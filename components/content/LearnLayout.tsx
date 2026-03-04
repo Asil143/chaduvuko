@@ -1,3 +1,4 @@
+import { CommentSection } from '@/components/ui/CommentSection'
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -346,6 +347,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
                   <ChevronRight size={18} style={{ color: next.color, flexShrink: 0 }} />
                 </Link>
               ) : <div className="flex-1" />}
+              <CommentSection />
             </div>
           </main>
         </div>
