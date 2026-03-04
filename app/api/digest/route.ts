@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Asil <hello@resend.dev>',
+          from: 'Asil <onboarding@resend.dev>',
           to: sub.email,
           subject: 'Weekly digest — Data Engineering',
           html,
