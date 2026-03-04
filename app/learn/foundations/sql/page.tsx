@@ -1,151 +1,231 @@
 import { LearnLayout } from '@/components/content/LearnLayout'
-import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
-import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
-const windowCode = `-- Window functions -- the most important advanced SQL concept for DEs
--- Calculate running total and rank for sales by region
-
-SELECT
-    order_date,
-    region,
-    product,
-    sales_amount,
-    -- Running total within each region
-    SUM(sales_amount) OVER (
-        PARTITION BY region 
-        ORDER BY order_date
-        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-    ) AS running_total,
-    -- Rank products by sales within each region
-    RANK() OVER (
-        PARTITION BY region 
-        ORDER BY sales_amount DESC
-    ) AS rank_in_region,
-    -- Compare current day to previous day
-    LAG(sales_amount, 1, 0) OVER (
-        PARTITION BY region, product 
-        ORDER BY order_date
-    ) AS prev_day_sales
-FROM gold.daily_sales
-WHERE order_date >= '2025-01-01'
-ORDER BY region, order_date;`
-
-const cteCode = `-- CTEs (Common Table Expressions) -- how to write readable complex queries
--- Find customers who bought in 3+ consecutive months
-
-WITH monthly_purchases AS (
-    SELECT
-        customer_id,
-        DATE_TRUNC('month', order_date) AS purchase_month,
-        COUNT(*) AS orders_in_month
-    FROM silver.orders
-    GROUP BY customer_id, DATE_TRUNC('month', order_date)
-),
-ranked_months AS (
-    SELECT
-        customer_id,
-        purchase_month,
-        -- Subtract row number to find consecutive groups
-        DATE_TRUNC('month', purchase_month) - 
-            (ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY purchase_month) * INTERVAL '1 month') 
-            AS grp
-    FROM monthly_purchases
-),
-streaks AS (
-    SELECT
-        customer_id,
-        COUNT(*) AS consecutive_months
-    FROM ranked_months
-    GROUP BY customer_id, grp
-)
-SELECT customer_id, MAX(consecutive_months) AS longest_streak
-FROM streaks
-WHERE MAX(consecutive_months) >= 3
-GROUP BY customer_id
-ORDER BY longest_streak DESC;`
-
-export const metadata = { title: 'SQL for Data Engineers' }
+export const metadata = { title: 'SQL for Data Engineers — Asil' }
 
 export default function SQLPage() {
   return (
     <LearnLayout
       title="SQL for Data Engineers"
-      description="SQL is the single most important skill for a data engineer. Not basic SQL — the advanced SQL that you use every day to transform, validate, and analyze data at scale."
-      section="Section 01 · Foundations"
-      readTime="20 min read"
+      description="Not SQL for beginners — SQL for people who need to build pipelines, debug data quality issues, and answer hard questions from analysts. The parts that actually come up in interviews and on the job."
+      section="Foundations"
+      readTime="25 min"
       updatedAt="March 2025"
       breadcrumbs={[
-        { label: 'Foundations', href: '/learn/what-is-data-engineering' },
+        { label: 'Foundations', href: '/learn/roadmap' },
         { label: 'SQL for Data Engineers', href: '/learn/foundations/sql' },
       ]}
     >
-
-      <h2 id="why-sql-matters">Why SQL is still the most important skill in 2025</h2>
+      <h2>Why SQL is not optional</h2>
       <p>
-        You might think SQL is old. It's from the 1970s. Surely in the world of Spark, Kafka, and Databricks, SQL has been replaced by something better?
+        Every data engineering interview has SQL questions. Every data engineering job uses SQL daily — to validate pipeline output, to write Gold layer transformations, to debug data quality issues, to answer ad-hoc questions from analysts.
       </p>
       <p>
-        Absolutely not. SQL is everywhere in data engineering — and knowing it deeply separates junior engineers from senior ones. You use SQL to query data warehouses, write Spark transformations (PySpark supports SQL directly), create Synapse views, validate data quality, and debug pipelines. If your SQL is weak, everything else suffers.
+        PySpark, Python, and cloud tools are important. But SQL is the one skill that never goes away regardless of which cloud, which tool, or which company you work at.
       </p>
 
-      <Callout type="tip">
-        If you can only do one thing before your first data engineering interview, make it this: practice writing window functions, CTEs, and complex aggregations until they feel natural. These appear in almost every technical interview screen.
-      </Callout>
+      <h2>The JOIN types — and when each one actually applies</h2>
+      <p>Most people know INNER JOIN. The ones that catch you in interviews are LEFT JOIN and the edge cases.</p>
+      <CodeBlock language="sql" filename="join_types.sql" code={`-- INNER JOIN: only rows where both sides match
+SELECT o.order_id, c.customer_name
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.customer_id
 
-      <h2 id="concepts">The SQL concepts every data engineer must know</h2>
+-- LEFT JOIN: every row from orders, even if no matching customer
+-- (useful for finding orphaned records — data quality check)
+SELECT o.order_id, c.customer_name
+FROM orders o
+LEFT JOIN customers c ON o.customer_id = c.customer_id
+WHERE c.customer_id IS NULL  -- orders with no matching customer
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
-        {[
-          { title:'JOINs', level:'Must know', desc:'INNER, LEFT, RIGHT, FULL OUTER, CROSS. Know when to use each and what the performance implications are on large datasets.' },
-          { title:'Window Functions', level:'Must know', desc:'ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD, SUM OVER, AVG OVER. These are the advanced SQL concept that most people struggle with.' },
-          { title:'CTEs (WITH clauses)', level:'Must know', desc:'The clean way to write complex multi-step queries. Every senior data engineer writes CTEs — not nested subqueries.' },
-          { title:'Aggregations', level:'Must know', desc:'GROUP BY, HAVING, ROLLUP, CUBE, GROUPING SETS. Knowing the difference between WHERE and HAVING is a common interview question.' },
-          { title:'Subqueries & Correlated Subqueries', level:'Should know', desc:'When to use them, when they kill performance, and how to rewrite them as JOINs or CTEs for better efficiency.' },
-          { title:'Date & Time manipulation', level:'Must know', desc:'DATE_TRUNC, DATEDIFF, DATEADD, EXTRACT, time zone handling. Real data always has messy date issues.' },
-          { title:'String functions', level:'Should know', desc:'SUBSTRING, REGEXP_REPLACE, SPLIT, CONCAT, UPPER, LOWER, TRIM. Text data is everywhere and often needs cleaning.' },
-          { title:'NULL handling', level:'Must know', desc:'COALESCE, NULLIF, IS NULL, IS NOT NULL. NULLs cause more silent bugs than almost anything else in data pipelines.' },
-        ].map(c => (
-          <div key={c.title} className="rounded-xl p-4" style={{ background: 'var(--bg2)', border: '1px solid var(--border)' }}>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="font-display font-semibold text-sm" style={{ color: 'var(--text)' }}>{c.title}</span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded"
-                style={{ background: c.level === 'Must know' ? 'rgba(0,194,255,0.1)' : 'rgba(245,197,66,0.1)', color: c.level === 'Must know' ? 'var(--accent)' : 'var(--gold)' }}>
-                {c.level}
-              </span>
-            </div>
-            <p className="text-xs leading-relaxed" style={{ color: 'var(--muted)', fontFamily: 'Lora, serif' }}>{c.desc}</p>
-          </div>
-        ))}
-      </div>
+-- SELF JOIN: join a table to itself
+-- (useful for finding duplicates or hierarchies)
+SELECT a.order_id, b.order_id as duplicate_id
+FROM orders a
+JOIN orders b
+  ON a.customer_id = b.customer_id
+  AND a.order_date = b.order_date
+  AND a.order_id < b.order_id  -- avoid matching row with itself`} />
 
-      <h2 id="window-functions">Window Functions — the most important advanced SQL topic</h2>
+      <h2>Window functions — the most important thing to master</h2>
       <p>
-        If there's one SQL concept that separates people who "know SQL" from people who really know SQL, it's window functions. They let you perform calculations across a set of rows that are related to the current row — without collapsing them into a single output row like GROUP BY does.
+        Window functions let you do calculations across rows without collapsing them into groups. Every senior data engineer uses them constantly. Every interview asks about them.
       </p>
+      <CodeBlock language="sql" filename="window_functions.sql" code={`-- ROW_NUMBER: unique rank per partition, no ties
+SELECT
+  order_id,
+  customer_id,
+  order_date,
+  amount,
+  ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) as order_seq
+FROM orders
+-- Result: each customer's orders numbered 1,2,3... in date order
 
-      <CodeBlock code={windowCode} language="sql" filename="window_functions_example.sql" />
+-- RANK vs DENSE_RANK (the interview trap question)
+SELECT
+  product_name,
+  revenue,
+  RANK()       OVER (ORDER BY revenue DESC) as rank_with_gaps,     -- 1,2,2,4
+  DENSE_RANK() OVER (ORDER BY revenue DESC) as rank_no_gaps        -- 1,2,2,3
+FROM product_revenue
 
-      <h2 id="ctes">CTEs — write SQL that humans can read</h2>
+-- LAG and LEAD: access previous or next row's value
+SELECT
+  order_date,
+  daily_revenue,
+  LAG(daily_revenue) OVER (ORDER BY order_date)        as prev_day_revenue,
+  daily_revenue - LAG(daily_revenue) OVER (ORDER BY order_date) as day_over_day_change
+FROM daily_sales
+
+-- Running total (cumulative sum)
+SELECT
+  order_date,
+  daily_revenue,
+  SUM(daily_revenue) OVER (ORDER BY order_date ROWS UNBOUNDED PRECEDING) as running_total
+FROM daily_sales
+
+-- Percentage of total using window function
+SELECT
+  region,
+  revenue,
+  revenue * 100.0 / SUM(revenue) OVER () as pct_of_total
+FROM regional_sales`} />
+
+      <h2>CTEs — how to write SQL that is actually readable</h2>
       <p>
-        A CTE (Common Table Expression) is a named temporary result set defined within a SQL query using the <code>WITH</code> clause. They make complex queries dramatically more readable by breaking them into named logical steps. Every senior data engineer writes CTEs by default.
+        CTE stands for Common Table Expression. It is a named temporary result set you define with a WITH clause. Use them to break complex queries into readable steps.
+      </p>
+      <CodeBlock language="sql" filename="cte_example.sql" code={`-- Without CTEs (hard to read and debug)
+SELECT customer_id, SUM(amount) as ltv
+FROM (
+  SELECT o.customer_id, o.amount
+  FROM orders o
+  WHERE o.status = 'completed'
+  AND o.order_date >= '2024-01-01'
+) filtered
+GROUP BY customer_id
+HAVING SUM(amount) > 1000
+
+-- With CTEs (easy to read, easy to debug one step at a time)
+WITH completed_orders AS (
+  SELECT customer_id, amount
+  FROM orders
+  WHERE status = 'completed'
+  AND order_date >= '2024-01-01'
+),
+customer_ltv AS (
+  SELECT customer_id, SUM(amount) as ltv
+  FROM completed_orders
+  GROUP BY customer_id
+)
+SELECT *
+FROM customer_ltv
+WHERE ltv > 1000`} />
+
+      <h2>GROUP BY vs HAVING — the one that trips people up</h2>
+      <CodeBlock language="sql" filename="groupby_having.sql" code={`-- WHERE filters rows BEFORE grouping
+-- HAVING filters groups AFTER grouping
+
+-- Wrong: this errors because you can't use aggregate in WHERE
+SELECT region, COUNT(*) as order_count
+FROM orders
+WHERE COUNT(*) > 100  -- ERROR
+GROUP BY region
+
+-- Correct: use HAVING for aggregate conditions
+SELECT region, COUNT(*) as order_count
+FROM orders
+GROUP BY region
+HAVING COUNT(*) > 100  -- works
+
+-- Both together
+SELECT region, COUNT(*) as order_count
+FROM orders
+WHERE order_date >= '2024-01-01'  -- filter rows first
+GROUP BY region
+HAVING COUNT(*) > 100  -- then filter groups`} />
+
+      <h2>A real data quality check query</h2>
+      <p>
+        Data engineers write queries like this to validate pipeline output. You run this against your Silver layer to make sure the Bronze-to-Silver transformation worked correctly.
+      </p>
+      <CodeBlock language="sql" filename="data_quality_check.sql" code={`-- Check 1: null counts per column
+SELECT
+  COUNT(*) as total_rows,
+  COUNT(*) - COUNT(order_id)    as null_order_ids,
+  COUNT(*) - COUNT(customer_id) as null_customer_ids,
+  COUNT(*) - COUNT(amount)      as null_amounts,
+  COUNT(*) - COUNT(order_date)  as null_dates
+FROM silver.orders
+
+-- Check 2: duplicate order IDs
+SELECT order_id, COUNT(*) as cnt
+FROM silver.orders
+GROUP BY order_id
+HAVING COUNT(*) > 1
+
+-- Check 3: amount range sanity check
+SELECT
+  MIN(amount)    as min_amount,
+  MAX(amount)    as max_amount,
+  AVG(amount)    as avg_amount,
+  COUNT(CASE WHEN amount < 0 THEN 1 END) as negative_amounts,
+  COUNT(CASE WHEN amount > 100000 THEN 1 END) as suspiciously_large
+FROM silver.orders
+
+-- Check 4: row count comparison (Silver should have fewer rows than Bronze after dedup)
+SELECT
+  (SELECT COUNT(*) FROM bronze.orders) as bronze_count,
+  (SELECT COUNT(*) FROM silver.orders) as silver_count,
+  (SELECT COUNT(*) FROM bronze.orders) - (SELECT COUNT(*) FROM silver.orders) as removed_rows`} />
+
+      <h2>Month-over-month comparison — a classic analyst request</h2>
+      <p>Analysts ask for this constantly. Know how to write it without thinking.</p>
+      <CodeBlock language="sql" filename="mom_comparison.sql" code={`WITH monthly_revenue AS (
+  SELECT
+    DATE_TRUNC('month', order_date) as month,
+    SUM(amount) as revenue
+  FROM orders
+  GROUP BY DATE_TRUNC('month', order_date)
+)
+SELECT
+  month,
+  revenue,
+  LAG(revenue) OVER (ORDER BY month) as prev_month_revenue,
+  revenue - LAG(revenue) OVER (ORDER BY month) as change,
+  ROUND(
+    (revenue - LAG(revenue) OVER (ORDER BY month)) * 100.0
+    / NULLIF(LAG(revenue) OVER (ORDER BY month), 0),
+    1
+  ) as pct_change
+FROM monthly_revenue
+ORDER BY month`} />
+      <p>
+        Notice <code>NULLIF(..., 0)</code> — this prevents division by zero if the previous month had zero revenue. Small details like this are what separate people who write SQL versus people who write production-quality SQL.
       </p>
 
-      <CodeBlock code={cteCode} language="sql" filename="consecutive_months_cte.sql" />
+      <h2>Top N per group — another common interview question</h2>
+      <CodeBlock language="sql" filename="top_n_per_group.sql" code={`-- Top 3 products by revenue per region
+WITH ranked_products AS (
+  SELECT
+    region,
+    product_name,
+    revenue,
+    ROW_NUMBER() OVER (PARTITION BY region ORDER BY revenue DESC) as rn
+  FROM product_sales
+)
+SELECT region, product_name, revenue
+FROM ranked_products
+WHERE rn <= 3
+ORDER BY region, rn`} />
 
-      <Callout type="example">
-        At a real company, a senior data engineer will reject code review PRs that use deeply nested subqueries instead of CTEs. Readability is not optional — other engineers need to maintain your code.
-      </Callout>
-
-      <KeyTakeaways items={[
-        'SQL is the single most important skill for data engineers in 2025 — no tool or language replaces it',
-        'Window functions (ROW_NUMBER, RANK, LAG, LEAD, running totals) are the most tested topic in technical interviews',
-        'CTEs make complex queries readable — always prefer CTEs over deeply nested subqueries',
-        'NULLs are silent killers in data pipelines — always handle them explicitly with COALESCE or NULLIF',
-        'Date manipulation is constant in real data engineering — know DATE_TRUNC, DATEDIFF, and time zone handling cold',
-        'Practice writing complex queries by hand — not just reading them. Interview screens require you to write from scratch',
-      ]} />
-
+      <h2>What to practice</h2>
+      <p>
+        Do not just read these examples. Type them out. Change them. Break them on purpose and fix them. The best free practice resources are <strong>LeetCode</strong> (filter for SQL, medium difficulty) and <strong>StrataScratch</strong> which has real interview questions from actual companies.
+      </p>
+      <p>
+        When you can write a window function without looking it up and explain WHY you used it — you are ready.
+      </p>
     </LearnLayout>
   )
 }

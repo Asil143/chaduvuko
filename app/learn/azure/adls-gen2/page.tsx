@@ -1,157 +1,129 @@
 import { LearnLayout } from '@/components/content/LearnLayout'
-import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
-import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
-const medallionCode = `# Medallion Architecture folder structure in ADLS Gen2
-# This is how you organize your data lake
+export const metadata = { title: 'ADLS Gen2 — Azure Data Lake Storage — Asil' }
 
-adls-storage-account/
-├── bronze/          # Raw data - never modified, kept forever
-│   ├── sales/
-│   │   ├── 2025/01/01/sales_raw_20250101.csv
-│   │   └── 2025/01/02/sales_raw_20250102.csv
-│   └── customers/
-│       └── customers_raw_20250101.json
-│
-├── silver/          # Cleaned, validated, deduplicated data
-│   ├── sales/       # Delta Lake tables
-│   └── customers/
-│
-└── gold/            # Aggregated, business-ready data
-    ├── sales_daily_summary/
-    ├── customer_lifetime_value/
-    └── regional_performance/`
-
-const pythonCode = `from azure.storage.filedatalake import DataLakeServiceClient
-
-# Connect to ADLS Gen2
-service_client = DataLakeServiceClient(
-    account_url="https://yourstorageaccount.dfs.core.windows.net",
-    credential=your_credential  # Always use Key Vault, never hardcode
-)
-
-# Get a reference to a filesystem (container)
-file_system_client = service_client.get_file_system_client("bronze")
-
-# Upload a file to bronze layer
-with open("sales_data.csv", "rb") as data:
-    file_client = file_system_client.create_file("sales/2025/01/sales.csv")
-    file_client.upload_data(data, overwrite=True)
-
-print("✅ File uploaded to Bronze layer")`
-
-export const metadata = { title: 'Azure Data Lake Storage Gen2 (ADLS Gen2)' }
-
-export default function ADLSGen2Page() {
+export default function ADLSPage() {
   return (
     <LearnLayout
-      title="Azure Data Lake Storage Gen2"
-      description="ADLS Gen2 is the central storage backbone of every Azure data engineering architecture. This is where your Bronze, Silver, and Gold layers live. Understanding it deeply is non-negotiable."
-      section="Section 02 · Azure Track"
-      readTime="10 min read"
+      title="Azure Data Lake Storage Gen2 (ADLS Gen2)"
+      description="ADLS Gen2 is where all your data lives on Azure. Your Bronze, Silver, and Gold layers all sit here. Understanding how it is structured, how access works, and how to partition data well is foundational for everything else."
+      section="Azure Track"
+      readTime="15 min"
       updatedAt="March 2025"
       breadcrumbs={[
-        { label: 'Azure Track', href: '/learn/azure/introduction' },
+        { label: 'Azure', href: '/learn/azure/introduction' },
         { label: 'ADLS Gen2', href: '/learn/azure/adls-gen2' },
       ]}
     >
-
-      <h2 id="what-is-adls">What is ADLS Gen2?</h2>
+      <h2>What ADLS Gen2 actually is</h2>
       <p>
-        Azure Data Lake Storage Gen2 — everyone calls it ADLS Gen2 — is Microsoft's cloud storage service built specifically for big data analytics. It's the place where all your data lives at every stage of the pipeline. Raw data from your source systems lands here first. Cleaned data lives here too. So does the final aggregated data that analysts query.
+        ADLS Gen2 is Azure's data lake storage. It is built on top of Azure Blob Storage but with one key addition: a hierarchical namespace. That means you get real folders, not just key names that look like folder paths.
       </p>
       <p>
-        The "Gen2" part matters. Gen1 was an older, separate service that Microsoft has discontinued. Gen2 is built on top of Azure Blob Storage — which means it gets Blob's reliability, scalability, and low cost — but adds a hierarchical namespace (like a real file system with folders) that makes it much faster and more efficient for big data workloads.
+        This matters because operations like renaming a folder or listing files in a directory are fast and atomic — critical for data pipelines that need to write data reliably.
       </p>
-
-      <Callout type="tip">
-        If you've used Amazon S3 before, think of ADLS Gen2 as Azure's equivalent. The concept is the same — cheap, scalable, durable object storage — but ADLS Gen2 has better support for big data workloads because of the hierarchical namespace.
-      </Callout>
-
-      <h2 id="key-concepts">Three things that make ADLS Gen2 special</h2>
-
-      <div className="space-y-4 my-6">
-        {[
-          { icon:'📁', title:'Hierarchical Namespace', desc:'Real folders, real paths. Unlike regular blob storage where everything is a flat list of files, ADLS Gen2 organizes data like a real file system — /bronze/sales/2025/01/. This makes rename, delete, and move operations on large directories fast and atomic.' },
-          { icon:'🔐', title:'Fine-grained Access Control (ACLs)', desc:'You can control who reads what at the file and folder level. A data analyst can read the Gold layer but not Bronze. The ADF pipeline can write to Bronze but not Gold. This is essential for production security.' },
-          { icon:'⚡', title:'Optimized for Analytics', desc:'ADLS Gen2 is designed to work natively with Databricks, Synapse, and Azure HDInsight. It supports parallel reads, which is essential when Spark is splitting data processing across multiple machines.' },
-        ].map(item => (
-          <div key={item.title} className="rounded-xl p-5 flex gap-4" style={{ background: 'var(--bg2)', border: '1px solid var(--border)' }}>
-            <span className="text-2xl flex-shrink-0">{item.icon}</span>
-            <div>
-              <div className="font-display font-semibold text-sm mb-1.5" style={{ color: 'var(--text)' }}>{item.title}</div>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--text2)', fontFamily: 'Lora, serif' }}>{item.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <h2 id="medallion">How ADLS Gen2 fits into Medallion Architecture</h2>
       <p>
-        In practice, every Azure data engineering project organizes ADLS Gen2 into three layers following the Medallion Architecture. This is so standard in the industry that you should memorize it immediately.
+        When you create a storage account in Azure, you enable hierarchical namespace to turn regular Blob Storage into ADLS Gen2. That is the difference.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-        {[
-          { layer:'Bronze', color:'#cd7f32', emoji:'🥉', desc:'Raw data exactly as it arrived from the source. Never modified, never deleted. This is your insurance policy — if anything goes wrong downstream, you can always reprocess from Bronze.' },
-          { layer:'Silver', color:'#c0c0c0', emoji:'🥈', desc:'Cleaned and validated data. Duplicates removed, nulls handled, data types corrected, bad records filtered. Data here is reliable and trusted by the organization.' },
-          { layer:'Gold', color:'#f5c542', emoji:'🥇', desc:'Aggregated, business-ready data. Sales by region, customer lifetime value, monthly KPIs. This is what analysts and Power BI query directly. Optimized for fast reads.' },
-        ].map(l => (
-          <div key={l.layer} className="rounded-xl p-5 text-center" style={{ background: 'var(--bg3)', border: `1px solid ${l.color}30` }}>
-            <div className="text-3xl mb-2">{l.emoji}</div>
-            <div className="font-display font-bold text-base mb-2" style={{ color: l.color }}>{l.layer} Layer</div>
-            <p className="text-xs leading-relaxed" style={{ color: 'var(--text2)', fontFamily: 'Lora, serif' }}>{l.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <CodeBlock code={medallionCode} language="bash" filename="adls-structure.txt" />
-
-      <h2 id="connecting">Connecting to ADLS Gen2 from Python</h2>
+      <h2>How to structure your containers</h2>
       <p>
-        In most real projects, you'll interact with ADLS Gen2 through Databricks or ADF — not directly through Python. But understanding the Python SDK helps you grasp what's happening under the hood.
+        A container is like a root-level folder. The standard Medallion setup uses three containers — one per layer.
       </p>
-
-      <CodeBlock code={pythonCode} language="python" filename="adls_upload.py" />
-
-      <Callout type="warning">
-        Never hardcode storage account keys or connection strings in your code. Always store them in Azure Key Vault and retrieve them at runtime. This is a security requirement in every production Azure environment.
-      </Callout>
-
-      <h2 id="performance">Performance tips you'll actually use on the job</h2>
+      <CodeBlock language="text" filename="ADLS container structure" code={`Storage Account: yourcompanydatalake
+├── bronze/                  ← raw data, never modified
+│   └── sales/
+│       └── date=2025-03-01/
+│           └── sales.csv
+├── silver/                  ← cleaned, validated Delta tables
+│   └── orders/
+│       └── date=2025-03-01/
+│           └── part-00000.parquet
+└── gold/                    ← aggregated, business-ready
+    ├── daily_sales_summary/
+    ├── customer_ltv/
+    └── regional_performance/`} />
       <p>
-        Once you start working with large datasets, you'll discover that how you organize data in ADLS Gen2 dramatically affects query performance. Here are the patterns senior engineers use:
+        Partition by date at the Bronze level. This means when ADF or Databricks needs to reprocess a specific day, it reads only that partition instead of scanning the entire container.
       </p>
 
-      <div className="space-y-3 my-6">
-        {[
-          { tip:'Partition by date', detail:'Organize files by year/month/day. When Spark reads a date range, it can skip entire folders instead of scanning everything.' },
-          { tip:'Use Parquet or Delta format', detail:'Never store big data as CSV in production. Parquet is columnar and 10x faster to query. Delta adds ACID transactions on top of Parquet.' },
-          { tip:'Right-size your files', detail:'Many small files hurt performance badly (the "small file problem"). Aim for 100MB–1GB files in production. Use Delta Lake\'s OPTIMIZE command to compact small files.' },
-          { tip:'Use managed identities for auth', detail:'Instead of storing keys, let your Azure services authenticate to ADLS Gen2 using managed identities. No secrets to rotate, no risk of accidental exposure.' },
-        ].map((item, i) => (
-          <div key={i} className="flex gap-3 p-4 rounded-xl" style={{ background: 'var(--bg2)', border: '1px solid var(--border)' }}>
-            <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-mono font-bold"
-              style={{ background: 'var(--accent-glow)', color: 'var(--accent)' }}>{i+1}</span>
-            <div>
-              <div className="font-display font-semibold text-sm mb-1" style={{ color: 'var(--text)' }}>{item.tip}</div>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--muted)', fontFamily: 'Lora, serif' }}>{item.detail}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <h2>Access control — how to do it correctly</h2>
+      <p>
+        Never use storage account access keys in production. If those keys leak, someone has full access to all your data. Always use one of these instead.
+      </p>
+      <p>
+        <strong>Managed Identity</strong> — the cleanest approach. Your Databricks cluster or ADF pipeline gets an identity automatically. You grant that identity access to ADLS using RBAC. No keys, no credentials, no secrets to rotate.
+      </p>
+      <p>
+        <strong>Service Principal</strong> — you create an app registration in Entra ID (formerly Azure AD), generate a client secret, and store that secret in Azure Key Vault. Your pipeline reads the secret from Key Vault at runtime. Never in code, never in config files.
+      </p>
 
-      <KeyTakeaways items={[
-        'ADLS Gen2 is the central storage layer for all Azure data engineering architectures — every project uses it',
-        'It\'s built on Azure Blob Storage but adds a hierarchical namespace that makes it efficient for big data workloads',
-        'Three layers: Bronze (raw), Silver (clean), Gold (aggregated) — this is the Medallion Architecture every DE knows',
-        'Use Parquet or Delta Lake format in production — never CSV for large datasets',
-        'Partition data by date to dramatically improve query performance on large datasets',
-        'Always use Azure Key Vault for credentials — never hardcode storage account keys in your code',
-        'Managed identities are the most secure way to authenticate between Azure services',
-      ]} />
+      <h2>Mounting ADLS in Databricks</h2>
+      <p>
+        When you mount ADLS in Databricks, you can access it using familiar file paths instead of the full ABFS URL. You do this once and then every notebook can use the short path.
+      </p>
+      <CodeBlock language="python" filename="mount_adls.py" code={`# Mount using Service Principal (credentials stored in Key Vault)
+configs = {
+  "fs.azure.account.auth.type": "OAuth",
+  "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+  "fs.azure.account.oauth2.client.id": dbutils.secrets.get(scope="keyvault", key="sp-client-id"),
+  "fs.azure.account.oauth2.client.secret": dbutils.secrets.get(scope="keyvault", key="sp-client-secret"),
+  "fs.azure.account.oauth2.client.endpoint": "https://login.microsoftonline.com/<tenant-id>/oauth2/token",
+}
 
+dbutils.fs.mount(
+  source="abfss://bronze@yourcompanydatalake.dfs.core.windows.net/",
+  mount_point="/mnt/bronze",
+  extra_configs=configs
+)
+
+# After mounting, use simple paths in all notebooks
+df = spark.read.parquet("/mnt/bronze/sales/date=2025-03-01/")
+df.write.format("delta").save("/mnt/silver/orders/")`} />
+
+      <h2>Partitioning strategy — this matters a lot</h2>
+      <p>
+        Partitioning is how you organize data so that queries only read the files they need. A poorly partitioned data lake forces every query to scan every file.
+      </p>
+      <p>
+        The most common partition column is date. But the right choice depends on how data is queried.
+      </p>
+      <CodeBlock language="python" filename="partitioning.py" code={`# Partition Bronze by load date (when the file arrived)
+df.write \
+  .partitionBy("load_date") \
+  .mode("append") \
+  .parquet("/mnt/bronze/orders/")
+
+# Partition Silver by order date (when the order happened)
+df.write \
+  .format("delta") \
+  .partitionBy("order_date") \
+  .mode("overwrite") \
+  .save("/mnt/silver/orders/")
+
+# Partition Gold by month (analysts rarely need daily grain in Gold)
+df.write \
+  .format("delta") \
+  .partitionBy("year_month") \
+  .mode("overwrite") \
+  .save("/mnt/gold/daily_sales_summary/")`} />
+
+      <h2>Lifecycle management — how to cut storage costs</h2>
+      <p>
+        Bronze data is accessed frequently when it is new, then almost never after 30 days. Azure lets you automatically move it to cheaper storage tiers based on age.
+      </p>
+      <p>
+        In the Azure Portal, go to your Storage Account → Lifecycle Management → Add Rule. Set Bronze files older than 30 days to move to Cool tier, and files older than 90 days to move to Archive tier. This alone can cut your storage bill by 60-70% on a large data lake.
+      </p>
+      <p>
+        Silver and Gold should stay in Hot tier because analysts query them regularly. Only move Bronze.
+      </p>
+
+      <h2>The difference between Gen1 and Gen2</h2>
+      <p>
+        ADLS Gen1 is deprecated. It still exists but Microsoft is shutting it down. If you see Gen1 in a job description or on a project, that is a legacy system. Gen2 is what all new projects use. You do not need to learn Gen1.
+      </p>
     </LearnLayout>
   )
 }

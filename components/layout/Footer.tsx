@@ -14,9 +14,17 @@ const links = {
     { label: 'Azure Databricks', href: '/learn/azure/databricks' },
     { label: 'Azure Synapse', href: '/learn/azure/synapse' },
   ],
+  AWS: [
+    { label: 'AWS Introduction', href: '/learn/aws/introduction' },
+    { label: 'Amazon S3', href: '/learn/aws/s3' },
+    { label: 'AWS Glue', href: '/learn/aws/glue' },
+    { label: 'Amazon Redshift', href: '/learn/aws/redshift' },
+    { label: 'Amazon Kinesis', href: '/learn/aws/kinesis' },
+  ],
   Resources: [
     { label: 'End-to-End Projects', href: '/learn/projects' },
     { label: 'Interview Prep', href: '/learn/interview' },
+    { label: 'Top Companies Hiring', href: '/learn/industry' },
     { label: 'Microsoft Learn ↗', href: 'https://learn.microsoft.com' },
   ],
 }
@@ -25,13 +33,13 @@ export function Footer() {
   return (
     <footer className="border-t mt-20" style={{ borderColor: 'var(--border)', background: 'var(--bg2)' }}>
       <div className="max-w-7xl mx-auto px-6 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-          <div>
-            <div className="font-display font-extrabold text-xl mb-3" style={{ color: 'var(--text)' }}>
-              Veda<span style={{ color: 'var(--accent)' }}>Era</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 mb-12">
+          <div className="sm:col-span-2 md:col-span-1">
+            <div className="font-display font-extrabold text-xl mb-3">
+              <span style={{ color: 'var(--text)' }}>As</span><span style={{ color: 'var(--accent)' }}>il</span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-              Free, open data engineering and cloud education. Built for the next generation of data engineers.
+              Free, open data engineering education. Built by Asil for the next generation of data engineers.
             </p>
             <p className="text-xs mt-4 font-mono" style={{ color: 'var(--muted)' }}>
               🌱 Built with ❤️ from Andhra Pradesh, India
@@ -57,10 +65,14 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between pt-8 gap-4"
           style={{ borderTop: '1px solid var(--border)' }}>
           <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-            © 2025 VedaEra · 100% Free Forever · No Ads · No Paywalls
+            © 2025 · Built by{' '}
+            <span className="font-display font-bold">
+              <span style={{ color: 'var(--text)' }}>As</span><span style={{ color: 'var(--accent)' }}>il</span>
+            </span>
+            {' '}· 100% Free Forever · No Ads · No Paywalls
           </p>
           <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-            Veda (వేద) = Knowledge in Telugu · Era = A new beginning
+            Asil = Pure, genuine · Free forever
           </p>
         </div>
       </div>

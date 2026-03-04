@@ -5,13 +5,13 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title: { default: 'VedaEra — Free Data Engineering & Cloud Learning', template: '%s · VedaEra' },
+  title: { default: 'Asil — Free Data Engineering & Cloud Learning', template: '%s · Asil' },
   description: 'Free, open data engineering and cloud education covering Azure, AWS, GCP, Apache Iceberg, Spark, Delta Lake, Data Mesh, and the full modern data stack.',
   keywords: ['data engineering', 'azure', 'aws', 'gcp', 'apache spark', 'databricks', 'data lake', 'free tutorials'],
-  authors: [{ name: 'VedaEra' }],
+  authors: [{ name: 'Asil' }],
   openGraph: {
-    title: 'VedaEra — Free Data Engineering & Cloud Learning',
-    description: 'Master Data Engineering and Cloud from first principles. Free forever.',
+    title: 'Asil — Free Data Engineering & Cloud Learning',
+    description: 'Master Data Engineering and Cloud from first principles. Built by Asil. Free forever.',
     type: 'website',
   },
 }
