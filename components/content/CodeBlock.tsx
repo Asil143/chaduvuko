@@ -18,25 +18,42 @@ export function CodeBlock({ code, language = 'python', filename }: Props) {
   }
 
   return (
-    <div className="my-6 rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--code-bg)' }}>
-      <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-        <div className="flex items-center gap-2">
+    <div className="my-6 rounded-xl overflow-hidden"
+      style={{ border: '1px solid var(--border)', background: '#0d1117' }}>
+
+      {/* Header — always dark background so dots and text are visible */}
+      <div className="flex items-center justify-between px-4 py-2.5"
+        style={{ background: '#161b22', borderBottom: '1px solid #30363d' }}>
+        <div className="flex items-center gap-3">
           <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500 opacity-70" />
-            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500 opacity-70" />
-            <div className="w-2.5 h-2.5 rounded-full bg-green-500 opacity-70" />
+            <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#ff5f57' }} />
+            <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#febc2e' }} />
+            <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#28c840' }} />
           </div>
-          {filename && <span className="text-xs font-mono ml-2 opacity-60">{filename}</span>}
+          {filename && (
+            <span className="text-xs font-mono" style={{ color: '#8b949e' }}>{filename}</span>
+          )}
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs font-mono opacity-40">{language}</span>
-          <button onClick={copy} className="flex items-center gap-1 text-xs font-mono opacity-60 hover:opacity-100 transition-opacity">
-            {copied ? <Check size={12} className="text-green-400" /> : <Copy size={12} />}
-            {copied ? 'copied!' : 'copy'}
+          <span className="text-xs font-mono" style={{ color: '#6e7681' }}>{language}</span>
+          <button onClick={copy}
+            className="flex items-center gap-1.5 text-xs font-mono px-2 py-1 rounded transition-all"
+            style={{
+              background: copied ? 'rgba(63,185,80,0.15)' : 'rgba(139,148,158,0.1)',
+              color: copied ? '#3fb950' : '#8b949e',
+              border: `1px solid ${copied ? 'rgba(63,185,80,0.3)' : 'rgba(139,148,158,0.2)'}`,
+            }}>
+            {copied
+              ? <><Check size={11} /> copied!</>
+              : <><Copy size={11} /> copy</>
+            }
           </button>
         </div>
       </div>
-      <pre className="p-5 overflow-x-auto text-sm leading-relaxed" style={{ fontFamily: 'JetBrains Mono, monospace', color: '#a8b4c8' }}>
+
+      {/* Code body — always dark */}
+      <pre className="p-5 overflow-x-auto text-sm leading-relaxed m-0"
+        style={{ fontFamily: 'JetBrains Mono, Fira Code, monospace', color: '#c9d1d9', background: '#0d1117' }}>
         <code>{code}</code>
       </pre>
     </div>
