@@ -276,6 +276,11 @@ export function LearnLayout({ children, title, description, section, readTime, u
           </aside>
 
           <main className="flex-1 min-w-0 max-w-3xl">
+            {/* Mobile TOC — only shows on small screens, sidebar TOC handles desktop */}
+            <div className="lg:hidden mb-6">
+              <TableOfContents />
+            </div>
+
             <div className="prose-vedalera">{children}</div>
 
             {/* Salary widget — shown on intro pages */}
