@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { ThemePicker } from '@/components/ui/ThemePicker'
+import { DashboardPanel } from '@/components/ui/DashboardPanel'
 import { SearchBar } from '@/components/ui/SearchBar'
 
 const navItems = [
@@ -38,6 +39,7 @@ const navItems = [
   { label: 'Projects', href: '/learn/projects' },
   { label: 'Industry', href: '/learn/industry' },
   { label: 'Blog', href: '/blog' },
+  { label: 'Dashboard', href: '/dashboard' },
 ]
 
 export function Navbar() {
@@ -90,6 +92,7 @@ export function Navbar() {
 
       <div className="flex items-center gap-2 flex-shrink-0">
         <SearchBar variant="navbar" />
+        <DashboardPanel />
         <ThemePicker />
         <Link href="/learn/roadmap" className="hidden md:flex btn-primary text-sm">Start →</Link>
         <button className="lg:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)}>

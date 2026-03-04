@@ -1,5 +1,10 @@
-import { CommentSection } from '@/components/ui/CommentSection'
 'use client'
+import { CommentSection }  from '@/components/ui/CommentSection'
+import { ReadingProgress } from '@/components/ui/ReadingProgress'
+import { TableOfContents } from '@/components/ui/TableOfContents'
+import { ShareButtons }    from '@/components/ui/ShareButtons'
+import { PageViews }       from '@/components/ui/PageViews'
+import { RelatedArticles } from '@/components/ui/RelatedArticles'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ChevronRight, ChevronLeft, Clock, Calendar, BookOpen, Copy, Check } from 'lucide-react'
@@ -194,7 +199,9 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const diffStyle = diff ? difficultyColors[diff] : null
 
   return (
-    <div className="pt-16 min-h-screen" style={{ background: 'var(--bg)' }}>
+    <>
+      <ReadingProgress />
+      <div className="pt-16 min-h-screen" style={{ background: 'var(--bg)' }}>
       <div className="border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg2)' }}>
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
           {breadcrumbs && (
@@ -231,6 +238,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
           <div className="flex items-center gap-4 mt-4 text-xs font-mono" style={{ color: 'var(--muted)' }}>
             {readTime  && <span className="flex items-center gap-1"><Clock size={11} /> {readTime}</span>}
             {updatedAt && <span className="flex items-center gap-1"><Calendar size={11} /> {updatedAt}</span>}
+            <PageViews slug={pathname} />
           </div>
         </div>
       </div>
@@ -239,6 +247,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
         <div className="flex gap-10">
           <aside className="hidden lg:block w-64 flex-shrink-0">
             <div className="sticky top-24 space-y-5 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2">
+              <TableOfContents />
               <GamifiedProgress />
               {sidebar.map(group => (
                 <div key={group.label}>
@@ -316,6 +325,9 @@ export function LearnLayout({ children, title, description, section, readTime, u
               </div>
             )}
 
+            <ShareButtons title={title} />
+            <RelatedArticles />
+
             {/* Prev / Next */}
             <div className="flex items-stretch gap-3 mt-10 pt-8" style={{ borderTop: '1px solid var(--border)' }}>
               {prev ? (
@@ -347,11 +359,16 @@ export function LearnLayout({ children, title, description, section, readTime, u
                   <ChevronRight size={18} style={{ color: next.color, flexShrink: 0 }} />
                 </Link>
               ) : <div className="flex-1" />}
-              <CommentSection />
             </div>
           </main>
         </div>
+
+        {/* Comments — outside flex row, full width below */}
+        <div className="mt-10 max-w-3xl ml-0 lg:ml-72">
+          <CommentSection />
+        </div>
       </div>
     </div>
+    </>
   )
 }
