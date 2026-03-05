@@ -195,11 +195,15 @@ interface Props {
   updatedAt?: string
   breadcrumbs?: { label: string; href: string }[]
   showSalary?: boolean
+  prev?: { title: string; href: string }
+  next?: { title: string; href: string }
 }
 
-export function LearnLayout({ children, title, description, section, readTime, updatedAt, breadcrumbs, showSalary }: Props) {
+export function LearnLayout({ children, title, description, section, readTime, updatedAt, breadcrumbs, showSalary, prev: prevOverride, next: nextOverride }: Props) {
   const pathname = usePathname()
-  const { prev, next } = getPrevNext(pathname)
+  const { prev: autoPrev, next: autoNext } = getPrevNext(pathname)
+  const prev = prevOverride ? { ...prevOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoPrev
+  const next = nextOverride ? { ...nextOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoNext
   const meta = getPageMeta(pathname)
   const suggestedNext = NEXT_PAGES[pathname] || (next ? [next] : [])
   const diff = meta?.difficulty
