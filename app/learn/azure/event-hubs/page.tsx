@@ -153,7 +153,7 @@ export default function EventHubsPage() {
         The key thing to understand about Event Hubs: it is Kafka-compatible. You can use the Kafka protocol to produce and consume events without changing your application code. If you know Kafka, you know Event Hubs.
       </p>
 
-      <Callout type="info" title="Event Hubs vs Azure Service Bus">
+      <Callout type="info" label="Event Hubs vs Azure Service Bus">
         Event Hubs is for high-throughput event streaming — millions of events, multiple consumers, replay. Service Bus is for reliable message delivery — one consumer, guaranteed delivery, dead-letter queues. Use Event Hubs for data pipelines. Use Service Bus for application-to-application messaging.
       </Callout>
 
@@ -179,7 +179,7 @@ export default function EventHubsPage() {
       </p>
       <CodeBlock code={consumerCode} language="python" filename="event_consumer.py" />
 
-      <Callout type="tip" title="Consumer Groups for Fan-Out">
+      <Callout type="tip" label="Consumer Groups for Fan-Out">
         Create separate consumer groups for each downstream system. Your real-time dashboard reads from consumer group &quot;dashboard&quot;. Your Databricks pipeline reads from consumer group &quot;pipeline&quot;. Both get every event independently — neither blocks or affects the other.
       </Callout>
 
@@ -213,7 +213,7 @@ export default function EventHubsPage() {
         </table>
       </div>
 
-      <Callout type="warning" title="Start with Standard tier">
+      <Callout type="warning" label="Start with Standard tier">
         For most production data engineering workloads, Standard tier with 1-2 Throughput Units is sufficient. Dedicated clusters are only needed at very high scale (10,000+ events/second sustained).
       </Callout>
 
