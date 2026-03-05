@@ -1,4 +1,5 @@
 'use client'
+import { NewsletterSignup } from '@/components/ui/NewsletterSignup'
 import Link from 'next/link'
 import { ArrowRight, ChevronRight, BookOpen, Code2, Trophy } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -355,13 +356,13 @@ export default function HomePage() {
               <p className="text-base mb-8" style={{ color: 'var(--muted)' }}>
                 Start with the roadmap. Build a real project. Get the job. Built by Asil — free forever.
               </p>
-              <div className="flex items-center gap-3 justify-center flex-wrap">
+              <div className="flex items-center gap-3 justify-center flex-wrap mb-8">
                 <Link href="/learn/roadmap" className="btn-primary text-base px-8 py-3">
                   Begin the Roadmap <ArrowRight size={16} />
                 </Link>
-                <Link href="/newsletter" className="btn-secondary text-base px-8 py-3">
-                  Get Updates
-                </Link>
+              </div>
+              <div className="max-w-md mx-auto">
+                <NewsletterSignup compact={true} />
               </div>
             </div>
           </div>

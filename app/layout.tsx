@@ -7,12 +7,21 @@ import { Footer } from '@/components/layout/Footer'
 export const metadata: Metadata = {
   title: { default: 'Asil — Free Data Engineering & Cloud Learning', template: '%s · Asil' },
   description: 'Free, open data engineering and cloud education covering Azure, AWS, GCP, Apache Iceberg, Spark, Delta Lake, Data Mesh, and the full modern data stack.',
-  keywords: ['data engineering', 'azure', 'aws', 'gcp', 'apache spark', 'databricks', 'data lake', 'free tutorials'],
+  keywords: ['data engineering', 'azure', 'aws', 'gcp', 'apache spark', 'databricks', 'data lake', 'free tutorials', 'h1b', 'data engineer salary'],
   authors: [{ name: 'Asil' }],
+  metadataBase: new URL('https://asil-site.vercel.app'),
   openGraph: {
     title: 'Asil — Free Data Engineering & Cloud Learning',
-    description: 'Master Data Engineering and Cloud from first principles. Built by Asil. Free forever.',
+    description: 'Master Data Engineering for free. Azure, AWS, GCP, Interview Prep, Real Projects. Built by Asil.',
     type: 'website',
+    url: 'https://asil-site.vercel.app',
+    siteName: 'Asil',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Asil — Free Data Engineering & Cloud Learning',
+    description: 'Free Azure, AWS, GCP tutorials + interview prep. Built by Asil.',
+    creator: '@Asil143',
   },
 }
 
