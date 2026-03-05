@@ -96,6 +96,7 @@ function ReplyCard({ reply, onUpvote, onFlag }: {
             <ThumbsUp size={10} /> {reply.upvotes}
           </button>
           <button onClick={() => onFlag(reply.id)}
+            title="Report this comment as inappropriate or spam"
             className="flex items-center gap-1 text-xs font-mono ml-auto"
             style={{ color: reply.is_flagged ? '#ff6b6b' : 'var(--muted)' }}>
             <Flag size={10} />
@@ -164,13 +165,11 @@ function CommentCard({ comment, replies, user, isAdmin, replyTo, replyContent, s
             <ThumbsUp size={11} /> {comment.upvotes}
           </button>
 
-          {user && (
-            <button onClick={() => setReplyTo(replyTo === comment.id ? null : comment.id)}
-              className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg"
-              style={{ background: 'var(--bg)', color: 'var(--muted)', border: '1px solid var(--border)' }}>
-              <Reply size={11} /> Reply{replies.length > 0 ? ' (' + replies.length + ')' : ''}
-            </button>
-          )}
+          <button onClick={() => setReplyTo(replyTo === comment.id ? null : comment.id)}
+            className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg"
+            style={{ background: replyTo === comment.id ? 'var(--accent-glow)' : 'var(--bg)', color: replyTo === comment.id ? 'var(--accent)' : 'var(--muted)', border: '1px solid ' + (replyTo === comment.id ? 'var(--accent)' : 'var(--border)') }}>
+            <Reply size={11} /> Reply{replies.length > 0 ? ' (' + replies.length + ')' : ''}
+          </button>
 
           <div className="flex items-center gap-2 ml-auto">
             {isAdmin && (
@@ -185,6 +184,7 @@ function CommentCard({ comment, replies, user, isAdmin, replyTo, replyContent, s
             )}
             <button onClick={() => onFlag(comment.id)}
               className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg"
+              title="Report this comment as inappropriate or spam"
               style={{
                 background: 'var(--bg)',
                 color: comment.is_flagged ? '#ff6b6b' : 'var(--muted)',
@@ -195,24 +195,34 @@ function CommentCard({ comment, replies, user, isAdmin, replyTo, replyContent, s
           </div>
         </div>
 
-        {replyTo === comment.id && user && (
+        {replyTo === comment.id && (
           <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--border)' }}>
-            <textarea value={replyContent} onChange={e => setReplyContent(e.target.value)}
-              placeholder={'Reply to ' + comment.author_name + '...'}
-              rows={2} className="w-full px-3 py-2.5 rounded-xl text-sm resize-none"
-              style={{ background: 'var(--bg)', border: '1px solid var(--border)', color: 'var(--text)', outline: 'none', fontFamily: 'Lora, serif' }} />
-            <div className="flex gap-2 mt-2 justify-end">
-              <button onClick={() => { setReplyTo(null); setReplyContent('') }}
-                className="px-3 py-1.5 rounded-lg text-xs font-mono"
-                style={{ background: 'var(--bg2)', color: 'var(--muted)', border: '1px solid var(--border)' }}>
-                Cancel
-              </button>
-              <button onClick={onSubmitReply} disabled={!replyContent.trim() || submitting}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono"
-                style={{ background: 'var(--accent)', color: '#fff', opacity: replyContent.trim() && !submitting ? 1 : 0.5 }}>
-                <Send size={11} /> Post reply
-              </button>
-            </div>
+            {!user ? (
+              <div className="text-xs font-mono py-3 px-4 rounded-xl text-center"
+                style={{ background: 'var(--bg)', border: '1px solid var(--border)', color: 'var(--muted)' }}>
+                Please <a href={'/api/auth/github?return=' + (typeof window !== 'undefined' ? window.location.pathname : '/')}
+                  style={{ color: 'var(--accent)', textDecoration: 'underline' }}>sign in with GitHub</a> or use guest login above to reply.
+              </div>
+            ) : (
+              <>
+                <textarea value={replyContent} onChange={e => setReplyContent(e.target.value)}
+                  placeholder={'Reply to ' + comment.author_name + '...'}
+                  rows={2} className="w-full px-3 py-2.5 rounded-xl text-sm resize-none"
+                  style={{ background: 'var(--bg)', border: '1px solid var(--border)', color: 'var(--text)', outline: 'none', fontFamily: 'Lora, serif' }} />
+                <div className="flex gap-2 mt-2 justify-end">
+                  <button onClick={() => { setReplyTo(null); setReplyContent('') }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-mono"
+                    style={{ background: 'var(--bg2)', color: 'var(--muted)', border: '1px solid var(--border)' }}>
+                    Cancel
+                  </button>
+                  <button onClick={onSubmitReply} disabled={!replyContent.trim() || submitting}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono"
+                    style={{ background: 'var(--accent)', color: '#fff', opacity: replyContent.trim() && !submitting ? 1 : 0.5 }}>
+                    <Send size={11} /> Post reply
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
