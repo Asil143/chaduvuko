@@ -171,7 +171,7 @@ export default function AthenaPage() {
         The pricing model is what makes Athena unique: you pay $5 per terabyte of data scanned. Use Parquet with partition pruning and most queries cost fractions of a cent. SELECT * on a 10TB CSV table costs $50 per run. Format and partitioning decisions have direct financial consequences.
       </p>
 
-      <Callout type="info" title="Athena vs Redshift">
+      <Callout type="info" label="Athena vs Redshift">
         Athena is for ad-hoc queries on S3 data — no loading, no maintenance, pay per query. Redshift is for sustained, high-concurrency analytical workloads with consistent performance. Use Athena for exploration and infrequent queries. Use Redshift for dashboards and reports that run constantly.
       </Callout>
 
@@ -203,7 +203,7 @@ export default function AthenaPage() {
       </p>
       <CodeBlock code={optimizeCode} language="sql" filename="athena_optimization.sql" />
 
-      <Callout type="tip" title="Always convert CSV to Parquet">
+      <Callout type="tip" label="Always convert CSV to Parquet">
         A 100GB CSV table costs $0.50 per full scan. The same data as Parquet with partitioning costs $0.005 for a typical filtered query — 100x cheaper. Converting to Parquet is a one-time cost that pays back immediately.
       </Callout>
 

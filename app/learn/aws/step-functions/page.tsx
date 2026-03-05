@@ -168,7 +168,7 @@ export default function StepFunctionsPage() {
         For data engineers, Step Functions is most useful for orchestrating pipelines where each step calls a different AWS service: Lambda for validation, Glue for transformation, Athena for aggregation, SNS for alerting.
       </p>
 
-      <Callout type="info" title="Step Functions vs Apache Airflow">
+      <Callout type="info" label="Step Functions vs Apache Airflow">
         Step Functions is tightly integrated with AWS services and requires no infrastructure. Airflow is code-first, cloud-neutral, and more flexible for complex Python logic. Most data engineering teams use Airflow (via MWAA on AWS) for complex pipeline orchestration and Step Functions for microservice coordination and event-driven workflows.
       </Callout>
 
@@ -191,7 +191,7 @@ export default function StepFunctionsPage() {
       <h2>Triggering Executions from Python</h2>
       <CodeBlock code={triggerCode} language="python" filename="trigger_pipeline.py" />
 
-      <Callout type="tip" title="Use EventBridge for scheduled triggers">
+      <Callout type="tip" label="Use EventBridge for scheduled triggers">
         Instead of calling start_execution from code, use Amazon EventBridge to trigger Step Functions on a cron schedule. EventBridge rule: cron(0 2 * * ? *) triggers the pipeline every day at 2am UTC. No always-running scheduler needed.
       </Callout>
 

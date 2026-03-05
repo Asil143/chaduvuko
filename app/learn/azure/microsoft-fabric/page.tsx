@@ -149,7 +149,7 @@ export default function MicrosoftFabricPage() {
         Think of it this way: the traditional Azure data stack requires 4-6 separate services that you wire together. Fabric is Microsoft&apos;s answer to that complexity — one platform where a data engineer, analyst, and business user all work in the same environment.
       </p>
 
-      <Callout type="info" title="OneLake — the most important concept">
+      <Callout type="info" label="OneLake — the most important concept">
         OneLake is the foundation of Fabric. It is a single logical data lake shared by every workload in your Fabric tenant. When a Data Pipeline ingests data, a Notebook transforms it, and Power BI reports on it — they are all reading the same OneLake storage. No copies, no movement, no sync.
       </Callout>
 
@@ -206,7 +206,7 @@ export default function MicrosoftFabricPage() {
         </table>
       </div>
 
-      <Callout type="tip" title="Learn the fundamentals first">
+      <Callout type="tip" label="Learn the fundamentals first">
         If you already know ADF, Databricks, and Synapse — Fabric takes about a week to learn because the concepts are identical. If you are new to Azure data engineering, learn the traditional stack first. Fabric assumes you understand pipelines, Spark, and SQL warehouses already.
       </Callout>
 
@@ -231,7 +231,7 @@ export default function MicrosoftFabricPage() {
         ))}
       </div>
 
-      <Callout type="warning" title="Free trial available">
+      <Callout type="warning" label="Free trial available">
         Microsoft offers a 60-day free Fabric trial on any Microsoft 365 account. Go to app.fabric.microsoft.com and start a trial — no credit card needed. Enough time to build a full end-to-end pipeline and explore every component.
       </Callout>
 

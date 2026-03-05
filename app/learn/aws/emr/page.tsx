@@ -148,7 +148,7 @@ export default function EMRPage() {
         The core value of EMR over Databricks is cost. EMR charges the EC2 instance price plus a small EMR management fee. Databricks charges EC2 plus Databricks Unit (DBU) fees on top — often 2-3x more expensive for equivalent compute. For teams running large, long-running batch jobs, EMR saves significant money.
       </p>
 
-      <Callout type="info" title="EMR on EC2 vs EMR Serverless">
+      <Callout type="info" label="EMR on EC2 vs EMR Serverless">
         EMR on EC2 gives you full cluster control — instance types, Spark configs, cluster lifetime. EMR Serverless is the newer, managed option — you submit jobs without provisioning a cluster. EMR Serverless is simpler but less configurable. Start with EMR on EC2 to learn the concepts.
       </Callout>
 
@@ -166,7 +166,7 @@ export default function EMRPage() {
       <h2>Launching a Cluster with a Spark Job</h2>
       <CodeBlock code={clusterCode} language="bash" filename="launch_emr_cluster.sh" />
 
-      <Callout type="tip" title="Use Spot instances on Task nodes">
+      <Callout type="tip" label="Use Spot instances on Task nodes">
         Task nodes do not store HDFS data — they are safe to terminate mid-job (Spark will retry failed tasks). Run Task nodes on Spot instances for 60-70% cost savings. Run Master and Core nodes on On-Demand for stability.
       </Callout>
 

@@ -128,7 +128,7 @@ export default function KeyVaultPage() {
         Key Vault solves this by being the single place where secrets live. Your code never contains the actual value — it contains a reference to Key Vault. At runtime, the pipeline authenticates using Managed Identity, retrieves the secret, and uses it. The value never touches your code or logs.
       </p>
 
-      <Callout type="warning" title="Secrets in Git are permanently compromised">
+      <Callout type="warning" label="Secrets in Git are permanently compromised">
         Even if you delete a secret from a Git commit, it exists in repository history. Anyone with repo access can retrieve it with git log. If a secret ever touches a Git repository, rotate it immediately — do not just delete it.
       </Callout>
 

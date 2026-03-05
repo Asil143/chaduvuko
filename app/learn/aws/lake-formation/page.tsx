@@ -137,7 +137,7 @@ export default function LakeFormationPage() {
         Lake Formation replaces all of that with a single permission model. You grant access at the database, table, column, or row level through Lake Formation — it translates those permissions into the underlying IAM and S3 policies automatically.
       </p>
 
-      <Callout type="info" title="Lake Formation vs S3 + IAM">
+      <Callout type="info" label="Lake Formation vs S3 + IAM">
         Without Lake Formation: grant S3 permissions + Glue permissions + Athena permissions separately for every user. With Lake Formation: grant SELECT on a table once — Lake Formation handles everything else. One place to manage, audit, and revoke access.
       </Callout>
 
@@ -163,7 +163,7 @@ export default function LakeFormationPage() {
       </p>
       <CodeBlock code={columnLevelCode} language="sql" filename="column_row_security.sql" />
 
-      <Callout type="tip" title="Column security for PII compliance">
+      <Callout type="tip" label="Column security for PII compliance">
         Column-level security is the correct way to handle PII in a shared data lake. Raw customer data (email, phone, address) lands in Bronze. Silver strips or masks PII columns. Lake Formation prevents anyone without explicit column permission from querying the raw columns — even if they have table access.
       </Callout>
 
