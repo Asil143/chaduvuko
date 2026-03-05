@@ -91,6 +91,9 @@ const sidebar = [
     { label: 'Azure Data Factory', href: '/learn/azure/adf' },
     { label: 'Azure Databricks', href: '/learn/azure/databricks' },
     { label: 'Azure Synapse', href: '/learn/azure/synapse' },
+    { label: 'Azure Event Hubs', href: '/learn/azure/event-hubs' },
+    { label: 'Azure Key Vault', href: '/learn/azure/key-vault' },
+    { label: 'Microsoft Fabric', href: '/learn/azure/microsoft-fabric' },
   ]},
   { label: 'AWS Track', color: '#ff9900', items: [
     { label: 'AWS Introduction', href: '/learn/aws/introduction' },
@@ -98,6 +101,10 @@ const sidebar = [
     { label: 'AWS Glue', href: '/learn/aws/glue' },
     { label: 'Amazon Redshift', href: '/learn/aws/redshift' },
     { label: 'Amazon Kinesis', href: '/learn/aws/kinesis' },
+    { label: 'Amazon Athena', href: '/learn/aws/athena' },
+    { label: 'Amazon EMR', href: '/learn/aws/emr' },
+    { label: 'AWS Step Functions', href: '/learn/aws/step-functions' },
+    { label: 'AWS Lake Formation', href: '/learn/aws/lake-formation' },
   ]},
   { label: 'GCP Track', color: '#4285f4', items: [
     { label: 'GCP Introduction', href: '/learn/gcp/introduction' },

@@ -185,7 +185,7 @@ export default function AzureIntroductionPage() {
       </div>
 
       <Callout type="azure">
-        This VedaEra Azure track is aligned with the official Microsoft Learn DP-203 learning path.{' '}
+        This Azure track is aligned with the official Microsoft Learn DP-203 learning path.{' '}
         <a href="https://learn.microsoft.com/en-us/training/modules/introduction-to-data-engineering-azure/" target="_blank" rel="noreferrer"
           className="underline inline-flex items-center gap-1" style={{ color: '#50b0ff' }}>
           Introduction to Data Engineering on Azure <ExternalLink size={11} />
