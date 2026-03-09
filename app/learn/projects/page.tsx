@@ -247,9 +247,10 @@ export default function ProjectsPage() {
                 Projects build on each other — same resources, same data, growing complexity
               </p>
               <p className="text-xs" style={{ color: 'var(--muted)' }}>
-                All {track.label} projects use the same FreshMart grocery chain dataset and the same Azure resource group.
-                Complete them in order — each project assumes the previous one is done.
-              </p>
+  {track.key === 'azure' && 'All Azure projects use the same FreshMart grocery chain dataset and the same Azure resource group. Complete them in order — each project assumes the previous one is done.'}
+  {track.key === 'aws' && 'All AWS projects use the same RetailStream e-commerce dataset on Amazon S3. Complete them in order — each project builds on the same AWS account and resources.'}
+  {track.key === 'gcp' && 'All GCP projects use the same UrbanMart retail dataset on Google Cloud Storage. Complete them in order — each project builds on the same GCP project and resources.'}
+</p>
             </div>
           </div>
         </div>

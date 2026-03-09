@@ -39,8 +39,11 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/gcp/dataflow',             title: 'Cloud Dataflow',                  section: 'GCP Track',   difficulty: 'Advanced',     color: '#4285f4', readTime: '14 min', xp: 200 },
   { href: '/learn/gcp/pubsub',               title: 'Cloud Pub/Sub',                   section: 'GCP Track',   difficulty: 'Intermediate', color: '#4285f4', readTime: '12 min', xp: 150 },
   { href: '/learn/gcp/composer',             title: 'Cloud Composer',                  section: 'GCP Track',   difficulty: 'Advanced',     color: '#4285f4', readTime: '14 min', xp: 200 },
-  // Projects & Career
-  { href: '/learn/projects/azure-batch-pipeline', title: 'Project 1: Azure Batch Pipeline', section: 'Projects', difficulty: 'Advanced', color: '#00e676', readTime: '45 min', xp: 500 },
+  // Projects — all three live projects
+  { href: '/learn/projects/azure-batch-pipeline', title: 'Project 01 — Copy CSV to ADLS',        section: 'Projects', difficulty: 'Advanced', color: '#00e676', readTime: '60 min', xp: 500 },
+  { href: '/learn/projects/azure-project-02',     title: 'Project 02 — ForEach Loop',            section: 'Projects', difficulty: 'Advanced', color: '#00e676', readTime: '60 min', xp: 500 },
+  { href: '/learn/projects/azure-project-03',     title: 'Project 03 — Run Date Pipeline',       section: 'Projects', difficulty: 'Advanced', color: '#00e676', readTime: '75 min', xp: 500 },
+  // Career
   { href: '/learn/interview',                title: 'Interview Prep',                  section: 'Interview',   difficulty: 'Intermediate', color: '#ff6b6b', readTime: '20 min', xp: 200 },
 ]
 
@@ -87,11 +90,11 @@ export const NEXT_PAGES: Record<string, PageMeta[]> = {
   ],
   '/learn/azure/key-vault': [
     PAGE_ORDER.find(p => p.href === '/learn/azure/microsoft-fabric')!,
-    PAGE_ORDER.find(p => p.href === '/learn/aws/introduction')!,
+    PAGE_ORDER.find(p => p.href === '/learn/projects/azure-batch-pipeline')!,
   ],
   '/learn/azure/microsoft-fabric': [
-    PAGE_ORDER.find(p => p.href === '/learn/aws/introduction')!,
     PAGE_ORDER.find(p => p.href === '/learn/projects/azure-batch-pipeline')!,
+    PAGE_ORDER.find(p => p.href === '/learn/aws/introduction')!,
   ],
   '/learn/aws/introduction': [
     PAGE_ORDER.find(p => p.href === '/learn/aws/s3')!,
@@ -128,6 +131,12 @@ export const NEXT_PAGES: Record<string, PageMeta[]> = {
   '/learn/aws/lake-formation': [
     PAGE_ORDER.find(p => p.href === '/learn/gcp/introduction')!,
     PAGE_ORDER.find(p => p.href === '/learn/gcp/bigquery')!,
+  ],
+  '/learn/projects/azure-batch-pipeline': [
+    PAGE_ORDER.find(p => p.href === '/learn/projects/azure-project-02')!,
+  ],
+  '/learn/projects/azure-project-02': [
+    PAGE_ORDER.find(p => p.href === '/learn/projects/azure-project-03')!,
   ],
 }
 
