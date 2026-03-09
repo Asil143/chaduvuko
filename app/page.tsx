@@ -58,12 +58,54 @@ const modernStack = [
 ]
 
 const projects = [
-  { num:'01', title:'Retail Sales Batch Pipeline — Azure', desc:'Medallion Architecture using ADF, Databricks, ADLS Gen2, and Synapse Analytics.', tags:['ADF','Databricks','Synapse','Delta Lake'], status:'live', href:'/learn/projects/azure-batch-pipeline' },
-  { num:'02', title:'Real-Time Stock Streaming — Azure', desc:'Event Hubs, Stream Analytics, and Power BI real-time dashboard.', tags:['Event Hubs','Stream Analytics','Power BI'], status:'soon', href:'/learn/projects' },
-  { num:'03', title:'Lambda Architecture — Batch + Stream', desc:'Production-grade e-commerce platform combining batch and real-time data.', tags:['Databricks','Event Hubs','ADF','Synapse'], status:'soon', href:'/learn/projects' },
-  { num:'04', title:'End-to-End Pipeline — AWS', desc:'S3, AWS Glue, Redshift, and Kinesis on Amazon Web Services.', tags:['S3','Glue','Redshift','Kinesis'], status:'soon', href:'/learn/projects' },
-  { num:'05', title:'BigQuery Analytics — GCP', desc:'BigQuery, Dataflow, Pub/Sub, and Looker Studio on Google Cloud.', tags:['BigQuery','Dataflow','Pub/Sub','Looker'], status:'soon', href:'/learn/projects' },
-  { num:'06', title:'Multi-Cloud Lakehouse with Iceberg', desc:'One open lakehouse spanning Azure, AWS, and GCP using Apache Iceberg.', tags:['Iceberg','Azure','AWS','GCP'], status:'soon', href:'/learn/projects' },
+  {
+    num: '01',
+    title: 'Copy a CSV File to Azure Data Lake',
+    desc: 'Your first Azure pipeline from scratch. Upload a CSV file to cloud storage using Azure Data Factory — the foundation pattern behind every DE pipeline.',
+    tags: ['ADF', 'ADLS Gen2', 'Blob Storage'],
+    status: 'live',
+    href: '/learn/projects/azure-batch-pipeline',
+  },
+  {
+    num: '02',
+    title: 'Copy Multiple Files Using ForEach Loop',
+    desc: 'Stop creating 10 separate Copy activities. Use one ForEach loop to move all 10 store CSV files in a single parameterized pipeline run.',
+    tags: ['ADF', 'ForEach', 'Parameters'],
+    status: 'live',
+    href: '/learn/projects/azure-projects-02',
+  },
+  {
+    num: '03',
+    title: 'Parameterized Pipeline with Run Date',
+    desc: 'Pass a date at runtime and ADF builds the correct file names automatically. Add a midnight trigger and the pipeline runs every night with zero human involvement.',
+    tags: ['ADF', 'Triggers', 'Date Partitioning'],
+    status: 'live',
+    href: '/learn/projects/azure-project-03',
+  },
+  {
+    num: '04',
+    title: 'HTTP Ingestion — Download from a Public URL',
+    desc: 'Pull data directly from a public HTTPS endpoint into ADLS. No manual uploads — ADF fetches from the internet and lands it straight in your data lake.',
+    tags: ['ADF', 'HTTP', 'Web Activity'],
+    status: 'live',
+    href: '/learn/projects/azure-project-04',
+  },
+  {
+    num: '05',
+    title: 'Organize Files Automatically With Date Stamps',
+    desc: 'Check file existence before copying, add today\'s date to file names, clean the landing zone automatically, and log missing files — a complete production file management workflow.',
+    tags: ['ADF', 'Get Metadata', 'If Condition', 'Delete'],
+    status: 'live',
+    href: '/learn/projects/azure-project-05',
+  },
+  {
+    num: '06',
+    title: 'Silver → Gold Aggregations for Reporting',
+    desc: 'Build the Gold layer — aggregate daily store sales by region, product category, and time period. Load into Synapse for Power BI reporting.',
+    tags: ['Databricks', 'Synapse', 'Delta Lake'],
+    status: 'soon',
+    href: '/learn/projects',
+  },
 ]
 
 // Animated counter hook
@@ -193,7 +235,7 @@ export default function HomePage() {
         <div className="relative flex items-center gap-10 md:gap-16 mt-14 pt-10 flex-wrap justify-center"
           style={{ borderTop: '1px solid var(--border)' }}>
           <AnimatedStat value={200} suffix="+" label="Tutorials" />
-          <AnimatedStat value={6} suffix="" label="Projects" />
+          <AnimatedStat value={3} suffix=" live" label="Projects" />
           <AnimatedStat value={3} suffix="" label="Cloud Platforms" />
           <AnimatedStat value={100} suffix="%" label="Free Forever" />
         </div>
