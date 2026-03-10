@@ -83,7 +83,7 @@ const sidebar = [
     { label: 'What is Data Engineering?', href: '/learn/what-is-data-engineering' },
     { label: 'Roadmap 2025', href: '/learn/roadmap' },
     { label: 'SQL for Data Engineers', href: '/learn/foundations/sql' },
-    { label: 'PostgreSQL', href: '/learn/foundations/postgresql' }
+    { label: 'PostgreSQL', href: '/learn/foundations/postgresql' },
     { label: 'Python for Data Engineers', href: '/learn/foundations/python' },
   ]},
   { label: 'Azure Track', color: '#0078d4', items: [
