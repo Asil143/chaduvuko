@@ -66,15 +66,15 @@ const azureProjects = [
   },
   {
     num: '06',
-    title: 'Silver → Gold Aggregations for Reporting',
-    subtitle: 'Databricks · Synapse · Analytics · Business Metrics',
-    desc: 'Build the Gold layer — aggregate daily store sales by region, product category, and time period. Load into Synapse for Power BI reporting.',
-    tags: ['Databricks', 'Synapse', 'Delta Lake'],
-    time: '90 min',
-    level: 'Intermediate',
-    levelColor: '#ff9900',
-    href: '/learn/projects',
-    status: 'coming',
+    title: 'Pull Data From a REST API',
+    subtitle: 'ADF · HTTP Linked Service · REST API · JSON Format · Real Weather Data',
+    desc: 'Call a live weather API from ADF, receive JSON responses for three cities, save them to ADLS, and automate the pipeline to run every morning at 6 AM.',
+    tags: ['ADF', 'REST API', 'JSON', 'HTTP'],
+    time: '75–90 min',
+    level: 'Beginner+',
+    levelColor: '#00e676',
+    href: '/learn/projects/azure-project-06',
+    status: 'live',
   },
 ]
 
@@ -121,7 +121,7 @@ const gcpProjects = [
 ]
 
 const tracks = [
-  { key: 'azure', label: '☁️ Azure', color: '#0078d4', textColor: '#50b0ff', projects: azureProjects, liveCount: 5 },
+  { key: 'azure', label: '☁️ Azure', color: '#0078d4', textColor: '#50b0ff', projects: azureProjects, liveCount: 6 },
   { key: 'aws',   label: '🟠 AWS',   color: '#ff9900', textColor: '#ff9900', projects: awsProjects,   liveCount: 0 },
   { key: 'gcp',   label: '🔵 GCP',   color: '#4285f4', textColor: '#4285f4', projects: gcpProjects,   liveCount: 0 },
 ]
@@ -205,7 +205,7 @@ export default function ProjectsPage() {
           {/* Stats */}
           <div className="flex flex-wrap gap-4 mt-6">
             {[
-              { label: 'Azure Projects Live', value: '3', color: '#0078d4' },
+              { label: 'Azure Projects Live', value: '6', color: '#0078d4' },
               { label: 'AWS Projects',         value: '2 coming', color: '#ff9900' },
               { label: 'GCP Projects',         value: '1 coming', color: '#4285f4' },
               { label: 'Total Planned',         value: '25+', color: 'var(--accent)' },

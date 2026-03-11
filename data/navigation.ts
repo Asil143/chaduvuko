@@ -43,6 +43,7 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/projects/azure-batch-pipeline', title: 'Project 01 — Copy CSV to ADLS',        section: 'Projects', difficulty: 'Advanced', color: '#00e676', readTime: '60 min', xp: 500 },
   { href: '/learn/projects/azure-project-02',     title: 'Project 02 — ForEach Loop',            section: 'Projects', difficulty: 'Advanced', color: '#00e676', readTime: '60 min', xp: 500 },
   { href: '/learn/projects/azure-project-03',     title: 'Project 03 — Run Date Pipeline',       section: 'Projects', difficulty: 'Advanced', color: '#00e676', readTime: '75 min', xp: 500 },
+  { href: '/learn/projects/azure-project-06',     title: 'Project 06 — Pull Data From a REST API', section: 'Projects', difficulty: 'Advanced', color: '#00e676', readTime: '90 min', xp: 500 },
   // Career
   { href: '/learn/interview',                title: 'Interview Prep',                  section: 'Interview',   difficulty: 'Intermediate', color: '#ff6b6b', readTime: '20 min', xp: 200 },
 ]
@@ -137,6 +138,9 @@ export const NEXT_PAGES: Record<string, PageMeta[]> = {
   ],
   '/learn/projects/azure-project-02': [
     PAGE_ORDER.find(p => p.href === '/learn/projects/azure-project-03')!,
+  ],
+  '/learn/projects/azure-project-03': [
+    PAGE_ORDER.find(p => p.href === '/learn/projects/azure-project-06')!,
   ],
 }
 
