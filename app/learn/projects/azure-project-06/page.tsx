@@ -355,7 +355,7 @@ latitude=28.6139              → first parameter (Delhi's latitude)
 
       <Screenshot caption="Browser showing the raw JSON response from Open-Meteo API — JSON text visible in the browser window" />
 
-      <Callout type="success" label="✅ If you see JSON data — the API is working">
+      <Callout type="tip" label="✅ If you see JSON data — the API is working">
         The browser is doing the same thing ADF will do: sending an HTTP GET request to the URL and receiving a JSON response.
       </Callout>
 
@@ -692,7 +692,7 @@ cities:    [{"name":"delhi","lat":"28.6139","lon":"77.2090"},{"name":"mumbai","l
       <Screenshot caption="weather_delhi_20240115.json file open in Azure Portal — raw JSON content visible" />
       <Screenshot caption="weather_mumbai_20240115.json — different temperature values confirming it's a separate API call" />
 
-      <Callout type="success" label="✅ 3 API calls, 3 JSON responses, 3 separate files">
+      <Callout type="tip" label="✅ 3 API calls, 3 JSON responses, 3 separate files">
         The pipeline called the Open-Meteo API three times with different lat/lon values and saved three separate JSON files to ADLS — one per city.
       </Callout>
 
