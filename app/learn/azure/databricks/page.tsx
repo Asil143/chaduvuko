@@ -156,7 +156,7 @@ export default function DatabricksPage() {
       description="Azure Databricks is where the real transformation work happens. It brings Apache Spark as a fully managed service — write PySpark code in notebooks, run it across a cluster of machines, and process datasets too large to fit in memory on any single computer."
       section="Section 02 · Azure Track"
       readTime="20 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Azure Track', href: '/learn/azure/introduction' },
         { label: 'Azure Databricks', href: '/learn/azure/databricks' },

@@ -43,7 +43,7 @@ export default function PostgreSQLPage() {
       description="The most important database skill you can learn. From absolute zero — install PostgreSQL, understand tables, write real queries, and build skills that every data engineering job requires."
       section="Foundations"
       readTime="90–120 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       prev={{ title: 'SQL for Data Engineers', href: '/learn/foundations/sql' }}
       next={{ title: 'Python for Data Engineers', href: '/learn/foundations/python' }}
     >

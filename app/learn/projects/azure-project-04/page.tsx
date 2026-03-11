@@ -92,7 +92,7 @@ export default function Project04Page() {
       description="Stop uploading files manually. Build a pipeline that goes directly to a public internet URL, downloads the CSV, and saves it to ADLS — automatically, every morning. No analyst involvement required."
       section="Projects"
       readTime="60–75 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
     >
 
       {/* Series info */}

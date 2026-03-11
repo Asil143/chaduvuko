@@ -98,7 +98,7 @@ export default function ComposerPage() {
       description="Cloud Composer is GCP's fully managed Apache Airflow service. You write Python DAGs to orchestrate your entire data pipeline — triggering Dataflow jobs, waiting for files, running BigQuery queries, and handling failures automatically."
       section="Section 02 · GCP Track"
       readTime="14 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'GCP Track', href: '/learn/gcp/introduction' },
         { label: 'Cloud Composer', href: '/learn/gcp/composer' },

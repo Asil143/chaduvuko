@@ -10,7 +10,7 @@ export default function KinesisPage() {
       description="Kinesis is how you get data into AWS in real time. Instead of waiting for a file to land in S3, Kinesis captures events the moment they happen — clicks, transactions, sensor readings — and makes them available for processing within seconds."
       section="AWS Track"
       readTime="13 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'AWS', href: '/learn/aws/introduction' },
         { label: 'Amazon Kinesis', href: '/learn/aws/kinesis' },

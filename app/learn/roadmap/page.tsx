@@ -1,7 +1,7 @@
 import { LearnLayout } from '@/components/content/LearnLayout'
 import Link from 'next/link'
 
-export const metadata = { title: 'Data Engineering Roadmap 2025 — Asil' }
+export const metadata = { title: 'Data Engineering Roadmap 2026 — Asil' }
 
 const phases = [
   {
@@ -67,15 +67,15 @@ const phases = [
 export default function RoadmapPage() {
   return (
     <LearnLayout
-      title="Data Engineering Roadmap 2025"
+      title="Data Engineering Roadmap 2026"
       description="A clear path from zero to job-ready. No wasted time, no random tutorials. Every step is here because it makes you more employable."
       section="Foundations"
       readTime="8 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       showSalary={true}
       breadcrumbs={[
         { label: 'Learn', href: '/learn/roadmap' },
-        { label: 'Roadmap 2025', href: '/learn/roadmap' },
+        { label: 'Roadmap 2026', href: '/learn/roadmap' },
       ]}
     >
       <h2>How to use this roadmap</h2>

@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const searchData = [
   { title: 'What is Data Engineering?', section: 'Foundations', href: '/learn/what-is-data-engineering', tags: ['pipeline','etl','batch','streaming','data lake','warehouse'] },
-  { title: 'Data Engineering Roadmap 2025', section: 'Foundations', href: '/learn/roadmap', tags: ['roadmap','learning path','beginner','career'] },
+  { title: 'Data Engineering Roadmap 2026', section: 'Foundations', href: '/learn/roadmap', tags: ['roadmap','learning path','beginner','career'] },
   { title: 'SQL for Data Engineers', section: 'Foundations', href: '/learn/foundations/sql', tags: ['sql','window functions','cte','joins','rank'] },
   { title: 'Python for Data Engineers', section: 'Foundations', href: '/learn/foundations/python', tags: ['python','pyspark','pandas','spark','dataframe'] },
   { title: 'Azure Introduction', section: 'Azure Track', href: '/learn/azure/introduction', tags: ['azure','cloud','medallion','dp-203'] },

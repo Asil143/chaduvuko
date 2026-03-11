@@ -75,7 +75,7 @@ export default function Project02Page() {
       description="Stop creating one Copy activity per file. Use the ForEach activity to loop through a list of files and copy all of them in a single pipeline run. Add a new store tomorrow — just update the array, no pipeline changes needed."
       section="Projects"
       readTime="60–90 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Projects', href: '/learn/projects' },
         { label: 'Project 02 — ForEach Loop', href: '/learn/projects/azure-projects-02' },

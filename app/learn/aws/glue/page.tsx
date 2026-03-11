@@ -10,7 +10,7 @@ export default function GluePage() {
       description="AWS Glue is the closest thing AWS has to Azure Databricks — a managed environment for running Spark-based data transformations without managing servers. The key difference: Glue is fully serverless, Databricks gives you more control."
       section="AWS Track"
       readTime="16 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'AWS', href: '/learn/aws/introduction' },
         { label: 'AWS Glue', href: '/learn/aws/glue' },

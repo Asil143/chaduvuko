@@ -10,7 +10,7 @@ export default function S3Page() {
       description="S3 is the foundation of every AWS data engineering stack. Every pipeline reads from it, writes to it, or both. Once you understand S3 well, everything else on AWS makes more sense."
       section="AWS Track"
       readTime="14 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'AWS', href: '/learn/aws/introduction' },
         { label: 'Amazon S3', href: '/learn/aws/s3' },

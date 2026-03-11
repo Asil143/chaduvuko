@@ -10,7 +10,7 @@ export default function ADLSPage() {
       description="ADLS Gen2 is where all your data lives on Azure. Your Bronze, Silver, and Gold layers all sit here. Understanding how it is structured, how access works, and how to partition data well is foundational for everything else."
       section="Azure Track"
       readTime="15 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Azure', href: '/learn/azure/introduction' },
         { label: 'ADLS Gen2', href: '/learn/azure/adls-gen2' },

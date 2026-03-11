@@ -41,7 +41,7 @@ export default function AzureIntroductionPage() {
       description="Azure is the dominant cloud platform for enterprise data engineering. This section explains why Azure, what roles exist, how the architecture cycle works, and which services you'll actually use on the job."
       section="Section 02 · Cloud Platforms · Azure Track"
       readTime="18 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Cloud Platforms', href: '/learn/azure/introduction' },
         { label: 'Azure Introduction', href: '/learn/azure/introduction' },

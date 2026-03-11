@@ -3,7 +3,7 @@ import Link from 'next/link'
 const links = {
   Learn: [
     { label: 'What is Data Engineering?', href: '/learn/what-is-data-engineering' },
-    { label: 'Roadmap 2025', href: '/learn/roadmap' },
+    { label: 'Roadmap 2026', href: '/learn/roadmap' },
     { label: 'SQL for Data Engineers', href: '/learn/foundations/sql' },
     { label: 'Python for Data Engineers', href: '/learn/foundations/python' },
   ],
@@ -65,7 +65,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between pt-8 gap-4"
           style={{ borderTop: '1px solid var(--border)' }}>
           <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-            © 2025 · Built by{' '}
+            © 2026 · Built by{' '}
             <span className="font-display font-bold">
               <span style={{ color: 'var(--text)' }}>As</span><span style={{ color: 'var(--accent)' }}>il</span>
             </span>

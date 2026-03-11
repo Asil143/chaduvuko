@@ -551,7 +551,7 @@ export default function InterviewPage() {
       description="Real questions from real interviews — not textbook definitions. Each answer is written the way a senior engineer would actually answer it, with the details that make interviewers take notice."
       section="Interview Prep"
       readTime="30 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Learn', href: '/learn/roadmap' },
         { label: 'Interview Prep', href: '/learn/interview' },

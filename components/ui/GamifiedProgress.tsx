@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const LESSONS = [
   { id: 'what-is-de',   title: 'What is Data Engineering?',  section: 'Foundations', href: '/learn/what-is-data-engineering', color: '#00c2ff', xp: 100 },
-  { id: 'roadmap',      title: 'Roadmap 2025',                section: 'Foundations', href: '/learn/roadmap',                  color: '#00c2ff', xp: 100 },
+  { id: 'roadmap',      title: 'Roadmap 2026',                section: 'Foundations', href: '/learn/roadmap',                  color: '#00c2ff', xp: 100 },
   { id: 'sql',          title: 'SQL for Data Engineers',      section: 'Foundations', href: '/learn/foundations/sql',          color: '#00c2ff', xp: 150 },
   { id: 'python',       title: 'Python for Data Engineers',   section: 'Foundations', href: '/learn/foundations/python',       color: '#00c2ff', xp: 150 },
   { id: 'azure-intro',  title: 'Azure Introduction',          section: 'Azure',       href: '/learn/azure/introduction',       color: '#0078d4', xp: 100 },

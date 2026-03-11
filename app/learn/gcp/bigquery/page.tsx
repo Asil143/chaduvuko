@@ -81,7 +81,7 @@ export default function BigQueryPage() {
       description="BigQuery is the crown jewel of GCP — a serverless, massively parallel data warehouse that queries terabytes in seconds. Zero infrastructure to manage, zero tuning required. The most powerful SQL analytics engine in any cloud."
       section="Section 02 · GCP Track"
       readTime="15 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'GCP Track', href: '/learn/gcp/introduction' },
         { label: 'Google BigQuery', href: '/learn/gcp/bigquery' },

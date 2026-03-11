@@ -121,7 +121,7 @@ export default function LakeFormationPage() {
       description="Lake Formation is the AWS data governance and security layer for your data lake. It controls who can access which databases, tables, columns, and rows in your S3-based data lake — replacing complex IAM and S3 bucket policies with a centralized, fine-grained permission system."
       section="Section 03 · AWS Track"
       readTime="12 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'AWS Track', href: '/learn/aws/introduction' },
         { label: 'AWS Lake Formation', href: '/learn/aws/lake-formation' },

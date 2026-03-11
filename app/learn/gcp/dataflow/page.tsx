@@ -71,7 +71,7 @@ export default function DataflowPage() {
       description="Cloud Dataflow is GCP's fully managed Apache Beam service. It handles both batch and streaming data processing, auto-scales workers up and down based on workload, and integrates natively with BigQuery, Pub/Sub, and GCS."
       section="Section 02 · GCP Track"
       readTime="14 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'GCP Track', href: '/learn/gcp/introduction' },
         { label: 'Cloud Dataflow', href: '/learn/gcp/dataflow' },

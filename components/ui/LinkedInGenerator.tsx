@@ -5,7 +5,7 @@ import { Copy, Check, Linkedin, ChevronDown } from 'lucide-react'
 const POSTS: Record<string, { headline: string; body: string; hashtags: string }> = {
   '/learn/what-is-data-engineering': {
     headline: "I just started my Data Engineering journey",
-    body: "Today I learned what Data Engineers actually do — we build the pipelines that move raw data into clean, structured formats for analysts and ML teams to use.\n\nKey concepts I studied:\n• ETL vs ELT\n• Batch vs Streaming pipelines\n• The Medallion Architecture (Bronze → Silver → Gold)\n• Why Data Engineering is the fastest-growing cloud skill in 2025\n\nUsing Asil (asil.dev) to learn Azure, AWS, and GCP data engineering for free.",
+    body: "Today I learned what Data Engineers actually do — we build the pipelines that move raw data into clean, structured formats for analysts and ML teams to use.\n\nKey concepts I studied:\n• ETL vs ELT\n• Batch vs Streaming pipelines\n• The Medallion Architecture (Bronze → Silver → Gold)\n• Why Data Engineering is the fastest-growing cloud skill in 2026\n\nUsing Asil (asil.dev) to learn Azure, AWS, and GCP data engineering for free.",
     hashtags: "#DataEngineering #Azure #AWS #GCP #CloudComputing #LearningInPublic"
   },
   '/learn/foundations/sql': {
@@ -30,7 +30,7 @@ const POSTS: Record<string, { headline: string; body: string; hashtags: string }
   },
   '/learn/projects/azure-batch-pipeline': {
     headline: "I just built my first end-to-end Azure data pipeline from scratch",
-    body: "Project 1 COMPLETE on Asil 🎉\n\nBuilt a complete Retail Sales Batch Pipeline on Azure using the Medallion Architecture:\n\n🏗️ Tech Stack:\n• ADLS Gen2 — Bronze/Silver/Gold storage layers\n• Azure Data Factory — Pipeline orchestration\n• Azure Databricks — PySpark transformations\n• Azure Synapse Analytics — Analyst SQL queries\n\n📊 What the pipeline does:\n1. Raw sales CSV lands in Bronze (ADLS Gen2)\n2. ADF triggers Databricks at 2am daily\n3. Databricks cleans, validates, and creates Delta Lake Silver layer\n4. Gold layer aggregates: daily sales, customer LTV, regional performance\n5. Analysts query Gold via Synapse SQL\n\nThis is a portfolio-ready project. If you want to land a data engineering job in 2025, this is the kind of thing recruiters want to see.\n\n100% free at asil.dev",
+    body: "Project 1 COMPLETE on Asil 🎉\n\nBuilt a complete Retail Sales Batch Pipeline on Azure using the Medallion Architecture:\n\n🏗️ Tech Stack:\n• ADLS Gen2 — Bronze/Silver/Gold storage layers\n• Azure Data Factory — Pipeline orchestration\n• Azure Databricks — PySpark transformations\n• Azure Synapse Analytics — Analyst SQL queries\n\n📊 What the pipeline does:\n1. Raw sales CSV lands in Bronze (ADLS Gen2)\n2. ADF triggers Databricks at 2am daily\n3. Databricks cleans, validates, and creates Delta Lake Silver layer\n4. Gold layer aggregates: daily sales, customer LTV, regional performance\n5. Analysts query Gold via Synapse SQL\n\nThis is a portfolio-ready project. If you want to land a data engineering job in 2026, this is the kind of thing recruiters want to see.\n\n100% free at asil.dev",
     hashtags: "#Azure #DataEngineering #Portfolio #AzureDatabricks #ADF #Synapse #LearningInPublic #H1B"
   },
 }

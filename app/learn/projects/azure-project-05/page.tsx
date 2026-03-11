@@ -93,7 +93,7 @@ export default function Project05Page() {
       description="Stop overwriting files silently. Build a pipeline that checks if a file exists before copying, date-stamps the output, cleans the landing zone automatically, and logs what was missing — a complete production file management workflow."
       section="Projects"
       readTime="90–120 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
     >
 
       {/* Series info */}

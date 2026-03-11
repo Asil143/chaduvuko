@@ -10,7 +10,7 @@ const KEY_LAST_VISIT = 'vedalera_last_visit'
 
 const ALL_LESSONS = [
   { href: '/learn/what-is-data-engineering', title: 'What is Data Engineering?',  track: 'Foundations', xp: 100, color: '#00c2ff' },
-  { href: '/learn/roadmap',                  title: 'Roadmap 2025',               track: 'Foundations', xp: 100, color: '#00c2ff' },
+  { href: '/learn/roadmap',                  title: 'Roadmap 2026',               track: 'Foundations', xp: 100, color: '#00c2ff' },
   { href: '/learn/foundations/sql',          title: 'SQL for Data Engineers',     track: 'Foundations', xp: 200, color: '#00c2ff' },
   { href: '/learn/foundations/python',       title: 'Python for Data Engineers',  track: 'Foundations', xp: 200, color: '#00c2ff' },
   { href: '/learn/azure/introduction',       title: 'Azure Introduction',         track: 'Azure',       xp: 150, color: '#0078d4' },

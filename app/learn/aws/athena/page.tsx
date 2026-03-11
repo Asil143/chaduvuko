@@ -155,7 +155,7 @@ export default function AthenaPage() {
       description="Athena is AWS serverless SQL query engine. It queries data directly in S3 using standard SQL — no database to set up, no cluster to manage, no data to load. You pay only for the data scanned per query."
       section="Section 03 · AWS Track"
       readTime="13 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'AWS Track', href: '/learn/aws/introduction' },
         { label: 'Amazon Athena', href: '/learn/aws/athena' },

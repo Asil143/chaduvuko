@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     '<p style="font-size: 16px; line-height: 1.7; color: #444;">Hey ' + greeting + ' 👋</p>',
     '<p style="font-size: 16px; line-height: 1.7; color: #444;">You are now subscribed to free data engineering content — tutorials, career tips, and updates on the modern data stack.</p>',
     '<p style="font-size: 16px; line-height: 1.7; color: #444;">Start here if you have not already:</p>',
-    '<a href="' + siteUrl + '/learn/roadmap" style="display: inline-block; background: #0078d4; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 8px 0;">Data Engineering Roadmap 2025 &rarr;</a>',
+    '<a href="' + siteUrl + '/learn/roadmap" style="display: inline-block; background: #0078d4; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 8px 0;">Data Engineering Roadmap 2026 &rarr;</a>',
     '<p style="font-size: 13px; color: #999; margin-top: 40px;">Built by Asil &middot; Free forever &middot; No spam</p>',
     '</div>',
   ].join('\n')

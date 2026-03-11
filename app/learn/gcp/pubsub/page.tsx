@@ -75,7 +75,7 @@ export default function PubSubPage() {
       description="Cloud Pub/Sub is GCP's real-time messaging service. It decouples event producers from consumers and handles millions of messages per second — the streaming foundation of every GCP data pipeline."
       section="Section 02 · GCP Track"
       readTime="12 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'GCP Track', href: '/learn/gcp/introduction' },
         { label: 'Cloud Pub/Sub', href: '/learn/gcp/pubsub' },

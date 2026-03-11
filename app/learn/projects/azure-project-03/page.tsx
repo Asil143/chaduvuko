@@ -85,7 +85,7 @@ export default function Project03Page() {
       description="Build a fully automated pipeline where you pass a date at runtime and ADF constructs the correct file names and folder paths automatically. Add a scheduled trigger and the pipeline runs every night at midnight with zero human involvement."
       section="Projects"
       readTime="75–90 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Projects', href: '/learn/projects/azure-batch-pipeline' },
         { label: 'Project 03 — Run Date Pipeline', href: '/learn/projects/azure-project-03' },

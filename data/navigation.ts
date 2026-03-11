@@ -11,7 +11,7 @@ export interface PageMeta {
 export const PAGE_ORDER: PageMeta[] = [
   // Foundations
   { href: '/learn/what-is-data-engineering', title: 'What is Data Engineering?',      section: 'Foundations', difficulty: 'Beginner',     color: '#00c2ff', readTime: '10 min', xp: 100 },
-  { href: '/learn/roadmap',                  title: 'Roadmap 2025',                    section: 'Foundations', difficulty: 'Beginner',     color: '#00c2ff', readTime: '8 min',  xp: 100 },
+  { href: '/learn/roadmap',                  title: 'Roadmap 2026',                    section: 'Foundations', difficulty: 'Beginner',     color: '#00c2ff', readTime: '8 min',  xp: 100 },
   { href: '/learn/foundations/sql',          title: 'SQL for Data Engineers',          section: 'Foundations', difficulty: 'Intermediate', color: '#00c2ff', readTime: '25 min', xp: 150 },
   { href: '/learn/foundations/python',       title: 'Python for Data Engineers',       section: 'Foundations', difficulty: 'Intermediate', color: '#00c2ff', readTime: '20 min', xp: 150 },
   // Azure Track

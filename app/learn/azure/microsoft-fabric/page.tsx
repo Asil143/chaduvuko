@@ -133,7 +133,7 @@ export default function MicrosoftFabricPage() {
       description="Microsoft Fabric is an all-in-one analytics platform that unifies data engineering, data warehousing, real-time analytics, and business intelligence inside a single product. It replaces the need to stitch together ADF + Databricks + Synapse + Power BI separately."
       section="Section 02 · Azure Track"
       readTime="15 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Azure Track', href: '/learn/azure/introduction' },
         { label: 'Microsoft Fabric', href: '/learn/azure/microsoft-fabric' },

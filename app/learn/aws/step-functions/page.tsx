@@ -152,7 +152,7 @@ export default function StepFunctionsPage() {
       description="Step Functions is AWS serverless workflow orchestration. You define pipelines as state machines — visual, auditable, and automatically retried. Each step calls an AWS service: Lambda, Glue, Athena, EMR, or anything else in the AWS ecosystem."
       section="Section 03 · AWS Track"
       readTime="12 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'AWS Track', href: '/learn/aws/introduction' },
         { label: 'AWS Step Functions', href: '/learn/aws/step-functions' },

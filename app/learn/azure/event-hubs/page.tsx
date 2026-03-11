@@ -137,7 +137,7 @@ export default function EventHubsPage() {
       description="Event Hubs is Azure's managed event streaming service — the Azure-native equivalent of Apache Kafka. It ingests millions of events per second from applications, IoT devices, and microservices, then makes them available for real-time processing or batch archiving."
       section="Section 02 · Azure Track"
       readTime="14 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Azure Track', href: '/learn/azure/introduction' },
         { label: 'Azure Event Hubs', href: '/learn/azure/event-hubs' },

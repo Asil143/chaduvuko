@@ -10,9 +10,9 @@ const ARTICLES: Record<string, {
 }> = {
   'medallion-architecture-explained': {
     title: 'Medallion Architecture Explained — Bronze, Silver, and Gold in Plain English',
-    date: 'March 1, 2025', readTime: '8 min read',
+    date: 'March 1, 2026', readTime: '8 min read',
     tags: ['Architecture', 'Data Lake', 'Azure', 'AWS', 'GCP'],
-    intro: 'The Medallion Architecture is the most widely used data lake design pattern in 2025. If you are applying for data engineering roles, you will be asked about it in almost every interview. Here is exactly what each layer means, why it exists, and how to implement it on any cloud platform.',
+    intro: 'The Medallion Architecture is the most widely used data lake design pattern in 2026. If you are applying for data engineering roles, you will be asked about it in almost every interview. Here is exactly what each layer means, why it exists, and how to implement it on any cloud platform.',
     sections: [
       { heading: 'Why does the Medallion Architecture exist?', body: `Before the Medallion Architecture, data lakes were a mess. Raw data landed in a single location and everyone — analysts, data scientists, downstream pipelines — read directly from it. The result: inconsistent results, schema surprises, and nobody trusting the data.\n\nThe Medallion Architecture solves this by introducing three distinct layers, each with a clear contract about the quality and shape of the data inside it.` },
       { heading: 'Bronze — Raw data, preserved forever', body: `Bronze is the raw layer. Data lands here exactly as it came from the source — no modifications, no cleaning, no transformations. A CSV file lands as a CSV file. JSON from an API lands as JSON.\n\nWhy keep raw data? Because mistakes happen downstream. If your Silver transformation has a bug, you need to reprocess from the original source. Bronze is your safety net and audit trail.\n\nRule: Never modify Bronze data. Append only. Partition by date.` },
@@ -24,37 +24,37 @@ const ARTICLES: Record<string, {
   },
 
   'delta-lake-vs-apache-iceberg': {
-    title: 'Delta Lake vs. Apache Iceberg in 2025 — Which Should You Use?',
-    date: 'February 22, 2025', readTime: '10 min read',
+    title: 'Delta Lake vs. Apache Iceberg in 2026 — Which Should You Use?',
+    date: 'February 22, 2026', readTime: '10 min read',
     tags: ['Delta Lake', 'Apache Iceberg', 'Open Table Format'],
     intro: 'Both Delta Lake and Apache Iceberg are open table formats that bring ACID transactions to your data lake. Both are widely used in production. But they have different strengths, different ecosystems, and different ideal use cases.',
     sections: [
       { heading: 'What is an Open Table Format?', body: `An open table format sits on top of Parquet files in your data lake and adds a metadata layer enabling ACID transactions, schema evolution, time travel, and efficient upserts.\n\nWithout an open table format, a data lake is just a folder of Parquet files — no transactions, no versioning, no reliable reads during writes.` },
       { heading: 'Delta Lake — the Databricks native choice', body: `Delta Lake was created by Databricks and is the default table format in all Databricks workspaces. If your stack is Azure Databricks or AWS Databricks, Delta Lake is the natural choice.\n\nStrengths: tight Databricks integration, excellent documentation, native support in Azure Synapse and Microsoft Fabric, and simple time travel with RESTORE TABLE.\n\nWeakness: historically less portable outside the Databricks ecosystem, though Delta Universal Format is closing this gap.` },
       { heading: 'Apache Iceberg — the multi-engine standard', body: `Apache Iceberg was created at Netflix and is now an Apache Foundation project. It is designed to be engine-agnostic — Spark, Flink, Trino, Snowflake, BigQuery, and Redshift can all read and write Iceberg tables.\n\nStrengths: true multi-engine support not tied to any vendor, AWS natively supports Iceberg in S3 Tables and Athena, GCP BigQuery supports Iceberg tables.\n\nWeakness: slightly more complex to configure initially.` },
-      { heading: 'Which should you learn first in 2025?', body: `Azure-focused target jobs: learn Delta Lake first. It is the standard on Azure Databricks and Microsoft Fabric.\n\nAWS or multi-cloud target: learn Iceberg. AWS has made Iceberg a first-class citizen with S3 Tables.\n\nFor your resume: listing both Delta Lake and Apache Iceberg signals that you understand open table formats as a category, not just one vendor implementation. That is a strong signal to senior engineers reviewing your resume.` },
+      { heading: 'Which should you learn first in 2026?', body: `Azure-focused target jobs: learn Delta Lake first. It is the standard on Azure Databricks and Microsoft Fabric.\n\nAWS or multi-cloud target: learn Iceberg. AWS has made Iceberg a first-class citizen with S3 Tables.\n\nFor your resume: listing both Delta Lake and Apache Iceberg signals that you understand open table formats as a category, not just one vendor implementation. That is a strong signal to senior engineers reviewing your resume.` },
     ],
     cta: { label: 'See Delta Lake in action — Azure Databricks Tutorial', href: '/learn/azure/databricks' },
   },
 
   'data-engineer-resume-without-experience': {
     title: 'How to Write a Data Engineer Resume When You Have No Work Experience',
-    date: 'February 15, 2025', readTime: '12 min read',
+    date: 'February 15, 2026', readTime: '12 min read',
     tags: ['Career', 'Resume', 'H1B'],
     intro: 'Recruiters at consulting firms that sponsor H1B visas see hundreds of resumes every week. Most get rejected in under 10 seconds. Here is exactly what separates the resumes that get callbacks from the ones that do not.',
     sections: [
       { heading: 'The core problem with most beginner resumes', body: `Most beginners list technologies without demonstrating how they were used. "Proficient in Python, SQL, Azure, Spark" tells a recruiter nothing. Every resume says this.\n\nWhat recruiters want to see is evidence of applied skill — proof that you have actually used these tools to build something real.` },
       { heading: 'Rule 1: Lead with a project, not a summary', body: `Replace the generic Objective or Summary section with a Projects section at the top. Your project is your experience.\n\nWrong: "Seeking a challenging data engineering role to utilize my skills in Azure and Python."\n\nRight: "Built an end-to-end Medallion Architecture retail sales pipeline on Azure using ADF, Databricks, ADLS Gen2, and Synapse. Processed 50,000 records per run with Bronze to Silver to Gold transformation layers."\n\nNow you have a conversation starter. A recruiter who sees this will ask about it.` },
       { heading: 'Rule 2: Quantify everything', body: `Numbers make achievements concrete. Even on a personal project, you can quantify:\n\n- Volume: "Processed 5,000 sales records per pipeline run"\n- Time: "Reduced query time from 45 seconds to 3 seconds using partitioning"\n- Coverage: "Data quality checks catching 98% of null and duplicate records"\n\nThese are real numbers from your actual project. Use them.` },
-      { heading: 'Rule 3: Match job description keywords exactly', body: `ATS systems filter resumes before a human sees them. If the job says "Azure Data Factory" and your resume says "ADF", the ATS may filter you out.\n\nFor every application: copy the job description, highlight every technical term, ensure those exact terms appear in your resume.\n\nMust-have keywords in 2025: Medallion Architecture, Azure Data Factory, Azure Databricks, Delta Lake, ADLS Gen2, PySpark, Apache Spark, ETL, data pipeline, SQL, Python.` },
-      { heading: 'What a strong beginner resume looks like', body: `PROJECTS (put this FIRST)\nRetail Sales Batch Pipeline | Azure | 2025\n- End-to-end Medallion Architecture pipeline on Azure\n- Bronze: raw CSV ingestion into ADLS Gen2 partitioned by date\n- Silver: PySpark data quality validation in Azure Databricks\n- Gold: 3 aggregated Delta Lake tables for analyst queries\n- Orchestrated with Azure Data Factory at 2am daily\n- Stack: ADF, Databricks, ADLS Gen2, Synapse, Delta Lake, PySpark\n\nSKILLS\nCloud: Azure (ADF, Databricks, ADLS Gen2, Synapse, Key Vault)\nProcessing: Apache Spark, PySpark, Delta Lake, Medallion Architecture\nLanguages: Python, SQL` },
+      { heading: 'Rule 3: Match job description keywords exactly', body: `ATS systems filter resumes before a human sees them. If the job says "Azure Data Factory" and your resume says "ADF", the ATS may filter you out.\n\nFor every application: copy the job description, highlight every technical term, ensure those exact terms appear in your resume.\n\nMust-have keywords in 2026: Medallion Architecture, Azure Data Factory, Azure Databricks, Delta Lake, ADLS Gen2, PySpark, Apache Spark, ETL, data pipeline, SQL, Python.` },
+      { heading: 'What a strong beginner resume looks like', body: `PROJECTS (put this FIRST)\nRetail Sales Batch Pipeline | Azure | 2026\n- End-to-end Medallion Architecture pipeline on Azure\n- Bronze: raw CSV ingestion into ADLS Gen2 partitioned by date\n- Silver: PySpark data quality validation in Azure Databricks\n- Gold: 3 aggregated Delta Lake tables for analyst queries\n- Orchestrated with Azure Data Factory at 2am daily\n- Stack: ADF, Databricks, ADLS Gen2, Synapse, Delta Lake, PySpark\n\nSKILLS\nCloud: Azure (ADF, Databricks, ADLS Gen2, Synapse, Key Vault)\nProcessing: Apache Spark, PySpark, Delta Lake, Medallion Architecture\nLanguages: Python, SQL` },
     ],
     cta: { label: 'Build Project 1 to put on your resume', href: '/learn/projects/azure-batch-pipeline' },
   },
 
   'adf-vs-airflow-vs-step-functions': {
     title: 'ADF vs. Airflow vs. Step Functions — Which Orchestration Tool Should You Learn?',
-    date: 'February 8, 2025', readTime: '9 min read',
+    date: 'February 8, 2026', readTime: '9 min read',
     tags: ['ADF', 'Airflow', 'Orchestration'],
     intro: 'Azure Data Factory, Apache Airflow, and AWS Step Functions all orchestrate data pipelines but take fundamentally different approaches. Knowing which to use — and more importantly, why — is one of the things that separates senior data engineers from junior ones.',
     sections: [
@@ -62,21 +62,21 @@ const ARTICLES: Record<string, {
       { heading: 'Azure Data Factory — UI-first, Azure-native', body: `ADF is Microsoft's managed orchestration service. You build pipelines in a drag-and-drop UI, connect to 90+ data sources, and schedule runs without writing any code for basic workflows.\n\nBest for: Azure-only stacks, teams that prefer visual pipeline building, organizations already in the Microsoft ecosystem.\n\nLimitation: logic-heavy workflows (complex branching, dynamic configs) become awkward in the UI. And ADF does not exist outside Azure — you cannot take your pipelines to AWS or GCP.` },
       { heading: 'Apache Airflow — code-first, cloud-neutral', body: `Airflow is an open-source Python framework. You write DAGs (Directed Acyclic Graphs) as Python files — tasks, dependencies, schedules, retry logic, all in code.\n\nBest for: complex workflows, multi-cloud environments, teams that prefer code over UI, GCP (Cloud Composer is managed Airflow).\n\nLimitation: you need to manage infrastructure yourself unless using a managed service like Cloud Composer, MWAA on AWS, or Astronomer.\n\nAirflow is the most widely used orchestration tool in the industry. If you only learn one, learn Airflow.` },
       { heading: 'AWS Step Functions — event-driven, serverless', body: `Step Functions is AWS serverless orchestration. You define state machines in JSON/YAML — each state is a Lambda function, Glue job, or ECS task. It is tightly integrated with the AWS ecosystem.\n\nBest for: event-driven architectures, serverless AWS stacks, microservice coordination.\n\nLimitation: the JSON state machine syntax is verbose, and it is AWS-only. Data engineers rarely use it as a primary orchestration tool — it is more of a DevOps and microservices tool that data teams sometimes encounter.` },
-      { heading: 'Which should you learn for job market 2025?', body: `Priority order for maximum employability:\n\n1. Apache Airflow — universal, cloud-neutral, most job postings mention it\n2. Azure Data Factory — essential for any Azure data engineering role\n3. AWS Step Functions — only if you are targeting pure AWS roles\n\nOn your resume: if you know Airflow, you can say you know orchestration. If you also know ADF, you cover the entire Azure job market. That combination appears in more job descriptions than any other orchestration pairing.` },
+      { heading: 'Which should you learn for job market 2026?', body: `Priority order for maximum employability:\n\n1. Apache Airflow — universal, cloud-neutral, most job postings mention it\n2. Azure Data Factory — essential for any Azure data engineering role\n3. AWS Step Functions — only if you are targeting pure AWS roles\n\nOn your resume: if you know Airflow, you can say you know orchestration. If you also know ADF, you cover the entire Azure job market. That combination appears in more job descriptions than any other orchestration pairing.` },
     ],
     cta: { label: 'Learn Azure Data Factory in depth', href: '/learn/azure/adf' },
   },
 
   'microsoft-fabric-explained': {
     title: 'Microsoft Fabric Explained — Should You Learn It Now or Wait?',
-    date: 'February 1, 2025', readTime: '7 min read',
+    date: 'February 1, 2026', readTime: '7 min read',
     tags: ['Microsoft Fabric', 'Azure', 'Career'],
     intro: 'Microsoft Fabric is the biggest change to the Azure data engineering landscape since Databricks entered the picture. It unifies the entire Azure data stack into one product. Here is what it actually is, what it replaces, and the honest answer to whether you should prioritize it right now.',
     sections: [
       { heading: 'What is Microsoft Fabric?', body: `Microsoft Fabric is an all-in-one analytics platform launched in 2023. It unifies data integration (ADF), data engineering (Spark), data warehousing (Synapse), real-time analytics (Event Streams), business intelligence (Power BI), and data science — all inside one product with one license.\n\nThink of it as Microsoft deciding: instead of making customers stitch together ADF + Databricks + Synapse + Power BI, we will give them one platform that does everything.` },
-      { heading: 'What does Fabric replace?', body: `Fabric does not delete existing services — Azure Databricks, ADF, and Synapse still exist. But Fabric provides overlapping capabilities:\n\n- Data Factory in Fabric replaces standalone ADF for many use cases\n- Lakehouse in Fabric replaces ADLS Gen2 + Databricks for many teams\n- Warehouse in Fabric replaces Synapse Analytics for many analytical workloads\n- Power BI is now native inside Fabric instead of a separate service\n\nFor new Azure projects in 2025, many companies are starting on Fabric instead of building the traditional stack.` },
+      { heading: 'What does Fabric replace?', body: `Fabric does not delete existing services — Azure Databricks, ADF, and Synapse still exist. But Fabric provides overlapping capabilities:\n\n- Data Factory in Fabric replaces standalone ADF for many use cases\n- Lakehouse in Fabric replaces ADLS Gen2 + Databricks for many teams\n- Warehouse in Fabric replaces Synapse Analytics for many analytical workloads\n- Power BI is now native inside Fabric instead of a separate service\n\nFor new Azure projects in 2026, many companies are starting on Fabric instead of building the traditional stack.` },
       { heading: 'OneLake — the key architectural shift', body: `The most important concept in Fabric is OneLake. It is a single logical data lake that spans the entire organization — all Fabric workloads read and write to the same OneLake storage automatically.\n\nThis eliminates the biggest pain point in the traditional Azure stack: copying data between services. In the old world, you moved data from ADLS to Synapse to Power BI. In Fabric, everything shares OneLake — no movement, no copies, no sync.` },
-      { heading: 'Should you learn Fabric now or wait?', body: `Honest answer: learn the fundamentals first, then layer in Fabric.\n\nIf you know ADF, Databricks, and Synapse, Fabric takes about one week to understand because the concepts are identical — only the UI and naming changes.\n\nIf you skip the fundamentals and go straight to Fabric, you will struggle because Fabric assumes you understand data pipelines, Spark, and SQL warehouses already.\n\nFor your resume in 2025: mention Fabric awareness. Employers are not yet requiring deep Fabric expertise at entry level, but knowing what it is signals you are following the industry.` },
+      { heading: 'Should you learn Fabric now or wait?', body: `Honest answer: learn the fundamentals first, then layer in Fabric.\n\nIf you know ADF, Databricks, and Synapse, Fabric takes about one week to understand because the concepts are identical — only the UI and naming changes.\n\nIf you skip the fundamentals and go straight to Fabric, you will struggle because Fabric assumes you understand data pipelines, Spark, and SQL warehouses already.\n\nFor your resume in 2026: mention Fabric awareness. Employers are not yet requiring deep Fabric expertise at entry level, but knowing what it is signals you are following the industry.` },
     ],
     cta: { label: 'Start with the Azure fundamentals first', href: '/learn/azure/introduction' },
   },
@@ -84,13 +84,13 @@ const ARTICLES: Record<string, {
 
   'why-data-engineers-use-parquet': {
     title: 'Why Data Engineers Use Parquet Instead of CSV',
-    date: 'March 10, 2025', readTime: '5 min read',
+    date: 'March 10, 2026', readTime: '5 min read',
     tags: ['Foundations', 'Storage', 'Architecture'],
     intro: 'If you open any data engineering job description, you will see Parquet listed under required skills. Yet most beginners start with CSV files. Understanding why the industry switched to Parquet — and the specific technical reasons behind it — is one of the most important foundational concepts in data engineering.',
     sections: [
       { heading: 'What is wrong with CSV?', body: `CSV files are human-readable, simple, and universal. So why does every production data pipeline avoid them?\n\nThe problem is how CSV stores data. CSV is row-oriented — each row is written together sequentially. To answer the query SELECT SUM(revenue) FROM sales, a CSV reader must scan every single column in every single row, even though you only need the revenue column.\n\nFor a file with 100 columns and 10 million rows, that means reading roughly 100x more data than necessary. At scale, this becomes the difference between a query running in 3 seconds or 5 minutes.` },
       { heading: 'What Parquet does differently', body: `Parquet is columnar — it stores all values for each column together. To read the revenue column, Parquet reads only the revenue column data and skips everything else.\n\nThis single change has dramatic effects on query performance and storage costs:\n\n- Queries that touch 5 columns out of 100 read 95% less data\n- Columns with similar values compress extremely well (revenue values like 99.99, 100.00, 99.99 compress much better than mixed row data)\n- Typical CSV to Parquet compression: 5x to 10x smaller file size` },
-      { heading: 'Predicate pushdown — the second advantage', body: `Parquet stores metadata about each row group — the minimum and maximum value of each column inside that group. When you run WHERE order_date = 2025-01-15, Parquet reads this metadata first and skips any row group where the min and max dates do not include January 15th.\n\nThis is called predicate pushdown, and it is one of the reasons partitioned Parquet tables on cloud storage can query billions of rows in seconds.\n\nCSV has no such metadata — the reader must scan every row to find the matching ones.` },
+      { heading: 'Predicate pushdown — the second advantage', body: `Parquet stores metadata about each row group — the minimum and maximum value of each column inside that group. When you run WHERE order_date = 2026-01-15, Parquet reads this metadata first and skips any row group where the min and max dates do not include January 15th.\n\nThis is called predicate pushdown, and it is one of the reasons partitioned Parquet tables on cloud storage can query billions of rows in seconds.\n\nCSV has no such metadata — the reader must scan every row to find the matching ones.` },
       { heading: 'When CSV is still fine', body: `CSV is appropriate when:\n- The file is small (under a few hundred MB)\n- A human needs to open and read it directly\n- You are exchanging data with a non-technical system that only accepts CSV\n- You are doing a one-time data migration\n\nFor everything else — production pipelines, data lakes, analytical tables — use Parquet. Your queries will be faster, your storage costs will be lower, and your pipeline will behave predictably at scale.` },
       { heading: 'Parquet on Azure, AWS, and GCP', body: `All three cloud platforms treat Parquet as the default format for data engineering workloads:\n\nAzure: ADLS Gen2 + Databricks use Parquet as the underlying format for Delta Lake tables\nAWS: S3 + Glue + Athena are optimized for Parquet — Athena charges per byte scanned\nGCP: Cloud Storage + BigQuery external tables work natively with Parquet\n\nWhen you write a Delta Lake table in Databricks, you are writing Parquet files with a Delta transaction log on top. Understanding Parquet means understanding what Delta Lake, Iceberg, and Hudi are built on.` },
     ],
@@ -99,7 +99,7 @@ const ARTICLES: Record<string, {
 
   'spark-interview-questions': {
     title: '15 PySpark Interview Questions Asked at Real Data Engineering Roles',
-    date: 'March 5, 2025', readTime: '10 min read',
+    date: 'March 5, 2026', readTime: '10 min read',
     tags: ['Interview', 'Apache Spark'],
     intro: 'These are real PySpark questions asked at consulting firms, financial services companies, and technology companies that sponsor H1B visas. For each question, I have included the answer interviewers actually want to hear — not the textbook definition.',
     sections: [
@@ -113,8 +113,8 @@ const ARTICLES: Record<string, {
   },
 
   'azure-vs-aws-data-engineering': {
-    title: 'Azure vs AWS for Data Engineers in 2025 — A Real Comparison',
-    date: 'February 28, 2025', readTime: '7 min read',
+    title: 'Azure vs AWS for Data Engineers in 2026 — A Real Comparison',
+    date: 'February 28, 2026', readTime: '7 min read',
     tags: ['Azure', 'AWS', 'Career'],
     intro: 'Most data engineers are asked to work on Azure or AWS — and increasingly both. This is a direct comparison of the core services on each platform, focused specifically on what a data engineer actually spends their day using.',
     sections: [
@@ -128,13 +128,13 @@ const ARTICLES: Record<string, {
   },
 
   'how-to-get-h1b-data-engineering': {
-    title: 'How to Get H1B Sponsorship as a Data Engineer in 2025',
-    date: 'March 15, 2025', readTime: '8 min read',
+    title: 'How to Get H1B Sponsorship as a Data Engineer in 2026',
+    date: 'March 15, 2026', readTime: '8 min read',
     tags: ['Career', 'H1B'],
     intro: 'Getting an H1B-sponsored data engineering job in the US is achievable — but only if you target the right companies, with the right skills, at the right time. This guide is based on actual H1B disclosure data and hiring patterns at companies that consistently sponsor.',
     sections: [
       { heading: 'Which companies actually sponsor H1B for data engineers?', body: `The top H1B sponsors for data engineering and IT roles every year are consulting and IT services firms, not tech companies:\n\n1. Infosys — consistently the largest H1B sponsor in the US\n2. Tata Consultancy Services (TCS)\n3. Cognizant Technology Solutions\n4. Wipro Technologies\n5. Capgemini\n6. HCL Technologies\n7. Accenture\n8. IBM\n9. Deloitte\n10. EY (Ernst and Young)\n\nThese companies place data engineers at Fortune 500 clients — banks, hospitals, retailers, government agencies. They sponsor aggressively because their entire business model depends on bringing in international talent.` },
-      { heading: 'What skills do these companies look for?', body: `The tech stack at these companies is heavily Azure and Microsoft-focused because their clients are enterprise companies with Microsoft relationships. The most in-demand skills in 2025:\n\nMust have:\n- Azure Data Factory, Azure Databricks, ADLS Gen2, Azure Synapse\n- PySpark and Python for data transformations\n- SQL — complex analytical queries, not just basic SELECT\n- Medallion Architecture — Bronze, Silver, Gold implementation\n\nStrong differentiators:\n- Delta Lake and open table format knowledge\n- Apache Airflow for orchestration\n- Real project with end-to-end pipeline code on GitHub\n- DP-203 certification (Azure Data Engineer Associate)` },
+      { heading: 'What skills do these companies look for?', body: `The tech stack at these companies is heavily Azure and Microsoft-focused because their clients are enterprise companies with Microsoft relationships. The most in-demand skills in 2026:\n\nMust have:\n- Azure Data Factory, Azure Databricks, ADLS Gen2, Azure Synapse\n- PySpark and Python for data transformations\n- SQL — complex analytical queries, not just basic SELECT\n- Medallion Architecture — Bronze, Silver, Gold implementation\n\nStrong differentiators:\n- Delta Lake and open table format knowledge\n- Apache Airflow for orchestration\n- Real project with end-to-end pipeline code on GitHub\n- DP-203 certification (Azure Data Engineer Associate)` },
       { heading: 'The resume strategy that works', body: `Your resume needs to answer one question immediately: can this person build a data pipeline on Azure?\n\nThe fastest way to answer yes convincingly without prior work experience:\n\n1. Build a complete Medallion Architecture project on Azure — ADF + Databricks + ADLS Gen2 + Synapse\n2. Put it on GitHub with a proper README\n3. Deploy it on a real Azure account (free tier gets you started)\n4. Write 3 strong resume bullet points quantifying what it does\n\nThis project puts you in the top 20% of applicants for entry-level consulting roles because most applicants have zero real Azure project work.` },
       { heading: 'Timing: when to apply', body: `H1B cap petitions are filed in April every year for work starting October 1st. The lottery registration opens in March.\n\nThis means consulting firms are most actively hiring candidates for H1B sponsorship between October and February — they want people onboarded and on projects before the next April filing deadline.\n\nBest time to apply: October through February. Apply in volume — 30 to 50 applications across all the consulting firms simultaneously. Response rates are low; volume matters.` },
       { heading: 'The OPT to H1B path', body: `If you are on OPT (F-1 visa optional practical training), the path is:\n\n1. Land a consulting firm job on OPT — easier because they can hire you immediately\n2. Perform well — get rated highly by your project client\n3. The firm files your H1B petition in April\n4. You transition from OPT to H1B in October\n\nSome firms offer STEM OPT extension support and H1B sponsorship as a package. Ask explicitly during the hiring process — not all recruiters will volunteer this information.\n\nIf your STEM OPT expires before October: look for firms that offer cap-exempt H1B sponsorship or can support H1B transfer from another employer.` },
@@ -145,7 +145,7 @@ const ARTICLES: Record<string, {
 
   'apache-spark-architecture-explained': {
     title: 'Apache Spark Architecture Explained — How Spark Actually Works',
-    date: 'March 18, 2025', readTime: '8 min read',
+    date: 'March 18, 2026', readTime: '8 min read',
     tags: ['Apache Spark', 'Architecture'],
     intro: 'Every data engineer uses Spark but most cannot explain how it works under the hood. Understanding the architecture — drivers, executors, DAGs, stages — is what separates engineers who can debug slow jobs from those who just restart the cluster and hope.',
     sections: [
@@ -160,7 +160,7 @@ const ARTICLES: Record<string, {
 
   'data-quality-in-pipelines': {
     title: 'Data Quality in Production Pipelines — What to Check and When',
-    date: 'March 17, 2025', readTime: '7 min read',
+    date: 'March 17, 2026', readTime: '7 min read',
     tags: ['Architecture', 'Foundations'],
     intro: 'Bad data flowing silently through a pipeline is worse than a broken pipeline. A broken pipeline stops. Bad data corrupts reports, misleads analysts, and causes business decisions based on wrong numbers. Data quality checks are not optional — they are the difference between a pipeline and a reliable pipeline.',
     sections: [
@@ -174,9 +174,9 @@ const ARTICLES: Record<string, {
 
   'what-is-a-data-lakehouse': {
     title: 'What Is a Data Lakehouse? The Architecture Replacing the Data Warehouse',
-    date: 'March 16, 2025', readTime: '6 min read',
+    date: 'March 16, 2026', readTime: '6 min read',
     tags: ['Architecture', 'Foundations'],
-    intro: 'The data lakehouse combines the low-cost storage of a data lake with the reliability and performance of a data warehouse. It is the dominant architecture pattern being adopted by enterprise companies in 2025, and it is what Databricks, Delta Lake, Apache Iceberg, and Microsoft Fabric are all built around.',
+    intro: 'The data lakehouse combines the low-cost storage of a data lake with the reliability and performance of a data warehouse. It is the dominant architecture pattern being adopted by enterprise companies in 2026, and it is what Databricks, Delta Lake, Apache Iceberg, and Microsoft Fabric are all built around.',
     sections: [
       { heading: 'The problem with data lakes and data warehouses separately', body: `Data warehouses (Snowflake, Redshift, Synapse) are fast, reliable, and support ACID transactions. But they are expensive and only work with structured data.\\n\\nData lakes (S3, ADLS Gen2, GCS) are cheap and handle any data type — CSV, JSON, images, logs. But they are unreliable for concurrent reads and writes, have no transaction support, and queries are slow on raw files.\\n\\nMost companies ended up with both: a data lake for raw storage and a data warehouse for analytics. This meant copying data twice, maintaining two systems, and paying twice.` },
       { heading: 'What the lakehouse adds', body: `The lakehouse adds a metadata and transaction layer — Delta Lake, Apache Iceberg, or Apache Hudi — directly on top of cloud object storage.\\n\\nThis layer provides ACID transactions (no corruption during concurrent writes), schema enforcement (no silent schema changes), time travel (query data as it was yesterday), and efficient upserts (MERGE statements that work like a database).\\n\\nNow you get warehouse reliability at lake cost. One copy of data, queryable by both Spark for heavy transformation and SQL engines for analytics.` },
@@ -188,12 +188,12 @@ const ARTICLES: Record<string, {
 
   'adls-gen2-best-practices': {
     title: 'ADLS Gen2 Best Practices — How to Structure Your Azure Data Lake',
-    date: 'March 14, 2025', readTime: '6 min read',
+    date: 'March 14, 2026', readTime: '6 min read',
     tags: ['Azure', 'Storage'],
     intro: 'Most Azure data engineers set up ADLS Gen2 incorrectly at the start. The mistakes made early — poor container structure, wrong partitioning strategy, incorrect access controls — are expensive to fix later when pipelines are running at scale.',
     sections: [
-      { heading: 'Container structure', body: `Use one container per Medallion layer, not one container per project:\\n\\nbronze/\\nsilver/\\ngold/\\n\\nInside each container, organize by domain then by source system then by date:\\nbronze/sales/orders/2025/03/15/\\nbronze/hr/employees/2025/03/15/\\n\\nThis structure makes lifecycle management policies easy — you can expire bronze data older than 90 days at the container prefix level without affecting silver or gold.` },
-      { heading: 'Partitioning strategy', body: `Always partition by date. For most batch pipelines: year/month/day partitioning.\\n\\nbronze/sales/orders/year=2025/month=03/day=15/\\n\\nThis date-based partition pruning is critical for performance. A query for last week reads 7 partitions, not the entire dataset.\\n\\nFor high-volume tables: also partition by a secondary key like region or source_system. But do not over-partition — partitions smaller than 128MB create the small files problem.` },
+      { heading: 'Container structure', body: `Use one container per Medallion layer, not one container per project:\\n\\nbronze/\\nsilver/\\ngold/\\n\\nInside each container, organize by domain then by source system then by date:\\nbronze/sales/orders/2026/03/15/\\nbronze/hr/employees/2026/03/15/\\n\\nThis structure makes lifecycle management policies easy — you can expire bronze data older than 90 days at the container prefix level without affecting silver or gold.` },
+      { heading: 'Partitioning strategy', body: `Always partition by date. For most batch pipelines: year/month/day partitioning.\\n\\nbronze/sales/orders/year=2026/month=03/day=15/\\n\\nThis date-based partition pruning is critical for performance. A query for last week reads 7 partitions, not the entire dataset.\\n\\nFor high-volume tables: also partition by a secondary key like region or source_system. But do not over-partition — partitions smaller than 128MB create the small files problem.` },
       { heading: 'Access control', body: `Use Azure RBAC for container-level access and ACLs for folder-level access. Never use storage account keys in application code — use Managed Identity or Service Principals.\\n\\nIn practice: Databricks clusters get a Service Principal with Storage Blob Data Contributor on the storage account. ADF pipelines use Managed Identity. No passwords or keys in code or configuration.\\n\\nSet up separate Service Principals for bronze writes, silver reads/writes, and gold reads. Principle of least privilege prevents a silver transformation bug from accidentally overwriting bronze.` },
       { heading: 'Small files problem and how to fix it', body: `Streaming pipelines and frequent micro-batch runs create thousands of tiny Parquet files. Querying 10,000 files of 1MB each is far slower than querying 10 files of 1GB each.\\n\\nFix with Delta Lake OPTIMIZE: run OPTIMIZE table on a schedule (daily is usually enough). This compacts small files into larger ones automatically.\\n\\nFor Synapse external tables pointing at ADLS: use CETAS (Create External Table As Select) to produce clean, evenly-sized Parquet files.` },
     ],
@@ -202,7 +202,7 @@ const ARTICLES: Record<string, {
 
   'azure-key-vault-for-data-engineers': {
     title: 'Azure Key Vault for Data Engineers — Stop Putting Secrets in Your Code',
-    date: 'March 13, 2025', readTime: '5 min read',
+    date: 'March 13, 2026', readTime: '5 min read',
     tags: ['Azure', 'Security'],
     intro: 'Secrets in code are the most common security mistake in data engineering. Connection strings, API keys, and storage account keys hardcoded in notebooks, pipeline configs, or environment variables get committed to Git and end up exposed. Azure Key Vault is the solution — and it takes 15 minutes to set up properly.',
     sections: [
@@ -216,7 +216,7 @@ const ARTICLES: Record<string, {
 
   'what-is-apache-kafka': {
     title: 'What Is Apache Kafka? A Plain English Explanation for Data Engineers',
-    date: 'March 12, 2025', readTime: '7 min read',
+    date: 'March 12, 2026', readTime: '7 min read',
     tags: ['Streaming', 'Architecture'],
     intro: 'Apache Kafka appears in almost every senior data engineering job description. Most beginners understand it as a message queue but that undersells what it actually is and why it changed how companies build data pipelines.',
     sections: [
@@ -230,7 +230,7 @@ const ARTICLES: Record<string, {
 
   'slowly-changing-dimensions-explained': {
     title: 'Slowly Changing Dimensions Explained — SCD Type 1, 2, and 3',
-    date: 'March 11, 2025', readTime: '6 min read',
+    date: 'March 11, 2026', readTime: '6 min read',
     tags: ['Architecture', 'Foundations'],
     intro: 'Slowly Changing Dimensions (SCDs) appear in almost every data warehousing interview. They describe how to handle changes to dimension data over time — and getting this decision wrong can corrupt your entire historical analysis.',
     sections: [
@@ -244,7 +244,7 @@ const ARTICLES: Record<string, {
 
   'etl-vs-elt-explained': {
     title: 'ETL vs ELT — Why the Industry Switched and What It Means for Your Work',
-    date: 'March 9, 2025', readTime: '5 min read',
+    date: 'March 9, 2026', readTime: '5 min read',
     tags: ['Architecture', 'Foundations'],
     intro: 'ETL and ELT both move data from source to destination but in a different order. Understanding why the industry shifted from ETL to ELT — and when to use each — is a fundamental data engineering concept.',
     sections: [
@@ -258,7 +258,7 @@ const ARTICLES: Record<string, {
 
   'aws-glue-vs-databricks': {
     title: 'AWS Glue vs Databricks on AWS — Which Should You Use?',
-    date: 'March 8, 2025', readTime: '6 min read',
+    date: 'March 8, 2026', readTime: '6 min read',
     tags: ['AWS', 'Apache Spark'],
     intro: 'Both AWS Glue and Databricks run Apache Spark on AWS. Both transform data. Both connect to S3. So why do some AWS shops use Glue and others use Databricks — and how do you know which one is right for a given situation?',
     sections: [
@@ -272,7 +272,7 @@ const ARTICLES: Record<string, {
 
   'redshift-vs-bigquery-vs-synapse': {
     title: 'Redshift vs BigQuery vs Synapse — Choosing a Cloud Data Warehouse',
-    date: 'March 7, 2025', readTime: '7 min read',
+    date: 'March 7, 2026', readTime: '7 min read',
     tags: ['AWS', 'GCP', 'Azure'],
     intro: 'Amazon Redshift, Google BigQuery, and Azure Synapse are the three dominant cloud data warehouses. Choosing between them is less about which is technically superior and more about which cloud your organization is on and what workload you are running.',
     sections: [
@@ -286,11 +286,11 @@ const ARTICLES: Record<string, {
 
   'bigquery-cost-optimization': {
     title: 'BigQuery Cost Optimization — How to Stop Paying for Queries You Do Not Need',
-    date: 'March 6, 2025', readTime: '6 min read',
+    date: 'March 6, 2026', readTime: '6 min read',
     tags: ['GCP', 'BigQuery'],
     intro: 'BigQuery charges per terabyte scanned. A single analyst running SELECT * on a 10TB table costs around $50. Multiplied across a team running queries all day, unoptimized BigQuery usage can generate surprising bills. These are the practical optimizations that make the biggest difference.',
     sections: [
-      { heading: 'Partitioning — the most impactful change', body: `Partition your tables by date. A query with WHERE event_date = "2025-03-15" on a partitioned table reads only that day's partition — not the full table.\\n\\nCREATE TABLE myproject.dataset.events\\nPARTITION BY DATE(event_date)\\nAS SELECT * FROM source_table;\\n\\nFor a 2-year table queried daily: partitioning reduces bytes scanned by roughly 700x (730 days, querying 1 at a time). This is the single highest-impact optimization for most teams.` },
+      { heading: 'Partitioning — the most impactful change', body: `Partition your tables by date. A query with WHERE event_date = "2026-03-15" on a partitioned table reads only that day's partition — not the full table.\\n\\nCREATE TABLE myproject.dataset.events\\nPARTITION BY DATE(event_date)\\nAS SELECT * FROM source_table;\\n\\nFor a 2-year table queried daily: partitioning reduces bytes scanned by roughly 700x (730 days, querying 1 at a time). This is the single highest-impact optimization for most teams.` },
       { heading: 'Clustering — the second layer of optimization', body: `Clustering co-locates rows with similar values in the same storage blocks. Queries filtering on clustered columns skip entire blocks.\\n\\nCluster on columns you frequently filter on after partitioning: user_id, country, product_category.\\n\\nCREATE TABLE myproject.dataset.events\\nPARTITION BY DATE(event_date)\\nCLUSTER BY user_id, country\\nAS SELECT * FROM source_table;\\n\\nCombined partitioning and clustering can reduce bytes scanned by 99%+ on well-structured analytical queries.` },
       { heading: 'Never use SELECT *', body: `BigQuery charges for every column in your SELECT. A table with 50 columns — SELECT * reads all 50 columns. SELECT id, revenue, date reads just 3 columns.\\n\\nColumnar storage means each column is stored separately. Selecting fewer columns directly reduces bytes scanned and cost.\\n\\nFor exploration: use the table preview feature in the BigQuery console — it is free and does not scan any data.` },
       { heading: 'Materialized views and cached results', body: `BigQuery caches query results for 24 hours. An identical query run twice in 24 hours charges only for the first run.\\n\\nFor dashboard queries that run on a schedule: create materialized views. BigQuery maintains them automatically and queries against materialized views scan much less data than the underlying tables.\\n\\nFor recurring aggregations (daily revenue by region): write results to a summary table with a scheduled query rather than re-aggregating the full table on every dashboard load.` },
@@ -300,7 +300,7 @@ const ARTICLES: Record<string, {
 
   'cloud-composer-vs-managed-airflow': {
     title: 'Cloud Composer vs Self-Managed Airflow — What GCP Data Engineers Should Know',
-    date: 'March 4, 2025', readTime: '5 min read',
+    date: 'March 4, 2026', readTime: '5 min read',
     tags: ['GCP', 'Orchestration'],
     intro: 'Cloud Composer is managed Apache Airflow on GCP. It removes infrastructure management but adds cost and some constraints. This is what you need to know before deciding between Composer and running Airflow yourself.',
     sections: [
@@ -314,7 +314,7 @@ const ARTICLES: Record<string, {
 
   'dataflow-vs-spark-streaming': {
     title: 'Google Dataflow vs Apache Spark Streaming — Streaming Processing Compared',
-    date: 'March 3, 2025', readTime: '6 min read',
+    date: 'March 3, 2026', readTime: '6 min read',
     tags: ['GCP', 'Streaming'],
     intro: 'Both Google Dataflow and Apache Spark Structured Streaming process data in real time. They take fundamentally different approaches, and choosing between them depends on your cloud, your team, and your latency requirements.',
     sections: [
@@ -328,7 +328,7 @@ const ARTICLES: Record<string, {
 
   'pubsub-vs-kafka-vs-kinesis': {
     title: 'Pub/Sub vs Kafka vs Kinesis — Choosing a Streaming Ingestion Layer',
-    date: 'March 2, 2025', readTime: '6 min read',
+    date: 'March 2, 2026', readTime: '6 min read',
     tags: ['GCP', 'Streaming', 'AWS'],
     intro: 'Every real-time data pipeline needs a message broker — a system that ingests high-velocity events and makes them available to downstream consumers. Google Pub/Sub, Apache Kafka, and Amazon Kinesis all do this job but with different tradeoffs.',
     sections: [
@@ -342,7 +342,7 @@ const ARTICLES: Record<string, {
 
   'gcp-iam-for-data-engineers': {
     title: 'GCP IAM for Data Engineers — Access Control Without the Confusion',
-    date: 'February 28, 2025', readTime: '5 min read',
+    date: 'February 28, 2026', readTime: '5 min read',
     tags: ['GCP', 'Security'],
     intro: 'GCP IAM (Identity and Access Management) confuses most newcomers because it looks similar to AWS IAM and Azure RBAC but works differently. Understanding how to grant the right access to the right resources is essential for building secure data pipelines on GCP.',
     sections: [
@@ -356,7 +356,7 @@ const ARTICLES: Record<string, {
 
   'kinesis-firehose-explained': {
     title: 'Amazon Kinesis Firehose Explained — The Easiest Way to Stream Data into S3',
-    date: 'February 26, 2025', readTime: '5 min read',
+    date: 'February 26, 2026', readTime: '5 min read',
     tags: ['AWS', 'Streaming'],
     intro: 'Kinesis Data Firehose is the simplest streaming ingestion service in AWS. While Kinesis Data Streams requires you to write consumer code, Firehose automatically delivers streaming data to S3, Redshift, OpenSearch, or Splunk — no consumer code needed.',
     sections: [
@@ -370,7 +370,7 @@ const ARTICLES: Record<string, {
 
   'redshift-best-practices': {
     title: 'Amazon Redshift Best Practices — Distribution Keys, Sort Keys, and Vacuum',
-    date: 'February 25, 2025', readTime: '7 min read',
+    date: 'February 25, 2026', readTime: '7 min read',
     tags: ['AWS', 'Storage'],
     intro: 'A poorly configured Redshift cluster can be 100x slower than a well-configured one for the same query. The three most impactful configuration decisions — distribution keys, sort keys, and vacuum strategy — are what separate a performant Redshift cluster from an expensive slow one.',
     sections: [
@@ -384,49 +384,49 @@ const ARTICLES: Record<string, {
 
   'aws-s3-for-data-engineers': {
     title: 'Amazon S3 for Data Engineers — Beyond Just File Storage',
-    date: 'February 24, 2025', readTime: '6 min read',
+    date: 'February 24, 2026', readTime: '6 min read',
     tags: ['AWS', 'Storage'],
     intro: 'Most data engineers use S3 as a file system — upload files, download files. But S3 has a rich set of features specifically useful for data engineering that most engineers never learn: lifecycle policies, event notifications, S3 Select, Requester Pays, and Intelligent Tiering.',
     sections: [
       { heading: 'S3 storage classes and lifecycle policies', body: `S3 has multiple storage classes with different cost and retrieval speed tradeoffs:\\n\\nS3 Standard: hot data, frequent access, highest cost\\nS3 Standard-IA (Infrequent Access): data accessed monthly, 40% cheaper than Standard\\nS3 Glacier Instant Retrieval: archive data accessed quarterly, 68% cheaper\\nS3 Glacier Deep Archive: long-term archive, lowest cost, 12-hour retrieval\\n\\nLifecycle policies automatically transition objects between classes based on age. Bronze layer data older than 90 days → Standard-IA. Older than 365 days → Glacier. This runs automatically with no code required.` },
       { heading: 'S3 event notifications for pipeline triggers', body: `S3 can trigger Lambda functions, SQS queues, or SNS topics when objects are created, deleted, or restored.\\n\\nCommon pattern: a source system drops a CSV file in S3 → S3 event triggers a Lambda → Lambda starts a Glue job to process the file → Glue writes Parquet to processed/ prefix.\\n\\nThis creates an event-driven pipeline that runs automatically when new data arrives — no polling, no scheduler, no wasted compute waiting for files.` },
       { heading: 'S3 Select — query without downloading', body: `S3 Select lets you run SQL-like queries against individual S3 objects and return only the matching rows — without downloading the entire file.\\n\\nFor a 10GB CSV file: SELECT * WHERE region = US returns only US rows, transferring perhaps 500MB instead of 10GB.\\n\\nUseful for: quick data inspection, lightweight filtering before full processing, and reducing Lambda function memory requirements when processing large files.` },
-      { heading: 'Partitioning strategy for S3 data lakes', body: `S3 objects are accessed by prefix (folder-like path). Athena, Glue, and Spark all prune partitions based on S3 prefixes.\\n\\nOptimal partition structure for most data engineering use cases:\\ns3://bucket/table-name/year=2025/month=03/day=15/\\n\\nHive-style partitioning (key=value format) is recognized automatically by Glue catalog, Athena, and Spark. This enables predicate pushdown — only partitions matching your WHERE clause are read.` },
+      { heading: 'Partitioning strategy for S3 data lakes', body: `S3 objects are accessed by prefix (folder-like path). Athena, Glue, and Spark all prune partitions based on S3 prefixes.\\n\\nOptimal partition structure for most data engineering use cases:\\ns3://bucket/table-name/year=2026/month=03/day=15/\\n\\nHive-style partitioning (key=value format) is recognized automatically by Glue catalog, Athena, and Spark. This enables predicate pushdown — only partitions matching your WHERE clause are read.` },
     ],
     cta: { label: 'Learn Amazon S3 in depth', href: '/learn/aws/s3' },
   },
 
   'data-engineering-career-path': {
     title: 'The Data Engineering Career Path — Junior to Senior in 3 Years',
-    date: 'February 23, 2025', readTime: '8 min read',
+    date: 'February 23, 2026', readTime: '8 min read',
     tags: ['Career'],
     intro: 'Data engineering is one of the highest-paying entry points in the technology industry. But the path from zero experience to a senior role is not linear — and most guides miss the specific skills and milestones that actually matter to hiring managers at each level.',
     sections: [
       { heading: 'Year 0 to 1 — Getting the first job', body: `The first job is the hardest. Employers want experience, but you need a job to get experience. The way out: build a project that demonstrates you can do the actual work.\\n\\nThe minimum viable portfolio for a junior DE role:\\n1. One end-to-end pipeline project on a cloud platform (Azure or AWS)\\n2. SQL skills demonstrated through complex query samples\\n3. Python data transformation scripts on GitHub\\n4. Basic understanding of the Medallion Architecture\\n\\nYou do not need a degree in computer science or prior software engineering experience. The portfolio is the proof.` },
       { heading: 'Year 1 to 2 — Junior to mid-level', body: `In your first year, focus on depth over breadth. Become genuinely good at one cloud platform's core services rather than superficially familiar with everything.\\n\\nSkills that unlock mid-level titles:\\n- Owning a production pipeline end to end (not just writing code but monitoring, alerting, and fixing it)\\n- Data quality framework implementation\\n- Pipeline performance optimization (you have made something meaningfully faster)\\n- Mentoring an intern or junior colleague\\n\\nThe mid-level jump usually comes at 18-24 months if you are actively taking on more responsibility.` },
       { heading: 'Year 2 to 3 — Mid to senior', body: `Senior data engineers are defined less by technical skill and more by scope of impact. A senior DE:\\n\\n- Designs systems that other engineers implement\\n- Makes architectural decisions with multi-year implications\\n- Identifies problems before they become incidents\\n- Communicates technical tradeoffs to non-technical stakeholders\\n\\nTechnical markers of senior readiness: you have migrated a production system to a new architecture, you have led incident response on a data outage, you have designed a data model that serves multiple teams.` },
-      { heading: 'Salary progression in the US (2025)', body: `Entry level / Junior (0-2 years): $80,000 - $110,000\\nMid-level (2-4 years): $110,000 - $140,000\\nSenior (4-7 years): $140,000 - $180,000\\nStaff / Principal (7+ years): $180,000 - $250,000+\\n\\nThese are US consulting and mid-size tech company figures. FAANG pays 30-50% more at each level. H1B-sponsored consulting firm roles start at the lower end of these ranges.\\n\\nThe fastest salary growth happens at the junior to mid jump — going from $90K to $130K is common in the first three years for high performers.` },
+      { heading: 'Salary progression in the US (2026)', body: `Entry level / Junior (0-2 years): $80,000 - $110,000\\nMid-level (2-4 years): $110,000 - $140,000\\nSenior (4-7 years): $140,000 - $180,000\\nStaff / Principal (7+ years): $180,000 - $250,000+\\n\\nThese are US consulting and mid-size tech company figures. FAANG pays 30-50% more at each level. H1B-sponsored consulting firm roles start at the lower end of these ranges.\\n\\nThe fastest salary growth happens at the junior to mid jump — going from $90K to $130K is common in the first three years for high performers.` },
     ],
     cta: { label: 'See which companies are hiring and sponsoring H1B', href: '/learn/industry' },
   },
 
   'what-is-dbt': {
     title: 'What Is dbt? The Data Transformation Tool Everyone Is Talking About',
-    date: 'February 20, 2025', readTime: '6 min read',
+    date: 'February 20, 2026', readTime: '6 min read',
     tags: ['Foundations', 'Architecture'],
     intro: 'dbt (data build tool) has become one of the most-mentioned tools in analytics engineering job descriptions in the past two years. If you are seeing it everywhere and not sure what it does or whether to learn it, this is the plain-English explanation.',
     sections: [
       { heading: 'What dbt actually does', body: `dbt transforms data that is already in your data warehouse or data lake. It does not extract data from sources or load it — that is handled by ADF, Glue, Fivetran, or your ingestion pipeline. dbt only does the T in ELT.\\n\\nYou write SQL SELECT statements in .sql files. dbt compiles them into the correct SQL dialect for your warehouse and runs them. Each .sql file becomes a table or view in your warehouse.\\n\\ndbt adds: dependency management between models, testing on data quality, documentation, and version control for SQL transformations.` },
       { heading: 'Why it became popular', body: `Before dbt, SQL transformations were managed as stored procedures, scripts, or Spark notebooks. They had no tests, no documentation, no lineage, and no consistent structure.\\n\\ndbt brings software engineering practices to SQL. You can see the full lineage of a model (what it depends on, what depends on it), run tests to catch data quality issues, and generate automatically updated documentation.\\n\\nFor analytics engineers who work primarily in SQL: dbt is transformative. For data engineers building heavy Spark pipelines: dbt is a useful complement for the SQL serving layer.` },
       { heading: 'dbt Core vs dbt Cloud', body: `dbt Core is the open-source CLI tool — free, runs locally or on any server, integrates with any orchestrator.\\n\\ndbt Cloud is the managed SaaS product — adds a web IDE, managed scheduler, CI/CD integration, and enhanced documentation. Costs money but removes infrastructure management.\\n\\nFor learning: start with dbt Core locally against a free BigQuery or Snowflake account. For production: most companies use dbt Cloud for the managed scheduler and IDE.` },
-      { heading: 'Should you learn dbt in 2025?', body: `If you are targeting analytics engineering roles: yes, immediately. dbt is listed in nearly every analytics engineer job description.\\n\\nIf you are targeting data engineering roles: understand it conceptually. Know what it does and when to use it. You will encounter dbt in most modern data stacks even if you are not writing dbt models yourself.\\n\\nFor the resume: listing dbt signals you understand the modern ELT stack and the separation of ingestion, transformation, and serving layers.` },
+      { heading: 'Should you learn dbt in 2026?', body: `If you are targeting analytics engineering roles: yes, immediately. dbt is listed in nearly every analytics engineer job description.\\n\\nIf you are targeting data engineering roles: understand it conceptually. Know what it does and when to use it. You will encounter dbt in most modern data stacks even if you are not writing dbt models yourself.\\n\\nFor the resume: listing dbt signals you understand the modern ELT stack and the separation of ingestion, transformation, and serving layers.` },
     ],
     cta: { label: 'Understand the full modern data stack in the Roadmap', href: '/learn/roadmap' },
   },
 
   'incremental-loading-explained': {
     title: 'Incremental Loading — How to Process Only New Data in Your Pipelines',
-    date: 'February 18, 2025', readTime: '6 min read',
+    date: 'February 18, 2026', readTime: '6 min read',
     tags: ['Architecture', 'Foundations'],
     intro: 'Loading all data from scratch every pipeline run is safe but slow and expensive. Incremental loading — processing only new or changed records since the last run — is what makes production pipelines fast enough to run every hour instead of once a day.',
     sections: [
@@ -440,7 +440,7 @@ const ARTICLES: Record<string, {
 
   'batch-vs-streaming': {
     title: 'Batch vs. Streaming — The Decision Framework Every Data Engineer Needs',
-    date: 'January 25, 2025', readTime: '6 min read',
+    date: 'January 25, 2026', readTime: '6 min read',
     tags: ['Architecture', 'Batch', 'Streaming'],
     intro: 'Most data engineering architecture decisions come down to one question: batch or streaming? Get this wrong and you build an overly complex streaming system when a simple batch job would have worked fine — or you build a batch pipeline that cannot meet the business latency requirement.',
     sections: [

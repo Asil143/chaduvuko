@@ -36,7 +36,7 @@ export default function manifest(): MetadataRoute.Manifest {
       {
         name: 'Roadmap',
         url: '/learn/roadmap',
-        description: 'Data Engineering Roadmap 2025',
+        description: 'Data Engineering Roadmap 2026',
       },
       {
         name: 'Interview Prep',

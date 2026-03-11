@@ -40,7 +40,7 @@ export default function GCPIntroPage() {
       description="GCP is where Google engineering excellence shows. BigQuery alone is reason enough to learn GCP — query terabytes in seconds with zero infrastructure. This section maps everything from Azure and AWS to GCP equivalents."
       section="Section 02 · GCP Track"
       readTime="12 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'GCP Track', href: '/learn/gcp/introduction' },
         { label: 'GCP Introduction', href: '/learn/gcp/introduction' },

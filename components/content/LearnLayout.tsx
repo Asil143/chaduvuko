@@ -81,7 +81,7 @@ const RESUME_BULLETS: Record<string, string[]> = {
 const sidebar = [
   { label: 'Foundations', color: '#00c2ff', items: [
     { label: 'What is Data Engineering?', href: '/learn/what-is-data-engineering' },
-    { label: 'Roadmap 2025', href: '/learn/roadmap' },
+    { label: 'Roadmap 2026', href: '/learn/roadmap' },
     { label: 'SQL for Data Engineers', href: '/learn/foundations/sql' },
     { label: 'PostgreSQL', href: '/learn/foundations/postgresql' },
     { label: 'Python for Data Engineers', href: '/learn/foundations/python' },

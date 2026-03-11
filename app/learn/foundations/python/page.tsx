@@ -10,7 +10,7 @@ export default function PythonPage() {
       description="You do not need to be a software engineer. You need to write clear, working Python that reads data, transforms it, handles errors, and connects to cloud services."
       section="Foundations"
       readTime="20 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Foundations', href: '/learn/roadmap' },
         { label: 'Python for Data Engineers', href: '/learn/foundations/python' },

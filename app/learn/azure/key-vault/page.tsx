@@ -112,7 +112,7 @@ export default function KeyVaultPage() {
       description="Azure Key Vault is a managed secrets store. Store passwords, connection strings, API keys, and certificates in one place — and let your pipelines retrieve them at runtime using Managed Identity, with zero credentials in your code."
       section="Section 02 · Azure Track"
       readTime="12 min read"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Azure Track', href: '/learn/azure/introduction' },
         { label: 'Azure Key Vault', href: '/learn/azure/key-vault' },

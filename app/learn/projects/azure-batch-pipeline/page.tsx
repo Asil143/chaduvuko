@@ -74,7 +74,7 @@ export default function Project01Page() {
       description="Build your first Azure data pipeline from scratch. Copy a CSV file from a local landing zone into ADLS Gen2 using Azure Data Factory — the foundational pattern behind every data engineering pipeline in Azure."
       section="Projects"
       readTime="60–90 min"
-      updatedAt="March 2025"
+      updatedAt="March 2026"
       breadcrumbs={[
         { label: 'Projects', href: '/learn/projects/azure-batch-pipeline' },
         { label: 'Project 01 — Copy CSV to ADLS', href: '/learn/projects/azure-batch-pipeline' },
