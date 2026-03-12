@@ -24,6 +24,7 @@ const navItems: NavItem[] = [
         color: '#00c2ff',
         items: [
           { label: 'What is Data Engineering?', href: '/learn/what-is-data-engineering' },
+          
           { label: 'Roadmap 2026',               href: '/learn/roadmap' },
           { label: 'SQL for Data Engineers',     href: '/learn/foundations/sql' },
           { label: 'PostgreSQL',                 href: '/learn/foundations/postgresql' },
@@ -45,6 +46,7 @@ const navItems: NavItem[] = [
   { label: 'Industry',   href: '/learn/industry' },
   { label: 'Blog',       href: '/blog' },
   { label: 'Dashboard',  href: '/dashboard' },
+  { label: 'About',      href: '/about' },
 ]
 
 export function Navbar() {
