@@ -42,7 +42,7 @@ export function Footer() {
               Free, open data engineering education. Built by Asil for the next generation of data engineers.
             </p>
             <p className="text-xs mt-4 font-mono" style={{ color: 'var(--muted)' }}>
-              🌱 Built with ❤️ from Andhra Pradesh, India
+              🌱 Built with ❤️ from California, USA
             </p>
           </div>
           {Object.entries(links).map(([section, items]) => (

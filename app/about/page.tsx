@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export const metadata = {
   title: 'About Asil Kamepalli — Data Engineer',
-  description: 'MS in Information Studies (4.0 GPA) · B.Tech CSE · Azure Certified · Building cloud data pipelines on Azure, AWS, and GCP. Open to Data Engineer roles.',
+  description: 'MS in Information Studies (4.0 GPA) · B.Tech CSE · Azure Certified · 5 production Azure ADF pipelines. Open to Data Engineer roles.',
 }
 
 const education = [
@@ -48,7 +48,6 @@ const certifications = [
     icon: '📊',
     color: '#0078d4',
     featured: false,
-    desc: '',
     verifyUrl: 'https://www.coursera.org/account/accomplishments/professional-cert/certificate/U4AORKA2JOA9',
   },
   {
@@ -59,7 +58,6 @@ const certifications = [
     icon: '🔧',
     color: '#7b61ff',
     featured: false,
-    desc: '',
     verifyUrl: 'https://www.coursera.org/account/accomplishments/verify/DB2AUG40Y5IR',
   },
   {
@@ -70,7 +68,6 @@ const certifications = [
     icon: '🏛️',
     color: '#7b61ff',
     featured: false,
-    desc: '',
     verifyUrl: 'https://www.coursera.org/account/accomplishments/verify/FMEJZ54MD2EI',
   },
   {
@@ -81,7 +78,6 @@ const certifications = [
     icon: '🗄️',
     color: '#7b61ff',
     featured: false,
-    desc: '',
     verifyUrl: 'https://www.coursera.org/account/accomplishments/verify/RRADGH9JAV0E',
   },
   {
@@ -92,48 +88,49 @@ const certifications = [
     icon: '🔵',
     color: '#4285f4',
     featured: false,
-    desc: '',
     verifyUrl: 'https://www.coursera.org/account/accomplishments/specialization/K1VS6S4HBPFN',
   },
 ]
 
+// FIX #5 — only DE-relevant skills, Java and TypeScript/Next.js removed
 const skills = [
   {
     category: '☁️ Cloud Platforms',
     color: '#0078d4',
     items: [
-      { name: 'Azure Data Factory',     level: 85 },
-      { name: 'Azure Data Lake Gen2',   level: 85 },
-      { name: 'Azure Blob Storage',     level: 80 },
-      { name: 'Azure Databricks',       level: 60 },
-      { name: 'AWS S3 / Glue',          level: 55 },
-      { name: 'GCP BigQuery',           level: 45 },
+      { name: 'Azure Data Factory',    level: 85 },
+      { name: 'Azure Data Lake Gen2',  level: 85 },
+      { name: 'Azure Blob Storage',    level: 80 },
+      { name: 'Azure Databricks',      level: 60 },
+      { name: 'AWS S3 / Glue',         level: 55 },
+      { name: 'GCP BigQuery',          level: 45 },
     ],
   },
   {
-    category: '💻 Programming',
+    category: '💻 Programming & DB',
     color: '#7b61ff',
     items: [
-      { name: 'Python',               level: 75 },
-      { name: 'SQL / PostgreSQL',     level: 80 },
-      { name: 'Java',                 level: 50 },
-      { name: 'TypeScript / Next.js', level: 50 },
+      { name: 'Python (Pandas, PySpark)',  level: 75 },
+      { name: 'SQL / PostgreSQL',          level: 80 },
+      { name: 'MySQL',                     level: 75 },
+      { name: 'Google BigQuery (SQL)',      level: 55 },
     ],
   },
   {
-    category: '🔧 Tools & Concepts',
+    category: '🔧 Data Engineering',
     color: '#ff9900',
     items: [
-      { name: 'Medallion Architecture',  level: 80 },
-      { name: 'ETL / Pipeline Design',   level: 75 },
-      { name: 'Data Modeling',           level: 85 },
-      { name: 'Power BI',                level: 70 },
-      { name: 'Git / GitHub',            level: 75 },
-      { name: 'AI Tools (Claude, GPT)',  level: 90 },
+      { name: 'Medallion Architecture',    level: 80 },
+      { name: 'ETL / Pipeline Design',     level: 80 },
+      { name: 'Data Modeling',             level: 75 },
+      { name: 'Data Warehousing',          level: 70 },
+      { name: 'Power BI (DAX)',            level: 70 },
+      { name: 'Delta Lake',                level: 55 },
     ],
   },
 ]
 
+// FIX #6 — all 5 live projects added
 const projects = [
   {
     num: '01',
@@ -146,7 +143,7 @@ const projects = [
   {
     num: '02',
     title: 'Copy Multiple Files Using ForEach Loop',
-    desc: 'Replaced 10 separate Copy activities with a single ForEach loop using parameterized datasets and @item().',
+    desc: 'Replaced 10 separate Copy activities with a single parameterized ForEach loop — 90% less pipeline complexity.',
     tags: ['ADF', 'ForEach', 'Dynamic Expressions'],
     href: '/learn/projects/azure-projects-02',
     color: '#0078d4',
@@ -154,15 +151,31 @@ const projects = [
   {
     num: '03',
     title: 'Parameterized Pipeline with Run Date',
-    desc: 'Pass run_date at trigger time — ADF builds correct file names automatically. Midnight schedule trigger included.',
+    desc: 'Pass run_date at trigger time — ADF expressions auto-construct file paths, enabling fully automated daily ingestion.',
     tags: ['ADF', 'Parameters', 'Schedule Trigger'],
     href: '/learn/projects/azure-project-03',
     color: '#0078d4',
   },
   {
     num: '04',
+    title: 'HTTP Ingestion — Download from a Public URL',
+    desc: 'Ingest external CSV data from public HTTP endpoints directly into ADLS Gen2 using a dynamic HTTP linked service.',
+    tags: ['ADF', 'HTTP Ingestion', 'ADLS Gen2'],
+    href: '/learn/projects/azure-project-04',
+    color: '#0078d4',
+  },
+  {
+    num: '05',
+    title: 'Organize Files With Date Stamps',
+    desc: 'Automated date-stamped folder partitioning using Get Metadata + ForEach + Copy + Delete activity chains.',
+    tags: ['ADF', 'Get Metadata', 'File Management'],
+    href: '/learn/projects/azure-project-05',
+    color: '#0078d4',
+  },
+  {
+    num: '06',
     title: 'asil-site — Data Engineering Learning Platform',
-    desc: 'Built and deployed a full-stack learning platform from scratch covering Azure, AWS, and GCP. Live on Vercel.',
+    desc: 'Built and deployed a full-stack DE learning platform from scratch covering Azure, AWS, and GCP tracks.',
     tags: ['Next.js', 'TypeScript', 'Vercel', 'Tailwind'],
     href: 'https://asil-site.vercel.app',
     color: '#00e676',
@@ -170,14 +183,14 @@ const projects = [
 ]
 
 const timeline = [
-  { year: '2016', event: 'SSC — GPA 9.3/10',                         detail: 'Board of Secondary Education, Andhra Pradesh',                       color: 'var(--muted)' },
-  { year: '2018', event: 'Intermediate — A Grade',                    detail: 'NRI Vidya Junior College, Guntur · 906/1000',                         color: 'var(--muted)' },
-  { year: '2022', event: 'B.Tech CSE — First Class with Distinction', detail: 'Parul University · CGPA 7.11/10',                                     color: '#0078d4'      },
-  { year: '2022', event: 'Moved to USA for Masters',                  detail: 'Trine University, Indiana',                                           color: '#7b61ff'      },
-  { year: '2024', event: 'MS Information Studies — 4.0 GPA',         detail: 'Trine University · Perfect GPA · Dec 2024',                           color: '#00e676'      },
-  { year: '2025', event: '6 Industry Certifications Earned',          detail: 'Microsoft Azure, Power BI · IBM Data Engineering · Google Analytics', color: '#ff9900'      },
-  { year: '2025', event: 'Built asil-site.vercel.app',                detail: 'Full-stack DE learning platform — Azure, AWS, GCP tracks',           color: '#00e676'      },
-  { year: 'Now',  event: 'Open to Data Engineer Roles',               detail: 'Azure · Cloud · Entry Level / Junior',                               color: 'var(--accent)'},
+  { year: '2016', event: 'SSC — GPA 9.3/10',                         detail: 'Board of Secondary Education, Andhra Pradesh',                        color: 'var(--muted)' },
+  { year: '2018', event: 'Intermediate — A Grade',                    detail: 'NRI Vidya Junior College, Guntur · 906/1000',                          color: 'var(--muted)' },
+  { year: '2022', event: 'B.Tech CSE — First Class with Distinction', detail: 'Parul University · CGPA 7.11/10',                                      color: '#0078d4'      },
+  { year: '2022', event: 'Moved to USA for Masters',                  detail: 'Trine University, Indiana',                                            color: '#7b61ff'      },
+  { year: '2024', event: 'MS Information Studies — 4.0 GPA',         detail: 'Trine University · Perfect GPA · Dec 2024',                            color: '#00e676'      },
+  { year: '2025', event: '6 Industry Certifications Earned',          detail: 'Microsoft Azure, Power BI · IBM Data Engineering · Google Analytics',  color: '#ff9900'      },
+  { year: '2025', event: 'Built asil-site.vercel.app',                detail: '5 production Azure ADF pipelines — documented and publicly deployed',  color: '#00e676'      },
+  { year: 'Now',  event: 'Open to Data Engineer Roles',               detail: 'Azure · Cloud · Entry Level / Junior · El Centro, CA',                 color: 'var(--accent)'},
 ]
 
 export default function AboutPage() {
@@ -201,8 +214,9 @@ export default function AboutPage() {
               <h1 className="text-3xl font-bold font-display mb-1" style={{ color: 'var(--text)' }}>
                 Asil Kamepalli
               </h1>
+              {/* FIX #1 — "Aspiring" removed */}
               <p className="text-base font-mono mb-3" style={{ color: 'var(--accent)' }}>
-                Aspiring Data Engineer · Azure Certified · Open to Opportunities
+                Data Engineer · Azure Certified · Open to Opportunities
               </p>
               <p className="text-sm max-w-2xl mb-4" style={{ color: 'var(--text2)', lineHeight: 1.8 }}>
                 B.Tech in Computer Science · MS in Information Studies from Trine University, USA (4.0 GPA) ·
@@ -215,7 +229,8 @@ export default function AboutPage() {
                   { label: 'MS — 4.0 GPA',              color: '#00e676' },
                   { label: 'B.Tech CSE — Distinction',  color: '#0078d4' },
                   { label: 'Azure Certified ✓',         color: '#0078d4' },
-                  { label: '6 Certifications',          color: '#ff9900' },
+                  // FIX #10 — ✓ added to certifications badge
+                  { label: '6 Certifications ✓',        color: '#ff9900' },
                   { label: 'Open to Work',              color: '#00e676' },
                 ].map(b => (
                   <span
@@ -243,8 +258,9 @@ export default function AboutPage() {
                 >
                   View Projects →
                 </Link>
+                {/* FIX #2 — consistent email */}
                 <a
-                  href="mailto:kamepalliasil143@gmail.com"
+                  href="mailto:asilkamepalli9@gmail.com"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold"
                   style={{ background: 'var(--surface)', color: 'var(--text2)', border: '1px solid var(--border)' }}
                 >
@@ -286,24 +302,18 @@ export default function AboutPage() {
             6 industry certifications across Microsoft, IBM, and Google — all earned in 2025. Each one is verifiable.
           </p>
 
-          {/* Featured cert — Azure */}
+          {/* Featured cert */}
           <div className="mb-4 p-5 rounded-xl" style={{ background: 'var(--surface)', border: '2px solid #0078d440' }}>
             <div className="flex items-start gap-3 mb-3">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                style={{ background: '#0078d420', border: '1px solid #0078d440' }}
-              >
-                ☁️
-              </div>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+                style={{ background: '#0078d420', border: '1px solid #0078d440' }}>☁️</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-0.5">
                   <h3 className="font-bold text-sm" style={{ color: 'var(--text)' }}>
                     Microsoft Certified: Azure Data Fundamentals
                   </h3>
-                  <span
-                    className="text-xs px-2 py-0.5 rounded-full font-mono font-bold"
-                    style={{ background: '#0078d420', color: '#50b0ff', border: '1px solid #0078d440' }}
-                  >
+                  <span className="text-xs px-2 py-0.5 rounded-full font-mono font-bold"
+                    style={{ background: '#0078d420', color: '#50b0ff', border: '1px solid #0078d440' }}>
                     ★ Featured
                   </span>
                 </div>
@@ -311,12 +321,10 @@ export default function AboutPage() {
                   Microsoft · Issued Dec 2025 · Credential ID: 28D73DF5699FDA34
                 </p>
               </div>
-              {/* Verify button */}
               <a
                 href="https://learn.microsoft.com/en-us/users/asilkamepalli-9260/credentials/28d73df5699fda34"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all"
+                target="_blank" rel="noopener noreferrer"
+                className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold"
                 style={{ background: '#0078d420', color: '#50b0ff', border: '1px solid #0078d440', whiteSpace: 'nowrap' }}
               >
                 Verify ↗
@@ -328,36 +336,23 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Remaining 5 certs grid */}
+          {/* Rest of certs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {certifications.filter(c => !c.featured).map(cert => (
-              <div
-                key={cert.name}
-                className="p-4 rounded-xl"
-                style={{ background: 'var(--surface)', border: `1px solid ${cert.color}25` }}
-              >
+              <div key={cert.name} className="p-4 rounded-xl"
+                style={{ background: 'var(--surface)', border: `1px solid ${cert.color}25` }}>
                 <div className="flex items-start gap-3">
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0"
-                    style={{ background: cert.color + '20', border: `1px solid ${cert.color}40` }}
-                  >
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0"
+                    style={{ background: cert.color + '20', border: `1px solid ${cert.color}40` }}>
                     {cert.icon}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-xs mb-0.5" style={{ color: 'var(--text)' }}>{cert.name}</h3>
-                    <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-                      {cert.issuer} · {cert.issued}
-                    </p>
-                    <p className="text-xs font-mono mt-0.5" style={{ color: 'var(--border)' }}>
-                      ID: {cert.credentialId}
-                    </p>
-                    <a
-                      href={cert.verifyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{cert.issuer} · {cert.issued}</p>
+                    <p className="text-xs font-mono mt-0.5" style={{ color: 'var(--border)' }}>ID: {cert.credentialId}</p>
+                    <a href={cert.verifyUrl} target="_blank" rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 mt-2 text-xs font-mono font-semibold"
-                      style={{ color: cert.color, textDecoration: 'none' }}
-                    >
+                      style={{ color: cert.color, textDecoration: 'none' }}>
                       Verify credential ↗
                     </a>
                   </div>
@@ -366,14 +361,14 @@ export default function AboutPage() {
             ))}
           </div>
 
-          {/* Issuer summary */}
           <div className="mt-4 grid grid-cols-3 gap-3">
             {[
               { label: 'Microsoft', count: '2', color: '#0078d4' },
               { label: 'IBM',       count: '3', color: '#7b61ff' },
               { label: 'Google',    count: '1', color: '#4285f4' },
             ].map(s => (
-              <div key={s.label} className="p-3 rounded-xl text-center" style={{ background: 'var(--surface)', border: `1px solid ${s.color}25` }}>
+              <div key={s.label} className="p-3 rounded-xl text-center"
+                style={{ background: 'var(--surface)', border: `1px solid ${s.color}25` }}>
                 <div className="text-xl font-bold font-mono" style={{ color: s.color }}>{s.count}</div>
                 <div className="text-xs" style={{ color: 'var(--muted)' }}>{s.label}</div>
               </div>
@@ -386,7 +381,8 @@ export default function AboutPage() {
           <div className="text-xs font-mono uppercase tracking-widest mb-6" style={{ color: 'var(--muted)' }}>// Education</div>
           <div className="space-y-5">
             {education.map(edu => (
-              <div key={edu.degree} className="p-6 rounded-xl" style={{ background: 'var(--surface)', border: `1px solid ${edu.color}30` }}>
+              <div key={edu.degree} className="p-6 rounded-xl"
+                style={{ background: 'var(--surface)', border: `1px solid ${edu.color}30` }}>
                 <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
                   <div>
                     <h3 className="font-bold text-base" style={{ color: 'var(--text)' }}>{edu.degree}</h3>
@@ -426,7 +422,8 @@ export default function AboutPage() {
           <div className="text-xs font-mono uppercase tracking-widest mb-6" style={{ color: 'var(--muted)' }}>// Technical Skills</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {skills.map(group => (
-              <div key={group.category} className="p-5 rounded-xl" style={{ background: 'var(--surface)', border: `1px solid ${group.color}25` }}>
+              <div key={group.category} className="p-5 rounded-xl"
+                style={{ background: 'var(--surface)', border: `1px solid ${group.color}25` }}>
                 <h3 className="text-xs font-mono font-bold uppercase tracking-widest mb-4" style={{ color: group.color }}>
                   {group.category}
                 </h3>
@@ -538,7 +535,8 @@ export default function AboutPage() {
                     'US Masters degree — 4.0 GPA',
                     'Microsoft Azure Data Fundamentals certified',
                     '6 certifications — Microsoft, IBM & Google',
-                    'Hands-on Azure ADF pipeline experience',
+                    // FIX #7 — stronger phrasing
+                    '5 production Azure ADF pipelines — built, deployed & documented',
                     'AI-augmented problem solving ability',
                     'Self-driven — built a full platform to prove it',
                   ].map(r => (
@@ -556,13 +554,15 @@ export default function AboutPage() {
         <section>
           <div className="text-xs font-mono uppercase tracking-widest mb-6" style={{ color: 'var(--muted)' }}>// Get In Touch</div>
           <div className="p-8 rounded-2xl text-center" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            {/* FIX #8 — stronger title */}
             <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--text)' }}>
-              Open to Data Engineer Opportunities
+              Ready to Contribute as a Data Engineer
             </h2>
+            {/* FIX #3 & #4 — removed weak lines */}
             <p className="text-sm mb-6 max-w-lg mx-auto" style={{ color: 'var(--text2)', lineHeight: 1.7 }}>
-              MS degree · Azure certified · 6 industry certifications · hands-on pipeline projects · built a full
-              learning platform from scratch. I am actively looking for my first data engineering role.
-              Every senior engineer started with zero experience — I am ready to prove myself.
+              MS degree · Azure certified · 6 industry certifications · 5 production Azure ADF pipelines ·
+              full-stack learning platform built and deployed. I am actively pursuing Data Engineer roles
+              and ready to contribute from day one.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <a
@@ -573,12 +573,13 @@ export default function AboutPage() {
               >
                 Connect on LinkedIn →
               </a>
+              {/* FIX #2 — consistent email */}
               <a
-                href="mailto:kamepalliasil143@gmail.com"
+                href="mailto:asilkamepalli9@gmail.com"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm"
                 style={{ background: 'var(--bg2)', color: 'var(--text2)', border: '1px solid var(--border)' }}
               >
-                kamepalliasil143@gmail.com
+                asilkamepalli9@gmail.com
               </a>
             </div>
           </div>
