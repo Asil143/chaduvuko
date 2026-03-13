@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/kamep/asil-site/app -name \"page.tsx\" | xargs grep -rL \"export const metadata\" 2>/dev/null)",
+      "Bash(head -30 /c/Users/kamep/asil-site/app/blog/[slug]/page.tsx)",
+      "Bash(node -e \"console.log\\('node ok'\\)\" && ls /c/Users/kamep/asil-site/node_modules | grep -E \"^\\(sharp|canvas\\)$\" 2>/dev/null || echo \"no sharp/canvas\")",
+      "Bash(npx tsc:*)",
+      "Bash(ls /c/Users/kamep/asil-site/app/globals.css 2>/dev/null && echo \"found\" || echo \"not found\"\nls /c/Users/kamep/asil-site/app/*.css 2>/dev/null | head -5\nls /c/Users/kamep/asil-site/styles/ 2>/dev/null | head -5\ngrep -r \"import.*globals\\\\|import.*styles\" /c/Users/kamep/asil-site/components --include=\"*.tsx\" -l 2>/dev/null | head -3)",
+      "Bash(grep -r \"Navbar\\\\|Header\\\\|Nav\\\\|Footer\" /c/Users/kamep/asil-site/components --include=\"*.tsx\" -l 2>/dev/null | head -5\nls /c/Users/kamep/asil-site/components/ui/ 2>/dev/null | head -10)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(grep -o '\"0+\\\\|\"0 live\\\\|\"0%\\\\|\"0\"' /c/Users/kamep/asil-site/out/index.html 2>/dev/null | head -10\ngrep -o '>[0-9][0-9+]*\\\\s*live\\\\|>[0-9][0-9+]*\\\\s*Tutorials' /c/Users/kamep/asil-site/out/index.html 2>/dev/null | head -10)"
+    ]
+  }
+}
