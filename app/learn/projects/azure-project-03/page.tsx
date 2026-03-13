@@ -1,9 +1,47 @@
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { LearningResourceJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd'
 
-export const metadata = { title: 'Project 03 — Parameterized Pipeline with Run Date' }
-
+export const metadata = {
+  title: 'Azure Data Factory Parameterized Pipeline with Run Date & Trigger — Project 03',
+  description:
+    'Pass a run_date parameter to an ADF pipeline at runtime and build file names automatically. Add a scheduled trigger for fully automated nightly data ingestion. Free tutorial.',
+  keywords: [
+    'azure data factory parameters tutorial',
+    'adf pipeline run date parameter',
+    'azure data factory scheduled trigger',
+    'adf date partitioning',
+    'parameterized azure pipeline',
+    'adf trigger tutorial',
+    'date-based file ingestion adf',
+  ],
+  alternates: {
+    canonical: 'https://asil-site.vercel.app/learn/projects/azure-project-03',
+  },
+  openGraph: {
+    title: 'ADF Parameterized Pipeline with Run Date & Scheduled Trigger — Free Tutorial',
+    description:
+      'Pass a date at runtime and ADF builds the correct file names automatically. Add a midnight trigger for zero-touch nightly ingestion.',
+    url: 'https://asil-site.vercel.app/learn/projects/azure-project-03',
+    type: 'article',
+    images: [
+      {
+        url: 'https://asil-site.vercel.app/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Azure Data Factory Parameterized Pipeline Tutorial',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ADF Parameterized Pipeline with Scheduled Trigger — Free Tutorial',
+    description:
+      'Pass a run_date parameter, build file names dynamically, and schedule nightly ingestion. Full walkthrough, no paywall.',
+    images: ['https://asil-site.vercel.app/og-image.png'],
+  },
+}
 function Screenshot({ caption }: { caption: string }) {
   return (
     <div className="my-4 rounded-xl overflow-hidden" style={{ border: '2px dashed var(--border)' }}>
@@ -92,6 +130,9 @@ export default function Project03Page() {
       ]}
       prev={{ title: 'Project 02 — ForEach Loop', href: '/learn/projects/azure-project-02' }}
     >
+
+      <LearningResourceJsonLd name="ADF Parameterized Pipeline with Run Date and Trigger" description="Pass a run_date parameter at runtime and add a scheduled trigger for nightly ingestion." url="https://asil-site.vercel.app/learn/projects/azure-project-03" datePublished="2026-03-01" keywords={['azure data factory parameters', 'adf scheduled trigger', 'adf date partitioning']} timeRequired="PT75M" />
+      <BreadcrumbJsonLd items={[{ name: 'Home', url: 'https://asil-site.vercel.app' }, { name: 'Projects', url: 'https://asil-site.vercel.app/learn/projects' }, { name: 'Project 03 — Parameterized Pipeline', url: 'https://asil-site.vercel.app/learn/projects/azure-project-03' }]} />
 
       {/* Meta bar */}
       <div className="flex flex-wrap gap-3 my-6">

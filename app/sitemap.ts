@@ -1,49 +1,260 @@
 import { MetadataRoute } from 'next'
 
-const BASE = 'https://asil-site.vercel.app'
+const BASE_URL = 'https://asil-site.vercel.app'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
 
-  const staticPages = [
-    { url: BASE,                              priority: 1.0,  changeFrequency: 'weekly'  as const },
-    { url: BASE + '/learn/roadmap',           priority: 0.9,  changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/what-is-data-engineering', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/foundations/sql',   priority: 0.9,  changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/foundations/python',priority: 0.9,  changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/azure/introduction',priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/azure/adls-gen2',   priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/azure/adf',         priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/azure/databricks',  priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/azure/synapse',     priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/aws/introduction',  priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/aws/s3',            priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/aws/glue',          priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/aws/redshift',      priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/aws/kinesis',       priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/gcp/introduction',  priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/gcp/bigquery',      priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/gcp/dataflow',      priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/gcp/pubsub',        priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/gcp/composer',      priority: 0.85, changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/interview',         priority: 0.9,  changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/industry',          priority: 0.8,  changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/projects',          priority: 0.8,  changeFrequency: 'monthly' as const },
-    { url: BASE + '/learn/projects/azure-batch-pipeline', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: BASE + '/blog',                    priority: 0.8,  changeFrequency: 'weekly'  as const },
-    { url: BASE + '/blog/why-data-engineers-use-parquet',     priority: 0.75, changeFrequency: 'monthly' as const },
-    { url: BASE + '/blog/medallion-architecture-explained',   priority: 0.75, changeFrequency: 'monthly' as const },
-    { url: BASE + '/blog/delta-lake-vs-apache-iceberg',       priority: 0.75, changeFrequency: 'monthly' as const },
-    { url: BASE + '/blog/how-to-get-h1b-data-engineering',    priority: 0.75, changeFrequency: 'monthly' as const },
-    { url: BASE + '/blog/spark-interview-questions',          priority: 0.75, changeFrequency: 'monthly' as const },
-    { url: BASE + '/blog/azure-vs-aws-data-engineering',      priority: 0.75, changeFrequency: 'monthly' as const },
-    { url: BASE + '/dashboard',               priority: 0.6,  changeFrequency: 'monthly' as const },
+  // Static routes with their priorities and change frequencies
+  const routes: MetadataRoute.Sitemap = [
+    // Homepage — highest priority
+    {
+      url: BASE_URL,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 1.0,
+    },
+
+    // Core learn pages
+    {
+      url: `${BASE_URL}/learn/roadmap`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/learn/what-is-data-engineering`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+
+    // Projects listing
+    {
+      url: `${BASE_URL}/learn/projects`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+
+    // Azure project pages — high priority (live content)
+    {
+      url: `${BASE_URL}/learn/projects/azure-batch-pipeline`,
+      lastModified: new Date('2026-03-01'),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/learn/projects/azure-projects-02`,
+      lastModified: new Date('2026-03-01'),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/learn/projects/azure-project-03`,
+      lastModified: new Date('2026-03-01'),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/learn/projects/azure-project-04`,
+      lastModified: new Date('2026-03-01'),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/learn/projects/azure-project-05`,
+      lastModified: new Date('2026-03-01'),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+
+    // Azure track tutorials
+    {
+      url: `${BASE_URL}/learn/azure/introduction`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/azure/adls-gen2`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/azure/adf`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/azure/databricks`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/azure/synapse`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/azure/event-hubs`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/learn/azure/key-vault`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/learn/azure/microsoft-fabric`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+
+    // AWS track tutorials
+    {
+      url: `${BASE_URL}/learn/aws/introduction`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/aws/s3`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/aws/glue`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/aws/redshift`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/aws/kinesis`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/aws/athena`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/learn/aws/emr`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/learn/aws/step-functions`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/learn/aws/lake-formation`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+
+    // GCP track tutorials
+    {
+      url: `${BASE_URL}/learn/gcp/introduction`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/gcp/bigquery`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/gcp/dataflow`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/learn/gcp/pubsub`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/learn/gcp/composer`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+
+    // Foundations
+    {
+      url: `${BASE_URL}/learn/foundations/sql`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/foundations/python`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/learn/foundations/postgresql`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+
+    // Career / interview
+    {
+      url: `${BASE_URL}/learn/interview`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/learn/industry`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+
+    // Static pages
+    {
+      url: `${BASE_URL}/about`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/blog`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
   ]
 
-  return staticPages.map(page => ({
-    url: page.url,
-    lastModified: now,
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
-  }))
+  return routes
 }

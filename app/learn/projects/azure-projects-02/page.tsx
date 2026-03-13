@@ -1,9 +1,47 @@
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import { LearningResourceJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd'
 
-export const metadata = { title: 'Project 02 — Copy Multiple CSV Files Using ForEach Loop' }
-
+export const metadata = {
+  title: 'Azure Data Factory ForEach Loop Tutorial: Copy Multiple Files — Project 02',
+  description:
+    'Learn how to use the ADF ForEach activity to loop over multiple CSV files with a single parameterized pipeline. Stop duplicating Copy activities — automate it properly.',
+  keywords: [
+    'azure data factory foreach loop',
+    'adf foreach activity tutorial',
+    'copy multiple files adf',
+    'azure data factory parameterized pipeline',
+    'adf pipeline parameters',
+    'azure data factory loop files',
+    'data engineering pipeline automation',
+  ],
+  alternates: {
+    canonical: 'https://asil-site.vercel.app/learn/projects/azure-projects-02',
+  },
+  openGraph: {
+    title: 'ADF ForEach Loop: Copy Multiple Files in One Pipeline — Free Tutorial',
+    description:
+      'Use ADF ForEach to copy 10 store CSVs with a single pipeline run. No duplicate Copy activities. Real beginner-friendly walkthrough.',
+    url: 'https://asil-site.vercel.app/learn/projects/azure-projects-02',
+    type: 'article',
+    images: [
+      {
+        url: 'https://asil-site.vercel.app/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Azure Data Factory ForEach Loop Tutorial',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ADF ForEach Loop: Copy Multiple Files in One Pipeline — Free Tutorial',
+    description:
+      'Loop over 10 CSV files with a single parameterized ADF pipeline. Real walkthrough, no paywall.',
+    images: ['https://asil-site.vercel.app/og-image.png'],
+  },
+}
 function Screenshot({ caption }: { caption: string }) {
   return (
     <div className="my-4 rounded-xl overflow-hidden" style={{ border: '2px dashed var(--border)' }}>
@@ -83,6 +121,9 @@ export default function Project02Page() {
       prev={{ title: 'Project 01 — Copy CSV to ADLS', href: '/learn/projects/azure-batch-pipeline' }}
       next={{ title: 'Project 03 — Parameterized Pipeline with Run Date', href: '/learn/projects/azure-project-03' }}
     >
+
+      <LearningResourceJsonLd name="ADF ForEach Loop: Copy Multiple Files" description="Use ADF ForEach to copy 10 store CSV files with a single parameterized pipeline." url="https://asil-site.vercel.app/learn/projects/azure-projects-02" datePublished="2026-03-01" keywords={['azure data factory foreach', 'copy multiple files adf', 'adf pipeline parameters']} timeRequired="PT60M" />
+      <BreadcrumbJsonLd items={[{ name: 'Home', url: 'https://asil-site.vercel.app' }, { name: 'Projects', url: 'https://asil-site.vercel.app/learn/projects' }, { name: 'Project 02 — ForEach Loop', url: 'https://asil-site.vercel.app/learn/projects/azure-projects-02' }]} />
 
       {/* Project meta */}
       <div className="flex flex-wrap gap-3 my-6">
