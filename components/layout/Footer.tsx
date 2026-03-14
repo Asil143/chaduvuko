@@ -31,48 +31,23 @@ const links = {
 
 export function Footer() {
   return (
-    <footer className="border-t mt-20" style={{ borderColor: 'var(--border)', background: 'var(--bg2)' }}>
-      <div className="max-w-7xl mx-auto px-6 py-14">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 mb-12">
-          <div className="sm:col-span-2 md:col-span-1">
-            <div className="font-display font-extrabold text-xl mb-3">
-              <span style={{ color: 'var(--text)' }}>Chaduv</span><span style={{ color: 'var(--accent)' }}>uko</span>
-            </div>
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-              Built by Asil for the next generation of data engineers.
-            </p>
-            <p className="text-xs mt-4 font-mono" style={{ color: 'var(--muted)' }}>
-              🌱 Built with ❤️ from California, USA
-            </p>
-          </div>
-          {Object.entries(links).map(([section, items]) => (
-            <div key={section}>
-              <div className="text-xs font-mono uppercase tracking-widest mb-4" style={{ color: 'var(--muted)' }}>{section}</div>
-              <ul className="space-y-2">
-                {items.map(item => (
-                  <li key={item.href}>
-                    <Link href={item.href} className="text-sm transition-colors hover:opacity-100"
-                      style={{ color: 'var(--text2)' }}
-                      target={item.href.startsWith('http') ? '_blank' : undefined}>
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between pt-8 gap-4"
-          style={{ borderTop: '1px solid var(--border)' }}>
-          <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-            © 2026 · Built by{' '}
-            <span className="font-display font-bold">
-              <span style={{ color: 'var(--text)' }}>As</span><span style={{ color: 'var(--accent)' }}>il</span>
-            </span>
-            {' '}· No Ads · No Paywalls
-          </p>
-        </div>
-      </div>
+    <footer style={{
+      borderTop: '1px solid var(--border)',
+      padding: '20px 28px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+      gap: '8px',
+      fontSize: '11px',
+      color: 'var(--muted)',
+    }}>
+      <span>
+        Chaduvuko · Built by Asil · Made with{' '}
+        <span style={{ color: '#e25555' }}>❤️</span>
+        {' '}in California for every student who deserved better learning tools
+      </span>
+      <span>© 2026 · No Ads · Built by Asil</span>
     </footer>
   )
 }
