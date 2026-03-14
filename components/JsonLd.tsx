@@ -5,7 +5,7 @@
 // No visual change to the page — pure SEO signal.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const BASE_URL = 'https://asil-site.vercel.app'
+const BASE_URL = 'https://chaduvuko.com'
 
 // ── WebSite schema — paste into app/page.tsx (homepage) ──────────────────────
 export function WebSiteJsonLd() {
@@ -149,16 +149,16 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
 //    <LearningResourceJsonLd
 //      name="Azure Data Factory: Copy CSV to ADLS Gen2"
 //      description="Build your first ADF pipeline from scratch..."
-//      url="https://asil-site.vercel.app/learn/projects/azure-batch-pipeline"
+//      url="https://chaduvuko.com/learn/projects/azure-batch-pipeline"
 //      datePublished="2026-03-01"
 //      keywords={['azure data factory', 'adls gen2', 'csv pipeline']}
 //      timeRequired="PT75M"
 //    />
 //    <BreadcrumbJsonLd
 //      items={[
-//        { name: 'Home', url: 'https://asil-site.vercel.app' },
-//        { name: 'Projects', url: 'https://asil-site.vercel.app/learn/projects' },
-//        { name: 'Project 01 — Copy CSV to ADLS', url: 'https://asil-site.vercel.app/learn/projects/azure-batch-pipeline' },
+//        { name: 'Home', url: 'https://chaduvuko.com' },
+//        { name: 'Projects', url: 'https://chaduvuko.com/learn/projects' },
+//        { name: 'Project 01 — Copy CSV to ADLS', url: 'https://chaduvuko.com/learn/projects/azure-batch-pipeline' },
 //      ]}
 //    />
 // ─────────────────────────────────────────────────────────────────────────────

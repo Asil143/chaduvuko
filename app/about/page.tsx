@@ -177,7 +177,7 @@ const projects = [
     title: 'asil-site — Data Engineering Learning Platform',
     desc: 'Built and deployed a full-stack DE learning platform from scratch covering Azure, AWS, and GCP tracks.',
     tags: ['Next.js', 'TypeScript', 'Vercel', 'Tailwind'],
-    href: 'https://asil-site.vercel.app',
+    href: 'https://chaduvuko.com',
     color: '#00e676',
   },
 ]
@@ -189,7 +189,7 @@ const timeline = [
   { year: '2022', event: 'Moved to USA for Masters',                  detail: 'Trine University, Indiana',                                            color: '#7b61ff'      },
   { year: '2024', event: 'MS Information Studies — 4.0 GPA',         detail: 'Trine University · Perfect GPA · Dec 2024',                            color: '#00e676'      },
   { year: '2025', event: '6 Industry Certifications Earned',          detail: 'Microsoft Azure, Power BI · IBM Data Engineering · Google Analytics',  color: '#ff9900'      },
-  { year: '2025', event: 'Built asil-site.vercel.app',                detail: '5 production Azure ADF pipelines — documented and publicly deployed',  color: '#00e676'      },
+  { year: '2025', event: 'Built chaduvuko.com',                detail: '5 production Azure ADF pipelines — documented and publicly deployed',  color: '#00e676'      },
   { year: 'Now',  event: 'Open to Data Engineer Roles',               detail: 'Azure · Cloud · Entry Level / Junior · El Centro, CA',                 color: 'var(--accent)'},
 ]
 
@@ -282,7 +282,7 @@ export default function AboutPage() {
               { icon: '🏗️', title: 'Builder Mentality',     color: '#0078d4', desc: "I don't just study tools — I build with them. Every Azure project on this site is hands-on, real cloud infrastructure, fully documented." },
               { icon: '🎯', title: 'Problem-First Thinking', color: '#7b61ff', desc: 'In the AI era, knowing what to solve matters more than how to solve it. I focus on root cause analysis before reaching for a solution.' },
               { icon: '🤖', title: 'AI-Augmented',           color: '#ff9900', desc: 'Expert at leveraging AI tools to accelerate learning, debug problems, and build faster. This entire platform was built using AI as a co-pilot.' },
-              { icon: '📚', title: 'Teach to Learn',         color: '#00e676', desc: 'Built asil-site.vercel.app — a free centralised DE learning platform covering Azure, AWS, and GCP. If I can explain it, I truly understand it.' },
+              { icon: '📚', title: 'Teach to Learn',         color: '#00e676', desc: 'Built chaduvuko.com — a free centralised DE learning platform covering Azure, AWS, and GCP. If I can explain it, I truly understand it.' },
             ].map(c => (
               <div key={c.title} className="p-5 rounded-xl" style={{ background: 'var(--surface)', border: `1px solid ${c.color}25` }}>
                 <div className="text-2xl mb-3">{c.icon}</div>

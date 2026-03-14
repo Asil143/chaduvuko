@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://asil-site.vercel.app'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chaduvuko.com'
   const greeting = name ? name : 'there'
 
   const html = [

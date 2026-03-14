@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/dashboard'],
       },
     ],
-    sitemap: 'https://asil-site.vercel.app/sitemap.xml',
-    host: 'https://asil-site.vercel.app',
+    sitemap: 'https://chaduvuko.com/sitemap.xml',
+    host: 'https://chaduvuko.com',
   }
 }

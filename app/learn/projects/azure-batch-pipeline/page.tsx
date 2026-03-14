@@ -17,17 +17,17 @@ export const metadata = {
     'data lake pipeline tutorial',
   ],
   alternates: {
-    canonical: 'https://asil-site.vercel.app/learn/projects/azure-batch-pipeline',
+    canonical: 'https://chaduvuko.com/learn/projects/azure-batch-pipeline',
   },
   openGraph: {
     title: 'Azure Data Factory: Copy CSV to ADLS Gen2 — Free Tutorial',
     description:
       'Build your first ADF pipeline from scratch. Copy a CSV file into Azure Data Lake — the foundation pattern of every data engineering project.',
-    url: 'https://asil-site.vercel.app/learn/projects/azure-batch-pipeline',
+    url: 'https://chaduvuko.com/learn/projects/azure-batch-pipeline',
     type: 'article',
     images: [
       {
-        url: 'https://asil-site.vercel.app/og-image.png',
+        url: 'https://chaduvuko.com/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Azure Data Factory CSV to ADLS Gen2 Tutorial',
@@ -39,7 +39,7 @@ export const metadata = {
     title: 'Azure Data Factory: Copy CSV to ADLS Gen2 — Free Tutorial',
     description:
       'Build your first ADF pipeline from scratch. The foundational pattern of every Azure data engineering project.',
-    images: ['https://asil-site.vercel.app/og-image.png'],
+    images: ['https://chaduvuko.com/og-image.png'],
   },
 }
 
@@ -122,16 +122,16 @@ export default function Project01Page() {
       <LearningResourceJsonLd
         name="Azure Data Factory Tutorial: Copy CSV to ADLS Gen2"
         description="Build your first ADF pipeline to copy a CSV file from Azure Blob Storage into ADLS Gen2. Beginner-friendly, free, with full screenshots."
-        url="https://asil-site.vercel.app/learn/projects/azure-batch-pipeline"
+        url="https://chaduvuko.com/learn/projects/azure-batch-pipeline"
         datePublished="2026-03-01"
         keywords={['azure data factory', 'adls gen2', 'csv pipeline', 'azure data engineering']}
         timeRequired="PT75M"
       />
       <BreadcrumbJsonLd
         items={[
-          { name: 'Home', url: 'https://asil-site.vercel.app' },
-          { name: 'Projects', url: 'https://asil-site.vercel.app/learn/projects' },
-          { name: 'Project 01 — Copy CSV to ADLS', url: 'https://asil-site.vercel.app/learn/projects/azure-batch-pipeline' },
+          { name: 'Home', url: 'https://chaduvuko.com' },
+          { name: 'Projects', url: 'https://chaduvuko.com/learn/projects' },
+          { name: 'Project 01 — Copy CSV to ADLS', url: 'https://chaduvuko.com/learn/projects/azure-batch-pipeline' },
         ]}
       />
 

@@ -18,17 +18,17 @@ export const metadata = {
     'adf file existence check',
   ],
   alternates: {
-    canonical: 'https://asil-site.vercel.app/learn/projects/azure-project-05',
+    canonical: 'https://chaduvuko.com/learn/projects/azure-project-05',
   },
   openGraph: {
     title: 'ADF File Management: Get Metadata, If Condition & Delete Activity — Free Tutorial',
     description:
       'Check file existence, date-stamp outputs, auto-clean the landing zone, and log errors. A complete production file management workflow in ADF.',
-    url: 'https://asil-site.vercel.app/learn/projects/azure-project-05',
+    url: 'https://chaduvuko.com/learn/projects/azure-project-05',
     type: 'article',
     images: [
       {
-        url: 'https://asil-site.vercel.app/og-image.png',
+        url: 'https://chaduvuko.com/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Azure Data Factory File Management Tutorial',
@@ -40,7 +40,7 @@ export const metadata = {
     title: 'ADF Get Metadata, If Condition & Delete Activity — Free Tutorial',
     description:
       'Production-grade ADF file management: check existence, date-stamp, auto-cleanup, log errors. Full walkthrough.',
-    images: ['https://asil-site.vercel.app/og-image.png'],
+    images: ['https://chaduvuko.com/og-image.png'],
   },
 }
 function Screenshot({ caption }: { caption: string }) {
@@ -135,8 +135,8 @@ export default function Project05Page() {
       updatedAt="March 2026"
     >
 
-      <LearningResourceJsonLd name="ADF File Management: Get Metadata, If Condition and Delete Activity" description="Build a production-grade ADF pipeline with file existence checks, date stamps, auto-cleanup, and error logging." url="https://asil-site.vercel.app/learn/projects/azure-project-05" datePublished="2026-03-01" keywords={['adf get metadata activity', 'adf if condition', 'adf delete activity', 'azure file management pipeline']} timeRequired="PT90M" />
-      <BreadcrumbJsonLd items={[{ name: 'Home', url: 'https://asil-site.vercel.app' }, { name: 'Projects', url: 'https://asil-site.vercel.app/learn/projects' }, { name: 'Project 05 — File Management', url: 'https://asil-site.vercel.app/learn/projects/azure-project-05' }]} />
+      <LearningResourceJsonLd name="ADF File Management: Get Metadata, If Condition and Delete Activity" description="Build a production-grade ADF pipeline with file existence checks, date stamps, auto-cleanup, and error logging." url="https://chaduvuko.com/learn/projects/azure-project-05" datePublished="2026-03-01" keywords={['adf get metadata activity', 'adf if condition', 'adf delete activity', 'azure file management pipeline']} timeRequired="PT90M" />
+      <BreadcrumbJsonLd items={[{ name: 'Home', url: 'https://chaduvuko.com' }, { name: 'Projects', url: 'https://chaduvuko.com/learn/projects' }, { name: 'Project 05 — File Management', url: 'https://chaduvuko.com/learn/projects/azure-project-05' }]} />
 
       {/* Series info */}
       <div className="not-prose mb-8 p-4 rounded-xl" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>

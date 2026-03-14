@@ -91,7 +91,7 @@ export default function OGImage() {
           position: 'absolute', bottom: '40px', right: '80px',
           fontSize: '20px', color: '#30363d', display: 'flex',
         }}>
-          asil-site.vercel.app
+          chaduvuko.com
         </div>
       </div>
     ),

@@ -17,17 +17,17 @@ export const metadata = {
     'download csv from url azure data factory',
   ],
   alternates: {
-    canonical: 'https://asil-site.vercel.app/learn/projects/azure-project-04',
+    canonical: 'https://chaduvuko.com/learn/projects/azure-project-04',
   },
   openGraph: {
     title: 'ADF HTTP Ingestion: Download Public URL Data to ADLS Gen2 — Free Tutorial',
     description:
       'Pull data directly from any HTTPS endpoint into your Azure Data Lake. ADF HTTP Linked Service, step-by-step.',
-    url: 'https://asil-site.vercel.app/learn/projects/azure-project-04',
+    url: 'https://chaduvuko.com/learn/projects/azure-project-04',
     type: 'article',
     images: [
       {
-        url: 'https://asil-site.vercel.app/og-image.png',
+        url: 'https://chaduvuko.com/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Azure Data Factory HTTP Ingestion Tutorial',
@@ -39,7 +39,7 @@ export const metadata = {
     title: 'ADF HTTP Ingestion: Download Public URL to ADLS Gen2 — Free Tutorial',
     description:
       'No manual uploads. ADF fetches from the internet and lands it straight in your data lake.',
-    images: ['https://asil-site.vercel.app/og-image.png'],
+    images: ['https://chaduvuko.com/og-image.png'],
   },
 }
 function Screenshot({ caption }: { caption: string }) {
@@ -133,8 +133,8 @@ export default function Project04Page() {
       updatedAt="March 2026"
     >
 
-      <LearningResourceJsonLd name="ADF HTTP Ingestion: Download from Public URL to ADLS Gen2" description="Use ADF HTTP Linked Service to pull data from a public HTTPS endpoint into Azure Data Lake." url="https://asil-site.vercel.app/learn/projects/azure-project-04" datePublished="2026-03-01" keywords={['azure data factory http ingestion', 'adf download from url', 'adf http linked service']} timeRequired="PT60M" />
-      <BreadcrumbJsonLd items={[{ name: 'Home', url: 'https://asil-site.vercel.app' }, { name: 'Projects', url: 'https://asil-site.vercel.app/learn/projects' }, { name: 'Project 04 — HTTP Ingestion', url: 'https://asil-site.vercel.app/learn/projects/azure-project-04' }]} />
+      <LearningResourceJsonLd name="ADF HTTP Ingestion: Download from Public URL to ADLS Gen2" description="Use ADF HTTP Linked Service to pull data from a public HTTPS endpoint into Azure Data Lake." url="https://chaduvuko.com/learn/projects/azure-project-04" datePublished="2026-03-01" keywords={['azure data factory http ingestion', 'adf download from url', 'adf http linked service']} timeRequired="PT60M" />
+      <BreadcrumbJsonLd items={[{ name: 'Home', url: 'https://chaduvuko.com' }, { name: 'Projects', url: 'https://chaduvuko.com/learn/projects' }, { name: 'Project 04 — HTTP Ingestion', url: 'https://chaduvuko.com/learn/projects/azure-project-04' }]} />
 
       {/* Series info */}
       <div className="not-prose mb-8 p-4 rounded-xl" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>

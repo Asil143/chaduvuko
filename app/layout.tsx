@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: 'Free, open data engineering and cloud education covering Azure, AWS, GCP, Apache Iceberg, Spark, Delta Lake, Data Mesh, and the full modern data stack.',
   keywords: ['data engineering', 'azure', 'aws', 'gcp', 'apache spark', 'databricks', 'data lake', 'free tutorials', 'h1b', 'data engineer salary'],
   authors: [{ name: 'Asil' }],
-  metadataBase: new URL('https://asil-site.vercel.app'),
+  metadataBase: new URL('https://chaduvuko.com'),
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: 'Asil — Free Data Engineering & Cloud Learning',
     description: 'Master Data Engineering for free. Azure, AWS, GCP, Interview Prep, Real Projects. Built by Asil.',
     type: 'website',
-    url: 'https://asil-site.vercel.app',
+    url: 'https://chaduvuko.com',
     siteName: 'Asil',
   },
   twitter: {
@@ -60,7 +60,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://asil-site.vercel.app'),
+  metadataBase: new URL('https://chaduvuko.com'),
 
   title: {
     default: 'Asil — Free Data Engineering & Cloud Learning',
@@ -96,12 +96,12 @@ export const metadata: Metadata = {
     'modern data stack',
   ],
 
-  authors: [{ name: 'Asil', url: 'https://asil-site.vercel.app' }],
+  authors: [{ name: 'Asil', url: 'https://chaduvuko.com' }],
   creator: 'Asil',
   publisher: 'Asil',
 
   alternates: {
-    canonical: 'https://asil-site.vercel.app',
+    canonical: 'https://chaduvuko.com',
   },
 
   robots: {
@@ -121,7 +121,7 @@ export const metadata: Metadata = {
     description:
       'Master Data Engineering for free. Azure, AWS, GCP tutorials, real-world projects, and interview prep. Built by Asil — no paywall, ever.',
     type: 'website',
-    url: 'https://asil-site.vercel.app',
+    url: 'https://chaduvuko.com',
     siteName: 'Asil — Free Data Engineering Learning',
     locale: 'en_US',
     images: [

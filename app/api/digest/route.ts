@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ sent: 0 })
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://asil-site.vercel.app'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chaduvuko.com'
 
   const html = `
     <div style="font-family: Georgia, serif; max-width: 580px; margin: 0 auto; padding: 40px 20px; color: #1a1a2e;">
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
       <p style="font-size: 12px; color: #bbb; border-top: 1px solid #eee; padding-top: 20px; font-family: monospace;">
         Built by Asil · Free forever · 
-        <a href="${siteUrl}" style="color: #bbb;">asil-site.vercel.app</a>
+        <a href="${siteUrl}" style="color: #bbb;">chaduvuko.com</a>
       </p>
     </div>
   `
