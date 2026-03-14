@@ -154,6 +154,38 @@ export function Navbar() {
         <Link href="/learn/roadmap" className="hidden md:flex btn-primary text-sm">
           Start →
         </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '8px' }}>
+          <Link href="/dashboard">
+            <span style={{
+              display: 'inline-block',
+              fontSize: '12px',
+              fontWeight: 500,
+              padding: '5px 13px',
+              borderRadius: '6px',
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: 'var(--text)',
+              cursor: 'pointer',
+              textDecoration: 'none',
+            }}>
+              Sign in
+            </span>
+          </Link>
+          <Link href="/learn/roadmap">
+            <span style={{
+              display: 'inline-block',
+              fontSize: '12px',
+              fontWeight: 700,
+              padding: '5px 14px',
+              borderRadius: '6px',
+              background: 'var(--green)',
+              color: '#000',
+              cursor: 'pointer',
+              textDecoration: 'none',
+            }}>
+              Start Learning →
+            </span>
+          </Link>
+        </div>
         <button className="lg:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen
             ? <X size={20} style={{ color: 'var(--text)' }} />

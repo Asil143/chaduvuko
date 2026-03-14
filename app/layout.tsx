@@ -167,6 +167,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <ServiceWorkerRegistration />
           <Navbar />
+          {/* Announce Bar */}
+          <div style={{
+            background: 'rgba(0, 230, 118, 0.06)',
+            borderBottom: '1px solid rgba(0, 230, 118, 0.12)',
+            padding: '7px 28px',
+            fontSize: '11px',
+            color: 'rgba(0, 230, 118, 0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            fontWeight: 600,
+          }}>
+            <span style={{
+              width: '5px',
+              height: '5px',
+              borderRadius: '50%',
+              background: '#00e676',
+              display: 'inline-block',
+              flexShrink: 0,
+            }} />
+            Python · SQL · Web Dev · Java · AI/ML tracks launching soon — your one platform for all of IT
+          </div>
           <main>{children}</main>
           <Footer />
         </ThemeProvider>
@@ -174,7 +197,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
-
-
-
-
