@@ -42,11 +42,15 @@ const navItems: NavItem[] = [
       },
     ],
   },
-  { label: 'Projects',   href: '/learn/projects' },
-  { label: 'Industry',   href: '/learn/industry' },
-  { label: 'Blog',       href: '/blog' },
-  { label: 'Dashboard',  href: '/dashboard' },
-  { label: 'About',      href: '/about' },
+  { label: 'Projects',       href: '/learn/projects' },
+  { label: 'Industry',       href: '/learn/industry' },
+  { label: 'Blog',           href: '/blog' },
+  { label: 'Dashboard',      href: '/dashboard' },
+  { label: 'About',          href: '/about' },
+  { label: 'Tutorials',      href: '/learn/what-is-data-engineering' },
+  { label: 'Interview Prep', href: '/learn/interview' },
+  { label: 'Career Explorer',href: '/learn/roadmap' },
+  { label: 'Roadmap',        href: '/learn/roadmap' },
 ]
 
 export function Navbar() {
@@ -68,7 +72,7 @@ export function Navbar() {
       <Link
         href="/"
         className="flex items-center gap-1.5 font-display font-extrabold text-xl tracking-tight flex-shrink-0"
-        style={{ color: 'var(--text)' }}
+        style={{ color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'visible' }}
       >
         <span
           className="w-2 h-2 rounded-full flex-shrink-0"
@@ -151,9 +155,6 @@ export function Navbar() {
         <SearchBar variant="navbar" />
         <DashboardPanel />
         <ThemePicker />
-        <Link href="/learn/roadmap" className="hidden md:flex btn-primary text-sm">
-          Start →
-        </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '8px' }}>
           <Link href="/dashboard">
             <span style={{
