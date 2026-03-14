@@ -75,7 +75,7 @@ export function Navbar() {
           style={{ background: 'var(--accent)', animation: 'pulseDot 2s ease-in-out infinite' }}
         />
         <span style={{ letterSpacing: '-0.01em' }}>
-          As<span style={{ color: 'var(--accent)' }}>il</span>
+          Chaduv<span style={{ color: 'var(--accent)' }}>uko</span>
         </span>
       </Link>
 

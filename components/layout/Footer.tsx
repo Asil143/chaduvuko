@@ -36,10 +36,10 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 mb-12">
           <div className="sm:col-span-2 md:col-span-1">
             <div className="font-display font-extrabold text-xl mb-3">
-              <span style={{ color: 'var(--text)' }}>As</span><span style={{ color: 'var(--accent)' }}>il</span>
+              <span style={{ color: 'var(--text)' }}>Chaduv</span><span style={{ color: 'var(--accent)' }}>uko</span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-              Free, open data engineering education. Built by Asil for the next generation of data engineers.
+              Built by Asil for the next generation of data engineers.
             </p>
             <p className="text-xs mt-4 font-mono" style={{ color: 'var(--muted)' }}>
               🌱 Built with ❤️ from California, USA
@@ -69,10 +69,7 @@ export function Footer() {
             <span className="font-display font-bold">
               <span style={{ color: 'var(--text)' }}>As</span><span style={{ color: 'var(--accent)' }}>il</span>
             </span>
-            {' '}· 100% Free Forever · No Ads · No Paywalls
-          </p>
-          <p className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
-            Asil = Pure, genuine · Free forever
+            {' '}· No Ads · No Paywalls
           </p>
         </div>
       </div>

@@ -179,13 +179,6 @@ export default function HomePage() {
           </div>
         ))}
 
-        {/* Badge */}
-        <div className="relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono border mb-6"
-          style={{ background: 'var(--accent-glow)', borderColor: 'rgba(0,120,212,0.25)', color: 'var(--accent)' }}>
-          <span className="w-1.5 h-1.5 rounded-full inline-block flex-shrink-0" style={{ background: 'var(--accent)', animation: 'pulseDot 2s ease-in-out infinite' }} />
-          Free · Open · Community Driven · No Paywall Ever
-        </div>
-
         {/* Main headline */}
         <h1 className="relative font-display font-extrabold leading-[1.04] tracking-tight max-w-5xl"
           style={{ fontSize: 'clamp(2.6rem, 7.5vw, 6rem)', color: 'var(--text)' }}>
@@ -207,7 +200,7 @@ export default function HomePage() {
           style={{ color: 'var(--muted)', fontFamily: 'Lora, serif', fontStyle: 'italic' }}>
           Tutorials, real-world projects, and interview prep covering Azure, AWS, GCP,
           Apache Iceberg, Delta Lake, Spark, and the entire modern data stack.
-          Built by <span style={{ background: 'linear-gradient(135deg, #F59E0B, #FCD34D)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', fontWeight: 700 }}>Asil</span> · Free forever.
+          Built by <span style={{ background: 'linear-gradient(135deg, #F59E0B, #FCD34D)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', fontWeight: 700 }}>Asil</span>.
         </p>
 
         {/* Cloud badges */}
@@ -237,7 +230,6 @@ export default function HomePage() {
           <AnimatedStat value={200} suffix="+" label="Tutorials" />
           <AnimatedStat value={3} suffix=" live" label="Projects" />
           <AnimatedStat value={3} suffix="" label="Cloud Platforms" />
-          <AnimatedStat value={100} suffix="%" label="Free Forever" />
         </div>
       </section>
 
@@ -365,7 +357,6 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon:'🆓', title:'100% Free Forever', desc:'Every tutorial, every project, every interview question. No paywalls, no subscriptions, no credit card required.' },
               { icon:'🛠️', title:'Real Projects, Real Code', desc:'Not just theory. Every concept is backed by working code you can run yourself on Azure, AWS, or GCP.' },
               { icon:'🎯', title:'Job-Market Focused', desc:'Content curated based on what companies are actively hiring for — not what was relevant five years ago.' },
               { icon:'📡', title:'Always Up to Date', desc:'The data engineering landscape changes fast. This site tracks the latest tools, architectures, and cloud updates — kept current by Asil.' },
@@ -396,7 +387,7 @@ export default function HomePage() {
                 Ready to become a<br /><span style={{ color: 'var(--accent)' }}>Data Engineer?</span>
               </h2>
               <p className="text-base mb-8" style={{ color: 'var(--muted)' }}>
-                Start with the roadmap. Build a real project. Get the job. Built by Asil — free forever.
+                Start with the roadmap. Build a real project. Get the job. Built by Asil.
               </p>
               <div className="flex items-center gap-3 justify-center flex-wrap mb-8">
                 <Link href="/learn/roadmap" className="btn-primary text-base px-8 py-3">
