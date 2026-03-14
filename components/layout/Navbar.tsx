@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { ThemePicker } from '@/components/ui/ThemePicker'
-import { DashboardPanel } from '@/components/ui/DashboardPanel'
 import { SearchBar } from '@/components/ui/SearchBar'
 
 type NavChild = { label: string; href: string }
@@ -63,7 +62,7 @@ export function Navbar() {
     <nav
       className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 md:px-6"
       style={{
-        background: 'rgba(var(--bg-rgb,248,249,252),0.92)',
+        background: 'var(--bg)',
         backdropFilter: 'blur(20px)',
         borderBottom: '1px solid var(--border)',
       }}
@@ -153,7 +152,6 @@ export function Navbar() {
       {/* Right side */}
       <div className="flex items-center gap-2 flex-shrink-0">
         <SearchBar variant="navbar" />
-        <DashboardPanel />
         <ThemePicker />
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '8px' }}>
           <Link href="/dashboard">
