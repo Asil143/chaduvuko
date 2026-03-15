@@ -128,7 +128,7 @@ export default function HeapsPage() {
         set of problems: priority queues, scheduling, and the fastest known sorting algorithm
         based on comparisons.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         The best part: a heap is always a complete binary tree, which means it is
         always balanced. Unlike BSTs that can degrade to O(n), every heap operation
         is guaranteed O(log n) — no special handling, no self-balancing needed.
@@ -153,7 +153,7 @@ export default function HeapsPage() {
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 10 }}>
             Complete Binary Tree
           </div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
             All levels are fully filled <em>except possibly the last</em>,
             and the last level fills from <strong style={{ color: 'var(--text)' }}>left to right</strong> with no gaps.
             This guarantees the height is always O(log n) — the tree can never go skewed.
@@ -163,7 +163,7 @@ export default function HeapsPage() {
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 10 }}>
             Heap Property
           </div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
             <strong style={{ color: 'var(--text)' }}>Max-heap:</strong> every parent is ≥ its children.<br />
             <strong style={{ color: 'var(--text)' }}>Min-heap:</strong> every parent is ≤ its children.<br />
             The root is always the maximum (max-heap) or minimum (min-heap).
@@ -610,7 +610,7 @@ int main() {
             <div style={{ width: 28, height: 28, borderRadius: '50%', background: item.color, color: '#000', fontSize: 13, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{item.step}</div>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: item.color, marginBottom: 4 }}>{item.title}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -806,7 +806,7 @@ int main() {
             <span style={{ fontSize: 22, flexShrink: 0 }}>{item.icon}</span>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>{item.title}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -895,7 +895,7 @@ int main() {
         insert with bubble-up, extract with heapify-down, build heap in O(n),
         heap sort, and why heaps are the foundation of every production priority queue.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 14 we cover <strong style={{ color: 'var(--text)' }}>Hashing</strong> —
         the technique behind O(1) lookup. Hash tables power database indexes,
         caches, language runtimes, and almost every fast system you have ever used.

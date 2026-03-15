@@ -143,7 +143,7 @@ export default function DynamicProgrammingPage() {
         up, starting with a problem you already know, showing exactly why the naive solution
         fails, and then showing how DP fixes it with one simple insight.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         By the end of this unit you will solve the knapsack problem, longest common
         subsequence, coin change, and edit distance — the four most important DP problems
         in all of computer science — completely from scratch.
@@ -172,7 +172,7 @@ export default function DynamicProgrammingPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
           <div style={{ background: 'rgba(255,71,87,0.08)', border: '1px solid rgba(255,71,87,0.2)', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#ff4757', marginBottom: 8 }}>❌ Without DP</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
               Your study group asks "what was the formula for question 3?"
               You go back to the textbook and derive it from scratch.
               Two hours later someone asks the same question. You derive it again.
@@ -181,7 +181,7 @@ export default function DynamicProgrammingPage() {
           </div>
           <div style={{ background: 'rgba(0,230,118,0.08)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 8 }}>✅ With DP</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
               The first time someone asks, you derive the formula and
               write it in your notes. Every subsequent question — just look it up.
               One derivation, infinite lookups. That is memoization.
@@ -196,7 +196,7 @@ export default function DynamicProgrammingPage() {
           <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--green)', marginBottom: 10 }}>
             Condition 1 — Optimal Substructure
           </div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
             The optimal solution to the big problem can be built from
             optimal solutions to its smaller subproblems.
             Shortest path has this. Sorting does not.
@@ -206,7 +206,7 @@ export default function DynamicProgrammingPage() {
           <div style={{ fontSize: 14, fontWeight: 800, color: '#4285f4', marginBottom: 10 }}>
             Condition 2 — Overlapping Subproblems
           </div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
             The same subproblems are solved multiple times.
             If every subproblem is unique, plain recursion is fine — DP adds no value.
             Fibonacci is the classic example of overlap.
@@ -375,7 +375,7 @@ int main() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 28 }}>
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 10, padding: '14px 16px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 8 }}>Memoization (top-down)</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
             Recursive + cache. Natural to write — just add memo to recursion.
             Only computes subproblems that are actually needed.
             Call stack overhead.
@@ -383,7 +383,7 @@ int main() {
         </div>
         <div style={{ background: 'rgba(66,133,244,0.06)', border: '1px solid rgba(66,133,244,0.2)', borderRadius: 10, padding: '14px 16px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#4285f4', marginBottom: 8 }}>Tabulation (bottom-up)</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
             Iterative loops. No call stack. Slightly faster in practice.
             Computes all subproblems even if not needed.
             Often easier to optimise space.
@@ -408,7 +408,7 @@ int main() {
       <ProblemHeader num="Problem 01" title="0/1 Knapsack" naive="O(2ⁿ)" dp="O(n × W)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           You have a bag (knapsack) with a weight capacity W.
           You have n items, each with a weight and a value.
           You want to maximise the total value in the bag without exceeding capacity.
@@ -546,12 +546,12 @@ int main() {
       <ProblemHeader num="Problem 02" title="Longest Common Subsequence (LCS)" naive="O(2ⁿ)" dp="O(m × n)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
           Given two strings, find the length of their longest common subsequence —
           a sequence that appears in both strings in the same relative order,
           but not necessarily contiguous. LCS of "ABCBDAB" and "BDCAB" is "BCAB" or "BDAB" — length 4.
         </p>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Real use: Git diff, DNA sequence comparison, spell checkers, plagiarism detection.
         </p>
       </div>
@@ -650,7 +650,7 @@ int main() {
       <ProblemHeader num="Problem 03" title="Coin Change — Minimum Coins" naive="O(cⁿ)" dp="O(amount × coins)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Given coin denominations and a target amount, find the minimum number of coins needed
           to make that amount. You have unlimited coins of each denomination.
           Coins: [1, 5, 6, 9]. Amount: 11. Answer: 2 coins (5 + 6).
@@ -738,7 +738,7 @@ int main() {
       <ProblemHeader num="Problem 04" title="Longest Increasing Subsequence (LIS)" naive="O(2ⁿ)" dp="O(n²)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Given an array, find the length of the longest subsequence that is strictly increasing.
           Array: [10, 9, 2, 5, 3, 7, 101, 18]. LIS = [2, 3, 7, 18] → length 4.
           Elements do not need to be contiguous — just in the same relative order and increasing.
@@ -789,12 +789,12 @@ int main() {
       <ProblemHeader num="Problem 05" title="Edit Distance (Levenshtein Distance)" naive="O(3ⁿ)" dp="O(m × n)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
           Given two strings, find the minimum number of single-character operations —
           insert, delete, or replace — to transform one string into another.
           editDistance("horse", "ros") = 3.
         </p>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Real use: spell checkers (suggest closest word), DNA sequence alignment,
           plagiarism detection, autocorrect on your phone.
         </p>
@@ -910,7 +910,7 @@ int main() {
             <div style={{ width: 4, background: item.color, flexShrink: 0 }} />
             <div style={{ padding: '14px 18px' }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: item.color, marginBottom: 4 }}>{item.signal}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -933,7 +933,7 @@ int main() {
               <div style={{ width: 26, height: 26, borderRadius: '50%', background: 'var(--green)', color: '#000', fontSize: 12, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{item.step}</div>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>{item.title}</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</div>
+                <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.7 }}>{item.desc}</div>
               </div>
             </div>
           ))}
@@ -1025,7 +1025,7 @@ int main() {
         tabulation, and five of the most important DP problems in computer science.
         The 5-step framework will help you tackle any new DP problem you encounter.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 17 we cover <strong style={{ color: 'var(--text)' }}>Greedy Algorithms</strong> —
         always pick the locally best option at each step. Sometimes that is enough to get
         the global optimum. We cover activity selection, fractional knapsack, and Huffman coding,

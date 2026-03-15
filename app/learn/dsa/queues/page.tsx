@@ -166,7 +166,7 @@ export default function QueuesPage() {
         waits until everyone ahead of them is done. No jumping, no skipping.
         <strong style={{ color: 'var(--green)' }}> First In, First Out.</strong>
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         Queues are everywhere in computing — your print jobs wait in a queue,
         your CPU runs processes in a queue, every BFS graph traversal uses a queue.
         In this unit we build queues from scratch two ways, fix the classic wasted-space
@@ -212,13 +212,13 @@ export default function QueuesPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#ff4757', marginBottom: 6 }}>FRONT — where removal happens</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               The oldest element. Always served next. Like the person at the front of the line.
             </div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--green)', marginBottom: 6 }}>REAR — where addition happens</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               The newest element. Just joined. Like the person who just got in line.
             </div>
           </div>
@@ -235,7 +235,7 @@ export default function QueuesPage() {
         ].map((item) => (
           <div key={item.op} style={{ background: 'var(--surface)', border: `1px solid ${item.color}33`, borderRadius: 10, padding: '16px 18px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 800, color: item.color, marginBottom: 8 }}>{item.op}</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>{item.desc}</div>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7, marginBottom: 10 }}>{item.desc}</div>
             <ComplexityBadge value={item.time} color={item.color} />
           </div>
         ))}
@@ -896,7 +896,7 @@ int main() {
                 <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{item.title}</div>
                 <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 4, padding: '1px 8px' }}>{item.company}</div>
               </div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -952,7 +952,7 @@ int main() {
         deque, and priority queue. You also know why queues are used in real systems
         from printers to payment APIs to graph algorithms.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 08 we tackle <strong style={{ color: 'var(--text)' }}>Recursion</strong> —
         the concept that trips up almost every beginner. A function that calls itself.
         We will explain it more clearly than any textbook ever has, trace every call

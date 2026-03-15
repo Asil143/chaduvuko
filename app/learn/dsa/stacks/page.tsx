@@ -143,7 +143,7 @@ export default function StacksPage() {
         add and remove from one end.</strong> That rule — as simple as it sounds —
         makes stacks incredibly useful for a whole class of problems.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         Every time you press Ctrl+Z to undo, every time your browser goes back a page,
         every time a function calls another function — a stack is working underneath.
         In this unit we build stacks two ways, learn all four operations, and solve
@@ -228,7 +228,7 @@ export default function StacksPage() {
         ].map((item) => (
           <div key={item.op} style={{ background: 'var(--surface)', border: `1px solid ${item.color}33`, borderRadius: 10, padding: '16px 18px' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 800, color: item.color, marginBottom: 8 }}>{item.op}</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>{item.desc}</div>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7, marginBottom: 10 }}>{item.desc}</div>
             <ComplexityBadge value={item.time} color={item.color} />
           </div>
         ))}
@@ -435,11 +435,11 @@ int main() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 28 }}>
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 10, padding: '16px 18px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 8 }}>Array-based stack</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>Fixed size. Simpler code. Better cache performance. Use when max size is known.</div>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>Fixed size. Simpler code. Better cache performance. Use when max size is known.</div>
         </div>
         <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.2)', borderRadius: 10, padding: '16px 18px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#7b61ff', marginBottom: 8 }}>Linked list-based stack</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>Dynamic size. No overflow. Extra memory per node (the pointer). Use when size is unpredictable.</div>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>Dynamic size. No overflow. Extra memory per node (the pointer). Use when size is unpredictable.</div>
         </div>
       </div>
 
@@ -471,7 +471,7 @@ int main() {
           ].map(item => (
             <div key={item.step} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px' }}>
               <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--green)', color: '#000', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{item.step}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.text}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item.text}</div>
             </div>
           ))}
         </div>
@@ -616,7 +616,7 @@ int main() {
               ].map(item => (
                 <div key={item.step} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                   <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'var(--green)', color: '#000', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{item.step}</div>
-                  <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.text}</div>
+                  <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item.text}</div>
                 </div>
               ))}
             </div>
@@ -705,14 +705,14 @@ int main() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 10 }}>Undo Stack</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
               <div>Every action you perform gets <strong style={{ color: 'var(--text)' }}>pushed</strong> onto the undo stack.</div>
               <div>When you press Ctrl+Z — <strong style={{ color: 'var(--text)' }}>pop</strong> from undo stack, reverse the action, <strong style={{ color: 'var(--text)' }}>push</strong> it onto the redo stack.</div>
             </div>
           </div>
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#7b61ff', marginBottom: 10 }}>Redo Stack</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
               <div>When you press Ctrl+Y — <strong style={{ color: 'var(--text)' }}>pop</strong> from redo stack, redo the action, <strong style={{ color: 'var(--text)' }}>push</strong> it back onto the undo stack.</div>
               <div>If you perform a new action — the redo stack is <strong style={{ color: '#ff4757' }}>cleared</strong> entirely.</div>
             </div>
@@ -855,7 +855,7 @@ int main() {
         both implementations, and three classic applications. You also understand
         the call stack that powers every program you have ever run.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 07 we cover <strong style={{ color: 'var(--text)' }}>Queues</strong> —
         the other side of the coin. Where stacks are LIFO, queues are FIFO:
         First In, First Out. Think of a ticket counter line — the person who

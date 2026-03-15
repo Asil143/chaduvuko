@@ -126,7 +126,7 @@ export default function TreesPage() {
         parent–child relationships where one node can connect to multiple others.
         This single change opens up an entirely new class of problems and solutions.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         In this unit we build binary trees from scratch in C, learn all the
         vocabulary, implement every traversal, and understand the properties
         that make trees the backbone of some of the most important systems in computing.
@@ -280,7 +280,7 @@ export default function TreesPage() {
         ].map((item) => (
           <div key={item.name} style={{ background: 'var(--surface)', border: `1px solid ${item.color}33`, borderRadius: 10, padding: '16px 18px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: item.color, marginBottom: 8 }}>{item.name}</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</div>
+            <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.75 }}>{item.desc}</div>
           </div>
         ))}
       </div>
@@ -752,7 +752,7 @@ int main() {
             <span style={{ fontSize: 24, flexShrink: 0 }}>{item.icon}</span>
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{item.title}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -841,7 +841,7 @@ int main() {
         all four traversals with full traces, height, count, and how trees power
         real systems from file systems to databases.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 12 we cover the <strong style={{ color: 'var(--text)' }}>Binary Search Tree (BST)</strong> —
         a binary tree with one powerful rule: every left child is smaller than its parent,
         every right child is larger. This rule makes search, insert, and delete

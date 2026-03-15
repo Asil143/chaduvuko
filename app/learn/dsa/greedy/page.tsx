@@ -123,7 +123,7 @@ export default function GreedyPage() {
         At each step, make the best available choice right now, and commit to it.
         No exploring alternatives. No going back. Just always grab the best option in front of you.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         When greedy works, it is dramatically simpler and faster than DP.
         When it fails — and it does fail for many problems — you need DP.
         Understanding the difference is one of the most important skills in algorithm design.
@@ -178,7 +178,7 @@ export default function GreedyPage() {
           <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--green)', marginBottom: 10 }}>
             Condition 1 — Greedy Choice Property
           </div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
             A globally optimal solution can always be built by making locally optimal
             (greedy) choices. The best choice now is always part of some optimal solution.
           </div>
@@ -187,7 +187,7 @@ export default function GreedyPage() {
           <div style={{ fontSize: 14, fontWeight: 800, color: '#4285f4', marginBottom: 10 }}>
             Condition 2 — Optimal Substructure
           </div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
             After making the greedy choice, the remaining subproblem has the same structure
             as the original. Its optimal solution combines with the greedy choice to give
             the global optimum.
@@ -212,7 +212,7 @@ export default function GreedyPage() {
       <ProblemHeader num="Problem 01" title="Activity Selection — Maximum Non-Overlapping Events" time="O(n log n)" space="O(1)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           You have n activities, each with a start time and finish time.
           Only one activity can run at a time. Select the maximum number of
           non-overlapping activities you can attend. This is the classic greedy problem —
@@ -351,7 +351,7 @@ int main() {
       <ProblemHeader num="Problem 02" title="Fractional Knapsack — Take Fractions of Items" time="O(n log n)" space="O(1)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
           Same as 0/1 knapsack — items with weights and values, bag with capacity W —
           but now you can take <strong>fractions of items</strong>. Take 60% of an item,
           get 60% of its value. This small difference means greedy works perfectly here,
@@ -482,7 +482,7 @@ int main() {
         <div style={{ fontSize: 13, fontWeight: 700, color: '#ff4757', marginBottom: 10 }}>
           Why this does NOT work for 0/1 knapsack:
         </div>
-        <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+        <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
           With 0/1 knapsack (no fractions), capacity=10, items: A(weight=6,value=6), B(weight=5,value=5), C(weight=5,value=5).<br />
           Greedy picks A first (ratio=1.0), then bag is full: value=6.<br />
           But B+C = weight 10, value 10 → <strong style={{ color: '#ff4757' }}>greedy missed the better answer.</strong><br />
@@ -500,7 +500,7 @@ int main() {
       <ProblemHeader num="Problem 03" title="Huffman Coding — Optimal Data Compression" time="O(n log n)" space="O(n)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
           Huffman coding assigns variable-length binary codes to characters — shorter codes
           for more frequent characters, longer codes for rare ones. This is how ZIP files,
           JPEG images, and MP3 audio compress data. It is provably the optimal prefix-free encoding.
@@ -678,7 +678,7 @@ int main() {
       <ProblemHeader num="Problem 04" title="Job Sequencing with Deadlines — Maximise Profit" time="O(n²)" space="O(n)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           You have n jobs. Each takes exactly 1 unit of time. Each has a deadline and a profit
           (earned only if completed before/by the deadline). Only one job can run at a time.
           Select jobs to maximise total profit. Greedy: always pick the highest profit job first,
@@ -775,7 +775,7 @@ int main() {
             <span style={{ fontSize: 13, fontWeight: 700, color: '#ff4757' }}>✗ Failure 1 — 0/1 Knapsack</span>
           </div>
           <div style={{ padding: '16px 20px' }}>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
               Items: A(w=3,v=9), B(w=4,v=10), C(w=5,v=12). Capacity=7.
             </div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)', lineHeight: 1.9 }}>
@@ -798,7 +798,7 @@ int main() {
             <span style={{ fontSize: 13, fontWeight: 700, color: '#ff4757' }}>✗ Failure 2 — Coin Change with unusual denominations</span>
           </div>
           <div style={{ padding: '16px 20px' }}>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
               Coins: [1, 3, 4]. Amount: 6.<br />
               <span style={{ color: '#ff4757' }}>Greedy: 4 + 1 + 1 = 3 coins</span><br />
               <span style={{ color: 'var(--green)' }}>Optimal (DP): 3 + 3 = 2 coins</span><br />
@@ -813,7 +813,7 @@ int main() {
             <span style={{ fontSize: 13, fontWeight: 700, color: '#ff4757' }}>✗ Failure 3 — Shortest path without Dijkstra</span>
           </div>
           <div style={{ padding: '16px 20px' }}>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
               Simply picking the shortest edge at each step (pure greedy) does not find
               the shortest path in a graph. A short first step might lead to a very long
               path overall. This is why Dijkstra needs the priority queue — it is a more
@@ -874,7 +874,7 @@ int main() {
               <div style={{ width: 4, background: item.color, flexShrink: 0 }} />
               <div style={{ padding: '12px 16px' }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>Q: {item.q}</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>→ {item.a}</div>
+                <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.7 }}>→ {item.a}</div>
               </div>
             </div>
           ))}
@@ -894,7 +894,7 @@ int main() {
         when greedy is provably correct, and the critical cases where it fails.
         The greedy vs DP decision framework will save you hours in interviews.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 18 we cover <strong style={{ color: 'var(--text)' }}>Backtracking</strong> —
         try a path, hit a dead end, undo, try another. The technique behind N-Queens,
         Sudoku solvers, and maze problems. Backtracking is brute force made smart —

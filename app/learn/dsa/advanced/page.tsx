@@ -161,7 +161,7 @@ export default function AdvancedPage() {
       <TopicHeader num="19.1" name="Segment Tree" tagline="Answer range queries and point updates in O(log n)" time="O(log n)" space="O(4n)" color="var(--green)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           You have an array and need to answer many queries like "what is the sum of elements
           from index 3 to 7?" or "what is the minimum between index 2 and 9?" If the array
           never changes, prefix sums handle this in O(1). But if the array gets updated
@@ -298,7 +298,7 @@ int main() {
       <TopicHeader num="19.2" name="Fenwick Tree (BIT)" tagline="Prefix sums with updates — simpler than Segment Tree, same O(log n)" time="O(log n)" space="O(n)" color="#4285f4" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           A Binary Indexed Tree (BIT or Fenwick Tree) is a simpler alternative to the Segment Tree
           for prefix sum queries with point updates. It uses a clever trick with the lowest set bit
           of an index to navigate the tree implicitly — no explicit tree structure needed.
@@ -368,7 +368,7 @@ int main() {
       <TopicHeader num="19.3" name="Trie (Prefix Tree)" tagline="Insert and search strings in O(length) — powers autocomplete and spell check" time="O(L)" space="O(alphabet × nodes)" color="#7b61ff" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           A Trie is a tree where each path from root to a node spells a string.
           Every character of a word occupies one node. Words that share a prefix
           share the same path from the root. Insert, search, and prefix-check
@@ -479,7 +479,7 @@ int main() {
       <TopicHeader num="19.4" name="Union-Find (DSU)" tagline="Group elements into sets. Check if two elements are connected in near O(1)" time="≈ O(1) amortised" space="O(n)" color="#f97316" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Union-Find (also called Disjoint Set Union, DSU) maintains a collection of disjoint sets
           and supports two operations: union (merge two sets) and find (which set does an element
           belong to). With path compression and union by rank, both operations run in nearly O(1)
@@ -564,7 +564,7 @@ int main() {
       <TopicHeader num="19.5" name="Sliding Window" tagline="Solve subarray problems in O(n) instead of O(n²)" time="O(n)" space="O(1)" color="#facc15" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Many problems ask: "find the subarray of size k with the maximum sum" or
           "find the smallest subarray with sum ≥ target." A naive approach checks all
           subarrays in O(n²). The sliding window technique maintains a window that slides
@@ -658,7 +658,7 @@ int main() {
       <TopicHeader num="19.6" name="Two Pointers" tagline="Solve sorted array pair problems in O(n) instead of O(n²)" time="O(n)" space="O(1)" color="#00e676" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Two pointers start at opposite ends of a sorted array and move toward each other.
           At each step, comparing their sum to the target tells you which pointer to move —
           eliminating one element from consideration per step. The result is O(n) instead of
@@ -742,7 +742,7 @@ int main() {
       <TopicHeader num="19.7" name="Bit Manipulation" tagline="Work directly with binary representations for O(1) tricks" time="O(1)" space="O(1)" color="#8b5cf6" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Every integer is stored as bits. Bit manipulation uses bitwise operators
           (&, |, ^, ~, {'<<'}, {'>>'}) to work directly on these bits.
           The results are algorithms that look like magic but run in constant time O(1).
@@ -912,7 +912,7 @@ int main() {
         <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 16 }}>
           Zero to Advanced. Done.
         </h2>
-        <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, maxWidth: 560, margin: '0 auto 28px' }}>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, maxWidth: 560, margin: '0 auto 28px' }}>
           From understanding what a variable is, to segment trees and bit manipulation —
           you have covered every topic that appears in technical interviews from
           campus placements all the way to FAANG India. That is 20 units, 135+ topics,

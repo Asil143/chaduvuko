@@ -132,7 +132,7 @@ export default function HashingPage() {
         The result is O(1) average lookup — constant time regardless of how many
         items you have stored.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         In this unit we build a hash table from scratch — hash functions,
         collision handling with chaining, open addressing, and load factor.
         By the end you will understand exactly how Python dictionaries,
@@ -250,7 +250,7 @@ int main() {
           ].map((item, i) => (
             <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
               <span style={{ fontSize: 16, flexShrink: 0 }}>{item.icon}</span>
-              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.text}</span>
+              <span style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item.text}</span>
             </div>
           ))}
         </div>
@@ -303,14 +303,14 @@ int main() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 28 }}>
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.3)', borderRadius: 10, padding: '16px 18px' }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--green)', marginBottom: 8 }}>Chaining</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
             Each bucket holds a linked list. Multiple keys at the same index
             form a chain. Fast and simple — never runs out of space.
           </div>
         </div>
         <div style={{ background: 'rgba(66,133,244,0.06)', border: '1px solid rgba(66,133,244,0.3)', borderRadius: 10, padding: '16px 18px' }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: '#4285f4', marginBottom: 8 }}>Open Addressing</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
             All data stays in the array itself. On collision, probe the next
             available slot. More cache-friendly, trickier to implement.
           </div>
@@ -518,7 +518,7 @@ int main() {
               <div style={{ fontSize: 14, fontWeight: 700, color: item.color }}>{item.name}</div>
               <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)', background: 'var(--bg2)', padding: '2px 8px', borderRadius: 4 }}>{item.formula}</code>
             </div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</div>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.desc}</div>
           </div>
         ))}
       </div>
@@ -682,7 +682,7 @@ int main() {
             <div style={{ padding: '12px 16px', flex: 1, display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 800, color: item.color, minWidth: 120 }}>{item.range}</div>
               <div style={{ fontSize: 11, fontWeight: 700, color: item.color, background: `${item.color}15`, border: `1px solid ${item.color}33`, borderRadius: 4, padding: '2px 8px' }}>{item.status}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, flex: 1 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7, flex: 1 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -885,7 +885,7 @@ int main() {
             <span style={{ fontSize: 24, flexShrink: 0 }}>{item.icon}</span>
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{item.title}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -975,7 +975,7 @@ int main() {
         Python dicts, Redis, and database indexes all use this technique.
         O(1) average lookup is one of the most powerful tools in all of computing.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 15 we cover <strong style={{ color: 'var(--text)' }}>Graphs</strong> —
         the most general and most powerful data structure in DSA. Nodes connected by edges
         in any direction. Maps, social networks, flight routes, dependency graphs —

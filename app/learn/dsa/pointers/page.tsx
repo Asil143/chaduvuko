@@ -124,7 +124,7 @@ export default function PointersPage() {
         We are going to do the opposite: build the idea from the ground up, one
         layer at a time, until it feels completely obvious.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         After this unit, linked lists, trees, graphs, and dynamic memory will all make sense.
         Every advanced data structure in DSA uses pointers internally.
         This unit is the key that unlocks the rest.
@@ -167,7 +167,7 @@ export default function PointersPage() {
             </div>
           </div>
         </div>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           The variable name <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>age</code> is just
           a convenient label for humans. Internally, the computer only works with
           the address <code style={{ fontFamily: 'var(--font-mono)', color: '#4285f4' }}>0x1004</code>.
@@ -290,7 +290,7 @@ Address of grade:  0x7fff5fbff5a7
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.25)', borderRadius: 12, padding: '20px 22px' }}>
           <div style={{ fontSize: 28, fontWeight: 900, color: 'var(--green)', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>&</div>
           <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Address-of operator</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 12 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 12 }}>
             Put it before a variable name to get its memory address.
             Think: "where does this variable live?"
           </div>
@@ -301,7 +301,7 @@ Address of grade:  0x7fff5fbff5a7
         <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)', borderRadius: 12, padding: '20px 22px' }}>
           <div style={{ fontSize: 28, fontWeight: 900, color: '#7b61ff', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>*</div>
           <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Dereference operator</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 12 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 12 }}>
             Put it before a pointer to get the value stored at that address.
             Think: "go to that address and bring back what is there."
           </div>
@@ -345,7 +345,7 @@ int main() {
           ].map((item, i) => (
             <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
               <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)', fontSize: 12, minWidth: 120, flexShrink: 0, marginTop: 2 }}>{item.code}</code>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.meaning}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item.meaning}</div>
             </div>
           ))}
         </div>
@@ -476,14 +476,14 @@ int main() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
         <div style={{ background: 'rgba(255,71,87,0.06)', border: '1px solid rgba(255,71,87,0.2)', borderRadius: 10, padding: '18px 20px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#ff4757', marginBottom: 10 }}>❌ Pass by value — original unchanged</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
             The function gets a photocopy. It scribbles all over the photocopy.
             Your original document stays untouched.
           </div>
         </div>
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 10, padding: '18px 20px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 10 }}>✅ Pass by reference — original changed</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
             The function gets your home address. It walks to your house and changes
             things directly. The original is modified.
           </div>
@@ -517,7 +517,7 @@ int main() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 12, marginTop: 32 }}>
         Classic example — swap two numbers
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
         The swap function is the most famous pass-by-reference example. It cannot work
         without pointers in C. This exact function is used inside sorting algorithms.
       </p>
@@ -703,7 +703,7 @@ int main() {
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: 'var(--green)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.3)', borderRadius: 4, padding: '3px 8px', whiteSpace: 'nowrap', marginTop: 2 }}>{item.unit}</span>
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{item.name}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.how}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.how}</div>
             </div>
           </div>
         ))}
@@ -729,7 +729,7 @@ int main() {
         Pointers are not magic — they are just variables that hold addresses, and
         two operators: & to get an address, * to follow one.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 05 we build our first truly dynamic data structure —
         <strong style={{ color: 'var(--text)' }}> Linked Lists</strong>.
         Everything you just learned about pointers will be used immediately.

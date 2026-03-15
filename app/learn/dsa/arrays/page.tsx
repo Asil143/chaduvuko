@@ -112,7 +112,7 @@ export default function ArraysPage() {
         graphs — they all either use arrays internally or are compared against arrays.
         If you understand arrays deeply, the rest of DSA becomes much easier to learn.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         In this unit we build arrays from scratch in C, understand exactly how they
         live in your computer's memory, and implement every core operation with full
         code and complexity analysis.
@@ -172,14 +172,14 @@ export default function ArraysPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 16px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--green)', marginBottom: 6 }}>Seat number = Array Index</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               Just like seat A3 always means the 3rd seat, index [2] always means the 3rd element.
               (We count from 0, not 1 — more on that shortly.)
             </div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 16px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--green)', marginBottom: 6 }}>Row = Contiguous memory</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               All seats are in one row — just like all array elements occupy one
               unbroken stretch of RAM. No gaps, no random jumps.
             </div>
@@ -362,7 +362,7 @@ marks[4] = 95
         </div>
       </div>
 
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8 }}>
         We visit n elements so time is O(n). We use no extra memory — just one loop
         variable i — so space is O(1).
       </p>
@@ -385,7 +385,7 @@ marks[4] = 95
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 12, marginTop: 28 }}>
         Case 1 — Insert at the end
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
         If there is space at the end, just put it there. No shifting needed.
       </p>
 
@@ -419,7 +419,7 @@ int main() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 12, marginTop: 28 }}>
         Case 2 — Insert at a specific position
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
         This is where arrays show their weakness. To insert at position 2,
         every element from position 2 onwards must shift one step to the right
         to make room. The more elements, the more shifting.
@@ -721,7 +721,7 @@ int main() {
           <ComplexityBadge value="O(n)" color="#facc15" />
         </div>
         <div style={{ padding: '16px 20px' }}>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 0 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 0 }}>
             Start by assuming the first element is both the max and the min.
             Then walk through the rest — if you find something bigger, update max.
             If smaller, update min.
@@ -761,7 +761,7 @@ int main() {
           <ComplexityBadge value="O(n)" color="#facc15" />
         </div>
         <div style={{ padding: '16px 20px' }}>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 0 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 0 }}>
             Use two pointers — one at the start, one at the end. Swap them and move
             inward until they meet in the middle. No extra array needed.
           </p>
@@ -809,7 +809,7 @@ int main() {
           <ComplexityBadge value="O(n²)" color="#ff4757" />
         </div>
         <div style={{ padding: '16px 20px' }}>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 0 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 0 }}>
             For each element, check if the same value appears again later in the array.
             This uses a nested loop — O(n²) — which is the straightforward approach.
             There are faster methods using hashing (Unit 14) but this version
@@ -849,7 +849,7 @@ int main() {
           <ComplexityBadge value="O(n)" color="#facc15" />
         </div>
         <div style={{ padding: '16px 20px' }}>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 0 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 0 }}>
             Save the first element, shift everything left by one position,
             then place the saved element at the end.
           </p>
@@ -909,7 +909,7 @@ int main() {
             ].map((item, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                 <span style={{ color: 'var(--green)', marginTop: 2, flexShrink: 0 }}>→</span>
-                <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item}</span>
+                <span style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item}</span>
               </div>
             ))}
           </div>
@@ -925,7 +925,7 @@ int main() {
             ].map((item, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                 <span style={{ color: '#ff4757', marginTop: 2, flexShrink: 0 }}>→</span>
-                <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item}</span>
+                <span style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item}</span>
               </div>
             ))}
           </div>
@@ -981,7 +981,7 @@ int main() {
         operation with full complexity analysis. This knowledge will never become
         irrelevant. Arrays are inside almost every program ever written.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 03 we cover <strong style={{ color: 'var(--text)' }}>Strings</strong> —
         which are, at their core, just arrays of characters. You already know
         how they work in memory. Now we learn how to search, reverse, compare,

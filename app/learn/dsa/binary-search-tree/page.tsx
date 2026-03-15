@@ -132,7 +132,7 @@ export default function BSTPage() {
         simple rule on top of everything you already know, and that rule transforms the tree
         from a random structure into a powerful, searchable, self-organised data structure.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         In this unit we learn the BST property, build insert and search from scratch,
         tackle the tricky delete operation with all three cases, and understand why
         balance matters — and what happens when a BST goes wrong.
@@ -442,7 +442,7 @@ int main() {
             <ComplexityBadge value="Easiest" color="#00e676" />
           </div>
           <div style={{ padding: '16px 20px' }}>
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 14 }}>
               Just remove it. Set its parent's pointer to NULL. Nothing else needs to change
               because a leaf has no children that need rehoming.
             </p>
@@ -482,7 +482,7 @@ int main() {
             <ComplexityBadge value="Medium" color="#4285f4" />
           </div>
           <div style={{ padding: '16px 20px' }}>
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 14 }}>
               Bypass the node — make the parent point directly to the node's only child.
               The single child takes the deleted node's place. BST property preserved
               because the child was already correctly positioned relative to the parent.
@@ -519,7 +519,7 @@ int main() {
             <ComplexityBadge value="Hardest" color="#f97316" />
           </div>
           <div style={{ padding: '16px 20px' }}>
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 14 }}>
               You cannot just remove it — two subtrees would be left dangling.
               The trick: find the <strong style={{ color: 'var(--green)' }}>inorder successor</strong> —
               the smallest value in the right subtree. Copy its value into the current node,
@@ -529,7 +529,7 @@ int main() {
             </p>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 18px', marginBottom: 14 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>What is the inorder successor?</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                 The inorder successor of a node is the <strong style={{ color: 'var(--green)' }}>smallest node in its right subtree</strong>.
                 To find it: go one step right, then go left as far as possible.
                 That leftmost node is the inorder successor.
@@ -792,7 +792,7 @@ int main() {
         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>
           The fix — Self-Balancing BSTs
         </div>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 12 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, marginBottom: 12 }}>
           Self-balancing trees automatically restructure themselves after each insert/delete
           to maintain O(log n) height. The two most important ones:
         </p>
@@ -805,7 +805,7 @@ int main() {
               <div style={{ width: 4, background: item.color, flexShrink: 0 }} />
               <div style={{ padding: '12px 16px' }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: item.color, marginBottom: 4 }}>{item.name}</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</div>
+                <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.7 }}>{item.desc}</div>
               </div>
             </div>
           ))}
@@ -961,7 +961,7 @@ int main() {
         inorder sorted output, and the balance problem. These are the exact topics
         that appear in every serious technical interview.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 13 we cover <strong style={{ color: 'var(--text)' }}>Heaps</strong> —
         a special tree where the parent is always larger (or smaller) than its children.
         Heaps power priority queues, heap sort, and Dijkstra's shortest path algorithm.

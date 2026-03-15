@@ -139,7 +139,7 @@ export default function GraphsPage() {
         This generality makes graphs the most powerful and most widely used
         data structure in computer science.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         In this unit we build graphs from scratch, implement BFS and DFS,
         find shortest paths with Dijkstra's algorithm, detect cycles,
         and sort dependencies with topological sort — all in C.
@@ -172,7 +172,7 @@ export default function GraphsPage() {
           <div key={item.title} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
             <div style={{ fontSize: 22, marginBottom: 8 }}>{item.icon}</div>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{item.title}</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</div>
+            <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.7 }}>{item.desc}</div>
           </div>
         ))}
       </div>
@@ -226,7 +226,7 @@ export default function GraphsPage() {
         ].map((item) => (
           <div key={item.name} style={{ background: 'var(--surface)', border: `1px solid ${item.color}33`, borderRadius: 10, padding: '16px 18px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: item.color, marginBottom: 6 }}>{item.name}</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 10 }}>{item.desc}</div>
+            <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.75, marginBottom: 10 }}>{item.desc}</div>
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: item.color, background: `${item.color}10`, padding: '3px 8px', borderRadius: 4 }}>{item.example}</code>
           </div>
         ))}
@@ -278,7 +278,7 @@ export default function GraphsPage() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 12 }}>
         Method 1 — Adjacency Matrix
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 16 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 16 }}>
         A 2D array where <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>matrix[i][j] = 1</code> means there is an edge from i to j.
         For weighted graphs, store the weight instead of 1.
       </p>
@@ -324,7 +324,7 @@ export default function GraphsPage() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 12, marginTop: 28 }}>
         Method 2 — Adjacency List
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 16 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 16 }}>
         An array of linked lists. Each index holds the list of neighbours for that node.
         Only actual edges are stored — much more space-efficient for sparse graphs.
         This is what almost every real graph algorithm uses.
@@ -368,13 +368,13 @@ export default function GraphsPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 28 }}>
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 10, padding: '14px 16px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 8 }}>Use Matrix when</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
             Graph is dense (many edges). Need O(1) edge lookup. V is small (fewer than ~1000).
           </div>
         </div>
         <div style={{ background: 'rgba(66,133,244,0.06)', border: '1px solid rgba(66,133,244,0.2)', borderRadius: 10, padding: '14px 16px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#4285f4', marginBottom: 8 }}>Use List when</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
             Graph is sparse (few edges). Memory matters. V is large. Almost every real-world case.
           </div>
         </div>
@@ -678,14 +678,14 @@ int main() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 10, padding: '14px 16px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 8 }}>BFS — use when</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
             Finding shortest path in unweighted graph.
             Level-order exploration. Minimum steps between nodes.
           </div>
         </div>
         <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.2)', borderRadius: 10, padding: '14px 16px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#7b61ff', marginBottom: 8 }}>DFS — use when</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
             Detecting cycles. Topological sort. Finding connected components.
             Exploring all possible paths (backtracking).
           </div>
@@ -937,7 +937,7 @@ int main() {
               <span style={{ fontSize: 18, flexShrink: 0 }}>{item.icon}</span>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 3 }}>{item.ex}</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</div>
+                <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.7 }}>{item.desc}</div>
               </div>
             </div>
           ))}
@@ -1091,7 +1091,7 @@ int main() {
         every serious technical interview and power every map application, social network,
         and build system on earth.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 16 we cover <strong style={{ color: 'var(--text)' }}>Dynamic Programming</strong> —
         the hardest and most rewarding topic in all of DSA. Remember what you already computed
         so you never compute it twice. We go from naive recursion to memoization to tabulation,

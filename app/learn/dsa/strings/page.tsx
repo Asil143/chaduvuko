@@ -119,7 +119,7 @@ export default function StringsPage() {
         a sentence — is a string. And a string is nothing more than an array of characters
         sitting in memory, one after another, with a special signal at the end that says "stop here."
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         Because you already understand arrays from Unit 02, strings will feel natural.
         We just need to learn a few new rules — especially that special signal at the end —
         and then practise the classic problems that show up in almost every coding interview.
@@ -386,7 +386,7 @@ int main() {
       {/* Problem 1 — Reverse a string */}
       <ProblemHeader num="Problem 01" title="Reverse a String" complexity="O(n)" />
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '14px 20px', marginBottom: 0 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Same two-pointer technique as reversing an array from Unit 02. One pointer at the
           start, one at the end — swap and move inward until they meet.
         </p>
@@ -422,7 +422,7 @@ int main() {
       {/* Problem 2 — Palindrome */}
       <ProblemHeader num="Problem 02" title="Check if a String is a Palindrome" complexity="O(n)" />
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '14px 20px' }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           A palindrome reads the same forwards and backwards — "madam", "racecar", "level".
           Compare characters from both ends — if any pair doesn't match, it's not a palindrome.
         </p>
@@ -461,7 +461,7 @@ int main() {
       {/* Problem 3 — Count vowels and consonants */}
       <ProblemHeader num="Problem 03" title="Count Vowels and Consonants" complexity="O(n)" />
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '14px 20px' }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Walk through each character. If it is a, e, i, o, u (uppercase or lowercase) it
           is a vowel. If it is any other letter it is a consonant. Spaces and digits are neither.
         </p>
@@ -498,7 +498,7 @@ int main() {
       {/* Problem 4 — Anagram check */}
       <ProblemHeader num="Problem 04" title="Check if Two Strings are Anagrams" complexity="O(n)" />
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '14px 20px' }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Two strings are anagrams if they contain the exact same characters in any order.
           "listen" and "silent" are anagrams. The approach: count how many times each letter
           appears in string 1, then subtract for string 2. If all counts reach zero — anagram.
@@ -557,7 +557,7 @@ int main() {
       {/* Problem 5 — Count words */}
       <ProblemHeader num="Problem 05" title="Count Words in a Sentence" complexity="O(n)" />
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '14px 20px' }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           A new word starts when you see a non-space character after a space (or at the very beginning).
           Track whether the previous character was a space — that is all you need.
         </p>
@@ -590,7 +590,7 @@ int main() {
       {/* Problem 6 — Find and replace character */}
       <ProblemHeader num="Problem 06" title="Replace All Occurrences of a Character" complexity="O(n)" />
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '14px 20px' }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Walk through the string once. Every time you find the target character, replace it.
           Single pass — O(n).
         </p>
@@ -656,10 +656,10 @@ int main() {
               <span style={{ fontSize: 13, fontWeight: 700, color: '#ff4757' }}>⚠ {item.error}</span>
             </div>
             <div style={{ padding: '16px 20px' }}>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 8 }}>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75, marginBottom: 8 }}>
                 <strong style={{ color: 'var(--text)' }}>Symptom:</strong> {item.symptom}
               </div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 12 }}>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75, marginBottom: 12 }}>
                 <strong style={{ color: 'var(--green)' }}>Fix:</strong> {item.fix}
               </div>
               <div style={{ background: '#0d0d0d', borderRadius: 8, padding: '12px 16px', fontFamily: 'var(--font-mono)', fontSize: 12, color: '#e0e0e0', lineHeight: 1.75, whiteSpace: 'pre' }}>
@@ -722,7 +722,7 @@ int main() {
         and how to solve the classic problems. You have also seen the frequency array trick
         which appears constantly in string, array, and hashing problems.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 04 we tackle <strong style={{ color: 'var(--text)' }}>Pointers</strong> — the concept
         that confuses most beginners but is the backbone of everything advanced in C.
         You have already seen pointers briefly with the <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>&</code> in

@@ -188,13 +188,13 @@ export default function LinkedListsPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 20 }}>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 16px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--green)', marginBottom: 6 }}>data field</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               Holds the actual value — 10, 20, 30, 40. Could be any type: int, float, string.
             </div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 16px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#7b61ff', marginBottom: 6 }}>next field</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               Pointer to the next node. The last node's next is NULL — meaning "chain ends here."
             </div>
           </div>
@@ -346,7 +346,7 @@ int main() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 10 }}>
         Case 1 — Insert at the Head
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
         The new node becomes the new HEAD. Point its next to the old head, then update HEAD.
         This is the fastest insertion — O(1).
       </p>
@@ -382,7 +382,7 @@ int main() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 10 }}>
         Case 2 — Insert at the Tail
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
         Walk to the last node (the one whose next is NULL), then attach the new node there.
         Must traverse the whole list — O(n).
       </p>
@@ -415,7 +415,7 @@ int main() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 10 }}>
         Case 3 — Insert at a Specific Position
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
         Walk to the node just before the target position, then rewire the pointers.
         The key is stopping one node early — at position-1.
       </p>
@@ -657,7 +657,7 @@ int main() {
             <div key={item.step} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
               <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--green)', color: '#000', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{item.step}</div>
               <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)', fontSize: 12, minWidth: 180, flexShrink: 0 }}>{item.code}</code>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.result}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{item.result}</div>
             </div>
           ))}
         </div>
@@ -998,7 +998,7 @@ int main() {
         and detect loops in a linked list. Every one of those operations used
         the pointer knowledge from Unit 04 directly.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 06 we build <strong style={{ color: 'var(--text)' }}>Stacks</strong> —
         a data structure built on top of arrays or linked lists that enforces one rule:
         Last In, First Out. Stacks power undo/redo, function calls, expression evaluation,

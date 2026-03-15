@@ -156,7 +156,7 @@ export default function SortingPage() {
         Given a list of items in random order, arrange them in a defined sequence —
         ascending, descending, alphabetical. Simple to describe, endlessly interesting to optimise.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         In this unit we cover six sorting algorithms — from the naive O(n²) ones that
         every beginner learns, to the powerful O(n log n) ones that real systems use.
         Every algorithm gets a full explanation, a step-by-step trace, complete C code,
@@ -187,7 +187,7 @@ export default function SortingPage() {
             <span style={{ fontSize: 24, flexShrink: 0 }}>{item.icon}</span>
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{item.title}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -205,14 +205,14 @@ export default function SortingPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 14px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--green)', marginBottom: 6 }}>Stable example</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.7 }}>
               Sort students by marks. Two students both scored 85.
               A stable sort keeps them in their original name order (Alice before Bob if Alice was listed first).
             </div>
           </div>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 14px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#ff4757', marginBottom: 6 }}>Unstable — may reorder equal elements</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.7 }}>
               An unstable sort might put Bob before Alice even though
               Alice was originally first — their relative order is not guaranteed.
             </div>
@@ -239,7 +239,7 @@ export default function SortingPage() {
       />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Bubble sort repeatedly steps through the array, compares adjacent elements,
           and swaps them if they are in the wrong order. After each pass, the largest
           unsorted element "bubbles up" to its correct position at the end — just like
@@ -334,7 +334,7 @@ int main() {
       />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Selection sort divides the array into two parts: sorted (left) and unsorted (right).
           In each pass, find the minimum element in the unsorted part and swap it into
           its correct position at the start of the unsorted section. After n-1 passes, sorted.
@@ -422,7 +422,7 @@ int main() {
       />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Imagine holding a hand of cards and picking them up one at a time.
           Each new card gets inserted into the correct position among the cards
           you already hold. Insertion sort works the same way — it takes one element
@@ -507,7 +507,7 @@ int main() {
       />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Merge sort uses the divide-and-conquer strategy and recursion from Unit 08.
           Split the array in half, recursively sort each half, then merge the two sorted
           halves back together. The merge step is where the real work happens — and it
@@ -646,7 +646,7 @@ int main() {
       />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Quick sort picks a <strong style={{ color: 'var(--green)' }}>pivot</strong> element and partitions
           the array so that all elements smaller than the pivot go to its left and all larger
           go to its right. The pivot is now in its final correct position. Recursively apply
@@ -750,7 +750,7 @@ int main() {
       />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           All previous algorithms compare elements against each other.
           Counting sort does not compare at all — it counts how many times each value appears,
           then reconstructs the sorted array from those counts.
@@ -908,7 +908,7 @@ int main() {
         their complexity, and when to pick each one. This unit alone covers a
         significant portion of what most coding interviews test.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 10 we cover <strong style={{ color: 'var(--text)' }}>Searching Algorithms</strong> —
         linear search for unsorted data, and the elegant binary search that cuts the
         problem in half each step to achieve O(log n). Sorting and searching always

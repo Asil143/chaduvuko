@@ -336,7 +336,7 @@ export default function DSAPage() {
         }}>
           20 Units. Zero to Advanced.
         </h2>
-        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 560 }}>
+        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, maxWidth: 560 }}>
           Go in order. Each unit builds on the last. Do not skip — every concept
           is introduced exactly when you need it, not before.
         </p>
@@ -498,7 +498,7 @@ export default function DSAPage() {
         }}>
           Units are dropping weekly.
         </h3>
-        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 480, margin: '0 auto 24px' }}>
+        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, maxWidth: 480, margin: '0 auto 24px' }}>
           Start with Unit 00 the moment it goes live. Each unit is self-contained —
           no chapter you need to have read first. Just come back, pick up where you left off.
         </p>

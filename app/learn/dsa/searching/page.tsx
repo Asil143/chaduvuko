@@ -150,7 +150,7 @@ export default function SearchingPage() {
         In this unit we go deeper — understanding exactly when linear search is the right
         choice, and when binary search makes it hundreds of thousands of times faster.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         Binary search is one of the most elegant ideas in all of computer science.
         A simple trick — always check the middle — that turns a million-item search
         into just 20 steps. We will understand it completely, implement it two ways,
@@ -254,7 +254,7 @@ int main() {
             { yes: false, text: 'Array is sorted — binary search is dramatically faster' },
             { yes: false, text: 'You search the same data repeatedly — sort once, binary search many times' },
           ].map((item, i) => (
-            <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               <span style={{ color: item.yes ? 'var(--green)' : '#ff4757', flexShrink: 0, fontWeight: 700 }}>{item.yes ? '✓' : '✗'}</span>
               {item.text}
             </div>
@@ -293,14 +293,14 @@ int main() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div style={{ background: 'rgba(255,71,87,0.08)', border: '1px solid rgba(255,71,87,0.2)', borderRadius: 8, padding: '12px 14px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#ff4757', marginBottom: 6 }}>Linear approach</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               1000-page dictionary. Looking for "Zebra." You start at page 1 and flip
               one page at a time. You reach page ~950 after ~950 flips. Painful.
             </div>
           </div>
           <div style={{ background: 'rgba(0,230,118,0.08)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 8, padding: '12px 14px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--green)', marginBottom: 6 }}>Binary approach</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               Open page 500 → too early. Open page 750 → still early.
               Open page 875... You find "Zebra" in about 10 flips. Always.
             </div>
@@ -532,14 +532,14 @@ int main() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 10, padding: '16px 18px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 8 }}>Iterative version</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
             O(1) space — no call stack frames. Preferred in production and interviews
             where stack depth could be a concern on very large arrays.
           </div>
         </div>
         <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.2)', borderRadius: 10, padding: '16px 18px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#7b61ff', marginBottom: 8 }}>Recursive version</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
             O(log n) space — one call per level. Cleaner and easier to understand.
             Good for learning and for variations that naturally require recursion.
           </div>
@@ -564,7 +564,7 @@ int main() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 10 }}>
         Variation 1 — Find First Occurrence of a Repeated Value
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
         In <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>[1, 2, 2, 2, 3, 4]</code>, finding 2 could return index 1, 2, or 3.
         How do you always return the first one (index 1)?
         When you find the target, do not stop — save the index and keep searching left.
@@ -595,7 +595,7 @@ int main() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 10, marginTop: 32 }}>
         Variation 2 — Find Last Occurrence of a Repeated Value
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
         Same idea, opposite direction. When you find the target, save the index
         and keep searching <strong>right</strong> for a later occurrence.
       </p>
@@ -625,7 +625,7 @@ int main() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 10, marginTop: 32 }}>
         Variation 3 — Count Total Occurrences
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 8 }}>
         Once you have first and last occurrence, count = last - first + 1. O(log n).
       </p>
 
@@ -650,7 +650,7 @@ int main() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 10, marginTop: 32 }}>
         Variation 4 — Search in a Rotated Sorted Array
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 12 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 12 }}>
         A sorted array has been rotated at some pivot: <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>[4, 5, 6, 7, 0, 1, 2]</code>.
         Standard binary search breaks here. The fix: one of the two halves is always sorted —
         check which half is sorted, and use that to decide which half the target could be in.
@@ -816,7 +816,7 @@ int main() {
             <div style={{ width: 4, background: item.color, flexShrink: 0 }} />
             <div style={{ padding: '14px 18px' }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 5 }}>If: {item.condition}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>→ {item.answer}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>→ {item.answer}</div>
             </div>
           </div>
         ))}
@@ -870,7 +870,7 @@ int main() {
         interview scenarios. The overflow-safe midpoint formula and the first/last
         occurrence patterns alone will save you in dozens of future problems.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 11 we enter the world of <strong style={{ color: 'var(--text)' }}>Trees</strong> —
         hierarchical data structures that look like upside-down trees.
         Trees are everywhere: file systems, HTML pages, databases, compilers.

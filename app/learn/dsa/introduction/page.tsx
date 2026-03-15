@@ -179,7 +179,7 @@ export default function DSAIntroductionPage() {
         What is DSA? Why do companies test it? How does a computer actually store your data?
         And why are we using C instead of Python or JavaScript?
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         This unit is for everyone — especially those who have never written code before,
         or who come from a non-IT background. If you already know some programming, you will
         still find the memory and computer internals section useful. Read it anyway.
@@ -212,20 +212,20 @@ export default function DSAIntroductionPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
           <div style={{ background: 'rgba(255,71,87,0.08)', border: '1px solid rgba(255,71,87,0.2)', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#ff4757', marginBottom: 6 }}>❌ Bad approach</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               Throw everything into one giant room randomly. When you need your passport,
               you dig through 200 items. Every time.
             </div>
           </div>
           <div style={{ background: 'rgba(0,230,118,0.08)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 6 }}>✅ Good approach</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
               Label boxes. Documents in one box, clothes by type in another, kitchen items together.
               Finding your passport takes 5 seconds.
             </div>
           </div>
         </div>
-        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           A <strong style={{ color: 'var(--text)' }}>data structure</strong> is that labelled box system —
           but for data inside a computer. It is a way of organising information so you can
           find it, change it, and use it efficiently.
@@ -253,7 +253,7 @@ export default function DSAIntroductionPage() {
           Step 4: Add milk and sugar<br />
           Step 5: Pour and serve
         </div>
-        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           That is an algorithm. A fixed set of steps that, if followed correctly, always
           produces the right result. In programming, an algorithm is the same thing —
           a clear sequence of steps to solve a specific problem, written in code.
@@ -319,7 +319,7 @@ export default function DSAIntroductionPage() {
             </div>
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{item.title}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.body}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.body}</div>
             </div>
           </div>
         ))}
@@ -449,7 +449,7 @@ export default function DSAIntroductionPage() {
           }}>
             <div style={{ fontSize: 22, marginBottom: 10 }}>{item.icon}</div>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>{item.title}</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.body}</div>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.body}</div>
           </div>
         ))}
       </div>
@@ -522,7 +522,7 @@ int main() {
             </div>
             <div style={{ padding: '14px 18px' }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{item.title}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>{item.explanation}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>{item.explanation}</div>
             </div>
           </div>
         ))}
@@ -586,7 +586,7 @@ int main() {
     return 0;
 }`} />
 
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 28 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginBottom: 28 }}>
         The <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>%d</code>,{' '}
         <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>%f</code>, and{' '}
         <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>%c</code> are
@@ -661,7 +661,7 @@ int main() {
         ].map(item => (
           <div key={item.part} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
             <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)', fontSize: 13, minWidth: 60, marginTop: 1 }}>{item.part}</code>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>→ {item.meaning}</div>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>→ {item.meaning}</div>
           </div>
         ))}
       </div>
@@ -678,7 +678,7 @@ int main() {
         You now know what DSA is, why it matters, how memory works, why we use C,
         and the basics of writing C programs. That is the complete foundation.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 01, we tackle <strong style={{ color: 'var(--text)' }}>Complexity</strong> —
         how to measure the speed and memory usage of any piece of code. This is the skill
         that separates engineers who write code from engineers who write <em>good</em> code.

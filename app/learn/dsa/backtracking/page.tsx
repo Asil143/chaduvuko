@@ -130,7 +130,7 @@ export default function BacktrackingPage() {
         Backtracking is the systematic way to do this exploration without wasting effort
         on paths that are guaranteed to fail.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         Think of it as navigating a maze. You walk forward until you hit a wall,
         then step back and try a different direction. You keep doing this until you
         either find the exit or prove there is no way through. Backtracking is
@@ -165,7 +165,7 @@ export default function BacktrackingPage() {
             <span style={{ fontSize: 22, flexShrink: 0 }}>{item.icon}</span>
             <div>
               <div style={{ fontSize: 14, fontWeight: 800, color: item.color, fontFamily: 'var(--font-display)', marginBottom: 4 }}>{item.phase}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -190,7 +190,7 @@ export default function BacktrackingPage() {
         }
     }
 }`} />
-        <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+        <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
           The <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>undo(choice)</code> step
           is what makes it backtracking — not just recursion. Without undo,
           choices accumulate and corrupt future attempts. With undo, the state
@@ -216,7 +216,7 @@ export default function BacktrackingPage() {
       <ProblemHeader num="Problem 01" title="N-Queens — Place N Queens With No Attacks" time="O(N!)" space="O(N)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Place N chess queens on an N×N board such that no two queens attack each other.
           Two queens attack if they share the same row, column, or diagonal.
           For N=4 there are 2 solutions. For N=8 there are 92 solutions.
@@ -379,7 +379,7 @@ int main() {
       <ProblemHeader num="Problem 02" title="Rat in a Maze — Find a Path Through a Grid" time="O(2^(N²))" space="O(N²)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Given an N×N grid where 1 = open cell and 0 = blocked wall,
           find a path from the top-left corner (0,0) to the bottom-right corner (N-1, N-1).
           The rat can move right or down only. Print the solution path.
@@ -520,7 +520,7 @@ int main() {
       <ProblemHeader num="Problem 03" title="Sudoku Solver — Fill the Grid" time="O(9^m)" space="O(1)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Fill a 9×9 grid with digits 1-9 such that every row, every column, and every
           3×3 subgrid contains each digit exactly once. Empty cells are represented by 0.
           m is the number of empty cells. This is the most complex backtracking problem
@@ -675,7 +675,7 @@ int main() {
       <ProblemHeader num="Problem 04" title="Subset Sum — Find All Subsets That Sum to Target" time="O(2^n)" space="O(n)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Given a set of numbers and a target sum, find all subsets that add up to the target.
           Set: {'{'}3, 1, 4, 2{'}'}, Target: 5.
           Valid subsets: {'{'}3,2{'}'} and {'{'}1,4{'}'}.
@@ -763,7 +763,7 @@ int main() {
       <ProblemHeader num="Problem 05" title="Generate All Permutations of a String" time="O(n × n!)" space="O(n)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
-        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
           Generate all possible arrangements of characters in a string.
           "ABC" has 6 permutations: ABC, ACB, BAC, BCA, CAB, CBA.
           Used in: password recovery, anagram generation, combinatorics problems.
@@ -846,7 +846,7 @@ int main() {
             <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75, marginBottom: 6 }}>
               <strong>Prune when:</strong> {item.prune}
             </div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
+            <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.7 }}>
               <strong style={{ color: 'var(--green)' }}>Impact:</strong> {item.savings}
             </div>
           </div>
@@ -943,7 +943,7 @@ int main() {
         Backtracking + pruning is how every Sudoku app, chess engine, and
         constraint solver you have ever used works under the hood.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 19 — the final unit — we cover
         <strong style={{ color: 'var(--text)' }}> Advanced Topics</strong>: Segment Trees,
         Fenwick Trees (BIT), Tries, Union-Find (DSU), Sliding Window, Two Pointers,

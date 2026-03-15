@@ -144,7 +144,7 @@ const BigOCard = ({
         }} />
       </div>
     </div>
-    <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 10 }}>
+    <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75, marginBottom: 10 }}>
       <strong style={{ color: 'var(--text)' }}>Real life: </strong>{analogy}
     </div>
     <div style={{
@@ -189,7 +189,7 @@ export default function ComplexityPage() {
         yet one can be a million times faster than the other. How do you know which one
         is better? How do you even measure it?
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         That is exactly what this unit answers. Complexity is the scoreboard for code.
         It tells you — before you even run the program — how it will behave when the
         data gets big. This is what every interviewer means when they ask
@@ -248,12 +248,12 @@ export default function ComplexityPage() {
               <span style={{ fontSize: 22 }}>{t.icon}</span>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: t.color, marginBottom: 5 }}>{t.label}</div>
-                <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{t.desc}</div>
+                <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{t.desc}</div>
               </div>
             </div>
           ))}
         </div>
-        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginTop: 16, marginBottom: 0 }}>
+        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginTop: 16, marginBottom: 0 }}>
           Teacher A's method grows with input size. Teacher B's method stays constant.
           That difference — that relationship between input and steps — is time complexity.
         </p>
@@ -289,14 +289,14 @@ export default function ComplexityPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div style={{ background: 'rgba(255,71,87,0.08)', border: '1px solid rgba(255,71,87,0.2)', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#ff4757', marginBottom: 8 }}>High space usage</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
               You make a full photocopy of every document before packing.
               200 documents → 400 pieces of paper. Your memory doubles.
             </div>
           </div>
           <div style={{ background: 'rgba(0,230,118,0.08)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 8 }}>Low space usage</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
+            <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
               You just write a list of what is in each box. 200 documents →
               one small list. Memory stays minimal regardless of document count.
             </div>
@@ -448,7 +448,7 @@ export default function ComplexityPage() {
         background: 'var(--surface)', border: '1px solid var(--border)',
         borderRadius: 12, padding: '24px 28px', marginBottom: 24,
       }}>
-        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 16 }}>
+        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 16 }}>
           Suppose you are searching for a person in a list of 1000 names, going one by one:
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -485,7 +485,7 @@ export default function ComplexityPage() {
                   borderRadius: 4, padding: '2px 8px', display: 'inline-block',
                 }}>{item.note}</div>
               </div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.desc}</div>
             </div>
           ))}
         </div>
@@ -554,7 +554,7 @@ export default function ComplexityPage() {
                 }}>{item.rule}</span>
                 <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{item.title}</span>
               </div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>{item.desc}</div>
             </div>
           </div>
         ))}
@@ -564,7 +564,7 @@ export default function ComplexityPage() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 8 }}>
         Example 1 — O(1) Constant Time
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 4 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 4 }}>
         No matter what value n has, this function always does exactly the same number of steps.
       </p>
 
@@ -585,7 +585,7 @@ export default function ComplexityPage() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 8 }}>
         Example 2 — O(n) Linear Time
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 4 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 4 }}>
         The loop runs once for every element. More elements = more steps, directly.
       </p>
 
@@ -610,7 +610,7 @@ export default function ComplexityPage() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 8 }}>
         Example 3 — O(n²) Quadratic Time
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 4 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 4 }}>
         A loop inside a loop. The inner loop runs n times for every iteration of the outer loop.
         Total steps = n × n.
       </p>
@@ -638,7 +638,7 @@ export default function ComplexityPage() {
       <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', fontFamily: 'var(--font-display)', marginBottom: 8 }}>
         Example 4 — Mixed: What is the complexity here?
       </h3>
-      <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 4 }}>
+      <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 4 }}>
         When you have multiple parts, identify the dominant one.
       </p>
 
@@ -772,7 +772,7 @@ export default function ComplexityPage() {
         Every unit from here uses this language. When we say "arrays give O(1) access"
         or "bubble sort is O(n²)", you now know exactly what that means.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 02 we dive into <strong style={{ color: 'var(--text)' }}>Arrays</strong> —
         the very first and most fundamental data structure. We will build them from scratch
         in C, understand exactly how they sit in memory, and write the core operations:

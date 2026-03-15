@@ -128,7 +128,7 @@ export default function RecursionPage() {
         A function that calls <em>itself</em>? Does it not just loop forever?
         How does it ever stop? How does it know what to return?
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         These are exactly the right questions. By the end of this unit every one of them
         will have a clear, satisfying answer. We will build the idea from a simple analogy,
         trace every call on the stack by hand, solve five classic problems,
@@ -161,7 +161,7 @@ export default function RecursionPage() {
           and inside that reflection you see another reflection, and inside that another —
           going smaller and smaller until they become too small to see.
         </p>
-        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 0 }}>
+        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 0 }}>
           Recursion works the same way. Each call creates a smaller version of itself,
           which creates an even smaller one, going deeper and deeper — until we hit
           the base case (the point where the mirrors end) and start coming back.
@@ -173,7 +173,7 @@ export default function RecursionPage() {
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '2px solid rgba(0,230,118,0.3)', borderRadius: 12, padding: '20px 22px' }}>
           <div style={{ fontSize: 22, marginBottom: 10 }}>🛑</div>
           <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--green)', marginBottom: 8 }}>Law 1 — The Base Case</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
             Every recursive function MUST have a condition where it stops calling itself
             and returns a direct answer. Without this, it runs forever and crashes with
             a stack overflow.
@@ -182,7 +182,7 @@ export default function RecursionPage() {
         <div style={{ background: 'rgba(123,97,255,0.06)', border: '2px solid rgba(123,97,255,0.3)', borderRadius: 12, padding: '20px 22px' }}>
           <div style={{ fontSize: 22, marginBottom: 10 }}>🔁</div>
           <div style={{ fontSize: 14, fontWeight: 800, color: '#7b61ff', marginBottom: 8 }}>Law 2 — The Recursive Case</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
             Every recursive call must move closer to the base case. Each call should
             work on a smaller version of the problem — never the same or larger.
             Otherwise it never terminates.
@@ -849,7 +849,7 @@ Move disk 1 from rod A to rod C
         are dangerously slow. You traced factorial, Fibonacci, sum of digits,
         power, GCD, and the legendary Tower of Hanoi.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 32 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 32 }}>
         In Unit 09 we cover <strong style={{ color: 'var(--text)' }}>Sorting Algorithms</strong> —
         six different ways to arrange data in order, from the simplest to the fastest.
         Bubble sort, selection sort, insertion sort, merge sort, quick sort, counting sort.
