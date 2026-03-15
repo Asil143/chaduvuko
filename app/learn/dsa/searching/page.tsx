@@ -492,7 +492,7 @@ int main() {
 
       <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, marginBottom: 16 }}>
         The recursive version expresses the same logic using function calls instead of a loop.
-        The base cases: array is empty (low > high) → not found. Middle element matches → found.
+       The base cases: array is empty (low {'>'} high) → not found. Middle element matches → found.
         Recursive cases: search left half or right half.
       </p>
 
