@@ -30,6 +30,7 @@ const tracksAll = [
   // Data & Cloud
   { cat:'data',  icon:'☁️',  name:'Data Engineering',      desc:'Azure/AWS/GCP real pipelines', pills:['ADF','Databricks','Spark','dbt','Kafka'],   jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/azure/introduction' },
   { cat:'data',  icon:'🌩️', name:'Microsoft Azure',         desc:'Full Azure cloud service track', pills:['ADLS Gen2','ADF','Synapse','Fabric'],     jobs:'Cloud Engineer · Azure Developer',           status:'live', href:'/learn/azure/introduction' },
+  { cat:'cs',    icon:'🧮',  name:'Data Structures & Algorithms', desc:'Crack every technical coding round', pills:['Arrays','Trees','Graphs','Dynamic Programming'], jobs:'FAANG India · Product Companies · Startups', status:'live', href:'/learn/dsa' },
   { cat:'data',  icon:'🟠',  name:'Amazon Web Services',    desc:'S3, Glue, Redshift, Kinesis, Lambda', pills:['S3','Glue','Redshift','Lambda'],     jobs:'AWS Developer · Cloud Engineer',             status:'soon', href:'#' },
   { cat:'data',  icon:'🔵',  name:'Google Cloud Platform',  desc:'BigQuery, Dataflow, Pub/Sub, Composer', pills:['BigQuery','Dataflow','Composer'],  jobs:'GCP Engineer · Data Engineer',               status:'soon', href:'#' },
   { cat:'data',  icon:'📊',  name:'Power BI & Tableau',     desc:'Dashboards, DAX, data storytelling', pills:['Power BI','Tableau','DAX','Reports'],  jobs:'BI Developer · Data Analyst',               status:'soon', href:'#' },
@@ -72,7 +73,6 @@ const tracksAll = [
   { cat:'db',    icon:'⚡',  name:'Redis',                  desc:'In-memory caching and queuing', pills:['Caching Patterns','Pub/Sub','Sessions','Lua Scripting'], jobs:'Backend Dev · Platform Eng',       status:'soon', href:'#' },
   { cat:'db',    icon:'❄️',  name:'Snowflake',              desc:'Cloud data warehouse platform', pills:['Schemas','Time Travel','Streams','dbt Integration'], jobs:'Data Engineer · Analytics Engineer', status:'soon', href:'#' },
   // CS Core
-  { cat:'cs',    icon:'🧮',  name:'Data Structures & Algorithms', desc:'Crack every technical coding round', pills:['Arrays','Trees','Graphs','Dynamic Programming'], jobs:'FAANG India · Product Companies · Startups', status:'soon', href:'/learn/dsa' },
   { cat:'cs',    icon:'⚙️',  name:'System Design',          desc:'Design scalable systems like a senior', pills:['HLD','LLD','Scalability','CAP Theorem','Trade-offs'], jobs:'Senior Engineer · Tech Lead · Architect', status:'soon', href:'#' },
   { cat:'cs',    icon:'💾',  name:'DBMS',                   desc:'Database theory and design fundamentals', pills:['ER Diagrams','Normalization','ACID','Transactions'], jobs:'DBA · Backend Dev · Campus Placement', status:'soon', href:'#' },
   { cat:'cs',    icon:'🖥️', name:'Operating Systems',      desc:'Processes, memory, scheduling, concurrency', pills:['Processes','Memory Mgmt','Scheduling','IPC'], jobs:'Campus Placements · Systems Engineering', status:'soon', href:'#' },

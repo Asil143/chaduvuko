@@ -39,7 +39,7 @@ const units = [
     topics: ['What is an Array', 'Insert & Delete', 'Traversal', '2D Arrays', 'Common problems'],
     time: '90 min',
     slug: 'arrays',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#00e676',
   },
   {
