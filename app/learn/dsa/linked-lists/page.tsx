@@ -141,7 +141,7 @@ export default function LinkedListsPage() {
         Linked lists solve this completely — they grow and shrink dynamically,
         one node at a time, using the pointers you mastered in Unit 04.
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         In this unit we build linked lists completely from scratch in C —
         singly, doubly, and circular. We implement every operation, understand
         every edge case, and solve the classic interview problems that come from this topic.
