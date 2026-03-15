@@ -50,7 +50,7 @@ const units = [
     topics: ['Strings in C', 'Reverse & Palindrome', 'Anagram check', 'Pattern matching basics'],
     time: '60 min',
     slug: 'strings',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#7b61ff',
   },
   {
@@ -61,7 +61,7 @@ const units = [
     topics: ['Memory addresses', 'What is a pointer', '& and * operators', 'Pointers + arrays', 'Common mistakes'],
     time: '75 min',
     slug: 'pointers',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#7b61ff',
   },
   {
@@ -72,7 +72,7 @@ const units = [
     topics: ['Singly Linked List', 'Doubly Linked List', 'Circular Linked List', 'Reverse a list', 'Detect a loop'],
     time: '90 min',
     slug: 'linked-lists',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#7b61ff',
   },
   {
@@ -83,7 +83,7 @@ const units = [
     topics: ['Stack using array', 'Stack using linked list', 'Balanced parentheses', 'Function call stack'],
     time: '60 min',
     slug: 'stacks',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#f97316',
   },
   {
@@ -94,7 +94,7 @@ const units = [
     topics: ['Queue using array', 'Circular Queue', 'Deque', 'Priority Queue', 'Real-world uses'],
     time: '60 min',
     slug: 'queues',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#f97316',
   },
   {
@@ -105,7 +105,7 @@ const units = [
     topics: ['Base case vs recursive case', 'Tracing call stacks', 'Factorial & Fibonacci', 'Tower of Hanoi'],
     time: '90 min',
     slug: 'recursion',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#f97316',
   },
   {
@@ -116,7 +116,7 @@ const units = [
     topics: ['Bubble, Selection, Insertion', 'Merge Sort', 'Quick Sort', 'Counting Sort', 'Big O comparison'],
     time: '120 min',
     slug: 'sorting',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#facc15',
   },
   {
@@ -127,7 +127,7 @@ const units = [
     topics: ['Linear Search', 'Binary Search', 'Iterative vs Recursive', 'Binary Search variations'],
     time: '45 min',
     slug: 'searching',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#facc15',
   },
   {
@@ -138,7 +138,7 @@ const units = [
     topics: ['Tree terminology', 'Binary Tree in C', 'Inorder / Preorder / Postorder', 'Level Order traversal'],
     time: '90 min',
     slug: 'trees',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#facc15',
   },
   {
@@ -149,7 +149,7 @@ const units = [
     topics: ['BST property', 'Insert & Search', 'Delete (3 cases)', 'Balanced vs Unbalanced'],
     time: '75 min',
     slug: 'binary-search-tree',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#4285f4',
   },
   {
@@ -160,7 +160,7 @@ const units = [
     topics: ['Min Heap vs Max Heap', 'Heap as array', 'Insert & Delete', 'Heap Sort'],
     time: '75 min',
     slug: 'heaps',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#4285f4',
   },
   {
@@ -171,7 +171,7 @@ const units = [
     topics: ['Hash functions', 'Collisions', 'Chaining', 'Open Addressing', 'Build one in C'],
     time: '75 min',
     slug: 'hashing',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#4285f4',
   },
   {
@@ -182,7 +182,7 @@ const units = [
     topics: ['Graph types', 'Adjacency list/matrix', 'BFS & DFS', 'Dijkstra\'s', 'Topological Sort'],
     time: '120 min',
     slug: 'graphs',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#0078d4',
   },
   {
@@ -193,7 +193,7 @@ const units = [
     topics: ['Memoization', 'Tabulation', 'Knapsack', 'LCS', 'Coin Change', 'Edit Distance'],
     time: '150 min',
     slug: 'dynamic-programming',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#0078d4',
   },
   {
@@ -204,7 +204,7 @@ const units = [
     topics: ['Activity Selection', 'Fractional Knapsack', 'Huffman Coding', 'Greedy vs DP'],
     time: '75 min',
     slug: 'greedy',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#0078d4',
   },
   {
@@ -215,7 +215,7 @@ const units = [
     topics: ['N-Queens', 'Rat in a Maze', 'Sudoku Solver', 'Subset Sum'],
     time: '90 min',
     slug: 'backtracking',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#8b5cf6',
   },
   {
@@ -226,7 +226,7 @@ const units = [
     topics: ['Segment Tree', 'Trie', 'Union-Find', 'Sliding Window', 'Two Pointers', 'Bit Manipulation'],
     time: '180 min',
     slug: 'advanced',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#8b5cf6',
   },
 ]
