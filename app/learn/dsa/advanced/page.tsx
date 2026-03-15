@@ -129,7 +129,7 @@ export default function AdvancedPage() {
         efficient range queries, prefix trees, union-find, and the elegant two-pointer
         and sliding window patterns that turn O(n²) solutions into O(n).
       </p>
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85 }}>
         Each topic here is a complete sub-field. We cover the core idea, the key operations,
         and the problems each one solves — with full C code throughout.
       </p>
