@@ -28,7 +28,7 @@ const units = [
     topics: ['Time Complexity', 'Space Complexity', 'Big O Notation', 'Best / Worst / Average Case', 'Analyzing any code'],
     time: '60 min',
     slug: 'complexity',
-    status: 'coming-soon' as const,
+    status: 'live' as const,
     color: '#00e676',
   },
   {
