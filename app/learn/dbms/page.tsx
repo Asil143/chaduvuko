@@ -28,7 +28,7 @@ const modules = [
     topics: ['Hierarchical Model', 'Network Model', 'Relational Model', 'Document Model', 'Why Relational Won'],
     time: '20–25 min',
     difficulty: 'Beginner',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '03',
@@ -38,7 +38,7 @@ const modules = [
     topics: ['Entities & Attributes', 'Relationships & Cardinality', 'Strong vs Weak Entities', 'Drawing ER Diagrams', 'ER to Tables'],
     time: '35–40 min',
     difficulty: 'Beginner',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '04',
@@ -48,7 +48,7 @@ const modules = [
     topics: ['Relations & Tuples', 'Schema vs Instance', 'Super & Candidate Keys', 'Primary & Foreign Keys', 'Integrity Constraints'],
     time: '30–35 min',
     difficulty: 'Beginner',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '05',
@@ -58,7 +58,7 @@ const modules = [
     topics: ['Insert/Update/Delete Anomalies', '1NF · 2NF · 3NF', 'BCNF · 4NF · 5NF', 'Step-by-Step Normalization', 'When to Denormalize'],
     time: '45–55 min',
     difficulty: 'Beginner',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '06',
@@ -68,7 +68,7 @@ const modules = [
     topics: ["Armstrong's Axioms", 'Trivial vs Non-Trivial FDs', 'Attribute Closure (F+)', 'Canonical Cover', 'Finding Candidate Keys'],
     time: '30–35 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '07',
@@ -78,7 +78,7 @@ const modules = [
     topics: ['DDL · DML · DCL · TCL', 'SELECT & WHERE', 'All JOIN Types', 'Window Functions', 'CTEs & Subqueries'],
     time: '90–120 min',
     difficulty: 'Beginner → Advanced',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '08',
@@ -88,7 +88,7 @@ const modules = [
     topics: ['How Indexes Work', 'B+ Tree Index', 'Clustered vs Non-Clustered', 'Composite & Covering Indexes', 'When NOT to Index'],
     time: '35–40 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '09',
@@ -98,7 +98,7 @@ const modules = [
     topics: ['What is a Transaction?', 'Atomicity', 'Consistency', 'Isolation', 'Durability · COMMIT · ROLLBACK'],
     time: '30–35 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '10',
@@ -108,7 +108,7 @@ const modules = [
     topics: ['Lost Update · Dirty Read · Phantom Read', 'Shared & Exclusive Locks', 'Two-Phase Locking (2PL)', 'Deadlock Detection', 'Isolation Levels · MVCC'],
     time: '40–45 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '11',
@@ -118,7 +118,7 @@ const modules = [
     topics: ['Parsing → Planning → Execution', 'Query Optimizer', 'EXPLAIN & EXPLAIN ANALYZE', 'Sequential vs Index Scan', 'Real Optimization Examples'],
     time: '35–40 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '12',
@@ -128,7 +128,7 @@ const modules = [
     topics: ['Blocks & Pages', 'Buffer Pool & Cache', 'Heap File Organization', 'Sequential & Hash Organization', 'Why This Affects Query Speed'],
     time: '30–35 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '13',
@@ -138,7 +138,7 @@ const modules = [
     topics: ['Static & Dynamic Hashing', 'Collision Handling', 'B+ Tree Structure', 'Search · Insert · Delete', 'Why B+ Tree is the Standard'],
     time: '40–45 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '14',
@@ -148,7 +148,7 @@ const modules = [
     topics: ['Select (σ) & Project (π)', 'Union · Intersection · Difference', 'Cartesian Product & Join', 'Division (÷)', 'Mapping RA to SQL'],
     time: '30–35 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '15',
@@ -158,7 +158,7 @@ const modules = [
     topics: ['Views & Materialized Views', 'Stored Procedures vs Functions', 'Triggers — BEFORE & AFTER', 'Cursors', 'Real Use Cases at Companies'],
     time: '35–40 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live ' as const,
   },
   {
     number: '16',
@@ -168,7 +168,7 @@ const modules = [
     topics: ['Write-Ahead Logging (WAL)', 'Undo & Redo Logs', 'Checkpoints', 'ARIES Algorithm', 'What Happens at 3am When DB Crashes'],
     time: '30–35 min',
     difficulty: 'Advanced',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '17',
@@ -178,7 +178,7 @@ const modules = [
     topics: ['Horizontal & Vertical Fragmentation', 'Replication Strategies', 'Two-Phase Commit (2PC)', 'CAP Theorem', 'CA · CP · AP Real Examples'],
     time: '35–40 min',
     difficulty: 'Advanced',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '18',
@@ -188,7 +188,7 @@ const modules = [
     topics: ['Document Stores — MongoDB', 'Key-Value — Redis', 'Column-Family — Cassandra', 'Graph — Neo4j', 'SQL vs NoSQL Decision Framework'],
     time: '35–40 min',
     difficulty: 'Advanced',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '19',
@@ -198,7 +198,7 @@ const modules = [
     topics: ['Authentication vs Authorization', 'GRANT & REVOKE', 'SQL Injection — How & Prevention', 'Encryption at Rest & in Transit', 'Auditing & Row-Level Security'],
     time: '25–30 min',
     difficulty: 'Intermediate',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
   {
     number: '20',
@@ -208,7 +208,7 @@ const modules = [
     topics: ['Service Company Questions (TCS, Wipro)', 'Product Company Questions (Flipkart, Swiggy)', 'GATE CS Level Questions', 'System Design DB Questions', 'Answers with Explanations'],
     time: '60–90 min',
     difficulty: 'All Levels',
-    status: 'soon' as const,
+    status: 'live' as const,
   },
 ]
 
