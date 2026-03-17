@@ -182,7 +182,7 @@ const modules = [
   },
   {
     number: '18',
-    slug: 'nosql',
+    slug: 'nosql-databases',
     title: 'NoSQL Databases',
     desc: 'When and why to break away from relational — MongoDB, Redis, Cassandra, Neo4j explained clearly. The SQL vs NoSQL decision framework for real projects.',
     topics: ['Document Stores — MongoDB', 'Key-Value — Redis', 'Column-Family — Cassandra', 'Graph — Neo4j', 'SQL vs NoSQL Decision Framework'],
