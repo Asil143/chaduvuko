@@ -102,7 +102,7 @@ const modules = [
   },
   {
     number: '10',
-    slug: 'concurrency',
+    slug: 'concurrency-control',
     title: 'Concurrency Control',
     desc: 'How databases handle thousands of simultaneous users safely. Locks, deadlocks, isolation levels, Two-Phase Locking, and MVCC — the engine inside PostgreSQL.',
     topics: ['Lost Update · Dirty Read · Phantom Read', 'Shared & Exclusive Locks', 'Two-Phase Locking (2PL)', 'Deadlock Detection', 'Isolation Levels · MVCC'],
