@@ -59,8 +59,8 @@ export default function ConcurrencyControl() {
           ].map((item) => (
             <div key={item.name} style={{ background: 'var(--surface)', border: `1px solid ${item.color}30`, borderLeft: `4px solid ${item.color}`, borderRadius: 10, padding: '20px 24px' }}>
               <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)', marginBottom: 6, fontFamily: 'Syne, sans-serif' }}>{item.name}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12, fontFamily: 'Inter, sans-serif', fontStyle: 'italic' }}>{item.scenario}</div>
-              <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8, marginBottom: 10, fontFamily: 'Inter, sans-serif', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 16px' }}>{item.example}</div>
+              <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12,  fontStyle: 'italic' }}>{item.scenario}</div>
+              <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8, marginBottom: 10,  background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 16px' }}>{item.example}</div>
               <div style={{ fontSize: 13, color: item.color, fontFamily: 'Inter, sans-serif' }}><strong>Consequence:</strong> {item.consequence}</div>
             </div>
           ))}
@@ -221,7 +221,7 @@ export default function ConcurrencyControl() {
           <strong style={{ color: 'var(--text)' }}> multiple versions</strong> of each row.
         </p>
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
-          <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.85, fontFamily: 'Inter, sans-serif', marginBottom: 12 }}>
+          <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.85,  marginBottom: 12 }}>
             When T1 updates a row, PostgreSQL doesn't overwrite the old row.
             It creates a <strong style={{ color: 'var(--text)' }}>new version</strong> of the row and marks the old version as expired.
           </div>

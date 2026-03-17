@@ -31,7 +31,7 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
     fontSize: 'clamp(17px, 2vw, 22px)',
     fontWeight: 800, letterSpacing: '-0.5px',
     color: 'var(--text)', marginBottom: 14,
-    fontFamily: 'Syne, sans-serif',
+    
   }}>{children}</h3>
 )
 
@@ -47,7 +47,7 @@ const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{
     fontSize: 15, color: 'var(--text2)',
     lineHeight: 1.95, marginBottom: 20,
-    fontFamily: 'Inter, sans-serif',
+    
   }}>{children}</p>
 )
 
@@ -118,7 +118,7 @@ const SampleTable = ({
       </table>
     </div>
     {note && (
-      <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6, fontFamily: 'Inter, sans-serif', lineHeight: 1.6 }}>
+      <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6,  lineHeight: 1.6 }}>
         ↑ {note}
       </div>
     )}
@@ -458,7 +458,7 @@ ALTER TABLE employees
               ].map(([label, value]) => (
                 <div key={label} style={{ marginBottom: 8 }}>
                   <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 3 }}>{label}</div>
-                  <div style={{ fontSize: 12, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.65 }}>{value}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text2)',  lineHeight: 1.65 }}>{value}</div>
                 </div>
               ))}
             </div>
@@ -512,7 +512,7 @@ ALTER TABLE employees
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 800, color: i === 5 ? 'var(--accent)' : 'var(--text)' }}>{item.clause}</span>
                   <span style={{ fontSize: 12, color: 'var(--text2)', fontFamily: 'Inter, sans-serif' }}>{item.desc}</span>
                 </div>
-                <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'Inter, sans-serif', fontStyle: 'italic' }}>→ {item.note}</div>
+                <div style={{ fontSize: 11, color: 'var(--muted)',  fontStyle: 'italic' }}>→ {item.note}</div>
               </div>
             </div>
           ))}
@@ -2445,9 +2445,9 @@ SELECT DISTINCT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1;
               <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 10, fontFamily: 'Syne, sans-serif' }}>Q: {item.q}</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '8px 12px' }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: '#ff4757', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap', marginTop: 2 }}>Trap:</span>
-                <span style={{ fontSize: 13, color: '#ff4757', fontFamily: 'Inter, sans-serif', lineHeight: 1.75, fontStyle: 'italic' }}>{item.trap}</span>
+                <span style={{ fontSize: 13, color: '#ff4757',  lineHeight: 1.75, fontStyle: 'italic' }}>{item.trap}</span>
                 <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap', marginTop: 2 }}>Answer:</span>
-                <span style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.85, whiteSpace: 'pre-wrap' }}>{item.answer}</span>
+                <span style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.85, whiteSpace: 'pre-wrap' }}>{item.answer}</span>
               </div>
             </div>
           ))}

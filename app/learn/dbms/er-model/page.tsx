@@ -47,7 +47,7 @@ const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{
     fontSize: 15, color: 'var(--text2)',
     lineHeight: 1.95, marginBottom: 20,
-    fontFamily: 'Inter, sans-serif',
+    
   }}>{children}</p>
 )
 
@@ -791,11 +791,11 @@ FLIGHT entity:
                 {item.examples.map((ex) => (
                   <div key={ex} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
                     <span style={{ color: item.color, flexShrink: 0 }}>▸</span>
-                    <span style={{ fontSize: 12, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.6 }}>{ex}</span>
+                    <span style={{ fontSize: 12, color: 'var(--text2)',  lineHeight: 1.6 }}>{ex}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, sans-serif', fontStyle: 'italic', lineHeight: 1.6 }}>
+              <div style={{ fontSize: 12, color: 'var(--muted)',  fontStyle: 'italic', lineHeight: 1.6 }}>
                 → Table impact: {item.tableImpact}
               </div>
             </div>
@@ -1168,7 +1168,7 @@ AND EXISTS (
             <Para>Every instance of the entity MUST participate in at least one relationship instance. No entity instance is allowed to exist without being associated with the other entity.</Para>
             <Para>Represented by a <strong style={{ color: 'var(--text)' }}>double line</strong> in ER diagrams. Implemented as a NOT NULL constraint or a mandatory foreign key in the relational schema.</Para>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px' }}>
-              <div style={{ fontSize: 12, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.7 }}>Every ORDER must belong to exactly one CUSTOMER.<br />An order cannot exist without a customer.<br />→ customer_id NOT NULL in orders table</div>
+              <div style={{ fontSize: 12, color: 'var(--text2)',  lineHeight: 1.7 }}>Every ORDER must belong to exactly one CUSTOMER.<br />An order cannot exist without a customer.<br />→ customer_id NOT NULL in orders table</div>
             </div>
           </div>
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: '4px solid #8b5cf6', borderRadius: 10, padding: '20px' }}>
@@ -1176,7 +1176,7 @@ AND EXISTS (
             <Para>Some instances of the entity may NOT participate in any relationship instance. The relationship is optional — an entity can exist without being associated with the other entity.</Para>
             <Para>Represented by a <strong style={{ color: 'var(--text)' }}>single line</strong> in ER diagrams. Implemented by allowing NULL in the foreign key column.</Para>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px' }}>
-              <div style={{ fontSize: 12, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.7 }}>A CUSTOMER may or may not have placed any orders.<br />A customer can exist without any orders.<br />→ customers without orders is valid</div>
+              <div style={{ fontSize: 12, color: 'var(--text2)',  lineHeight: 1.7 }}>A CUSTOMER may or may not have placed any orders.<br />A customer can exist without any orders.<br />→ customers without orders is valid</div>
             </div>
           </div>
         </div>
@@ -1710,7 +1710,7 @@ CREATE TABLE supply_contracts (
           ].map((req, i) => (
             <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 8 }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.08)', borderRadius: 4, padding: '2px 7px', flexShrink: 0 }}>R{String(i + 1).padStart(2, '0')}</span>
-              <span style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.7 }}>{req}</span>
+              <span style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.7 }}>{req}</span>
             </div>
           ))}
         </div>

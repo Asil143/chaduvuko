@@ -31,7 +31,7 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
     fontSize: 'clamp(17px, 2vw, 22px)',
     fontWeight: 800, letterSpacing: '-0.5px',
     color: 'var(--text)', marginBottom: 14,
-    fontFamily: 'Syne, sans-serif',
+  
   }}>{children}</h3>
 )
 
@@ -39,7 +39,7 @@ const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{
     fontSize: 15, color: 'var(--text2)',
     lineHeight: 1.95, marginBottom: 20,
-    fontFamily: 'Inter, sans-serif',
+    
   }}>{children}</p>
 )
 
@@ -140,7 +140,7 @@ export default function DBMSIntroduction() {
                 }}>
                   {item.example}
                 </div>
-                <div style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Inter, sans-serif', lineHeight: 1.7 }}>
+                <div style={{ fontSize: 13, color: 'var(--muted)',  lineHeight: 1.7 }}>
                   💡 {item.realWorld}
                 </div>
               </div>
@@ -249,7 +249,7 @@ export default function DBMSIntroduction() {
             </div>
             <div style={{ padding: '14px 24px', background: 'rgba(255,71,87,0.04)' }}>
               <div style={{ fontSize: 12, color: '#ff4757', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 6 }}>REAL EXAMPLE AT WORK</div>
-              <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.75 }}>
+              <div style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.75 }}>
                 A major Indian bank discovered in 2019 that a customer's KYC address existed in
                 11 different systems with 4 different values. When regulators asked for the customer's
                 correct address, the bank couldn't answer confidently. Audit failure. ₹2 crore fine.
@@ -619,7 +619,7 @@ CREATE POLICY team_access ON employees
                   <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{item.function}</span>
                 </div>
                 <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.8, marginBottom: 12, fontFamily: 'Inter, sans-serif' }}>{item.desc}</div>
-                <div style={{ fontSize: 12, color: item.color, background: `${item.color}0e`, border: `1px solid ${item.color}25`, borderRadius: 7, padding: '8px 12px', fontFamily: 'Inter, sans-serif', lineHeight: 1.7 }}>
+                <div style={{ fontSize: 12, color: item.color, background: `${item.color}0e`, border: `1px solid ${item.color}25`, borderRadius: 7, padding: '8px 12px',  lineHeight: 1.7 }}>
                   <strong>In practice:</strong> {item.howItHelps}
                 </div>
               </div>
@@ -683,9 +683,9 @@ CREATE POLICY team_access ON employees
               <Para>{item.definition}</Para>
               <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 16px', marginBottom: 12 }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: item.color, marginBottom: 6, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Example</div>
-                <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.75 }}>{item.example}</div>
+                <div style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.75 }}>{item.example}</div>
               </div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Inter, sans-serif', fontStyle: 'italic' }}>
+              <div style={{ fontSize: 13, color: 'var(--muted)',  fontStyle: 'italic' }}>
                 ⚠ {item.whatItIsNot}
               </div>
             </div>
@@ -753,7 +753,7 @@ CREATE POLICY team_access ON employees
                     <div style={{ fontSize: 11, color: item.color, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase' }}>aka {item.also}</div>
                   </div>
                   <div style={{
-                    fontSize: 11, color: 'var(--muted)', fontFamily: 'Inter, sans-serif',
+                    fontSize: 11, color: 'var(--muted)', 
                     background: 'var(--bg2)', border: '1px solid var(--border)',
                     borderRadius: 6, padding: '5px 12px',
                   }}>Users: {item.who}</div>
@@ -761,9 +761,9 @@ CREATE POLICY team_access ON employees
                 <Para>{item.desc}</Para>
                 <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 18px', marginBottom: 14 }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', marginBottom: 8, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Example</div>
-                  <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.8 }}>{item.example}</div>
+                  <div style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.8 }}>{item.example}</div>
                 </div>
-                <div style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic', fontFamily: 'Inter, sans-serif', lineHeight: 1.75 }}>
+                <div style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic',  lineHeight: 1.75 }}>
                   💡 {item.keyInsight}
                 </div>
               </div>
@@ -1168,7 +1168,7 @@ CREATE POLICY team_access ON employees
                   letterSpacing: '.06em', textTransform: 'uppercase',
                   flexShrink: 0, marginTop: 3, whiteSpace: 'nowrap',
                 }}>{msg.role}</span>
-                <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.85, fontFamily: 'Inter, sans-serif', fontStyle: 'italic' }}>{msg.message}</div>
+                <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.85,  fontStyle: 'italic' }}>{msg.message}</div>
               </div>
             ))}
           </div>
@@ -1209,7 +1209,7 @@ CREATE POLICY team_access ON employees
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 18px' }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 8, fontFamily: 'Inter, sans-serif' }}>❓ {item.q}</div>
-                <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.75, fontFamily: 'Inter, sans-serif', display: 'flex', gap: 8 }}>
+                <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.75,  display: 'flex', gap: 8 }}>
                   <span style={{ color: 'var(--accent)', flexShrink: 0, fontWeight: 700 }}>→</span>
                   {item.answer}
                 </div>

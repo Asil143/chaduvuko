@@ -36,7 +36,7 @@ export default function Indexes() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
           <div style={{ background: 'var(--surface)', border: '1px solid rgba(255,71,87,0.3)', borderRadius: 10, padding: '18px 20px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#ff4757', marginBottom: 10, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Without Index</div>
-            <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8, fontFamily: 'Inter, sans-serif', marginBottom: 10 }}>
+            <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8,  marginBottom: 10 }}>
               SELECT * FROM orders WHERE customer_id = 'C001' on 50 million rows:
             </div>
             <div style={{ fontSize: 13, color: '#ff4757', fontFamily: 'var(--font-mono)', background: 'rgba(255,71,87,0.05)', border: '1px solid rgba(255,71,87,0.15)', borderRadius: 6, padding: '8px 12px' }}>
@@ -46,7 +46,7 @@ export default function Indexes() {
           </div>
           <div style={{ background: 'var(--surface)', border: '1px solid rgba(0,230,118,0.3)', borderRadius: 10, padding: '18px 20px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginBottom: 10, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>With Index on customer_id</div>
-            <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8, fontFamily: 'Inter, sans-serif', marginBottom: 10 }}>
+            <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8,  marginBottom: 10 }}>
               Same query, same 50 million rows:
             </div>
             <div style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'var(--font-mono)', background: 'rgba(0,230,118,0.05)', border: '1px solid rgba(0,230,118,0.15)', borderRadius: 6, padding: '8px 12px' }}>

@@ -31,7 +31,6 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
     fontSize: 'clamp(17px, 2vw, 22px)',
     fontWeight: 800, letterSpacing: '-0.5px',
     color: 'var(--text)', marginBottom: 14,
-    fontFamily: 'Syne, sans-serif',
   }}>{children}</h3>
 )
 
@@ -39,7 +38,7 @@ const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{
     fontSize: 15, color: 'var(--text2)',
     lineHeight: 1.95, marginBottom: 20,
-    fontFamily: 'Inter, sans-serif',
+    
   }}>{children}</p>
 )
 
@@ -132,7 +131,7 @@ export default function DataModels() {
                 <Para>{item.desc}</Para>
                 <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px' }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Example: </span>
-                  <span style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Inter, sans-serif', lineHeight: 1.7 }}>{item.example}</span>
+                  <span style={{ fontSize: 13, color: 'var(--muted)',  lineHeight: 1.7 }}>{item.example}</span>
                 </div>
               </div>
             </div>

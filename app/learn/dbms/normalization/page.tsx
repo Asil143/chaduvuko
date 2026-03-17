@@ -31,7 +31,7 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
     fontSize: 'clamp(17px, 2vw, 22px)',
     fontWeight: 800, letterSpacing: '-0.5px',
     color: 'var(--text)', marginBottom: 14,
-    fontFamily: 'Syne, sans-serif',
+    
   }}>{children}</h3>
 )
 
@@ -47,7 +47,7 @@ const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{
     fontSize: 15, color: 'var(--text2)',
     lineHeight: 1.95, marginBottom: 20,
-    fontFamily: 'Inter, sans-serif',
+    
   }}>{children}</p>
 )
 
@@ -104,7 +104,7 @@ const RelationTable = ({
                 <td key={j} style={{
                   padding: '10px 14px',
                   color: highlightCols.includes(j) ? '#ff4757' : 'var(--text2)',
-                  fontFamily: 'Inter, sans-serif', fontSize: 13,
+                   fontSize: 13,
                   background: highlightCols.includes(j) ? 'rgba(255,71,87,0.04)' : 'transparent',
                 }}>{cell}</td>
               ))}
@@ -113,7 +113,7 @@ const RelationTable = ({
         </tbody>
       </table>
     </div>
-    {note && <div style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, sans-serif', marginTop: 6, lineHeight: 1.6 }}>↑ {note}</div>}
+    {note && <div style={{ fontSize: 12, color: 'var(--muted)',  marginTop: 6, lineHeight: 1.6 }}>↑ {note}</div>}
   </div>
 )
 
@@ -233,7 +233,7 @@ export default function Normalization() {
                   existence depends on him being enrolled in at least one course. The student
                   is trapped — he cannot exist in the system until he is enrolled.
                 </Para>
-                <div style={{ fontSize: 13, color: '#ff4757', fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>
+                <div style={{ fontSize: 13, color: '#ff4757',  fontWeight: 700 }}>
                   Root cause: Facts about independent things (teachers, students, enrollments) are all mixed into one table.
                 </div>
               </div>
@@ -275,7 +275,7 @@ export default function Normalization() {
                   rows, partial update bugs are common, silent (no error is raised), and
                   extremely difficult to detect and fix after the fact.
                 </Para>
-                <div style={{ fontSize: 13, color: '#f97316', fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>
+                <div style={{ fontSize: 13, color: '#f97316',  fontWeight: 700 }}>
                   Root cause: One real-world fact (Prof. Kumar's phone) is stored in multiple rows, each of which can be independently updated.
                 </div>
               </div>
@@ -314,7 +314,7 @@ export default function Normalization() {
                   should not destroy a teacher's record. These are independent facts with independent
                   lifecycles — they should never have been stored in the same row.
                 </Para>
-                <div style={{ fontSize: 13, color: '#facc15', fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>
+                <div style={{ fontSize: 13, color: '#facc15',  fontWeight: 700 }}>
                   Root cause: Independent facts (student enrollment, teacher information) are coupled in the same row — deleting one destroys the other.
                 </div>
               </div>
@@ -1655,7 +1655,7 @@ INSERT INTO r2_student_teacher VALUES ('S001', 'T03');  -- T03 also teaches Phys
             <div key={item.scenario} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: `4px solid ${item.color}`, borderRadius: 10, padding: '18px 22px' }}>
               <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8, fontFamily: 'Syne, sans-serif' }}>{item.scenario}</div>
               <Para>{item.desc}</Para>
-              <div style={{ fontSize: 13, color: item.color, fontFamily: 'Inter, sans-serif', lineHeight: 1.7 }}>
+              <div style={{ fontSize: 13, color: item.color,  lineHeight: 1.7 }}>
                 → Real example: {item.example}
               </div>
             </div>
@@ -2020,9 +2020,9 @@ WHERE ask.skill = 'Python'
               <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 10, fontFamily: 'Syne, sans-serif' }}>Q: {item.q}</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '8px 12px' }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: '#ff4757', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap', marginTop: 2 }}>Trap:</span>
-                <span style={{ fontSize: 13, color: '#ff4757', fontFamily: 'Inter, sans-serif', lineHeight: 1.75, fontStyle: 'italic' }}>{item.trap}</span>
+                <span style={{ fontSize: 13, color: '#ff4757',  lineHeight: 1.75, fontStyle: 'italic' }}>{item.trap}</span>
                 <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap', marginTop: 2 }}>Answer:</span>
-                <span style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.85 }}>{item.answer}</span>
+                <span style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.85 }}>{item.answer}</span>
               </div>
             </div>
           ))}

@@ -31,7 +31,7 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
     fontSize: 'clamp(17px, 2vw, 22px)',
     fontWeight: 800, letterSpacing: '-0.5px',
     color: 'var(--text)', marginBottom: 14,
-    fontFamily: 'Syne, sans-serif',
+    
   }}>{children}</h3>
 )
 
@@ -47,7 +47,7 @@ const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{
     fontSize: 15, color: 'var(--text2)',
     lineHeight: 1.95, marginBottom: 20,
-    fontFamily: 'Inter, sans-serif',
+    
   }}>{children}</p>
 )
 
@@ -265,14 +265,14 @@ CUSTOMERS = {
                 alignItems: 'center', justifyContent: 'center', gap: 6,
               }}>
                 <span style={{ fontSize: 14, fontWeight: 900, color: item.color, fontFamily: 'var(--font-mono)', textAlign: 'center', lineHeight: 1.3 }}>{item.formal}</span>
-                <span style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'Inter, sans-serif', textAlign: 'center', lineHeight: 1.4 }}>= {item.informal}</span>
+                <span style={{ fontSize: 10, color: 'var(--muted)',  textAlign: 'center', lineHeight: 1.4 }}>= {item.informal}</span>
               </div>
               <div style={{ padding: '20px 24px', flex: 1 }}>
                 <Para><strong style={{ color: 'var(--text)' }}>Definition:</strong> {item.definition}</Para>
                 <Para><strong style={{ color: 'var(--text)' }}>Why it matters:</strong> {item.depth}</Para>
                 <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '6px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px' }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap' }}>SQL:</span>
-                  <span style={{ fontSize: 12, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.6 }}>{item.sqlEquivalent}</span>
+                  <span style={{ fontSize: 12, color: 'var(--text2)',  lineHeight: 1.6 }}>{item.sqlEquivalent}</span>
                   <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap' }}>Example:</span>
                   <span style={{ fontSize: 12, color: item.color, fontFamily: 'var(--font-mono)', lineHeight: 1.6 }}>{item.example}</span>
                 </div>
@@ -1808,9 +1808,9 @@ DELETE FROM orders WHERE order_id = 'ORD-001';
               <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 10, fontFamily: 'Syne, sans-serif' }}>Q: {item.question}</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '8px 12px', marginBottom: 14 }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: '#ff4757', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap', marginTop: 2 }}>Trap:</span>
-                <span style={{ fontSize: 13, color: '#ff4757', fontFamily: 'Inter, sans-serif', lineHeight: 1.7, fontStyle: 'italic' }}>{item.trap}</span>
+                <span style={{ fontSize: 13, color: '#ff4757',  lineHeight: 1.7, fontStyle: 'italic' }}>{item.trap}</span>
                 <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap', marginTop: 2 }}>Answer:</span>
-                <span style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.8 }}>{item.correctAnswer}</span>
+                <span style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.8 }}>{item.correctAnswer}</span>
               </div>
             </div>
           ))}

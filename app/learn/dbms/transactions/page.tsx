@@ -107,7 +107,7 @@ export default function Transactions() {
               <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.8, marginBottom: 6, fontFamily: 'Inter, sans-serif' }}><span style={{ color: 'var(--accent)' }}>✓ With:</span> {prop.pass}</div>
               <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.8, fontFamily: 'Inter, sans-serif' }}><span style={{ color: '#ff4757' }}>✕ Without:</span> {prop.fail}</div>
             </div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic', fontFamily: 'Inter, sans-serif', lineHeight: 1.7 }}>💡 {prop.realWorld}</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic',  lineHeight: 1.7 }}>💡 {prop.realWorld}</div>
           </div>
         ))}
       </section>

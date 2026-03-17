@@ -39,7 +39,7 @@ const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
   <h4 style={{
     fontSize: 16, fontWeight: 700,
     color: 'var(--text)', marginBottom: 10,
-    fontFamily: 'Syne, sans-serif',
+    
   }}>{children}</h4>
 )
 
@@ -47,7 +47,7 @@ const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{
     fontSize: 15, color: 'var(--text2)',
     lineHeight: 1.95, marginBottom: 20,
-    fontFamily: 'Inter, sans-serif',
+    
   }}>{children}</p>
 )
 
@@ -87,7 +87,7 @@ const FDBox = ({ lhs, rhs, label, color = 'var(--accent)', note }: {
     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: color, fontWeight: 700 }}>
       {lhs} <span style={{ color: 'var(--muted)' }}>→</span> {rhs}
     </span>
-    {note && <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, sans-serif', fontStyle: 'italic' }}>{note}</span>}
+    {note && <span style={{ fontSize: 12, color: 'var(--muted)',  fontStyle: 'italic' }}>{note}</span>}
   </div>
 )
 
@@ -793,13 +793,13 @@ export default function FunctionalDependencies() {
           <div style={{ fontSize: 14, fontWeight: 700, color: '#0078d4', marginBottom: 16, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Example 1 — Basic (GATE Level)</div>
 
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 18px', marginBottom: 20 }}>
-            <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', marginBottom: 10 }}>
+            <div style={{ fontSize: 13, color: 'var(--text2)',  marginBottom: 10 }}>
               <strong style={{ color: 'var(--text)' }}>Relation:</strong> R(A, B, C, D, E)
             </div>
             <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif' }}>
               <strong style={{ color: 'var(--text)' }}>FDs:</strong> F = {'{ AB → C, C → D, D → E, E → B }'}
             </div>
-            <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', marginTop: 8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text2)',  marginTop: 8 }}>
               <strong style={{ color: 'var(--text)' }}>Question:</strong> Compute {'{AB}'}⁺ and determine if AB is a candidate key.
             </div>
           </div>
@@ -847,10 +847,10 @@ closure = {A, B}
           <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', marginBottom: 16, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Example 2 — Intermediate (Multiple Candidate Keys)</div>
 
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 18px', marginBottom: 20 }}>
-            <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', marginBottom: 8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text2)',  marginBottom: 8 }}>
               <strong style={{ color: 'var(--text)' }}>Relation:</strong> R(A, B, C, D)
             </div>
-            <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', marginBottom: 8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text2)',  marginBottom: 8 }}>
               <strong style={{ color: 'var(--text)' }}>FDs:</strong> F = {'{ A → B, B → A, B → C, A → C, C → D }'}
             </div>
             <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif' }}>
@@ -928,10 +928,10 @@ closure = {A, B}
           <div style={{ fontSize: 14, fontWeight: 700, color: '#f97316', marginBottom: 16, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Example 3 — Advanced (GATE Exam Standard)</div>
 
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 18px', marginBottom: 20 }}>
-            <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', marginBottom: 8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text2)',  marginBottom: 8 }}>
               <strong style={{ color: 'var(--text)' }}>Relation:</strong> R(A, B, C, D, E, F)
             </div>
-            <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', marginBottom: 8 }}>
+            <div style={{ fontSize: 13, color: 'var(--text2)',  marginBottom: 8 }}>
               <strong style={{ color: 'var(--text)' }}>FDs:</strong> F = {'{ AB → C, BC → AD, D → E, CF → B }'}
             </div>
             <div style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif' }}>
@@ -1480,9 +1480,9 @@ F = {A→B, A→C, A→D, AB→C, B→D}
               <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 12, fontFamily: 'Syne, sans-serif' }}>{item.misconception}</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '8px 12px' }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: '#ff4757', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap', marginTop: 2 }}>Wrong:</span>
-                <span style={{ fontSize: 13, color: '#ff4757', fontFamily: 'Inter, sans-serif', lineHeight: 1.75, fontStyle: 'italic' }}>{item.wrong}</span>
+                <span style={{ fontSize: 13, color: '#ff4757',  lineHeight: 1.75, fontStyle: 'italic' }}>{item.wrong}</span>
                 <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.06em', whiteSpace: 'nowrap', marginTop: 2 }}>Correct:</span>
-                <span style={{ fontSize: 13, color: 'var(--text2)', fontFamily: 'Inter, sans-serif', lineHeight: 1.85 }}>{item.correct}</span>
+                <span style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.85 }}>{item.correct}</span>
               </div>
             </div>
           ))}
