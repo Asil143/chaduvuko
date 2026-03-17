@@ -158,7 +158,7 @@ const modules = [
     topics: ['Views & Materialized Views', 'Stored Procedures vs Functions', 'Triggers — BEFORE & AFTER', 'Cursors', 'Real Use Cases at Companies'],
     time: '35–40 min',
     difficulty: 'Intermediate',
-    status: 'live ' as const,
+    status: 'live' as const,
   },
   {
     number: '16',
