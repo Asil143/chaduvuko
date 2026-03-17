@@ -192,7 +192,7 @@ const modules = [
   },
   {
     number: '19',
-    slug: 'security',
+    slug: 'database-security',
     title: 'Database Security',
     desc: 'Protecting data at every layer — authentication, authorization, roles, SQL injection attacks and exactly how to prevent them, encryption, and auditing.',
     topics: ['Authentication vs Authorization', 'GRANT & REVOKE', 'SQL Injection — How & Prevention', 'Encryption at Rest & in Transit', 'Auditing & Row-Level Security'],
