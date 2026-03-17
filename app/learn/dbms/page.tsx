@@ -132,7 +132,7 @@ const modules = [
   },
   {
     number: '13',
-    slug: 'b-plus-trees',
+    slug: 'hashing-btrees',
     title: 'Hashing & B+ Trees',
     desc: 'The two most important data structures inside every database. Static and dynamic hashing for fast lookups, B+ tree structure for range queries and indexes.',
     topics: ['Static & Dynamic Hashing', 'Collision Handling', 'B+ Tree Structure', 'Search · Insert · Delete', 'Why B+ Tree is the Standard'],
