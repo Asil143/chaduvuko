@@ -122,7 +122,7 @@ const modules = [
   },
   {
     number: '12',
-    slug: 'storage',
+    slug: 'storage-file-organization',
     title: 'Storage & File Organization',
     desc: 'How data physically lives on disk — blocks, pages, buffer pool, heap files, sequential files. Understanding this is what separates developers from engineers.',
     topics: ['Blocks & Pages', 'Buffer Pool & Cache', 'Heap File Organization', 'Sequential & Hash Organization', 'Why This Affects Query Speed'],
