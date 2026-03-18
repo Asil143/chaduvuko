@@ -174,7 +174,7 @@ const projects = [
   },
   {
     num: '06',
-    title: 'Learning Platform',
+    title: 'Chaduvuko Learning Platform',
     desc: 'Built and deployed a full-stack DE learning platform from scratch covering Azure, AWS, and GCP tracks.',
     tags: ['Next.js', 'TypeScript', 'Vercel', 'Tailwind'],
     href: 'https://chaduvuko.com',
