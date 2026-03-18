@@ -28,7 +28,8 @@ const compMult: Record<string,number>  = { product:1.0, service:0.72, startup:1.
 // ─── TRACKS DATA ──────────────────────────────────────────────────────────────
 const tracksAll = [
   // Data & Cloud
-  { cat:'data',  icon:'☁️',  name:'Data Engineering',      desc:'Azure/AWS/GCP real pipelines', pills:['ADF','Databricks','Spark','dbt','Kafka'],   jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/azure/introduction' },
+  { cat:'data',  icon:'📁',  name:'Data Engineering',       desc:'From zero to production-grade DE — no cloud required', pills:['Pipelines','SQL','Python','Batch','Streaming'], jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/data-engineering' },
+  { cat:'data',  icon:'☁️',  name:'Azure Track',      desc:'Full Azure cloud engineering track', pills:['ADF','Databricks','Spark','dbt','Kafka'],   jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/azure/introduction' },
   { cat:'data',  icon:'🌩️', name:'Microsoft Azure',         desc:'Full Azure cloud service track', pills:['ADLS Gen2','ADF','Synapse','Fabric'],     jobs:'Cloud Engineer · Azure Developer',           status:'live', href:'/learn/azure/introduction' },
   { cat:'cs',    icon:'🧮',  name:'Data Structures & Algorithms', desc:'Crack every technical coding round', pills:['Arrays','Trees','Graphs','Dynamic Programming'], jobs:'FAANG India · Product Companies · Startups', status:'live', href:'/learn/dsa' },
   { cat:'cs',    icon:'💾',  name:'DBMS',                   desc:'Database theory and design fundamentals', pills:['ER Diagrams','Normalization','ACID','Transactions'], jobs:'DBA · Backend Dev · Campus Placement', status:'live', href:'/learn/dbms' },
