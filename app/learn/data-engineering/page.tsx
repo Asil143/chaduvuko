@@ -353,7 +353,7 @@ const modules: Module[] = [
   {
     num: '44', phase: 6, color: phaseColors[6], status: 'live', xp: 150, readTime: '55 min',
     title: 'DataOps and CI/CD for Data Pipelines',
-    slug: 'dataops-cicd',
+    slug: 'cicd-pipelines',
     description: 'How to ship pipeline changes like a professional — testing, staging, rollback, and automated deployments.',
     topics: ['DataOps principles', 'Testing pipelines in CI', 'Staging environments', 'Rollback strategies', 'GitOps for data'],
   },
