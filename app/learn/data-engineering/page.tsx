@@ -304,7 +304,7 @@ const modules: Module[] = [
   {
     num: '37', phase: 6, color: phaseColors[6], status: 'live', xp: 150, readTime: '50 min',
     title: 'Data Observability — Metrics, Logging and Anomaly Detection',
-    slug: 'data-observability',
+    slug: 'monitoring-observability',
     description: 'When pipelines run in production, how do you know something is wrong before your users do? Observability answers that.',
     topics: ['Observability vs monitoring', 'Pipeline metrics', 'Structured logging', 'Anomaly detection', 'Alerting design'],
   },
