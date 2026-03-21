@@ -358,14 +358,21 @@ const modules: Module[] = [
     topics: ['DataOps principles', 'Testing pipelines in CI', 'Staging environments', 'Rollback strategies', 'GitOps for data'],
   },
   {
-    num: '45', phase: 6, color: phaseColors[6], status: 'live', xp: 250, readTime: '80 min',
+  num: '45', phase: 6, color: phaseColors[6], status: 'live', xp: 150, readTime: '55 min',
+  title: 'Infrastructure as Code for Data Engineers',
+  slug: 'infrastructure-as-code',
+  description: 'Provision cloud data infrastructure with Terraform — storage accounts, pipelines, clusters, and secrets — so your environments are reproducible, version-controlled, and never "it works on my machine".',
+  topics: ['Why IaC matters', 'Terraform core concepts', 'Provisioning data resources', 'State management', 'Modules and reuse', 'CI/CD for infrastructure'],
+},
+  {
+    num: '46', phase: 6, color: phaseColors[6], status: 'live', xp: 250, readTime: '80 min',
     title: 'Data Engineering System Design',
     slug: 'system-design-de',
     description: 'How to design any data system from scratch. Framework, trade-offs, capacity estimation — for both interviews and real work.',
     topics: ['Design framework', 'Capacity estimation', 'Trade-off analysis', 'Common system designs', 'Interview approach'],
   },
   {
-    num: '46', phase: 6, color: phaseColors[6], status: 'live', xp: 300, readTime: '90 min',
+    num: '47', phase: 6, color: phaseColors[6], status: 'live', xp: 300, readTime: '90 min',
     title: 'Interview Prep — 60 Complete Answers',
     slug: 'de-interview-questions',
     description: '60 complete answers across Python, SQL, pipelines, modelling, architecture, and behavioural questions — written at senior engineer depth.',
