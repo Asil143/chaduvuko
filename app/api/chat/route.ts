@@ -21,12 +21,14 @@ Keep responses concise — 2 to 4 short paragraphs, line breaks generously. Be s
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json()
+    const { messages, pageContext } = await req.json()
 
     const apiKey = process.env.GROQ_API_KEY
     if (!apiKey) {
       return NextResponse.json({ reply: 'DEBUG: GROQ_API_KEY is missing from environment variables.' })
     }
+
+    const systemWithContext = SYSTEM + (pageContext || '')
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -39,7 +41,7 @@ export async function POST(req: NextRequest) {
         max_tokens: 800,
         temperature: 0.7,
         messages: [
-          { role: 'system', content: SYSTEM },
+          { role: 'system', content: systemWithContext },
           ...messages,
         ],
       }),
