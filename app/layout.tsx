@@ -64,12 +64,12 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://chaduvuko.com'),
 
   title: {
-    default: 'Asil — Free Data Engineering & Cloud Learning',
+    default: 'Chaduvuko — Free IT Learning Platform',
     template: '%s | Asil — Data Engineering',
   },
 
   description:
-    'Free data engineering tutorials covering Azure Data Factory, ADLS Gen2, AWS Glue, BigQuery, Apache Spark, dbt, and the full modern data stack. Real-world projects, interview prep, no paywall.',
+    'Free structured learning for every branch of IT — Data Engineering, Python, Web Dev, AI/ML, DevOps and more. Built for the Indian job market.',
 
   keywords: [
     'data engineering',
