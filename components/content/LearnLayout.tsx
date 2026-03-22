@@ -1,19 +1,18 @@
 'use client'
 import { CommentSection }  from '@/components/ui/CommentSection'
 import { ReadingProgress } from '@/components/ui/ReadingProgress'
-import { TableOfContents } from '@/components/ui/TableOfContents'
 import { ShareButtons }    from '@/components/ui/ShareButtons'
 import { PageViews }       from '@/components/ui/PageViews'
 import { RelatedArticles } from '@/components/ui/RelatedArticles'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronRight, ChevronLeft, Clock, Calendar, BookOpen, Copy, Check } from 'lucide-react'
+import { ChevronRight, ChevronLeft, Clock, Calendar, BookOpen, Copy, Check, CheckCircle2 } from 'lucide-react'
 import { useState } from 'react'
-import { GamifiedProgress } from '@/components/ui/GamifiedProgress'
+import { TableOfContents } from '@/components/ui/TableOfContents'
 import { QuizSection } from '@/components/ui/QuizSection'
 import { LinkedInGenerator } from '@/components/ui/LinkedInGenerator'
 import { SalaryWidget } from '@/components/ui/SalaryWidget'
-import { getPrevNext, getPageMeta, NEXT_PAGES } from '@/data/navigation'
+import { getPrevNext, getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
 
 const RESUME_BULLETS: Record<string, string[]> = {
   '/learn/what-is-data-engineering': [
@@ -77,54 +76,6 @@ const RESUME_BULLETS: Record<string, string[]> = {
     'Orchestrated multi-step Azure Data Factory pipeline with chained Databricks Notebook activities on daily schedule trigger',
   ],
 }
-
-const sidebar = [
-  { label: 'Foundations', color: '#00c2ff', items: [
-    { label: 'What is Data Engineering?', href: '/learn/what-is-data-engineering' },
-    { label: 'Roadmap 2026', href: '/learn/roadmap' },
-    { label: 'SQL for Data Engineers', href: '/learn/foundations/sql' },
-    { label: 'PostgreSQL', href: '/learn/foundations/postgresql' },
-    { label: 'Python for Data Engineers', href: '/learn/foundations/python' },
-  ]},
-  { label: 'Azure Track', color: '#0078d4', items: [
-    { label: 'Azure Introduction', href: '/learn/azure/introduction' },
-    { label: 'ADLS Gen2', href: '/learn/azure/adls-gen2' },
-    { label: 'Azure Data Factory', href: '/learn/azure/adf' },
-    { label: 'Azure Databricks', href: '/learn/azure/databricks' },
-    { label: 'Azure Synapse', href: '/learn/azure/synapse' },
-    { label: 'Azure Event Hubs', href: '/learn/azure/event-hubs' },
-    { label: 'Azure Key Vault', href: '/learn/azure/key-vault' },
-    { label: 'Microsoft Fabric', href: '/learn/azure/microsoft-fabric' },
-  ]},
-  { label: 'AWS Track', color: '#ff9900', items: [
-    { label: 'AWS Introduction', href: '/learn/aws/introduction' },
-    { label: 'Amazon S3', href: '/learn/aws/s3' },
-    { label: 'AWS Glue', href: '/learn/aws/glue' },
-    { label: 'Amazon Redshift', href: '/learn/aws/redshift' },
-    { label: 'Amazon Kinesis', href: '/learn/aws/kinesis' },
-    { label: 'Amazon Athena', href: '/learn/aws/athena' },
-    { label: 'Amazon EMR', href: '/learn/aws/emr' },
-    { label: 'AWS Step Functions', href: '/learn/aws/step-functions' },
-    { label: 'AWS Lake Formation', href: '/learn/aws/lake-formation' },
-  ]},
-  { label: 'GCP Track', color: '#4285f4', items: [
-    { label: 'GCP Introduction', href: '/learn/gcp/introduction' },
-    { label: 'Google BigQuery', href: '/learn/gcp/bigquery' },
-    { label: 'Cloud Dataflow', href: '/learn/gcp/dataflow' },
-    { label: 'Cloud Pub/Sub', href: '/learn/gcp/pubsub' },
-    { label: 'Cloud Composer', href: '/learn/gcp/composer' },
-  ]},
-  { label: 'Projects', color: '#00e676', items: [
-    { label: 'All Projects', href: '/learn/projects' },
-    { label: 'Project 1: Azure Pipeline', href: '/learn/projects/azure-batch-pipeline' },
-  ]},
-  { label: 'Interview Prep', color: '#ff6b6b', items: [
-    { label: 'Interview Questions', href: '/learn/interview' },
-  ]},
-  { label: 'Industry', color: '#f5c542', items: [
-    { label: 'Top Companies Hiring', href: '/learn/industry' },
-  ]},
-]
 
 const difficultyColors = {
   Beginner:     { bg: 'rgba(0,194,255,0.1)',   color: '#00c2ff', border: 'rgba(0,194,255,0.2)' },
@@ -206,186 +157,209 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const prev = prevOverride ? { ...prevOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoPrev
   const next = nextOverride ? { ...nextOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoNext
   const meta = getPageMeta(pathname)
-  const suggestedNext = NEXT_PAGES[pathname] || (next ? [next] : [])
+  const suggestedNext = NEXT_PAGES[pathname] ?? getNextPages(pathname)
   const diff = meta?.difficulty
   const diffStyle = diff ? difficultyColors[diff] : null
+
+  const [completed, setCompleted] = useState(false)
 
   return (
     <>
       <ReadingProgress />
       <div className="pt-16 min-h-screen" style={{ background: 'var(--bg)' }}>
-      <div className="border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg2)' }}>
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-          {breadcrumbs && (
-            <nav className="flex items-center gap-1.5 text-xs font-mono mb-4" style={{ color: 'var(--muted)' }}>
-              <Link href="/" style={{ color: 'var(--accent)' }}>Home</Link>
-              {breadcrumbs.map(bc => (
-                <span key={bc.href} className="flex items-center gap-1.5">
-                  <ChevronRight size={10} />
-                  <Link href={bc.href} className="hover:underline"
-                    style={{ color: bc.href === pathname ? 'var(--text)' : 'var(--accent)' }}>{bc.label}</Link>
+
+        {/* Page header */}
+        <div className="border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg2)' }}>
+          <div className="max-w-screen-2xl mx-auto px-4 md:px-6 py-8">
+            {breadcrumbs && (
+              <nav className="flex items-center gap-1.5 text-xs font-mono mb-4" style={{ color: 'var(--muted)' }}>
+                <Link href="/" style={{ color: 'var(--accent)' }}>Home</Link>
+                {breadcrumbs.map(bc => (
+                  <span key={bc.href} className="flex items-center gap-1.5">
+                    <ChevronRight size={10} />
+                    <Link href={bc.href} className="hover:underline"
+                      style={{ color: bc.href === pathname ? 'var(--text)' : 'var(--accent)' }}>{bc.label}</Link>
+                  </span>
+                ))}
+              </nav>
+            )}
+            <div className="flex items-center gap-3 flex-wrap mb-2">
+              <span className="section-tag">{section}</span>
+              {diff && diffStyle && (
+                <span className="text-xs font-mono px-2.5 py-1 rounded-full"
+                  style={{ background: diffStyle.bg, color: diffStyle.color, border: `1px solid ${diffStyle.border}` }}>
+                  {diff}
                 </span>
-              ))}
-            </nav>
-          )}
-          <div className="flex items-center gap-3 flex-wrap mb-2">
-            <span className="section-tag">{section}</span>
-            {diff && diffStyle && (
-              <span className="text-xs font-mono px-2.5 py-1 rounded-full"
-                style={{ background: diffStyle.bg, color: diffStyle.color, border: `1px solid ${diffStyle.border}` }}>
-                {diff}
-              </span>
-            )}
-            {meta && (
-              <span className="text-xs font-mono px-2.5 py-1 rounded-full"
-                style={{ background: 'rgba(0,230,118,0.1)', color: 'var(--green)', border: '1px solid rgba(0,230,118,0.2)' }}>
-                +{meta.xp} XP
-              </span>
-            )}
-          </div>
-          <h1 className="font-display font-extrabold leading-tight tracking-tight mt-1 mb-3"
-            style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: 'var(--text)' }}>{title}</h1>
-          <p className="text-base max-w-2xl leading-relaxed"
-            style={{ color: 'var(--muted)', fontFamily: 'Lora, serif', fontStyle: 'italic' }}>{description}</p>
-          <div className="flex items-center gap-4 mt-4 text-xs font-mono" style={{ color: 'var(--muted)' }}>
-            {readTime  && <span className="flex items-center gap-1"><Clock size={11} /> {readTime}</span>}
-            {updatedAt && <span className="flex items-center gap-1"><Calendar size={11} /> {updatedAt}</span>}
-            <PageViews slug={pathname} />
+              )}
+              {meta && (
+                <span className="text-xs font-mono px-2.5 py-1 rounded-full"
+                  style={{ background: 'rgba(0,230,118,0.1)', color: 'var(--green)', border: '1px solid rgba(0,230,118,0.2)' }}>
+                  +{meta.xp} XP
+                </span>
+              )}
+            </div>
+            <h1 className="font-display font-extrabold leading-tight tracking-tight mt-1 mb-3"
+              style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: 'var(--text)' }}>{title}</h1>
+            <p className="text-base max-w-2xl leading-relaxed"
+              style={{ color: 'var(--muted)', fontFamily: 'Lora, serif', fontStyle: 'italic' }}>{description}</p>
+            <div className="flex items-center gap-4 mt-4 text-xs font-mono" style={{ color: 'var(--muted)' }}>
+              {readTime  && <span className="flex items-center gap-1"><Clock size={11} /> {readTime}</span>}
+              {updatedAt && <span className="flex items-center gap-1"><Calendar size={11} /> {updatedAt}</span>}
+              <PageViews slug={pathname} />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10">
-        <div className="flex gap-10">
-          <aside className="hidden lg:block w-64 flex-shrink-0">
-            <div className="sticky top-24 space-y-5 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2">
+        {/* Two-column layout: left nav + full-width content */}
+        <div className="max-w-screen-2xl mx-auto flex">
+
+          {/* ── LEFT SIDEBAR — sticky, full height ── */}
+          <aside className="hidden lg:flex flex-col flex-shrink-0"
+            style={{
+              width: 240,
+              minHeight: 'calc(100vh - 64px)',
+              borderRight: '1px solid var(--border)',
+              background: 'var(--bg2)',
+            }}>
+            <div className="sticky top-16 overflow-y-auto py-6 px-4"
+              style={{ maxHeight: 'calc(100vh - 64px)' }}>
+              <div className="text-xs font-mono uppercase tracking-widest mb-4 px-2"
+                style={{ color: 'var(--muted)' }}>
+                On this page
+              </div>
               <TableOfContents />
-              <GamifiedProgress />
-              {sidebar.map(group => (
-                <div key={group.label}>
-                  <div className="text-xs font-mono uppercase tracking-widest mb-2 px-2" style={{ color: 'var(--muted)' }}>
-                    {group.label}
-                  </div>
-                  <ul className="space-y-0.5">
-                    {group.items.map(item => (
-                      <li key={item.href}>
-                        <Link href={item.href}
-                          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all"
-                          style={{
-                            color: pathname === item.href ? group.color : 'var(--text2)',
-                            background: pathname === item.href ? `${group.color}12` : 'transparent',
-                            fontWeight: pathname === item.href ? 500 : 400,
-                          }}>
-                          {pathname === item.href && <ChevronRight size={11} style={{ color: group.color, flexShrink: 0 }} />}
-                          {item.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
             </div>
           </aside>
 
-          <main className="flex-1 min-w-0 max-w-3xl">
-            {/* Mobile TOC — only shows on small screens, sidebar TOC handles desktop */}
-            <div className="lg:hidden mb-6">
-              <TableOfContents />
-            </div>
+          {/* ── MAIN CONTENT — fills remaining width ── */}
+          <div className="flex-1 min-w-0">
+            <div className="px-8 md:px-12 py-10">
 
-            <div className="prose-vedalera">{children}</div>
+              {/* Prev / Next at top — W3Schools style */}
+              <div className="flex items-center justify-between mb-8 gap-3">
+                {prev ? (
+                  <Link href={prev.href}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-mono transition-all"
+                    style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text2)', textDecoration: 'none' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = prev.color; (e.currentTarget as HTMLElement).style.color = prev.color }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text2)' }}>
+                    <ChevronLeft size={14} />
+                    {prev.title}
+                  </Link>
+                ) : <div />}
 
-            {/* Salary widget — shown on intro pages */}
-            {showSalary && (
-              <div className="mt-12">
-                <SalaryWidget />
+                {next ? (
+                  <Link href={next.href}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-mono transition-all"
+                    style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text2)', textDecoration: 'none' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = next.color; (e.currentTarget as HTMLElement).style.color = next.color }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text2)' }}>
+                    {next.title}
+                    <ChevronRight size={14} />
+                  </Link>
+                ) : <div />}
               </div>
-            )}
 
-            {/* Resume bullets */}
-            <ResumeBullets href={pathname} />
+              {/* Page content */}
+              <div className="prose-vedalera">{children}</div>
 
-            {/* Quiz */}
-            <QuizSection pageHref={pathname} />
+              {showSalary && (
+                <div className="mt-12"><SalaryWidget /></div>
+              )}
 
-            {/* LinkedIn share */}
-            <LinkedInGenerator pageHref={pathname} />
+              <ResumeBullets href={pathname} />
+              <QuizSection pageHref={pathname} />
+              <LinkedInGenerator pageHref={pathname} />
 
-            {/* What to learn next */}
-            {suggestedNext.length > 0 && (
-              <div className="mt-10">
-                <div className="text-xs font-mono uppercase tracking-widest mb-4" style={{ color: 'var(--muted)' }}>
-                  What to learn next
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {suggestedNext.slice(0, 2).map(page => (
-                    <Link key={page.href} href={page.href}
-                      className="flex items-center gap-3 p-4 rounded-xl group transition-all"
-                      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-                      onMouseEnter={e => (e.currentTarget.style.borderColor = page.color)}
-                      onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}>
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                        style={{ background: `${page.color}12` }}>
-                        <BookOpen size={14} style={{ color: page.color }} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{page.title}</div>
-                        <div className="text-xs font-mono mt-0.5" style={{ color: 'var(--muted)' }}>
-                          {page.section} · {page.readTime} · +{page.xp} XP
+              {/* What to learn next */}
+              {suggestedNext.length > 0 && (
+                <div className="mt-10">
+                  <div className="text-xs font-mono uppercase tracking-widest mb-4" style={{ color: 'var(--muted)' }}>
+                    What to learn next
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {suggestedNext.slice(0, 2).map(page => (
+                      <Link key={page.href} href={page.href}
+                        className="flex items-center gap-3 p-4 rounded-xl group transition-all"
+                        style={{ background: 'var(--surface)', border: '1px solid var(--border)', textDecoration: 'none' }}
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = page.color}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'}>
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                          style={{ background: `${page.color}12` }}>
+                          <BookOpen size={14} style={{ color: page.color }} />
                         </div>
-                      </div>
-                      <ChevronRight size={14} className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ color: page.color }} />
-                    </Link>
-                  ))}
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{page.title}</div>
+                          <div className="text-xs font-mono mt-0.5" style={{ color: 'var(--muted)' }}>
+                            {page.section} · {page.readTime} · +{page.xp} XP
+                          </div>
+                        </div>
+                        <ChevronRight size={14} className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          style={{ color: page.color }} />
+                      </Link>
+                    ))}
+                  </div>
                 </div>
+              )}
+
+              {/* Mark complete */}
+              <div className="mt-10 flex justify-center">
+                <button
+                  onClick={() => setCompleted(v => !v)}
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-mono transition-all"
+                  style={{
+                    background: completed ? 'rgba(0,230,118,0.12)' : 'var(--surface)',
+                    border: completed ? '1px solid rgba(0,230,118,0.35)' : '1px solid var(--border)',
+                    color: completed ? 'var(--green)' : 'var(--muted)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <CheckCircle2 size={15} />
+                  {completed ? 'Marked as complete ✓' : 'Mark as complete'}
+                </button>
               </div>
-            )}
 
-            <ShareButtons title={title} />
-            <RelatedArticles />
+              {/* Prev / Next at bottom */}
+              <div className="flex items-stretch gap-3 mt-10 pt-8" style={{ borderTop: '1px solid var(--border)' }}>
+                {prev ? (
+                  <Link href={prev.href}
+                    className="flex-1 flex items-center gap-3 p-4 rounded-xl group transition-all"
+                    style={{ background: 'var(--surface)', border: '1px solid var(--border)', textDecoration: 'none' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = prev.color}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'}>
+                    <ChevronLeft size={18} style={{ color: prev.color, flexShrink: 0 }} />
+                    <div className="min-w-0">
+                      <div className="text-xs font-mono mb-0.5" style={{ color: 'var(--muted)' }}>Previous</div>
+                      <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{prev.title}</div>
+                      <div className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{prev.section}</div>
+                    </div>
+                  </Link>
+                ) : <div className="flex-1" />}
 
-            {/* Prev / Next */}
-            <div className="flex items-stretch gap-3 mt-10 pt-8" style={{ borderTop: '1px solid var(--border)' }}>
-              {prev ? (
-                <Link href={prev.href}
-                  className="flex-1 flex items-center gap-3 p-4 rounded-xl group transition-all"
-                  style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = prev.color)}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}>
-                  <ChevronLeft size={18} style={{ color: prev.color, flexShrink: 0 }} />
-                  <div className="min-w-0">
-                    <div className="text-xs font-mono mb-0.5" style={{ color: 'var(--muted)' }}>Previous</div>
-                    <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{prev.title}</div>
-                    <div className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{prev.section}</div>
-                  </div>
-                </Link>
-              ) : <div className="flex-1" />}
+                {next ? (
+                  <Link href={next.href}
+                    className="flex-1 flex items-center gap-3 p-4 rounded-xl text-right justify-end group transition-all"
+                    style={{ background: 'var(--surface)', border: '1px solid var(--border)', textDecoration: 'none' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = next.color}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'}>
+                    <div className="min-w-0">
+                      <div className="text-xs font-mono mb-0.5" style={{ color: 'var(--muted)' }}>Next</div>
+                      <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{next.title}</div>
+                      <div className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{next.section}</div>
+                    </div>
+                    <ChevronRight size={18} style={{ color: next.color, flexShrink: 0 }} />
+                  </Link>
+                ) : <div className="flex-1" />}
+              </div>
 
-              {next ? (
-                <Link href={next.href}
-                  className="flex-1 flex items-center gap-3 p-4 rounded-xl text-right justify-end group transition-all"
-                  style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = next.color)}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}>
-                  <div className="min-w-0">
-                    <div className="text-xs font-mono mb-0.5" style={{ color: 'var(--muted)' }}>Next</div>
-                    <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{next.title}</div>
-                    <div className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{next.section}</div>
-                  </div>
-                  <ChevronRight size={18} style={{ color: next.color, flexShrink: 0 }} />
-                </Link>
-              ) : <div className="flex-1" />}
+              <ShareButtons title={title} />
+              <RelatedArticles />
+              <CommentSection />
             </div>
-          </main>
-        </div>
+          </div>
 
-        {/* Comments — outside flex row, full width below */}
-        <div className="mt-10 max-w-3xl ml-0 lg:ml-72">
-          <CommentSection />
         </div>
       </div>
-    </div>
     </>
   )
 }
