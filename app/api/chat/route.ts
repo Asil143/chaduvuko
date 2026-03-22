@@ -47,12 +47,17 @@ export async function POST(req: NextRequest) {
     )
 
     const data = await response.json()
+    if (!response.ok) {
+      console.error('Gemini API error:', JSON.stringify(data))
+      return NextResponse.json({ reply: 'API error — check server logs.' }, { status: 500 })
+    }
     const reply =
       data.candidates?.[0]?.content?.parts?.[0]?.text ||
       'Sorry, something went wrong. Please try again.'
 
     return NextResponse.json({ reply })
   } catch (error) {
+    console.error('Chat API error:', error)
     return NextResponse.json(
       { reply: 'Connection error. Please try again.' },
       { status: 500 }
