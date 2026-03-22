@@ -35,7 +35,6 @@ export default function ChatBot() {
   const [hasNew, setHasNew] = useState(true)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     if (open) {
@@ -52,7 +51,7 @@ export default function ChatBot() {
     const userMsg = text || input.trim()
     if (!userMsg || loading) return
     setInput('')
-    if (textareaRef.current) textareaRef.current.style.height = 'auto'
+    if (inputRef.current) inputRef.current.style.height = 'auto'
 
     const newMessages: Message[] = [...messages, { role: 'user', content: userMsg }]
     setMessages(newMessages)
@@ -257,7 +256,7 @@ export default function ChatBot() {
             {/* Input */}
             <div style={{ padding: '10px 14px 14px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', gap: 8, alignItems: 'flex-end' }}>
               <textarea
-                ref={el => { inputRef.current = el; textareaRef.current = el; }}
+                ref={inputRef}
                 className="chad-input"
                 value={input}
                 onChange={e => {
