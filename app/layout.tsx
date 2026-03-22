@@ -58,6 +58,7 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider'
 import { ServiceWorkerRegistration } from '@/components/ui/ServiceWorkerRegistration'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
+import ChatBot from '@/components/ui/ChatBot'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chaduvuko.com'),
@@ -192,6 +193,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
           <main>{children}</main>
           <Footer />
+          <ChatBot />
         </ThemeProvider>
       </body>
     </html>
