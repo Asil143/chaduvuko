@@ -81,8 +81,6 @@ export default function AIMLHierarchy() {
 
   return (
     <div style={{ display: 'flex', gap: 36, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-
-      {/* ── Left: ring diagram ── */}
       <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
         <div style={{ position: 'relative', width: 280, height: 280 }}>
           {concepts.map((c, i) => (
@@ -104,7 +102,7 @@ export default function AIMLHierarchy() {
                 alignItems: i === 3 ? 'center' : 'flex-start',
                 justifyContent: 'center',
                 paddingTop: i === 3 ? 0 : 9,
-                boxSizing: 'border-box',
+                boxSizing: 'border-box' as const,
               }}
             >
               <span style={{
@@ -116,27 +114,24 @@ export default function AIMLHierarchy() {
                 borderRadius: 3,
                 fontFamily: 'var(--font-mono)',
                 letterSpacing: '0.04em',
-                whiteSpace: 'nowrap',
+                whiteSpace: 'nowrap' as const,
                 lineHeight: i === 3 ? 1.35 : 1,
-                textAlign: 'center',
+                textAlign: 'center' as const,
               }}>
                 {i === 3 ? 'Gen AI' : c.short}
               </span>
             </div>
           ))}
         </div>
-        {/* Axis */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, width: 280 }}>
-          <span style={{ fontSize: 10, color: 'var(--muted)', whiteSpace: 'nowrap' }}>broader</span>
+          <span style={{ fontSize: 10, color: 'var(--muted)', whiteSpace: 'nowrap' as const }}>broader</span>
           <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-          <span style={{ fontSize: 10, color: 'var(--muted)', whiteSpace: 'nowrap' }}>more specific</span>
+          <span style={{ fontSize: 10, color: 'var(--muted)', whiteSpace: 'nowrap' as const }}>more specific</span>
         </div>
       </div>
 
-      {/* ── Right: tabs + detail panel ── */}
       <div style={{ flex: 1, minWidth: 260 }}>
-        {/* Tabs */}
-        <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' as const }}>
           {concepts.map((c, i) => (
             <button
               key={c.short}
@@ -158,7 +153,6 @@ export default function AIMLHierarchy() {
           ))}
         </div>
 
-        {/* Detail card */}
         <div style={{
           border: `1.5px solid ${active.color}40`,
           borderRadius: 12,
@@ -166,16 +160,13 @@ export default function AIMLHierarchy() {
           background: 'var(--surface)',
           transition: 'border-color 0.2s',
         }}>
-          {/* Tag */}
           <div style={{
             fontSize: 10, fontWeight: 700, letterSpacing: '0.08em',
-            textTransform: 'uppercase', color: active.color,
+            textTransform: 'uppercase' as const, color: active.color,
             marginBottom: 6, fontFamily: 'var(--font-mono)',
           }}>
             {active.tag}
           </div>
-
-          {/* Title */}
           <div style={{
             fontSize: 17, fontWeight: 900, color: 'var(--text)',
             marginBottom: 10, fontFamily: 'var(--font-display)',
@@ -183,34 +174,26 @@ export default function AIMLHierarchy() {
           }}>
             {active.label}
           </div>
-
-          {/* Definition */}
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 0 }}>
             {active.def}
           </p>
-
-          {/* Analogy */}
           <div style={{
             fontSize: 10, fontWeight: 700, letterSpacing: '0.08em',
-            textTransform: 'uppercase', color: 'var(--muted)',
+            textTransform: 'uppercase' as const, color: 'var(--muted)',
             margin: '14px 0 6px', fontFamily: 'var(--font-mono)',
           }}>
             The analogy
           </div>
           <div style={{
             fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.7,
-            padding: '9px 12px',
-            background: 'var(--bg2)',
-            borderRadius: 6,
-            borderLeft: `3px solid ${active.color}60`,
+            padding: '9px 12px', background: 'var(--bg2)',
+            borderRadius: 6, borderLeft: `3px solid ${active.color}60`,
           }}>
             {active.analogy}
           </div>
-
-          {/* Real examples */}
           <div style={{
             fontSize: 10, fontWeight: 700, letterSpacing: '0.08em',
-            textTransform: 'uppercase', color: 'var(--muted)',
+            textTransform: 'uppercase' as const, color: 'var(--muted)',
             margin: '14px 0 8px', fontFamily: 'var(--font-mono)',
           }}>
             Real examples
@@ -226,21 +209,17 @@ export default function AIMLHierarchy() {
               </div>
             ))}
           </div>
-
-          {/* What it is NOT */}
           <div style={{
             fontSize: 10, fontWeight: 700, letterSpacing: '0.08em',
-            textTransform: 'uppercase', color: 'var(--muted)',
+            textTransform: 'uppercase' as const, color: 'var(--muted)',
             margin: '14px 0 6px', fontFamily: 'var(--font-mono)',
           }}>
             What it is NOT
           </div>
           <div style={{
             fontSize: 12, color: 'var(--muted)', lineHeight: 1.65,
-            padding: '8px 11px',
-            background: 'var(--bg2)',
-            borderRadius: 6,
-            border: '1px solid var(--border)',
+            padding: '8px 11px', background: 'var(--bg2)',
+            borderRadius: 6, border: '1px solid var(--border)',
           }}>
             {active.notText}
           </div>
