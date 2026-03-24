@@ -58,8 +58,9 @@ const modules: Module[] = [
     topics: ['AI', 'ML', 'DL', 'GenAI', 'Hierarchy'],
   },
   {
-    num: '02', section: 1, color: sectionColors[1], status: 'soon', xp: 100,
+    num: '02', section: 1, color: sectionColors[1], status: 'live', xp: 100,
     readTime: '25 min',
+    href: '/learn/ai-ml/ai-ml-landscape',
     title: 'The AI/ML Landscape — Tools, Roles, and Career Paths',
     description: 'Every tool, every role, every career path in the AI/ML ecosystem mapped clearly. Know exactly where you fit before you write a single line of code.',
     topics: ['Tools map', 'Roles', 'Salaries', 'Career paths'],
@@ -67,35 +68,35 @@ const modules: Module[] = [
 
   // ── Section 2 — Math Foundations ─────────────────────────────────────────
   {
-    num: '03', section: 2, color: sectionColors[2], status: 'soon', xp: 100,
+    num: '03', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '35 min',
     title: 'Vectors, Matrices and Tensors',
     description: 'The language every ML algorithm speaks. From a single number to multi-dimensional arrays — with visual intuition first, formula second.',
     topics: ['Vectors', 'Matrices', 'Tensors', 'Dot product'],
   },
   {
-    num: '04', section: 2, color: sectionColors[2], status: 'soon', xp: 100,
+    num: '04', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '30 min',
     title: 'Matrix Multiplication and Linear Transformations',
     description: 'How data flows through neural network layers. One of the most important operations in all of ML — explained visually before mathematically.',
     topics: ['Matrix mult', 'Transformations', 'SVD'],
   },
   {
-    num: '05', section: 2, color: sectionColors[2], status: 'soon', xp: 100,
+    num: '05', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '35 min',
     title: 'Derivatives, Gradients and the Chain Rule',
     description: 'The mathematical engine behind every learning algorithm. Understand gradient descent before you ever run model.fit().',
     topics: ['Derivatives', 'Gradients', 'Chain rule', 'Backprop preview'],
   },
   {
-    num: '06', section: 2, color: sectionColors[2], status: 'soon', xp: 100,
+    num: '06', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '40 min',
     title: 'Probability Distributions and Bayes Theorem',
     description: 'How ML models reason under uncertainty. Normal distribution, Bernoulli, Poisson, and why Bayes theorem appears in almost every algorithm.',
     topics: ['Distributions', 'Bayes', 'MLE', 'MAP'],
   },
   {
-    num: '07', section: 2, color: sectionColors[2], status: 'soon', xp: 100,
+    num: '07', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '30 min',
     title: 'Information Theory — Entropy, Cross-Entropy and KL Divergence',
     description: 'Why loss functions in neural networks look the way they do. The information theory behind cross-entropy loss explained from scratch.',
@@ -104,28 +105,28 @@ const modules: Module[] = [
 
   // ── Section 3 — Programming Ecosystem ────────────────────────────────────
   {
-    num: '08', section: 3, color: sectionColors[3], status: 'soon', xp: 100,
+    num: '08', section: 3, color: sectionColors[3], status: 'live', xp: 100,
     readTime: '60 min',
     title: 'Python for Machine Learning',
     description: 'Not Python 101. Python for ML — NumPy vectorisation, Pandas DataFrames, matplotlib visualisation, and the sklearn interface that every algorithm shares.',
     topics: ['NumPy', 'Pandas', 'Matplotlib', 'sklearn'],
   },
   {
-    num: '09', section: 3, color: sectionColors[3], status: 'soon', xp: 100,
+    num: '09', section: 3, color: sectionColors[3], status: 'live', xp: 100,
     readTime: '45 min',
     title: 'NumPy Arrays and Broadcasting',
     description: 'The backbone of all numerical ML. Arrays, indexing, slicing, broadcasting, and vectorised operations that replace for loops at scale.',
     topics: ['Arrays', 'Broadcasting', 'Vectorisation', 'Indexing'],
   },
   {
-    num: '10', section: 3, color: sectionColors[3], status: 'soon', xp: 100,
+    num: '10', section: 3, color: sectionColors[3], status: 'live', xp: 100,
     readTime: '50 min',
     title: 'Pandas for Data Analysis',
     description: 'Load, clean, transform and explore datasets. GroupBy, merge, pivot, apply — the operations every ML project starts with.',
     topics: ['DataFrames', 'GroupBy', 'Merge', 'EDA'],
   },
   {
-    num: '11', section: 3, color: sectionColors[3], status: 'soon', xp: 100,
+    num: '11', section: 3, color: sectionColors[3], status: 'live', xp: 100,
     readTime: '40 min',
     title: 'Data Visualisation for ML',
     description: 'Plot distributions, correlations, confusion matrices, ROC curves, and learning curves. See what is happening in your data before you model it.',
@@ -134,21 +135,21 @@ const modules: Module[] = [
 
   // ── Section 4 — Data Engineering for ML ──────────────────────────────────
   {
-    num: '12', section: 4, color: sectionColors[4], status: 'soon', xp: 100,
+    num: '12', section: 4, color: sectionColors[4], status: 'live', xp: 100,
     readTime: '55 min',
     title: 'Data Collection — APIs, SQL, Files and Scraping',
     description: 'Where ML data actually comes from. Pull from REST APIs, query databases, read Parquet files, and scrape web data — all with production-grade Python.',
     topics: ['REST APIs', 'SQL', 'Parquet', 'Web scraping'],
   },
   {
-    num: '13', section: 4, color: sectionColors[4], status: 'soon', xp: 100,
+    num: '13', section: 4, color: sectionColors[4], status: 'live', xp: 100,
     readTime: '50 min',
     title: 'Missing Values, Outliers and Data Cleaning',
     description: 'The step that determines whether your model works or fails silently. Every imputation strategy, when to use each, and what breaks when you skip this.',
     topics: ['Missing values', 'Outliers', 'Imputation', 'Cleaning'],
   },
   {
-    num: '14', section: 4, color: sectionColors[4], status: 'soon', xp: 100,
+    num: '14', section: 4, color: sectionColors[4], status: 'live', xp: 100,
     readTime: '35 min',
     title: 'Feature Scaling — Standardisation and Normalisation',
     description: 'Why scale matters, what StandardScaler and MinMaxScaler actually do, and which algorithms break without scaling.',

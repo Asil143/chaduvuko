@@ -38,8 +38,8 @@ const tracksAll = [
   { cat:'data',  icon:'📊',  name:'Power BI & Tableau',     desc:'Dashboards, DAX, data storytelling', pills:['Power BI','Tableau','DAX','Reports'],  jobs:'BI Developer · Data Analyst',               status:'soon', href:'#' },
   // AI & ML
   { cat:'ai', icon:'🤖', name:'AI & Machine Learning', desc:'Math → Classical ML → Deep Learning → GenAI → MLOps. One complete path from zero.', pills:['Classical ML','Deep Learning','NLP','Generative AI','MLOps'], jobs:'ML Engineer · Data Scientist · AI Engineer', status:'live', href:'/learn/ai-ml' },
-{ cat:'ai', icon:'🧠', name:'Deep Learning',          desc:'Neural networks, CNNs, RNNs, Transformers — part of the AI & ML track', pills:['TensorFlow','PyTorch','Backprop','Transformers'], jobs:'DL Engineer · AI Researcher',     status:'soon', href:'/learn/ai-ml' },
-{ cat:'ai', icon:'✨', name:'Generative AI / LLMs',   desc:'GANs, Diffusion, LLMs, RAG, Agents — part of the AI & ML track',       pills:['LangChain','OpenAI','RAG','HuggingFace'],     jobs:'GenAI Developer · AI Engineer',   status:'soon', href:'/learn/ai-ml' },
+{ cat:'ai', icon:'🧠', name:'Deep Learning',          desc:'Neural networks, CNNs, RNNs, Transformers — part of the AI & ML track', pills:['TensorFlow','PyTorch','Backprop','Transformers'], jobs:'DL Engineer · AI Researcher',     status:'live', href:'/learn/ai-ml' },
+{ cat:'ai', icon:'✨', name:'Generative AI / LLMs',   desc:'GANs, Diffusion, LLMs, RAG, Agents — part of the AI & ML track',       pills:['LangChain','OpenAI','RAG','HuggingFace'],     jobs:'GenAI Developer · AI Engineer',   status:'live', href:'/learn/ai-ml' },
 { cat:'ai', icon:'📈', name:'Data Science',            desc:'Analysis, modelling, storytelling',    pills:['Pandas','Matplotlib','Stats','EDA'],          jobs:'Data Scientist · Analytics Consultant', status:'soon', href:'#' },
 { cat:'ai', icon:'🔍', name:'MLOps',                   desc:'Deploy and monitor ML in production',  pills:['MLflow','Docker','Kubeflow','CI/CD'],         jobs:'MLOps Engineer · ML Platform Eng', status:'soon', href:'/learn/ai-ml' },
   // Programming Languages
