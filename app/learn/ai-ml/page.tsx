@@ -78,6 +78,7 @@ const modules: Module[] = [
   {
     num: '04', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/math-foundations/matrix-multiplication',
     title: 'Matrix Multiplication and Linear Transformations',
     description: 'How data flows through neural network layers. One of the most important operations in all of ML — explained visually before mathematically.',
     topics: ['Matrix mult', 'Transformations', 'SVD'],
