@@ -112,6 +112,7 @@ const modules: Module[] = [
   {
     num: '08', section: 3, color: sectionColors[3], status: 'live', xp: 100,
     readTime: '60 min',
+    href: '/learn/ai-ml/programming/python-for-ml',
     title: 'Python for Machine Learning',
     description: 'Not Python 101. Python for ML — NumPy vectorisation, Pandas DataFrames, matplotlib visualisation, and the sklearn interface that every algorithm shares.',
     topics: ['NumPy', 'Pandas', 'Matplotlib', 'sklearn'],
