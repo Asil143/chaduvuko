@@ -154,6 +154,7 @@ const modules: Module[] = [
   {
     num: '13', section: 4, color: sectionColors[4], status: 'live', xp: 100,
     readTime: '50 min',
+    href: '/learn/ai-ml/data-engineering/data-cleaning',
     title: 'Missing Values, Outliers and Data Cleaning',
     description: 'The step that determines whether your model works or fails silently. Every imputation strategy, when to use each, and what breaks when you skip this.',
     topics: ['Missing values', 'Outliers', 'Imputation', 'Cleaning'],
