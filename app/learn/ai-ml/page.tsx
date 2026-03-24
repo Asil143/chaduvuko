@@ -70,6 +70,7 @@ const modules: Module[] = [
   {
     num: '03', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/math-foundations/vectors-matrices-tensors',
     title: 'Vectors, Matrices and Tensors',
     description: 'The language every ML algorithm speaks. From a single number to multi-dimensional arrays — with visual intuition first, formula second.',
     topics: ['Vectors', 'Matrices', 'Tensors', 'Dot product'],
