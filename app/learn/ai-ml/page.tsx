@@ -136,6 +136,7 @@ const modules: Module[] = [
   {
     num: '11', section: 3, color: sectionColors[3], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/programming/matplotlib-seaborn',
     title: 'Data Visualisation for ML',
     description: 'Plot distributions, correlations, confusion matrices, ROC curves, and learning curves. See what is happening in your data before you model it.',
     topics: ['Matplotlib', 'Seaborn', 'Plotly', 'EDA charts'],
