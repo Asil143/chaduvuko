@@ -120,6 +120,7 @@ const modules: Module[] = [
   {
     num: '09', section: 3, color: sectionColors[3], status: 'live', xp: 100,
     readTime: '45 min',
+    href: '/learn/ai-ml/programming/numpy-arrays',
     title: 'NumPy Arrays and Broadcasting',
     description: 'The backbone of all numerical ML. Arrays, indexing, slicing, broadcasting, and vectorised operations that replace for loops at scale.',
     topics: ['Arrays', 'Broadcasting', 'Vectorisation', 'Indexing'],
