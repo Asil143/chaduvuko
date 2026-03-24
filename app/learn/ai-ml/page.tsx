@@ -86,6 +86,7 @@ const modules: Module[] = [
   {
     num: '05', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/math-foundations/derivatives-and-gradients',
     title: 'Derivatives, Gradients and the Chain Rule',
     description: 'The mathematical engine behind every learning algorithm. Understand gradient descent before you ever run model.fit().',
     topics: ['Derivatives', 'Gradients', 'Chain rule', 'Backprop preview'],
