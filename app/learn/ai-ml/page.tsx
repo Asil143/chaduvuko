@@ -521,7 +521,7 @@ export default function AIMLTrack() {
   return (
     <LearnLayout
       title="AI & Machine Learning"
-      description="From zero to production-grade AI/ML — 30+ modules, no prerequisites"
+      description="From zero to production-grade AI/ML — 60+ modules, no prerequisites"
       section="AI & ML"
       readTime="Self-paced"
       updatedAt="March 2026"
@@ -567,11 +567,11 @@ export default function AIMLTrack() {
         marginBottom: 36,
       }}>
         {[
-          { value: '30+',   label: 'Modules'         },
+          { value: '60+',   label: 'Modules'         },
           { value: '11',    label: 'Sections'         },
           { value: '100+',  label: 'Topics covered'   },
           { value: '~60h',  label: 'Total content'    },
-          { value: '100%',  label: 'Free forever'     },
+          
         ].map((s) => (
           <div key={s.label}>
             <div style={{
@@ -622,7 +622,7 @@ export default function AIMLTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              30+ Modules. Zero to Advanced.
+              60+ Modules. Zero to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is
