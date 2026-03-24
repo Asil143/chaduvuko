@@ -146,6 +146,7 @@ const modules: Module[] = [
   {
     num: '12', section: 4, color: sectionColors[4], status: 'live', xp: 100,
     readTime: '55 min',
+    href: '/learn/ai-ml/data-engineering/data-collection',
     title: 'Data Collection — APIs, SQL, Files and Scraping',
     description: 'Where ML data actually comes from. Pull from REST APIs, query databases, read Parquet files, and scrape web data — all with production-grade Python.',
     topics: ['REST APIs', 'SQL', 'Parquet', 'Web scraping'],
