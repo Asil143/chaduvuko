@@ -102,6 +102,7 @@ const modules: Module[] = [
   {
     num: '07', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/math-foundations/information-theory',
     title: 'Information Theory — Entropy, Cross-Entropy and KL Divergence',
     description: 'Why loss functions in neural networks look the way they do. The information theory behind cross-entropy loss explained from scratch.',
     topics: ['Entropy', 'Cross-entropy', 'KL divergence'],
