@@ -162,6 +162,7 @@ const modules: Module[] = [
   {
     num: '14', section: 4, color: sectionColors[4], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/data-engineering/feature-engineering',
     title: 'Feature Scaling — Standardisation and Normalisation',
     description: 'Why scale matters, what StandardScaler and MinMaxScaler actually do, and which algorithms break without scaling.',
     topics: ['StandardScaler', 'MinMaxScaler', 'RobustScaler'],
