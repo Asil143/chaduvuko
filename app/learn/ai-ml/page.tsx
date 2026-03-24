@@ -128,6 +128,7 @@ const modules: Module[] = [
   {
     num: '10', section: 3, color: sectionColors[3], status: 'live', xp: 100,
     readTime: '50 min',
+    href: '/learn/ai-ml/programming/pandas-dataframes',
     title: 'Pandas for Data Analysis',
     description: 'Load, clean, transform and explore datasets. GroupBy, merge, pivot, apply — the operations every ML project starts with.',
     topics: ['DataFrames', 'GroupBy', 'Merge', 'EDA'],
