@@ -94,6 +94,7 @@ const modules: Module[] = [
   {
     num: '06', section: 2, color: sectionColors[2], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/math-foundations/probability-distributions',
     title: 'Probability Distributions and Bayes Theorem',
     description: 'How ML models reason under uncertainty. Normal distribution, Bernoulli, Poisson, and why Bayes theorem appears in almost every algorithm.',
     topics: ['Distributions', 'Bayes', 'MLE', 'MAP'],
