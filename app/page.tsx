@@ -28,6 +28,7 @@ const compMult: Record<string,number>  = { product:1.0, service:0.72, startup:1.
 // ─── TRACKS DATA ──────────────────────────────────────────────────────────────
 const tracksAll = [
   // Data & Cloud
+  { cat:'ai', icon:'🤖', name:'AI & Machine Learning', desc:'Math → Classical ML → Deep Learning → GenAI → MLOps. One complete path from zero.', pills:['Classical ML','Deep Learning','NLP','Generative AI','MLOps'], jobs:'ML Engineer · Data Scientist · AI Engineer', status:'live', href:'/learn/ai-ml' },
   { cat:'data',  icon:'📁',  name:'Data Engineering',       desc:'From zero to production-grade DE — no cloud required', pills:['Pipelines','SQL','Python','Batch','Streaming'], jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/data-engineering' },
   { cat:'data',  icon:'☁️',  name:'Azure Track',      desc:'Full Azure cloud engineering track', pills:['ADF','Databricks','Spark','dbt','Kafka'],   jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/azure/introduction' },
   { cat:'data',  icon:'🌩️', name:'Microsoft Azure',         desc:'Full Azure cloud service track', pills:['ADLS Gen2','ADF','Synapse','Fabric'],     jobs:'Cloud Engineer · Azure Developer',           status:'live', href:'/learn/azure/introduction' },
@@ -37,7 +38,7 @@ const tracksAll = [
   { cat:'data',  icon:'🔵',  name:'Google Cloud Platform',  desc:'BigQuery, Dataflow, Pub/Sub, Composer', pills:['BigQuery','Dataflow','Composer'],  jobs:'GCP Engineer · Data Engineer',               status:'soon', href:'#' },
   { cat:'data',  icon:'📊',  name:'Power BI & Tableau',     desc:'Dashboards, DAX, data storytelling', pills:['Power BI','Tableau','DAX','Reports'],  jobs:'BI Developer · Data Analyst',               status:'soon', href:'#' },
   // AI & ML
-  { cat:'ai', icon:'🤖', name:'AI & Machine Learning', desc:'Math → Classical ML → Deep Learning → GenAI → MLOps. One complete path from zero.', pills:['Classical ML','Deep Learning','NLP','Generative AI','MLOps'], jobs:'ML Engineer · Data Scientist · AI Engineer', status:'live', href:'/learn/ai-ml' },
+  
 { cat:'ai', icon:'🧠', name:'Deep Learning',          desc:'Neural networks, CNNs, RNNs, Transformers — part of the AI & ML track', pills:['TensorFlow','PyTorch','Backprop','Transformers'], jobs:'DL Engineer · AI Researcher',     status:'live', href:'/learn/ai-ml' },
 { cat:'ai', icon:'✨', name:'Generative AI / LLMs',   desc:'GANs, Diffusion, LLMs, RAG, Agents — part of the AI & ML track',       pills:['LangChain','OpenAI','RAG','HuggingFace'],     jobs:'GenAI Developer · AI Engineer',   status:'live', href:'/learn/ai-ml' },
 { cat:'ai', icon:'📈', name:'Data Science',            desc:'Analysis, modelling, storytelling',    pills:['Pandas','Matplotlib','Stats','EDA'],          jobs:'Data Scientist · Analytics Consultant', status:'soon', href:'#' },
