@@ -300,8 +300,9 @@ const modules: Module[] = [
     topics: ['XGBoost', 'SHAP', 'Regularisation', 'Early stopping'],
   },
   {
-    num: '31', section: 5, color: sectionColors[5], status: 'soon', xp: 100,
+    num: '31', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/classical-ml/lightgbm',
     title: 'LightGBM — Fast Gradient Boosting at Scale',
     description: 'Microsoft\'s answer to XGBoost. Leaf-wise tree growth, histogram-based splitting, and why LightGBM trains 10x faster on large datasets.',
     topics: ['LightGBM', 'Leaf-wise', 'Histogram', 'GBDT'],
