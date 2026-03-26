@@ -210,8 +210,9 @@ const modules: Module[] = [
     topics: ['Feature creation', 'Pipeline', 'ColumnTransformer'],
   },
   {
-    num: '20', section: 4, color: sectionColors[4], status: 'soon', xp: 100,
+    num: '20', section: 4, color: sectionColors[4], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/data-engineering/train-val-test-split',
     title: 'Train / Validation / Test Split',
     description: 'Why three splits, not two. Holdout sets, stratified splits, data leakage across splits, and the time-series exception where random splits break everything.',
     topics: ['Train split', 'Validation', 'Holdout', 'Stratified', 'Leakage'],
