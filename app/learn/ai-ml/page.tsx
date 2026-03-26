@@ -210,8 +210,9 @@ const modules: Module[] = [
     topics: ['Classification', 'Sigmoid', 'Log-odds', 'Threshold'],
   },
   {
-    num: '20', section: 5, color: sectionColors[5], status: 'soon', xp: 100,
+    num: '20', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/classical-ml/decision-trees',
     title: 'Decision Trees — Loan Approval at HDFC',
     description: 'The algorithm that thinks in if-then questions. Gini impurity, information gain, pruning, and why decision trees are the foundation of every ensemble method.',
     topics: ['Trees', 'Gini', 'Info gain', 'Pruning'],
