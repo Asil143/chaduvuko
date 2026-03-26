@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'Decision Trees — Loan Approval at HDFC — Chaduvuko',
@@ -167,82 +168,7 @@ export default function DecisionTreesPage() {
       readTime="30–35 min"
       updatedAt="March 2026"
     >
-      {/* ── Section progress header ─────────────────────────────────────────── */}
-      <div style={{ marginBottom: 40 }}>
-
-        {/* Breadcrumb */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          fontSize: 12, color: 'var(--muted)', marginBottom: 16,
-          fontFamily: 'var(--font-mono)',
-        }}>
-          <a href="/learn/ai-ml" style={{ color: 'var(--muted)', textDecoration: 'none' }}>AI &amp; ML</a>
-          <span style={{ color: 'var(--border)' }}>›</span>
-          <a href="/learn/ai-ml/classical-ml" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Classical ML</a>
-          <span style={{ color: 'var(--border)' }}>›</span>
-          <span style={{ color: 'var(--text)' }}>Decision Trees</span>
-        </div>
-
-        {/* Section tag */}
-        <a href="/learn/ai-ml/classical-ml" style={{ textDecoration: 'none' }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 7,
-            padding: '4px 12px', borderRadius: 5,
-            border: '1px solid var(--border)', background: 'var(--surface)',
-            marginBottom: 16,
-          }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#378ADD' }} />
-            <span style={{
-              fontSize: 10, fontWeight: 700, letterSpacing: '0.09em',
-              textTransform: 'uppercase' as const, color: '#378ADD',
-              fontFamily: 'var(--font-mono)',
-            }}>
-              Section 05 · Classical Machine Learning
-            </span>
-          </div>
-        </a>
-
-        {/* Progress strip */}
-        <div style={{
-          background: 'var(--surface)', border: '1px solid var(--border)',
-          borderRadius: 10, padding: '12px 14px',
-        }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            marginBottom: 10,
-          }}>
-            <span style={{
-              fontSize: 11, fontWeight: 700, color: 'var(--muted)',
-              fontFamily: 'var(--font-mono)', letterSpacing: '0.07em',
-              textTransform: 'uppercase' as const,
-            }}>
-              Classical ML · 13 topics
-            </span>
-            <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-              0/13 done
-            </span>
-          </div>
-          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' as const }}>
-            {PROGRESS_TOPICS.map((topic) => (
-              <a
-                key={topic.label}
-                href={topic.href}
-                title={topic.title}
-                style={{
-                  padding: '4px 10px', borderRadius: 5, textDecoration: 'none',
-                  fontSize: 11, fontWeight: topic.active ? 700 : 500,
-                  fontFamily: 'var(--font-mono)',
-                  background: topic.active ? '#378ADD20' : 'var(--bg2)',
-                  color:      topic.active ? '#378ADD'   : 'var(--muted)',
-                  border: '1px solid ' + (topic.active ? '#378ADD50' : 'var(--border)'),
-                }}
-              >
-                {topic.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
+      <MLPageHeader section='classical-ml' topic='decision-trees' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
