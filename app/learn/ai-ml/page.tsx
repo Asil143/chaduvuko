@@ -284,8 +284,9 @@ const modules: Module[] = [
     topics: ['Bagging', 'Ensemble', 'Feature importance', 'OOB'],
   },
   {
-    num: '29', section: 5, color: sectionColors[5], status: 'soon', xp: 100,
+    num: '29', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/classical-ml/gradient-boosting',
     title: 'Gradient Boosting — How XGBoost and LightGBM Work',
     description: 'The most powerful classical ML algorithm family. Sequential weak learners, residuals, and why gradient boosting wins almost every tabular ML competition.',
     topics: ['Boosting', 'Residuals', 'Weak learners', 'Shrinkage'],
