@@ -260,8 +260,9 @@ const modules: Module[] = [
     topics: ['SVM', 'Margin', 'Kernels', 'Hyperplane'],
   },
   {
-    num: '26', section: 5, color: sectionColors[5], status: 'soon', xp: 100,
+    num: '26', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '25 min',
+    href: '/learn/ai-ml/classical-ml/knn',
     title: 'K-Nearest Neighbours — Similarity-Based Prediction',
     description: 'The simplest possible ML algorithm — predict based on what your neighbours look like. Distance metrics, the curse of dimensionality, and when KNN actually works.',
     topics: ['KNN', 'Distance', 'Euclidean', 'Curse of dimensionality'],
