@@ -252,8 +252,9 @@ const modules: Module[] = [
     topics: ['Trees', 'Gini', 'Info gain', 'Pruning'],
   },
   {
-    num: '25', section: 5, color: sectionColors[5], status: 'soon', xp: 100,
+    num: '25', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/classical-ml/svm',
     title: 'Support Vector Machines — Margin Maximisation',
     description: 'The algorithm that finds the widest possible boundary between classes. Kernels, the kernel trick, and why SVMs still matter for small high-dimensional datasets.',
     topics: ['SVM', 'Margin', 'Kernels', 'Hyperplane'],
