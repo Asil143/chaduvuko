@@ -160,8 +160,9 @@ const modules: Module[] = [
     topics: ['Matplotlib', 'Seaborn', 'Plotly', 'EDA charts'],
   },
   {
-    num: '14', section: 3, color: sectionColors[3], status: 'soon', xp: 100,
+    num: '14', section: 3, color: sectionColors[3], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/programming/sklearn-interface',
     title: 'Scikit-learn Interface',
     description: 'The API every sklearn algorithm shares. fit, transform, predict, Pipeline, ColumnTransformer — understand the interface once and every algorithm becomes obvious.',
     topics: ['fit', 'predict', 'Pipeline', 'API patterns'],
