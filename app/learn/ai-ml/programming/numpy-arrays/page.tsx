@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
   title: 'NumPy Arrays and Broadcasting — Chaduvuko',
@@ -151,22 +152,7 @@ export default function NumpyArraysPage() {
       readTime="50–60 min"
       updatedAt="March 2026"
     >
-      {/* Breadcrumb */}
-      <div style={{
-        display: 'inline-flex', alignItems: 'center', gap: 7,
-        padding: '4px 12px', borderRadius: 5,
-        border: '1px solid var(--border)', background: 'var(--surface)',
-        marginBottom: 32,
-      }}>
-        <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#888888' }} />
-        <span style={{
-          fontSize: 10, fontWeight: 700, letterSpacing: '0.09em',
-          textTransform: 'uppercase' as const, color: '#888888',
-          fontFamily: 'var(--font-mono)',
-        }}>
-          Programming Ecosystem · Module 09
-        </span>
-      </div>
+      <MLPageHeader section='programming' topic='numpy-arrays' />
 
       {/* ══ SECTION 1 — HOOK ═══════════════════════════════════════════════════ */}
       <div style={S.sec}>
