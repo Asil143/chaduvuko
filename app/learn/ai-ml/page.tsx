@@ -268,8 +268,9 @@ const modules: Module[] = [
     topics: ['KNN', 'Distance', 'Euclidean', 'Curse of dimensionality'],
   },
   {
-    num: '27', section: 5, color: sectionColors[5], status: 'soon', xp: 100,
+    num: '27', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '25 min',
+    href: '/learn/ai-ml/classical-ml/naive-bayes',
     title: 'Naive Bayes — Probabilistic Text Classification',
     description: 'Bayes theorem applied to classification. Why the naive independence assumption works surprisingly well for spam filters and document classification.',
     topics: ['Naive Bayes', 'Bayes theorem', 'Probabilistic', 'Text classification'],
