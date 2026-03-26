@@ -292,8 +292,9 @@ const modules: Module[] = [
     topics: ['Boosting', 'Residuals', 'Weak learners', 'Shrinkage'],
   },
   {
-    num: '30', section: 5, color: sectionColors[5], status: 'soon', xp: 100,
+    num: '30', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/classical-ml/xgboost',
     title: 'XGBoost in Practice — End to End',
     description: 'Train, tune, and interpret XGBoost on a real dataset. Regularisation parameters, early stopping, SHAP values, and production deployment.',
     topics: ['XGBoost', 'SHAP', 'Regularisation', 'Early stopping'],
