@@ -164,7 +164,7 @@ export default function DataCollectionPage() {
           textTransform: 'uppercase' as const, color: '#1D9E75',
           fontFamily: 'var(--font-mono)',
         }}>
-          Data Engineering · Module 12
+          Data Engineering · Module 15
         </span>
       </div>
 
@@ -1697,7 +1697,7 @@ if df_weather is not None:
         </p>
 
         <p style={S.p}>
-          Module 13 moves to data cleaning and validation — the step that comes
+          Module 16 moves to data cleaning and validation — the step that comes
           after collection. Raw data from any of these sources will have nulls,
           wrong types, duplicate records, schema drift, and outliers.
           Cleaning it systematically — with validation rules that catch problems
@@ -1717,7 +1717,7 @@ if df_weather is not None:
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 13 · Data Engineering
+              Next — Module 16 · Data Engineering
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

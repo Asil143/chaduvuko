@@ -1502,7 +1502,7 @@ print(f"\nNew order prediction: {pred} (P(late)={p_late:.3f})")`} />
         </p>
 
         <p style={S.p}>
-          Module 17 covers Decision Trees — the algorithm that grows a flowchart
+          Module 21 covers Decision Trees — the algorithm that grows a flowchart
           from your data. Trees are the conceptual foundation of Random Forests
           and Gradient Boosting (XGBoost, LightGBM) — the algorithms that win
           most tabular ML competitions and power most production ML systems
@@ -1521,7 +1521,7 @@ print(f"\nNew order prediction: {pred} (P(late)={p_late:.3f})")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 17 · Classical ML
+              Next — Module 21 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

@@ -164,7 +164,7 @@ export default function FeatureScalingPage() {
           textTransform: 'uppercase' as const, color: '#1D9E75',
           fontFamily: 'var(--font-mono)',
         }}>
-          Data Engineering · Module 14
+          Data Engineering · Module 17
         </span>
       </div>
 
@@ -1273,7 +1273,7 @@ print("     Fix: always scale y when using neural networks")`} />
         </p>
 
         <p style={S.p}>
-          Module 15 builds your first complete ML model from scratch:
+          Module 18 builds your first complete ML model from scratch:
           linear regression. You'll see how the scaled features from this module
           feed directly into the gradient descent update from Module 05,
           and how regularisation (Ridge and Lasso) prevents overfitting —
@@ -1292,7 +1292,7 @@ print("     Fix: always scale y when using neural networks")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 15 · Classical ML
+              Next — Module 18 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

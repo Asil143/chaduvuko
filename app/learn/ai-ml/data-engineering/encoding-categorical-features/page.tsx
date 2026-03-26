@@ -164,7 +164,7 @@ export default function EncodingCategoricalFeaturesPage() {
           textTransform: 'uppercase' as const, color: '#1D9E75',
           fontFamily: 'var(--font-mono)',
         }}>
-          Data Engineering for ML · Module 15
+          Data Engineering for ML · Module 18
         </span>
       </div>
 
@@ -460,7 +460,7 @@ print(f"\nSample encoding: {ord_enc.transform(sample).flatten()}")
 # time_slot: 'breakfast', 'lunch', 'evening', 'dinner'
 # These have a time-of-day order but the ML relationship to delivery
 # time is NOT linear — dinner might be worse than evening.
-# For time_slot: use one-hot OR cyclical encoding (from Module 14).
+# For time_slot: use one-hot OR cyclical encoding (from Module 17).
 # Only use ordinal for features where the ordering is the SIGNAL.
 
 # ── Ordinal encoding for tree models ─────────────────────────────────
@@ -1261,7 +1261,7 @@ print(f"  Unique values remaining: {X_train_coll['restaurant'].nunique()}")`} />
         </p>
 
         <p style={S.p}>
-          Module 16 is the capstone of the Data Engineering section —
+          Module 19 is the capstone of the Data Engineering section —
           Feature Engineering and the sklearn Pipeline. It combines everything
           from Modules 12–15 into a single reusable preprocessing and modelling
           pipeline, adds interaction features and transformations,
@@ -1281,7 +1281,7 @@ print(f"  Unique values remaining: {X_train_coll['restaurant'].nunique()}")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 16 · Data Engineering for ML
+              Next — Module 19 · Data Engineering for ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

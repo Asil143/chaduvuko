@@ -164,7 +164,7 @@ export default function FeatureEngineeringPage() {
           textTransform: 'uppercase' as const, color: '#1D9E75',
           fontFamily: 'var(--font-mono)',
         }}>
-          Data Engineering · Module 14
+          Data Engineering · Module 17
         </span>
       </div>
 
@@ -268,7 +268,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 10_000
 
-# Generate clean Swiggy dataset (Module 13 output)
+# Generate clean Swiggy dataset (Module 16 output)
 restaurants = ['Pizza Hut','Biryani Blues',"McDonald's","Haldiram's",
                'Dominos','KFC','Subway','Burger King']
 cities      = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai']
@@ -1663,7 +1663,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
         </p>
 
         <p style={S.p}>
-          Module 15 begins the Classical Machine Learning section with
+          Module 18 begins the Classical Machine Learning section with
           linear regression — the oldest, most interpretable, and still one of
           the most useful algorithms in production ML.
           Understanding linear regression deeply — not just calling{' '}
@@ -1684,7 +1684,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 15 · Classical ML
+              Next — Module 18 · Classical ML
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

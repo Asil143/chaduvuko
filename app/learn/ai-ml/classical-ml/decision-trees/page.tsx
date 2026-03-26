@@ -1036,7 +1036,7 @@ print(f"Actual interest rate:                    {interest_rate_test.iloc[0]:.2f
               fontSize: 14, fontWeight: 700, color: '#378ADD',
               fontFamily: 'var(--font-display)', marginBottom: 7,
             }}>
-              Random Forest (Module 21)
+              Random Forest (Module 28)
             </div>
             <p style={{ ...S.ps, marginBottom: 10 }}>
               Train 100–1000 trees, each on a random sample of data
@@ -1198,7 +1198,7 @@ print("\nModel and decision rules saved for compliance audit.")`} />
         <p style={S.p}>
           A single tree overfits, is unstable, and has high variance.
           The fix — discovered in the 1990s — was to train many trees and combine
-          their predictions. Module 21 covers Random Forest: 100–1000 trees,
+          their predictions. Module 28 covers Random Forest: 100–1000 trees,
           each trained on a random sample of data and a random subset of features,
           their predictions averaged into something far more powerful and stable
           than any individual tree.
@@ -1216,7 +1216,7 @@ print("\nModel and decision rules saved for compliance audit.")`} />
               textTransform: 'uppercase' as const, color: '#378ADD',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Classical ML · Module 21
+              Next — Classical ML · Module 28
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',

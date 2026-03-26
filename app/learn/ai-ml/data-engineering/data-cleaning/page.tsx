@@ -164,7 +164,7 @@ export default function DataCleaningPage() {
           textTransform: 'uppercase' as const, color: '#1D9E75',
           fontFamily: 'var(--font-mono)',
         }}>
-          Data Engineering · Module 13
+          Data Engineering · Module 16
         </span>
       </div>
 
@@ -1802,7 +1802,7 @@ print("Saved to /tmp/swiggy_clean.parquet")`} />
               textTransform: 'uppercase' as const, color: '#1D9E75',
               fontFamily: 'var(--font-mono)', marginBottom: 5,
             }}>
-              Next — Module 14 · Data Engineering
+              Next — Module 17 · Data Engineering
             </div>
             <div style={{
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
