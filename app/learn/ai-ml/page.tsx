@@ -326,8 +326,9 @@ const modules: Module[] = [
 
   // ── Section 6 — Evaluation & Optimisation ────────────────────────────────
   {
-    num: '34', section: 6, color: sectionColors[6], status: 'soon', xp: 100,
+    num: '34', section: 6, color: sectionColors[6], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/evaluation/evaluation-metrics',
     title: 'Classification Metrics — Precision, Recall, F1, AUC',
     description: 'What accuracy hides, and what every other metric reveals. The confusion matrix explained from scratch, with Razorpay fraud detection as the running example.',
     topics: ['Precision', 'Recall', 'F1', 'ROC', 'AUC'],
