@@ -392,8 +392,9 @@ const modules: Module[] = [
     topics: ['Neurons', 'Layers', 'Weights', 'Forward pass'],
   },
   {
-    num: '42', section: 7, color: sectionColors[7], status: 'soon', xp: 100,
+    num: '42', section: 7, color: sectionColors[7], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/deep-learning/backpropagation',
     title: 'Backpropagation — How Neural Networks Learn',
     description: 'The chain rule applied to a network of layers. Gradients flow backward, weights update, the network gets better. Understood once, never forgotten.',
     topics: ['Backprop', 'Chain rule', 'Gradients', 'Weight updates'],
