@@ -85,25 +85,37 @@ export default function PlaygroundPage() {
     setOutput('');
     setStderr('');
     setRan(false);
+
+    if (selectedLang.value === 'sql') {
+      setOutput('SQL execution coming soon.');
+      setLoading(false);
+      setRan(true);
+      return;
+    }
+
+    const pistonLanguage = selectedLang.pistonRuntime;
+
     try {
-      const ext: Record<string, string> = {
-        python: 'py', javascript: 'js', typescript: 'ts', java: 'java',
-        cpp: 'cpp', c: 'c', go: 'go', rust: 'rs', shell: 'sh',
-        ruby: 'rb', php: 'php', swift: 'swift', kotlin: 'kt', sql: 'sql',
-      };
-      const res = await fetch('https://emkc.org/api/v2/piston/execute', {
+      const response = await fetch('https://emkc.org/api/v2/piston/execute', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          language: selectedLang.pistonRuntime,
-          version: selectedLang.pistonVersion,
-          files: [{ name: `main.${ext[selectedLang.value] ?? 'txt'}`, content: code }],
-        }),
+          language: pistonLanguage,
+          version: '*',
+          files: [
+            {
+              name: 'main',
+              content: code,
+            }
+          ]
+        })
       });
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
-      const data = await res.json();
-      setOutput(data.run?.stdout ?? '');
-      setStderr(data.run?.stderr ?? data.run?.output ?? '');
+
+      const result = await response.json();
+      const output = result.run?.stdout || result.run?.stderr || 'No output';
+      setOutput(output);
     } catch (err: unknown) {
       setStderr(err instanceof Error ? err.message : 'Unknown error');
     } finally {
