@@ -87,7 +87,7 @@ export default function PlaygroundPage() {
     setRan(false);
 
     if (selectedLang.value === 'sql') {
-      setOutput('SQL execution coming soon.');
+      setOutput('SQL execution coming soon — we\'re building an in-browser SQL runner.');
       setLoading(false);
       setRan(true);
       return;
@@ -95,45 +95,38 @@ export default function PlaygroundPage() {
 
     const pistonLanguage = selectedLang.pistonRuntime;
 
+    const languageIdMap: Record<string, number> = {
+      python:     71,
+      javascript: 63,
+      typescript: 74,
+      java:       62,
+      'c++':      54,
+      c:          50,
+      go:         60,
+      rust:       73,
+      bash:       46,
+      ruby:       72,
+      php:        68,
+      swift:      83,
+      kotlin:     78,
+    };
+
     try {
-      const extensionMap: Record<string, string> = {
-        python:     'py',
-        javascript: 'js',
-        typescript: 'ts',
-        java:       'java',
-        'c++':      'cpp',
-        c:          'c',
-        go:         'go',
-        rust:       'rs',
-        bash:       'sh',
-        ruby:       'rb',
-        php:        'php',
-        swift:      'swift',
-        kotlin:     'kt',
-      };
-
-      const ext = extensionMap[pistonLanguage] || 'txt';
-
-      const response = await fetch('https://emkc.org/api/v2/piston/execute', {
+      const submitRes = await fetch('https://ce.judge0.com/submissions?base64_encoded=false&wait=true', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          language: pistonLanguage,
-          version: '*',
-          files: [
-            {
-              name: `main.${ext}`,
-              content: code,
-            }
-          ]
+          language_id: languageIdMap[pistonLanguage],
+          source_code: code,
         })
       });
 
-      const result = await response.json();
-      console.log('Piston full response:', JSON.stringify(result, null, 2));
-      const output = JSON.stringify(result, null, 2);
+      const result = await submitRes.json();
+      const output = result.stdout
+        || result.stderr
+        || result.compile_output
+        || result.message
+        || 'No output returned.';
       setOutput(output);
     } catch (err: unknown) {
       setStderr(err instanceof Error ? err.message : 'Unknown error');
