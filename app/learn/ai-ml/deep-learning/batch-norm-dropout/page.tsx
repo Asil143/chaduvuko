@@ -177,7 +177,7 @@ export default function TrainingDeepNetworksPage() {
       readTime="35–40 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="deep-learning" topic="batch-norm-dropout" />
+      <MLPageHeader section="deep-learning" topic="training-deep-networks" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>

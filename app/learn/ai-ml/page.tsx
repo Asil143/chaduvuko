@@ -424,8 +424,9 @@ const modules: Module[] = [
     topics: ['Batch norm', 'Dropout', 'Regularisation', 'Training stability'],
   },
   {
-    num: '46', section: 7, color: sectionColors[7], status: 'soon', xp: 100,
+    num: '46', section: 7, color: sectionColors[7], status: 'live', xp: 100,
     readTime: '50 min',
+    href: '/learn/ai-ml/deep-learning/cnns-image-classification',
     title: 'CNNs — Meesho Product Image Classification',
     description: 'Convolutions, filters, pooling, feature maps, and the ResNet skip connection that let neural networks go from 5 layers to 1000. Full PyTorch code.',
     topics: ['CNN', 'Conv', 'Pooling', 'ResNet', 'Transfer learning'],
