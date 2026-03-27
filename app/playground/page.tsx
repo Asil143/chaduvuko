@@ -196,8 +196,8 @@ export default function PlaygroundPage() {
           flex-direction: column;
         }
         .pg-editor {
-          flex: 1;
-          min-height: 0;
+          height: calc(100vh - 56px - 296px);
+          min-height: 400px;
         }
         .pg-output-panel {
           border-top: 1px solid var(--border);
@@ -263,7 +263,7 @@ export default function PlaygroundPage() {
         </header>
 
         <div className="pg-editor-wrap">
-          <div className="pg-editor" style={{ flex: 1, minHeight: 0 }}>
+          <div className="pg-editor">
             <MonacoEditor
               height="100%"
               language={selectedLang.value}

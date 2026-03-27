@@ -13,6 +13,13 @@ const withMDX = createMDX({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'vscode': false,
+    };
+    return config;
+  },
 }
 
 export default withMDX(nextConfig)
