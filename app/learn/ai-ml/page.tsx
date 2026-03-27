@@ -334,11 +334,12 @@ const modules: Module[] = [
     topics: ['Precision', 'Recall', 'F1', 'ROC', 'AUC'],
   },
   {
-    num: '35', section: 6, color: sectionColors[6], status: 'soon', xp: 100,
+    num: '35', section: 6, color: sectionColors[6], status: 'live', xp: 100,
     readTime: '20 min',
-    title: 'Regression Metrics — MAE, RMSE, R²',
-    description: 'How to measure how wrong your regression model is — and which metric to report to which audience. Stakeholder-ready interpretations included.',
-    topics: ['MAE', 'RMSE', 'R²', 'MAPE'],
+    href: '/learn/ai-ml/evaluation/calibration',
+    title: 'Calibration — Are Your Probabilities Trustworthy?',
+    description: 'Reliability diagrams, Brier score, and Platt scaling vs isotonic regression — when your model says 80% fraud probability, does it actually mean 80%?',
+    topics: ['Calibration', 'Reliability', 'Brier score', 'Platt scaling'],
   },
   {
     num: '36', section: 6, color: sectionColors[6], status: 'soon', xp: 100,
