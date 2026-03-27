@@ -458,8 +458,9 @@ const modules: Module[] = [
     topics: ['Tokenisation', 'BPE', 'Word2Vec', 'Embeddings'],
   },
   {
-    num: '50', section: 8, color: sectionColors[8], status: 'soon', xp: 100,
+    num: '50', section: 8, color: sectionColors[8], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/nlp/bert-encoder-family',
     title: 'BERT and the Encoder-Only Family',
     description: 'Masked language modelling, next sentence prediction, fine-tuning on downstream tasks. The model that changed NLP — still powering classification and NER.',
     topics: ['BERT', 'MLM', 'Fine-tuning', 'RoBERTa'],
