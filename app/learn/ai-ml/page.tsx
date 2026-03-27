@@ -350,8 +350,9 @@ const modules: Module[] = [
     topics: ['ROC', 'AUC', 'PR curve', 'Threshold'],
   },
   {
-    num: '37', section: 6, color: sectionColors[6], status: 'soon', xp: 100,
+    num: '37', section: 6, color: sectionColors[6], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/evaluation/cross-validation',
     title: 'Cross-Validation and the Bias-Variance Tradeoff',
     description: 'Why train/test split alone is not enough. K-fold, stratified K-fold, time-series split, and the bias-variance tradeoff visualised clearly.',
     topics: ['K-fold', 'Stratified', 'Bias-variance', 'Overfitting'],
