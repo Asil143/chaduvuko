@@ -117,7 +117,7 @@ export const AIML_SECTIONS: Section[] = [
     shortTitle: 'Deep Learning',
     color: '#D85A30',
     topics: [
-      { slug: 'neural-networks',      title: 'Neural Networks from Scratch',               status: 'live' },
+      { slug: 'neural-networks-from-scratch', title: 'Neural Networks from Scratch', status: 'live' },
       { slug: 'backpropagation',      title: 'Backpropagation — How Neural Networks Learn', status: 'live' },
       { slug: 'activation-functions', title: 'Activation Functions and Loss Functions',     status: 'live' },
       { slug: 'optimisers',           title: 'Optimisers — SGD, Adam, AdamW',              status: 'live' },

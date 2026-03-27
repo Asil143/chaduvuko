@@ -384,8 +384,9 @@ const modules: Module[] = [
 
   // ── Section 7 — Deep Learning ─────────────────────────────────────────────
   {
-    num: '41', section: 7, color: sectionColors[7], status: 'soon', xp: 100,
+    num: '41', section: 7, color: sectionColors[7], status: 'live', xp: 100,
     readTime: '45 min',
+    href: '/learn/ai-ml/deep-learning/neural-networks-from-scratch',
     title: 'Neural Networks from Scratch',
     description: 'Build a neural network from nothing but NumPy. Layers, weights, activations, forward pass — no black boxes, every line of code explained.',
     topics: ['Neurons', 'Layers', 'Weights', 'Forward pass'],
