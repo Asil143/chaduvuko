@@ -416,8 +416,9 @@ const modules: Module[] = [
     topics: ['SGD', 'Adam', 'AdamW', 'Learning rate'],
   },
   {
-    num: '45', section: 7, color: sectionColors[7], status: 'soon', xp: 100,
+    num: '45', section: 7, color: sectionColors[7], status: 'live', xp: 100,
     readTime: '25 min',
+    href: '/learn/ai-ml/deep-learning/batch-norm-dropout',
     title: 'Batch Normalisation and Dropout',
     description: 'Two techniques that made deep networks trainable. What batch norm actually normalises, why dropout works as an ensemble method, and when to use each.',
     topics: ['Batch norm', 'Dropout', 'Regularisation', 'Training stability'],
