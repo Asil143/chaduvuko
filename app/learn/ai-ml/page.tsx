@@ -442,7 +442,7 @@ const modules: Module[] = [
   {
     num: '48', section: 7, color: sectionColors[7], status: 'live', xp: 100,
     readTime: '50 min',
-    href: '/learn/ai-ml/deep-learning/transformers-self-attention',
+    href: '/learn/ai-ml/deep-learning/transformers-and-attention',
     title: 'Transformers and Self-Attention',
     description: 'The architecture behind GPT, BERT, and every modern LLM. Query-Key-Value attention, multi-head attention, positional encoding — built up from scratch.',
     topics: ['Attention', 'QKV', 'Multi-head', 'Positional encoding'],

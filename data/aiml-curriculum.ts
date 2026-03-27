@@ -124,7 +124,7 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'batch-norm-dropout',   title: 'Batch Normalisation and Dropout',             status: 'live' },
       { slug: 'cnns',                 title: 'CNNs — Meesho Product Image Classification',  status: 'live' },
       { slug: 'rnns-and-lstms',       title: 'RNNs and LSTMs — Sequence Modelling',        status: 'live' },
-      { slug: 'transformers',         title: 'Transformers and Self-Attention',             status: 'live' },
+      { slug: 'transformers-and-attention',         title: 'Transformers and Self-Attention',             status: 'live' },
     ],
   },
   {
