@@ -342,8 +342,9 @@ const modules: Module[] = [
     topics: ['Calibration', 'Reliability', 'Brier score', 'Platt scaling'],
   },
   {
-    num: '36', section: 6, color: sectionColors[6], status: 'soon', xp: 100,
+    num: '36', section: 6, color: sectionColors[6], status: 'live', xp: 100,
     readTime: '25 min',
+    href: '/learn/ai-ml/evaluation/roc-and-auc',
     title: 'ROC Curve and AUC — Threshold-Independent Evaluation',
     description: 'Why ROC-AUC is the most trustworthy single number for a classifier. How the curve is constructed, what the area means, and when to use PR-AUC instead.',
     topics: ['ROC', 'AUC', 'PR curve', 'Threshold'],
