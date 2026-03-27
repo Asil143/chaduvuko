@@ -96,6 +96,24 @@ export default function PlaygroundPage() {
     const pistonLanguage = selectedLang.pistonRuntime;
 
     try {
+      const extensionMap: Record<string, string> = {
+        python:     'py',
+        javascript: 'js',
+        typescript: 'ts',
+        java:       'java',
+        'c++':      'cpp',
+        c:          'c',
+        go:         'go',
+        rust:       'rs',
+        bash:       'sh',
+        ruby:       'rb',
+        php:        'php',
+        swift:      'swift',
+        kotlin:     'kt',
+      };
+
+      const ext = extensionMap[pistonLanguage] || 'txt';
+
       const response = await fetch('https://emkc.org/api/v2/piston/execute', {
         method: 'POST',
         headers: {
@@ -106,7 +124,7 @@ export default function PlaygroundPage() {
           version: '*',
           files: [
             {
-              name: 'main',
+              name: `main.${ext}`,
               content: code,
             }
           ]
@@ -114,7 +132,11 @@ export default function PlaygroundPage() {
       });
 
       const result = await response.json();
-      const output = result.run?.stdout || result.run?.stderr || 'No output';
+      const output = result.run?.output
+        || result.run?.stdout
+        || result.run?.stderr
+        || result.compile?.stderr
+        || 'No output returned.';
       setOutput(output);
     } catch (err: unknown) {
       setStderr(err instanceof Error ? err.message : 'Unknown error');
