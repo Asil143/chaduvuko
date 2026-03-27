@@ -400,8 +400,9 @@ const modules: Module[] = [
     topics: ['Backprop', 'Chain rule', 'Gradients', 'Weight updates'],
   },
   {
-    num: '43', section: 7, color: sectionColors[7], status: 'soon', xp: 100,
+    num: '43', section: 7, color: sectionColors[7], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/deep-learning/activation-functions',
     title: 'Activation Functions and Loss Functions',
     description: 'Why ReLU replaced sigmoid, what GELU is doing in Transformers, and which loss function to use for which problem. The full reference.',
     topics: ['ReLU', 'GELU', 'Softmax', 'Cross-entropy loss'],
