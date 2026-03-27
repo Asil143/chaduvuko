@@ -308,8 +308,9 @@ const modules: Module[] = [
     topics: ['LightGBM', 'Leaf-wise', 'Histogram', 'GBDT'],
   },
   {
-    num: '32', section: 5, color: sectionColors[5], status: 'soon', xp: 100,
+    num: '32', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '25 min',
+    href: '/learn/ai-ml/classical-ml/kmeans-clustering',
     title: 'K-Means Clustering — Customer Segmentation',
     description: 'Finding hidden groups in data without labels. Inertia, elbow method, silhouette scores, and when clustering is and isn\'t the right approach.',
     topics: ['Clustering', 'K-Means', 'Silhouette', 'Elbow'],
