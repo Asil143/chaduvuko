@@ -101,14 +101,13 @@ export const AIML_SECTIONS: Section[] = [
     shortTitle: 'Evaluation',
     color: '#BA7517',
     topics: [
-      { slug: 'classification-metrics', title: 'Classification Metrics — Precision, Recall, F1, AUC', status: 'soon' },
-      { slug: 'regression-metrics',     title: 'Regression Metrics — MAE, RMSE, R²',                  status: 'soon' },
+      { slug: 'evaluation-metrics',     title: 'Evaluation Metrics — Beyond Accuracy',                  status: 'live' },
+      { slug: 'calibration',            title: 'Calibration — Are Your Probabilities Trustworthy?',     status: 'live' },
       { slug: 'roc-and-auc',            title: 'ROC Curve and AUC',                                    status: 'soon' },
       { slug: 'cross-validation',       title: 'Cross-Validation and the Bias-Variance Tradeoff',      status: 'soon' },
       { slug: 'hyperparameter-tuning',  title: 'Hyperparameter Tuning with Optuna',                    status: 'soon' },
       { slug: 'model-interpretability', title: 'Model Interpretability — SHAP and LIME',               status: 'soon' },
-      { slug: 'evaluation-metrics',     title: 'Evaluation Metrics — Beyond Accuracy',                  status: 'live' },
-      { slug: 'calibration',            title: 'Calibration — Are Your Probabilities Trustworthy?',     status: 'live' },
+      { slug: 'regression-metrics',     title: 'Regression Metrics — MAE, RMSE, R²',                  status: 'soon' },
     ],
   },
   {
