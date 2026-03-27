@@ -408,8 +408,9 @@ const modules: Module[] = [
     topics: ['ReLU', 'GELU', 'Softmax', 'Cross-entropy loss'],
   },
   {
-    num: '44', section: 7, color: sectionColors[7], status: 'soon', xp: 100,
+    num: '44', section: 7, color: sectionColors[7], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/deep-learning/optimisers',
     title: 'Optimisers — SGD, Adam, AdamW',
     description: 'How neural networks update their weights. Momentum, adaptive learning rates, weight decay — and why Adam is the default for almost everything.',
     topics: ['SGD', 'Adam', 'AdamW', 'Learning rate'],
