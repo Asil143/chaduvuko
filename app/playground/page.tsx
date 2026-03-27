@@ -132,6 +132,7 @@ export default function PlaygroundPage() {
           display: flex;
           flex-direction: column;
           font-family: var(--font-display, sans-serif);
+          padding-top: 80px;
         }
         .pg-header {
           border-bottom: 1px solid var(--border);
@@ -196,12 +197,12 @@ export default function PlaygroundPage() {
           flex-direction: column;
         }
         .pg-editor {
-          height: calc(100vh - 56px - 296px);
-          min-height: 400px;
+          height: 420px;
         }
         .pg-output-panel {
-          border-top: 1px solid var(--border);
+          border: 1px solid var(--border);
           background: var(--surface);
+          color: var(--text);
           flex-shrink: 0;
           display: flex;
           flex-direction: column;
