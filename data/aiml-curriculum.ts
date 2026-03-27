@@ -134,7 +134,7 @@ export const AIML_SECTIONS: Section[] = [
     shortTitle: 'NLP',
     color: '#D4537E',
     topics: [
-      { slug: 'tokenisation',       title: 'Tokenisation and Word Embeddings',      status: 'live' },
+      { slug: 'tokenisation-and-embeddings',       title: 'Tokenisation and Word Embeddings',      status: 'live' },
       { slug: 'bert-and-family',    title: 'BERT and the Encoder-Only Family',       status: 'live' },
       { slug: 'fine-tuning',        title: 'Fine-Tuning with PEFT — LoRA and Adapters', status: 'live' },
       { slug: 'rag',                title: 'RAG — Retrieval-Augmented Generation',   status: 'live' },

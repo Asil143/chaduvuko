@@ -450,8 +450,9 @@ const modules: Module[] = [
 
   // ── Section 8 — Natural Language Processing ───────────────────────────────
   {
-    num: '49', section: 8, color: sectionColors[8], status: 'soon', xp: 100,
+    num: '49', section: 8, color: sectionColors[8], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/nlp/tokenisation-and-embeddings',
     title: 'Tokenisation and Word Embeddings',
     description: 'How text becomes numbers. BPE, WordPiece, SentencePiece tokenisers explained. Word2Vec, GloVe, and contextual embeddings — why each one exists.',
     topics: ['Tokenisation', 'BPE', 'Word2Vec', 'Embeddings'],
