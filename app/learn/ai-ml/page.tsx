@@ -316,8 +316,9 @@ const modules: Module[] = [
     topics: ['Clustering', 'K-Means', 'Silhouette', 'Elbow'],
   },
   {
-    num: '33', section: 5, color: sectionColors[5], status: 'soon', xp: 100,
+    num: '33', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/classical-ml/pca',
     title: 'PCA — Dimensionality Reduction',
     description: 'Turn 100 features into 10 without losing most of the information. Explained variance, scree plots, and when PCA helps and when it hurts.',
     topics: ['PCA', 'Variance', 'Components', 'Dimensionality'],
