@@ -132,11 +132,8 @@ export default function PlaygroundPage() {
       });
 
       const result = await response.json();
-      const output = result.run?.output
-        || result.run?.stdout
-        || result.run?.stderr
-        || result.compile?.stderr
-        || 'No output returned.';
+      console.log('Piston full response:', JSON.stringify(result, null, 2));
+      const output = JSON.stringify(result, null, 2);
       setOutput(output);
     } catch (err: unknown) {
       setStderr(err instanceof Error ? err.message : 'Unknown error');
