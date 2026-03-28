@@ -14,7 +14,12 @@
       "Bash(grep -rl \"asil-site\\\\.vercel\\\\.app\" . --include=\"*.ts\" --include=\"*.tsx\" | xargs sed -i 's/asil-site\\\\.vercel\\\\.app/chaduvuko.com/g')",
       "Bash(npm run:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(ls c:/Users/kamep/asil-site/app/learn/btech/[branch]/)",
+      "Bash(ls c:/Users/kamep/asil-site/app/learn/school/[cls]/)",
+      "Bash(ls c:/Users/kamep/asil-site/app/learn/competitive/[exam]/)",
+      "Bash(ls c:/Users/kamep/asil-site/app/learn/intermediate/[cls]/)",
+      "Bash(git -C c:/Users/kamep/asil-site status --short)"
     ]
   }
 }
