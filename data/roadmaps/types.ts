@@ -32,6 +32,16 @@ export interface SalaryEntry {
   note: string
 }
 
+export interface RoadmapMeta {
+  slug: string
+  title: string
+  category: 'role' | 'skill' | 'project' | 'practice'
+  description: string
+  totalTime: string
+  nodeCount: number
+  hasLiveContent: boolean
+}
+
 export interface RoadmapSection {
   row: number
   label: string
