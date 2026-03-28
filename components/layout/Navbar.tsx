@@ -44,7 +44,7 @@ const navItems: NavItem[] = [
   { label: 'Projects',       href: '/learn/projects' },
   { label: 'Industry',       href: '/learn/industry' },
   { label: 'Blog',           href: '/blog' },
-  { label: 'Dashboard',      href: '/dashboard' },
+  { label: 'Code Playground',      href: '/playground' },
   { label: 'About',          href: '/about' },
   { label: 'Tutorials',      href: '/learn/tutorials' },
   { label: 'Interview Prep', href: '/learn/interview' },
@@ -153,7 +153,7 @@ export function Navbar() {
         <SearchBar variant="navbar" />
         <ThemePicker />
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '8px' }}>
-          <Link href="/dashboard">
+          <Link href="/playground">
             <span style={{
               display: 'inline-block',
               fontSize: '12px',
@@ -165,7 +165,7 @@ export function Navbar() {
               cursor: 'pointer',
               textDecoration: 'none',
             }}>
-              Dashboard
+              Playground
             </span>
           </Link>
           <Link href="/learn/roadmap">
