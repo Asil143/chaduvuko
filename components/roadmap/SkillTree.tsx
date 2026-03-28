@@ -248,7 +248,7 @@ export default function SkillTree({ roadmap }: Props) {
             }
 
             const stateStyle: React.CSSProperties = s === 'locked'
-              ? { background: 'rgba(255,255,255,.02)', border: '1px solid rgba(255,255,255,.05)', borderLeft: '4px solid rgba(255,255,255,.04)' }
+              ? { background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: '4px solid var(--border)' }
               : s === 'available'
               ? { background: 'var(--surface)', border: `1px solid ${col}40`, borderLeft: `4px solid ${col}` }
               : s === 'in-progress'
@@ -269,11 +269,11 @@ export default function SkillTree({ roadmap }: Props) {
                   {s === 'in-progress' && <span style={{ fontSize: 8, color: col }}>●</span>}
                   {s === 'locked' && <span style={{ fontSize: 12, color: 'rgba(255,255,255,.08)' }}>⊘</span>}
                 </div>
-                <div style={{ padding: '3px 9px 0 11px', fontSize: 12, fontWeight: 700, lineHeight: 1.25, color: s === 'locked' ? 'rgba(255,255,255,.1)' : s === 'done' ? 'var(--text)' : s === 'in-progress' ? '#ddd' : '#aaa' }}>
+                <div style={{ padding: '3px 9px 0 11px', fontSize: 12, fontWeight: 700, lineHeight: 1.25, color: s === 'locked' ? 'var(--muted)' : s === 'done' ? 'var(--text)' : s === 'in-progress' ? '#ddd' : '#aaa' }}>
                   {node.title}
                 </div>
                 <div style={{ padding: '3px 9px 0 11px' }}>
-                  <span style={{ fontSize: 10, fontWeight: 800, fontFamily: 'monospace', color: s === 'done' ? 'rgba(255,255,255,.18)' : s === 'locked' ? 'rgba(255,255,255,.06)' : col }}>
+                  <span style={{ fontSize: 10, fontWeight: 800, fontFamily: 'monospace', color: s === 'done' ? 'rgba(255,255,255,.18)' : s === 'locked' ? 'var(--border)' : col }}>
                     +{node.xp} XP{s === 'done' ? ' ✓' : ''}
                   </span>
                 </div>
@@ -289,9 +289,9 @@ export default function SkillTree({ roadmap }: Props) {
           <div style={{ background: 'var(--surface)', borderRadius: 12, padding: '20px 22px', border: '1px solid var(--border)', borderTop: `2.5px solid ${TYPE_CFG[selectedNode.type].color}` }}>
             {selectedState === 'locked' ? (
               <>
-                <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: '.13em', textTransform: 'uppercase' as const, color: 'rgba(255,255,255,.15)', marginBottom: 6 }}>Locked</div>
+                <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: '.13em', textTransform: 'uppercase' as const, color: 'var(--muted)', marginBottom: 6 }}>Locked</div>
                 <div style={{ fontSize: 18, fontWeight: 900, color: 'rgba(255,255,255,.18)', marginBottom: 10 }}>{selectedNode.title}</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,.1)', marginBottom: 8, fontStyle: 'italic' }}>Complete these to unlock:</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8, fontStyle: 'italic' }}>Complete these to unlock:</div>
                 <div>
                   {(selectedNode.prerequisites ?? []).filter(p => states[p] !== 'done').map(p => {
                     const pn = roadmap.nodes.find(n => n.id === p)!
@@ -311,18 +311,18 @@ export default function SkillTree({ roadmap }: Props) {
                 <div style={{ fontSize: 20, fontWeight: 900, letterSpacing: '-.6px', color: 'var(--text)', marginBottom: 8, lineHeight: 1.15 }}>{selectedNode.title}</div>
                 <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.72, marginBottom: 13, fontStyle: 'italic' }}>{selectedNode.description}</div>
                 <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' as const, marginBottom: 14 }}>
-                  {selectedNode.time && <span style={{ fontSize: 12, color: 'var(--muted)' }}><b style={{ color: 'rgba(255,255,255,.3)', marginRight: 5, fontWeight: 700 }}>Time</b>{selectedNode.time}</span>}
-                  <span style={{ fontSize: 12, color: 'var(--muted)' }}><b style={{ color: 'rgba(255,255,255,.3)', marginRight: 5, fontWeight: 700 }}>Level</b><span style={{ color: DIFF_COLOR[selectedNode.difficulty] }}>{selectedNode.difficulty}</span></span>
-                  <span style={{ fontSize: 12, color: 'var(--muted)' }}><b style={{ color: 'rgba(255,255,255,.3)', marginRight: 5, fontWeight: 700 }}>XP</b><span style={{ color: TYPE_CFG[selectedNode.type].color }}>+{selectedNode.xp}</span></span>
+                  {selectedNode.time && <span style={{ fontSize: 12, color: 'var(--muted)' }}><b style={{ color: 'var(--muted)', marginRight: 5, fontWeight: 700 }}>Time</b>{selectedNode.time}</span>}
+                  <span style={{ fontSize: 12, color: 'var(--muted)' }}><b style={{ color: 'var(--muted)', marginRight: 5, fontWeight: 700 }}>Level</b><span style={{ color: DIFF_COLOR[selectedNode.difficulty] }}>{selectedNode.difficulty}</span></span>
+                  <span style={{ fontSize: 12, color: 'var(--muted)' }}><b style={{ color: 'var(--muted)', marginRight: 5, fontWeight: 700 }}>XP</b><span style={{ color: TYPE_CFG[selectedNode.type].color }}>+{selectedNode.xp}</span></span>
                 </div>
                 {(selectedNode.prerequisites ?? []).length > 0 && (
                   <div style={{ marginBottom: 14 }}>
-                    <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase' as const, color: 'rgba(255,255,255,.12)', marginBottom: 5 }}>Prerequisites</div>
+                    <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase' as const, color: 'var(--muted)', marginBottom: 5 }}>Prerequisites</div>
                     {(selectedNode.prerequisites ?? []).map(p => {
                       const pn = roadmap.nodes.find(n => n.id === p)!
                       const done = states[p] === 'done'
                       return (
-                        <span key={p} style={{ display: 'inline-block', padding: '3px 9px', borderRadius: 20, fontSize: 11, fontWeight: 700, margin: 2, background: done ? `${TYPE_CFG[pn.type].color}22` : 'rgba(255,255,255,.03)', color: done ? TYPE_CFG[pn.type].color : 'rgba(255,255,255,.2)', border: `1px solid ${done ? TYPE_CFG[pn.type].color + '45' : 'rgba(255,255,255,.06)'}` }}>
+                        <span key={p} style={{ display: 'inline-block', padding: '3px 9px', borderRadius: 20, fontSize: 11, fontWeight: 700, margin: 2, background: done ? `${TYPE_CFG[pn.type].color}22` : 'var(--surface)', color: done ? TYPE_CFG[pn.type].color : 'var(--muted)', border: `1px solid ${done ? TYPE_CFG[pn.type].color + '45' : 'var(--border)'}` }}>
                           {done ? '✓ ' : ''}{pn.title}
                         </span>
                       )
@@ -332,14 +332,14 @@ export default function SkillTree({ roadmap }: Props) {
                 <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' as const }}>
                   <button
                     onClick={() => selectedState === 'done' ? markReset(selectedNode.id) : markDone(selectedNode.id)}
-                    style={{ padding: '8px 18px', borderRadius: 9, fontSize: 12, fontWeight: 800, cursor: 'pointer', border: 'none', background: selectedState === 'done' ? 'rgba(255,255,255,.04)' : TYPE_CFG[selectedNode.type].color, color: selectedState === 'done' ? 'rgba(255,255,255,.25)' : selectedNode.type === 'required' ? '#000' : '#fff', transition: 'all .13s' }}
+                    style={{ padding: '8px 18px', borderRadius: 9, fontSize: 12, fontWeight: 800, cursor: 'pointer', border: 'none', background: selectedState === 'done' ? 'var(--surface)' : TYPE_CFG[selectedNode.type].color, color: selectedState === 'done' ? 'var(--muted)' : selectedNode.type === 'required' ? '#000' : '#fff', transition: 'all .13s' }}
                   >
                     {selectedState === 'done' ? '✓ Done — click to reset' : 'Mark as done'}
                   </button>
                   {selectedState !== 'done' && (
                     <button
                       onClick={() => markProgress(selectedNode.id)}
-                      style={{ padding: '8px 18px', borderRadius: 9, fontSize: 12, fontWeight: 800, cursor: 'pointer', background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', color: 'rgba(255,255,255,.3)' }}
+                      style={{ padding: '8px 18px', borderRadius: 9, fontSize: 12, fontWeight: 800, cursor: 'pointer', background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--muted)' }}
                     >
                       ↻ In progress
                     </button>
@@ -347,7 +347,7 @@ export default function SkillTree({ roadmap }: Props) {
                   {selectedNode.href && (
                     <a
                       href={selectedNode.href}
-                      style={{ padding: '8px 18px', borderRadius: 9, fontSize: 12, fontWeight: 800, cursor: 'pointer', background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', color: TYPE_CFG[selectedNode.type].color, textDecoration: 'none', display: 'inline-block' }}
+                      style={{ padding: '8px 18px', borderRadius: 9, fontSize: 12, fontWeight: 800, cursor: 'pointer', background: 'var(--surface)', border: '1px solid var(--border)', color: TYPE_CFG[selectedNode.type].color, textDecoration: 'none', display: 'inline-block' }}
                     >
                       Open tutorial →
                     </a>
