@@ -17,6 +17,8 @@ export interface RoadmapNode {
   y: number
   width: number
   height: number
+  row?: number
+  col?: number
 }
 
 export interface RoadmapEdge {
@@ -28,6 +30,13 @@ export interface SalaryEntry {
   company: string
   range: string
   note: string
+}
+
+export interface RoadmapSection {
+  row: number
+  label: string
+  description?: string
+  color?: string
 }
 
 export interface Roadmap {
@@ -42,4 +51,5 @@ export interface Roadmap {
   nodes: RoadmapNode[]
   edges: RoadmapEdge[]
   salaryData?: SalaryEntry[]
+  sections?: RoadmapSection[]
 }
