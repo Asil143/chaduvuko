@@ -228,9 +228,9 @@ export function RoadmapCanvas({ roadmap, onProgressChange }: Props) {
   }, [onProgressChange])
 
   // Group nodes by row
-  const maxRow = Math.max(...roadmap.nodes.map(n => n.row))
+  const maxRow = Math.max(...roadmap.nodes.map(n => n.row ?? 0))
   const rows: RoadmapNode[][] = Array.from({ length: maxRow + 1 }, (_, i) =>
-    roadmap.nodes.filter(n => n.row === i).sort((a, b) => a.col - b.col)
+    roadmap.nodes.filter(n => (n.row ?? 0) === i).sort((a, b) => (a.col ?? 0) - (b.col ?? 0))
   )
 
   // Section map: row → section info

@@ -1,18 +1,34 @@
-export type NodeStatus = 'not-started' | 'in-progress' | 'done'
-export type NodeType = 'required' | 'recommended' | 'optional' | 'chaduvuko'
+export type NodeType = 'required' | 'optional' | 'recommended' | 'chaduvuko'
+export type NodeState = 'locked' | 'available' | 'in-progress' | 'done'
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced'
-export type RoadmapCategory = 'role' | 'skill' | 'project' | 'best-practices'
 
 export interface RoadmapNode {
   id: string
   title: string
   type: NodeType
-  description: string
+  xp?: number
+  prerequisites?: string[]
+  difficulty: Difficulty
   time?: string
-  difficulty?: Difficulty
+  description: string
   href?: string
-  row: number
-  col: number
+  x?: number
+  y?: number
+  width?: number
+  height?: number
+  row?: number
+  col?: number
+}
+
+export interface RoadmapEdge {
+  from: string
+  to: string
+}
+
+export interface SalaryEntry {
+  company: string
+  range: string
+  note: string
 }
 
 export interface RoadmapSection {
@@ -22,25 +38,31 @@ export interface RoadmapSection {
   color?: string
 }
 
+export interface RoadmapGuide {
+  howToUse?: string
+}
+
 export interface Roadmap {
   id: string
   slug: string
   title: string
-  category: RoadmapCategory
+  subtitle?: string
+  category: 'role' | 'skill' | 'project' | 'practice' | 'best-practices'
   description: string
-  totalTime: string
-  guide?: {
-    howToUse?: string
-    commonMistakes?: string[]
-  }
-  sections?: RoadmapSection[]
+  level?: Difficulty
+  estimatedTime?: string
+  totalTime?: string
   nodes: RoadmapNode[]
+  edges?: RoadmapEdge[]
+  salaryData?: SalaryEntry[]
+  sections?: RoadmapSection[]
+  guide?: RoadmapGuide
 }
 
 export interface RoadmapMeta {
   slug: string
   title: string
-  category: RoadmapCategory
+  category: 'role' | 'skill' | 'project' | 'best-practices'
   description: string
   totalTime: string
   nodeCount: number

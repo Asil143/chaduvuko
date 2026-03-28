@@ -1,131 +1,82 @@
+
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { LearnLayout } from '@/components/content/LearnLayout'
-import { RoadmapCanvas } from '@/components/roadmap/RoadmapCanvas'
-import { RoadmapProgress } from '@/components/roadmap/RoadmapProgress'
-import { getRoadmapMeta } from '@/data/roadmaps/index'
+import SkillTree from '@/components/roadmap/SkillTree'
 import { dataEngineerRoadmap } from '@/data/roadmaps/role/data-engineer'
-import { azureRoadmap } from '@/data/roadmaps/skill/azure'
-import { azureDataPipelineRoadmap } from '@/data/roadmaps/project/azure-data-pipeline'
 import type { Roadmap } from '@/data/roadmaps/types'
 
-// Registry of built roadmaps. Add new entries here as new data files are created.
-const BUILT_ROADMAPS: Record<string, Roadmap> = {
+const ROADMAPS: Record<string, Roadmap> = {
   'data-engineer': dataEngineerRoadmap,
-  'azure': azureRoadmap,
-  'azure-data-pipeline': azureDataPipelineRoadmap,
 }
 
 interface Props {
   params: { slug: string }
 }
 
-export async function generateMetadata({ params }: Props) {
-  const meta = getRoadmapMeta(params.slug)
-  if (!meta) return { title: 'Roadmap — Chaduvuko' }
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const roadmap = ROADMAPS[params.slug]
+  if (!roadmap) return {}
   return {
-    title: `${meta.title} Roadmap 2026 — Chaduvuko`,
-    description: meta.description,
+    title: `${roadmap.title} Roadmap — Chaduvuko`,
+    description: roadmap.description,
   }
 }
 
-export default function RoadmapSlugPage({ params }: Props) {
-  const meta = getRoadmapMeta(params.slug)
-  if (!meta) notFound()
+export function generateStaticParams() {
+  return Object.keys(ROADMAPS).map(slug => ({ slug }))
+}
 
-  const roadmap = BUILT_ROADMAPS[params.slug]
-
-  // Coming soon page for unbuilt roadmaps
-  if (!roadmap) {
-    return (
-      <LearnLayout
-        title={`${meta.title} Roadmap`}
-        description={meta.description}
-        section="Roadmap"
-        readTime="—"
-        updatedAt="Coming soon"
-      >
-        <div style={{
-          textAlign: 'center', padding: '48px 24px',
-          background: 'var(--surface)', borderRadius: 16,
-          border: '1px solid var(--border)',
-        }}>
-          <div style={{ fontSize: 32, marginBottom: 16 }}>🗺️</div>
-          <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
-            This roadmap is being built
-          </h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', maxWidth: 400, margin: '0 auto 24px', lineHeight: 1.7 }}>
-            The {meta.title} roadmap ({meta.nodeCount} nodes, {meta.totalTime}) is planned and will go live soon.
-            Start with the <a href="/learn/roadmap/data-engineer" style={{ color: 'var(--green)' }}>Data Engineer roadmap</a> while you wait.
-          </p>
-          <a href="/learn/roadmap" style={{
-            display: 'inline-block', padding: '10px 20px', borderRadius: 8,
-            background: 'var(--surface)', border: '1px solid var(--border)',
-            color: 'var(--text)', fontSize: 13, fontWeight: 600, textDecoration: 'none',
-          }}>
-            ← Back to all roadmaps
-          </a>
-        </div>
-      </LearnLayout>
-    )
-  }
+export default function RoadmapPage({ params }: Props) {
+  const roadmap = ROADMAPS[params.slug]
+  if (!roadmap) notFound()
 
   return (
-    <LearnLayout
-      title={`${roadmap.title} Roadmap 2026`}
-      description={roadmap.description}
-      section={`${
-        roadmap.category === 'role' ? 'Role-based Roadmap' :
-        roadmap.category === 'skill' ? 'Skill Roadmap' :
-        roadmap.category === 'project' ? 'Project Roadmap' :
-        'Best Practices'
-      }`}
-      readTime={`${roadmap.nodes.length} nodes`}
-      updatedAt="March 2026"
-    >
-      {/* Progress tracker — client component reading localStorage */}
-      <RoadmapProgress roadmapId={roadmap.id} nodes={roadmap.nodes} />
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', padding: '48px 20px 80px' }}>
+      <div style={{ maxWidth: 820, margin: '0 auto' }}>
 
-      {/* Total time */}
-      <div style={{
-        display: 'flex', gap: 20, marginBottom: 28, flexWrap: 'wrap',
-      }}>
-        <div>
-          <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: 2 }}>Total time</span>
-          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{roadmap.totalTime}</span>
+        {/* Breadcrumb */}
+        <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 24 }}>
+          <a href="/learn/roadmap" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Roadmaps</a>
+          <span style={{ margin: '0 8px' }}>›</span>
+          <span style={{ color: 'var(--text)' }}>{roadmap.title}</span>
         </div>
-        <div>
-          <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: 2 }}>Nodes</span>
-          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{roadmap.nodes.length}</span>
+
+        {/* Header */}
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 10 }}>
+            {roadmap.category === 'role' ? 'Role Roadmap' : 'Skill Roadmap'}
+          </div>
+          <h1 style={{ fontSize: 'clamp(26px,3.5vw,42px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', marginBottom: 10 }}>
+            {roadmap.title}
+          </h1>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 16, maxWidth: 560 }}>
+            {roadmap.description}
+          </p>
+          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 12, color: 'var(--muted)' }}>
+              <b style={{ color: 'var(--text)', fontWeight: 700, marginRight: 6 }}>Level</b>
+              {roadmap.level}
+            </span>
+            <span style={{ fontSize: 12, color: 'var(--muted)' }}>
+              <b style={{ color: 'var(--text)', fontWeight: 700, marginRight: 6 }}>Time</b>
+              {roadmap.estimatedTime}
+            </span>
+            <span style={{ fontSize: 12, color: 'var(--muted)' }}>
+              <b style={{ color: 'var(--text)', fontWeight: 700, marginRight: 6 }}>Nodes</b>
+              {roadmap.nodes.length}
+            </span>
+          </div>
         </div>
-        <div>
-          <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: 2 }}>Category</span>
-          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', textTransform: 'capitalize' }}>
-            {roadmap.category.replace('-', ' ')}
-          </span>
+
+        {/* Skill tree */}
+        <SkillTree roadmap={roadmap} />
+
+        {/* Footer note */}
+        <div style={{ marginTop: 28, fontSize: 12, color: 'rgba(255,255,255,.15)', textAlign: 'center', lineHeight: 1.7 }}>
+          Progress saves automatically in your browser. No account needed.
         </div>
+
       </div>
-
-      {/* Interactive roadmap canvas */}
-      <RoadmapCanvas roadmap={roadmap} />
-
-      {/* Guide content — migrated from the original roadmap page */}
-      {roadmap.guide?.howToUse && (
-        <>
-          <h2 style={{ marginTop: 48 }}>How to use this roadmap</h2>
-          <p>{roadmap.guide.howToUse}</p>
-        </>
-      )}
-
-      {roadmap.guide?.commonMistakes && roadmap.guide.commonMistakes.length > 0 && (
-        <>
-          <h2>Common mistakes to avoid</h2>
-          <ul>
-            {roadmap.guide.commonMistakes.map((m, i) => (
-              <li key={i}>{m}</li>
-            ))}
-          </ul>
-        </>
-      )}
-    </LearnLayout>
+    </div>
   )
 }

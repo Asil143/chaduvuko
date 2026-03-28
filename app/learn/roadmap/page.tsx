@@ -1,189 +1,92 @@
-'use client'
-import { useState } from 'react'
+
+
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import { roadmapRegistry, getRoadmapsByCategory } from '@/data/roadmaps/index'
-import type { RoadmapMeta, RoadmapCategory } from '@/data/roadmaps/types'
 
-const CATEGORY_LABELS: Record<RoadmapCategory, string> = {
-  'role': 'Role-based',
-  'skill': 'Skill-based',
-  'project': 'Project-based',
-  'best-practices': 'Best Practices',
+export const metadata: Metadata = {
+  title: 'Learning Roadmaps — Chaduvuko',
+  description: 'Interactive skill-tree roadmaps for every tech role. Track your progress, earn XP, and unlock India salary data as you learn.',
 }
 
-const CATEGORY_DESCRIPTIONS: Record<RoadmapCategory, string> = {
-  'role': 'What job role do you want? Start here.',
-  'skill': 'Master a specific technology or tool.',
-  'project': 'Learn by building real end-to-end projects.',
-  'best-practices': 'Do it the right way, not just the working way.',
-}
+const roadmaps = [
+  {
+    slug: 'data-engineer',
+    title: 'Data Engineer',
+    subtitle: 'From zero to job-ready',
+    level: 'Beginner → Advanced',
+    time: '3–5 months',
+    nodes: 19,
+    color: '#0078d4',
+    live: true,
+  },
+  { slug: 'ml-engineer',    title: 'ML Engineer',      subtitle: 'Classical ML to LLMs',       level: 'Intermediate', time: '4–6 months', nodes: 0,  color: '#7b61ff', live: false },
+  { slug: 'backend-dev',    title: 'Backend Developer', subtitle: 'APIs, DBs, system design',   level: 'Beginner',     time: '3–4 months', nodes: 0,  color: '#00e676', live: false },
+  { slug: 'devops',         title: 'DevOps Engineer',   subtitle: 'Docker, K8s, CI/CD, cloud',  level: 'Intermediate', time: '4–5 months', nodes: 0,  color: '#ff9900', live: false },
+  { slug: 'data-scientist', title: 'Data Scientist',    subtitle: 'Stats, Python, storytelling', level: 'Beginner',    time: '4–6 months', nodes: 0,  color: '#4285f4', live: false },
+  { slug: 'fullstack',      title: 'Full Stack Dev',    subtitle: 'React + Node + databases',   level: 'Beginner',     time: '4–5 months', nodes: 0,  color: '#ff4757', live: false },
+]
 
-const CATEGORY_COLORS: Record<RoadmapCategory, string> = {
-  'role': '#7b61ff',
-  'skill': '#00e676',
-  'project': '#ff9900',
-  'best-practices': '#ff4757',
-}
-
-const CATEGORIES: RoadmapCategory[] = ['role', 'skill', 'project', 'best-practices']
-
-function RoadmapCard({ rm }: { rm: RoadmapMeta }) {
-  const color = CATEGORY_COLORS[rm.category]
+export default function RoadmapIndex() {
   return (
-    <Link href={`/learn/roadmap/${rm.slug}`} style={{ textDecoration: 'none' }}>
-      <div style={{
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: 12,
-        padding: '14px 16px',
-        cursor: 'pointer',
-        transition: 'all 0.15s',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 6,
-      }}
-        onMouseEnter={e => {
-          (e.currentTarget as HTMLDivElement).style.borderColor = color + '50'
-          ;(e.currentTarget as HTMLDivElement).style.background = 'var(--bg2)'
-        }}
-        onMouseLeave={e => {
-          (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border)'
-          ;(e.currentTarget as HTMLDivElement).style.background = 'var(--surface)'
-        }}
-      >
-        <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3 }}>
-          {rm.title}
-        </div>
-        <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.55, flex: 1 }}>
-          {rm.description}
-        </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4, flexWrap: 'wrap' }}>
-          <span style={{
-            fontSize: 10, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase',
-            padding: '2px 7px', borderRadius: 20,
-            background: rm.hasLiveContent ? 'rgba(0,230,118,0.1)' : 'rgba(255,255,255,0.05)',
-            color: rm.hasLiveContent ? 'var(--green)' : 'var(--muted)',
-            border: rm.hasLiveContent ? '1px solid rgba(0,230,118,0.2)' : '1px solid var(--border)',
-          }}>
-            {rm.hasLiveContent ? 'Content live' : 'Coming soon'}
-          </span>
-          <span style={{ fontSize: 11, color: 'var(--muted)', marginLeft: 'auto' }}>
-            {rm.nodeCount} nodes · {rm.totalTime}
-          </span>
-        </div>
-      </div>
-    </Link>
-  )
-}
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', padding: '60px 24px' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
 
-export default function RoadmapIndexPage() {
-  const [activeFilter, setActiveFilter] = useState<RoadmapCategory | 'all'>('all')
-
-  const liveCount = roadmapRegistry.filter(r => r.hasLiveContent).length
-  const totalCount = roadmapRegistry.length
-
-  const displayCategories = activeFilter === 'all'
-    ? CATEGORIES
-    : [activeFilter]
-
-  return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', padding: '0 0 80px' }}>
-      {/* Header */}
-      <div style={{
-        maxWidth: 1100, margin: '0 auto', padding: '60px 24px 32px',
-        borderBottom: '1px solid var(--border)',
-      }}>
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: 6,
-          padding: '4px 12px', borderRadius: 20,
-          background: 'rgba(0,230,118,0.08)', border: '1px solid rgba(0,230,118,0.2)',
-          marginBottom: 16,
-        }}>
-          <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--green)', display: 'inline-block' }} />
-          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--green)' }}>
-            {liveCount} of {totalCount} roadmaps live
-          </span>
+        {/* Header */}
+        <div style={{ marginBottom: 48 }}>
+          <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12 }}>Learning Roadmaps</div>
+          <h1 style={{ fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--text)', lineHeight: 1.08, marginBottom: 16 }}>
+            Pick your path.<br />
+            <span style={{ color: 'var(--green)' }}>Track every step.</span>
+          </h1>
+          <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520 }}>
+            Interactive skill trees with XP, unlock mechanics, and India salary data. Not just a list — a game you finish with a job.
+          </p>
         </div>
 
-        <h1 style={{
-          fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 900,
-          letterSpacing: '-2px', color: 'var(--text)',
-          fontFamily: 'Syne, var(--font-display), sans-serif',
-          marginBottom: 12, lineHeight: 1.1,
-        }}>
-          Find your learning path
-        </h1>
-        <p style={{
-          fontSize: 16, color: 'var(--muted)', lineHeight: 1.7,
-          maxWidth: 520, marginBottom: 28,
-        }}>
-          Structured roadmaps for every IT role and skill — from beginner to job-ready.
-          Every node links to a lesson or real project.
-        </p>
-
-        {/* Filters */}
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {(['all', ...CATEGORIES] as const).map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActiveFilter(cat)}
-              style={{
-                padding: '7px 16px', borderRadius: 20, fontSize: 12, fontWeight: 600,
-                cursor: 'pointer', border: '1px solid',
-                transition: 'all 0.15s',
-                background: activeFilter === cat
-                  ? (cat === 'all' ? 'rgba(0,230,118,0.12)' : `${CATEGORY_COLORS[cat]}18`)
-                  : 'transparent',
-                borderColor: activeFilter === cat
-                  ? (cat === 'all' ? 'rgba(0,230,118,0.3)' : `${CATEGORY_COLORS[cat]}50`)
-                  : 'var(--border)',
-                color: activeFilter === cat
-                  ? (cat === 'all' ? 'var(--green)' : CATEGORY_COLORS[cat])
-                  : 'var(--muted)',
-              }}
-            >
-              {cat === 'all' ? `All (${totalCount})` : CATEGORY_LABELS[cat]}
-            </button>
+        {/* Legend */}
+        <div style={{ display: 'flex', gap: 16, marginBottom: 32, flexWrap: 'wrap' }}>
+          {[
+            { color: '#00e676', label: 'Required' },
+            { color: '#888', label: 'Optional' },
+            { color: '#7b61ff', label: '✦ Chaduvuko exclusive' },
+          ].map(l => (
+            <span key={l.label} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, color: l.color, fontWeight: 700 }}>
+              <span style={{ width: 8, height: 8, borderRadius: 2, background: l.color, display: 'inline-block' }} />
+              {l.label}
+            </span>
           ))}
         </div>
-      </div>
 
-      {/* Roadmap sections */}
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 24px 0' }}>
-        {displayCategories.map(category => {
-          const items = getRoadmapsByCategory(category)
-          return (
-            <div key={category} style={{ marginBottom: 48 }}>
-              <div style={{ marginBottom: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 4, flexWrap: 'wrap' }}>
-                  <h2 style={{
-                    fontSize: 18, fontWeight: 800, letterSpacing: '-0.5px',
-                    color: 'var(--text)',
-                    fontFamily: 'Syne, var(--font-display), sans-serif',
-                  }}>
-                    {CATEGORY_LABELS[category]}
-                  </h2>
-                  <span style={{ fontSize: 12, color: 'var(--muted)' }}>
-                    {items.length} roadmaps
-                  </span>
+        {/* Roadmap cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 14 }}>
+          {roadmaps.map(r => (
+            r.live ? (
+              <Link key={r.slug} href={`/learn/roadmap/${r.slug}`} style={{ textDecoration: 'none' }}>
+                <div style={{ background: 'var(--surface)', borderRadius: 12, padding: '20px 22px', border: `1px solid ${r.color}40`, borderTop: `3px solid ${r.color}`, cursor: 'pointer', transition: 'border-color .18s' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', padding: '2px 8px', borderRadius: 20, background: `${r.color}18`, color: r.color, border: `1px solid ${r.color}40` }}>Live</span>
+                    <span style={{ fontSize: 11, color: 'var(--muted)' }}>{r.nodes} nodes</span>
+                  </div>
+                  <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--text)', marginBottom: 4 }}>{r.title}</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14, fontStyle: 'italic' }}>{r.subtitle}</div>
+                  <div style={{ display: 'flex', gap: 14 }}>
+                    <span style={{ fontSize: 11, color: 'var(--muted)' }}>{r.level}</span>
+                    <span style={{ fontSize: 11, color: 'var(--muted)' }}>{r.time}</span>
+                  </div>
                 </div>
-                <p style={{ fontSize: 13, color: 'var(--muted)' }}>
-                  {CATEGORY_DESCRIPTIONS[category]}
-                </p>
+              </Link>
+            ) : (
+              <div key={r.slug} style={{ background: 'var(--surface)', borderRadius: 12, padding: '20px 22px', border: '1px solid var(--border)', borderTop: `3px solid ${r.color}30`, opacity: .45, cursor: 'not-allowed' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
+                  <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', padding: '2px 8px', borderRadius: 20, background: 'rgba(255,255,255,.04)', color: 'var(--muted)', border: '1px solid var(--border)' }}>Coming soon</span>
+                </div>
+                <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--muted)', marginBottom: 4 }}>{r.title}</div>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,.15)', fontStyle: 'italic' }}>{r.subtitle}</div>
               </div>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-                gap: 10,
-              }}>
-                {items.map(rm => (
-                  <RoadmapCard key={rm.slug} rm={rm} />
-                ))}
-              </div>
-            </div>
-          )
-        })}
+            )
+          ))}
+        </div>
+
       </div>
     </div>
   )
