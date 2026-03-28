@@ -7,16 +7,16 @@ export interface RoadmapNode {
   id: string
   title: string
   type: NodeType
-  xp: number
-  prerequisites: string[]
+  xp?: number
+  prerequisites?: string[]
   difficulty: Difficulty
   time?: string
   description: string
   href?: string
-  x: number
-  y: number
-  width: number
-  height: number
+  x?: number
+  y?: number
+  width?: number
+  height?: number
   row?: number
   col?: number
 }
