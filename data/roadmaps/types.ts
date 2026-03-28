@@ -1,5 +1,5 @@
 
-export type NodeType = 'required' | 'optional' | 'chaduvuko'
+export type NodeType = 'required' | 'optional' | 'chaduvuko' | 'recommended'
 export type NodeState = 'locked' | 'available' | 'in-progress' | 'done'
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced'
 
@@ -53,13 +53,15 @@ export interface Roadmap {
   id: string
   slug: string
   title: string
-  subtitle: string
+  subtitle?: string
   category: 'role' | 'skill' | 'project' | 'practice' | 'best-practices'
   description: string
-  level: Difficulty
-  estimatedTime: string
+  level?: Difficulty
+  estimatedTime?: string
+  totalTime?: string
+  guide?: { howToUse?: string }
   nodes: RoadmapNode[]
-  edges: RoadmapEdge[]
+  edges?: RoadmapEdge[]
   salaryData?: SalaryEntry[]
   sections?: RoadmapSection[]
 }
