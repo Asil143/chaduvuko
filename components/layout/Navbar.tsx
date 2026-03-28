@@ -46,7 +46,7 @@ const navItems: NavItem[] = [
   { label: 'Blog',           href: '/blog' },
   { label: 'Dashboard',      href: '/dashboard' },
   { label: 'About',          href: '/about' },
-  { label: 'Tutorials',      href: '/learn/what-is-data-engineering' },
+  { label: 'Tutorials',      href: '/learn/tutorials' },
   { label: 'Interview Prep', href: '/learn/interview' },
   { label: 'Roadmap',        href: '/learn/roadmap' },
 ]
