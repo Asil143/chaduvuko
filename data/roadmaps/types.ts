@@ -35,7 +35,7 @@ export interface SalaryEntry {
 export interface RoadmapMeta {
   slug: string
   title: string
-  category: 'role' | 'skill' | 'project' | 'practice'
+  category: 'role' | 'skill' | 'project' | 'practice' | 'best-practices'
   description: string
   totalTime: string
   nodeCount: number
@@ -54,7 +54,7 @@ export interface Roadmap {
   slug: string
   title: string
   subtitle: string
-  category: 'role' | 'skill' | 'project' | 'practice'
+  category: 'role' | 'skill' | 'project' | 'practice' | 'best-practices'
   description: string
   level: Difficulty
   estimatedTime: string
