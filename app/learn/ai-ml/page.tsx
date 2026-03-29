@@ -490,8 +490,9 @@ const modules: Module[] = [
     topics: ['Zero-shot', 'Few-shot', 'CoT', 'ReAct'],
   },
   {
-    num: '54', section: 8, color: sectionColors[8], status: 'soon', xp: 100,
+    num: '54', section: 8, color: sectionColors[8], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/nlp/llm-agents-and-tool-use',
     title: 'LLM Agents and Tool Use',
     description: 'When LLMs call functions, search the web, write and run code, and plan multi-step tasks. The architecture behind every AI agent.',
     topics: ['Agents', 'Tool use', 'Function calling', 'Planning'],

@@ -139,7 +139,7 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'peft-lora-adapters',        title: 'Fine-Tuning with PEFT — LoRA and Adapters', status: 'live' },
       { slug: 'rag-retrieval-augmented-generation',                title: 'RAG — Retrieval-Augmented Generation',   status: 'live' },
       { slug: 'prompt-engineering', title: 'Prompt Engineering',                     status: 'live' },
-      { slug: 'llm-agents',         title: 'LLM Agents and Tool Use',                status: 'live' },
+      { slug: 'llm-agents-and-tool-use',         title: 'LLM Agents and Tool Use',                status: 'live' },
     ],
   },
   {
