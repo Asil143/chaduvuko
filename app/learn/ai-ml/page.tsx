@@ -474,8 +474,9 @@ const modules: Module[] = [
     topics: ['LoRA', 'PEFT', 'Adapters', 'Fine-tuning'],
   },
   {
-    num: '52', section: 8, color: sectionColors[8], status: 'soon', xp: 100,
+    num: '52', section: 8, color: sectionColors[8], status: 'live', xp: 100,
     readTime: '45 min',
+    href: '/learn/ai-ml/nlp/rag-retrieval-augmented-generation',
     title: 'RAG — Retrieval-Augmented Generation',
     description: 'Give any LLM external memory. Vector databases, semantic search, chunking strategies, and the full RAG pipeline from document to answer.',
     topics: ['RAG', 'Vector DB', 'FAISS', 'Semantic search'],
