@@ -482,8 +482,9 @@ const modules: Module[] = [
     topics: ['RAG', 'Vector DB', 'FAISS', 'Semantic search'],
   },
   {
-    num: '53', section: 8, color: sectionColors[8], status: 'soon', xp: 100,
+    num: '53', section: 8, color: sectionColors[8], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/nlp/prompt-engineering',
     title: 'Prompt Engineering',
     description: 'Zero-shot, few-shot, chain-of-thought, ReAct — the patterns that consistently improve LLM outputs. With real before/after examples for every technique.',
     topics: ['Zero-shot', 'Few-shot', 'CoT', 'ReAct'],
