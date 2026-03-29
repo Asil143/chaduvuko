@@ -500,8 +500,9 @@ const modules: Module[] = [
 
   // ── Section 9 — Computer Vision ──────────────────────────────────────────
   {
-    num: '55', section: 9, color: sectionColors[9], status: 'soon', xp: 100,
+    num: '55', section: 9, color: sectionColors[9], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/computer-vision/image-fundamentals',
     title: 'Image Fundamentals — Pixels, Channels and Tensors',
     description: 'How computers see images. Pixel values, colour channels, image tensors, normalisation, and the preprocessing pipeline every vision model expects.',
     topics: ['Pixels', 'RGB channels', 'Image tensors', 'Normalisation'],
