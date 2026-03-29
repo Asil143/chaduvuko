@@ -136,7 +136,7 @@ export const AIML_SECTIONS: Section[] = [
     topics: [
       { slug: 'tokenisation-and-embeddings',       title: 'Tokenisation and Word Embeddings',      status: 'live' },
       { slug: 'bert-encoder-family',    title: 'BERT and the Encoder-Only Family',       status: 'live' },
-      { slug: 'fine-tuning',        title: 'Fine-Tuning with PEFT — LoRA and Adapters', status: 'live' },
+      { slug: 'peft-lora-adapters',        title: 'Fine-Tuning with PEFT — LoRA and Adapters', status: 'live' },
       { slug: 'rag',                title: 'RAG — Retrieval-Augmented Generation',   status: 'live' },
       { slug: 'prompt-engineering', title: 'Prompt Engineering',                     status: 'live' },
       { slug: 'llm-agents',         title: 'LLM Agents and Tool Use',                status: 'live' },

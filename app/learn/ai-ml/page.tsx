@@ -466,8 +466,9 @@ const modules: Module[] = [
     topics: ['BERT', 'MLM', 'Fine-tuning', 'RoBERTa'],
   },
   {
-    num: '51', section: 8, color: sectionColors[8], status: 'soon', xp: 100,
+    num: '51', section: 8, color: sectionColors[8], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/nlp/peft-lora-adapters',
     title: 'Fine-Tuning with PEFT — LoRA and Adapters',
     description: 'Tune less than 1% of a model\'s parameters and get 95% of the performance. LoRA, adapters, and prefix tuning — when and how to use each.',
     topics: ['LoRA', 'PEFT', 'Adapters', 'Fine-tuning'],
