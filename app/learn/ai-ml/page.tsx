@@ -532,8 +532,9 @@ const modules: Module[] = [
     topics: ['Segmentation', 'U-Net', 'Skip connections', 'Pixel labels'],
   },
   {
-    num: '59', section: 9, color: sectionColors[9], status: 'soon', xp: 100,
+    num: '59', section: 9, color: sectionColors[9], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/computer-vision/transfer-learning',
     title: 'Transfer Learning — Fine-Tuning Pretrained Vision Models',
     description: 'Get ImageNet-level features without ImageNet-level compute. Feature extraction vs fine-tuning, layer freezing, and choosing the right backbone.',
     topics: ['Transfer learning', 'Fine-tuning', 'Backbone', 'Feature extraction'],
