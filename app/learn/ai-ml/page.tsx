@@ -524,8 +524,9 @@ const modules: Module[] = [
     topics: ['YOLO', 'Anchor boxes', 'IoU', 'NMS'],
   },
   {
-    num: '58', section: 9, color: sectionColors[9], status: 'soon', xp: 100,
+    num: '58', section: 9, color: sectionColors[9], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/computer-vision/semantic-segmentation',
     title: 'Semantic Segmentation — Pixel-Level Classification',
     description: 'Label every pixel in an image. U-Net architecture, skip connections, and how segmentation powers medical imaging and autonomous vehicles.',
     topics: ['Segmentation', 'U-Net', 'Skip connections', 'Pixel labels'],
