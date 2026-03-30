@@ -516,8 +516,9 @@ const modules: Module[] = [
     topics: ['Augmentation', 'Flips', 'Mixup', 'Cutout'],
   },
   {
-    num: '57', section: 9, color: sectionColors[9], status: 'soon', xp: 100,
+    num: '57', section: 9, color: sectionColors[9], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/computer-vision/object-detection',
     title: 'Object Detection — YOLO and Feature Pyramids',
     description: 'Detect and localise multiple objects in one pass. Anchor boxes, IoU, non-maximum suppression, and why YOLO became the production standard.',
     topics: ['YOLO', 'Anchor boxes', 'IoU', 'NMS'],
