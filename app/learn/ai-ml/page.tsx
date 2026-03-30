@@ -508,8 +508,9 @@ const modules: Module[] = [
     topics: ['Pixels', 'RGB channels', 'Image tensors', 'Normalisation'],
   },
   {
-    num: '56', section: 9, color: sectionColors[9], status: 'soon', xp: 100,
+    num: '56', section: 9, color: sectionColors[9], status: 'live', xp: 100,
     readTime: '25 min',
+    href: '/learn/ai-ml/computer-vision/data-augmentation',
     title: 'Data Augmentation — Training on Limited Image Data',
     description: 'How to multiply your image dataset without collecting more data. Flips, crops, colour jitter, mixup, cutout — and how each one affects what the model learns.',
     topics: ['Augmentation', 'Flips', 'Mixup', 'Cutout'],
