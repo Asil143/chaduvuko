@@ -542,8 +542,9 @@ const modules: Module[] = [
 
   // ── Section 10 — Generative AI ────────────────────────────────────────────
   {
-    num: '60', section: 10, color: sectionColors[10], status: 'soon', xp: 100,
+    num: '60', section: 10, color: sectionColors[10], status: 'live', xp: 100,
     readTime: '25 min',
+    href: '/learn/ai-ml/generative-ai/what-is-generative-ai',
     title: 'What is Generative AI?',
     description: 'The shift from judging to creating. GANs, VAEs, diffusion, and LLMs — what makes each one generative, and when each one is the right architecture.',
     topics: ['Generative', 'Discriminative', 'Architecture overview'],
