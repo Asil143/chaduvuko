@@ -550,8 +550,9 @@ const modules: Module[] = [
     topics: ['Generative', 'Discriminative', 'Architecture overview'],
   },
   {
-    num: '61', section: 10, color: sectionColors[10], status: 'soon', xp: 100,
+    num: '61', section: 10, color: sectionColors[10], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/generative-ai/gans-generator-discriminator',
     title: 'GANs — Generator vs Discriminator',
     description: 'Two networks in adversarial competition. Mode collapse, training instability, Wasserstein distance — the honest account of what makes GANs hard to train.',
     topics: ['GAN', 'Generator', 'Discriminator', 'DCGAN'],

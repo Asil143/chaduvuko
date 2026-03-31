@@ -164,7 +164,7 @@ export const AIML_SECTIONS: Section[] = [
     color: '#9C27B0',
     topics: [
       { slug: 'what-is-generative-ai', title: 'What is Generative AI?',                  status: 'live' },
-      { slug: 'gans',                  title: 'GANs — Generator vs Discriminator',        status: 'live' },
+      { slug: 'gans-generator-discriminator',                  title: 'GANs — Generator vs Discriminator',        status: 'live' },
       { slug: 'vaes',                  title: 'Variational Autoencoders',                 status: 'live' },
       { slug: 'diffusion-models',      title: 'Diffusion Models and Stable Diffusion',    status: 'live' },
       { slug: 'llms',                  title: 'LLMs — Pretraining, RLHF and Scaling Laws', status: 'live' },
