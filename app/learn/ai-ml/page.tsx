@@ -632,8 +632,9 @@ const modules: Module[] = [
     topics: ['MLflow', 'W&B', 'Experiment tracking', 'Model registry'],
   },
   {
-    num: '71', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
+    num: '71', section: 11, color: sectionColors[11], status: 'live', xp: 100,
     readTime: '55 min',
+    href: '/learn/ai-ml/mlops/model-deployment',
     title: 'Model Deployment — FastAPI, Docker, Kubernetes',
     description: 'Wrap your model in a FastAPI endpoint, containerise with Docker, scale with Kubernetes. Full working deployment of the Swiggy delivery model.',
     topics: ['FastAPI', 'Docker', 'K8s', 'REST API', 'Serving'],
