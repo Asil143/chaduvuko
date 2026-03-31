@@ -590,8 +590,9 @@ const modules: Module[] = [
     topics: ['Fine-tuning', 'LoRA', 'HuggingFace', 'PEFT'],
   },
   {
-    num: '66', section: 10, color: sectionColors[10], status: 'soon', xp: 100,
+    num: '66', section: 10, color: sectionColors[10], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/generative-ai/multimodal-models',
     title: 'Multimodal Models — CLIP, LLaVA, and Vision-Language',
     description: 'Models that see and understand images and text together. CLIP for zero-shot image classification, LLaVA for visual question answering.',
     topics: ['Multimodal', 'CLIP', 'LLaVA', 'Vision-language'],
