@@ -598,8 +598,9 @@ const modules: Module[] = [
     topics: ['Multimodal', 'CLIP', 'LLaVA', 'Vision-language'],
   },
   {
-    num: '67', section: 10, color: sectionColors[10], status: 'soon', xp: 100,
+    num: '67', section: 10, color: sectionColors[10], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/generative-ai/advanced-rag',
     title: 'Advanced RAG — Reranking, Hybrid Search and Evaluation',
     description: 'Beyond naive RAG. Reranking retrieved chunks, hybrid dense-sparse search, RAG evaluation metrics, and the patterns that separate production RAG from toy RAG.',
     topics: ['Reranking', 'Hybrid search', 'RAG eval', 'Production RAG'],
