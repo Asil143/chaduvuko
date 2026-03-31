@@ -606,8 +606,9 @@ const modules: Module[] = [
     topics: ['Reranking', 'Hybrid search', 'RAG eval', 'Production RAG'],
   },
   {
-    num: '68', section: 10, color: sectionColors[10], status: 'soon', xp: 100,
+    num: '68', section: 10, color: sectionColors[10], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/generative-ai/agents-tool-use',
     title: 'Agents and Tool Use — Building Autonomous AI Systems',
     description: 'LLMs that plan, use tools, and execute multi-step tasks autonomously. ReAct, tool calling, memory, and the architecture patterns behind production AI agents.',
     topics: ['Agents', 'ReAct', 'Tool calling', 'Planning', 'Memory'],

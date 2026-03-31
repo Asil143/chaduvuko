@@ -171,7 +171,7 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'llm-fine-tuning',       title: 'LLM Fine-Tuning in Practice',              status: 'live' },
       { slug: 'multimodal-models',            title: 'Multimodal Models — CLIP and LLaVA',       status: 'live' },
       { slug: 'advanced-rag',          title: 'Advanced RAG',                              status: 'live' },
-      { slug: 'agents',                title: 'Agents and Tool Use',                       status: 'live' },
+      { slug: 'agents-tool-use',                title: 'Agents and Tool Use',                       status: 'live' },
     ],
   },
   {
