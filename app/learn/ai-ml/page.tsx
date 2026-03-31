@@ -558,8 +558,9 @@ const modules: Module[] = [
     topics: ['GAN', 'Generator', 'Discriminator', 'DCGAN'],
   },
   {
-    num: '62', section: 10, color: sectionColors[10], status: 'soon', xp: 100,
+    num: '62', section: 10, color: sectionColors[10], status: 'live', xp: 100,
     readTime: '30 min',
+    href: '/learn/ai-ml/generative-ai/variational-autoencoders',
     title: 'Variational Autoencoders — Learning Latent Representations',
     description: 'Encode data into a structured latent space and decode it back. The reparameterisation trick, KL divergence loss, and why VAEs enable controllable generation.',
     topics: ['VAE', 'Latent space', 'Reparameterisation', 'ELBO'],
