@@ -624,8 +624,9 @@ const modules: Module[] = [
     topics: ['Pipelines', 'Feature store', 'Airflow', 'Kubeflow'],
   },
   {
-    num: '70', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
+    num: '70', section: 11, color: sectionColors[11], status: 'live', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/mlops/experiment-tracking',
     title: 'Experiment Tracking with MLflow and Weights & Biases',
     description: 'Log every run, compare experiments, version models, register artifacts. Never lose a good experiment again.',
     topics: ['MLflow', 'W&B', 'Experiment tracking', 'Model registry'],

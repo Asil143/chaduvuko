@@ -73,28 +73,6 @@ function CodeBlock({ code, label }: { code: string; label?: string }) {
   )
 }
 
-function VisualBox({ children, label }: { children: React.ReactNode; label: string }) {
-  return (
-    <div style={{
-      border: '1px solid var(--border)', borderRadius: 10,
-      overflow: 'hidden', marginBottom: 24,
-    }}>
-      <div style={{
-        padding: '8px 14px', background: 'var(--surface)',
-        borderBottom: '1px solid var(--border)',
-        fontSize: 11, fontWeight: 700, color: 'var(--muted)',
-        fontFamily: 'var(--font-mono)', letterSpacing: '0.07em',
-        textTransform: 'uppercase' as const,
-      }}>
-        {label}
-      </div>
-      <div style={{ padding: '20px', background: 'var(--bg2)' }}>
-        {children}
-      </div>
-    </div>
-  )
-}
-
 function AnalogyBox({ children }: { children: React.ReactNode }) {
   return (
     <div style={{
@@ -114,27 +92,6 @@ function AnalogyBox({ children }: { children: React.ReactNode }) {
   )
 }
 
-function ConceptBox({ title, children, color = '#7b61ff' }: {
-  title: string; children: React.ReactNode; color?: string
-}) {
-  return (
-    <div style={{
-      background: 'var(--surface)',
-      border: `1px solid ${color}30`,
-      borderLeft: `4px solid ${color}`,
-      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
-    }}>
-      <div style={{
-        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
-        textTransform: 'uppercase' as const, color,
-        fontFamily: 'var(--font-mono)', marginBottom: 10,
-      }}>
-        {title}
-      </div>
-      {children}
-    </div>
-  )
-}
 
 function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: string }) {
   return (
