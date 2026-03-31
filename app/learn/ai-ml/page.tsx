@@ -582,8 +582,9 @@ const modules: Module[] = [
     topics: ['LLMs', 'RLHF', 'DPO', 'Scaling laws', 'Pretraining'],
   },
   {
-    num: '65', section: 10, color: sectionColors[10], status: 'soon', xp: 100,
+    num: '65', section: 10, color: sectionColors[10], status: 'live', xp: 100,
     readTime: '55 min',
+    href: '/learn/ai-ml/generative-ai/llm-fine-tuning',
     title: 'LLM Fine-Tuning in Practice',
     description: 'When to fine-tune vs RAG vs prompt. Full LoRA fine-tuning walkthrough on a real dataset using HuggingFace Transformers and PEFT.',
     topics: ['Fine-tuning', 'LoRA', 'HuggingFace', 'PEFT'],
