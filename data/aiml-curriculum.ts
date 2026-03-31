@@ -181,7 +181,7 @@ export const AIML_SECTIONS: Section[] = [
     shortTitle: 'MLOps',
     color: '#639922',
     topics: [
-      { slug: 'ml-pipelines',         title: 'ML Pipelines and Feature Stores',         status: 'live' },
+      { slug: 'ml-pipelines-feature-stores',         title: 'ML Pipelines and Feature Stores',         status: 'live' },
       { slug: 'experiment-tracking',  title: 'Experiment Tracking with MLflow and W&B', status: 'live' },
       { slug: 'model-deployment',     title: 'Model Deployment — FastAPI, Docker, K8s', status: 'live' },
       { slug: 'drift-and-monitoring', title: 'Model Monitoring — Drift Detection',       status: 'live' },

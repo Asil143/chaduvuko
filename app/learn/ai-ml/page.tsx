@@ -616,8 +616,9 @@ const modules: Module[] = [
 
   // ── Section 11 — MLOps & Production ──────────────────────────────────────
   {
-    num: '69', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
+    num: '69', section: 11, color: sectionColors[11], status: 'live', xp: 100,
     readTime: '45 min',
+    href: '/learn/ai-ml/mlops/ml-pipelines-feature-stores',
     title: 'ML Pipelines and Feature Stores',
     description: 'Feature pipelines, training pipelines, inference pipelines. Feast and Tecton for feature stores. Airflow, Kubeflow, and Prefect for orchestration.',
     topics: ['Pipelines', 'Feature store', 'Airflow', 'Kubeflow'],
