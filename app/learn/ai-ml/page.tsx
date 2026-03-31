@@ -574,8 +574,9 @@ const modules: Module[] = [
     topics: ['Diffusion', 'DDPM', 'Latent diffusion', 'ControlNet'],
   },
   {
-    num: '64', section: 10, color: sectionColors[10], status: 'soon', xp: 100,
+    num: '64', section: 10, color: sectionColors[10], status: 'live', xp: 100,
     readTime: '50 min',
+    href: '/learn/ai-ml/generative-ai/llms-pretraining-rlhf',
     title: 'LLMs — Pretraining, RLHF, and Scaling Laws',
     description: 'How GPT, Claude, and Gemini are built. Next-token prediction at scale, RLHF alignment, DPO, instruction tuning, and the laws that predict capability.',
     topics: ['LLMs', 'RLHF', 'DPO', 'Scaling laws', 'Pretraining'],
