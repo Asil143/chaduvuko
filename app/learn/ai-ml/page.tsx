@@ -566,8 +566,9 @@ const modules: Module[] = [
     topics: ['VAE', 'Latent space', 'Reparameterisation', 'ELBO'],
   },
   {
-    num: '63', section: 10, color: sectionColors[10], status: 'soon', xp: 100,
+    num: '63', section: 10, color: sectionColors[10], status: 'live', xp: 100,
     readTime: '45 min',
+    href: '/learn/ai-ml/generative-ai/diffusion-models',
     title: 'Diffusion Models and Stable Diffusion',
     description: 'Forward noise, reverse denoising, DDPM, DDIM, latent diffusion, classifier-free guidance. How Stable Diffusion generates photorealistic images from text.',
     topics: ['Diffusion', 'DDPM', 'Latent diffusion', 'ControlNet'],
