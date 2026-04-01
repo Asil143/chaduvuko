@@ -648,7 +648,7 @@ const modules: Module[] = [
     topics: ['Drift', 'Monitoring', 'Evidently', 'Retraining'],
   },
   {
-    num: '73', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
+    num: '73', section: 11, color: sectionColors[11], status: 'live', xp: 100,
     readTime: '35 min',
     href: '/learn/ai-ml/mlops/retraining-pipelines',
     title: 'Retraining Pipelines — Keeping Models Fresh',
