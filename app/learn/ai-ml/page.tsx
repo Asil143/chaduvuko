@@ -690,9 +690,9 @@ const modules: Module[] = [
     topics: ['SageMaker', 'Training jobs', 'Clarify', 'JumpStart'],
   },
   {
-    num: '78', section: 12, color: sectionColors[12], status: 'soon', xp: 100,
+    num: '78', section: 12, color: sectionColors[12], status: 'live', xp: 100,
     readTime: '45 min',
-    href: '/learn/ai-ml/cloud-ml-platforms',
+    href: '/learn/ai-ml/cloud-ml/gcp-vertex-ai',
     title: 'GCP Vertex AI — Pipelines and AutoML',
     description: 'Vertex Pipelines (Kubeflow-based), Feature Store, AutoML Tables, model endpoints, and BigQuery ML for SQL-native ML.',
     topics: ['Vertex AI', 'Vertex Pipelines', 'BigQuery ML', 'AutoML'],
