@@ -640,8 +640,9 @@ const modules: Module[] = [
     topics: ['FastAPI', 'Docker', 'K8s', 'REST API', 'Serving'],
   },
   {
-    num: '72', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
+    num: '72', section: 11, color: sectionColors[11], status: 'live', xp: 100,
     readTime: '40 min',
+    href: '/learn/ai-ml/mlops/model-monitoring',
     title: 'Model Monitoring — Drift Detection and Retraining',
     description: 'How to know your model is degrading before users complain. Data drift, concept drift, Evidently AI, and automated retraining triggers.',
     topics: ['Drift', 'Monitoring', 'Evidently', 'Retraining'],
@@ -649,6 +650,7 @@ const modules: Module[] = [
   {
     num: '73', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/mlops/retraining-pipelines',
     title: 'Retraining Pipelines — Keeping Models Fresh',
     description: 'Automated retraining schedules, trigger-based retraining on drift alerts, champion-challenger evaluation, and safe model promotion to production.',
     topics: ['Retraining', 'Scheduled', 'Champion-challenger', 'Model promotion'],
@@ -656,6 +658,7 @@ const modules: Module[] = [
   {
     num: '74', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
     readTime: '35 min',
+    href: '/learn/ai-ml/mlops/dvc',
     title: 'DVC — Data Version Control',
     description: 'Version datasets like code. DVC pipelines, remote storage, experiment tracking, and the full DVC + Git workflow for ML projects.',
     topics: ['DVC', 'Data versioning', 'Pipelines', 'Git'],
@@ -663,6 +666,7 @@ const modules: Module[] = [
   {
     num: '75', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
     readTime: '60 min',
+    href: '/learn/ai-ml/mlops/system-design',
     title: 'ML System Design — End to End',
     description: 'Design any ML system from scratch. The framework, trade-offs, capacity estimation, and how to present it in an interview.',
     topics: ['System design', 'Architecture', 'Trade-offs', 'Interview'],
@@ -672,6 +676,7 @@ const modules: Module[] = [
   {
     num: '76', section: 12, color: sectionColors[12], status: 'soon', xp: 100,
     readTime: '50 min',
+    href: '/learn/ai-ml/cloud-ml-platforms',
     title: 'Azure ML — Studio, Pipelines and AutoML',
     description: 'Azure Machine Learning Studio, compute clusters, AML Pipelines, AutoML, model registry, and online endpoints. Connects to the existing Azure track.',
     topics: ['Azure ML', 'AML Pipelines', 'AutoML', 'Endpoints'],
@@ -679,6 +684,7 @@ const modules: Module[] = [
   {
     num: '77', section: 12, color: sectionColors[12], status: 'soon', xp: 100,
     readTime: '45 min',
+    href: '/learn/ai-ml/cloud-ml-platforms',
     title: 'AWS SageMaker — Training Jobs and Pipelines',
     description: 'SageMaker training jobs, SageMaker Pipelines, Feature Store, Clarify for bias detection, and JumpStart model hub.',
     topics: ['SageMaker', 'Training jobs', 'Clarify', 'JumpStart'],
@@ -686,6 +692,7 @@ const modules: Module[] = [
   {
     num: '78', section: 12, color: sectionColors[12], status: 'soon', xp: 100,
     readTime: '45 min',
+    href: '/learn/ai-ml/cloud-ml-platforms',
     title: 'GCP Vertex AI — Pipelines and AutoML',
     description: 'Vertex Pipelines (Kubeflow-based), Feature Store, AutoML Tables, model endpoints, and BigQuery ML for SQL-native ML.',
     topics: ['Vertex AI', 'Vertex Pipelines', 'BigQuery ML', 'AutoML'],
@@ -693,6 +700,7 @@ const modules: Module[] = [
   {
     num: '79', section: 12, color: sectionColors[12], status: 'soon', xp: 100,
     readTime: '50 min',
+    href: '/learn/ai-ml/cloud-ml-platforms',
     title: 'MLOps on Cloud — CI/CD for ML',
     description: 'GitHub Actions for ML pipelines, automated training and deployment, model validation gates, and the full MLOps loop on a cloud provider.',
     topics: ['CI/CD', 'GitHub Actions', 'MLOps', 'Automation'],
@@ -700,6 +708,7 @@ const modules: Module[] = [
   {
     num: '80', section: 12, color: sectionColors[12], status: 'soon', xp: 300,
     readTime: '90 min',
+    href: '/learn/ai-ml/cloud-ml-platforms',
     title: 'Interview Prep — 50 Complete ML Answers',
     description: '50 complete answers covering classical ML, deep learning, system design, coding rounds, and behavioural questions — written at senior engineer depth.',
     topics: ['Interview', 'Classical ML', 'DL', 'System design', 'Behavioural'],

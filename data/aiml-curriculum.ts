@@ -184,7 +184,7 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'ml-pipelines-feature-stores',         title: 'ML Pipelines and Feature Stores',         status: 'live' },
       { slug: 'experiment-tracking',  title: 'Experiment Tracking with MLflow and W&B', status: 'live' },
       { slug: 'model-deployment',     title: 'Model Deployment — FastAPI, Docker, K8s', status: 'live' },
-      { slug: 'drift-and-monitoring', title: 'Model Monitoring — Drift Detection',       status: 'live' },
+      { slug: 'model-monitoring',     title: 'Model Monitoring — Drift Detection',       status: 'live' },
       { slug: 'retraining-pipelines', title: 'Retraining Pipelines',                     status: 'live' },
       { slug: 'dvc',                  title: 'DVC — Data Version Control',              status: 'live' },
       { slug: 'ml-system-design',     title: 'ML System Design — End to End',           status: 'live' },
