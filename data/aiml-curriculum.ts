@@ -201,7 +201,7 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'aws-sagemaker',  title: 'AWS SageMaker — Training Jobs and Pipelines', status: 'live' },
       { slug: 'gcp-vertex-ai',  title: 'GCP Vertex AI — Pipelines and AutoML',        status: 'live' },
       { slug: 'mlops-on-cloud', title: 'MLOps on Cloud — CI/CD for ML',               status: 'live' },
-      { slug: 'interview-prep', title: 'Interview Prep — 50 Complete ML Answers',     status: 'live' },
+      { slug: 'ml-interview-prep', title: 'ML Interview Prep — 50 Complete Answers',     status: 'live' },
     ],
   },
 ]

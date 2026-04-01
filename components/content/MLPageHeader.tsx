@@ -53,8 +53,9 @@ export default function MLPageHeader({ section, topic, completedTopics = [] }: P
           {sec.topics.map((t) => {
             const isDone = completedTopics.includes(t.slug)
             const isActive = t.slug === topic
+            const href = t.slug === 'ml-interview-prep' ? `/learn/ai-ml/${t.slug}` : `/learn/ai-ml/${section}/${t.slug}`
             return (
-              <Link key={t.slug} href={`/learn/ai-ml/${section}/${t.slug}`} title={t.title} style={{ flex: 1, height: 5, borderRadius: 3, background: isDone ? '#00e676' : isActive ? color : 'var(--border)', display: 'block', textDecoration: 'none' }} />
+              <Link key={t.slug} href={href} title={t.title} style={{ flex: 1, height: 5, borderRadius: 3, background: isDone ? '#00e676' : isActive ? color : 'var(--border)', display: 'block', textDecoration: 'none' }} />
             )
           })}
         </div>
@@ -63,8 +64,9 @@ export default function MLPageHeader({ section, topic, completedTopics = [] }: P
           {sec.topics.map((t) => {
             const isDone = completedTopics.includes(t.slug)
             const isActive = t.slug === topic
+            const href = t.slug === 'ml-interview-prep' ? `/learn/ai-ml/${t.slug}` : `/learn/ai-ml/${section}/${t.slug}`
             return (
-              <Link key={t.slug} href={`/learn/ai-ml/${section}/${t.slug}`} style={{ flex: 1, fontSize: 9, textAlign: 'center' as const, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, color: isDone ? '#00e676' : isActive ? color : 'var(--muted)', fontWeight: isActive ? 700 : 400, textDecoration: 'none', fontFamily: 'var(--font-mono)', opacity: isDone || isActive ? 1 : 0.6 }} title={t.title}>
+              <Link key={t.slug} href={href} style={{ flex: 1, fontSize: 9, textAlign: 'center' as const, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, color: isDone ? '#00e676' : isActive ? color : 'var(--muted)', fontWeight: isActive ? 700 : 400, textDecoration: 'none', fontFamily: 'var(--font-mono)', opacity: isDone || isActive ? 1 : 0.6 }} title={t.title}>
                 {t.title.split(' ')[0]}
               </Link>
             )

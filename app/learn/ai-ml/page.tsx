@@ -706,9 +706,9 @@ const modules: Module[] = [
     topics: ['CI/CD', 'GitHub Actions', 'MLOps', 'Automation'],
   },
   {
-    num: '80', section: 12, color: sectionColors[12], status: 'soon', xp: 300,
+    num: '80', section: 12, color: sectionColors[12], status: 'live', xp: 300,
     readTime: '90 min',
-    href: '/learn/ai-ml/cloud-ml-platforms',
+    href: '/learn/ai-ml/ml-interview-prep',
     title: 'Interview Prep — 50 Complete ML Answers',
     description: '50 complete answers covering classical ML, deep learning, system design, coding rounds, and behavioural questions — written at senior engineer depth.',
     topics: ['Interview', 'Classical ML', 'DL', 'System design', 'Behavioural'],

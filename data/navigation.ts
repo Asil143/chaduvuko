@@ -150,6 +150,9 @@ export const PAGE_ORDER: PageMeta[] = [
   // Career
   { href: '/learn/interview', title: 'Interview Prep',       section: 'Interview', difficulty: 'Intermediate', color: '#ff6b6b', readTime: '20 min', xp: 200 },
   { href: '/learn/industry',  title: 'Top Companies Hiring', section: 'Industry',  difficulty: 'Beginner',     color: '#f5c542', readTime: '10 min', xp: 100 },
+
+  // AI & ML
+  { href: '/learn/ai-ml/ml-interview-prep', title: 'ML Interview Prep — 50 Complete Answers', section: 'AI & ML', difficulty: 'Advanced', color: '#4285f4', readTime: '90 min', xp: 300 },
 ]
 
 export function getPageMeta(href: string): PageMeta | undefined {
