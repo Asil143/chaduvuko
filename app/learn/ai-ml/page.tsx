@@ -682,9 +682,9 @@ const modules: Module[] = [
     topics: ['Azure ML', 'AML Pipelines', 'AutoML', 'Endpoints'],
   },
   {
-    num: '77', section: 12, color: sectionColors[12], status: 'soon', xp: 100,
+    num: '77', section: 12, color: sectionColors[12], status: 'live', xp: 100,
     readTime: '45 min',
-    href: '/learn/ai-ml/cloud-ml-platforms',
+    href: '/learn/ai-ml/cloud-ml/aws-sagemaker',
     title: 'AWS SageMaker — Training Jobs and Pipelines',
     description: 'SageMaker training jobs, SageMaker Pipelines, Feature Store, Clarify for bias detection, and JumpStart model hub.',
     topics: ['SageMaker', 'Training jobs', 'Clarify', 'JumpStart'],
