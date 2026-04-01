@@ -664,9 +664,9 @@ const modules: Module[] = [
     topics: ['DVC', 'Data versioning', 'Pipelines', 'Git'],
   },
   {
-    num: '75', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
+    num: '75', section: 11, color: sectionColors[11], status: 'live', xp: 100,
     readTime: '60 min',
-    href: '/learn/ai-ml/mlops/system-design',
+    href: '/learn/ai-ml/mlops/ml-system-design',
     title: 'ML System Design — End to End',
     description: 'Design any ML system from scratch. The framework, trade-offs, capacity estimation, and how to present it in an interview.',
     topics: ['System design', 'Architecture', 'Trade-offs', 'Interview'],
