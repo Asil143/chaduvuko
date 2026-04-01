@@ -698,9 +698,9 @@ const modules: Module[] = [
     topics: ['Vertex AI', 'Vertex Pipelines', 'BigQuery ML', 'AutoML'],
   },
   {
-    num: '79', section: 12, color: sectionColors[12], status: 'soon', xp: 100,
+    num: '79', section: 12, color: sectionColors[12], status: 'live', xp: 100,
     readTime: '50 min',
-    href: '/learn/ai-ml/cloud-ml-platforms',
+    href: '/learn/ai-ml/cloud-ml/mlops-on-cloud',
     title: 'MLOps on Cloud — CI/CD for ML',
     description: 'GitHub Actions for ML pipelines, automated training and deployment, model validation gates, and the full MLOps loop on a cloud provider.',
     topics: ['CI/CD', 'GitHub Actions', 'MLOps', 'Automation'],

@@ -20,7 +20,14 @@
       "Bash(ls c:/Users/kamep/asil-site/app/learn/competitive/[exam]/)",
       "Bash(ls c:/Users/kamep/asil-site/app/learn/intermediate/[cls]/)",
       "Bash(git -C c:/Users/kamep/asil-site status --short)",
-      "Bash(xxd \"c:/Users/kamep/asil-site/app/learn/ai-ml/cloud-ml/gcp-vertex-ai/page.tsx\")"
+      "Bash(xxd \"c:/Users/kamep/asil-site/app/learn/ai-ml/cloud-ml/gcp-vertex-ai/page.tsx\")",
+      "Bash(python3:*)",
+      "Bash(node:*)",
+      "Bash(grep -n '\\\\${{' \"c:\\\\Users\\\\kamep\\\\asil-site\\\\app\\\\learn\\\\ai-ml\\\\cloud-ml\\\\azure-ml\\\\page.tsx\")",
+      "Bash(grep -n '\\\\\\\\\\\\${{' \"c:\\\\Users\\\\kamep\\\\asil-site\\\\app\\\\learn\\\\ai-ml\\\\cloud-ml\\\\mlops-on-cloud\\\\page.tsx\")",
+      "Bash(grep -n '\\\\\\\\\\\\${[A-Z]' \"c:\\\\Users\\\\kamep\\\\asil-site\\\\app\\\\learn\\\\ai-ml\\\\cloud-ml\\\\mlops-on-cloud\\\\page.tsx\")",
+      "Bash(grep -n '\\\\${[A-Z_][A-Z0-9_]*}' \"c:\\\\Users\\\\kamep\\\\asil-site\\\\app\\\\learn\\\\ai-ml\\\\cloud-ml\\\\mlops-on-cloud\\\\page.tsx\")",
+      "Bash(grep -v '\\\\\\\\\\\\${')"
     ]
   }
 }
