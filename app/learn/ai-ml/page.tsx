@@ -674,9 +674,9 @@ const modules: Module[] = [
 
   // ── Section 12 — Cloud ML Platforms ──────────────────────────────────────
   {
-    num: '76', section: 12, color: sectionColors[12], status: 'soon', xp: 100,
+    num: '76', section: 12, color: sectionColors[12], status: 'live', xp: 100,
     readTime: '50 min',
-    href: '/learn/ai-ml/cloud-ml-platforms',
+    href: '/learn/ai-ml/cloud-ml/azure-ml',
     title: 'Azure ML — Studio, Pipelines and AutoML',
     description: 'Azure Machine Learning Studio, compute clusters, AML Pipelines, AutoML, model registry, and online endpoints. Connects to the existing Azure track.',
     topics: ['Azure ML', 'AML Pipelines', 'AutoML', 'Endpoints'],
