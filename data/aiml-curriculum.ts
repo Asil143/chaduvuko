@@ -186,7 +186,7 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'model-deployment',     title: 'Model Deployment — FastAPI, Docker, K8s', status: 'live' },
       { slug: 'model-monitoring',     title: 'Model Monitoring — Drift Detection',       status: 'live' },
       { slug: 'retraining-pipelines', title: 'Retraining Pipelines',                     status: 'live' },
-      { slug: 'dvc',                  title: 'DVC — Data Version Control',              status: 'live' },
+      { slug: 'dvc-data-version-control',                  title: 'DVC — Data Version Control',              status: 'live' },
       { slug: 'ml-system-design',     title: 'ML System Design — End to End',           status: 'live' },
     ],
   },

@@ -656,9 +656,9 @@ const modules: Module[] = [
     topics: ['Retraining', 'Scheduled', 'Champion-challenger', 'Model promotion'],
   },
   {
-    num: '74', section: 11, color: sectionColors[11], status: 'soon', xp: 100,
+    num: '74', section: 11, color: sectionColors[11], status: 'live', xp: 100,
     readTime: '35 min',
-    href: '/learn/ai-ml/mlops/dvc',
+    href: '/learn/ai-ml/mlops/dvc-data-version-control',
     title: 'DVC — Data Version Control',
     description: 'Version datasets like code. DVC pipelines, remote storage, experiment tracking, and the full DVC + Git workflow for ML projects.',
     topics: ['DVC', 'Data versioning', 'Pipelines', 'Git'],
