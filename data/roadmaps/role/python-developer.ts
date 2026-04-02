@@ -1,0 +1,42 @@
+import type { Roadmap } from '@/data/roadmaps/types'
+
+export const pythonDeveloperRoadmap: Roadmap = {
+  id: 'python-developer',
+  slug: 'python-developer',
+  title: 'Python Developer',
+  subtitle: 'From scripting to production Python',
+  category: 'role',
+  description: 'Comprehensive path to professional Python development in India. Covers the language deeply, then moves to web APIs (FastAPI), databases, testing, packaging, async programming, and cloud deployment.',
+  level: 'beginner',
+  estimatedTime: '3–4 months',
+  salaryData: [
+    { company: 'Service / Outsourcing', range: '₹5–9 LPA', note: 'Entry point for most' },
+    { company: 'Startup (fintech / e-comm)', range: '₹12–22 LPA', note: 'FastAPI + testing expected' },
+    { company: 'MNC India', range: '₹16–30 LPA', note: 'Strong DSA + design patterns' },
+    { company: 'FAANG India', range: '₹30–55 LPA', note: 'Top-tier DSA required' },
+  ],
+  nodes: [
+    { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your Python developer journey starts. Mark complete to unlock the language fundamentals.', x: 305, y: 20, width: 150, height: 60 },
+    { id: 'syntax', title: 'Python Fundamentals', type: 'required', xp: 15, prerequisites: ['root'], difficulty: 'beginner', time: '8 hrs', description: 'Variables, types, control flow, functions, modules, exceptions. Write idiomatic Python, not just code that happens to run.', x: 80, y: 120, width: 130, height: 60 },
+    { id: 'git', title: 'Git & Terminal', type: 'required', xp: 5, prerequisites: ['root'], difficulty: 'beginner', time: '2 hrs', description: 'Version control, command-line workflow, virtual environments (venv/uv). The baseline for professional development.', x: 230, y: 120, width: 130, height: 60 },
+    { id: 'ds', title: 'Data Structures', type: 'required', xp: 15, prerequisites: ['syntax'], difficulty: 'intermediate', time: '10 hrs', description: 'Lists, dicts, sets, tuples, comprehensions, generators. Python\'s built-in data structures are powerful — use them correctly.', x: 80, y: 220, width: 130, height: 60 },
+    { id: 'oop', title: 'OOP & Design Patterns', type: 'required', xp: 12, prerequisites: ['syntax'], difficulty: 'intermediate', time: '6 hrs', description: 'Classes, inheritance, dunder methods, dataclasses, SOLID principles, common patterns (factory, singleton, observer). Real projects are object-oriented.', x: 230, y: 220, width: 130, height: 60 },
+    { id: 'sql', title: 'SQL & SQLAlchemy', type: 'required', xp: 10, prerequisites: ['git'], difficulty: 'beginner', time: '5 hrs', description: 'PostgreSQL fundamentals + SQLAlchemy ORM. Every Python backend talks to a database.', x: 380, y: 220, width: 130, height: 60 },
+    { id: 'testing', title: 'Testing (pytest)', type: 'required', xp: 12, prerequisites: ['oop'], difficulty: 'intermediate', time: '5 hrs', description: 'Unit tests, fixtures, mocking, coverage, TDD mindset. Untested Python code in production is a support ticket waiting to happen.', x: 80, y: 320, width: 130, height: 60 },
+    { id: 'fastapi', title: 'FastAPI', type: 'required', xp: 15, prerequisites: ['oop', 'sql'], difficulty: 'intermediate', time: '7 hrs', description: 'Routes, Pydantic models, dependency injection, middleware, async handlers. The standard Python web framework at Indian startups.', x: 230, y: 320, width: 130, height: 60 },
+    { id: 'async', title: 'Async Programming', type: 'required', xp: 12, prerequisites: ['oop', 'ds'], difficulty: 'intermediate', time: '5 hrs', description: 'asyncio, async/await, event loops, concurrent.futures. Required for high-throughput APIs and I/O-bound tasks.', x: 380, y: 320, width: 130, height: 60 },
+    { id: 'docker', title: 'Docker', type: 'required', xp: 10, prerequisites: ['git'], difficulty: 'beginner', time: '3 hrs', description: 'Containerise your Python app. All modern Python services ship in Docker containers.', x: 530, y: 320, width: 130, height: 60 },
+    { id: 'packaging', title: 'Packaging & CI/CD', type: 'recommended', xp: 8, prerequisites: ['testing', 'docker'], difficulty: 'intermediate', time: '4 hrs', description: 'pyproject.toml, build systems, GitHub Actions for lint + test + deploy. Professional Python delivery pipeline.', x: 155, y: 420, width: 130, height: 60 },
+    { id: 'perf', title: 'Performance & Profiling', type: 'optional', xp: 10, prerequisites: ['async', 'ds'], difficulty: 'advanced', time: '5 hrs', description: 'cProfile, line_profiler, memory_profiler, Cython basics, C extensions. When Python isn\'t fast enough, these tools tell you why.', x: 305, y: 420, width: 130, height: 60 },
+    { id: 'cloud', title: 'Cloud Deploy (AWS Lambda / EC2)', type: 'required', xp: 12, prerequisites: ['docker', 'fastapi'], difficulty: 'intermediate', time: '5 hrs', description: 'Serverless functions, managed containers, environment configuration, secrets management. Ship Python to production.', x: 455, y: 420, width: 130, height: 60 },
+  ],
+  edges: [
+    { from: 'root', to: 'syntax' }, { from: 'root', to: 'git' },
+    { from: 'syntax', to: 'ds' }, { from: 'syntax', to: 'oop' }, { from: 'git', to: 'sql' },
+    { from: 'oop', to: 'testing' }, { from: 'oop', to: 'fastapi' }, { from: 'sql', to: 'fastapi' },
+    { from: 'oop', to: 'async' }, { from: 'ds', to: 'async' }, { from: 'git', to: 'docker' },
+    { from: 'testing', to: 'packaging' }, { from: 'docker', to: 'packaging' },
+    { from: 'async', to: 'perf' }, { from: 'ds', to: 'perf' },
+    { from: 'docker', to: 'cloud' }, { from: 'fastapi', to: 'cloud' },
+  ],
+}

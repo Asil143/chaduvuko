@@ -27,7 +27,8 @@
       "Bash(grep -n '\\\\\\\\\\\\${{' \"c:\\\\Users\\\\kamep\\\\asil-site\\\\app\\\\learn\\\\ai-ml\\\\cloud-ml\\\\mlops-on-cloud\\\\page.tsx\")",
       "Bash(grep -n '\\\\\\\\\\\\${[A-Z]' \"c:\\\\Users\\\\kamep\\\\asil-site\\\\app\\\\learn\\\\ai-ml\\\\cloud-ml\\\\mlops-on-cloud\\\\page.tsx\")",
       "Bash(grep -n '\\\\${[A-Z_][A-Z0-9_]*}' \"c:\\\\Users\\\\kamep\\\\asil-site\\\\app\\\\learn\\\\ai-ml\\\\cloud-ml\\\\mlops-on-cloud\\\\page.tsx\")",
-      "Bash(grep -v '\\\\\\\\\\\\${')"
+      "Bash(grep -v '\\\\\\\\\\\\${')",
+      "Bash(npx next:*)"
     ]
   }
 }

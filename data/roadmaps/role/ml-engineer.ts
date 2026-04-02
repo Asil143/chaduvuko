@@ -1,0 +1,42 @@
+import type { Roadmap } from '@/data/roadmaps/types'
+
+export const mlEngineerRoadmap: Roadmap = {
+  id: 'ml-engineer',
+  slug: 'ml-engineer',
+  title: 'ML Engineer',
+  subtitle: 'Classical ML to production LLMs',
+  category: 'role',
+  description: 'End-to-end path to becoming an ML Engineer in India. From Python and maths foundations through scikit-learn, PyTorch, MLOps, and deploying models on SageMaker and Vertex AI.',
+  level: 'intermediate',
+  estimatedTime: '4–6 months',
+  salaryData: [
+    { company: 'Service (Infosys / Wipro)', range: '₹7–12 LPA', note: 'Most common entry point' },
+    { company: 'Startup (Meesho / Sarvam)', range: '₹18–30 LPA', note: 'Strong ML portfolio needed' },
+    { company: 'MNC / GCC', range: '₹22–40 LPA', note: 'Microsoft / Google India GCC' },
+    { company: 'FAANG India', range: '₹40–70 LPA', note: 'Extremely competitive' },
+  ],
+  nodes: [
+    { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your ML engineering journey begins. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },
+    { id: 'python', title: 'Python', type: 'required', xp: 10, prerequisites: ['root'], difficulty: 'beginner', time: '5–6 hrs', description: 'Functions, classes, list comprehensions, file I/O, virtual environments. Write clean, idiomatic Python before touching ML libraries.', x: 80, y: 120, width: 130, height: 60 },
+    { id: 'math', title: 'Math & Stats', type: 'required', xp: 15, prerequisites: ['root'], difficulty: 'intermediate', time: '8–10 hrs', description: 'Linear algebra (vectors, matrices, eigenvalues), calculus (gradients, chain rule), probability (Bayes, distributions). You need this to understand what algorithms actually do.', x: 230, y: 120, width: 130, height: 60 },
+    { id: 'sql', title: 'SQL', type: 'required', xp: 10, prerequisites: ['root'], difficulty: 'beginner', time: '4–5 hrs', description: 'JOINs, aggregations, window functions. Real ML jobs pull training data from databases, not CSVs on your laptop.', x: 380, y: 120, width: 130, height: 60 },
+    { id: 'git', title: 'Git & GitHub', type: 'required', xp: 5, prerequisites: ['root'], difficulty: 'beginner', time: '2 hrs', description: 'Version control for code and experiments. Pull requests, branching. Every team uses Git.', x: 530, y: 120, width: 130, height: 60 },
+    { id: 'numpy', title: 'NumPy & Pandas', type: 'required', xp: 10, prerequisites: ['python', 'math'], difficulty: 'beginner', time: '5 hrs', description: 'Array math, DataFrame manipulation, groupby, merges. The daily bread of every data/ML job.', x: 80, y: 220, width: 130, height: 60 },
+    { id: 'sklearn', title: 'Scikit-learn', type: 'required', xp: 15, prerequisites: ['numpy', 'math'], difficulty: 'intermediate', time: '6 hrs', description: 'Linear/logistic regression, decision trees, SVMs, cross-validation, pipelines, GridSearchCV. Core classical ML toolkit.', x: 230, y: 220, width: 130, height: 60 },
+    { id: 'viz', title: 'Data Viz (EDA)', type: 'recommended', xp: 8, prerequisites: ['numpy'], difficulty: 'beginner', time: '3 hrs', description: 'Matplotlib, Seaborn, Plotly. EDA before modelling catches data issues and impresses interviewers.', x: 380, y: 220, width: 130, height: 60 },
+    { id: 'feature', title: 'Feature Engineering', type: 'required', xp: 12, prerequisites: ['sklearn'], difficulty: 'intermediate', time: '5 hrs', description: 'Encoding, scaling, imputation, feature selection, target encoding. The single biggest lever for improving model performance on real data.', x: 80, y: 320, width: 130, height: 60 },
+    { id: 'pytorch', title: 'PyTorch', type: 'required', xp: 20, prerequisites: ['sklearn', 'math'], difficulty: 'intermediate', time: '10 hrs', description: 'Tensors, autograd, nn.Module, training loop, GPU usage. PyTorch is the default framework at Indian product companies.', x: 230, y: 320, width: 130, height: 60 },
+    { id: 'mldesign', title: 'ML System Design', type: 'required', xp: 15, prerequisites: ['sklearn'], difficulty: 'intermediate', time: '6 hrs', description: 'Feature stores, training pipelines, serving latency, retraining triggers, offline vs online. Asked in every senior ML interview.', x: 380, y: 320, width: 130, height: 60 },
+    { id: 'docker', title: 'Docker', type: 'required', xp: 10, prerequisites: ['git'], difficulty: 'beginner', time: '3 hrs', description: 'Containerise your model serving code. A model that only runs on your laptop is not a shipped model.', x: 530, y: 320, width: 130, height: 60 },
+    { id: 'mlops', title: 'MLOps', type: 'required', xp: 20, prerequisites: ['docker', 'pytorch', 'mldesign'], difficulty: 'advanced', time: '10 hrs', description: 'MLflow experiment tracking, model registry, CI/CD for ML, drift detection, retraining pipelines. The gap between notebook and production.', x: 155, y: 420, width: 130, height: 60 },
+    { id: 'llms', title: 'LLMs & Fine-tuning', type: 'recommended', xp: 20, prerequisites: ['pytorch'], difficulty: 'advanced', time: '10 hrs', description: 'Transformers architecture, HuggingFace, LoRA fine-tuning, RLHF concepts. In-demand at every Indian startup in 2025–26.', x: 305, y: 420, width: 130, height: 60 },
+    { id: 'cloud', title: 'SageMaker / Vertex AI', type: 'required', xp: 15, prerequisites: ['mlops'], difficulty: 'advanced', time: '8 hrs', description: 'Managed training jobs, endpoints, pipelines. Most Indian MNCs and GCCs expect cloud ML platform experience.', x: 455, y: 420, width: 130, height: 60 },
+  ],
+  edges: [
+    { from: 'root', to: 'python' }, { from: 'root', to: 'math' }, { from: 'root', to: 'sql' }, { from: 'root', to: 'git' },
+    { from: 'python', to: 'numpy' }, { from: 'math', to: 'numpy' }, { from: 'math', to: 'sklearn' }, { from: 'numpy', to: 'sklearn' },
+    { from: 'numpy', to: 'viz' }, { from: 'sklearn', to: 'feature' }, { from: 'sklearn', to: 'pytorch' }, { from: 'sklearn', to: 'mldesign' },
+    { from: 'git', to: 'docker' }, { from: 'docker', to: 'mlops' }, { from: 'pytorch', to: 'mlops' }, { from: 'mldesign', to: 'mlops' },
+    { from: 'pytorch', to: 'llms' }, { from: 'mlops', to: 'cloud' },
+  ],
+}

@@ -1,0 +1,43 @@
+import type { Roadmap } from '@/data/roadmaps/types'
+
+export const mobileAppDeveloperRoadmap: Roadmap = {
+  id: 'mobile-app-developer',
+  slug: 'mobile-app-developer',
+  title: 'Mobile App Developer',
+  subtitle: 'React Native / Flutter to app store',
+  category: 'role',
+  description: 'Build production mobile apps for iOS and Android. Covers JavaScript/Dart fundamentals, React Native or Flutter, state management, REST APIs, authentication, push notifications, and app store deployment.',
+  level: 'beginner',
+  estimatedTime: '4–5 months',
+  salaryData: [
+    { company: 'Agency / Freelance', range: '₹4–8 LPA', note: 'High freelance demand in India' },
+    { company: 'Startup (fintech / health)', range: '₹12–22 LPA', note: 'PhonePe, Groww, HealthifyMe' },
+    { company: 'Product MNC India', range: '₹18–32 LPA', note: 'Platform expertise + performance' },
+    { company: 'FAANG India', range: '₹30–55 LPA', note: 'Deep native + system design' },
+  ],
+  nodes: [
+    { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your mobile development journey starts. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },
+    { id: 'lang', title: 'JavaScript or Dart', type: 'required', xp: 12, prerequisites: ['root'], difficulty: 'beginner', time: '8 hrs', description: 'Pick based on framework: JavaScript for React Native, Dart for Flutter. Learn async/await, classes, and modules properly.', x: 80, y: 120, width: 130, height: 60 },
+    { id: 'git', title: 'Git & Dev Setup', type: 'required', xp: 5, prerequisites: ['root'], difficulty: 'beginner', time: '2 hrs', description: 'Version control, Android Studio / Xcode simulator setup, device debugging. Non-negotiable for any developer.', x: 230, y: 120, width: 130, height: 60 },
+    { id: 'ui_basics', title: 'UI/UX Basics', type: 'recommended', xp: 8, prerequisites: ['root'], difficulty: 'beginner', time: '4 hrs', description: 'Mobile design patterns, touch targets, safe areas, Figma basics. Understand designs before implementing them.', x: 380, y: 120, width: 130, height: 60 },
+    { id: 'framework', title: 'React Native or Flutter', type: 'required', xp: 20, prerequisites: ['lang', 'git'], difficulty: 'intermediate', time: '15 hrs', description: 'Core components, layout (Flexbox / Columns), styling, navigation, lists, text input. The entire UI layer of your app lives here.', x: 80, y: 220, width: 130, height: 60 },
+    { id: 'navigation', title: 'Navigation', type: 'required', xp: 10, prerequisites: ['framework'], difficulty: 'intermediate', time: '4 hrs', description: 'React Navigation / go_router, stack, tab, and drawer navigators, passing params, deep linking. Every app has multiple screens.', x: 230, y: 220, width: 130, height: 60 },
+    { id: 'state', title: 'State Management', type: 'required', xp: 12, prerequisites: ['framework'], difficulty: 'intermediate', time: '5 hrs', description: 'Redux Toolkit / Riverpod / Bloc — manage app state across screens without prop drilling. Required once your app grows.', x: 380, y: 220, width: 130, height: 60 },
+    { id: 'rest', title: 'REST APIs & Auth', type: 'required', xp: 12, prerequisites: ['navigation'], difficulty: 'intermediate', time: '5 hrs', description: 'Fetch/Axios, JWT tokens, secure token storage, token refresh, error handling. Every real app communicates with a backend.', x: 80, y: 320, width: 130, height: 60 },
+    { id: 'storage', title: 'Local Storage', type: 'required', xp: 8, prerequisites: ['rest'], difficulty: 'intermediate', time: '3 hrs', description: 'AsyncStorage / SQLite / Hive for offline data, caching, and user preferences. Apps must work without a network connection.', x: 230, y: 320, width: 130, height: 60 },
+    { id: 'push', title: 'Push Notifications', type: 'recommended', xp: 8, prerequisites: ['rest'], difficulty: 'intermediate', time: '3 hrs', description: 'Firebase Cloud Messaging, notification permissions, deep-link on tap. The main re-engagement mechanism for mobile apps.', x: 380, y: 320, width: 130, height: 60 },
+    { id: 'perf', title: 'Performance & Testing', type: 'required', xp: 10, prerequisites: ['state', 'rest'], difficulty: 'intermediate', time: '5 hrs', description: 'FlatList optimisation, memoization, Flipper profiler, unit tests (Jest / flutter_test), Detox E2E. Smooth apps get better reviews.', x: 530, y: 320, width: 130, height: 60 },
+    { id: 'analytics', title: 'Analytics & Crash Reporting', type: 'recommended', xp: 6, prerequisites: ['rest'], difficulty: 'beginner', time: '2 hrs', description: 'Firebase Analytics, Crashlytics, event tracking. You can\'t improve what you can\'t measure.', x: 80, y: 420, width: 130, height: 60 },
+    { id: 'cicd', title: 'CI/CD & App Stores', type: 'required', xp: 12, prerequisites: ['perf', 'git'], difficulty: 'advanced', time: '6 hrs', description: 'Fastlane, EAS Build, Play Store / App Store deploy, signing certificates, review process. Shipping is the most important feature.', x: 230, y: 420, width: 130, height: 60 },
+    { id: 'native', title: 'Native Modules (optional)', type: 'optional', xp: 12, prerequisites: ['framework'], difficulty: 'advanced', time: '8 hrs', description: 'Write Swift/Kotlin bridges for platform-specific features. Camera, Bluetooth, biometrics — when JS/Dart can\'t reach.', x: 380, y: 420, width: 130, height: 60 },
+  ],
+  edges: [
+    { from: 'root', to: 'lang' }, { from: 'root', to: 'git' }, { from: 'root', to: 'ui_basics' },
+    { from: 'lang', to: 'framework' }, { from: 'git', to: 'framework' },
+    { from: 'framework', to: 'navigation' }, { from: 'framework', to: 'state' },
+    { from: 'navigation', to: 'rest' }, { from: 'rest', to: 'storage' }, { from: 'rest', to: 'push' },
+    { from: 'state', to: 'perf' }, { from: 'rest', to: 'perf' },
+    { from: 'rest', to: 'analytics' }, { from: 'perf', to: 'cicd' }, { from: 'git', to: 'cicd' },
+    { from: 'framework', to: 'native' },
+  ],
+}

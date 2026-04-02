@@ -1,0 +1,41 @@
+import type { Roadmap } from '@/data/roadmaps/types'
+
+export const javaDeveloperRoadmap: Roadmap = {
+  id: 'java-developer',
+  slug: 'java-developer',
+  title: 'Java Developer',
+  subtitle: 'Core Java to Spring Boot microservices',
+  category: 'role',
+  description: 'From Java fundamentals through Spring Boot, JPA, microservices, Kafka, and cloud deployment. Java is the dominant language at Indian banks, fintech, and large enterprises — TCS, Infosys, Razorpay, and PayTM.',
+  level: 'beginner',
+  estimatedTime: '4–5 months',
+  salaryData: [
+    { company: 'Service (TCS / Wipro)', range: '₹4–8 LPA', note: 'Most common entry; Spring Boot expected' },
+    { company: 'Fintech startup', range: '₹12–22 LPA', note: 'Razorpay, PayTM, Juspay' },
+    { company: 'MNC India (SAP / Oracle)', range: '₹18–32 LPA', note: 'Enterprise Java experience' },
+    { company: 'FAANG India', range: '₹30–60 LPA', note: 'Deep DSA + distributed systems' },
+  ],
+  nodes: [
+    { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your Java developer journey starts. Mark complete to unlock language foundations.', x: 305, y: 20, width: 150, height: 60 },
+    { id: 'java_core', title: 'Core Java', type: 'required', xp: 15, prerequisites: ['root'], difficulty: 'beginner', time: '12 hrs', description: 'Data types, OOP (inheritance, polymorphism, interfaces), exception handling, I/O, Generics, Enums. The language you will write every day.', x: 80, y: 120, width: 130, height: 60 },
+    { id: 'git', title: 'Git & Build Tools', type: 'required', xp: 8, prerequisites: ['root'], difficulty: 'beginner', time: '3 hrs', description: 'Git version control, Maven or Gradle for dependency management and builds. Every Java project uses one of these.', x: 230, y: 120, width: 130, height: 60 },
+    { id: 'collections', title: 'Collections & Streams', type: 'required', xp: 12, prerequisites: ['java_core'], difficulty: 'intermediate', time: '6 hrs', description: 'ArrayList, HashMap, LinkedList, TreeMap, Stream API, lambda expressions, Optional. The Java standard library is huge — know the important parts.', x: 80, y: 220, width: 130, height: 60 },
+    { id: 'concurrency', title: 'Concurrency', type: 'required', xp: 12, prerequisites: ['java_core'], difficulty: 'intermediate', time: '6 hrs', description: 'Threads, ExecutorService, CompletableFuture, synchronized, volatile, concurrent collections. Critical for high-throughput backend services.', x: 230, y: 220, width: 130, height: 60 },
+    { id: 'sql', title: 'SQL & JPA/Hibernate', type: 'required', xp: 12, prerequisites: ['git'], difficulty: 'beginner', time: '6 hrs', description: 'PostgreSQL / MySQL basics, JPA entities, JPQL, transactions, N+1 problem. Java persistence is a career in itself.', x: 380, y: 220, width: 130, height: 60 },
+    { id: 'springboot', title: 'Spring Boot', type: 'required', xp: 20, prerequisites: ['collections', 'concurrency', 'sql'], difficulty: 'intermediate', time: '15 hrs', description: 'IoC, DI, REST controllers, Spring Data JPA, Spring Security, configuration, actuators. Spring Boot is the default Java backend framework in India.', x: 80, y: 320, width: 130, height: 60 },
+    { id: 'testing', title: 'Testing (JUnit 5 + Mockito)', type: 'required', xp: 10, prerequisites: ['springboot'], difficulty: 'intermediate', time: '5 hrs', description: 'Unit tests, mocking with Mockito, Spring integration tests, TestContainers. Tested code ships faster.', x: 230, y: 320, width: 130, height: 60 },
+    { id: 'docker', title: 'Docker & CI/CD', type: 'required', xp: 10, prerequisites: ['git'], difficulty: 'beginner', time: '4 hrs', description: 'Containerise Spring Boot apps, multi-stage Docker builds, GitHub Actions pipeline. Modern Java services run in containers.', x: 380, y: 320, width: 130, height: 60 },
+    { id: 'dsa', title: 'DSA & Algorithms', type: 'required', xp: 20, prerequisites: ['collections'], difficulty: 'advanced', time: '25 hrs', description: 'LeetCode Medium problems in Java. Every ₹15 LPA+ offer in India has a DSA round — no shortcuts.', x: 530, y: 320, width: 130, height: 60 },
+    { id: 'kafka', title: 'Kafka', type: 'recommended', xp: 12, prerequisites: ['springboot'], difficulty: 'advanced', time: '6 hrs', description: 'Producers, consumers, consumer groups, partitioning, Spring Kafka. Async messaging at Indian fintech scale.', x: 80, y: 420, width: 130, height: 60 },
+    { id: 'microservices', title: 'Microservices', type: 'required', xp: 15, prerequisites: ['springboot', 'docker'], difficulty: 'advanced', time: '8 hrs', description: 'Service decomposition, Feign clients, API gateway, distributed tracing, circuit breakers (Resilience4j). How large Indian systems are structured.', x: 230, y: 420, width: 130, height: 60 },
+    { id: 'cloud', title: 'Cloud Deploy (AWS / Azure)', type: 'required', xp: 12, prerequisites: ['docker', 'microservices'], difficulty: 'advanced', time: '6 hrs', description: 'ECS/EKS, App Service, RDS, managed queues. Enterprise Java in India runs on cloud.', x: 380, y: 420, width: 130, height: 60 },
+  ],
+  edges: [
+    { from: 'root', to: 'java_core' }, { from: 'root', to: 'git' },
+    { from: 'java_core', to: 'collections' }, { from: 'java_core', to: 'concurrency' }, { from: 'git', to: 'sql' },
+    { from: 'collections', to: 'springboot' }, { from: 'concurrency', to: 'springboot' }, { from: 'sql', to: 'springboot' },
+    { from: 'springboot', to: 'testing' }, { from: 'git', to: 'docker' }, { from: 'collections', to: 'dsa' },
+    { from: 'springboot', to: 'kafka' }, { from: 'springboot', to: 'microservices' }, { from: 'docker', to: 'microservices' },
+    { from: 'docker', to: 'cloud' }, { from: 'microservices', to: 'cloud' },
+  ],
+}

@@ -1,0 +1,41 @@
+import type { Roadmap } from '@/data/roadmaps/types'
+
+export const analyticsEngineerRoadmap: Roadmap = {
+  id: 'analytics-engineer',
+  slug: 'analytics-engineer',
+  title: 'Analytics Engineer',
+  subtitle: 'dbt, data modelling, and the analytics stack',
+  category: 'role',
+  description: 'The path that sits between data engineering and data analysis. SQL, dbt, dimensional modelling, modern data warehouses, and making data trustworthy for business teams. A fast-growing role at Indian startups and GCCs.',
+  level: 'beginner',
+  estimatedTime: '3–5 months',
+  salaryData: [
+    { company: 'Startup / Analytics firm', range: '₹8–14 LPA', note: 'Growing but still emerging role' },
+    { company: 'Mid-size startup', range: '₹14–24 LPA', note: 'Swiggy, Meesho, Razorpay data teams' },
+    { company: 'MNC / GCC (analytics)', range: '₹18–32 LPA', note: 'dbt + warehouse expertise' },
+    { company: 'Data-first product company', range: '₹25–45 LPA', note: 'Full modern data stack' },
+  ],
+  nodes: [
+    { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your analytics engineering journey starts. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },
+    { id: 'sql', title: 'SQL (Advanced)', type: 'required', xp: 20, prerequisites: ['root'], difficulty: 'beginner', time: '10 hrs', description: 'Window functions, CTEs, subqueries, EXPLAIN / query plans, optimisation. Analytics engineers live in SQL — go deep, not shallow.', x: 80, y: 120, width: 130, height: 60 },
+    { id: 'python', title: 'Python Basics', type: 'recommended', xp: 8, prerequisites: ['root'], difficulty: 'beginner', time: '5 hrs', description: 'Enough to write Airflow DAGs, use the dbt Python SDK, and parse data files. You don\'t need to be a software engineer.', x: 230, y: 120, width: 130, height: 60 },
+    { id: 'git', title: 'Git & Version Control', type: 'required', xp: 5, prerequisites: ['root'], difficulty: 'beginner', time: '2 hrs', description: 'dbt projects live in Git. Branches, PRs, code review — treat your SQL models as software.', x: 380, y: 120, width: 130, height: 60 },
+    { id: 'data_modeling', title: 'Data Modelling', type: 'required', xp: 15, prerequisites: ['sql'], difficulty: 'intermediate', time: '7 hrs', description: 'Kimball dimensional modelling, facts and dimensions, star schema, slowly changing dimensions. The mental model for analytics data design.', x: 80, y: 220, width: 130, height: 60 },
+    { id: 'warehouse', title: 'Data Warehouse (BigQuery / Snowflake / Redshift)', type: 'required', xp: 15, prerequisites: ['sql'], difficulty: 'intermediate', time: '6 hrs', description: 'Columnar storage, partitioning, clustering, cost optimisation, warehousing concepts. Pick one and go deep — all are used in India.', x: 230, y: 220, width: 130, height: 60 },
+    { id: 'dbt', title: 'dbt (Core)', type: 'required', xp: 20, prerequisites: ['data_modeling', 'warehouse', 'git'], difficulty: 'intermediate', time: '10 hrs', description: 'Models, sources, tests, macros, snapshots, documentation, lineage graph. dbt is the tool that defines the analytics engineer role.', x: 80, y: 320, width: 130, height: 60 },
+    { id: 'testing', title: 'Data Quality & Testing', type: 'required', xp: 12, prerequisites: ['dbt'], difficulty: 'intermediate', time: '5 hrs', description: 'dbt tests (unique, not_null, accepted_values), Great Expectations, data contracts, anomaly detection. Untested data is misinformation.', x: 230, y: 320, width: 130, height: 60 },
+    { id: 'orchestration', title: 'Orchestration (Airflow / Dagster)', type: 'required', xp: 12, prerequisites: ['python', 'dbt'], difficulty: 'intermediate', time: '6 hrs', description: 'DAG design, scheduling, sensors, task dependencies. Data pipelines need reliable scheduling.', x: 380, y: 320, width: 130, height: 60 },
+    { id: 'docs', title: 'Documentation & Lineage', type: 'required', xp: 8, prerequisites: ['dbt'], difficulty: 'beginner', time: '3 hrs', description: 'dbt docs, column-level lineage, data catalogue (DataHub / Atlan), metric definitions. Good documentation is the analytics engineer\'s superpower.', x: 530, y: 320, width: 130, height: 60 },
+    { id: 'bi', title: 'BI Tools (Metabase / Tableau)', type: 'required', xp: 10, prerequisites: ['warehouse'], difficulty: 'beginner', time: '5 hrs', description: 'Build dashboards, calculated fields, performance optimisation. Analytics engineers serve data consumers — know their tools.', x: 80, y: 420, width: 130, height: 60 },
+    { id: 'metrics_layer', title: 'Metrics Layer (dbt Semantic)', type: 'optional', xp: 10, prerequisites: ['dbt', 'bi'], difficulty: 'advanced', time: '5 hrs', description: 'dbt Semantic Layer, MetricFlow, centralised metric definitions. The future of consistent business metrics across tools.', x: 230, y: 420, width: 130, height: 60 },
+    { id: 'reverse_etl', title: 'Reverse ETL', type: 'optional', xp: 8, prerequisites: ['warehouse', 'dbt'], difficulty: 'intermediate', time: '3 hrs', description: 'Census, Hightouch — sync warehouse data back to CRMs, marketing tools, support platforms. Operational analytics is growing fast.', x: 380, y: 420, width: 130, height: 60 },
+  ],
+  edges: [
+    { from: 'root', to: 'sql' }, { from: 'root', to: 'python' }, { from: 'root', to: 'git' },
+    { from: 'sql', to: 'data_modeling' }, { from: 'sql', to: 'warehouse' },
+    { from: 'data_modeling', to: 'dbt' }, { from: 'warehouse', to: 'dbt' }, { from: 'git', to: 'dbt' },
+    { from: 'dbt', to: 'testing' }, { from: 'python', to: 'orchestration' }, { from: 'dbt', to: 'orchestration' },
+    { from: 'dbt', to: 'docs' }, { from: 'warehouse', to: 'bi' }, { from: 'dbt', to: 'metrics_layer' }, { from: 'bi', to: 'metrics_layer' },
+    { from: 'warehouse', to: 'reverse_etl' }, { from: 'dbt', to: 'reverse_etl' },
+  ],
+}

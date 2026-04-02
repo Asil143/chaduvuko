@@ -1,0 +1,43 @@
+import type { Roadmap } from '@/data/roadmaps/types'
+
+export const dataScientistRoadmap: Roadmap = {
+  id: 'data-scientist',
+  slug: 'data-scientist',
+  title: 'Data Scientist',
+  subtitle: 'Stats, Python, and telling stories with data',
+  category: 'role',
+  description: 'From Python and statistics fundamentals through machine learning, experimentation, and business storytelling. Built for the Indian market — Fractal, Mu Sigma, Flipkart, and MNC analytics teams.',
+  level: 'beginner',
+  estimatedTime: '4–6 months',
+  salaryData: [
+    { company: 'Analytics firm (Mu Sigma / Tiger)', range: '₹6–10 LPA', note: 'Entry-level data analyst track' },
+    { company: 'Product startup', range: '₹14–26 LPA', note: 'Flipkart, Swiggy, Meesho' },
+    { company: 'MNC / Consulting GCC', range: '₹18–35 LPA', note: 'BCG Gamma, Deloitte Analytics' },
+    { company: 'FAANG India', range: '₹35–60 LPA', note: 'PhD preferred but not mandatory' },
+  ],
+  nodes: [
+    { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Begin your data science journey. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },
+    { id: 'python', title: 'Python', type: 'required', xp: 12, prerequisites: ['root'], difficulty: 'beginner', time: '6 hrs', description: 'Functions, loops, list comprehensions, OOP basics. Python is the language of data science — there is no alternative.', x: 80, y: 120, width: 130, height: 60 },
+    { id: 'stats', title: 'Statistics', type: 'required', xp: 15, prerequisites: ['root'], difficulty: 'intermediate', time: '8 hrs', description: 'Distributions, hypothesis testing, p-values, confidence intervals, CLT. Bad statistics = wrong business decisions. This is the core skill.', x: 230, y: 120, width: 130, height: 60 },
+    { id: 'sql', title: 'SQL', type: 'required', xp: 10, prerequisites: ['root'], difficulty: 'beginner', time: '5 hrs', description: 'JOINs, GROUP BY, window functions, subqueries. Real data lives in databases. You\'ll write SQL every single day.', x: 380, y: 120, width: 130, height: 60 },
+    { id: 'excel', title: 'Excel / Spreadsheets', type: 'recommended', xp: 5, prerequisites: ['root'], difficulty: 'beginner', time: '2 hrs', description: 'Pivot tables, VLOOKUP, conditional formatting. Still used in 80% of business reporting, especially at MNCs and consulting.', x: 530, y: 120, width: 130, height: 60 },
+    { id: 'pandas', title: 'Pandas & NumPy', type: 'required', xp: 12, prerequisites: ['python', 'sql'], difficulty: 'beginner', time: '6 hrs', description: 'Data loading, cleaning, reshaping, merging. The workhorse of every data science notebook.', x: 80, y: 220, width: 130, height: 60 },
+    { id: 'viz', title: 'Data Visualisation', type: 'required', xp: 10, prerequisites: ['pandas'], difficulty: 'beginner', time: '4 hrs', description: 'Matplotlib, Seaborn, Plotly. A good chart communicates in seconds what a table takes minutes to parse.', x: 230, y: 220, width: 130, height: 60 },
+    { id: 'prob', title: 'Probability & Bayes', type: 'required', xp: 12, prerequisites: ['stats'], difficulty: 'intermediate', time: '5 hrs', description: 'Conditional probability, Bayes theorem, priors. Required for ML models and A/B testing interpretation.', x: 380, y: 220, width: 130, height: 60 },
+    { id: 'ml', title: 'Machine Learning', type: 'required', xp: 20, prerequisites: ['pandas', 'prob'], difficulty: 'intermediate', time: '15 hrs', description: 'Regression, classification, clustering, decision trees, gradient boosting (XGBoost). The core toolkit for prediction problems.', x: 80, y: 320, width: 130, height: 60 },
+    { id: 'abtesting', title: 'A/B Testing', type: 'required', xp: 12, prerequisites: ['stats', 'prob'], difficulty: 'intermediate', time: '5 hrs', description: 'Experiment design, power analysis, statistical significance, Bonferroni correction. The primary way product decisions get validated.', x: 230, y: 320, width: 130, height: 60 },
+    { id: 'storytelling', title: 'Insight Storytelling', type: 'required', xp: 10, prerequisites: ['viz'], difficulty: 'beginner', time: '4 hrs', description: 'Structure findings for non-technical stakeholders, build decks, answer "so what?". The rarest skill in data science.', x: 380, y: 320, width: 130, height: 60 },
+    { id: 'nlp', title: 'NLP Basics', type: 'optional', xp: 10, prerequisites: ['ml'], difficulty: 'intermediate', time: '6 hrs', description: 'Text cleaning, TF-IDF, embeddings, sentiment analysis. High demand in e-commerce and fintech for review/feedback analysis.', x: 530, y: 320, width: 130, height: 60 },
+    { id: 'timeseries', title: 'Time Series', type: 'optional', xp: 10, prerequisites: ['ml'], difficulty: 'intermediate', time: '5 hrs', description: 'ARIMA, Prophet, stationarity, decomposition. Demand forecasting is a major use case at Swiggy, Flipkart, and logistics firms.', x: 80, y: 420, width: 130, height: 60 },
+    { id: 'deploy', title: 'Model Deployment', type: 'recommended', xp: 12, prerequisites: ['ml'], difficulty: 'intermediate', time: '5 hrs', description: 'Flask/FastAPI wrapper, Streamlit dashboards, basic Docker. A model that never ships has zero business value.', x: 230, y: 420, width: 130, height: 60 },
+    { id: 'bi', title: 'BI Tools (Tableau / PowerBI)', type: 'recommended', xp: 8, prerequisites: ['viz', 'storytelling'], difficulty: 'beginner', time: '4 hrs', description: 'Self-service dashboards for business teams. Reduces ad-hoc requests and makes your insights more accessible.', x: 380, y: 420, width: 130, height: 60 },
+  ],
+  edges: [
+    { from: 'root', to: 'python' }, { from: 'root', to: 'stats' }, { from: 'root', to: 'sql' }, { from: 'root', to: 'excel' },
+    { from: 'python', to: 'pandas' }, { from: 'sql', to: 'pandas' }, { from: 'pandas', to: 'viz' },
+    { from: 'stats', to: 'prob' }, { from: 'pandas', to: 'ml' }, { from: 'prob', to: 'ml' },
+    { from: 'stats', to: 'abtesting' }, { from: 'prob', to: 'abtesting' }, { from: 'viz', to: 'storytelling' },
+    { from: 'ml', to: 'nlp' }, { from: 'ml', to: 'timeseries' }, { from: 'ml', to: 'deploy' },
+    { from: 'viz', to: 'bi' }, { from: 'storytelling', to: 'bi' },
+  ],
+}

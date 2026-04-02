@@ -122,6 +122,30 @@ const jobRoles = [
   'Database Administrator','Cloud Security Engineer',
 ]
 
+// ─── ROLE LINKS ──────────────────────────────────────────────────────────────
+const roleLinks: Record<string, string> = {
+  'Data Engineer':            '/learn/roadmap/data-engineer',
+  'ML Engineer':              '/learn/roadmap/ml-engineer',
+  'AI Engineer':              '/learn/roadmap/ml-engineer',
+  'Data Scientist':           '/learn/roadmap/data-scientist',
+  'GenAI Developer':          '/learn/roadmap/ml-engineer',
+  'Full Stack Developer':     '/learn/roadmap/fullstack',
+  'Backend Developer':        '/learn/roadmap/backend-dev',
+  'Frontend Developer':       '/learn/roadmap/frontend',
+  'Python Developer':         '/learn/roadmap/python-developer',
+  'Database Administrator':   '/learn/roadmap/database-administrator',
+  'Cloud Architect':          '/learn/roadmap/cloud-architect',
+  'DevOps Engineer':          '/learn/roadmap/devops',
+  'Mobile App Developer':     '/learn/roadmap/mobile-app-developer',
+  'Java Developer':           '/learn/roadmap/java-developer',
+  'Site Reliability Engineer':'/learn/roadmap/site-reliability-engineer',
+  'Cybersecurity Analyst':    '/learn/roadmap/cybersecurity-analyst',
+  'Analytics Engineer':       '/learn/roadmap/analytics-engineer',
+  'Platform Engineer':        '/learn/roadmap/platform-engineer',
+  'Software Architect':       '/learn/roadmap/software-architect',
+  'Cloud Security Engineer':  '/learn/roadmap/cloud-security-engineer',
+}
+
 // ─── DAY 1 TASKS ─────────────────────────────────────────────────────────────
 const dayOneTasks = [
   { role:'Data Engineer', company:'Swiggy · Bengaluru', salary:'₹18–26 LPA', task:'Build an automated daily pipeline ingesting 10M orders from Azure Blob into ADLS, partitioned by city and date, available in Databricks by 7am.', track:'ADF + ADLS + Databricks track', color:'#0078d4' },
@@ -228,15 +252,16 @@ export default function HomePage() {
         </h1>
         <div style={{ fontSize:'clamp(16px,2.2vw,26px)', fontWeight:600, color:'var(--muted)', margin:'20px 0 24px', minHeight:44, display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
           Become a{' '}
-          <span style={{
+          <Link href={roleLinks[jobRoles[roleIndex]] ?? '/learn/roadmap'} style={{
             background:'rgba(0,230,118,0.1)', border:'1px solid rgba(0,230,118,0.2)',
             color:'var(--green)', padding:'3px 14px', borderRadius:99, fontWeight:700,
             minWidth:260, textAlign:'center', display:'inline-block',
             opacity: roleVisible ? 1 : 0, transition:'opacity 0.25s',
             fontSize:'clamp(14px,1.8vw,22px)',
+            textDecoration:'none', cursor:'pointer',
           }}>
-            {jobRoles[roleIndex]}
-          </span>
+            {jobRoles[roleIndex]} →
+          </Link>
         </div>
         <p style={{ fontSize:15, color:'var(--muted)', maxWidth:540, margin:'0 auto 32px', lineHeight:1.75 }}>
           Structured, real-world learning for <strong style={{ color:'var(--text)' }}>every branch of tech</strong> — with the errors explained, the job context shown, and a clear path from where you are to where you want to be.

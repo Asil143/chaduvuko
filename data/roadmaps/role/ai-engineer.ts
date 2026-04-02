@@ -1,0 +1,42 @@
+import type { Roadmap } from '@/data/roadmaps/types'
+
+export const aiEngineerRoadmap: Roadmap = {
+  id: 'ai-engineer',
+  slug: 'ai-engineer',
+  title: 'AI Engineer',
+  subtitle: 'Build and ship AI-powered products',
+  category: 'role',
+  description: 'Practical path to AI Engineering in India. From Python and deep learning fundamentals through LLMs, RAG systems, multi-agent frameworks, and production AI deployment — the most in-demand tech role of 2025–26.',
+  level: 'intermediate',
+  estimatedTime: '4–6 months',
+  salaryData: [
+    { company: 'Startup (early stage)', range: '₹12–20 LPA', note: 'Portfolio of shipped AI features needed' },
+    { company: 'Product company (Sarvam / Krutrim)', range: '₹20–40 LPA', note: 'Deep LLM knowledge expected' },
+    { company: 'MNC GCC (Microsoft / Google India)', range: '₹30–55 LPA', note: 'Research + engineering mix' },
+    { company: 'FAANG India', range: '₹45–80 LPA', note: 'Extremely competitive' },
+  ],
+  nodes: [
+    { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your AI engineering journey starts. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },
+    { id: 'python', title: 'Python (Advanced)', type: 'required', xp: 12, prerequisites: ['root'], difficulty: 'beginner', time: '6 hrs', description: 'Async, decorators, dataclasses, type hints, packaging. AI engineering requires clean, production-grade Python — not notebook code.', x: 80, y: 120, width: 130, height: 60 },
+    { id: 'math', title: 'Math for AI', type: 'required', xp: 15, prerequisites: ['root'], difficulty: 'intermediate', time: '8 hrs', description: 'Linear algebra, probability, statistics, calculus (for understanding gradients). You need enough to read papers and debug loss curves.', x: 230, y: 120, width: 130, height: 60 },
+    { id: 'git', title: 'Git & APIs', type: 'required', xp: 5, prerequisites: ['root'], difficulty: 'beginner', time: '3 hrs', description: 'Version control and calling REST APIs. LLM providers are all API-first.', x: 380, y: 120, width: 130, height: 60 },
+    { id: 'dl', title: 'Deep Learning', type: 'required', xp: 20, prerequisites: ['python', 'math'], difficulty: 'intermediate', time: '12 hrs', description: 'Neural networks, backpropagation, CNNs, RNNs, attention mechanism. Understand what happens inside the models you deploy.', x: 80, y: 220, width: 130, height: 60 },
+    { id: 'transformers', title: 'Transformers & LLMs', type: 'required', xp: 20, prerequisites: ['dl'], difficulty: 'intermediate', time: '10 hrs', description: 'Attention, BERT, GPT, tokenisation, HuggingFace. The architecture behind every modern language model.', x: 230, y: 220, width: 130, height: 60 },
+    { id: 'prompt', title: 'Prompt Engineering', type: 'required', xp: 10, prerequisites: ['git'], difficulty: 'beginner', time: '4 hrs', description: 'Zero/few-shot, chain-of-thought, system prompts, structured output. The first skill that separates AI engineers from casual API users.', x: 380, y: 220, width: 130, height: 60 },
+    { id: 'vectordb', title: 'Vector Databases', type: 'required', xp: 12, prerequisites: ['transformers'], difficulty: 'intermediate', time: '5 hrs', description: 'Embeddings, similarity search, Pinecone/Chroma/pgvector. The memory layer for AI applications.', x: 80, y: 320, width: 130, height: 60 },
+    { id: 'rag', title: 'RAG Systems', type: 'required', xp: 15, prerequisites: ['vectordb', 'prompt'], difficulty: 'intermediate', time: '8 hrs', description: 'Retrieval-augmented generation, chunking strategies, re-ranking, hybrid search. RAG is the dominant pattern for enterprise AI in India.', x: 230, y: 320, width: 130, height: 60 },
+    { id: 'finetuning', title: 'Fine-tuning & RLHF', type: 'optional', xp: 15, prerequisites: ['transformers'], difficulty: 'advanced', time: '10 hrs', description: 'LoRA, QLoRA, instruction tuning, DPO. When general LLMs aren\'t enough and you need domain-specific behaviour.', x: 380, y: 320, width: 130, height: 60 },
+    { id: 'agents', title: 'Agents & Tool Use', type: 'required', xp: 15, prerequisites: ['rag', 'prompt'], difficulty: 'advanced', time: '8 hrs', description: 'LangChain/LlamaIndex agents, function calling, tool orchestration, memory. Multi-agent systems are the frontier of production AI.', x: 530, y: 320, width: 130, height: 60 },
+    { id: 'eval', title: 'LLM Evaluation', type: 'required', xp: 10, prerequisites: ['rag'], difficulty: 'intermediate', time: '4 hrs', description: 'RAGAS, faithfulness, answer relevancy, hallucination detection. You can\'t improve what you don\'t measure.', x: 80, y: 420, width: 130, height: 60 },
+    { id: 'mlops_ai', title: 'AI Deployment & MLOps', type: 'required', xp: 15, prerequisites: ['agents', 'eval'], difficulty: 'advanced', time: '8 hrs', description: 'FastAPI model serving, Docker, monitoring latency/cost, prompt versioning, A/B testing prompts. Moving from demo to production.', x: 230, y: 420, width: 130, height: 60 },
+    { id: 'multimodal', title: 'Multi-modal AI', type: 'optional', xp: 12, prerequisites: ['transformers'], difficulty: 'advanced', time: '6 hrs', description: 'Vision-language models (GPT-4o, Gemini), image generation (Stable Diffusion), speech AI. Expanding beyond text-only AI.', x: 380, y: 420, width: 130, height: 60 },
+  ],
+  edges: [
+    { from: 'root', to: 'python' }, { from: 'root', to: 'math' }, { from: 'root', to: 'git' },
+    { from: 'python', to: 'dl' }, { from: 'math', to: 'dl' }, { from: 'dl', to: 'transformers' },
+    { from: 'git', to: 'prompt' }, { from: 'transformers', to: 'vectordb' }, { from: 'transformers', to: 'finetuning' },
+    { from: 'vectordb', to: 'rag' }, { from: 'prompt', to: 'rag' }, { from: 'rag', to: 'agents' }, { from: 'prompt', to: 'agents' },
+    { from: 'rag', to: 'eval' }, { from: 'agents', to: 'mlops_ai' }, { from: 'eval', to: 'mlops_ai' },
+    { from: 'transformers', to: 'multimodal' },
+  ],
+}

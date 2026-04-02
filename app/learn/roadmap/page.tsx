@@ -9,27 +9,32 @@ export const metadata: Metadata = {
 }
 
 const roadmaps = [
-  {
-    slug: 'data-engineer',
-    title: 'Data Engineer',
-    subtitle: 'From zero to job-ready',
-    level: 'Beginner → Advanced',
-    time: '3–5 months',
-    nodes: 19,
-    color: '#0078d4',
-    live: true,
-  },
-  { slug: 'ml-engineer',    title: 'ML Engineer',      subtitle: 'Classical ML to LLMs',       level: 'Intermediate', time: '4–6 months', nodes: 0,  color: '#7b61ff', live: false },
-  { slug: 'backend-dev',    title: 'Backend Developer', subtitle: 'APIs, DBs, system design',   level: 'Beginner',     time: '3–4 months', nodes: 0,  color: '#00e676', live: false },
-  { slug: 'devops',         title: 'DevOps Engineer',   subtitle: 'Docker, K8s, CI/CD, cloud',  level: 'Intermediate', time: '4–5 months', nodes: 0,  color: '#ff9900', live: false },
-  { slug: 'data-scientist', title: 'Data Scientist',    subtitle: 'Stats, Python, storytelling', level: 'Beginner',    time: '4–6 months', nodes: 0,  color: '#4285f4', live: false },
-  { slug: 'fullstack',      title: 'Full Stack Dev',    subtitle: 'React + Node + databases',   level: 'Beginner',     time: '4–5 months', nodes: 0,  color: '#ff4757', live: false },
+  { slug: 'data-engineer',            title: 'Data Engineer',            subtitle: 'From zero to job-ready',                  level: 'Beginner → Advanced', time: '3–5 months', nodes: 19,  color: '#0078d4', live: true  },
+  { slug: 'ml-engineer',              title: 'ML Engineer',              subtitle: 'Classical ML to production LLMs',          level: 'Intermediate',        time: '4–6 months', nodes: 15,  color: '#7b61ff', live: true  },
+  { slug: 'ai-engineer',              title: 'AI Engineer',              subtitle: 'Build and ship AI-powered products',       level: 'Intermediate',        time: '4–6 months', nodes: 14,  color: '#a855f7', live: true  },
+  { slug: 'genai-developer',          title: 'GenAI Developer',          subtitle: 'LLM-powered apps from scratch',           level: 'Intermediate',        time: '3–5 months', nodes: 14,  color: '#ec4899', live: true  },
+  { slug: 'data-scientist',           title: 'Data Scientist',           subtitle: 'Stats, Python, and storytelling',         level: 'Beginner',            time: '4–6 months', nodes: 15,  color: '#4285f4', live: true  },
+  { slug: 'analytics-engineer',       title: 'Analytics Engineer',       subtitle: 'dbt, modelling, and the analytics stack', level: 'Beginner',            time: '3–5 months', nodes: 13,  color: '#06b6d4', live: true  },
+  { slug: 'fullstack',                title: 'Full Stack Developer',     subtitle: 'React + Node + databases + cloud',        level: 'Beginner',            time: '4–5 months', nodes: 15,  color: '#ff4757', live: true  },
+  { slug: 'frontend',                 title: 'Frontend Developer',       subtitle: 'HTML to production-grade React apps',     level: 'Beginner',            time: '3–4 months', nodes: 15,  color: '#f59e0b', live: true  },
+  { slug: 'backend-dev',              title: 'Backend Developer',        subtitle: 'APIs, databases, and system design',      level: 'Beginner',            time: '3–4 months', nodes: 15,  color: '#00e676', live: true  },
+  { slug: 'python-developer',         title: 'Python Developer',         subtitle: 'From scripting to production Python',     level: 'Beginner',            time: '3–4 months', nodes: 13,  color: '#3b82f6', live: true  },
+  { slug: 'java-developer',           title: 'Java Developer',           subtitle: 'Core Java to Spring Boot microservices',  level: 'Beginner',            time: '4–5 months', nodes: 13,  color: '#f97316', live: true  },
+  { slug: 'mobile-app-developer',     title: 'Mobile App Developer',     subtitle: 'React Native / Flutter to app store',     level: 'Beginner',            time: '4–5 months', nodes: 14,  color: '#10b981', live: true  },
+  { slug: 'devops',                   title: 'DevOps Engineer',          subtitle: 'Docker, K8s, CI/CD, and cloud infra',     level: 'Intermediate',        time: '4–5 months', nodes: 15,  color: '#ff9900', live: true  },
+  { slug: 'site-reliability-engineer',title: 'Site Reliability Engineer',subtitle: 'Reliability, observability, on-call',     level: 'Intermediate',        time: '5–7 months', nodes: 15,  color: '#ef4444', live: true  },
+  { slug: 'platform-engineer',        title: 'Platform Engineer',        subtitle: 'Build the internal platform devs love',   level: 'Intermediate',        time: '5–7 months', nodes: 14,  color: '#8b5cf6', live: true  },
+  { slug: 'cloud-architect',          title: 'Cloud Architect',          subtitle: 'Design scalable, secure cloud systems',   level: 'Intermediate',        time: '5–7 months', nodes: 15,  color: '#0ea5e9', live: true  },
+  { slug: 'software-architect',       title: 'Software Architect',       subtitle: 'Design systems that scale and endure',    level: 'Advanced',            time: '6–12 months',nodes: 15,  color: '#64748b', live: true  },
+  { slug: 'database-administrator',   title: 'Database Administrator',   subtitle: 'Design, tune, and protect databases',     level: 'Beginner',            time: '4–6 months', nodes: 14,  color: '#84cc16', live: true  },
+  { slug: 'cybersecurity-analyst',    title: 'Cybersecurity Analyst',    subtitle: 'Defend, detect, and respond to threats',  level: 'Intermediate',        time: '5–7 months', nodes: 15,  color: '#dc2626', live: true  },
+  { slug: 'cloud-security-engineer',  title: 'Cloud Security Engineer',  subtitle: 'Secure cloud infrastructure end to end',  level: 'Intermediate',        time: '5–7 months', nodes: 15,  color: '#c026d3', live: true  },
 ]
 
 export default function RoadmapIndex() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', padding: '60px 24px' }}>
-      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
 
         {/* Header */}
         <div style={{ marginBottom: 48 }}>
