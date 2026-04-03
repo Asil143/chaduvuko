@@ -30,6 +30,7 @@ const tracksAll = [
   // Data & Cloud
   { cat:'ai', icon:'🤖', name:'AI & Machine Learning', desc:'Math → Classical ML → Deep Learning → GenAI → MLOps. One complete path from zero.', pills:['Classical ML','Deep Learning','NLP','Generative AI','MLOps'], jobs:'ML Engineer · Data Scientist · AI Engineer', status:'live', href:'/learn/ai-ml' },
   { cat:'data',  icon:'📁',  name:'Data Engineering',       desc:'From zero to production-grade DE — no cloud required', pills:['Pipelines','SQL','Python','Batch','Streaming'], jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/data-engineering' },
+  { cat:'db',    icon:'🗄️', name:'SQL & Databases',        desc:'The one skill every tech role needs', pills:['JOINs','Window Functions','Indexes','CTEs'], jobs:'Data Analyst · Backend Dev · DBA',      status:'live', href:'/learn/sql' },
   { cat:'data',  icon:'☁️',  name:'Azure Track',      desc:'Full Azure cloud engineering track', pills:['ADF','Databricks','Spark','dbt','Kafka'],   jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/azure/introduction' },
   { cat:'data',  icon:'🌩️', name:'Microsoft Azure',         desc:'Full Azure cloud service track', pills:['ADLS Gen2','ADF','Synapse','Fabric'],     jobs:'Cloud Engineer · Azure Developer',           status:'live', href:'/learn/azure/introduction' },
   { cat:'cs',    icon:'🧮',  name:'Data Structures & Algorithms', desc:'Crack every technical coding round', pills:['Arrays','Trees','Graphs','Dynamic Programming'], jobs:'FAANG India · Product Companies · Startups', status:'live', href:'/learn/dsa' },
@@ -70,7 +71,6 @@ const tracksAll = [
   { cat:'devops',icon:'🐧',  name:'Linux',                  desc:'Command line and system administration', pills:['Bash','File System','Networking','Permissions'], jobs:'SysAdmin · DevOps Eng',            status:'soon', href:'#' },
   { cat:'devops',icon:'🛡️', name:'Cybersecurity',          desc:'Ethical hacking and defence techniques', pills:['Pen Testing','OWASP','SIEM','Networks'], jobs:'Security Analyst · Pen Tester',          status:'soon', href:'#' },
   // Databases
-  { cat:'db',    icon:'🗄️', name:'SQL & Databases',        desc:'The one skill every tech role needs', pills:['JOINs','Window Functions','Indexes','CTEs'], jobs:'Data Analyst · Backend Dev · DBA',      status:'soon', href:'#' },
   { cat:'db',    icon:'🐘',  name:'PostgreSQL',             desc:'Advanced relational database mastery', pills:['JSONB','Full Text Search','Partitioning','Extensions'], jobs:'DBA · Backend Dev',            status:'soon', href:'#' },
   { cat:'db',    icon:'🍃',  name:'MongoDB',                desc:'NoSQL document database at scale', pills:['Aggregation Pipeline','Indexes','Atlas','Replication'], jobs:'Backend Dev · Full Stack Dev',   status:'soon', href:'#' },
   { cat:'db',    icon:'⚡',  name:'Redis',                  desc:'In-memory caching and queuing', pills:['Caching Patterns','Pub/Sub','Sessions','Lua Scripting'], jobs:'Backend Dev · Platform Eng',       status:'soon', href:'#' },
