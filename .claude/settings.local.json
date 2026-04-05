@@ -34,7 +34,14 @@
       "Bash(mkdir -p content/dsa)",
       "Bash([ -f \"app/learn/dsa/$slug/page.tsx\" ])",
       "Bash(cp app/learn/dsa/__TRACKED_VAR__/page.tsx content/dsa/__TRACKED_VAR__.tsx)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(mkdir -p content/data-engineering)",
+      "Bash([ -f \"app/learn/data-engineering/$slug/page.tsx\" ])",
+      "Bash(cp app/learn/data-engineering/__TRACKED_VAR__/page.tsx content/data-engineering/__TRACKED_VAR__.tsx)",
+      "Bash(rm -rf app/learn/ai-ml/__TRACKED_VAR__)",
+      "Bash([ -d \"app/learn/ai-ml/$section\" ])",
+      "Bash(find app/learn/ai-ml/__TRACKED_VAR__ -name page.tsx -execdir rm -rf '{}' +)",
+      "Bash(rmdir 'app/learn/ai-ml/__TRACKED_VAR__/*/')"
     ]
   }
 }
