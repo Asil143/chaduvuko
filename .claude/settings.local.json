@@ -28,7 +28,13 @@
       "Bash(grep -n '\\\\\\\\\\\\${[A-Z]' \"c:\\\\Users\\\\kamep\\\\asil-site\\\\app\\\\learn\\\\ai-ml\\\\cloud-ml\\\\mlops-on-cloud\\\\page.tsx\")",
       "Bash(grep -n '\\\\${[A-Z_][A-Z0-9_]*}' \"c:\\\\Users\\\\kamep\\\\asil-site\\\\app\\\\learn\\\\ai-ml\\\\cloud-ml\\\\mlops-on-cloud\\\\page.tsx\")",
       "Bash(grep -v '\\\\\\\\\\\\${')",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "Bash(powershell -Command ':*)",
+      "WebFetch(domain:chaduvuko.com)",
+      "Bash(mkdir -p content/dsa)",
+      "Bash([ -f \"app/learn/dsa/$slug/page.tsx\" ])",
+      "Bash(cp app/learn/dsa/__TRACKED_VAR__/page.tsx content/dsa/__TRACKED_VAR__.tsx)",
+      "Bash(rm:*)"
     ]
   }
 }
