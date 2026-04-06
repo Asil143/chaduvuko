@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 // ─── Map: slug → dynamic import ──────────────────────────────────────────────
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
-  'what-is-a-database': () => import('@/components/content/sql/what-is-a-database'),
+  'what-is-a-database': () => import('@/content/sql/what-is-a-database'),
   // Add each new module here as you build it:
   // 'how-databases-work':     () => import('@/content/sql/how-databases-work'),
   // 'types-of-databases':     () => import('@/content/sql/types-of-databases'),
