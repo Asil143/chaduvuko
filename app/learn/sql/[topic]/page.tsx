@@ -7,10 +7,10 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'what-is-a-database': () => import('@/content/sql/what-is-a-database'),
   'how-databases-work': () => import('@/content/sql/how-databases-work'),
   'types-of-databases': () => import('@/content/sql/types-of-databases'),
+  'setting-up':         () => import('@/content/sql/setting-up'),
   // Add each new module here as you build it:
   // 'how-databases-work':     () => import('@/content/sql/how-databases-work'),
   // 'types-of-databases':     () => import('@/content/sql/types-of-databases'),
-  // 'setting-up':             () => import('@/content/sql/setting-up'),
   // 'select-from':            () => import('@/content/sql/select-from'),
   // ... (add all 62 slugs as they are built)
 };
