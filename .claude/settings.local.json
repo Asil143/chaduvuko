@@ -43,7 +43,8 @@
       "Bash(find app/learn/ai-ml/__TRACKED_VAR__ -name page.tsx -execdir rm -rf '{}' +)",
       "Bash(rmdir 'app/learn/ai-ml/__TRACKED_VAR__/*/')",
       "Bash(xargs grep:*)",
-      "Bash(grep -E '\\\\.\\(wasm|worker\\\\.js\\)$')"
+      "Bash(grep -E '\\\\.\\(wasm|worker\\\\.js\\)$')",
+      "Bash(grep -E '\\\\.\\(wasm|js\\)$')"
     ]
   }
 }
