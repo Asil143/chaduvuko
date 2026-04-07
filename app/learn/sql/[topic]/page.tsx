@@ -13,6 +13,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'and-or-not':            () => import('@/content/sql/and-or-not'),
   'order-by':              () => import('@/content/sql/order-by'),
   'limit-fetch':          () => import('@/content/sql/limit-fetch'),
+  'distinct':              () => import('@/content/sql/distinct'),
   // 'group-by':              () => import('@/content/sql/group-by'),
   // 'joins':                 () => import('@/content/sql/joins'),
   // 'subqueries':            () => import('@/content/sql/subqueries'),
