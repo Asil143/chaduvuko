@@ -6,3 +6,5 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+# DuckDB WASM bundles (served from public/duckdb, not committed)
+public/duckdb/

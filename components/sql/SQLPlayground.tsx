@@ -44,9 +44,19 @@ export default function SQLPlayground({
     async function initDB() {
       try {
         const duckdb: any = await import('@duckdb/duckdb-wasm');
-        const { JSDELIVR_BUNDLES, selectBundle, AsyncDuckDB, ConsoleLogger } = duckdb;
+        const { selectBundle, AsyncDuckDB, ConsoleLogger } = duckdb;
 
-        const bundle = await selectBundle(JSDELIVR_BUNDLES);
+        const LOCAL_BUNDLES = {
+          mvp: {
+            mainModule: '/duckdb/duckdb-mvp.wasm',
+            mainWorker: '/duckdb/duckdb-browser-mvp.worker.js',
+          },
+          eh: {
+            mainModule: '/duckdb/duckdb-eh.wasm',
+            mainWorker: '/duckdb/duckdb-browser-eh.worker.js',
+          },
+        };
+        const bundle = await selectBundle(LOCAL_BUNDLES);
         const workerUrl = URL.createObjectURL(
           new Blob([`importScripts("${bundle.mainWorker}");`], { type: 'text/javascript' })
         );
