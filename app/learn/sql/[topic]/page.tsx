@@ -10,6 +10,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'setting-up': () => import('@/content/sql/setting-up'),
   'select-from':           () => import('@/content/sql/select-from'),
   'where-clause':          () => import('@/content/sql/where-clause'),
+  'and-or-not':            () => import('@/content/sql/and-or-not'),
   // 'order-by':              () => import('@/content/sql/order-by'),
   // 'group-by':              () => import('@/content/sql/group-by'),
   // 'joins':                 () => import('@/content/sql/joins'),
