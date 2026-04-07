@@ -6,5 +6,6 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
-# DuckDB WASM bundles (served from public/duckdb, not committed)
+# WASM engine bundles (copied from node_modules at postinstall, not committed)
 public/duckdb/
+public/sqljs/

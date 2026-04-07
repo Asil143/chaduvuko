@@ -13,19 +13,24 @@ const withMDX = createMDX({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  async headers() {
+    return [
+      {
+        source: '/sqljs/:file*',
+        headers: [{ key: 'Content-Type', value: 'application/wasm' }],
+      },
+    ];
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
       'vscode': false,
     };
-    config.experiments = {
-      ...config.experiments,
-      asyncWebAssembly: true,
-    };
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
       path: false,
+      crypto: false,
     };
     return config;
   },

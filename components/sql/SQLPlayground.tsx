@@ -35,46 +35,26 @@ export default function SQLPlayground({
   const [status, setStatus]   = useState<DBStatus>('loading');
   const [schemaOpen, setSchemaOpen] = useState(false);
   const [expandedTable, setExpandedTable] = useState<string | null>(null);
-  const connRef = useRef<any>(null);
+  const dbRef = useRef<any>(null);
 
-  // ── Init DuckDB ──────────────────────────────────────────────────────────
+  // ── Init sql.js ──────────────────────────────────────────────────────────
   useEffect(() => {
     let cancelled = false;
 
     async function initDB() {
       try {
-        const duckdb: any = await import('@duckdb/duckdb-wasm');
-        const { selectBundle, AsyncDuckDB, ConsoleLogger } = duckdb;
-
-        const LOCAL_BUNDLES = {
-          mvp: {
-            mainModule: '/duckdb/duckdb-mvp.wasm',
-            mainWorker: '/duckdb/duckdb-browser-mvp.worker.js',
-          },
-          eh: {
-            mainModule: '/duckdb/duckdb-eh.wasm',
-            mainWorker: '/duckdb/duckdb-browser-eh.worker.js',
-          },
-        };
-        const bundle = await selectBundle(LOCAL_BUNDLES);
-        const workerUrl = URL.createObjectURL(
-          new Blob([`importScripts("${bundle.mainWorker}");`], { type: 'text/javascript' })
-        );
-        const worker = new Worker(workerUrl);
-        const db     = new AsyncDuckDB(new ConsoleLogger(), worker);
-        await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
-        URL.revokeObjectURL(workerUrl);
-
-        const conn = await db.connect();
-        await conn.query(FRESHMART_SCHEMA_SQL);
-        await conn.query(FRESHMART_SEED_SQL);
+        const initSqlJs = (await import('sql.js')).default;
+        const SQL = await initSqlJs({ locateFile: () => '/sqljs/sql-wasm.wasm' });
+        const db = new SQL.Database();
+        db.run(FRESHMART_SCHEMA_SQL);
+        db.run(FRESHMART_SEED_SQL);
 
         if (!cancelled) {
-          connRef.current = conn;
+          dbRef.current = db;
           setStatus('ready');
         }
       } catch (e) {
-        console.error('[SQLPlayground] DuckDB init failed:', e);
+        console.error('[SQLPlayground] sql.js init failed:', e);
         if (!cancelled) setStatus('failed');
       }
     }
@@ -85,7 +65,7 @@ export default function SQLPlayground({
 
   // ── Run query ────────────────────────────────────────────────────────────
   const runQuery = useCallback(async () => {
-    if (!connRef.current || status !== 'ready') return;
+    if (!dbRef.current || status !== 'ready') return;
     const q = query.trim();
     if (!q) return;
 
@@ -95,21 +75,21 @@ export default function SQLPlayground({
 
     try {
       const start = performance.now();
-      const res   = await connRef.current.query(q);
+      const res   = dbRef.current.exec(q);
       const elapsed = Math.round(performance.now() - start);
 
-      const columns: string[] = res.schema.fields.map((f: any) => f.name);
-      const rows: string[][] = res.toArray().map((row: any) =>
-        columns.map(col => {
-          const val = row[col];
-          if (val === null || val === undefined) return 'NULL';
-          if (typeof val === 'bigint') return val.toString();
-          if (val instanceof Date) return val.toISOString().split('T')[0];
-          return String(val);
-        })
-      );
-
-      setResult({ columns, rows, rowCount: rows.length, timeMs: elapsed });
+      if (!res || res.length === 0) {
+        setResult({ columns: [], rows: [], rowCount: 0, timeMs: elapsed });
+      } else {
+        const { columns, values } = res[0];
+        const rows: string[][] = (values as any[][]).map(row =>
+          row.map(cell => {
+            if (cell === null || cell === undefined) return 'NULL';
+            return String(cell);
+          })
+        );
+        setResult({ columns, rows, rowCount: rows.length, timeMs: elapsed });
+      }
     } catch (e: any) {
       setError(e.message ?? 'Query failed');
     }
