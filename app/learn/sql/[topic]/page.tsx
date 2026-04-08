@@ -15,6 +15,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'limit-fetch':          () => import('@/content/sql/limit-fetch'),
   'distinct':              () => import('@/content/sql/distinct'),
   'arithmetic-expressions':     () => import('@/content/sql/arithmetic-expressions'),
+  'aliases':                () => import('@/content/sql/aliases'),
   // 'group-by':              () => import('@/content/sql/group-by'),
   // 'joins':                 () => import('@/content/sql/joins'),
   // 'subqueries':            () => import('@/content/sql/subqueries'),
