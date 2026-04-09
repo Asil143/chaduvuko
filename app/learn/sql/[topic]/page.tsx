@@ -18,6 +18,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'aliases':                () => import('@/content/sql/aliases'),
   'like-wildcards':          () => import('@/content/sql/like-wildcards'),
   'in-between':             () => import('@/content/sql/in-between'),
+  'case-when':              () => import('@/content/sql/case-when'),
   // 'group-by':              () => import('@/content/sql/group-by'),
   // 'joins':                 () => import('@/content/sql/joins'),
   // 'subqueries':            () => import('@/content/sql/subqueries'),
