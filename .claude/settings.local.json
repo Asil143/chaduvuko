@@ -44,7 +44,11 @@
       "Bash(rmdir 'app/learn/ai-ml/__TRACKED_VAR__/*/')",
       "Bash(xargs grep:*)",
       "Bash(grep -E '\\\\.\\(wasm|worker\\\\.js\\)$')",
-      "Bash(grep -E '\\\\.\\(wasm|js\\)$')"
+      "Bash(grep -E '\\\\.\\(wasm|js\\)$')",
+      "Bash(grep -B2 -A15 'initialQuery=.*DATE_TRUNC\\\\|initialQuery=.*date_trunc\\\\|initialQuery=.*EXTRACT' /Users/asil/Chaduvuko/content/sql/*.tsx)",
+      "Bash(grep -l \"EXTRACT\\\\|DATE_TRUNC\\\\|date_trunc\" /Users/asil/Chaduvuko/content/sql/*.tsx)",
+      "Bash(grep -n \"information_schema\\\\|TO_CHAR\\\\|ILIKE\\\\|GENERATED ALWAYS\\\\|TIMESTAMPTZ\\\\|JSONB\\\\|SERIAL\" /Users/asil/Chaduvuko/content/sql/*.tsx)",
+      "Bash(grep -n \"INTERVAL\" /Users/asil/Chaduvuko/content/sql/*.tsx)"
     ]
   }
 }
