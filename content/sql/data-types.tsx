@@ -213,12 +213,15 @@ export default function DataTypes() {
       <SQLPlayground
         initialQuery={`-- See the column types in the orders table
 SELECT
-  name        AS column_name,
-  type        AS data_type,
-  [notnull]   AS not_null,
-  dflt_value  AS default_value
-FROM pragma_table_info('orders');`}
-        height={140}
+  column_name,
+  data_type,
+  numeric_precision,
+  numeric_scale,
+  is_nullable
+FROM information_schema.columns
+WHERE table_name = 'orders'
+ORDER BY ordinal_position;`}
+        height={150}
         showSchema={true}
       />
 
@@ -338,13 +341,15 @@ SELECT 10.50::FLOAT * 1000000  -- might give 10499999.999... instead of 10500000
 
       <SQLPlayground
         initialQuery={`-- Explore column types in customers and products
-SELECT 'customers' AS table_name, name AS column_name, type AS data_type
-FROM pragma_table_info('customers')
-UNION ALL
-SELECT 'products', name, type
-FROM pragma_table_info('products')
-ORDER BY table_name;`}
-        height={130}
+SELECT
+  table_name,
+  column_name,
+  data_type,
+  character_maximum_length
+FROM information_schema.columns
+WHERE table_name IN ('customers', 'products')
+ORDER BY table_name, ordinal_position;`}
+        height={140}
         showSchema={false}
       />
 
@@ -855,14 +860,20 @@ JOIN orders o ON c.customer_id = o.customer_id;
         initialQuery={`-- Verify FreshMart's type consistency in joins
 -- customer_id should be the same type in customers and orders
 SELECT
-  c.name  AS column_name,
-  c.type  AS customers_type,
-  o.type  AS orders_type,
-  CASE WHEN c.type = o.type THEN 'MATCH' ELSE 'MISMATCH' END AS type_status
-FROM pragma_table_info('customers') c
-JOIN pragma_table_info('orders') o
-  ON c.name = o.name
-WHERE c.name = 'customer_id';`}
+  c.column_name AS customers_col,
+  c.data_type   AS customers_type,
+  o.column_name AS orders_col,
+  o.data_type   AS orders_type,
+  CASE WHEN c.data_type = o.data_type
+    THEN 'MATCH'
+    ELSE 'MISMATCH'
+  END           AS type_status
+FROM information_schema.columns c
+JOIN information_schema.columns o
+  ON c.column_name = o.column_name
+WHERE c.table_name = 'customers'
+  AND o.table_name = 'orders'
+  AND c.column_name IN ('customer_id');`}
         height={200}
         showSchema={false}
       />
@@ -1018,16 +1029,19 @@ CREATE TABLE loan_applications (
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a query that shows all columns in the FreshMart 'products' table with their column name, data type, whether they allow NULL, and their default value. Then write a second query that finds any product where unit_price cast to INTEGER differs from unit_price — which would indicate products with sub-rupee pricing that would be lost in integer conversion."
-        hint="Query 1: use pragma_table_info('products') — it returns name, type, notnull, dflt_value, and pk for every column. Query 2: SELECT product_name, unit_price FROM products WHERE CAST(unit_price AS INTEGER) != unit_price."
-        answer={`-- Query 1: Products table schema inspection (SQLite)
+        question="Using information_schema, write a query that shows all columns in the FreshMart 'products' table with their column name, data type, whether they allow NULL, and their character maximum length (NULL for non-text columns). Then write a second query that finds any product where unit_price cast to INTEGER differs from unit_price — which would indicate products with sub-rupee pricing that would be lost in integer conversion."
+        hint="Query 1: SELECT column_name, data_type, is_nullable, character_maximum_length FROM information_schema.columns WHERE table_name = 'products' ORDER BY ordinal_position. Query 2: SELECT product_name, unit_price FROM products WHERE CAST(unit_price AS INTEGER) != unit_price."
+        answer={`-- Query 1: Products table schema inspection
 SELECT
-  name        AS column_name,
-  type        AS data_type,
-  [notnull]   AS not_null,
-  dflt_value  AS default_value,
-  pk          AS primary_key
-FROM pragma_table_info('products');
+  column_name,
+  data_type,
+  is_nullable,
+  character_maximum_length,
+  numeric_precision,
+  numeric_scale
+FROM information_schema.columns
+WHERE table_name = 'products'
+ORDER BY ordinal_position;
 
 -- Query 2: Products with sub-rupee pricing (paise component)
 -- If CAST to INTEGER matches, the price is a whole number of rupees
@@ -1040,7 +1054,7 @@ SELECT
 FROM products
 WHERE CAST(unit_price AS INTEGER) != unit_price
 ORDER BY paise_component DESC;`}
-        explanation="Query 1 uses pragma_table_info() — SQLite's built-in table inspector. It returns one row per column with: name (column name), type (declared data type like INTEGER or DECIMAL(10,2)), notnull (1 if NOT NULL constraint is present), dflt_value (DEFAULT expression or NULL), and pk (1 if part of primary key). This is the SQLite equivalent of information_schema.columns. Query 2 demonstrates CAST in a practical audit context: comparing the original DECIMAL value to its INTEGER cast reveals any prices that would lose data if the column type were changed to INTEGER. The paise_component column shows exactly how much sub-rupee precision exists. This is the type of schema audit query a DBA runs before any column type migration."
+        explanation="Query 1 uses information_schema.columns — the system view that holds metadata about every column in every table. numeric_precision and numeric_scale reveal the DECIMAL(10,2) definitions. character_maximum_length shows VARCHAR lengths (NULL for non-text types). is_nullable shows which columns allow NULL. Query 2 demonstrates CAST in a practical audit context: comparing the original DECIMAL value to its INTEGER cast reveals any prices that would lose data if the column type were changed to INTEGER. The paise_component column shows exactly how much sub-rupee precision exists. This is the type of schema audit query a DBA runs before any column type migration."
       />
 
       <HR />
