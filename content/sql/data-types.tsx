@@ -340,16 +340,16 @@ SELECT 10.50::FLOAT * 1000000  -- might give 10499999.999... instead of 10500000
       <P>In MySQL, TEXT types are stored differently from VARCHAR — they cannot be fully indexed without a prefix and have different row-format implications. For MySQL, prefer VARCHAR(255) or VARCHAR(1000) over TEXT whenever a reasonable maximum exists.</P>
 
       <SQLPlayground
-        initialQuery={`-- See text column types in FreshMart
+        initialQuery={`-- Explore column types using DuckDB system catalog
 SELECT
+  table_name,
   column_name,
   data_type,
   character_maximum_length
 FROM information_schema.columns
 WHERE table_name IN ('customers', 'products')
-  AND data_type IN ('character varying', 'text', 'character')
 ORDER BY table_name, ordinal_position;`}
-        height={150}
+        height={140}
         showSchema={false}
       />
 
@@ -450,23 +450,20 @@ LIMIT 8;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Date formatting and extraction
+        initialQuery={`-- Date formatting and extraction (DuckDB syntax)
 SELECT
   order_id,
   order_date,
-  -- Format as readable string (PostgreSQL)
-  TO_CHAR(order_date, 'DD Mon YYYY')          AS formatted_date,
-  TO_CHAR(order_date, 'Month YYYY')           AS month_label,
-  -- First day of the month
-  DATE_TRUNC('month', order_date)             AS month_start,
-  -- Days until end of month
-  (DATE_TRUNC('month', order_date)
-   + INTERVAL '1 month' - INTERVAL '1 day')
-  - order_date                               AS days_left_in_month
+  strftime(order_date, '%d %B %Y')            AS formatted_date,
+  strftime(order_date, '%B %Y')               AS month_label,
+  date_trunc('month', order_date)             AS month_start,
+  EXTRACT(MONTH FROM order_date)              AS order_month,
+  EXTRACT(YEAR  FROM order_date)              AS order_year,
+  EXTRACT(DOY   FROM order_date)              AS day_of_year
 FROM orders
 ORDER BY order_date DESC
 LIMIT 8;`}
-        height={220}
+        height={200}
         showSchema={false}
       />
 
@@ -514,13 +511,11 @@ WHERE order_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)`}
 SELECT
   product_name,
   in_stock,
-  -- Boolean in WHERE
   CASE WHEN in_stock THEN 'Available' ELSE 'Unavailable' END  AS availability,
-  -- Arithmetic with boolean (TRUE = 1, FALSE = 0)
-  in_stock::INTEGER                                           AS stock_as_int
+  CAST(in_stock AS INTEGER)                                   AS stock_as_int
 FROM products
 ORDER BY in_stock DESC, product_name;`}
-        height={155}
+        height={145}
         showSchema={false}
       />
 
@@ -531,7 +526,7 @@ SELECT
   SUM(CASE WHEN in_stock THEN 1 ELSE 0 END)  AS in_stock_count,
   SUM(CASE WHEN NOT in_stock THEN 1 ELSE 0 END) AS out_of_stock_count,
   -- Alternative: cast boolean to integer
-  SUM(in_stock::INTEGER)                     AS in_stock_alt
+  SUM(CAST(in_stock AS INTEGER))             AS in_stock_alt
 FROM products;`}
         height={145}
         showSchema={false}
@@ -600,8 +595,8 @@ SELECT
   -- Concatenate mixed types — must CAST to text first
   'Order #' || CAST(order_id AS VARCHAR)
   || ' — ₹' || CAST(total_amount AS VARCHAR)   AS order_summary,
-  -- Format date as string
-  TO_CHAR(order_date, 'DD/MM/YYYY')             AS formatted_date
+  -- Format date as string (DuckDB syntax)
+  strftime(order_date, '%d/%m/%Y')              AS formatted_date
 FROM orders
 ORDER BY order_date DESC
 LIMIT 6;`}
@@ -613,12 +608,13 @@ LIMIT 6;`}
         initialQuery={`-- CAST for date extraction
 SELECT
   order_date,
-  EXTRACT(YEAR FROM order_date)                    AS year,
-  EXTRACT(MONTH FROM order_date)                   AS month,
-  -- Cast date to text for grouping labels
+  EXTRACT(YEAR    FROM order_date)                 AS year,
+  EXTRACT(MONTH   FROM order_date)                 AS month,
+  EXTRACT(QUARTER FROM order_date)                 AS quarter,
+  -- Cast date parts to text for grouping labels
   CAST(EXTRACT(YEAR FROM order_date) AS VARCHAR)
   || '-Q'
-  || CAST(CEIL(EXTRACT(MONTH FROM order_date)/3.0) AS VARCHAR)
+  || CAST(EXTRACT(QUARTER FROM order_date) AS VARCHAR)
                                                    AS quarter_label
 FROM orders
 ORDER BY order_date DESC

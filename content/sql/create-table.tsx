@@ -410,19 +410,17 @@ CREATE TABLE customers (
       />
 
       <SQLPlayground
-        initialQuery={`-- See UNIQUE constraints in FreshMart
+        initialQuery={`-- See column definitions for the customers, products, and stores tables
 SELECT
-  tc.table_name,
-  tc.constraint_name,
-  tc.constraint_type,
-  kcu.column_name
-FROM information_schema.table_constraints tc
-JOIN information_schema.key_column_usage kcu
-  ON tc.constraint_name = kcu.constraint_name
-WHERE tc.table_name IN ('customers', 'products', 'stores')
-  AND tc.constraint_type IN ('PRIMARY KEY', 'UNIQUE')
-ORDER BY tc.table_name, tc.constraint_type;`}
-        height={175}
+  table_name,
+  column_name,
+  data_type,
+  is_nullable,
+  column_default
+FROM information_schema.columns
+WHERE table_name IN ('customers', 'products', 'stores')
+ORDER BY table_name, ordinal_position;`}
+        height={155}
         showSchema={false}
       />
 
@@ -483,18 +481,17 @@ CREATE TABLE orders (
       />
 
       <SQLPlayground
-        initialQuery={`-- See CHECK constraints in FreshMart
+        initialQuery={`-- See column defaults in FreshMart tables
 SELECT
-  tc.table_name,
-  tc.constraint_name,
-  cc.check_clause
-FROM information_schema.table_constraints tc
-JOIN information_schema.check_constraints cc
-  ON tc.constraint_name = cc.constraint_name
-WHERE tc.table_name IN ('customers','orders','products','order_items')
-  AND tc.constraint_type = 'CHECK'
-ORDER BY tc.table_name;`}
-        height={165}
+  table_name,
+  column_name,
+  data_type,
+  column_default
+FROM information_schema.columns
+WHERE table_name IN ('customers','orders','products','order_items')
+  AND column_default IS NOT NULL
+ORDER BY table_name, ordinal_position;`}
+        height={155}
         showSchema={false}
       />
 
