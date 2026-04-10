@@ -136,19 +136,15 @@ description   TEXT                     -- nullable, no default`}
       />
 
       <SQLPlayground
-        initialQuery={`-- See the CREATE TABLE definition for FreshMart's customers table
--- information_schema shows all columns and their types
+        initialQuery={`-- See the column definitions for FreshMart's customers table
+-- pragma_table_info() is SQLite's built-in schema inspector
 SELECT
-  column_name,
-  data_type,
-  character_maximum_length,
-  numeric_precision,
-  numeric_scale,
-  is_nullable,
-  column_default
-FROM information_schema.columns
-WHERE table_name = 'customers'
-ORDER BY ordinal_position;`}
+  name        AS column_name,
+  type        AS data_type,
+  [notnull]   AS not_null,
+  dflt_value  AS default_value,
+  pk          AS primary_key
+FROM pragma_table_info('customers');`}
         height={175}
         showSchema={true}
       />
@@ -186,16 +182,17 @@ CREATE TABLE customers (
 
       <SQLPlayground
         initialQuery={`-- Verify which FreshMart columns are NOT NULL
-SELECT
-  table_name,
-  column_name,
-  is_nullable,
-  data_type
-FROM information_schema.columns
-WHERE table_name IN ('customers', 'orders', 'products')
-  AND is_nullable = 'NO'
-ORDER BY table_name, ordinal_position;`}
-        height={165}
+-- notnull = 1 means NOT NULL constraint is present
+SELECT 'customers' AS table_name, name AS column_name, type AS data_type
+FROM pragma_table_info('customers') WHERE [notnull] = 1
+UNION ALL
+SELECT 'orders', name, type
+FROM pragma_table_info('orders') WHERE [notnull] = 1
+UNION ALL
+SELECT 'products', name, type
+FROM pragma_table_info('products') WHERE [notnull] = 1
+ORDER BY table_name;`}
+        height={175}
         showSchema={false}
       />
 
@@ -411,16 +408,16 @@ CREATE TABLE customers (
 
       <SQLPlayground
         initialQuery={`-- See column definitions for the customers, products, and stores tables
-SELECT
-  table_name,
-  column_name,
-  data_type,
-  is_nullable,
-  column_default
-FROM information_schema.columns
-WHERE table_name IN ('customers', 'products', 'stores')
-ORDER BY table_name, ordinal_position;`}
-        height={155}
+SELECT 'customers' AS table_name, name AS column_name, type AS data_type, [notnull] AS not_null, dflt_value AS default_value
+FROM pragma_table_info('customers')
+UNION ALL
+SELECT 'products', name, type, [notnull], dflt_value
+FROM pragma_table_info('products')
+UNION ALL
+SELECT 'stores', name, type, [notnull], dflt_value
+FROM pragma_table_info('stores')
+ORDER BY table_name;`}
+        height={165}
         showSchema={false}
       />
 
@@ -482,16 +479,20 @@ CREATE TABLE orders (
 
       <SQLPlayground
         initialQuery={`-- See column defaults in FreshMart tables
-SELECT
-  table_name,
-  column_name,
-  data_type,
-  column_default
-FROM information_schema.columns
-WHERE table_name IN ('customers','orders','products','order_items')
-  AND column_default IS NOT NULL
-ORDER BY table_name, ordinal_position;`}
-        height={155}
+-- dflt_value holds the DEFAULT expression; NULL means no default set
+SELECT 'customers' AS table_name, name AS column_name, type AS data_type, dflt_value AS default_value
+FROM pragma_table_info('customers') WHERE dflt_value IS NOT NULL
+UNION ALL
+SELECT 'orders', name, type, dflt_value
+FROM pragma_table_info('orders') WHERE dflt_value IS NOT NULL
+UNION ALL
+SELECT 'products', name, type, dflt_value
+FROM pragma_table_info('products') WHERE dflt_value IS NOT NULL
+UNION ALL
+SELECT 'order_items', name, type, dflt_value
+FROM pragma_table_info('order_items') WHERE dflt_value IS NOT NULL
+ORDER BY table_name;`}
+        height={175}
         showSchema={false}
       />
 
@@ -527,15 +528,15 @@ VALUES ('Rahul', 'Sharma', 'rahul@gmail.com', '2024-01-15', 'Gold');`}
 
       <SQLPlayground
         initialQuery={`-- See which FreshMart columns have defaults
-SELECT
-  table_name,
-  column_name,
-  data_type,
-  column_default
-FROM information_schema.columns
-WHERE table_name IN ('customers','orders','products')
-  AND column_default IS NOT NULL
-ORDER BY table_name, ordinal_position;`}
+SELECT 'customers' AS table_name, name AS column_name, type AS data_type, dflt_value AS default_value
+FROM pragma_table_info('customers') WHERE dflt_value IS NOT NULL
+UNION ALL
+SELECT 'orders', name, type, dflt_value
+FROM pragma_table_info('orders') WHERE dflt_value IS NOT NULL
+UNION ALL
+SELECT 'products', name, type, dflt_value
+FROM pragma_table_info('products') WHERE dflt_value IS NOT NULL
+ORDER BY table_name;`}
         height={165}
         showSchema={false}
       />
