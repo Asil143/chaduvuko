@@ -28,9 +28,9 @@ const compMult: Record<string,number>  = { product:1.0, service:0.72, startup:1.
 // ─── TRACKS DATA ──────────────────────────────────────────────────────────────
 const tracksAll = [
   // Data & Cloud
+  { cat:'db',    icon:'🗄️', name:'SQL & Databases',        desc:'The one skill every tech role needs', pills:['JOINs','Window Functions','Indexes','CTEs'], jobs:'Data Analyst · Backend Dev · DBA',      status:'live', href:'/learn/sql' },
   { cat:'ai', icon:'🤖', name:'AI & Machine Learning', desc:'Math → Classical ML → Deep Learning → GenAI → MLOps. One complete path from zero.', pills:['Classical ML','Deep Learning','NLP','Generative AI','MLOps'], jobs:'ML Engineer · Data Scientist · AI Engineer', status:'live', href:'/learn/ai-ml' },
   { cat:'data',  icon:'📁',  name:'Data Engineering',       desc:'From zero to production-grade DE — no cloud required', pills:['Pipelines','SQL','Python','Batch','Streaming'], jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/data-engineering' },
-  { cat:'db',    icon:'🗄️', name:'SQL & Databases',        desc:'The one skill every tech role needs', pills:['JOINs','Window Functions','Indexes','CTEs'], jobs:'Data Analyst · Backend Dev · DBA',      status:'live', href:'/learn/sql' },
   { cat:'data',  icon:'☁️',  name:'Azure Track',      desc:'Full Azure cloud engineering track', pills:['ADF','Databricks','Spark','dbt','Kafka'],   jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/azure/introduction' },
   { cat:'data',  icon:'🌩️', name:'Microsoft Azure',         desc:'Full Azure cloud service track', pills:['ADLS Gen2','ADF','Synapse','Fabric'],     jobs:'Cloud Engineer · Azure Developer',           status:'live', href:'/learn/azure/introduction' },
   { cat:'cs',    icon:'🧮',  name:'Data Structures & Algorithms', desc:'Crack every technical coding round', pills:['Arrays','Trees','Graphs','Dynamic Programming'], jobs:'FAANG India · Product Companies · Startups', status:'live', href:'/learn/dsa' },
