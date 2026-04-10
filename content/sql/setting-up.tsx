@@ -815,17 +815,16 @@ ORDER BY ordinal_position;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="You are given credentials to a new database at your company. Before running any business queries, you want to understand the schema. Using the browser playground (which has the FreshMart database loaded), write a query that shows all the columns in the 'orders' table — their names and data types. Use the information_schema."
-        hint="The information_schema.columns table has columns called table_name, column_name, data_type, and ordinal_position. Filter by table_name = 'orders' and order by ordinal_position."
+        question="You are given credentials to a new database at your company. Before running any business queries, you want to understand the schema. Using the browser playground (which has the FreshMart database loaded), write a query that shows all the columns in the 'orders' table — their names, data types, and whether they allow NULL."
+        hint="Use pragma_table_info('orders') — it returns one row per column with fields: name, type, notnull, dflt_value, and pk."
         answer={`SELECT
-  ordinal_position  AS position,
-  column_name,
-  data_type,
-  is_nullable
-FROM information_schema.columns
-WHERE table_name = 'orders'
-ORDER BY ordinal_position;`}
-        explanation="This query reads from information_schema.columns — a system table that every SQL-compliant database has. It contains metadata about every column in every table. Filtering by table_name = 'orders' gives you only the columns from the orders table. ordinal_position is the column's position in the table definition — ordering by it shows columns in the order they were created. This is one of the most useful exploratory queries when joining a new project: it tells you exactly what columns exist and what types they are without having to look at CREATE TABLE statements or documentation."
+  name       AS column_name,
+  type       AS data_type,
+  [notnull]  AS not_null,
+  dflt_value AS default_value,
+  pk         AS primary_key
+FROM pragma_table_info('orders');`}
+        explanation="The browser playground runs SQLite (via sql.js). In SQLite, pragma_table_info() is how you inspect a table's structure — it returns one row per column with name, type, notnull (1 = NOT NULL), dflt_value, and pk (1 = primary key). In a real PostgreSQL or MySQL database you would use information_schema.columns instead — but the concept is identical."
       />
 
       <HR />
