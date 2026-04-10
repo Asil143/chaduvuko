@@ -23,6 +23,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'data-types':             () => import('@/content/sql/data-types'),
   'complex-where':          () => import('@/content/sql/complex-where'),
   'update':                 () => import('@/content/sql/update'),
+  'normalization':          () => import('@/content/sql/normalization'),
   // 'group-by':              () => import('@/content/sql/group-by'),
   // 'joins':                 () => import('@/content/sql/joins'),
   // 'subqueries':            () => import('@/content/sql/subqueries'),
