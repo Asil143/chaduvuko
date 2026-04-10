@@ -411,25 +411,24 @@ ORDER BY city;`}
       <H>ILIKE — case-insensitive LIKE in PostgreSQL</H>
 
       <SQLPlayground
-        initialQuery={`-- ILIKE: case-insensitive pattern match (PostgreSQL and DuckDB)
+        initialQuery={`-- SQLite LIKE is already case-insensitive for ASCII letters
 -- 'amul%' matches 'Amul Butter', 'AMUL MILK', 'amul taaza' etc.
 SELECT product_name, brand
 FROM products
-WHERE product_name ILIKE 'amul%';`}
+WHERE product_name LIKE 'amul%';`}
         height={110}
         showSchema={false}
       />
 
       <SQLPlayground
-        initialQuery={`-- LIKE (case-sensitive) vs ILIKE (case-insensitive)
--- LIKE: 'amul%' finds nothing because stored as 'Amul'
--- ILIKE: 'amul%' finds Amul products correctly
+        initialQuery={`-- LIKE vs LOWER()+LIKE — both work in SQLite
+-- SQLite LIKE is case-insensitive for ASCII by default
 SELECT product_name, brand,
-  CASE WHEN product_name LIKE  'amul%' THEN 'LIKE matched'  ELSE 'LIKE missed'  END AS like_result,
-  CASE WHEN product_name ILIKE 'amul%' THEN 'ILIKE matched' ELSE 'ILIKE missed' END AS ilike_result
+  CASE WHEN product_name LIKE 'amul%' THEN 'matched' ELSE 'missed' END AS like_result,
+  CASE WHEN LOWER(product_name) LIKE 'amul%' THEN 'matched' ELSE 'missed' END AS lower_like_result
 FROM products
-WHERE product_name ILIKE 'amul%';`}
-        height={150}
+WHERE product_name LIKE 'amul%';`}
+        height={140}
         showSchema={false}
       />
 

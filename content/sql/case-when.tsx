@@ -469,14 +469,14 @@ ORDER BY total_revenue DESC;`}
         initialQuery={`-- Monthly order count pivoted into columns by status
 -- Rows are months, columns are order statuses
 SELECT
-  EXTRACT(MONTH FROM order_date)                                      AS month,
+  CAST(strftime('%m', order_date) AS INTEGER)                         AS month,
   COUNT(*)                                                            AS total,
   SUM(CASE WHEN order_status = 'Delivered'  THEN 1 ELSE 0 END)       AS delivered,
   SUM(CASE WHEN order_status = 'Processing' THEN 1 ELSE 0 END)       AS processing,
   SUM(CASE WHEN order_status = 'Cancelled'  THEN 1 ELSE 0 END)       AS cancelled,
   SUM(CASE WHEN order_status = 'Returned'   THEN 1 ELSE 0 END)       AS returned
 FROM orders
-GROUP BY EXTRACT(MONTH FROM order_date)
+GROUP BY CAST(strftime('%m', order_date) AS INTEGER)
 ORDER BY month;`}
         height={205}
         showSchema={false}

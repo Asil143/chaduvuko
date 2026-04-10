@@ -428,14 +428,14 @@ SELECT
   order_date,
   delivery_date,
   -- Extract parts of a date
-  EXTRACT(YEAR  FROM order_date)   AS order_year,
-  EXTRACT(MONTH FROM order_date)   AS order_month,
-  EXTRACT(DOW   FROM order_date)   AS day_of_week,  -- 0=Sunday
-  -- Date arithmetic
-  delivery_date - order_date       AS days_to_deliver,
-  -- Current date functions
-  CURRENT_DATE                     AS today,
-  CURRENT_DATE - order_date        AS days_since_order
+  CAST(strftime('%Y', order_date) AS INTEGER)                              AS order_year,
+  CAST(strftime('%m', order_date) AS INTEGER)                              AS order_month,
+  CAST(strftime('%w', order_date) AS INTEGER)                              AS day_of_week,
+  -- Date arithmetic (julianday gives fractional days; cast to integer for whole days)
+  CAST(julianday(delivery_date) - julianday(order_date) AS INTEGER)        AS days_to_deliver,
+  -- Current date
+  date('now')                                                              AS today,
+  CAST(julianday('now') - julianday(order_date) AS INTEGER)                AS days_since_order
 FROM orders
 WHERE delivery_date IS NOT NULL
 ORDER BY order_date DESC
@@ -445,16 +445,16 @@ LIMIT 8;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Date formatting and extraction (DuckDB syntax)
+        initialQuery={`-- Date formatting and extraction (SQLite syntax)
 SELECT
   order_id,
   order_date,
-  strftime(order_date, '%d %B %Y')            AS formatted_date,
-  strftime(order_date, '%B %Y')               AS month_label,
-  date_trunc('month', order_date)             AS month_start,
-  EXTRACT(MONTH FROM order_date)              AS order_month,
-  EXTRACT(YEAR  FROM order_date)              AS order_year,
-  EXTRACT(DOY   FROM order_date)              AS day_of_year
+  strftime('%d/%m/%Y', order_date)                        AS formatted_date,
+  strftime('%Y-%m', order_date)                           AS month_label,
+  date(order_date, 'start of month')                      AS month_start,
+  CAST(strftime('%m', order_date) AS INTEGER)             AS order_month,
+  CAST(strftime('%Y', order_date) AS INTEGER)             AS order_year,
+  CAST(strftime('%j', order_date) AS INTEGER)             AS day_of_year
 FROM orders
 ORDER BY order_date DESC
 LIMIT 8;`}
@@ -603,14 +603,13 @@ LIMIT 6;`}
         initialQuery={`-- CAST for date extraction
 SELECT
   order_date,
-  EXTRACT(YEAR    FROM order_date)                 AS year,
-  EXTRACT(MONTH   FROM order_date)                 AS month,
-  EXTRACT(QUARTER FROM order_date)                 AS quarter,
+  CAST(strftime('%Y', order_date) AS INTEGER)                                    AS year,
+  CAST(strftime('%m', order_date) AS INTEGER)                                    AS month,
+  (CAST(strftime('%m', order_date) AS INTEGER) - 1) / 3 + 1                     AS quarter,
   -- Cast date parts to text for grouping labels
-  CAST(EXTRACT(YEAR FROM order_date) AS VARCHAR)
+  strftime('%Y', order_date)
   || '-Q'
-  || CAST(EXTRACT(QUARTER FROM order_date) AS VARCHAR)
-                                                   AS quarter_label
+  || CAST((CAST(strftime('%m', order_date) AS INTEGER) - 1) / 3 + 1 AS TEXT)    AS quarter_label
 FROM orders
 ORDER BY order_date DESC
 LIMIT 8;`}

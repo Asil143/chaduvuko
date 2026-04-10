@@ -735,18 +735,16 @@ ALTER TABLE monthly_revenue_summary
 
       <SQLPlayground
         initialQuery={`-- Simulate CTAS: see what a summary table would look like
--- (DuckDB playground doesn't persist across queries,
--- but the SELECT logic is identical to CTAS)
 SELECT
-  EXTRACT(MONTH FROM o.order_date)   AS month,
+  CAST(strftime('%m', o.order_date) AS INTEGER)  AS month,
   o.store_id,
-  COUNT(o.order_id)                  AS total_orders,
-  ROUND(SUM(o.total_amount), 2)      AS total_revenue,
-  ROUND(AVG(o.total_amount), 2)      AS avg_order_value
+  COUNT(o.order_id)                              AS total_orders,
+  ROUND(SUM(o.total_amount), 2)                  AS total_revenue,
+  ROUND(AVG(o.total_amount), 2)                  AS avg_order_value
 FROM orders AS o
 WHERE o.order_status = 'Delivered'
 GROUP BY
-  EXTRACT(MONTH FROM o.order_date),
+  CAST(strftime('%m', o.order_date) AS INTEGER),
   o.store_id
 ORDER BY month, total_revenue DESC;`}
         height={200}
