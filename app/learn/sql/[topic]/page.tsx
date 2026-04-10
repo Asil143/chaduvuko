@@ -14,6 +14,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'order-by':              () => import('@/content/sql/order-by'),
   'limit-fetch':          () => import('@/content/sql/limit-fetch'),
   'distinct':              () => import('@/content/sql/distinct'),
+  'null-values':           () => import('@/content/sql/null-values'),
   'arithmetic-expressions':     () => import('@/content/sql/arithmetic-expressions'),
   'aliases':                () => import('@/content/sql/aliases'),
   'like-wildcards':          () => import('@/content/sql/like-wildcards'),
