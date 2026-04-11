@@ -25,6 +25,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'update':                 () => import('@/content/sql/update'),
   'normalization':          () => import('@/content/sql/normalization'),
   'group-by':              () => import('@/content/sql/group-by'),
+  'having':                () => import('@/content/sql/having'),
   // 'joins':                 () => import('@/content/sql/joins'),
   // 'subqueries':            () => import('@/content/sql/subqueries'),
   // 'ctes':                  () => import('@/content/sql/ctes'),
