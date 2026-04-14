@@ -48,7 +48,18 @@
       "Bash(grep -B2 -A15 'initialQuery=.*DATE_TRUNC\\\\|initialQuery=.*date_trunc\\\\|initialQuery=.*EXTRACT' /Users/asil/Chaduvuko/content/sql/*.tsx)",
       "Bash(grep -l \"EXTRACT\\\\|DATE_TRUNC\\\\|date_trunc\" /Users/asil/Chaduvuko/content/sql/*.tsx)",
       "Bash(grep -n \"information_schema\\\\|TO_CHAR\\\\|ILIKE\\\\|GENERATED ALWAYS\\\\|TIMESTAMPTZ\\\\|JSONB\\\\|SERIAL\" /Users/asil/Chaduvuko/content/sql/*.tsx)",
-      "Bash(grep -n \"INTERVAL\" /Users/asil/Chaduvuko/content/sql/*.tsx)"
+      "Bash(grep -n \"INTERVAL\" /Users/asil/Chaduvuko/content/sql/*.tsx)",
+      "Bash(sqlite3 --version)",
+      "Read(//private/tmp/**)",
+      "Bash(cat)",
+      "Bash(sqlite3 /tmp/testdb.sqlite)",
+      "Bash(sqlite3 /tmp/testdb2.sqlite)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(sqlite3 :memory: \"SELECT sqlite_compileoptions\\(\\);\")",
+      "Bash(sqlite3 :memory:)",
+      "Bash(echo \"Exit2: $?\")",
+      "Bash(sqlite3 :memory: \"SELECT strftime\\('%m', '2024-01-05'\\), strftime\\('%Y', '2024-01-05'\\), CAST\\(strftime\\('%m', '2024-01-05'\\) AS INTEGER\\);\")",
+      "Bash(echo \"strftime Exit: $?\")"
     ]
   }
 }
