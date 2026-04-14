@@ -220,9 +220,9 @@ SELECT
   mgr.first_name || ' ' || mgr.last_name      AS manager_name,
   mgr.role                                    AS manager_role,
   COUNT(emp.employee_id)                      AS direct_reports,
-  STRING_AGG(
+  GROUP_CONCAT(
     emp.first_name || ' ' || emp.last_name,
-    ', ' ORDER BY emp.first_name
+    ', '
   )                                           AS report_names
 FROM employees AS mgr
 JOIN employees AS emp ON emp.manager_id = mgr.employee_id

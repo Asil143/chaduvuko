@@ -31,7 +31,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'left-right-join':                 () => import('@/content/sql/left-right-join'),
   'full-outer-join':                 () => import('@/content/sql/full-outer-join'),
   'self-join':                 () => import('@/content/sql/self-join'),
-
+'cross-join':                 () => import('@/content/sql/cross-join'),
   // 'subqueries':            () => import('@/content/sql/subqueries'),
   // 'ctes':                  () => import('@/content/sql/ctes'),
   // 'window-functions':      () => import('@/content/sql/window-functions'),
