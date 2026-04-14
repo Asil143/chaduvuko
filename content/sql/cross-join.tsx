@@ -1,6 +1,7 @@
 import { LearnLayout } from '@/components/content/LearnLayout';
 import { Callout } from '@/components/content/Callout';
 import { KeyTakeaways } from '@/components/content/KeyTakeaways';
+import WhyMatters from '@/components/content/WhyMatters';
 import SQLPlayground from '@/components/sql/SQLPlayground';
 import TryItChallenge from '@/components/sql/TryItChallenge';
 import Link from 'next/link';
@@ -82,6 +83,9 @@ export default function CrossJoin() {
       readTime="25 min"
       updatedAt="April 2026"
     >
+      <WhyMatters track="sql">
+        Zepto's operations team runs JOIN queries every morning to match delivery partner IDs to order IDs. This is that query.
+      </WhyMatters>
 
       {/* ── PART 01 ── */}
       <Part n="01" title="What CROSS JOIN Does — Every Row with Every Row" />
