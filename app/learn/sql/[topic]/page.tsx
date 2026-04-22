@@ -34,6 +34,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
 'cross-join':                 () => import('@/content/sql/cross-join'),
    'subqueries':            () => import('@/content/sql/subqueries'),
    'correlated-subqueries':   () => import('@/content/sql/correlated-subqueries'),
+    'exists-not-exists':      () => import('@/content/sql/exists-not-exists'),
   // 'ctes':                  () => import('@/content/sql/ctes'),
   // 'window-functions':      () => import('@/content/sql/window-functions'),
   // 'case-statements':       () => import('@/content/sql/case-statements'),
