@@ -274,8 +274,8 @@ SELECT
   ROUND(SUM(total_amount), 2)          AS revenue
 FROM orders
 WHERE order_status = 'Delivered'
-  AND EXTRACT(MONTH FROM order_date) = 1
-  AND EXTRACT(YEAR  FROM order_date) = 2024
+  AND strftime('%m', order_date) = '01'
+  AND strftime('%Y', order_date) = '2024'
 GROUP BY store_id
 
 UNION ALL
@@ -287,8 +287,8 @@ SELECT
   ROUND(SUM(total_amount), 2)          AS revenue
 FROM orders
 WHERE order_status = 'Delivered'
-  AND EXTRACT(MONTH FROM order_date) = 2
-  AND EXTRACT(YEAR  FROM order_date) = 2024
+  AND strftime('%m', order_date) = '02'
+  AND strftime('%Y', order_date) = '2024'
 GROUP BY store_id
 
 ORDER BY store_id, period;`}
@@ -514,8 +514,8 @@ SELECT DISTINCT oi.product_id
 FROM order_items AS oi
 JOIN orders AS o ON oi.order_id = o.order_id
 WHERE o.order_status = 'Delivered'
-  AND EXTRACT(MONTH FROM o.order_date) = 1
-  AND EXTRACT(YEAR  FROM o.order_date) = 2024
+  AND strftime('%m', o.order_date) = '01'
+  AND strftime('%Y', o.order_date) = '2024'
 
 EXCEPT
 
@@ -523,8 +523,8 @@ SELECT DISTINCT oi.product_id
 FROM order_items AS oi
 JOIN orders AS o ON oi.order_id = o.order_id
 WHERE o.order_status = 'Delivered'
-  AND EXTRACT(MONTH FROM o.order_date) = 2
-  AND EXTRACT(YEAR  FROM o.order_date) = 2024
+  AND strftime('%m', o.order_date) = '02'
+  AND strftime('%Y', o.order_date) = '2024'
 
 ORDER BY product_id;`}
         height={240}
@@ -930,8 +930,8 @@ LIMIT 15;`}
         answer={`-- Query 1: Activity feed — recent orders UNION ALL expensive products
 SELECT * FROM (
   SELECT
-    order_id::TEXT                     AS id,
-    'Order #' || order_id::TEXT        AS name,
+    CAST(order_id AS TEXT)             AS id,
+    'Order #' || CAST(order_id AS TEXT) AS name,
     total_amount                       AS amount,
     'Order'                            AS type
   FROM orders
@@ -944,7 +944,7 @@ UNION ALL
 
 SELECT * FROM (
   SELECT
-    product_id::TEXT                   AS id,
+    CAST(product_id AS TEXT)           AS id,
     product_name                       AS name,
     unit_price                         AS amount,
     'Product'                          AS type
