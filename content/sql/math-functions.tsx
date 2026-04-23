@@ -92,7 +92,7 @@ export default function MathFunctions() {
     <LearnLayout
       title="Math Functions"
       description="ROUND, FLOOR, CEIL, ABS, MOD, POWER, SQRT, LOG — every numeric operation for financial calculations, statistical analysis, data bucketing, and percentage computations"
-      section="SQL — Module 44"
+      section="SQL — Module 43"
       readTime="30 min"
       updatedAt="April 2026"
     >
@@ -1006,10 +1006,10 @@ ORDER BY gross_margin_pct DESC NULLS LAST;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 45</strong>, you learn CAST and type conversion — converting between data types, implicit vs explicit casting, safe casting with TRY_CAST, and the type coercion rules that prevent silent errors.
+          In <strong>Module 44</strong>, you learn CAST and type conversion — converting between data types, implicit vs explicit casting, safe casting with TRY_CAST, and the type coercion rules that prevent silent errors.
         </p>
         <Link href="/learn/sql/cast-convert" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 45 → CAST and Type Conversion
+          Module 44 → CAST and Type Conversion
         </Link>
       </div>
 
