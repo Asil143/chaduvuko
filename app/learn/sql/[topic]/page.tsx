@@ -38,6 +38,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
     'union-intersect-except': () => import('@/content/sql/union-intersect-except'),
     'derived-tables':         () => import('@/content/sql/derived-tables'),
     'cte-with-clause':          () => import('@/content/sql/cte-with-clause'),
+    'string-functions':         () => import('@/content/sql/string-functions'),
   // 'ctes':                  () => import('@/content/sql/ctes'),
   // 'window-functions':      () => import('@/content/sql/window-functions'),
   // 'case-statements':       () => import('@/content/sql/case-statements'),
