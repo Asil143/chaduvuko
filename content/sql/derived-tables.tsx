@@ -833,10 +833,10 @@ ORDER BY cs.total_delivered_spend DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 41</strong>, you learn the CTE (WITH clause) in full depth — syntax, multi-step composition, reuse within one query, performance considerations, and every pattern where CTEs outshine derived tables and subqueries.
+          In <strong>Module 41</strong>, you learn the String Function in full depth — syntax, multi-step composition, reuse within one query, performance considerations, and every pattern where CTEs outshine derived tables and subqueries.
         </p>
-        <Link href="/learn/sql/cte-with-clause" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 41 → CTE — WITH Clause
+        <Link href="/learn/sql/string-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 41 → String Function
         </Link>
       </div>
 
