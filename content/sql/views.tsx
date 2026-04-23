@@ -1095,7 +1095,7 @@ ORDER BY price_band, rnk;`}
           In <strong>Module 46</strong>, you learn Indexes — how the database finds rows without scanning every row, when to create them, which type to choose, and how to diagnose slow queries with EXPLAIN ANALYZE.
         </p>
         <Link href="/learn/sql/indexes" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 47 → Indexes
+          Module 46: Indexes→ Indexes
         </Link>
       </div>
 
