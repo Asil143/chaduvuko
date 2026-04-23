@@ -96,7 +96,7 @@ export default function Views() {
     <LearnLayout
       title="Views — Virtual Tables"
       description="Store a query as a named database object — create, replace, and drop views, build layered reporting abstractions, control access with views, and understand when materialized views beat regular ones"
-      section="SQL — Module 46"
+      section="SQL — Module 45"
       readTime="32 min"
       updatedAt="April 2026"
     >
@@ -1092,7 +1092,7 @@ ORDER BY price_band, rnk;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 47</strong>, you learn Indexes — how the database finds rows without scanning every row, when to create them, which type to choose, and how to diagnose slow queries with EXPLAIN ANALYZE.
+          In <strong>Module 46</strong>, you learn Indexes — how the database finds rows without scanning every row, when to create them, which type to choose, and how to diagnose slow queries with EXPLAIN ANALYZE.
         </p>
         <Link href="/learn/sql/indexes" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
           Module 47 → Indexes
