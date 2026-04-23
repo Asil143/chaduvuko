@@ -91,7 +91,7 @@ export default function StringFunctions() {
     <LearnLayout
       title="String Functions"
       description="Every text manipulation tool — concatenation, case, length, trimming, substrings, replacement, padding, splitting, and pattern matching for real data cleaning"
-      section="SQL — Module 42"
+      section="SQL — Module 41"
       readTime="35 min"
       updatedAt="April 2026"
     >
@@ -958,10 +958,10 @@ ORDER BY clean_name;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 43</strong>, you learn date and time functions — extracting parts, calculating differences, formatting, truncating to periods, and every temporal operation needed for time-series analytics and reporting.
+          In <strong>Module 42</strong>, you learn date and time functions — extracting parts, calculating differences, formatting, truncating to periods, and every temporal operation needed for time-series analytics and reporting.
         </p>
         <Link href="/learn/sql/date-time-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 43 → Date and Time Functions
+          Module 42 → Date and Time Functions
         </Link>
       </div>
 
