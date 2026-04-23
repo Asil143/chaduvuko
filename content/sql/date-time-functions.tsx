@@ -86,7 +86,7 @@ export default function DateTimeFunctions() {
     <LearnLayout
       title="Date and Time Functions"
       description="Extract parts, calculate differences, truncate to periods, format for display, handle timezones — every temporal operation for time-series analytics and reporting"
-      section="SQL — Module 43"
+      section="SQL — Module 42"
       readTime="38 min"
       updatedAt="April 2026"
     >
@@ -1025,10 +1025,10 @@ ORDER BY s.store_id, month_start;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 44</strong>, you learn math and numeric functions — ROUND, FLOOR, CEIL, ABS, MOD, POWER, SQRT, LOG, and every numeric operation for financial calculations, statistical summaries, and data transformation.
+          In <strong>Module 43</strong>, you learn math and numeric functions — ROUND, FLOOR, CEIL, ABS, MOD, POWER, SQRT, LOG, and every numeric operation for financial calculations, statistical summaries, and data transformation.
         </p>
         <Link href="/learn/sql/math-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 44 → Math Functions
+          Module 43 → Math Functions
         </Link>
       </div>
 
