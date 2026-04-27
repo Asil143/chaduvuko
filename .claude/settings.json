@@ -2,6 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(grep -v \"^$\")"
+    ],
+    "additionalDirectories": [
+      "/Users/asil/Chaduvuko/app/learn/sql/[topic]"
     ]
   }
 }
