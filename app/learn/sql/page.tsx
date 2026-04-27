@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
-import { SQL_CURRICULUM, SQL_TABLES } from '@/data/sql-freshmart'
+import { SQL_CURRICULUM, SQL_TABLES } from '@/data/sql-freshcart'
 
 type SectionFilter = 'all' | string
 
@@ -18,7 +18,11 @@ export default function SQLTrackPage() {
       : allModules.filter(m => m.sectionId === parseInt(activeSection))
 
   const totalTopics  = allModules.reduce((sum, m) => sum + m.tags.length, 0)
-  const totalMinutes = allModules.reduce((sum, m) => sum + parseInt(m.readTime), 0)
+  const totalMinutes = allModules.reduce((sum, m) => {
+    const parts = m.readTime.match(/\d+/g) ?? ['0']
+    const avg = parts.length > 1 ? (parseInt(parts[0]) + parseInt(parts[1])) / 2 : parseInt(parts[0])
+    return sum + avg
+  }, 0)
   const totalHours   = Math.round(totalMinutes / 60)
 
   return (
@@ -191,11 +195,8 @@ export default function SQLTrackPage() {
           // Curriculum
         </div>
 
-        <div style={{
-          display: 'flex', justifyContent: 'space-between',
-          alignItems: 'flex-end', flexWrap: 'wrap', gap: 16, marginBottom: 6,
-        }}>
-          <div>
+        <div style={{ marginBottom: 6 }}>
+          <div style={{ marginBottom: 14 }}>
             <h2 style={{
               fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 900,
               letterSpacing: '-1px', color: 'var(--text)',
@@ -210,7 +211,7 @@ export default function SQLTrackPage() {
           </div>
 
           {/* Section filter tabs */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'flex-end' }}>
             {(['all', ...SQL_CURRICULUM.map(s => String(s.id))] as SectionFilter[]).map(f => {
               const section = SQL_CURRICULUM.find(s => String(s.id) === f)
               const col = f === 'all' ? '#06b6d4' : (section?.color ?? '#06b6d4')

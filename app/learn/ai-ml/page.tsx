@@ -61,7 +61,7 @@ const modules: Module[] = [
   },
   {
     num: '02', section: 1, color: sectionColors[1], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/ai-ml-landscape',
     title: 'The AI/ML Landscape — Tools, Roles, and Career Paths',
     description: 'Every tool, every role, every career path in the AI/ML ecosystem mapped clearly. Know exactly where you fit before you write a single line of code.',
@@ -71,7 +71,7 @@ const modules: Module[] = [
   // ── Section 2 — Math Foundations ─────────────────────────────────────────
   {
     num: '03', section: 2, color: sectionColors[2], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–38 min',
     href: '/learn/ai-ml/math-foundations/vectors-matrices-tensors',
     title: 'Vectors, Matrices and Tensors',
     description: 'The language every ML algorithm speaks. From a single number to multi-dimensional arrays — with visual intuition first, formula second.',
@@ -79,7 +79,7 @@ const modules: Module[] = [
   },
   {
     num: '04', section: 2, color: sectionColors[2], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/math-foundations/matrix-multiplication',
     title: 'Matrix Multiplication and Linear Transformations',
     description: 'How data flows through neural network layers. One of the most important operations in all of ML — explained visually before mathematically.',
@@ -87,7 +87,7 @@ const modules: Module[] = [
   },
   {
     num: '05', section: 2, color: sectionColors[2], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/math-foundations/dot-product-similarity',
     title: 'Dot Product and Similarity',
     description: 'The operation behind every recommendation engine, embedding search, and attention mechanism. Cosine similarity, projections, and geometric intuition.',
@@ -95,7 +95,7 @@ const modules: Module[] = [
   },
   {
     num: '06', section: 2, color: sectionColors[2], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/math-foundations/eigenvalues-eigenvectors',
     title: 'Eigenvalues and Eigenvectors',
     description: 'The mathematical foundation of PCA, spectral clustering, and page rank. What eigenvectors are, why they matter, and how to compute them.',
@@ -103,7 +103,7 @@ const modules: Module[] = [
   },
   {
     num: '07', section: 2, color: sectionColors[2], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/math-foundations/derivatives-and-gradients',
     title: 'Derivatives, Gradients and the Chain Rule',
     description: 'The mathematical engine behind every learning algorithm. Understand gradient descent before you ever run model.fit().',
@@ -111,7 +111,7 @@ const modules: Module[] = [
   },
   {
     num: '08', section: 2, color: sectionColors[2], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–45 min',
     href: '/learn/ai-ml/math-foundations/probability-distributions',
     title: 'Probability Distributions and Bayes Theorem',
     description: 'How ML models reason under uncertainty. Normal distribution, Bernoulli, Poisson, and why Bayes theorem appears in almost every algorithm.',
@@ -119,7 +119,7 @@ const modules: Module[] = [
   },
   {
     num: '09', section: 2, color: sectionColors[2], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/math-foundations/information-theory',
     title: 'Information Theory — Entropy, Cross-Entropy and KL Divergence',
     description: 'Why loss functions in neural networks look the way they do. The information theory behind cross-entropy loss explained from scratch.',
@@ -129,7 +129,7 @@ const modules: Module[] = [
   // ── Section 3 — Programming Ecosystem ────────────────────────────────────
   {
     num: '10', section: 3, color: sectionColors[3], status: 'live', xp: 100,
-    readTime: '60 min',
+    readTime: '55–70 min',
     href: '/learn/ai-ml/programming/python-for-ml',
     title: 'Python for Machine Learning',
     description: 'Not Python 101. Python for ML — NumPy vectorisation, Pandas DataFrames, matplotlib visualisation, and the sklearn interface that every algorithm shares.',
@@ -137,7 +137,7 @@ const modules: Module[] = [
   },
   {
     num: '11', section: 3, color: sectionColors[3], status: 'live', xp: 100,
-    readTime: '45 min',
+    readTime: '40–52 min',
     href: '/learn/ai-ml/programming/numpy-arrays',
     title: 'NumPy Arrays and Broadcasting',
     description: 'The backbone of all numerical ML. Arrays, indexing, slicing, broadcasting, and vectorised operations that replace for loops at scale.',
@@ -145,7 +145,7 @@ const modules: Module[] = [
   },
   {
     num: '12', section: 3, color: sectionColors[3], status: 'live', xp: 100,
-    readTime: '50 min',
+    readTime: '45–58 min',
     href: '/learn/ai-ml/programming/pandas-dataframes',
     title: 'Pandas for Data Analysis',
     description: 'Load, clean, transform and explore datasets. GroupBy, merge, pivot, apply — the operations every ML project starts with.',
@@ -153,7 +153,7 @@ const modules: Module[] = [
   },
   {
     num: '13', section: 3, color: sectionColors[3], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '35–45 min',
     href: '/learn/ai-ml/programming/matplotlib-seaborn',
     title: 'Data Visualisation for ML',
     description: 'Plot distributions, correlations, confusion matrices, ROC curves, and learning curves. See what is happening in your data before you model it.',
@@ -161,7 +161,7 @@ const modules: Module[] = [
   },
   {
     num: '14', section: 3, color: sectionColors[3], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/programming/sklearn-interface',
     title: 'Scikit-learn Interface',
     description: 'The API every sklearn algorithm shares. fit, transform, predict, Pipeline, ColumnTransformer — understand the interface once and every algorithm becomes obvious.',
@@ -171,7 +171,7 @@ const modules: Module[] = [
   // ── Section 4 — Data Engineering for ML ──────────────────────────────────
   {
     num: '15', section: 4, color: sectionColors[4], status: 'live', xp: 100,
-    readTime: '55 min',
+    readTime: '50–62 min',
     href: '/learn/ai-ml/data-engineering/data-collection',
     title: 'Data Collection — APIs, SQL, Files and Scraping',
     description: 'Where ML data actually comes from. Pull from REST APIs, query databases, read Parquet files, and scrape web data — all with production-grade Python.',
@@ -179,7 +179,7 @@ const modules: Module[] = [
   },
   {
     num: '16', section: 4, color: sectionColors[4], status: 'live', xp: 100,
-    readTime: '50 min',
+    readTime: '45–58 min',
     href: '/learn/ai-ml/data-engineering/data-cleaning',
     title: 'Missing Values, Outliers and Data Cleaning',
     description: 'The step that determines whether your model works or fails silently. Every imputation strategy, when to use each, and what breaks when you skip this.',
@@ -187,7 +187,7 @@ const modules: Module[] = [
   },
   {
     num: '17', section: 4, color: sectionColors[4], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–38 min',
     href: '/learn/ai-ml/data-engineering/feature-scaling',
     title: 'Feature Scaling — Standardisation and Normalisation',
     description: 'Why scale matters, what StandardScaler and MinMaxScaler actually do, and which algorithms break without scaling.',
@@ -195,7 +195,7 @@ const modules: Module[] = [
   },
   {
     num: '18', section: 4, color: sectionColors[4], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–45 min',
     href: '/learn/ai-ml/data-engineering/encoding-categorical-features',
     title: 'Encoding Categorical Features',
     description: 'One-hot encoding, ordinal encoding, target encoding — what each one does to your data and when each one is the right choice.',
@@ -203,7 +203,7 @@ const modules: Module[] = [
   },
   {
     num: '19', section: 4, color: sectionColors[4], status: 'live', xp: 100,
-    readTime: '50 min',
+    readTime: '45–55 min',
     href: '/learn/ai-ml/data-engineering/feature-engineering',
     title: 'Feature Engineering and the Sklearn Pipeline',
     description: 'Create new features, combine transformers, and build a single reusable pipeline that preprocesses and models together.',
@@ -211,7 +211,7 @@ const modules: Module[] = [
   },
   {
     num: '20', section: 4, color: sectionColors[4], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/data-engineering/train-val-test-split',
     title: 'Train / Validation / Test Split',
     description: 'Why three splits, not two. Holdout sets, stratified splits, data leakage across splits, and the time-series exception where random splits break everything.',
@@ -245,7 +245,7 @@ const modules: Module[] = [
   },
   {
     num: '24', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/classical-ml/decision-trees',
     title: 'Decision Trees — Loan Approval at HDFC',
     description: 'The algorithm that thinks in if-then questions. Gini impurity, information gain, pruning, and why decision trees are the foundation of every ensemble method.',
@@ -253,7 +253,7 @@ const modules: Module[] = [
   },
   {
     num: '25', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/classical-ml/svm',
     title: 'Support Vector Machines — Margin Maximisation',
     description: 'The algorithm that finds the widest possible boundary between classes. Kernels, the kernel trick, and why SVMs still matter for small high-dimensional datasets.',
@@ -261,7 +261,7 @@ const modules: Module[] = [
   },
   {
     num: '26', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/classical-ml/knn',
     title: 'K-Nearest Neighbours — Similarity-Based Prediction',
     description: 'The simplest possible ML algorithm — predict based on what your neighbours look like. Distance metrics, the curse of dimensionality, and when KNN actually works.',
@@ -269,7 +269,7 @@ const modules: Module[] = [
   },
   {
     num: '27', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/classical-ml/naive-bayes',
     title: 'Naive Bayes — Probabilistic Text Classification',
     description: 'Bayes theorem applied to classification. Why the naive independence assumption works surprisingly well for spam filters and document classification.',
@@ -277,7 +277,7 @@ const modules: Module[] = [
   },
   {
     num: '28', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/classical-ml/random-forest',
     title: 'Random Forest — Instacart Stock Prediction',
     description: 'Bagging + random features = a model that beats most others on tabular data. Feature importance, out-of-bag evaluation, and hyperparameter intuition.',
@@ -285,7 +285,7 @@ const modules: Module[] = [
   },
   {
     num: '29', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/classical-ml/gradient-boosting',
     title: 'Gradient Boosting — How XGBoost and LightGBM Work',
     description: 'The most powerful classical ML algorithm family. Sequential weak learners, residuals, and why gradient boosting wins almost every tabular ML competition.',
@@ -293,7 +293,7 @@ const modules: Module[] = [
   },
   {
     num: '30', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–45 min',
     href: '/learn/ai-ml/classical-ml/xgboost',
     title: 'XGBoost in Practice — End to End',
     description: 'Train, tune, and interpret XGBoost on a real dataset. Regularisation parameters, early stopping, SHAP values, and production deployment.',
@@ -301,7 +301,7 @@ const modules: Module[] = [
   },
   {
     num: '31', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/classical-ml/lightgbm',
     title: 'LightGBM — Fast Gradient Boosting at Scale',
     description: 'Microsoft\'s answer to XGBoost. Leaf-wise tree growth, histogram-based splitting, and why LightGBM trains 10x faster on large datasets.',
@@ -309,7 +309,7 @@ const modules: Module[] = [
   },
   {
     num: '32', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/classical-ml/kmeans-clustering',
     title: 'K-Means Clustering — Customer Segmentation',
     description: 'Finding hidden groups in data without labels. Inertia, elbow method, silhouette scores, and when clustering is and isn\'t the right approach.',
@@ -317,7 +317,7 @@ const modules: Module[] = [
   },
   {
     num: '33', section: 5, color: sectionColors[5], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/classical-ml/pca',
     title: 'PCA — Dimensionality Reduction',
     description: 'Turn 100 features into 10 without losing most of the information. Explained variance, scree plots, and when PCA helps and when it hurts.',
@@ -327,7 +327,7 @@ const modules: Module[] = [
   // ── Section 6 — Evaluation & Optimisation ────────────────────────────────
   {
     num: '34', section: 6, color: sectionColors[6], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/evaluation/evaluation-metrics',
     title: 'Evaluation Metrics — Beyond Accuracy',
     description: 'What accuracy hides, and what every other metric reveals. The confusion matrix explained from scratch, with Stripe fraud detection as the running example.',
@@ -335,7 +335,7 @@ const modules: Module[] = [
   },
   {
     num: '35', section: 6, color: sectionColors[6], status: 'live', xp: 100,
-    readTime: '20 min',
+    readTime: '18–24 min',
     href: '/learn/ai-ml/evaluation/calibration',
     title: 'Calibration — Are Your Probabilities Trustworthy?',
     description: 'Reliability diagrams, Brier score, and Platt scaling vs isotonic regression — when your model says 80% fraud probability, does it actually mean 80%?',
@@ -343,7 +343,7 @@ const modules: Module[] = [
   },
   {
     num: '36', section: 6, color: sectionColors[6], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/evaluation/roc-and-auc',
     title: 'ROC Curve and AUC — Threshold-Independent Evaluation',
     description: 'Why ROC-AUC is the most trustworthy single number for a classifier. How the curve is constructed, what the area means, and when to use PR-AUC instead.',
@@ -351,7 +351,7 @@ const modules: Module[] = [
   },
   {
     num: '37', section: 6, color: sectionColors[6], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/evaluation/cross-validation',
     title: 'Cross-Validation and the Bias-Variance Tradeoff',
     description: 'Why train/test split alone is not enough. K-fold, stratified K-fold, time-series split, and the bias-variance tradeoff visualised clearly.',
@@ -359,7 +359,7 @@ const modules: Module[] = [
   },
   {
     num: '38', section: 6, color: sectionColors[6], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/evaluation/hyperparameter-tuning',
     title: 'Hyperparameter Tuning with Optuna',
     description: 'From grid search to Bayesian optimisation. How Optuna works, when to use it, and how to tune any model without wasting GPU hours.',
@@ -367,7 +367,7 @@ const modules: Module[] = [
   },
   {
     num: '39', section: 6, color: sectionColors[6], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/evaluation/model-interpretability',
     title: 'Model Interpretability — SHAP and LIME',
     description: 'Why your model makes the predictions it does. SHAP values for any model, LIME for local explanations, and how to present findings to non-technical stakeholders.',
@@ -375,7 +375,7 @@ const modules: Module[] = [
   },
   {
     num: '40', section: 6, color: sectionColors[6], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/evaluation/regression-metrics',
     title: 'Regression Metrics — MAE, RMSE, R²',
     description: 'How to measure how wrong a regression model is. MAE, RMSE, and R² explained with intuition, formulas, and when to use which.',
@@ -385,7 +385,7 @@ const modules: Module[] = [
   // ── Section 7 — Deep Learning ─────────────────────────────────────────────
   {
     num: '41', section: 7, color: sectionColors[7], status: 'live', xp: 100,
-    readTime: '45 min',
+    readTime: '40–52 min',
     href: '/learn/ai-ml/deep-learning/neural-networks-from-scratch',
     title: 'Neural Networks from Scratch',
     description: 'Build a neural network from nothing but NumPy. Layers, weights, activations, forward pass — no black boxes, every line of code explained.',
@@ -393,7 +393,7 @@ const modules: Module[] = [
   },
   {
     num: '42', section: 7, color: sectionColors[7], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/deep-learning/backpropagation',
     title: 'Backpropagation — How Neural Networks Learn',
     description: 'The chain rule applied to a network of layers. Gradients flow backward, weights update, the network gets better. Understood once, never forgotten.',
@@ -401,7 +401,7 @@ const modules: Module[] = [
   },
   {
     num: '43', section: 7, color: sectionColors[7], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/deep-learning/activation-functions',
     title: 'Activation Functions and Loss Functions',
     description: 'Why ReLU replaced sigmoid, what GELU is doing in Transformers, and which loss function to use for which problem. The full reference.',
@@ -409,7 +409,7 @@ const modules: Module[] = [
   },
   {
     num: '44', section: 7, color: sectionColors[7], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/deep-learning/optimisers',
     title: 'Optimisers — SGD, Adam, AdamW',
     description: 'How neural networks update their weights. Momentum, adaptive learning rates, weight decay — and why Adam is the default for almost everything.',
@@ -417,7 +417,7 @@ const modules: Module[] = [
   },
   {
     num: '45', section: 7, color: sectionColors[7], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/deep-learning/batch-norm-dropout',
     title: 'Batch Normalisation and Dropout',
     description: 'Two techniques that made deep networks trainable. What batch norm actually normalises, why dropout works as an ensemble method, and when to use each.',
@@ -425,7 +425,7 @@ const modules: Module[] = [
   },
   {
     num: '46', section: 7, color: sectionColors[7], status: 'live', xp: 100,
-    readTime: '50 min',
+    readTime: '45–58 min',
     href: '/learn/ai-ml/deep-learning/cnns-image-classification',
     title: 'CNNs — Shopify Product Image Classification',
     description: 'Convolutions, filters, pooling, feature maps, and the ResNet skip connection that let neural networks go from 5 layers to 1000. Full PyTorch code.',
@@ -433,7 +433,7 @@ const modules: Module[] = [
   },
   {
     num: '47', section: 7, color: sectionColors[7], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/deep-learning/rnns-and-lstms',
     title: 'RNNs and LSTMs — Sequence Modelling',
     description: 'When order matters. The vanishing gradient problem, LSTM gates (input/forget/output/cell state), and when RNNs are still the right choice over Transformers.',
@@ -441,7 +441,7 @@ const modules: Module[] = [
   },
   {
     num: '48', section: 7, color: sectionColors[7], status: 'live', xp: 100,
-    readTime: '50 min',
+    readTime: '45–58 min',
     href: '/learn/ai-ml/deep-learning/transformers-and-attention',
     title: 'Transformers and Self-Attention',
     description: 'The architecture behind GPT, BERT, and every modern LLM. Query-Key-Value attention, multi-head attention, positional encoding — built up from scratch.',
@@ -451,7 +451,7 @@ const modules: Module[] = [
   // ── Section 8 — Natural Language Processing ───────────────────────────────
   {
     num: '49', section: 8, color: sectionColors[8], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/nlp/tokenisation-and-embeddings',
     title: 'Tokenisation and Word Embeddings',
     description: 'How text becomes numbers. BPE, WordPiece, SentencePiece tokenisers explained. Word2Vec, GloVe, and contextual embeddings — why each one exists.',
@@ -459,7 +459,7 @@ const modules: Module[] = [
   },
   {
     num: '50', section: 8, color: sectionColors[8], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/nlp/bert-encoder-family',
     title: 'BERT and the Encoder-Only Family',
     description: 'Masked language modelling, next sentence prediction, fine-tuning on downstream tasks. The model that changed NLP — still powering classification and NER.',
@@ -467,7 +467,7 @@ const modules: Module[] = [
   },
   {
     num: '51', section: 8, color: sectionColors[8], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/nlp/peft-lora-adapters',
     title: 'Fine-Tuning with PEFT — LoRA and Adapters',
     description: 'Tune less than 1% of a model\'s parameters and get 95% of the performance. LoRA, adapters, and prefix tuning — when and how to use each.',
@@ -475,7 +475,7 @@ const modules: Module[] = [
   },
   {
     num: '52', section: 8, color: sectionColors[8], status: 'live', xp: 100,
-    readTime: '45 min',
+    readTime: '40–52 min',
     href: '/learn/ai-ml/nlp/rag-retrieval-augmented-generation',
     title: 'RAG — Retrieval-Augmented Generation',
     description: 'Give any LLM external memory. Vector databases, semantic search, chunking strategies, and the full RAG pipeline from document to answer.',
@@ -483,7 +483,7 @@ const modules: Module[] = [
   },
   {
     num: '53', section: 8, color: sectionColors[8], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/nlp/prompt-engineering',
     title: 'Prompt Engineering',
     description: 'Zero-shot, few-shot, chain-of-thought, ReAct — the patterns that consistently improve LLM outputs. With real before/after examples for every technique.',
@@ -491,7 +491,7 @@ const modules: Module[] = [
   },
   {
     num: '54', section: 8, color: sectionColors[8], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/nlp/llm-agents-and-tool-use',
     title: 'LLM Agents and Tool Use',
     description: 'When LLMs call functions, search the web, write and run code, and plan multi-step tasks. The architecture behind every AI agent.',
@@ -501,7 +501,7 @@ const modules: Module[] = [
   // ── Section 9 — Computer Vision ──────────────────────────────────────────
   {
     num: '55', section: 9, color: sectionColors[9], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/computer-vision/image-fundamentals',
     title: 'Image Fundamentals — Pixels, Channels and Tensors',
     description: 'How computers see images. Pixel values, colour channels, image tensors, normalisation, and the preprocessing pipeline every vision model expects.',
@@ -509,7 +509,7 @@ const modules: Module[] = [
   },
   {
     num: '56', section: 9, color: sectionColors[9], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/computer-vision/data-augmentation',
     title: 'Data Augmentation — Training on Limited Image Data',
     description: 'How to multiply your image dataset without collecting more data. Flips, crops, colour jitter, mixup, cutout — and how each one affects what the model learns.',
@@ -517,7 +517,7 @@ const modules: Module[] = [
   },
   {
     num: '57', section: 9, color: sectionColors[9], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/computer-vision/object-detection',
     title: 'Object Detection — YOLO and Feature Pyramids',
     description: 'Detect and localise multiple objects in one pass. Anchor boxes, IoU, non-maximum suppression, and why YOLO became the production standard.',
@@ -525,7 +525,7 @@ const modules: Module[] = [
   },
   {
     num: '58', section: 9, color: sectionColors[9], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/computer-vision/semantic-segmentation',
     title: 'Semantic Segmentation — Pixel-Level Classification',
     description: 'Label every pixel in an image. U-Net architecture, skip connections, and how segmentation powers medical imaging and autonomous vehicles.',
@@ -533,7 +533,7 @@ const modules: Module[] = [
   },
   {
     num: '59', section: 9, color: sectionColors[9], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/computer-vision/transfer-learning',
     title: 'Transfer Learning — Fine-Tuning Pretrained Vision Models',
     description: 'Get ImageNet-level features without ImageNet-level compute. Feature extraction vs fine-tuning, layer freezing, and choosing the right backbone.',
@@ -543,7 +543,7 @@ const modules: Module[] = [
   // ── Section 10 — Generative AI ────────────────────────────────────────────
   {
     num: '60', section: 10, color: sectionColors[10], status: 'live', xp: 100,
-    readTime: '25 min',
+    readTime: '22–28 min',
     href: '/learn/ai-ml/generative-ai/what-is-generative-ai',
     title: 'What is Generative AI?',
     description: 'The shift from judging to creating. GANs, VAEs, diffusion, and LLMs — what makes each one generative, and when each one is the right architecture.',
@@ -551,7 +551,7 @@ const modules: Module[] = [
   },
   {
     num: '61', section: 10, color: sectionColors[10], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/generative-ai/gans-generator-discriminator',
     title: 'GANs — Generator vs Discriminator',
     description: 'Two networks in adversarial competition. Mode collapse, training instability, Wasserstein distance — the honest account of what makes GANs hard to train.',
@@ -559,7 +559,7 @@ const modules: Module[] = [
   },
   {
     num: '62', section: 10, color: sectionColors[10], status: 'live', xp: 100,
-    readTime: '30 min',
+    readTime: '26–34 min',
     href: '/learn/ai-ml/generative-ai/variational-autoencoders',
     title: 'Variational Autoencoders — Learning Latent Representations',
     description: 'Encode data into a structured latent space and decode it back. The reparameterisation trick, KL divergence loss, and why VAEs enable controllable generation.',
@@ -567,7 +567,7 @@ const modules: Module[] = [
   },
   {
     num: '63', section: 10, color: sectionColors[10], status: 'live', xp: 100,
-    readTime: '45 min',
+    readTime: '40–52 min',
     href: '/learn/ai-ml/generative-ai/diffusion-models',
     title: 'Diffusion Models and Stable Diffusion',
     description: 'Forward noise, reverse denoising, DDPM, DDIM, latent diffusion, classifier-free guidance. How Stable Diffusion generates photorealistic images from text.',
@@ -575,7 +575,7 @@ const modules: Module[] = [
   },
   {
     num: '64', section: 10, color: sectionColors[10], status: 'live', xp: 100,
-    readTime: '50 min',
+    readTime: '45–58 min',
     href: '/learn/ai-ml/generative-ai/llms-pretraining-rlhf',
     title: 'LLMs — Pretraining, RLHF, and Scaling Laws',
     description: 'How GPT, Claude, and Gemini are built. Next-token prediction at scale, RLHF alignment, DPO, instruction tuning, and the laws that predict capability.',
@@ -583,7 +583,7 @@ const modules: Module[] = [
   },
   {
     num: '65', section: 10, color: sectionColors[10], status: 'live', xp: 100,
-    readTime: '55 min',
+    readTime: '50–65 min',
     href: '/learn/ai-ml/generative-ai/llm-fine-tuning',
     title: 'LLM Fine-Tuning in Practice',
     description: 'When to fine-tune vs RAG vs prompt. Full LoRA fine-tuning walkthrough on a real dataset using HuggingFace Transformers and PEFT.',
@@ -591,7 +591,7 @@ const modules: Module[] = [
   },
   {
     num: '66', section: 10, color: sectionColors[10], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/generative-ai/multimodal-models',
     title: 'Multimodal Models — CLIP, LLaVA, and Vision-Language',
     description: 'Models that see and understand images and text together. CLIP for zero-shot image classification, LLaVA for visual question answering.',
@@ -599,7 +599,7 @@ const modules: Module[] = [
   },
   {
     num: '67', section: 10, color: sectionColors[10], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/generative-ai/advanced-rag',
     title: 'Advanced RAG — Reranking, Hybrid Search and Evaluation',
     description: 'Beyond naive RAG. Reranking retrieved chunks, hybrid dense-sparse search, RAG evaluation metrics, and the patterns that separate production RAG from toy RAG.',
@@ -607,7 +607,7 @@ const modules: Module[] = [
   },
   {
     num: '68', section: 10, color: sectionColors[10], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/generative-ai/agents-tool-use',
     title: 'Agents and Tool Use — Building Autonomous AI Systems',
     description: 'LLMs that plan, use tools, and execute multi-step tasks autonomously. ReAct, tool calling, memory, and the architecture patterns behind production AI agents.',
@@ -617,7 +617,7 @@ const modules: Module[] = [
   // ── Section 11 — MLOps & Production ──────────────────────────────────────
   {
     num: '69', section: 11, color: sectionColors[11], status: 'live', xp: 100,
-    readTime: '45 min',
+    readTime: '40–52 min',
     href: '/learn/ai-ml/mlops/ml-pipelines-feature-stores',
     title: 'ML Pipelines and Feature Stores',
     description: 'Feature pipelines, training pipelines, inference pipelines. Feast and Tecton for feature stores. Airflow, Kubeflow, and Prefect for orchestration.',
@@ -625,7 +625,7 @@ const modules: Module[] = [
   },
   {
     num: '70', section: 11, color: sectionColors[11], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/mlops/experiment-tracking',
     title: 'Experiment Tracking with MLflow and Weights & Biases',
     description: 'Log every run, compare experiments, version models, register artifacts. Never lose a good experiment again.',
@@ -633,7 +633,7 @@ const modules: Module[] = [
   },
   {
     num: '71', section: 11, color: sectionColors[11], status: 'live', xp: 100,
-    readTime: '55 min',
+    readTime: '50–65 min',
     href: '/learn/ai-ml/mlops/model-deployment',
     title: 'Model Deployment — FastAPI, Docker, Kubernetes',
     description: 'Wrap your model in a FastAPI endpoint, containerise with Docker, scale with Kubernetes. Full working deployment of the DoorDash delivery model.',
@@ -641,7 +641,7 @@ const modules: Module[] = [
   },
   {
     num: '72', section: 11, color: sectionColors[11], status: 'live', xp: 100,
-    readTime: '40 min',
+    readTime: '36–46 min',
     href: '/learn/ai-ml/mlops/model-monitoring',
     title: 'Model Monitoring — Drift Detection and Retraining',
     description: 'How to know your model is degrading before users complain. Data drift, concept drift, Evidently AI, and automated retraining triggers.',
@@ -649,7 +649,7 @@ const modules: Module[] = [
   },
   {
     num: '73', section: 11, color: sectionColors[11], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/mlops/retraining-pipelines',
     title: 'Retraining Pipelines — Keeping Models Fresh',
     description: 'Automated retraining schedules, trigger-based retraining on drift alerts, champion-challenger evaluation, and safe model promotion to production.',
@@ -657,7 +657,7 @@ const modules: Module[] = [
   },
   {
     num: '74', section: 11, color: sectionColors[11], status: 'live', xp: 100,
-    readTime: '35 min',
+    readTime: '30–40 min',
     href: '/learn/ai-ml/mlops/dvc-data-version-control',
     title: 'DVC — Data Version Control',
     description: 'Version datasets like code. DVC pipelines, remote storage, experiment tracking, and the full DVC + Git workflow for ML projects.',
@@ -665,7 +665,7 @@ const modules: Module[] = [
   },
   {
     num: '75', section: 11, color: sectionColors[11], status: 'live', xp: 100,
-    readTime: '60 min',
+    readTime: '55–70 min',
     href: '/learn/ai-ml/mlops/ml-system-design',
     title: 'ML System Design — End to End',
     description: 'Design any ML system from scratch. The framework, trade-offs, capacity estimation, and how to present it in an interview.',
@@ -675,7 +675,7 @@ const modules: Module[] = [
   // ── Section 12 — Cloud ML Platforms ──────────────────────────────────────
   {
     num: '76', section: 12, color: sectionColors[12], status: 'live', xp: 100,
-    readTime: '50 min',
+    readTime: '45–58 min',
     href: '/learn/ai-ml/cloud-ml/azure-ml',
     title: 'Azure ML — Studio, Pipelines and AutoML',
     description: 'Azure Machine Learning Studio, compute clusters, AML Pipelines, AutoML, model registry, and online endpoints. Connects to the existing Azure track.',
@@ -683,7 +683,7 @@ const modules: Module[] = [
   },
   {
     num: '77', section: 12, color: sectionColors[12], status: 'live', xp: 100,
-    readTime: '45 min',
+    readTime: '40–52 min',
     href: '/learn/ai-ml/cloud-ml/aws-sagemaker',
     title: 'AWS SageMaker — Training Jobs and Pipelines',
     description: 'SageMaker training jobs, SageMaker Pipelines, Feature Store, Clarify for bias detection, and JumpStart model hub.',
@@ -691,7 +691,7 @@ const modules: Module[] = [
   },
   {
     num: '78', section: 12, color: sectionColors[12], status: 'live', xp: 100,
-    readTime: '45 min',
+    readTime: '40–52 min',
     href: '/learn/ai-ml/cloud-ml/gcp-vertex-ai',
     title: 'GCP Vertex AI — Pipelines and AutoML',
     description: 'Vertex Pipelines (Kubeflow-based), Feature Store, AutoML Tables, model endpoints, and BigQuery ML for SQL-native ML.',
@@ -699,7 +699,7 @@ const modules: Module[] = [
   },
   {
     num: '79', section: 12, color: sectionColors[12], status: 'live', xp: 100,
-    readTime: '50 min',
+    readTime: '45–58 min',
     href: '/learn/ai-ml/cloud-ml/mlops-on-cloud',
     title: 'MLOps on Cloud — CI/CD for ML',
     description: 'GitHub Actions for ML pipelines, automated training and deployment, model validation gates, and the full MLOps loop on a cloud provider.',
@@ -707,7 +707,7 @@ const modules: Module[] = [
   },
   {
     num: '80', section: 12, color: sectionColors[12], status: 'live', xp: 300,
-    readTime: '90 min',
+    readTime: '80–100 min',
     href: '/learn/ai-ml/ml-interview-prep',
     title: 'Interview Prep — 50 Complete ML Answers',
     description: '50 complete answers covering classical ML, deep learning, system design, coding rounds, and behavioural questions — written at senior engineer depth.',
@@ -726,7 +726,7 @@ export default function AIMLTrack() {
   return (
     <LearnLayout
       title="AI & Machine Learning"
-      description="From zero to production-grade AI/ML — 60+ modules, no prerequisites"
+      description="From zero to production-grade AI/ML — 80 modules, no prerequisites"
       section="AI & ML"
       readTime="Self-paced"
       updatedAt="March 2026"
@@ -772,7 +772,7 @@ export default function AIMLTrack() {
         marginBottom: 36,
       }}>
         {[
-          { value: '60+',   label: 'Modules'         },
+          { value: '80',    label: 'Modules'         },
           { value: '12',    label: 'Sections'         },
           { value: '200+',  label: 'Topics covered'   },
           { value: '~60h',  label: 'Total content'    },
@@ -843,17 +843,14 @@ export default function AIMLTrack() {
           // Curriculum
         </div>
 
-        <div style={{
-          display: 'flex', justifyContent: 'space-between',
-          alignItems: 'flex-end', flexWrap: 'wrap', gap: 16, marginBottom: 6,
-        }}>
-          <div>
+        <div style={{ marginBottom: 6 }}>
+          <div style={{ marginBottom: 14 }}>
             <h2 style={{
               fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 900,
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              60+ Modules. Zero to Advanced.
+              80 Modules. Zero to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is
@@ -862,7 +859,7 @@ export default function AIMLTrack() {
           </div>
 
           {/* Section filter tabs */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'flex-end' }}>
             {(['all', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] as SectionFilter[]).map((f) => {
               const col = f === 'all' ? 'var(--accent)' : sectionColors[parseInt(f)]
               const isActive = activeSection === f
