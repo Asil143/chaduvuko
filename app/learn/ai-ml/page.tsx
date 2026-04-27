@@ -1070,14 +1070,14 @@ export default function AIMLTrack() {
           color: 'var(--text)', fontFamily: 'var(--font-display)',
           letterSpacing: '-1px', marginBottom: 12,
         }}>
-          Modules are dropping weekly.
+          80 modules. Start anywhere, finish stronger.
         </h3>
         <p style={{
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,
           maxWidth: 480, margin: '0 auto 24px',
         }}>
-          Start with Module 01 the moment it goes live. Each module is self-contained
-          enough to read on its own — but follow the order. Every concept earns the next one.
+          All 80 modules are live. Start with Module 01 and follow the order —
+          each module is self-contained enough to read on its own, but every concept earns the next one.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/learn/ai-ml/what-is-ai" style={{
