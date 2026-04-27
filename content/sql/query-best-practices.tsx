@@ -86,7 +86,7 @@ export default function QueryBestPractices() {
       <P>This module covers the patterns senior engineers check for in every SQL code review. They are not stylistic preferences — most of them have direct, measurable performance implications.</P>
 
       <SQLPlayground
-        initialQuery={`-- The FreshMart dataset we will optimize queries against
+        initialQuery={`-- The FreshCart dataset we will optimize queries against
 SELECT
   'customers'   AS tbl, COUNT(*) AS rows FROM customers
 UNION ALL SELECT 'orders',      COUNT(*) FROM orders
@@ -407,7 +407,7 @@ SELECT
       />
 
       <SQLPlayground
-        initialQuery={`-- NULL audit on the FreshMart orders table
+        initialQuery={`-- NULL audit on the FreshCart orders table
 SELECT
   COUNT(*)                                        AS total_orders,
   COUNT(delivery_date)                            AS with_delivery_date,
@@ -679,7 +679,7 @@ ORDER BY o.order_date DESC, o.total_amount DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 60</strong>, you apply everything to real data analysis — cohort analysis, RFM segmentation, and revenue breakdowns using the full FreshMart dataset.
+          In <strong>Module 60</strong>, you apply everything to real data analysis — cohort analysis, RFM segmentation, and revenue breakdowns using the full FreshCart dataset.
         </p>
         <Link href="/learn/sql/sql-for-data-analysis" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
           Module 60 → SQL for Data Analysis

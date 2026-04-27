@@ -253,7 +253,7 @@ ORDER BY month_start;`}
 
       <P>The classic recursive CTE use case: traversing a parent-child relationship stored in a self-referencing table. The same table has both the child rows and the parent rows — the recursive CTE walks from root to leaves (top-down) or from leaf to root (bottom-up).</P>
 
-      <H>FreshMart employee org chart — top-down traversal</H>
+      <H>FreshCart employee org chart — top-down traversal</H>
 
       <SQLPlayground
         initialQuery={`-- Traverse the employee hierarchy from top to bottom
@@ -439,7 +439,7 @@ ORDER BY sort_path;`}
 
       <SQLPlayground
         initialQuery={`-- Simulate a 3-level category tree using a VALUES CTE
--- (FreshMart doesn't have a categories table — we build one inline)
+-- (FreshCart doesn't have a categories table — we build one inline)
 WITH categories(category_id, category_name, parent_id) AS (
   VALUES
     (1,  'All Products',    NULL),
@@ -547,7 +547,7 @@ LIMIT 5;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Simulate delivery routing between FreshMart store cities
+        initialQuery={`-- Simulate delivery routing between FreshCart store cities
 -- Build a route graph inline and find all paths
 WITH routes(from_city, to_city, km) AS (
   VALUES
@@ -659,7 +659,7 @@ FROM bom_explosion;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Simulate BOM explosion for a FreshMart gift basket
+        initialQuery={`-- Simulate BOM explosion for a FreshCart gift basket
 -- (basket contains products, products may have sub-components)
 WITH bom(parent_id, child_id, component_name, quantity, unit_cost) AS (
   VALUES
@@ -926,7 +926,7 @@ ORDER BY depth, node_name;`}
       </TimeBlock>
 
       <SQLPlayground
-        initialQuery={`-- Production-style BOM explosion for FreshMart gift basket
+        initialQuery={`-- Production-style BOM explosion for FreshCart gift basket
 -- Parameterised: change the basket_id to explode any product
 WITH
 basket_id(id) AS (VALUES (0)),   -- change this to any product
@@ -1116,7 +1116,7 @@ ORDER BY depth;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Build two recursive CTEs using FreshMart data. (1) Write a recursive CTE that generates every date in the range of FreshMart's order data (from the MIN order_date to the MAX order_date), then LEFT JOIN it to orders to produce a complete daily revenue calendar showing: calendar_date, daily_revenue (0 if no orders that day), order_count (0 if none), and a 3-day moving average of daily_revenue using a window function on the result. (2) Write a recursive CTE that traverses the FreshMart employee table from root (manager_id IS NULL) downward, producing: employee_id, full_name, job_title, depth (0 for root), indented_name (REPEAT spaces + name), full_path (names joined by ' → '), and direct_report_count (how many employees have this person as their manager_id — compute with a subquery or join). Order the org chart by the path so siblings appear together."
+        question="Build two recursive CTEs using FreshCart data. (1) Write a recursive CTE that generates every date in the range of FreshCart's order data (from the MIN order_date to the MAX order_date), then LEFT JOIN it to orders to produce a complete daily revenue calendar showing: calendar_date, daily_revenue (0 if no orders that day), order_count (0 if none), and a 3-day moving average of daily_revenue using a window function on the result. (2) Write a recursive CTE that traverses the FreshCart employee table from root (manager_id IS NULL) downward, producing: employee_id, full_name, job_title, depth (0 for root), indented_name (REPEAT spaces + name), full_path (names joined by ' → '), and direct_report_count (how many employees have this person as their manager_id — compute with a subquery or join). Order the org chart by the path so siblings appear together."
         hint="CTE 1: anchor = SELECT MIN(order_date) AS dt FROM orders, recursive = SELECT dt + 1 WHERE dt < (SELECT MAX(order_date) FROM orders). LEFT JOIN to orders. Window function for moving avg. CTE 2: anchor = WHERE manager_id IS NULL, recursive = JOIN employees ON manager_id = org.employee_id. direct_report_count = subquery COUNT WHERE manager_id = employee_id."
         answer={`-- ── Part 1: Complete daily revenue calendar ─────────────────────
 WITH RECURSIVE date_spine AS (

@@ -393,7 +393,7 @@ GENERATION 3: OPEN TABLE FORMATS + LAKEHOUSE (2020-present)
 
         <SubTitle>The standard four-zone model</SubTitle>
 
-        <CodeBox label="Data lake zone organisation — the standard model">{`DATA LAKE ZONES (S3 bucket organisation for FreshMart):
+        <CodeBox label="Data lake zone organisation — the standard model">{`DATA LAKE ZONES (S3 bucket organisation for FreshCart):
 
 s3://freshmart-data-lake/
 ├── landing/              ← ZONE 1: Landing / Raw Ingestion
@@ -935,7 +935,7 @@ OPTIMIZE silver.orders ZORDER BY (store_id, order_date);
         }}>
           💼 What This Looks Like at Work
         </div>
-        <SectionTitle>Designing FreshMart's Data Lake From Scratch</SectionTitle>
+        <SectionTitle>Designing FreshCart's Data Lake From Scratch</SectionTitle>
 
         <div style={{
           background: 'var(--surface)', border: '1px solid var(--border)',
@@ -948,18 +948,18 @@ OPTIMIZE silver.orders ZORDER BY (store_id, order_date);
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · New data lake design
+            Scenario — FreshCart · New data lake design
           </div>
 
           <Para>
-            FreshMart is migrating from an on-premise Hadoop cluster to a cloud
+            FreshCart is migrating from an on-premise Hadoop cluster to a cloud
             data lake on AWS. You are asked to design the architecture. Here is
             the complete design decision process a senior data engineer follows.
           </Para>
 
-          <CodeBox label="FreshMart data lake design — decisions and rationale">{`DECISION 1: Storage choice
+          <CodeBox label="FreshCart data lake design — decisions and rationale">{`DECISION 1: Storage choice
   Options: S3 Standard vs ADLS Gen2 vs GCS
-  FreshMart is AWS-native (EC2, RDS, Lambda already on AWS).
+  FreshCart is AWS-native (EC2, RDS, Lambda already on AWS).
   Decision: S3 — zero integration friction with existing AWS services.
   Bucket structure: one bucket per environment (dev/staging/prod).
   prod: s3://freshmart-data-lake-prod/  (versioning on, default encryption)

@@ -86,7 +86,7 @@ export default function LimitFetch() {
       {/* ── PART 01 ── */}
       <Part n="01" title="Why You Almost Never Want All the Rows" />
 
-      <P>Every query you have written so far returns every row that satisfies the WHERE condition. On the FreshMart database with 20 customers and 30 orders, that is fine. In a real production database at Swiggy, Flipkart, or Razorpay, the equivalent tables have tens of millions of rows. Returning all of them in a single query is not just slow — it can crash your application, exhaust database memory, and bring down services for other users.</P>
+      <P>Every query you have written so far returns every row that satisfies the WHERE condition. On the FreshCart database with 20 customers and 30 orders, that is fine. In a real production database at Swiggy, Flipkart, or Razorpay, the equivalent tables have tens of millions of rows. Returning all of them in a single query is not just slow — it can crash your application, exhaust database memory, and bring down services for other users.</P>
 
       <P>LIMIT is the clause that says: <Hl>"Stop after you have returned N rows."</Hl> It is one of the most important performance tools in SQL. Combined with ORDER BY from Module 08, LIMIT lets you efficiently answer questions like:</P>
 
@@ -272,7 +272,7 @@ LIMIT 10 OFFSET (N-1)*10;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- FreshMart has 30 orders. Show them 8 per page.
+        initialQuery={`-- FreshCart has 30 orders. Show them 8 per page.
 -- Page 1: orders 1-8 (most recent first)
 SELECT order_id, customer_id, order_date,
        order_status, total_amount
@@ -450,7 +450,7 @@ LIMIT 10;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Cursor pagination on FreshMart orders
+        initialQuery={`-- Cursor pagination on FreshCart orders
 -- Page 1: first 8 orders
 SELECT order_id, customer_id, order_date, total_amount
 FROM orders
@@ -698,7 +698,7 @@ OFFSET (:page - 1) * :page_size;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart mobile app shows customers a 'Recent Orders' screen with 4 orders per page. Write the SQL for page 1 and page 2 of all delivered orders, sorted by most recent first. Also write the query to find how many total pages the customer needs to scroll through."
+        question="The FreshCart mobile app shows customers a 'Recent Orders' screen with 4 orders per page. Write the SQL for page 1 and page 2 of all delivered orders, sorted by most recent first. Also write the query to find how many total pages the customer needs to scroll through."
         hint="Page 1: LIMIT 4 OFFSET 0. Page 2: LIMIT 4 OFFSET 4. For total pages: SELECT COUNT(*) FROM orders WHERE order_status = 'Delivered' — then divide by 4 and round up."
         answer={`-- Total count (to calculate number of pages)
 SELECT COUNT(*) AS total_delivered

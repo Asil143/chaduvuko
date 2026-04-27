@@ -130,7 +130,7 @@ WHERE city = 'Bangalore';`}
       <P>If the column in your WHERE clause has an index (a B-tree), the database jumps directly to the matching rows without reading the whole table. Finding 100 rows out of 500 million with an index takes milliseconds — the same query without an index takes minutes. You will learn to create indexes in Module 46. For now, know that WHERE on a primary key or a properly indexed column is always fast regardless of table size.</P>
 
       <Callout type="info">
-        In the FreshMart playground, all tables are small (under 120 rows) so every query is fast regardless of indexes. In real production databases with millions of rows, WHERE performance depends entirely on whether the filtered column has an index. Always think about indexes when writing WHERE clauses on large tables.
+        In the FreshCart playground, all tables are small (under 120 rows) so every query is fast regardless of indexes. In real production databases with millions of rows, WHERE performance depends entirely on whether the filtered column has an index. Always think about indexes when writing WHERE clauses on large tables.
       </Callout>
 
       <HR />
@@ -391,7 +391,7 @@ ORDER BY total_amount DESC;`}
       {/* ── PART 06 ── */}
       <Part n="06" title="Filtering NULL Values — IS NULL and IS NOT NULL" />
 
-      <P>NULL is the absence of a value. It is not zero, not an empty string, not false — it means <Hl>"we do not know"</Hl> or <Hl>"this information does not apply."</Hl> In FreshMart's orders table, delivery_date is NULL for orders that have not been delivered yet — we do not know the delivery date because it has not happened.</P>
+      <P>NULL is the absence of a value. It is not zero, not an empty string, not false — it means <Hl>"we do not know"</Hl> or <Hl>"this information does not apply."</Hl> In FreshCart's orders table, delivery_date is NULL for orders that have not been delivered yet — we do not know the delivery date because it has not happened.</P>
 
       <P>NULL has a special property that surprises almost every beginner: <Hl>you cannot use = to check for NULL</Hl>. The expression column = NULL does not return TRUE or FALSE — it returns NULL. And remember: WHERE discards rows where the condition is NULL. So WHERE delivery_date = NULL returns zero rows — always, no matter what the data contains.</P>
 
@@ -447,9 +447,9 @@ WHERE manager_id IS NULL;`}
       <HR />
 
       {/* ── PART 07 ── */}
-      <Part n="07" title="WHERE on Different FreshMart Tables — Real Scenarios" />
+      <Part n="07" title="WHERE on Different FreshCart Tables — Real Scenarios" />
 
-      <P>Let us practice WHERE across all six FreshMart tables with real business questions that would come up in day-to-day work.</P>
+      <P>Let us practice WHERE across all six FreshCart tables with real business questions that would come up in day-to-day work.</P>
 
       <H>Customers — targeting by tier and location</H>
 
@@ -834,7 +834,7 @@ ORDER BY delivery_date DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart operations team needs a report of all high-value delivered orders placed in February 2024 — specifically orders with a total_amount above ₹800 that were successfully delivered. Show the order_id, order_date, delivery_date, payment_method, and total_amount. Sort by total_amount descending."
+        question="The FreshCart operations team needs a report of all high-value delivered orders placed in February 2024 — specifically orders with a total_amount above ₹800 that were successfully delivered. Show the order_id, order_date, delivery_date, payment_method, and total_amount. Sort by total_amount descending."
         hint="You need three conditions in WHERE: order_status = 'Delivered', order_date range for February 2024 (>= '2024-02-01' AND < '2024-03-01'), and total_amount > 800. All three must be true — combine them with AND (covered in Module 07)."
         answer={`SELECT
   order_id,

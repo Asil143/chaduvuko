@@ -388,7 +388,7 @@ ORDER BY p.product_name;`}
 
       <CodeBlock
         label="CASCADE delete — what gets deleted"
-        code={`-- FreshMart FK relationships with CASCADE:
+        code={`-- FreshCart FK relationships with CASCADE:
 -- order_items.order_id → orders.order_id ON DELETE CASCADE
 
 -- Deleting one order also deletes all its order_items
@@ -770,7 +770,7 @@ VALUES (
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshMart's data team needs to clean up test data that was inserted during a recent load test. All test data has customer emails ending in '@test.freshmart.com'. Write: (1) A SELECT to find all test customers and how many orders they have each. (2) The DELETE to remove test order_items first (for orders belonging to test customers). (3) The DELETE to remove test orders. (4) The DELETE to remove the test customers themselves. Show the correct order."
+        question="FreshCart's data team needs to clean up test data that was inserted during a recent load test. All test data has customer emails ending in '@test.freshmart.com'. Write: (1) A SELECT to find all test customers and how many orders they have each. (2) The DELETE to remove test order_items first (for orders belonging to test customers). (3) The DELETE to remove test orders. (4) The DELETE to remove the test customers themselves. Show the correct order."
         hint="Delete in dependency order: order_items first, then orders, then customers. Use subqueries in WHERE: WHERE order_id IN (SELECT order_id FROM orders WHERE customer_id IN (SELECT customer_id FROM customers WHERE email LIKE '%@test.freshmart.com'))."
         answer={`-- Step 1: Verify scope — find test customers and their order counts
 SELECT

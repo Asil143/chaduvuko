@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { SQL_CURRICULUM } from '@/data/sql-freshmart';
+import { SQL_CURRICULUM } from '@/data/sql-freshcart';
 import type { Metadata } from 'next';
 
 // ─── Map: slug → dynamic import ──────────────────────────────────────────────

@@ -778,7 +778,7 @@ DROP COLUMN IF EXISTS rating_count;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshMart is launching a loyalty points system. Write the ALTER TABLE statements to: (1) Add a 'loyalty_points' column to customers — integer, not null, defaults to 0, must be >= 0. (2) Add a 'points_expiry_date' column — date, nullable. (3) Update existing customers to seed their loyalty_points based on their tier: Platinum = 1000, Gold = 500, Silver = 200, Bronze = 0. (4) Add a named CHECK constraint ensuring points_expiry_date is either NULL or in the future (> current date). Then verify with a SELECT showing the new columns for all customers."
+        question="FreshCart is launching a loyalty points system. Write the ALTER TABLE statements to: (1) Add a 'loyalty_points' column to customers — integer, not null, defaults to 0, must be >= 0. (2) Add a 'points_expiry_date' column — date, nullable. (3) Update existing customers to seed their loyalty_points based on their tier: Platinum = 1000, Gold = 500, Silver = 200, Bronze = 0. (4) Add a named CHECK constraint ensuring points_expiry_date is either NULL or in the future (> current date). Then verify with a SELECT showing the new columns for all customers."
         hint="Step 1-2: ALTER TABLE ADD COLUMN. Step 3: UPDATE with CASE WHEN. Step 4: ALTER TABLE ADD CONSTRAINT with CHECK. Step 5: SELECT customer_id, first_name, loyalty_tier, loyalty_points, points_expiry_date FROM customers."
         answer={`-- Step 1: Add loyalty_points column
 ALTER TABLE customers

@@ -449,7 +449,7 @@ SELECT
   customer_id,
   first_name,
   email,
-  -- customer_id is already INTEGER in FreshMart — cast to TEXT and back to check
+  -- customer_id is already INTEGER in FreshCart — cast to TEXT and back to check
   CAST(customer_id AS TEXT)                AS id_as_text,
   CAST(customer_id AS INTEGER)             AS id_as_int,
   CASE WHEN typeof(customer_id) = 'integer'
@@ -782,7 +782,7 @@ FROM (VALUES
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a data quality and casting report for FreshMart orders. The report should show for each order: order_id cast to TEXT with 'ORD-' prefix and zero-padded to 8 digits (e.g. 'ORD-00000001'), order_date formatted as 'DD Month YYYY' (e.g. '15 January 2024'), total_amount cast to NUMERIC and rounded to 2dp, total_amount cast to INTEGER (showing truncation), the difference between NUMERIC rounded and INTEGER truncated versions (to illustrate the difference), total_amount as a percentage of the maximum order amount (rounded to 1dp, using NUMERIC division), a size_band: 'Small' if total < 300, 'Medium' if total < 700, 'Large' if total < 1200, 'Premium' otherwise. Only include delivered orders. Sort by total_amount descending."
+        question="Write a data quality and casting report for FreshCart orders. The report should show for each order: order_id cast to TEXT with 'ORD-' prefix and zero-padded to 8 digits (e.g. 'ORD-00000001'), order_date formatted as 'DD Month YYYY' (e.g. '15 January 2024'), total_amount cast to NUMERIC and rounded to 2dp, total_amount cast to INTEGER (showing truncation), the difference between NUMERIC rounded and INTEGER truncated versions (to illustrate the difference), total_amount as a percentage of the maximum order amount (rounded to 1dp, using NUMERIC division), a size_band: 'Small' if total < 300, 'Medium' if total < 700, 'Large' if total < 1200, 'Premium' otherwise. Only include delivered orders. Sort by total_amount descending."
         hint="'ORD-' || LPAD(order_id::TEXT, 8, '0'). strftime for date. ::NUMERIC and ::INTEGER for both casts. NULLIF on MAX for pct. CASE for band."
         answer={`SELECT
   -- Zero-padded order ID with prefix using printf

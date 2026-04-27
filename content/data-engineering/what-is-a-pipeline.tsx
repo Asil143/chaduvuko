@@ -903,7 +903,7 @@ LIMIT 30;
             {
               term: 'Workflow',
               meaning: 'A coordinated set of pipelines with dependencies, schedules, and error handling. A workflow defines what runs when and in what order.',
-              example: 'The daily FreshMart workflow: ingest orders + customers + products, then run dbt Silver, then run Gold models.',
+              example: 'The daily FreshCart workflow: ingest orders + customers + products, then run dbt Silver, then run Gold models.',
             },
             {
               term: 'DAG',
@@ -1102,7 +1102,7 @@ if __name__ == '__main__':
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Pipeline audit task
+            Scenario — FreshCart · Pipeline audit task
           </div>
 
           <Para>
@@ -1229,7 +1229,7 @@ The common root causes: a source team added a new category value that existing f
 
 A DAG (Directed Acyclic Graph) is a mathematical structure used to represent the dependencies between tasks in a workflow. Each node in the DAG is a task, and each directed edge represents a dependency — this task must complete before that task can start. "Acyclic" means there are no circular dependencies: no task depends on itself, directly or indirectly.
 
-In Apache Airflow — the dominant workflow orchestration tool in data engineering — a DAG is the code representation of a workflow. Each Airflow DAG defines a set of tasks and their dependencies, a schedule for when to run, and configuration for retries, timeouts, and alerting. A single Airflow DAG often orchestrates multiple pipelines — for example, the daily FreshMart DAG might contain tasks for extracting orders, extracting customers, running dbt Silver models, running dbt Gold models, and sending a completion notification. Each of these tasks is a pipeline (or part of one), and the DAG defines their execution order and dependency relationships.
+In Apache Airflow — the dominant workflow orchestration tool in data engineering — a DAG is the code representation of a workflow. Each Airflow DAG defines a set of tasks and their dependencies, a schedule for when to run, and configuration for retries, timeouts, and alerting. A single Airflow DAG often orchestrates multiple pipelines — for example, the daily FreshCart DAG might contain tasks for extracting orders, extracting customers, running dbt Silver models, running dbt Gold models, and sending a completion notification. Each of these tasks is a pipeline (or part of one), and the DAG defines their execution order and dependency relationships.
 
 The distinction matters practically: a pipeline can exist without a DAG (a cron job running a Python script has no DAG representation), and a DAG can contain many pipelines. When engineers say "the DAG failed," they usually mean a specific task within the Airflow DAG failed, not the entire data flow. When they say "the pipeline is slow," they usually mean the data processing logic is slow, independent of how it is scheduled. Using the terms precisely prevents confusion during incident response.`,
           },

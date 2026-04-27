@@ -792,11 +792,11 @@ ORDER BY in_stock, margin_pct;`}
       </TimeBlock>
 
       <TimeBlock time="2:20 PM" label="You translate the requirement">
-        You identify three OR groups, each with internal AND conditions. You adapt this to the FreshMart schema for illustration.
+        You identify three OR groups, each with internal AND conditions. You adapt this to the FreshCart schema for illustration.
       </TimeBlock>
 
       <SQLPlayground
-        initialQuery={`-- Adapted fraud pattern for FreshMart orders:
+        initialQuery={`-- Adapted fraud pattern for FreshCart orders:
 -- Group 1: Very high value COD orders (cash fraud risk)
 -- Group 2: Multiple orders from same customer in same day
 -- Group 3: New customers with large first orders
@@ -914,7 +914,7 @@ ORDER BY o.total_amount DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart operations director needs a priority order list with three tiers. Write a single query that returns orders matching ANY of these three conditions: (1) High-priority: Cancelled or Returned orders above ₹800 from stores ST001, ST005, or ST009. (2) Medium-priority: Processing orders older than order_id 1010 with UPI payment. (3) Low-priority: Delivered orders in January 2024 with total above ₹1,200. Show order_id, store_id, order_date, order_status, payment_method, total_amount, and a priority column using CASE WHEN. Sort by priority ascending then total_amount descending."
+        question="The FreshCart operations director needs a priority order list with three tiers. Write a single query that returns orders matching ANY of these three conditions: (1) High-priority: Cancelled or Returned orders above ₹800 from stores ST001, ST005, or ST009. (2) Medium-priority: Processing orders older than order_id 1010 with UPI payment. (3) Low-priority: Delivered orders in January 2024 with total above ₹1,200. Show order_id, store_id, order_date, order_status, payment_method, total_amount, and a priority column using CASE WHEN. Sort by priority ascending then total_amount descending."
         hint="Three OR groups each with internal AND conditions. CASE WHEN for priority labelling. The CASE for priority should mirror the three OR groups. Order by CASE WHEN priority THEN 1/2/3 END for the sort."
         answer={`SELECT
   order_id,

@@ -127,7 +127,7 @@ LIMIT 5;`}
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
             <tr>
-              {['Operator', 'Name', 'Example', 'Result', 'FreshMart use'].map(h => (
+              {['Operator', 'Name', 'Example', 'Result', 'FreshCart use'].map(h => (
                 <th key={h} style={{ padding: '10px 14px', background: 'var(--surface)', color: 'var(--muted)', fontWeight: 700, textAlign: 'left', borderBottom: '1px solid var(--border)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '.08em' }}>{h}</th>
               ))}
             </tr>
@@ -313,7 +313,7 @@ SELECT
 -- In PostgreSQL/MySQL: (unit_price - cost_price) might be integer
 -- Dividing by unit_price (integer) gives 0 for all products
 -- where profit < unit_price (which is all of them!)
--- FreshMart prices are DECIMAL so this works here
+-- FreshCart prices are DECIMAL so this works here
 -- but try this pattern on INTEGER columns in production:
 SELECT
   product_name,
@@ -562,7 +562,7 @@ WHERE delivery_date IS NOT NULL;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Days since each customer joined FreshMart
+        initialQuery={`-- Days since each customer joined FreshCart
 -- CURRENT_DATE is today's date in the database
 SELECT
   first_name || ' ' || last_name         AS customer,
@@ -829,7 +829,7 @@ ORDER BY margin_pct DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart procurement team needs a reorder priority report. Write a query on the products table that returns: product_name, category, unit_price, cost_price, a profit column (unit_price minus cost_price), a margin_pct column (profit as a percentage of unit_price, rounded to 1 decimal), a gst_price column (unit_price multiplied by 1.18, rounded to 2 decimal places), and a priority column using CASE: 'Urgent Restock' if out of stock and margin above 25%, 'Restock' if out of stock and margin 25% or below, 'OK' if in stock. Sort by margin_pct descending."
+        question="The FreshCart procurement team needs a reorder priority report. Write a query on the products table that returns: product_name, category, unit_price, cost_price, a profit column (unit_price minus cost_price), a margin_pct column (profit as a percentage of unit_price, rounded to 1 decimal), a gst_price column (unit_price multiplied by 1.18, rounded to 2 decimal places), and a priority column using CASE: 'Urgent Restock' if out of stock and margin above 25%, 'Restock' if out of stock and margin 25% or below, 'OK' if in stock. Sort by margin_pct descending."
         hint="Use (unit_price - cost_price) for profit. Use ROUND((unit_price - cost_price) / unit_price * 100, 1) for margin_pct. The CASE needs to check in_stock = false first, then branch on the margin condition."
         answer={`SELECT
   product_name,

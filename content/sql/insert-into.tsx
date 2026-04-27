@@ -88,7 +88,7 @@ export default function InsertInto() {
 
       <P>Every query you have written so far has been read-only — SELECT returns data but never changes it. INSERT INTO is where you start writing data. It is the command that adds new rows to a table and the foundation of every application that stores anything.</P>
 
-      <P>INSERT runs inside applications thousands of times per second at scale. When a FreshMart customer places an order, an INSERT adds a row to the orders table and multiple rows to order_items. When a new user registers, an INSERT adds their record to customers. When stock is replenished, an INSERT or UPDATE reflects the new quantity. Understanding INSERT deeply — the syntax, the safety rules, the performance patterns, and the failure modes — is essential for any SQL developer.</P>
+      <P>INSERT runs inside applications thousands of times per second at scale. When a FreshCart customer places an order, an INSERT adds a row to the orders table and multiple rows to order_items. When a new user registers, an INSERT adds their record to customers. When stock is replenished, an INSERT or UPDATE reflects the new quantity. Understanding INSERT deeply — the syntax, the safety rules, the performance patterns, and the failure modes — is essential for any SQL developer.</P>
 
       <HR />
 
@@ -161,7 +161,7 @@ LIMIT 5;`}
 
       <SQLPlayground
         initialQuery={`-- Simulate: insert then immediately query the new row
--- DuckDB playground: INSERT affects the in-memory FreshMart data
+-- DuckDB playground: INSERT affects the in-memory FreshCart data
 INSERT INTO customers (first_name, last_name, email, city, state, joined_date)
 VALUES ('Priya', 'Nair', 'priya.nair@gmail.com', 'Kochi', 'Kerala', '2024-04-10');
 
@@ -831,14 +831,14 @@ COMMIT;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshMart is opening three new stores in Tier 2 cities. Write a single INSERT statement that adds all three stores at once. The stores are: (1) 'FreshMart Nagpur Central' in Nagpur, Maharashtra, managed by 'Suresh Rao', with a monthly target of ₹8,50,000. (2) 'FreshMart Indore Main' in Indore, Madhya Pradesh, managed by 'Anjali Singh', monthly target ₹7,20,000. (3) 'FreshMart Bhopal Square' in Bhopal, Madhya Pradesh, managed by 'Ramesh Tiwari', monthly target ₹6,80,000. Use store IDs ST011, ST012, ST013. Set opened_date to today. Then write a SELECT to verify all three were inserted."
+        question="FreshCart is opening three new stores in Tier 2 cities. Write a single INSERT statement that adds all three stores at once. The stores are: (1) 'FreshCart Nagpur Central' in Nagpur, Maharashtra, managed by 'Suresh Rao', with a monthly target of ₹8,50,000. (2) 'FreshCart Indore Main' in Indore, Madhya Pradesh, managed by 'Anjali Singh', monthly target ₹7,20,000. (3) 'FreshCart Bhopal Square' in Bhopal, Madhya Pradesh, managed by 'Ramesh Tiwari', monthly target ₹6,80,000. Use store IDs ST011, ST012, ST013. Set opened_date to today. Then write a SELECT to verify all three were inserted."
         hint="Multi-row INSERT with three VALUES tuples. Use CURRENT_DATE for opened_date. Then SELECT WHERE store_id IN ('ST011','ST012','ST013')."
         answer={`-- Insert three new stores
 INSERT INTO stores (store_id, store_name, city, state, manager_name, opened_date, monthly_target)
 VALUES
-  ('ST011', 'FreshMart Nagpur Central', 'Nagpur', 'Maharashtra',    'Suresh Rao',    CURRENT_DATE, 850000.00),
-  ('ST012', 'FreshMart Indore Main',    'Indore', 'Madhya Pradesh', 'Anjali Singh',  CURRENT_DATE, 720000.00),
-  ('ST013', 'FreshMart Bhopal Square',  'Bhopal', 'Madhya Pradesh', 'Ramesh Tiwari', CURRENT_DATE, 680000.00);
+  ('ST011', 'FreshCart Nagpur Central', 'Nagpur', 'Maharashtra',    'Suresh Rao',    CURRENT_DATE, 850000.00),
+  ('ST012', 'FreshCart Indore Main',    'Indore', 'Madhya Pradesh', 'Anjali Singh',  CURRENT_DATE, 720000.00),
+  ('ST013', 'FreshCart Bhopal Square',  'Bhopal', 'Madhya Pradesh', 'Ramesh Tiwari', CURRENT_DATE, 680000.00);
 
 -- Verify all three were inserted
 SELECT
@@ -852,7 +852,7 @@ SELECT
 FROM stores
 WHERE store_id IN ('ST011', 'ST012', 'ST013')
 ORDER BY store_id;`}
-        explanation="The multi-row INSERT adds all three stores in a single statement — one round-trip to the database, one transaction, one constraint check pass. Each tuple in VALUES maps to the column list in order: store_id → 'ST011', store_name → 'FreshMart Nagpur Central', etc. CURRENT_DATE is a SQL function that evaluates to today's date at execution time — the database fills it in, not the application. The verification SELECT uses IN with the three store IDs to confirm all three rows exist with correct values. In production you would wrap the INSERT in a transaction and check the affected row count equals 3 before committing."
+        explanation="The multi-row INSERT adds all three stores in a single statement — one round-trip to the database, one transaction, one constraint check pass. Each tuple in VALUES maps to the column list in order: store_id → 'ST011', store_name → 'FreshCart Nagpur Central', etc. CURRENT_DATE is a SQL function that evaluates to today's date at execution time — the database fills it in, not the application. The verification SELECT uses IN with the three store IDs to confirm all three rows exist with correct values. In production you would wrap the INSERT in a transaction and check the affected row count equals 3 before committing."
       />
 
       <HR />

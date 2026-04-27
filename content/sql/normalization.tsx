@@ -94,7 +94,7 @@ export default function Normalization() {
   return (
     <LearnLayout
       title="Normalisation"
-      description="Design relational schemas that eliminate redundancy, prevent update anomalies, and stay consistent — 1NF through 3NF explained with real FreshMart examples"
+      description="Design relational schemas that eliminate redundancy, prevent update anomalies, and stay consistent — 1NF through 3NF explained with real FreshCart examples"
       section="SQL — Module 26"
       readTime="40 min"
       updatedAt="April 2026"
@@ -105,7 +105,7 @@ export default function Normalization() {
 
       <P>Before relational databases existed, data was often stored in flat files — one big table with every piece of information crammed into it. This feels natural: put everything in one place, easy to find. But as soon as the data needs to be updated, the problems begin.</P>
 
-      <P>Imagine FreshMart stored all order information in a single flat table like this:</P>
+      <P>Imagine FreshCart stored all order information in a single flat table like this:</P>
 
       <div style={{ overflowX: 'auto', margin: '20px 0 28px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
@@ -259,7 +259,7 @@ CREATE TABLE customers (
       />
 
       <SQLPlayground
-        initialQuery={`-- FreshMart is already in 1NF
+        initialQuery={`-- FreshCart is already in 1NF
 -- order_items has one row per product per order — atomic
 SELECT
   o.order_id,
@@ -349,7 +349,7 @@ CREATE TABLE products (
       />
 
       <SQLPlayground
-        initialQuery={`-- FreshMart's order_items is in 2NF
+        initialQuery={`-- FreshCart's order_items is in 2NF
 -- product_name lives in products, not in order_items
 -- Join retrieves it when needed — stored only once
 
@@ -453,7 +453,7 @@ CREATE TABLE employees (
       />
 
       <SQLPlayground
-        initialQuery={`-- FreshMart employees — checking for transitive dependencies
+        initialQuery={`-- FreshCart employees — checking for transitive dependencies
 -- Do any non-key columns in employees depend on other non-key columns?
 SELECT
   e.employee_id,
@@ -470,14 +470,14 @@ ORDER BY e.store_id, e.salary DESC;`}
         showSchema={true}
       />
 
-      <P>In FreshMart's employees table, store_id is stored in employees and the store's city and manager_name are in the stores table. This is correct 3NF — if we stored store_city in employees, it would be a transitive dependency: employee_id → store_id → city.</P>
+      <P>In FreshCart's employees table, store_id is stored in employees and the store's city and manager_name are in the stores table. This is correct 3NF — if we stored store_city in employees, it would be a transitive dependency: employee_id → store_id → city.</P>
 
       <HR />
 
       {/* ── PART 06 ── */}
-      <Part n="06" title="FreshMart — Full Normalisation Walkthrough" />
+      <Part n="06" title="FreshCart — Full Normalisation Walkthrough" />
 
-      <P>Let us walk through the original denormalised FreshMart flat table from Part 01 and normalise it step by step to 3NF.</P>
+      <P>Let us walk through the original denormalised FreshCart flat table from Part 01 and normalise it step by step to 3NF.</P>
 
       <H>Starting point — the flat table (unnormalised)</H>
 
@@ -554,7 +554,7 @@ orders(order_id, customer_id, store_id, order_date, total_amount)
 products(product_id, product_name, category, brand, unit_price)
 order_items(order_id, product_id, quantity, unit_price, line_total)
 
--- This is exactly FreshMart's schema!`}
+-- This is exactly FreshCart's schema!`}
       />
 
       <SQLPlayground
@@ -611,10 +611,10 @@ LIMIT 10;`}
         ))}
       </div>
 
-      <H>FreshMart's deliberate denormalisation</H>
+      <H>FreshCart's deliberate denormalisation</H>
 
       <CodeBlock
-        label="Deliberate denormalisation in FreshMart"
+        label="Deliberate denormalisation in FreshCart"
         code={`-- orders.total_amount is denormalised
 -- It could always be computed as: SELECT SUM(line_total) FROM order_items WHERE order_id = X
 -- But storing it directly in orders saves that JOIN+SUM for every order lookup
@@ -649,8 +649,8 @@ LIMIT 10;`}
       <P>A functional dependency A → B (read: "A determines B") means that for any two rows with the same value of A, those rows will always have the same value of B. Knowing A is enough to know B.</P>
 
       <CodeBlock
-        label="Functional dependencies in FreshMart"
-        code={`-- These functional dependencies exist in FreshMart's data:
+        label="Functional dependencies in FreshCart"
+        code={`-- These functional dependencies exist in FreshCart's data:
 
 customer_id → first_name          -- one customer_id has one first_name
 customer_id → email               -- one customer has one email
@@ -703,10 +703,10 @@ store_id → manager_name (would violate 3NF if stored in orders)`}
       {/* ── PART 09 ── */}
       <Part n="09" title="Practical Normalisation — Step-by-Step Design" />
 
-      <P>Here is the practical workflow for designing a normalised schema from scratch, applied to a new FreshMart feature: a supplier management system.</P>
+      <P>Here is the practical workflow for designing a normalised schema from scratch, applied to a new FreshCart feature: a supplier management system.</P>
 
       <H>Requirements from the product team</H>
-      <P>FreshMart needs to track: which supplier provides which products, the supplier's contact details, the contract price (may differ from the selling price), the contract start and end dates, and whether the supplier is preferred for that product.</P>
+      <P>FreshCart needs to track: which supplier provides which products, the supplier's contact details, the contract price (may differ from the selling price), the contract start and end dates, and whether the supplier is preferred for that product.</P>
 
       <TimeBlock time="Step 1" label="Identify all the entities and their attributes">
         Entities: Supplier (name, contact person, phone, email, address), Product (already exists), Supply contract (product, supplier, contract price, start date, end date, is preferred).
@@ -758,7 +758,7 @@ CREATE TABLE supply_contracts (
       />
 
       <SQLPlayground
-        initialQuery={`-- Preview the supply contract structure with FreshMart data
+        initialQuery={`-- Preview the supply contract structure with FreshCart data
 -- Simulate supplier-product relationships
 SELECT
   p.product_id,
@@ -907,10 +907,10 @@ CREATE TABLE appointments (
         <p style={{ margin: 0 }}>The risks: data inconsistency when the denormalised copy falls out of sync with the source. If orders.total_amount is stored but an order_items record is corrected, total_amount must be manually updated too — the database no longer enforces consistency. Application code must maintain the invariant. This requires careful testing, triggers, or event-driven synchronisation. The rule: normalise first, measure performance, denormalise only where you have data showing the JOIN is the bottleneck, and document every denormalisation decision with how consistency is maintained.</p>
       </IQ>
 
-      <IQ q="How does FreshMart's schema demonstrate normalisation principles?">
-        <p style={{ margin: '0 0 14px' }}>FreshMart's six-table schema is a clean example of 3NF design. Each entity — customers, products, stores, employees, orders, order_items — has its own table where all columns depend directly on that table's primary key. Customer information (name, email, city) is stored once in customers and referenced by customer_id wherever needed. Product information (name, category, brand) is stored once in products. Store information is in stores. No non-key column in any table determines another non-key column.</p>
+      <IQ q="How does FreshCart's schema demonstrate normalisation principles?">
+        <p style={{ margin: '0 0 14px' }}>FreshCart's six-table schema is a clean example of 3NF design. Each entity — customers, products, stores, employees, orders, order_items — has its own table where all columns depend directly on that table's primary key. Customer information (name, email, city) is stored once in customers and referenced by customer_id wherever needed. Product information (name, category, brand) is stored once in products. Store information is in stores. No non-key column in any table determines another non-key column.</p>
         <p style={{ margin: '0 0 14px' }}>The relationships are enforced by foreign keys: orders.customer_id references customers, orders.store_id references stores, order_items.order_id references orders, order_items.product_id references products. This structure means changing a customer's city requires one UPDATE to one row in customers — not thousands of updates across all order rows. Deleting a store does not lose product data. Adding a new product does not require an order to exist first.</p>
-        <p style={{ margin: 0 }}>FreshMart has two deliberate denormalisations worth noting: orders.total_amount stores the sum of order_items.line_total — this is a computed aggregate stored for read performance, maintained by application code. order_items.unit_price stores the price at the time of the order, which may differ from the current products.unit_price — this is a point-in-time capture, not redundancy. Both are valid and intentional, following the principle of "normalise first, denormalise only where justified by real performance data."</p>
+        <p style={{ margin: 0 }}>FreshCart has two deliberate denormalisations worth noting: orders.total_amount stores the sum of order_items.line_total — this is a computed aggregate stored for read performance, maintained by application code. order_items.unit_price stores the price at the time of the order, which may differ from the current products.unit_price — this is a point-in-time capture, not redundancy. Both are valid and intentional, following the principle of "normalise first, denormalise only where justified by real performance data."</p>
       </IQ>
 
       <HR />
@@ -946,7 +946,7 @@ CREATE TABLE appointments (
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="A FreshMart analyst built this single flat table for tracking marketing campaigns: campaigns_flat(campaign_id, campaign_name, start_date, end_date, store_id, store_city, store_manager, product_id, product_name, product_category, discount_pct, target_units). Identify: (1) Which normal form does this violate and why? (2) What are the anomalies? (3) Design a normalised 3NF schema with correct tables and FKs. You do not need to write CREATE TABLE — just describe the tables and their columns."
+        question="A FreshCart analyst built this single flat table for tracking marketing campaigns: campaigns_flat(campaign_id, campaign_name, start_date, end_date, store_id, store_city, store_manager, product_id, product_name, product_category, discount_pct, target_units). Identify: (1) Which normal form does this violate and why? (2) What are the anomalies? (3) Design a normalised 3NF schema with correct tables and FKs. You do not need to write CREATE TABLE — just describe the tables and their columns."
         hint="The flat table has attributes from multiple entities: stores (store_city, store_manager), products (product_name, product_category), and the campaign itself. Identify which columns depend on campaign_id, which on store_id, and which on product_id."
         answer={`-- (1) Normal form violations:
 -- Violates 2NF and 3NF.
@@ -977,10 +977,10 @@ CREATE TABLE appointments (
 --   Which products are in this campaign + campaign-specific facts (discount, target)
 
 -- stores(store_id PK, store_city, store_manager, ...)
---   Already exists in FreshMart — no change needed
+--   Already exists in FreshCart — no change needed
 
 -- products(product_id PK, product_name, product_category, ...)
---   Already exists in FreshMart — no change needed`}
+--   Already exists in FreshCart — no change needed`}
         explanation="The flat table mixes three entities: campaigns, stores, and products. Normalisation separates them. Campaign facts (name, dates) belong in campaigns. Store facts (city, manager) belong in stores (already exists). Product facts (name, category) belong in products (already exists). The relationships between campaigns, stores, and products are captured in junction tables (campaign_stores, campaign_products) which hold only the facts that depend on the combination — like discount_pct and target_units which are specific to a campaign-product pair, not to a product alone. This 3NF design stores each fact once, eliminates all anomalies, and allows campaigns, stores, and products to be managed independently."
       />
 
@@ -998,7 +998,7 @@ CREATE TABLE appointments (
           'Denormalisation is intentionally breaking normalisation rules for read performance. Valid for analytics, reporting tables, and pre-computed aggregates. Always: normalise first, measure, then denormalise only where justified.',
           'Storing a value at its point in time (unit_price in order_items, consultation_fee in appointments) is not a 3NF violation — it is a deliberate historical capture. The value captures what was true at that moment, not what is true now.',
           'Every denormalisation creates an application-level invariant: the code must keep all redundant copies in sync. Document every denormalisation and how consistency is maintained.',
-          'FreshMart\'s six-table schema is 3NF: each entity has its own table, all columns depend directly on the PK, no transitive dependencies, two deliberate denormalisations (total_amount, order unit_price) with clear business justifications.',
+          'FreshCart\'s six-table schema is 3NF: each entity has its own table, all columns depend directly on the PK, no transitive dependencies, two deliberate denormalisations (total_amount, order unit_price) with clear business justifications.',
         ]}
       />
 

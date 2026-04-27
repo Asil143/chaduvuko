@@ -158,7 +158,7 @@ export default function AndOrNot() {
 
       <P>The NULL rows are important — if either condition is NULL (unknown), AND cannot determine a definitive TRUE result unless the other condition is definitively FALSE.</P>
 
-      <H>AND in practice — FreshMart examples</H>
+      <H>AND in practice — FreshCart examples</H>
 
       <SQLPlayground
         initialQuery={`-- Gold customers from Bangalore only
@@ -232,7 +232,7 @@ ORDER BY salary DESC;`}
 
       <P>Notice that OR with NULL can still return TRUE if the other condition is TRUE. This is different from AND — when one condition is TRUE and the other is NULL, OR returns TRUE because one known TRUE is enough.</P>
 
-      <H>OR in practice — FreshMart examples</H>
+      <H>OR in practice — FreshCart examples</H>
 
       <SQLPlayground
         initialQuery={`-- Customers from either Bangalore OR Hyderabad
@@ -295,7 +295,7 @@ ORDER BY category, unit_price;`}
 
       <P>Important: NOT NULL is still NULL — the absence of a value reversed is still unknown. This is why NOT IN behaves surprisingly when the list contains NULL values — you will see this in Module 15.</P>
 
-      <H>NOT in practice — FreshMart examples</H>
+      <H>NOT in practice — FreshCart examples</H>
 
       <SQLPlayground
         initialQuery={`-- All customers NOT in Bangalore
@@ -667,8 +667,8 @@ ORDER BY salary DESC;`}
       </TimeBlock>
 
       <CodeBlock
-        label="Segment A — Metro high-spenders (adapted for FreshMart data)"
-        code={`-- Adapt to FreshMart: Gold/Platinum customers in metro cities
+        label="Segment A — Metro high-spenders (adapted for FreshCart data)"
+        code={`-- Adapt to FreshCart: Gold/Platinum customers in metro cities
 -- with recent orders (Feb 2024 or later)
 SELECT
   c.customer_id,
@@ -724,7 +724,7 @@ ORDER BY c.city;`}
       <IQ q="How would you write a WHERE clause to find customers who are NOT from the top three cities?">
         <p style={{ margin: '0 0 14px' }}>There are several correct approaches with different trade-offs. The most readable approach uses NOT with an OR group: WHERE NOT (city = 'Bangalore' OR city = 'Hyderabad' OR city = 'Mumbai'). This is evaluated as: exclude rows where city is any of the three. By De Morgan's law, this is equivalent to: WHERE city &lt;&gt; 'Bangalore' AND city &lt;&gt; 'Hyderabad' AND city &lt;&gt; 'Mumbai'.</p>
         <p style={{ margin: '0 0 14px' }}>A more concise and equally readable approach uses NOT IN: WHERE city NOT IN ('Bangalore', 'Hyderabad', 'Mumbai'). This is cleaner for more than two or three values. Both approaches are semantically identical and produce the same results.</p>
-        <p style={{ margin: 0 }}>The critical caveat: if the city column can contain NULL values, neither NOT with OR nor NOT IN will include rows where city is NULL — they will silently exclude them. If you want to include customers with an unknown city alongside those from non-top-three cities, add an explicit NULL check: WHERE (city NOT IN ('Bangalore', 'Hyderabad', 'Mumbai') OR city IS NULL). In the FreshMart customers table, city is defined NOT NULL, so this is not an issue — but in any table where nullable city is possible, the NULL case must be handled explicitly.</p>
+        <p style={{ margin: 0 }}>The critical caveat: if the city column can contain NULL values, neither NOT with OR nor NOT IN will include rows where city is NULL — they will silently exclude them. If you want to include customers with an unknown city alongside those from non-top-three cities, add an explicit NULL check: WHERE (city NOT IN ('Bangalore', 'Hyderabad', 'Mumbai') OR city IS NULL). In the FreshCart customers table, city is defined NOT NULL, so this is not an issue — but in any table where nullable city is possible, the NULL case must be handled explicitly.</p>
       </IQ>
 
       <HR />
@@ -766,7 +766,7 @@ ORDER BY c.city;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart finance team needs two separate reports. Report 1: All orders from store ST001 OR ST008 that were delivered AND paid by either Card or NetBanking — sorted by total_amount descending. Report 2: All orders that are NOT delivered (any other status) AND have a total_amount above ₹400. Write both queries."
+        question="The FreshCart finance team needs two separate reports. Report 1: All orders from store ST001 OR ST008 that were delivered AND paid by either Card or NetBanking — sorted by total_amount descending. Report 2: All orders that are NOT delivered (any other status) AND have a total_amount above ₹400. Write both queries."
         hint="Report 1 needs parentheses for the store OR and the payment method OR, then AND for the status and connecting the groups. Report 2 uses order_status <> 'Delivered' (or NOT order_status = 'Delivered') AND total_amount > 400."
         answer={`-- Report 1: Specific stores, delivered, card/netbanking
 SELECT order_id, store_id, order_date,

@@ -931,11 +931,11 @@ def process_erasure_request(
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Scenario — FreshMart · Legal team requests GDPR audit, DPO finds issues
+            Scenario — FreshCart · Legal team requests GDPR audit, DPO finds issues
           </div>
 
           <Para>
-            FreshMart's Data Protection Officer conducts a GDPR audit. They find
+            FreshCart's Data Protection Officer conducts a GDPR audit. They find
             that customer emails and phone numbers in silver.customers are directly
             accessible to 12 analysts, the data engineer who quit last year still
             has active Snowflake credentials, and there is no audit log of who

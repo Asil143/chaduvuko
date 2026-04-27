@@ -136,7 +136,7 @@ export default function SQLForDEModule() {
         </HighlightBox>
 
         <Callout type="info">
-          <strong>All examples use FreshMart data</strong> — our fictional grocery chain
+          <strong>All examples use FreshCart data</strong> — our fictional grocery chain
           with 10 stores across India. You will see the same tables throughout:
           <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> silver.orders</code>,{' '}
           <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>silver.customers</code>,{' '}
@@ -1471,7 +1471,7 @@ SELECT * FROM orders FETCH FIRST 10 ROWS ONLY;  -- SQL standard`}</CodeBox>
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Task — FreshMart Daily Revenue Dashboard model
+            Task — FreshCart Daily Revenue Dashboard model
           </div>
 
           <Para>
@@ -1483,7 +1483,7 @@ SELECT * FROM orders FETCH FIRST 10 ROWS ONLY;  -- SQL standard`}</CodeBox>
           </Para>
 
           <CodeBox label="gold/daily_store_category_metrics.sql — complete production model">{`-- Gold model: daily revenue metrics by store and category
--- Powers the FreshMart Revenue Dashboard
+-- Powers the FreshCart Revenue Dashboard
 -- Refresh: daily at 06:00 AM IST
 
 WITH

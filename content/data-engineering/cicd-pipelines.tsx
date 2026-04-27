@@ -875,7 +875,7 @@ END-TO-END TESTS (run full pipeline, validate output):
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Scenario — FreshMart · A column rename breaks production dashboards
+            Scenario — FreshCart · A column rename breaks production dashboards
           </div>
 
           <Para>

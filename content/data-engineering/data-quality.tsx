@@ -681,7 +681,7 @@ dbt_silver_task >> quality_check_task >> dbt_gold_task
         </Para>
 
         <CodeBox label="Data contract definition — the structure and enforcement">{`# DATA CONTRACT: orders_api_v2
-# Producer: FreshMart Orders Service Team
+# Producer: FreshCart Orders Service Team
 # Consumer: Data Engineering
 # Effective: 2026-01-01
 # Version:   2.3.1
@@ -1111,7 +1111,7 @@ with DAG('freshmart_morning_pipeline', ...) as dag:
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Scenario — FreshMart · Orders team adds new order status without notice
+            Scenario — FreshCart · Orders team adds new order status without notice
           </div>
 
           <Para>
@@ -1311,7 +1311,7 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
           },
           {
             error: `Row count anomaly detection fires false positives every Monday — Saturday data is always flagged as anomalous`,
-            cause: 'The anomaly detection uses a rolling 7-day average that includes both weekdays and weekends. FreshMart has significantly lower order volume on Saturdays and Sundays. When Monday\'s data (high weekday volume) is compared to a rolling average that includes Saturday and Sunday data, it always appears anomalously high. The detection algorithm doesn\'t account for day-of-week seasonality.',
+            cause: 'The anomaly detection uses a rolling 7-day average that includes both weekdays and weekends. FreshCart has significantly lower order volume on Saturdays and Sundays. When Monday\'s data (high weekday volume) is compared to a rolling average that includes Saturday and Sunday data, it always appears anomalously high. The detection algorithm doesn\'t account for day-of-week seasonality.',
             fix: 'Compare to the same day of week rather than a simple rolling average. Instead of comparing Monday to the 7-day rolling mean, compare Monday to the average of the previous 4 Mondays. This corrects for weekday seasonality. More sophisticated: use a day-of-week multiplier to normalise volumes before comparing (Monday volume = total / expected_monday_fraction). Tools like Elementary handle day-of-week seasonality automatically with their ML-based anomaly detection.',
           },
         ].map((item, i) => (

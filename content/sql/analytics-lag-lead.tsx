@@ -637,7 +637,7 @@ ORDER BY step_num;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- FreshMart order funnel: how many orders reach each status stage
+        initialQuery={`-- FreshCart order funnel: how many orders reach each status stage
 WITH order_funnel AS (
   SELECT
     1 AS step_num, 'Orders placed (all)'          AS step_name,

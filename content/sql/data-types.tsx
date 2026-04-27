@@ -148,7 +148,7 @@ export default function DataTypes() {
         ))}
       </div>
 
-      <P>In FreshMart's schema, every type choice was deliberate. unit_price is DECIMAL(10,2) — not FLOAT — because money must be exact. customer_id is INTEGER — not VARCHAR — because IDs are numbers used in arithmetic and joins. order_date is DATE — not TIMESTAMP — because FreshMart only needs day precision. This module explains every choice like that.</P>
+      <P>In FreshCart's schema, every type choice was deliberate. unit_price is DECIMAL(10,2) — not FLOAT — because money must be exact. customer_id is INTEGER — not VARCHAR — because IDs are numbers used in arithmetic and joins. order_date is DATE — not TIMESTAMP — because FreshCart only needs day precision. This module explains every choice like that.</P>
 
       <HR />
 
@@ -243,7 +243,7 @@ DECIMAL(5, 2)    -- max: 999.99          — percentages, tax rates
 DECIMAL(15, 4)   -- max: 99,999,999,999.9999 — high-precision financial
 DECIMAL(3, 0)    -- max: 999             — integer stored as decimal
 
--- FreshMart uses:
+-- FreshCart uses:
 unit_price  DECIMAL(10, 2)  -- up to ₹99,999,999.99
 cost_price  DECIMAL(10, 2)  -- same
 salary      DECIMAL(10, 2)  -- monthly salary
@@ -352,7 +352,7 @@ ORDER BY table_name;`}
       <P>Every text column has a <Hl>collation</Hl> — a set of rules for comparing and sorting strings. Collation controls case sensitivity (is 'A' = 'a'?), accent sensitivity (is 'é' = 'e'?), and sort order. In PostgreSQL the default collation is determined at database creation. In MySQL the default is often utf8mb4_general_ci (case-insensitive). Mismatched collations between joined tables can cause join failures or incorrect results — a subtle bug that is hard to diagnose.</P>
 
       <CodeBlock
-        label="Choosing VARCHAR length — FreshMart column design rationale"
+        label="Choosing VARCHAR length — FreshCart column design rationale"
         code={`-- Why each column has the length it has:
 first_name  VARCHAR(100)  -- longest Indian name + margin
 last_name   VARCHAR(100)  -- same
@@ -422,7 +422,7 @@ store_name  VARCHAR(200)  -- full store name with location
       <P>Use <Hl>TIMESTAMP WITH TIME ZONE</Hl> (TIMESTAMPTZ) for any event that happens at a specific moment — when a user logged in, when a payment was made, when a notification was sent. TIMESTAMPTZ stores the moment in UTC and converts to local time on display. Without time zone, timestamps from different cities are ambiguous — 14:30:00 in Bangalore and 14:30:00 in New York are completely different moments.</P>
 
       <SQLPlayground
-        initialQuery={`-- Working with dates in FreshMart
+        initialQuery={`-- Working with dates in FreshCart
 SELECT
   order_id,
   order_date,
@@ -695,7 +695,7 @@ CREATE TABLE events (
 -- UUID: distributed systems, external-facing IDs, merged databases
 -- INTEGER: internal tables, simple applications, better join performance
 
--- FreshMart uses INTEGER PKs — single database, internal IDs
+-- FreshCart uses INTEGER PKs — single database, internal IDs
 -- Razorpay uses UUID for payment IDs shared with merchants — must be globally unique`}
       />
 
@@ -752,7 +752,7 @@ SELECT * FROM products WHERE tags @> ARRAY['organic', 'vegan'];
         ))}
       </div>
 
-      <H>FreshMart schema — every type explained</H>
+      <H>FreshCart schema — every type explained</H>
 
       <div style={{ overflowX: 'auto', margin: '16px 0 28px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
@@ -851,7 +851,7 @@ JOIN orders o ON c.customer_id = o.customer_id;
       />
 
       <SQLPlayground
-        initialQuery={`-- Verify FreshMart's type consistency in joins
+        initialQuery={`-- Verify FreshCart's type consistency in joins
 -- customer_id should be the same type in customers and orders
 SELECT
   c.name AS column_name,
@@ -1016,7 +1016,7 @@ CREATE TABLE loan_applications (
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a query that shows all columns in the FreshMart 'products' table — their name, data type, whether they allow NULL, and their default value. Then write a second query that finds any product where unit_price cast to INTEGER differs from unit_price, indicating sub-rupee pricing."
+        question="Write a query that shows all columns in the FreshCart 'products' table — their name, data type, whether they allow NULL, and their default value. Then write a second query that finds any product where unit_price cast to INTEGER differs from unit_price, indicating sub-rupee pricing."
         hint="Query 1: use pragma_table_info('products') — returns name, type, notnull, dflt_value, pk. Query 2: SELECT product_name, unit_price FROM products WHERE CAST(unit_price AS INTEGER) != unit_price."
         answer={`-- Query 1: Products table schema inspection
 SELECT

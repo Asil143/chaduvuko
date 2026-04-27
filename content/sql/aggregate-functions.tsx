@@ -694,12 +694,12 @@ ORDER BY lifetime_value DESC NULLS LAST;`}
 
       <P>You are an analyst at Swiggy. It is Monday morning and the weekly business review is in two hours. Your manager has sent three requests overnight: a summary of last week's GMV by city, the top 5 restaurants by order count, and the average delivery time by restaurant rating band. These are classic aggregate queries that you need to produce in under 30 minutes.</P>
 
-      <TimeBlock time="8:00 AM" label="Request 1 — GMV by city (adapted for FreshMart)">
-        Adapted to FreshMart: total delivered revenue by store city for the most recent available data.
+      <TimeBlock time="8:00 AM" label="Request 1 — GMV by city (adapted for FreshCart)">
+        Adapted to FreshCart: total delivered revenue by store city for the most recent available data.
       </TimeBlock>
 
       <SQLPlayground
-        initialQuery={`-- Weekly GMV by store city (FreshMart adaptation)
+        initialQuery={`-- Weekly GMV by store city (FreshCart adaptation)
 SELECT
   s.city,
   COUNT(o.order_id)              AS order_count,
@@ -849,7 +849,7 @@ ORDER BY
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a single query that produces the FreshMart monthly executive summary. Show: total orders, unique customers, total delivered revenue (rounded to 2 decimal places), average order value for delivered orders (rounded to 2 decimal places), the count of orders by status (delivered, cancelled, returned, processing as separate columns), percentage of orders delivered (rounded to 1 decimal place), and the most expensive single order. All from the orders table — no GROUP BY needed, one summary row."
+        question="Write a single query that produces the FreshCart monthly executive summary. Show: total orders, unique customers, total delivered revenue (rounded to 2 decimal places), average order value for delivered orders (rounded to 2 decimal places), the count of orders by status (delivered, cancelled, returned, processing as separate columns), percentage of orders delivered (rounded to 1 decimal place), and the most expensive single order. All from the orders table — no GROUP BY needed, one summary row."
         hint="Use COUNT(*) for total, COUNT(DISTINCT customer_id) for unique customers, SUM with WHERE or CASE for delivered revenue, SUM(CASE WHEN ... THEN 1 ELSE 0 END) for status counts, and MAX(total_amount) for the largest order."
         answer={`SELECT
   COUNT(*)                                                        AS total_orders,

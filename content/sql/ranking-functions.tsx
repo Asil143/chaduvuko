@@ -802,7 +802,7 @@ ORDER BY revenue DESC;`}
       <P>You are a data analyst at Flipkart. The seller success team runs a monthly seller health report: for each seller, their revenue rank within their category, their overall revenue rank, their percentile position, their quartile segment, and whether they moved up or down compared to the previous month. The ranking logic alone would take multiple queries without window functions — with them, it is one SELECT on two pre-aggregated CTEs.</P>
 
       <TimeBlock time="2:00 PM" label="Requirements: seller health report with 6 ranking metrics">
-        Category rank, overall rank, percentile, quartile, MoM rank movement, performance badge. Adapted for FreshMart stores.
+        Category rank, overall rank, percentile, quartile, MoM rank movement, performance badge. Adapted for FreshCart stores.
       </TimeBlock>
 
       <SQLPlayground

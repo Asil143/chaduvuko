@@ -701,7 +701,7 @@ def evaluate_model(
 # ── Pipeline: wire components together ────────────────────────────────
 @pipeline(
     name='freshmart-training-pipeline',
-    description='Daily retraining pipeline for FreshMart delivery time model',
+    description='Daily retraining pipeline for FreshCart delivery time model',
     pipeline_root=f'{BUCKET}/pipeline-root/',
 )
 def training_pipeline(
@@ -940,7 +940,7 @@ PREDICTOR_SCRIPT = """
 from google.cloud.aiplatform.utils import prediction_utils
 import pickle, json, numpy as np, os
 
-class FreshMartPredictor:
+class FreshCartPredictor:
     def __init__(self):
         self.model = None
         self.feature_cols = None

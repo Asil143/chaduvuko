@@ -161,10 +161,10 @@ export default function Project01Page() {
       {/* Real World Problem */}
       <h2>Real World Problem</h2>
       <p>
-        <strong>The Company: FreshMart</strong> — a grocery chain with 10 stores across India.
+        <strong>The Company: FreshCart</strong> — a grocery chain with 10 stores across India.
       </p>
       <p>
-        Every day, each store manager exports a file called <code>daily_sales.csv</code> from their billing software and saves it on their computer. That file just sits there. The data team at FreshMart HQ has zero visibility into what is happening across stores. They cannot answer basic questions like:
+        Every day, each store manager exports a file called <code>daily_sales.csv</code> from their billing software and saves it on their computer. That file just sits there. The data team at FreshCart HQ has zero visibility into what is happening across stores. They cannot answer basic questions like:
       </p>
       <ul className="my-4 space-y-1 text-sm pl-4" style={{ color: 'var(--text2)', listStyle: 'disc' }}>
         <li>Which store sold the most today?</li>
@@ -332,7 +332,7 @@ export default function Project01Page() {
 
       <h2>Step 3 — Create the Sample CSV File</h2>
       <p>
-        This represents the <code>daily_sales.csv</code> that FreshMart store managers export from their billing software every day. Open <strong>Notepad</strong> (Windows) or <strong>TextEdit</strong> (Mac) and paste exactly this:
+        This represents the <code>daily_sales.csv</code> that FreshCart store managers export from their billing software every day. Open <strong>Notepad</strong> (Windows) or <strong>TextEdit</strong> (Mac) and paste exactly this:
       </p>
       <div className="my-4 rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
         <div className="px-4 py-2 flex items-center gap-2" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
@@ -388,7 +388,7 @@ export default function Project01Page() {
       <p>Click on the <strong>"raw"</strong> container → click <strong>"+ Add Directory"</strong> → name it <code>sales</code>.</p>
       <Screenshot caption="raw container showing the 'sales' directory created inside it" />
       <Callout type="tip" label="🎯 Why This Folder Structure?">
-        We are starting organized. In future projects we will add <code>raw/products/</code>, <code>raw/customers/</code>, <code>raw/inventory/</code> as FreshMart grows. Starting with a clean hierarchy now saves massive headaches later.
+        We are starting organized. In future projects we will add <code>raw/products/</code>, <code>raw/customers/</code>, <code>raw/inventory/</code> as FreshCart grows. Starting with a clean hierarchy now saves massive headaches later.
       </Callout>
 
       {/* ── PHASE 2 ── */}
@@ -498,7 +498,7 @@ export default function Project01Page() {
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 180, flexShrink: 0 }}>Import schema</span><span style={{ color: '#00e676' }}>From connection/store</span></div>
       </div>
       <Screenshot caption="Dataset properties form — all fields filled in exactly as shown" />
-      <p>Click <strong>"OK"</strong> → then click the <strong>"Preview data"</strong> tab at the bottom. You should see all 10 rows of FreshMart sales data — this confirms ADF can read your file.</p>
+      <p>Click <strong>"OK"</strong> → then click the <strong>"Preview data"</strong> tab at the bottom. You should see all 10 rows of FreshCart sales data — this confirms ADF can read your file.</p>
       <Screenshot caption="Dataset preview — showing all 10 rows of CSV data in a clean table format" />
       <p>Click <strong>💾 Save</strong> (or Ctrl+S).</p>
       <Screenshot caption="Dataset saved — ds_src_blob_daily_sales visible in the Datasets list on the left" />
@@ -601,7 +601,7 @@ export default function Project01Page() {
       <p>Go to Azure Portal → <strong>Storage accounts</strong> → <code>stfreshmartdev</code> → <strong>Containers</strong> → <strong>raw</strong> → <strong>sales</strong>.</p>
       <Screenshot caption="sales folder contents — showing daily_sales.csv file with file size and last modified timestamp" />
       <p>Click on <code>daily_sales.csv</code> → click <strong>"Edit"</strong> to preview its contents.</p>
-      <Screenshot caption="File preview in Azure Portal — showing all 10 rows of FreshMart sales data confirming the copy was successful" />
+      <Screenshot caption="File preview in Azure Portal — showing all 10 rows of FreshCart sales data confirming the copy was successful" />
 
       <Callout type="example" label="🎉 You did it">
         You just completed your first Azure Data Engineering pipeline. A CSV file that was sitting on a laptop is now safely stored in Azure Data Lake — accessible to Databricks, Synapse, and Power BI — copied by an automated pipeline that you built from scratch.
@@ -684,7 +684,7 @@ export default function Project01Page() {
       <div className="my-8 p-6 rounded-xl" style={{ background: 'var(--surface)', border: '2px solid var(--accent2)' }}>
         <div className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'var(--accent2)' }}>What is coming in Project 02</div>
         <p className="text-sm mb-3" style={{ color: 'var(--text)' }}>
-          Right now our pipeline copies <strong>one specific file</strong>. But FreshMart has 10 stores — that means 10 files: <code>store_ST001_sales.csv</code> through <code>store_ST010_sales.csv</code>.
+          Right now our pipeline copies <strong>one specific file</strong>. But FreshCart has 10 stores — that means 10 files: <code>store_ST001_sales.csv</code> through <code>store_ST010_sales.csv</code>.
         </p>
         <p className="text-sm" style={{ color: 'var(--text2)' }}>
           In Project 02, you will learn to use the <strong>ForEach activity</strong> to loop through all 10 files and copy them in one pipeline run — instead of creating 10 separate Copy activities. Same resources. Same storage account. Same ADF. Just smarter.

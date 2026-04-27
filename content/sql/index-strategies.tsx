@@ -114,7 +114,7 @@ export default function IndexStrategies() {
 -- Table with 1 index:  1 heap write + 1 index write per INSERT
 -- Table with 10 indexes: 1 heap write + 10 index writes per INSERT
 
--- Example: orders table (FreshMart)
+-- Example: orders table (FreshCart)
 -- Current indexes: pk (order_id), customer_id, store_id, order_date
 -- Every INSERT into orders: 1 heap write + 4 index writes = 5 total writes
 -- Adding 6 more indexes: 1 + 10 = 10 writes per INSERT — 2× write overhead
@@ -236,7 +236,7 @@ SELECT 'customer_id',  COUNT(DISTINCT customer_id)::NUMERIC / COUNT(*) FROM orde
       />
 
       <SQLPlayground
-        initialQuery={`-- Measure column selectivity for FreshMart tables
+        initialQuery={`-- Measure column selectivity for FreshCart tables
 SELECT
   'orders.store_id'     AS column_name,
   COUNT(DISTINCT store_id)   AS distinct_vals,
@@ -456,7 +456,7 @@ CREATE INDEX idx_events_user_id
       />
 
       <SQLPlayground
-        initialQuery={`-- Queries that need functional indexes in FreshMart
+        initialQuery={`-- Queries that need functional indexes in FreshCart
 -- Check: are these common query patterns? If yes, functional indexes help
 
 -- Pattern 1: case-insensitive name search
@@ -611,7 +611,7 @@ LIMIT 20;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Audit FreshMart indexes: size vs usage
+        initialQuery={`-- Audit FreshCart indexes: size vs usage
 SELECT
   tablename,
   indexname,
@@ -624,7 +624,7 @@ ORDER BY tablename, indexname;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Check index usage statistics for FreshMart tables
+        initialQuery={`-- Check index usage statistics for FreshCart tables
 SELECT
   relname       AS table_name,
   indexrelname  AS index_name,
@@ -931,7 +931,7 @@ FROM orders;
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Design a complete index strategy for the FreshMart orders table based on the following five query patterns. For each query, write the CREATE INDEX statement (including type, columns, INCLUDE if beneficial, WHERE if partial) and a one-sentence justification. Then write a single audit query that identifies any existing indexes on the orders table with zero scans. Query patterns: (1) Customer order history page: SELECT order_id, order_date, total_amount, order_status FROM orders WHERE customer_id = ? ORDER BY order_date DESC LIMIT 20. (2) Store daily settlement: SELECT store_id, SUM(total_amount) FROM orders WHERE order_status = 'Delivered' AND order_date BETWEEN ? AND ? GROUP BY store_id. (3) Queue worker: SELECT order_id, customer_id, store_id FROM orders WHERE order_status = 'Processing' ORDER BY order_date LIMIT 1 FOR UPDATE SKIP LOCKED. (4) Admin cancellation report: SELECT order_id, customer_id, total_amount FROM orders WHERE order_status = 'Cancelled' AND order_date >= ? ORDER BY order_date DESC. (5) High-value order alert: SELECT order_id, store_id, customer_id, total_amount FROM orders WHERE total_amount > 1000 AND order_status = 'Delivered' AND order_date >= ?."
+        question="Design a complete index strategy for the FreshCart orders table based on the following five query patterns. For each query, write the CREATE INDEX statement (including type, columns, INCLUDE if beneficial, WHERE if partial) and a one-sentence justification. Then write a single audit query that identifies any existing indexes on the orders table with zero scans. Query patterns: (1) Customer order history page: SELECT order_id, order_date, total_amount, order_status FROM orders WHERE customer_id = ? ORDER BY order_date DESC LIMIT 20. (2) Store daily settlement: SELECT store_id, SUM(total_amount) FROM orders WHERE order_status = 'Delivered' AND order_date BETWEEN ? AND ? GROUP BY store_id. (3) Queue worker: SELECT order_id, customer_id, store_id FROM orders WHERE order_status = 'Processing' ORDER BY order_date LIMIT 1 FOR UPDATE SKIP LOCKED. (4) Admin cancellation report: SELECT order_id, customer_id, total_amount FROM orders WHERE order_status = 'Cancelled' AND order_date >= ? ORDER BY order_date DESC. (5) High-value order alert: SELECT order_id, store_id, customer_id, total_amount FROM orders WHERE total_amount > 1000 AND order_status = 'Delivered' AND order_date >= ?."
         hint="Q1: composite (customer_id, order_date DESC) INCLUDE(order_id, total_amount, order_status). Q2: partial WHERE order_status='Delivered' on (order_date) INCLUDE(store_id, total_amount) — or composite (order_status, order_date) INCLUDE. Q3: partial WHERE order_status='Processing' on (order_date). Q4: partial WHERE order_status='Cancelled' on (order_date DESC) INCLUDE. Q5: partial WHERE order_status='Delivered' on (total_amount, order_date) INCLUDE. Audit: pg_stat_user_indexes WHERE idx_scan = 0."
         answer={`-- ── Index 1: Customer order history page ───────────────────────
 -- Query: WHERE customer_id = ? ORDER BY order_date DESC LIMIT 20

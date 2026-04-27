@@ -88,7 +88,7 @@ const AcidCard = ({ letter, word, color, plain, technical, example }: {
     <div style={{ padding: '14px 16px' }}>
       <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7, margin: '0 0 10px' }}>{technical}</p>
       <div style={{ background: 'var(--bg)', borderRadius: 6, padding: '10px 12px' }}>
-        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 4px' }}>FreshMart example</p>
+        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 4px' }}>FreshCart example</p>
         <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{example}</p>
       </div>
     </div>
@@ -128,7 +128,7 @@ export default function Transactions() {
 
       <P>A transaction is a group of SQL statements that the database treats as a <Hl>single indivisible unit of work</Hl>. Either all statements in the transaction succeed and are permanently saved, or none of them take effect. There is no in-between state visible to other users or sessions.</P>
 
-      <P>The classic example: a customer pays ₹500 for a FreshMart order. Two things must happen — the customer's wallet balance decreases by ₹500 AND FreshMart's account increases by ₹500. If the first statement succeeds but the database crashes before the second, the customer has lost ₹500 with nothing to show for it. A transaction prevents this: both updates are wrapped in a single unit. If the crash happens mid-transaction, the database rolls back the first update on restart. Either both succeed or neither does.</P>
+      <P>The classic example: a customer pays ₹500 for a FreshCart order. Two things must happen — the customer's wallet balance decreases by ₹500 AND FreshCart's account increases by ₹500. If the first statement succeeds but the database crashes before the second, the customer has lost ₹500 with nothing to show for it. A transaction prevents this: both updates are wrapped in a single unit. If the crash happens mid-transaction, the database rolls back the first update on restart. Either both succeed or neither does.</P>
 
       <CodeBlock
         label="Transaction anatomy — BEGIN, COMMIT, ROLLBACK"
@@ -154,7 +154,7 @@ ROLLBACK;
 
       <SQLPlayground
         initialQuery={`-- Preview: what a payment transaction would look like
--- (SELECT only — we won't modify FreshMart data here)
+-- (SELECT only — we won't modify FreshCart data here)
 BEGIN;
 
 -- Step 1: verify customer has sufficient balance (check before deducting)
@@ -189,7 +189,7 @@ ROLLBACK;   -- clean up the read-only transaction`}
         color={C}
         plain="All or nothing — the transaction never partially completes"
         technical="Every statement in a transaction either fully succeeds (all changes applied) or fully fails (no changes applied). If any statement in the transaction raises an error, the database automatically rolls back all previous statements in that transaction. Partial commits are impossible — the database will never show a state where some statements of a transaction applied and others did not."
-        example="A FreshMart order involves: INSERT into orders, INSERT into order_items (one per product), UPDATE products (decrement stock), INSERT into payment_log. Atomicity guarantees that if the payment_log insert fails, the order and order_items and stock changes are also rolled back. The customer's order either fully exists or does not exist at all."
+        example="A FreshCart order involves: INSERT into orders, INSERT into order_items (one per product), UPDATE products (decrement stock), INSERT into payment_log. Atomicity guarantees that if the payment_log insert fails, the order and order_items and stock changes are also rolled back. The customer's order either fully exists or does not exist at all."
       />
 
       <AcidCard
@@ -198,7 +198,7 @@ ROLLBACK;   -- clean up the read-only transaction`}
         color="#10b981"
         plain="Transactions can only take the database from one valid state to another"
         technical="A transaction must bring the database from one consistent state to another consistent state. Consistency is defined by the constraints, rules, and invariants declared in the schema — NOT NULL, UNIQUE, CHECK, FOREIGN KEY constraints, and any application-level business rules. A transaction that would violate any constraint is rejected entirely."
-        example="FreshMart's order_items table has a FK to products. Consistency means a transaction cannot insert an order_item referencing a non-existent product_id — the FK constraint is checked and the transaction is rejected. After a successful order, the sum of line_total in order_items should equal orders.total_amount — this business invariant must hold after every commit."
+        example="FreshCart's order_items table has a FK to products. Consistency means a transaction cannot insert an order_item referencing a non-existent product_id — the FK constraint is checked and the transaction is rejected. After a successful order, the sum of line_total in order_items should equal orders.total_amount — this business invariant must hold after every commit."
       />
 
       <AcidCard
@@ -207,7 +207,7 @@ ROLLBACK;   -- clean up the read-only transaction`}
         color="#8b5cf6"
         plain="Concurrent transactions don't interfere with each other"
         technical="Each transaction executes as if it were the only transaction running, even when hundreds of transactions run simultaneously. Changes made by an in-progress transaction are not visible to other transactions until the first transaction commits (at the default isolation level). This prevents one transaction from reading dirty, inconsistent intermediate states written by another in-flight transaction."
-        example="Two FreshMart customers simultaneously try to buy the last unit of Amul Butter (stock = 1). Without isolation, both transactions could read stock = 1, both deduct 1, and both succeed — leaving stock at -1 (an impossible state). Isolation ensures one transaction wins and the other sees stock = 0 and fails, maintaining the invariant that stock >= 0."
+        example="Two FreshCart customers simultaneously try to buy the last unit of Amul Butter (stock = 1). Without isolation, both transactions could read stock = 1, both deduct 1, and both succeed — leaving stock at -1 (an impossible state). Isolation ensures one transaction wins and the other sees stock = 0 and fails, maintaining the invariant that stock >= 0."
       />
 
       <AcidCard
@@ -216,7 +216,7 @@ ROLLBACK;   -- clean up the read-only transaction`}
         color="#f97316"
         plain="Committed data survives crashes"
         technical="Once a transaction commits, its changes are permanently recorded — even if the database server crashes immediately after COMMIT returns. The database achieves this through write-ahead logging (WAL): changes are written to a persistent log before they are applied to the main data files. On restart after a crash, the database replays the WAL to recover any committed changes that had not yet been written to main storage."
-        example="A customer's FreshMart order is placed at 11:59 PM. The server crashes at 12:00 AM. On restart, the order is still there — the COMMIT was written to the WAL before the crash. The customer's order confirmation email was correct — the data is durable. Without durability, a crash after COMMIT could silently lose the order."
+        example="A customer's FreshCart order is placed at 11:59 PM. The server crashes at 12:00 AM. On restart, the order is still there — the COMMIT was written to the WAL before the crash. The customer's order confirmation email was correct — the data is durable. Without durability, a crash after COMMIT could silently lose the order."
       />
 
       <HR />
@@ -444,7 +444,7 @@ SHOW autocommit;        -- shows current setting
             name: 'Non-Repeatable Read',
             color: '#f97316',
             desc: 'Transaction A reads a row, then reads it again and gets a different value because Transaction B committed a change between A\'s two reads.',
-            example: 'A settlement report reads FreshMart order #1001 total_amount = ₹850 at the start of the report. Midway through the report, a refund transaction commits and changes #1001 to ₹750. The report re-reads #1001 and gets ₹750. The same row returned two different values in the same report run.',
+            example: 'A settlement report reads FreshCart order #1001 total_amount = ₹850 at the start of the report. Midway through the report, a refund transaction commits and changes #1001 to ₹750. The report re-reads #1001 and gets ₹750. The same row returned two different values in the same report run.',
           },
           {
             name: 'Phantom Read',
@@ -727,7 +727,7 @@ async function processPayment(userId, merchantId, amount) {
       <P>You are a backend engineer at PhonePe. A critical bug is reported: occasionally, a customer's UPI payment succeeds (money deducted from their account) but the merchant never receives the credit. This is a classic atomicity failure — two statements that must succeed together are not wrapped in a transaction.</P>
 
       <TimeBlock time="9:00 AM" label="Bug reported — customer deducted, merchant not credited">
-        Investigation reveals the payment service runs two separate UPDATE statements — one for the customer deduction, one for the merchant credit — without a transaction. The database crashes between the two statements 1 in 50,000 times. Adapted for FreshMart: order placed (INSERT) but payment not logged (INSERT fails).
+        Investigation reveals the payment service runs two separate UPDATE statements — one for the customer deduction, one for the merchant credit — without a transaction. The database crashes between the two statements 1 in 50,000 times. Adapted for FreshCart: order placed (INSERT) but payment not logged (INSERT fails).
       </TimeBlock>
 
       <TimeBlock time="9:30 AM" label="Reproduce the bug scenario">
@@ -896,9 +896,9 @@ ROLLBACK;  -- end the read-only transaction`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a complete transaction scenario for FreshMart's order fulfilment process. The scenario: a customer (customer_id = 1) places an order for 2 units of product_id = 1. Write the SQL transaction that: (1) verifies the customer exists and is active (loyalty_tier != null), (2) checks product_id = 1 is in stock, (3) inserts a new order into the orders table with store_id = 'ST001', total_amount = quantity × unit_price, order_status = 'Processing', (4) inserts the order line into order_items. Wrap all validation and DML in a BEGIN...ROLLBACK block (use ROLLBACK at the end since this is a playground — in production it would be COMMIT). Also show what a SAVEPOINT would look like between the order INSERT and the order_items INSERT, and write the SELECT queries that verify each step."
+        question="Write a complete transaction scenario for FreshCart's order fulfilment process. The scenario: a customer (customer_id = 1) places an order for 2 units of product_id = 1. Write the SQL transaction that: (1) verifies the customer exists and is active (loyalty_tier != null), (2) checks product_id = 1 is in stock, (3) inserts a new order into the orders table with store_id = 'ST001', total_amount = quantity × unit_price, order_status = 'Processing', (4) inserts the order line into order_items. Wrap all validation and DML in a BEGIN...ROLLBACK block (use ROLLBACK at the end since this is a playground — in production it would be COMMIT). Also show what a SAVEPOINT would look like between the order INSERT and the order_items INSERT, and write the SELECT queries that verify each step."
         hint="BEGIN; SELECT to validate; INSERT into orders; SAVEPOINT sp_order; INSERT into order_items; ROLLBACK TO if items fail; ROLLBACK at end. Use subquery for product unit_price in the total_amount calculation."
-        answer={`-- FreshMart order fulfilment transaction
+        answer={`-- FreshCart order fulfilment transaction
 BEGIN;
 
 -- Step 1: Validate customer exists and is active

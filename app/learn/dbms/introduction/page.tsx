@@ -647,7 +647,7 @@ CREATE POLICY team_access ON employees
               symbol: 'DB',
               color: '#0078d4',
               definition: 'A database is a logically coherent, organised collection of related data, stored in a structured format, and designed to serve a specific purpose. The key word is "logically coherent" — the data represents some aspect of the real world (called the miniworld or universe of discourse). It is not just any pile of files.',
-              example: 'A collection of tables representing FreshMart\'s customers, orders, inventory, and stores — with defined relationships between them — is a database. The raw CSV files on a hard drive before they are organised and related are NOT a database.',
+              example: 'A collection of tables representing FreshCart\'s customers, orders, inventory, and stores — with defined relationships between them — is a database. The raw CSV files on a hard drive before they are organised and related are NOT a database.',
               whatItIsNot: 'A database is not the DBMS software. If PostgreSQL is deleted from the server, the data files still exist on disk. Those files are the database.',
             },
             {

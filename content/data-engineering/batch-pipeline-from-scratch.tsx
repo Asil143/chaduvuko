@@ -108,7 +108,7 @@ export default function BatchPipelineFromScratchModule() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
             {[
-              { label: 'Source', value: 'PostgreSQL replica — FreshMart orders table (500M rows)', color: '#4285f4' },
+              { label: 'Source', value: 'PostgreSQL replica — FreshCart orders table (500M rows)', color: '#4285f4' },
               { label: 'Pattern', value: 'Incremental high-watermark — updated_at based', color: '#7b61ff' },
               { label: 'Schedule', value: 'Every 15 minutes via Airflow', color: '#f97316' },
               { label: 'Destination', value: 'Snowflake — silver.orders table', color: '#00add4' },
@@ -1473,7 +1473,7 @@ default_args = {
 with DAG(
     dag_id             = 'orders_pipeline_incremental',
     default_args       = default_args,
-    description        = 'FreshMart orders incremental ingestion (every 15 min)',
+    description        = 'FreshCart orders incremental ingestion (every 15 min)',
     schedule           = '*/15 * * * *',   # every 15 minutes
     start_date         = datetime(2026, 3, 1),
     catchup            = False,     # do not run missed intervals on deploy

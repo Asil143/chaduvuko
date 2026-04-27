@@ -88,7 +88,7 @@ export default function Distinct() {
 
       <P>By default, SELECT returns every row that satisfies your WHERE condition — including duplicates. If ten customers all live in Bangalore, a query for cities returns "Bangalore" ten times. If thirty orders were placed across five stores, a query for store IDs returns five store IDs across thirty rows — with many repeats.</P>
 
-      <P>Sometimes you want those repeats — when you are counting transactions, listing orders, or analysing every individual record. But sometimes you want to know the <Hl>unique set of values</Hl> — which cities does FreshMart serve, which categories of products exist, which payment methods have been used. This is what DISTINCT does: it eliminates duplicate rows from your result, returning each unique value exactly once.</P>
+      <P>Sometimes you want those repeats — when you are counting transactions, listing orders, or analysing every individual record. But sometimes you want to know the <Hl>unique set of values</Hl> — which cities does FreshCart serve, which categories of products exist, which payment methods have been used. This is what DISTINCT does: it eliminates duplicate rows from your result, returning each unique value exactly once.</P>
 
       <SQLPlayground
         initialQuery={`-- Without DISTINCT: every customer's city, with repeats
@@ -102,7 +102,7 @@ ORDER BY city;`}
 
       <SQLPlayground
         initialQuery={`-- With DISTINCT: each city appears exactly once
--- Much smaller result — the unique set of cities FreshMart serves
+-- Much smaller result — the unique set of cities FreshCart serves
 SELECT DISTINCT city
 FROM customers
 ORDER BY city;`}
@@ -139,7 +139,7 @@ ORDER BY city;`}
       <P>The most common use of DISTINCT is finding the unique values in one column — all distinct cities, all distinct categories, all distinct statuses. This is often called finding the <Hl>domain</Hl> or <Hl>cardinality</Hl> of a column.</P>
 
       <SQLPlayground
-        initialQuery={`-- All distinct cities where FreshMart has customers
+        initialQuery={`-- All distinct cities where FreshCart has customers
 SELECT DISTINCT city
 FROM customers
 ORDER BY city;`}
@@ -455,7 +455,7 @@ ORDER BY department;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- What brands does FreshMart stock?
+        initialQuery={`-- What brands does FreshCart stock?
 SELECT DISTINCT brand
 FROM products
 ORDER BY brand;`}
@@ -661,7 +661,7 @@ ORDER BY category_count DESC, brand;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart marketing team wants to understand their customer reach across India. Write three queries: (1) All distinct states where FreshMart has customers, sorted alphabetically. (2) The total count of distinct cities across all customers. (3) All distinct store-city combinations — which city each store is in — sorted by city."
+        question="The FreshCart marketing team wants to understand their customer reach across India. Write three queries: (1) All distinct states where FreshCart has customers, sorted alphabetically. (2) The total count of distinct cities across all customers. (3) All distinct store-city combinations — which city each store is in — sorted by city."
         hint="Query 1: SELECT DISTINCT state FROM customers ORDER BY state. Query 2: SELECT COUNT(DISTINCT city) FROM customers. Query 3: SELECT DISTINCT store_id, city FROM stores ORDER BY city — use the stores table, not customers."
         answer={`-- Query 1: All distinct states
 SELECT DISTINCT state

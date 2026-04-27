@@ -212,7 +212,7 @@ Host: api.razorpay.com
 Authorization: Basic cnpwX2xpdmVfeHh4Ong=      ← base64(key_id:key_secret)
 Content-Type: application/json
 Accept: application/json
-User-Agent: FreshMart-Pipeline/1.0
+User-Agent: FreshCart-Pipeline/1.0
 X-Request-ID: f8a3b2c4-1234-5678-abcd-ef0123456789
 
 [body — empty for GET, JSON payload for POST/PUT/PATCH]
@@ -1406,7 +1406,7 @@ def detect_schema_changes(sample: list[dict], expected_fields: set[str]) -> None
         </Para>
 
         <CodeBox label="Complete production API ingestion pipeline — all patterns combined">{`"""
-FreshMart Payment Gateway Ingestion Pipeline
+FreshCart Payment Gateway Ingestion Pipeline
 Fetches payments from payment API → validates → upserts to PostgreSQL
 Architecture: idempotent, resumable, rate-limited, defensive
 """
@@ -1641,11 +1641,11 @@ if __name__ == '__main__':
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Onboarding a new logistics API
+            Scenario — FreshCart · Onboarding a new logistics API
           </div>
 
           <Para>
-            FreshMart has just signed with a new last-mile delivery partner,
+            FreshCart has just signed with a new last-mile delivery partner,
             ShipFast. You are asked to build a pipeline that ingests daily
             delivery performance data from ShipFast's API into the warehouse.
             Here is the actual process a senior data engineer follows.
@@ -1697,7 +1697,7 @@ curl -s -I -H "X-API-Key: \${SHIPFAST_API_KEY}" \
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>delivered_at</code> field
             that is null for undelivered orders. The{' '}
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>agent_id</code> field
-            refers to ShipFast's internal agent IDs, not FreshMart's. These are the
+            refers to ShipFast's internal agent IDs, not FreshCart's. These are the
             three things you handle defensively in the parser.
           </Para>
 

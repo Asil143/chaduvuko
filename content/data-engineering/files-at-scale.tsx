@@ -1300,7 +1300,7 @@ def audit_s3_prefix(bucket: str, prefix: str) -> dict:
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Analyst reports Athena query takes 18 minutes
+            Scenario — FreshCart · Analyst reports Athena query takes 18 minutes
           </div>
 
           <Para>

@@ -362,7 +362,7 @@ print(f"GPU cluster: {gpu_cluster.name}  ({gpu_cluster.size})")
 # ── Register a training environment ───────────────────────────────────
 training_env = Environment(
     name='freshmart-training-env',
-    description='FreshMart ML training environment',
+    description='FreshCart ML training environment',
     conda_file={
         'name': 'freshmart-ml',
         'channels': ['defaults', 'conda-forge'],
@@ -474,8 +474,8 @@ from azure.ai.ml.constants import AssetTypes
 
 job = command(
     name='freshmart-delivery-training',
-    display_name='FreshMart Delivery Time Model — v1',
-    description='Train GradientBoosting model on FreshMart delivery data',
+    display_name='FreshCart Delivery Time Model — v1',
+    description='Train GradientBoosting model on FreshCart delivery data',
 
     # The training script
     code='./src',          # directory containing train.py

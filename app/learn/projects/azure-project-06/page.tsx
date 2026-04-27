@@ -119,21 +119,21 @@ export default function Project06Page() {
       <div className="my-6 p-5 rounded-xl" style={{ background: 'var(--surface)', border: '2px solid var(--accent)', borderLeft: '4px solid var(--accent)' }}>
         <div className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: 'var(--accent)' }}>What you will build</div>
         <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>
-          A pipeline that calls a live REST API, receives a JSON response for each of FreshMart&apos;s three store cities, and saves the data to ADLS automatically every morning at 6 AM.
+          A pipeline that calls a live REST API, receives a JSON response for each of FreshCart&apos;s three store cities, and saves the data to ADLS automatically every morning at 6 AM.
         </p>
       </div>
 
       {/* Real World Problem */}
       <h2>🏢 Real World Problem</h2>
       <p>
-        FreshMart&apos;s category managers noticed something interesting. On rainy days, sales of umbrellas, instant
+        FreshCart&apos;s category managers noticed something interesting. On rainy days, sales of umbrellas, instant
         noodles, and hot beverages spike. On hot summer days, ice cream, cold drinks, and fruits sell faster.
       </p>
       <p>
         The data team wants to <strong>combine sales data with weather data</strong> to help stores plan inventory
         better. If heavy rain is forecast for Delhi tomorrow, ST001 should stock more umbrellas tonight.
       </p>
-      <p>But FreshMart has no weather data. They need to pull it from somewhere.</p>
+      <p>But FreshCart has no weather data. They need to pull it from somewhere.</p>
 
       <div className="my-4 p-4 rounded-xl text-sm italic" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)' }}>
         <p style={{ color: 'var(--text2)' }}>
@@ -143,7 +143,7 @@ export default function Project06Page() {
         </p>
       </div>
 
-      <CodeBlock label="FreshMart's 3 store cities">{`New Delhi    → lat=28.6139, lon=77.2090
+      <CodeBlock label="FreshCart's 3 store cities">{`New Delhi    → lat=28.6139, lon=77.2090
 Mumbai       → lat=19.0760, lon=72.8777
 Bangalore    → lat=12.9716, lon=77.5946`}</CodeBlock>
 
@@ -756,7 +756,7 @@ trigger_weather_6am`}</CodeBlock>
         <div className="p-4 rounded-xl" style={{ background: 'var(--surface)', border: '1px solid #ff6b6b30' }}>
           <div className="text-xs font-mono font-bold mb-3" style={{ color: '#ff6b6b' }}>Before Project 06</div>
           <ul className="space-y-1 text-xs" style={{ color: 'var(--text2)' }}>
-            <li>FreshMart had no weather data</li>
+            <li>FreshCart had no weather data</li>
             <li>No way to link sales patterns to weather</li>
             <li>Analyst would visit a weather website manually</li>
           </ul>

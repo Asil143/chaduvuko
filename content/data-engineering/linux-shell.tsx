@@ -880,7 +880,7 @@ main "$@"`}</CodeBox>
 set -euo pipefail
 
 # ── VARIABLES ──────────────────────────────────────────────────────────────────
-name="FreshMart"
+name="FreshCart"
 count=42
 today=$(date +%Y-%m-%d)          # command substitution
 files=$(ls /data/*.csv | wc -l)  # command substitution

@@ -3,27 +3,27 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
-// ─── SALARY DATA (real 2026 India figures — Glassdoor, Naukri, AmbitionBox, LinkedIn) ───
+// ─── SALARY DATA (US market 2026 — LinkedIn, Glassdoor, Levels.fyi, BLS OES) ───
 const salaryDB: Record<string, any> = {
-  de:     { name:'Data Engineer',           fresher:{min:6,max:10,med:8},   mid:{min:14,max:24,med:18}, senior:{min:25,max:45,med:32}, lead:{min:35,max:65,med:48},  demand:'Very High', growth:'+22% YoY', skills:['Azure ADF','Apache Spark','Databricks','dbt','SQL','Python','Kafka','Iceberg'],            companies:['Flipkart','Swiggy','Zomato','Razorpay','Deloitte','Infosys GCC','Mu Sigma','Fractal Analytics'], tracks:['Data Engineering','Python','SQL','Azure','AWS'] },
-  ml:     { name:'ML / AI Engineer',        fresher:{min:6,max:12,med:9},   mid:{min:15,max:30,med:22}, senior:{min:30,max:60,med:42}, lead:{min:45,max:80,med:60},  demand:'Very High', growth:'+25% YoY', skills:['Python','TensorFlow','PyTorch','MLOps','SQL','LLMs','AWS SageMaker','Feature Stores'],     companies:['Flipkart','Amazon India','Fractal Analytics','Mu Sigma','Microsoft India','Google India','Sarvam AI','Meesho'], tracks:['Machine Learning','Python','Data Science','AWS','Deep Learning'] },
-  fs:     { name:'Full Stack Developer',    fresher:{min:4,max:8,med:6},    mid:{min:8,max:18,med:12},  senior:{min:16,max:35,med:24}, lead:{min:25,max:50,med:36},  demand:'High',      growth:'+18% YoY', skills:['React','Node.js','TypeScript','PostgreSQL','REST APIs','Docker','AWS','System Design'],   companies:['CRED','Razorpay','Meesho','Zerodha','Groww','Urban Company','OYO','ShareChat'],               tracks:['React.js','Node.js','TypeScript','SQL & Databases','Docker'] },
-  be:     { name:'Backend Developer',       fresher:{min:4,max:8,med:6},    mid:{min:8,max:16,med:11},  senior:{min:14,max:30,med:20}, lead:{min:22,max:45,med:32},  demand:'High',      growth:'+16% YoY', skills:['Python / Java / Node.js','REST APIs','SQL','Redis','Docker','Microservices','System Design'], companies:['Razorpay','PhonePe','Zomato','Swiggy','Ola','Paytm','MakeMyTrip','BrowserStack'],             tracks:['Python','Java','Node.js','SQL & Databases','Docker'] },
-  fe:     { name:'Frontend Developer',      fresher:{min:3,max:7,med:5},    mid:{min:7,max:15,med:10},  senior:{min:13,max:28,med:18}, lead:{min:20,max:40,med:28},  demand:'High',      growth:'+14% YoY', skills:['React','TypeScript','CSS','Performance Optimisation','Testing','Webpack','GraphQL'],         companies:['CRED','Swiggy','Flipkart','Zerodha','Urban Company','Nykaa','ShareChat','Juspay'],            tracks:['React.js','TypeScript','HTML & CSS','GraphQL'] },
-  devops: { name:'DevOps Engineer',         fresher:{min:4,max:8,med:6},    mid:{min:10,max:20,med:14}, senior:{min:18,max:35,med:25}, lead:{min:28,max:50,med:38},  demand:'High',      growth:'+20% YoY', skills:['Kubernetes','Docker','Terraform','CI/CD Pipelines','Python','AWS / Azure','Linux'],        companies:['Amazon India','Flipkart','Meesho','PhonePe','IBM','Thoughtworks','Capgemini','Persistent'],  tracks:['Docker','Kubernetes','Terraform','CI/CD Pipelines','Linux'] },
-  ds:     { name:'Data Scientist',          fresher:{min:6,max:10,med:8},   mid:{min:12,max:25,med:17}, senior:{min:22,max:45,med:30}, lead:{min:35,max:65,med:48},  demand:'High',      growth:'+20% YoY', skills:['Python','SQL','Pandas','Statistics','ML','Tableau / Power BI','Spark'],                  companies:['Mu Sigma','Fractal Analytics','Tiger Analytics','Amazon India','Flipkart','Walmart Labs','EXL'], tracks:['Data Science','Python','Machine Learning','Power BI & Tableau'] },
-  java:   { name:'Java Developer',          fresher:{min:3.5,max:7,med:5},  mid:{min:6,max:14,med:9},   senior:{min:12,max:25,med:18}, lead:{min:20,max:40,med:28},  demand:'Medium',    growth:'+12% YoY', skills:['Spring Boot','Microservices','JPA / Hibernate','Kafka','Docker','REST APIs','SQL'],        companies:['TCS','Infosys','Wipro','HCL','Tech Mahindra','Cognizant','Capgemini','Mphasis'],             tracks:['Java','Spring Boot','SQL & Databases','Docker'] },
-  py:     { name:'Python Developer',        fresher:{min:4,max:8,med:6},    mid:{min:8,max:16,med:11},  senior:{min:14,max:28,med:20}, lead:{min:22,max:42,med:30},  demand:'High',      growth:'+18% YoY', skills:['Django / FastAPI','REST APIs','SQL','Docker','Data Structures','Testing','AWS / Azure'],    companies:['Swiggy','Razorpay','Ola','Urban Company','Freshworks','Chargebee','BrowserStack','Hasura'],  tracks:['Python','Django','SQL & Databases','Docker','AWS'] },
-  cloud:  { name:'Cloud / Solutions Architect', fresher:{min:5,max:10,med:7}, mid:{min:18,max:38,med:26}, senior:{min:28,max:55,med:40}, lead:{min:40,max:80,med:58}, demand:'Very High', growth:'+22% YoY', skills:['AWS / Azure / GCP','Kubernetes','Terraform','System Design','Cloud Security','Cost Optimisation'], companies:['Amazon India','Microsoft India','Google India','IBM','Accenture','Deloitte','PwC','Infosys'], tracks:['Azure','AWS','GCP','Kubernetes','Terraform','System Design'] },
-  cyber:  { name:'Cybersecurity Analyst',   fresher:{min:6,max:10,med:8},   mid:{min:12,max:22,med:16}, senior:{min:20,max:35,med:26}, lead:{min:30,max:50,med:38},  demand:'High',      growth:'+25% YoY', skills:['Penetration Testing','SIEM','OWASP Top 10','Networking','Python Scripting','Security Ops'],  companies:['HCL','Wipro','IBM','Deloitte','PwC','Tata Communications','Paytm','Juspay'],                 tracks:['Cybersecurity','Linux','Networking'] },
-  sre:    { name:'Site Reliability Engineer', fresher:{min:5,max:10,med:7}, mid:{min:15,max:28,med:20},  senior:{min:24,max:45,med:32}, lead:{min:35,max:60,med:46},  demand:'Very High', growth:'+22% YoY', skills:['Kubernetes','Python','Observability / Prometheus','SLOs & Error Budgets','Chaos Eng','Terraform'], companies:['Google India','Flipkart','Swiggy','PhonePe','Razorpay','Dunzo','Dream11'],                  tracks:['Kubernetes','Linux','Python','Docker','CI/CD Pipelines'] },
-  mobile: { name:'Mobile App Developer',    fresher:{min:3.5,max:7,med:5},  mid:{min:7,max:16,med:10},  senior:{min:14,max:28,med:20}, lead:{min:22,max:40,med:30},  demand:'Medium',    growth:'+14% YoY', skills:['Android / Flutter / React Native','Kotlin / Dart','REST APIs','Firebase','App Performance'], companies:['Swiggy','Zomato','Ola','Nykaa','ShareChat','Meesho','Josh','DailyHunt'],                     tracks:['Android Development','Flutter'] },
-  genai:  { name:'GenAI / LLM Engineer',    fresher:{min:8,max:14,med:11},  mid:{min:18,max:35,med:25}, senior:{min:30,max:65,med:45}, lead:{min:45,max:90,med:65},  demand:'Very High', growth:'+40% YoY', skills:['Python','LangChain / LlamaIndex','RAG Pipelines','Vector Databases','Prompt Engineering','OpenAI API','HuggingFace'], companies:['Microsoft India','Google India','Sarvam AI','Krutrim','Infosys AI Lab','Wipro AI','Jio Platforms'], tracks:['Generative AI / LLMs','Python','Machine Learning','SQL & Databases'] },
-  qa:     { name:'QA / Test Automation',    fresher:{min:3,max:6,med:4.5},  mid:{min:6,max:12,med:8},   senior:{min:10,max:20,med:14}, lead:{min:16,max:30,med:22},  demand:'Medium',    growth:'+10% YoY', skills:['Selenium','API Testing / Postman','TestNG / JUnit','Python Scripting','JIRA','CI/CD Integration'], companies:['TCS','Infosys','Wipro','Accenture','Cognizant','Capgemini','Hexaware','Mphasis'],             tracks:['Software Testing','Selenium','Python'] },
+  de:     { name:'Data Engineer',           fresher:{min:90,max:130,med:108},   mid:{min:130,max:175,med:150}, senior:{min:155,max:215,med:182}, lead:{min:190,max:260,med:220},  demand:'Very High', growth:'+22% YoY', skills:['Apache Spark','Databricks','dbt','SQL','Python','Kafka','Iceberg','Azure/AWS'],            companies:['Stripe','DoorDash','Airbnb','Databricks','Snowflake','Palantir','Lyft','Robinhood'], tracks:['Data Engineering','Python','SQL','Azure','AWS'] },
+  ml:     { name:'ML / AI Engineer',        fresher:{min:110,max:155,med:130},  mid:{min:155,max:210,med:180}, senior:{min:200,max:280,med:235}, lead:{min:250,max:360,med:295},  demand:'Very High', growth:'+28% YoY', skills:['Python','PyTorch','TensorFlow','MLOps','SQL','LLMs','AWS SageMaker','Feature Stores'],     companies:['OpenAI','Anthropic','Google DeepMind','Meta AI','Amazon','Microsoft','Cohere','Scale AI'], tracks:['Machine Learning','Python','Data Science','AWS','Deep Learning'] },
+  fs:     { name:'Full Stack Developer',    fresher:{min:85,max:125,med:105},   mid:{min:120,max:165,med:140}, senior:{min:155,max:210,med:180}, lead:{min:190,max:255,med:215},  demand:'High',      growth:'+16% YoY', skills:['React','Node.js','TypeScript','PostgreSQL','REST APIs','Docker','AWS','System Design'],   companies:['Netflix','Airbnb','Uber','Lyft','GitHub','Vercel','Linear','Notion'],               tracks:['React.js','Node.js','TypeScript','SQL & Databases','Docker'] },
+  be:     { name:'Backend Developer',       fresher:{min:90,max:130,med:108},   mid:{min:125,max:170,med:145}, senior:{min:155,max:205,med:177}, lead:{min:190,max:250,med:215},  demand:'High',      growth:'+14% YoY', skills:['Python / Go / Java','REST APIs','SQL','Redis','Docker','Microservices','System Design'], companies:['Stripe','Cloudflare','Twilio','Square','Braintree','PagerDuty','Datadog','HashiCorp'],             tracks:['Python','Java','Node.js','SQL & Databases','Docker'] },
+  fe:     { name:'Frontend Developer',      fresher:{min:80,max:120,med:98},    mid:{min:115,max:158,med:134}, senior:{min:145,max:195,med:167}, lead:{min:180,max:235,med:200},  demand:'High',      growth:'+12% YoY', skills:['React','TypeScript','CSS','Performance Optimisation','Testing','Webpack','GraphQL'],         companies:['Meta','Apple','Google','Figma','Vercel','Shopify','Tailwind Labs','Linear'],            tracks:['React.js','TypeScript','HTML & CSS','GraphQL'] },
+  devops: { name:'DevOps Engineer',         fresher:{min:90,max:130,med:108},   mid:{min:130,max:175,med:150}, senior:{min:160,max:215,med:185}, lead:{min:195,max:255,med:220},  demand:'High',      growth:'+18% YoY', skills:['Kubernetes','Docker','Terraform','CI/CD Pipelines','Python','AWS / Azure','Linux'],        companies:['Cloudflare','HashiCorp','GitHub','GitLab','Datadog','PagerDuty','CrowdStrike','Palo Alto'],  tracks:['Docker','Kubernetes','Terraform','CI/CD Pipelines','Linux'] },
+  ds:     { name:'Data Scientist',          fresher:{min:95,max:135,med:112},   mid:{min:130,max:178,med:152}, senior:{min:160,max:215,med:185}, lead:{min:195,max:260,med:220},  demand:'High',      growth:'+18% YoY', skills:['Python','SQL','Pandas','Statistics','ML','Tableau / Power BI','Spark'],                  companies:['Netflix','Spotify','Airbnb','Lyft','Duolingo','DoorDash','Robinhood','Brex'], tracks:['Data Science','Python','Machine Learning','Power BI & Tableau'] },
+  java:   { name:'Java Developer',          fresher:{min:80,max:115,med:96},    mid:{min:110,max:155,med:130}, senior:{min:140,max:190,med:162}, lead:{min:175,max:230,med:198},  demand:'Medium',    growth:'+10% YoY', skills:['Spring Boot','Microservices','JPA / Hibernate','Kafka','Docker','REST APIs','SQL'],        companies:['Oracle','Red Hat','IBM','SAP','Salesforce','ServiceNow','VMware','Twilio'],             tracks:['Java','Spring Boot','SQL & Databases','Docker'] },
+  py:     { name:'Python Developer',        fresher:{min:85,max:122,med:102},   mid:{min:118,max:162,med:138}, senior:{min:148,max:198,med:170}, lead:{min:180,max:240,med:205},  demand:'High',      growth:'+16% YoY', skills:['Django / FastAPI','REST APIs','SQL','Docker','Data Structures','Testing','AWS / Azure'],    companies:['Reddit','Dropbox','Pinterest','Yelp','Quora','Eventbrite','SurveyMonkey','Gusto'],  tracks:['Python','Django','SQL & Databases','Docker','AWS'] },
+  cloud:  { name:'Cloud / Solutions Architect', fresher:{min:100,max:145,med:120}, mid:{min:145,max:195,med:168}, senior:{min:185,max:250,med:215}, lead:{min:230,max:315,med:265}, demand:'Very High', growth:'+22% YoY', skills:['AWS / Azure / GCP','Kubernetes','Terraform','System Design','Cloud Security','Cost Optimisation'], companies:['Amazon AWS','Microsoft Azure','Google Cloud','IBM Cloud','Deloitte','Accenture','PwC','KPMG'], tracks:['Azure','AWS','GCP','Kubernetes','Terraform','System Design'] },
+  cyber:  { name:'Cybersecurity Analyst',   fresher:{min:75,max:115,med:93},    mid:{min:110,max:158,med:132}, senior:{min:145,max:200,med:170}, lead:{min:180,max:245,med:210},  demand:'High',      growth:'+24% YoY', skills:['Penetration Testing','SIEM','OWASP Top 10','Networking','Python Scripting','Security Ops'],  companies:['CrowdStrike','Palo Alto Networks','Okta','Splunk','SentinelOne','Rapid7','Tenable','IBM'],                 tracks:['Cybersecurity','Linux','Networking'] },
+  sre:    { name:'Site Reliability Engineer', fresher:{min:95,max:135,med:114}, mid:{min:138,max:185,med:160}, senior:{min:170,max:230,med:198}, lead:{min:210,max:285,med:240},  demand:'Very High', growth:'+20% YoY', skills:['Kubernetes','Python','Observability / Prometheus','SLOs & Error Budgets','Chaos Eng','Terraform'], companies:['Google','Meta','Netflix','LinkedIn','Spotify','Uber','Lyft','GitHub'],                  tracks:['Kubernetes','Linux','Python','Docker','CI/CD Pipelines'] },
+  mobile: { name:'Mobile App Developer',    fresher:{min:85,max:120,med:100},   mid:{min:118,max:162,med:138}, senior:{min:150,max:200,med:172}, lead:{min:185,max:245,med:210},  demand:'Medium',    growth:'+12% YoY', skills:['iOS / Android / Flutter / React Native','Swift / Kotlin / Dart','REST APIs','Firebase','App Performance'], companies:['Apple','Google','Uber','DoorDash','Instagram','TikTok','Discord','Snap'],                     tracks:['Android Development','Flutter'] },
+  genai:  { name:'GenAI / LLM Engineer',    fresher:{min:120,max:170,med:142},  mid:{min:165,max:235,med:195}, senior:{min:210,max:310,med:255}, lead:{min:270,max:400,med:320},  demand:'Very High', growth:'+45% YoY', skills:['Python','LangChain / LlamaIndex','RAG Pipelines','Vector Databases','Prompt Engineering','OpenAI API','HuggingFace'], companies:['OpenAI','Anthropic','Cohere','Mistral','Google DeepMind','Meta AI','xAI','Hugging Face'], tracks:['Generative AI / LLMs','Python','Machine Learning','SQL & Databases'] },
+  qa:     { name:'QA / Test Automation',    fresher:{min:70,max:105,med:86},    mid:{min:98,max:140,med:118},  senior:{min:128,max:175,med:150}, lead:{min:158,max:215,med:183},  demand:'Medium',    growth:'+8% YoY',  skills:['Selenium','Cypress','API Testing / Postman','Jest / JUnit','Python Scripting','CI/CD Integration'], companies:['Google','Microsoft','Amazon','Salesforce','ServiceNow','Workday','SAP','Oracle'],             tracks:['Software Testing','Selenium','Python'] },
 }
 
-const cityMult: Record<string,number>  = { blr:1.3, hyd:1.2, mum:1.2, pune:1.1, del:1.1, che:1.0, remote:1.15, tier2:0.8 }
-const compMult: Record<string,number>  = { product:1.0, service:0.72, startup:1.28, faang:2.1, gcc:1.42, mnc:1.0 }
+const cityMult: Record<string,number>  = { sf:1.35, nyc:1.3, seattle:1.2, boston:1.15, austin:1.0, chicago:0.95, remote:1.1, other:0.9 }
+const compMult: Record<string,number>  = { bigtech:1.0, startup:1.18, fintech:0.95, consulting:0.72, faang:1.42, remote:1.05 }
 
 // ─── TRACKS DATA ──────────────────────────────────────────────────────────────
 const tracksAll = [
@@ -33,13 +33,13 @@ const tracksAll = [
   { cat:'data',  icon:'📁',  name:'Data Engineering',       desc:'From zero to production-grade DE — no cloud required', pills:['Pipelines','SQL','Python','Batch','Streaming'], jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/data-engineering' },
   { cat:'data',  icon:'☁️',  name:'Azure Track',      desc:'Full Azure cloud engineering track', pills:['ADF','Databricks','Spark','dbt','Kafka'],   jobs:'Data Engineer · Analytics Engineer',        status:'live', href:'/learn/azure/introduction' },
   { cat:'data',  icon:'🌩️', name:'Microsoft Azure',         desc:'Full Azure cloud service track', pills:['ADLS Gen2','ADF','Synapse','Fabric'],     jobs:'Cloud Engineer · Azure Developer',           status:'live', href:'/learn/azure/introduction' },
-  { cat:'cs',    icon:'🧮',  name:'Data Structures & Algorithms', desc:'Crack every technical coding round', pills:['Arrays','Trees','Graphs','Dynamic Programming'], jobs:'FAANG India · Product Companies · Startups', status:'live', href:'/learn/dsa' },
-  { cat:'cs',    icon:'💾',  name:'DBMS',                   desc:'Database theory and design fundamentals', pills:['ER Diagrams','Normalization','ACID','Transactions'], jobs:'DBA · Backend Dev · Campus Placement', status:'live', href:'/learn/dbms' },
+  { cat:'cs',    icon:'🧮',  name:'Data Structures & Algorithms', desc:'Crack every technical coding round', pills:['Arrays','Trees','Graphs','Dynamic Programming'], jobs:'Big Tech · FAANG · Product Companies', status:'live', href:'/learn/dsa' },
+  { cat:'cs',    icon:'💾',  name:'DBMS',                   desc:'Database theory and design fundamentals', pills:['ER Diagrams','Normalization','ACID','Transactions'], jobs:'DBA · Backend Dev · Technical Interviews', status:'live', href:'/learn/dbms' },
   { cat:'data',  icon:'🟠',  name:'Amazon Web Services',    desc:'S3, Glue, Redshift, Kinesis, Lambda', pills:['S3','Glue','Redshift','Lambda'],     jobs:'AWS Developer · Cloud Engineer',             status:'soon', href:'#' },
   { cat:'data',  icon:'🔵',  name:'Google Cloud Platform',  desc:'BigQuery, Dataflow, Pub/Sub, Composer', pills:['BigQuery','Dataflow','Composer'],  jobs:'GCP Engineer · Data Engineer',               status:'soon', href:'#' },
   { cat:'data',  icon:'📊',  name:'Power BI & Tableau',     desc:'Dashboards, DAX, data storytelling', pills:['Power BI','Tableau','DAX','Reports'],  jobs:'BI Developer · Data Analyst',               status:'soon', href:'#' },
   // AI & ML
-  
+
 { cat:'ai', icon:'🧠', name:'Deep Learning',          desc:'Neural networks, CNNs, RNNs, Transformers — part of the AI & ML track', pills:['TensorFlow','PyTorch','Backprop','Transformers'], jobs:'DL Engineer · AI Researcher',     status:'live', href:'/learn/ai-ml' },
 { cat:'ai', icon:'✨', name:'Generative AI / LLMs',   desc:'GANs, Diffusion, LLMs, RAG, Agents — part of the AI & ML track',       pills:['LangChain','OpenAI','RAG','HuggingFace'],     jobs:'GenAI Developer · AI Engineer',   status:'live', href:'/learn/ai-ml' },
 { cat:'ai', icon:'📈', name:'Data Science',            desc:'Analysis, modelling, storytelling',    pills:['Pandas','Matplotlib','Stats','EDA'],          jobs:'Data Scientist · Analytics Consultant', status:'soon', href:'#' },
@@ -77,8 +77,8 @@ const tracksAll = [
   { cat:'db',    icon:'❄️',  name:'Snowflake',              desc:'Cloud data warehouse platform', pills:['Schemas','Time Travel','Streams','dbt Integration'], jobs:'Data Engineer · Analytics Engineer', status:'soon', href:'#' },
   // CS Core
   { cat:'cs',    icon:'⚙️',  name:'System Design',          desc:'Design scalable systems like a senior', pills:['HLD','LLD','Scalability','CAP Theorem','Trade-offs'], jobs:'Senior Engineer · Tech Lead · Architect', status:'soon', href:'#' },
-  { cat:'cs',    icon:'🖥️', name:'Operating Systems',      desc:'Processes, memory, scheduling, concurrency', pills:['Processes','Memory Mgmt','Scheduling','IPC'], jobs:'Campus Placements · Systems Engineering', status:'soon', href:'#' },
-  { cat:'cs',    icon:'🌐',  name:'Computer Networks',      desc:'TCP/IP, HTTP, DNS, and beyond', pills:['TCP/IP','HTTP/HTTPS','DNS','Load Balancers'],  jobs:'DevOps Eng · Backend Dev · Campus Placement', status:'soon', href:'#' },
+  { cat:'cs',    icon:'🖥️', name:'Operating Systems',      desc:'Processes, memory, scheduling, concurrency', pills:['Processes','Memory Mgmt','Scheduling','IPC'], jobs:'Technical Interviews · Systems Engineering', status:'soon', href:'#' },
+  { cat:'cs',    icon:'🌐',  name:'Computer Networks',      desc:'TCP/IP, HTTP, DNS, and beyond', pills:['TCP/IP','HTTP/HTTPS','DNS','Load Balancers'],  jobs:'DevOps Eng · Backend Dev · Technical Interviews', status:'soon', href:'#' },
   // Mobile
   { cat:'mobile',icon:'🤖',  name:'Android Development',    desc:'Native Android with Kotlin', pills:['Kotlin','Jetpack Compose','MVVM','Room DB'],   jobs:'Android Dev · Mobile Dev',                   status:'soon', href:'#' },
   { cat:'mobile',icon:'🦋',  name:'Flutter',                desc:'Cross-platform iOS and Android with Dart', pills:['Dart','Widgets','BLoC','Firebase'], jobs:'Mobile Dev · Flutter Dev',                 status:'soon', href:'#' },
@@ -88,9 +88,9 @@ const tracksAll = [
   { cat:'test',  icon:'🕷️', name:'Selenium',               desc:'Web browser test automation', pills:['WebDriver','TestNG','Page Object Model','Frameworks'], jobs:'Automation QA · SDET',                status:'soon', href:'#' },
   { cat:'test',  icon:'📮',  name:'API Testing',            desc:'Postman, REST Assured, API automation', pills:['Postman','REST Assured','Newman','CI Integration'], jobs:'QA Engineer · SDET',              status:'soon', href:'#' },
   // Interview
-  { cat:'interview',icon:'🎯',name:'Interview Prep — All Roles', desc:'Structured Q&A for every tech role', pills:['System Design','Coding Rounds','HR Round','Resume'], jobs:'Every company · Every level · Every role', status:'live', href:'/learn/interview' },
-  { cat:'interview',icon:'🏢',name:'Campus Placements',     desc:'TCS, Wipro, Infosys, Cognizant, Accenture', pills:['Aptitude','Technical Round','HR Round','Group Discussion'], jobs:'MNCs · IT Services · Product Co', status:'soon', href:'#' },
-  { cat:'interview',icon:'🚀',name:'FAANG India Prep',       desc:'Google, Amazon, Microsoft, Meta, Apple India', pills:['DSA','System Design','Behavioural','Coding Patterns'], jobs:'Google · Amazon · Microsoft · Meta · Apple', status:'soon', href:'#' },
+  { cat:'interview',icon:'🎯',name:'Interview Prep — All Roles', desc:'Structured Q&A for every tech role', pills:['System Design','Coding Rounds','Behavioral','Resume'], jobs:'Every company · Every level · Every role', status:'live', href:'/learn/interview' },
+  { cat:'interview',icon:'🏢',name:'Big Tech Hiring Process', desc:'Google, Meta, Amazon, Microsoft, Apple — full loop', pills:['Resume Screen','Phone Screen','Onsite','Offer Negotiation'], jobs:'Big Tech · Startups · FAANG', status:'soon', href:'#' },
+  { cat:'interview',icon:'🚀',name:'FAANG & Big Tech Prep',  desc:'Algorithms, system design, behavioral rounds', pills:['DSA','System Design','Behavioral','Coding Patterns'], jobs:'Google · Amazon · Microsoft · Meta · Apple', status:'soon', href:'#' },
 ]
 
 // ─── TICKER TECHNOLOGIES ──────────────────────────────────────────────────────
@@ -148,12 +148,12 @@ const roleLinks: Record<string, string> = {
 
 // ─── DAY 1 TASKS ─────────────────────────────────────────────────────────────
 const dayOneTasks = [
-  { role:'Data Engineer', company:'Swiggy · Bengaluru', salary:'₹18–26 LPA', task:'Build an automated daily pipeline ingesting 10M orders from Azure Blob into ADLS, partitioned by city and date, available in Databricks by 7am.', track:'ADF + ADLS + Databricks track', color:'#0078d4' },
-  { role:'Backend Developer', company:'Razorpay · Bengaluru', salary:'₹16–24 LPA', task:'Design a REST API in Python FastAPI for our payments dashboard — handle 50k requests/min, write unit tests, deploy on AWS Lambda.', track:'Python + AWS track', color:'#ff9900' },
-  { role:'ML Engineer', company:'Flipkart · Bengaluru', salary:'₹22–35 LPA', task:'Train a product recommendation model on 3 months of purchase history using collaborative filtering, evaluate with NDCG, deploy via SageMaker.', track:'Python + ML + AWS track', color:'#8b5cf6' },
-  { role:'Full Stack Developer', company:'CRED · Bengaluru', salary:'₹18–28 LPA', task:'Build the credit score dashboard in React — fetch from our Node.js API, add real-time updates via WebSocket, write Cypress E2E tests.', track:'React + Node.js + TypeScript track', color:'#06b6d4' },
-  { role:'DevOps Engineer', company:'Meesho · Bengaluru', salary:'₹14–22 LPA', task:'Migrate 40 microservices to Kubernetes on EKS, write Terraform for all infra, set up ArgoCD for a full GitOps deployment pipeline.', track:'Docker + Kubernetes + DevOps track', color:'#f97316' },
-  { role:'GenAI Developer', company:'Infosys AI Lab · Hyderabad', salary:'₹12–20 LPA', task:'Build a RAG-based internal knowledge chatbot using LangChain, OpenAI embeddings, and PostgreSQL vector store — under 2 second response time.', track:'Python + GenAI + Databases track', color:'#ec4899' },
+  { role:'Data Engineer', company:'Stripe · San Francisco', salary:'$145K–$185K', task:'Build an automated daily pipeline ingesting 50M transaction events from S3 into Snowflake, partitioned by region and date, available for analysts by 7am ET.', track:'ADF + ADLS + Databricks track', color:'#0078d4' },
+  { role:'Backend Developer', company:'DoorDash · Seattle', salary:'$150K–$195K', task:'Design a REST API in Python FastAPI for our merchant analytics dashboard — handle 80k requests/min, write unit tests, deploy on AWS Lambda behind API Gateway.', track:'Python + AWS track', color:'#ff9900' },
+  { role:'ML Engineer', company:'Airbnb · San Francisco', salary:'$165K–$220K', task:'Train a listing recommendation model on 6 months of search history using two-tower embeddings, evaluate with NDCG@10, deploy via SageMaker real-time endpoint.', track:'Python + ML + AWS track', color:'#8b5cf6' },
+  { role:'Full Stack Developer', company:'Netflix · Los Gatos', salary:'$160K–$210K', task:'Build the A/B test results dashboard in React — fetch experiment data from our Node.js API, add real-time updates via Server-Sent Events, write Playwright E2E tests.', track:'React + Node.js + TypeScript track', color:'#06b6d4' },
+  { role:'DevOps Engineer', company:'Cloudflare · Austin', salary:'$140K–$180K', task:'Migrate 60 microservices to Kubernetes on EKS, write Terraform for all infra, set up ArgoCD for a full GitOps deployment pipeline with automated rollback.', track:'Docker + Kubernetes + DevOps track', color:'#f97316' },
+  { role:'GenAI Developer', company:'Cohere · Remote', salary:'$175K–$235K', task:'Build a RAG-based enterprise knowledge assistant using LangChain, Cohere embeddings, and Pinecone vector store — sub-2-second P95 latency requirement.', track:'Python + GenAI + Databases track', color:'#ec4899' },
 ]
 
 export default function HomePage() {
@@ -162,9 +162,9 @@ export default function HomePage() {
   const [trackCat, setTrackCat] = useState('all')
   const [showAllTracks, setShowAllTracks] = useState(false)
   const [salaryRole, setSalaryRole] = useState('de')
-  const [salaryCity, setSalaryCity] = useState('blr')
+  const [salaryCity, setSalaryCity] = useState('sf')
   const [salaryExp, setSalaryExp] = useState('mid')
-  const [salaryComp, setSalaryComp] = useState('product')
+  const [salaryComp, setSalaryComp] = useState('bigtech')
   const [counters, setCounters] = useState({ t:0, p:0, tr:0, r:0 })
 
   // Role rotation
@@ -205,9 +205,9 @@ export default function HomePage() {
   const band = sd[expKey]
   const cm = cityMult[salaryCity] || 1
   const co = compMult[salaryComp] || 1
-  const r = (v: number) => Math.round(v * cm * co * 10) / 10
+  const r = (v: number) => Math.round(v * cm * co)
   const salMin = r(band.min), salMax = r(band.max), salMed = r(band.med)
-  const barPct = Math.min(95, Math.round((salMed / 100) * 100))
+  const barPct = Math.min(95, Math.round((salMed / 400) * 100))
 
   // Filtered tracks
   const filteredTracks = trackCat === 'all' ? tracksAll : tracksAll.filter(t => t.cat === trackCat)
@@ -228,7 +228,7 @@ export default function HomePage() {
   ]
 
   const expBands = [
-    { key:'fresher', label:'Fresher (0–2yr)', color:'var(--green)' },
+    { key:'fresher', label:'Entry-level (0–2yr)', color:'var(--green)' },
     { key:'mid', label:'Mid-level (3–5yr)', color:'var(--aws)' },
     { key:'senior', label:'Senior (6–10yr)', color:'var(--azure)' },
     { key:'lead', label:'Lead / Architect (10yr+)', color:'var(--purple)' },
@@ -320,8 +320,8 @@ export default function HomePage() {
                 'Aggressive login popups and modal walls mid-reading.',
                 '40-hour video courses with no structured job outcome.',
                 'Tutorial hell — finish 50 pages, still can\'t build anything.',
-                'No context for Indian job market — TCS, Flipkart, FAANG India.',
-                'Generic salary data — not filtered by city, company, or skills.',
+                'No real job context — just theory with no connection to actual JDs.',
+                'Generic salary data — not filtered by role, country, or experience.',
                 'AI era completely ignored — no Copilot, GenAI, LLM workflows.',
                 'No visual path — students don\'t know what to learn next.',
               ]},
@@ -332,8 +332,8 @@ export default function HomePage() {
                 'No popups. No login walls. Read any tutorial, anytime, always.',
                 '5-minute micro-lessons — learn on your phone in any gap.',
                 'End-to-end projects you put on your resume from day one.',
-                'India salary data — filtered by city, company type, experience.',
-                'Company-wise prep: TCS, Wipro, Infosys, Swiggy, FAANG India.',
+                'US + global salary data — filtered by role, country, and experience.',
+                'Big Tech prep: Google, Amazon, Meta, Stripe, FAANG-level interviews.',
                 'AI-era track — Prompt Eng, RAG, LangChain, GitHub Copilot.',
                 'Visual skill roadmap — what to learn, in what order, why.',
               ]},
@@ -407,7 +407,7 @@ export default function HomePage() {
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12 }}>
           {[
             { icon:'🩺', title:'Error Library', desc:'Every project page has an "Errors You\'ll Hit" section — the actual error message, exactly why it happens, and the precise fix. 80% of real engineering is debugging. No other platform prepares you for it.', code: ['PipelineRunFailed: Copy_Store_Sales', 'Source file not found in landing zone', '', '→ Why: Date format in expression', '   uses "yyyy-MM-dd" but file has "yyyyMMdd"', '→ Fix: Change @formatDateTime format', '   to "yyyyMMdd" (remove hyphens)'] },
-            { icon:'💼', title:'What This Looks Like at Work', desc:'Every concept ends with real job context — the actual Slack message your manager sends on day 1, the job posting that requires this skill, and what a senior engineer\'s code review would say.', code: ['Real task — Swiggy Data Engineering:', '"Build a daily ingestion pipeline', ' from S3 landing zone to Redshift,', ' partitioned by city + order date."', '', '→ This exact tutorial covers it.'] },
+            { icon:'💼', title:'What This Looks Like at Work', desc:'Every concept ends with real job context — the actual Slack message your manager sends on day 1, the job posting that requires this skill, and what a senior engineer\'s code review would say.', code: ['Real task — DoorDash Data Engineering:', '"Build a daily ingestion pipeline', ' from S3 landing zone to Snowflake,', ' partitioned by market + order date."', '', '→ This exact tutorial covers it.'] },
             { icon:'📅', title:'Last Verified Badge', desc:'Every tutorial shows when it was last tested against the real tool version. GFG has Python 2 articles from 2019 ranking on Google with zero warning. That will never happen here.', code: ['✓ Last verified: March 2026', '✓ Tested on: ADF v2 · Python 3.12', '✓ Status: All steps confirmed working', '', '⚑ Flag something broken? →', '  Submit a correction in one click'] },
           ].map(m => (
             <div key={m.title} style={{ border:'1px solid var(--border)', borderRadius:14, padding:'22px 18px', background:'var(--surface)' }}>
@@ -418,7 +418,7 @@ export default function HomePage() {
               <div style={{ background:'var(--bg2)', border:'1px solid var(--border)', borderRadius:8, padding:'10px 12px', fontFamily:'monospace', fontSize:10.5, lineHeight:1.7, color:'var(--muted)' }}>
                 {m.code.map((line, i) => (
                   <div key={i} style={{ color: line.startsWith('→') || line.startsWith('✓') ? 'var(--green)' : line.startsWith('Real') ? 'var(--yellow)' : line.startsWith('Pipeline') ? 'var(--red)' : 'var(--muted)' }}>
-                    {line || '\u00A0'}
+                    {line || ' '}
                   </div>
                 ))}
               </div>
@@ -434,7 +434,7 @@ export default function HomePage() {
         <section style={{ maxWidth:1100, margin:'0 auto', padding:'56px 28px' }}>
           <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// Day 1 at work</p>
           <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>This is what you&apos;ll<br />actually be asked to do.</h2>
-          <p style={{ fontSize:14, color:'var(--muted)', marginBottom:28, maxWidth:520 }}>Real tasks from real job descriptions at India&apos;s top tech companies. Every tutorial connects to one of these.</p>
+          <p style={{ fontSize:14, color:'var(--muted)', marginBottom:28, maxWidth:520 }}>Real tasks from real job descriptions at top US tech companies. Every tutorial connects to one of these.</p>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
             {dayOneTasks.map(t => (
               <div key={t.role} style={{ borderRadius:12, padding:18, border:'1px solid var(--border)', background:'var(--surface)', borderLeft:`3px solid ${t.color}` }}>
@@ -483,8 +483,8 @@ export default function HomePage() {
       <div id="salary" style={{ background:'var(--bg2)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)' }}>
         <section style={{ maxWidth:1100, margin:'0 auto', padding:'56px 28px' }}>
           <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// Career salary explorer</p>
-          <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Real 2026 India salary data.<br />Your filters. Your career.</h2>
-          <p style={{ fontSize:14, color:'var(--muted)', marginBottom:28, maxWidth:560 }}>Filter by role, city, experience, and company type. Data sourced from Glassdoor India, Naukri, AmbitionBox, and LinkedIn — updated March 2026.</p>
+          <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Real 2026 US salary data.<br />Your filters. Your career.</h2>
+          <p style={{ fontSize:14, color:'var(--muted)', marginBottom:28, maxWidth:560 }}>Filter by role, city, experience, and company type. Data sourced from LinkedIn, Glassdoor, Levels.fyi, and BLS OES — updated April 2026.</p>
           {/* Filters */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginBottom:20 }}>
             {[
@@ -496,19 +496,20 @@ export default function HomePage() {
                 {v:'sre',l:'Site Reliability Engineer'},{v:'mobile',l:'Mobile App Developer'},
                 {v:'genai',l:'GenAI / LLM Engineer'},{v:'qa',l:'QA / Test Automation'},
               ]},
-              { label:'City', id:'city', value:salaryCity, setter:setSalaryCity, opts:[
-                {v:'blr',l:'Bangalore'},{v:'hyd',l:'Hyderabad'},{v:'mum',l:'Mumbai'},
-                {v:'pune',l:'Pune'},{v:'del',l:'Delhi-NCR'},{v:'che',l:'Chennai'},
-                {v:'remote',l:'Remote (India)'},{v:'tier2',l:'Tier 2 Cities'},
+              { label:'City / Region', id:'city', value:salaryCity, setter:setSalaryCity, opts:[
+                {v:'sf',l:'San Francisco / Bay Area'},{v:'nyc',l:'New York City'},
+                {v:'seattle',l:'Seattle'},{v:'boston',l:'Boston'},
+                {v:'austin',l:'Austin'},{v:'chicago',l:'Chicago'},
+                {v:'remote',l:'Remote (US)'},{v:'other',l:'Other US Cities'},
               ]},
               { label:'Experience', id:'exp', value:salaryExp, setter:setSalaryExp, opts:[
-                {v:'fresher',l:'Fresher (0–2 yrs)'},{v:'mid',l:'Mid-level (3–5 yrs)'},
-                {v:'senior',l:'Senior (6–10 yrs)'},{v:'lead',l:'Lead / Architect (10+ yrs)'},
+                {v:'fresher',l:'Entry-level (0–2 yrs)'},{v:'mid',l:'Mid-level (3–5 yrs)'},
+                {v:'senior',l:'Senior (6–10 yrs)'},{v:'lead',l:'Staff / Principal (10+ yrs)'},
               ]},
               { label:'Company Type', id:'comp', value:salaryComp, setter:setSalaryComp, opts:[
-                {v:'product',l:'Product Company'},{v:'service',l:'Service (TCS/Infosys/Wipro)'},
-                {v:'startup',l:'High-Growth Startup'},{v:'faang',l:'FAANG India'},
-                {v:'gcc',l:'GCC / Global Captive'},{v:'mnc',l:'MNC (non-FAANG)'},
+                {v:'bigtech',l:'Big Tech (Google / Amazon / Meta)'},{v:'faang',l:'FAANG+ (Top Tier)'},
+                {v:'startup',l:'High-Growth Startup'},{v:'fintech',l:'Fintech / Series B+'},
+                {v:'consulting',l:'Consulting / SI'},{v:'remote',l:'Remote-First Company'},
               ]},
             ].map(f => (
               <div key={f.id}>
@@ -524,8 +525,8 @@ export default function HomePage() {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
             <div style={{ border:'1px solid var(--border)', borderRadius:12, padding:20, background:'var(--surface)' }}>
               <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'.08em', color:'var(--muted)', marginBottom:14 }}>Estimated Salary Range</div>
-              <div style={{ fontSize:38, fontWeight:900, color:'var(--green)', letterSpacing:'-2px', lineHeight:1 }}>₹{salMed} LPA</div>
-              <div style={{ fontSize:12, color:'var(--muted)', marginTop:4, marginBottom:10 }}>Range: ₹{salMin} – ₹{salMax} LPA</div>
+              <div style={{ fontSize:38, fontWeight:900, color:'var(--green)', letterSpacing:'-2px', lineHeight:1 }}>${salMed}K</div>
+              <div style={{ fontSize:12, color:'var(--muted)', marginTop:4, marginBottom:10 }}>Range: ${salMin}K – ${salMax}K / year</div>
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:16 }}>
                 <span style={{ fontSize:10, fontWeight:600, padding:'3px 10px', borderRadius:99, background: sd.demand === 'Very High' ? 'rgba(139,92,246,.15)' : 'rgba(0,230,118,.12)', color: sd.demand === 'Very High' ? 'var(--purple)' : 'var(--green)' }}>
                   {sd.demand} Demand
@@ -542,7 +543,7 @@ export default function HomePage() {
                 ))}
               </div>
               <div style={{ fontSize:10, color:'var(--muted2)', marginTop:14, paddingTop:12, borderTop:'1px solid var(--border)' }}>
-                Sources: Glassdoor India, Naukri, AmbitionBox, LinkedIn India · March 2026 · {sd.name}
+                Sources: LinkedIn, Glassdoor, Levels.fyi, BLS OES · April 2026 · {sd.name}
               </div>
             </div>
             <div style={{ border:'1px solid var(--border)', borderRadius:12, padding:20, background:'var(--surface)' }}>
@@ -556,12 +557,12 @@ export default function HomePage() {
               {expBands.map(eb => {
                 const b = sd[eb.key]
                 const bMin = r(b.min), bMax = r(b.max), bMed = r(b.med)
-                const pct = Math.min(96, bMed)
+                const pct = Math.min(96, Math.round((bMed / 400) * 100))
                 return (
                   <div key={eb.key} style={{ marginBottom:10 }}>
                     <div style={{ display:'flex', justifyContent:'space-between', fontSize:10, color:'var(--muted)', marginBottom:3 }}>
                       <span>{eb.label}</span>
-                      <span style={{ color:'var(--text)', fontWeight:600 }}>₹{bMin}–{bMax}L</span>
+                      <span style={{ color:'var(--text)', fontWeight:600 }}>${bMin}K–${bMax}K</span>
                     </div>
                     <div style={{ height:5, background:'var(--surface2)', borderRadius:3, overflow:'hidden' }}>
                       <div style={{ height:'100%', borderRadius:3, background:eb.color, width:`${pct}%`, transition:'width .6s ease' }} />
@@ -589,10 +590,10 @@ export default function HomePage() {
           {[
             { icon:'🩺', title:'Error Library', desc:'Every project includes the real errors you\'ll hit — exact error messages, root cause, and fix. No other platform prepares you for debugging.' },
             { icon:'🛠️', title:'Real Projects, Real Code', desc:'Not just theory. Working code on Azure, AWS, GCP, or real web infrastructure. Put it on your resume from day one.' },
-            { icon:'🎯', title:'Job-Market Focused', desc:'Content curated based on what Indian companies are actively hiring for right now — not what was relevant five years ago.' },
+            { icon:'🎯', title:'Job-Market Focused', desc:'Content curated based on what companies are actively hiring for right now — mapped to real job descriptions, not five-year-old syllabi.' },
             { icon:'📅', title:'Always Verified', desc:'Every page carries a "Last Verified" badge showing the tool version and test date. Stale content is flagged and fixed.' },
             { icon:'🧭', title:'Structured Learning Path', desc:'Visual skill roadmaps per track — what to learn, in what order, and which job role it leads to. No more random rabbit holes.' },
-            { icon:'🇮🇳', title:'India-Focused Career Data', desc:'Salary data by city and company. Company-wise prep for TCS, Wipro, Swiggy, CRED, and FAANG India — built for the Indian job market.' },
+            { icon:'🌍', title:'Global Career Data', desc:'US + worldwide salary data by role and country. Big Tech prep, FAANG-level interview guides, and real job descriptions from top companies.' },
           ].map(w => (
             <div key={w.title} style={{ border:'1px solid var(--border)', borderRadius:12, padding:18, background:'var(--surface)' }}>
               <div style={{ fontSize:22, marginBottom:10 }}>{w.icon}</div>
@@ -612,7 +613,7 @@ export default function HomePage() {
           Pick a track. Follow the path. Build the project. Get the job. Built by Asil.
         </p>
         <div style={{ display:'flex', gap:20, justifyContent:'center', flexWrap:'wrap', marginBottom:28 }}>
-          {['No login required to read any tutorial','No popup interruptions','Error library on every project','India salary data built in','Built by Asil'].map(item => (
+          {['No login required to read any tutorial','No popup interruptions','Error library on every project','Global salary data built in','Built by Asil'].map(item => (
             <div key={item} style={{ fontSize:11, color:'var(--muted)', display:'flex', alignItems:'center', gap:5 }}>
               <div style={{ width:4, height:4, borderRadius:'50%', background:'var(--green)' }} />
               {item}

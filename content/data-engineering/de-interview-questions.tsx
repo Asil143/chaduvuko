@@ -1613,7 +1613,7 @@ for lag in [1, 2, 3]:
           web UI provides visibility into every DAG run, every task's log,
           and the history of successes and failures.
         </Para>
-        <CodeBox label="Airflow DAG — FreshMart daily pipeline">
+        <CodeBox label="Airflow DAG — FreshCart daily pipeline">
 {`from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator

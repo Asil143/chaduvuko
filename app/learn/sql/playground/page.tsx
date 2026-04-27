@@ -19,7 +19,7 @@ const CHALLENGES: {
     category: 'Aggregation',
     color: '#10b981',
     difficulty: 'Beginner',
-    desc: 'Which city generates the most revenue for FreshMart?',
+    desc: 'Which city generates the most revenue for FreshCart?',
     sql: `SELECT s.city,\n  COUNT(o.order_id)        AS total_orders,\n  ROUND(SUM(o.total_amount), 2) AS revenue\nFROM stores s\nJOIN orders o ON s.store_id = o.store_id\nGROUP BY s.city\nORDER BY revenue DESC;`,
   },
   {
@@ -102,7 +102,7 @@ export default function SQLPlaygroundPage() {
   return (
     <LearnLayout
       title="SQL Playground"
-      description="Run real SQL against the FreshMart database — DuckDB-WASM, fully in your browser"
+      description="Run real SQL against the FreshCart database — DuckDB-WASM, fully in your browser"
       section="SQL"
       readTime="Interactive"
       updatedAt="April 2026"
@@ -131,7 +131,7 @@ export default function SQLPlaygroundPage() {
           <div style={{ width: 1, height: 16, background: 'var(--border)' }} />
           {[
             { label: '6 tables', color: SQL_COLOR },
-            { label: 'FreshMart DB', color: SQL_COLOR },
+            { label: 'FreshCart DB', color: SQL_COLOR },
             { label: 'No install', color: '#10b981' },
             { label: '100% local', color: '#10b981' },
           ].map(b => (
@@ -236,7 +236,7 @@ export default function SQLPlaygroundPage() {
           {/* Playground */}
           <SQLPlayground
             key={playKey}
-            initialQuery={mounted ? challenge.sql : `-- Welcome to the FreshMart SQL Playground\n-- Pick a challenge on the left, or write your own query below\n\nSELECT first_name, last_name, city, loyalty_tier\nFROM customers\nORDER BY loyalty_tier\nLIMIT 10;`}
+            initialQuery={mounted ? challenge.sql : `-- Welcome to the FreshCart SQL Playground\n-- Pick a challenge on the left, or write your own query below\n\nSELECT first_name, last_name, city, loyalty_tier\nFROM customers\nORDER BY loyalty_tier\nLIMIT 10;`}
             height={200}
             showSchema={true}
           />

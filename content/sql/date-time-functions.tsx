@@ -124,7 +124,7 @@ export default function DateTimeFunctions() {
       </div>
 
       <SQLPlayground
-        initialQuery={`-- See the date types in FreshMart
+        initialQuery={`-- See the date types in FreshCart
 SELECT
   date('now')                           AS today_date,
   datetime('now')                       AS now_timestamp,
@@ -428,7 +428,7 @@ ORDER BY order_date DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Employee tenure: how long have they worked at FreshMart?
+        initialQuery={`-- Employee tenure: how long have they worked at FreshCart?
 SELECT
   employee_id,
   first_name || ' ' || last_name      AS employee,

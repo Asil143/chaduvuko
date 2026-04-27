@@ -313,7 +313,7 @@ PYTHON IMPLEMENTATION (full load with staging swap):
         <SubTitle>When full load breaks down</SubTitle>
 
         <CodeBox label="Full load failure modes — when the pattern stops working">{`FAILURE MODE 1: Table grows too large for full extraction
-  Table: orders (FreshMart) — 500 million rows after 3 years
+  Table: orders (FreshCart) — 500 million rows after 3 years
   Full load time: 6 hours
   Pipeline SLA: complete by 6 AM
   Pipeline runtime on a bad day: started 11 PM, finishes 5 AM next day
@@ -902,7 +902,7 @@ PRACTICAL ROUTING TABLE:
 
         <SubTitle>The mixed-pattern architecture — most production platforms use all three</SubTitle>
 
-        <CodeBox label="FreshMart ingestion architecture — all three patterns in use">{`FRESHMART DATA PLATFORM — INGESTION PATTERN BY TABLE:
+        <CodeBox label="FreshCart ingestion architecture — all three patterns in use">{`FRESHMART DATA PLATFORM — INGESTION PATTERN BY TABLE:
 
   FULL LOAD (nightly, fast):
     reference.store_master          10 rows    → Replaces nightly
@@ -960,7 +960,7 @@ PRACTICAL ROUTING TABLE:
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Data quality incident
+            Scenario — FreshCart · Data quality incident
           </div>
 
           <Para>

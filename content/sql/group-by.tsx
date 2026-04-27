@@ -191,7 +191,7 @@ ORDER BY order_count DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Customer count per city — where are FreshMart's customers?
+        initialQuery={`-- Customer count per city — where are FreshCart's customers?
 SELECT
   city,
   COUNT(*)                        AS customer_count,
@@ -746,8 +746,8 @@ ORDER BY total_spend DESC NULLS LAST;`}
         The product manager needs: for each combination of payment method and merchant category, show the transaction count, total value, average transaction size, and the percentage of total transactions. This is a multi-column GROUP BY with percentage calculations.
       </TimeBlock>
 
-      <TimeBlock time="2:15 PM" label="You build the query (adapted for FreshMart)">
-        Adapted to FreshMart: payment method × product category breakdown.
+      <TimeBlock time="2:15 PM" label="You build the query (adapted for FreshCart)">
+        Adapted to FreshCart: payment method × product category breakdown.
       </TimeBlock>
 
       <SQLPlayground
@@ -775,7 +775,7 @@ ORDER BY p.category, order_count DESC;`}
       />
 
       <TimeBlock time="2:40 PM" label="Report delivered">
-        The product manager immediately spots that COD (Cash on Delivery) is disproportionately high for Staples orders — customers trust FreshMart enough to pay digitally for premium products but default to COD for everyday groceries. This insight drives a new COD-to-digital conversion campaign targeting staple product orders.
+        The product manager immediately spots that COD (Cash on Delivery) is disproportionately high for Staples orders — customers trust FreshCart enough to pay digitally for premium products but default to COD for everyday groceries. This insight drives a new COD-to-digital conversion campaign targeting staple product orders.
       </TimeBlock>
 
       <ProTip>
@@ -856,7 +856,7 @@ ORDER BY p.category, order_count DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart management team needs a store performance summary for their Q1 2024 review (January through March 2024). Write a GROUP BY query that shows for each store: store_id, city, total delivered orders, unique customers served, total delivered revenue (rounded to 2 decimal places), average order value (rounded to 2 decimal places), fastest delivery in days, and a performance_band column using CASE: 'Star' if revenue above ₹3,000, 'Good' if above ₹1,500, 'Needs Support' otherwise. Only include stores that had at least 1 delivered order. Sort by total revenue descending."
+        question="The FreshCart management team needs a store performance summary for their Q1 2024 review (January through March 2024). Write a GROUP BY query that shows for each store: store_id, city, total delivered orders, unique customers served, total delivered revenue (rounded to 2 decimal places), average order value (rounded to 2 decimal places), fastest delivery in days, and a performance_band column using CASE: 'Star' if revenue above ₹3,000, 'Good' if above ₹1,500, 'Needs Support' otherwise. Only include stores that had at least 1 delivered order. Sort by total revenue descending."
         hint="JOIN stores to orders. WHERE for Q1 2024 date range AND order_status = 'Delivered'. GROUP BY store_id and city. HAVING COUNT(*) >= 1 (or just let the join naturally exclude stores with no orders). CASE on SUM(total_amount) for the band."
         answer={`SELECT
   s.store_id,

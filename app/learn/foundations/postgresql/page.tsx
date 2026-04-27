@@ -268,7 +268,7 @@ export default function PostgreSQLPage() {
 
       <h2>Step 4 — Create Your First Table</h2>
       <p>
-        We will recreate the FreshMart scenario in PostgreSQL. Let us create a <code>stores</code> table and a <code>sales</code> table.
+        We will recreate the FreshCart scenario in PostgreSQL. Let us create a <code>stores</code> table and a <code>sales</code> table.
       </p>
 
       <div className="my-4 rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
@@ -324,7 +324,7 @@ export default function PostgreSQLPage() {
 
       {/* ── SECTION 5 — INSERT ── */}
       <h2>Step 5 — Insert Data</h2>
-      <p>Tables are empty after creation. Let us add some FreshMart data.</p>
+      <p>Tables are empty after creation. Let us add some FreshCart data.</p>
 
       <div className="my-4 rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
         <div className="px-4 py-2" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
@@ -332,11 +332,11 @@ export default function PostgreSQLPage() {
         </div>
         <pre className="p-4 text-xs overflow-x-auto" style={{ background: 'var(--bg2)', color: 'var(--text2)', lineHeight: 1.8 }}>{`INSERT INTO stores (store_id, store_name, city, state, opened_date)
 VALUES
-  ('ST001', 'FreshMart New Delhi',   'New Delhi',  'Delhi',     '2020-01-15'),
-  ('ST002', 'FreshMart Mumbai',      'Mumbai',     'Maharashtra','2020-03-10'),
-  ('ST003', 'FreshMart Bangalore',   'Bangalore',  'Karnataka', '2020-06-01'),
-  ('ST004', 'FreshMart Chennai',     'Chennai',    'Tamil Nadu','2021-01-20'),
-  ('ST005', 'FreshMart Hyderabad',   'Hyderabad',  'Telangana', '2021-04-05');`}</pre>
+  ('ST001', 'FreshCart New Delhi',   'New Delhi',  'Delhi',     '2020-01-15'),
+  ('ST002', 'FreshCart Mumbai',      'Mumbai',     'Maharashtra','2020-03-10'),
+  ('ST003', 'FreshCart Bangalore',   'Bangalore',  'Karnataka', '2020-06-01'),
+  ('ST004', 'FreshCart Chennai',     'Chennai',    'Tamil Nadu','2021-01-20'),
+  ('ST005', 'FreshCart Hyderabad',   'Hyderabad',  'Telangana', '2021-04-05');`}</pre>
       </div>
 
       <div className="my-4 rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
@@ -572,7 +572,7 @@ DELETE FROM sales WHERE order_date < '2023-01-01';`}</pre>
           <span className="text-xs font-mono" style={{ color: 'var(--accent)' }}>UPSERT with ON CONFLICT</span>
         </div>
         <pre className="p-4 text-xs overflow-x-auto" style={{ background: 'var(--bg2)', color: 'var(--text2)', lineHeight: 2 }}>{`INSERT INTO stores (store_id, store_name, city, state)
-VALUES ('ST001', 'FreshMart New Delhi Updated', 'New Delhi', 'Delhi')
+VALUES ('ST001', 'FreshCart New Delhi Updated', 'New Delhi', 'Delhi')
 ON CONFLICT (store_id)
 DO UPDATE SET
   store_name = EXCLUDED.store_name,

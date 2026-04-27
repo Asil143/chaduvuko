@@ -98,7 +98,7 @@ export default function SelectFrom() {
 FROM   customers;`}
       />
 
-      <P>Two lines. Two words. This query asks the FreshMart database one question: <em>"Give me the first_name, last_name, and city columns from every row in the customers table."</em> The database reads every row in customers, extracts those three columns, and returns the result. That is all SELECT and FROM do — and they do it for everything from 5 rows to 5 billion rows.</P>
+      <P>Two lines. Two words. This query asks the FreshCart database one question: <em>"Give me the first_name, last_name, and city columns from every row in the customers table."</em> The database reads every row in customers, extracts those three columns, and returns the result. That is all SELECT and FROM do — and they do it for everything from 5 rows to 5 billion rows.</P>
 
       <HR />
 
@@ -223,7 +223,7 @@ LIMIT 8;`}
       <H>Column order in SELECT is yours to control</H>
       <P>The columns in your result appear in the order you list them in SELECT — not the order they are defined in the table. In the query above, city appears first even though it is the 6th column in the customers table. This lets you organise results in whatever order makes sense for the person reading them.</P>
 
-      <H>Selecting columns from FreshMart — practical examples</H>
+      <H>Selecting columns from FreshCart — practical examples</H>
 
       <SQLPlayground
         initialQuery={`-- Products: just the info a customer needs to see
@@ -326,7 +326,7 @@ LIMIT 10;`}
       <SQLPlayground
         initialQuery={`-- SELECT can return literal values directly
 -- No FROM needed when you are not reading from any table
-SELECT 'Hello, FreshMart!'   AS greeting,
+SELECT 'Hello, FreshCart!'   AS greeting,
        2 + 2                  AS math_result,
        CURRENT_DATE           AS today;`}
         height={110}
@@ -339,7 +339,7 @@ SELECT 'Hello, FreshMart!'   AS greeting,
 SELECT
   first_name,
   last_name,
-  'FreshMart Customer'   AS type,
+  'FreshCart Customer'   AS type,
   loyalty_tier,
   2026 - 2022            AS years_since_launch
 FROM customers
@@ -359,7 +359,7 @@ LIMIT 5;`}
 
       <P><Hl>SQL keywords are case-insensitive.</Hl> SELECT, select, Select, and SeLeCt are all identical to the database. FROM, from, From — all the same. The convention is to write keywords in UPPERCASE — it makes queries easier to read by visually separating your instructions from your data. All examples in this course follow this convention.</P>
 
-      <P><Hl>Table and column names depend on the database.</Hl> In PostgreSQL, table and column names are case-insensitive unless you quote them with double quotes. In MySQL, table names are case-sensitive on Linux (because file names are case-sensitive on Linux) but case-insensitive on Windows. The safest practice: always use lowercase for table and column names (as FreshMart does) and write them the same way every time.</P>
+      <P><Hl>Table and column names depend on the database.</Hl> In PostgreSQL, table and column names are case-insensitive unless you quote them with double quotes. In MySQL, table names are case-sensitive on Linux (because file names are case-sensitive on Linux) but case-insensitive on Windows. The safest practice: always use lowercase for table and column names (as FreshCart does) and write them the same way every time.</P>
 
       <P><Hl>String values are case-sensitive.</Hl> The value 'Bangalore' is not the same as 'bangalore' or 'BANGALORE' in a WHERE clause. String comparisons respect exact case — you will see this in Module 06 when learning WHERE.</P>
 
@@ -441,7 +441,7 @@ ORDER BY city, loyalty_tier;`}
         showSchema={false}
       />
 
-      <P>DISTINCT is useful for: finding all unique values in a column (all cities FreshMart serves, all product categories, all payment methods used), checking what values actually exist in a column before filtering on them, and understanding the cardinality of a column — how many distinct values it has.</P>
+      <P>DISTINCT is useful for: finding all unique values in a column (all cities FreshCart serves, all product categories, all payment methods used), checking what values actually exist in a column before filtering on them, and understanding the cardinality of a column — how many distinct values it has.</P>
 
       <Callout type="warning">
         DISTINCT has a performance cost — the database must compare every row against every other row (or sort all rows) to eliminate duplicates. On large tables, DISTINCT can be significantly slower than a plain SELECT. Only use it when you genuinely need unique values. If you are counting distinct values, use COUNT(DISTINCT column) — covered in Module 27.
@@ -491,9 +491,9 @@ LIMIT 5;`}
       <HR />
 
       {/* ── PART 11 ── */}
-      <Part n="11" title="Complete FreshMart Examples — Real Business Questions" />
+      <Part n="11" title="Complete FreshCart Examples — Real Business Questions" />
 
-      <P>Now let us put everything together. Here are real business questions that FreshMart's management team might ask, answered with SELECT and FROM alone — no filtering, no aggregation, just reading the right columns from the right table.</P>
+      <P>Now let us put everything together. Here are real business questions that FreshCart's management team might ask, answered with SELECT and FROM alone — no filtering, no aggregation, just reading the right columns from the right table.</P>
 
       <SQLPlayground
         initialQuery={`-- Business question: "Show me all our stores — city, state, and monthly targets"
@@ -680,7 +680,7 @@ ORDER BY onboarded_date DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshMart wants a product listing for their website. Write a SELECT query that returns: the product name, category, brand, price (formatted as unit_price with an alias 'price'), and a calculated column called 'gst_price' which is the unit_price multiplied by 1.18 (adding 18% GST), rounded to 2 decimal places. Only return products that are in stock. Order by price ascending."
+        question="FreshCart wants a product listing for their website. Write a SELECT query that returns: the product name, category, brand, price (formatted as unit_price with an alias 'price'), and a calculated column called 'gst_price' which is the unit_price multiplied by 1.18 (adding 18% GST), rounded to 2 decimal places. Only return products that are in stock. Order by price ascending."
         hint="You need SELECT with column names and a calculated column using ROUND(unit_price * 1.18, 2). For filtering in-stock products use WHERE in_stock = true. For ordering use ORDER BY unit_price ASC."
         answer={`SELECT
   product_name,

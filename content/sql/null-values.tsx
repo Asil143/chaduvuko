@@ -119,7 +119,7 @@ export default function NullValues() {
 
       <P>Think of it this way. You are filling out a form and a field asks for your middle name. If you have no middle name, you write "N/A" or leave it blank. If you do not know whether you have a middle name (unlikely, but humour the example), the field is genuinely unknown. In a database, both situations — not applicable and unknown — are represented by NULL. The field contains no value. Not an empty value. No value at all.</P>
 
-      <P>In FreshMart's orders table, the delivery_date column is NULL for orders that have not been delivered yet. It is not that the delivery date is unknown — it is that the delivery has not happened, so the date <Hl>does not exist yet</Hl>. The employees table has manager_id as NULL for store managers who report to nobody in this dataset. Not an unknown manager — no manager relationship applies.</P>
+      <P>In FreshCart's orders table, the delivery_date column is NULL for orders that have not been delivered yet. It is not that the delivery date is unknown — it is that the delivery has not happened, so the date <Hl>does not exist yet</Hl>. The employees table has manager_id as NULL for store managers who report to nobody in this dataset. Not an unknown manager — no manager relationship applies.</P>
 
       <SQLPlayground
         initialQuery={`-- See NULL in action — orders without a delivery date
@@ -802,7 +802,7 @@ ALTER COLUMN annual_income SET NOT NULL;`}
       <IQ q="What is NULL in SQL and how is it different from zero or empty string?">
         <p style={{ margin: '0 0 14px' }}>NULL in SQL represents the complete absence of a value — it means the information is unknown, missing, or not applicable for that row. It is fundamentally different from zero, empty string, or false. Zero is a known numeric value. Empty string is a known string of zero length. False is a known boolean value. NULL is the absence of any known value.</p>
         <p style={{ margin: '0 0 14px' }}>The distinction matters enormously in queries. WHERE salary = 0 finds employees with a salary explicitly set to zero — perhaps interns or volunteers. WHERE salary IS NULL finds employees whose salary has not been recorded — perhaps newly added rows or data entry errors. These are completely different sets of rows. Similarly, WHERE name = '' finds rows where name is an empty string — someone entered nothing but submitted the form. WHERE name IS NULL finds rows where the name field was never touched at all.</p>
-        <p style={{ margin: 0 }}>In FreshMart's orders table, delivery_date IS NULL means the delivery has not happened yet — not that the delivery date is unknown, but that it does not exist because the event has not occurred. This is the "not applicable" use of NULL, distinct from the "unknown" use. Both are represented identically in SQL, which is why understanding what NULL means in context is important before writing queries that filter on nullable columns.</p>
+        <p style={{ margin: 0 }}>In FreshCart's orders table, delivery_date IS NULL means the delivery has not happened yet — not that the delivery date is unknown, but that it does not exist because the event has not occurred. This is the "not applicable" use of NULL, distinct from the "unknown" use. Both are represented identically in SQL, which is why understanding what NULL means in context is important before writing queries that filter on nullable columns.</p>
       </IQ>
 
       <IQ q="What is three-valued logic and why does it exist in SQL?">
@@ -868,7 +868,7 @@ ALTER COLUMN annual_income SET NOT NULL;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart operations team wants a delivery performance report. Write a query that shows all orders with: order_id, order_date, a delivery_status column that shows 'Delivered' if delivery_date IS NOT NULL or 'Pending' if delivery_date IS NULL, the actual delivery_date (show 'Not yet delivered' if NULL), and days_taken (the number of days between order_date and delivery_date — show NULL for pending orders). Sort by order_date descending."
+        question="The FreshCart operations team wants a delivery performance report. Write a query that shows all orders with: order_id, order_date, a delivery_status column that shows 'Delivered' if delivery_date IS NOT NULL or 'Pending' if delivery_date IS NULL, the actual delivery_date (show 'Not yet delivered' if NULL), and days_taken (the number of days between order_date and delivery_date — show NULL for pending orders). Sort by order_date descending."
         hint="Use CASE WHEN delivery_date IS NOT NULL THEN 'Delivered' ELSE 'Pending' END for the status. Use COALESCE(CAST(delivery_date AS VARCHAR), 'Not yet delivered') for the date display. Use delivery_date - order_date for days_taken (it will naturally be NULL for undelivered orders)."
         answer={`SELECT
   order_id,

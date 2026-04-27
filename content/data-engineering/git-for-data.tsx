@@ -1224,7 +1224,7 @@ delivered order revenue per store per day, with 7-day moving averages
 and month-to-date totals.
 
 ## Why
-Powers the FreshMart Revenue Dashboard's store performance widget.
+Powers the FreshCart Revenue Dashboard's store performance widget.
 Currently this runs as a direct Snowflake query that takes 4 minutes
 — this pre-aggregated model reduces it to <1 second.
 
@@ -1356,7 +1356,7 @@ git merge --abort                   # abandon the merge, go back to pre-merge st
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Finance team raises alarm at 09:15 AM
+            Scenario — FreshCart · Finance team raises alarm at 09:15 AM
           </div>
 
           <Para>

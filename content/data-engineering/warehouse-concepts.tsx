@@ -906,11 +906,11 @@ WHERE o.order_date = '2026-03-17';
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · CFO asks why Snowflake bill doubled in 3 months
+            Scenario — FreshCart · CFO asks why Snowflake bill doubled in 3 months
           </div>
 
           <Para>
-            FreshMart's Snowflake bill grew from $4,200/month to $11,800/month
+            FreshCart's Snowflake bill grew from $4,200/month to $11,800/month
             over three months. The data team is asked to investigate and reduce
             the cost. Here is the systematic approach.
           </Para>

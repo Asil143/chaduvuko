@@ -115,7 +115,7 @@ export default function MathFunctions() {
       <FnCard fn="TRUNC" syntax="TRUNC(number, decimal_places)" returns="truncated number" note="Truncates (cuts off) without rounding. TRUNC(4.99, 1) = 4.9. TRUNC(4.99, 0) = 4. Differs from ROUND — never rounds up." />
 
       <SQLPlayground
-        initialQuery={`-- Compare rounding behaviours on FreshMart prices
+        initialQuery={`-- Compare rounding behaviours on FreshCart prices
 SELECT
   unit_price,
   ROUND(unit_price, 0)          AS rounded_to_int,

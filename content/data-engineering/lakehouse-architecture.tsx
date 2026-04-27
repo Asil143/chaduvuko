@@ -228,7 +228,7 @@ export default function LakehouseArchitectureModule() {
           top that all speak the same table format protocol.
         </Para>
 
-        <CodeBox label="Lakehouse architecture — components and their roles">{`LAKEHOUSE ARCHITECTURE (FreshMart example):
+        <CodeBox label="Lakehouse architecture — components and their roles">{`LAKEHOUSE ARCHITECTURE (FreshCart example):
 
   ┌─────────────────────────────────────────────────────────────────┐
   │                    QUERY / COMPUTE LAYER                        │
@@ -1016,7 +1016,7 @@ ALTER TABLE bronze.orders SET TBLPROPERTIES (delta.enableChangeDataFeed = true);
         }}>
           💼 What This Looks Like at Work
         </div>
-        <SectionTitle>Migrating FreshMart From Two Systems to a Lakehouse</SectionTitle>
+        <SectionTitle>Migrating FreshCart From Two Systems to a Lakehouse</SectionTitle>
 
         <div style={{
           background: 'var(--surface)', border: '1px solid var(--border)',
@@ -1029,11 +1029,11 @@ ALTER TABLE bronze.orders SET TBLPROPERTIES (delta.enableChangeDataFeed = true);
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Consolidating lake + warehouse into lakehouse
+            Scenario — FreshCart · Consolidating lake + warehouse into lakehouse
           </div>
 
           <Para>
-            FreshMart runs two separate systems: a Spark + S3 data lake (used by
+            FreshCart runs two separate systems: a Spark + S3 data lake (used by
             ML engineers) and a Snowflake warehouse (used by analysts). The daily
             ETL job that copies Silver tables from S3 to Snowflake costs $1,800/month
             in Snowflake credits and takes 4 hours. Analysts see data that is 4 hours

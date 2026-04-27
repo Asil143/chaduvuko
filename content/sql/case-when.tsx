@@ -801,7 +801,7 @@ ORDER BY total_gmv DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a single query that produces a store performance summary for FreshMart management. For each store show: store_id, city, total delivered orders, total delivered revenue (rounded to 2 decimal places), the revenue from high-value orders (above ₹1,000) as high_value_revenue, a performance_band column using CASE: 'Star' if total delivered revenue above ₹3,000, 'Good' if above ₹1,500, 'Needs Support' otherwise. Sort by total delivered revenue descending."
+        question="Write a single query that produces a store performance summary for FreshCart management. For each store show: store_id, city, total delivered orders, total delivered revenue (rounded to 2 decimal places), the revenue from high-value orders (above ₹1,000) as high_value_revenue, a performance_band column using CASE: 'Star' if total delivered revenue above ₹3,000, 'Good' if above ₹1,500, 'Needs Support' otherwise. Sort by total delivered revenue descending."
         hint="JOIN stores to orders. WHERE order_status = 'Delivered'. SUM(total_amount) for revenue. SUM(CASE WHEN total_amount > 1000 THEN total_amount ELSE 0 END) for high_value_revenue. CASE on the SUM result for performance_band — but you cannot use the alias in CASE, so repeat the expression."
         answer={`SELECT
   s.store_id,

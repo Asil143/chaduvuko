@@ -174,10 +174,10 @@ WHERE product_name LIKE 'Tata%';`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Stores whose name starts with 'FreshMart Koram'
+        initialQuery={`-- Stores whose name starts with 'FreshCart Koram'
 SELECT store_id, store_name, city, manager_name
 FROM stores
-WHERE store_name LIKE 'FreshMart Koram%';`}
+WHERE store_name LIKE 'FreshCart Koram%';`}
         height={110}
         showSchema={false}
       />
@@ -474,7 +474,7 @@ WHERE product_name LIKE '%100!%' ESCAPE '!'`}
       <SQLPlayground
         initialQuery={`-- Searching for a literal percent sign in product descriptions
 -- Using ESCAPE to treat % as a literal character
--- (FreshMart products don't have % in names, but the syntax is correct)
+-- (FreshCart products don't have % in names, but the syntax is correct)
 SELECT product_name
 FROM products
 WHERE product_name LIKE '%Noodles%'
@@ -720,7 +720,7 @@ ORDER BY brand;`}
       />
 
       <TimeBlock time="10:35 AM" label="Store search for a delivery partner">
-        A delivery partner application is looking for FreshMart stores in cities ending with "bad" — Hyderabad and Ahmedabad specifically.
+        A delivery partner application is looking for FreshCart stores in cities ending with "bad" — Hyderabad and Ahmedabad specifically.
       </TimeBlock>
 
       <SQLPlayground
@@ -812,7 +812,7 @@ ORDER BY city;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart marketing team is running a campaign targeting: (1) customers whose email is from a non-Gmail provider AND who live in cities ending with 'abad' or 'abad' variant — specifically Hyderabad or Ahmedabad. (2) Separately, find all products from brands whose name is exactly 5 characters long. Write both queries."
+        question="The FreshCart marketing team is running a campaign targeting: (1) customers whose email is from a non-Gmail provider AND who live in cities ending with 'abad' or 'abad' variant — specifically Hyderabad or Ahmedabad. (2) Separately, find all products from brands whose name is exactly 5 characters long. Write both queries."
         hint="Query 1: email NOT LIKE '%@gmail.com' AND (city LIKE '%abad' OR city LIKE 'Hyderabad'). Query 2: brand LIKE '_____ ' — five underscores for exactly five characters. Use SELECT DISTINCT brand to verify first."
         answer={`-- Query 1: Non-Gmail customers in Hyderabad or Ahmedabad
 SELECT

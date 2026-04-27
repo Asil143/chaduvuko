@@ -1314,11 +1314,11 @@ FAILURE 5: Schema change breaks consumer
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · GDPR Right to Erasure requirement
+            Scenario — FreshCart · GDPR Right to Erasure requirement
           </div>
 
           <Para>
-            FreshMart's legal team informs the data engineering team that under GDPR
+            FreshCart's legal team informs the data engineering team that under GDPR
             (applicable to users in the EU), customers can request deletion of their
             personal data. When a deletion request is processed by the application
             team, the customer row in PostgreSQL is hard-deleted. The data engineering

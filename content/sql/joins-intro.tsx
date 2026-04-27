@@ -110,7 +110,7 @@ export default function JoinsIntro() {
       {/* ── PART 01 ── */}
       <Part n="01" title="Why JOINs Exist — The Relational Model's Core Idea" />
 
-      <P>Every query you have written so far touches one table at a time. But the FreshMart database has six tables — customers, orders, order_items, products, stores, and employees — and the most valuable information lives across the boundaries between them. An order row knows its customer_id but not the customer's name. An order_items row knows the product_id but not the product's name. A store row knows the city but not the orders placed there.</P>
+      <P>Every query you have written so far touches one table at a time. But the FreshCart database has six tables — customers, orders, order_items, products, stores, and employees — and the most valuable information lives across the boundaries between them. An order row knows its customer_id but not the customer's name. An order_items row knows the product_id but not the product's name. A store row knows the city but not the orders placed there.</P>
 
       <P>This is not a design flaw — it is the relational model working exactly as intended. Normalisation (Module 26) taught you to store each fact once in the right table. JOINs are how you <Hl>reassemble</Hl> those facts at query time — combining columns from multiple tables based on matching values, producing a result that looks like it came from one wide table but was stored efficiently in several narrow ones.</P>
 
@@ -151,7 +151,7 @@ JOIN     table2 AS t2          -- right table (with alias)
 -- For each row in table1, find rows in table2 where t1.key = t2.key
 -- Combine matched rows into one output row
 
--- Real FreshMart example:
+-- Real FreshCart example:
 SELECT   o.order_id, o.order_date, c.first_name, c.city
 FROM     orders    AS o
 JOIN     customers AS c
@@ -484,7 +484,7 @@ JOIN stores    AS s ON o.store_id    = s.store_id;`}
 
       <CodeBlock
         label="Standard alias conventions"
-        code={`-- Common single-letter aliases for FreshMart tables:
+        code={`-- Common single-letter aliases for FreshCart tables:
 orders       AS o
 customers    AS c
 products     AS p
@@ -764,7 +764,7 @@ ORDER BY o.order_id, p.category;`}
       </TimeBlock>
 
       <ProTip>
-        The four-table JOIN above — orders, customers, stores, order_items, products — is the FreshMart "master join" that you will use as the foundation for dozens of reports. Once you have this base query working, you add WHERE filters, GROUP BY dimensions, and HAVING thresholds to build any specific report. Build your base JOIN first, verify the row count and a sample of results, then add the analytical layer on top.
+        The four-table JOIN above — orders, customers, stores, order_items, products — is the FreshCart "master join" that you will use as the foundation for dozens of reports. Once you have this base query working, you add WHERE filters, GROUP BY dimensions, and HAVING thresholds to build any specific report. Build your base JOIN first, verify the row count and a sample of results, then add the analytical layer on top.
       </ProTip>
 
       <HR />
@@ -809,7 +809,7 @@ ORDER BY o.order_id, p.category;`}
 
       <Err
         msg="ERROR: column reference 'city' is ambiguous"
-        cause="Two or more joined tables have a column with the same name — in FreshMart, both customers and stores have a city column. When SELECT references city without a table alias prefix, the database cannot determine which table's city column you mean and throws an ambiguity error."
+        cause="Two or more joined tables have a column with the same name — in FreshCart, both customers and stores have a city column. When SELECT references city without a table alias prefix, the database cannot determine which table's city column you mean and throws an ambiguity error."
         fix="Prefix every column reference with the table alias: SELECT c.city AS customer_city, s.city AS store_city. Always use table aliases in multi-table queries and qualify every column reference with its table alias. If you see an ambiguity error, search your SELECT list for every column name that exists in more than one of the joined tables and add the alias prefix."
       />
 

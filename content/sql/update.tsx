@@ -782,7 +782,7 @@ COMMIT;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshMart's quarterly loyalty review has three updates to apply: (1) Upgrade any Bronze customer who joined before 2022 to Silver. (2) Upgrade any Silver customer from Bangalore or Hyderabad to Gold. (3) Apply a 5% price increase to all Staples products that are currently in stock. For each update, first write the SELECT to verify which rows will be affected, then write the UPDATE."
+        question="FreshCart's quarterly loyalty review has three updates to apply: (1) Upgrade any Bronze customer who joined before 2022 to Silver. (2) Upgrade any Silver customer from Bangalore or Hyderabad to Gold. (3) Apply a 5% price increase to all Staples products that are currently in stock. For each update, first write the SELECT to verify which rows will be affected, then write the UPDATE."
         hint="Three separate updates, each with a SELECT first. Update 1: WHERE loyalty_tier = 'Bronze' AND joined_date < '2022-01-01'. Update 2: WHERE loyalty_tier = 'Silver' AND city IN ('Bangalore', 'Hyderabad'). Update 3: WHERE category = 'Staples' AND in_stock = true. Use ROUND(unit_price * 1.05, 2) for the price update."
         answer={`-- Update 1: Bronze → Silver for pre-2022 customers
 -- SELECT first:

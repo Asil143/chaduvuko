@@ -153,7 +153,7 @@ export default function Project05Page() {
 
       {/* Real World Problem */}
       <h2>🏢 Real World Problem</h2>
-      <p>FreshMart&apos;s data lake is growing. After Projects 01–04, files are landing in ADLS — but new problems are showing up.</p>
+      <p>FreshCart&apos;s data lake is growing. After Projects 01–04, files are landing in ADLS — but new problems are showing up.</p>
 
       <p><strong>Problem 1 — Files get overwritten silently</strong></p>
       <p>
@@ -805,7 +805,7 @@ PROJECT 05:  File management with validation        → Get Metadata, If Conditi
         In the real world, a huge portion of data comes from <strong>REST APIs</strong> — services you query
         with an HTTP request and get back structured JSON.
       </p>
-      <p>In <strong>Project 06</strong>, FreshMart integrates with a live public REST API:</p>
+      <p>In <strong>Project 06</strong>, FreshCart integrates with a live public REST API:</p>
       <ul>
         <li>Call a real API endpoint and receive a JSON response</li>
         <li>Extract data and land it in ADLS as a clean CSV</li>

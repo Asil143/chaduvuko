@@ -407,7 +407,7 @@ resource "aws_s3_bucket_notification" "data_lake" {
 
 # KMS key for encryption
 resource "aws_kms_key" "data_lake" {
-  description             = "FreshMart data lake encryption key"
+  description             = "FreshCart data lake encryption key"
   deletion_window_in_days = 30
   enable_key_rotation     = true
   tags                    = local.common_tags
@@ -653,7 +653,7 @@ resource "snowflake_warehouse" "dbt_pipeline_monitor" {
 resource "snowflake_database" "freshmart" {
   name                        = "FRESHMART_\${upper(var.environment)}"
   data_retention_time_in_days = var.environment == "prod" ? 30 : 1
-  comment                     = "FreshMart data platform - \${var.environment}"
+  comment                     = "FreshCart data platform - \${var.environment}"
 }
 
 resource "snowflake_schema" "bronze" {
@@ -1029,11 +1029,11 @@ resource "snowflake_database" "freshmart_prod" {
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Scenario — FreshMart · New engineer joins the data team
+            Scenario — FreshCart · New engineer joins the data team
           </div>
 
           <Para>
-            Rahul Sharma joins FreshMart as a data engineer. Before IaC, onboarding
+            Rahul Sharma joins FreshCart as a data engineer. Before IaC, onboarding
             took 3-5 days: manually creating an S3 prefix, requesting Snowflake access
             from IT, waiting for IAM role creation, configuring dbt profiles with
             manual credential lookup. With IaC, the entire environment is ready in

@@ -219,7 +219,7 @@ SELECT 'order_items', COUNT(*) FROM order_items;`}
       <P>TRUNCATE respects foreign key constraints — you cannot truncate a parent table if child tables have FK references to it. You must truncate in dependency order (child first, then parent) or use CASCADE.</P>
 
       <CodeBlock
-        label="TRUNCATE in dependency order — reset FreshMart test data"
+        label="TRUNCATE in dependency order — reset FreshCart test data"
         code={`-- WRONG order: fails because order_items references orders
 TRUNCATE TABLE orders;
 -- ERROR: cannot truncate a table referenced in a foreign key constraint
@@ -477,9 +477,9 @@ ORDER BY avg_order DESC;`}
       <H>Full database reset script</H>
 
       <CodeBlock
-        label="Complete FreshMart database reset — dev/staging only"
+        label="Complete FreshCart database reset — dev/staging only"
         code={`-- DEVELOPMENT/STAGING ONLY — NEVER RUN ON PRODUCTION
--- Reset all FreshMart tables to empty state
+-- Reset all FreshCart tables to empty state
 
 -- Step 1: Truncate in dependency order (children first)
 TRUNCATE TABLE order_items  RESTART IDENTITY;
@@ -579,7 +579,7 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO analyst_user;
       </TimeBlock>
 
       <TimeBlock time="10:30 AM" label="Design the replacement">
-        TRUNCATE with RESTART IDENTITY resets everything in under 2 seconds. But you need two safeguards: the script must never run on production, and it must automatically reseed with the standard FreshMart test data after truncating.
+        TRUNCATE with RESTART IDENTITY resets everything in under 2 seconds. But you need two safeguards: the script must never run on production, and it must automatically reseed with the standard FreshCart test data after truncating.
       </TimeBlock>
 
       <CodeBlock
@@ -609,7 +609,7 @@ TRUNCATE TABLE customers    RESTART IDENTITY;
 TRUNCATE TABLE products     RESTART IDENTITY;
 TRUNCATE TABLE stores       RESTART IDENTITY;
 
--- Reseed with standard FreshMart test data
+-- Reseed with standard FreshCart test data
 \i /scripts/freshmart_seed.sql
 
 -- Log completion
@@ -701,9 +701,9 @@ WHERE event = 'NIGHTLY_RESET'
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a complete database reset script for FreshMart's staging environment. The script should: (1) Check that the current database is 'freshmart_staging' and abort with a clear error message if not. (2) Truncate all six FreshMart tables in the correct dependency order, restarting all sequences. (3) After truncating, insert one test store (ST001, 'FreshMart Test Store', 'Bangalore', 'Karnataka', 'Test Manager', today's date, monthly target 500000). (4) Verify the reset worked by showing row counts for all six tables."
+        question="Write a complete database reset script for FreshCart's staging environment. The script should: (1) Check that the current database is 'freshmart_staging' and abort with a clear error message if not. (2) Truncate all six FreshCart tables in the correct dependency order, restarting all sequences. (3) After truncating, insert one test store (ST001, 'FreshCart Test Store', 'Bangalore', 'Karnataka', 'Test Manager', today's date, monthly target 500000). (4) Verify the reset worked by showing row counts for all six tables."
         hint="Dependency order for truncate: order_items → orders → employees → customers → products → stores. Use RESTART IDENTITY. The database check uses a DO $$ BEGIN IF ... END $$; block."
-        answer={`-- FreshMart Staging Reset Script
+        answer={`-- FreshCart Staging Reset Script
 -- DEVELOPMENT/STAGING ONLY
 
 -- Step 1: Safety guard
@@ -726,7 +726,7 @@ TRUNCATE TABLE stores       RESTART IDENTITY;
 
 -- Step 3: Insert one test store
 INSERT INTO stores (store_id, store_name, city, state, manager_name, opened_date, monthly_target)
-VALUES ('ST001', 'FreshMart Test Store', 'Bangalore', 'Karnataka', 'Test Manager', CURRENT_DATE, 500000.00);
+VALUES ('ST001', 'FreshCart Test Store', 'Bangalore', 'Karnataka', 'Test Manager', CURRENT_DATE, 500000.00);
 
 -- Step 4: Verify row counts
 SELECT 'order_items' AS table_name, COUNT(*) AS row_count FROM order_items

@@ -179,7 +179,7 @@ export default function Project03Page() {
         </div>
       </div>
 
-      <p>Here is what FreshMart's IT team actually needs:</p>
+      <p>Here is what FreshCart's IT team actually needs:</p>
       <div className="my-4 p-4 rounded-xl text-sm italic" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)' }}>
         <p style={{ color: 'var(--text2)' }}>"Every night at 11:30 PM the billing system exports files automatically. The file names include the date — like <code>store_ST001_sales_20240115.csv</code> for January 15th. We need a pipeline to run automatically at midnight, pick up that night's files, and copy them to ADLS — without anyone pressing a button."</p>
       </div>
@@ -777,7 +777,7 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
           So far we have only worked with files you manually uploaded to Blob Storage. In the real world, data often lives on public internet URLs — government portals, supplier servers, weather APIs, open datasets.
         </p>
         <p className="text-sm" style={{ color: 'var(--text2)' }}>
-          In <strong>Project 04</strong> you will build a pipeline that downloads a CSV file directly from a <strong>public HTTPS URL</strong> — no manual upload needed. ADF fetches the file from the internet and drops it straight into ADLS. Same FreshMart scenario. Zero manual work.
+          In <strong>Project 04</strong> you will build a pipeline that downloads a CSV file directly from a <strong>public HTTPS URL</strong> — no manual upload needed. ADF fetches the file from the internet and drops it straight into ADLS. Same FreshCart scenario. Zero manual work.
         </p>
       </div>
 

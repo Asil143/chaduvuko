@@ -504,7 +504,7 @@ on:
 env:
   PYTHON_VERSION: '3.11'
   MODEL_NAME:     freshmart-delivery-time
-  REGISTRY_NAME:  FreshMartDeliveryTime
+  REGISTRY_NAME:  FreshCartDeliveryTime
 
 jobs:
   # ── Stage 1: Unit tests (fast, no cloud) ─────────────────────────

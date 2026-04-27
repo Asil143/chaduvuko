@@ -717,7 +717,7 @@ GROUP BY store_id;`}</Code>
 
       <SQLPlayground
         initialQuery={`-- Practice sandbox: run any of the query examples from this module
--- The full FreshMart schema is available (customers, orders, order_items, products, stores)
+-- The full FreshCart schema is available (customers, orders, order_items, products, stores)
 
 -- Example: Q13 running total
 SELECT

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { FRESHMART_SCHEMA_SQL, FRESHMART_SEED_SQL, SQL_TABLES } from '@/data/sql-freshmart';
+import { FRESHCART_SCHEMA_SQL, FRESHCART_SEED_SQL, SQL_TABLES } from '@/data/sql-freshcart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -46,8 +46,8 @@ export default function SQLPlayground({
         const initSqlJs = (await import('sql.js')).default;
         const SQL = await initSqlJs({ locateFile: () => '/sqljs/sql-wasm.wasm' });
         const db = new SQL.Database();
-        db.run(FRESHMART_SCHEMA_SQL);
-        db.run(FRESHMART_SEED_SQL);
+        db.run(FRESHCART_SCHEMA_SQL);
+        db.run(FRESHCART_SEED_SQL);
 
         if (!cancelled) {
           dbRef.current = db;
@@ -141,8 +141,8 @@ export default function SQLPlayground({
             transition: 'all 0.3s',
           }} />
           <span style={{ fontSize: 11, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-            {status === 'loading' ? 'Loading FreshMart DB…'
-              : status === 'ready'   ? 'FreshMart SQL · Ready'
+            {status === 'loading' ? 'Loading FreshCart DB…'
+              : status === 'ready'   ? 'FreshCart SQL · Ready'
               : status === 'running' ? 'Running query…'
               : 'Failed to load — try refresh'}
           </span>
@@ -351,7 +351,7 @@ export default function SQLPlayground({
           {/* Loading DB state */}
           {status === 'loading' && (
             <div style={{ padding: '20px 16px', color: 'var(--muted)', fontSize: 12, textAlign: 'center' }}>
-              Loading FreshMart database in your browser…
+              Loading FreshCart database in your browser…
             </div>
           )}
 

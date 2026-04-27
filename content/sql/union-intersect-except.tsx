@@ -299,7 +299,7 @@ ORDER BY store_id, period;`}
       <H>Combining different tables with compatible structures</H>
 
       <SQLPlayground
-        initialQuery={`-- All people in the FreshMart system: customers and employees
+        initialQuery={`-- All people in the FreshCart system: customers and employees
 -- Both have first_name and last_name — combine into one list
 SELECT
   customer_id  AS person_id,
@@ -775,7 +775,7 @@ ORDER BY city;`}
       <P>You are a data engineer at Paytm. Every morning at 7 AM, the reconciliation job produces a report comparing yesterday's transaction data across three systems: the primary OLTP database, the data warehouse, and the partner bank's settlement file. Each source must agree. You use EXCEPT and UNION ALL to identify discrepancies.</P>
 
       <TimeBlock time="7:00 AM" label="Reconciliation job starts">
-        Three sources need to agree: primary DB transactions, warehouse transactions, settlement file transactions. Adapted for FreshMart: compare ST001 orders, ST002 orders, and a combined view.
+        Three sources need to agree: primary DB transactions, warehouse transactions, settlement file transactions. Adapted for FreshCart: compare ST001 orders, ST002 orders, and a combined view.
       </TimeBlock>
 
       <TimeBlock time="7:05 AM" label="Step 1 — find order IDs in one source but not the other">

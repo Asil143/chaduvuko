@@ -471,7 +471,7 @@ export default function StreamingDataModule() {
 # → Even distribution if customer IDs are random
 # → Stateful processing per customer is easy — all data for one customer is in one partition
 
-# Good partition key: store_id (for FreshMart)
+# Good partition key: store_id (for FreshCart)
 # → All events from one store arrive in order
 # → 10 stores = reasonably even distribution across partitions
 # → Aggregations per store can be done locally without shuffling
@@ -693,7 +693,7 @@ export default function StreamingDataModule() {
 
         <HighlightBox>
           <Para>
-            <strong>Example — FreshMart order processing group:</strong><br />
+            <strong>Example — FreshCart order processing group:</strong><br />
             Topic: <code>freshmart.orders</code> — 12 partitions<br />
             Consumer group: <code>order-processor</code> — 4 consumer instances
           </Para>

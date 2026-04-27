@@ -149,7 +149,7 @@ export default function BatchVsStreamingModule() {
 
         <Para>
           Most real-world data platforms use all three simultaneously. A mature
-          FreshMart data platform has: a nightly batch job that reprocesses the
+          FreshCart data platform has: a nightly batch job that reprocesses the
           full day's orders for the finance report (batch), a Kafka consumer that
           updates the real-time delivery tracking dashboard (streaming), and an
           hourly Spark job that updates customer segmentation (micro-batch).
@@ -396,7 +396,7 @@ These two times diverge whenever:
   - The event source has retries (event replayed with original timestamp)
 
 EXAMPLE:
-  A FreshMart delivery agent marks an order "delivered" at 11:58 PM
+  A FreshCart delivery agent marks an order "delivered" at 11:58 PM
   on a bad network connection. The event reaches Kafka at 12:03 AM.
 
   Event time:     2026-03-17 23:58:00  (when the tap happened)
@@ -966,7 +966,7 @@ MODERN HYBRID (2022–present, most practical):
         }}>
           💼 What This Looks Like at Work
         </div>
-        <SectionTitle>Designing FreshMart's Three-Layer Processing Architecture</SectionTitle>
+        <SectionTitle>Designing FreshCart's Three-Layer Processing Architecture</SectionTitle>
 
         <div style={{
           background: 'var(--surface)', border: '1px solid var(--border)',
@@ -979,11 +979,11 @@ MODERN HYBRID (2022–present, most practical):
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · New data platform architecture design
+            Scenario — FreshCart · New data platform architecture design
           </div>
 
           <Para>
-            FreshMart's CTO asks you to design the data processing architecture
+            FreshCart's CTO asks you to design the data processing architecture
             for three specific business requirements. Here is how a senior data
             engineer applies the decision framework to each:
           </Para>

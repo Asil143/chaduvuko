@@ -516,9 +516,9 @@ employees AS mgr   -- the manager
       <HR />
 
       {/* ── PART 08 ── */}
-      <Part n="08" title="Practical Alias Examples — Complete FreshMart Queries" />
+      <Part n="08" title="Practical Alias Examples — Complete FreshCart Queries" />
 
-      <P>Here are complete, well-aliased queries for real FreshMart reporting scenarios.</P>
+      <P>Here are complete, well-aliased queries for real FreshCart reporting scenarios.</P>
 
       <H>Customer summary report</H>
 
@@ -712,7 +712,7 @@ ORDER BY margin_pct DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a clean, well-aliased query for the FreshMart monthly business review. The query should show: each store's ID (aliased as 'store'), the store's city, total number of orders placed (aliased as 'total_orders'), total revenue from delivered orders only (aliased as 'delivered_revenue'), and average order value across all orders (aliased as 'avg_order_value', rounded to 2 decimal places). Join the stores and orders tables. Group by store. Sort by delivered_revenue descending."
+        question="Write a clean, well-aliased query for the FreshCart monthly business review. The query should show: each store's ID (aliased as 'store'), the store's city, total number of orders placed (aliased as 'total_orders'), total revenue from delivered orders only (aliased as 'delivered_revenue'), and average order value across all orders (aliased as 'avg_order_value', rounded to 2 decimal places). Join the stores and orders tables. Group by store. Sort by delivered_revenue descending."
         hint="Use stores AS s and orders AS o. JOIN on store_id. For delivered_revenue use SUM with a CASE WHEN order_status = 'Delivered' THEN total_amount END inside it. Group by s.store_id and s.city."
         answer={`SELECT
   s.store_id                                               AS store,

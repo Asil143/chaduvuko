@@ -538,7 +538,7 @@ export default function VisualJoinsPage() {
           // Try it yourself
         </div>
         <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 440, margin: '0 auto 20px' }}>
-          Write real JOIN queries against the FreshMart database in your browser — no install needed.
+          Write real JOIN queries against the FreshCart database in your browser — no install needed.
         </p>
         <a href="/learn/sql/playground" style={{
           display: 'inline-block', background: '#06b6d4',

@@ -1041,7 +1041,7 @@ IMPLEMENTATION DECISION TREE:
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Finance team reports wrong revenue for March 15
+            Scenario — FreshCart · Finance team reports wrong revenue for March 15
           </div>
 
           <Para>

@@ -859,7 +859,7 @@ OPTIMISATION 4: Coalesce vs repartition — know the difference
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Scenario — FreshMart · Silver orders pipeline misses its 08:00 IST SLA daily
+            Scenario — FreshCart · Silver orders pipeline misses its 08:00 IST SLA daily
           </div>
 
           <Para>
@@ -890,7 +890,7 @@ STEP 2: Identify the skewed key.
   # ST003    3,800,000
   # ... (remaining 9 stores share 28M rows)
 
-  # ST001 is FreshMart HQ — all online orders route through this store_id.
+  # ST001 is FreshCart HQ — all online orders route through this store_id.
   # The join on store_id puts all 148M ST001 rows in one partition.
   # One executor task processes 148M rows. Others process 3-4M each.
 

@@ -875,7 +875,7 @@ DROP FUNCTION IF EXISTS tgf_audit_orders();`}
       />
 
       <SQLPlayground
-        initialQuery={`-- List all triggers in the FreshMart database
+        initialQuery={`-- List all triggers in the FreshCart database
 SELECT
   trigger_name,
   event_manipulation      AS event,
@@ -1139,7 +1139,7 @@ ORDER BY entry_num;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Design three triggers for FreshMart. Write the CREATE FUNCTION and CREATE TRIGGER statements for: (1) A BEFORE INSERT OR UPDATE trigger on customers that auto-normalises first_name and last_name (INITCAP LOWER TRIM), lowercases and trims email, sets joined_date to CURRENT_DATE on INSERT if NULL, and sets loyalty_tier to 'Bronze' if NULL. (2) An AFTER INSERT OR UPDATE trigger on orders that fires only WHEN NEW.order_status = 'Delivered' and updates a denormalised column last_delivery_date on the customers table. (3) An AFTER INSERT OR UPDATE OR DELETE trigger on order_items that recomputes and updates orders.total_amount as the SUM of line_total for that order. Then write the SELECT queries that verify each trigger would produce the correct result."
+        question="Design three triggers for FreshCart. Write the CREATE FUNCTION and CREATE TRIGGER statements for: (1) A BEFORE INSERT OR UPDATE trigger on customers that auto-normalises first_name and last_name (INITCAP LOWER TRIM), lowercases and trims email, sets joined_date to CURRENT_DATE on INSERT if NULL, and sets loyalty_tier to 'Bronze' if NULL. (2) An AFTER INSERT OR UPDATE trigger on orders that fires only WHEN NEW.order_status = 'Delivered' and updates a denormalised column last_delivery_date on the customers table. (3) An AFTER INSERT OR UPDATE OR DELETE trigger on order_items that recomputes and updates orders.total_amount as the SUM of line_total for that order. Then write the SELECT queries that verify each trigger would produce the correct result."
         hint="Trigger 1: BEFORE — modify NEW fields directly. Trigger 2: AFTER with WHEN clause — UPDATE customers SET last_delivery_date = NEW.delivery_date WHERE customer_id = NEW.customer_id. Trigger 3: AFTER — UPDATE orders SET total_amount = (SELECT SUM FROM order_items WHERE order_id = NEW.order_id)."
         answer={`-- ── Trigger 1: Normalise customer data on INSERT/UPDATE ──────────
 CREATE OR REPLACE FUNCTION tgf_normalise_customers()

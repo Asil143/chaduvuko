@@ -129,7 +129,7 @@ export default function SqlProjects() {
 
       <P>These are not exercises with a predetermined answer at the bottom. They are structured the same way a senior data analyst actually works: receive a business problem, decompose it into analytical questions, write queries that answer each question, interpret the output, and form a recommendation. Each project has five to seven steps — skip none of them, because the reasoning in each step directly informs the next.</P>
 
-      <P>Every project uses the <Hl>FreshMart dataset</Hl> already loaded in each playground. The data is real and consistent — every query you run will produce results you can actually interpret. By the end of each project, you should be able to write two or three sentences summarizing what you found and what the business should do about it. That synthesis is the point.</P>
+      <P>Every project uses the <Hl>FreshCart dataset</Hl> already loaded in each playground. The data is real and consistent — every query you run will produce results you can actually interpret. By the end of each project, you should be able to write two or three sentences summarizing what you found and what the business should do about it. That synthesis is the point.</P>
 
       <Callout type="info">
         Each playground is independent — changes you make in one do not carry over. But the dataset is the same everywhere, so results will be consistent across steps. Run every query, read the output, and work through the interpretation prompts before moving to the next step.
@@ -145,8 +145,8 @@ export default function SqlProjects() {
         num="01"
         title="Revenue Intelligence Report"
         role="Data Analyst"
-        company="FreshMart Analytics Team"
-        problem="The Head of Revenue Operations needs to understand what drove FreshMart's performance this period. She needs to know which stores are leading and lagging, which customer segments are most valuable, whether the business is growing or contracting month-over-month, and where concentration risk exists. She has 20 minutes before the leadership review. She needs numbers, not descriptions."
+        company="FreshCart Analytics Team"
+        problem="The Head of Revenue Operations needs to understand what drove FreshCart's performance this period. She needs to know which stores are leading and lagging, which customer segments are most valuable, whether the business is growing or contracting month-over-month, and where concentration risk exists. She has 20 minutes before the leadership review. She needs numbers, not descriptions."
         deliverable="A complete revenue breakdown across store, loyalty tier, payment method, and time — with anomaly flags for stores or segments deviating significantly from the mean, and a one-paragraph written summary you could hand to the CEO."
         skills={['GROUP BY', 'Window Functions', 'SUM() OVER()', 'LAG()', 'CASE WHEN', 'CTEs', 'HAVING', 'Conditional Aggregation']}
         time="30 min"
@@ -179,7 +179,7 @@ LEFT JOIN order_items AS oi ON oi.order_id = o.order_id
       />
 
       <Interpret>
-        Note the cancellation_rate_pct alongside revenue. A high cancellation rate with high total revenue can be misleading — you are measuring orders that completed, not orders that were placed. If cancellation_rate is above 10%, that is worth calling out in the executive summary as a separate concern. Revenue_per_customer is the most important single number here: it tells you the average economic value of acquiring one FreshMart customer.
+        Note the cancellation_rate_pct alongside revenue. A high cancellation rate with high total revenue can be misleading — you are measuring orders that completed, not orders that were placed. If cancellation_rate is above 10%, that is worth calling out in the executive summary as a separate concern. Revenue_per_customer is the most important single number here: it tells you the average economic value of acquiring one FreshCart customer.
       </Interpret>
 
       <Step n="2" label="Decompose Revenue by Store — Find the Leaders and Laggards">
@@ -406,7 +406,7 @@ ORDER BY z_score;`}
         num="02"
         title="Customer Lifecycle and Churn Architecture"
         role="Senior Analytics Engineer"
-        company="FreshMart Growth Team"
+        company="FreshCart Growth Team"
         problem="The Growth team has a problem: they do not know which customers are about to churn until after they already have. By the time a customer has been inactive for 6 months, win-back costs 5x more than retention would have. You need to build a customer health monitoring system that identifies churn signals early — declining order frequency, shrinking basket size, increasing time between purchases — so that the CRM team can act proactively."
         deliverable="A customer lifecycle model that: (1) defines churn rigorously, (2) computes behavioral signals that precede churn, (3) scores every customer on risk level, (4) outputs a prioritized intervention list ranked by expected value of successful retention, (5) validates the model by checking whether the signals actually correlate with eventual churn."
         skills={['Cohort Analysis', 'Window Functions', 'LAG()', 'RFM Scoring', 'Date Arithmetic', 'CASE WHEN', 'CTEs', 'Conditional Aggregation', 'Statistical Correlation']}
@@ -761,8 +761,8 @@ ORDER BY lifetime_value DESC;`}
         num="03"
         title="Schema Design: Delivery SLA Tracking System"
         role="Database Engineer"
-        company="FreshMart Infrastructure Team"
-        problem="FreshMart is launching a delivery SLA guarantee: orders within city limits will be delivered within 2 hours of placement, or the customer receives a ₹100 store credit. The current orders table has a delivery_date column but no delivery timestamps, no SLA tracking, no credit issuance records, and no delivery partner assignment. You need to design a complete schema extension that supports: sub-minute delivery tracking, SLA compliance reporting, automatic credit calculation, and performance analytics by delivery partner, store, and time-of-day."
+        company="FreshCart Infrastructure Team"
+        problem="FreshCart is launching a delivery SLA guarantee: orders within city limits will be delivered within 2 hours of placement, or the customer receives a ₹100 store credit. The current orders table has a delivery_date column but no delivery timestamps, no SLA tracking, no credit issuance records, and no delivery partner assignment. You need to design a complete schema extension that supports: sub-minute delivery tracking, SLA compliance reporting, automatic credit calculation, and performance analytics by delivery partner, store, and time-of-day."
         deliverable="A fully normalized schema design with DDL, constraint rationale, index strategy, and five analytical queries that answer the SLA monitoring questions the operations team will ask daily."
         skills={['DDL', 'CREATE TABLE', 'Normalization (1NF–3NF)', 'CHECK Constraints', 'FOREIGN KEY Design', 'Index Strategy', 'Analytical Queries', 'Temporal Data Design']}
         time="30 min"
@@ -982,7 +982,7 @@ INSERT OR IGNORE INTO delivery_partners VALUES
 INSERT OR IGNORE INTO sla_policies VALUES
   (1,'ST001','Mumbai Central',120,100.00);
 
--- 3 deliveries: order_ids 1,2,3 from FreshMart orders table
+-- 3 deliveries: order_ids 1,2,3 from FreshCart orders table
 INSERT OR IGNORE INTO deliveries VALUES
   (1,1,1,1,'2024-03-15 10:00','2024-03-15 10:20','2024-03-15 11:45'), -- on time (105 min)
   (2,2,2,1,'2024-03-15 11:00','2024-03-15 11:25','2024-03-15 13:15'), -- BREACH (135 min, +15 late)
@@ -991,7 +991,7 @@ INSERT OR IGNORE INTO deliveries VALUES
 INSERT OR IGNORE INTO sla_breaches VALUES
   (1,2,'2024-03-15 13:00','2024-03-15 13:15',15.0);
 
--- Customer_id for order 2 (from FreshMart data)
+-- Customer_id for order 2 (from FreshCart data)
 INSERT OR IGNORE INTO customer_credits
   SELECT 1, o.customer_id, 1, 100.00, datetime('now'), NULL
   FROM orders AS o WHERE o.order_id = 2;

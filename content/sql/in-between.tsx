@@ -487,7 +487,7 @@ WHERE created_at >= '2024-01-01'
 -- This captures ALL of January, including 2024-01-31 23:59:59 ✓`}
       />
 
-      <P>In FreshMart, order_date is a DATE column so BETWEEN works correctly. But in any system where timestamps are stored (most production systems log exact timestamps), always use <Hl>&gt;= start AND &lt; day_after_end</Hl> instead of BETWEEN for date range filtering.</P>
+      <P>In FreshCart, order_date is a DATE column so BETWEEN works correctly. But in any system where timestamps are stored (most production systems log exact timestamps), always use <Hl>&gt;= start AND &lt; day_after_end</Hl> instead of BETWEEN for date range filtering.</P>
 
       <Callout type="warning">
         The professional standard for date range filtering in production SQL: never use BETWEEN for timestamp columns. Always use: WHERE timestamp_col &gt;= '2024-01-01' AND timestamp_col &lt; '2024-02-01'. This is unambiguous, captures the full month including the last day up to midnight, and works identically whether the column is DATE or TIMESTAMP.
@@ -643,7 +643,7 @@ WHERE unit_price BETWEEN NULL AND 200
       <P>You are an analyst at Razorpay's merchant analytics team. The merchant success team needs three different reports for their quarterly business review. All three need to be ready within an hour.</P>
 
       <TimeBlock time="2:00 PM" label="Report 1 — Merchant tier segmentation">
-        The growth team wants to see merchants segmented by monthly transaction volume into three bands: small (under ₹1 lakh), medium (₹1 lakh to ₹10 lakh), and large (above ₹10 lakh). They want the count per tier. Adapted for FreshMart: orders segmented by amount bands.
+        The growth team wants to see merchants segmented by monthly transaction volume into three bands: small (under ₹1 lakh), medium (₹1 lakh to ₹10 lakh), and large (above ₹10 lakh). They want the count per tier. Adapted for FreshCart: orders segmented by amount bands.
       </TimeBlock>
 
       <SQLPlayground
@@ -785,7 +785,7 @@ ORDER BY q1_revenue DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart weekly operations report needs three things from one combined query: Show all orders where (1) the store is one of the Bangalore or Hyderabad stores (ST001, ST002, ST003, ST004), AND (2) the total_amount is between ₹400 and ₹1,500, AND (3) the order_status is NOT one of 'Cancelled' or 'Returned'. Show order_id, store_id, order_date, order_status, payment_method, and total_amount. Sort by total_amount descending."
+        question="The FreshCart weekly operations report needs three things from one combined query: Show all orders where (1) the store is one of the Bangalore or Hyderabad stores (ST001, ST002, ST003, ST004), AND (2) the total_amount is between ₹400 and ₹1,500, AND (3) the order_status is NOT one of 'Cancelled' or 'Returned'. Show order_id, store_id, order_date, order_status, payment_method, and total_amount. Sort by total_amount descending."
         hint="Three conditions: store_id IN (...), total_amount BETWEEN 400 AND 1500, order_status NOT IN ('Cancelled', 'Returned'). All three connected with AND."
         answer={`SELECT
   order_id,

@@ -124,7 +124,7 @@ export default function HowDatabasesWork() {
       <P>A table is the fundamental unit of storage in a relational database. Every piece of data you ever store lives in a table. Understanding what makes a good table — and what makes a bad one — is the most important design skill in all of SQL. Bad table design causes problems that no amount of clever querying can fix.</P>
 
       <H>Rule 1: One table, one thing</H>
-      <P>The single most important rule in database design: each table stores exactly one type of entity. FreshMart has a customers table that stores only customers. A products table that stores only products. An orders table that stores only orders. You would never put customer data and product data in the same table, even though both are used when a customer buys a product.</P>
+      <P>The single most important rule in database design: each table stores exactly one type of entity. FreshCart has a customers table that stores only customers. A products table that stores only products. An orders table that stores only orders. You would never put customer data and product data in the same table, even though both are used when a customer buys a product.</P>
       <P>When beginners design databases for the first time they often try to put everything in one table — one row per order, with the customer's name, address, and loyalty tier repeated in every single row. This is called data redundancy and it causes serious problems: if Aisha Khan moves from Bangalore to Hyderabad, you have to update her address in every single order row. Miss one row and your data is inconsistent. In a properly designed database you update her address in exactly one place — the customers table — and every order automatically reflects it through the foreign key relationship.</P>
 
       <H>Rule 2: Every column stores exactly one piece of information</H>
@@ -133,7 +133,7 @@ export default function HowDatabasesWork() {
       <H>Rule 3: Table and column names must be clear, lowercase, and use underscores</H>
       <P>The universal convention for SQL tables and columns: all lowercase letters, words separated by underscores, no spaces, no special characters. <Hl>customers</Hl> not Customers. <Hl>order_date</Hl> not OrderDate or orderDate. <Hl>unit_price</Hl> not UnitPrice or unitprice. This matters because SQL is case-sensitive in some databases for table names, and mixed-case names require quoting everywhere — adding noise to every query you write.</P>
 
-      <H>The FreshMart tables examined</H>
+      <H>The FreshCart tables examined</H>
 
       <div style={{ overflowX: 'auto', margin: '20px 0 32px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
@@ -146,12 +146,12 @@ export default function HowDatabasesWork() {
           </thead>
           <tbody>
             {[
-              ['customers', 'One row per person who shops at FreshMart', 'Customer details (name, city, tier) should only exist in one place — update once, reflected everywhere'],
+              ['customers', 'One row per person who shops at FreshCart', 'Customer details (name, city, tier) should only exist in one place — update once, reflected everywhere'],
               ['orders', 'One row per purchase transaction', 'An order has its own attributes (date, status, total) that are not about the customer or the products inside it'],
               ['order_items', 'One row per product line within an order', 'One order can have many products — storing them in the orders table would require an unknown number of columns'],
-              ['products', 'One row per thing FreshMart sells', 'Product details (name, price, category) should not be repeated in every order_items row — update once in products'],
-              ['stores', 'One row per physical FreshMart location', 'Store details (city, manager, target) are independent of any specific order or customer'],
-              ['employees', 'One row per person who works at FreshMart', 'Staff data (salary, role, hire date) is sensitive and operationally separate from customer or product data'],
+              ['products', 'One row per thing FreshCart sells', 'Product details (name, price, category) should not be repeated in every order_items row — update once in products'],
+              ['stores', 'One row per physical FreshCart location', 'Store details (city, manager, target) are independent of any specific order or customer'],
+              ['employees', 'One row per person who works at FreshCart', 'Staff data (salary, role, hire date) is sensitive and operationally separate from customer or product data'],
             ].map(([table, what, why], i) => (
               <tr key={table} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
                 <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', fontSize: 12, color: C, borderBottom: '1px solid var(--border)', whiteSpace: 'nowrap' }}>{table}</td>
@@ -176,7 +176,7 @@ export default function HowDatabasesWork() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
             <tr>
-              {['Type', 'Storage', 'Example value', 'Use in FreshMart'].map(h => (
+              {['Type', 'Storage', 'Example value', 'Use in FreshCart'].map(h => (
                 <th key={h} style={{ padding: '10px 14px', background: 'var(--surface)', color: 'var(--muted)', fontWeight: 700, textAlign: 'left', borderBottom: '1px solid var(--border)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '.08em' }}>{h}</th>
               ))}
             </tr>
@@ -196,7 +196,7 @@ export default function HowDatabasesWork() {
       </div>
 
       <H>The money mistake — why FLOAT is wrong for prices</H>
-      <P>This is one of the most common beginner mistakes. If you define a price column as FLOAT or DOUBLE, you will eventually get values like 28.499999999998 instead of 28.5. This happens because floating-point numbers are stored in binary and cannot represent most decimal fractions exactly — the same way 1/3 cannot be written as a finite decimal. For currency you must always use <Hl>DECIMAL(precision, scale)</Hl>. In FreshMart, DECIMAL(10,2) means up to 10 total digits with exactly 2 decimal places — sufficient for prices up to ₹99,999,999.99.</P>
+      <P>This is one of the most common beginner mistakes. If you define a price column as FLOAT or DOUBLE, you will eventually get values like 28.499999999998 instead of 28.5. This happens because floating-point numbers are stored in binary and cannot represent most decimal fractions exactly — the same way 1/3 cannot be written as a finite decimal. For currency you must always use <Hl>DECIMAL(precision, scale)</Hl>. In FreshCart, DECIMAL(10,2) means up to 10 total digits with exactly 2 decimal places — sufficient for prices up to ₹99,999,999.99.</P>
 
       <H>VARCHAR vs CHAR — when to use which</H>
       <P>VARCHAR(n) stores variable-length strings — it only uses as much space as the actual string needs, plus 1–2 bytes to record the length. A VARCHAR(100) column storing the word "Amul" uses 5 bytes, not 100. CHAR(n) stores fixed-length strings — it always uses exactly n bytes, padding shorter values with spaces. Use CHAR for values that are always the same length: country codes (IN, US), store IDs (ST001), status codes. Use VARCHAR for everything else.</P>
@@ -206,7 +206,7 @@ export default function HowDatabasesWork() {
       </Callout>
 
       <SQLPlayground
-        initialQuery={`-- See the data types in action — FreshMart products
+        initialQuery={`-- See the data types in action — FreshCart products
 -- Notice: prices are clean decimals, dates are formatted,
 -- booleans show as true/false
 SELECT product_name,
@@ -270,7 +270,7 @@ LIMIT 8;`}
       </div>
 
       <H>Composite primary keys — when one column is not enough</H>
-      <P>Sometimes a single column is not sufficient to uniquely identify a row, and you need a combination of two columns to serve as the primary key. This is called a <Hl>composite primary key</Hl>. The order_items table is a good example: item_id is a dedicated surrogate key here, but you could also uniquely identify each item by the combination of (order_id, product_id) — one order cannot contain the same product twice. Composite primary keys are common in junction tables (many-to-many relationships). In FreshMart we use a surrogate integer key for simplicity, but both approaches are correct.</P>
+      <P>Sometimes a single column is not sufficient to uniquely identify a row, and you need a combination of two columns to serve as the primary key. This is called a <Hl>composite primary key</Hl>. The order_items table is a good example: item_id is a dedicated surrogate key here, but you could also uniquely identify each item by the combination of (order_id, product_id) — one order cannot contain the same product twice. Composite primary keys are common in junction tables (many-to-many relationships). In FreshCart we use a surrogate integer key for simplicity, but both approaches are correct.</P>
 
       <ProTip>
         Always use a dedicated surrogate integer key (an auto-increment ID) as the primary key, even when another column or combination of columns could uniquely identify rows. Phone numbers change. Email addresses change. Business rules change. An integer ID never needs to change, which means every foreign key referencing it also never needs to change. This saves enormous pain when requirements evolve.
@@ -315,11 +315,11 @@ LIMIT 8;`}
         </table>
       </div>
 
-      <H>The FreshMart foreign key map in code</H>
+      <H>The FreshCart foreign key map in code</H>
 
       <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', margin: '16px 0 32px' }}>
         <div style={{ padding: '10px 16px', background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)' }}>Every foreign key in the FreshMart schema</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)' }}>Every foreign key in the FreshCart schema</span>
         </div>
         <pre style={{ margin: 0, padding: '16px', fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2, color: 'var(--text)', overflowX: 'auto' }}>
 {`-- orders → customers
@@ -352,20 +352,20 @@ FOREIGN KEY (manager_id) REFERENCES employees(employee_id)`}
       <P>Constraints are rules you attach to columns (or tables) that the database checks on every INSERT and UPDATE. If a value violates a constraint, the operation fails with an error — the data is never saved. Constraints are your first line of defence against bad data. They are far more reliable than checking validity in application code, because application code can have bugs, can be bypassed, and does not cover every path data enters through.</P>
 
       <H>NOT NULL — the column must always have a value</H>
-      <P>By default, any column can contain NULL — the absence of a value. Adding NOT NULL means the column must always have a real value. Inserting a row without providing a value for a NOT NULL column causes an error. In FreshMart, first_name, last_name, and order_date are NOT NULL — it makes no sense to have a customer without a name or an order without a date.</P>
+      <P>By default, any column can contain NULL — the absence of a value. Adding NOT NULL means the column must always have a real value. Inserting a row without providing a value for a NOT NULL column causes an error. In FreshCart, first_name, last_name, and order_date are NOT NULL — it makes no sense to have a customer without a name or an order without a date.</P>
 
       <H>UNIQUE — no two rows can have the same value</H>
-      <P>The UNIQUE constraint prevents duplicate values in a column across all rows. In FreshMart, the email column on customers is UNIQUE — no two customers can share the same email address. Unlike PRIMARY KEY, a UNIQUE column can contain NULL (and multiple NULLs are allowed, since NULL is not equal to NULL in SQL — more on this surprising behaviour in Module 11).</P>
+      <P>The UNIQUE constraint prevents duplicate values in a column across all rows. In FreshCart, the email column on customers is UNIQUE — no two customers can share the same email address. Unlike PRIMARY KEY, a UNIQUE column can contain NULL (and multiple NULLs are allowed, since NULL is not equal to NULL in SQL — more on this surprising behaviour in Module 11).</P>
 
       <H>DEFAULT — the value used when nothing is provided</H>
-      <P>The DEFAULT constraint specifies what value the database should use when a row is inserted without providing a value for that column. In FreshMart, loyalty_tier has a DEFAULT of 'Bronze' — when a new customer is added without specifying their tier, they automatically start at Bronze. Defaults keep INSERT statements cleaner and reduce the chance of NULL slipping into columns that should always have a value.</P>
+      <P>The DEFAULT constraint specifies what value the database should use when a row is inserted without providing a value for that column. In FreshCart, loyalty_tier has a DEFAULT of 'Bronze' — when a new customer is added without specifying their tier, they automatically start at Bronze. Defaults keep INSERT statements cleaner and reduce the chance of NULL slipping into columns that should always have a value.</P>
 
       <H>CHECK — custom rule for valid values</H>
       <P>The CHECK constraint lets you define an arbitrary condition that every value in a column must satisfy. For example, discount_pct in order_items should always be between 0 and 100. A CHECK constraint enforces this: CHECK (discount_pct &gt;= 0 AND discount_pct &lt;= 100). If you try to insert a discount of 150 or -5, the database rejects it immediately.</P>
 
       <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', margin: '20px 0 28px' }}>
         <div style={{ padding: '10px 16px', background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)' }}>All constraints on the FreshMart orders table</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)' }}>All constraints on the FreshCart orders table</span>
         </div>
         <pre style={{ margin: 0, padding: '16px', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 1.8, color: 'var(--text)', overflowX: 'auto' }}>
 {`CREATE TABLE orders (
@@ -397,9 +397,9 @@ FOREIGN KEY (manager_id) REFERENCES employees(employee_id)`}
       <HR />
 
       {/* ── PART 07 ── */}
-      <Part n="07" title="The FreshMart Schema — Every Table Examined Line by Line" />
+      <Part n="07" title="The FreshCart Schema — Every Table Examined Line by Line" />
 
-      <P>Now that you understand tables, data types, primary keys, foreign keys, and constraints — let us look at the full FreshMart schema in one place. You will use this schema for every query in every module. Read it carefully and notice how every design decision reflects the rules covered in this module.</P>
+      <P>Now that you understand tables, data types, primary keys, foreign keys, and constraints — let us look at the full FreshCart schema in one place. You will use this schema for every query in every module. Read it carefully and notice how every design decision reflects the rules covered in this module.</P>
 
       <SQLPlayground
         initialQuery={`-- Explore the customers table structure
@@ -471,7 +471,7 @@ LIMIT 10;`}
 
       <IQ q="What is the difference between PRIMARY KEY and UNIQUE constraint?">
         <p style={{ margin: '0 0 14px' }}>Both PRIMARY KEY and UNIQUE prevent duplicate values in a column. The differences are three. First, a table can have only one PRIMARY KEY but multiple UNIQUE constraints — you could have unique constraints on both email and phone independently. Second, PRIMARY KEY columns implicitly have NOT NULL — they can never contain a null value. UNIQUE columns can contain NULL, and in most databases multiple NULLs are allowed in a UNIQUE column because NULL is not considered equal to NULL. Third, the PRIMARY KEY is the canonical identifier for the row and is the column other tables reference in their foreign keys. UNIQUE constraints enforce business rules about uniqueness but do not serve as the relational identifier.</p>
-        <p style={{ margin: 0 }}>In FreshMart's customers table: customer_id is the PRIMARY KEY — it is the row's identity that orders reference. email has a UNIQUE constraint — we want no two customers sharing the same email, but email is not the identifier we use in foreign keys.</p>
+        <p style={{ margin: 0 }}>In FreshCart's customers table: customer_id is the PRIMARY KEY — it is the row's identity that orders reference. email has a UNIQUE constraint — we want no two customers sharing the same email, but email is not the identifier we use in foreign keys.</p>
       </IQ>
 
       <IQ q="What is the difference between DELETE, TRUNCATE, and DROP?">
@@ -494,7 +494,7 @@ LIMIT 10;`}
 
       <IQ q="What is a self-referencing foreign key? Give a real example.">
         <p style={{ margin: '0 0 14px' }}>A self-referencing foreign key is a foreign key in a table that references the primary key of the same table. It is used to represent hierarchical relationships where entities of the same type relate to each other — most commonly parent-child or manager-employee relationships.</p>
-        <p style={{ margin: '0 0 14px' }}>In FreshMart's employees table, each employee has an employee_id (primary key) and a manager_id (foreign key). The manager_id column references employees.employee_id — a manager is also an employee. Priya Sharma is the Store Manager with employee_id = 1 and manager_id = NULL (she reports to nobody in this dataset). Rahul Verma is her Assistant Manager with employee_id = 2 and manager_id = 1 — he reports to Priya. This single foreign key declaration captures the entire org chart with no additional tables.</p>
+        <p style={{ margin: '0 0 14px' }}>In FreshCart's employees table, each employee has an employee_id (primary key) and a manager_id (foreign key). The manager_id column references employees.employee_id — a manager is also an employee. Priya Sharma is the Store Manager with employee_id = 1 and manager_id = NULL (she reports to nobody in this dataset). Rahul Verma is her Assistant Manager with employee_id = 2 and manager_id = 1 — he reports to Priya. This single foreign key declaration captures the entire org chart with no additional tables.</p>
         <p style={{ margin: 0 }}>Self-referencing foreign keys appear in: organisational hierarchies (employees and managers), geographic hierarchies (countries containing states containing cities), category trees (a category that has a parent_category_id pointing to another category), and comment threads (a comment with a parent_comment_id pointing to the comment it replies to). You query this structure using a SELF JOIN or, for arbitrary depth, a recursive CTE — covered in Module 34 and Module 56 respectively.</p>
       </IQ>
 
@@ -537,7 +537,7 @@ LIMIT 10;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Look at the FreshMart employees table. Employee ID 1 (Priya Sharma) has manager_id = NULL. Employee ID 2 (Rahul Verma) has manager_id = 1. Employee ID 3 (Sunita Kapoor) has manager_id = 2. Write a query that shows each employee's name alongside their manager's name. What happens to Priya's row since she has no manager?"
+        question="Look at the FreshCart employees table. Employee ID 1 (Priya Sharma) has manager_id = NULL. Employee ID 2 (Rahul Verma) has manager_id = 1. Employee ID 3 (Sunita Kapoor) has manager_id = 2. Write a query that shows each employee's name alongside their manager's name. What happens to Priya's row since she has no manager?"
         hint="You need to join the employees table to itself. Use two aliases — one for the employee, one for the manager. Use a LEFT JOIN so Priya's row is not excluded just because her manager_id is NULL."
         answer={`SELECT
   e.first_name || ' ' || e.last_name  AS employee,

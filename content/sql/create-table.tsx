@@ -136,7 +136,7 @@ description   TEXT                     -- nullable, no default`}
       />
 
       <SQLPlayground
-        initialQuery={`-- See the column definitions for FreshMart's customers table
+        initialQuery={`-- See the column definitions for FreshCart's customers table
 SELECT
   name       AS column_name,
   type       AS data_type,
@@ -180,7 +180,7 @@ CREATE TABLE customers (
       />
 
       <SQLPlayground
-        initialQuery={`-- Verify which FreshMart columns are NOT NULL
+        initialQuery={`-- Verify which FreshCart columns are NOT NULL
 SELECT 'customers' AS table_name, name AS column_name, type AS data_type
 FROM pragma_table_info('customers') WHERE [notnull] = 1
 UNION ALL
@@ -476,7 +476,7 @@ CREATE TABLE orders (
       />
 
       <SQLPlayground
-        initialQuery={`-- See column defaults in FreshMart tables
+        initialQuery={`-- See column defaults in FreshCart tables
 SELECT 'customers' AS table_name, name AS column_name, type AS data_type, dflt_value AS default_value
 FROM pragma_table_info('customers') WHERE dflt_value IS NOT NULL
 UNION ALL
@@ -524,7 +524,7 @@ VALUES ('Rahul', 'Sharma', 'rahul@gmail.com', '2024-01-15', 'Gold');`}
       />
 
       <SQLPlayground
-        initialQuery={`-- See which FreshMart columns have defaults
+        initialQuery={`-- See which FreshCart columns have defaults
 SELECT 'customers' AS table_name, name AS column_name, type AS data_type, dflt_value AS default_value
 FROM pragma_table_info('customers') WHERE dflt_value IS NOT NULL
 UNION ALL
@@ -562,12 +562,12 @@ CREATE TABLE IF NOT EXISTS customers (...);
       <HR />
 
       {/* ── PART 10 ── */}
-      <Part n="10" title="Complete Table Definitions — FreshMart From Scratch" />
+      <Part n="10" title="Complete Table Definitions — FreshCart From Scratch" />
 
-      <P>Here are the complete, production-quality CREATE TABLE statements for the entire FreshMart database. Every type choice, every constraint, and every default is annotated with the reasoning behind it.</P>
+      <P>Here are the complete, production-quality CREATE TABLE statements for the entire FreshCart database. Every type choice, every constraint, and every default is annotated with the reasoning behind it.</P>
 
       <CodeBlock
-        label="FreshMart — stores table (no dependencies, create first)"
+        label="FreshCart — stores table (no dependencies, create first)"
         code={`CREATE TABLE stores (
   store_id        VARCHAR(10)    PRIMARY KEY,
   -- VARCHAR(10) not INTEGER: store codes like 'ST001' contain letters
@@ -584,7 +584,7 @@ CREATE TABLE IF NOT EXISTS customers (...);
       />
 
       <CodeBlock
-        label="FreshMart — customers table"
+        label="FreshCart — customers table"
         code={`CREATE TABLE customers (
   customer_id  INTEGER        PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   first_name   VARCHAR(100)   NOT NULL,
@@ -606,7 +606,7 @@ CREATE TABLE IF NOT EXISTS customers (...);
       />
 
       <CodeBlock
-        label="FreshMart — products table"
+        label="FreshCart — products table"
         code={`CREATE TABLE products (
   product_id    INTEGER        PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   product_name  VARCHAR(200)   NOT NULL,
@@ -626,7 +626,7 @@ CREATE TABLE IF NOT EXISTS customers (...);
       />
 
       <CodeBlock
-        label="FreshMart — employees table (self-referencing FK)"
+        label="FreshCart — employees table (self-referencing FK)"
         code={`CREATE TABLE employees (
   employee_id  INTEGER        PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   first_name   VARCHAR(100)   NOT NULL,
@@ -649,7 +649,7 @@ CREATE TABLE IF NOT EXISTS customers (...);
       />
 
       <CodeBlock
-        label="FreshMart — orders table"
+        label="FreshCart — orders table"
         code={`CREATE TABLE orders (
   order_id        INTEGER        PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   customer_id     INTEGER        NOT NULL
@@ -674,7 +674,7 @@ CREATE TABLE IF NOT EXISTS customers (...);
       />
 
       <CodeBlock
-        label="FreshMart — order_items table (create last — depends on orders and products)"
+        label="FreshCart — order_items table (create last — depends on orders and products)"
         code={`CREATE TABLE order_items (
   item_id       INTEGER        PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   order_id      INTEGER        NOT NULL
@@ -763,7 +763,7 @@ ORDER BY month, total_revenue DESC;`}
       <P>When creating multiple related tables, the order matters. A table with a foreign key that references another table cannot be created before the referenced table exists. This is called the <Hl>dependency order</Hl> and it is one of the most common mistakes in schema setup scripts.</P>
 
       <CodeBlock
-        label="Correct creation order for FreshMart"
+        label="Correct creation order for FreshCart"
         code={`-- Create tables in dependency order:
 -- Tables with no FKs first, tables with FKs last
 
@@ -908,7 +908,7 @@ CREATE TABLE prescriptions (
       <IQ q="Why does the order of table creation matter and how do you determine the correct order?">
         <p style={{ margin: '0 0 14px' }}>Table creation order matters because foreign key constraints reference other tables. When you create a table with a FK to another table, the referenced table must already exist. If it does not, the CREATE TABLE statement fails with an error like "referenced table does not exist." This is the dependency constraint of relational schema creation.</p>
         <p style={{ margin: '0 0 14px' }}>The correct creation order follows the dependency graph of your schema — a directed acyclic graph (DAG) where each table is a node and each FK is a directed edge pointing to the referenced table. Tables with no outgoing edges (no FKs) have no dependencies and can be created first. Tables with FKs must be created after all the tables they reference. This is called a topological sort of the dependency graph.</p>
-        <p style={{ margin: 0 }}>For FreshMart: stores, customers, and products have no FKs — create first. employees references stores — create after stores. orders references customers and stores — create after both. order_items references orders and products — create last. In practice, determine creation order by drawing the dependency graph and creating tables from the "leaves" (no dependencies) inward to the "centre" (many dependencies). For schemas with circular references — where table A references B and B references A — break the cycle by creating one table first without the circular FK, then adding it later with ALTER TABLE ADD FOREIGN KEY after both tables exist.</p>
+        <p style={{ margin: 0 }}>For FreshCart: stores, customers, and products have no FKs — create first. employees references stores — create after stores. orders references customers and stores — create after both. order_items references orders and products — create last. In practice, determine creation order by drawing the dependency graph and creating tables from the "leaves" (no dependencies) inward to the "centre" (many dependencies). For schemas with circular references — where table A references B and B references A — break the cycle by creating one table first without the circular FK, then adding it later with ALTER TABLE ADD FOREIGN KEY after both tables exist.</p>
       </IQ>
 
       <HR />
@@ -919,7 +919,7 @@ CREATE TABLE prescriptions (
       <Err
         msg="ERROR: relation 'customers' does not exist — when creating orders table"
         cause="You are trying to create a table with a foreign key that references a table that has not been created yet. The database validates FK references at creation time — the referenced table must exist. This happens when CREATE TABLE statements are run in the wrong order, or when a migration script is partially executed and the referenced table was not created in a previous run."
-        fix="Create tables in dependency order: tables with no FKs first, then tables that reference them. For FreshMart: stores, customers, products → employees → orders → order_items. If you have a circular dependency (table A references B, B references A), create one table without the circular FK, then add it after both tables exist: ALTER TABLE a ADD CONSTRAINT fk_a_b FOREIGN KEY (b_id) REFERENCES b(b_id)."
+        fix="Create tables in dependency order: tables with no FKs first, then tables that reference them. For FreshCart: stores, customers, products → employees → orders → order_items. If you have a circular dependency (table A references B, B references A), create one table without the circular FK, then add it after both tables exist: ALTER TABLE a ADD CONSTRAINT fk_a_b FOREIGN KEY (b_id) REFERENCES b(b_id)."
       />
 
       <Err
@@ -950,7 +950,7 @@ CREATE TABLE prescriptions (
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Design a CREATE TABLE statement for a 'product_reviews' table for FreshMart. Requirements: each review belongs to a customer and a product. Reviews have a rating (1-5, integer, required), a review_text (optional, up to 2000 characters), a title (required, up to 200 characters), a verified_purchase flag (boolean, defaults to false), and a created_at timestamp (defaults to now). One customer can only review each product once. The table should cascade-delete reviews if the product is deleted, but restrict deletion of customers who have reviews."
+        question="Design a CREATE TABLE statement for a 'product_reviews' table for FreshCart. Requirements: each review belongs to a customer and a product. Reviews have a rating (1-5, integer, required), a review_text (optional, up to 2000 characters), a title (required, up to 200 characters), a verified_purchase flag (boolean, defaults to false), and a created_at timestamp (defaults to now). One customer can only review each product once. The table should cascade-delete reviews if the product is deleted, but restrict deletion of customers who have reviews."
         hint="You need FKs to customers and products with different ON DELETE behaviours. The one-review-per-customer-per-product rule requires a UNIQUE constraint on (customer_id, product_id). Rating needs a CHECK between 1 and 5."
         answer={`CREATE TABLE product_reviews (
   review_id          INTEGER        PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

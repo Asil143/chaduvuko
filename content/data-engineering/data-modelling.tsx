@@ -296,7 +296,7 @@ DEGENERATE DIMENSIONS:
         <Para>
           A fact without context is just a number. ₹380 has no analytical value
           until you know it was an order from a premium customer in Bangalore at
-          a FreshMart store on a weekday evening. Dimension tables provide that
+          a FreshCart store on a weekday evening. Dimension tables provide that
           context. Understanding what belongs in dimensions, how to structure them,
           and how surrogate keys work is essential for building models analysts can
           use intuitively.
@@ -409,7 +409,7 @@ REASON 2: Source system independence
   Only dim_customer.customer_id column changes — fact table untouched.
 
 REASON 3: Multiple source system integration
-  FreshMart acquires a competitor. Both had customer_id = 4201938.
+  FreshCart acquires a competitor. Both had customer_id = 4201938.
   Surrogate keys: assign unique customer_sk per entity — no collision.
   Without surrogates: manual prefix/remap of all customer IDs — painful.
 
@@ -438,7 +438,7 @@ SURROGATE KEY GENERATION in dbt:
           visually to analysts who are not data engineers.
         </Para>
 
-        <CodeBox label="FreshMart orders star schema — structure and query pattern">{`STAR SCHEMA (ASCII diagram):
+        <CodeBox label="FreshCart orders star schema — structure and query pattern">{`STAR SCHEMA (ASCII diagram):
 
                         dim_date
                        (date_sk PK)
@@ -745,7 +745,7 @@ LEFT JOIN {{ ref('dim_payment_method') }} p ON o.payment_method = p.payment_meth
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Scenario — FreshMart · Finance and Operations report different March revenue
+            Scenario — FreshCart · Finance and Operations report different March revenue
           </div>
 
           <Para>

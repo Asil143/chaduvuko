@@ -695,7 +695,7 @@ ORDER BY a.revenue DESC;`}
       <P>You are a data analyst at Razorpay, India's largest payment gateway. The risk team has asked you to identify merchant accounts showing unusual activity patterns that may indicate fraud or policy violations. They have given you three criteria that define "flagged" merchants.</P>
 
       <TimeBlock time="3:00 PM" label="Risk team criteria arrive">
-        Flag any merchant where: (1) average transaction value exceeds ₹5,000 AND total transaction count is below 10 (low volume, high value — unusual), (2) OR cancellation rate exceeds 30% of all transactions, (3) OR they have only 1 distinct payment method used (legitimate merchants typically use multiple methods). Adapted for FreshMart: flag stores matching analogous patterns.
+        Flag any merchant where: (1) average transaction value exceeds ₹5,000 AND total transaction count is below 10 (low volume, high value — unusual), (2) OR cancellation rate exceeds 30% of all transactions, (3) OR they have only 1 distinct payment method used (legitimate merchants typically use multiple methods). Adapted for FreshCart: flag stores matching analogous patterns.
       </TimeBlock>
 
       <TimeBlock time="3:20 PM" label="You build the query">
@@ -818,7 +818,7 @@ ORDER BY cancellation_rate_pct DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart loyalty team needs to identify customers for a targeted re-engagement campaign. Write a query that finds customers who meet ALL of these criteria: placed at least 2 delivered orders, have an average delivered order value between ₹300 and ₹800 (not too cheap, not already high-value), and their most recent delivered order was before '2024-03-01' (lapsed customers). Show customer_id, full name, city, loyalty_tier, order_count, avg_order_value (rounded to 2 decimal places), and last_order_date. Sort by last_order_date ascending (longest lapsed first)."
+        question="The FreshCart loyalty team needs to identify customers for a targeted re-engagement campaign. Write a query that finds customers who meet ALL of these criteria: placed at least 2 delivered orders, have an average delivered order value between ₹300 and ₹800 (not too cheap, not already high-value), and their most recent delivered order was before '2024-03-01' (lapsed customers). Show customer_id, full name, city, loyalty_tier, order_count, avg_order_value (rounded to 2 decimal places), and last_order_date. Sort by last_order_date ascending (longest lapsed first)."
         hint="JOIN customers to orders. WHERE for delivered status. GROUP BY customer details. HAVING for the three aggregate conditions: COUNT >= 2, AVG BETWEEN 300 AND 800, MAX(order_date) < '2024-03-01'."
         answer={`SELECT
   c.customer_id,

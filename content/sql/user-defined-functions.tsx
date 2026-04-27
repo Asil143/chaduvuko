@@ -221,7 +221,7 @@ LIMIT 10;`}
       <H>Domain formula functions</H>
 
       <CodeBlock
-        label="Business formula functions — FreshMart library"
+        label="Business formula functions — FreshCart library"
         code={`-- Gross margin percentage
 CREATE OR REPLACE FUNCTION fn_margin_pct(
   p_price  NUMERIC,
@@ -815,7 +815,7 @@ WHERE customer_id = 1;   -- fn_get_loyalty_tier(1) equivalent`}
       <P>Production databases accumulate dozens of domain functions. Organising them into a coherent library — with consistent naming, documentation, and volatility declarations — makes the codebase maintainable. The convention used at most companies: a function schema (or prefix) per domain area, consistent parameter naming, and a comment on every function.</P>
 
       <CodeBlock
-        label="FreshMart function library — production-ready definitions"
+        label="FreshCart function library — production-ready definitions"
         code={`-- ── NAMING CONVENTION ──────────────────────────────────────────
 -- fn_<domain>_<action>
 -- fn_product_margin_pct   — product domain
@@ -1075,7 +1075,7 @@ LIMIT 12;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Build a FreshMart function library with four functions, then use them all in one report query. Write the CREATE OR REPLACE FUNCTION statements for: (1) fn_order_size_label(p_amount NUMERIC) → TEXT: 'Micro' if < 200, 'Small' if < 500, 'Medium' if < 1000, 'Large' otherwise. IMMUTABLE, handles NULL (return 'Unknown'). (2) fn_store_target_status(p_revenue NUMERIC, p_target NUMERIC) → TEXT: 'Exceeded' if revenue >= target * 1.2, 'Met' if >= target, 'Near' if >= target * 0.8, 'Behind' otherwise. IMMUTABLE STRICT. (3) fn_customer_display_name(p_first TEXT, p_last TEXT) → TEXT: returns 'FirstName L.' format (first name + space + first letter of last name + dot). IMMUTABLE STRICT. (4) fn_days_label(p_days INTEGER) → TEXT: '< 1 week' if days <= 7, '1–2 weeks' if <= 14, '2–4 weeks' if <= 28, '> 1 month' otherwise, 'N/A' if NULL. IMMUTABLE. Then write a report query that uses all four functions against FreshMart data."
+        question="Build a FreshCart function library with four functions, then use them all in one report query. Write the CREATE OR REPLACE FUNCTION statements for: (1) fn_order_size_label(p_amount NUMERIC) → TEXT: 'Micro' if < 200, 'Small' if < 500, 'Medium' if < 1000, 'Large' otherwise. IMMUTABLE, handles NULL (return 'Unknown'). (2) fn_store_target_status(p_revenue NUMERIC, p_target NUMERIC) → TEXT: 'Exceeded' if revenue >= target * 1.2, 'Met' if >= target, 'Near' if >= target * 0.8, 'Behind' otherwise. IMMUTABLE STRICT. (3) fn_customer_display_name(p_first TEXT, p_last TEXT) → TEXT: returns 'FirstName L.' format (first name + space + first letter of last name + dot). IMMUTABLE STRICT. (4) fn_days_label(p_days INTEGER) → TEXT: '< 1 week' if days <= 7, '1–2 weeks' if <= 14, '2–4 weeks' if <= 28, '> 1 month' otherwise, 'N/A' if NULL. IMMUTABLE. Then write a report query that uses all four functions against FreshCart data."
         hint="Functions 1 and 4: check IS NULL first in the CASE, then the numeric thresholds. Function 2: STRICT handles NULL automatically. Function 3: LEFT(p_last, 1) for the initial. Report: join orders + stores + customers, call each function."
         answer={`-- Function 1: Order size label
 CREATE OR REPLACE FUNCTION fn_order_size_label(p_amount NUMERIC)

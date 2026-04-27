@@ -152,10 +152,10 @@ export default function Project04Page() {
       {/* Real World Problem */}
       <h2>🏢 Real World Problem</h2>
       <p>
-        FreshMart&apos;s data team now works with an external supplier — <strong>AgriPrice India</strong> — a government-backed
+        FreshCart&apos;s data team now works with an external supplier — <strong>AgriPrice India</strong> — a government-backed
         organization that publishes daily wholesale vegetable and fruit prices across Indian cities.
       </p>
-      <p>FreshMart&apos;s category managers need this data to:</p>
+      <p>FreshCart&apos;s category managers need this data to:</p>
       <ul>
         <li>Compare what they paid suppliers vs the wholesale market price</li>
         <li>Spot overpriced procurement deals</li>
@@ -163,7 +163,7 @@ export default function Project04Page() {
       </ul>
       <p>
         AgriPrice India publishes their data every morning as a CSV file on their public website. Right now,
-        FreshMart&apos;s analyst manually opens the browser every morning, downloads the file, and uploads it to Azure.
+        FreshCart&apos;s analyst manually opens the browser every morning, downloads the file, and uploads it to Azure.
         <strong> 20 minutes every single day. If the analyst is on leave, it doesn&apos;t happen at all.</strong>
       </p>
 

@@ -779,7 +779,7 @@ ORDER BY c.customer_id;`}
       <P>You are a backend engineer at Swiggy. The marketing team is planning three campaign segments and needs the customer lists. Each segment uses a different existence condition — perfect for EXISTS and NOT EXISTS queries. The lists must be mutually exclusive and exhaustive.</P>
 
       <TimeBlock time="3:00 PM" label="Three segment definitions">
-        Segment A: customers who have placed at least one order above ₹1,500 (high-value ever). Segment B: customers who have placed orders but never one above ₹500 (consistent low-value). Segment C: customers who have never placed any delivered order (dormant). Adapted for FreshMart data.
+        Segment A: customers who have placed at least one order above ₹1,500 (high-value ever). Segment B: customers who have placed orders but never one above ₹500 (consistent low-value). Segment C: customers who have never placed any delivered order (dormant). Adapted for FreshCart data.
       </TimeBlock>
 
       <TimeBlock time="3:20 PM" label="Segment A — high value customers">

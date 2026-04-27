@@ -226,7 +226,7 @@ WHERE tablename = 'orders';`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Check what indexes exist on the FreshMart tables (SQLite)
+        initialQuery={`-- Check what indexes exist on the FreshCart tables (SQLite)
 SELECT
   tbl_name  AS tablename,
   name      AS indexname,
@@ -681,7 +681,7 @@ REINDEX TABLE orders;     -- rebuilds all indexes on the table`}
       />
 
       <SQLPlayground
-        initialQuery={`-- List indexes on FreshMart tables
+        initialQuery={`-- List indexes on FreshCart tables
 SELECT
   tbl_name AS tablename,
   name     AS indexname,
@@ -730,7 +730,7 @@ ORDER BY tbl_name, name;`}
       </TimeBlock>
 
       <TimeBlock time="6:18 AM" label="Run EXPLAIN ANALYZE on the slow query">
-        Adapted for FreshMart: the equivalent is a slow orders aggregation query.
+        Adapted for FreshCart: the equivalent is a slow orders aggregation query.
       </TimeBlock>
 
       <SQLPlayground
@@ -865,7 +865,7 @@ CREATE INDEX CONCURRENTLY idx_order_items_product_id
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Design an indexing strategy for FreshMart's most critical queries. Write the CREATE INDEX statements (with appropriate types — partial, composite, functional, covering) for each scenario, and explain your choice. Scenarios: (1) The orders table is queried thousands of times per day with WHERE order_status = 'Delivered' AND order_date >= some_date — this is the most common query pattern. (2) Customer login authenticates by looking up LOWER(email) — case-insensitive email search happens on every login. (3) The analytics team runs store performance reports that GROUP BY store_id and aggregate total_amount — they always filter WHERE order_status = 'Delivered'. (4) Product search uses WHERE product_name ILIKE 'amul%' (prefix match, case-insensitive). (5) The order_items table is joined to orders via order_id on every order detail query. Then write a diagnostic query that shows all indexes on the orders and order_items tables."
+        question="Design an indexing strategy for FreshCart's most critical queries. Write the CREATE INDEX statements (with appropriate types — partial, composite, functional, covering) for each scenario, and explain your choice. Scenarios: (1) The orders table is queried thousands of times per day with WHERE order_status = 'Delivered' AND order_date >= some_date — this is the most common query pattern. (2) Customer login authenticates by looking up LOWER(email) — case-insensitive email search happens on every login. (3) The analytics team runs store performance reports that GROUP BY store_id and aggregate total_amount — they always filter WHERE order_status = 'Delivered'. (4) Product search uses WHERE product_name ILIKE 'amul%' (prefix match, case-insensitive). (5) The order_items table is joined to orders via order_id on every order detail query. Then write a diagnostic query that shows all indexes on the orders and order_items tables."
         hint="Scenario 1: partial composite (status in WHERE, date range). Scenario 2: functional on LOWER(email). Scenario 3: partial composite with INCLUDE for covering. Scenario 4: functional on LOWER(product_name) for ILIKE prefix. Scenario 5: FK index on order_items(order_id). Diagnostic: pg_indexes WHERE tablename IN (...)."
         answer={`-- Scenario 1: Most common query — delivered orders by date
 -- Partial: status filter baked into index (smaller index)
@@ -908,7 +908,7 @@ CREATE INDEX IF NOT EXISTS idx_order_items_order_id
 -- Rationale: every order detail query JOINs order_items.order_id = orders.order_id
 -- Without this index: nested loop join does full scan of order_items per order
 -- With this index: direct lookup of items for each order_id
--- This is the single highest-impact index for JOIN performance in FreshMart
+-- This is the single highest-impact index for JOIN performance in FreshCart
 
 -- ── Diagnostic: show all indexes on orders and order_items ──
 SELECT

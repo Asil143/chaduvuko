@@ -48,7 +48,7 @@ export default function SqlForDataAnalysis() {
   return (
     <LearnLayout
       title="SQL for Data Analysis"
-      description="Real analytical patterns — revenue trends, customer segmentation, cohort analysis, and RFM scoring — applied to the FreshMart dataset"
+      description="Real analytical patterns — revenue trends, customer segmentation, cohort analysis, and RFM scoring — applied to the FreshCart dataset"
       section="SQL — Module 60"
       readTime="30 min"
       updatedAt="April 2026"
@@ -59,10 +59,10 @@ export default function SqlForDataAnalysis() {
 
       <P>Data analysis in SQL is not about learning new syntax — it is about applying the syntax you already know to answer real business questions. The patterns in this module are used daily by analysts at Swiggy, Zepto, HDFC, and every data-driven company: revenue breakdowns, customer cohorts, retention curves, and RFM segmentation.</P>
 
-      <P>We will use the <Hl>FreshMart dataset</Hl> — the same one in every playground in this course — so every query you run here is real and produces real results. By the end of this module you will have a toolkit of analytical query patterns you can adapt to any business dataset.</P>
+      <P>We will use the <Hl>FreshCart dataset</Hl> — the same one in every playground in this course — so every query you run here is real and produces real results. By the end of this module you will have a toolkit of analytical query patterns you can adapt to any business dataset.</P>
 
       <SQLPlayground
-        initialQuery={`-- FreshMart business overview — what we are working with
+        initialQuery={`-- FreshCart business overview — what we are working with
 SELECT
   (SELECT COUNT(DISTINCT customer_id) FROM customers)      AS total_customers,
   (SELECT COUNT(*) FROM orders)                            AS total_orders,
@@ -521,12 +521,12 @@ ORDER BY avg_basket_value DESC;`}
       <HR />
 
       {/* ── PART 09 ── */}
-      <Part n="09" title="The Complete FreshMart Business Report" />
+      <Part n="09" title="The Complete FreshCart Business Report" />
 
-      <P>A real business report combines multiple analytical angles into one document. Below is a comprehensive FreshMart Q-period performance report using window functions, CTEs, and aggregations — the kind of query a data analyst would write for a management review.</P>
+      <P>A real business report combines multiple analytical angles into one document. Below is a comprehensive FreshCart Q-period performance report using window functions, CTEs, and aggregations — the kind of query a data analyst would write for a management review.</P>
 
       <SQLPlayground
-        initialQuery={`-- Comprehensive FreshMart performance report
+        initialQuery={`-- Comprehensive FreshCart performance report
 WITH
 -- 1. Revenue by month
 monthly AS (
@@ -581,7 +581,7 @@ ORDER BY m.month;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a complete customer health report for FreshMart. The report should show for each loyalty tier: (1) number of customers, (2) average orders per customer, (3) average revenue per customer, (4) the percentage of customers in that tier who placed an order in the last 90 days (active rate). Order by average revenue per customer descending."
+        question="Write a complete customer health report for FreshCart. The report should show for each loyalty tier: (1) number of customers, (2) average orders per customer, (3) average revenue per customer, (4) the percentage of customers in that tier who placed an order in the last 90 days (active rate). Order by average revenue per customer descending."
         hint="Use two CTEs: one to aggregate per customer (order count, total revenue, last order date), one to aggregate per tier with the 90-day active rate using CASE WHEN. julianday('now') - julianday(last_order_date) gives days since last order."
         answer={`-- Customer health report by loyalty tier
 WITH customer_stats AS (

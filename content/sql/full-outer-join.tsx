@@ -575,7 +575,7 @@ ORDER BY customer_id NULLS LAST, order_id NULLS LAST;`}
       <P>You are a data engineer at HDFC Bank's digital banking division. Every night, the transaction processing system writes payment records to two databases: the primary OLTP database and an independent audit database. The compliance team runs a daily reconciliation to ensure both databases agree. Any transaction present in one but absent in the other — or present in both but with different amounts — must be flagged for investigation.</P>
 
       <TimeBlock time="6:00 AM" label="Nightly reconciliation job starts">
-        The reconciliation query runs against both databases. Adapted here using FreshMart's two monthly snapshots as the two systems being compared.
+        The reconciliation query runs against both databases. Adapted here using FreshCart's two monthly snapshots as the two systems being compared.
       </TimeBlock>
 
       <SQLPlayground
@@ -690,7 +690,7 @@ LIMIT 15;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshMart's operations team wants to compare store performance between two months. Write a query using FULL OUTER JOIN that compares delivered order revenue per store between January 2024 and February 2024. Show: store_id, jan_orders, jan_revenue, feb_orders, feb_revenue, revenue_change (feb minus jan, 0 if either month has no data), and a trend column: 'New store' if no Jan data, 'Went quiet' if no Feb data, 'Growth' if Feb > Jan, 'Decline' if Feb < Jan, 'Flat' if equal. Use CTEs for each month. Sort by revenue_change descending."
+        question="FreshCart's operations team wants to compare store performance between two months. Write a query using FULL OUTER JOIN that compares delivered order revenue per store between January 2024 and February 2024. Show: store_id, jan_orders, jan_revenue, feb_orders, feb_revenue, revenue_change (feb minus jan, 0 if either month has no data), and a trend column: 'New store' if no Jan data, 'Went quiet' if no Feb data, 'Growth' if Feb > Jan, 'Decline' if Feb < Jan, 'Flat' if equal. Use CTEs for each month. Sort by revenue_change descending."
         hint="Two CTEs — one per month, each with COUNT(*) and SUM(total_amount). FULL OUTER JOIN on store_id. COALESCE for the key column and for the numeric columns. CASE WHEN for trend. revenue_change = COALESCE(feb, 0) - COALESCE(jan, 0)."
         answer={`WITH jan AS (
   SELECT

@@ -808,7 +808,7 @@ ORDER BY c.customer_id;`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Nykaa, India's beauty and personal care platform. The retention team runs a monthly lapsed-customer campaign. They need three lists: (1) customers who registered but never purchased, (2) customers who purchased at least once but not in the last 90 days, and (3) products that have been added to carts but never purchased. All three are anti-join or conditional LEFT JOIN queries — adapted here for FreshMart.</P>
+      <P>You are a data analyst at Nykaa, India's beauty and personal care platform. The retention team runs a monthly lapsed-customer campaign. They need three lists: (1) customers who registered but never purchased, (2) customers who purchased at least once but not in the last 90 days, and (3) products that have been added to carts but never purchased. All three are anti-join or conditional LEFT JOIN queries — adapted here for FreshCart.</P>
 
       <TimeBlock time="10:00 AM" label="List 1 — registered but never purchased">
         Classic anti-join: customers in the customer table with no row in orders.

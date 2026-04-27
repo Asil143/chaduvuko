@@ -351,10 +351,10 @@ BashOperator(
           retries, and dependencies.
         </Para>
 
-        <SubTitle>The FreshMart morning DAG — a complete production example</SubTitle>
+        <SubTitle>The FreshCart morning DAG — a complete production example</SubTitle>
 
         <CodeBox label="dags/freshmart_morning_pipeline.py — complete production DAG">{`"""
-FreshMart Morning Pipeline DAG
+FreshCart Morning Pipeline DAG
 Runs daily at 02:00 UTC (07:30 IST)
 Processes previous day's data across all layers
 
@@ -394,14 +394,14 @@ default_args = {
 with DAG(
     dag_id          = 'freshmart_morning_pipeline',
     default_args    = default_args,
-    description     = 'FreshMart daily data platform — Bronze → Silver → Gold',
+    description     = 'FreshCart daily data platform — Bronze → Silver → Gold',
     schedule        = '0 2 * * *',    # 02:00 UTC daily = 07:30 IST
     start_date      = datetime(2026, 1, 1),
     catchup         = False,          # do not backfill on deploy
     max_active_runs = 1,              # no concurrent runs
     tags            = ['daily', 'production', 'silver', 'gold'],
     doc_md          = """
-        ## FreshMart Morning Pipeline
+        ## FreshCart Morning Pipeline
 
         Processes the previous day's data through all layers.
 
@@ -1099,7 +1099,7 @@ def load_data(**context):
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Morning pipeline getting slower every week
+            Scenario — FreshCart · Morning pipeline getting slower every week
           </div>
 
           <Para>
@@ -1165,7 +1165,7 @@ GROUP BY 1
 ORDER BY 1 DESC
 LIMIT 30;
 
-# FreshMart is growing: 48k orders/day → 52k → 56k → 60k
+# FreshCart is growing: 48k orders/day → 52k → 56k → 60k
 # Silver.orders incremental model runs:
 # WHERE source_date = '{{ ds }}'
 # And then computes window functions over ALL historical orders

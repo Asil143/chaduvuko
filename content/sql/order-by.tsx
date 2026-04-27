@@ -523,7 +523,7 @@ ORDER BY salary DESC;`}
       </TimeBlock>
 
       <CodeBlock
-        label="Top categories by revenue (adapted for FreshMart)"
+        label="Top categories by revenue (adapted for FreshCart)"
         code={`-- Category revenue ranked highest to lowest
 SELECT
   category,
@@ -657,7 +657,7 @@ ORDER BY last_name ASC, first_name ASC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart procurement team wants a product report for their weekly review. Write a query that returns all in-stock products sorted first by category alphabetically, then within each category by unit_price from highest to lowest. Show product_name, category, brand, unit_price, and a calculated column called margin that is unit_price minus cost_price. The report should only include products where the margin is greater than ₹30."
+        question="The FreshCart procurement team wants a product report for their weekly review. Write a query that returns all in-stock products sorted first by category alphabetically, then within each category by unit_price from highest to lowest. Show product_name, category, brand, unit_price, and a calculated column called margin that is unit_price minus cost_price. The report should only include products where the margin is greater than ₹30."
         hint="You need WHERE in_stock = true AND (unit_price - cost_price) > 30, then ORDER BY category ASC, unit_price DESC. The margin calculation goes in SELECT."
         answer={`SELECT
   product_name,

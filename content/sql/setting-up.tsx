@@ -107,7 +107,7 @@ export default function SettingUp() {
       {/* ── PART 01 ── */}
       <Part n="01" title="You Already Have a Working SQL Environment" />
 
-      <P>Before going any further — you already have a fully functional SQL environment running in your browser. The playground on every page of this course uses <Hl>DuckDB-WASM</Hl> — a real, production-grade database engine that runs entirely in your browser with the complete FreshMart database preloaded. Every query you write here is real SQL. Every concept you learn here works identically in MySQL and PostgreSQL.</P>
+      <P>Before going any further — you already have a fully functional SQL environment running in your browser. The playground on every page of this course uses <Hl>DuckDB-WASM</Hl> — a real, production-grade database engine that runs entirely in your browser with the complete FreshCart database preloaded. Every query you write here is real SQL. Every concept you learn here works identically in MySQL and PostgreSQL.</P>
 
       <P>This module is for when you want to go further — when you want a local installation that you can use for your own projects, connect to from your code, or use in job interviews where they ask you to run queries on their database. A local installation is not required to complete any module in this course. If you just want to write SQL, skip to Module 05 right now.</P>
 
@@ -117,7 +117,7 @@ export default function SettingUp() {
 
       <SQLPlayground
         initialQuery={`-- Your browser playground is already live.
--- This runs against the full FreshMart database right now.
+-- This runs against the full FreshCart database right now.
 SELECT 'Your SQL environment is ready!' AS status,
        COUNT(*)                          AS customers_loaded
 FROM customers;`}
@@ -431,13 +431,13 @@ SHOW DATABASES;
       <HR />
 
       {/* ── PART 07 ── */}
-      <Part n="07" title="Load the FreshMart Database Locally" />
+      <Part n="07" title="Load the FreshCart Database Locally" />
 
-      <P>Once your local database is running, you can load the full FreshMart dataset into it. This lets you practice every query from this course on your local machine — useful when you want to experiment beyond what the browser playground allows.</P>
+      <P>Once your local database is running, you can load the full FreshCart dataset into it. This lets you practice every query from this course on your local machine — useful when you want to experiment beyond what the browser playground allows.</P>
 
       <H>PostgreSQL</H>
       <CodeBlock
-        label="psql — create the FreshMart database"
+        label="psql — create the FreshCart database"
         code={`-- 1. Connect to PostgreSQL
 psql -U postgres
 
@@ -529,7 +529,7 @@ CREATE TABLE order_items (
 
       <H>MySQL</H>
       <CodeBlock
-        label="mysql — create the FreshMart database"
+        label="mysql — create the FreshCart database"
         code={`-- 1. Connect to MySQL
 mysql -u root -p
 
@@ -614,7 +614,7 @@ CREATE TABLE order_items (
       />
 
       <Callout type="info">
-        The data INSERT statements (all 208 rows of FreshMart data) are in the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>data/sql-freshmart.ts</code> file in the Chaduvuko GitHub repository. Copy the SQL from the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>FRESHMART_SEED_SQL</code> constant and run it after the CREATE TABLE statements above.
+        The data INSERT statements (all 208 rows of FreshCart data) are in the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>data/sql-freshmart.ts</code> file in the Chaduvuko GitHub repository. Copy the SQL from the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>FRESHMART_SEED_SQL</code> constant and run it after the CREATE TABLE statements above.
       </Callout>
 
       <HR />
@@ -815,7 +815,7 @@ ORDER BY ordinal_position;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="You are given credentials to a new database at your company. Before running any business queries, you want to understand the schema. Using the browser playground (which has the FreshMart database loaded), write a query that shows all the columns in the 'orders' table — their names, data types, and whether they allow NULL."
+        question="You are given credentials to a new database at your company. Before running any business queries, you want to understand the schema. Using the browser playground (which has the FreshCart database loaded), write a query that shows all the columns in the 'orders' table — their names, data types, and whether they allow NULL."
         hint="Use pragma_table_info('orders') — it returns one row per column with fields: name, type, notnull, dflt_value, and pk."
         answer={`SELECT
   name       AS column_name,
@@ -841,7 +841,7 @@ FROM pragma_table_info('orders');`}
           'The information_schema is a built-in read-only schema in every SQL database. Query information_schema.tables for table lists, information_schema.columns for column structure, and information_schema.table_constraints for constraint details.',
           'When joining a new company: confirm whether credentials are for production or staging, explore schema before writing queries, check table sizes with COUNT(*) before running broad queries, and always add LIMIT to exploratory queries.',
           'VS Code with the SQLTools extension is how most data engineers write SQL professionally — same editor, same git integration, autocomplete and schema browsing without switching applications.',
-          'The five online SQL tools worth knowing: SQLiteOnline.com (zero friction), DB Fiddle (multi-database), Supabase Studio (real cloud PostgreSQL), PlanetScale (cloud MySQL), and the Chaduvuko browser playground (FreshMart preloaded).',
+          'The five online SQL tools worth knowing: SQLiteOnline.com (zero friction), DB Fiddle (multi-database), Supabase Studio (real cloud PostgreSQL), PlanetScale (cloud MySQL), and the Chaduvuko browser playground (FreshCart preloaded).',
         ]}
       />
 

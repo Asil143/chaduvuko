@@ -22,7 +22,7 @@ const subjects = [
     title: 'Microsoft Azure — ADF & Cloud',
     status: 'live',
     href: '/learn/azure/introduction',
-    desc: 'Azure Data Factory, ADLS Gen2, Synapse, Databricks — full Azure cloud engineering track with real FreshMart projects.',
+    desc: 'Azure Data Factory, ADLS Gen2, Synapse, Databricks — full Azure cloud engineering track with real FreshCart projects.',
     pills: ['ADF', 'ADLS Gen2', 'Databricks', 'Synapse', 'Linked Services'],
   },
   {

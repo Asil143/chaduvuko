@@ -1149,7 +1149,7 @@ class TestIdempotency:
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Finance team reports double revenue
+            Scenario — FreshCart · Finance team reports double revenue
           </div>
 
           <Para>

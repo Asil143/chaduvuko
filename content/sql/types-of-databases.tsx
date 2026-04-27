@@ -437,7 +437,7 @@ export default function TypesOfDatabases() {
       <P>For this entire SQL course, you will use <Hl>DuckDB</Hl> — a modern analytical relational database that runs in your browser. Every query you write here translates directly to MySQL, PostgreSQL, or any other relational database. The relational model and SQL are universal — learn them once and you can work with any relational database on day one.</P>
 
       <SQLPlayground
-        initialQuery={`-- The FreshMart database is a perfect relational database use case:
+        initialQuery={`-- The FreshCart database is a perfect relational database use case:
 -- structured data, relationships that matter, complex queries needed
 -- Let's see all three in action: JOIN across 3 tables
 SELECT
@@ -553,7 +553,7 @@ LIMIT 8;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshMart decides to expand: they want to store unstructured customer feedback (star rating, free-text review, photos, tags — all optional). They also want to add a real-time 'driver location' tracker for their delivery staff, updating every 5 seconds per active delivery. And they want to cache the homepage product list (same for all users, valid for 10 minutes). For each of these three new requirements — what type of database would you recommend, and why? The existing orders, products, and customers data stays in the relational database."
+        question="FreshCart decides to expand: they want to store unstructured customer feedback (star rating, free-text review, photos, tags — all optional). They also want to add a real-time 'driver location' tracker for their delivery staff, updating every 5 seconds per active delivery. And they want to cache the homepage product list (same for all users, valid for 10 minutes). For each of these three new requirements — what type of database would you recommend, and why? The existing orders, products, and customers data stays in the relational database."
         hint="Think about each requirement's access pattern, schema flexibility, write volume, and how long the data needs to live. They all have different answers."
         answer={`1. Customer feedback → Document database (MongoDB)
    Reason: Feedback has no fixed schema — some reviews have photos, some have tags, 

@@ -404,7 +404,7 @@ ALTER TABLE orders ALTER COLUMN order_status SET STATISTICS 500;
       />
 
       <SQLPlayground
-        initialQuery={`-- Inspect current statistics for FreshMart tables
+        initialQuery={`-- Inspect current statistics for FreshCart tables
 SELECT
   tablename,
   attname                                    AS column_name,
@@ -761,7 +761,7 @@ SHOW work_mem;`}
       </TimeBlock>
 
       <TimeBlock time="7:35 AM" label="Step 1 — run EXPLAIN ANALYZE on the slow query">
-        Adapted for FreshMart: the equivalent is a revenue reconciliation across orders, stores, and customers.
+        Adapted for FreshCart: the equivalent is a revenue reconciliation across orders, stores, and customers.
       </TimeBlock>
 
       <SQLPlayground
@@ -919,7 +919,7 @@ ORDER BY row_count DESC;
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Perform a systematic query diagnosis on the following FreshMart report query. (1) Run EXPLAIN on the query and identify: the join strategies used, whether any Seq Scans appear and on which tables, the estimated row counts at each major node. (2) Rewrite the correlated subquery for customer order count into a pre-aggregated LEFT JOIN. (3) Remove the function applied to the date column and replace with an index-friendly range. (4) Write the CREATE INDEX statements that would most improve this query — include a partial index and specify why each index helps. The query to diagnose: SELECT c.customer_id, c.first_name, c.loyalty_tier, (SELECT COUNT(*) FROM orders o WHERE o.customer_id = c.customer_id AND order_status = 'Delivered') AS order_count, ROUND(SUM(o2.total_amount), 2) AS total_spend FROM customers c LEFT JOIN orders o2 ON c.customer_id = o2.customer_id AND DATE_TRUNC('month', o2.order_date) = '2024-01-01' AND o2.order_status = 'Delivered' GROUP BY c.customer_id, c.first_name, c.loyalty_tier ORDER BY total_spend DESC NULLS LAST LIMIT 20."
+        question="Perform a systematic query diagnosis on the following FreshCart report query. (1) Run EXPLAIN on the query and identify: the join strategies used, whether any Seq Scans appear and on which tables, the estimated row counts at each major node. (2) Rewrite the correlated subquery for customer order count into a pre-aggregated LEFT JOIN. (3) Remove the function applied to the date column and replace with an index-friendly range. (4) Write the CREATE INDEX statements that would most improve this query — include a partial index and specify why each index helps. The query to diagnose: SELECT c.customer_id, c.first_name, c.loyalty_tier, (SELECT COUNT(*) FROM orders o WHERE o.customer_id = c.customer_id AND order_status = 'Delivered') AS order_count, ROUND(SUM(o2.total_amount), 2) AS total_spend FROM customers c LEFT JOIN orders o2 ON c.customer_id = o2.customer_id AND DATE_TRUNC('month', o2.order_date) = '2024-01-01' AND o2.order_status = 'Delivered' GROUP BY c.customer_id, c.first_name, c.loyalty_tier ORDER BY total_spend DESC NULLS LAST LIMIT 20."
         hint="(1) EXPLAIN the query as-is. (2) Replace correlated subquery with LEFT JOIN (SELECT customer_id, COUNT(*) FROM orders WHERE status='Delivered' GROUP BY customer_id). (3) Replace DATE_TRUNC = '2024-01-01' with order_date >= '2024-01-01' AND order_date < '2024-02-01'. (4) Partial index on orders WHERE order_status = 'Delivered', composite index on (customer_id, order_date) INCLUDE (total_amount)."
         answer={`-- ── Step 1: Diagnose the original query ────────────────────────
 EXPLAIN

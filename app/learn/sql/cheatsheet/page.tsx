@@ -174,7 +174,7 @@ export default function SQLCheatSheet() {
         }}>
           <div>
             <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>Ready to go deeper?</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>Start from Module 01 and learn every concept with real queries and the FreshMart database.</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>Start from Module 01 and learn every concept with real queries and the FreshCart database.</div>
           </div>
           <Link href="/learn/sql/what-is-a-database" style={{
             background: SQL_COLOR, color: '#000',

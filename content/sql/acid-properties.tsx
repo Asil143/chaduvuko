@@ -87,7 +87,7 @@ const PropertyCard = ({
         </div>
       ))}
       <div style={{ background: 'var(--bg)', borderRadius: 8, padding: '12px 14px' }}>
-        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.09em', margin: '0 0 6px' }}>FreshMart scenario</p>
+        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.09em', margin: '0 0 6px' }}>FreshCart scenario</p>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{example}</p>
       </div>
     </div>
@@ -114,7 +114,7 @@ export default function AcidProperties() {
       <P>Every major relational database — PostgreSQL, MySQL (InnoDB), SQL Server, Oracle, SQLite — implements ACID. Understanding each property tells you what the database protects you from automatically and what you must protect yourself from in application code.</P>
 
       <SQLPlayground
-        initialQuery={`-- FreshMart has financial and inventory data — exactly where ACID matters most
+        initialQuery={`-- FreshCart has financial and inventory data — exactly where ACID matters most
 -- Let's see what we're working with
 SELECT
   'customers'   AS tbl, COUNT(*) AS rows FROM customers
@@ -139,7 +139,7 @@ UNION ALL SELECT 'stores',      COUNT(*) FROM stores;`}
         what="Every SQL statement inside a BEGIN...COMMIT block is treated as a single unit. Either ALL statements execute and their changes are committed, or NONE of them take effect. There is no state where some statements committed and others did not — partial transactions are impossible."
         how="Transaction log (WAL — Write-Ahead Log). Before any change is applied to data files, the intended change is written to the log. If the transaction commits, the log records the commit. If the server crashes mid-transaction, on restart the database reads the log: uncommitted transactions are rolled back, committed transactions are replayed. The log is the ground truth."
         breaks="Without atomicity, a payment that deducts ₹500 from a customer's wallet but crashes before crediting the merchant leaves ₹500 permanently lost — deducted from one account, never arrived at another. The money exists in neither place. Any multi-step operation that must either fully succeed or fully fail needs atomicity."
-        example="A FreshMart order involves: INSERT into orders, INSERT into order_items (one per product), UPDATE products to reduce stock, INSERT into payment_log. Atomicity means if the payment_log INSERT fails (duplicate key, constraint violation), the order INSERT, order_items INSERT, and stock UPDATE are all rolled back. The customer's order either fully exists or does not exist — never half-created."
+        example="A FreshCart order involves: INSERT into orders, INSERT into order_items (one per product), UPDATE products to reduce stock, INSERT into payment_log. Atomicity means if the payment_log INSERT fails (duplicate key, constraint violation), the order INSERT, order_items INSERT, and stock UPDATE are all rolled back. The customer's order either fully exists or does not exist — never half-created."
       />
 
       <CodeBlock
@@ -201,12 +201,12 @@ LIMIT 10;`}
         what="Consistency means the database is always in a valid state — before a transaction begins and after it commits. 'Valid state' is defined by all the rules declared in the schema: NOT NULL constraints, UNIQUE constraints, CHECK constraints, FOREIGN KEY constraints, and any triggers or rules. A transaction that would violate any of these is rejected in its entirety."
         how="Constraint checking at commit time (and in many cases, statement-by-statement). When you try to INSERT a row with a NULL in a NOT NULL column, the database rejects it before the INSERT completes. When you try to INSERT an order_item referencing a product_id that does not exist, the FOREIGN KEY constraint rejects it. Constraints are the database's definition of what 'valid' means."
         breaks="Without consistency enforcement, you could have orders referencing customers who do not exist (broken foreign keys), negative stock quantities (violated CHECK constraints), duplicate primary keys (two orders with the same order_id), or NULL values in columns that require a value. These corrupt states cause cascading failures in queries, reports, and application logic that assume the data is valid."
-        example="FreshMart's order_items table has a FOREIGN KEY to products. Consistency ensures you cannot insert an order_item for a product that was deleted — the database rejects it. The products table has stock_quantity >= 0 as a CHECK constraint — no transaction can decrement stock below zero. These rules are enforced at the database level, not just the application layer."
+        example="FreshCart's order_items table has a FOREIGN KEY to products. Consistency ensures you cannot insert an order_item for a product that was deleted — the database rejects it. The products table has stock_quantity >= 0 as a CHECK constraint — no transaction can decrement stock below zero. These rules are enforced at the database level, not just the application layer."
       />
 
       <CodeBlock
         label="Consistency — constraints that define valid states"
-        code={`-- SQLite constraint examples (FreshMart-style)
+        code={`-- SQLite constraint examples (FreshCart-style)
 CREATE TABLE products (
   product_id    INTEGER PRIMARY KEY,
   product_name  TEXT    NOT NULL,              -- NOT NULL: every product needs a name
@@ -237,7 +237,7 @@ VALUES (99999, 1, 2, 200.00);
       />
 
       <SQLPlayground
-        initialQuery={`-- Check FreshMart's current data consistency
+        initialQuery={`-- Check FreshCart's current data consistency
 -- Every order_item must reference a valid order and a valid product
 SELECT
   (SELECT COUNT(*) FROM orders)       AS total_orders,
@@ -270,7 +270,7 @@ SELECT
         what="Isolation means each transaction executes as if it were the only transaction running, even when hundreds of transactions run simultaneously. Changes made by an in-progress transaction are not visible to other transactions until the first transaction commits. This prevents one transaction from reading or depending on the intermediate, possibly-to-be-rolled-back work of another."
         how="MVCC (Multi-Version Concurrency Control) in PostgreSQL: instead of one version of each row, the database maintains multiple versions. Each transaction sees the version that was current when the transaction started (or when the statement started, depending on the isolation level). Readers never block writers. Writers never block readers. Only write-write conflicts require locking."
         breaks="Without isolation, two sessions simultaneously reading inventory could both see stock = 1, both decide to sell the last item, both decrement the stock, and leave it at -1 (an impossible state). Reports could read a row mid-update and see an inconsistent intermediate value. Financial aggregations could include partial payments."
-        example="Two FreshMart customers simultaneously try to buy the last Amul Butter (stock = 1). Without isolation: both read stock = 1, both decrement by 1, stock = -1. With isolation at SERIALIZABLE: the first transaction commits stock = 0, the second tries to decrement but the database detects the conflict and forces it to retry — it reads stock = 0 and fails with 'out of stock'. The impossible state never exists."
+        example="Two FreshCart customers simultaneously try to buy the last Amul Butter (stock = 1). Without isolation: both read stock = 1, both decrement by 1, stock = -1. With isolation at SERIALIZABLE: the first transaction commits stock = 0, the second tries to decrement but the database detects the conflict and forces it to retry — it reads stock = 0 and fails with 'out of stock'. The impossible state never exists."
       />
 
       <H>The four isolation levels</H>
@@ -327,7 +327,7 @@ ORDER BY total_revenue DESC;
         what="Once a transaction's COMMIT succeeds, its changes are permanent. A server crash, power failure, or OS restart immediately after COMMIT will not lose the committed data. When the database restarts, it recovers all committed transactions and discards all uncommitted ones. The COMMIT response to the client is only sent after the data is guaranteed to survive a crash."
         how="Write-Ahead Logging (WAL). Before any change is applied to the actual data files, the change is first written to the WAL — a sequential append-only log on durable storage. On crash recovery, the database reads the WAL: transactions with a COMMIT record are replayed (applied to data files), transactions without a COMMIT record are rolled back. The WAL is fsynced to disk before COMMIT returns — this is why COMMIT on large transactions can be slightly slow."
         breaks="Without durability, a confirmed order could disappear after a server restart. A payment marked 'success' in the database could vanish. Customers could receive order confirmations for orders that no longer exist in the database. This is catastrophic for any financial or e-commerce system."
-        example="A FreshMart customer places an order at 11:59 PM. The COMMIT succeeds and the app sends the order confirmation email. The database server crashes at 12:00 AM. When it restarts, the order is still there — COMMIT means it was written to the WAL before the crash. The order data survived because durability guarantees that every committed transaction is recoverable."
+        example="A FreshCart customer places an order at 11:59 PM. The COMMIT succeeds and the app sends the order confirmation email. The database server crashes at 12:00 AM. When it restarts, the order is still there — COMMIT means it was written to the WAL before the crash. The order data survived because durability guarantees that every committed transaction is recoverable."
       />
 
       <CodeBlock
@@ -391,7 +391,7 @@ PRAGMA journal_mode;   -- shows current journal mode (WAL or DELETE/rollback jou
 
       <CodeBlock
         label="All four ACID properties in one transaction"
-        code={`-- A FreshMart loyalty tier upgrade — all four properties at work
+        code={`-- A FreshCart loyalty tier upgrade — all four properties at work
 BEGIN;
 
   -- ISOLATION: this SELECT sees only committed data (READ COMMITTED default)
@@ -462,7 +462,7 @@ COMMIT;`}
       </div>
 
       <Callout type="info">
-        The choice between ACID and BASE is not about which is better — it is about which fits the workload. FreshMart orders, wallet balances, and inventory require ACID: no eventual consistency is acceptable when ₹1,000 is at stake. FreshMart's product recommendation engine or user activity log can tolerate BASE: a slightly stale recommendation or a 500ms lag in logging a page view is fine.
+        The choice between ACID and BASE is not about which is better — it is about which fits the workload. FreshCart orders, wallet balances, and inventory require ACID: no eventual consistency is acceptable when ₹1,000 is at stake. FreshCart's product recommendation engine or user activity log can tolerate BASE: a slightly stale recommendation or a 500ms lag in logging a page view is fine.
       </Callout>
 
       <HR />
@@ -552,7 +552,7 @@ COMMIT;`}
       <IQ q="What is eventual consistency and when is it acceptable?">
         <p style={{ margin: '0 0 12px' }}>Eventual consistency is a weaker guarantee offered by many distributed and NoSQL databases. Instead of guaranteeing that every read sees the latest committed write (strong consistency), eventual consistency guarantees only that if no new writes occur, all replicas will eventually converge to the same state. Between a write and that convergence, different nodes or readers may return different, stale, or conflicting values.</p>
         <p style={{ margin: '0 0 12px' }}>Eventual consistency is acceptable when: (1) the data is not financial or inventory-critical — a user's "likes" count being 1 second stale is acceptable, (2) operations are idempotent or easily reconciled — appending to a log can handle duplicates, (3) availability is more important than consistency — the system should stay up even if some nodes are unreachable, even if that means stale data.</p>
-        <p style={{ margin: 0 }}>Eventual consistency is NOT acceptable for: wallet balances (a stale balance could allow overdrafts), order inventory (stale stock could allow overselling), payment records (a lost write means lost money), or medical records (stale data could affect patient safety). FreshMart's orders, payments, and stock all require strong consistency. FreshMart's product browsing history, search analytics, or recommendation click-through rates could tolerate eventual consistency. The choice is workload-driven, not ideological.</p>
+        <p style={{ margin: 0 }}>Eventual consistency is NOT acceptable for: wallet balances (a stale balance could allow overdrafts), order inventory (stale stock could allow overselling), payment records (a lost write means lost money), or medical records (stale data could affect patient safety). FreshCart's orders, payments, and stock all require strong consistency. FreshCart's product browsing history, search analytics, or recommendation click-through rates could tolerate eventual consistency. The choice is workload-driven, not ideological.</p>
       </IQ>
 
       <IQ q="How does a database achieve Durability — what is WAL?">
@@ -595,7 +595,7 @@ COMMIT;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write queries that demonstrate all four ACID properties using the FreshMart schema. For each property, write a query or code block that: (A) shows Atomicity by simulating a payment that must debit and credit atomically; (B) shows Consistency by attempting an INSERT that violates a constraint; (C) shows Isolation by writing two queries that represent what two concurrent sessions would each see; (D) shows Durability by describing the WAL check query. Wrap the Atomicity demo in a BEGIN...ROLLBACK block."
+        question="Write queries that demonstrate all four ACID properties using the FreshCart schema. For each property, write a query or code block that: (A) shows Atomicity by simulating a payment that must debit and credit atomically; (B) shows Consistency by attempting an INSERT that violates a constraint; (C) shows Isolation by writing two queries that represent what two concurrent sessions would each see; (D) shows Durability by describing the WAL check query. Wrap the Atomicity demo in a BEGIN...ROLLBACK block."
         hint="BEGIN; two-statement payment scenario; ROLLBACK. For Consistency: try INSERT with NULL in a NOT NULL column. For Isolation: same SELECT run twice with a comment about what REPEATABLE READ would guarantee."
         answer={`-- A: ATOMICITY — payment must debit and credit as one unit
 BEGIN;
@@ -609,7 +609,7 @@ WHERE order_id = 1 AND order_status = 'Processing';
 -- UPDATE customer_wallets SET balance = balance - 450.00
 -- WHERE customer_id = 1;
 
--- Step 3: Would credit FreshMart account
+-- Step 3: Would credit FreshCart account
 -- UPDATE store_revenue SET total = total + 450.00
 -- WHERE store_id = 'ST001';
 

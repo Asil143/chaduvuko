@@ -772,11 +772,11 @@ DECISION RULE: ELT or ETL for each source?
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Modernising the data platform
+            Scenario — FreshCart · Modernising the data platform
           </div>
 
           <Para>
-            FreshMart's original data platform was built in 2019. It uses a 500-line
+            FreshCart's original data platform was built in 2019. It uses a 500-line
             Informatica workflow that extracts from PostgreSQL, applies 40 transformation
             steps in a GUI-based ETL tool, and loads clean data into Redshift. The data
             team hates it: changes require opening the GUI, transformation logic is

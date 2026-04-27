@@ -758,7 +758,7 @@ ORDER BY o.total_amount DESC;`}
       <P>When a computed value is used exactly once and the correlated subquery is short, keeping it inline is often cleaner than adding a CTE. The readability benefit of naming the CTE is outweighed by the structural overhead when the computation is simple.</P>
 
       <ProTip>
-        The signal to replace a correlated subquery with a JOIN or window function: when you run EXPLAIN ANALYZE and see the inner query executing thousands or millions of times, or when query time is measured in seconds rather than milliseconds on a medium-sized table. For the day-to-day analytical queries on FreshMart's 30-row playground data, correlated subqueries are perfectly fine and often clearest. The rewrite matters when the table has millions of rows.
+        The signal to replace a correlated subquery with a JOIN or window function: when you run EXPLAIN ANALYZE and see the inner query executing thousands or millions of times, or when query time is measured in seconds rather than milliseconds on a medium-sized table. For the day-to-day analytical queries on FreshCart's 30-row playground data, correlated subqueries are perfectly fine and often clearest. The rewrite matters when the table has millions of rows.
       </ProTip>
 
       <HR />
@@ -769,7 +769,7 @@ ORDER BY o.total_amount DESC;`}
       <P>You are a senior data analyst at PhonePe. The fraud team needs to identify merchants showing unusual transaction patterns — specifically merchants whose average transaction value this month is more than 2 standard deviations above their own historical average. This is a classic "each merchant vs their own baseline" correlated problem — the baseline is specific to each merchant, not a global average.</P>
 
       <TimeBlock time="2:00 PM" label="Fraud pattern definition">
-        Flag merchants where current month average transaction {'>'} historical average + (2 × historical standard deviation). Adapted for FreshMart: flag stores where February average order value exceeds their January average by more than 2 standard deviations of their January orders.
+        Flag merchants where current month average transaction {'>'} historical average + (2 × historical standard deviation). Adapted for FreshCart: flag stores where February average order value exceeds their January average by more than 2 standard deviations of their January orders.
       </TimeBlock>
 
       <TimeBlock time="2:20 PM" label="Step 1 — verify the correlated logic on a small example">
@@ -852,7 +852,7 @@ ORDER BY anomaly_status DESC, f.feb_avg DESC;`}
       </TimeBlock>
 
       <ProTip>
-        Anomaly detection — "is this entity's current metric statistically unusual relative to its own history?" — is one of the strongest use cases for correlated subqueries. The historical baseline is entity-specific, making it a natural correlated pattern. On large tables (millions of merchants, billions of transactions), this would be rewritten using window functions or pre-computed baseline CTEs. At FreshMart's scale, the correlated version is perfectly readable and fast.
+        Anomaly detection — "is this entity's current metric statistically unusual relative to its own history?" — is one of the strongest use cases for correlated subqueries. The historical baseline is entity-specific, making it a natural correlated pattern. On large tables (millions of merchants, billions of transactions), this would be rewritten using window functions or pre-computed baseline CTEs. At FreshCart's scale, the correlated version is perfectly readable and fast.
       </ProTip>
 
       <HR />
@@ -986,7 +986,7 @@ SELECT
   )                                        AS cheaper_in_category
 FROM products AS p
 ORDER BY p.category, cheaper_in_category DESC;`}
-        explanation="Query 1 uses a correlated AVG in both SELECT (to display the store average) and WHERE (to filter). The two subqueries are identical — in production this would be rewritten as a JOIN to avoid the double computation. Query 2 uses two separate EXISTS checks — one per month — both correlated on customer_id. This is more readable than NOT EXISTS over a set of months, and since FreshMart only has two months of data, two EXISTS is clean and correct. A more general approach for 'ordered in every month' uses NOT EXISTS (SELECT 1 FROM months WHERE NOT EXISTS (SELECT 1 FROM orders WHERE customer_id = c.customer_id AND month = m.month)) but that is overkill for two months. Query 3 uses a correlated COUNT in SELECT — for each product, count how many other products in the same category have a lower price. The p2.product_id <> p.product_id condition excludes the product from counting itself. This produces a natural ranking: the product with the most cheaper alternatives has the highest rank in its category."
+        explanation="Query 1 uses a correlated AVG in both SELECT (to display the store average) and WHERE (to filter). The two subqueries are identical — in production this would be rewritten as a JOIN to avoid the double computation. Query 2 uses two separate EXISTS checks — one per month — both correlated on customer_id. This is more readable than NOT EXISTS over a set of months, and since FreshCart only has two months of data, two EXISTS is clean and correct. A more general approach for 'ordered in every month' uses NOT EXISTS (SELECT 1 FROM months WHERE NOT EXISTS (SELECT 1 FROM orders WHERE customer_id = c.customer_id AND month = m.month)) but that is overkill for two months. Query 3 uses a correlated COUNT in SELECT — for each product, count how many other products in the same category have a lower price. The p2.product_id <> p.product_id condition excludes the product from counting itself. This produces a natural ranking: the product with the most cheaper alternatives has the highest rank in its category."
       />
 
       <HR />

@@ -712,7 +712,7 @@ ORDER BY g.store_id, g.category, g.order_month;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshMart business team wants a complete payment method performance report. Write a query using CROSS JOIN that shows for every (store, payment_method) combination: store_id, city, payment_method, order_count (0 if none), total_revenue (0 if none), avg_order_value (NULL is acceptable for zero combinations), and a 'performance' column: 'Strong' if revenue > ₹1500, 'Moderate' if revenue > ₹500, 'Weak' if revenue > 0, 'No activity' if zero. Use the four payment methods: UPI, Card, COD, NetBanking. Only include delivered orders. Sort by store_id then total_revenue descending."
+        question="The FreshCart business team wants a complete payment method performance report. Write a query using CROSS JOIN that shows for every (store, payment_method) combination: store_id, city, payment_method, order_count (0 if none), total_revenue (0 if none), avg_order_value (NULL is acceptable for zero combinations), and a 'performance' column: 'Strong' if revenue > ₹1500, 'Moderate' if revenue > ₹500, 'Weak' if revenue > 0, 'No activity' if zero. Use the four payment methods: UPI, Card, COD, NetBanking. Only include delivered orders. Sort by store_id then total_revenue descending."
         hint="CROSS JOIN stores × VALUES payment methods. LEFT JOIN actual delivered order data aggregated by (store_id, payment_method). COALESCE for zeros. CASE on revenue for performance band."
         answer={`WITH grid AS (
   SELECT

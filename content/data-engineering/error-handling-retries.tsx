@@ -1098,7 +1098,7 @@ def reprocess_dlq_records(
 # Subject: [P1] orders_incremental pipeline FAILED — data stale since 06:00 UTC
 
 ALERT BODY:
-  Pipeline:   orders_incremental (FreshMart Silver Layer)
+  Pipeline:   orders_incremental (FreshCart Silver Layer)
   Status:     FAILED
   Failed at:  2026-03-17 06:23:41 UTC
   Error:      psycopg2.OperationalError: could not connect to server
@@ -1285,7 +1285,7 @@ with DAG(
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshMart · Weekly vendor reconciliation file
+            Scenario — FreshCart · Weekly vendor reconciliation file
           </div>
 
           <Para>

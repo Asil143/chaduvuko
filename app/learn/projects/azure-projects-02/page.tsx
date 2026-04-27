@@ -158,7 +158,7 @@ export default function Project02Page() {
         In Project 01 we solved the first problem — we moved a single CSV file from a laptop to Azure automatically. But here is where the real world gets complicated.
       </p>
       <p>
-        FreshMart does not have 1 store. They have <strong>10 stores</strong>. Every night, each store manager exports their own sales file:
+        FreshCart does not have 1 store. They have <strong>10 stores</strong>. Every night, each store manager exports their own sales file:
       </p>
 
       <div className="my-6 overflow-x-auto rounded-xl" style={{ border: '1px solid var(--border)' }}>

@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -v \"^$\")"
+      "Bash(grep -v \"^$\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/learn/sql/acid-properties)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/learn/sql)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/learn/sql/select-from)"
     ],
     "additionalDirectories": [
       "/Users/asil/Chaduvuko/app/learn/sql/[topic]"

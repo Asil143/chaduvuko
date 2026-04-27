@@ -545,7 +545,7 @@ WHERE notes LIKE '%50\%%' ESCAPE '\'   -- contains literal '50%'`}
       />
 
       <SQLPlayground
-        initialQuery={`-- LIKE pattern filtering on FreshMart data
+        initialQuery={`-- LIKE pattern filtering on FreshCart data
 SELECT
   product_name,
   category,
@@ -794,7 +794,7 @@ LIMIT 10;`}
 
       <SQLPlayground
         initialQuery={`-- Simulated seller data cleaning pipeline
--- Using FreshMart employees as stand-in for seller records
+-- Using FreshCart employees as stand-in for seller records
 SELECT
   employee_id                                        AS seller_id,
 
@@ -907,7 +907,7 @@ LIMIT 10;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a query that generates a clean customer directory from FreshMart's customers table. Each row should show: a display_id (format: 'CUST-' followed by zero-padded 6-digit customer_id), clean_name (first + last name in Title Case, trimmed), username (everything before @ in email, lowercased), domain (everything after @ in email, lowercased), city_display (city in Title Case), a customer_slug (lowercase first name + '.' + lowercase last name + '-' + customer_id, all spaces replaced with hyphens), and a short_label (first initial + '. ' + last name, e.g. 'A. Khan'). Order by clean_name. Only include customers whose email contains an @ symbol."
+        question="Write a query that generates a clean customer directory from FreshCart's customers table. Each row should show: a display_id (format: 'CUST-' followed by zero-padded 6-digit customer_id), clean_name (first + last name in Title Case, trimmed), username (everything before @ in email, lowercased), domain (everything after @ in email, lowercased), city_display (city in Title Case), a customer_slug (lowercase first name + '.' + lowercase last name + '-' + customer_id, all spaces replaced with hyphens), and a short_label (first initial + '. ' + last name, e.g. 'A. Khan'). Order by clean_name. Only include customers whose email contains an @ symbol."
         hint="LPAD for zero-padding, INITCAP(LOWER(TRIM())) for Title Case, SPLIT_PART for email parts, LOWER + REPLACE for slug, LEFT(first_name,1) for initial. WHERE email LIKE '%@%'."
         answer={`SELECT
   'CUST-' || LPAD(customer_id::TEXT, 6, '0')          AS display_id,

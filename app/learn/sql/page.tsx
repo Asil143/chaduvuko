@@ -95,7 +95,7 @@ export default function SQLTrackPage() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
           {[
-            { icon: '▶', title: 'Live SQL Playground',   desc: 'Run real queries in your browser — no install, no account. Uses DuckDB-WASM with the FreshMart database preloaded.',               color: '#06b6d4', href: '/learn/sql/playground' },
+            { icon: '▶', title: 'Live SQL Playground',   desc: 'Run real queries in your browser — no install, no account. Uses DuckDB-WASM with the FreshCart database preloaded.',               color: '#06b6d4', href: '/learn/sql/playground' },
             { icon: '◎', title: 'Try It Challenges',     desc: "Every module ends with a practice question. Reveal the answer and explanation when you're ready.",                                  color: '#10b981', href: '/learn/sql/what-is-a-database' },
             { icon: '⊞', title: 'Visual JOIN Diagrams',  desc: "Row-matching visualizations that make joins click — switch between INNER, LEFT, RIGHT, and FULL OUTER live.",                      color: '#8b5cf6', href: '/learn/sql/joins' },
             { icon: '≡', title: 'SQL Cheat Sheet',       desc: "All 62 modules' syntax on one printable page. Bookmark it for interviews.",                                                        color: '#f97316', href: '/learn/sql/cheatsheet' },
@@ -117,16 +117,16 @@ export default function SQLTrackPage() {
         </div>
       </div>
 
-      {/* ── FreshMart Database ──────────────────────────────────────────── */}
+      {/* ── FreshCart Database ──────────────────────────────────────────── */}
       <div style={{ marginBottom: 40 }}>
         <div style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 8 }}>
           Your learning dataset
         </div>
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px,2.5vw,24px)', fontWeight: 900, letterSpacing: '-1px', margin: '0 0 8px' }}>
-          The FreshMart Database
+          The FreshCart Database
         </h2>
         <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 580, marginBottom: 20 }}>
-          Every module, every query, every example uses FreshMart — a fictional Indian grocery chain with 10 stores across Bangalore, Hyderabad, Mumbai, Delhi, Chennai, and Ahmedabad.
+          Every module, every query, every example uses FreshCart — a fictional Indian grocery chain with 10 stores across Bangalore, Hyderabad, Mumbai, Delhi, Chennai, and Ahmedabad.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
           {SQL_TABLES.map(table => (
@@ -411,7 +411,7 @@ export default function SQLTrackPage() {
           fontSize: 14, color: 'var(--muted)', lineHeight: 1.7,
           maxWidth: 480, margin: '0 auto 24px',
         }}>
-          Every module runs entirely in your browser. Write real SQL against the FreshMart database
+          Every module runs entirely in your browser. Write real SQL against the FreshCart database
           from your very first lesson.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>

@@ -822,7 +822,7 @@ REVOKE EXECUTE ON PROCEDURE sp_upgrade_loyalty_tier(INTEGER) FROM PUBLIC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- List all routines in the FreshMart database
+        initialQuery={`-- List all routines in the FreshCart database
 SELECT
   routine_name,
   routine_type,
@@ -971,7 +971,7 @@ $$;
 
       <SQLPlayground
         initialQuery={`-- Simulate the tier calculation the procedure would perform
--- (FreshMart equivalent: seller = store, orders = store orders)
+-- (FreshCart equivalent: seller = store, orders = store orders)
 WITH store_revenue AS (
   SELECT
     store_id,
@@ -1089,7 +1089,7 @@ ORDER BY monthly_revenue DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Design two stored procedures for FreshMart. (1) Write the CREATE PROCEDURE statement for sp_daily_store_summary that takes a p_summary_date DATE parameter (defaulting to CURRENT_DATE - 1) and computes for each store: total delivered orders, total revenue, average order value, and the store's best-selling product category (by revenue). The procedure should INSERT these results into a store_daily_summary table and log the run with a RAISE NOTICE showing how many stores were processed. Use a CTE inside the procedure for the category calculation. (2) Write the CREATE PROCEDURE statement for sp_reorder_low_stock that takes a p_threshold INTEGER parameter (default 5) and for every product where in_stock = false (simulating low stock), INSERTs a reorder request into a reorder_queue table with product_id, product_name, category, unit_price, and requested_at = NOW(). It should use a FOR loop over the low-stock products and count how many reorder requests were created. Show the DECLARE section, the logic, exception handling, and what a CALL would look like for each."
+        question="Design two stored procedures for FreshCart. (1) Write the CREATE PROCEDURE statement for sp_daily_store_summary that takes a p_summary_date DATE parameter (defaulting to CURRENT_DATE - 1) and computes for each store: total delivered orders, total revenue, average order value, and the store's best-selling product category (by revenue). The procedure should INSERT these results into a store_daily_summary table and log the run with a RAISE NOTICE showing how many stores were processed. Use a CTE inside the procedure for the category calculation. (2) Write the CREATE PROCEDURE statement for sp_reorder_low_stock that takes a p_threshold INTEGER parameter (default 5) and for every product where in_stock = false (simulating low stock), INSERTs a reorder request into a reorder_queue table with product_id, product_name, category, unit_price, and requested_at = NOW(). It should use a FOR loop over the low-stock products and count how many reorder requests were created. Show the DECLARE section, the logic, exception handling, and what a CALL would look like for each."
         hint="Procedure 1: CTE with RANK() OVER (PARTITION BY store_id ORDER BY category_revenue DESC) to get best category per store, then INSERT ... SELECT from the CTE. Procedure 2: FOR v_product IN SELECT ... WHERE NOT in_stock LOOP INSERT ... v_count := v_count + 1; END LOOP."
         answer={`-- Procedure 1: Daily store summary
 CREATE OR REPLACE PROCEDURE sp_daily_store_summary(

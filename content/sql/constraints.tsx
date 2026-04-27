@@ -207,7 +207,7 @@ ALTER TABLE customers ALTER COLUMN phone SET NOT NULL;
       />
 
       <SQLPlayground
-        initialQuery={`-- Check which FreshMart columns are nullable
+        initialQuery={`-- Check which FreshCart columns are nullable
 SELECT
   column_name,
   is_nullable,
@@ -358,7 +358,7 @@ ALTER TABLE products DROP CONSTRAINT chk_products_price_positive;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Demonstrate CHECK enforcement on FreshMart
+        initialQuery={`-- Demonstrate CHECK enforcement on FreshCart
 -- Try to insert a product with a negative price (violates CHECK)
 INSERT INTO products (product_name, category, brand, unit_price, cost_price, in_stock)
 VALUES ('Test Product', 'Dairy', 'TestBrand', -50.00, 30.00, true);
@@ -423,7 +423,7 @@ CREATE TABLE order_items (
       />
 
       <SQLPlayground
-        initialQuery={`-- See primary keys across FreshMart tables
+        initialQuery={`-- See primary keys across FreshCart tables
 SELECT
   table_name,
   column_name,
@@ -623,12 +623,12 @@ CONSTRAINT chk_delivery_after_order  CHECK (delivery_date IS NULL OR delivery_da
       <HR />
 
       {/* ── PART 10 ── */}
-      <Part n="10" title="Constraints in Practice — FreshMart Complete Schema" />
+      <Part n="10" title="Constraints in Practice — FreshCart Complete Schema" />
 
-      <P>Here is the FreshMart schema with every constraint fully named and annotated. This is the production-quality standard for constraint design.</P>
+      <P>Here is the FreshCart schema with every constraint fully named and annotated. This is the production-quality standard for constraint design.</P>
 
       <SQLPlayground
-        initialQuery={`-- Verify FreshMart's existing constraints using information_schema
+        initialQuery={`-- Verify FreshCart's existing constraints using information_schema
 SELECT
   tc.table_name,
   tc.constraint_name,
@@ -646,7 +646,7 @@ ORDER BY tc.table_name, tc.constraint_type, kcu.column_name;`}
       />
 
       <CodeBlock
-        label="Production-quality FreshMart schema — all constraints named"
+        label="Production-quality FreshCart schema — all constraints named"
         code={`CREATE TABLE customers (
   customer_id  INTEGER        NOT NULL,
   first_name   VARCHAR(100)   NOT NULL,
@@ -760,7 +760,7 @@ CREATE TABLE payments (
       <IQ q="What is the difference between PRIMARY KEY and UNIQUE constraints?">
         <p style={{ margin: '0 0 14px' }}>Both PRIMARY KEY and UNIQUE prevent duplicate values in the specified column(s), but they differ in three important ways. First, NULL handling: PRIMARY KEY implicitly adds NOT NULL — no row can have NULL in a PK column. UNIQUE allows NULL, and multiple rows can have NULL in a UNIQUE column because NULL ≠ NULL in SQL's three-valued logic. Second, cardinality: a table can have only one PRIMARY KEY but can have multiple UNIQUE constraints on different columns or combinations. Third, purpose: PRIMARY KEY designates the row's canonical identifier — the column that other tables reference as a foreign key target. UNIQUE enforces uniqueness on other columns that must be unique but are not the primary identifier (email, phone, external reference codes).</p>
         <p style={{ margin: '0 0 14px' }}>Both create an index automatically — queries that filter on PK or UNIQUE columns are always fast because the index makes lookups efficient.</p>
-        <p style={{ margin: 0 }}>A practical example from FreshMart: customers.customer_id is the PRIMARY KEY — it is the row identifier that orders.customer_id references as a foreign key. customers.email is UNIQUE — no two customers can share an email, but email is not the primary identifier (customers can change emails, emails are not always present, and the system uses customer_id internally). The guideline: every table gets one PRIMARY KEY for the immutable row identifier, and UNIQUE constraints on any other columns that must have distinct values.</p>
+        <p style={{ margin: 0 }}>A practical example from FreshCart: customers.customer_id is the PRIMARY KEY — it is the row identifier that orders.customer_id references as a foreign key. customers.email is UNIQUE — no two customers can share an email, but email is not the primary identifier (customers can change emails, emails are not always present, and the system uses customer_id internally). The guideline: every table gets one PRIMARY KEY for the immutable row identifier, and UNIQUE constraints on any other columns that must have distinct values.</p>
       </IQ>
 
       <IQ q="What does a CHECK constraint enforce and what are its limitations?">
@@ -826,7 +826,7 @@ CREATE TABLE payments (
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshMart is adding a promotions system. Design a CREATE TABLE statement for a 'promotions' table with these rules: each promotion has a unique code (e.g. 'DIWALI24'), a description, a discount percentage (must be between 1 and 90), a minimum order value (must be above 0, defaults to 0), a start_date and end_date (end must be after start), an is_active flag (defaults to true), and it belongs to a store (nullable — some promotions apply to all stores). Name all constraints. Then write ALTER TABLE statements to: (1) add a maximum usage count column (integer, must be above 0 if set), and (2) add a UNIQUE constraint on (store_id, promo_code) so the same code cannot be used twice in the same store."
+        question="FreshCart is adding a promotions system. Design a CREATE TABLE statement for a 'promotions' table with these rules: each promotion has a unique code (e.g. 'DIWALI24'), a description, a discount percentage (must be between 1 and 90), a minimum order value (must be above 0, defaults to 0), a start_date and end_date (end must be after start), an is_active flag (defaults to true), and it belongs to a store (nullable — some promotions apply to all stores). Name all constraints. Then write ALTER TABLE statements to: (1) add a maximum usage count column (integer, must be above 0 if set), and (2) add a UNIQUE constraint on (store_id, promo_code) so the same code cannot be used twice in the same store."
         hint="Cross-column CHECK for end > start. Named constraints with chk_ prefix. ALTER TABLE ADD COLUMN then ADD CONSTRAINT."
         answer={`-- CREATE TABLE with all named constraints
 CREATE TABLE promotions (

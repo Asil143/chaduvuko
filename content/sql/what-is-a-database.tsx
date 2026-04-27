@@ -140,10 +140,10 @@ export default function WhatIsADatabase() {
       {/* ── PART 03 ── */}
       <Part n="03" title="Tables, Rows, Columns, Primary Keys and Foreign Keys" />
 
-      <P>A relational database stores all data in <Hl>tables</Hl>. A table holds exactly one type of thing. FreshMart has a table for customers, a separate table for orders, one for products, and so on. You never mix two types of things in the same table — that single rule is the most important design principle in all of SQL.</P>
+      <P>A relational database stores all data in <Hl>tables</Hl>. A table holds exactly one type of thing. FreshCart has a table for customers, a separate table for orders, one for products, and so on. You never mix two types of things in the same table — that single rule is the most important design principle in all of SQL.</P>
 
       <H>Rows and Columns</H>
-      <P><Hl>Columns</Hl> are the fields — the specific pieces of information you track about that type of thing. <Hl>Rows</Hl> are the individual records — one row per instance. In the FreshMart customers table, columns include first_name, city, and loyalty_tier. Each row is one specific customer.</P>
+      <P><Hl>Columns</Hl> are the fields — the specific pieces of information you track about that type of thing. <Hl>Rows</Hl> are the individual records — one row per instance. In the FreshCart customers table, columns include first_name, city, and loyalty_tier. Each row is one specific customer.</P>
 
       <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', margin: '20px 0 32px' }}>
         <div style={{ padding: '10px 16px', background: `${C}15`, borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -191,14 +191,14 @@ export default function WhatIsADatabase() {
       </div>
 
       <H>Primary Keys — Every Row's Unique ID</H>
-      <P>Every table must have a column whose value is unique for every row and is never NULL. That column is called the <Hl>Primary Key</Hl>. In FreshMart's customers table, customer_id is the primary key. No two customers can ever share the same customer_id. The database enforces this automatically — if you try to insert a second customer with customer_id = 1, it will throw an error and reject the insert.</P>
+      <P>Every table must have a column whose value is unique for every row and is never NULL. That column is called the <Hl>Primary Key</Hl>. In FreshCart's customers table, customer_id is the primary key. No two customers can ever share the same customer_id. The database enforces this automatically — if you try to insert a second customer with customer_id = 1, it will throw an error and reject the insert.</P>
       <P>Primary keys are almost always integers that auto-increment — the database generates 1, 2, 3, 4... automatically every time a new row is inserted. You never type a primary key value manually. The database does it for you. This means every customer, every order, every product always has a unique identifier you can refer to precisely — no ambiguity, no duplicates.</P>
 
       <H>Foreign Keys — How Tables Connect to Each Other</H>
       <P>The power of a relational database comes from linking tables. The orders table has a column called customer_id. This is a <Hl>Foreign Key</Hl> — it stores the primary key value of a row in another table, creating an enforced link between them. Order 1001 has customer_id = 1. That 1 means Aisha Khan placed this order. The database enforces this link: you cannot insert an order with customer_id = 999 if no customer with id 999 exists. This prevents orphaned records — orders that point to nobody.</P>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 20px', margin: '20px 0 32px', fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2 }}>
-        <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 12 }}>How FreshMart's 6 tables are linked</div>
+        <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 12 }}>How FreshCart's 6 tables are linked</div>
         <div style={{ color: 'var(--text)' }}>
           customers.customer_id <span style={{ color: C }}>←——</span> orders.customer_id<br />
           orders.order_id <span style={{ color: C }}>←——</span> order_items.order_id<br />
@@ -287,9 +287,9 @@ export default function WhatIsADatabase() {
       <HR />
 
       {/* ── PART 06 ── */}
-      <Part n="06" title="The FreshMart Database — Your SQL Dataset for All 62 Modules" />
+      <Part n="06" title="The FreshCart Database — Your SQL Dataset for All 62 Modules" />
 
-      <P>Every single module in this course — from Module 01 to Module 62 — uses the same database: <Hl>FreshMart</Hl>. A fictional Indian grocery chain. 10 stores across Bangalore, Hyderabad, Mumbai, Delhi, Chennai, Pune, and Ahmedabad. Real Indian brands — Amul, Tata, Nestle, Britannia, P&G. Realistic prices, realistic data.</P>
+      <P>Every single module in this course — from Module 01 to Module 62 — uses the same database: <Hl>FreshCart</Hl>. A fictional Indian grocery chain. 10 stores across Bangalore, Hyderabad, Mumbai, Delhi, Chennai, Pune, and Ahmedabad. Real Indian brands — Amul, Tata, Nestle, Britannia, P&G. Realistic prices, realistic data.</P>
       <P>You will know this database so well by Module 62 that you could rebuild it from memory. That depth of familiarity with one dataset is intentional — every query you write will feel meaningful, not academic.</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12, margin: '24px 0 32px' }}>
@@ -319,8 +319,8 @@ export default function WhatIsADatabase() {
       {/* ── PART 07 ── */}
       <Part n="07" title="The Live SQL Playground — Run Queries Right Now" />
 
-      <P>Every module in this course has a live SQL playground. The FreshMart database is loaded and ready the moment the page opens — no install, no account, no cloud. It runs entirely in your browser using DuckDB-WASM.</P>
-      <P>Do not worry about understanding the syntax below yet. That starts in Module 05. For now, click <Hl>Run</Hl> and see real FreshMart data appear.</P>
+      <P>Every module in this course has a live SQL playground. The FreshCart database is loaded and ready the moment the page opens — no install, no account, no cloud. It runs entirely in your browser using DuckDB-WASM.</P>
+      <P>Do not worry about understanding the syntax below yet. That starts in Module 05. For now, click <Hl>Run</Hl> and see real FreshCart data appear.</P>
 
       <SQLPlayground
         initialQuery={`-- Every customer and their loyalty tier
@@ -404,7 +404,7 @@ ORDER BY revenue DESC;`}
       </IQ>
 
       <IQ q="What is a foreign key and what problem does it solve?">
-        <p style={{ margin: '0 0 14px' }}>A foreign key is a column in one table that stores the primary key value of a row in another table, creating an enforced relationship between the two. In FreshMart, the orders table has a customer_id column that references customers.customer_id. The database enforces this: any insert into orders must provide a customer_id that already exists in the customers table. An insert with customer_id = 9999 when no customer 9999 exists will fail immediately.</p>
+        <p style={{ margin: '0 0 14px' }}>A foreign key is a column in one table that stores the primary key value of a row in another table, creating an enforced relationship between the two. In FreshCart, the orders table has a customer_id column that references customers.customer_id. The database enforces this: any insert into orders must provide a customer_id that already exists in the customers table. An insert with customer_id = 9999 when no customer 9999 exists will fail immediately.</p>
         <p style={{ margin: '0 0 14px' }}>The problem foreign keys solve is called referential integrity — ensuring relationships between tables are always valid. Without foreign keys, you could insert orders pointing to customers who do not exist, delete customers who still have orders referencing them, or end up with thousands of orphaned records that point to nothing. When you later join orders to customers, those orphaned rows silently disappear from the results with no error message — a data quality disaster that is extremely difficult to debug.</p>
         <p style={{ margin: 0 }}>Foreign keys also define the structure of every JOIN query you will write. When you join orders to customers, you join on the foreign key relationship: ON orders.customer_id = customers.customer_id. Understanding foreign keys is the foundational prerequisite to writing any correct JOIN.</p>
       </IQ>
@@ -460,7 +460,7 @@ ORDER BY revenue DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="A customer in Bangalore places an order on FreshMart's app. She buys Amul Milk, Tata Atta, and Maggi. How many tables in the FreshMart database are involved in storing that single transaction — and which ones are they?"
+        question="A customer in Bangalore places an order on FreshCart's app. She buys Amul Milk, Tata Atta, and Maggi. How many tables in the FreshCart database are involved in storing that single transaction — and which ones are they?"
         hint="Think step by step: who placed it (1 table), what is the order itself (1 table), what products were bought (how many tables does that involve)?"
         answer={`5 tables are involved:
 
@@ -468,7 +468,7 @@ ORDER BY revenue DESC;`}
 2. orders — stores the order itself (order_id, date, store, status, payment method, total)  
 3. order_items — stores 3 rows, one per product (Amul Milk × 1, Tata Atta × 1, Maggi × 2)
 4. products — each order_items row links here to get the product name, price, and category
-5. stores — the orders row links here to record which FreshMart location processed the order
+5. stores — the orders row links here to record which FreshCart location processed the order
 
 The employees table is not directly involved in recording the transaction, though a store's employees are associated with that store.`}
         explanation="This is the relational model in action. One real-world event — a customer buying 3 products — is split across 5 coordinated tables. Each table stores exactly one type of thing. The tables are linked through foreign keys. When you query this data with SQL, you will JOIN these tables back together to answer questions like 'What did each customer buy, and from which store?' Understanding this structure is the foundation of every JOIN query you will write from Module 30 onwards."
@@ -486,8 +486,8 @@ The employees table is not directly involved in recording the transaction, thoug
           'Foreign Keys create enforced links between tables. You cannot insert a row that references a parent that does not exist. This prevents orphaned records and is the foundation of every JOIN query you will write.',
           'RDBMS (Relational Database Management System) is the category that MySQL, PostgreSQL, Oracle, SQL Server, and SQLite belong to. SQL is the standardised query language for this model — 95% identical across all of them.',
           'In Indian tech: PostgreSQL is default at fintech startups (Razorpay, CRED, Zerodha). MySQL dominates high-traffic consumer apps (Swiggy, Nykaa). MS SQL Server is standard in banking (HDFC, ICICI). SQLite runs inside every mobile app.',
-          'FreshMart — 6 tables, 218 total rows, realistic Indian data — is the dataset for all 62 modules. Learn it once and use it for every single query in the course.',
-          'A live SQL playground powered by DuckDB-WASM runs on every module page. Zero install, zero account, zero server — the FreshMart database is pre-loaded and ready the moment the page opens.',
+          'FreshCart — 6 tables, 218 total rows, realistic Indian data — is the dataset for all 62 modules. Learn it once and use it for every single query in the course.',
+          'A live SQL playground powered by DuckDB-WASM runs on every module page. Zero install, zero account, zero server — the FreshCart database is pre-loaded and ready the moment the page opens.',
           'SQL is not just a "data" skill. Every product manager, growth analyst, operations lead, and finance analyst at every Indian tech company uses SQL daily. It is the highest-return technical skill learnable in under 3 months.',
         ]}
       />

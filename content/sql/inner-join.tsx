@@ -269,12 +269,12 @@ ORDER BY monthly_payroll DESC;`}
       <HR />
 
       {/* ── PART 04 ── */}
-      <Part n="04" title="Four-Table INNER JOIN — The FreshMart Master Query" />
+      <Part n="04" title="Four-Table INNER JOIN — The FreshCart Master Query" />
 
-      <P>The full FreshMart order detail query joins all four core tables: orders, customers, stores, order_items, and products. This five-table join (treating order_items as the bridge between orders and products) is the foundation for almost every sales and customer report.</P>
+      <P>The full FreshCart order detail query joins all four core tables: orders, customers, stores, order_items, and products. This five-table join (treating order_items as the bridge between orders and products) is the foundation for almost every sales and customer report.</P>
 
       <SQLPlayground
-        initialQuery={`-- FreshMart master join — full order line detail
+        initialQuery={`-- FreshCart master join — full order line detail
 SELECT
   o.order_id,
   o.order_date,
@@ -745,7 +745,7 @@ JOIN customers AS c ON o.customer_id = c.customer_id
       <P>You are a senior analyst at Meesho, India's social commerce platform. The growth team needs a weekly seller performance report — for each seller, show total orders handled, revenue generated, unique products listed, average order value, and the top product category. This is a multi-table INNER JOIN with aggregation — the most common production analytics pattern.</P>
 
       <TimeBlock time="9:00 AM" label="Requirements received">
-        Weekly seller performance: seller_id, seller_name, total orders, total revenue, unique products, avg order value, top category. Adapted for FreshMart: store performance with product category breakdown.
+        Weekly seller performance: seller_id, seller_name, total orders, total revenue, unique products, avg order value, top category. Adapted for FreshCart: store performance with product category breakdown.
       </TimeBlock>
 
       <TimeBlock time="9:20 AM" label="Step 1 — build the base join">

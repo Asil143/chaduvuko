@@ -351,7 +351,7 @@ EFFECTIVITY SATELLITE (for relationship end dates):
 
   SOURCE SYSTEMS
   ────────────────────────────────────────────────────────────────────────
-  FreshMart Orders DB    Loyalty App    Finance System    Logistics Partner
+  FreshCart Orders DB    Loyalty App    Finance System    Logistics Partner
 
   ▼ Extract → Stage (typed landing, hash keys pre-computed, record_source set)
 
@@ -567,15 +567,15 @@ freshmart_vault/
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12, fontFamily: 'var(--font-mono)' }}>
           💼 What This Looks Like at Work
         </div>
-        <SectionTitle>FreshMart Acquires QuickBasket — Why the Vault Handles Integration Cleanly</SectionTitle>
+        <SectionTitle>FreshCart Acquires QuickBasket — Why the Vault Handles Integration Cleanly</SectionTitle>
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Scenario — FreshMart acquires QuickBasket and must integrate their data
+            Scenario — FreshCart acquires QuickBasket and must integrate their data
           </div>
 
           <Para>
-            QuickBasket has customer_id range 1–500,000 (overlapping with FreshMart),
+            QuickBasket has customer_id range 1–500,000 (overlapping with FreshCart),
             different customer attributes (preferred_store), and a different order schema
             (basket_value not order_amount). Integration must complete in 6 weeks without
             disrupting existing analytics.
@@ -601,7 +601,7 @@ DATA VAULT APPROACH (additive, zero breaking changes):
            CURRENT_TIMESTAMP(), 'quickbasket_orders_db'
     FROM stg_quickbasket_customers
     ON CONFLICT DO NOTHING;
-    ← Existing FreshMart hub rows: UNTOUCHED
+    ← Existing FreshCart hub rows: UNTOUCHED
 
   Day 3: New satellite for QuickBasket-specific attributes
     SAT_CUSTOMER_QUICKBASKET — new table, never touches SAT_CUSTOMER_ORDERS_DB
@@ -612,14 +612,14 @@ DATA VAULT APPROACH (additive, zero breaking changes):
     LNK_ORDER_CUSTOMER accepts QuickBasket orders — record_source distinguishes them.
 
   Weeks 2-4: Same-as-link for identity resolution
-    Match QuickBasket customers to FreshMart customers via email/phone/name.
+    Match QuickBasket customers to FreshCart customers via email/phone/name.
     SAL_CUSTOMER records matched pairs.
     Business Vault resolves "master" identity.
 
   Weeks 5-6: Information Mart rebuilt to include QuickBasket
     dim_customer query reads from BOTH satellites (Business Vault resolves conflicts).
     fct_orders includes QuickBasket orders.
-    Existing FreshMart-only metrics: filter by record_source='freshmart_orders_db'.
+    Existing FreshCart-only metrics: filter by record_source='freshmart_orders_db'.
 
 RESULT: Zero breaking changes to existing analytics.
   QuickBasket data added in parallel new satellites.
@@ -673,9 +673,9 @@ PIT tables are part of the Business Vault layer — computed from the Raw Vault 
             q: 'Q4. How does Data Vault handle a new source system being added? What changes and what does not?',
             a: `Adding a new source system is one of Data Vault's strongest demonstrations of value. The changes are minimal and strictly additive — existing tables and processes are not touched.
 
-For a new source (QuickBasket) added to a vault that already has FreshMart data: create a new staging area for QuickBasket with its own staging tables. Add QuickBasket business keys to existing hubs by inserting new rows with record_source='quickbasket_orders_db'. The existing hub columns accommodate this with no schema change. Add QuickBasket relationships to existing link tables as new rows. Create new satellites specifically for QuickBasket attributes that are unique to that source.
+For a new source (QuickBasket) added to a vault that already has FreshCart data: create a new staging area for QuickBasket with its own staging tables. Add QuickBasket business keys to existing hubs by inserting new rows with record_source='quickbasket_orders_db'. The existing hub columns accommodate this with no schema change. Add QuickBasket relationships to existing link tables as new rows. Create new satellites specifically for QuickBasket attributes that are unique to that source.
 
-Nothing in the existing Raw Vault is modified. Existing FreshMart hub rows are unchanged. Existing FreshMart satellite rows are unchanged. Existing ETL processes continue loading FreshMart data without modification. Existing information marts continue producing correct FreshMart-only results — they filter by record_source implicitly through the Business Vault.
+Nothing in the existing Raw Vault is modified. Existing FreshCart hub rows are unchanged. Existing FreshCart satellite rows are unchanged. Existing ETL processes continue loading FreshCart data without modification. Existing information marts continue producing correct FreshCart-only results — they filter by record_source implicitly through the Business Vault.
 
 The only changes visible to analysts come in the Information Mart layer, where Business Vault rules are updated to integrate QuickBasket data. This is additive SQL — new satellite joins, source resolution rules in computed satellites — not schema changes.
 

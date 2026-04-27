@@ -571,11 +571,11 @@ balance = read_wallet_balance(user_id='U1234')
 # Read goes to 1 node, returns immediately
 # Maximum speed, minimum consistency
 
-# FreshMart product catalogue (can tolerate slight staleness):
+# FreshCart product catalogue (can tolerate slight staleness):
 # N=3, W=1, R=1 → fastest, eventually consistent
 # A product price being 30 seconds stale is acceptable
 
-# FreshMart order status (must be accurate):
+# FreshCart order status (must be accurate):
 # N=3, W=2, R=2 → W+R=4 > N=3 → consistent
 # A user checking whether their order is placed must get the truth
 
@@ -647,7 +647,7 @@ balance = read_wallet_balance(user_id='U1234')
 # shard_id = hash(entity_id) % num_shards
 # Writes are spread across shards, each shard has its own time ordering
 
-# DynamoDB example for FreshMart orders:
+# DynamoDB example for FreshCart orders:
 # Bad:  partition_key = date          → all orders for today on one partition
 # Good: partition_key = store_id      → 10 stores → 10 evenly distributed partitions
 # Best: partition_key = store_id + "#" + hour  → 10 stores × 24 hours = 240 partitions`}
