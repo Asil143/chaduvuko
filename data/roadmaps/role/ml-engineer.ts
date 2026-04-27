@@ -10,10 +10,10 @@ export const mlEngineerRoadmap: Roadmap = {
   level: 'intermediate',
   estimatedTime: '4–6 months',
   salaryData: [
-    { company: 'Service (Infosys / Wipro)', range: '₹7–12 LPA', note: 'Most common entry point' },
-    { company: 'Startup (Meesho / Sarvam)', range: '₹18–30 LPA', note: 'Strong ML portfolio needed' },
+    { company: 'Service (Deloitte / KPMG)', range: '₹7–12 LPA', note: 'Most common entry point' },
+    { company: 'Startup (Shopify / Sarvam)', range: '₹18–30 LPA', note: 'Strong ML portfolio needed' },
     { company: 'MNC / GCC', range: '₹22–40 LPA', note: 'Microsoft / Google India GCC' },
-    { company: 'FAANG India', range: '₹40–70 LPA', note: 'Extremely competitive' },
+    { company: 'FAANG', range: '₹40–70 LPA', note: 'Extremely competitive' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your ML engineering journey begins. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },

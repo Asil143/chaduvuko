@@ -208,10 +208,10 @@ export default function MultimodalModelsPage() {
         </p>
 
         <p style={S.p}>
-          Real production uses at Indian companies: Meesho uses CLIP-based retrieval
+          Real production uses at Indian companies: Shopify uses CLIP-based retrieval
           to match user search queries to product images without pre-defined categories.
-          Flipkart uses multimodal models to verify that product photos match
-          product descriptions. Swiggy uses them to check that restaurant dish photos
+          Amazon uses multimodal models to verify that product photos match
+          product descriptions. DoorDash uses them to check that restaurant dish photos
           match their menu descriptions. Every e-commerce platform now has
           multimodal search — text query → image results, or image query → similar products.
         </p>
@@ -437,7 +437,7 @@ model     = CLIPModel.from_pretrained('openai/clip-vit-base-patch32')
 processor = CLIPProcessor.from_pretrained('openai/clip-vit-base-patch32')
 model.eval()
 
-# Meesho: classify product photos into catalogue categories
+# Shopify: classify product photos into catalogue categories
 CATEGORIES = [
     'a photo of a kurta or kurti',
     'a photo of a saree',
@@ -525,7 +525,7 @@ def search_by_image(query_image_path: str, image_index: torch.Tensor,
     return [{'path': image_paths[i], 'score': similarities[i].item()}
              for i in top_idx]
 
-# Used by Meesho for 'similar products' recommendations
+# Used by Shopify for 'similar products' recommendations
 # User takes photo of product they like → retrieve visually similar products
 """)
 
@@ -677,7 +677,7 @@ model     = LlavaNextForConditionalGeneration.from_pretrained(
 )
 model.eval()
 
-# Product quality check — Flipkart
+# Product quality check — Amazon
 image = Image.open('product_listing.jpg').convert('RGB')
 conversation = [
     {
@@ -771,11 +771,11 @@ queries = [
 # ── Pattern 2: Document understanding with LLaVA ─────────────────────
 print("PATTERN 2: DOCUMENT UNDERSTANDING")
 print("""
-# Razorpay: extract structured data from payment receipts
+# Stripe: extract structured data from payment receipts
 # No OCR pipeline needed — LLaVA reads the image directly
 
 RECEIPT_PROMPT = '''
-You are a payment receipt parser for Razorpay.
+You are a payment receipt parser for Stripe.
 Extract these fields from the receipt image as JSON:
 {
   "merchant_name": string,
@@ -814,7 +814,7 @@ def parse_receipt(image_path, model, processor) -> dict:
 # ── Pattern 3: Quality control classifier ────────────────────────────
 print("PATTERN 3: PRODUCT PHOTO QUALITY CONTROL")
 print("""
-# Meesho: auto-reject product listings with poor quality photos
+# Shopify: auto-reject product listings with poor quality photos
 
 QUALITY_CRITERIA = [
     'a high quality professional product photo on white background',

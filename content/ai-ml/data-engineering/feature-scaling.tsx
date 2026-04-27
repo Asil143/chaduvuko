@@ -162,7 +162,7 @@ export default function FeatureScalingPage() {
         </h2>
 
         <p style={S.p}>
-          A Swiggy delivery prediction model has two features: distance in kilometres
+          A DoorDash delivery prediction model has two features: distance in kilometres
           (range 0.5–15) and order value in rupees (range 50–1200).
           To gradient descent, ₹1200 looks 80 times more important than 15km
           simply because the number is bigger — not because it actually is.
@@ -297,7 +297,7 @@ from sklearn.model_selection import train_test_split
 np.random.seed(42)
 n = 5000
 
-# Swiggy features — very different scales
+# DoorDash features — very different scales
 distance    = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)    # 0.5–15 km
 traffic     = np.random.randint(1, 11, n).astype(float)               # 1–10
 prep_time   = np.abs(np.random.normal(15, 5, n)).clip(5, 35)         # 5–35 min
@@ -982,7 +982,7 @@ np.random.seed(42)
 n = 5000
 
 restaurants = ['Pizza Hut','Biryani Blues',"McDonald's","Haldiram's",'Dominos','KFC']
-cities      = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai']
+cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
 
 distance    = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
 traffic     = np.random.randint(1, 11, n).astype(float)
@@ -1059,9 +1059,9 @@ print(f"RobustScaler stored scale_:   {robust_scaler.scale_.round(3)}")
 # ── Score new orders at inference time ────────────────────────────────
 new_orders = pd.DataFrame([
     {'distance_km': 2.1, 'traffic_score': 3, 'restaurant_prep': 10,
-     'order_value': 220, 'restaurant': 'KFC',       'city': 'Bangalore'},
+     'order_value': 220, 'restaurant': 'KFC',       'city': 'Seattle'},
     {'distance_km': 8.5, 'traffic_score': 9, 'restaurant_prep': 25,
-     'order_value': 680, 'restaurant': 'Pizza Hut', 'city': 'Mumbai'},
+     'order_value': 680, 'restaurant': 'Pizza Hut', 'city': 'New York'},
 ])
 predictions = pipe.predict(new_orders)
 for i, (_, row) in enumerate(new_orders.iterrows()):

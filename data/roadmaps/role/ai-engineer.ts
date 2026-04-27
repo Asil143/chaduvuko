@@ -11,9 +11,9 @@ export const aiEngineerRoadmap: Roadmap = {
   estimatedTime: '4–6 months',
   salaryData: [
     { company: 'Startup (early stage)', range: '₹12–20 LPA', note: 'Portfolio of shipped AI features needed' },
-    { company: 'Product company (Sarvam / Krutrim)', range: '₹20–40 LPA', note: 'Deep LLM knowledge expected' },
+    { company: 'Product company (Sarvam / Mistral)', range: '₹20–40 LPA', note: 'Deep LLM knowledge expected' },
     { company: 'MNC GCC (Microsoft / Google India)', range: '₹30–55 LPA', note: 'Research + engineering mix' },
-    { company: 'FAANG India', range: '₹45–80 LPA', note: 'Extremely competitive' },
+    { company: 'FAANG', range: '₹45–80 LPA', note: 'Extremely competitive' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your AI engineering journey starts. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },

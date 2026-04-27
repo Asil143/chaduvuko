@@ -13,7 +13,7 @@ export const pythonDeveloperRoadmap: Roadmap = {
     { company: 'Service / Outsourcing', range: '₹5–9 LPA', note: 'Entry point for most' },
     { company: 'Startup (fintech / e-comm)', range: '₹12–22 LPA', note: 'FastAPI + testing expected' },
     { company: 'MNC India', range: '₹16–30 LPA', note: 'Strong DSA + design patterns' },
-    { company: 'FAANG India', range: '₹30–55 LPA', note: 'Top-tier DSA required' },
+    { company: 'FAANG', range: '₹30–55 LPA', note: 'Top-tier DSA required' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your Python developer journey starts. Mark complete to unlock the language fundamentals.', x: 305, y: 20, width: 150, height: 60 },

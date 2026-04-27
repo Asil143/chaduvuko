@@ -631,9 +631,9 @@ print(f"Sum of squares: {total:,}")`} />
 # Every algorithm follows: __init__ → fit → predict/transform
 # Learning it once means you understand every sklearn algorithm automatically.
 
-class SwiggyDeliveryPredictor:
+class DoorDashDeliveryPredictor:
     """
-    Predicts Swiggy delivery time from order features.
+    Predicts DoorDash delivery time from order features.
     Follows the sklearn estimator interface.
     """
 
@@ -689,7 +689,7 @@ class SwiggyDeliveryPredictor:
     def __repr__(self):
         """String representation — shown in notebooks and debuggers."""
         return (
-            f"SwiggyDeliveryPredictor("
+            f"DoorDashDeliveryPredictor("
             f"lr={self.learning_rate}, epochs={self.n_epochs})"
         )
 
@@ -699,8 +699,8 @@ np.random.seed(42)
 X_train = np.random.randn(800, 4)
 y_train = 35 + X_train @ np.array([7.3, 1.5, 0.9, 2.1]) + np.random.randn(800)*3
 
-model = SwiggyDeliveryPredictor(learning_rate=0.01, n_epochs=200)
-print(model)        # SwiggyDeliveryPredictor(lr=0.01, epochs=200)
+model = DoorDashDeliveryPredictor(learning_rate=0.01, n_epochs=200)
+print(model)        # DoorDashDeliveryPredictor(lr=0.01, epochs=200)
 
 model.fit(X_train, y_train)   # trains in-place, returns self
 print(f"Weights: {model.weights_.round(2)}")   # learned: ~[7.3, 1.5, 0.9, 2.1]
@@ -965,13 +965,13 @@ for i, (features, label) in enumerate(dataset):
     print(f"  Sample {i}: features={features[:2].round(2)}, label={label:.2f}")
 
 # In PyTorch you would subclass torch.utils.data.Dataset:
-# class SwiggyDataset(torch.utils.data.Dataset):
+# class DoorDashDataset(torch.utils.data.Dataset):
 #     def __init__(self, X, y): self.X, self.y = X, y
 #     def __len__(self): return len(self.X)
 #     def __getitem__(self, idx): return self.X[idx], self.y[idx]
 #
 # Then DataLoader handles batching, shuffling, multi-process loading:
-# loader = DataLoader(SwiggyDataset(X_train, y_train), batch_size=32, shuffle=True)
+# loader = DataLoader(DoorDashDataset(X_train, y_train), batch_size=32, shuffle=True)
 # for X_batch, y_batch in loader: ...`} />
       </div>
 

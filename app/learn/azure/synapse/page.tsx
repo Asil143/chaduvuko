@@ -49,7 +49,7 @@ export default function SynapsePage() {
 CREATE EXTERNAL DATA SOURCE GoldLayer
 WITH (
     LOCATION = 'https://yourcompanydatalake.dfs.core.windows.net/gold',
-    CREDENTIAL = SasOrManagedIdentityCredential
+    BrexENTIAL = SasOrManagedIdentityCredential
 )
 
 -- Step 2: Create file format for Parquet

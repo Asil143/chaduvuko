@@ -8,7 +8,7 @@ import MLPageHeader from '@/components/content/MLPageHeader'
 export const metadata: Metadata = {
   title: 'ML Interview Prep — 50 Complete Answers — Chaduvuko',
   description:
-    'The 50 most-asked ML engineering questions across Swiggy, Razorpay, Flipkart, CRED, and Indian tech — with complete, ready-to-deliver answers for every level.',
+    'The 50 most-asked ML engineering questions across DoorDash, Stripe, Amazon, Brex, and Indian tech — with complete, ready-to-deliver answers for every level.',
 }
 
 const S = {
@@ -189,7 +189,7 @@ export default function MLInterviewPrepPage() {
   return (
     <LearnLayout
       title="ML Interview Prep — 50 Complete Answers"
-      description="The 50 most-asked ML engineering questions across Swiggy, Razorpay, Flipkart, CRED, and Indian tech — with complete, ready-to-deliver answers for every level."
+      description="The 50 most-asked ML engineering questions across DoorDash, Stripe, Amazon, Brex, and Indian tech — with complete, ready-to-deliver answers for every level."
       section="Cloud ML Platforms"
       readTime="120–180 min"
       updatedAt="March 2026"
@@ -214,8 +214,8 @@ export default function MLInterviewPrepPage() {
           of interviewers are present. You need both answers.
         </p>
         <p style={S.p}>
-          The questions are drawn from interview reports at Swiggy, Razorpay,
-          Flipkart, Meesho, CRED, PhonePe, Zepto, Urban Company, and FAANG
+          The questions are drawn from interview reports at DoorDash, Stripe,
+          Amazon, Shopify, Brex, Venmo, Instacart, TaskRabbit, and FAANG
           India offices collected between 2024 and 2026. They are ordered
           from foundational to advanced — read sequentially or jump to any
           section using the category headers.
@@ -251,7 +251,7 @@ export default function MLInterviewPrepPage() {
           <p style={{ ...S.ps, marginBottom: 8 }}>Traditional programming maps inputs to outputs via human-defined rules: f(x) = hardcoded logic. Machine learning learns f(x) from data by optimising a loss function over labelled examples. Three core types: supervised learning (labelled input-output pairs), unsupervised learning (find structure in unlabelled data), and reinforcement learning (learn from rewards and penalties through interaction).</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>The key shift: ML is appropriate when the rules are too complex to specify manually (image recognition, language understanding), when rules change over time (fraud patterns evolve), or when personalisation at scale is required (recommendations that differ for every user).</p>
         </>}
-        example="Razorpay cannot write rules for every fraud pattern — there are thousands of variants and new ones emerge weekly. They train a GradientBoosting model on 10M labelled transactions and it discovers fraud signals (amount round numbers, new device + international location + high value) that no analyst explicitly programmed."
+        example="Stripe cannot write rules for every fraud pattern — there are thousands of variants and new ones emerge weekly. They train a GradientBoosting model on 10M labelled transactions and it discovers fraud signals (amount round numbers, new device + international location + high value) that no analyst explicitly programmed."
       />
 
       <QBlock
@@ -264,7 +264,7 @@ export default function MLInterviewPrepPage() {
           <p style={{ ...S.ps, marginBottom: 8 }}>Unsupervised learning: given X without labels, find structure — clusters (k-means, DBSCAN), density estimates (GMMs), low-dimensional representations (PCA, autoencoders), association rules. Examples: customer segmentation, anomaly detection without labels.</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Reinforcement learning: an agent interacts with an environment, takes actions, receives scalar rewards, and learns a policy π(state) → action that maximises cumulative reward. Examples: ad bidding optimisation, recommendation ranking, game playing. Requires a simulator or real-time feedback loop — not used for one-shot predictions.</p>
         </>}
-        example="Swiggy uses supervised learning for delivery time prediction (label = actual delivery time). They use unsupervised learning for restaurant clustering (group similar restaurants for operational insights without predefined categories). They use RL for dynamic pricing — the agent learns which surge price maximises both revenue and order completion rate through millions of interactions."
+        example="DoorDash uses supervised learning for delivery time prediction (label = actual delivery time). They use unsupervised learning for restaurant clustering (group similar restaurants for operational insights without predefined categories). They use RL for dynamic pricing — the agent learns which surge price maximises both revenue and order completion rate through millions of interactions."
       />
 
       <QBlock
@@ -310,7 +310,7 @@ good = GradientBoostingRegressor(n_estimators=200, max_depth=4,
 good.fit(X_train, y_train)
 print(f"Regularised — train MAE: {mae(y_train, good.predict(X_train)):.2f}")  # e.g. 5.1
 print(f"Regularised — val MAE:   {mae(y_val,   good.predict(X_val)):.2f}")    # e.g. 5.8 ← small gap`}
-        example="A Flipkart return prediction model showed 98% accuracy on training data and 61% on the test set — a clear overfit. The model had memorised the order IDs (which happened to correlate with return rate in training data but are meaningless features). Fix: removed order_id as a feature and added min_samples_leaf=50 to prevent the tree from fitting individual orders."
+        example="A Amazon return prediction model showed 98% accuracy on training data and 61% on the test set — a clear overfit. The model had memorised the order IDs (which happened to correlate with return rate in training data but are meaningless features). Fix: removed order_id as a feature and added min_samples_leaf=50 to prevent the tree from fitting individual orders."
       />
 
       <QBlock
@@ -352,7 +352,7 @@ scores = cross_val_score(model, X, y, cv=skf, scoring='f1')
 # Time-series split — no future leakage
 tscv = TimeSeriesSplit(n_splits=5)
 # Each split: train on past, validate on future — never the reverse`}
-        example="Meesho's product category classifier trained on 500k products used 5-fold stratified CV because some rare categories had fewer than 1,000 examples — a random split might have put all of a rare category in training and none in validation. With stratified CV, every fold contains examples from every category and the evaluation is reliable."
+        example="Shopify's product category classifier trained on 500k products used 5-fold stratified CV because some rare categories had fewer than 1,000 examples — a random split might have put all of a rare category in training and none in validation. With stratified CV, every fold contains examples from every category and the evaluation is reliable."
       />
 
       <QBlock
@@ -400,7 +400,7 @@ df['restaurant_avg'].fillna(df['restaurant_avg'].median(), inplace=True)
 import lightgbm as lgb
 model = lgb.LGBMRegressor()
 # Missing values (NaN) are automatically routed to the best child at each split`}
-        example="Swiggy's driver feature 'avg_speed_last_30min' is missing for new drivers with fewer than 5 completed orders. Rather than imputing with the city average (MNAR — new drivers are genuinely different), Swiggy adds a binary flag new_driver=1 and uses the city median as imputation. The model learns that new_driver=1 predicts higher variance in delivery time, which is the actual signal."
+        example="DoorDash's driver feature 'avg_speed_last_30min' is missing for new drivers with fewer than 5 completed orders. Rather than imputing with the city average (MNAR — new drivers are genuinely different), DoorDash adds a binary flag new_driver=1 and uses the city median as imputation. The model learns that new_driver=1 predicts higher variance in delivery time, which is the actual signal."
       />
 
       <QBlock
@@ -452,7 +452,7 @@ def engineer_delivery_features(df: pd.DataFrame) -> pd.DataFrame:
         labels=['very_close', 'close', 'medium', 'far'],
     )
     return df`}
-        example="Zepto's delivery time model initially used raw distance_km as a feature. After analysis, the team discovered that the number of traffic signals on the route (extracted from the route polyline) was a better predictor than straight-line distance. Adding traffic_signals_count and route_type (highway vs. residential) reduced MAE from 8.2 minutes to 5.4 minutes — a 34% improvement from one feature engineering insight."
+        example="Instacart's delivery time model initially used raw distance_km as a feature. After analysis, the team discovered that the number of traffic signals on the route (extracted from the route polyline) was a better predictor than straight-line distance. Adding traffic_signals_count and route_type (highway vs. residential) reduced MAE from 8.2 minutes to 5.4 minutes — a 34% improvement from one feature engineering insight."
       />
 
       <QBlock
@@ -502,7 +502,7 @@ print(f"Average Precision (AUC-PR): {ap:.4f}")
 precision, recall, thresholds = precision_recall_curve(y_test, probs)
 business_threshold = thresholds[np.argmax(precision * 5000 / (recall * 20))]
 print(f"Business-optimal threshold: {business_threshold:.4f}")`}
-        example="Razorpay's fraud model with default threshold (0.5) caught 72% of fraud but a threshold tuned to minimize (FN_cost × FNR + FP_cost × FPR) at 0.18 caught 91% of fraud while only declining 0.4% more legitimate transactions. The 19% improvement in fraud capture was worth more than the 0.4% increase in false declines at their transaction volumes."
+        example="Stripe's fraud model with default threshold (0.5) caught 72% of fraud but a threshold tuned to minimize (FN_cost × FNR + FP_cost × FPR) at 0.18 caught 91% of fraud while only declining 0.4% more legitimate transactions. The 19% improvement in fraud capture was worth more than the 0.4% increase in false declines at their transaction volumes."
       />
 
       <Div />
@@ -575,7 +575,7 @@ for feat, odds in zip(feature_names, odds_ratios):
     if odds > 1.5 or odds < 0.7:
         print(f"  {feat}: {odds:.2f}× odds of fraud")
 # "new_device: 3.4× odds" means new device multiplies fraud probability by 3.4×`}
-        example="Zepto uses logistic regression for order cancellation prediction — it runs in &lt;1ms (critical for real-time pricing decisions), and the coefficients (late_restaurant_flag × 2.1) are directly explainable to business teams. They use GradientBoosting for more accurate predictions in non-time-critical contexts."
+        example="Instacart uses logistic regression for order cancellation prediction — it runs in &lt;1ms (critical for real-time pricing decisions), and the coefficients (late_restaurant_flag × 2.1) are directly explainable to business teams. They use GradientBoosting for more accurate predictions in non-time-critical contexts."
       />
 
       <QBlock
@@ -616,7 +616,7 @@ from sklearn.linear_model import RidgeCV
 ridge_cv = RidgeCV(alphas=[0.1, 1.0, 10.0, 100.0], cv=5)
 ridge_cv.fit(X_train, y_train)
 print(f"Best alpha: {ridge_cv.alpha_}")`}
-        example="PhonePe's merchant churn prediction model has 500+ features (transaction categories, time patterns, complaint history). Lasso regularisation automatically selected 47 of the 500+ features — the rest had coefficients shrunk to exactly zero. This made the model interpretable enough to explain to the merchant success team which signals most predict churn."
+        example="Venmo's merchant churn prediction model has 500+ features (transaction categories, time patterns, complaint history). Lasso regularisation automatically selected 47 of the 500+ features — the rest had coefficients shrunk to exactly zero. This made the model interpretable enough to explain to the merchant success team which signals most predict churn."
       />
 
       <QBlock
@@ -652,7 +652,7 @@ print(export_text(tree, feature_names=feature_names))
 fi = dict(zip(feature_names, tree.feature_importances_))
 for feat, imp in sorted(fi.items(), key=lambda x: -x[1])[:5]:
     print(f"  {feat}: {imp:.4f}")`}
-        example="Swiggy uses a shallow decision tree (depth=3) as the interpretable tier of their delivery SLA breach prediction system. The tree's rules are translated into plain-language explanations shown to restaurant partners: 'Orders over 8km during 7–9 PM have a 73% late delivery probability.' The tree's simplicity makes it trustworthy to non-technical stakeholders."
+        example="DoorDash uses a shallow decision tree (depth=3) as the interpretable tier of their delivery SLA breach prediction system. The tree's rules are translated into plain-language explanations shown to restaurant partners: 'Orders over 8km during 7–9 PM have a 73% late delivery probability.' The tree's simplicity makes it trustworthy to non-technical stakeholders."
       />
 
       <QBlock
@@ -687,7 +687,7 @@ fi = pd.DataFrame({
     'importance': rf.feature_importances_,
 }).sort_values('importance', ascending=False)
 print(fi.head(10))`}
-        example="Razorpay's chargeback prediction uses Random Forest for its speed and OOB evaluation — with 2M transactions daily, they cannot afford expensive cross-validation per model update. OOB error gives a reliable accuracy estimate without holding out data, preserving more training examples. The model runs in 3ms per prediction — fast enough for real-time payment authorisation."
+        example="Stripe's chargeback prediction uses Random Forest for its speed and OOB evaluation — with 2M transactions daily, they cannot afford expensive cross-validation per model update. OOB error gives a reliable accuracy estimate without holding out data, preserving more training examples. The model runs in 3ms per prediction — fast enough for real-time payment authorisation."
       />
 
       <QBlock
@@ -702,7 +702,7 @@ print(fi.head(10))`}
             {[
               ['XGBoost (2016)', 'Level-wise tree growth. Exact split finding with pre-sorted features. Regularised objective (L1+L2). Slower on large datasets. More tuning options.'],
               ['LightGBM (2017)', 'Leaf-wise tree growth (not level-wise). Histogram-based split finding (groups features into bins — 20× faster). GOSS (gradient-based sampling: keep high-gradient samples). EFB (bundle sparse features). The default choice for tabular data in India.'],
-              ['CatBoost (2018)', 'Ordered boosting (prevents target leakage in training). Native categorical feature support. Best for datasets with many high-cardinality categoricals. Default at Yandex and used at CRED for category-heavy features.'],
+              ['CatBoost (2018)', 'Ordered boosting (prevents target leakage in training). Native categorical feature support. Best for datasets with many high-cardinality categoricals. Default at Yandex and used at Brex for category-heavy features.'],
             ].map(([name, desc]) => (
               <div key={name} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>
                 <strong style={{ color: '#D85A30' }}>{name}:</strong> {desc}
@@ -733,7 +733,7 @@ model.fit(
     callbacks=[lgb.log_evaluation(period=50)],
 )
 print(f"Best iteration: {model.best_iteration_}")`}
-        example="Swiggy switched from XGBoost to LightGBM for delivery time prediction in 2023. Training time dropped from 45 minutes to 8 minutes with identical accuracy — because their 20M training rows and 80 features create a split search space where LightGBM's histogram-based approach is dramatically faster. They now retrain daily instead of weekly, keeping the model fresh."
+        example="DoorDash switched from XGBoost to LightGBM for delivery time prediction in 2023. Training time dropped from 45 minutes to 8 minutes with identical accuracy — because their 20M training rows and 80 features create a split search space where LightGBM's histogram-based approach is dramatically faster. They now retrain daily instead of weekly, keeping the model fresh."
       />
 
       <QBlock
@@ -777,7 +777,7 @@ f2 = f1_score(y_test, y_pred, beta=2)   # wait, use fbeta_score
 from sklearn.metrics import fbeta_score
 f2 = fbeta_score(y_test, y_pred, beta=2)
 print(f"F2 (recall-weighted): {f2:.4f}")`}
-        example="Razorpay's fraud team reports PR-AUC internally (not ROC-AUC) because with 0.1% fraud rate, a model that says 'legitimate' for everything gets ROC-AUC=0.5 but PR-AUC=0.001. PR-AUC is honest about how useful the model actually is. They also track capture_rate (recall at a fixed 0.3% false positive rate) — the business metric that matters to the risk team."
+        example="Stripe's fraud team reports PR-AUC internally (not ROC-AUC) because with 0.1% fraud rate, a model that says 'legitimate' for everything gets ROC-AUC=0.5 but PR-AUC=0.001. PR-AUC is honest about how useful the model actually is. They also track capture_rate (recall at a fixed 0.3% false positive rate) — the business metric that matters to the risk team."
       />
 
       <QBlock
@@ -811,7 +811,7 @@ clusters = km.fit_predict(X_scaled)
 # Profile each cluster
 df['cluster'] = clusters
 print(df.groupby('cluster')[['order_frequency', 'avg_order_value', 'churn_rate']].mean())`}
-        example="Meesho segments 150M users into 5 clusters based on purchase frequency, average order value, and category preferences. The clusters: (1) high-value fashion buyers, (2) occasional grocery buyers, (3) deal hunters, (4) new users, (5) dormant. Each cluster gets a different re-engagement strategy — email, push notification, or cashback offer — improving conversion by 23% vs. one-size-fits-all campaigns."
+        example="Shopify segments 150M users into 5 clusters based on purchase frequency, average order value, and category preferences. The clusters: (1) high-value fashion buyers, (2) occasional grocery buyers, (3) deal hunters, (4) new users, (5) dormant. Each cluster gets a different re-engagement strategy — email, push notification, or cashback offer — improving conversion by 23% vs. one-size-fits-all campaigns."
       />
 
       <QBlock
@@ -843,7 +843,7 @@ print(f"Variance explained: {pca.explained_variance_ratio_.cumsum()[-1]:.1%}")
 pca_2d = PCA(n_components=2)
 X_2d   = pca_2d.fit_transform(X_scaled)
 # Now plot X_2d[:, 0] vs X_2d[:, 1] with color = cluster label`}
-        example="Flipkart's product similarity engine uses 2,048-dimensional image embeddings from ResNet. Storing and searching 50M product embeddings at full dimensionality is expensive. PCA reduces embeddings to 256 dimensions (retaining 94% of variance), cutting storage by 8× and nearest-neighbour search time by 4×, with negligible impact on product recommendation quality."
+        example="Amazon's product similarity engine uses 2,048-dimensional image embeddings from ResNet. Storing and searching 50M product embeddings at full dimensionality is expensive. PCA reduces embeddings to 256 dimensions (retaining 94% of variance), cutting storage by 8× and nearest-neighbour search time by 4×, with negligible impact on product recommendation quality."
       />
 
       <Div />
@@ -908,7 +908,7 @@ for batch_X, batch_y in train_loader:
           <p style={{ ...S.ps, marginBottom: 8 }}>A CNN exploits three properties of images: translation invariance (a dog in the top-left looks the same as a dog in the bottom-right), spatial locality (nearby pixels are related), and hierarchical features (edges → textures → shapes → objects). It achieves this via convolutional layers: the output at each position (i,j) is the dot product of a learnable kernel K with the local patch of input. Instead of n²×n² weights (dense), each kernel has k×k weights shared across all positions — massive parameter reduction.</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Key layers: Conv2d (feature extraction via learned filters), MaxPool2d (spatial downsampling, translation invariance), BatchNorm2d (training stability), ReLU (non-linearity), Flatten + Linear (classification head). Modern architectures — ResNet (skip connections prevent vanishing gradients), EfficientNet (compound scaling), ViT (Vision Transformer — treats image as sequence of patches, attended over with self-attention) — have replaced hand-crafted feature engineering for images entirely.</p>
         </>}
-        example="Meesho's product image quality checker uses a fine-tuned EfficientNet-B0 to detect blurry, dark, watermarked, or non-white-background product photos. Before CNNs, a team of 50 reviewers manually checked every uploaded photo. The CNN checks 100,000 photos per hour with 94% accuracy, escalating only the 6% borderline cases to human review."
+        example="Shopify's product image quality checker uses a fine-tuned EfficientNet-B0 to detect blurry, dark, watermarked, or non-white-background product photos. Before CNNs, a team of 50 reviewers manually checked every uploaded photo. The CNN checks 100,000 photos per hour with 94% accuracy, escalating only the 6% borderline cases to human review."
       />
 
       <QBlock
@@ -921,7 +921,7 @@ for batch_X, batch_y in train_loader:
           <p style={{ ...S.ps, marginBottom: 8 }}>Why better than RNNs: RNNs have O(n) sequential operations — cannot parallelise over sequence length. Transformer has O(1) sequential operations — all positions processed in parallel, dramatic training speedup on GPUs. RNNs have O(n) path length between distant tokens — gradients struggle over long sequences. Transformer has O(1) path length — every token directly attends to every other token.</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Positional encoding: since Transformer has no inherent notion of order, sinusoidal position encodings (or learned position embeddings) are added to token embeddings. The feedforward sublayer (applied independently per position): FFN(x) = max(0, xW₁+b₁)W₂+b₂ with d_ff=4d_model typically. Layer normalisation and residual connections prevent vanishing gradients in deep Transformers.</p>
         </>}
-        example="Flipkart replaced their product search from TF-IDF + BM25 to a BERT-based bi-encoder in 2022. The RNN-based predecessor failed on queries like 'red traditional dress for wedding' because by processing word by word it lost track of which adjectives modified which noun. BERT's self-attention connects 'red' directly to 'dress' and 'wedding' directly to 'traditional' regardless of distance — search relevance improved by 31%."
+        example="Amazon replaced their product search from TF-IDF + BM25 to a BERT-based bi-encoder in 2022. The RNN-based predecessor failed on queries like 'red traditional dress for wedding' because by processing word by word it lost track of which adjectives modified which noun. BERT's self-attention connects 'red' directly to 'dress' and 'wedding' directly to 'traditional' regardless of distance — search relevance improved by 31%."
       />
 
       <QBlock
@@ -967,7 +967,7 @@ optimiser = torch.optim.Adam([
     {'params': backbone.features.parameters(), 'lr': 1e-5},   # frozen-ish
     {'params': backbone.classifier.parameters(), 'lr': 1e-3}, # train freely
 ])`}
-        example="Juspay trained a document classification model for KYC documents (Aadhaar, PAN card, bank statement) using 2,000 labelled examples. From scratch this would need 100,000+ examples. Using a LayoutLM model pre-trained on millions of document images, they achieved 96% accuracy with just 2,000 examples — the pre-trained model already understood document structure, layout, and common text patterns."
+        example="Braintree trained a document classification model for KYC documents (SSN, PAN card, bank statement) using 2,000 labelled examples. From scratch this would need 100,000+ examples. Using a LayoutLM model pre-trained on millions of document images, they achieved 96% accuracy with just 2,000 examples — the pre-trained model already understood document structure, layout, and common text patterns."
       />
 
       <QBlock
@@ -979,7 +979,7 @@ optimiser = torch.optim.Adam([
           <p style={{ ...S.ps, marginBottom: 8 }}>Batch normalisation normalises activations within a mini-batch: μ_B = (1/m)Σxᵢ, σ²_B = (1/m)Σ(xᵢ-μ_B)², x̂ᵢ = (xᵢ-μ_B)/√(σ²_B+ε), yᵢ = γx̂ᵢ + β where γ and β are learnable scale and shift parameters. Applied before the activation function (original paper) or after (more common in practice).</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Benefits: reduces internal covariate shift (the distribution change problem), allows higher learning rates (training is more stable), provides slight regularisation (noise from batch statistics), reduces dependence on careful weight initialisation. At inference: use running mean/variance accumulated during training (not batch statistics). Limitation: behaves differently at training vs inference (must set model.eval() in PyTorch). Layer normalisation (normalise across feature dimension, not batch) is preferred for Transformers because sequence lengths vary and batch size 1 is common.</p>
         </>}
-        example="Flipkart's image embedding network for visual search was initially unstable — training diverged at learning rates above 1e-5. Adding batch normalisation after every convolutional layer allowed them to train at lr=1e-3 (100× higher), reducing training time from 5 days to 8 hours. The normalization prevented gradient explosions in the 20-layer ResNet they were using."
+        example="Amazon's image embedding network for visual search was initially unstable — training diverged at learning rates above 1e-5. Adding batch normalisation after every convolutional layer allowed them to train at lr=1e-3 (100× higher), reducing training time from 5 days to 8 hours. The normalization prevented gradient explosions in the 20-layer ResNet they were using."
       />
 
       <QBlock
@@ -1042,7 +1042,7 @@ optimiser = torch.optim.Adam([
           <p style={{ ...S.ps, marginBottom: 8 }}>Skip-gram objective: P(context | target) = softmax(v_context · v_target). Training with negative sampling (for efficiency): for each positive context-target pair, sample k random negative words and update weights to increase P(positive) and decrease P(negatives).</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Modern embeddings: Word2Vec produces one vector per word (context-independent — "bank" has same embedding in "bank account" and "river bank"). BERT produces contextual embeddings — every occurrence of "bank" gets a different vector depending on surrounding context. Sentence embeddings (sentence-transformers) produce one vector per sentence — used for semantic search, deduplication, RAG retrieval. OpenAI/Cohere embeddings: 1536-3072 dimensional vectors from large transformer models — state-of-the-art for semantic similarity.</p>
         </>}
-        example="Nykaa's product search previously used keyword matching — 'matte lipstick' found only products with those exact words. After adding sentence-transformer embeddings, the search understands that 'non-shiny lip colour' and 'matte lipstick' are semantically equivalent. Searches for 'pink shade for Indian skin tone' now retrieve relevant products even if they use different terminology."
+        example="Sephora's product search previously used keyword matching — 'matte lipstick' found only products with those exact words. After adding sentence-transformer embeddings, the search understands that 'non-shiny lip colour' and 'matte lipstick' are semantically equivalent. Searches for 'pink shade for Indian skin tone' now retrieve relevant products even if they use different terminology."
       />
 
       <QBlock
@@ -1055,7 +1055,7 @@ optimiser = torch.optim.Adam([
           <p style={{ ...S.ps, marginBottom: 8 }}>GPT (Generative Pre-trained Transformer): decoder-only Transformer. Pre-trained with causal language modelling (predict next token given all previous tokens — left-to-right). The causal mask prevents attending to future tokens. Excellent for text generation, completion, summarisation, instruction following. Cannot do bidirectional understanding natively.</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Decision rule: Classification/understanding tasks → BERT-family (RoBERTa, DeBERTa, Electra for higher accuracy). Embedding generation for retrieval → sentence-transformers (bi-encoder: two separate BERT encoders, one per sentence). Text generation, chat, summarisation, code → GPT-family (LLaMA, Mistral, Gemini). Encoder-decoder (T5, BART) → best for seq-to-seq (translation, summarisation with constrained output).</p>
         </>}
-        example="Flipkart's product review sentiment system uses RoBERTa (BERT-family) fine-tuned on 500k labelled reviews — it classifies each review as positive/negative/neutral with 93% accuracy. Their customer support chatbot uses LLaMA-3-8B (GPT-family) fine-tuned with DPO — it generates contextual responses to customer queries about orders, returns, and policies."
+        example="Amazon's product review sentiment system uses RoBERTa (BERT-family) fine-tuned on 500k labelled reviews — it classifies each review as positive/negative/neutral with 93% accuracy. Their customer support chatbot uses LLaMA-3-8B (GPT-family) fine-tuned with DPO — it generates contextual responses to customer queries about orders, returns, and policies."
       />
 
       <QBlock
@@ -1078,7 +1078,7 @@ optimiser = torch.optim.Adam([
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>Advanced RAG improvements: re-ranking retrieved chunks with a cross-encoder (Module 67), HyDE (generate a hypothetical answer, embed that instead of the query), parent-child chunking (index small chunks, return larger parent for context), query decomposition (split complex questions into sub-questions).</p>
         </>}
-        example="Razorpay's merchant support bot answers 50,000 questions per day about integration docs, error codes, and settlement policies. Their documentation updates weekly. Fine-tuning would require weekly retraining at significant cost. RAG indexes all Razorpay docs in a vector store — when documentation changes, they re-index (1 hour) instead of retraining (1 week). Accuracy on policy questions improved from 71% (fine-tuned static model) to 89% (RAG with current docs)."
+        example="Stripe's merchant support bot answers 50,000 questions per day about integration docs, error codes, and settlement policies. Their documentation updates weekly. Fine-tuning would require weekly retraining at significant cost. RAG indexes all Stripe docs in a vector store — when documentation changes, they re-index (1 hour) instead of retraining (1 week). Accuracy on policy questions improved from 71% (fine-tuned static model) to 89% (RAG with current docs)."
       />
 
       <QBlock
@@ -1106,7 +1106,7 @@ optimiser = torch.optim.Adam([
         </>}
         code={`# Few-shot + output format + role
 PROMPT = """
-You are a customer complaint classifier for Razorpay.
+You are a customer complaint classifier for Stripe.
 
 Classify the complaint into exactly one category.
 Respond ONLY with the category name — no other text.
@@ -1132,10 +1132,10 @@ The settlement report shows Rs 4850.
 Think through this step by step:
 1. What is the difference?
 2. What percentage is this of the original?
-3. Does this match standard Razorpay transaction fees (2% for domestic cards)?
+3. Does this match standard Stripe transaction fees (2% for domestic cards)?
 4. What is your conclusion about whether this is correct or a billing error?
 """`}
-        example="CRED's credit card bill analysis feature uses a chain-of-thought prompt that first extracts all transactions from the statement (step 1), then categorises each by merchant type (step 2), then summarises spending patterns (step 3). Running these as three sequential prompts reduced hallucination rate from 12% (single complex prompt) to 2% (chain of simpler prompts)."
+        example="Brex's credit card bill analysis feature uses a chain-of-thought prompt that first extracts all transactions from the statement (step 1), then categorises each by merchant type (step 2), then summarises spending patterns (step 3). Running these as three sequential prompts reduced hallucination rate from 12% (single complex prompt) to 2% (chain of simpler prompts)."
       />
 
       <QBlock
@@ -1158,7 +1158,7 @@ Think through this step by step:
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>Decision: fine-tune when the base model is inconsistent on your task despite optimised prompts, when you have 500+ high-quality labelled examples, when inference cost at scale justifies training cost, when output must follow a strict format the model ignores via prompting. Do not fine-tune when: insufficient data (&lt;500 examples), task changes frequently (fine-tuned model becomes stale), problem is knowledge-based (use RAG instead).</p>
         </>}
-        example="Flipkart's product dispute classifier needed to output one of 18 exact category strings that matched their CRM system. Despite detailed prompting, GPT-4 produced valid-sounding but non-matching category names 15% of the time. LoRA fine-tuning LLaMA-3-8B on 3,000 labelled disputes reduced invalid outputs to &lt;0.5% — the model internalised the exact category names. This also cut inference cost by 10× vs GPT-4 API."
+        example="Amazon's product dispute classifier needed to output one of 18 exact category strings that matched their CRM system. Despite detailed prompting, GPT-4 produced valid-sounding but non-matching category names 15% of the time. LoRA fine-tuning LLaMA-3-8B on 3,000 labelled disputes reduced invalid outputs to &lt;0.5% — the model internalised the exact category names. This also cut inference cost by 10× vs GPT-4 API."
       />
 
       <QBlock
@@ -1195,7 +1195,7 @@ Think through this step by step:
           <p style={{ ...S.ps, marginBottom: 8 }}>An LLM agent runs a loop: Observe (receive input or tool result) → Think (LLM decides what to do) → Act (call a tool or return final answer). The ReAct pattern (Reason + Act) interleaves reasoning traces with action calls: "Thought: I need to look up the transaction. Action: get_transaction(pay_ABC123). Observation: [result]. Thought: The transaction shows... Action: [next step]."</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Production agent requirements beyond toy implementations: structured tool calling (JSON schemas, not text parsing — prevents format failures), loop detection (hash tool call arguments, block if same call attempted twice), confirmation gates (irreversible actions like refunds must pause for human approval), memory (episodic memory of past sessions, semantic memory via RAG), graceful failure (create support ticket when unable to resolve instead of hallucinating a solution), hard max_calls limit (prevents runaway costs from infinite loops). The reliability comes from these engineering constraints, not from LLM capability alone.</p>
         </>}
-        example="Razorpay's dispute resolution agent handles 40,000 merchant tickets per day automatically. It calls: get_transaction() → search_knowledge_base() → draft_response() → validate_response(). A ticket that previously required 4 minutes of human time is resolved in 8 seconds at 91% first-contact resolution rate. The 9% that the agent cannot resolve are escalated with a full context summary — reducing human resolution time from 12 minutes to 3 minutes for those cases."
+        example="Stripe's dispute resolution agent handles 40,000 merchant tickets per day automatically. It calls: get_transaction() → search_knowledge_base() → draft_response() → validate_response(). A ticket that previously required 4 minutes of human time is resolved in 8 seconds at 91% first-contact resolution rate. The 9% that the agent cannot resolve are escalated with a full context summary — reducing human resolution time from 12 minutes to 3 minutes for those cases."
       />
 
       <QBlock
@@ -1253,7 +1253,7 @@ Think through this step by step:
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>The three most common production failures invisible in notebooks: training-serving skew (features computed differently at training vs serving), silent model degradation (model gets worse over months without alerting), dependency drift (a package version changes and the model behaviour changes subtly). All three require production infrastructure — they are undetectable in a notebook environment.</p>
         </>}
-        example="A Meesho data scientist built a product recommendation model in a notebook with 94% offline accuracy. When deployed, online CTR was 23% lower than expected. Root cause: the notebook computed user_30d_purchase_count by scanning a local CSV. The production API computed it from a Redis cache that was refreshed only weekly. The stale features meant the model was using 30-day-old purchase histories for recommendations — training-serving skew caused by the notebook never needing to think about real-time feature serving."
+        example="A Shopify data scientist built a product recommendation model in a notebook with 94% offline accuracy. When deployed, online CTR was 23% lower than expected. Root cause: the notebook computed user_30d_purchase_count by scanning a local CSV. The production API computed it from a Redis cache that was refreshed only weekly. The stale features meant the model was using 30-day-old purchase histories for recommendations — training-serving skew caused by the notebook never needing to think about real-time feature serving."
       />
 
       <QBlock
@@ -1265,7 +1265,7 @@ Think through this step by step:
           <p style={{ ...S.ps, marginBottom: 8 }}>A feature store solves two distinct problems: training-serving consistency (same feature computation code produces the same values for training and for serving) and point-in-time correctness (training features are retrieved as-of the training event timestamp, preventing data leakage from future data).</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Architecture: offline store (S3/BigQuery — full history at batch frequency, used for training dataset generation) and online store (Redis/DynamoDB — latest feature values at millisecond latency, used by inference service). Materialisation job runs on a schedule (hourly or daily) to sync offline to online. Point-in-time correct training: get_historical_features(entity_df) returns feature values as-of entity_df['event_timestamp'] for each row — crucial for preventing leakage. Tools: Feast (open-source), Tecton (managed), Vertex AI Feature Store, SageMaker Feature Store, Hopsworks. The most common failure in production ML is skipping the feature store and recomputing features differently in each environment.</p>
         </>}
-        example="Swiggy's delivery time model previously had three separate feature computations: the data scientist's pandas pipeline (training), the backend engineer's Kotlin code (serving), and the analytics engineer's SQL (reporting). Despite code reviews, subtle differences accumulated — the pandas pipeline used a 7-day rolling window exclusive of the current day, the Kotlin code included it. Swiggy's Feast-based feature store eliminated this by making 'restaurant_7d_order_count' a single definition computed once and served to all consumers."
+        example="DoorDash's delivery time model previously had three separate feature computations: the data scientist's pandas pipeline (training), the backend engineer's Kotlin code (serving), and the analytics engineer's SQL (reporting). Despite code reviews, subtle differences accumulated — the pandas pipeline used a 7-day rolling window exclusive of the current day, the Kotlin code included it. DoorDash's Feast-based feature store eliminated this by making 'restaurant_7d_order_count' a single definition computed once and served to all consumers."
       />
 
       <QBlock
@@ -1301,7 +1301,7 @@ for col in feature_columns:
         'skew_detected': stat > 0.1 or pval < 0.01,
     }
 print(pd.DataFrame(skew_report).T.sort_values('ks_statistic', ascending=False))`}
-        example="Flipkart's CTR prediction model mysteriously degraded after a backend team refactored the product view count cache. The training pipeline computed view_count_7d correctly but the refactored cache returned a rolling 30-day count. Detection: monitoring showed the mean of view_count_7d in serving was 4.3× higher than in training. Fix: unified the feature computation into Feast so any change to the computation would require a model retrain."
+        example="Amazon's CTR prediction model mysteriously degraded after a backend team refactored the product view count cache. The training pipeline computed view_count_7d correctly but the refactored cache returned a rolling 30-day count. Detection: monitoring showed the mean of view_count_7d in serving was 4.3× higher than in training. Fix: unified the feature computation into Feast so any change to the computation would require a model retrain."
       />
 
       <QBlock
@@ -1324,7 +1324,7 @@ print(pd.DataFrame(skew_report).T.sort_values('ks_statistic', ascending=False))`
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>Monitoring stack: data drift — compare current week's feature distributions to training distributions daily using PSI (&gt;0.2 = significant) and KS test. Prediction drift — monitor distribution of model outputs (mean, variance, histogram). Performance drift (requires labels) — track rolling 7-day MAE, AUC, or precision-recall with 30-min to 30-day label delay. Proxy metrics when labels are delayed: business metrics (complaint rate, escalation rate, refund rate) as early warning signals.</p>
         </>}
-        example="Razorpay's fraud detection model was deployed in January. By March, the team noticed the fraud capture rate had dropped from 91% to 78% (detected via monthly model audit). Root cause: a new fraud pattern had emerged — fraudsters were using legitimate merchant IDs obtained through SIM swaps. Same feature values (legitimate merchant IDs), but now associated with fraudulent behaviour. Concept drift. Fix: added SIM swap recency as a feature and retrained on March data containing the new pattern."
+        example="Stripe's fraud detection model was deployed in January. By March, the team noticed the fraud capture rate had dropped from 91% to 78% (detected via monthly model audit). Root cause: a new fraud pattern had emerged — fraudsters were using legitimate merchant IDs obtained through SIM swaps. Same feature values (legitimate merchant IDs), but now associated with fraudulent behaviour. Concept drift. Fix: added SIM swap recency as a feature and retrained on March data containing the new pattern."
       />
 
       <QBlock
@@ -1348,7 +1348,7 @@ print(pd.DataFrame(skew_report).T.sort_values('ks_statistic', ascending=False))`
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>The three-pipeline architecture (Module 69): feature pipeline → training pipeline → inference pipeline must all use the same feature definitions (via feature store) or training-serving skew is inevitable. The common failure: teams build pipelines where each stage has its own feature computation code — subtle differences accumulate and cause silent degradation.</p>
         </>}
-        example="Swiggy's delivery time model runs three pipelines: the feature pipeline runs every 30 minutes on Kafka streams (updating restaurant queue length, driver location), the training pipeline runs every Sunday at 2 AM on the full week's data, and the monitoring pipeline runs every morning comparing the week's feature distributions to the training baseline. When the monsoon monitoring triggered a drift alert in June, the weekly retraining automatically captured the new distribution and model MAE recovered within one week."
+        example="DoorDash's delivery time model runs three pipelines: the feature pipeline runs every 30 minutes on Kafka streams (updating restaurant queue length, driver location), the training pipeline runs every Sunday at 2 AM on the full week's data, and the monitoring pipeline runs every morning comparing the week's feature distributions to the training baseline. When the monsoon monitoring triggered a drift alert in June, the weekly retraining automatically captured the new distribution and model MAE recovered within one week."
       />
 
       <QBlock
@@ -1374,7 +1374,7 @@ print(pd.DataFrame(skew_report).T.sort_values('ks_statistic', ascending=False))`
             ))}
           </div>
         </>}
-        example="PhonePe's loan eligibility model deployment: model trained on 5M applications → wrapped in FastAPI with Pydantic validation for 23 input features → containerised (87MB Docker image) → deployed to Kubernetes (4 replicas, n1-standard-4 on GKE) → initial 5% canary to 10,000 users for 48 hours → approval rate within 2% of expected → full promotion. Total time from trained model to production: 4 hours for the team with a mature deployment pipeline."
+        example="Venmo's loan eligibility model deployment: model trained on 5M applications → wrapped in FastAPI with Pydantic validation for 23 input features → containerised (87MB Docker image) → deployed to Kubernetes (4 replicas, n1-standard-4 on GKE) → initial 5% canary to 10,000 users for 48 hours → approval rate within 2% of expected → full promotion. Total time from trained model to production: 4 hours for the team with a mature deployment pipeline."
       />
 
       <QBlock
@@ -1417,7 +1417,7 @@ print(f"Challenger MAE:   {challenger_errors.mean():.4f}")
 print(f"Improvement:      {improvement:+.2f}%")
 print(f"p-value:          {p_one_sided:.4f}")
 print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
-        example="Zomato ran a 14-day A/B test of a new ETA model on 10% of delivery routes (consistent hash on delivery_id). With 50,000 deliveries in each arm, the challenger showed 8.3% lower MAE (p=0.0003) — statistically and practically significant. The 14-day duration was required because the first 7 days showed high variance (weekend vs weekday traffic patterns) that stabilised in the second week."
+        example="Uber Eats ran a 14-day A/B test of a new ETA model on 10% of delivery routes (consistent hash on delivery_id). With 50,000 deliveries in each arm, the challenger showed 8.3% lower MAE (p=0.0003) — statistically and practically significant. The 14-day duration was required because the first 7 days showed high variance (weekend vs weekday traffic patterns) that stabilised in the second week."
       />
 
       <QBlock
@@ -1441,7 +1441,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>Tools: MLflow (self-hosted, MLflow Registry for model versioning, integrates with Azure ML), Weights & Biases (richer visualisations, built-in sweep agent, preferred for deep learning). Required team discipline: every run must have required tags (model_type, dataset_version, team, purpose) — enforce via a shared wrapper class that raises an error if required fields are missing. Without this discipline, the experiment tracker fills with unidentifiable 'run_1', 'test', 'final_v2' runs.</p>
         </>}
-        example="CRED's credit scoring team ran 200 experiments over 6 months before deploying their current model. Without MLflow, they would have lost track of which feature set and hyperparameters produced the best result. With MLflow: they found that an experiment from 3 months ago (now archived) had the best PR-AUC — they reproduced it exactly from the logged parameters and data_version tag, updated it with newer data, and shipped it. The experiment that went to production was one the team had forgotten about."
+        example="Brex's credit scoring team ran 200 experiments over 6 months before deploying their current model. Without MLflow, they would have lost track of which feature set and hyperparameters produced the best result. With MLflow: they found that an experiment from 3 months ago (now archived) had the best PR-AUC — they reproduced it exactly from the logged parameters and data_version tag, updated it with newer data, and shipped it. The experiment that went to production was one the team had forgotten about."
       />
 
       <QBlock
@@ -1466,7 +1466,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>Never delete the champion immediately — keep at zero replicas for 2 weeks. Rollback (scale champion back up, switch Service selector, scale challenger down) should be achievable in &lt;60 seconds. Always use blue-green deployment for rollback, never rolling update — rolling updates create a transient period where both models serve traffic simultaneously, which can confuse monitoring.</p>
         </>}
-        example="Razorpay's fraud model is replaced monthly. The replacement process: new model trains Sunday night → Monday 6 AM shadow deployment runs for 24h → Tuesday a 5% canary runs for 48h with fraud analysts monitoring → Thursday gradual promotion to 100% over 4 hours with automated rollback if fraud capture rate drops >3%. The old model stays at zero replicas until the following Monday. In 18 months this process has never required emergency rollback."
+        example="Stripe's fraud model is replaced monthly. The replacement process: new model trains Sunday night → Monday 6 AM shadow deployment runs for 24h → Tuesday a 5% canary runs for 48h with fraud analysts monitoring → Thursday gradual promotion to 100% over 4 hours with automated rollback if fraud capture rate drops >3%. The old model stays at zero replicas until the following Monday. In 18 months this process has never required emergency rollback."
       />
 
       <QBlock
@@ -1490,7 +1490,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
             ))}
           </div>
         </>}
-        example="When Paytm launched UPI credit (a new payment type), Razorpay's fraud model had never seen this transaction type. Fraud rates for UPI credit were 3× higher than the model expected — it was scoring them as low-risk. Immediate fix (same day): added a hard rule 'if payment_type == upi_credit AND amount > 5000, multiply fraud score by 1.8'. This stopped the losses within hours. Proper fix (2 weeks later): 10,000 labelled UPI credit transactions were added to the training set and the model was retrained — the hard rule was removed."
+        example="When Square launched UPI credit (a new payment type), Stripe's fraud model had never seen this transaction type. Fraud rates for UPI credit were 3× higher than the model expected — it was scoring them as low-risk. Immediate fix (same day): added a hard rule 'if payment_type == upi_credit AND amount > 5000, multiply fraud score by 1.8'. This stopped the losses within hours. Proper fix (2 weeks later): 10,000 labelled UPI credit transactions were added to the training set and the model was retrained — the hard rule was removed."
       />
 
       <Div />
@@ -1508,7 +1508,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
       <QBlock
         num={43}
         color="#4285f4"
-        question="How would you design a recommendation system from scratch? (e.g. Meesho product recommendations)"
+        question="How would you design a recommendation system from scratch? (e.g. Shopify product recommendations)"
         plain="A recommendation system answers: out of millions of products, which 20 should I show this specific user right now? The answer is different for every user and changes as their preferences evolve. The design challenge is doing this for 15 million daily users in under 100 milliseconds. You cannot run a complex personalisation algorithm over 50 million products for every request — you need to first narrow it down quickly, then rank carefully."
         technical={<>
           <p style={{ ...S.ps, marginBottom: 8 }}>Two-stage architecture is mandatory at scale:</p>
@@ -1527,13 +1527,13 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>Total latency: ~50ms. Cold start for new users: use popularity-based retrieval + category preferences from onboarding survey. Cold start for new products: use content-based retrieval from day 1 (CLIP embedding available immediately). Evaluation: offline — NDCG@10, MRR. Online — CTR, conversion rate, revenue per session. Retrain ranking model daily (click patterns change fast). Retrain embedding model weekly (catalogue changes slower).</p>
         </>}
-        example="Meesho switched from matrix factorisation alone to the two-stage architecture with LightGBM reranking in 2023. Stage 1 takes 8ms (retrieval from Faiss ANN index). Stage 2 takes 22ms (scoring 500 candidates with LightGBM). Total 30ms. The LightGBM reranker improved CTR by 34% over the raw collaborative filtering order because it incorporated real-time signals (current user session context, inventory availability, margin targets) that the embedding model could not capture."
+        example="Shopify switched from matrix factorisation alone to the two-stage architecture with LightGBM reranking in 2023. Stage 1 takes 8ms (retrieval from Faiss ANN index). Stage 2 takes 22ms (scoring 500 candidates with LightGBM). Total 30ms. The LightGBM reranker improved CTR by 34% over the raw collaborative filtering order because it incorporated real-time signals (current user session context, inventory availability, margin targets) that the embedding model could not capture."
       />
 
       <QBlock
         num={44}
         color="#4285f4"
-        question="How would you design a real-time fraud detection system? (e.g. Razorpay)"
+        question="How would you design a real-time fraud detection system? (e.g. Stripe)"
         plain="Fraud detection must decide in under 50 milliseconds whether a payment is fraudulent — before the payment clears. This means the model gets one shot, with limited information, and must be wrong as rarely as possible in both directions: missing fraud is expensive, but blocking legitimate payments damages merchant relationships. The system also has an adversarial element — fraudsters study and adapt to the detection model."
         technical={<>
           <p style={{ ...S.ps, marginBottom: 6 }}>Key design decisions and their reasoning:</p>
@@ -1552,7 +1552,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
           </div>
           <p style={{ ...S.ps, marginBottom: 0 }}>Monitoring: transaction fraud rate (TFR) hourly. False positive rate daily (declined legitimate transactions). Feature distribution of fraud cases — new fraud cluster in previously clean region = concept drift. Labels arrive via chargebacks (7-30 days). Speed up with manual review team labelling 2% of flagged transactions same-day for fast feedback.</p>
         </>}
-        example="Razorpay's system serves 1,157 peak TPS (transactions per second). Serving infrastructure: 12 pods × ml.m5.large × 100 requests/second each. Feature store: Redis cluster with 3ms p99 lookup latency, 99.99% availability. LightGBM model: 10ms p99 inference. End-to-end fraud decision: 38ms p99 at peak load, well within 50ms SLA. Fraud capture rate 91% at 0.3% false positive rate."
+        example="Stripe's system serves 1,157 peak TPS (transactions per second). Serving infrastructure: 12 pods × ml.m5.large × 100 requests/second each. Feature store: Redis cluster with 3ms p99 lookup latency, 99.99% availability. LightGBM model: 10ms p99 inference. End-to-end fraud decision: 38ms p99 at peak load, well within 50ms SLA. Fraud capture rate 91% at 0.3% false positive rate."
       />
 
       <QBlock
@@ -1565,14 +1565,14 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
           <p style={{ ...S.ps, marginBottom: 8 }}>Stage 1 (retrieval) requirements: sub-linear time in catalogue size, handles large n (10M-1B), tolerates approximate results (not every relevant item needs to be retrieved, just enough of them). Methods: approximate nearest neighbour (Faiss IVF — O(1) lookup after index build), inverted index (BM25 for keyword matching), popularity sorted set (Redis — O(log n)).</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Stage 2 (ranking) requirements: high quality (the 20 final results must be highly relevant), can use expensive features (full user history, real-time context), can be slow (30-50ms for 500 candidates is fine). Methods: LightGBM with rich feature sets, two-tower neural model, listwise learning-to-rank (LambdaMART). The ranking model is trained offline on (user, item, click/purchase) triples using a learning-to-rank objective that optimises position-aware metrics like NDCG.</p>
         </>}
-        example="Nykaa Beauty: 2M products, 5M daily users. Stage 1 retrieves 500 candidates per user via ANN on product embeddings (8ms). Stage 2 ranks them with a LightGBM model (features: user skin tone from profile, ingredient preferences, price sensitivity, seasonal trends) and returns top 24 (4 rows × 6 items per page). Running the LightGBM ranker directly over 2M products would take 20 seconds — impossible for a real-time API."
+        example="Sephora Beauty: 2M products, 5M daily users. Stage 1 retrieves 500 candidates per user via ANN on product embeddings (8ms). Stage 2 ranks them with a LightGBM model (features: user skin tone from profile, ingredient preferences, price sensitivity, seasonal trends) and returns top 24 (4 rows × 6 items per page). Running the LightGBM ranker directly over 2M products would take 20 seconds — impossible for a real-time API."
       />
 
       <QBlock
         num={46}
         color="#4285f4"
         question="How do you handle cold start in ML systems? (new users, new items, new merchants)"
-        plain="Cold start is the 'new kid at school' problem. A new user has no history — the model cannot make personalised predictions. A new product has no click data — the model cannot rank it accurately. A new restaurant on Swiggy has no delivery time history — the model cannot estimate preparation time. You need fallback strategies that give reasonable predictions without historical data."
+        plain="Cold start is the 'new kid at school' problem. A new user has no history — the model cannot make personalised predictions. A new product has no click data — the model cannot rank it accurately. A new restaurant on DoorDash has no delivery time history — the model cannot estimate preparation time. You need fallback strategies that give reasonable predictions without historical data."
         technical={<>
           <p style={{ ...S.ps, marginBottom: 8 }}>Three cold start scenarios with solutions:</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5, paddingLeft: 12, marginBottom: 8 }}>
@@ -1587,7 +1587,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
             ))}
           </div>
         </>}
-        example="Swiggy's delivery time model for a new restaurant starting day 1: uses the city's median prep time (22 minutes) + distance × 5.5 minutes + peak_hour_flag × 7 minutes. After 10 completed orders, a Bayesian update blends the city prior with observed prep times for that restaurant. After 50 orders, the model uses the restaurant's own historical data entirely. The transition avoids showing absurd ETAs on day 1 while converging to accurate restaurant-specific predictions within a week."
+        example="DoorDash's delivery time model for a new restaurant starting day 1: uses the city's median prep time (22 minutes) + distance × 5.5 minutes + peak_hour_flag × 7 minutes. After 10 completed orders, a Bayesian update blends the city prior with observed prep times for that restaurant. After 50 orders, the model uses the restaurant's own historical data entirely. The transition avoids showing absurd ETAs on day 1 while converging to accurate restaurant-specific predictions within a week."
       />
 
       <QBlock
@@ -1599,7 +1599,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
           <p style={{ ...S.ps, marginBottom: 6 }}>Capacity estimation framework:</p>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2.2, paddingLeft: 12, marginBottom: 8, color: 'var(--muted)' }}>
             <div>1. Peak RPS = DAU × sessions_per_user × requests_per_session / peak_hour_duration_s</div>
-            <div>   e.g. Swiggy: 10M DAU × 3 sessions × 2 requests / 3600s = 16,666 RPS average</div>
+            <div>   e.g. DoorDash: 10M DAU × 3 sessions × 2 requests / 3600s = 16,666 RPS average</div>
             <div>   Peak factor: 5-10× → 83,000-166,000 peak RPS</div>
             <div style={{ height: 8 }} />
             <div>2. Single-request latency = feature_store_lookup + model_inference + network</div>
@@ -1609,13 +1609,13 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
             <div>   e.g. 1000 / 20 = 50 predictions/s per single-threaded pod</div>
             <div style={{ height: 8 }} />
             <div>4. Pods needed = peak_RPS / throughput_per_pod × 1.5 (safety margin)</div>
-            <div>   e.g. Swiggy: 166,000 / 50 × 1.5 = ~5,000 pods</div>
+            <div>   e.g. DoorDash: 166,000 / 50 × 1.5 = ~5,000 pods</div>
             <div style={{ height: 8 }} />
             <div>5. Cost = pods × cost_per_pod_per_hour × peak_hours_per_month</div>
           </div>
-          <p style={{ ...S.ps, marginBottom: 0 }}>Reality check: at 5,000 pods Swiggy would go bankrupt. Real solutions: async prediction (pre-compute ETAs for likely orders in advance), model optimisation (reduce inference from 10ms to 1ms with quantisation), caching (same (restaurant, driver, location) tuple seen multiple times — cache for 30 seconds), batching (GPU batching lets one GPU serve 50 requests simultaneously at 5ms each vs 50×10ms = 500ms without batching).</p>
+          <p style={{ ...S.ps, marginBottom: 0 }}>Reality check: at 5,000 pods DoorDash would go bankrupt. Real solutions: async prediction (pre-compute ETAs for likely orders in advance), model optimisation (reduce inference from 10ms to 1ms with quantisation), caching (same (restaurant, driver, location) tuple seen multiple times — cache for 30 seconds), batching (GPU batching lets one GPU serve 50 requests simultaneously at 5ms each vs 50×10ms = 500ms without batching).</p>
         </>}
-        example="Razorpay's fraud system: 10M transactions/day = 116 avg TPS, 1,160 peak TPS (10× factor during Diwali). Model inference: 10ms. Feature store: 3ms. Total: ~15ms. Throughput per pod: 1000/15 = 67 RPS. Pods needed: 1160/67 × 1.5 = 26 pods (ml.m5.large on SageMaker). Monthly cost at 80% utilisation: 26 pods × $0.192/hr × 730 hr × 0.8 = ~$2,900/month for the serving infrastructure."
+        example="Stripe's fraud system: 10M transactions/day = 116 avg TPS, 1,160 peak TPS (10× factor during Diwali). Model inference: 10ms. Feature store: 3ms. Total: ~15ms. Throughput per pod: 1000/15 = 67 RPS. Pods needed: 1160/67 × 1.5 = 26 pods (ml.m5.large on SageMaker). Monthly cost at 80% utilisation: 26 pods × $0.192/hr × 730 hr × 0.8 = ~$2,900/month for the serving infrastructure."
       />
 
       <QBlock
@@ -1642,7 +1642,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
             ))}
           </div>
         </>}
-        example="Swiggy's delivery time prediction service uses a three-tier fallback: (1) ML model — 38ms, used when healthy. (2) Cached prediction from 5 minutes ago — 1ms, used when ML is degraded. (3) Rule-based formula (distance × 6 + 15 + peak_bonus) — 0ms, used when cache is stale. The rule-based fallback has never caused a user to see an error. The fallback tiers are tested monthly by intentionally killing the ML service in staging and verifying the fallback chain triggers correctly."
+        example="DoorDash's delivery time prediction service uses a three-tier fallback: (1) ML model — 38ms, used when healthy. (2) Cached prediction from 5 minutes ago — 1ms, used when ML is degraded. (3) Rule-based formula (distance × 6 + 15 + peak_bonus) — 0ms, used when cache is stale. The rule-based fallback has never caused a user to see an error. The fallback tiers are tested monthly by intentionally killing the ML service in staging and verifying the fallback chain triggers correctly."
       />
 
       <Div />
@@ -1667,7 +1667,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
           <p style={{ ...S.ps, marginBottom: 8 }}>Why it matters for ML: ML models find correlations in training data. If training data contains confounders that are present during training but not at deployment, the model will be wrong. Classic example: a hospital mortality prediction model showed patients in ICU had lower predicted mortality than ER patients — because ICU patients received better care (a confounder). Deploying this model to allocate care would harm patients.</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Causation requires: temporality (cause precedes effect), correlation, no alternative explanation, plausible mechanism. Establishing causation: randomised controlled trials (A/B tests with random assignment), instrumental variables, difference-in-differences, propensity score matching. ML models predict well without causation but only support causal interventions when causation is established. In practice: use ML for prediction, use causal inference tools for decisions that involve changing the world.</p>
         </>}
-        example="Nykaa's data team found that users who purchased face serum were 3× more likely to purchase sunscreen the next month (correlation). They added serum-to-sunscreen cross-sell recommendations. But when they tried the reverse (sunscreen → serum recommendations), conversion was near zero. The causal direction was serum first, then sunscreen — not symmetric. Understanding directionality (cause) not just association (correlation) was essential for the recommendation logic."
+        example="Sephora's data team found that users who purchased face serum were 3× more likely to purchase sunscreen the next month (correlation). They added serum-to-sunscreen cross-sell recommendations. But when they tried the reverse (sunscreen → serum recommendations), conversion was near zero. The causal direction was serum first, then sunscreen — not symmetric. Understanding directionality (cause) not just association (correlation) was essential for the recommendation logic."
       />
 
       <QBlock
@@ -1712,7 +1712,7 @@ print(f"Cohen's d:   {cohens_d:.4f}   (0.2=small, 0.5=medium, 0.8=large)")
 print(f"Lift:        {lift_pct:+.2f}%")
 print(f"Conclusion:  {'Reject H₀' if p_value < 0.05 else 'Fail to reject H₀'}")
 print(f"Practical:   {'Meaningful improvement' if lift_pct > 1.0 else 'Too small to matter'}")`}
-        example="Razorpay ran an A/B test of a new fraud model on 100,000 transactions per arm (a 2-week test). Result: p-value = 0.0002 (highly significant). Fraud capture rate improvement: 0.3 percentage points (from 91.0% to 91.3%). The team correctly noted that while statistically significant, 0.3pp at current transaction volume saves approximately ₹2 crore/month in fraud losses — large enough to justify the deployment complexity. Both the statistical test and the business impact calculation were required to make the decision."
+        example="Stripe ran an A/B test of a new fraud model on 100,000 transactions per arm (a 2-week test). Result: p-value = 0.0002 (highly significant). Fraud capture rate improvement: 0.3 percentage points (from 91.0% to 91.3%). The team correctly noted that while statistically significant, 0.3pp at current transaction volume saves approximately ₹2 million/month in fraud losses — large enough to justify the deployment complexity. Both the statistical test and the business impact calculation were required to make the decision."
       />
 
       <Div />
@@ -1739,7 +1739,7 @@ print(f"Practical:   {'Meaningful improvement' if lift_pct > 1.0 else 'Too small
       <KeyTakeaways
         items={[
           'Two answers for every question: Plain English (for PMs, engineering managers, and non-ML interviewers — no jargon, pure intuition with an analogy) and Technical depth (for senior ML engineers — precise terminology, formulas, tradeoffs). Real panel interviews always have both types of interviewers present. Practice both answers for every question.',
-          'The most underestimated interview topic is MLOps and production (Section E). Most candidates prepare only model theory and ML algorithms. Interviewers at Swiggy, Flipkart, and Razorpay report that candidates fail most often on: training-serving skew (what it is and how to prevent it), champion-challenger deployment (how to safely replace a production model), and monitoring (what drifts and how you detect it without labels).',
+          'The most underestimated interview topic is MLOps and production (Section E). Most candidates prepare only model theory and ML algorithms. Interviewers at DoorDash, Amazon, and Stripe report that candidates fail most often on: training-serving skew (what it is and how to prevent it), champion-challenger deployment (how to safely replace a production model), and monitoring (what drifts and how you detect it without labels).',
           'For ML system design questions (Section F), always follow the eight-question framework: problem framing → data → features → model → serving → scale → monitoring → failure modes. Never jump to model selection before answering the first four. Interviewers score "asked the right clarifying questions" and "gave numbers for scale" as explicit criteria.',
           'Three concepts that appear across every interview regardless of level: overfitting and how to fix it (Q3), precision vs recall tradeoff and when to optimise for each (Q15), and training-serving skew (Q35). If you can explain these three clearly with a real company example, you will pass the bar for most roles.',
           'Statistics questions (Section G) are asked more than candidates expect. The most common: p-value misinterpretation (p-value is NOT the probability H₀ is true — it is the probability of the observed result if H₀ were true), A/B test design errors (sample size calculation, peeking, multiple comparisons), and correlation vs causation in the context of why an ML model that works historically might fail after an intervention.',

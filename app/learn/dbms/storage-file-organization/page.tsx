@@ -395,7 +395,7 @@ export default function StorageFileOrganization() {
               { label: 'Page Header', color: '#0078d4', content: 'page_id | lsn (log sequence number) | free_space_start | free_space_end | slot_count', side: 'fixed, at start of page' },
               { label: 'Slot Array', color: 'var(--accent)', content: '[slot_0: offset=200, len=45] [slot_1: offset=150, len=50] [slot_2: offset=100, len=50] ...', side: 'grows forward →' },
               { label: 'Free Space', color: 'var(--muted)', content: '(empty space in the middle)', side: 'shrinks from both sides' },
-              { label: 'Record Data', color: '#f97316', content: '← ... [row_2: Arjun|Mumbai|24] [row_1: Priya|Hyd|31] [row_0: Rahul|Blr|28]', side: '← grows backward' },
+              { label: 'Record Data', color: '#f97316', content: '← ... [row_2: Arjun|New York|24] [row_1: Priya|Hyd|31] [row_0: Rahul|Blr|28]', side: '← grows backward' },
             ].map((item, i) => (
               <div key={i} style={{ display: 'flex', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
                 <div style={{ background: `${item.color}10`, borderRight: '1px solid var(--border)', padding: '10px 14px', minWidth: 110, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -424,8 +424,8 @@ export default function StorageFileOrganization() {
 //   slot[2] → (offset=0, length=0):    slot 2 is DELETED (marked with null offset)
 
 // Record data (grows backward from end of page):
-//   Row 0: [customer_id=1 | name=Rahul | city=Bengaluru | age=28]  at offset 7900
-//   Row 1: [customer_id=2 | name=Priya | city=Hyderabad | age=31]  at offset 7848
+//   Row 0: [customer_id=1 | name=Rahul | city=San Francisco | age=28]  at offset 7900
+//   Row 1: [customer_id=2 | name=Priya | city=Austin | age=31]  at offset 7848
 
 // ROW ID (RID): (page_id, slot_number)
 //   RID = (page_47, slot_0) → always identifies the same row
@@ -1072,8 +1072,8 @@ SHOW checkpoint_timeout;            -- default: 5min (checkpoint at least every 
 
         <CodeBox label="Columnar compression techniques — run-length encoding, delta, and dictionary">
 {`// 1. RUN-LENGTH ENCODING (RLE): compress runs of repeated values
-// city column (sorted): [Bengaluru, Bengaluru, Bengaluru, Bengaluru, Hyderabad, Hyderabad, Mumbai]
-// RLE compressed:       [(Bengaluru, 4), (Hyderabad, 2), (Mumbai, 1)]
+// city column (sorted): [San Francisco, San Francisco, San Francisco, San Francisco, Austin, Austin, New York]
+// RLE compressed:       [(San Francisco, 4), (Austin, 2), (New York, 1)]
 // Compression ratio: 7 values → 3 entries (57% smaller)
 // Works best on: low-cardinality sorted columns (status, country, category)
 
@@ -1084,8 +1084,8 @@ SHOW checkpoint_timeout;            -- default: 5min (checkpoint at least every 
 // Works best on: monotonically increasing or slowly changing numeric values
 
 // 3. DICTIONARY ENCODING: replace strings with integer codes
-// city column: [Bengaluru, Hyderabad, Mumbai, Bengaluru, Pune, Bengaluru, ...]
-// Dictionary: {0: Bengaluru, 1: Hyderabad, 2: Mumbai, 3: Pune}
+// city column: [San Francisco, Austin, New York, San Francisco, Boston, San Francisco, ...]
+// Dictionary: {0: San Francisco, 1: Austin, 2: New York, 3: Boston}
 // Encoded:    [0, 1, 2, 0, 3, 0, ...]
 // String comparisons → integer comparisons (much faster)
 // Works best on: moderate-cardinality string columns (city, category, status)

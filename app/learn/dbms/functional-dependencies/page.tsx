@@ -197,11 +197,11 @@ export default function FunctionalDependencies() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 28 }}>
           {[
             {
-              relation: 'EMPLOYEES(employee_id, name, email, dept_id, salary, pan_number)',
+              relation: 'EMPLOYEES(employee_id, name, email, dept_id, salary, ssn_last4)',
               fds: [
-                { lhs: 'employee_id', rhs: 'name, email, dept_id, salary, pan_number', why: 'Each employee has a unique ID assigned exactly once. Knowing the ID tells you everything about that employee. This is the primary key dependency.' },
+                { lhs: 'employee_id', rhs: 'name, email, dept_id, salary, ssn_last4', why: 'Each employee has a unique ID assigned exactly once. Knowing the ID tells you everything about that employee. This is the primary key dependency.' },
                 { lhs: 'email', rhs: 'employee_id, name, dept_id', why: 'Work email addresses are unique per employee — each email belongs to exactly one person. Knowing the email tells you which employee it is, and therefore all their details.' },
-                { lhs: 'pan_number', rhs: 'employee_id, name', why: 'PAN (Permanent Account Number) is issued uniquely per person by the Indian government. Knowing the PAN tells you which person it is.' },
+                { lhs: 'ssn_last4', rhs: 'employee_id, name', why: 'PAN (Permanent Account Number) is issued uniquely per person by the Indian government. Knowing the PAN tells you which person it is.' },
                 { lhs: 'dept_id', rhs: 'name', color: '#ff4757', why: 'Does NOT hold. Multiple employees belong to the same department — knowing the dept_id does NOT tell you which specific employee you are referring to. Many people share the same dept_id.' },
               ],
               color: '#0078d4',

@@ -166,11 +166,11 @@ export default function RelationalAlgebra() {
 {`// STUDENTS(student_id, name, city, gpa, dept_id)
 // student_id | name           | city       | gpa  | dept_id
 // -----------+----------------+------------+------+--------
-// S001       | Rahul Sharma   | Bengaluru  | 8.5  | D01
-// S002       | Priya Reddy    | Hyderabad  | 9.1  | D02
-// S003       | Arjun Nair     | Mumbai     | 7.8  | D01
-// S004       | Kavya Krishnan | Bengaluru  | 9.4  | D03
-// S005       | Deepak Mehta   | Pune       | 8.2  | D02
+// S001       | Rahul Sharma   | San Francisco  | 8.5  | D01
+// S002       | Priya Reddy    | Austin  | 9.1  | D02
+// S003       | Arjun Nair     | New York     | 7.8  | D01
+// S004       | Kavya Krishnan | San Francisco  | 9.4  | D03
+// S005       | Deepak Mehta   | Boston       | 8.2  | D02
 
 // COURSES(course_id, course_name, dept_id, credits)
 // course_id | course_name        | dept_id | credits
@@ -230,22 +230,22 @@ export default function RelationalAlgebra() {
 
         <CodeBox label="Selection — examples with every condition type">
 {`// SIMPLE EQUALITY:
-σ_{city='Bengaluru'}(STUDENTS)
-// Returns: {(S001, Rahul, Bengaluru, 8.5, D01), (S004, Kavya, Bengaluru, 9.4, D03)}
-// SQL: SELECT * FROM students WHERE city = 'Bengaluru'
+σ_{city='San Francisco'}(STUDENTS)
+// Returns: {(S001, Rahul, San Francisco, 8.5, D01), (S004, Kavya, San Francisco, 9.4, D03)}
+// SQL: SELECT * FROM students WHERE city = 'San Francisco'
 
 // COMPARISON:
 σ_{gpa > 9.0}(STUDENTS)
-// Returns: {(S002, Priya, Hyderabad, 9.1, D02), (S004, Kavya, Bengaluru, 9.4, D03)}
+// Returns: {(S002, Priya, Austin, 9.1, D02), (S004, Kavya, San Francisco, 9.4, D03)}
 
 // CONJUNCTION (AND — ∧):
-σ_{city='Bengaluru' ∧ gpa > 8.0}(STUDENTS)
-// Returns: {(S001, Rahul, Bengaluru, 8.5, D01), (S004, Kavya, Bengaluru, 9.4, D03)}
-// SQL: WHERE city = 'Bengaluru' AND gpa > 8.0
+σ_{city='San Francisco' ∧ gpa > 8.0}(STUDENTS)
+// Returns: {(S001, Rahul, San Francisco, 8.5, D01), (S004, Kavya, San Francisco, 9.4, D03)}
+// SQL: WHERE city = 'San Francisco' AND gpa > 8.0
 
 // DISJUNCTION (OR — ∨):
-σ_{city='Bengaluru' ∨ city='Mumbai'}(STUDENTS)
-// Returns: Rahul, Kavya (Bengaluru), Arjun (Mumbai)
+σ_{city='San Francisco' ∨ city='New York'}(STUDENTS)
+// Returns: Rahul, Kavya (San Francisco), Arjun (New York)
 
 // NEGATION (NOT — ¬):
 σ_{¬(dept_id='D01')}(STUDENTS)
@@ -279,13 +279,13 @@ export default function RelationalAlgebra() {
         <CodeBox label="Projection — duplicate elimination and composition with selection">
 {`// SIMPLE PROJECTION:
 π_{name, city}(STUDENTS)
-// Returns: {(Rahul, Bengaluru), (Priya, Hyderabad), (Arjun, Mumbai), (Kavya, Bengaluru), (Deepak, Pune)}
+// Returns: {(Rahul, San Francisco), (Priya, Austin), (Arjun, New York), (Kavya, San Francisco), (Deepak, Boston)}
 // Note: no duplicates in this case (all names are unique)
 
 // PROJECTION WITH DUPLICATES:
 π_{city}(STUDENTS)
-// Raw tuples: {Bengaluru, Hyderabad, Mumbai, Bengaluru, Pune}
-// After duplicate elimination: {Bengaluru, Hyderabad, Mumbai, Pune}
+// Raw tuples: {San Francisco, Austin, New York, San Francisco, Boston}
+// After duplicate elimination: {San Francisco, Austin, New York, Boston}
 // = 4 distinct cities from 5 students
 // SQL: SELECT DISTINCT city FROM students
 
@@ -468,7 +468,7 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
   σ_{S1.city = S2.city ∧ S1.student_id < S2.student_id}(ρ_{S1}(STUDENTS) × ρ_{S2}(STUDENTS))
 )
 // S1.student_id < S2.student_id: avoids duplicates (Rahul-Kavya and Kavya-Rahul)
-// Result: {(Rahul, Kavya, Bengaluru)} — both are in Bengaluru
+// Result: {(Rahul, Kavya, San Francisco)} — both are in San Francisco
 
 // SQL equivalent:
 // SELECT s1.name, s2.name, s1.city
@@ -545,8 +545,8 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
 // Result: each student row joined with their department row
 // dept_id appears once (duplicate eliminated)
 // student_id | name  | city      | gpa | dept_id | dept_name        | hod
-// S001       | Rahul | Bengaluru | 8.5 | D01     | Computer Science | Prof. Kumar
-// S002       | Priya | Hyderabad | 9.1 | D02     | AI & Data Science| Prof. Rao
+// S001       | Rahul | San Francisco | 8.5 | D01     | Computer Science | Prof. Kumar
+// S002       | Priya | Austin | 9.1 | D02     | AI & Data Science| Prof. Rao
 // ... (5 rows — one per student)
 
 // STUDENTS ⋈ ENROLLMENTS ⋈ COURSES (chain natural joins)
@@ -817,20 +817,20 @@ ENROLLMENTS ⟗ COURSES
         </Para>
 
         <CodeBox label="Query tree construction — SQL to algebra to tree">
-{`// QUERY: "Find names of students from Bengaluru who are enrolled in Database Systems"
+{`// QUERY: "Find names of students from San Francisco who are enrolled in Database Systems"
 // SQL:
 SELECT s.name
 FROM students s
 JOIN enrollments e ON s.student_id = e.student_id
 JOIN courses c ON e.course_id = c.course_id
-WHERE s.city = 'Bengaluru'
+WHERE s.city = 'San Francisco'
   AND c.course_name = 'Database Systems';
 
 // ─────────────────────────────────────────────────────────────────
 // STEP 1: Write the relational algebra expression
 // ─────────────────────────────────────────────────────────────────
 π_{name}(
-  σ_{city='Bengaluru' ∧ course_name='Database Systems'}(
+  σ_{city='San Francisco' ∧ course_name='Database Systems'}(
     STUDENTS ⋈ ENROLLMENTS ⋈ COURSES
   )
 )
@@ -858,7 +858,7 @@ WHERE s.city = 'Bengaluru'
 // STEP 3: Optimised query tree (predicate pushdown applied)
 // ─────────────────────────────────────────────────────────────────
 π_{name}(
-  σ_{city='Bengaluru'}(STUDENTS)
+  σ_{city='San Francisco'}(STUDENTS)
   ⋈
   ENROLLMENTS
   ⋈
@@ -877,7 +877,7 @@ WHERE s.city = 'Bengaluru'
 //    STUDENTS
 //
 // Now:
-// σ_{city='Bengaluru'}(STUDENTS): 5 → 2 rows (Rahul, Kavya)
+// σ_{city='San Francisco'}(STUDENTS): 5 → 2 rows (Rahul, Kavya)
 // σ_{course_name='DB'}(COURSES): 4 → 1 row (CS301)
 // First join (students ⋈ enrollments): 2 students × their enrollments
 //   Rahul: enrolled in CS301, CS302 → 2 rows

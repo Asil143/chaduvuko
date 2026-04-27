@@ -408,18 +408,18 @@ CREATE TABLE customers (
                 A composite attribute is one that can be subdivided into smaller sub-attributes,
                 each of which has independent meaning. The composite attribute itself has meaning
                 (the full address), and each component also has independent meaning (the city
-                can be searched on its own, the pincode can be used for delivery zone grouping).
+                can be searched on its own, the zip_code can be used for delivery zone grouping).
               </Para>
               <Para>
                 The design question is whether to store the composite attribute as a single column
                 or split it into its components. The answer depends on whether the sub-components
                 are ever searched, filtered, grouped, or displayed independently. If you will
-                ever run a query like <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', fontSize: 13 }}>WHERE city = 'Bengaluru'</code>,
+                ever run a query like <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', fontSize: 13 }}>WHERE city = 'San Francisco'</code>,
                 then city must be its own column — you cannot efficiently search within
                 a single address string for a city value.
               </Para>
               <CodeBox label="Composite attributes — two implementation strategies">
-{`-- COMPOSITE ATTRIBUTE: address (street, city, state, pincode, country)
+{`-- COMPOSITE ATTRIBUTE: address (street, city, state, zip_code, country)
 -- COMPOSITE ATTRIBUTE: full_name (first_name, middle_name, last_name)
 -- COMPOSITE ATTRIBUTE: phone (country_code, area_code, number)
 
@@ -430,9 +430,9 @@ CREATE TABLE customers (
     last_name     VARCHAR(50)  NOT NULL,
     -- full_name is derived: first_name || ' ' || last_name
     street        VARCHAR(200),
-    city          VARCHAR(100),  -- searched: WHERE city = 'Bengaluru'
+    city          VARCHAR(100),  -- searched: WHERE city = 'San Francisco'
     state         VARCHAR(50),
-    pincode       CHAR(6),        -- searched: WHERE pincode = '560001'
+    zip_code       CHAR(6),        -- searched: WHERE zip_code = '560001'
     country       VARCHAR(50)    DEFAULT 'India'
 );
 -- Queries on individual components are efficient (indexable).
@@ -444,7 +444,7 @@ CREATE TABLE customers (
     full_name     VARCHAR(150)  NOT NULL,  -- never search by first/last separately
     address       TEXT                     -- always displayed as one unit, never filtered
 );
--- Simpler schema, but cannot efficiently search by city or pincode.
+-- Simpler schema, but cannot efficiently search by city or zip_code.
 
 -- Strategy 3: JSONB for semi-structured addresses (PostgreSQL)
 CREATE TABLE customers (
@@ -452,15 +452,15 @@ CREATE TABLE customers (
     full_name     VARCHAR(150)  NOT NULL,
     address       JSONB         -- flexible: some customers have different address fields
     -- with GIN index: CREATE INDEX ON customers USING GIN (address)
-    -- query: WHERE address->>'city' = 'Bengaluru' (indexed)
+    -- query: WHERE address->>'city' = 'San Francisco' (indexed)
 );`}
               </CodeBox>
               <Callout type="tip">
                 The right rule: if any sub-component of a composite attribute will ever be used
                 in a WHERE clause, GROUP BY, ORDER BY, or JOIN — store it as a separate column
-                with its own index. Storing "12 Brigade Road, Bengaluru, Karnataka, 560001" as
+                with its own index. Storing "12 Brigade Road, San Francisco, Karnataka, 560001" as
                 a single string and then trying to filter by city requires a full table scan
-                with a LIKE '%Bengaluru%' — which cannot use an index and will be catastrophically
+                with a LIKE '%San Francisco%' — which cannot use an index and will be catastrophically
                 slow on millions of rows.
               </Callout>
             </div>
@@ -1998,7 +1998,7 @@ ORDER BY pr.start_date DESC;`}
               mistake: 'Over-normalising the ER model',
               severity: 'Medium',
               color: '#f97316',
-              wrong: 'Creating a separate CITY entity and a COUNTRY entity and a STATE entity and linking CUSTOMER to CITY to STATE to COUNTRY — when the only query ever run is "customers from Bengaluru".',
+              wrong: 'Creating a separate CITY entity and a COUNTRY entity and a STATE entity and linking CUSTOMER to CITY to STATE to COUNTRY — when the only query ever run is "customers from San Francisco".',
               why: 'Over-engineering the model increases join complexity without benefiting the queries that the system actually needs to answer. Every extra entity is an extra join in every query.',
               fix: 'Design the ER model to serve the miniworld\'s actual requirements. If city is always just a filter string and never a first-class object with its own lifecycle, store it as a simple VARCHAR column, not as a linked entity.',
             },
@@ -2033,7 +2033,7 @@ ORDER BY pr.start_date DESC;`}
       <section style={{ marginBottom: 72 }}>
         <SectionTag text="// Part 10 — Real World" />
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12, fontFamily: 'var(--font-mono)' }}>💼 What This Looks Like at Work</div>
-        <SectionTitle>The Schema Design Interview — Design a Database for Zomato</SectionTitle>
+        <SectionTitle>The Schema Design Interview — Design a Database for Uber Eats</SectionTitle>
 
         <Para>
           The most common DBMS task in a product company interview is the schema design question:
@@ -2045,11 +2045,11 @@ ORDER BY pr.start_date DESC;`}
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Interview Question — Design the Zomato Database
+            Interview Question — Design the Uber Eats Database
           </div>
 
           <Para>
-            <strong style={{ color: 'var(--text)' }}>Interviewer:</strong> "Design the core database schema for a food delivery platform like Zomato. You have 20 minutes."
+            <strong style={{ color: 'var(--text)' }}>Interviewer:</strong> "Design the core database schema for a food delivery platform like Uber Eats. You have 20 minutes."
           </Para>
 
           <Para>
@@ -2100,7 +2100,7 @@ CREATE TABLE addresses (
     label        VARCHAR(50)   DEFAULT 'Home', -- Home, Work, Other
     street       VARCHAR(200)  NOT NULL,
     city         VARCHAR(100)  NOT NULL,
-    pincode      CHAR(6)       NOT NULL,
+    zip_code      CHAR(6)       NOT NULL,
     latitude     DECIMAL(10,8),
     longitude    DECIMAL(11,8),
     is_default   BOOLEAN       DEFAULT false,

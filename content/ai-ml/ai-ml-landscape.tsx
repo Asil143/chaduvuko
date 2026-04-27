@@ -119,7 +119,7 @@ const roles = [
       'Deploy models as REST APIs serving real-time predictions',
       'Monitor production model accuracy and retrain on schedule',
     ],
-    companies: 'Swiggy, Razorpay, Zepto, Meesho, CRED',
+    companies: 'DoorDash, Stripe, Instacart, Shopify, Brex',
   },
   {
     title: 'Data Scientist',
@@ -133,7 +133,7 @@ const roles = [
       'Run A/B tests and measure statistical significance',
       'Present findings with charts and plain-English explanations',
     ],
-    companies: 'Flipkart, Ola, Nykaa, Zomato, MakeMyTrip',
+    companies: 'Amazon, Ola, Sephora, Uber Eats, Expedia',
   },
   {
     title: 'Applied Scientist / Research Scientist',
@@ -161,7 +161,7 @@ const roles = [
       'Automate retraining when model accuracy degrades',
       'Reduce model serving latency and infrastructure cost',
     ],
-    companies: 'Uber, Grab, Juspay, PhonePe, Freshworks',
+    companies: 'Uber, Grab, Braintree, Venmo, Zendesk',
   },
   {
     title: 'GenAI / LLM Engineer',
@@ -503,7 +503,7 @@ export default function AIMLLandscapePage() {
 
         <Callout type="info">
           Salary ranges are mid-level (3–6 years experience) at product companies
-          in Bangalore. Service companies (TCS, Infosys, Wipro) pay 30–40% less.
+          in Seattle. Service companies (Accenture, Deloitte, KPMG) pay 30–40% less.
           Startups vary wildly. FAANG/GCC roles pay 2–3× these numbers.
           Freshers start at roughly 50–60% of these figures.
         </Callout>
@@ -704,7 +704,7 @@ export default function AIMLLandscapePage() {
           'ML tools are organised by workflow stage — data, classical ML, deep learning, NLP/LLMs, MLOps, cloud. Learn them in that order.',
           'The learning path that works: NumPy → Pandas → sklearn → XGBoost → PyTorch → HuggingFace → FastAPI + Docker.',
           'ML Engineer = build and ship systems. Data Scientist = answer business questions. Applied Scientist = research. GenAI Engineer = LLM products.',
-          'Salary ranges (mid-level Bangalore): ML Engineer ₹18–28 LPA, Data Scientist ₹14–24 LPA, Applied Scientist ₹22–40 LPA, GenAI Engineer ₹20–35 LPA.',
+          'Salary ranges (mid-level Seattle): ML Engineer ₹18–28 LPA, Data Scientist ₹14–24 LPA, Applied Scientist ₹22–40 LPA, GenAI Engineer ₹20–35 LPA.',
           'If you cannot decide which role — target ML Engineer. It is the most versatile entry point and has the clearest preparation path.',
           'Realistic timelines: fresher 4–5 months, career switcher 5–6 months, SWE to ML 2–3 months, data professional to ML 2 months.',
         ]}

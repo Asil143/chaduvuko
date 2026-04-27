@@ -5,7 +5,7 @@ import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
-  title: 'Random Forest — Zepto Stock Prediction — Chaduvuko',
+  title: 'Random Forest — Instacart Stock Prediction — Chaduvuko',
   description:
     'Bagging, random feature subsets, out-of-bag evaluation, and the feature importance that actually works in production. Why Random Forest beats a single tree on every real dataset.',
 }
@@ -162,7 +162,7 @@ const PROGRESS_TOPICS = [
 export default function RandomForestPage() {
   return (
     <LearnLayout
-      title="Random Forest — Zepto Stock Prediction"
+      title="Random Forest — Instacart Stock Prediction"
       description="Bagging, random feature subsets, out-of-bag evaluation, and the feature importance that actually works. Why Random Forest beats a single tree on every real dataset."
       section="Classical ML"
       readTime="25–30 min"
@@ -200,7 +200,7 @@ export default function RandomForestPage() {
           you should try on any tabular ML problem. It almost never catastrophically
           fails, requires minimal tuning, handles missing values gracefully,
           provides reliable feature importances, and trains in parallel across cores.
-          The Zepto data science team uses it for demand forecasting, inventory
+          The Instacart data science team uses it for demand forecasting, inventory
           reorder prediction, and fraud detection — often as a strong baseline
           before reaching for XGBoost.
         </p>
@@ -237,7 +237,7 @@ export default function RandomForestPage() {
         </HBox>
 
         <Callout type="tip">
-          The running example is predicting whether a Zepto product will go
+          The running example is predicting whether a Instacart product will go
           out of stock in the next 24 hours — a binary classification problem
           that determines which products to reorder proactively.
           Every concept is demonstrated on this dataset before the code appears.
@@ -340,10 +340,10 @@ from sklearn.model_selection import train_test_split
 np.random.seed(42)
 n = 15_000
 
-# ── Zepto product stock-out prediction dataset ─────────────────────────
+# ── Instacart product stock-out prediction dataset ─────────────────────────
 categories    = ['Grocery', 'Dairy', 'Beverages', 'Snacks', 'Household',
                   'Personal Care', 'Frozen', 'Bakery']
-warehouses    = ['Mumbai_Central', 'Mumbai_West', 'Delhi_NCR', 'Bangalore']
+warehouses    = ['New York_Central', 'New York_West', 'Delhi_NCR', 'Seattle']
 
 current_stock  = np.abs(np.random.normal(200, 120, n)).clip(0, 1000).astype(int)
 avg_daily_sale = np.abs(np.random.normal(45, 30, n)).clip(1, 300).round(1)
@@ -942,7 +942,7 @@ for i in range(5):
       {/* ══ SECTION 9 — PRODUCTION PIPELINE ═══════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>What this looks like at work</span>
-        <h2 style={S.h2}>Day-one task at Zepto — stock-out predictor end to end</h2>
+        <h2 style={S.h2}>Day-one task at Instacart — stock-out predictor end to end</h2>
 
         <CodeBlock code={`import numpy as np
 import pandas as pd

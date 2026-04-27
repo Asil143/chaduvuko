@@ -86,7 +86,7 @@ export default function Distinct() {
       {/* ── PART 01 ── */}
       <Part n="01" title="The Problem DISTINCT Solves" />
 
-      <P>By default, SELECT returns every row that satisfies your WHERE condition — including duplicates. If ten customers all live in Bangalore, a query for cities returns "Bangalore" ten times. If thirty orders were placed across five stores, a query for store IDs returns five store IDs across thirty rows — with many repeats.</P>
+      <P>By default, SELECT returns every row that satisfies your WHERE condition — including duplicates. If ten customers all live in Seattle, a query for cities returns "Seattle" ten times. If thirty orders were placed across five stores, a query for store IDs returns five store IDs across thirty rows — with many repeats.</P>
 
       <P>Sometimes you want those repeats — when you are counting transactions, listing orders, or analysing every individual record. But sometimes you want to know the <Hl>unique set of values</Hl> — which cities does FreshCart serve, which categories of products exist, which payment methods have been used. This is what DISTINCT does: it eliminates duplicate rows from your result, returning each unique value exactly once.</P>
 
@@ -529,7 +529,7 @@ FROM customers;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Zepto, the quick commerce startup. The product team is preparing a feature that lets customers filter products by brand. Before the engineering team builds the filter UI, they need to know exactly which brands exist in the product catalogue — the complete, deduplicated list with no repeats.</P>
+      <P>You are a data analyst at Instacart, the quick commerce startup. The product team is preparing a feature that lets customers filter products by brand. Before the engineering team builds the filter UI, they need to know exactly which brands exist in the product catalogue — the complete, deduplicated list with no repeats.</P>
 
       <TimeBlock time="11:00 AM" label="Request arrives">
         The product manager sends a message: "We need the list of all distinct brands in our catalogue for the filter dropdown. Should be alphabetical. Also, how many distinct brands do we have total? And which brands appear in more than one category — those need a special multi-category indicator in the UI."
@@ -606,7 +606,7 @@ ORDER BY category_count DESC, brand;`}
 
       <IQ q="How does DISTINCT behave when applied to multiple columns?">
         <p style={{ margin: '0 0 14px' }}>When multiple columns are listed in a SELECT DISTINCT query, DISTINCT applies to the full combination of all listed columns — not to each column independently. A row is eliminated as a duplicate only if every column in the SELECT list has an identical value to another row. If any one column differs, the row is considered unique and is included in the result.</p>
-        <p style={{ margin: '0 0 14px' }}>Concrete example: SELECT DISTINCT city, loyalty_tier FROM customers. The result contains every unique city-tier pair that exists in the data. If Bangalore has customers at Gold and Platinum tiers, two rows appear: (Bangalore, Gold) and (Bangalore, Platinum). If Hyderabad only has Silver customers, one row appears: (Hyderabad, Silver). The total number of result rows is the count of unique combinations — not the sum of distinct values in each column independently.</p>
+        <p style={{ margin: '0 0 14px' }}>Concrete example: SELECT DISTINCT city, loyalty_tier FROM customers. The result contains every unique city-tier pair that exists in the data. If Seattle has customers at Gold and Platinum tiers, two rows appear: (Seattle, Gold) and (Seattle, Platinum). If Austin only has Silver customers, one row appears: (Austin, Silver). The total number of result rows is the count of unique combinations — not the sum of distinct values in each column independently.</p>
         <p style={{ margin: 0 }}>This combination behaviour is important to understand because it means adding more columns to a DISTINCT query increases the number of rows returned (or keeps it the same — never decreases it). If every combination of city and loyalty_tier is unique, SELECT DISTINCT city, loyalty_tier returns as many rows as SELECT DISTINCT city. Only if multiple rows share the exact same city AND loyalty_tier does DISTINCT reduce the count. The more columns you add, the more specific the combination and the fewer rows get eliminated as duplicates.</p>
       </IQ>
 

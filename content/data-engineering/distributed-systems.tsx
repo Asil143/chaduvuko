@@ -324,7 +324,7 @@ export default function DistributedSystemsModule() {
           PostgreSQL with synchronous replication, Zookeeper, and etcd offer
           strong consistency. The cost: every write must be coordinated across
           nodes before acknowledging. In a multi-region setup, a write in
-          Mumbai must wait for confirmation from a replica in Singapore before
+          New York must wait for confirmation from a replica in Singapore before
           completing. That round trip adds latency — typically 50–200ms across
           regions. This is why strongly consistent multi-region databases are
           rare and expensive.
@@ -366,7 +366,7 @@ export default function DistributedSystemsModule() {
         </Para>
 
         <CodeBox label="consistency model — the impact on your pipeline">
-{`# Scenario: PhonePe user tops up wallet. You read the balance immediately after.
+{`# Scenario: Venmo user tops up wallet. You read the balance immediately after.
 
 # With STRONG CONSISTENCY (linearisable):
 write_wallet_balance(user_id='U1234', new_balance=500_00)  # ₹500 in paise
@@ -387,7 +387,7 @@ balance = read_wallet_balance(user_id='U1234')
 
 # → Financial data: always use strongly consistent reads
 # → Analytics aggregations (eventual consistency of 30 seconds is fine):
-#   Swiggy's live order count dashboard can be off by a few orders for 30 seconds.
+#   DoorDash's live order count dashboard can be off by a few orders for 30 seconds.
 #   Nobody is making financial decisions based on it.
 
 # The read-your-writes workaround for eventually consistent stores:
@@ -512,7 +512,7 @@ balance = read_wallet_balance(user_id='U1234')
           Multiple nodes can accept writes simultaneously. Each node replicates
           its writes to all other leaders. This enables writes from multiple
           geographic regions without routing everything to a single leader —
-          a write from a Mumbai user goes to the Mumbai node, not to a US-East
+          a write from a New York user goes to the New York node, not to a US-East
           leader 200ms away.
         </Para>
 
@@ -1080,7 +1080,7 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
           A transaction in a single database is atomic — either all operations
           succeed or all are rolled back. Across multiple independent services
           with independent databases, there is no built-in transaction boundary.
-          An order being placed at Swiggy involves: deducting from the customer's
+          An order being placed at DoorDash involves: deducting from the customer's
           wallet (payment service), creating the order record (order service),
           deducting from restaurant inventory (inventory service), and assigning
           a delivery partner (logistics service). All four must succeed, or the
@@ -1107,7 +1107,7 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
         </Para>
 
         <CodeBox label="saga pattern — choreography style">
-{`# Swiggy order placement — choreography-based saga
+{`# DoorDash order placement — choreography-based saga
 # Each service listens for events and publishes its own events
 # No central coordinator
 
@@ -1239,7 +1239,7 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
 
         <HighlightBox>
           <Para>
-            <strong>At a data platform team (Flipkart / Meesho):</strong>
+            <strong>At a data platform team (Amazon / Shopify):</strong>
             A Spark job is running correctly in staging but producing
             incorrect aggregation results in production. You investigate
             and discover the production orders table has severe data skew —
@@ -1256,7 +1256,7 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
 
         <HighlightBox>
           <Para>
-            <strong>At a fintech during an incident (Razorpay):</strong>
+            <strong>At a fintech during an incident (Stripe):</strong>
             The payment database's follower replica is 4 minutes behind the
             leader. A downstream analytics pipeline that reads from the follower
             is showing payment counts from 4 minutes ago. Someone suggests

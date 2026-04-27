@@ -844,7 +844,7 @@ ORDER BY store_id, island_start;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Swiggy. The retention team needs a comprehensive customer health report: for each customer who placed their most recent order within the last 60 days, show their order history summary, their average gap between orders, whether their gaps are increasing or decreasing (churn signal), and their predicted next order window based on their typical gap.</P>
+      <P>You are a data analyst at DoorDash. The retention team needs a comprehensive customer health report: for each customer who placed their most recent order within the last 60 days, show their order history summary, their average gap between orders, whether their gaps are increasing or decreasing (churn signal), and their predicted next order window based on their typical gap.</P>
 
       <TimeBlock time="11:00 AM" label="Requirements: customer order cadence report">
         Most recent order date, total orders, avg gap between orders, gap trend (increasing/stable/decreasing), and predicted next order window. Only customers whose last order was within 60 days.

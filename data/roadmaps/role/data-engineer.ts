@@ -6,14 +6,14 @@ export const dataEngineerRoadmap: Roadmap = {
   title: 'Data Engineer',
   subtitle: 'From zero to job-ready',
   category: 'role',
-  description: 'The complete path to becoming a Data Engineer in India. Covers Linux, Python, SQL, cloud pipelines, and real ADF projects used at companies like Swiggy, Razorpay, and Flipkart.',
+  description: 'The complete path to becoming a Data Engineer in India. Covers Linux, Python, SQL, cloud pipelines, and real ADF projects used at companies like DoorDash, Stripe, and Amazon.',
   level: 'beginner',
   estimatedTime: '3–5 months',
   salaryData: [
-    { company: 'Service (TCS / Infy)', range: '₹7–11 LPA', note: 'Most common first job' },
-    { company: 'Product startup', range: '₹14–22 LPA', note: 'Swiggy, CRED, Razorpay' },
+    { company: 'Service (Accenture / Infy)', range: '₹7–11 LPA', note: 'Most common first job' },
+    { company: 'Product startup', range: '₹14–22 LPA', note: 'DoorDash, Brex, Stripe' },
     { company: 'MNC / GCC', range: '₹18–28 LPA', note: '+ visa & relocation' },
-    { company: 'FAANG India', range: '₹35–60 LPA', note: 'Google, Amazon, MS' },
+    { company: 'FAANG', range: '₹35–60 LPA', note: 'Google, Amazon, MS' },
   ],
   nodes: [
     {
@@ -222,7 +222,7 @@ export const dataEngineerRoadmap: Roadmap = {
       prerequisites: ['dbt', 'datamodeling'],
       difficulty: 'advanced',
       time: '8–10 hrs',
-      description: 'Design a data lake, a streaming pipeline, a warehouse schema under load. Asked at every senior interview. Flipkart, Razorpay, Meesho all ask this.',
+      description: 'Design a data lake, a streaming pipeline, a warehouse schema under load. Asked at every senior interview. Amazon, Stripe, Shopify all ask this.',
       x: 175, y: 820, width: 170, height: 60,
     },
     {
@@ -233,7 +233,7 @@ export const dataEngineerRoadmap: Roadmap = {
       prerequisites: ['systemdesign', 'monitoring'],
       difficulty: 'advanced',
       time: '10–12 hrs',
-      description: 'Role-specific Q&A bank curated for Indian job market. Real questions from Swiggy, Zepto, and GCC companies — with model answers.',
+      description: 'Role-specific Q&A bank curated for US job market. Real questions from DoorDash, Instacart, and GCC companies — with model answers.',
       href: '/learn/interview',
       x: 405, y: 820, width: 170, height: 60,
     },

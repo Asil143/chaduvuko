@@ -399,7 +399,7 @@ response = requests.get(
 # As HTTP Basic Auth:
 response = requests.get(
     'https://api.example.com/v1/payments',
-    auth=HTTPBasicAuth(API_KEY, ''),  # Razorpay-style: key_id as user, empty pass
+    auth=HTTPBasicAuth(API_KEY, ''),  # Stripe-style: key_id as user, empty pass
 )
 
 
@@ -1632,18 +1632,18 @@ def parse_orders(raw_records: list[dict]) -> tuple[list[Order], list[dict]]:
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Complete pipeline — Razorpay payments ingestion
+            Complete pipeline — Stripe payments ingestion
           </div>
 
           <Para>
             Here is what a real production-quality API ingestion pipeline looks like
             when all the patterns from this module are applied together. This pipeline
-            fetches payments from the Razorpay API, validates them, and loads them
+            fetches payments from the Stripe API, validates them, and loads them
             into a PostgreSQL Silver layer table.
           </Para>
 
           <CodeBox label="Complete production pipeline — all patterns combined">{`"""
-Razorpay Payments Ingestion Pipeline
+Stripe Payments Ingestion Pipeline
 Fetches payments from API → validates → loads to PostgreSQL silver layer
 """
 import os
@@ -1699,7 +1699,7 @@ class Payment(BaseModel):
 
     @validator('amount', pre=True)
     def coerce_paise_to_rupees(cls, v):
-        return Decimal(str(v)) / 100   # Razorpay sends amounts in paise
+        return Decimal(str(v)) / 100   # Stripe sends amounts in paise
 
 
 # ── Dead Letter Queue ─────────────────────────────────────────────────────────

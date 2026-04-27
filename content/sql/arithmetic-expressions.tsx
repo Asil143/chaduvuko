@@ -708,7 +708,7 @@ ORDER BY gross_profit DESC;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a business analyst at Nykaa. The category management team wants a weekly SKU-level profitability report that their buyers use to make restocking decisions. The report needs to show each product's margin, GST-inclusive price, a margin band category, and a restock recommendation based on stock status and margin.</P>
+      <P>You are a business analyst at Sephora. The category management team wants a weekly SKU-level profitability report that their buyers use to make restocking decisions. The report needs to show each product's margin, GST-inclusive price, a margin band category, and a restock recommendation based on stock status and margin.</P>
 
       <TimeBlock time="2:00 PM" label="Requirements briefing">
         The buyer explains: show all products with their margin percentage, GST price (18% added), a margin band (Premium above 40%, Standard 25–40%, Review below 25%), and a restocking flag — restock immediately if margin is above 30% and item is out of stock, otherwise normal replenishment.

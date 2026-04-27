@@ -109,7 +109,7 @@ export default function DistributedDatabases() {
             {
               force: 'Throughput',
               color: '#f97316',
-              problem: 'Query load exceeds what one machine can handle. Razorpay processing 100,000 payment requests per second — one database server cannot serve all those requests within acceptable latency. A single CPU and disk can only do so much work per second.',
+              problem: 'Query load exceeds what one machine can handle. Stripe processing 100,000 payment requests per second — one database server cannot serve all those requests within acceptable latency. A single CPU and disk can only do so much work per second.',
               solution: 'Read replicas — copy data to multiple servers and distribute read queries across them. Writes go to the primary, reads spread across many replicas. Total read throughput scales linearly with replica count.',
             },
             {
@@ -752,7 +752,7 @@ async def get_customer(customer_id):
         <CodeBox label="Cross-shard join strategies">
 {`// PROBLEM: Join customers (sharded by city) with orders (sharded by date)
 // Query: SELECT c.name, o.total FROM customers c JOIN orders o ON c.id=o.customer_id
-// WHERE c.city='Bengaluru' AND o.order_date >= '2024-01-01'
+// WHERE c.city='San Francisco' AND o.order_date >= '2024-01-01'
 
 // Strategy 1: Scatter-Gather
 // Send query to all shards, collect results, join in the application layer
@@ -925,7 +925,7 @@ N1,N2,N3 → C: "ACK"
 // Each local transaction updates one service and publishes an event
 // If any step fails: run compensating transactions to undo previous steps
 
-// EXAMPLE: Swiggy order placement saga
+// EXAMPLE: DoorDash order placement saga
 // Step 1: OrderService.createOrder() → publishes ORDER_CREATED
 // Step 2: InventoryService.reserveItems() → publishes ITEMS_RESERVED
 //          OR → publishes RESERVATION_FAILED
@@ -1065,7 +1065,7 @@ N1,N2,N3 → C: "ACK"
       <section style={{ marginBottom: 72 }}>
         <SectionTag text="// Part 09 — Real World" />
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12, fontFamily: 'var(--font-mono)' }}>💼 What This Looks Like at Work</div>
-        <SectionTitle>System Design — Building a Distributed Order System for Swiggy at Scale</SectionTitle>
+        <SectionTitle>System Design — Building a Distributed Order System for DoorDash at Scale</SectionTitle>
 
         <Para>
           This is the kind of system design question asked at every senior engineer and

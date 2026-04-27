@@ -184,7 +184,7 @@ export default function TokenisationAndEmbeddingsPage() {
         <span style={S.tag}>Before any formula — why tokenisation matters</span>
         <h2 style={S.h2}>
           Neural networks only understand numbers.
-          "Razorpay declined my payment" is text.
+          "Stripe declined my payment" is text.
           Before any model can process it, every character, subword,
           or word must become an integer. That conversion is tokenisation —
           and the choice of how to split text changes everything.
@@ -244,7 +244,7 @@ export default function TokenisationAndEmbeddingsPage() {
               {
                 strategy: 'Word-level',
                 color: '#D85A30',
-                tokens: ['Razorpay', 'declined', 'my', 'payment', 'of', '₹2500'],
+                tokens: ['Stripe', 'declined', 'my', 'payment', 'of', '₹2500'],
                 ids: [4821, 892, 45, 3301, 12, 8823],
                 note: 'OOV problem: "₹2500" unseen at train time → [UNK]. 500k+ vocab needed for Hindi+English.',
               },
@@ -309,7 +309,7 @@ from tokenizers.pre_tokenizers import Whitespace
 import re
 
 # ── Build a BPE tokeniser from scratch ────────────────────────────────
-# Corpus: Razorpay support tickets (simulated)
+# Corpus: Stripe support tickets (simulated)
 corpus = [
     "razorpay payment declined please retry",
     "payment gateway timeout error occurred",
@@ -359,7 +359,7 @@ try:
 
     # GPT-2 tokeniser (BPE)
     gpt2_tok = AutoTokenizer.from_pretrained('gpt2')
-    text     = "Razorpay declined my payment of ₹2500"
+    text     = "Stripe declined my payment of ₹2500"
     gpt2_enc = gpt2_tok(text)
     print(f"\nGPT-2 BPE tokeniser:")
     print(f"  Input:  '{text}'")
@@ -450,7 +450,7 @@ def merge_pair(pair, vocab):
         new_vocab[new_word] = vocab[word]
     return new_vocab
 
-# ── Train BPE on Razorpay corpus ──────────────────────────────────────
+# ── Train BPE on Stripe corpus ──────────────────────────────────────
 corpus = ("razorpay payment declined retry payment gateway "
           "timeout payment failed upi transaction payment "
           "successful razorpay dashboard payment link payment "
@@ -565,7 +565,7 @@ class SkipGram(nn.Module):
         embed = self.embeddings(centre_word)
         return self.output(embed)
 
-# ── Build vocabulary from Razorpay support corpus ─────────────────────
+# ── Build vocabulary from Stripe support corpus ─────────────────────
 corpus = """
 razorpay payment declined please retry payment gateway timeout
 upi transaction failed reversal initiated payment link expired

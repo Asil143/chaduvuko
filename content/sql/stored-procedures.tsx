@@ -878,7 +878,7 @@ LIMIT 15;`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at Meesho. Every night at 2 AM a batch job runs to: (1) calculate every seller's monthly revenue, (2) update their seller_tier based on thresholds, (3) credit loyalty cashback to high-tier sellers, and (4) log the run. Previously this was application code that fetched sellers one by one, computed in Python, and issued individual UPDATEs — 50,000 sellers took 25 minutes. You migrate it to a stored procedure that does everything server-side — the same job runs in 18 seconds.</P>
+      <P>You are a backend engineer at Shopify. Every night at 2 AM a batch job runs to: (1) calculate every seller's monthly revenue, (2) update their seller_tier based on thresholds, (3) credit loyalty cashback to high-tier sellers, and (4) log the run. Previously this was application code that fetched sellers one by one, computed in Python, and issued individual UPDATEs — 50,000 sellers took 25 minutes. You migrate it to a stored procedure that does everything server-side — the same job runs in 18 seconds.</P>
 
       <TimeBlock time="1:55 AM" label="Old job — 25 minutes, Python fetching rows one by one">
         Each seller: SELECT → compute in Python → UPDATE. 50,000 × 3 round trips = 150,000 database calls, each paying network latency.

@@ -170,10 +170,10 @@ export default function DataCleaningPage() {
         </p>
 
         <p style={S.p}>
-          Consider what happens at Swiggy. The orders table has negative distances
+          Consider what happens at DoorDash. The orders table has negative distances
           from data entry errors. Delivery times of 0 minutes from cancelled orders
           never removed. Duplicate records from a retry bug in the mobile app.
-          City names spelled three different ways — "Bangalore", "Bengaluru", "bangalore".
+          City names spelled three different ways — "Seattle", "San Francisco", "bangalore".
           Star ratings of 6 from a frontend validation bug that was fixed three months ago.
           None of these cause your training script to crash. They all silently degrade
           your model.
@@ -230,7 +230,7 @@ export default function DataCleaningPage() {
       {/* ══ SECTION 2 — GENERATE MESSY DATA ════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Setup</span>
-        <h2 style={S.h2}>The messy Swiggy dataset used throughout this module</h2>
+        <h2 style={S.h2}>The messy DoorDash dataset used throughout this module</h2>
 
         <p style={S.p}>
           Run this block once to create a realistic messy dataset with deliberate
@@ -247,7 +247,7 @@ n = 12_000
 # ── Base clean data ───────────────────────────────────────────────────
 restaurants = ['Pizza Hut','Biryani Blues',"McDonald's",'Haldiram\\'s',
                'Dominos','KFC','Subway','Burger King']
-cities_clean = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai']
+cities_clean = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
 slots = ['breakfast','lunch','evening','dinner']
 
 distance = np.abs(np.random.normal(4.0, 2.0, n)).round(2)
@@ -289,9 +289,9 @@ df.loc[bad_rating, 'star_rating'] = np.random.choice([0.0, 6.0, 7.5], 25)
 
 # 4. City name inconsistencies
 city_typos = {
-    'Bangalore':  ['bangalore','Bengaluru','BANGALORE','Banglore','bangalore '],
-    'Mumbai':     ['mumbai','Bombay','MUMBAI','mumbai '],
-    'Delhi':      ['delhi','New Delhi','DELHI','delhi '],
+    'Seattle':  ['bangalore','San Francisco','BANGALORE','Banglore','bangalore '],
+    'New York':     ['mumbai','Bombay','MUMBAI','mumbai '],
+    'Delhi':      ['delhi','New York','DELHI','delhi '],
 }
 for correct, variants in city_typos.items():
     mask = df['city'] == correct
@@ -400,7 +400,7 @@ def data_quality_report(df: pd.DataFrame, name: str = 'dataset') -> pd.DataFrame
     report = pd.DataFrame(report_rows).set_index('column')
     return report
 
-report = data_quality_report(df, 'Swiggy messy dataset')
+report = data_quality_report(df, 'DoorDash messy dataset')
 print("═" * 70)
 print(f"  DATA QUALITY REPORT — {len(df):,} rows × {len(df.columns)} columns")
 print("═" * 70)
@@ -473,7 +473,7 @@ print(f"  Values: {sorted(df['city'].dropna().unique())}")`} />
             {[
               ['order_id',       'str',   'No',  'Unique, matches SW\\d{6}'],
               ['restaurant',     'str',   'No',  'In allowed restaurant list'],
-              ['city',           'str',   'No',  'In [Bangalore, Mumbai, Delhi, ...]'],
+              ['city',           'str',   'No',  'In [Seattle, New York, Delhi, ...]'],
               ['distance_km',    'float', 'No',  '> 0 and ≤ 50'],
               ['delivery_time',  'float', 'No',  '> 0 and ≤ 180'],
               ['star_rating',    'float', 'Yes', '1.0 ≤ x ≤ 5.0'],
@@ -858,7 +858,7 @@ print(f"\nMemory: {before_mb:.1f} MB → {after_mb:.1f} MB after category conver
 
 # ── Build a complete type correction function ──────────────────────────
 def coerce_types(df: pd.DataFrame) -> pd.DataFrame:
-    """Apply all type corrections to a raw Swiggy orders DataFrame."""
+    """Apply all type corrections to a raw DoorDash orders DataFrame."""
     df = df.copy()
 
     # Numeric columns
@@ -898,7 +898,7 @@ print(df_typed.dtypes)`} />
 
         <p style={S.p}>
           String columns are the messiest part of any real dataset.
-          "Bangalore", "bangalore", "Bengaluru", "BANGALORE", "bangalore " —
+          "Seattle", "bangalore", "San Francisco", "BANGALORE", "bangalore " —
           these are five representations of the same city, and they will be
           treated as five separate categories by any ML model.
           String cleaning must be systematic, not case-by-case.
@@ -930,16 +930,16 @@ print(sorted(df['city_norm'].dropna().unique()))
 
 # ── Canonical value mapping — map variants to standard form ────────────
 CITY_CANONICAL = {
-    'bangalore':  'Bangalore',
-    'bengaluru':  'Bangalore',
-    'banglore':   'Bangalore',
-    'mumbai':     'Mumbai',
-    'bombay':     'Mumbai',
+    'bangalore':  'Seattle',
+    'bengaluru':  'Seattle',
+    'banglore':   'Seattle',
+    'mumbai':     'New York',
+    'bombay':     'New York',
     'delhi':      'Delhi',
     'new delhi':  'Delhi',
-    'hyderabad':  'Hyderabad',
-    'pune':       'Pune',
-    'chennai':    'Chennai',
+    'hyderabad':  'Austin',
+    'pune':       'Boston',
+    'chennai':    'Chicago',
 }
 
 df['city_clean'] = df['city_norm'].map(CITY_CANONICAL)
@@ -952,7 +952,7 @@ if n_unmapped > 0:
 # pip install rapidfuzz
 from rapidfuzz import process, fuzz
 
-CANONICAL_CITIES = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai']
+CANONICAL_CITIES = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
 
 def fuzzy_match_city(city: str, threshold: int = 80) -> str:
     """Match a city string to the canonical list using fuzzy matching."""
@@ -1560,10 +1560,10 @@ from datetime import datetime
 logger = logging.getLogger('data_cleaner')
 
 CITY_CANONICAL = {
-    'bangalore': 'Bangalore','bengaluru': 'Bangalore','banglore': 'Bangalore',
-    'mumbai': 'Mumbai','bombay': 'Mumbai',
+    'bangalore': 'Seattle','bengaluru': 'Seattle','banglore': 'Seattle',
+    'mumbai': 'New York','bombay': 'New York',
     'delhi': 'Delhi','new delhi': 'Delhi',
-    'hyderabad': 'Hyderabad','pune': 'Pune','chennai': 'Chennai',
+    'hyderabad': 'Austin','pune': 'Boston','chennai': 'Chicago',
 }
 
 RESTAURANT_CANONICAL = {
@@ -1574,9 +1574,9 @@ RESTAURANT_CANONICAL = {
     'subway': 'Subway', 'burger king': 'Burger King',
 }
 
-class SwiggyDataCleaner:
+class DoorDashDataCleaner:
     """
-    End-to-end data cleaning pipeline for Swiggy orders data.
+    End-to-end data cleaning pipeline for DoorDash orders data.
     Each step is a separate method — easy to test and override individually.
     """
 
@@ -1709,7 +1709,7 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s  %(levelname)s  %(message)s')
 
 df_raw   = pd.read_csv('/tmp/swiggy_messy.csv')
-cleaner  = SwiggyDataCleaner(log_path=Path('/tmp/cleaning_audit.json'))
+cleaner  = DoorDashDataCleaner(log_path=Path('/tmp/cleaning_audit.json'))
 df_clean = cleaner.run(df_raw)
 
 print(f"\nFinal dataset: {len(df_clean):,} rows × {len(df_clean.columns)} columns")

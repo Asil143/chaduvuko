@@ -982,7 +982,7 @@ except ValueError as e:
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
               Wrap your model in a FastAPI endpoint, containerise with Docker,
-              scale with Kubernetes. Full working deployment of the Swiggy
+              scale with Kubernetes. Full working deployment of the DoorDash
               delivery model.
             </p>
           </div>

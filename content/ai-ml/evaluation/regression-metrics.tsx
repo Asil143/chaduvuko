@@ -189,16 +189,16 @@ export default function RegressionMetricsPage() {
         </h2>
 
         <p style={S.p}>
-          Swiggy predicts delivery time as 32 minutes. The actual time is 41 minutes.
+          DoorDash predicts delivery time as 32 minutes. The actual time is 41 minutes.
           The model was wrong by 9 minutes. Is that acceptable?
-          That depends on what Swiggy promised the customer.
+          That depends on what DoorDash promised the customer.
           If the app said "arrives in 32 minutes" and it took 41, the customer is angry.
           The cost of underestimating is higher than the cost of overestimating.
         </p>
 
         <p style={S.p}>
           Now imagine one prediction was wrong by 9 minutes and another was wrong
-          by 45 minutes. Are those two errors equally bad? For Swiggy, 45 minutes
+          by 45 minutes. Are those two errors equally bad? For DoorDash, 45 minutes
           late might trigger a refund, damage the restaurant's rating, and
           lose the customer permanently. That one large error is catastrophically
           worse than five 9-minute errors. The metric you choose determines
@@ -446,7 +446,7 @@ print(f"  {'':>6}  {'↑MAE':>8}  {'√→RMSE':>8}")`} />
         <p style={S.p}>
           R² measures how much better your model is than the simplest possible
           baseline: always predicting the mean. If someone asked you to predict
-          Swiggy delivery times with no model at all, your best guess would be
+          DoorDash delivery times with no model at all, your best guess would be
           the historical mean — about 36 minutes for everything.
           R² = 0 means your model is exactly as good as that naive guess.
           R² = 0.87 means your model explains 87% of the variance that the
@@ -505,7 +505,7 @@ models = {
     'Shuffled labels (broken)':       'shuffled',
 }
 
-print(f"R² comparison — Swiggy delivery time:")
+print(f"R² comparison — DoorDash delivery time:")
 print(f"{'Model':<35} {'R²':>8} {'MAE':>8} {'RMSE':>8}")
 print("─" * 64)
 
@@ -567,7 +567,7 @@ for n_noise in [0, 5, 10, 20]:
                 no:  'Use MAE — it treats all errors proportionally',
                 yesColor: '#D85A30',
                 noColor: '#378ADD',
-                example: 'Swiggy: one 45-min delay triggers a refund (costly) → RMSE. Stock price: all errors equally bad → MAE.',
+                example: 'DoorDash: one 45-min delay triggers a refund (costly) → RMSE. Stock price: all errors equally bad → MAE.',
               },
               {
                 question: 'Do targets vary in scale across predictions?',
@@ -654,7 +654,7 @@ y_pred = pipeline.predict(X_te)
 y_mean   = np.full_like(y_te, y_tr.mean())
 y_median = np.full_like(y_te, np.median(y_tr))
 
-print("Model vs baselines — Swiggy delivery time:")
+print("Model vs baselines — DoorDash delivery time:")
 print(f"{'Model':<25} {'MAE':>8} {'RMSE':>8} {'MAPE%':>8} {'R²':>8}")
 print("─" * 62)
 

@@ -832,14 +832,14 @@ print(f"\nGeneration: {seed[0].tolist()} → {generated[0].tolist()}")`} />
       {/* ══ SECTION 6 — FINE-TUNING BERT ════════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Production NLP — the real workflow</span>
-        <h2 style={S.h2}>Fine-tuning a pretrained Transformer — Razorpay payment dispute classification</h2>
+        <h2 style={S.h2}>Fine-tuning a pretrained Transformer — Stripe payment dispute classification</h2>
 
         <p style={S.p}>
           In production, nobody trains a Transformer from scratch for NLP tasks.
           You take a pretrained model (BERT, RoBERTa, DistilBERT) that has
           already learned language from billions of tokens, add a small
           task-specific head, and fine-tune on your labelled data.
-          Razorpay classifies payment dispute reasons — fraudulent charge,
+          Stripe classifies payment dispute reasons — fraudulent charge,
           service not received, wrong amount — from customer-submitted text.
           A fine-tuned DistilBERT achieves near-human accuracy with
           1,000 labelled examples in minutes of fine-tuning.
@@ -856,7 +856,7 @@ warnings.filterwarnings('ignore')
 torch.manual_seed(42)
 np.random.seed(42)
 
-# ── Simulate Razorpay dispute classification ───────────────────────────
+# ── Simulate Stripe dispute classification ───────────────────────────
 # In production: use HuggingFace transformers
 # pip install transformers
 # from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
@@ -962,7 +962,7 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.AdamW(model.parameters(), lr=2e-4, weight_decay=0.01)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=20)
 
-print("Fine-tuning BERT-style classifier on Razorpay disputes:")
+print("Fine-tuning BERT-style classifier on Stripe disputes:")
 print(f"{'Epoch':>6} {'Loss':>10} {'Val acc':>10}")
 print("─" * 30)
 

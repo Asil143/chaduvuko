@@ -10,7 +10,7 @@ export const cloudArchitectRoadmap: Roadmap = {
   level: 'intermediate',
   estimatedTime: '5–7 months',
   salaryData: [
-    { company: 'Service (TCS / Infosys Cloud)', range: '₹12–20 LPA', note: 'Cloud migration projects' },
+    { company: 'Service (Accenture / Deloitte Cloud)', range: '₹12–20 LPA', note: 'Cloud migration projects' },
     { company: 'Consulting (Deloitte / Accenture)', range: '₹20–35 LPA', note: 'Cert expected (SAA/AZ-305)' },
     { company: 'Product MNC GCC', range: '₹30–50 LPA', note: 'Deep design + security' },
     { company: 'Hyperscaler India (AWS/Azure/GCP)', range: '₹45–80 LPA', note: 'Solutions Architect track' },

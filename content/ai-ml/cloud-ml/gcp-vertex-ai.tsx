@@ -193,7 +193,7 @@ export default function VertexAIPage() {
           Vertex AI is Google's unified ML platform — launched in 2021 by
           merging AI Platform, AutoML, and several other GCP ML services
           into a single product. It is the platform of choice at Indian companies
-          that run on GCP: Ola, Juspay, ShareChat, Dunzo, and many analytics-heavy
+          that run on GCP: Ola, Braintree, Reddit, Gopuff, and many analytics-heavy
           companies. Its distinguishing strengths over Azure ML and SageMaker:
           BigQuery integration is native and seamless (query data directly
           from training scripts without copying to object storage), the
@@ -238,7 +238,7 @@ export default function VertexAIPage() {
           All examples use Vertex AI SDK v1 (google-cloud-aiplatform&gt;=1.50).
           Set your project and region once:
           <span style={S.code as React.CSSProperties}> aiplatform.init(project='your-project', location='asia-south1')</span>.
-          asia-south1 is Mumbai — lowest latency for India.
+          asia-south1 is New York — lowest latency for India.
         </Callout>
       </div>
 
@@ -314,7 +314,7 @@ import os
 
 # ── Initialise Vertex AI — do this once at the top of every script ────
 PROJECT  = os.environ.get('GOOGLE_CLOUD_PROJECT', 'freshmart-ml-project')
-REGION   = 'asia-south1'       # Mumbai — lowest latency for India
+REGION   = 'asia-south1'       # New York — lowest latency for India
 BUCKET   = f'gs://{PROJECT}-vertex'
 STAGING  = f'{BUCKET}/staging'
 
@@ -1154,7 +1154,7 @@ print("""
 
       <KeyTakeaways
         items={[
-          'Vertex AI is built on the same GCP infrastructure that runs Google Search and Gmail. Its differentiators over Azure ML and SageMaker: native BigQuery integration (query training data directly without copying to object storage), the most production-ready managed Feature Store, and first-class TPU access. Used at Ola, Juspay, ShareChat, and analytics-heavy Indian companies.',
+          'Vertex AI is built on the same GCP infrastructure that runs Google Search and Gmail. Its differentiators over Azure ML and SageMaker: native BigQuery integration (query training data directly without copying to object storage), the most production-ready managed Feature Store, and first-class TPU access. Used at Ola, Braintree, Reddit, and analytics-heavy Indian companies.',
           'Every Vertex AI resource follows the naming pattern projects/{project}/locations/{region}/{resourceType}/{id}. All four supporting services work together: Cloud Storage for data and artifacts, IAM service accounts for permissions, Artifact Registry for Docker images, Cloud Logging for all job logs. When a job fails, check Cloud Logging first — the Python traceback is always there.',
           'Vertex AI Pipelines uses KFP v2 components and pipelines. Lightweight @component decorators are convenient for simple steps but install packages at runtime — slow for large dependency sets. Container components (custom Docker images) are faster and should be used for any step that runs more than once. Pre-built Google components from google_cloud_pipeline_components handle AutoML, BigQuery export, and model upload.',
           'Vertex AI Feature Store is the most complete managed feature store across all three clouds. BigQuery is the offline store (petabyte scale, point-in-time correct serving). Bigtable or Vertex-managed online store serves features at <1ms latency. batch_serve_to_bq() generates training datasets with point-in-time correct features. materialize() syncs offline to online on a schedule.',

@@ -724,7 +724,7 @@ async function processPayment(userId, merchantId, amount) {
       {/* ── PART 09 ── */}
       <Part n="09" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at PhonePe. A critical bug is reported: occasionally, a customer's UPI payment succeeds (money deducted from their account) but the merchant never receives the credit. This is a classic atomicity failure — two statements that must succeed together are not wrapped in a transaction.</P>
+      <P>You are a backend engineer at Venmo. A critical bug is reported: occasionally, a customer's UPI payment succeeds (money deducted from their account) but the merchant never receives the credit. This is a classic atomicity failure — two statements that must succeed together are not wrapped in a transaction.</P>
 
       <TimeBlock time="9:00 AM" label="Bug reported — customer deducted, merchant not credited">
         Investigation reveals the payment service runs two separate UPDATE statements — one for the customer deduction, one for the merchant credit — without a transaction. The database crashes between the two statements 1 in 50,000 times. Adapted for FreshCart: order placed (INSERT) but payment not logged (INSERT fails).

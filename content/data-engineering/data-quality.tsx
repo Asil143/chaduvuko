@@ -1155,7 +1155,7 @@ WHERE status = 'scheduled';
 SELECT SUM(order_amount) AS unloaded_revenue
 FROM bronze.orders
 WHERE status = 'scheduled';
--- Returns: ₹4.82 crore unloaded to Silver/Gold
+-- Returns: ₹4.82 million unloaded to Silver/Gold
 
 -- STEP 4: Fix and reprocess
 -- a) Update VALID_STATUSES in pipeline/validate.py to include 'scheduled'
@@ -1173,7 +1173,7 @@ SELECT COUNT(*) FROM silver.orders WHERE status = 'scheduled';
 
 -- TOTAL IMPACT:
 -- Data missing from Silver/Gold: 2 days and 14 hours
--- Revenue gap in dashboards: ₹4.82 crore for 67 hours
+-- Revenue gap in dashboards: ₹4.82 million for 67 hours
 -- Root cause: no data contract enforcement for enum changes
 -- Prevention going forward:
 --   Data contract updated to require 30-day notice for enum changes

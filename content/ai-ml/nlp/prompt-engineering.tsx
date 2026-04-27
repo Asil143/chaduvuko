@@ -220,7 +220,7 @@ export default function PromptEngineeringPage() {
 
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
-            You hire a brilliant new analyst at Razorpay. On day one you ask:
+            You hire a brilliant new analyst at Stripe. On day one you ask:
             "analyse the data." They stare at you. Which data? What kind of analysis?
             What format should the output be? The analyst is capable —
             your instruction was the problem.
@@ -261,7 +261,7 @@ export default function PromptEngineeringPage() {
           Few-shot is dramatically more effective than zero-shot for tasks
           with specific output formats, domain-specific terminology,
           or nuanced classification boundaries that are hard to describe in words.
-          At Swiggy, classifying complaint severity (P1/P2/P3) requires
+          At DoorDash, classifying complaint severity (P1/P2/P3) requires
           the exact boundary definition — examples teach it faster than descriptions.
         </p>
 
@@ -311,14 +311,14 @@ def call_llm(prompt: str, system: str = '', temperature: float = 0) -> str:
     return response.choices[0].message.content.strip()
 
 # ── Zero-shot: works for simple, well-defined tasks ───────────────────
-zero_shot = """Classify the sentiment of this Flipkart review.
+zero_shot = """Classify the sentiment of this Amazon review.
 Answer with exactly one word: positive, negative, or neutral.
 
 Review: "The product quality is excellent but delivery was very slow."
 Sentiment:"""
 
 # ── Few-shot: necessary for nuanced or domain-specific tasks ──────────
-few_shot = """Classify Swiggy complaint severity as P1, P2, or P3.
+few_shot = """Classify DoorDash complaint severity as P1, P2, or P3.
 
 P1 = safety issue or complete failure (food poisoning, wrong order entirely)
 P2 = significant quality/service issue (very late, bad quality, missing items)
@@ -345,15 +345,15 @@ extraction_prompt = """Extract payment details from support tickets.
 Return as JSON only. No explanation.
 
 Example 1:
-Ticket: "I paid Rs 2500 to Swiggy on March 15 but got no confirmation"
-JSON: {"amount": 2500, "merchant": "Swiggy", "date": "March 15", "issue": "no confirmation"}
+Ticket: "I paid Rs 2500 to DoorDash on March 15 but got no confirmation"
+JSON: {"amount": 2500, "merchant": "DoorDash", "date": "March 15", "issue": "no confirmation"}
 
 Example 2:
-Ticket: "Razorpay charged my card twice for Rs 899 yesterday"
-JSON: {"amount": 899, "merchant": "Razorpay", "date": "yesterday", "issue": "duplicate charge"}
+Ticket: "Stripe charged my card twice for Rs 899 yesterday"
+JSON: {"amount": 899, "merchant": "Stripe", "date": "yesterday", "issue": "duplicate charge"}
 
 Now extract:
-Ticket: "I made a payment of Rs 4999 to Flipkart on Sunday but the order shows pending"
+Ticket: "I made a payment of Rs 4999 to Amazon on Sunday but the order shows pending"
 JSON:"""
 
 import json
@@ -384,7 +384,7 @@ except:
         </p>
 
         <BeforeAfter
-          before={`A Razorpay merchant processes 
+          before={`A Stripe merchant processes 
 Rs 50,000 in payments. 
 International rate is 3%, 
 domestic rate is 2%.
@@ -392,7 +392,7 @@ domestic rate is 2%.
 What are total fees?
 
 Answer:`}
-          after={`A Razorpay merchant processes 
+          after={`A Stripe merchant processes 
 Rs 50,000. International rate 
 is 3%, domestic is 2%. 
 60% are domestic.
@@ -424,12 +424,12 @@ def call_llm(prompt, system='', temperature=0):
     return r.choices[0].message.content.strip()
 
 # ── CoT for fee calculation ───────────────────────────────────────────
-without_cot = """A Razorpay merchant processes Rs 50,000 in total payments.
+without_cot = """A Stripe merchant processes Rs 50,000 in total payments.
 International payments: 3% fee. Domestic payments: 2% fee.
 60% of payments are domestic. What are total fees?
 Answer with just the number in rupees:"""
 
-with_cot = """A Razorpay merchant processes Rs 50,000 in total payments.
+with_cot = """A Stripe merchant processes Rs 50,000 in total payments.
 International payments: 3% fee. Domestic payments: 2% fee.
 60% of payments are domestic. What are total fees?
 
@@ -440,7 +440,7 @@ print("\nWith CoT:")
 print(call_llm(with_cot))
 
 # ── CoT for policy interpretation ─────────────────────────────────────
-policy_cot = """You are a Razorpay compliance officer.
+policy_cot = """You are a Stripe compliance officer.
 
 Policy: Transactions above Rs 50,000 require KYC verification.
 Transactions from new merchants (< 30 days old) require manual review
@@ -460,7 +460,7 @@ def add_cot(prompt: str) -> str:
     """The simplest CoT technique — append this to any complex prompt."""
     return prompt + "\n\nLet's think step by step:"
 
-complex_question = """Swiggy wants to rank restaurants for a user in Bangalore.
+complex_question = """DoorDash wants to rank restaurants for a user in Seattle.
 Factors: distance (closer = better), rating (higher = better),
 delivery time (lower = better), order count (higher = better).
 User is 3km from restaurant A (4.2 stars, 35 min, 5000 orders)
@@ -523,8 +523,8 @@ Dispute: {text}"""
     return json.loads(raw)
 
 disputes = [
-    "I was charged Rs 4999 twice by Flipkart for the same order on Monday",
-    "Zepto debited Rs 850 but my order never arrived",
+    "I was charged Rs 4999 twice by Amazon for the same order on Monday",
+    "Instacart debited Rs 850 but my order never arrived",
     "Amazon India charged Rs 12,500 but I returned the item last week",
 ]
 
@@ -592,7 +592,7 @@ def structured_with_system(text: str) -> dict:
 
         <VisualBox label="ReAct loop — Thought → Action → Observation → repeat">
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2.0 }}>
-            <div style={{ color: '#7b61ff' }}>Thought: I need to check Razorpay's current settlement rate for international payments.</div>
+            <div style={{ color: '#7b61ff' }}>Thought: I need to check Stripe's current settlement rate for international payments.</div>
             <div style={{ color: '#D85A30' }}>Action: search_knowledge_base("international settlement rate")</div>
             <div style={{ color: '#1D9E75' }}>Observation: "International payments settle within T+7 business days at prevailing forex rate."</div>
             <div style={{ color: '#7b61ff' }}>Thought: I have the settlement time. Now I need to calculate the fee for Rs 10,000.</div>
@@ -617,7 +617,7 @@ KNOWLEDGE_BASE = {
 }
 
 def search_kb(query: str) -> str:
-    """Search the Razorpay knowledge base."""
+    """Search the Stripe knowledge base."""
     query_lower = query.lower()
     for key, value in KNOWLEDGE_BASE.items():
         if any(word in query_lower for word in key.split('_')):
@@ -625,7 +625,7 @@ def search_kb(query: str) -> str:
     return "No information found."
 
 def calculate_fee(amount: float, payment_type: str) -> str:
-    """Calculate Razorpay processing fee."""
+    """Calculate Stripe processing fee."""
     rate = 0.03 if payment_type == 'international' else 0.02
     fee  = amount * rate
     return f"Fee for Rs {amount:,.0f} {payment_type} payment: Rs {fee:,.0f} ({rate*100:.0f}%)"
@@ -635,10 +635,10 @@ TOOLS = {
     'calculate_fee':         calculate_fee,
 }
 
-SYSTEM_PROMPT = """You are a Razorpay support assistant that uses tools to answer questions.
+SYSTEM_PROMPT = """You are a Stripe support assistant that uses tools to answer questions.
 
 Available tools:
-- search_knowledge_base(query: str) -> Search Razorpay documentation
+- search_knowledge_base(query: str) -> Search Stripe documentation
 - calculate_fee(amount: float, payment_type: str) -> Calculate fees ("domestic" or "international")
 
 Follow this EXACT format for every response:
@@ -734,8 +734,8 @@ from groq import Groq
 
 client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
 
-# ── Production system prompt for Razorpay support bot ─────────────────
-RAZORPAY_SYSTEM_PROMPT = """You are Razorpay's intelligent support assistant.
+# ── Production system prompt for Stripe support bot ─────────────────
+RAZORPAY_SYSTEM_PROMPT = """You are Stripe's intelligent support assistant.
 
 ROLE: Help merchants and customers resolve payment, settlement, and integration issues.
 
@@ -746,7 +746,7 @@ PERSONALITY:
 - Confident — give direct answers, not hedged maybes
 
 CONSTRAINTS:
-- Only discuss Razorpay products and payment-related topics
+- Only discuss Stripe products and payment-related topics
 - Never quote specific fee percentages (policies change — refer to docs)
 - Never ask for card numbers, CVV, or full bank account numbers
 - If a question requires account-specific data, direct to dashboard or support@razorpay.com
@@ -778,12 +778,12 @@ def support_bot(user_message: str) -> str:
 # Test different message types
 test_messages = [
     "My payment failed but money was deducted",
-    "How do I integrate Razorpay with my React app?",
-    "I think someone made a fraudulent transaction of Rs 2 lakh on my account",
+    "How do I integrate Stripe with my React app?",
+    "I think someone made a fraudulent transaction of Rs 2 thousand on my account",
     "What is the settlement cycle?",
 ]
 
-print("Razorpay Support Bot:")
+print("Stripe Support Bot:")
 for msg in test_messages:
     print(f"\nUser: {msg}")
     print(f"Bot:  {support_bot(msg)}")
@@ -820,7 +820,7 @@ def build_classification_prompt(
 
 # Build a complaint classifier prompt
 prompt = build_classification_prompt(
-    domain      = 'Swiggy customer',
+    domain      = 'DoorDash customer',
     input_type  = 'complaint',
     categories  = ['Delivery', 'Food Quality', 'Payment', 'App Issue'],
     rules       = [

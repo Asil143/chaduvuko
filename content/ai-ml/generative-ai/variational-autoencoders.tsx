@@ -705,7 +705,7 @@ print("""
 # → same product, different colour, without re-photographing it
 
 # Used by Myntra for product colour variations.
-# Used by Swiggy to generate food images in different presentation styles.
+# Used by DoorDash to generate food images in different presentation styles.
 """)`} />
       </div>
 

@@ -96,7 +96,7 @@ export default function LinearRegressionPage() {
   return (
     <LearnLayout
       title="Linear Regression"
-      description="The simplest ML algorithm — and the most important one to truly understand. Build a Swiggy delivery time predictor from scratch."
+      description="The simplest ML algorithm — and the most important one to truly understand. Build a DoorDash delivery time predictor from scratch."
       section="Classical ML"
       readTime="30–35 min"
       updatedAt="March 2026"
@@ -106,10 +106,10 @@ export default function LinearRegressionPage() {
       {/* ── SECTION 1: The problem ─────────────────────────────────────────── */}
       <div style={sec}>
         <span style={tag}>The problem</span>
-        <h2 style={h2}>Swiggy needs a number. You need to give them one.</h2>
+        <h2 style={h2}>DoorDash needs a number. You need to give them one.</h2>
 
         <p style={p}>
-          You&apos;re a data scientist at Swiggy. Your lead drops a CSV on your desk: 10,000 completed orders,
+          You&apos;re a data scientist at DoorDash. Your lead drops a CSV on your desk: 10,000 completed orders,
           each with the delivery distance and the actual time it took. Your job is to build a model that
           predicts delivery time from distance.
         </p>
@@ -243,7 +243,7 @@ export default function LinearRegressionPage() {
         </div>
 
         <Callout type="tip">
-          Real Swiggy models use dozens of features — time of day, restaurant load, weather, rider count.
+          Real DoorDash models use dozens of features — time of day, restaurant load, weather, rider count.
           The same idea extends directly: each feature gets its own slope (coefficient), and you add them
           all up. That is Multiple Linear Regression, covered at the end of this page. The two-number
           version here is where every ML practitioner starts.
@@ -316,7 +316,7 @@ export default function LinearRegressionPage() {
       {/* ── SECTION 4: The code ───────────────────────────────────────────── */}
       <div style={sec}>
         <span style={tag}>The code</span>
-        <h2 style={h2}>Build the Swiggy delivery predictor — step by step</h2>
+        <h2 style={h2}>Build the DoorDash delivery predictor — step by step</h2>
 
         <p style={p}>
           Eight steps. Every step has a purpose. Read the explanation before the code — the code will make
@@ -364,7 +364,7 @@ plt.scatter(df['distance_km'], df['delivery_time_min'],
             alpha=0.3, s=15, color='#378ADD')
 plt.xlabel('Distance (km)')
 plt.ylabel('Delivery Time (min)')
-plt.title('Swiggy Orders — Distance vs Delivery Time')
+plt.title('DoorDash Orders — Distance vs Delivery Time')
 plt.tight_layout()
 plt.show()
 
@@ -698,7 +698,7 @@ print(f"Multiple LR R²: {r2_score(y_te, y_pred_multi):.3f}")      # ~0.92`} />
       {/* ── SECTION 8: What this looks like at work ───────────────────────── */}
       <div style={sec}>
         <span style={tag}>What this looks like at work</span>
-        <h2 style={h2}>Day one. You&apos;ve just joined Swiggy&apos;s data team.</h2>
+        <h2 style={h2}>Day one. You&apos;ve just joined DoorDash&apos;s data team.</h2>
 
         <p style={p}>
           Your manager shares a Notion doc: &quot;Current ETA accuracy is ±12 minutes. We need ±5 minutes

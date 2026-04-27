@@ -57,7 +57,7 @@ export default function SqlForDataAnalysis() {
       {/* ── PART 01 ── */}
       <Part n="01" title="What Data Analysis Looks Like in SQL" />
 
-      <P>Data analysis in SQL is not about learning new syntax — it is about applying the syntax you already know to answer real business questions. The patterns in this module are used daily by analysts at Swiggy, Zepto, HDFC, and every data-driven company: revenue breakdowns, customer cohorts, retention curves, and RFM segmentation.</P>
+      <P>Data analysis in SQL is not about learning new syntax — it is about applying the syntax you already know to answer real business questions. The patterns in this module are used daily by analysts at DoorDash, Instacart, HDFC, and every data-driven company: revenue breakdowns, customer cohorts, retention curves, and RFM segmentation.</P>
 
       <P>We will use the <Hl>FreshCart dataset</Hl> — the same one in every playground in this course — so every query you run here is real and produces real results. By the end of this module you will have a toolkit of analytical query patterns you can adapt to any business dataset.</P>
 

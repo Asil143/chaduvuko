@@ -214,7 +214,7 @@ export default function ROCAndAUCPage() {
 
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
-            Imagine 100 CRED loan applicants — 10 will default, 90 will not.
+            Imagine 100 Brex loan applicants — 10 will default, 90 will not.
             You line them up ordered by your model's default score, highest first.
             The ROC curve asks: as you walk down the line and draw a threshold
             between each pair of adjacent applicants, what fraction of the 10
@@ -375,7 +375,7 @@ print(f"sklearn AUC:                 {auc_sk:.4f}  ← matches")`} />
         <p style={S.p}>
           It means you can directly answer the question: "if I show this model
           one fraud transaction and one legitimate transaction, what is the
-          probability it will rank the fraud higher?" For Razorpay's fraud model
+          probability it will rank the fraud higher?" For Stripe's fraud model
           with AUC = 0.94, the answer is 94%. This is the number you put
           in the model card, the slide deck, and the RBI audit report.
         </p>
@@ -403,7 +403,7 @@ print(f"sklearn AUC:                 {auc_sk:.4f}  ← matches")`} />
 from sklearn.metrics import roc_auc_score
 
 np.random.seed(42)
-n_pos, n_neg = 200, 800   # CRED loan dataset: 20% default rate
+n_pos, n_neg = 200, 800   # Brex loan dataset: 20% default rate
 
 # Simulate model scores
 pos_scores = np.random.beta(5, 2, n_pos)   # defaulters score higher
@@ -443,9 +443,9 @@ print(f"non-defaulter, the model ranks the defaulter higher {auc_sklearn*100:.1f
 # ── AUC on different datasets — what the numbers mean in practice ──────
 print("\nAUC benchmarks by domain:")
 benchmarks = [
-    ('Fraud detection (Razorpay)',    0.94, 'Production quality'),
-    ('Credit scoring (CRED)',         0.88, 'Good, acceptable'),
-    ('Churn prediction (Swiggy)',     0.81, 'Fair, investigate features'),
+    ('Fraud detection (Stripe)',    0.94, 'Production quality'),
+    ('Credit scoring (Brex)',         0.88, 'Good, acceptable'),
+    ('Churn prediction (DoorDash)',     0.81, 'Fair, investigate features'),
     ('Random model (baseline)',       0.50, 'No signal at all'),
     ('Reverse model (worse than rnd)',0.30, 'AUC < 0.5 — flip predictions'),
 ]
@@ -618,7 +618,7 @@ print(f"  Both:    always report both — they capture different aspects")`} />
               method: 'Cost-minimising threshold',
               formula: 'Cost = FN × cost_FN + FP × cost_FP  →  find min cost',
               color: '#378ADD',
-              when: 'When you know the relative cost of each error type. Razorpay: cost_FN=₹2500 (missed fraud), cost_FP=₹50 (friction). Most situations.',
+              when: 'When you know the relative cost of each error type. Stripe: cost_FN=₹2500 (missed fraud), cost_FP=₹50 (friction). Most situations.',
               limit: 'Requires knowing business costs explicitly. Cost estimates may themselves be uncertain.',
             },
             {
@@ -664,7 +664,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 10_000
 
-# Razorpay fraud dataset
+# Stripe fraud dataset
 amount        = np.abs(np.random.normal(1200, 2000, n)).clip(10, 50_000)
 merchant_risk = np.random.uniform(0, 1, n)
 n_tx_hour     = np.random.randint(0, 20, n).astype(float)
@@ -779,7 +779,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 4000
 
-# Swiggy support ticket categories: 4 classes
+# DoorDash support ticket categories: 4 classes
 X = np.random.randn(n, 10)
 y = np.random.choice([0, 1, 2, 3], n, p=[0.40, 0.25, 0.20, 0.15])
 classes = ['delivery', 'food_quality', 'payment', 'general']

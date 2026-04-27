@@ -317,7 +317,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 3000
 
-# CRED loan default dataset
+# Brex loan default dataset
 income        = np.abs(np.random.normal(50_000, 30_000, n)).clip(8_000, 500_000)
 existing_emis = np.abs(np.random.normal(8_000, 6_000, n)).clip(0, 80_000)
 credit_score  = np.abs(np.random.normal(680, 80, n)).clip(300, 900)

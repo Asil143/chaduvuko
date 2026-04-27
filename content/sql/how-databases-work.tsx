@@ -125,10 +125,10 @@ export default function HowDatabasesWork() {
 
       <H>Rule 1: One table, one thing</H>
       <P>The single most important rule in database design: each table stores exactly one type of entity. FreshCart has a customers table that stores only customers. A products table that stores only products. An orders table that stores only orders. You would never put customer data and product data in the same table, even though both are used when a customer buys a product.</P>
-      <P>When beginners design databases for the first time they often try to put everything in one table — one row per order, with the customer's name, address, and loyalty tier repeated in every single row. This is called data redundancy and it causes serious problems: if Aisha Khan moves from Bangalore to Hyderabad, you have to update her address in every single order row. Miss one row and your data is inconsistent. In a properly designed database you update her address in exactly one place — the customers table — and every order automatically reflects it through the foreign key relationship.</P>
+      <P>When beginners design databases for the first time they often try to put everything in one table — one row per order, with the customer's name, address, and loyalty tier repeated in every single row. This is called data redundancy and it causes serious problems: if Aisha Khan moves from Seattle to Austin, you have to update her address in every single order row. Miss one row and your data is inconsistent. In a properly designed database you update her address in exactly one place — the customers table — and every order automatically reflects it through the foreign key relationship.</P>
 
       <H>Rule 2: Every column stores exactly one piece of information</H>
-      <P>Each column must represent one atomic, indivisible piece of data. A column called address that stores "12 Koramangala, Bangalore, 560034" is a bad design — city, street, and pincode are three different pieces of information crammed into one column. When you later want to find all customers in Bangalore, you would have to use string pattern matching on the whole address, which is slow and error-prone. Correct design separates them: street, city, state, pincode — four columns, four clean pieces of data.</P>
+      <P>Each column must represent one atomic, indivisible piece of data. A column called address that stores "12 Koramangala, Seattle, 560034" is a bad design — city, street, and zip_code are three different pieces of information crammed into one column. When you later want to find all customers in Seattle, you would have to use string pattern matching on the whole address, which is slow and error-prone. Correct design separates them: street, city, state, zip_code — four columns, four clean pieces of data.</P>
 
       <H>Rule 3: Table and column names must be clear, lowercase, and use underscores</H>
       <P>The universal convention for SQL tables and columns: all lowercase letters, words separated by underscores, no spaces, no special characters. <Hl>customers</Hl> not Customers. <Hl>order_date</Hl> not OrderDate or orderDate. <Hl>unit_price</Hl> not UnitPrice or unitprice. This matters because SQL is case-sensitive in some databases for table names, and mixed-case names require quoting everywhere — adding noise to every query you write.</P>
@@ -185,7 +185,7 @@ export default function HowDatabasesWork() {
             <TypeRow type="INTEGER" size="4 bytes" example="1, 42, 1001" use="customer_id, product_id, order_id — any whole number ID or count" />
             <TypeRow type="BIGINT" size="8 bytes" example="9876543210" use="phone numbers, large counters — when INTEGER's max of ~2 billion is not enough" />
             <TypeRow type="DECIMAL(10,2)" size="variable" example="340.00, 28.50" use="unit_price, total_amount — money. NEVER use FLOAT for money — floating point arithmetic introduces rounding errors" />
-            <TypeRow type="VARCHAR(n)" size="up to n chars" example="'Aisha', 'Bangalore'" use="first_name, city, product_name — variable-length text up to n characters" />
+            <TypeRow type="VARCHAR(n)" size="up to n chars" example="'Aisha', 'Seattle'" use="first_name, city, product_name — variable-length text up to n characters" />
             <TypeRow type="CHAR(n)" size="exactly n chars" example="'ST001'" use="store_id — fixed-length codes where every value is always the same length" />
             <TypeRow type="TEXT" size="unlimited" example="long descriptions" use="product descriptions, notes — when you cannot predict maximum length. Slower to index than VARCHAR" />
             <TypeRow type="DATE" size="3 bytes" example="2024-01-05" use="order_date, joined_date, hire_date — date without time, stored as YYYY-MM-DD" />
@@ -438,7 +438,7 @@ LIMIT 10;`}
       {/* ── PART 08 ── */}
       <Part n="08" title="What This Looks Like at Work" />
 
-      <P>You are hired as a junior backend developer at a Bangalore fintech startup. On your second week, you are asked to review a new table that a colleague designed and give feedback before it goes to production. Here is what that day looks like.</P>
+      <P>You are hired as a junior backend developer at a Seattle fintech startup. On your second week, you are asked to review a new table that a colleague designed and give feedback before it goes to production. Here is what that day looks like.</P>
 
       <TimeBlock time="10:00 AM" label="Schema review request arrives">
         Your team lead shares a PR in GitHub. It adds a new table called user_transactions to the database. She asks you to review the schema before it is merged. You open the file.
@@ -557,7 +557,7 @@ LIMIT 5;`}
         items={[
           'When you run a query, six components work in sequence: Parser (validates syntax), Query Planner (chooses the best execution plan), Executor (runs the plan), Buffer Pool (serves from memory), Storage Engine (reads disk), Transaction Manager (enforces ACID).',
           'The single most important table design rule: one table stores exactly one type of entity. Mixing customer and order data in one table causes redundancy that leads to inconsistency when data changes.',
-          'Every column must store one atomic piece of data. An address column storing "12 Koramangala, Bangalore, 560034" is bad design — split into street, city, state, pincode.',
+          'Every column must store one atomic piece of data. An address column storing "12 Koramangala, Seattle, 560034" is bad design — split into street, city, state, zip_code.',
           'Use DECIMAL(precision, scale) for all money columns. FLOAT and DOUBLE introduce binary rounding errors that accumulate into accounting discrepancies on financial data.',
           'PRIMARY KEY automatically enforces uniqueness and NOT NULL, and creates a B-tree index. Every table needs one. Use auto-increment integers in almost all cases.',
           'UNIQUE allows NULL values (multiple NULLs permitted). PRIMARY KEY does not allow NULL. A table can have one PRIMARY KEY and multiple UNIQUE constraints.',

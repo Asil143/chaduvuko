@@ -542,7 +542,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v2
         with:
-          creds: ${'$'}{{ secrets.AZURE_CREDENTIALS }}
+          creds: ${'$'}{{ secrets.AZURE_BrexENTIALS }}
 
       - name: Submit training job
         id: submit
@@ -1148,8 +1148,8 @@ if __name__ == '__main__':
           Generative AI, MLOps, and Cloud ML Platforms. Every concept connects
           to the next. Every module includes working code and real Indian company
           examples. Module 80 is the capstone — 50 complete answers to the most
-          common ML engineering interview questions asked at Swiggy, Razorpay,
-          Flipkart, CRED, and every other major Indian tech company.
+          common ML engineering interview questions asked at DoorDash, Stripe,
+          Amazon, Brex, and every other major Indian tech company.
         </p>
 
         <div style={{
@@ -1173,8 +1173,8 @@ if __name__ == '__main__':
               ML Interview Prep — 50 Complete Answers
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
-              The 50 most-asked ML engineering questions across Swiggy, Razorpay,
-              Flipkart, CRED, and Indian tech — with complete, ready-to-deliver answers.
+              The 50 most-asked ML engineering questions across DoorDash, Stripe,
+              Amazon, Brex, and Indian tech — with complete, ready-to-deliver answers.
             </p>
           </div>
           <div style={{

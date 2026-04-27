@@ -270,11 +270,11 @@ VALUES (1, 5, 3);
         initialQuery={`-- Demonstrate UNIQUE enforcement
 -- Insert a customer with a new email — succeeds
 INSERT INTO customers (first_name, last_name, email, city, joined_date)
-VALUES ('Test', 'User', 'unique.test@gmail.com', 'Pune', '2024-04-10');
+VALUES ('Test', 'User', 'unique.test@gmail.com', 'Boston', '2024-04-10');
 
 -- Try to insert another with the same email — fails
 INSERT INTO customers (first_name, last_name, email, city, joined_date)
-VALUES ('Another', 'User', 'unique.test@gmail.com', 'Mumbai', '2024-04-10');`}
+VALUES ('Another', 'User', 'unique.test@gmail.com', 'New York', '2024-04-10');`}
         height={145}
         showSchema={false}
       />
@@ -319,8 +319,8 @@ order_status VARCHAR(20) CHECK (order_status IN ('Processing','Delivered','Cance
 gender       VARCHAR(20) CHECK (gender IN ('Male','Female','Other','Prefer not to say'))
 
 -- String format validation
-pan_number   CHAR(10)    CHECK (LENGTH(pan_number) = 10)
-pincode      VARCHAR(10) CHECK (pincode ~ '^[0-9]{6}$')  -- PostgreSQL regex`}
+ssn_last4   CHAR(10)    CHECK (LENGTH(ssn_last4) = 10)
+zip_code      VARCHAR(10) CHECK (zip_code ~ '^[0-9]{6}$')  -- PostgreSQL regex`}
       />
 
       <H>Named CHECK constraints — better error messages</H>
@@ -655,7 +655,7 @@ ORDER BY tc.table_name, tc.constraint_type, kcu.column_name;`}
   phone        VARCHAR(20),
   city         VARCHAR(100),
   state        VARCHAR(100),
-  pincode      VARCHAR(10),
+  zip_code      VARCHAR(10),
   joined_date  DATE           NOT NULL DEFAULT CURRENT_DATE,
   loyalty_tier VARCHAR(20)    NOT NULL DEFAULT 'Bronze',
 
@@ -694,7 +694,7 @@ CREATE TABLE orders (
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are reviewing a pull request at a Bangalore fintech startup. A junior engineer has written a migration that adds a new payments table. You are doing the schema review before it goes to production.</P>
+      <P>You are reviewing a pull request at a Seattle fintech startup. A junior engineer has written a migration that adds a new payments table. You are doing the schema review before it goes to production.</P>
 
       <TimeBlock time="10:00 AM" label="Schema arrives for review">
         The migration creates a payments table for tracking UPI and card transactions.
@@ -765,7 +765,7 @@ CREATE TABLE payments (
 
       <IQ q="What does a CHECK constraint enforce and what are its limitations?">
         <p style={{ margin: '0 0 14px' }}>A CHECK constraint defines a boolean condition that every row must satisfy when inserted or updated. If the condition evaluates to FALSE, the operation is rejected immediately with an error. CHECK constraints encode business rules at the database level — rules that are independent of application logic and cannot be bypassed by any data entry method.</p>
-        <p style={{ margin: '0 0 14px' }}>CHECK constraints can enforce: numeric ranges (unit_price {'>'}= 0, quantity {'>'} = 0), enumerated valid values (status IN ('Active','Inactive')), string format requirements (LENGTH(pan_number) = 10), cross-column logical relationships (delivery_date IS NULL OR delivery_date {'>'}= order_date), and any condition expressible as a boolean SQL expression.</p>
+        <p style={{ margin: '0 0 14px' }}>CHECK constraints can enforce: numeric ranges (unit_price {'>'}= 0, quantity {'>'} = 0), enumerated valid values (status IN ('Active','Inactive')), string format requirements (LENGTH(ssn_last4) = 10), cross-column logical relationships (delivery_date IS NULL OR delivery_date {'>'}= order_date), and any condition expressible as a boolean SQL expression.</p>
         <p style={{ margin: 0 }}>The key limitation: CHECK constraints can only reference columns within the same row of the same table. They cannot reference other tables (that is what FOREIGN KEY is for), cannot reference other rows in the same table, and cannot call non-deterministic functions in most databases. The NULL behaviour is also important: CHECK only rejects FALSE results — if the condition evaluates to NULL (because the column being checked is NULL), the row is allowed through. To prevent both invalid values AND NULL, combine CHECK with NOT NULL. Finally, in MySQL before version 8.0.16, CHECK constraints were parsed but silently ignored — they had no effect. Always verify that your database version actually enforces CHECK constraints.</p>
       </IQ>
 

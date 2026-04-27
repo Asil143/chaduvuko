@@ -86,7 +86,7 @@ export default function SelectFrom() {
       {/* ── PART 01 ── */}
       <Part n="01" title="The Two Words That Run the World's Data" />
 
-      <P>Every piece of data you have ever seen on a screen — your bank balance, your Swiggy order history, your Zerodha portfolio, your Instagram feed — was retrieved from a database using a query that starts with the same two words: <Hl>SELECT</Hl> and <Hl>FROM</Hl>.</P>
+      <P>Every piece of data you have ever seen on a screen — your bank balance, your DoorDash order history, your Robinhood portfolio, your Instagram feed — was retrieved from a database using a query that starts with the same two words: <Hl>SELECT</Hl> and <Hl>FROM</Hl>.</P>
 
       <P>SELECT and FROM are not just beginner syntax that you graduate past. They are the foundation of every SQL query ever written, from the simplest lookup to the most complex analytical pipeline. A senior data engineer at a FAANG company writes SELECT and FROM a hundred times a day. Understanding them deeply — not just mechanically, but knowing what the database actually does when it sees them — makes every SQL concept that follows easier to learn.</P>
 
@@ -361,7 +361,7 @@ LIMIT 5;`}
 
       <P><Hl>Table and column names depend on the database.</Hl> In PostgreSQL, table and column names are case-insensitive unless you quote them with double quotes. In MySQL, table names are case-sensitive on Linux (because file names are case-sensitive on Linux) but case-insensitive on Windows. The safest practice: always use lowercase for table and column names (as FreshCart does) and write them the same way every time.</P>
 
-      <P><Hl>String values are case-sensitive.</Hl> The value 'Bangalore' is not the same as 'bangalore' or 'BANGALORE' in a WHERE clause. String comparisons respect exact case — you will see this in Module 06 when learning WHERE.</P>
+      <P><Hl>String values are case-sensitive.</Hl> The value 'Seattle' is not the same as 'bangalore' or 'BANGALORE' in a WHERE clause. String comparisons respect exact case — you will see this in Module 06 when learning WHERE.</P>
 
       <CodeBlock
         label="All of these are identical — SQL keywords are case-insensitive"
@@ -569,7 +569,7 @@ ORDER BY order_date DESC;`}
       {/* ── PART 12 ── */}
       <Part n="12" title="What This Looks Like at Work" />
 
-      <P>You are three weeks into your job as a Business Analyst at a Bangalore fintech startup. Your manager, Deepika, sends a Slack message on a Tuesday morning.</P>
+      <P>You are three weeks into your job as a Business Analyst at a Seattle fintech startup. Your manager, Deepika, sends a Slack message on a Tuesday morning.</P>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', margin: '20px 0 24px' }}>
         <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '.08em' }}>Slack · #analytics</div>

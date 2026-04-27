@@ -360,24 +360,24 @@ Best for: write-heavy workloads, time-series data, IoT streams, Kafka consumer s
 Index: idx_orders_city ON orders(city)
 
 INDEX STRUCTURE (simplified):
-  Root page:  [Chennai | Hyderabad | Mumbai]
+  Root page:  [Chicago | Austin | New York]
                   ↓           ↓          ↓
   Level 1: [Ahm..Che] [Hy..Mum] [Mum..Pun] [Pun..Vis]
                                      ↓
-  Leaf pages: [Mumbai row_ptr_1, Mumbai row_ptr_2, ...]
-              [Mumbai row_ptr_3, Mumbai row_ptr_4, ...]
+  Leaf pages: [New York row_ptr_1, New York row_ptr_2, ...]
+              [New York row_ptr_3, New York row_ptr_4, ...]
 
-QUERY: SELECT * FROM orders WHERE city = 'Mumbai'
+QUERY: SELECT * FROM orders WHERE city = 'New York'
 
 EXECUTION WITH INDEX:
-  1. Read root page → navigate right subtree (Mumbai > Hyderabad)
-  2. Read level-1 internal page → find leaf page range for Mumbai
-  3. Read first leaf page → find first Mumbai entry + row pointer
+  1. Read root page → navigate right subtree (New York > Austin)
+  2. Read level-1 internal page → find leaf page range for New York
+  3. Read first leaf page → find first New York entry + row pointer
   4. Follow row pointer → read actual table page for this row
-  5. Continue through leaf pages until city > 'Mumbai'
+  5. Continue through leaf pages until city > 'New York'
 
   Total: ~4 index pages + N data pages (one per matching row)
-  For 50,000 Mumbai orders in 100M rows: ~50,004 page reads
+  For 50,000 New York orders in 100M rows: ~50,004 page reads
 
 QUERY WITHOUT INDEX:
   Full table scan: 100,000,000 rows / 100 rows per page = 1,000,000 page reads
@@ -385,8 +385,8 @@ QUERY WITHOUT INDEX:
   Speedup: ~20× for this query
 
 RANGE QUERY benefit:
-  SELECT * FROM orders WHERE city = 'Mumbai' AND amount > 500
-  Index on city narrows to Mumbai rows, then filters amount.
+  SELECT * FROM orders WHERE city = 'New York' AND amount > 500
+  Index on city narrows to New York rows, then filters amount.
   Index on (city, amount) composite — narrows to both criteria in one pass.`}</CodeBox>
 
         <SubTitle>Index types every data engineer must know</SubTitle>
@@ -728,7 +728,7 @@ within seconds, not the next morning's batch.`}</CodeBox>
             word: 'Atomicity',
             color: '#00e676',
             def: 'All operations in a transaction succeed together, or none of them do. A bank transfer subtracts from account A and adds to account B. If anything fails between the two operations, both are rolled back. The money is never lost and never duplicated.',
-            real: 'A Razorpay payment: debit the customer\'s account and credit the merchant\'s account as one atomic operation. If the credit fails, the debit is automatically reversed.',
+            real: 'A Stripe payment: debit the customer\'s account and credit the merchant\'s account as one atomic operation. If the credit fails, the debit is automatically reversed.',
           },
           {
             letter: 'C',
@@ -931,18 +931,18 @@ To see the plan PostgreSQL chose:
         <SubTitle>Reading EXPLAIN output — the most practical skill for query optimisation</SubTitle>
 
         <CodeBox label="EXPLAIN ANALYZE output — how to read it">{`EXPLAIN ANALYZE
-  SELECT * FROM orders WHERE city = 'Bangalore' AND amount > 1000;
+  SELECT * FROM orders WHERE city = 'Seattle' AND amount > 1000;
 
 Output:
   Bitmap Heap Scan on orders  (cost=892.14..4821.33 rows=12847 width=89)
                                (actual time=12.847..89.234 rows=13102 loops=1)
-    Recheck Cond: (city = 'Bangalore')
+    Recheck Cond: (city = 'Seattle')
     Filter: (amount > 1000::numeric)
     Rows Removed by Filter: 28432
     ->  Bitmap Index Scan on idx_orders_city
                              (cost=0.00..888.93 rows=41279 width=0)
                              (actual time=11.234..11.234 rows=41534 loops=1)
-          Index Cond: (city = 'Bangalore')
+          Index Cond: (city = 'Seattle')
   Planning Time: 0.847 ms
   Execution Time: 94.127 ms
 
@@ -954,7 +954,7 @@ HOW TO READ THIS:
   "Rows Removed by Filter: 28432" → 28k rows passed index but failed amount filter
 
 KEY INSIGHT from this output:
-  The index returned 41,534 rows for city='Bangalore'
+  The index returned 41,534 rows for city='Seattle'
   But only 13,102 had amount > 1000 (filter removed 28,432)
   
   This means a composite index on (city, amount) would be better:

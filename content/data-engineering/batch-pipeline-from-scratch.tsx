@@ -516,7 +516,7 @@ def validate_row(raw: dict) -> ValidationResult:
         return ValidationResult(False, None,
             f'negative_order_amount: \${amount} for order \${raw["order_id"]}')
 
-    if amount > Decimal('500000'):   # ₹5 lakh — suspiciously large
+    if amount > Decimal('500000'):   # ₹5 thousand — suspiciously large
         return ValidationResult(False, None,
             f'suspiciously_large_amount: \${amount} for order \${raw["order_id"]}')
 

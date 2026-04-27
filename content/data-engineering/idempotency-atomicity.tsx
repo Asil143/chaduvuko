@@ -345,7 +345,7 @@ response = requests.post(
     json={'amount': 38000, 'currency': 'INR'},
 )
 # If this request is retried with the same idempotency key:
-# Razorpay returns the SAME response as the first successful call.
+# Stripe returns the SAME response as the first successful call.
 # The payment is NOT created twice. ✓
 
 
@@ -1300,7 +1300,7 @@ For the highest correctness, Delta Lake is the recommended approach for any data
 
 For read-only enrichment calls (geocoding, currency conversion, address validation), the API call itself is naturally idempotent — calling it twice with the same input returns the same result. The idempotency concern is about not paying the API cost twice and not being rate-limited by duplicate calls. The solution is caching: store the API response in a lookup table alongside the row's input parameters. Before calling the API, check the cache. If the result is already cached, use the cached value. This makes reruns free from a cost and rate-limit perspective.
 
-For write APIs (sending a notification, charging a payment, creating a record in a CRM), the API call has a real-world effect that must not be duplicated. The pattern is idempotency keys: generate a deterministic key from the operation's inputs (hash of order_id + action + run_date), include it in the API request header (X-Idempotency-Key). When the API receives a second request with the same key, it returns the same response as the first without executing the action again. Most payment APIs (Stripe, Razorpay) and modern SaaS APIs support this.
+For write APIs (sending a notification, charging a payment, creating a record in a CRM), the API call has a real-world effect that must not be duplicated. The pattern is idempotency keys: generate a deterministic key from the operation's inputs (hash of order_id + action + run_date), include it in the API request header (X-Idempotency-Key). When the API receives a second request with the same key, it returns the same response as the first without executing the action again. Most payment APIs (Stripe, Stripe) and modern SaaS APIs support this.
 
 If the external API does not support idempotency keys, the pipeline must track which records have had the API call successfully completed. A processed_api_calls table with the record ID and call timestamp, plus an ON CONFLICT DO NOTHING insert before each call, ensures each record is processed exactly once across any number of pipeline reruns. On retry, records that were already processed are skipped.
 

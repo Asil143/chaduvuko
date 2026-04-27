@@ -650,11 +650,11 @@ SELECT
     ELSE 'New Standard'
   END                                 AS segment,
   CASE c.city
-    WHEN 'Bangalore' THEN 'South'
-    WHEN 'Hyderabad' THEN 'South'
-    WHEN 'Chennai'   THEN 'South'
-    WHEN 'Mumbai'    THEN 'West'
-    WHEN 'Pune'      THEN 'West'
+    WHEN 'Seattle' THEN 'South'
+    WHEN 'Austin' THEN 'South'
+    WHEN 'Chicago'   THEN 'South'
+    WHEN 'New York'    THEN 'West'
+    WHEN 'Boston'      THEN 'West'
     WHEN 'Delhi'     THEN 'North'
     ELSE 'Other'
   END                                 AS region
@@ -675,7 +675,7 @@ ORDER BY
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a senior analyst at Meesho. The finance team needs a weekly GMV (Gross Merchandise Value) report that breaks down revenue by order tier, payment method category, and delivery performance — all in a single table, one row per store. Previously this took three separate queries and manual Excel work. You build it as one CASE-driven query.</P>
+      <P>You are a senior analyst at Shopify. The finance team needs a weekly GMV (Gross Merchandise Value) report that breaks down revenue by order tier, payment method category, and delivery performance — all in a single table, one row per store. Previously this took three separate queries and manual Excel work. You build it as one CASE-driven query.</P>
 
       <TimeBlock time="3:00 PM" label="Requirements briefing">
         Finance wants: total GMV per store, GMV split by order tier (Premium above ₹1,500, Standard ₹500–1,500, Basic below ₹500), digital vs non-digital payment split, and percentage of orders delivered within 3 days. All in one row per store, one query.
@@ -720,7 +720,7 @@ ORDER BY total_gmv DESC;`}
       />
 
       <TimeBlock time="3:55 PM" label="One query replaces three reports and an Excel session">
-        The finance director opens the result and immediately has the full picture: ST009 (Hyderabad) has the highest GMV but the lowest 3-day delivery rate. ST001 (Bangalore) leads on digital payment adoption. The entire briefing happens from one query result — no manual joins, no Excel pivots, no version control issues between three spreadsheets.
+        The finance director opens the result and immediately has the full picture: ST009 (Austin) has the highest GMV but the lowest 3-day delivery rate. ST001 (Seattle) leads on digital payment adoption. The entire briefing happens from one query result — no manual joins, no Excel pivots, no version control issues between three spreadsheets.
       </TimeBlock>
 
       <ProTip>

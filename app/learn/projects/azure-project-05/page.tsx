@@ -181,7 +181,7 @@ Step 3: After successful copy → delete file from landing zone
 Step 4: If file does not exist → log warning, continue gracefully`}</CodeBlock>
 
       <Callout type="example">
-        This is exactly how production pipelines are designed at companies like Flipkart, Zomato, and HDFC Bank.
+        This is exactly how production pipelines are designed at companies like Amazon, Uber Eats, and HDFC Bank.
       </Callout>
 
       {/* Concepts */}

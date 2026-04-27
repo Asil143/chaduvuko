@@ -561,7 +561,7 @@ airflow-webserver.pid
 # Last commit: abc1234
 
 # ── STEP 1: Immediately rotate/revoke the secret ──────────────────────────────
-# Go to Razorpay/AWS/GCP console and revoke the leaked key RIGHT NOW
+# Go to Stripe/AWS/GCP console and revoke the leaked key RIGHT NOW
 # Do this before anything else — assume the key is already compromised
 # Rotation takes 2 minutes; remediation takes 2 hours — do it first
 

@@ -200,7 +200,7 @@ export default function ModelMonitoringPage() {
 
         <p style={S.p}>
           Two types of drift cause degradation. Data drift: the input feature
-          distribution has shifted. Swiggy trained on pre-monsoon delivery patterns.
+          distribution has shifted. DoorDash trained on pre-monsoon delivery patterns.
           During monsoon, distance_km distributions shift (longer routes around
           flooded roads), is_peak_hour patterns shift (orders cluster differently),
           and the model receives inputs far from what it was trained on.
@@ -253,7 +253,7 @@ export default function ModelMonitoringPage() {
                 type: 'Data Drift (Feature Drift)',
                 color: '#D85A30',
                 what: 'Input feature distributions shift. P(X) changes.',
-                example: 'Swiggy: distance_km mean shifts from 3.2km to 5.8km during monsoon as drivers take longer routes.',
+                example: 'DoorDash: distance_km mean shifts from 3.2km to 5.8km during monsoon as drivers take longer routes.',
                 detect: 'Statistical tests: KS test, PSI, chi-squared. Compare current feature distributions to training distributions.',
                 action: 'Investigate cause. If the new distribution is permanent (business change), retrain. If temporary (holiday), wait.',
                 ground_truth: 'Not required — can detect immediately from input features alone.',
@@ -262,7 +262,7 @@ export default function ModelMonitoringPage() {
                 type: 'Concept Drift (Label Drift)',
                 color: '#7b61ff',
                 what: 'The relationship between features and target changes. P(Y|X) changes.',
-                example: 'Razorpay fraud model: new fraud scheme uses legitimate-looking merchant IDs — same features, different fraud probability.',
+                example: 'Stripe fraud model: new fraud scheme uses legitimate-looking merchant IDs — same features, different fraud probability.',
                 detect: 'Requires ground truth labels with delay. Monitor accuracy, AUC, PSI on predictions vs actuals.',
                 action: 'Retrain immediately with data from the new concept period. Add new fraud pattern to training set.',
                 ground_truth: 'Required — typically available 1-14 days after prediction (delayed labels).',

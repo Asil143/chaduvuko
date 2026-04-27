@@ -158,7 +158,7 @@ export default function MLSystemDesignPage() {
         <p style={S.p}>
           ML system design interviews — and real ML architecture discussions —
           feel open-ended and overwhelming. You are handed a problem like
-          "design Swiggy's delivery time prediction system" and expected to
+          "design DoorDash's delivery time prediction system" and expected to
           produce a coherent architecture in 45 minutes. Without a framework
           you will either forget something important or spend 30 minutes
           on model selection when the interviewer cares about serving infrastructure.
@@ -225,12 +225,12 @@ export default function MLSystemDesignPage() {
 
       {/* ══ SECTION 2 — CASE STUDY 1: DELIVERY TIME ════════════════════════════ */}
       <div style={S.sec}>
-        <span style={S.tag}>Case study 1 — Swiggy</span>
-        <h2 style={S.h2}>Design Swiggy's delivery time prediction system — full walkthrough</h2>
+        <span style={S.tag}>Case study 1 — DoorDash</span>
+        <h2 style={S.h2}>Design DoorDash's delivery time prediction system — full walkthrough</h2>
 
         <p style={S.p}>
           This is the most commonly asked ML design question in Indian interviews.
-          Delivery time estimation appears at Swiggy, Zomato, Dunzo, Blinkit,
+          Delivery time estimation appears at DoorDash, Uber Eats, Gopuff, Blinkit,
           and every quick-commerce startup. Walk through all eight questions.
         </p>
 
@@ -381,8 +381,8 @@ export default function MLSystemDesignPage() {
 
       {/* ══ SECTION 3 — CASE STUDY 2: FRAUD DETECTION ══════════════════════════ */}
       <div style={S.sec}>
-        <span style={S.tag}>Case study 2 — Razorpay</span>
-        <h2 style={S.h2}>Design Razorpay's real-time fraud detection system</h2>
+        <span style={S.tag}>Case study 2 — Stripe</span>
+        <h2 style={S.h2}>Design Stripe's real-time fraud detection system</h2>
 
         <p style={S.p}>
           Fraud detection is fundamentally different from delivery time prediction.
@@ -517,8 +517,8 @@ Feedback loop:
 
       {/* ══ SECTION 4 — CASE STUDY 3: RECOMMENDATION ═══════════════════════════ */}
       <div style={S.sec}>
-        <span style={S.tag}>Case study 3 — Meesho</span>
-        <h2 style={S.h2}>Design Meesho's product recommendation system — two-stage retrieval</h2>
+        <span style={S.tag}>Case study 3 — Shopify</span>
+        <h2 style={S.h2}>Design Shopify's product recommendation system — two-stage retrieval</h2>
 
         <p style={S.p}>
           Recommendation systems are the third most common ML design question
@@ -876,7 +876,7 @@ for mistake, why in mistakes:
           'Every ML system design problem has the same eight questions answered in order: problem framing → data → features → model → serving → scale → monitoring → failure modes. Answer them in this order — each answer constrains the next. Jumping to model selection first is the most common interview mistake.',
           'Problem framing before everything: what is the ML task type, what is the business metric (separate from ML metric), how are labels obtained, and what is the latency budget. These four answers determine the entire architecture. Never start designing until you have them.',
           'Two-stage architecture is the universal pattern for recommendation and search: fast retrieval of 500-1000 candidates (ANN search on pre-computed embeddings), then expensive ranking of only those candidates. Running a neural ranker over 50M products is impossible at real-time serving latency — two-stage is not an optimisation, it is a requirement.',
-          'Capacity estimation is not optional. Give numbers: Swiggy 580 peak RPS → 30 replicas × 20 RPS each at 10ms model latency. Meesho 15M DAU × 3 sessions × 4 requests = 2,083 avg RPS. Fraud detection 1,157 peak TPS at < 10ms model budget → 12 replicas. Interviewers score "thinking in numbers" explicitly.',
+          'Capacity estimation is not optional. Give numbers: DoorDash 580 peak RPS → 30 replicas × 20 RPS each at 10ms model latency. Shopify 15M DAU × 3 sessions × 4 requests = 2,083 avg RPS. Fraud detection 1,157 peak TPS at < 10ms model budget → 12 replicas. Interviewers score "thinking in numbers" explicitly.',
           'Six recurring tradeoffs to master: online vs batch serving (depends on whether real-time features are required), precision vs recall (depends on cost of FN vs FP), model complexity vs latency (start simple, add complexity when plateau), freshness vs cost (compute frequency = signal change rate), global vs per-segment models (add segments when global underperforms >10%), full automation vs human-in-the-loop (automate reversible low-stakes, humans for irreversible high-stakes).',
           'Always address: cold start problem (new users/items with no history — content-based or popularity fallback), label strategy (how and when ground truth is obtained — delivery time is immediate, fraud is delayed 30 days), and fallback when model is unavailable (rule-based or static fallback — never block the core user action due to ML unavailability).',
         ]}

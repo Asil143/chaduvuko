@@ -344,7 +344,7 @@ export default function NaiveBayesPage() {
         <CodeBlock code={`import numpy as np
 
 # ── Naive Bayes from scratch for text classification ──────────────────
-# Swiggy customer reviews: positive vs negative sentiment
+# DoorDash customer reviews: positive vs negative sentiment
 
 training_data = [
     # (text, label)  1=positive, 0=negative
@@ -547,7 +547,7 @@ from sklearn.pipeline import Pipeline
 
 np.random.seed(42)
 
-# ── Dataset: Swiggy customer support tickets ─────────────────────────
+# ── Dataset: DoorDash customer support tickets ─────────────────────────
 # Categories: delivery_issue, food_quality, payment_issue, general
 texts = [
     # delivery issues
@@ -785,7 +785,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 3000
 
-# Swiggy late delivery classification
+# DoorDash late delivery classification
 distance   = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
 traffic    = np.random.randint(1, 11, n).astype(float)
 prep       = np.abs(np.random.normal(15, 5, n)).clip(5, 35)
@@ -832,7 +832,7 @@ for i, name in enumerate(feat_names):
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
-print("\nAlgorithm comparison on Swiggy numeric features:")
+print("\nAlgorithm comparison on DoorDash numeric features:")
 for name, model in [
     ('GaussianNB',          GaussianNB()),
     ('LogisticRegression',  LogisticRegression(max_iter=1000, random_state=42)),
@@ -847,10 +847,10 @@ for name, model in [
       {/* ══ SECTION 6 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>What this looks like at work</span>
-        <h2 style={S.h2}>Day-one task — build a Swiggy review sentiment classifier</h2>
+        <h2 style={S.h2}>Day-one task — build a DoorDash review sentiment classifier</h2>
 
         <p style={S.p}>
-          Your first week at Swiggy's data team.
+          Your first week at DoorDash's data team.
           The product manager asks: "Can you automatically classify
           customer reviews as positive or negative so we can route
           negative ones to customer support immediately?"
@@ -870,7 +870,7 @@ import joblib
 
 np.random.seed(42)
 
-# ── Simulated Swiggy review dataset ───────────────────────────────────
+# ── Simulated DoorDash review dataset ───────────────────────────────────
 positive_templates = [
     "food was excellent delivery was super fast loved it",
     "amazing taste quick delivery will definitely order again",
@@ -1052,7 +1052,7 @@ print("Model saved — ready for production deployment")`} />
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              Random Forest — Zepto Stock Prediction
+              Random Forest — Instacart Stock Prediction
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
               Bagging, random feature subsets, out-of-bag evaluation,

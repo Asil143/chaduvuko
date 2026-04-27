@@ -226,7 +226,7 @@ export default function SklearnInterfacePage() {
         </h2>
 
         <p style={S.p}>
-          Imagine you joined Swiggy's data team on day one. Your lead says:
+          Imagine you joined DoorDash's data team on day one. Your lead says:
           "Try a few different models on this delivery time dataset — linear regression,
           random forest, maybe a gradient boosted tree. See which one performs best."
           In any other ML library, each algorithm has a completely different API.
@@ -271,7 +271,7 @@ export default function SklearnInterfacePage() {
 
         <Callout type="tip">
           This module is intentionally practical. You will not just read about the API —
-          you will use it on the Swiggy delivery time dataset with four different algorithms,
+          you will use it on the DoorDash delivery time dataset with four different algorithms,
           switching between them by changing one line each time.
           By the end, switching algorithms will feel completely natural.
         </Callout>
@@ -359,7 +359,7 @@ from sklearn.model_selection import train_test_split
 np.random.seed(42)
 n = 1000
 
-# Swiggy delivery time dataset
+# DoorDash delivery time dataset
 distance  = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
 traffic   = np.random.randint(1, 11, n).astype(float)
 prep_time = np.abs(np.random.normal(15, 5, n)).clip(5, 35)
@@ -724,7 +724,7 @@ from sklearn.metrics import mean_absolute_error
 np.random.seed(42)
 n = 2000
 restaurants = ['Pizza Hut','KFC','Dominos','Biryani Blues',"McDonald's",'Subway']
-cities      = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune']
+cities      = ['Seattle','New York','Delhi','Austin','Boston']
 
 df = pd.DataFrame({
     'distance_km':    np.abs(np.random.normal(4, 2, n)).clip(0.5, 15),
@@ -882,7 +882,7 @@ df = pd.DataFrame({
     # Ordinal categorical — has a natural order
     'traffic_level':  np.random.choice(['low','medium','high'], n),
     # Nominal categorical — no order
-    'city':           np.random.choice(['Bangalore','Mumbai','Delhi'], n),
+    'city':           np.random.choice(['Seattle','New York','Delhi'], n),
     'restaurant':     np.random.choice(['KFC','Dominos','Pizza Hut'], n),
     # Binary
     'is_weekend':     np.random.randint(0, 2, n).astype(float),
@@ -977,7 +977,7 @@ df = pd.DataFrame({
     'traffic_score':  np.random.randint(1, 11, n).astype(float),
     'restaurant_prep': np.abs(np.random.normal(15, 5, n)).clip(5, 35),
     'order_value':    np.abs(np.random.normal(350, 150, n)).clip(50, 1200),
-    'city':           np.random.choice(['Bangalore','Mumbai','Delhi','Hyderabad'], n),
+    'city':           np.random.choice(['Seattle','New York','Delhi','Austin'], n),
     'restaurant':     np.random.choice(['KFC','Dominos','Pizza Hut','Subway'], n),
 })
 y = (8.6 + 7.3*df['distance_km'] + 0.8*df['restaurant_prep']

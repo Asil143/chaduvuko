@@ -190,7 +190,7 @@ export default function PCAPage() {
         </h2>
 
         <p style={S.p}>
-          Flipkart's customer dataset has 200 features: order frequency,
+          Amazon's customer dataset has 200 features: order frequency,
           average spend, category preferences, browsing time, session length,
           search terms, device type, payment method, return rate,
           review history, and 190 more. Many of these carry overlapping information.
@@ -332,7 +332,7 @@ from sklearn.preprocessing import StandardScaler
 np.random.seed(42)
 n = 1000
 
-# Flipkart customer features — correlated by design
+# Amazon customer features — correlated by design
 order_freq   = np.random.normal(8, 3, n)
 avg_spend    = 200 + 80 * order_freq + np.random.normal(0, 150, n)   # correlated
 n_categories = 1 + 0.3 * order_freq + np.random.normal(0, 1, n)
@@ -486,7 +486,7 @@ from sklearn.preprocessing import StandardScaler
 np.random.seed(42)
 n = 2000
 
-# Flipkart customer: 20 features, many correlated
+# Amazon customer: 20 features, many correlated
 base1 = np.random.normal(0, 1, n)   # purchase behaviour axis
 base2 = np.random.normal(0, 1, n)   # browsing behaviour axis
 base3 = np.random.normal(0, 1, n)   # price sensitivity axis
@@ -699,7 +699,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 2000
 
-# Simulated high-dimensional Flipkart classification:
+# Simulated high-dimensional Amazon classification:
 # Predict segment (0=budget, 1=mid, 2=premium) from 50 features
 base1 = np.random.normal(0, 1, n)
 base2 = np.random.normal(0, 1, n)
@@ -992,7 +992,7 @@ print(f"  KernelPCA accuracy:     {lr_kpca.score(X_kpca, y_rings):.4f}")`} />
       {/* ══ SECTION 8 — FULL PRODUCTION EXAMPLE ════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>What this looks like at work</span>
-        <h2 style={S.h2}>Day-one task — compress Flipkart customer features for segmentation</h2>
+        <h2 style={S.h2}>Day-one task — compress Amazon customer features for segmentation</h2>
 
         <CodeBlock code={`import numpy as np
 import pandas as pd
@@ -1007,7 +1007,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 10_000
 
-# ── High-dimensional Flipkart customer dataset: 50 features ───────────
+# ── High-dimensional Amazon customer dataset: 50 features ───────────
 purchase_base  = np.random.normal(0, 1, n)
 browsing_base  = np.random.normal(0, 1, n)
 price_base     = np.random.normal(0, 1, n)

@@ -740,7 +740,7 @@ ORDER BY total_spend DESC NULLS LAST;`}
       {/* ── PART 12 ── */}
       <Part n="12" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at PhonePe. The product team is reviewing payment method adoption across different merchant categories. They need a breakdown of transaction volume and value by payment method and merchant type — a two-dimensional GROUP BY report.</P>
+      <P>You are a data analyst at Venmo. The product team is reviewing payment method adoption across different merchant categories. They need a breakdown of transaction volume and value by payment method and merchant type — a two-dimensional GROUP BY report.</P>
 
       <TimeBlock time="2:00 PM" label="Request arrives">
         The product manager needs: for each combination of payment method and merchant category, show the transaction count, total value, average transaction size, and the percentage of total transactions. This is a multi-column GROUP BY with percentage calculations.
@@ -795,7 +795,7 @@ ORDER BY p.category, order_count DESC;`}
 
       <IQ q="What is the rule about non-aggregate columns in GROUP BY queries?">
         <p style={{ margin: '0 0 14px' }}>Every column in the SELECT list of a GROUP BY query must be either (1) listed in the GROUP BY clause, or (2) wrapped in an aggregate function. This is the fundamental rule of grouped queries and it follows directly from what GROUP BY does.</p>
-        <p style={{ margin: '0 0 14px' }}>The reason: after GROUP BY, each group is collapsed into one output row. A non-aggregate column like first_name might have different values within a group — if you group by city, one Bangalore group might contain customers named Aisha, Rahul, and Priya. The database cannot return a single first_name for this group because there is no single value. It can only return values that are the same for every row in the group (the GROUP BY columns themselves) or computed aggregate values that reduce the group to one number.</p>
+        <p style={{ margin: '0 0 14px' }}>The reason: after GROUP BY, each group is collapsed into one output row. A non-aggregate column like first_name might have different values within a group — if you group by city, one Seattle group might contain customers named Aisha, Rahul, and Priya. The database cannot return a single first_name for this group because there is no single value. It can only return values that are the same for every row in the group (the GROUP BY columns themselves) or computed aggregate values that reduce the group to one number.</p>
         <p style={{ margin: 0 }}>PostgreSQL and most standard SQL databases enforce this strictly — a non-aggregate, non-GROUP BY column in SELECT throws an error. MySQL with sql_mode not including ONLY_FULL_GROUP_BY was historically more permissive — it would pick an arbitrary value from the group for non-aggregate columns, which is usually wrong and unpredictable. This is why MySQL queries sometimes appear to "work" without proper GROUP BY usage, but return unreliable results. Always follow the rule: every SELECT column is either in GROUP BY or in an aggregate function.</p>
       </IQ>
 
@@ -830,7 +830,7 @@ ORDER BY p.category, order_count DESC;`}
 
       <Err
         msg="GROUP BY returns more rows than expected — expected one row per store but got many"
-        cause="The GROUP BY columns have more unique combinations than expected — often because a JOIN introduced extra rows that created new unique combinations, or because a column you thought was a one-to-one with the GROUP BY key actually varies. For example, grouping by store_id and store_name should give one row per store, but if store_name has trailing whitespace in some rows ('Bangalore ' vs 'Bangalore'), it creates two distinct groups."
+        cause="The GROUP BY columns have more unique combinations than expected — often because a JOIN introduced extra rows that created new unique combinations, or because a column you thought was a one-to-one with the GROUP BY key actually varies. For example, grouping by store_id and store_name should give one row per store, but if store_name has trailing whitespace in some rows ('Seattle ' vs 'Seattle'), it creates two distinct groups."
         fix="Inspect the GROUP BY columns: SELECT store_id, store_name, COUNT(*) FROM stores GROUP BY store_id, store_name — if this returns more than one row per store_id, there are inconsistent store_name values. Fix the data (TRIM whitespace, normalise capitalisation) or group only by the primary key (store_id) and use MIN(store_name) or MAX(store_name) to get a single name per group in SELECT."
       />
 

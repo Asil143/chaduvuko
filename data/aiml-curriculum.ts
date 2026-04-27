@@ -122,7 +122,7 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'activation-functions', title: 'Activation Functions and Loss Functions',     status: 'live' },
       { slug: 'optimisers',           title: 'Optimisers — SGD, Adam, AdamW',              status: 'live' },
       { slug: 'batch-norm-dropout',   title: 'Batch Normalisation and Dropout',             status: 'live' },
-      { slug: 'cnns',                 title: 'CNNs — Meesho Product Image Classification',  status: 'live' },
+      { slug: 'cnns',                 title: 'CNNs — Shopify Product Image Classification',  status: 'live' },
       { slug: 'rnns-and-lstms',       title: 'RNNs and LSTMs — Sequence Modelling',        status: 'live' },
       { slug: 'transformers-and-attention',         title: 'Transformers and Self-Attention',             status: 'live' },
     ],

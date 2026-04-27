@@ -140,7 +140,7 @@ FROM customers;`}
           pros={[
             'Open source, completely free forever',
             'Most feature-rich SQL database available',
-            'Used by Razorpay, CRED, Zerodha, Groww',
+            'Used by Stripe, Brex, Robinhood, Acorns',
             'Best JSON support (JSONB) for mixed data',
             'Window functions, CTEs, full-text search all work',
             'Standard in modern Indian tech hiring',
@@ -158,7 +158,7 @@ FROM customers;`}
           pros={[
             'Easier to install and get started',
             'Massive community, huge amount of tutorials',
-            'Used by Swiggy, Nykaa, BookMyShow',
+            'Used by DoorDash, Sephora, BookMyShow',
             'MySQL Workbench is a polished GUI',
           ]}
           cons={[
@@ -467,7 +467,7 @@ CREATE TABLE customers (
   phone         VARCHAR(20),
   city          VARCHAR(100),
   state         VARCHAR(100),
-  pincode       VARCHAR(10),
+  zip_code       VARCHAR(10),
   joined_date   DATE          NOT NULL,
   loyalty_tier  VARCHAR(20)   NOT NULL DEFAULT 'Bronze'
                 CHECK (loyalty_tier IN ('Bronze','Silver','Gold','Platinum'))
@@ -556,7 +556,7 @@ CREATE TABLE customers (
   phone         VARCHAR(20),
   city          VARCHAR(100),
   state         VARCHAR(100),
-  pincode       VARCHAR(10),
+  zip_code       VARCHAR(10),
   joined_date   DATE          NOT NULL,
   loyalty_tier  VARCHAR(20)   NOT NULL DEFAULT 'Bronze'
 ) ENGINE=InnoDB;
@@ -695,7 +695,7 @@ CREATE TABLE order_items (
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You join a Bangalore startup as a data analyst. On your first day, the engineering manager gives you database credentials and tells you to explore the data before your first standup. Here is exactly what that first hour looks like.</P>
+      <P>You join a Seattle startup as a data analyst. On your first day, the engineering manager gives you database credentials and tells you to explore the data before your first standup. Here is exactly what that first hour looks like.</P>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0, margin: '16px 0 32px' }}>
         <Step n="1" title="You receive a credentials file">
@@ -748,7 +748,7 @@ ORDER BY ordinal_position;`}
 
       <IQ q="What is the difference between PostgreSQL and MySQL? Which would you recommend for a new project?">
         <p style={{ margin: '0 0 14px' }}>PostgreSQL and MySQL are both mature, production-grade open-source relational databases. The practical differences: PostgreSQL is more standards-compliant — it follows the SQL standard more closely and supports more advanced features natively, including better window functions, more flexible JSONB storage and indexing, more powerful full-text search, and a broader set of data types. MySQL has a simpler setup experience and historically had better replication tooling, which made it dominant in high-read consumer web applications.</p>
-        <p style={{ margin: '0 0 14px' }}>The Indian tech industry has largely converged on PostgreSQL for new projects. Razorpay, CRED, Zerodha, Groww, and most high-growth startups choose PostgreSQL. MySQL remains strong in companies that built their stack before 2015 (Swiggy, Nykaa) and are maintaining existing infrastructure.</p>
+        <p style={{ margin: '0 0 14px' }}>The Indian tech industry has largely converged on PostgreSQL for new projects. Stripe, Brex, Robinhood, Acorns, and most high-growth startups choose PostgreSQL. MySQL remains strong in companies that built their stack before 2015 (DoorDash, Sephora) and are maintaining existing infrastructure.</p>
         <p style={{ margin: 0 }}>For a new project in 2026, I would recommend PostgreSQL. It handles every workload MySQL handles, plus more advanced analytical queries, better JSON support, and stronger compliance with the SQL standard — meaning less surprising behaviour when writing complex queries.</p>
       </IQ>
 
@@ -833,8 +833,8 @@ FROM pragma_table_info('orders');`}
       <KeyTakeaways
         items={[
           'The browser playground on every module page is a full SQL environment using DuckDB-WASM. It is sufficient to complete every module in this course without any local installation.',
-          'PostgreSQL is the recommended local database for Indian tech careers in 2026 — used by Razorpay, CRED, Zerodha, Groww, and most high-growth startups.',
-          'MySQL is the alternative with easier initial setup — used by Swiggy, Nykaa, and many consumer web companies.',
+          'PostgreSQL is the recommended local database for Indian tech careers in 2026 — used by Stripe, Brex, Robinhood, Acorns, and most high-growth startups.',
+          'MySQL is the alternative with easier initial setup — used by DoorDash, Sephora, and many consumer web companies.',
           'SQLite is the simplest option with zero server setup — runs from a single file. Not used in production web backends but excellent for learning and mobile development.',
           'DBeaver is the recommended SQL client — free, open source, works with PostgreSQL, MySQL, SQLite, Oracle, Snowflake, BigQuery, and 50+ more from one application.',
           'SQL dialects differ in specific areas: auto-increment syntax (GENERATED ALWAYS AS IDENTITY vs AUTO_INCREMENT), string concatenation (|| vs CONCAT()), boolean types, and some date functions. Core SQL — SELECT, WHERE, JOIN, GROUP BY, window functions, CTEs — is 95% identical across all databases.',

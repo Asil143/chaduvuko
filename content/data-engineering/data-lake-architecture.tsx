@@ -228,7 +228,7 @@ export default function DataLakeArchitectureModule() {
     - Defining a schema before loading
     - Storing in the warehouse's proprietary columnar format
 
-  Application logs at Flipkart in 2013: 10 TB/day of JSON event logs
+  Application logs at Amazon in 2013: 10 TB/day of JSON event logs
   Cost to store in Teradata: $50,000/TB × 10 TB × 365 = $182M/year
   Cost to store on HDFS (Hadoop): ~$1,000/TB = $3.65M/year
   Cost to store on S3 (2015): $23/TB = $83,950/year

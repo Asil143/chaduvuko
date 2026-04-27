@@ -216,7 +216,7 @@ export default function SecurityCompliancePage() {
         Most data engineering tutorials teach you how to build pipelines that work.
         Almost none teach you how to build pipelines that are <em>legal</em>. That gap
         will cost you at some point — either in production when your company faces a GDPR
-        audit, or in an interview when a hiring manager at Razorpay or PhonePe asks how
+        audit, or in an interview when a hiring manager at Stripe or Venmo asks how
         you handle PII in your Kafka topics.
       </Para>
       <Para>
@@ -330,7 +330,7 @@ export default function SecurityCompliancePage() {
       <Para>
         Full-disk encryption protects you if storage is stolen. It does not protect you
         from a legitimate database user running <code>SELECT email, phone FROM users</code>.
-        For fields like Aadhaar numbers, phone numbers, and payment card data, you need
+        For fields like SSN numbers, phone numbers, and payment card data, you need
         column-level encryption — the field is stored as ciphertext in the database, and
         only systems with the decryption key can read the real value.
       </Para>
@@ -365,7 +365,7 @@ row = {
     'email': encrypt_field('priya@example.com'),   # Sensitive — encrypt
     'phone': encrypt_field('+91 9876543210'),       # Sensitive — encrypt
     'aadhaar_last4': encrypt_field('5678'),         # Sensitive — encrypt
-    'city': 'Hyderabad',             # Not sensitive — store as is
+    'city': 'Austin',             # Not sensitive — store as is
 }
 
 # Key rotation: generate new key, decrypt with old, re-encrypt with new
@@ -392,8 +392,8 @@ row = {
       <Table
         headers={['Type', 'Examples', 'Risk level']}
         rows={[
-          ['Direct identifiers', 'Full name, Aadhaar number, PAN, passport, phone, email', 'High — identifies person directly'],
-          ['Quasi-identifiers', 'Pincode + birthdate + gender (can re-identify when combined)', 'Medium — risky in combination'],
+          ['Direct identifiers', 'Full name, SSN number, PAN, passport, phone, email', 'High — identifies person directly'],
+          ['Quasi-identifiers', 'Zip Code + birthdate + gender (can re-identify when combined)', 'Medium — risky in combination'],
           ['Sensitive personal data (DPDP / GDPR)', 'Health data, financial data, biometrics, caste, religion, sexual orientation', 'Very high — stricter rules apply'],
           ['Derived data', 'Credit score, location history, behaviour profile built from raw data', 'High — still personal data even if derived'],
           ['Pseudonymous data', 'user_id replacing email (mapping table exists separately)', 'Medium — still PII if re-identification is possible'],
@@ -456,7 +456,7 @@ def mask_phone(phone: str) -> str:
     return 'XXXXXX' + digits[-4:] if len(digits) >= 4 else 'XXXXXXXXXX'
 
 def mask_aadhaar(aadhaar: str) -> str:
-    """Standard Aadhaar masking — show only last 4."""
+    """Standard SSN masking — show only last 4."""
     digits = re.sub(r'\D', '', aadhaar)
     return 'XXXX XXXX ' + digits[-4:] if len(digits) >= 4 else 'XXXX XXXX XXXX'
 
@@ -682,7 +682,7 @@ def erase_user(user_id: str, key_id: str):
           ['Right to erasure', 'Yes — 30 days', 'Yes — timeline per rules (expected similar)'],
           ['Right to access', 'Yes — detailed Subject Access Request', 'Yes — right to access information about data processed'],
           ['Data breach notification', '72 hours to regulator', 'Without delay to Data Protection Board (timeline per rules)'],
-          ['Fines', 'Up to €20M or 4% global revenue', 'Up to ₹250 crore per instance (rules may revise)'],
+          ['Fines', 'Up to €20M or 4% global revenue', 'Up to ₹250 million per instance (rules may revise)'],
           ['DPO requirement', 'Required for certain organisations', 'Required for "Significant Data Fiduciaries" (defined by rules)'],
           ['Cross-border transfer', 'Adequacy decisions or standard clauses', 'Allowed except to countries notified as restricted'],
         ]}
@@ -862,7 +862,7 @@ connection_string = (
       {/* ── 10. What this looks like at work ───────────────────────────── */}
       <H2>10. What This Looks Like at Work</H2>
 
-      <Card title="Day 1 at a fintech (Razorpay / PhonePe / CRED)" accent="#00e676">
+      <Card title="Day 1 at a fintech (Stripe / Venmo / Brex)" accent="#00e676">
         <Para>
           Your first task might be: "We have a new DPDP compliance requirement — audit the
           raw layer and flag every column that contains personal data." You open the data

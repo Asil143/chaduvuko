@@ -189,7 +189,7 @@ export default function EvaluationMetricsPage() {
         </h2>
 
         <p style={S.p}>
-          Razorpay processes 5 million transactions per day.
+          Stripe processes 5 million transactions per day.
           Only 1.5% are fraudulent — 75,000 transactions.
           A model that predicts "legitimate" for every transaction
           achieves 98.5% accuracy without catching a single fraudulent rupee.
@@ -353,7 +353,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 10_000
 
-# Simulate Razorpay fraud predictions
+# Simulate Stripe fraud predictions
 # 1.5% fraud rate
 y_true  = (np.random.random(n) < 0.015).astype(int)
 # Realistic model: catches 70% of fraud, 3% false alarm rate
@@ -429,7 +429,7 @@ print(classification_report(y_true, y_pred, target_names=['Legit', 'Fraud']))`} 
 
         <p style={S.p}>
           The right balance depends entirely on the business cost of each error type.
-          Missing a fraud transaction at Razorpay costs ₹2,500 on average.
+          Missing a fraud transaction at Stripe costs ₹2,500 on average.
           A false alarm costs ₹50 in support friction. The cost ratio is 50:1.
           You should therefore accept 50 false alarms for every fraud case caught —
           meaning you should optimise heavily toward recall at the expense of precision.
@@ -497,7 +497,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 8_000
 
-# Razorpay fraud features
+# Stripe fraud features
 amount         = np.abs(np.random.normal(1200, 2000, n)).clip(10, 50_000)
 merchant_risk  = np.random.uniform(0, 1, n)
 n_tx_hour      = np.random.randint(0, 20, n).astype(float)
@@ -541,7 +541,7 @@ for threshold in np.arange(0.1, 0.91, 0.1):
 # ── F-beta score — weight recall over precision ────────────────────────
 from sklearn.metrics import fbeta_score
 
-# At Razorpay: missing fraud costs 50× more than false alarm
+# At Stripe: missing fraud costs 50× more than false alarm
 # β=2 weights recall twice as heavily as precision
 # β=0.5 weights precision twice as heavily as recall
 print("\nF-beta score — adjusting the precision/recall balance:")
@@ -831,7 +831,7 @@ rmse = np.sqrt(mean_squared_error(y_te, y_pred))
 mape = mean_absolute_percentage_error(y_te, y_pred) * 100
 r2   = r2_score(y_te, y_pred)
 
-print(f"Swiggy delivery time model evaluation:")
+print(f"DoorDash delivery time model evaluation:")
 print(f"  MAE:   {mae:.4f} min   ← average error in minutes")
 print(f"  RMSE:  {rmse:.4f} min  ← penalises large errors more")
 print(f"  MAPE:  {mape:.4f}%    ← percentage error relative to actual")
@@ -973,7 +973,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 5000
 
-# Swiggy support ticket categories: 4 classes
+# DoorDash support ticket categories: 4 classes
 # delivery_issue, food_quality, payment_issue, general
 X = np.random.randn(n, 10)
 y = np.random.choice([0,1,2,3], n, p=[0.40, 0.25, 0.20, 0.15])
@@ -1120,7 +1120,7 @@ for name, f1, count in zip(class_names, per_class_f1, class_counts):
           'Precision = TP/(TP+FP): of all flagged transactions, what fraction were genuinely fraud? Recall = TP/(TP+FN): of all actual fraud, what fraction did we catch? They trade off — raising the threshold increases precision but decreases recall.',
           'ROC-AUC is threshold-independent — it measures how well the model ranks fraud above legitimate across all possible thresholds. AUC = 0.95 means a random fraud transaction scores higher than a random legit transaction 95% of the time.',
           'For severely imbalanced problems (fraud rate < 5%), PR-AUC (area under the precision-recall curve) is more informative than ROC-AUC. ROC-AUC can look excellent even when precision on the minority class is terrible.',
-          'The optimal threshold is almost never 0.5. Derive it from the relative business cost of false negatives vs false positives. At Razorpay, missing fraud (FN) costs ₹2,500 while a false alarm (FP) costs ₹50 — optimise heavily toward recall by lowering the threshold well below 0.5.',
+          'The optimal threshold is almost never 0.5. Derive it from the relative business cost of false negatives vs false positives. At Stripe, missing fraud (FN) costs ₹2,500 while a false alarm (FP) costs ₹50 — optimise heavily toward recall by lowering the threshold well below 0.5.',
         ]}
       />
     </LearnLayout>

@@ -439,7 +439,7 @@ FROM orders
 WHERE customer_id IN (
   SELECT customer_id
   FROM customers
-  WHERE city = 'Bangalore'
+  WHERE city = 'Seattle'
 )
 ORDER BY total_amount DESC
 LIMIT 8;`}
@@ -455,7 +455,7 @@ WHERE EXISTS (
   SELECT 1
   FROM customers AS c
   WHERE c.customer_id = o.customer_id
-    AND c.city = 'Bangalore'
+    AND c.city = 'Seattle'
 )
 ORDER BY o.total_amount DESC
 LIMIT 8;`}
@@ -468,17 +468,17 @@ LIMIT 8;`}
 
       <CodeBlock
         label="Performance mechanics — EXISTS vs IN"
-        code={`-- Scenario: checking if any of 1,000,000 orders belongs to Bangalore customers
+        code={`-- Scenario: checking if any of 1,000,000 orders belongs to Seattle customers
 
 -- IN approach:
--- 1. Scan customers table: collect ALL Bangalore customer_ids → 5,000 IDs
+-- 1. Scan customers table: collect ALL Seattle customer_ids → 5,000 IDs
 -- 2. For each of 1,000,000 orders: check if customer_id is in the 5,000-ID set
 -- Total: 1,005,000 rows processed + list membership check per order
 
 -- EXISTS approach:
 -- For each of 1,000,000 orders:
 --   1. Look up customer_id in customers table (index lookup)
---   2. Check if city = 'Bangalore'
+--   2. Check if city = 'Seattle'
 --   3. If YES → stop immediately (short-circuit), include order
 --   4. If NO → exclude order
 -- Total: 1,000,000 index lookups (typically fast with index on customer_id)
@@ -776,7 +776,7 @@ ORDER BY c.customer_id;`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at Swiggy. The marketing team is planning three campaign segments and needs the customer lists. Each segment uses a different existence condition — perfect for EXISTS and NOT EXISTS queries. The lists must be mutually exclusive and exhaustive.</P>
+      <P>You are a backend engineer at DoorDash. The marketing team is planning three campaign segments and needs the customer lists. Each segment uses a different existence condition — perfect for EXISTS and NOT EXISTS queries. The lists must be mutually exclusive and exhaustive.</P>
 
       <TimeBlock time="3:00 PM" label="Three segment definitions">
         Segment A: customers who have placed at least one order above ₹1,500 (high-value ever). Segment B: customers who have placed orders but never one above ₹500 (consistent low-value). Segment C: customers who have never placed any delivered order (dormant). Adapted for FreshCart data.

@@ -368,7 +368,7 @@ SELECT
   c.city,
   c.loyalty_tier
 FROM customers AS c
-WHERE c.city = 'Bangalore'
+WHERE c.city = 'Seattle'
 ORDER BY c.last_name;`}
         height={160}
         showSchema={true}
@@ -591,7 +591,7 @@ ORDER BY o.total_amount DESC;`}
       {/* ── PART 09 ── */}
       <Part n="09" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Flipkart's seller analytics team. Sellers use a dashboard to monitor their product performance. The dashboard pulls data from a SQL query that you maintain. The query was written six months ago by a colleague who has since left — and it has no aliases anywhere.</P>
+      <P>You are a data analyst at Amazon's seller analytics team. Sellers use a dashboard to monitor their product performance. The dashboard pulls data from a SQL query that you maintain. The query was written six months ago by a colleague who has since left — and it has no aliases anywhere.</P>
 
       <TimeBlock time="9:00 AM" label="You inherit the query">
         The original query looks like this — technically correct but completely unreadable:

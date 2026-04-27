@@ -324,7 +324,7 @@ CREATE TABLE reviews (
 
     -- UNIQUE constraint — alternate key
     email          VARCHAR(150)    NOT NULL UNIQUE,
-    pan_number     CHAR(10)        UNIQUE,   -- nullable UNIQUE (partial participation)
+    ssn_last4     CHAR(10)        UNIQUE,   -- nullable UNIQUE (partial participation)
 
     -- NUMERIC columns with precision
     salary         DECIMAL(12,2)   NOT NULL,
@@ -366,7 +366,7 @@ CREATE TABLE reviews (
 
     -- CROSS-COLUMN CHECK constraint
     CONSTRAINT chk_salary_range
-        CHECK (salary > 0 AND salary < 10000000)  -- max 1 crore
+        CHECK (salary > 0 AND salary < 10000000)  -- max 1 million
 );`}
         </CodeBox>
 
@@ -607,10 +607,10 @@ SELECT * FROM orders WHERE total_amount BETWEEN 200 AND 500;
 SELECT * FROM orders WHERE order_date BETWEEN '2024-01-01' AND '2024-03-31';
 
 -- IN: match against a list of values
-SELECT * FROM customers WHERE city IN ('Bengaluru', 'Hyderabad', 'Mumbai');
+SELECT * FROM customers WHERE city IN ('San Francisco', 'Austin', 'New York');
 SELECT * FROM orders WHERE status IN ('delivered', 'out_for_delivery');
 -- NOT IN:
-SELECT * FROM customers WHERE city NOT IN ('Delhi', 'Chennai');
+SELECT * FROM customers WHERE city NOT IN ('Delhi', 'Chicago');
 -- ⚠ WARNING: NOT IN with NULL in the list returns ZERO rows!
 -- If ANY value in the list is NULL: NOT IN fails for every row.
 -- See the NULL trap section for details.
@@ -639,8 +639,8 @@ WHERE is_veg = true
    OR price < 100;
 
 SELECT * FROM customers
-WHERE NOT (city = 'Delhi' OR city = 'Chennai');
--- Equivalent to: WHERE city NOT IN ('Delhi', 'Chennai')
+WHERE NOT (city = 'Delhi' OR city = 'Chicago');
+-- Equivalent to: WHERE city NOT IN ('Delhi', 'Chicago')
 
 -- OPERATOR PRECEDENCE: NOT > AND > OR
 -- Use parentheses to be explicit:
@@ -834,9 +834,9 @@ HAVING COUNT(*) = 1;
 
 -- ANTI-PATTERN: Using HAVING where WHERE would work
 -- SLOW (filters after grouping — processes all rows then discards):
-SELECT city, COUNT(*) FROM customers GROUP BY city HAVING city = 'Bengaluru';
+SELECT city, COUNT(*) FROM customers GROUP BY city HAVING city = 'San Francisco';
 -- FAST (filters before grouping — reduces rows first):
-SELECT city, COUNT(*) FROM customers WHERE city = 'Bengaluru' GROUP BY city;
+SELECT city, COUNT(*) FROM customers WHERE city = 'San Francisco' GROUP BY city;
 -- Rule: if the filter is on a raw column (not aggregate), use WHERE not HAVING`}
         </CodeBox>
       </section>
@@ -862,10 +862,10 @@ SELECT city, COUNT(*) FROM customers WHERE city = 'Bengaluru' GROUP BY city;
             title="customers (left table)"
             headers={['customer_id', 'name', 'city']}
             rows={[
-              [1, 'Rahul', 'Bengaluru'],
-              [2, 'Priya', 'Hyderabad'],
-              [3, 'Arjun', 'Mumbai'],
-              [4, 'Kavya', 'Bengaluru'],
+              [1, 'Rahul', 'San Francisco'],
+              [2, 'Priya', 'Austin'],
+              [3, 'Arjun', 'New York'],
+              [4, 'Kavya', 'San Francisco'],
             ]}
             note="4 customers"
           />
@@ -1794,7 +1794,7 @@ FROM orders;`}
         <CodeBox label="INSERT — every form">
 {`-- BASIC INSERT: explicit column list (always use this — never rely on column order)
 INSERT INTO customers (name, email, city, phone)
-VALUES ('Deepak Mehta', 'deepak@email.com', 'Pune', '99887-76655');
+VALUES ('Deepak Mehta', 'deepak@email.com', 'Boston', '99887-76655');
 
 -- INSERT multiple rows in one statement (more efficient than separate INSERTs)
 INSERT INTO menu_items (restaurant_id, name, category, price, is_veg)
@@ -1837,7 +1837,7 @@ WHERE restaurant_id = 1
 -- UPDATE multiple columns at once
 UPDATE customers
 SET
-    city       = 'Bengaluru',
+    city       = 'San Francisco',
     phone      = '99887-12345',
     is_active  = true
 WHERE customer_id = 42;
@@ -1925,7 +1925,7 @@ UPDATE customers SET deleted_at = CURRENT_TIMESTAMP WHERE customer_id = 42;
         <CodeBox label="UNION, INTERSECT, EXCEPT — complete reference">
 {`-- UNION: combine results from two queries, removing duplicates
 -- (UNION ALL keeps duplicates — almost always what you want for performance)
-SELECT customer_id, name, city FROM customers WHERE city = 'Bengaluru'
+SELECT customer_id, name, city FROM customers WHERE city = 'San Francisco'
 UNION
 SELECT customer_id, name, city FROM customers WHERE name LIKE 'R%';
 -- ⚠ UNION without ALL does a DISTINCT operation — expensive at scale
@@ -2265,8 +2265,8 @@ ORDER BY s.streak_length DESC;`}
         <SectionTitle>Real Queries From Real Job Descriptions at Indian Tech Companies</SectionTitle>
 
         <Para>
-          These are the exact types of SQL tasks that appear in Swiggy, Flipkart, Razorpay,
-          and CRED job descriptions for data engineering and analytics roles. Every one of
+          These are the exact types of SQL tasks that appear in DoorDash, Amazon, Stripe,
+          and Brex job descriptions for data engineering and analytics roles. Every one of
           these exercises pulls from the concepts in this module.
         </Para>
 
@@ -2274,7 +2274,7 @@ ORDER BY s.streak_length DESC;`}
 
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px' }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 16, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-              Swiggy — "Find top 3 restaurants by revenue in each city for Q1 2024"
+              DoorDash — "Find top 3 restaurants by revenue in each city for Q1 2024"
             </div>
             <CodeBox>
 {`WITH q1_revenue AS (
@@ -2304,7 +2304,7 @@ ORDER BY city, city_rank;`}
 
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px' }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: '#0078d4', background: 'rgba(0,120,212,0.1)', border: '1px solid rgba(0,120,212,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 16, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-              Razorpay — "Find customers who increased their average order value by more than 20% in the second half of the year compared to the first half"
+              Stripe — "Find customers who increased their average order value by more than 20% in the second half of the year compared to the first half"
             </div>
             <CodeBox>
 {`WITH half_year_stats AS (
@@ -2335,7 +2335,7 @@ ORDER BY pct_increase DESC;`}
 
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px' }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: '#f97316', background: 'rgba(249,115,22,0.1)', border: '1px solid rgba(249,115,22,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 16, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-              Flipkart — "Find the most ordered item in each restaurant and the percentage it contributes to that restaurant's total orders"
+              Amazon — "Find the most ordered item in each restaurant and the percentage it contributes to that restaurant's total orders"
             </div>
             <CodeBox>
 {`WITH item_orders AS (
@@ -2385,7 +2385,7 @@ ORDER BY r.name;`}
             {
               q: 'What is the difference between WHERE and HAVING?',
               trap: 'Saying "HAVING filters after grouping" and nothing more.',
-              answer: 'WHERE filters individual rows BEFORE grouping occurs — it cannot reference aggregate functions because aggregation hasn\'t happened yet. HAVING filters groups AFTER grouping and aggregation — it CAN reference aggregate functions like COUNT(*), SUM(), AVG(). Additionally: WHERE is more performant because it reduces the number of rows before GROUP BY processes them. Using HAVING to filter on a non-aggregate column (e.g., HAVING city = \'Bengaluru\') is an anti-pattern — that filter should be in WHERE where it can use indexes and reduces the data before grouping.',
+              answer: 'WHERE filters individual rows BEFORE grouping occurs — it cannot reference aggregate functions because aggregation hasn\'t happened yet. HAVING filters groups AFTER grouping and aggregation — it CAN reference aggregate functions like COUNT(*), SUM(), AVG(). Additionally: WHERE is more performant because it reduces the number of rows before GROUP BY processes them. Using HAVING to filter on a non-aggregate column (e.g., HAVING city = \'San Francisco\') is an anti-pattern — that filter should be in WHERE where it can use indexes and reduces the data before grouping.',
               color: '#0078d4',
             },
             {

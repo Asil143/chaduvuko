@@ -225,7 +225,7 @@ export default function TransferLearningPage() {
         </AnalogyBox>
 
         <Callout type="tip">
-          The standard recipe used by ML teams at Meesho, Flipkart, and Swiggy:
+          The standard recipe used by ML teams at Shopify, Amazon, and DoorDash:
           ResNet50 or EfficientNet-B3 pretrained on ImageNet →
           replace final FC layer → fine-tune with differential learning rates →
           evaluate with 5-fold CV. This produces production-quality models
@@ -625,7 +625,7 @@ for name in ['resnet18', 'resnet50', 'efficientnet_b0', 'efficientnet_b3']:
       {/* ══ SECTION 5 — COMPLETE PIPELINE ═══════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>The full recipe</span>
-        <h2 style={S.h2}>Complete transfer learning pipeline — Meesho product classification</h2>
+        <h2 style={S.h2}>Complete transfer learning pipeline — Shopify product classification</h2>
 
         <CodeBlock code={`import torch
 import torch.nn as nn
@@ -648,7 +648,7 @@ IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD  = [0.229, 0.224, 0.225]
 
 # ── Dataset ───────────────────────────────────────────────────────────
-class MeeshoDataset(Dataset):
+class ShopifyDataset(Dataset):
     def __init__(self, n=500, split='train'):
         np.random.seed(42 if split == 'train' else 7)
         self.labels = np.random.randint(0, N_CLASSES, n)
@@ -681,8 +681,8 @@ class MeeshoDataset(Dataset):
         img = Image.fromarray((img * 255).astype(np.uint8))
         return self.transform(img), self.labels[i]
 
-train_ds = MeeshoDataset(400, 'train')
-val_ds   = MeeshoDataset(100, 'val')
+train_ds = ShopifyDataset(400, 'train')
+val_ds   = ShopifyDataset(100, 'val')
 train_ld = DataLoader(train_ds, 32, shuffle=True,  drop_last=True)
 val_ld   = DataLoader(val_ds,   32, shuffle=False)
 
@@ -708,7 +708,7 @@ scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=20)
 # ── Training loop with early stopping ────────────────────────────────
 best_acc, best_wts, patience = 0.0, None, 0
 
-print(f"Fine-tuning ResNet50 on Meesho product categories:")
+print(f"Fine-tuning ResNet50 on Shopify product categories:")
 print(f"{'Epoch':>6} {'Train loss':>12} {'Val acc':>10}")
 print("─" * 32)
 

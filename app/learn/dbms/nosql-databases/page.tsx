@@ -205,7 +205,7 @@ SETNX config:maintenance "1" -- SET if Not eXists (atomic, for distributed locks
 // ─────────────────────────────────────────────────────────────────
 // HASH — nested key-value (object/struct)
 // ─────────────────────────────────────────────────────────────────
-HSET user:1001 name "Rahul Sharma" email "rahul@email.com" city "Bengaluru" tier "Gold"
+HSET user:1001 name "Rahul Sharma" email "rahul@email.com" city "San Francisco" tier "Gold"
 HGET  user:1001 name              -- "Rahul Sharma"
 HGETALL user:1001                 -- all fields and values
 HMGET user:1001 name email        -- multiple fields at once
@@ -378,7 +378,7 @@ BITCOUNT user:1001:daily_login           -- total days logged in
   "customer": {
     "customer_id": "C001",
     "name": "Rahul Sharma",
-    "city": "Bengaluru"
+    "city": "San Francisco"
   },
   "restaurant": {
     "restaurant_id": "R01",
@@ -400,7 +400,7 @@ db.orders.insertMany([...array of documents...]);
 
 // FIND (SELECT equivalent):
 db.orders.find({ status: "delivered" })
-db.orders.find({ "customer.city": "Bengaluru", total: { $gt: 300 } })
+db.orders.find({ "customer.city": "San Francisco", total: { $gt: 300 } })
 // Dot notation accesses embedded fields: "customer.city"
 
 // PROJECTION (SELECT specific fields):
@@ -429,7 +429,7 @@ db.orders.updateOne(
     $currentDate: { delivered_at: true } }
 )
 db.orders.updateMany(
-  { "customer.city": "Bengaluru", status: "pending" },
+  { "customer.city": "San Francisco", status: "pending" },
   { $set: { priority: "high" } }
 )
 // UPDATE OPERATORS: $set, $unset, $inc, $push, $pull, $addToSet
@@ -497,7 +497,7 @@ db.restaurants.createIndex({ location: "2dsphere" })
 db.restaurants.find({
   location: {
     $near: {
-      $geometry: { type: "Point", coordinates: [77.5946, 12.9716] }, // Bengaluru
+      $geometry: { type: "Point", coordinates: [77.5946, 12.9716] }, // San Francisco
       $maxDistance: 5000  // 5km radius
     }
   }
@@ -775,7 +775,7 @@ scan.withStopRow(Bytes.toBytes("customer:C001:2024-03-31\xFF"));
 // Properties: key-value attributes on both nodes and relationships
 
 // CREATE nodes:
-CREATE (rahul:Customer {id: 'C001', name: 'Rahul Sharma', city: 'Bengaluru'})
+CREATE (rahul:Customer {id: 'C001', name: 'Rahul Sharma', city: 'San Francisco'})
 CREATE (biryani_house:Restaurant {id: 'R01', name: 'Biryani House', rating: 4.5})
 CREATE (chicken_biryani:MenuItem {id: 'M001', name: 'Chicken Biryani', price: 280})
 
@@ -879,7 +879,7 @@ LIMIT 5
 // measurement,tag_key=tag_value field_key=field_value timestamp
 cpu_usage,host=web-01,region=ap-south-1 usage_percent=72.4,load_avg=2.1 1710499200000000000
 http_requests,service=order-api,status=200 count=1450,avg_latency_ms=12.4 1710499200000000000
-order_rate,city=Bengaluru placed=847,delivered=801,cancelled=23 1710499200000000000
+order_rate,city=San Francisco placed=847,delivered=801,cancelled=23 1710499200000000000
 
 // INFLUXQL QUERIES (SQL-like):
 SELECT mean(usage_percent)
@@ -983,7 +983,7 @@ PUT /products/_doc/P001
   "name": "Chicken Biryani",
   "description": "Fragrant basmati rice cooked with tender chicken and aromatic spices",
   "restaurant": "Biryani House",
-  "city": "Bengaluru",
+  "city": "San Francisco",
   "price": 280,
   "rating": 4.5,
   "tags": ["non-veg", "rice", "spicy"],
@@ -1021,7 +1021,7 @@ GET /products/_search
         { "match": { "name": "biryani" } }  // full-text on name
       ],
       "filter": [
-        { "term":  { "city": "Bengaluru" } },  // exact match (not scored)
+        { "term":  { "city": "San Francisco" } },  // exact match (not scored)
         { "term":  { "available": true } },
         { "range": { "price": { "gte": 100, "lte": 500 } } }
       ]
@@ -1120,7 +1120,7 @@ GET /products/_search
           using different storage technologies for different parts of the same system.
         </Para>
 
-        <CodeBox label="Swiggy's polyglot persistence architecture">
+        <CodeBox label="DoorDash's polyglot persistence architecture">
 {`// SWIGGY PRODUCTION DATABASE ARCHITECTURE (typical for Indian unicorns):
 
 // POSTGRESQL (primary transactional data):
@@ -1189,7 +1189,7 @@ GET /products/_search
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: '#0078d4', background: 'rgba(0,120,212,0.1)', border: '1px solid rgba(0,120,212,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Architecture Review — Razorpay API Rate Limiting
+            Architecture Review — Stripe API Rate Limiting
           </div>
 
           <CodeBox label="The problem: 100K API requests/second, each needs a rate limit check">

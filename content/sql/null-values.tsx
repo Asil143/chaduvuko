@@ -149,13 +149,13 @@ WHERE manager_id IS NULL;`}
 
       <P>In everyday life, every statement is either true or false. SQL uses <Hl>three-valued logic</Hl>: TRUE, FALSE, and NULL (unknown). This is the root cause of every NULL surprise you will ever encounter.</P>
 
-      <P>When you compare any value with NULL using a standard comparison operator, the result is <Hl>always NULL — never TRUE, never FALSE</Hl>. This is because comparing something known to something unknown cannot produce a definitive answer. "Is Bangalore equal to unknown?" — we cannot know. The answer is unknown (NULL), not false.</P>
+      <P>When you compare any value with NULL using a standard comparison operator, the result is <Hl>always NULL — never TRUE, never FALSE</Hl>. This is because comparing something known to something unknown cannot produce a definitive answer. "Is Seattle equal to unknown?" — we cannot know. The answer is unknown (NULL), not false.</P>
 
       <CodeBlock
         label="NULL comparisons always return NULL — never TRUE or FALSE"
         code={`-- Every one of these returns NULL, not FALSE:
 NULL = NULL        -- NULL (not TRUE!)
-NULL = 'Bangalore' -- NULL
+NULL = 'Seattle' -- NULL
 NULL <> NULL       -- NULL
 NULL > 0           -- NULL
 NULL < 100         -- NULL
@@ -301,25 +301,25 @@ FROM orders;`}
           ['NULL',  'NULL'],
         ]}
       />
-      <P>NOT NULL = NULL. Reversing an unknown still gives an unknown. This is why WHERE NOT city = 'Bangalore' does not include rows where city is NULL.</P>
+      <P>NOT NULL = NULL. Reversing an unknown still gives an unknown. This is why WHERE NOT city = 'Seattle' does not include rows where city is NULL.</P>
 
       <SQLPlayground
         initialQuery={`-- NOT NULL behaviour — city IS NULL rows are excluded
--- Even though NOT 'Bangalore' should logically include "any other city"
--- NULL city rows are neither Bangalore NOR not-Bangalore
+-- Even though NOT 'Seattle' should logically include "any other city"
+-- NULL city rows are neither Seattle NOR not-Seattle
 SELECT first_name, city
 FROM customers
-WHERE NOT city = 'Bangalore';
+WHERE NOT city = 'Seattle';
 -- Compare the count to: SELECT COUNT(*) FROM customers`}
         height={130}
         showSchema={false}
       />
 
       <SQLPlayground
-        initialQuery={`-- To include NULL city rows alongside non-Bangalore cities:
+        initialQuery={`-- To include NULL city rows alongside non-Seattle cities:
 SELECT first_name, city
 FROM customers
-WHERE city <> 'Bangalore'
+WHERE city <> 'Seattle'
    OR city IS NULL
 ORDER BY city;`}
         height={110}
@@ -337,8 +337,8 @@ ORDER BY city;`}
         label="IS NULL and IS NOT NULL — always return TRUE or FALSE"
         code={`NULL IS NULL         -- TRUE
 NULL IS NOT NULL     -- FALSE
-'Bangalore' IS NULL  -- FALSE
-'Bangalore' IS NOT NULL -- TRUE
+'Seattle' IS NULL  -- FALSE
+'Seattle' IS NOT NULL -- TRUE
 0 IS NULL            -- FALSE (0 is not NULL)
 '' IS NULL           -- FALSE (empty string is not NULL)`}
       />
@@ -694,12 +694,12 @@ WHERE NOT EXISTS (
         label="IS DISTINCT FROM vs = for NULL-safe comparison"
         code={`-- Standard equality — fails with NULL
 NULL = NULL             -- NULL (not TRUE)
-'Bangalore' = NULL      -- NULL (not FALSE)
+'Seattle' = NULL      -- NULL (not FALSE)
 
 -- NULL-safe equality
 NULL IS NOT DISTINCT FROM NULL   -- TRUE (both are NULL — they are the same)
-'Bangalore' IS NOT DISTINCT FROM NULL  -- FALSE (they are different)
-NULL IS DISTINCT FROM 'Bangalore'      -- TRUE (they are different)
+'Seattle' IS NOT DISTINCT FROM NULL  -- FALSE (they are different)
+NULL IS DISTINCT FROM 'Seattle'      -- TRUE (they are different)
 
 -- Use case: compare two nullable columns
 WHERE col1 IS NOT DISTINCT FROM col2
@@ -808,7 +808,7 @@ ALTER COLUMN annual_income SET NOT NULL;`}
       <IQ q="What is three-valued logic and why does it exist in SQL?">
         <p style={{ margin: '0 0 14px' }}>Three-valued logic extends standard two-valued (TRUE/FALSE) boolean logic by adding a third value: NULL (unknown). SQL uses three-valued logic because relational databases store real-world information that is sometimes incomplete or unknown. Forcing every value into TRUE or FALSE when the information is genuinely unknown would produce incorrect results — treating "unknown" as either "yes" or "no" introduces false precision.</p>
         <p style={{ margin: '0 0 14px' }}>The rules of three-valued logic follow from the meaning of NULL as "unknown." Any comparison with NULL returns NULL, because comparing a known value to an unknown value cannot produce a definitive TRUE or FALSE answer. TRUE AND NULL = NULL (true combined with unknown is still uncertain). FALSE AND NULL = FALSE (false combined with anything is false). TRUE OR NULL = TRUE (true combined with anything is true). FALSE OR NULL = NULL (false combined with unknown is uncertain). NOT NULL = NULL (reversing unknown is still unknown).</p>
-        <p style={{ margin: 0 }}>The practical consequence: the WHERE clause discards rows where the condition evaluates to NULL — only rows where the condition is definitely TRUE are included. This is the correct behaviour logically, but it means developers must be explicit about NULL handling. A condition intended to match "anything that is not Bangalore" written as WHERE city {'<>'} 'Bangalore' silently excludes rows where city is NULL, because NULL {'<>'} 'Bangalore' evaluates to NULL, not TRUE. The correct version that includes NULL cities is WHERE city {'<>'} 'Bangalore' OR city IS NULL.</p>
+        <p style={{ margin: 0 }}>The practical consequence: the WHERE clause discards rows where the condition evaluates to NULL — only rows where the condition is definitely TRUE are included. This is the correct behaviour logically, but it means developers must be explicit about NULL handling. A condition intended to match "anything that is not Seattle" written as WHERE city {'<>'} 'Seattle' silently excludes rows where city is NULL, because NULL {'<>'} 'Seattle' evaluates to NULL, not TRUE. The correct version that includes NULL cities is WHERE city {'<>'} 'Seattle' OR city IS NULL.</p>
       </IQ>
 
       <IQ q="What does COALESCE do and give a real-world example of when you would use it?">

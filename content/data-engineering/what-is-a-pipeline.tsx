@@ -222,7 +222,7 @@ Relational DB        PostgreSQL, MySQL, Oracle   CDC (Debezium) or SQL increment
 Document DB          MongoDB, Firestore           Change Streams or scheduled export
 Key-Value            Redis, DynamoDB             Snapshot (no built-in CDC)
 Column-Family        Cassandra, HBase            Spark connector or CDC plugin
-REST API             Razorpay, Salesforce        HTTP pagination with cursor
+REST API             Stripe, Salesforce        HTTP pagination with cursor
 Event Stream         Kafka, Kinesis, Pub/Sub     Kafka Consumer Group (streaming)
 File Drop            SFTP, S3 landing zone       File event trigger or scheduled scan
 SaaS Platform        Stripe, HubSpot, Shopify    Official connectors or REST API
@@ -615,9 +615,9 @@ DeltaTable.forPath(spark, 's3://freshmart-lake/silver/orders').alias('target') \
 # Multiple sources, one sink.
 # Data from different sources merged into one unified destination.
 
-  [Razorpay payments] ─┐
-  [Paytm payments]    ─┤→ [UNION ALL] → [silver.all_payments]
-  [PhonePe payments]  ─┘
+  [Stripe payments] ─┐
+  [Square payments]    ─┤→ [UNION ALL] → [silver.all_payments]
+  [Venmo payments]  ─┘
 
 # Properties:
 #   If one source fails, do you write partial data or wait for all sources?

@@ -537,17 +537,17 @@ WATERMARKS:
           {
             usecase: 'Real-time fraud detection',
             why: 'A fraudulent transaction detected 2 seconds after it occurs can be blocked. A fraudulent transaction detected 6 hours later in the next morning\'s batch is already processed — money is gone. The latency requirement is measured in seconds, not hours. Batch cannot serve this.',
-            companies: 'Razorpay, PhonePe — detect unusual velocity patterns (5 transactions in 10 seconds from same card) in real time',
+            companies: 'Stripe, Venmo — detect unusual velocity patterns (5 transactions in 10 seconds from same card) in real time',
           },
           {
             usecase: 'Live delivery tracking',
-            why: 'A Zomato customer watching their delivery progress on a map needs GPS updates every 10–30 seconds. A batch pipeline that runs hourly is useless for this use case. The data must flow from driver\'s phone → Kafka → stream processor → API → customer\'s map in under a second.',
-            companies: 'Zomato, Swiggy, Porter — real-time driver location tracking and ETA updates',
+            why: 'A Uber Eats customer watching their delivery progress on a map needs GPS updates every 10–30 seconds. A batch pipeline that runs hourly is useless for this use case. The data must flow from driver\'s phone → Kafka → stream processor → API → customer\'s map in under a second.',
+            companies: 'Uber Eats, DoorDash, Porter — real-time driver location tracking and ETA updates',
           },
           {
             usecase: 'Real-time inventory management',
             why: 'A flash sale that sells a product that has already gone out of stock needs to block new orders within seconds. If inventory updates arrive in batch every 15 minutes, the system oversells during the batch window.',
-            companies: 'Meesho, Flipkart during Big Billion Days — prevent overselling during high-velocity sale events',
+            companies: 'Shopify, Amazon during Big Billion Days — prevent overselling during high-velocity sale events',
           },
           {
             usecase: 'Operational alerting',

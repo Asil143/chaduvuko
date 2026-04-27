@@ -420,7 +420,7 @@ print(f"\nGaussian blur: mean_diff={abs(original.mean()-blur_t.mean()):.4f}  "
       f"std_diff={(original.std()-blur_t.std()):.4f}")
 
 # ── Production colour augmentation pipeline ───────────────────────────
-# Strong augmentation for Meesho product images
+# Strong augmentation for Shopify product images
 product_colour_aug = T.Compose([
     T.ColorJitter(brightness=0.4, contrast=0.3, saturation=0.3, hue=0.1),
     T.RandomGrayscale(p=0.05),

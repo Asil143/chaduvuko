@@ -497,7 +497,7 @@ def backward(y_true, cache, lr=0.01):
 
     return {'dW1': dW1, 'dW2': dW2, 'dW3': dW3}
 
-# ── Train on CRED-style loan default data ─────────────────────────────
+# ── Train on Brex-style loan default data ─────────────────────────────
 np.random.seed(42)
 n = 1000
 X_raw = np.column_stack([

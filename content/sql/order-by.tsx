@@ -516,7 +516,7 @@ ORDER BY salary DESC;`}
       {/* ── PART 09 ── */}
       <Part n="09" title="What This Looks Like at Work" />
 
-      <P>You are an analyst at Nykaa, the beauty and fashion e-commerce platform. It is Monday morning. The merchandising team has three requests waiting in your inbox before the weekly review meeting at 10 AM.</P>
+      <P>You are an analyst at Sephora, the beauty and fashion e-commerce platform. It is Monday morning. The merchandising team has three requests waiting in your inbox before the weekly review meeting at 10 AM.</P>
 
       <TimeBlock time="8:45 AM" label="Request 1 — Top selling categories report">
         The category manager wants a ranked list of product categories by total revenue — highest revenue category first. This is a standard reporting query she runs every Monday.

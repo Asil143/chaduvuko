@@ -206,7 +206,7 @@ WHERE unit LIKE '%kg';`}
       <H>Contains — %pattern%</H>
 
       <SQLPlayground
-        initialQuery={`-- Stores in cities containing 'bad' (Ahmedabad, Hyderabad)
+        initialQuery={`-- Stores in cities containing 'bad' (Ahmedabad, Austin)
 SELECT store_id, store_name, city
 FROM stores
 WHERE city LIKE '%bad';`}
@@ -361,7 +361,7 @@ ORDER BY product_name;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Stores that are NOT in Bangalore (city doesn't contain 'alore')
+        initialQuery={`-- Stores that are NOT in Seattle (city doesn't contain 'alore')
 SELECT store_id, store_name, city
 FROM stores
 WHERE city NOT LIKE '%alore'
@@ -537,7 +537,7 @@ WHERE product_name LIKE '%Noodles%'
           {
             title: 'Full-Text Search',
             color: C,
-            desc: 'PostgreSQL has built-in full-text search (tsvector/tsquery). MySQL has FULLTEXT indexes. Dramatically faster than LIKE for large text fields. Used by Swiggy for restaurant name search.',
+            desc: 'PostgreSQL has built-in full-text search (tsvector/tsquery). MySQL has FULLTEXT indexes. Dramatically faster than LIKE for large text fields. Used by DoorDash for restaurant name search.',
             when: 'Large text fields — product descriptions, addresses, review text',
           },
           {
@@ -549,7 +549,7 @@ WHERE product_name LIKE '%Noodles%'
           {
             title: 'Elasticsearch / Typesense',
             color: '#f97316',
-            desc: 'Dedicated search engines built specifically for full-text and fuzzy matching. Used by Flipkart, Amazon India, and Nykaa for product search. Not SQL but far superior for search workloads.',
+            desc: 'Dedicated search engines built specifically for full-text and fuzzy matching. Used by Amazon, Amazon India, and Sephora for product search. Not SQL but far superior for search workloads.',
             when: 'Any production search feature with millions of items',
           },
         ].map(item => (
@@ -610,8 +610,8 @@ ORDER BY brand, unit_price;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Managers in Bangalore stores
--- Role contains 'Manager' AND store is in Bangalore
+        initialQuery={`-- Managers in Seattle stores
+-- Role contains 'Manager' AND store is in Seattle
 SELECT
   e.first_name || ' ' || e.last_name  AS employee,
   e.role,
@@ -620,7 +620,7 @@ SELECT
 FROM employees AS e
 JOIN stores AS s ON e.store_id = s.store_id
 WHERE e.role LIKE '%Manager%'
-  AND s.city = 'Bangalore'
+  AND s.city = 'Seattle'
 ORDER BY e.salary DESC;`}
         height={180}
         showSchema={false}
@@ -669,7 +669,7 @@ WHERE email ~* 'amul'   -- case-insensitive contains
 WHERE product_name !~ '^[0-9]'  -- does not start with a digit
 
 -- Use cases for regex in SQL:
--- Validating formats (phone numbers, PAN, Aadhaar patterns)
+-- Validating formats (phone numbers, PAN, SSN patterns)
 -- Complex multi-pattern matching that LIKE cannot express
 -- Data quality audits on legacy data with inconsistent formatting`}
       />
@@ -679,7 +679,7 @@ WHERE product_name !~ '^[0-9]'  -- does not start with a digit
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Nykaa. The customer service team receives a complaint from a customer who cannot remember their account email but knows it starts with their name "meera" and ends with either @gmail.com or @yahoo.com. The compliance team also needs to audit all product names that do not follow the naming convention — they should start with the brand name.</P>
+      <P>You are a data analyst at Sephora. The customer service team receives a complaint from a customer who cannot remember their account email but knows it starts with their name "meera" and ends with either @gmail.com or @yahoo.com. The compliance team also needs to audit all product names that do not follow the naming convention — they should start with the brand name.</P>
 
       <TimeBlock time="10:00 AM" label="Customer lookup by partial email">
         The support agent gives you what the customer remembers. You write a pattern query to find the account.
@@ -720,12 +720,12 @@ ORDER BY brand;`}
       />
 
       <TimeBlock time="10:35 AM" label="Store search for a delivery partner">
-        A delivery partner application is looking for FreshCart stores in cities ending with "bad" — Hyderabad and Ahmedabad specifically.
+        A delivery partner application is looking for FreshCart stores in cities ending with "bad" — Austin and Ahmedabad specifically.
       </TimeBlock>
 
       <SQLPlayground
         initialQuery={`-- Stores in cities ending with 'bad'
--- Hyderabad and Ahmedabad both match
+-- Austin and Ahmedabad both match
 SELECT store_id, store_name, city, manager_name
 FROM stores
 WHERE city LIKE '%bad'
@@ -758,7 +758,7 @@ ORDER BY city;`}
       <IQ q="Why is LIKE '%pattern%' slow and what are the alternatives?">
         <p style={{ margin: '0 0 14px' }}>LIKE '%pattern%' (with a leading %) is slow because the leading percent wildcard prevents the database from using a B-tree index on the column. A B-tree index organises values in sorted order by their prefix — it can efficiently find all values starting with 'Amul' because those values are contiguous in the index. But for '%Fresh%', the database does not know where in the sorted index the matching values are — they could be anywhere. The database must read every row, retrieve the full value, and check whether it contains 'Fresh'. This is a full table scan: O(n) where n is the number of rows. On a table with 10 million products, this takes seconds.</p>
         <p style={{ margin: '0 0 14px' }}>The production alternatives depend on the scale and the database. For moderate scale (up to a few million rows), PostgreSQL's built-in full-text search using tsvector columns and GIN indexes can make contains-searches fast by pre-computing searchable tokens from text columns. A GIN index on tsvector supports fast text search without reading every row. MySQL supports FULLTEXT indexes with similar capabilities.</p>
-        <p style={{ margin: 0 }}>For large scale — millions of products, user-facing search with sub-100ms latency requirements — dedicated search engines like Elasticsearch, OpenSearch, or Typesense are the production standard. These systems are built specifically for full-text and fuzzy matching and are used by Flipkart, Nykaa, Amazon India, and every major e-commerce platform for their product search. They run alongside the SQL database: SQL handles transactions and structured queries, the search engine handles text search. LIKE '%pattern%' is acceptable for small tables and ad-hoc queries, but should never be the foundation of a production search feature on large datasets.</p>
+        <p style={{ margin: 0 }}>For large scale — millions of products, user-facing search with sub-100ms latency requirements — dedicated search engines like Elasticsearch, OpenSearch, or Typesense are the production standard. These systems are built specifically for full-text and fuzzy matching and are used by Amazon, Sephora, Amazon India, and every major e-commerce platform for their product search. They run alongside the SQL database: SQL handles transactions and structured queries, the search engine handles text search. LIKE '%pattern%' is acceptable for small tables and ad-hoc queries, but should never be the foundation of a production search feature on large datasets.</p>
       </IQ>
 
       <IQ q="How do you search for a literal percent sign or underscore using LIKE?">
@@ -770,7 +770,7 @@ ORDER BY city;`}
       <IQ q="What is the difference between LIKE, SIMILAR TO, and regular expressions in SQL?">
         <p style={{ margin: '0 0 14px' }}>LIKE is the standard SQL pattern matching operator supported by all relational databases. It uses only two wildcards (% and _), making it simple and fast for straightforward patterns. LIKE with a leading literal (not a wildcard) can use B-tree indexes and is performant at scale. LIKE is the right choice for the vast majority of pattern matching needs.</p>
         <p style={{ margin: '0 0 14px' }}>SIMILAR TO is a PostgreSQL-only operator that extends LIKE with a limited regex-like syntax: | for alternation, [] for character classes, * for zero or more repetitions, + for one or more, ? for zero or one. SIMILAR TO '%@(gmail|yahoo)\.com' matches email addresses from either domain. SIMILAR TO is anchored — the pattern must match the entire string. It is more powerful than LIKE but less commonly used because ILIKE handles most needs, and full regular expressions are more expressive when SIMILAR TO is not enough. SIMILAR TO is always a full scan — it offers no index benefit.</p>
-        <p style={{ margin: 0 }}>Regular expressions (REGEXP in MySQL, ~ in PostgreSQL) are the most powerful text matching tool — they support the full regular expression syntax: lookaheads, backreferences, named groups, character classes, quantifiers. They handle complex validation patterns (PAN card format, Aadhaar format, phone number patterns), multi-pattern alternation, and any matching logic LIKE cannot express. Regular expressions are always slow — full scans, no index benefit — and have complex, easy-to-get-wrong syntax. Use them when LIKE cannot solve the problem and the table is small enough that the scan cost is acceptable. For production search on large tables, none of the three are the right choice — use full-text search indexes or a dedicated search engine instead.</p>
+        <p style={{ margin: 0 }}>Regular expressions (REGEXP in MySQL, ~ in PostgreSQL) are the most powerful text matching tool — they support the full regular expression syntax: lookaheads, backreferences, named groups, character classes, quantifiers. They handle complex validation patterns (PAN card format, SSN format, phone number patterns), multi-pattern alternation, and any matching logic LIKE cannot express. Regular expressions are always slow — full scans, no index benefit — and have complex, easy-to-get-wrong syntax. Use them when LIKE cannot solve the problem and the table is small enough that the scan cost is acceptable. For production search on large tables, none of the three are the right choice — use full-text search indexes or a dedicated search engine instead.</p>
       </IQ>
 
       <HR />
@@ -812,9 +812,9 @@ ORDER BY city;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart marketing team is running a campaign targeting: (1) customers whose email is from a non-Gmail provider AND who live in cities ending with 'abad' or 'abad' variant — specifically Hyderabad or Ahmedabad. (2) Separately, find all products from brands whose name is exactly 5 characters long. Write both queries."
-        hint="Query 1: email NOT LIKE '%@gmail.com' AND (city LIKE '%abad' OR city LIKE 'Hyderabad'). Query 2: brand LIKE '_____ ' — five underscores for exactly five characters. Use SELECT DISTINCT brand to verify first."
-        answer={`-- Query 1: Non-Gmail customers in Hyderabad or Ahmedabad
+        question="The FreshCart marketing team is running a campaign targeting: (1) customers whose email is from a non-Gmail provider AND who live in cities ending with 'abad' or 'abad' variant — specifically Austin or Ahmedabad. (2) Separately, find all products from brands whose name is exactly 5 characters long. Write both queries."
+        hint="Query 1: email NOT LIKE '%@gmail.com' AND (city LIKE '%abad' OR city LIKE 'Austin'). Query 2: brand LIKE '_____ ' — five underscores for exactly five characters. Use SELECT DISTINCT brand to verify first."
+        answer={`-- Query 1: Non-Gmail customers in Austin or Ahmedabad
 SELECT
   first_name || ' ' || last_name  AS customer,
   email,
@@ -822,7 +822,7 @@ SELECT
   loyalty_tier
 FROM customers
 WHERE email NOT LIKE '%@gmail.com'
-  AND (city LIKE '%Hyderabad' OR city LIKE '%Ahmedabad')
+  AND (city LIKE '%Austin' OR city LIKE '%Ahmedabad')
 ORDER BY city, last_name;
 
 -- Query 2: Products from brands with exactly 5-character names
@@ -836,7 +836,7 @@ SELECT product_name, brand, category, unit_price
 FROM products
 WHERE brand LIKE '_____'
 ORDER BY brand, unit_price;`}
-        explanation="Query 1 combines NOT LIKE with OR-grouped LIKE conditions. The parentheses around the city OR are essential — without them, AND has higher precedence and would bind 'email NOT LIKE' with only 'city LIKE Hyderabad', producing wrong results. Query 2 uses five underscores to match exactly 5-character brand names — each _ matches exactly one character, so _____ requires exactly 5. Run SELECT DISTINCT brand FROM products first to see which brands have 5-character names and verify the count matches your expectation. The five-underscore count is easy to get wrong — always double-check by counting manually."
+        explanation="Query 1 combines NOT LIKE with OR-grouped LIKE conditions. The parentheses around the city OR are essential — without them, AND has higher precedence and would bind 'email NOT LIKE' with only 'city LIKE Austin', producing wrong results. Query 2 uses five underscores to match exactly 5-character brand names — each _ matches exactly one character, so _____ requires exactly 5. Run SELECT DISTINCT brand FROM products first to see which brands have 5-character names and verify the count matches your expectation. The five-underscore count is easy to get wrong — always double-check by counting manually."
       />
 
       <HR />

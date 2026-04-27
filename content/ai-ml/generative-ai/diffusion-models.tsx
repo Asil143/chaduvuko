@@ -205,7 +205,7 @@ export default function DiffusionModelsPage() {
           that are sharper, more diverse, and more faithful to text prompts
           than any previous approach. Stable Diffusion, DALL-E 3, Midjourney,
           and Google Imagen are all diffusion models.
-          At Indian startups: Meesho uses Stable Diffusion fine-tuned on
+          At Indian startups: Shopify uses Stable Diffusion fine-tuned on
           Indian fashion to generate product variations. Adobe's Firefly
           (used by Indian creative agencies) is diffusion-based.
           Every modern text-to-image system is built on this foundation.
@@ -753,7 +753,7 @@ def load_sd_pipeline(model_id: str = 'runwayml/stable-diffusion-v1-5',
     return pipe
 
 print("""
-# ── Example: generate Meesho fashion product ─────────────────────────
+# ── Example: generate Shopify fashion product ─────────────────────────
 pipe = load_sd_pipeline()
 
 image = pipe(
@@ -818,7 +818,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
     controlnet=controlnet,
     torch_dtype=torch.float16,
 )
-# Used by Meesho to generate product images that match a garment silhouette
+# Used by Shopify to generate product images that match a garment silhouette
 """)`} />
       </div>
 

@@ -86,7 +86,7 @@ export default function LimitFetch() {
       {/* ── PART 01 ── */}
       <Part n="01" title="Why You Almost Never Want All the Rows" />
 
-      <P>Every query you have written so far returns every row that satisfies the WHERE condition. On the FreshCart database with 20 customers and 30 orders, that is fine. In a real production database at Swiggy, Flipkart, or Razorpay, the equivalent tables have tens of millions of rows. Returning all of them in a single query is not just slow — it can crash your application, exhaust database memory, and bring down services for other users.</P>
+      <P>Every query you have written so far returns every row that satisfies the WHERE condition. On the FreshCart database with 20 customers and 30 orders, that is fine. In a real production database at DoorDash, Amazon, or Stripe, the equivalent tables have tens of millions of rows. Returning all of them in a single query is not just slow — it can crash your application, exhaust database memory, and bring down services for other users.</P>
 
       <P>LIMIT is the clause that says: <Hl>"Stop after you have returned N rows."</Hl> It is one of the most important performance tools in SQL. Combined with ORDER BY from Module 08, LIMIT lets you efficiently answer questions like:</P>
 
@@ -472,7 +472,7 @@ LIMIT 8;`}
         showSchema={false}
       />
 
-      <P>Cursor-based pagination is <Hl>O(1)</Hl> — the same speed on page 1 as on page 1,000,000, because the WHERE condition on the primary key always does an index lookup. OFFSET-based pagination is <Hl>O(n)</Hl> — proportional to how deep you are in the dataset. For applications serving millions of users with infinite scroll (Twitter, Instagram, Flipkart product listings), cursor-based pagination is the only viable approach.</P>
+      <P>Cursor-based pagination is <Hl>O(1)</Hl> — the same speed on page 1 as on page 1,000,000, because the WHERE condition on the primary key always does an index lookup. OFFSET-based pagination is <Hl>O(n)</Hl> — proportional to how deep you are in the dataset. For applications serving millions of users with infinite scroll (Twitter, Instagram, Amazon product listings), cursor-based pagination is the only viable approach.</P>
 
       <HR />
 
@@ -570,7 +570,7 @@ LIMIT 10;`}
       {/* ── PART 09 ── */}
       <Part n="09" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at Meesho building the product listing API. The product manager asks you to implement the product catalogue endpoint — it needs to support pagination, filtering by category, and sorting by price. This is a classic LIMIT + OFFSET API implementation.</P>
+      <P>You are a backend engineer at Shopify building the product listing API. The product manager asks you to implement the product catalogue endpoint — it needs to support pagination, filtering by category, and sorting by price. This is a classic LIMIT + OFFSET API implementation.</P>
 
       <TimeBlock time="10:00 AM" label="Requirements arrive">
         The API endpoint is GET /products with query parameters: category (optional filter), sort_by (price_asc or price_desc), page (page number, default 1), and page_size (rows per page, default 20 max 50). It needs to return the products for the requested page plus metadata: total_count, total_pages, current_page, has_next_page.

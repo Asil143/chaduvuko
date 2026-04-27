@@ -6,14 +6,14 @@ export const sreRoadmap: Roadmap = {
   title: 'Site Reliability Engineer',
   subtitle: 'Reliability, observability, and on-call engineering',
   category: 'role',
-  description: 'From Linux and programming through observability, Kubernetes, incident response, and SRE practices. Targeted at SRE roles at Indian product companies — Flipkart, Swiggy, Zerodha, and global MNCs.',
+  description: 'From Linux and programming through observability, Kubernetes, incident response, and SRE practices. Targeted at SRE roles at Indian product companies — Amazon, DoorDash, Robinhood, and global MNCs.',
   level: 'intermediate',
   estimatedTime: '5–7 months',
   salaryData: [
     { company: 'Mid-size startup', range: '₹14–24 LPA', note: 'SRE roles often start at senior level' },
-    { company: 'Large startup (Swiggy / Zerodha)', range: '₹22–40 LPA', note: 'On-call + K8s experience needed' },
+    { company: 'Large startup (DoorDash / Robinhood)', range: '₹22–40 LPA', note: 'On-call + K8s experience needed' },
     { company: 'MNC / GCC', range: '₹28–50 LPA', note: 'Reliability track well-defined' },
-    { company: 'FAANG India', range: '₹40–75 LPA', note: 'Google SRE is the gold standard' },
+    { company: 'FAANG', range: '₹40–75 LPA', note: 'Google SRE is the gold standard' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your SRE journey starts. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },

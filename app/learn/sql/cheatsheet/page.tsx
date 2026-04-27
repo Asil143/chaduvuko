@@ -101,9 +101,9 @@ export default function SQLCheatSheet() {
 
             <Section title="Filtering — WHERE" color="#f97316">
               <Entry label="Basic filter" code={`SELECT * FROM orders\nWHERE order_status = 'Delivered';`} />
-              <Entry label="AND / OR / NOT" code={`SELECT * FROM customers\nWHERE city = 'Bangalore'\n  AND loyalty_tier = 'Gold';`} />
+              <Entry label="AND / OR / NOT" code={`SELECT * FROM customers\nWHERE city = 'Seattle'\n  AND loyalty_tier = 'Gold';`} />
               <Entry label="Comparison operators" code={`WHERE salary > 50000\nWHERE salary BETWEEN 40000 AND 70000\nWHERE joined_date >= '2023-01-01'`} />
-              <Entry label="IN operator" code={`WHERE city IN ('Bangalore', 'Hyderabad', 'Mumbai')`} />
+              <Entry label="IN operator" code={`WHERE city IN ('Seattle', 'Austin', 'New York')`} />
               <Entry label="LIKE / wildcards" code={`WHERE email LIKE '%@gmail.com'\nWHERE product_name LIKE 'Amul%'`} />
               <Entry label="NULL checks" code={`WHERE delivery_date IS NULL\nWHERE delivery_date IS NOT NULL`} />
             </Section>
@@ -153,7 +153,7 @@ export default function SQLCheatSheet() {
             </Section>
 
             <Section title="CTEs & Advanced" color="#10b981">
-              <Entry label="Basic CTE" code={`WITH bangalore_customers AS (\n  SELECT * FROM customers\n  WHERE city = 'Bangalore'\n)\nSELECT * FROM bangalore_customers\nWHERE loyalty_tier = 'Gold';`} />
+              <Entry label="Basic CTE" code={`WITH bangalore_customers AS (\n  SELECT * FROM customers\n  WHERE city = 'Seattle'\n)\nSELECT * FROM bangalore_customers\nWHERE loyalty_tier = 'Gold';`} />
               <Entry label="Multiple CTEs" code={`WITH\n  top_customers AS (\n    SELECT customer_id, SUM(total_amount) AS total\n    FROM orders\n    GROUP BY customer_id\n    HAVING SUM(total_amount) > 2000\n  ),\n  customer_details AS (\n    SELECT * FROM customers\n  )\nSELECT cd.first_name, tc.total\nFROM top_customers tc\nJOIN customer_details cd ON tc.customer_id = cd.customer_id;`} />
               <Entry label="Recursive CTE (hierarchy)" code={`WITH RECURSIVE emp_hierarchy AS (\n  -- Anchor: top-level managers\n  SELECT employee_id, first_name, manager_id, 1 AS level\n  FROM employees\n  WHERE manager_id IS NULL\n\n  UNION ALL\n\n  -- Recursive: each employee's reports\n  SELECT e.employee_id, e.first_name, e.manager_id, h.level + 1\n  FROM employees e\n  JOIN emp_hierarchy h ON e.manager_id = h.employee_id\n)\nSELECT * FROM emp_hierarchy ORDER BY level;`} />
             </Section>

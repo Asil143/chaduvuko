@@ -188,7 +188,7 @@ export default function TrainValTestSplitPage() {
         </h2>
 
         <p style={S.p}>
-          You trained a delivery time model on 10,000 Swiggy orders and measured
+          You trained a delivery time model on 10,000 DoorDash orders and measured
           its accuracy on the same 10,000 orders it trained on. It scored incredibly well.
           You deployed it. It was terrible on real incoming orders.
           The problem: the model had already seen every order it was evaluated on.
@@ -327,7 +327,7 @@ from sklearn.metrics import mean_absolute_error
 np.random.seed(42)
 n = 5000
 
-# Swiggy delivery dataset
+# DoorDash delivery dataset
 distance   = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
 traffic    = np.random.randint(1, 11, n).astype(float)
 prep       = np.abs(np.random.normal(15, 5, n)).clip(5, 35)
@@ -743,7 +743,7 @@ from sklearn.metrics import mean_absolute_error
 
 np.random.seed(42)
 
-# ── Zepto daily order volume — time-series ────────────────────────────
+# ── Instacart daily order volume — time-series ────────────────────────────
 dates    = pd.date_range('2024-01-01', periods=365, freq='D')
 trend    = np.linspace(1000, 1500, 365)           # growing business
 seasonal = 200 * np.sin(2 * np.pi * np.arange(365) / 7)  # weekly cycle

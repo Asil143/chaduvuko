@@ -204,7 +204,7 @@ export default function XGBoostPage() {
           more accurate, and less prone to overfitting than the original
           gradient boosting. Within a year it dominated every tabular ML benchmark.
           In 2026 it is still what most Indian fintech companies —
-          Razorpay, CRED, Zepto, PhonePe — use for credit scoring,
+          Stripe, Brex, Instacart, Venmo — use for credit scoring,
           fraud detection, and churn prediction in production.
         </p>
 
@@ -308,7 +308,7 @@ export default function XGBoostPage() {
       {/* ══ SECTION 3 — FIRST XGBoost MODEL ════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Getting started</span>
-        <h2 style={S.h2}>Your first XGBoost model — Razorpay fraud detection</h2>
+        <h2 style={S.h2}>Your first XGBoost model — Stripe fraud detection</h2>
 
         <p style={S.p}>
           XGBoost's sklearn-compatible API means you already know how to use it.
@@ -330,7 +330,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 10_000
 
-# ── Razorpay transaction fraud dataset ────────────────────────────────
+# ── Stripe transaction fraud dataset ────────────────────────────────
 payment_methods = ['upi', 'card', 'netbanking', 'wallet']
 merchants       = ['ecommerce', 'food', 'travel', 'utilities', 'gaming']
 
@@ -698,7 +698,7 @@ print(f"Test AUC:    {test_auc:.4f}")`} />
         <h2 style={S.h2}>SHAP values — explain any individual prediction in plain English</h2>
 
         <p style={S.p}>
-          Fraud detection at Razorpay faces a hard business requirement:
+          Fraud detection at Stripe faces a hard business requirement:
           when a transaction is flagged, the system must be able to explain why.
           "The model said fraud" is not acceptable — not to the compliance team,
           not to the customer disputing the block, not to the RBI audit.

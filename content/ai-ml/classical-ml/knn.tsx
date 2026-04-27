@@ -188,7 +188,7 @@ export default function KNNPage() {
         </h2>
 
         <p style={S.p}>
-          A new customer joins Flipkart. They are 24 years old, live in Bangalore,
+          A new customer joins Amazon. They are 24 years old, live in Seattle,
           buy mostly electronics, and spend ₹3,000 per order on average.
           What products should you recommend to them?
         </p>
@@ -250,7 +250,7 @@ export default function KNNPage() {
           the entire training set and consults it at prediction time.
         </p>
 
-        <VisualBox label="KNN prediction — step by step on one new Swiggy order">
+        <VisualBox label="KNN prediction — step by step on one new DoorDash order">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
             {[
               {
@@ -262,7 +262,7 @@ export default function KNNPage() {
               {
                 step: '2',
                 title: 'Receive a new query point',
-                detail: 'New Swiggy order: distance=5.2km, traffic=8, prep=22min. We want to predict delivery time.',
+                detail: 'New DoorDash order: distance=5.2km, traffic=8, prep=22min. We want to predict delivery time.',
                 color: '#1D9E75',
               },
               {
@@ -361,7 +361,7 @@ class KNNScratch:
         return np.array([self._predict_one(x) for x in X])
 
 
-# ── Test on Swiggy delivery data ───────────────────────────────────────
+# ── Test on DoorDash delivery data ───────────────────────────────────────
 np.random.seed(42)
 n = 500
 distance  = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
@@ -427,7 +427,7 @@ print(f"\nFull test MAE (k=5): {mean_absolute_error(y_test, y_pred_full):.4f} mi
                 formula: '√Σ(aᵢ − bᵢ)²',
                 color: '#378ADD',
                 desc: 'Straight-line distance. The default. Treats all directions equally. Best when features are continuous and on the same scale.',
-                example: 'Two Swiggy orders: A=(5km, traffic=8) B=(3km, traffic=6). Distance = √((5-3)²+(8-6)²) = √8 = 2.83',
+                example: 'Two DoorDash orders: A=(5km, traffic=8) B=(3km, traffic=6). Distance = √((5-3)²+(8-6)²) = √8 = 2.83',
                 when: 'Default for most problems. Always scale first.',
               },
               {

@@ -183,7 +183,7 @@ export default function ImageFundamentalsPage() {
       <div style={S.sec}>
         <span style={S.tag}>Before any code — how a computer sees an image</span>
         <h2 style={S.h2}>
-          You see a photo of a Meesho kurta.
+          You see a photo of a Shopify kurta.
           A computer sees a 3D array of integers —
           height × width × channels, each value between 0 and 255.
           Everything in computer vision starts from this representation.
@@ -649,7 +649,7 @@ import os
 # ── Complete Dataset class with preprocessing ─────────────────────────
 class ProductImageDataset(Dataset):
     """
-    Meesho product image dataset.
+    Shopify product image dataset.
     Directory structure:
       data/
         kurta/    image1.jpg  image2.jpg  ...

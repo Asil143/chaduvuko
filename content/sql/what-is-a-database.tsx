@@ -100,11 +100,11 @@ export default function WhatIsADatabase() {
 
       <P>Every word of that definition is doing work. Let us go through it.</P>
 
-      <P><Hl>"Every read gets the correct data"</Hl> — when your Razorpay app shows your account balance, it must show the real current balance — not a stale version from 3 seconds ago when another transaction was still in progress. Databases use a property called isolation to ensure you never see partial or in-progress data from another user's session.</P>
+      <P><Hl>"Every read gets the correct data"</Hl> — when your Stripe app shows your account balance, it must show the real current balance — not a stale version from 3 seconds ago when another transaction was still in progress. Databases use a property called isolation to ensure you never see partial or in-progress data from another user's session.</P>
 
       <P><Hl>"Every write either fully succeeds or fully fails"</Hl> — if you transfer ₹1000 from your savings to your current account, two things must happen: ₹1000 leaves savings AND ₹1000 enters current. If the server crashes between those two steps, the database must undo the first step automatically. No half-executed operations. This is called atomicity.</P>
 
-      <P><Hl>"Multiple users never corrupt each other's changes"</Hl> — right now, thousands of people are placing Swiggy orders simultaneously. Two customers might order the last item in a restaurant's inventory at the exact same moment. The database ensures exactly one of them gets it and the other sees "out of stock." Without this guarantee, both orders would go through and the restaurant would be in chaos.</P>
+      <P><Hl>"Multiple users never corrupt each other's changes"</Hl> — right now, thousands of people are placing DoorDash orders simultaneously. Two customers might order the last item in a restaurant's inventory at the exact same moment. The database ensures exactly one of them gets it and the other sees "out of stock." Without this guarantee, both orders would go through and the restaurant would be in chaos.</P>
 
       <P><Hl>"Committed data survives any crash"</Hl> — the moment your UPI payment shows "Success," that record is permanent. Even if the bank's server loses power one millisecond later, the transaction is not lost. The database writes to a log on disk before confirming success — if it crashes, it replays the log on restart. This is called durability.</P>
 
@@ -171,9 +171,9 @@ export default function WhatIsADatabase() {
             </thead>
             <tbody>
               {[
-                ['1', 'Aisha',  'Bangalore', 'Gold',   '2022-03-15'],
-                ['2', 'Ravi',   'Hyderabad', 'Silver', '2021-07-22'],
-                ['3', 'Priya',  'Mumbai',    'Bronze', '2023-01-10'],
+                ['1', 'Aisha',  'Seattle', 'Gold',   '2022-03-15'],
+                ['2', 'Ravi',   'Austin', 'Silver', '2021-07-22'],
+                ['3', 'Priya',  'New York',    'Bronze', '2023-01-10'],
                 ['4', 'Arjun',  'Ahmedabad', 'Platinum','2022-11-05'],
               ].map((row, i) => (
                 <tr key={i} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
@@ -228,10 +228,10 @@ export default function WhatIsADatabase() {
           </thead>
           <tbody>
             {[
-              ['Scale', 'Hard limit of ~1 million rows per sheet. Swiggy crosses that before 9 AM every day.', 'Billions of rows. PostgreSQL runs production tables with hundreds of billions of rows.'],
+              ['Scale', 'Hard limit of ~1 million rows per sheet. DoorDash crosses that before 9 AM every day.', 'Billions of rows. PostgreSQL runs production tables with hundreds of billions of rows.'],
               ['Concurrent users', 'One person can edit at a time. Two people saving simultaneously corrupts the file or silently overwrites each other\'s changes.', 'Thousands of simultaneous connections. Each gets an isolated session. Changes never conflict.'],
               ['Data type enforcement', 'Anyone can type "two hundred" into a price column. No enforcement — one bad entry breaks every formula downstream.', 'Types enforced at the engine level. Inserting text into an INTEGER column throws an error before the data is saved.'],
-              ['Query speed', 'VLOOKUP across 1 lakh rows takes 10–30 seconds. Filters and pivot tables on large datasets lock the file for minutes.', 'A properly indexed query on 100 million rows returns in under 100 milliseconds.'],
+              ['Query speed', 'VLOOKUP across 1 thousand rows takes 10–30 seconds. Filters and pivot tables on large datasets lock the file for minutes.', 'A properly indexed query on 100 million rows returns in under 100 milliseconds.'],
               ['Connecting related data', 'VLOOKUP by ID across sheets — breaks when row order changes, requires manual maintenance in every file.', 'Foreign keys enforce links permanently. Change a customer name once — every table referencing that customer reflects it.'],
               ['Application connectivity', 'Cannot be queried by an app programmatically while open. No concept of concurrent API access.', 'Applications connect via a network protocol. 10,000 simultaneous app connections are routine.'],
               ['Crash recovery', 'If Excel crashes mid-save, the file may be permanently corrupted. No recovery guarantee beyond the last manual save.', 'The Write-Ahead Log guarantees committed data survives any crash. Zero data loss on recovery.'],
@@ -263,11 +263,11 @@ export default function WhatIsADatabase() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12, margin: '20px 0 32px' }}>
         {[
-          { db: 'PostgreSQL', color: '#336791', companies: 'Razorpay, CRED, Zerodha, Groww, Meesho', why: 'Open source with zero licensing cost. Handles complex queries, concurrent writes, and JSONB for semi-structured data. Default choice for high-growth fintech and e-commerce startups.' },
-          { db: 'MySQL',      color: '#4479A1', companies: 'Swiggy, Nykaa, OYO, MakeMyTrip',         why: 'Extremely mature, massive community, dominates high-traffic consumer apps. Swiggy uses MySQL for core order management because of its proven replication and read-scaling.' },
-          { db: 'MS SQL Server', color: '#0078d4', companies: 'HDFC Bank, ICICI, Infosys clients',   why: 'Enterprise support contracts, Windows Server integration, strong compliance tooling. Standard in Indian banking where RBI-regulated downtime has legal consequences.' },
-          { db: 'Oracle',    color: '#F80000', companies: 'TCS, Wipro clients, IRCTC, LIC',          why: 'Dominant in legacy enterprise and government. IRCTC runs one of the highest-transaction-volume Oracle databases in Asia. Expensive but deeply entrenched.' },
-          { db: 'SQLite',    color: '#003B57', companies: 'Inside every mobile app',                 why: 'Serverless, zero-configuration, runs on the device itself. Every Android and iOS app — including Swiggy, PhonePe, CRED — has an SQLite database storing local data.' },
+          { db: 'PostgreSQL', color: '#336791', companies: 'Stripe, Brex, Robinhood, Acorns, Shopify', why: 'Open source with zero licensing cost. Handles complex queries, concurrent writes, and JSONB for semi-structured data. Default choice for high-growth fintech and e-commerce startups.' },
+          { db: 'MySQL',      color: '#4479A1', companies: 'DoorDash, Sephora, OYO, Expedia',         why: 'Extremely mature, massive community, dominates high-traffic consumer apps. DoorDash uses MySQL for core order management because of its proven replication and read-scaling.' },
+          { db: 'MS SQL Server', color: '#0078d4', companies: 'HDFC Bank, ICICI, Deloitte clients',   why: 'Enterprise support contracts, Windows Server integration, strong compliance tooling. Standard in Indian banking where RBI-regulated downtime has legal consequences.' },
+          { db: 'Oracle',    color: '#F80000', companies: 'Accenture, KPMG clients, IRCTC, LIC',          why: 'Dominant in legacy enterprise and government. IRCTC runs one of the highest-transaction-volume Oracle databases in Asia. Expensive but deeply entrenched.' },
+          { db: 'SQLite',    color: '#003B57', companies: 'Inside every mobile app',                 why: 'Serverless, zero-configuration, runs on the device itself. Every Android and iOS app — including DoorDash, Venmo, Brex — has an SQLite database storing local data.' },
         ].map(item => (
           <div key={item.db} style={{ background: 'var(--surface)', border: `1px solid ${item.color}25`, borderRadius: 10, padding: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
@@ -289,7 +289,7 @@ export default function WhatIsADatabase() {
       {/* ── PART 06 ── */}
       <Part n="06" title="The FreshCart Database — Your SQL Dataset for All 62 Modules" />
 
-      <P>Every single module in this course — from Module 01 to Module 62 — uses the same database: <Hl>FreshCart</Hl>. A fictional Indian grocery chain. 10 stores across Bangalore, Hyderabad, Mumbai, Delhi, Chennai, Pune, and Ahmedabad. Real Indian brands — Amul, Tata, Nestle, Britannia, P&G. Realistic prices, realistic data.</P>
+      <P>Every single module in this course — from Module 01 to Module 62 — uses the same database: <Hl>FreshCart</Hl>. A fictional Indian grocery chain. 10 stores across Seattle, Austin, New York, Delhi, Chicago, Boston, and Ahmedabad. Real Indian brands — Amul, Tata, Nestle, Britannia, P&G. Realistic prices, realistic data.</P>
       <P>You will know this database so well by Module 62 that you could rebuild it from memory. That depth of familiarity with one dataset is intentional — every query you write will feel meaningful, not academic.</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12, margin: '24px 0 32px' }}>
@@ -356,7 +356,7 @@ ORDER BY revenue DESC;`}
       {/* ── PART 08 ── */}
       <Part n="08" title="What This Looks Like at Work — A Full Day" />
 
-      <P>You join PhonePe as a Business Analyst, three months after completing this SQL course. Here is what a real working day looks like.</P>
+      <P>You join Venmo as a Business Analyst, three months after completing this SQL course. Here is what a real working day looks like.</P>
 
       <TimeBlock time="8:30 AM" label="Check overnight data refresh">
         You open the company's internal analytics dashboard. The nightly pipeline ran at 3 AM and refreshed all the warehouse tables. You run a quick sanity check query — yesterday's total transaction volume — and confirm it looks reasonable before the morning standup.
@@ -416,8 +416,8 @@ ORDER BY revenue DESC;`}
       </IQ>
 
       <IQ q="Name three databases used by well-known Indian tech companies and explain why they chose them.">
-        <p style={{ margin: '0 0 14px' }}>Razorpay uses PostgreSQL as its primary transactional database. PostgreSQL is the dominant choice at Indian fintech startups because it is open source with no licensing cost, handles complex query patterns that payment processing requires, provides JSONB columns for storing semi-structured payment metadata alongside structured transaction records, and has a strong track record of ACID compliance at high concurrency. Every rupee transferred through Razorpay touches a PostgreSQL transaction.</p>
-        <p style={{ margin: '0 0 14px' }}>Swiggy uses MySQL for its core order management and logistics systems. MySQL has been proven at extreme transaction volumes in food delivery. Its read-replica architecture lets Swiggy route millions of "check my order status" queries to read replicas while reserving the primary database for writes — ensuring that peak dinner-time load does not overwhelm a single server. MySQL's maturity and the size of its ecosystem also mean Swiggy can hire engineers who already know it.</p>
+        <p style={{ margin: '0 0 14px' }}>Stripe uses PostgreSQL as its primary transactional database. PostgreSQL is the dominant choice at Indian fintech startups because it is open source with no licensing cost, handles complex query patterns that payment processing requires, provides JSONB columns for storing semi-structured payment metadata alongside structured transaction records, and has a strong track record of ACID compliance at high concurrency. Every rupee transferred through Stripe touches a PostgreSQL transaction.</p>
+        <p style={{ margin: '0 0 14px' }}>DoorDash uses MySQL for its core order management and logistics systems. MySQL has been proven at extreme transaction volumes in food delivery. Its read-replica architecture lets DoorDash route millions of "check my order status" queries to read replicas while reserving the primary database for writes — ensuring that peak dinner-time load does not overwhelm a single server. MySQL's maturity and the size of its ecosystem also mean DoorDash can hire engineers who already know it.</p>
         <p style={{ margin: 0 }}>HDFC Bank runs Microsoft SQL Server across much of its core banking infrastructure. SQL Server's enterprise support contracts, deep integration with Windows Server, and long track record with the kind of compliance and audit tooling that RBI-regulated institutions require make it the standard choice in Indian banking. The licensing cost is significant but acceptable when database downtime has direct regulatory and reputational consequences. HDFC also uses Oracle for certain legacy systems — Oracle remains dominant in Indian banking, insurance, and government despite its cost.</p>
       </IQ>
 
@@ -460,11 +460,11 @@ ORDER BY revenue DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="A customer in Bangalore places an order on FreshCart's app. She buys Amul Milk, Tata Atta, and Maggi. How many tables in the FreshCart database are involved in storing that single transaction — and which ones are they?"
+        question="A customer in Seattle places an order on FreshCart's app. She buys Amul Milk, Tata Atta, and Maggi. How many tables in the FreshCart database are involved in storing that single transaction — and which ones are they?"
         hint="Think step by step: who placed it (1 table), what is the order itself (1 table), what products were bought (how many tables does that involve)?"
         answer={`5 tables are involved:
 
-1. customers — stores who placed the order (Aisha Khan, Bangalore, Gold tier)
+1. customers — stores who placed the order (Aisha Khan, Seattle, Gold tier)
 2. orders — stores the order itself (order_id, date, store, status, payment method, total)  
 3. order_items — stores 3 rows, one per product (Amul Milk × 1, Tata Atta × 1, Maggi × 2)
 4. products — each order_items row links here to get the product name, price, and category
@@ -485,7 +485,7 @@ The employees table is not directly involved in recording the transaction, thoug
           'Every table needs a Primary Key — a column whose value uniquely identifies each row. The database enforces uniqueness and non-nullability automatically. Almost always an auto-incrementing integer.',
           'Foreign Keys create enforced links between tables. You cannot insert a row that references a parent that does not exist. This prevents orphaned records and is the foundation of every JOIN query you will write.',
           'RDBMS (Relational Database Management System) is the category that MySQL, PostgreSQL, Oracle, SQL Server, and SQLite belong to. SQL is the standardised query language for this model — 95% identical across all of them.',
-          'In Indian tech: PostgreSQL is default at fintech startups (Razorpay, CRED, Zerodha). MySQL dominates high-traffic consumer apps (Swiggy, Nykaa). MS SQL Server is standard in banking (HDFC, ICICI). SQLite runs inside every mobile app.',
+          'In Indian tech: PostgreSQL is default at fintech startups (Stripe, Brex, Robinhood). MySQL dominates high-traffic consumer apps (DoorDash, Sephora). MS SQL Server is standard in banking (HDFC, ICICI). SQLite runs inside every mobile app.',
           'FreshCart — 6 tables, 218 total rows, realistic Indian data — is the dataset for all 62 modules. Learn it once and use it for every single query in the course.',
           'A live SQL playground powered by DuckDB-WASM runs on every module page. Zero install, zero account, zero server — the FreshCart database is pre-loaded and ready the moment the page opens.',
           'SQL is not just a "data" skill. Every product manager, growth analyst, operations lead, and finance analyst at every Indian tech company uses SQL daily. It is the highest-return technical skill learnable in under 3 months.',

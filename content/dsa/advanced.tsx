@@ -915,7 +915,7 @@ int main() {
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, maxWidth: 560, margin: '0 auto 28px' }}>
           From understanding what a variable is, to segment trees and bit manipulation —
           you have covered every topic that appears in technical interviews from
-          campus placements all the way to FAANG India. That is 20 units, 135+ topics,
+          campus placements all the way to FAANG. That is 20 units, 135+ topics,
           and hundreds of problems. All in C. All from scratch.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>

@@ -443,7 +443,7 @@ print(f"int // int:  {a // b}")   # [0, 1, 1]       — integer floor division`}
         <CodeBlock code={`import numpy as np
 np.random.seed(42)
 
-# 1000 Swiggy orders, 4 features each
+# 1000 DoorDash orders, 4 features each
 # Columns: [distance_km, traffic_score, prep_time, time_of_day]
 X = np.random.randn(1000, 4)
 X[:, 0] = np.abs(X[:, 0]) * 3 + 2   # distance: positive, 2–8 km

@@ -6,7 +6,7 @@ import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 export const metadata: Metadata = {
   title: 'Logistic Regression — Chaduvuko',
   description:
-    'The foundation of all classification. Sigmoid function, decision boundaries, cross-entropy loss, regularisation, and multi-class extension — built from scratch then in sklearn on real Swiggy data.',
+    'The foundation of all classification. Sigmoid function, decision boundaries, cross-entropy loss, regularisation, and multi-class extension — built from scratch then in sklearn on real DoorDash data.',
 }
 
 const S = {
@@ -279,7 +279,7 @@ export default function LogisticRegressionPage() {
 
         <p style={S.p}>
           The name is misleading. Logistic regression predicts probabilities —
-          "what is the probability that this Swiggy order will be late?" —
+          "what is the probability that this DoorDash order will be late?" —
           and converts those probabilities into class labels.
           It is a classification algorithm, not a regression one.
           The "regression" refers to the linear equation inside it,
@@ -289,7 +289,7 @@ export default function LogisticRegressionPage() {
         <p style={S.p}>
           Despite being over 60 years old, logistic regression is still
           the first algorithm deployed at many companies for binary classification.
-          At Razorpay it predicts fraud. At Swiggy it predicts late deliveries.
+          At Stripe it predicts fraud. At DoorDash it predicts late deliveries.
           At every bank in India it predicts loan defaults. It is fast, interpretable,
           probabilistically calibrated, and works well with good features.
           Every ML engineer should understand it completely.
@@ -336,7 +336,7 @@ export default function LogisticRegressionPage() {
         </HBox>
 
         <Callout type="tip">
-          The problem throughout this module: predict whether a Swiggy delivery
+          The problem throughout this module: predict whether a DoorDash delivery
           will be late (delivery_time &gt; 45 minutes). This is a binary
           classification problem — the kind logistic regression was designed for.
           Every concept is demonstrated on this real business question.
@@ -701,7 +701,7 @@ for y, p, desc in scenarios:
 
 np.random.seed(42)
 
-# ── Generate Swiggy dataset ───────────────────────────────────────────
+# ── Generate DoorDash dataset ───────────────────────────────────────────
 n = 2000
 distance = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
 traffic  = np.random.randint(1, 11, n).astype(float)
@@ -1080,7 +1080,7 @@ print(f"  Accuracy:             {(y_pred == y_test).mean():.4f}")
 
 # ── Threshold tuning — 0.5 is not always optimal ──────────────────────
 # The business question determines the right threshold.
-# At Swiggy: missing a late delivery (FN) costs customer experience.
+# At DoorDash: missing a late delivery (FN) costs customer experience.
 # A lower threshold catches more late deliveries but flags more on-time ones.
 
 print("\nThreshold analysis:")
@@ -1097,7 +1097,7 @@ for threshold in [0.2, 0.3, 0.4, 0.5, 0.6, 0.7]:
     flagged_t = y_pred_t.mean() * 100
     print(f"{threshold:<12.1f} {prec_t:<12.3f} {rec_t:<10.3f} {f1_t:<10.3f} {flagged_t:.1f}%")
 
-# For Swiggy: a threshold of 0.3 catches more late deliveries
+# For DoorDash: a threshold of 0.3 catches more late deliveries
 # but flags more on-time ones for proactive ETA warnings — good tradeoff`} />
       </div>
 
@@ -1330,7 +1330,7 @@ np.random.seed(42)
 n = 8000
 restaurants = ['Pizza Hut','Biryani Blues',"McDonald's","Haldiram's",
                'Dominos','KFC','Subway','Burger King']
-cities = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai']
+cities = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
 slots  = ['breakfast','lunch','evening','dinner']
 
 distance = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
@@ -1433,7 +1433,7 @@ print("Model saved to /tmp/late_delivery_model.pkl")
 # ── Load and score a new order ─────────────────────────────────────────
 saved = joblib.load('/tmp/late_delivery_model.pkl')
 new_order = pd.DataFrame([{
-    'restaurant': 'Pizza Hut', 'city': 'Bangalore', 'time_slot': 'dinner',
+    'restaurant': 'Pizza Hut', 'city': 'Seattle', 'time_slot': 'dinner',
     'distance_km': 7.5, 'traffic_score': 9, 'restaurant_prep': 22,
     'order_value': 480,
 }])

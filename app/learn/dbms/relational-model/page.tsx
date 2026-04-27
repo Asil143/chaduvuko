@@ -124,23 +124,23 @@ export default function RelationalModel() {
 {`// Domain definitions:
 D_customer_id = { all strings matching pattern 'C' followed by digits }
 D_name        = { all non-empty strings up to 100 characters }
-D_city        = { 'Bengaluru', 'Hyderabad', 'Mumbai', 'Pune', 'Chennai', 'Delhi', ... }
+D_city        = { 'San Francisco', 'Austin', 'New York', 'Boston', 'Chicago', 'Delhi', ... }
 D_age         = { integers from 0 to 150 }
 
 // Cartesian product D_customer_id × D_name × D_city × D_age:
 // contains EVERY possible combination:
-// ('C001', 'Rahul Sharma', 'Bengaluru', 28)
-// ('C001', 'Rahul Sharma', 'Bengaluru', 29)
-// ('C001', 'Rahul Sharma', 'Mumbai', 28)
+// ('C001', 'Rahul Sharma', 'San Francisco', 28)
+// ('C001', 'Rahul Sharma', 'San Francisco', 29)
+// ('C001', 'Rahul Sharma', 'New York', 28)
 // ... (infinite combinations)
 
 // The CUSTOMERS RELATION is a specific SUBSET of this Cartesian product:
 // Only the tuples that represent real customers:
 CUSTOMERS = {
-  ('C001', 'Rahul Sharma',  'Bengaluru', 28),
-  ('C002', 'Priya Reddy',   'Hyderabad', 31),
-  ('C003', 'Arjun Nair',    'Mumbai',    24),
-  ('C004', 'Kavya Krishnan','Bengaluru', 35),
+  ('C001', 'Rahul Sharma',  'San Francisco', 28),
+  ('C002', 'Priya Reddy',   'Austin', 31),
+  ('C003', 'Arjun Nair',    'New York',    24),
+  ('C004', 'Kavya Krishnan','San Francisco', 35),
 }
 // This set of 4 tuples IS the relation.
 // It represents the true facts about customers at this moment in time.
@@ -197,7 +197,7 @@ CUSTOMERS = {
               definition: 'A single ordered list of values — one value per attribute — representing one specific instance of the entity or relationship that the relation models.',
               depth: 'In mathematical set theory, a tuple is an ordered sequence. In the relational model, the order of attributes in a tuple is significant in the formal definition but irrelevant in SQL (SQL accesses attributes by name, not position). This apparent contradiction is resolved by treating each tuple as a mapping from attribute names to values, not as a positional sequence.',
               sqlEquivalent: 'One row in a SELECT result. One inserted record.',
-              example: '(\'C001\', \'Rahul Sharma\', \'Bengaluru\', 28) is a tuple in the customers relation.',
+              example: '(\'C001\', \'Rahul Sharma\', \'San Francisco\', 28) is a tuple in the customers relation.',
             },
             {
               formal: 'Attribute',
@@ -391,13 +391,13 @@ FROM employees;`}
               property: 'Property 1 — No Duplicate Tuples',
               color: '#0078d4',
               formal: 'A relation is a mathematical set. By definition, a set cannot contain duplicate elements. Therefore, no two tuples in a relation can be identical in all their attribute values simultaneously.',
-              why: 'Duplicate tuples represent the same real-world fact stated twice. They add zero information while consuming storage and causing confusion in queries. If you count "how many customers named Rahul in Bengaluru?", a duplicate row would give you 2 instead of 1.',
+              why: 'Duplicate tuples represent the same real-world fact stated twice. They add zero information while consuming storage and causing confusion in queries. If you count "how many customers named Rahul in San Francisco?", a duplicate row would give you 2 instead of 1.',
               sqlReality: 'SQL does NOT automatically enforce no-duplicate-tuples unless you define a PRIMARY KEY or UNIQUE constraint covering all columns (which is impractical). SQL tables are technically multisets, not sets. This is one of SQL\'s departures from pure relational theory.',
               enforcement: 'Define a PRIMARY KEY on every table. This guarantees no duplicate tuples because the PK is always unique and never NULL.',
               code: `-- Without PK: duplicates are possible (SQL multiset behaviour)
 CREATE TABLE bad_table (name VARCHAR(100), city VARCHAR(100));
-INSERT INTO bad_table VALUES ('Rahul', 'Bengaluru');
-INSERT INTO bad_table VALUES ('Rahul', 'Bengaluru');  -- allowed! duplicate silently inserted
+INSERT INTO bad_table VALUES ('Rahul', 'San Francisco');
+INSERT INTO bad_table VALUES ('Rahul', 'San Francisco');  -- allowed! duplicate silently inserted
 SELECT COUNT(*) FROM bad_table;  -- Returns: 2
 
 -- With PK: duplicates impossible on the PK column
@@ -415,9 +415,9 @@ CREATE TABLE good_table (
               sqlReality: 'In SQL, the order of rows returned by SELECT (without ORDER BY) is implementation-defined and can change between queries. This surprises many beginners who expect rows to always come back in insertion order. They don\'t. The DBMS is free to return them in any order based on its physical storage and query plan.',
               enforcement: 'Always use ORDER BY when row order matters for your application. Never assume a particular row order without ORDER BY.',
               code: `-- WRONG ASSUMPTION: rows come back in insertion order
-INSERT INTO customers VALUES ('C003', 'Arjun', 'Mumbai');
-INSERT INTO customers VALUES ('C001', 'Rahul', 'Bengaluru');
-INSERT INTO customers VALUES ('C002', 'Priya', 'Hyderabad');
+INSERT INTO customers VALUES ('C003', 'Arjun', 'New York');
+INSERT INTO customers VALUES ('C001', 'Rahul', 'San Francisco');
+INSERT INTO customers VALUES ('C002', 'Priya', 'Austin');
 
 SELECT * FROM customers;
 -- MIGHT return:  C001, C002, C003 (index order)
@@ -660,7 +660,7 @@ CREATE TABLE products (
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['emp_id', 'email', 'phone', 'name', 'dept_id', 'pan_number', 'salary'].map((h) => (
+                  {['emp_id', 'email', 'phone', 'name', 'dept_id', 'ssn_last4', 'salary'].map((h) => (
                     <th key={h} style={{ textAlign: 'left', padding: '8px 14px', color: 'var(--accent)', fontWeight: 700, fontSize: 12, fontFamily: 'var(--font-mono)' }}>{h}</th>
                   ))}
                 </tr>
@@ -684,7 +684,7 @@ CREATE TABLE products (
           <Para>
             This EMPLOYEES relation has 4 tuples and 7 attributes. We will use it to illustrate
             every key type. The attributes are: emp_id (auto-assigned), email (work email),
-            phone (mobile), name, dept_id (department), pan_number (Indian tax ID — unique per person),
+            phone (mobile), name, dept_id (department), ssn_last4 (Indian tax ID — unique per person),
             salary.
           </Para>
         </div>
@@ -717,7 +717,7 @@ CREATE TABLE products (
               </Para>
 
               <CodeBox label="All super keys for the EMPLOYEES relation">
-{`-- EMPLOYEES(emp_id, email, phone, name, dept_id, pan_number, salary)
+{`-- EMPLOYEES(emp_id, email, phone, name, dept_id, ssn_last4, salary)
 
 -- SUPER KEYS (any set that uniquely identifies each row):
 
@@ -725,20 +725,20 @@ CREATE TABLE products (
 {emp_id}          -- emp_id is unique per employee
 {email}           -- each employee has a unique work email
 {phone}           -- each employee has a unique mobile
-{pan_number}      -- PAN card is unique per person in India
+{ssn_last4}      -- PAN card is unique per person in India
 
 -- Two-attribute super keys:
 {emp_id, email}   -- still unique (adding email to already-unique emp_id)
 {emp_id, name}    -- unique (emp_id alone is already unique)
 {emp_id, salary}  -- unique
 {email, phone}    -- unique (email alone is already unique)
-{email, pan_number} -- unique
+{email, ssn_last4} -- unique
 -- ... and many more combinations
 
 -- Multi-attribute super keys (including redundant attributes):
 {emp_id, email, phone}        -- unique
 {emp_id, email, name}         -- unique
-{emp_id, email, phone, name, dept_id, pan_number, salary}  -- ALL attributes = super key
+{emp_id, email, phone, name, dept_id, ssn_last4, salary}  -- ALL attributes = super key
 
 -- NOT super keys (do NOT uniquely identify rows):
 {name}     -- two employees could have the same name
@@ -747,7 +747,7 @@ CREATE TABLE products (
 {name, dept_id} -- two employees in same dept could have same name
 
 -- TOTAL COUNT of super keys in this relation:
--- Starting with 4 single-attribute keys (emp_id, email, phone, pan_number),
+-- Starting with 4 single-attribute keys (emp_id, email, phone, ssn_last4),
 -- every superset of any of these is also a super key.
 -- The number of super keys grows exponentially with relation size.
 -- This is why super keys alone are not useful practically.`}
@@ -794,7 +794,7 @@ CREATE TABLE products (
               </Para>
 
               <CodeBox label="Candidate keys for the EMPLOYEES relation — identified by minimality test">
-{`-- EMPLOYEES(emp_id, email, phone, name, dept_id, pan_number, salary)
+{`-- EMPLOYEES(emp_id, email, phone, name, dept_id, ssn_last4, salary)
 
 -- CANDIDATE KEY TEST: start with a super key, try removing each attribute
 -- If removing any attribute breaks uniqueness → it's a candidate key (minimal)
@@ -811,16 +811,16 @@ CREATE TABLE products (
 --   Remove phone from {phone}: {} → not unique
 --   Therefore, {phone} is a candidate key ✓
 
--- Test {pan_number}:
---   Remove pan_number: {} → not unique
---   Therefore, {pan_number} is a candidate key ✓
+-- Test {ssn_last4}:
+--   Remove ssn_last4: {} → not unique
+--   Therefore, {ssn_last4} is a candidate key ✓
 
 -- Test {emp_id, email} (a super key):
 --   Remove emp_id: {email} → still unique (email alone is unique) ← CAN REDUCE!
 --   Therefore, {emp_id, email} is NOT a candidate key (it's a non-minimal super key)
 
 -- CANDIDATE KEYS of EMPLOYEES:
--- {emp_id}, {email}, {phone}, {pan_number}
+-- {emp_id}, {email}, {phone}, {ssn_last4}
 -- These are ALL equally valid for becoming the primary key.
 
 -- COMPOSITE CANDIDATE KEY EXAMPLE — when no single attribute is unique:
@@ -920,7 +920,7 @@ CREATE TABLE products (
                   {
                     criterion: 'Simplicity — prefer fewer attributes',
                     detail: 'A single-attribute primary key is always simpler than a composite one. It requires less storage in the table and in every foreign key that references it. For the EMPLOYEES relation, {emp_id} is simpler than {email} because email strings are longer.',
-                    verdict: '{emp_id} preferred over {pan_number} for simplicity in foreign key references',
+                    verdict: '{emp_id} preferred over {ssn_last4} for simplicity in foreign key references',
                   },
                   {
                     criterion: 'Stability — prefer values that never change',
@@ -929,13 +929,13 @@ CREATE TABLE products (
                   },
                   {
                     criterion: 'Availability — must never be NULL',
-                    detail: 'A primary key attribute must always have a value — it can never be NULL. If a candidate key attribute is sometimes unknown at the time of insertion (e.g., pan_number might not be provided immediately when onboarding a new employee), it cannot serve as the primary key.',
-                    verdict: '{emp_id} can be assigned at insertion time; {pan_number} might be unknown during employee setup',
+                    detail: 'A primary key attribute must always have a value — it can never be NULL. If a candidate key attribute is sometimes unknown at the time of insertion (e.g., ssn_last4 might not be provided immediately when onboarding a new employee), it cannot serve as the primary key.',
+                    verdict: '{emp_id} can be assigned at insertion time; {ssn_last4} might be unknown during employee setup',
                   },
                   {
                     criterion: 'Semantics — prefer meaningless over meaningful',
-                    detail: 'A primary key with business meaning (like pan_number) can become problematic if the business logic around that meaning changes. A system-generated key with no real-world meaning never has this problem.',
-                    verdict: 'System-generated {emp_id} is preferred over {pan_number} for long-term stability',
+                    detail: 'A primary key with business meaning (like ssn_last4) can become problematic if the business logic around that meaning changes. A system-generated key with no real-world meaning never has this problem.',
+                    verdict: 'System-generated {emp_id} is preferred over {ssn_last4} for long-term stability',
                   },
                   {
                     criterion: 'Performance — prefer integers over strings',
@@ -959,20 +959,20 @@ CREATE TABLE employees (
     phone       VARCHAR(20)   NOT NULL UNIQUE,   -- candidate key → alternate key
     name        VARCHAR(100)  NOT NULL,
     dept_id     INT           NOT NULL,
-    pan_number  CHAR(10)      NOT NULL UNIQUE,   -- candidate key → alternate key
+    ssn_last4  CHAR(10)      NOT NULL UNIQUE,   -- candidate key → alternate key
     salary      DECIMAL(10,2) NOT NULL CHECK (salary > 0),
     hire_date   DATE          NOT NULL DEFAULT CURRENT_DATE
 );
 
 -- ENTITY INTEGRITY CONSTRAINT TEST:
-INSERT INTO employees (email, name, dept_id, pan_number, salary)
+INSERT INTO employees (email, name, dept_id, ssn_last4, salary)
 VALUES (NULL, 'Test', 1, 'ABCDE1234F', 50000);
 -- ERROR: null value in column "emp_id" violates not-null constraint
 -- The DBMS rejects NULL in the primary key column.
 
-INSERT INTO employees (emp_id, email, name, dept_id, pan_number, salary)
+INSERT INTO employees (emp_id, email, name, dept_id, ssn_last4, salary)
 VALUES (1, 'rahul@co.in', 'Rahul', 1, 'ABCDE1234F', 50000);
-INSERT INTO employees (emp_id, email, name, dept_id, pan_number, salary)
+INSERT INTO employees (emp_id, email, name, dept_id, ssn_last4, salary)
 VALUES (1, 'priya@co.in', 'Priya', 2, 'FGHIJ5678K', 60000);
 -- ERROR: duplicate key value violates unique constraint "employees_pkey"
 -- The DBMS rejects duplicate primary key values.
@@ -1026,16 +1026,16 @@ INSERT INTO order_items VALUES ('ORD-001', 1, 'P005', 3, 200);  -- ERROR: duplic
               </Para>
 
               <CodeBox label="Alternate keys — implemented as UNIQUE constraints">
-{`-- EMPLOYEES relation has candidate keys: {emp_id}, {email}, {phone}, {pan_number}
+{`-- EMPLOYEES relation has candidate keys: {emp_id}, {email}, {phone}, {ssn_last4}
 -- Design decision: emp_id is chosen as PRIMARY KEY
--- email, phone, pan_number become ALTERNATE KEYS
+-- email, phone, ssn_last4 become ALTERNATE KEYS
 
 CREATE TABLE employees (
     emp_id      SERIAL        PRIMARY KEY,       -- chosen candidate key → PK
     
     email       VARCHAR(150)  NOT NULL UNIQUE,   -- alternate key #1
     phone       VARCHAR(20)   NOT NULL UNIQUE,   -- alternate key #2
-    pan_number  CHAR(10)      NOT NULL UNIQUE,   -- alternate key #3
+    ssn_last4  CHAR(10)      NOT NULL UNIQUE,   -- alternate key #3
     
     name        VARCHAR(100)  NOT NULL,
     dept_id     INT           NOT NULL,
@@ -1065,8 +1065,8 @@ WHERE phone = '98765-43210';
 -- Tax system: "validate employee by PAN"
 SELECT emp_id, name
 FROM employees
-WHERE pan_number = 'ABCDE1234F';
--- Uses the UNIQUE index on pan_number → O(log n) lookup`}
+WHERE ssn_last4 = 'ABCDE1234F';
+-- Uses the UNIQUE index on ssn_last4 → O(log n) lookup`}
               </CodeBox>
 
               <Callout type="tip">
@@ -1160,7 +1160,7 @@ DELETE FROM departments WHERE dept_id = 1;
 -- Employees reference dept_id = 1 — ON DELETE RESTRICT blocks this
 
 -- Test 3: Allowed INSERT (FK value exists)
-INSERT INTO departments (dept_name, location) VALUES ('Engineering', 'Bengaluru');
+INSERT INTO departments (dept_name, location) VALUES ('Engineering', 'San Francisco');
 -- dept_id = 1 is assigned by SERIAL
 INSERT INTO employees (name, dept_id, salary) VALUES ('Rahul', 1, 85000);
 -- OK: dept_id = 1 exists in departments
@@ -1297,9 +1297,9 @@ CREATE TABLE departments (
     
     UNIQUE (dept_name, city)  -- composite alternate key: no two depts with same name in same city
 );
--- 'Engineering' in 'Bengaluru' is unique
--- 'Engineering' in 'Mumbai' is allowed (different city)
--- Two 'Engineering' in 'Bengaluru' → REJECTED
+-- 'Engineering' in 'San Francisco' is unique
+-- 'Engineering' in 'New York' is allowed (different city)
+-- Two 'Engineering' in 'San Francisco' → REJECTED
 
 -- IMPORTANT NUANCE: Individual components of a composite key CAN repeat
 INSERT INTO enrollments VALUES ('S001', 'CS101', 'A', '2024-01-15');
@@ -1360,7 +1360,7 @@ INSERT INTO enrollments VALUES ('S001', 'CS102', NULL, '2024-01-15');
                 <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px' }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: '#0078d4', marginBottom: 10, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Natural Key</div>
                   {[
-                    ['Meaningfulness', 'Carries real-world information (PAN number identifies a person)'],
+                    ['Meaningfulness', 'Carries real-world information (SSN last 4 identifies a person)'],
                     ['Self-documenting', 'The key itself tells you something about the entity'],
                     ['Debugging', 'Easier to trace data issues when key has meaning'],
                     ['Volatility', 'Can change if the real-world value changes (email changed)'],
@@ -1472,7 +1472,7 @@ CREATE TABLE employees (
     -- ALTERNATE KEYS (unchosen candidate keys):
     email        VARCHAR(150)   NOT NULL UNIQUE,     -- alternate key 1
     phone        VARCHAR(20)    NOT NULL UNIQUE,      -- alternate key 2
-    pan_number   CHAR(10)       NOT NULL UNIQUE,      -- alternate key 3
+    ssn_last4   CHAR(10)       NOT NULL UNIQUE,      -- alternate key 3
     
     -- Regular attributes (not keys by themselves):
     name         VARCHAR(100)   NOT NULL,
@@ -1490,15 +1490,15 @@ CREATE TABLE employees (
 );
 
 -- SUPER KEYS of employees (examples):
--- {emp_id}, {email}, {phone}, {pan_number}  ← single-attribute super keys
+-- {emp_id}, {email}, {phone}, {ssn_last4}  ← single-attribute super keys
 -- {emp_id, email}, {emp_id, name}, {email, phone}  ← multi-attribute super keys
--- {emp_id, email, phone, name, dept_id, pan_number, salary, manager_id}  ← trivial super key
+-- {emp_id, email, phone, name, dept_id, ssn_last4, salary, manager_id}  ← trivial super key
 
 -- CANDIDATE KEYS of employees:
--- {emp_id}, {email}, {phone}, {pan_number}  ← all minimal, all unique
+-- {emp_id}, {email}, {phone}, {ssn_last4}  ← all minimal, all unique
 
 -- PRIMARY KEY: {emp_id} (chosen — minimal, stable, integer)
--- ALTERNATE KEYS: {email}, {phone}, {pan_number} (UNIQUE constraints)
+-- ALTERNATE KEYS: {email}, {phone}, {ssn_last4} (UNIQUE constraints)
 -- FOREIGN KEYS: dept_id → departments.dept_id, manager_id → employees.emp_id
 -- COMPOSITE KEY example (from order_items table):
 -- PRIMARY KEY (order_id, line_number) — composite because neither alone is unique`}
@@ -1605,17 +1605,17 @@ CREATE TABLE products (
 CREATE TABLE employees (
     emp_id      SERIAL        PRIMARY KEY,
     email       VARCHAR(150)  UNIQUE NOT NULL,  -- unique AND not null (alternate key)
-    pan_number  CHAR(10)      UNIQUE,            -- unique but nullable (might not have PAN yet)
-    -- Note: multiple rows can have pan_number = NULL
+    ssn_last4  CHAR(10)      UNIQUE,            -- unique but nullable (might not have PAN yet)
+    -- Note: multiple rows can have ssn_last4 = NULL
     --       because NULL ≠ NULL in SQL's three-valued logic
     --       A UNIQUE constraint allows multiple NULLs
     name        VARCHAR(100)  NOT NULL
 );
 
 -- IMPORTANT: UNIQUE with multiple NULLs behaviour
-INSERT INTO employees (email, pan_number, name) VALUES ('a@co.in', NULL, 'Rahul');
-INSERT INTO employees (email, pan_number, name) VALUES ('b@co.in', NULL, 'Priya');
--- Both inserts succeed! Two rows with NULL pan_number is allowed by UNIQUE.
+INSERT INTO employees (email, ssn_last4, name) VALUES ('a@co.in', NULL, 'Rahul');
+INSERT INTO employees (email, ssn_last4, name) VALUES ('b@co.in', NULL, 'Priya');
+-- Both inserts succeed! Two rows with NULL ssn_last4 is allowed by UNIQUE.
 -- NULL ≠ NULL → not considered duplicate by the uniqueness check.
 
 -- COMPOSITE UNIQUE constraint:
@@ -1770,7 +1770,7 @@ DELETE FROM orders WHERE order_id = 'ORD-001';
             {
               question: 'Can a foreign key reference a non-primary key column?',
               trap: 'Saying "no, foreign keys must always reference primary keys."',
-              correctAnswer: 'In the relational model, a foreign key must reference a key (unique identifier) of the referenced relation. In SQL, a foreign key can reference any column (or combination of columns) that has a UNIQUE constraint — it does not have to be the PRIMARY KEY. This is important because sometimes you want to reference a table by its natural key (email, PAN number) rather than its surrogate primary key. The SQL standard requires the referenced column(s) to have a UNIQUE or PRIMARY KEY constraint.',
+              correctAnswer: 'In the relational model, a foreign key must reference a key (unique identifier) of the referenced relation. In SQL, a foreign key can reference any column (or combination of columns) that has a UNIQUE constraint — it does not have to be the PRIMARY KEY. This is important because sometimes you want to reference a table by its natural key (email, SSN last 4) rather than its surrogate primary key. The SQL standard requires the referenced column(s) to have a UNIQUE or PRIMARY KEY constraint.',
               color: 'var(--accent)',
             },
             {
@@ -1906,7 +1906,7 @@ CREATE TABLE payment_methods (
     user_id            INT           NOT NULL,         -- FK with NOT NULL
     card_number        CHAR(16)      NOT NULL UNIQUE,  -- alternate key
     -- Note: in production, card_number should be TOKENIZED, not stored in plaintext
-    -- Use a payment vault (Stripe, Razorpay) that stores the actual number
+    -- Use a payment vault (Stripe, Stripe) that stores the actual number
     -- and returns a token. Store the token here, not the card number.
     cardholder_name    VARCHAR(200)  NOT NULL,
     expiry_month       SMALLINT      NOT NULL CHECK (expiry_month BETWEEN 1 AND 12),

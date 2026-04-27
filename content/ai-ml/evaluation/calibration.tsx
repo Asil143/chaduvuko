@@ -196,7 +196,7 @@ export default function CalibrationPage() {
         </p>
 
         <p style={S.p}>
-          A Razorpay credit risk model outputs a score of 0.85 for a loan application.
+          A Stripe credit risk model outputs a score of 0.85 for a loan application.
           The credit officer interprets this as "85% probability of default."
           They reject the loan. But if that model is poorly calibrated,
           0.85 might actually correspond to a 40% default rate —
@@ -337,7 +337,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 8_000
 
-# Razorpay credit scoring dataset
+# Stripe credit scoring dataset
 income        = np.abs(np.random.normal(50_000, 30_000, n)).clip(8_000, 500_000)
 existing_emis = np.abs(np.random.normal(8_000, 6_000, n)).clip(0, 80_000)
 credit_score  = np.abs(np.random.normal(680, 80, n)).clip(300, 900)
@@ -752,7 +752,7 @@ for low, high in [(0.0,0.1),(0.1,0.3),(0.3,0.5),(0.5,0.7),(0.7,0.9),(0.9,1.0)]:
         <h2 style={S.h2}>Production credit scoring pipeline — calibrated end to end</h2>
 
         <p style={S.p}>
-          At Razorpay's credit team, every loan application produces a calibrated
+          At Stripe's credit team, every loan application produces a calibrated
           default probability. The credit officer sees "this applicant has a 23%
           probability of default." They need to trust that number —
           it drives the interest rate, the loan amount, and the approval decision.

@@ -168,7 +168,7 @@ WHERE total_amount * 1.18 > 1000`}
 WHERE order_date >= '2024-01-01'
   AND order_date <  '2025-01-01'
 
-WHERE city = 'Mumbai'   -- or store consistently-cased data
+WHERE city = 'New York'   -- or store consistently-cased data
 
 WHERE product_name > ''  -- different logic needed
 
@@ -552,13 +552,13 @@ WHERE EXISTS (
 
       <GoodBad
         bad={`-- OR prevents index use when columns are different
-WHERE city = 'Mumbai' OR store_id = 'ST001'
+WHERE city = 'New York' OR store_id = 'ST001'
 -- Database cannot satisfy both sides with one index scan`}
         good={`-- UNION ALL splits into two index-friendly queries
-SELECT * FROM customers WHERE city = 'Mumbai'
+SELECT * FROM customers WHERE city = 'New York'
 UNION ALL
 SELECT * FROM customers WHERE store_id = 'ST001'
-  AND city != 'Mumbai';  -- avoid duplicates`}
+  AND city != 'New York';  -- avoid duplicates`}
       />
 
       <SQLPlayground

@@ -118,10 +118,10 @@ export default function Normalization() {
           </thead>
           <tbody>
             {[
-              ['1001', 'Aisha Khan', 'aisha@gmail.com', 'Bangalore', 'Amul Butter', 'Dairy', 'Amul', '2', '56.00', 'Bangalore', 'Suresh Rao'],
-              ['1001', 'Aisha Khan', 'aisha@gmail.com', 'Bangalore', 'Tata Salt', 'Staples', 'Tata', '1', '22.00', 'Bangalore', 'Suresh Rao'],
-              ['1002', 'Rahul Sharma', 'rahul@gmail.com', 'Mumbai', 'Amul Butter', 'Dairy', 'Amul', '3', '56.00', 'Mumbai', 'Priya Nair'],
-              ['1003', 'Aisha Khan', 'aisha@gmail.com', 'Bangalore', 'Maggi Noodles', 'Staples', 'Nestle', '5', '15.00', 'Bangalore', 'Suresh Rao'],
+              ['1001', 'Aisha Khan', 'aisha@gmail.com', 'Seattle', 'Amul Butter', 'Dairy', 'Amul', '2', '56.00', 'Seattle', 'Suresh Rao'],
+              ['1001', 'Aisha Khan', 'aisha@gmail.com', 'Seattle', 'Tata Salt', 'Staples', 'Tata', '1', '22.00', 'Seattle', 'Suresh Rao'],
+              ['1002', 'Rahul Sharma', 'rahul@gmail.com', 'New York', 'Amul Butter', 'Dairy', 'Amul', '3', '56.00', 'New York', 'Olivia Brown'],
+              ['1003', 'Aisha Khan', 'aisha@gmail.com', 'Seattle', 'Maggi Noodles', 'Staples', 'Nestle', '5', '15.00', 'Seattle', 'Suresh Rao'],
             ].map((row, i) => (
               <tr key={i} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
                 {row.map((cell, j) => (
@@ -139,7 +139,7 @@ export default function Normalization() {
         {[
           { name: 'Update anomaly', color: '#ff4757', desc: 'Aisha Khan\'s email appears in three rows. If she changes her email, you must update all three rows. Miss one and your database has inconsistent data — two different "correct" emails for the same customer.' },
           { name: 'Insertion anomaly', color: '#f59e0b', desc: 'You cannot add a new product to the catalogue without also having an order for it. The product row requires an order_id because the table is built around orders.' },
-          { name: 'Deletion anomaly', color: '#f97316', desc: 'If order 1002 is deleted, you lose all information about the Mumbai store and Priya Nair — because that was the only row containing those store details.' },
+          { name: 'Deletion anomaly', color: '#f97316', desc: 'If order 1002 is deleted, you lose all information about the New York store and Olivia Brown — because that was the only row containing those store details.' },
           { name: 'Redundancy', color: '#8b5cf6', desc: 'Amul Butter\'s name, category, and brand are repeated in every order that contains it. With millions of orders, this is millions of repeated values wasting storage and causing inconsistency risk.' },
         ].map(item => (
           <div key={item.name} style={{ display: 'flex', gap: 14, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
@@ -219,7 +219,7 @@ order_id | product_1   | qty_1 | product_2  | qty_2 | product_3 | qty_3
 
 -- Violation 3: Non-atomic composite value
 customer_id | full_address
-1           | '204 MG Road, Koramangala, Bangalore 560001'
+1           | '204 MG Road, Koramangala, Seattle 560001'
 -- PROBLEM: Cannot query by city alone without string parsing`}
       />
 
@@ -253,7 +253,7 @@ CREATE TABLE customers (
   locality        VARCHAR(100),
   city            VARCHAR(100),
   state           VARCHAR(100),
-  pincode         VARCHAR(10)
+  zip_code         VARCHAR(10)
 );
 -- Each address component queryable independently`}
       />
@@ -387,22 +387,22 @@ CREATE TABLE customers_bad (
   customer_id  INTEGER  PRIMARY KEY,
   first_name   VARCHAR(100),
   email        VARCHAR(255),
-  pincode      VARCHAR(10),
-  city         VARCHAR(100),   -- determined by pincode (transitive!)
-  state        VARCHAR(100)    -- determined by pincode (transitive!)
+  zip_code      VARCHAR(10),
+  city         VARCHAR(100),   -- determined by zip_code (transitive!)
+  state        VARCHAR(100)    -- determined by zip_code (transitive!)
 );
 
 -- Dependency chain:
--- customer_id → pincode    (direct: each customer has one pincode)
--- pincode → city           (a pincode determines a city)
--- pincode → state          (a pincode determines a state)
--- Therefore: customer_id → pincode → city  (TRANSITIVE)
+-- customer_id → zip_code    (direct: each customer has one zip_code)
+-- zip_code → city           (a zip_code determines a city)
+-- zip_code → state          (a zip_code determines a state)
+-- Therefore: customer_id → zip_code → city  (TRANSITIVE)
 
 -- Problems:
--- If Bangalore's pincode 560001 is reassigned to another city:
---   Must update EVERY customer row with that pincode
--- Storage: city/state repeated for every customer with the same pincode
--- Inconsistency risk: two customers with same pincode can have different cities
+-- If Seattle's zip_code 560001 is reassigned to another city:
+--   Must update EVERY customer row with that zip_code
+-- Storage: city/state repeated for every customer with the same zip_code
+-- Inconsistency risk: two customers with same zip_code can have different cities
 
 -- Another classic 3NF violation:
 CREATE TABLE employees_bad (
@@ -419,7 +419,7 @@ CREATE TABLE employees_bad (
       <CodeBlock
         label="3NF fix — extract the transitive dependency"
         code={`-- BEFORE (3NF violation):
-customers(customer_id, first_name, email, pincode, city, state)
+customers(customer_id, first_name, email, zip_code, city, state)
 
 -- AFTER (3NF compliant):
 -- Table 1: Customer facts that depend directly on customer_id
@@ -427,13 +427,13 @@ CREATE TABLE customers (
   customer_id  INTEGER      PRIMARY KEY,
   first_name   VARCHAR(100) NOT NULL,
   email        VARCHAR(255) NOT NULL UNIQUE,
-  pincode      VARCHAR(10)
-  -- city and state removed — they belong in a pincodes table
+  zip_code      VARCHAR(10)
+  -- city and state removed — they belong in a zip_codes table
 );
 
--- Table 2: Pincode facts (city and state depend on pincode, not customer)
-CREATE TABLE pincodes (
-  pincode  VARCHAR(10)   PRIMARY KEY,
+-- Table 2: Zip Code facts (city and state depend on zip_code, not customer)
+CREATE TABLE zip_codes (
+  zip_code  VARCHAR(10)   PRIMARY KEY,
   city     VARCHAR(100)  NOT NULL,
   state    VARCHAR(100)  NOT NULL
 );
@@ -781,7 +781,7 @@ LIMIT 8;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are reviewing a database design at a Bangalore health-tech startup. A junior engineer has designed a single flat table for their telemedicine platform's appointment system. You need to normalise it.</P>
+      <P>You are reviewing a database design at a Seattle health-tech startup. A junior engineer has designed a single flat table for their telemedicine platform's appointment system. You need to normalise it.</P>
 
       <TimeBlock time="9:00 AM" label="The original design arrives">
         The original appointments table:

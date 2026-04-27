@@ -95,21 +95,21 @@ export default function DBMSIntroduction() {
               word: 'Data',
               color: '#0078d4',
               definition: 'Raw, unprocessed facts without context. Data alone means nothing — it has no interpretation, no meaning, no story.',
-              example: '"28", "Bengaluru", "98765-43210", "2024-03-15"',
+              example: '"28", "San Francisco", "98765-43210", "2024-03-15"',
               realWorld: 'A row in a database table: just numbers and strings. The number 28 could be age, temperature, or a product ID.',
             },
             {
               word: 'Information',
               color: 'var(--accent)',
               definition: 'Data that has been processed, organized, and given context so it becomes meaningful to a human being.',
-              example: '"Rahul Sharma, age 28, from Bengaluru, phone 98765-43210, joined on 2024-03-15"',
+              example: '"Rahul Sharma, age 28, from San Francisco, phone 98765-43210, joined on 2024-03-15"',
               realWorld: 'When you query a database and see a customer record with a name, city, and phone — that\'s information. Context transforms data.',
             },
             {
               word: 'Knowledge',
               color: '#f97316',
               definition: 'Information combined with understanding, experience, and insight to enable decisions and predictions.',
-              example: '"Customers aged 25–35 from Bengaluru who joined in Q1 have a 73% reorder rate within 60 days."',
+              example: '"Customers aged 25–35 from San Francisco who joined in Q1 have a 73% reorder rate within 60 days."',
               realWorld: 'This is what business intelligence and analytics extract from databases. It drives decisions — stock levels, marketing, pricing.',
             },
           ].map((item, i) => (
@@ -241,7 +241,7 @@ export default function DBMSIntroduction() {
               </Para>
               <Para>
                 This redundancy wastes storage — but storage is cheap. The real problem is what happens
-                next. Rahul Sharma moves from Bengaluru to Hyderabad. Someone updates the HR file.
+                next. Rahul Sharma moves from San Francisco to Austin. Someone updates the HR file.
                 Nobody tells Payroll. Nobody tells IT Assets. Now three files have three different
                 versions of Rahul's city. The data is not just redundant — it has become contradictory.
                 Which version is correct? Nobody knows.
@@ -252,7 +252,7 @@ export default function DBMSIntroduction() {
               <div style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.75 }}>
                 A major Indian bank discovered in 2019 that a customer's KYC address existed in
                 11 different systems with 4 different values. When regulators asked for the customer's
-                correct address, the bank couldn't answer confidently. Audit failure. ₹2 crore fine.
+                correct address, the bank couldn't answer confidently. Audit failure. ₹2 million fine.
               </div>
             </div>
           </div>
@@ -297,13 +297,13 @@ export default function DBMSIntroduction() {
               <div style={{ fontSize: 12, color: '#f97316', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 6 }}>INCONSISTENCY IN PRACTICE</div>
               <CodeBox>
 {`HR_System.csv:
-  employee_id: E001, name: Rahul Sharma, salary: 85000, city: Bengaluru
+  employee_id: E001, name: Rahul Sharma, salary: 85000, city: San Francisco
 
 Payroll_System.csv:
-  employee_id: E001, name: Rahul Sharma, salary: 75000, city: Hyderabad
+  employee_id: E001, name: Rahul Sharma, salary: 75000, city: Austin
 
 IT_Assets.csv:
-  employee_id: E001, name: Rahul S.,    salary: 85000, city: Bengaluru
+  employee_id: E001, name: Rahul S.,    salary: 85000, city: San Francisco
 
 // Three files. Three different salaries/cities. Which is truth?
 // A database would have ONE source and prevent this entirely.`}
@@ -331,7 +331,7 @@ IT_Assets.csv:
               <Para>
                 In a file-based system, accessing data requires writing a program. If the finance
                 manager needs "all employees who joined after January 2023 and earn more than ₹80,000
-                and are based in Bengaluru," a developer must write a custom program to read the file,
+                and are based in San Francisco," a developer must write a custom program to read the file,
                 parse each line, apply the three conditions, and output the results. This takes hours
                 or days of development effort for a question that should take seconds.
               </Para>
@@ -345,7 +345,7 @@ IT_Assets.csv:
 FROM employees
 WHERE join_date > '2023-01-01'
   AND salary > 80000
-  AND city = 'Bengaluru';`}
+  AND city = 'San Francisco';`}
               </CodeBox>
               <Para>
                 The difference is not just convenience — it is the difference between a data system
@@ -663,7 +663,7 @@ CREATE POLICY team_access ON employees
               symbol: 'DBS',
               color: '#f97316',
               definition: 'The complete, integrated system: the database (the data), the DBMS (the software managing it), the application programs (the code querying and presenting it), and the hardware (the servers storing and running everything). This is what the end user ultimately interacts with.',
-              example: 'The Swiggy ordering system: the PostgreSQL database (data) + PostgreSQL software (DBMS) + Swiggy\'s backend APIs (application) + Swiggy\'s cloud servers (hardware) = the complete database system.',
+              example: 'The DoorDash ordering system: the PostgreSQL database (data) + PostgreSQL software (DBMS) + DoorDash\'s backend APIs (application) + DoorDash\'s cloud servers (hardware) = the complete database system.',
               whatItIsNot: 'Not just the database. Not just the DBMS. The term refers to the entire stack working together.',
             },
           ].map((item) => (
@@ -792,7 +792,7 @@ CREATE POLICY team_access ON employees
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 16px', marginBottom: 12 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', marginBottom: 8, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Real scenario</div>
               <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.8, fontFamily: 'Inter, sans-serif' }}>
-                The DBA migrates the customers table from a heap file organisation to a B+ tree clustered index. The conceptual schema is unchanged: customers still has customer_id, name, city, phone. Every application continues to run SELECT * FROM customers WHERE city = 'Bengaluru' exactly as before. Zero application changes needed.
+                The DBA migrates the customers table from a heap file organisation to a B+ tree clustered index. The conceptual schema is unchanged: customers still has customer_id, name, city, phone. Every application continues to run SELECT * FROM customers WHERE city = 'San Francisco' exactly as before. Zero application changes needed.
               </div>
             </div>
             <div style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic', fontFamily: 'Inter, sans-serif' }}>
@@ -806,7 +806,7 @@ CREATE POLICY team_access ON employees
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 16px', marginBottom: 12 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#0078d4', marginBottom: 8, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Real scenario</div>
               <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.8, fontFamily: 'Inter, sans-serif' }}>
-                The architect adds a new column middle_name to the customers table and splits the address column into street, city, and pincode. Applications that use external schemas (views) referencing only name and city are completely unaffected. Only views that specifically referenced the full address column need updating.
+                The architect adds a new column middle_name to the customers table and splits the address column into street, city, and zip_code. Applications that use external schemas (views) referencing only name and city are completely unaffected. Only views that specifically referenced the full address column need updating.
               </div>
             </div>
             <div style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic', fontFamily: 'Inter, sans-serif' }}>
@@ -836,7 +836,7 @@ CREATE POLICY team_access ON employees
               type: 'Naive / Parametric End Users',
               color: '#0078d4', icon: '👤',
               howTheyInteract: 'Through application interfaces — forms, buttons, mobile apps. They have no knowledge of SQL or database internals.',
-              example: 'A customer placing an order on Flipkart. A bank teller entering a deposit. A hospital receptionist scheduling an appointment.',
+              example: 'A customer placing an order on Amazon. A bank teller entering a deposit. A hospital receptionist scheduling an appointment.',
               whatTheyNeed: 'A fast, reliable, intuitive interface. They should never need to think about the database — it should be invisible.',
               dbmsDesignImplication: 'The DBMS must handle high volumes of simple, repetitive transactions (parametric transactions) with consistent performance. OLTP optimization.',
             },
@@ -852,7 +852,7 @@ CREATE POLICY team_access ON employees
               type: 'Application Programmers',
               color: '#f97316', icon: '💻',
               howTheyInteract: 'Through programming language database APIs — JDBC, psycopg2, SQLAlchemy, Prisma. They write application code that interacts with the DBMS programmatically.',
-              example: 'A backend developer at Swiggy writing Python code that queries the orders database. A mobile developer writing Android code that syncs local SQLite data with the server.',
+              example: 'A backend developer at DoorDash writing Python code that queries the orders database. A mobile developer writing Android code that syncs local SQLite data with the server.',
               whatTheyNeed: 'Reliable drivers, transaction support, prepared statements (for security), connection pooling, clear error codes.',
               dbmsDesignImplication: 'The DBMS must support standard programming interfaces, provide good connection management, and return structured error information that applications can handle programmatically.',
             },
@@ -860,7 +860,7 @@ CREATE POLICY team_access ON employees
               type: 'Database Administrators (DBA)',
               color: '#8b5cf6', icon: '⚙️',
               howTheyInteract: 'Through administrative tools, direct SQL, and system-level configuration. Full access to all DBMS functions.',
-              example: 'A DBA at Razorpay managing PostgreSQL clusters, creating indexes for slow queries, setting up replication, monitoring performance, and managing user permissions.',
+              example: 'A DBA at Stripe managing PostgreSQL clusters, creating indexes for slow queries, setting up replication, monitoring performance, and managing user permissions.',
               whatTheyNeed: 'Full control over all DBMS functions — schema definition, performance tuning, user management, backup/recovery, replication configuration, monitoring.',
               dbmsDesignImplication: 'The DBMS must provide rich administrative interfaces, detailed performance metrics, fine-grained security controls, and tools for backup, recovery, and replication management.',
             },
@@ -988,7 +988,7 @@ CREATE POLICY team_access ON employees
               era: '1970s – present',
               tag: '★ The Foundation of This Entire Track',
               examples: 'PostgreSQL · MySQL · Oracle · SQL Server · SQLite',
-              usedAt: 'Swiggy, Razorpay, Flipkart, banks, hospitals, every enterprise',
+              usedAt: 'DoorDash, Stripe, Amazon, banks, hospitals, every enterprise',
               structure: 'Tables with rows and columns. Tables are connected via shared column values (keys). Data is normalised to eliminate redundancy.',
               queryLanguage: 'SQL — the universal declarative query language.',
               bestFor: 'Structured, related data with well-defined relationships. Any use case where data integrity, consistency, and complex queries matter. Financial systems, order management, user accounts, inventory.',
@@ -1001,12 +1001,12 @@ CREATE POLICY team_access ON employees
               era: '2007 – present',
               tag: 'NoSQL Revolution Leader',
               examples: 'MongoDB · CouchDB · Firestore · Amazon DocumentDB',
-              usedAt: 'Zomato (menus), content management systems, e-commerce product catalogs',
+              usedAt: 'Uber Eats (menus), content management systems, e-commerce product catalogs',
               structure: 'Self-contained JSON-like documents. Each document can have a completely different structure. Documents are grouped into collections (like tables, but without enforced schema).',
               queryLanguage: 'MongoDB Query Language (MQL), or platform-specific query APIs.',
               bestFor: 'Flexible, nested, document-shaped data. Product catalogs (each product type has different attributes). Blog posts. User profiles with varying fields. Rapid prototyping where the schema is still evolving.',
               limitations: 'No join support (by design). Data duplication is expected and managed manually. Complex multi-document transactions are more difficult than in RDBMS.',
-              deepDive: 'The document model\'s power comes from collocating all related data in one document. A Zomato restaurant document contains the restaurant name, location, opening hours, cuisine types, menu categories, menu items, and prices — all in one read. In a relational model, this requires 5 joins. For read-heavy use cases, this is transformative.',
+              deepDive: 'The document model\'s power comes from collocating all related data in one document. A Uber Eats restaurant document contains the restaurant name, location, opening hours, cuisine types, menu categories, menu items, and prices — all in one read. In a relational model, this requires 5 joins. For read-heavy use cases, this is transformative.',
             },
             {
               type: 'Key-Value Stores',
@@ -1014,7 +1014,7 @@ CREATE POLICY team_access ON employees
               era: '2003 – present',
               tag: 'Speed Above All',
               examples: 'Redis · Memcached · DynamoDB (also document) · Etcd',
-              usedAt: 'Every large application for caching — Paytm, CRED, Swiggy, Netflix India',
+              usedAt: 'Every large application for caching — Square, Brex, DoorDash, Netflix India',
               structure: 'The simplest possible structure: a key maps to a value. The key is a string. The value can be a string, number, list, set, hash, or sorted set (in Redis).',
               queryLanguage: 'GET key, SET key value, DEL key — and type-specific commands.',
               bestFor: 'Caching (database query results, session data, computed values). Real-time counters (page views, likes, inventory counts). Session storage. Rate limiting. Leaderboards. OTP storage.',
@@ -1027,7 +1027,7 @@ CREATE POLICY team_access ON employees
               era: '2008 – present',
               tag: 'Write-Heavy Scale',
               examples: 'Apache Cassandra · HBase · Google Bigtable',
-              usedAt: 'Netflix watch history, Flipkart time-series data, IoT sensor data',
+              usedAt: 'Netflix watch history, Amazon time-series data, IoT sensor data',
               structure: 'Data is stored by column family rather than by row. Rows can have different columns. Designed for massive write throughput across multiple servers with no single point of failure.',
               queryLanguage: 'CQL (Cassandra Query Language, SQL-like) or HBase API.',
               bestFor: 'Time-series data (IoT, metrics, logs). Write-heavy workloads where you write far more than you read. Data that needs to be spread across many servers for scale. Use cases where you can design queries at schema time.',
@@ -1275,13 +1275,13 @@ SELECT * FROM user_preferences WHERE user_id = 42;
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 14, marginBottom: 28 }}>
           {[
             {
-              role: 'Campus Placements — TCS / Wipro / Infosys / Cognizant',
+              role: 'Campus Placements — Accenture / KPMG / Deloitte / Cognizant',
               color: '#0078d4',
               guaranteed: ['Normalization — 1NF through BCNF with worked examples', 'ACID properties — definitions and real scenarios', 'All SQL join types with examples', 'Primary Key vs Foreign Key vs Candidate Key'],
               likely: ['Transaction isolation levels', 'Indexing basics', 'Basic SQL queries including GROUP BY and HAVING'],
             },
             {
-              role: 'Product Companies — Flipkart / Swiggy / CRED / Meesho / PhonePe',
+              role: 'Product Companies — Amazon / DoorDash / Brex / Shopify / Venmo',
               color: 'var(--accent)',
               guaranteed: ['Schema design — given a scenario, design tables', 'Indexing — why, which type, when not to', 'SQL window functions — ROW_NUMBER, RANK, LAG, LEAD', 'Transaction isolation and concurrency problems'],
               likely: ['Query optimization — EXPLAIN output', 'Sharding and partitioning concepts', 'SQL vs NoSQL trade-offs for specific scenarios'],

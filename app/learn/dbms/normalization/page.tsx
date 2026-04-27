@@ -481,13 +481,13 @@ SELECT * FROM student_skills WHERE skill_name = 'Python' AND level = 'expert';`}
               is actually two or more distinct data points.
             </Para>
             <CodeBox label="Subtle 1NF violations — composite values masquerading as atoms">
-{`-- VIOLATION: address stored as one string but city/pincode are queried separately
+{`-- VIOLATION: address stored as one string but city/zip_code are queried separately
 CREATE TABLE customers (
     customer_id  VARCHAR(10) PRIMARY KEY,
-    address      TEXT  -- "123 MG Road, Bengaluru, Karnataka, 560001"
+    address      TEXT  -- "123 MG Road, San Francisco, Karnataka, 560001"
 );
 -- App does: address.split(',')[1] to get city — violates 1NF
--- Cannot index on city, state, or pincode separately
+-- Cannot index on city, state, or zip_code separately
 
 -- VIOLATION: full_name stored when first/last are used independently
 CREATE TABLE employees (
@@ -511,7 +511,7 @@ CREATE TABLE customers (
     street       VARCHAR(200),
     city         VARCHAR(100),  -- separately stored, separately indexable
     state        VARCHAR(50),
-    pincode      CHAR(6)
+    zip_code      CHAR(6)
 );
 
 CREATE TABLE employees (
@@ -1737,13 +1737,13 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY order_summary;
 -- SELECT cron.schedule('refresh-order-summary', '*/15 * * * *', 'REFRESH MATERIALIZED VIEW CONCURRENTLY order_summary');
 
 -- Query the materialised view (no JOIN at query time):
-SELECT * FROM order_summary WHERE customer_city = 'Bengaluru' ORDER BY total DESC;
+SELECT * FROM order_summary WHERE customer_city = 'San Francisco' ORDER BY total DESC;
 -- Fast: reads pre-computed data, uses index, no runtime JOIN`}
         </CodeBox>
 
         <Callout type="example">
-          <strong>Real case — Swiggy order history page:</strong><br /><br />
-          Swiggy's fully normalised schema for order data has: orders table, order_items table,
+          <strong>Real case — DoorDash order history page:</strong><br /><br />
+          DoorDash's fully normalised schema for order data has: orders table, order_items table,
           products table, restaurants table, customers table — 5 JOIN operations to render
           one order card. At 50 million orders per day, the order history page is queried
           constantly. <br /><br />

@@ -101,7 +101,7 @@ export default function StringFunctions() {
 
       <P>In an ideal world, every string column is clean, consistently formatted, and ready to query. In production, data arrives from mobile apps, web forms, CSV imports, partner APIs, and legacy systems — each with its own formatting quirks. Customer names with extra spaces, email addresses in mixed case, phone numbers formatted a dozen different ways, product codes with inconsistent separators.</P>
 
-      <P>String functions are the tools that standardise, clean, extract, and transform text data at query time — without modifying the underlying rows. They are essential for data quality checks, display formatting, join key normalisation (so 'bangalore' matches 'Bangalore'), and extracting structured information from unstructured text fields.</P>
+      <P>String functions are the tools that standardise, clean, extract, and transform text data at query time — without modifying the underlying rows. They are essential for data quality checks, display formatting, join key normalisation (so 'bangalore' matches 'Seattle'), and extracting structured information from unstructured text fields.</P>
 
       <HR />
 
@@ -177,7 +177,7 @@ LIMIT 10;`}
 
       <SQLPlayground
         initialQuery={`-- Case-insensitive join using LOWER()
--- Without LOWER: 'Bangalore' != 'bangalore' — join misses rows
+-- Without LOWER: 'Seattle' != 'bangalore' — join misses rows
 -- With LOWER: both normalised, join works correctly
 SELECT
   c.customer_id,
@@ -194,7 +194,7 @@ ORDER BY order_count DESC;`}
       />
 
       <Callout type="tip">
-        Always normalise case before comparing or joining on string columns. WHERE LOWER(city) = 'bangalore' correctly matches 'Bangalore', 'BANGALORE', and 'bangalore'. Without normalisation, a single inconsistency in the data breaks the match silently — no error, just missing rows.
+        Always normalise case before comparing or joining on string columns. WHERE LOWER(city) = 'bangalore' correctly matches 'Seattle', 'BANGALORE', and 'bangalore'. Without normalisation, a single inconsistency in the data breaks the match silently — no error, just missing rows.
       </Callout>
 
       <HR />
@@ -308,7 +308,7 @@ ORDER BY customer_id;`}
         fn="LEFT"
         returns="first N characters"
         syntax="LEFT(str, n)"
-        note="Returns the first n characters. LEFT('Bangalore', 3) = 'Ban'"
+        note="Returns the first n characters. LEFT('Seattle', 3) = 'Ban'"
       />
       <FnCard
         fn="RIGHT"
@@ -384,7 +384,7 @@ POSITION('xyz' IN 'user@gmail.com')        -- 0 (not found)
 STRPOS('user@gmail.com', '@')              -- 5
 
 -- CONTAINS (DuckDB): returns TRUE/FALSE
-CONTAINS('Bangalore India', 'India')       -- true
+CONTAINS('Seattle India', 'India')       -- true
 
 -- Practical: extract everything before a delimiter
 SUBSTRING(email, 1, POSITION('@' IN email) - 1)  -- username before @
@@ -610,8 +610,8 @@ WHERE email ~ '^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'
 -- Validate Indian mobile number: starts with 6-9, 10 digits total
 WHERE phone ~ '^[6-9][0-9]{9}$'
 
--- Validate 6-digit pincode
-WHERE pincode ~ '^[0-9]{6}$'
+-- Validate 6-digit zip_code
+WHERE zip_code ~ '^[0-9]{6}$'
 
 -- Extract with REGEXP_EXTRACT (DuckDB)
 REGEXP_EXTRACT(text, pattern, group)
@@ -782,10 +782,10 @@ LIMIT 10;`}
       {/* ── PART 14 ── */}
       <Part n="14" title="What This Looks Like at Work" />
 
-      <P>You are a data engineer at Meesho. A partner has delivered a CSV of 50,000 seller records — names are in inconsistent case, phone numbers have various formats, city names have typos and whitespace, and emails are uncleaned. Before loading into the sellers table, you write a cleaning query that standardises every string field.</P>
+      <P>You are a data engineer at Shopify. A partner has delivered a CSV of 50,000 seller records — names are in inconsistent case, phone numbers have various formats, city names have typos and whitespace, and emails are uncleaned. Before loading into the sellers table, you write a cleaning query that standardises every string field.</P>
 
       <TimeBlock time="9:00 AM" label="Raw data sample arrives">
-        Sample shows: 'RAHUL sharma', ' Mumbai ', 'rahul@GMAIL.COM', '91-98765-43210' — every field needs cleaning.
+        Sample shows: 'RAHUL sharma', ' New York ', 'rahul@GMAIL.COM', '91-98765-43210' — every field needs cleaning.
       </TimeBlock>
 
       <TimeBlock time="9:20 AM" label="Build the cleaning pipeline">
@@ -840,7 +840,7 @@ LIMIT 10;`}
 
       <IQ q="How do you perform a case-insensitive string comparison in SQL?">
         <p style={{ margin: '0 0 14px' }}>Three approaches. First, normalise both sides using LOWER() or UPPER() before comparing: WHERE LOWER(city) = LOWER('bangalore'). This converts both values to the same case before the comparison, making it case-insensitive. Second, in PostgreSQL and DuckDB, use ILIKE instead of LIKE: WHERE city ILIKE 'bangalore' — ILIKE is the case-insensitive version of LIKE and supports wildcards. Third, for joins on string columns, normalise the join key: JOIN stores ON LOWER(TRIM(o.city)) = LOWER(TRIM(s.city)).</p>
-        <p style={{ margin: '0 0 14px' }}>The most important practical application is join key normalisation. Two tables may store the same city as 'Bangalore' and 'bangalore' — an INNER JOIN without normalisation would miss the match entirely. Using LOWER(TRIM(city)) on both sides ensures the join finds matches regardless of case or whitespace differences.</p>
+        <p style={{ margin: '0 0 14px' }}>The most important practical application is join key normalisation. Two tables may store the same city as 'Seattle' and 'bangalore' — an INNER JOIN without normalisation would miss the match entirely. Using LOWER(TRIM(city)) on both sides ensures the join finds matches regardless of case or whitespace differences.</p>
         <p style={{ margin: 0 }}>Performance consideration: applying LOWER() or TRIM() to a column in WHERE prevents the database from using an index on that column — because the index stores the original values, not the lowercased versions. For high-frequency case-insensitive searches on large tables, create a functional index: CREATE INDEX idx_customers_city_lower ON customers (LOWER(city)). Then WHERE LOWER(city) = 'bangalore' can use this index efficiently. Alternatively, enforce case normalisation at write time (store all city values in title case) so queries never need to apply LOWER().</p>
       </IQ>
 
@@ -874,8 +874,8 @@ LIMIT 10;`}
       <Part n="16" title="Errors You Will Hit — And Exactly Why They Happen" />
 
       <Err
-        msg="String comparison fails to match — 'Bangalore' != 'bangalore' — joins miss rows"
-        cause="SQL string comparisons are case-sensitive in PostgreSQL and most databases. 'Bangalore' and 'bangalore' are different values. A JOIN or WHERE using direct equality will miss rows where the case differs between the two columns being compared. This is especially common after bulk imports where different sources used different conventions."
+        msg="String comparison fails to match — 'Seattle' != 'bangalore' — joins miss rows"
+        cause="SQL string comparisons are case-sensitive in PostgreSQL and most databases. 'Seattle' and 'bangalore' are different values. A JOIN or WHERE using direct equality will miss rows where the case differs between the two columns being compared. This is especially common after bulk imports where different sources used different conventions."
         fix="Normalise both sides with LOWER() before comparing: WHERE LOWER(city) = 'bangalore' or JOIN ON LOWER(a.city) = LOWER(b.city). For PostgreSQL, ILIKE is the case-insensitive alternative to LIKE. Long-term fix: enforce consistent case at write time using CHECK constraints or triggers, so all city values are always title case. For frequent queries, create a functional index on LOWER(city) to maintain performance while using case-insensitive comparisons."
       />
 
@@ -887,8 +887,8 @@ LIMIT 10;`}
 
       <Err
         msg="LIKE pattern not matching as expected — wildcard seems to be ignored"
-        cause="Three common causes: (1) Case sensitivity — LIKE 'bangalore%' does not match 'Bangalore%' in PostgreSQL. (2) Whitespace — the value has leading/trailing spaces that the pattern does not account for. (3) Incorrect wildcard placement — LIKE 'Bangalore' without any % or _ is an exact match, not a pattern. The value must exactly equal 'Bangalore' for it to match."
-        fix="Use ILIKE instead of LIKE for case-insensitive matching. Wrap the column with TRIM() before LIKE: WHERE TRIM(city) LIKE 'Bangalore%'. Verify wildcards are in the right position: LIKE '%Bangalore%' matches the string anywhere; LIKE 'Bangalore%' only matches strings starting with 'Bangalore'. Test the pattern in isolation: SELECT 'Bangalore' LIKE 'bangalore%' — this returns FALSE without ILIKE, confirming the case-sensitivity issue."
+        cause="Three common causes: (1) Case sensitivity — LIKE 'bangalore%' does not match 'Seattle%' in PostgreSQL. (2) Whitespace — the value has leading/trailing spaces that the pattern does not account for. (3) Incorrect wildcard placement — LIKE 'Seattle' without any % or _ is an exact match, not a pattern. The value must exactly equal 'Seattle' for it to match."
+        fix="Use ILIKE instead of LIKE for case-insensitive matching. Wrap the column with TRIM() before LIKE: WHERE TRIM(city) LIKE 'Seattle%'. Verify wildcards are in the right position: LIKE '%Seattle%' matches the string anywhere; LIKE 'Seattle%' only matches strings starting with 'Seattle'. Test the pattern in isolation: SELECT 'Seattle' LIKE 'bangalore%' — this returns FALSE without ILIKE, confirming the case-sensitivity issue."
       />
 
       <Err
@@ -943,7 +943,7 @@ ORDER BY clean_name;`}
         items={[
           'String functions transform text at query time without modifying stored data — use them for display formatting, data cleaning, join key normalisation, and validation.',
           'Always normalise case before comparing or joining string columns: LOWER(city) = LOWER(other_city). Use ILIKE (PostgreSQL/DuckDB) for case-insensitive LIKE matching.',
-          'TRIM removes leading and trailing whitespace. Always TRIM before comparing or joining on string columns — a trailing space makes \'Bangalore\' != \'Bangalore \' causing silent join misses.',
+          'TRIM removes leading and trailing whitespace. Always TRIM before comparing or joining on string columns — a trailing space makes \'Seattle\' != \'Seattle \' causing silent join misses.',
           'NULL propagates through string operations: \'Hello\' || NULL = NULL. Wrap nullable columns with COALESCE before concatenation. CONCAT_WS skips NULLs automatically.',
           'REPLACE substitutes substrings. TRANSLATE substitutes individual characters in one pass — use TRANSLATE for cleaning multiple different characters (phone number symbols) instead of chaining REPLACE.',
           'SQL strings are 1-indexed: SUBSTRING(str, 1, 3) returns the first 3 characters. SPLIT_PART(str, delimiter, n) returns the nth segment (1-indexed).',

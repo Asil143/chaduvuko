@@ -520,7 +520,7 @@ mse   = nn.MSELoss()(y_pred, y_reg)
 mae   = nn.L1Loss()(y_pred, y_reg)
 huber = nn.HuberLoss(delta=5.0)(y_pred, y_reg)
 
-print("Regression losses (Swiggy delivery time):")
+print("Regression losses (DoorDash delivery time):")
 print(f"  MSE:   {mse.item():.4f}  (sensitive to large errors)")
 print(f"  MAE:   {mae.item():.4f}  (proportional to error)")
 print(f"  Huber: {huber.item():.4f}  (MSE for small, MAE for large)")

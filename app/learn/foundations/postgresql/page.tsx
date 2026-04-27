@@ -332,11 +332,11 @@ export default function PostgreSQLPage() {
         </div>
         <pre className="p-4 text-xs overflow-x-auto" style={{ background: 'var(--bg2)', color: 'var(--text2)', lineHeight: 1.8 }}>{`INSERT INTO stores (store_id, store_name, city, state, opened_date)
 VALUES
-  ('ST001', 'FreshCart New Delhi',   'New Delhi',  'Delhi',     '2020-01-15'),
-  ('ST002', 'FreshCart Mumbai',      'Mumbai',     'Maharashtra','2020-03-10'),
-  ('ST003', 'FreshCart Bangalore',   'Bangalore',  'Karnataka', '2020-06-01'),
-  ('ST004', 'FreshCart Chennai',     'Chennai',    'Tamil Nadu','2021-01-20'),
-  ('ST005', 'FreshCart Hyderabad',   'Hyderabad',  'Telangana', '2021-04-05');`}</pre>
+  ('ST001', 'FreshCart New York',   'New York',  'Delhi',     '2020-01-15'),
+  ('ST002', 'FreshCart New York',      'New York',     'Maharashtra','2020-03-10'),
+  ('ST003', 'FreshCart Seattle',   'Seattle',  'Karnataka', '2020-06-01'),
+  ('ST004', 'FreshCart Chicago',     'Chicago',    'Tamil Nadu','2021-01-20'),
+  ('ST005', 'FreshCart Austin',   'Austin',  'Telangana', '2021-04-05');`}</pre>
       </div>
 
       <div className="my-4 rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
@@ -534,7 +534,7 @@ ORDER BY total_revenue DESC NULLS LAST;`}</pre>
         </div>
         <pre className="p-4 text-xs overflow-x-auto" style={{ background: 'var(--bg2)', color: 'var(--text2)', lineHeight: 2 }}>{`-- UPDATE a single row
 UPDATE stores
-SET city = 'Bengaluru'
+SET city = 'San Francisco'
 WHERE store_id = 'ST003';
 
 -- UPDATE multiple rows
@@ -572,7 +572,7 @@ DELETE FROM sales WHERE order_date < '2023-01-01';`}</pre>
           <span className="text-xs font-mono" style={{ color: 'var(--accent)' }}>UPSERT with ON CONFLICT</span>
         </div>
         <pre className="p-4 text-xs overflow-x-auto" style={{ background: 'var(--bg2)', color: 'var(--text2)', lineHeight: 2 }}>{`INSERT INTO stores (store_id, store_name, city, state)
-VALUES ('ST001', 'FreshCart New Delhi Updated', 'New Delhi', 'Delhi')
+VALUES ('ST001', 'FreshCart New York Updated', 'New York', 'Delhi')
 ON CONFLICT (store_id)
 DO UPDATE SET
   store_name = EXCLUDED.store_name,

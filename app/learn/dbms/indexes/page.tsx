@@ -148,7 +148,7 @@ export default function Indexes() {
 
         <Para>
           That is not a small difference. It is a 4000× speedup for one missing index on one query.
-          At Swiggy's scale — tens of millions of orders, queries running thousands of times per
+          At DoorDash's scale — tens of millions of orders, queries running thousands of times per
           second — a missing index can bring down an entire service. Adding the right index can
           fix a production incident in under a minute. This is why indexes are one of the
           most practically important topics in all of database engineering.
@@ -864,7 +864,7 @@ CREATE INDEX idx_orders_year ON orders(EXTRACT(YEAR FROM order_date));
 -- JSON field indexing (PostgreSQL):
 -- Index a specific field inside a JSONB column
 CREATE INDEX idx_metadata_city ON customers((metadata->>'city'));
--- Query: WHERE metadata->>'city' = 'Bengaluru' now uses the index`}
+-- Query: WHERE metadata->>'city' = 'San Francisco' now uses the index`}
               </CodeBox>
             </div>
           </div>
@@ -1166,7 +1166,7 @@ OPTIMIZE TABLE orders;  -- ⚠ locks table during operation — use in maintenan
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: '#ff4757', background: 'rgba(255,71,87,0.1)', border: '1px solid rgba(255,71,87,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Production Incident — Swiggy Order History API
+            Production Incident — DoorDash Order History API
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>

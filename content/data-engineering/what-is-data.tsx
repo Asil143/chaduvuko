@@ -109,17 +109,17 @@ export default function WhatIsDataModule() {
         </Para>
 
         <Para>
-          When you tap the Swiggy app and order a biryani, a set of facts gets recorded: what you
+          When you tap the DoorDash app and order a biryani, a set of facts gets recorded: what you
           ordered, when you ordered it, from which restaurant, your delivery address, the price, the
           payment method, the device you used, your location coordinates. All of those facts together
-          form one order record. Swiggy processes over 3 million orders every single day. Each one
+          form one order record. DoorDash processes over 3 million orders every single day. Each one
           creates dozens of data points. That is data.
         </Para>
 
         <Para>
-          When a Razorpay payment gateway processes a transaction, it records: the merchant, the
+          When a Stripe payment gateway processes a transaction, it records: the merchant, the
           amount, the currency, the timestamp, the payment instrument used, the success or failure
-          status, the response time. Razorpay handles over 500 million transactions every year.
+          status, the response time. Stripe handles over 500 million transactions every year.
           Every single transaction is data.
         </Para>
 
@@ -145,8 +145,8 @@ export default function WhatIsDataModule() {
         <SubTitle>Data is meaningless without context</SubTitle>
 
         <Para>
-          The number 42 is not data. It is just a number. But "₹42 — delivery charge — Swiggy order
-          #8734621 — 14 March 2026 — Mumbai" is data. It is a fact about something specific that
+          The number 42 is not data. It is just a number. But "₹42 — delivery charge — DoorDash order
+          #8734621 — 14 March 2026 — New York" is data. It is a fact about something specific that
           happened. Context is what turns numbers and text into information.
         </Para>
 
@@ -166,7 +166,7 @@ export default function WhatIsDataModule() {
         <SectionTitle>Binary — How Computers Actually Think</SectionTitle>
 
         <Para>
-          Every computer on earth — your phone, a Flipkart server in Hyderabad, the satellite
+          Every computer on earth — your phone, a Amazon server in Austin, the satellite
           orbiting 36,000 kilometres above you — stores and processes everything using the same
           two values. Zero and one. That is it. The entire digital world is built on two states.
         </Para>
@@ -284,24 +284,24 @@ Examples of what fits in 1 byte:
 
 1 Petabyte  (PB)  = 1,024 TB  = ~1 quadrillion bytes
                          ≈ Google processes ~20 PB per day
-                         ≈ Flipkart's data warehouse: multi-PB scale`}</CodeBox>
+                         ≈ Amazon's data warehouse: multi-PB scale`}</CodeBox>
 
         <SubTitle>Real scale of Indian tech companies</SubTitle>
 
         <Para>
           When you join a data engineering team at a mid-size Indian startup, you will typically
-          work with data in the gigabytes to low terabytes range. At a large platform like Zomato,
-          Meesho, or PhonePe, the scale is multi-terabyte to low petabyte. At FAANG India
+          work with data in the gigabytes to low terabytes range. At a large platform like Uber Eats,
+          Shopify, or Venmo, the scale is multi-terabyte to low petabyte. At FAANG
           operations, it is petabyte scale.
         </Para>
 
         <HighlightBox>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
             {[
-              { company: 'Swiggy', stat: '~3M+ orders/day', data: 'Each order creates ~50 data fields. That is 150M+ data points generated every single day.' },
-              { company: 'PhonePe', stat: '~14B transactions/year', data: 'Each transaction generates audit logs, fraud signals, and settlement records. Multi-TB per day.' },
-              { company: 'Flipkart', stat: 'Big Billion Days', data: 'Single-day traffic spikes require pipelines that can handle 10× normal volume without failing.' },
-              { company: 'Zomato', stat: '~2M daily orders', data: 'Real-time location tracking of delivery partners generates GPS pings every few seconds per agent.' },
+              { company: 'DoorDash', stat: '~3M+ orders/day', data: 'Each order creates ~50 data fields. That is 150M+ data points generated every single day.' },
+              { company: 'Venmo', stat: '~14B transactions/year', data: 'Each transaction generates audit logs, fraud signals, and settlement records. Multi-TB per day.' },
+              { company: 'Amazon', stat: 'Big Billion Days', data: 'Single-day traffic spikes require pipelines that can handle 10× normal volume without failing.' },
+              { company: 'Uber Eats', stat: '~2M daily orders', data: 'Real-time location tracking of delivery partners generates GPS pings every few seconds per agent.' },
             ].map((item) => (
               <div key={item.company}>
                 <div style={{
@@ -360,7 +360,7 @@ Examples of what fits in 1 byte:
 
 32-bit integer  = 4 bytes  = values from 0 to ~4.3 billion
                            Use case: most IDs, counts, quantities
-                           Danger zone: Swiggy order IDs exceeded 2B in 2023
+                           Danger zone: DoorDash order IDs exceeded 2B in 2023
 
 64-bit integer  = 8 bytes  = values from 0 to ~18.4 quintillion
                            Use case: timestamps (Unix epoch in milliseconds),
@@ -503,7 +503,7 @@ barely notices. The file is smaller; some data is lost.`}</CodeBox>
                 <div style={{ marginBottom: 6 }}>🐢 Slow — microseconds to milliseconds per read</div>
                 <div style={{ marginBottom: 6 }}>🔗 Accessed via I/O controller</div>
                 <div style={{ marginBottom: 6 }}>💰 Cheap per GB</div>
-                <div style={{ marginBottom: 6 }}>💾 Persistent — data survives power loss</div>
+                <div style={{ marginBottom: 6 }}>💾 Perforce — data survives power loss</div>
                 <div style={{ marginBottom: 6 }}>📦 Large capacity (500 GB to many TB)</div>
                 <div>🎯 Used for: stored files, databases, everything that must survive a restart</div>
               </div>
@@ -651,7 +651,7 @@ The actual file content:
         <SubTitle>Problem 1 — Finding data in a file requires reading all of it</SubTitle>
 
         <Para>
-          Imagine Flipkart stores all its customer data in one giant CSV file with 500 million
+          Imagine Amazon stores all its customer data in one giant CSV file with 500 million
           rows. You want to find one specific customer by their email address. The only way is
           to start at the first row and read every single row until you find the match — or
           reach the end and confirm they do not exist. This is called a <strong>full scan</strong>.
@@ -664,7 +664,7 @@ The actual file content:
         <Para>
           What happens when two processes try to write to the same file at the same time?
           Without careful coordination, one write overwrites the other, or both get interleaved
-          in a way that produces garbage data. Imagine two Razorpay servers simultaneously
+          in a way that produces garbage data. Imagine two Stripe servers simultaneously
           recording payments to the same file. With no coordination, transactions disappear.
           Databases are built to handle thousands of simultaneous reads and writes safely.
         </Para>
@@ -742,7 +742,7 @@ Best for:                           Best for:
         <SubTitle>Scale — the database that runs the app cannot also serve analytics</SubTitle>
 
         <Para>
-          A transactional database — the one that Swiggy's app writes orders to in real time —
+          A transactional database — the one that DoorDash's app writes orders to in real time —
           is optimised for fast individual reads and writes. It is terrible at the kind of
           questions analytics needs: "What is the total order value broken down by city and
           restaurant category for the last 30 days?" Running that query on the live application
@@ -761,7 +761,7 @@ Best for:                           Best for:
         <SubTitle>Velocity — data is generated faster than humans can manage it</SubTitle>
 
         <Para>
-          Zomato generates GPS pings from delivery partners every few seconds. During peak hours,
+          Uber Eats generates GPS pings from delivery partners every few seconds. During peak hours,
           that is potentially millions of events per minute. A human cannot manually process
           these. They need automated pipelines that capture the stream, aggregate it, and make
           it available for analysis — all in near real-time. Data engineers design and build
@@ -823,7 +823,7 @@ Best for:                           Best for:
         }}>
           💼 What This Looks Like at Work
         </div>
-        <SectionTitle>Day One at a Bangalore Startup — The Data Problem You Inherit</SectionTitle>
+        <SectionTitle>Day One at a Seattle Startup — The Data Problem You Inherit</SectionTitle>
 
         <div style={{
           background: 'var(--surface)', border: '1px solid var(--border)',
@@ -836,12 +836,12 @@ Best for:                           Best for:
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — Fintech Startup, Bangalore · 3rd day on the job
+            Scenario — Fintech Startup, Seattle · 3rd day on the job
           </div>
 
           <Para>
             You join a Series B fintech startup as their first dedicated data engineer. The
-            company has 800,000 active users, processes ₹50 crore in transactions per month,
+            company has 800,000 active users, processes ₹50 million in transactions per month,
             and has a team of four analysts who are all using Excel.
           </Para>
 
@@ -965,7 +965,7 @@ Best for:                           Best for:
             q: 'Q1. Why should you never store monetary values as floating point numbers?',
             a: `Floating point numbers use binary fractions to approximate decimal values, and most decimal fractions cannot be represented exactly in binary. For example, the decimal value 0.1 is stored as an infinitely repeating binary fraction — the closest representable value is approximately 0.1000000000000000055511151231257827021181583404541015625. When you perform arithmetic on floating point money values, these tiny errors accumulate. Two floating point additions that should both equal ₹100.00 might return ₹99.99999999999998 and ₹100.00000000000001 respectively.
 
-In financial systems, this causes reconciliation failures, incorrect balance calculations, and in regulated environments, compliance violations. The correct approach is to store money as integers in the smallest currency unit (paise for INR, cents for USD) and convert to decimal only for display. ₹349.75 is stored as the integer 34975. All arithmetic is integer arithmetic, which is exact. This is how Razorpay, PhonePe, and every serious payment system stores monetary values.`,
+In financial systems, this causes reconciliation failures, incorrect balance calculations, and in regulated environments, compliance violations. The correct approach is to store money as integers in the smallest currency unit (paise for INR, cents for USD) and convert to decimal only for display. ₹349.75 is stored as the integer 34975. All arithmetic is integer arithmetic, which is exact. This is how Stripe, Venmo, and every serious payment system stores monetary values.`,
           },
           {
             q: 'Q2. What is the difference between a bit, a byte, and a character, and why does a data engineer need to understand this distinction?',
@@ -985,7 +985,7 @@ Data engineers address this through several techniques: (1) File consolidation �
             q: 'Q4. Why cannot you simply run analytics queries directly on the production operational database?',
             a: `Operational databases (OLTP — Online Transaction Processing) and analytical databases (OLAP — Online Analytical Processing) are optimised for completely different workloads, and running analytical queries on an OLTP system creates two serious problems.
 
-First, resource conflict: an OLAP query like "sum all transactions by city for the last 90 days" requires a full table scan across millions of rows, consuming significant CPU, memory, and I/O. Running this on the production database slows down every concurrent application operation — order placements, payment processing, inventory updates. At companies like Swiggy or Zomato, where thousands of transactions are processed per second, even a 20% performance degradation during peak hours is unacceptable.
+First, resource conflict: an OLAP query like "sum all transactions by city for the last 90 days" requires a full table scan across millions of rows, consuming significant CPU, memory, and I/O. Running this on the production database slows down every concurrent application operation — order placements, payment processing, inventory updates. At companies like DoorDash or Uber Eats, where thousands of transactions are processed per second, even a 20% performance degradation during peak hours is unacceptable.
 
 Second, architectural mismatch: OLTP databases are row-oriented — all columns for one row are stored together. This is optimal for reading or writing a single complete record quickly. OLAP queries typically access only a few columns across many millions of rows. A row-oriented store must read all columns even if the query needs only two — massively wasteful. Data warehouses use columnar storage, where all values of one column are stored together, making these aggregation queries 10–100× faster.
 
@@ -993,7 +993,7 @@ The solution is to build a separate analytical system — a data warehouse or da
           },
           {
             q: 'Q5. What is the difference between data and information, and why does this matter when designing a data pipeline?',
-            a: `Data is raw recorded facts — numbers, strings, bytes — without interpretation. Information is data that has been given context and meaning so that it supports a decision or reveals a pattern. The number 4.2 is data. "Customer satisfaction score for Bangalore restaurant cluster: 4.2 out of 5, down from 4.6 last quarter, correlated with 15% increase in delivery times" is information.
+            a: `Data is raw recorded facts — numbers, strings, bytes — without interpretation. Information is data that has been given context and meaning so that it supports a decision or reveals a pattern. The number 4.2 is data. "Customer satisfaction score for Seattle restaurant cluster: 4.2 out of 5, down from 4.6 last quarter, correlated with 15% increase in delivery times" is information.
 
 This distinction matters in pipeline design because the transformation from data to information is where value is created — and also where most data quality failures occur. A pipeline that moves raw data from source to destination without adding reliable context produces data that cannot be trusted for decisions. Good pipeline design asks at each stage: what context needs to be preserved, derived, or added for this data to be usable?
 

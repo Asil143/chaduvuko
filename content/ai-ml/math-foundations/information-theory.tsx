@@ -232,9 +232,9 @@ export default function InformationTheoryPage() {
         </p>
 
         <p style={S.p}>
-          Think about it concretely. You open Swiggy and see "Your order
+          Think about it concretely. You open DoorDash and see "Your order
           is being prepared." This happens every single time — completely
-          expected, no new information. But if you open Swiggy and see
+          expected, no new information. But if you open DoorDash and see
           "Your restaurant just won a Michelin star" — extremely rare,
           extremely surprising, and therefore carries a lot of information.
         </p>
@@ -299,7 +299,7 @@ def self_information_nats(p):
 
 # Real examples
 events = [
-    ('Swiggy order confirmed (always happens)',        1.00),
+    ('DoorDash order confirmed (always happens)',        1.00),
     ('Order arrives in under 20 min',                 0.30),
     ('Coin flip lands heads',                         0.50),
     ('Order delayed by more than 1 hour',             0.05),
@@ -502,7 +502,7 @@ def entropy_nats(probs):
     probs = probs[probs > 0]
     return -np.sum(probs * np.log(probs))
 
-# ── Four scenarios from a Swiggy star rating predictor ───────────────
+# ── Four scenarios from a DoorDash star rating predictor ───────────────
 
 # Scenario A: model is very confident (good!)
 model_confident = [0.01, 0.02, 0.04, 0.13, 0.80]  # almost certain it's 5 stars

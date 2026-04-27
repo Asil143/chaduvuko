@@ -359,7 +359,7 @@ last_name   VARCHAR(100)  -- same
 email       VARCHAR(255)  -- RFC 5321 maximum email length
 phone       VARCHAR(20)   -- country code + number + separators
 city        VARCHAR(100)  -- longest city name with margin
-pincode     VARCHAR(10)   -- 6-digit Indian pincode + future
+zip_code     VARCHAR(10)   -- 6-digit Indian zip_code + future
 product_name VARCHAR(200) -- long descriptive product names
 store_name  VARCHAR(200)  -- full store name with location
 
@@ -419,7 +419,7 @@ store_name  VARCHAR(200)  -- full store name with location
 
       <P>Use <Hl>DATE</Hl> when only the calendar day matters and time is irrelevant. Order dates, birth dates, hire dates, expiry dates — these are pure dates. Using TIMESTAMP for these adds unnecessary complexity and opens timezone pitfalls.</P>
 
-      <P>Use <Hl>TIMESTAMP WITH TIME ZONE</Hl> (TIMESTAMPTZ) for any event that happens at a specific moment — when a user logged in, when a payment was made, when a notification was sent. TIMESTAMPTZ stores the moment in UTC and converts to local time on display. Without time zone, timestamps from different cities are ambiguous — 14:30:00 in Bangalore and 14:30:00 in New York are completely different moments.</P>
+      <P>Use <Hl>TIMESTAMP WITH TIME ZONE</Hl> (TIMESTAMPTZ) for any event that happens at a specific moment — when a user logged in, when a payment was made, when a notification was sent. TIMESTAMPTZ stores the moment in UTC and converts to local time on display. Without time zone, timestamps from different cities are ambiguous — 14:30:00 in Seattle and 14:30:00 in New York are completely different moments.</P>
 
       <SQLPlayground
         initialQuery={`-- Working with dates in FreshCart
@@ -676,7 +676,7 @@ WHERE attributes->>'resolution' = '4K';
 CREATE INDEX idx_products_attributes ON products USING GIN (attributes);`}
       />
 
-      <P>Razorpay uses JSONB to store payment metadata — each payment instrument (UPI, card, netbanking) has a completely different structure of additional fields. JSONB lets them store all of it in one column without creating dozens of nullable columns. Zomato uses JSONB for restaurant menu data — each item has different option structures.</P>
+      <P>Stripe uses JSONB to store payment metadata — each payment instrument (UPI, card, netbanking) has a completely different structure of additional fields. JSONB lets them store all of it in one column without creating dozens of nullable columns. Uber Eats uses JSONB for restaurant menu data — each item has different option structures.</P>
 
       <H>UUID — universally unique identifiers</H>
 
@@ -696,7 +696,7 @@ CREATE TABLE events (
 -- INTEGER: internal tables, simple applications, better join performance
 
 -- FreshCart uses INTEGER PKs — single database, internal IDs
--- Razorpay uses UUID for payment IDs shared with merchants — must be globally unique`}
+-- Stripe uses UUID for payment IDs shared with merchants — must be globally unique`}
       />
 
       <H>Arrays — storing multiple values in one column</H>
@@ -809,7 +809,7 @@ CREATE TABLE customers (phone VARCHAR(20));
 INSERT INTO customers VALUES ('09876543210');  -- stored correctly
 INSERT INTO customers VALUES ('+91-9876543210');  -- also works
 
--- The rule: store phone numbers, account numbers, PAN, Aadhaar,
+-- The rule: store phone numbers, account numbers, PAN, SSN,
 -- and any "number" that has leading zeros or non-numeric characters
 -- as VARCHAR, never as INTEGER`}
       />
@@ -870,7 +870,7 @@ WHERE c.name = 'customer_id';`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at a Bangalore fintech startup. A senior engineer asks you to review the schema for a new loan application table before it goes to production. You find three type-related issues that would have caused production bugs.</P>
+      <P>You are a backend engineer at a Seattle fintech startup. A senior engineer asks you to review the schema for a new loan application table before it goes to production. You find three type-related issues that would have caused production bugs.</P>
 
       <TimeBlock time="10:00 AM" label="Schema review request arrives">
         The schema dump arrives in Slack. You review it column by column against the type decision framework.
@@ -882,7 +882,7 @@ WHERE c.name = 'customer_id';`}
 CREATE TABLE loan_applications (
   application_id  VARCHAR(20),      -- Issue 1
   applicant_name  VARCHAR(50),
-  pan_number      CHAR(10),
+  ssn_last4      CHAR(10),
   annual_income   FLOAT,            -- Issue 2
   application_date VARCHAR(10),     -- Issue 3
   phone_number    BIGINT,           -- Issue 4
@@ -907,7 +907,7 @@ CREATE TABLE loan_applications (
   applicant_name   VARCHAR(200) NOT NULL,
 
   -- PAN: CHAR(10) is correct — PAN is always exactly 10 chars (ABCDE1234F)
-  pan_number       CHAR(10) UNIQUE NOT NULL,
+  ssn_last4       CHAR(10) UNIQUE NOT NULL,
 
   -- Issue 2: annual_income as FLOAT causes rounding errors in loan calculations
   -- ₹5,00,000 stored as FLOAT might compute to ₹4,99,999.999...
@@ -962,7 +962,7 @@ CREATE TABLE loan_applications (
       <IQ q="Why should phone numbers be stored as VARCHAR rather than INTEGER?">
         <p style={{ margin: '0 0 14px' }}>Phone numbers are not numeric values in the mathematical sense — they are identifiers that happen to use digits. Storing them as INTEGER or BIGINT causes three problems. First, leading zeros are lost. Indian mobile numbers start with 0 (when dialled as local calls) or with a country code — 09876543210 stored as BIGINT becomes 9876543210, irreversibly losing the leading zero. Stored data can never be recovered to the original format.</p>
         <p style={{ margin: '0 0 14px' }}>Second, non-numeric characters cannot be stored. International format phone numbers include country codes (+91), separators (-), and sometimes extensions (x204). BIGINT accepts none of these — any format beyond pure digits requires VARCHAR. Third, no arithmetic is ever performed on phone numbers — you never add two phone numbers together or calculate the average phone number. The entire reason to choose a numeric type is to enable arithmetic and range operations. Phone numbers need neither.</p>
-        <p style={{ margin: 0 }}>The correct type is VARCHAR(20) — long enough for any international format (+1-800-555-0199 is 15 chars, with headroom). This applies to any "number" that is really an identifier: PAN card (ABCDE1234F — mixed alphanumeric), Aadhaar number (12 digits, no arithmetic), GST number, IFSC code, postal codes (some have letters — UK postcodes SW1A 1AA). The rule: if you would never multiply it, average it, or compare it with greater-than, store it as VARCHAR.</p>
+        <p style={{ margin: 0 }}>The correct type is VARCHAR(20) — long enough for any international format (+1-800-555-0199 is 15 chars, with headroom). This applies to any "number" that is really an identifier: PAN card (ABCDE1234F — mixed alphanumeric), SSN number (12 digits, no arithmetic), GST number, IFSC code, postal codes (some have letters — UK postcodes SW1A 1AA). The rule: if you would never multiply it, average it, or compare it with greater-than, store it as VARCHAR.</p>
       </IQ>
 
       <IQ q="What is the difference between TIMESTAMP and TIMESTAMPTZ and which should you use?">
@@ -1048,7 +1048,7 @@ ORDER BY paise_component DESC;`}
           'Never store money as FLOAT or DOUBLE. Always use DECIMAL(p,2). Floating-point cannot represent decimal fractions exactly, and errors compound across millions of transactions into regulatory violations.',
           'INTEGER for whole-number counts and IDs. BIGINT when values might exceed 2.1 billion. DECIMAL for any number with decimal precision. FLOAT only for scientific measurements with inherent imprecision.',
           'VARCHAR(n) for variable-length text with a known maximum. CHAR(n) for fixed-length codes (country codes, currency codes, PAN). TEXT for unbounded content (descriptions, articles).',
-          'Phone numbers, PAN, Aadhaar, IFSC, postal codes — store as VARCHAR, never INTEGER. They have leading zeros, non-numeric characters, and require no arithmetic.',
+          'Phone numbers, PAN, SSN, IFSC, postal codes — store as VARCHAR, never INTEGER. They have leading zeros, non-numeric characters, and require no arithmetic.',
           'DATE for calendar days with no time component. TIMESTAMP for specific moments in a single timezone. TIMESTAMPTZ for specific moments across multiple timezones — use this for all production created_at and updated_at columns.',
           'CAST(expression AS type) or expression::type (PostgreSQL) converts between types. Put CAST on the literal side of WHERE conditions, not the column side — CAST on a column prevents index usage.',
           'BOOLEAN for binary flags (is_active, in_stock). For multi-state columns (order_status, approval_status), use VARCHAR with a CHECK constraint — not BOOLEAN.',

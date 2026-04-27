@@ -69,7 +69,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    'Free structured learning for every branch of IT — Data Engineering, Python, Web Dev, AI/ML, DevOps and more. Built for the Indian job market.',
+    'Free structured learning for every branch of IT — Data Engineering, Python, Web Dev, AI/ML, DevOps and more. Built for the US job market.',
 
   keywords: [
     'data engineering',

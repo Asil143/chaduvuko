@@ -198,7 +198,7 @@ export default function SemanticSegmentationPage() {
         </p>
 
         <p style={S.p}>
-          Practical examples in India: Ola and Uber's dashcam systems
+          Practical examples in India: Lyft and Uber's dashcam systems
           segment road, vehicles, pedestrians, and lane markings pixel-by-pixel
           for driver safety scoring. Agri-tech startups segment satellite images
           into crop types for yield forecasting. Quality control systems

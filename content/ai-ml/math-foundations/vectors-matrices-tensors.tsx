@@ -321,7 +321,7 @@ print(scalar.ndim)    # 0`} />
         <h3 style={S.h3}>Vector — a list of numbers with meaning</h3>
         <p style={S.p}>
           A vector is a 1D array of numbers. In ML, every single data point
-          is a vector. A Swiggy order with 4 features —
+          is a vector. A DoorDash order with 4 features —
           distance, time of day, restaurant prep time, traffic score —
           is a vector of 4 numbers: <span style={S.code as React.CSSProperties}>[3.2, 2, 15, 7]</span>.
         </p>
@@ -333,7 +333,7 @@ print(scalar.ndim)    # 0`} />
           have vectors that point in similar directions in space.
         </p>
 
-        <VisualBox label="One Swiggy order as a vector">
+        <VisualBox label="One DoorDash order as a vector">
           <div style={{ display: 'flex', gap: 0, alignItems: 'stretch', flexWrap: 'wrap' }}>
             {[
               { val: '3.2', label: 'distance_km', color: '#378ADD' },
@@ -396,7 +396,7 @@ print(scaled)  # [6.4, 4, 30, 14]`} />
           1,000 orders with 4 features → a matrix with shape <span style={S.code as React.CSSProperties}>(1000, 4)</span>.
         </p>
 
-        <VisualBox label="1000 Swiggy orders → a (1000, 4) matrix">
+        <VisualBox label="1000 DoorDash orders → a (1000, 4) matrix">
           <div style={{ overflowX: 'auto' as const }}>
             <div style={{ minWidth: 420 }}>
               {/* Header */}

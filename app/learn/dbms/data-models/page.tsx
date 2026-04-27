@@ -594,7 +594,7 @@ WHILE DB-STATUS = 0:
               pillar: 'Pillar 1 — Relations (Tables)',
               color: '#0078d4',
               content: `A relation is a mathematical set of tuples — each tuple being an ordered list of domain values. In practical terms, a relation is a table: rows are tuples, columns are attributes, and each column has a domain (the set of valid values). The critical mathematical property: a relation is a SET — which means no two tuples can be identical (no duplicate rows), and tuples have no inherent order (the order of rows in a table is meaningless). These constraints come from set theory, not from engineering convenience.`,
-              example: `relation R = {(C001, Rahul, Bengaluru), (C002, Priya, Hyderabad), (C003, Arjun, Mumbai)}
+              example: `relation R = {(C001, Rahul, San Francisco), (C002, Priya, Austin), (C003, Arjun, New York)}
 // This is a mathematical set of 3-tuples.
 // No duplicate tuples (set property).
 // Unordered (set property — sequences are not sets).
@@ -604,9 +604,9 @@ WHILE DB-STATUS = 0:
               pillar: 'Pillar 2 — Relational Algebra (Operations)',
               color: 'var(--accent)',
               content: `Codd defined eight fundamental operations over relations — Selection (σ), Projection (π), Cartesian Product (×), Union (∪), Difference (−), Rename (ρ), Join (⋈), and Division (÷). These operations are closed — every operation takes one or more relations as input and produces a relation as output. This closure property means operations can be composed arbitrarily: the output of one operation can be the input of another. SQL is a declarative language that translates user queries into sequences of these algebraic operations.`,
-              example: `// "Find names of customers from Bengaluru with orders above ₹500"
+              example: `// "Find names of customers from San Francisco with orders above ₹500"
 // In relational algebra:
-π_name(σ_city='Bengaluru' AND amount>500 (customers ⋈ orders))
+π_name(σ_city='San Francisco' AND amount>500 (customers ⋈ orders))
 
 // Translation: JOIN customers and orders, SELECT rows matching conditions,
 // PROJECT down to just the name column.
@@ -888,7 +888,7 @@ WHERE c.course_name = 'DBMS'
             {
               concept: 'Object Identity (OID)',
               desc: 'Every object in an OODBMS has a unique, system-generated object identifier (OID) — similar to a primary key in a relational database, but managed entirely by the DBMS. The OID is immutable — it never changes regardless of how the object\'s attribute values change. Relationships between objects are represented by storing the OID of referenced objects (like pointers, but persistent).',
-              example: 'Customer object with OID=0x4A2F has attributes (name="Rahul", city="Bengaluru") and a reference to Order OID=0x8B3C. The link is the OID, not a foreign key.',
+              example: 'Customer object with OID=0x4A2F has attributes (name="Rahul", city="San Francisco") and a reference to Order OID=0x8B3C. The link is the OID, not a foreign key.',
             },
             {
               concept: 'Complex Attributes and Nested Objects',
@@ -908,7 +908,7 @@ WHERE c.course_name = 'DBMS'
             {
               concept: 'OQL — Object Query Language',
               desc: 'The ODMG (Object Data Management Group) standardised OQL (Object Query Language) in 1993 as the object-oriented equivalent of SQL. It is declarative like SQL but operates on objects and their traversal paths rather than flat table joins.',
-              example: 'SELECT c.name, c.orders\nFROM customers c\nWHERE c.city = "Bengaluru"\n  AND COUNT(c.orders) > 5\n// c.orders is traversed directly — no JOIN across tables needed',
+              example: 'SELECT c.name, c.orders\nFROM customers c\nWHERE c.city = "San Francisco"\n  AND COUNT(c.orders) > 5\n// c.orders is traversed directly — no JOIN across tables needed',
             },
           ].map((item) => (
             <div key={item.concept} style={{
@@ -989,7 +989,7 @@ CREATE TYPE address_t AS (
     street    VARCHAR(200),
     city      VARCHAR(100),
     state     VARCHAR(50),
-    pincode   CHAR(6)
+    zip_code   CHAR(6)
 );
 
 CREATE TABLE customers (
@@ -1003,14 +1003,14 @@ CREATE TABLE customers (
 INSERT INTO customers (name, address, phone_numbers)
 VALUES (
     'Rahul Sharma',
-    ROW('123 MG Road', 'Bengaluru', 'Karnataka', '560001'),
+    ROW('123 MG Road', 'San Francisco', 'Karnataka', '560001'),
     ARRAY['98765-43210', '87654-32109']
 );
 
 -- Query into composite type's components
-SELECT name, (address).city, (address).pincode
+SELECT name, (address).city, (address).zip_code
 FROM customers
-WHERE (address).city = 'Bengaluru';
+WHERE (address).city = 'San Francisco';
 
 -- Query arrays
 SELECT name FROM customers
@@ -1024,7 +1024,7 @@ CREATE TABLE products (
     attributes   JSONB      -- flexible schema for product-specific attributes
 );
 
--- Zomato restaurant: attributes vary by restaurant type
+-- Uber Eats restaurant: attributes vary by restaurant type
 INSERT INTO products (name, category, attributes) VALUES
 ('Butter Chicken', 'Main Course', 
  '{"spice_level": "medium", "is_vegetarian": false, "prep_time_mins": 20, "allergens": ["dairy"]}'),
@@ -1044,7 +1044,7 @@ WHERE attributes @> '{"is_vegetarian": true}'  -- contains this key-value
           The object-relational model is why PostgreSQL is the most popular database for complex
           applications in 2026. It gives you SQL, ACID transactions, and mature query optimisation —
           while also giving you the flexibility to model complex, varying data structures without
-          leaving the relational ecosystem. Swiggy, Razorpay, and PhonePe run on PostgreSQL
+          leaving the relational ecosystem. DoorDash, Stripe, and Venmo run on PostgreSQL
           precisely because it handles both the structured financial data (relational) and the
           flexible product/menu data (JSONB) in a single system.
         </Para>
@@ -1129,7 +1129,7 @@ WHERE r.restaurant_id = 'R001';
 {
   "_id": "R001",
   "name": "Biryani House",
-  "address": { "street": "45 Brigade Road", "city": "Bengaluru", "pincode": "560001" },
+  "address": { "street": "45 Brigade Road", "city": "San Francisco", "zip_code": "560001" },
   "rating": 4.6,
   "hours": { "open": "11:00", "close": "23:00" },
   "menu": [
@@ -1174,13 +1174,13 @@ WHERE r.restaurant_id = 'R001';
         </Para>
 
         <CodeBox label="Cross-document query problem — document model's Achilles heel">
-{`// Relational: "Find all restaurants in Bengaluru that serve veg biryani under ₹200"
+{`// Relational: "Find all restaurants in San Francisco that serve veg biryani under ₹200"
 // Clean single SQL query
 SELECT DISTINCT r.name, r.rating
 FROM restaurants r
 JOIN menu_categories mc ON r.restaurant_id = mc.restaurant_id
 JOIN menu_items mi ON mc.category_id = mi.category_id
-WHERE r.city = 'Bengaluru'
+WHERE r.city = 'San Francisco'
   AND mc.name = 'Biryani'
   AND mi.is_veg = true
   AND mi.price < 200;
@@ -1188,7 +1188,7 @@ WHERE r.city = 'Bengaluru'
 
 // MongoDB: same query
 db.restaurants.find({
-  "address.city": "Bengaluru",
+  "address.city": "San Francisco",
   "menu": {
     $elemMatch: {
       "category": "Biryani",
@@ -1295,7 +1295,7 @@ INCRBY api:rate_limit:user:1001 1        # Rate limiting — incr per request
 GET api:rate_limit:user:1001             # Check current request count
 
 # ─── HASH ─── Object storage without serialisation
-HSET user:1001 name "Rahul Sharma" city "Bengaluru" tier "gold"
+HSET user:1001 name "Rahul Sharma" city "San Francisco" tier "gold"
 HGET user:1001 name        # Returns: "Rahul Sharma"
 HGETALL user:1001          # Returns all fields
 HINCRBY user:1001 order_count 1  # Atomic field increment
@@ -1330,7 +1330,7 @@ SUNION online_users:server1 online_users:server2  # Union across servers`}
           store the result in Redis, return it. For frequently-read data — user profiles, product
           information, configuration values, search results — the cache hit rate in a well-tuned
           system is 80–95%. This means 80–95% of reads never touch the database at all.
-          At Swiggy's scale (10 million orders per day), eliminating even 80% of database reads
+          At DoorDash's scale (10 million orders per day), eliminating even 80% of database reads
           is the difference between a functioning system and one that requires 5x the database
           infrastructure.
         </Para>
@@ -1580,9 +1580,9 @@ RETURN path;
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
           {[
             { useCase: 'LinkedIn — People You May Know', desc: 'Every recommendation ("Rahul knows Priya, who knows Arjun, who knows you") is a graph traversal. LinkedIn\'s entire connection network — 900+ million members, billions of connections — is stored in a graph database. A relational JOIN at this scale for 2-hop recommendations would be unusably slow.' },
-            { useCase: 'PayTM / Razorpay — Fraud Detection', desc: 'Fraudulent behaviour often creates unusual graph patterns — a single entity connected to many accounts, circular fund transfers, unusually dense connection clusters. These patterns are trivial to detect with graph queries and practically impossible to detect with relational queries at transaction volume.' },
-            { useCase: 'Amazon / Flipkart — Recommendation Engine', desc: '"Customers who bought X also bought Y and Z" is a graph problem: find products that are connected via shared-purchase edges to the products the user has purchased, weighted by frequency. Graph databases store these purchase-connection graphs and traverse them in real time.' },
-            { useCase: 'Uber / Ola — Route Optimisation', desc: 'A city\'s road network is literally a graph — intersections are nodes, roads are edges, distances and traffic data are edge properties. Graph databases with specialised shortest-path algorithms (Dijkstra, A*) are the natural tool for routing and ETA calculation.' },
+            { useCase: 'PayTM / Stripe — Fraud Detection', desc: 'Fraudulent behaviour often creates unusual graph patterns — a single entity connected to many accounts, circular fund transfers, unusually dense connection clusters. These patterns are trivial to detect with graph queries and practically impossible to detect with relational queries at transaction volume.' },
+            { useCase: 'Amazon / Amazon — Recommendation Engine', desc: '"Customers who bought X also bought Y and Z" is a graph problem: find products that are connected via shared-purchase edges to the products the user has purchased, weighted by frequency. Graph databases store these purchase-connection graphs and traverse them in real time.' },
+            { useCase: 'Uber / Lyft — Route Optimisation', desc: 'A city\'s road network is literally a graph — intersections are nodes, roads are edges, distances and traffic data are edge properties. Graph databases with specialised shortest-path algorithms (Dijkstra, A*) are the natural tool for routing and ETA calculation.' },
           ].map((item) => (
             <div key={item.useCase} style={{
               display: 'flex', gap: 14, background: 'var(--surface)',
@@ -1657,7 +1657,7 @@ RETURN path;
 
         <Para>
           Let's design the data architecture for a comprehensive e-commerce platform
-          (think Flipkart) using the right model for each concern:
+          (think Amazon) using the right model for each concern:
         </Para>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>

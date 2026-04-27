@@ -416,28 +416,28 @@ IF email contains "invoice" AND sender matches company_domain
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14, margin: '24px 0' }}>
           {[
             {
-              company: 'Swiggy',
+              company: 'DoorDash',
               color: '#FF6B00',
               type: 'Classical ML',
               problem: 'How do you show a delivery time estimate the moment someone opens the app — before they have even chosen what to order?',
               approach: 'Gradient boosting models trained on millions of past deliveries, incorporating time of day, weather, kitchen prep patterns, and real-time traffic. No deep learning needed.',
             },
             {
-              company: 'Razorpay',
+              company: 'Stripe',
               color: '#2D9CDB',
               type: 'Classical ML + DL',
               problem: 'How do you detect fraudulent payments in under 100 milliseconds without blocking legitimate transactions?',
               approach: 'Two-stage system: XGBoost flags suspicious patterns from transaction metadata, a neural net analyses behavioural sequences. Each layer catches what the other misses.',
             },
             {
-              company: 'Flipkart',
+              company: 'Amazon',
               color: '#F7B731',
               type: 'Deep Learning',
               problem: 'How do you recommend relevant products to 300 million users across categories as different as groceries and laptops?',
               approach: 'A two-tower neural network learns separate embeddings for users and products. Similarity between embeddings determines recommendations. No explicit rules about what goes with what.',
             },
             {
-              company: 'Zepto',
+              company: 'Instacart',
               color: '#9B59B6',
               type: 'Classical ML',
               problem: 'How do you stock the right products at each dark store without running out or overstocking perishables?',
@@ -451,7 +451,7 @@ IF email contains "invoice" AND sender matches company_domain
               approach: 'An LLM fine-tuned on banking knowledge with RAG (Retrieval Augmented Generation) pulling from live policy documents. The model cites sources. Humans review edge cases.',
             },
             {
-              company: 'Meesho',
+              company: 'Shopify',
               color: '#F06292',
               type: 'Deep Learning',
               problem: 'How do you normalise and categorise 100 million product listings uploaded by small sellers who use inconsistent names, photos, and descriptions?',

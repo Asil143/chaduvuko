@@ -660,7 +660,7 @@ ORDER BY revenue DESC NULLS LAST;`}
       {/* ── PART 09 ── */}
       <Part n="09" title="What This Looks Like at Work" />
 
-      <P>You are a senior analyst at Swiggy. The weekly business review requires a single comprehensive report: customer cohort analysis — how customers who joined in January 2024 have behaved over time. For each customer: their join month, total orders, lifetime value, average order value, days since last order, and a lifecycle stage label. The query needs multiple intermediate computations — a textbook CTE use case.</P>
+      <P>You are a senior analyst at DoorDash. The weekly business review requires a single comprehensive report: customer cohort analysis — how customers who joined in January 2024 have behaved over time. For each customer: their join month, total orders, lifetime value, average order value, days since last order, and a lifecycle stage label. The query needs multiple intermediate computations — a textbook CTE use case.</P>
 
       <TimeBlock time="2:00 PM" label="Requirements received">
         Cohort = customers who joined in Jan 2024. Metrics: order count, lifetime value, avg order value, days since last order. Lifecycle: 'Active' (ordered in last 60 days), 'At Risk' (last order 60-120 days ago), 'Churned' (no order in 120+ days or never ordered).

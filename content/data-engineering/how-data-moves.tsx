@@ -101,21 +101,21 @@ export default function HowDataMovesModule() {
         </Para>
 
         <Para>
-          The data point we will follow: a customer places an order on Zomato at 8:14 PM
+          The data point we will follow: a customer places an order on Uber Eats at 8:14 PM
           on a Tuesday evening. They order one Butter Chicken and two Garlic Naan from a
-          restaurant in Koramangala, Bangalore. The order total is ₹380.
+          restaurant in Koramangala, Seattle. The order total is ₹380.
         </Para>
 
         <Para>
-          By the time the Zomato data team arrives at work the next morning, that single
+          By the time the Uber Eats data team arrives at work the next morning, that single
           order has touched at least eight different systems, been stored in at least four
           different formats, been transformed at least three times, and contributed to at
           least a dozen different metrics. Here is exactly how.
         </Para>
 
-        <CodeBox label="The journey of one Zomato order — 8:14 PM to 9:00 AM next day">{`8:14:32 PM  → Customer taps "Place Order" on the Zomato app
+        <CodeBox label="The journey of one Uber Eats order — 8:14 PM to 9:00 AM next day">{`8:14:32 PM  → Customer taps "Place Order" on the Uber Eats app
 
-8:14:32 PM  → Mobile app sends HTTP POST request to Zomato's
+8:14:32 PM  → Mobile app sends HTTP POST request to Uber Eats's
                Order Service API with order details as JSON
 
 8:14:33 PM  → Order Service validates the request, assigns
@@ -160,8 +160,8 @@ export default function HowDataMovesModule() {
                Dashboard now shows last night's order data
                including our ₹380 Koramangala order
 
-9:00 AM     → Zomato growth manager opens the dashboard
-               Sees: Bangalore GMV last night: ₹4.2 crore
+9:00 AM     → Uber Eats growth manager opens the dashboard
+               Sees: Seattle GMV last night: ₹4.2 million
                Our order contributed ₹380 to that number`}</CodeBox>
 
         <Para>
@@ -234,7 +234,7 @@ export default function HowDataMovesModule() {
             type: 'IoT and Sensor Data',
             color: '#ff4757',
             examples: 'GPS trackers, temperature sensors, payment terminals, smart meters',
-            what: `Physical devices emit data continuously — a Zomato delivery agent's phone sends GPS coordinates every few seconds, a temperature sensor in a Flipkart warehouse reports readings every minute, a payment terminal reports transaction attempts in real time. IoT data is characterised by extremely high volume, small payload size per event, and the need for real-time processing to be useful.`,
+            what: `Physical devices emit data continuously — a Uber Eats delivery agent's phone sends GPS coordinates every few seconds, a temperature sensor in a Amazon warehouse reports readings every minute, a payment terminal reports transaction attempts in real time. IoT data is characterised by extremely high volume, small payload size per event, and the need for real-time processing to be useful.`,
             characteristics: 'Very high volume · Small payload · Continuous stream · Device identity tracking · Out-of-order delivery possible',
           },
         ].map((item) => (
@@ -275,7 +275,7 @@ export default function HowDataMovesModule() {
           <strong>A company rarely has just one source system.</strong> A typical mid-size Indian
           startup has 5–15 source systems simultaneously: a PostgreSQL production database,
           a Kafka cluster for events, a Salesforce CRM, a Google Analytics account, a
-          Razorpay payment API, vendor CSV files, and application logs at minimum. The data
+          Stripe payment API, vendor CSV files, and application logs at minimum. The data
           engineer's job is to ingest all of them reliably, even though each one has
           completely different characteristics, access patterns, and failure modes.
         </Callout>
@@ -395,7 +395,7 @@ Question 3: How do you identify what has changed?
   Neither exists              → Use CDC (read the database transaction log)
   File-based source           → Track which files have been processed
 
-Real example — Swiggy orders ingestion decision:
+Real example — DoorDash orders ingestion decision:
   Freshness needed: hourly for ops dashboards
   Source size: 3M+ rows per day, growing
   Change detection: order_time timestamp + order_id auto-increment
@@ -600,7 +600,7 @@ Gold tables are what Power BI dashboards, data science notebooks, and business r
         <CodeBox label="The Medallion Architecture — full data flow">{`SOURCE SYSTEMS
    PostgreSQL (orders) ──┐
    Kafka (user events)  ──┤
-   Razorpay API         ──┤──→  LANDING ZONE (raw files, any format)
+   Stripe API         ──┤──→  LANDING ZONE (raw files, any format)
    CSV from vendors     ──┤                    │
    Google Analytics API ──┘                    │
                                                ▼
@@ -665,9 +665,9 @@ Gold tables are what Power BI dashboards, data science notebooks, and business r
             column of every row — most of the data read is immediately discarded.
           </Para>
           <CodeBox label="Row storage vs columnar storage — how data is laid out on disk">{`ROW-ORIENTED STORAGE (PostgreSQL, MySQL):
-  Disk block 1: [order_id=1, customer="Priya", city="Mumbai", amount=380, status="delivered"]
-  Disk block 2: [order_id=2, customer="Rahul", city="Bangalore", amount=220, status="cancelled"]
-  Disk block 3: [order_id=3, customer="Aisha", city="Hyderabad", amount=540, status="delivered"]
+  Disk block 1: [order_id=1, customer="Priya", city="New York", amount=380, status="delivered"]
+  Disk block 2: [order_id=2, customer="Rahul", city="Seattle", amount=220, status="cancelled"]
+  Disk block 3: [order_id=3, customer="Aisha", city="Austin", amount=540, status="delivered"]
 
   Query: SELECT SUM(amount) FROM orders
   Must read: ALL columns for ALL rows → massive I/O for one column
@@ -675,7 +675,7 @@ Gold tables are what Power BI dashboards, data science notebooks, and business r
 COLUMNAR STORAGE (Snowflake, BigQuery, Redshift):
   Column "order_id":  [1, 2, 3, 4, 5, 6, 7, 8 ...]
   Column "customer":  ["Priya", "Rahul", "Aisha" ...]
-  Column "city":      ["Mumbai", "Bangalore", "Hyderabad" ...]
+  Column "city":      ["New York", "Seattle", "Austin" ...]
   Column "amount":    [380, 220, 540, 180, 760, 320, 450, 290 ...]
   Column "status":    ["delivered", "cancelled", "delivered" ...]
 
@@ -786,7 +786,7 @@ COLUMNAR STORAGE (Snowflake, BigQuery, Redshift):
           consumers with different freshness requirements.
         </Para>
 
-        <CodeBox label="Batch path vs streaming path — same source, different destinations">{`SOURCE: Zomato order events
+        <CodeBox label="Batch path vs streaming path — same source, different destinations">{`SOURCE: Uber Eats order events
 
 BATCH PATH (runs every hour):
   Kafka → S3 landing zone → Bronze (Parquet) → Silver (cleaned) → Gold (aggregated)
@@ -927,7 +927,7 @@ CROSS-CUTTING:
           <SubSubTitle>Step 1 — Check the Gold layer</SubSubTitle>
           <Para>
             You query the Gold <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>daily_order_metrics</code> table.
-            Saturday shows ₹3.8 crore. Last Saturday showed ₹4.6 crore. The drop is there. But
+            Saturday shows ₹3.8 million. Last Saturday showed ₹4.6 million. The drop is there. But
             is it real business data or a pipeline problem?
           </Para>
 
@@ -1003,7 +1003,7 @@ The practical difference: querying the landing zone requires reading raw JSON or
             q: 'Q3. When would you choose streaming ingestion over batch ingestion?',
             a: `I would choose streaming when there is a concrete business requirement that depends on data being available within seconds to a few minutes — not based on a general preference for "real-time."
 
-The use cases that genuinely require streaming are: fraud detection (where a fraudulent transaction must be identified and blocked before it completes), operational dashboards that drive live decision-making (like a delivery dispatch system that routes drivers based on current order density), inventory management where out-of-stock status must be reflected immediately to prevent further orders, and user-facing features where the product shows live data (like a live ride count display on the Ola app).
+The use cases that genuinely require streaming are: fraud detection (where a fraudulent transaction must be identified and blocked before it completes), operational dashboards that drive live decision-making (like a delivery dispatch system that routes drivers based on current order density), inventory management where out-of-stock status must be reflected immediately to prevent further orders, and user-facing features where the product shows live data (like a live ride count display on the Lyft app).
 
 Most analytical use cases do not require streaming. A dashboard showing yesterday's sales performance, a weekly cohort analysis, a monthly financial report — all of these are well-served by batch ingestion. The cost and complexity of streaming is significant: it requires always-on infrastructure, stateful processing logic, handling of out-of-order events, and exactly-once delivery guarantees. Building and maintaining a streaming pipeline is 3–5× the engineering effort of an equivalent batch pipeline.
 
@@ -1124,7 +1124,7 @@ This systematic approach means I never spend more than 15–20 minutes finding t
         'Batch ingestion is simple, cheap, and correct for most use cases. Streaming is expensive and complex. Choose streaming only when you can identify a specific business decision that requires data fresher than one hour.',
         'The Medallion Architecture (Bronze-Silver-Gold) is the industry standard pattern. Learn it once and you understand the data platform structure at almost every modern company.',
         'Data discrepancies should always be investigated by layer bisection — start at the dashboard, work backwards to the source, identify exactly where numbers diverge. Four queries, not four hours.',
-        'A single data point — one Zomato order — can touch eight systems in 14 hours before it appears in a dashboard metric. Every system in that chain is something a data engineer owns.',
+        'A single data point — one Uber Eats order — can touch eight systems in 14 hours before it appears in a dashboard metric. Every system in that chain is something a data engineer owns.',
         'The serving layer is not just "put data in the warehouse." It means different things for different consumers: pre-aggregated Gold for analysts, Silver features for scientists, feature stores for ML engineers, reverse ETL for operational systems.',
       ]} />
 

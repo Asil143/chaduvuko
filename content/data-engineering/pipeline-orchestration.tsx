@@ -512,7 +512,7 @@ with DAG(
 # Create pools via Airflow UI (Admin → Pools) or CLI:
 # airflow pools set source_db_pool 5 "Max 5 concurrent source DB connections"
 # airflow pools set snowflake_pool  8 "Max 8 concurrent Snowflake queries"
-# airflow pools set api_pool        3 "Max 3 concurrent API calls to Razorpay"
+# airflow pools set api_pool        3 "Max 3 concurrent API calls to Stripe"
 
 # PROBLEM WITHOUT POOLS:
 # If 20 tasks all try to connect to the source PostgreSQL replica simultaneously,

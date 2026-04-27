@@ -11,9 +11,9 @@ export const platformEngineerRoadmap: Roadmap = {
   estimatedTime: '5–7 months',
   salaryData: [
     { company: 'Mid-size startup', range: '₹16–26 LPA', note: 'Often combined with DevOps role' },
-    { company: 'Large startup (Flipkart / ShareChat)', range: '₹22–40 LPA', note: 'Platform team at scale' },
+    { company: 'Large startup (Amazon / Reddit)', range: '₹22–40 LPA', note: 'Platform team at scale' },
     { company: 'MNC / GCC', range: '₹28–50 LPA', note: 'Dedicated platform engineering orgs' },
-    { company: 'FAANG India', range: '₹40–70 LPA', note: 'Infra / platform teams' },
+    { company: 'FAANG', range: '₹40–70 LPA', note: 'Infra / platform teams' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your platform engineering journey starts. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },

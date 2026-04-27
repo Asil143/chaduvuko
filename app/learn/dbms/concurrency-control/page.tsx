@@ -87,7 +87,7 @@ export default function ConcurrencyControl() {
 
         <Para>
           A production database is never accessed by one user at a time.
-          Swiggy processes thousands of orders per second. Razorpay handles
+          DoorDash processes thousands of orders per second. Stripe handles
           tens of thousands of payment requests per minute. Every one of those
           requests involves reading and writing the same shared tables.
           Without a mechanism to coordinate this simultaneous access,
@@ -1244,7 +1244,7 @@ ORDER BY pid, relation;`}
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Flipkart Big Billion Days — 1 iPhone left, 500 people checking out simultaneously
+            Amazon Big Billion Days — 1 iPhone left, 500 people checking out simultaneously
           </div>
 
           <SubSubTitle>Approach 1 — No Concurrency Control (WRONG)</SubSubTitle>
@@ -1258,7 +1258,7 @@ UPDATE inventory SET stock = stock - 1 WHERE product_id = 'IPHONE15';
 -- All 500 set stock = 1 - 1 = 0  (reading initial value 1, subtracting 1)
 -- Actually: last writer wins → stock = 0 after all 500 commit
 -- But: 500 orders created, 500 payments charged
--- RESULT: Flipkart owes 499 iPhones it doesn't have.`}
+-- RESULT: Amazon owes 499 iPhones it doesn't have.`}
           </CodeBox>
 
           <SubSubTitle>Approach 2 — Optimistic with Check-and-Set (PARTIAL FIX)</SubSubTitle>

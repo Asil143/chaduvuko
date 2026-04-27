@@ -825,7 +825,7 @@ Unstructured Data   Pure Data Lake   Images, audio, PDFs in S3.
                                      object storage with metadata table
                                      tracking what exists.
 
-REAL EXAMPLE — Swiggy-style architecture:
+REAL EXAMPLE — DoorDash-style architecture:
   Raw Kafka events (JSON) → S3 landing zone (data lake)
   Landing → Bronze Parquet (data lake, organised)
   Bronze → Silver Delta tables (lakehouse, ACID, deduplicated)

@@ -5,17 +5,17 @@ import { LearnLayout } from '@/components/content/LearnLayout';
 
 // ── Static data ───────────────────────────────────────────────────────────────
 const CUSTOMERS = [
-  { id: 'C001', name: 'Ravi Kumar',   city: 'Hyderabad', tier: 'Gold'     },
-  { id: 'C002', name: 'Meera Patel',  city: 'Mumbai',    tier: 'Silver'   },
-  { id: 'C003', name: 'Arjun Singh',  city: 'Delhi',     tier: 'Platinum' },
-  { id: 'C004', name: 'Priya Nair',   city: 'Bangalore', tier: 'Bronze'   },
+  { id: 'C001', name: 'Emma Johnson',  city: 'New York',  tier: 'Gold'     },
+  { id: 'C002', name: 'Liam Williams', city: 'Chicago',   tier: 'Silver'   },
+  { id: 'C003', name: 'Olivia Brown',  city: 'Seattle',   tier: 'Platinum' },
+  { id: 'C004', name: 'Noah Garcia',   city: 'Austin',    tier: 'Bronze'   },
 ];
 
 const ORDERS = [
-  { id: 'O001', cid: 'C001', amount: '₹1,240', item: 'Rice 5kg'   },
-  { id: 'O002', cid: 'C002', amount: '₹890',   item: 'Vegetables'  },
-  { id: 'O003', cid: 'C005', amount: '₹2,100', item: 'Groceries'   },
-  { id: 'O004', cid: 'C001', amount: '₹560',   item: 'Fruits'      },
+  { id: 'O001', cid: 'C001', amount: '$42.90', item: 'Organic Milk'  },
+  { id: 'O002', cid: 'C002', amount: '$31.50', item: 'Bread & Eggs'  },
+  { id: 'O003', cid: 'C005', amount: '$78.20', item: 'Pantry Bundle' },
+  { id: 'O004', cid: 'C001', amount: '$19.80', item: 'Fresh Produce' },
 ];
 
 // Which left-row index maps to which right-row indices
@@ -214,7 +214,7 @@ export default function VisualJoinsPage() {
               <div key={i} style={{ width: 12, height: 12, borderRadius: '50%', background: c, opacity: 0.9 }} />
             ))}
             <span style={{ fontSize: 11, color: '#ffffff40', marginLeft: 10, fontFamily: 'var(--font-mono)' }}>
-              freshmart_db · {CUSTOMERS.length} customers · {ORDERS.length} orders
+              freshcart_db · {CUSTOMERS.length} customers · {ORDERS.length} orders
             </span>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>

@@ -1165,7 +1165,7 @@ DYNAMODB (AP by default / CP with strongly consistent reads):
         {[
           {
             q: 'Q1. Explain the four ACID properties with a real example from data engineering.',
-            a: `I will use a daily settlement pipeline that loads payment data from Razorpay into a PostgreSQL database.
+            a: `I will use a daily settlement pipeline that loads payment data from Stripe into a PostgreSQL database.
 
 Atomicity: the pipeline loads one day's settlements as a single transaction — either all 15,892 settlement records for March 14th are committed together, or none of them are. If the pipeline fails on record 8,000, the entire batch is rolled back and the database contains no partial data for March 14th. The retry starts cleanly from record 1.
 

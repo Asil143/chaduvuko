@@ -13,7 +13,7 @@ export const softwareArchitectRoadmap: Roadmap = {
     { company: 'Service / IT consulting', range: '₹20–35 LPA', note: 'Solution architect track' },
     { company: 'Product startup (senior)', range: '₹30–55 LPA', note: '7–10 yr exp typically expected' },
     { company: 'MNC / GCC', range: '₹40–70 LPA', note: 'Principal / staff engineer level' },
-    { company: 'FAANG India (principal)', range: '₹60–100 LPA+', note: 'Rare, highly competitive' },
+    { company: 'FAANG (principal)', range: '₹60–100 LPA+', note: 'Rare, highly competitive' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'This roadmap assumes strong senior engineer fundamentals. Mark complete to begin.', x: 305, y: 20, width: 150, height: 60 },

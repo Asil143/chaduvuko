@@ -156,7 +156,7 @@ export default function ProbabilityDistributionsPage() {
         </h2>
 
         <p style={S.p}>
-          Swiggy's delivery time model predicts 32 minutes.
+          DoorDash's delivery time model predicts 32 minutes.
           But it doesn't mean delivery will take exactly 32 minutes.
           It means 32 minutes is the most likely outcome — given current
           traffic, distance, and restaurant load.
@@ -230,7 +230,7 @@ export default function ProbabilityDistributionsPage() {
 
         <p style={S.p}>
           A <strong>random variable</strong> is a variable whose value is
-          determined by a random process. The delivery time for a Swiggy order
+          determined by a random process. The delivery time for a DoorDash order
           is a random variable — it depends on traffic, restaurant speed,
           driver availability, and dozens of other unpredictable factors.
           When we call it "random" we don't mean completely unpredictable —
@@ -260,7 +260,7 @@ export default function ProbabilityDistributionsPage() {
                 Takes specific countable values. There are gaps between possible values.
               </p>
               <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.7, fontFamily: 'var(--font-mono)' }}>
-                Number of items in a Swiggy order: 1, 2, 3, 4...<br />
+                Number of items in a DoorDash order: 1, 2, 3, 4...<br />
                 Fraud or not: 0 or 1<br />
                 Star rating: 1, 2, 3, 4, 5<br />
                 Number of late orders today: 0, 1, 2...
@@ -295,7 +295,7 @@ from scipy import stats
 
 np.random.seed(42)
 
-# Discrete: number of items in a Swiggy order
+# Discrete: number of items in a DoorDash order
 # Simulating 1000 orders — most have 2-3 items
 order_items = np.random.randint(1, 8, size=1000)
 values, counts = np.unique(order_items, return_counts=True)
@@ -379,7 +379,7 @@ print(f"  % under 45 min: {(delivery_times < 45).mean()*100:.1f}%")`} />
           </div>
           <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
             68% of values fall within 1σ of the mean. 95% within 2σ. 99.7% within 3σ.
-            For Swiggy delivery times (μ=35, σ=8): 68% arrive between 27–43 min, 95% between 19–51 min.
+            For DoorDash delivery times (μ=35, σ=8): 68% arrive between 27–43 min, 95% between 19–51 min.
           </div>
         </VisualBox>
 
@@ -424,7 +424,7 @@ print(f"Sample std:  {samples.std():.2f} (expected: {sigma})")
         <CodeBlock code={`# Bernoulli distribution — one trial, binary outcome
 # p = probability of "success" (1)
 
-p_fraud = 0.02   # 2% of Razorpay transactions are fraud
+p_fraud = 0.02   # 2% of Stripe transactions are fraud
 
 bernoulli = stats.bernoulli(p=p_fraud)
 
@@ -455,7 +455,7 @@ print(f"  Legitimate: {10000 - n_fraud}")
         </p>
 
         <CodeBlock code={`# Binomial distribution — n trials, each with probability p
-# "In 100 Razorpay transactions, how many are likely to be fraud?"
+# "In 100 Stripe transactions, how many are likely to be fraud?"
 
 n = 100       # 100 transactions
 p = 0.02      # each has 2% fraud probability
@@ -487,7 +487,7 @@ print(f"P(more than 5 frauds)      = {1 - binom.cdf(5):.4f}")`} />
         </p>
 
         <CodeBlock code={`# Poisson distribution — rare events per unit time
-# "How many orders arrive at a Swiggy dark store per minute during peak hour?"
+# "How many orders arrive at a DoorDash dark store per minute during peak hour?"
 
 lambda_rate = 4.5   # average 4.5 orders per minute
 
@@ -577,7 +577,7 @@ print(np.sort(lr_samples).round(6))`} />
             <span style={{ color: 'var(--text)', fontWeight: 700 }}>
               In plain English:{' '}
             </span>
-            the expected value is the long-run average. If Swiggy processes
+            the expected value is the long-run average. If DoorDash processes
             one million orders and the expected delivery time is 35 minutes,
             the total delivery time divided by one million will approach 35 minutes.
             It doesn't mean every order takes 35 minutes — it's the centre of gravity
@@ -593,7 +593,7 @@ from scipy import stats
 # Way 1: Mathematical definition for discrete distribution
 # E[X] = sum(x_i * P(X = x_i))
 star_ratings = np.array([1, 2, 3, 4, 5])
-probabilities = np.array([0.05, 0.08, 0.15, 0.42, 0.30])  # Swiggy rating distribution
+probabilities = np.array([0.05, 0.08, 0.15, 0.42, 0.30])  # DoorDash rating distribution
 expected_rating = np.sum(star_ratings * probabilities)
 print(f"Expected star rating: {expected_rating:.3f}")  # 3.84
 
@@ -648,13 +648,13 @@ print(f"np.std:   {np.std(delivery_times):.2f}")       # population std
 print(f"Sample variance (ddof=1): {np.var(delivery_times, ddof=1):.2f}")
 
 # Practical interpretation:
-# Swiggy A (std=5 min): reliable, predictable — customers like this
-# Swiggy B (std=15 min): erratic — even if same mean, worse experience
+# DoorDash A (std=5 min): reliable, predictable — customers like this
+# DoorDash B (std=15 min): erratic — even if same mean, worse experience
 mu_A, sigma_A = 35, 5
 mu_B, sigma_B = 35, 15
 p_on_time_A = stats.norm(mu_A, sigma_A).cdf(45)
 p_on_time_B = stats.norm(mu_B, sigma_B).cdf(45)
-print(f"\nP(delivery < 45 min): Swiggy A = {p_on_time_A:.3f}, Swiggy B = {p_on_time_B:.3f}")
+print(f"\nP(delivery < 45 min): DoorDash A = {p_on_time_A:.3f}, DoorDash B = {p_on_time_B:.3f}")
 # Same mean, lower variance → better customer experience`} />
 
         <h3 style={S.h3}>Covariance and correlation — how two variables move together</h3>
@@ -673,7 +673,7 @@ print(f"\nP(delivery < 45 min): Swiggy A = {p_on_time_A:.3f}, Swiggy B = {p_on_t
 np.random.seed(42)
 n = 1000
 
-# Simulate Swiggy features
+# Simulate DoorDash features
 distance     = np.random.uniform(0.5, 8.0, n)
 traffic      = np.random.uniform(1, 10, n)
 # Delivery time correlates with distance and traffic
@@ -763,16 +763,16 @@ for i, l in enumerate(labels):
           </div>
         </HBox>
 
-        <h3 style={S.h3}>A concrete example: Razorpay fraud detection</h3>
+        <h3 style={S.h3}>A concrete example: Stripe fraud detection</h3>
 
         <p style={S.p}>
-          Razorpay's fraud model flags a transaction as suspicious.
+          Stripe's fraud model flags a transaction as suspicious.
           The flagging system has a false positive rate.
           What is the actual probability this specific transaction is fraud,
           given that it was flagged?
         </p>
 
-        <CodeBlock code={`# Bayes theorem: fraud detection at Razorpay
+        <CodeBlock code={`# Bayes theorem: fraud detection at Stripe
 
 # Known statistics (from historical data)
 p_fraud         = 0.001   # 0.1% of transactions are actually fraud (prior)

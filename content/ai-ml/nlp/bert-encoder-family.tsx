@@ -214,8 +214,8 @@ export default function BertEncoderFamilyPage() {
           The result: BERT representations capture deep bidirectional
           context. Fine-tune BERT on 1,000 labelled examples and it
           outperforms models trained from scratch on 100,000.
-          Flipkart's review classifier, Swiggy's complaint tagger,
-          Razorpay's intent detector — all fine-tuned BERT variants.
+          Amazon's review classifier, DoorDash's complaint tagger,
+          Stripe's intent detector — all fine-tuned BERT variants.
         </p>
 
         <AnalogyBox>
@@ -256,7 +256,7 @@ export default function BertEncoderFamilyPage() {
             <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 6, alignItems: 'center' }}>
               {[
                 { tok: '[CLS]', color: '#BA7517' },
-                { tok: 'Razorpay', color: 'var(--muted)' },
+                { tok: 'Stripe', color: 'var(--muted)' },
                 { tok: '[MASK]', color: '#ff4757', bold: true },
                 { tok: 'my', color: 'var(--muted)' },
                 { tok: 'payment', color: 'var(--muted)' },
@@ -306,15 +306,15 @@ export default function BertEncoderFamilyPage() {
               {
                 label: 'Positive (IsNext — 50%)',
                 color: '#1D9E75',
-                a: 'Razorpay payment was declined.',
+                a: 'Stripe payment was declined.',
                 b: 'Please retry after some time.',
                 verdict: 'IsNext ✓',
               },
               {
                 label: 'Negative (NotNext — 50%)',
                 color: '#D85A30',
-                a: 'Razorpay payment was declined.',
-                b: 'The weather in Mumbai is humid.',
+                a: 'Stripe payment was declined.',
+                b: 'The weather in New York is humid.',
                 verdict: 'NotNext ✗',
               },
             ].map((item) => (
@@ -357,7 +357,7 @@ model.eval()
 
 # ── Task: fill in the [MASK] ──────────────────────────────────────────
 sentences = [
-    "Razorpay [MASK] my payment successfully.",
+    "Stripe [MASK] my payment successfully.",
     "The [MASK] was declined due to insufficient funds.",
     "Please [MASK] your transaction after some time.",
 ]
@@ -459,7 +459,7 @@ import torch
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 
 # ── BERT tokenisation — what actually goes into the model ─────────────
-text_a = "Razorpay payment was declined"
+text_a = "Stripe payment was declined"
 text_b = "Please retry after some time"
 
 # Single sentence
@@ -521,7 +521,7 @@ print(f"\nVocab size: {tokenizer.vocab_size:,}  (WordPiece)")`} />
                 input: '[CLS] + sentence',
                 head: 'Linear(768 → n_classes)',
                 output: 'Class probabilities',
-                example: 'Flipkart review sentiment',
+                example: 'Amazon review sentiment',
                 model: 'AutoModelForSequenceClassification',
               },
               {
@@ -584,7 +584,7 @@ import evaluate
 import numpy as np
 import torch
 
-# ── Task: Swiggy complaint classification ────────────────────────────
+# ── Task: DoorDash complaint classification ────────────────────────────
 # Categories: delivery_late, wrong_order, missing_items, quality_issue
 
 LABELS   = ['delivery_late', 'wrong_order', 'missing_items', 'quality_issue']
@@ -653,7 +653,7 @@ trainer = Trainer(
     compute_metrics=compute_metrics,
 )
 
-print("Fine-tuning DistilBERT on Swiggy complaints:")
+print("Fine-tuning DistilBERT on DoorDash complaints:")
 trainer.train()
 results = trainer.evaluate()
 print(f"\nAccuracy: {results['eval_accuracy']:.4f}")
@@ -782,7 +782,7 @@ models_to_compare = [
     ('roberta-base',            'RoBERTa-base'),
 ]
 
-texts = ["Razorpay payment declined please help retry"] * 64
+texts = ["Stripe payment declined please help retry"] * 64
 
 print(f"{'Model':<20} {'Params':>8} {'Latency (ms)':>14} {'Throughput'}")
 print("─" * 60)
@@ -823,7 +823,7 @@ for model_id, name in models_to_compare:
         <p style={S.p}>
           Classification uses only the [CLS] token.
           NER uses every token's output — one label per token.
-          Useful at Razorpay to extract merchant names, amounts,
+          Useful at Stripe to extract merchant names, amounts,
           and dates from unstructured dispute text.
           The label format is BIO: B-entity (beginning),
           I-entity (inside), O (outside/no entity).
@@ -849,10 +849,10 @@ ner_pipeline = pipeline(
     aggregation_strategy='simple',  # merge subword tokens
 )
 
-# ── Extract entities from Razorpay dispute texts ──────────────────────
+# ── Extract entities from Stripe dispute texts ──────────────────────
 dispute_texts = [
-    "I made a payment of Rs 2500 to Swiggy on 15th March 2026.",
-    "Flipkart charged me twice for an order from Mumbai warehouse.",
+    "I made a payment of Rs 2500 to DoorDash on 15th March 2026.",
+    "Amazon charged me twice for an order from New York warehouse.",
     "Amazon India debited Rs 4999 from my HDFC account yesterday.",
 ]
 
@@ -869,7 +869,7 @@ for text in dispute_texts:
 print("""
 # Custom NER training pattern:
 # 1. Annotate data in BIO format:
-#    tokens: ["Paid", "Rs", "500", "to", "Swiggy"]
+#    tokens: ["Paid", "Rs", "500", "to", "DoorDash"]
 #    labels: ["O",  "B-AMOUNT", "I-AMOUNT", "O", "B-MERCHANT"]
 #
 # 2. Load model:
@@ -927,7 +927,7 @@ def tokenise_and_align(examples, tokenizer, label2id):
 
         <ErrorBlock
           error="NER labels are misaligned — first token gets wrong label after WordPiece tokenisation"
-          cause="WordPiece splits words into subword tokens. 'Razorpay' might become ['Razor', '##pay']. If you assigned one label to 'Razorpay' in your annotations but the tokeniser produces two tokens, the label alignment breaks — both subwords need labels but you only have one. Naively aligning labels to tokens produces misaligned training data."
+          cause="WordPiece splits words into subword tokens. 'Stripe' might become ['Razor', '##pay']. If you assigned one label to 'Stripe' in your annotations but the tokeniser produces two tokens, the label alignment breaks — both subwords need labels but you only have one. Naively aligning labels to tokens produces misaligned training data."
           fix="Use the word_ids() method from the tokeniser to align labels correctly. For the first subword of each word, assign the real label. For continuation subwords (##tokens), assign -100 so they are ignored in the loss computation. Use the tokenise_and_align pattern shown in Section 6. Never manually align labels by position — always use word_ids()."
         />
 

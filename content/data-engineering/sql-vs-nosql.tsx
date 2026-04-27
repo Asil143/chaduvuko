@@ -410,7 +410,7 @@ USE CASES:
 
 AVOID FOR:
   ✗ Anything requiring queries across multiple keys
-  ✗ Persistent primary data store (Redis is in-memory — data loss risk)
+  ✗ Perforce primary data store (Redis is in-memory — data loss risk)
   ✗ Complex relationships or JOINs`}</CodeBox>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
@@ -601,7 +601,7 @@ MONGODB QUERY LANGUAGE:
 
             <CodeBox label="Cassandra data model — designed around query patterns, not entities">{`PROBLEM: Store delivery tracking events for millions of deliveries.
   Requirements:
-    - Write millions of GPS events per second (Zomato's delivery network)
+    - Write millions of GPS events per second (Uber Eats's delivery network)
     - Read all events for a specific delivery in time order
     - Events never updated once written
 
@@ -958,7 +958,7 @@ QUESTION 3: What scale is genuinely needed?
           pattern uses the best database for each specific need.
         </Para>
 
-        <CodeBox label="Polyglot persistence — Meesho-style data architecture">{`MEESHO (e-commerce platform) — representative polyglot architecture:
+        <CodeBox label="Polyglot persistence — Shopify-style data architecture">{`MEESHO (e-commerce platform) — representative polyglot architecture:
 
   PostgreSQL (relational, CP):
     → Orders, payments, settlements, user accounts

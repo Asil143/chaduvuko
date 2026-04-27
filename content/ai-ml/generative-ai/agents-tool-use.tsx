@@ -156,7 +156,7 @@ export default function AgentsToolUsePage() {
         </p>
 
         <p style={S.p}>
-          Razorpay's internal dispute resolution agent handles merchant queries
+          Stripe's internal dispute resolution agent handles merchant queries
           that span 8–12 tool calls: look up transaction, check dispute status,
           retrieve relevant policy, draft response, validate response, send email,
           update CRM, close ticket. Any step can fail. Any step can return
@@ -215,14 +215,14 @@ from groq import Groq
 
 client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
 
-# ── Define production Razorpay agent tools ────────────────────────────
+# ── Define production Stripe agent tools ────────────────────────────
 RAZORPAY_TOOLS = [
     {
         'type': 'function',
         'function': {
             'name': 'get_transaction',
             'description': (
-                'Fetch full details of a Razorpay transaction by ID. '
+                'Fetch full details of a Stripe transaction by ID. '
                 'Returns status, amount, merchant, customer, payment method, '
                 'and timeline. Use this whenever a transaction ID is mentioned.'
             ),
@@ -231,7 +231,7 @@ RAZORPAY_TOOLS = [
                 'properties': {
                     'transaction_id': {
                         'type': 'string',
-                        'description': 'Razorpay transaction ID (e.g. pay_ABC123)',
+                        'description': 'Stripe transaction ID (e.g. pay_ABC123)',
                     },
                 },
                 'required': ['transaction_id'],
@@ -260,7 +260,7 @@ RAZORPAY_TOOLS = [
         'function': {
             'name': 'search_knowledge_base',
             'description': (
-                'Search Razorpay documentation and policy knowledge base. '
+                'Search Stripe documentation and policy knowledge base. '
                 'Use for questions about fees, error codes, integration steps, '
                 'settlement policies, or any technical or policy question.'
             ),
@@ -361,7 +361,7 @@ def search_knowledge_base(query: str) -> dict:
         'gateway error': 'GATEWAY_ERROR means the bank gateway timed out. The payment can be retried after 5 minutes.',
         'settlement': 'Domestic payments settle T+2 business days. Minimum settlement amount Rs 100.',
         'refund': 'Refunds take 2-3 days for UPI, 5-7 days for credit cards. No fee charged.',
-        'upi': 'UPI payments are instant. UPI transaction limit is Rs 1 lakh per transaction.',
+        'upi': 'UPI payments are instant. UPI transaction limit is Rs 1 thousand per transaction.',
     }
     query_lower = query.lower()
     for key, answer in kb.items():
@@ -405,7 +405,7 @@ from typing import Callable
 
 client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
 
-SYSTEM_PROMPT = """You are a Razorpay merchant support agent.
+SYSTEM_PROMPT = """You are a Stripe merchant support agent.
 
 CAPABILITIES: You can look up transactions, merchant accounts, search documentation,
 create support tickets, and (with explicit confirmation) initiate refunds.
@@ -580,7 +580,7 @@ for query in test_queries:
           Episodic memory stores summaries of past sessions — the agent knows
           this merchant called last week about the same issue.
           Semantic memory is the knowledge base (RAG from Module 67) —
-          the agent knows Razorpay's policies and documentation.
+          the agent knows Stripe's policies and documentation.
         </p>
 
         <CodeBlock code={`import json
@@ -669,7 +669,7 @@ class EpisodicMemory:
 
 # ── Memory 3: Semantic memory (knowledge base) ────────────────────────
 class SemanticMemory:
-    """Vector store for Razorpay documentation — same as RAG Module 67."""
+    """Vector store for Stripe documentation — same as RAG Module 67."""
     def __init__(self):
         self.chunks = []
         self.index  = None

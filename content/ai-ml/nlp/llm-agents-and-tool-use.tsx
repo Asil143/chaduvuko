@@ -200,7 +200,7 @@ export default function LLMAgentsPage() {
         </p>
 
         <p style={S.p}>
-          At Razorpay, an agent handling merchant disputes can: look up
+          At Stripe, an agent handling merchant disputes can: look up
           transaction details in the database, check the dispute deadline,
           draft a response email, send it via the email API, and update
           the CRM — all from a single natural language request from
@@ -274,13 +274,13 @@ TOOLS = [
         'type': 'function',
         'function': {
             'name': 'get_transaction',
-            'description': 'Look up a Razorpay transaction by ID. Returns status, amount, merchant, and settlement date.',
+            'description': 'Look up a Stripe transaction by ID. Returns status, amount, merchant, and settlement date.',
             'parameters': {
                 'type': 'object',
                 'properties': {
                     'transaction_id': {
                         'type': 'string',
-                        'description': 'The Razorpay transaction ID (e.g. TXN123456)',
+                        'description': 'The Stripe transaction ID (e.g. TXN123456)',
                     },
                 },
                 'required': ['transaction_id'],
@@ -313,7 +313,7 @@ TOOLS = [
         'type': 'function',
         'function': {
             'name': 'calculate_fee',
-            'description': 'Calculate Razorpay processing fee for a transaction amount.',
+            'description': 'Calculate Stripe processing fee for a transaction amount.',
             'parameters': {
                 'type': 'object',
                 'properties': {
@@ -333,9 +333,9 @@ TOOLS = [
 def get_transaction(transaction_id: str) -> dict:
     """Simulated transaction lookup."""
     mock_db = {
-        'TXN123': {'status': 'settled', 'amount': 5000, 'merchant': 'Swiggy', 'date': '2026-03-28'},
-        'TXN456': {'status': 'pending', 'amount': 12500, 'merchant': 'Flipkart', 'date': None},
-        'TXN789': {'status': 'failed',  'amount': 2499, 'merchant': 'Zomato', 'date': None},
+        'TXN123': {'status': 'settled', 'amount': 5000, 'merchant': 'DoorDash', 'date': '2026-03-28'},
+        'TXN456': {'status': 'pending', 'amount': 12500, 'merchant': 'Amazon', 'date': None},
+        'TXN789': {'status': 'failed',  'amount': 2499, 'merchant': 'Uber Eats', 'date': None},
     }
     return mock_db.get(transaction_id, {'error': 'Transaction not found'})
 
@@ -556,7 +556,7 @@ Conversation:
 ltm  = LongTermMemory()
 conv = ConversationMemory(
     max_messages=10,
-    system_prompt='You are a Razorpay support agent with memory of past interactions.',
+    system_prompt='You are a Stripe support agent with memory of past interactions.',
 )
 
 # Simulate session 1
@@ -603,7 +603,7 @@ print(ltm.recall(user_id))`} />
           It breaks the task into sub-tasks and routes each to the right specialist.
         </p>
 
-        <VisualBox label="Multi-agent architecture — Razorpay dispute resolution system">
+        <VisualBox label="Multi-agent architecture — Stripe dispute resolution system">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{
               background: 'rgba(123,97,255,0.1)', border: '2px solid #7b61ff',
@@ -706,7 +706,7 @@ transaction_agent = SpecialistAgent(
     tool_fns={
         'get_transaction': lambda txn_id: {
             'id': txn_id, 'amount': 5000, 'status': 'disputed',
-            'merchant': 'Swiggy', 'customer': 'Rahul Kumar',
+            'merchant': 'DoorDash', 'customer': 'Rahul Kumar',
             'dispute_deadline': '2026-04-01',
         },
     },
@@ -734,7 +734,7 @@ def orchestrator(request: str) -> str:
     Breaks a complex request into sub-tasks,
     delegates to specialists, and synthesises the final response.
     """
-    plan_prompt = f"""You are an orchestrator for a Razorpay dispute resolution system.
+    plan_prompt = f"""You are an orchestrator for a Stripe dispute resolution system.
 
 Available specialists:
 - Transaction Agent: looks up transaction details and dispute status

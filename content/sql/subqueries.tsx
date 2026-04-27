@@ -278,7 +278,7 @@ FROM orders AS o
 WHERE o.customer_id IN (
   SELECT customer_id
   FROM customers
-  WHERE city IN ('Bangalore', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai')
+  WHERE city IN ('Seattle', 'New York', 'Delhi', 'Austin', 'Chicago')
 )
 ORDER BY o.total_amount DESC
 LIMIT 10;`}
@@ -826,7 +826,7 @@ LIMIT 10;`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Razorpay. The product team needs a customer health report for a quarterly review. They want: every customer with their total spend, their spend relative to the average for their loyalty tier, whether they qualify as "high value" (top 25% spenders in their tier), and their most recent order date. This requires several computed values that depend on group-level aggregates — a classic multi-subquery problem.</P>
+      <P>You are a data analyst at Stripe. The product team needs a customer health report for a quarterly review. They want: every customer with their total spend, their spend relative to the average for their loyalty tier, whether they qualify as "high value" (top 25% spenders in their tier), and their most recent order date. This requires several computed values that depend on group-level aggregates — a classic multi-subquery problem.</P>
 
       <TimeBlock time="3:00 PM" label="Requirements received">
         Customer ID, name, loyalty tier, total spend, tier average spend, spend vs tier average, high-value flag (top 25% in tier), last order date.

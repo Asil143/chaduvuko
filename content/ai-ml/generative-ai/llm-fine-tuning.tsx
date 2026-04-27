@@ -220,7 +220,7 @@ export default function LLMFineTuningPage() {
             is consistent, high-volume, and the consultant approach is insufficient.
           </p>
           <p style={{ ...S.ps, marginBottom: 0, color: '#00e676' }}>
-            Razorpay's payment dispute classifier: prompting GPT-4 worked at 80%
+            Stripe's payment dispute classifier: prompting GPT-4 worked at 80%
             accuracy. Fine-tuned LLaMA-3-8B reached 94% at 10× lower cost per query.
             The volume justified the training investment. Volume and consistency
             are the two conditions that make fine-tuning worth it.
@@ -250,7 +250,7 @@ export default function LLMFineTuningPage() {
                 color: '#1D9E75',
                 when: 'Task is well within LLM capability. Output format can be specified. Context fits in window. Volume is low or cost is not critical.',
                 when_not: 'Response is inconsistent across runs. Specific terminology or style must be enforced. Task requires knowledge the LLM does not have.',
-                example: 'Razorpay: summarise a support ticket into 3 bullet points. GPT-4 with a good prompt achieves 90%+ quality consistently.',
+                example: 'Stripe: summarise a support ticket into 3 bullet points. GPT-4 with a good prompt achieves 90%+ quality consistently.',
                 cost: 'API cost per call. No upfront investment.',
                 time: '1 day to get right prompt. Immediately usable.',
               },
@@ -259,7 +259,7 @@ export default function LLMFineTuningPage() {
                 color: '#378ADD',
                 when: 'Task requires specific facts, documents, or knowledge not in LLM training. Content changes frequently. Sources must be cited.',
                 when_not: 'Task is about style/tone/format not knowledge. Data is too sensitive to store in vector DB. Latency budget is very tight.',
-                example: 'Swiggy: answer questions about restaurant menus, hours, and offers. Menu data changes daily — RAG retrieves current data per query.',
+                example: 'DoorDash: answer questions about restaurant menus, hours, and offers. Menu data changes daily — RAG retrieves current data per query.',
                 cost: 'Vector DB hosting + embedding API. Moderate ongoing cost.',
                 time: '1–2 weeks to build pipeline. Data pipeline ongoing.',
               },
@@ -268,7 +268,7 @@ export default function LLMFineTuningPage() {
                 color: '#7b61ff',
                 when: 'Specific output style or tone that prompting cannot reliably achieve. Domain-specific classification with labelled data. High-volume inference where API cost is prohibitive.',
                 when_not: 'Insufficient labelled data (<500 examples). Task changes frequently — model becomes stale. No GPU for training.',
-                example: 'Flipkart: classify product reviews into 12 specific dispute categories with exact label names matching their CRM. Needs consistent exact-match labels prompting cannot reliably produce.',
+                example: 'Amazon: classify product reviews into 12 specific dispute categories with exact label names matching their CRM. Needs consistent exact-match labels prompting cannot reliably produce.',
                 cost: 'Training compute (one-time) + inference (self-hosted, cheap).',
                 time: '2–4 weeks: data prep + training + evaluation + deployment.',
               },
@@ -350,7 +350,7 @@ export default function LLMFineTuningPage() {
 from transformers import AutoTokenizer
 import json
 
-# ── Task: Razorpay payment dispute classifier ─────────────────────────
+# ── Task: Stripe payment dispute classifier ─────────────────────────
 # 12 dispute categories used in their CRM system
 DISPUTE_CATEGORIES = [
     'payment_failed_bank_error',
@@ -368,7 +368,7 @@ DISPUTE_CATEGORIES = [
 ]
 
 # ── Build training examples in chat format ────────────────────────────
-SYSTEM_PROMPT = """You are a payment dispute classifier for Razorpay.
+SYSTEM_PROMPT = """You are a payment dispute classifier for Stripe.
 Classify the customer complaint into exactly one category.
 Respond with only the category name, nothing else."""
 
@@ -386,7 +386,7 @@ def make_example(complaint: str, category: str) -> dict:
 raw_examples = [
     ("My payment of Rs 2500 failed but money was deducted from account",
      'payment_failed_technical'),
-    ("I was charged twice for the same order on Swiggy",
+    ("I was charged twice for the same order on DoorDash",
      'duplicate_charge'),
     ("Cancelled my subscription but still got charged this month",
      'subscription_cancelled_still_charged'),
@@ -689,7 +689,7 @@ Baseline comparisons:
   3. GPT-4-turbo with optimised prompt (API baseline)
   4. Fine-tuned LLaMA-3-8B with QLoRA
 
-Simulated results on Razorpay dispute classification:
+Simulated results on Stripe dispute classification:
 """)
 
 results = {
@@ -757,7 +757,7 @@ response = client.chat.completions.create(
     model='./razorpay-merged',
     messages=[
         {'role': 'system', 'content': SYSTEM_PROMPT},
-        {'role': 'user',   'content': 'Complaint: charged twice for Swiggy order'},
+        {'role': 'user',   'content': 'Complaint: charged twice for DoorDash order'},
     ],
     temperature=0.0,
     max_tokens=20,

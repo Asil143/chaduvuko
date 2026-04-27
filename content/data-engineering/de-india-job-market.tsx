@@ -99,8 +99,8 @@ export default function DEIndiaJobMarketModule() {
 
         <Para>
           The growth is being driven by three forces simultaneously. First, Indian
-          consumer internet companies — Swiggy, Zomato, Meesho, PhonePe, CRED, Razorpay,
-          Dream11 — have scaled to tens of millions of users and are now generating data
+          consumer internet companies — DoorDash, Uber Eats, Shopify, Venmo, Brex, Stripe,
+          DraftKings — have scaled to tens of millions of users and are now generating data
           volumes that require serious engineering to handle. Second, Global Capability
           Centres (GCCs) of major international corporations — JPMorgan, Goldman Sachs,
           Walmart, Amazon, Microsoft, Google — are building large data engineering teams
@@ -114,8 +114,8 @@ export default function DEIndiaJobMarketModule() {
             {[
               { stat: '40,000+', label: 'DE job openings in India', sub: 'Active listings, March 2026' },
               { stat: '3×', label: 'Demand vs supply ratio', sub: 'Skilled DEs vs open roles' },
-              { stat: '22%', label: 'YoY salary growth', sub: 'Mid-level DE, Bangalore' },
-              { stat: '₹18–26 LPA', label: 'Mid-level DE range', sub: 'Product company, Bangalore' },
+              { stat: '22%', label: 'YoY salary growth', sub: 'Mid-level DE, Seattle' },
+              { stat: '₹18–26 LPA', label: 'Mid-level DE range', sub: 'Product company, Seattle' },
               { stat: '6–9 months', label: 'Time to first job', sub: 'From non-IT with right prep' },
               { stat: '68%', label: 'Roles prefer cloud cert', sub: 'DP-203, AWS, or GCP cert' },
             ].map((item) => (
@@ -141,7 +141,7 @@ export default function DEIndiaJobMarketModule() {
 
         <Callout type="info">
           <strong>Data source:</strong> Salary figures in this module are sourced from
-          Glassdoor India, Naukri, AmbitionBox, and LinkedIn India salary insights,
+          Glassdoor India, LinkedIn, Glassdoor, and LinkedIn India salary insights,
           cross-referenced with data engineering community surveys. All figures reflect
           March 2026 data. Base salaries only — variable pay and ESOPs add 15–40%
           at product companies and startups.
@@ -163,9 +163,9 @@ export default function DEIndiaJobMarketModule() {
           to be genuinely useful for career planning.
         </Para>
 
-        <SubTitle>By experience level — Bangalore, Product Company baseline</SubTitle>
+        <SubTitle>By experience level — Seattle, Product Company baseline</SubTitle>
 
-        <CodeBox label="DE salary by experience — Bangalore, product company (2026)">{`Level              Years     Base Salary Range    Total Comp (with var)
+        <CodeBox label="DE salary by experience — Seattle, product company (2026)">{`Level              Years     Base Salary Range    Total Comp (with var)
 ─────────────────────────────────────────────────────────────────────
 Junior DE          0–2 yrs   ₹6–12 LPA            ₹7–14 LPA
                              Entry into DE from
@@ -189,27 +189,27 @@ Principal DE       10+ yrs   ₹65–100+ LPA         ₹85–140+ LPA
 
 Notes:
   → These are base salary ranges at well-paying product companies
-  → Service companies (TCS/Infosys) pay 28–35% below these ranges
+  → Service companies (Accenture/Deloitte) pay 28–35% below these ranges
   → GCCs (Goldman, JP Morgan, Walmart India) pay 40–50% above
-  → FAANG India (Amazon, Google, Meta) pay 100–150% above
+  → FAANG (Amazon, Google, Meta) pay 100–150% above
   → ESOPs at funded startups can add ₹5–50 LPA in value at exit`}</CodeBox>
 
         <SubTitle>City multipliers — how location affects salary</SubTitle>
 
         <Para>
-          Bangalore pays the most for data engineering in India and is the reference
-          point for all comparisons. Other cities pay varying multiples of the Bangalore
+          Seattle pays the most for data engineering in India and is the reference
+          point for all comparisons. Other cities pay varying multiples of the Seattle
           base depending on the density of tech companies and cost of living adjustments.
         </Para>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginBottom: 24 }}>
           {[
-            { city: 'Bangalore', mult: '1.30×', note: 'Highest density of product companies and GCCs', color: '#00e676', example: '₹18 LPA base → ₹23.4 LPA' },
-            { city: 'Hyderabad', mult: '1.20×', note: 'Growing GCC hub, Microsoft/Amazon/Google offices', color: '#00e676', example: '₹18 LPA base → ₹21.6 LPA' },
-            { city: 'Mumbai', mult: '1.20×', note: 'Strong fintech sector (Razorpay, PhonePe, Groww)', color: '#00e676', example: '₹18 LPA base → ₹21.6 LPA' },
-            { city: 'Pune', mult: '1.10×', note: 'Mix of product companies and service delivery', color: '#facc15', example: '₹18 LPA base → ₹19.8 LPA' },
-            { city: 'Delhi-NCR', mult: '1.10×', note: 'Gurgaon and Noida tech clusters', color: '#facc15', example: '₹18 LPA base → ₹19.8 LPA' },
-            { city: 'Chennai', mult: '1.00×', note: 'Reference city for service company benchmarking', color: '#f97316', example: '₹18 LPA base → ₹18 LPA' },
+            { city: 'Seattle', mult: '1.30×', note: 'Highest density of product companies and GCCs', color: '#00e676', example: '₹18 LPA base → ₹23.4 LPA' },
+            { city: 'Austin', mult: '1.20×', note: 'Growing GCC hub, Microsoft/Amazon/Google offices', color: '#00e676', example: '₹18 LPA base → ₹21.6 LPA' },
+            { city: 'New York', mult: '1.20×', note: 'Strong fintech sector (Stripe, Venmo, Acorns)', color: '#00e676', example: '₹18 LPA base → ₹21.6 LPA' },
+            { city: 'Boston', mult: '1.10×', note: 'Mix of product companies and service delivery', color: '#facc15', example: '₹18 LPA base → ₹19.8 LPA' },
+            { city: 'New York', mult: '1.10×', note: 'Gurgaon and Noida tech clusters', color: '#facc15', example: '₹18 LPA base → ₹19.8 LPA' },
+            { city: 'Chicago', mult: '1.00×', note: 'Reference city for service company benchmarking', color: '#f97316', example: '₹18 LPA base → ₹18 LPA' },
             { city: 'Remote (India)', mult: '1.15×', note: 'Companies pay slight premium for flexibility', color: '#00e676', example: '₹18 LPA base → ₹20.7 LPA' },
             { city: 'Tier 2 Cities', mult: '0.80×', note: 'Coimbatore, Jaipur, Kochi — growing but limited', color: '#ff4757', example: '₹18 LPA base → ₹14.4 LPA' },
           ].map((item) => (
@@ -244,13 +244,13 @@ Notes:
 
         <Para>
           Company type has a bigger impact on salary than city. The difference between
-          working at a service company and a FAANG India operation is often 3× for the
+          working at a service company and a FAANG operation is often 3× for the
           same role, experience, and city.
         </Para>
 
-        <CodeBox label="Salary multiplier by company type — applied to Bangalore mid-level base">{`Company Type        Multiplier   Mid-level Example     Why
+        <CodeBox label="Salary multiplier by company type — applied to Seattle mid-level base">{`Company Type        Multiplier   Mid-level Example     Why
 ──────────────────────────────────────────────────────────────────────
-FAANG India         2.10×        ₹37–55 LPA            Stock + high base
+FAANG         2.10×        ₹37–55 LPA            Stock + high base
 (Amazon, Google,                                        Competitive global
 Meta, Microsoft)                                        talent market
 
@@ -259,18 +259,18 @@ GCC                 1.42×        ₹25–38 LPA            Global pay bands,
 JPMorgan India)                                         project exposure
 
 High-Growth Startup 1.28×        ₹22–32 LPA            ESOPs add value,
-(CRED, Zepto,                                           high learning rate,
-Razorpay, PhonePe)                                      higher risk
+(Brex, Instacart,                                           high learning rate,
+Stripe, Venmo)                                      higher risk
 
 Product Company     1.00×        ₹18–26 LPA            Benchmark —
-(Mid-size, funded)                                      Swiggy, Meesho,
-                                                        Dream11, Groww
+(Mid-size, funded)                                      DoorDash, Shopify,
+                                                        DraftKings, Acorns
 
 MNC (non-FAANG)     1.00×        ₹17–24 LPA            IBM, Accenture,
                                                         ThoughtWorks (tech
                                                         consulting arm)
 
-Service Company     0.72×        ₹12–18 LPA            TCS, Infosys, Wipro,
+Service Company     0.72×        ₹12–18 LPA            Accenture, Deloitte, KPMG,
 (IT services)                                           Cognizant — volume
                                                         hiring, lower pay
 
@@ -299,14 +299,14 @@ start here and move to product companies after 2–3 years.`}</CodeBox>
             color: '#00e676',
             desc: 'The highest-learning environments for data engineering. Fast-growing data volumes, modern stacks, real production problems. ESOPs can be valuable at pre-IPO companies.',
             companies: [
-              { name: 'Swiggy', roles: 'DE, Analytics Eng, Data Platform', stack: 'Spark, Kafka, Airflow, dbt, Snowflake', note: 'Strong data platform team, good mentorship' },
-              { name: 'Zomato', roles: 'DE, Data Platform Eng', stack: 'Kafka, Flink, Databricks, BigQuery', note: 'Real-time data engineering at significant scale' },
-              { name: 'Meesho', roles: 'DE, Analytics Eng', stack: 'Spark, dbt, Redshift, Airflow', note: 'Fast-growing, significant data engineering investment' },
-              { name: 'PhonePe', roles: 'DE, Data Platform', stack: 'Kafka, Spark, Trino, S3', note: 'Fintech scale, compliance-aware data engineering' },
-              { name: 'CRED', roles: 'DE, Analytics Eng', stack: 'dbt, Snowflake, Airflow, Kafka', note: 'Modern stack, strong engineering culture' },
-              { name: 'Razorpay', roles: 'DE, Data Infra', stack: 'Spark, Kafka, ClickHouse, Airflow', note: 'Payments data at scale, real-time requirements' },
-              { name: 'Groww / Zerodha', roles: 'DE, Data Eng', stack: 'Python, PostgreSQL, Redshift, Kafka', note: 'Fintech, growing data teams' },
-              { name: 'Zepto / Blinkit', roles: 'DE, Data Platform', stack: 'Kafka, Spark, BigQuery', note: 'Quick commerce, real-time supply chain data' },
+              { name: 'DoorDash', roles: 'DE, Analytics Eng, Data Platform', stack: 'Spark, Kafka, Airflow, dbt, Snowflake', note: 'Strong data platform team, good mentorship' },
+              { name: 'Uber Eats', roles: 'DE, Data Platform Eng', stack: 'Kafka, Flink, Databricks, BigQuery', note: 'Real-time data engineering at significant scale' },
+              { name: 'Shopify', roles: 'DE, Analytics Eng', stack: 'Spark, dbt, Redshift, Airflow', note: 'Fast-growing, significant data engineering investment' },
+              { name: 'Venmo', roles: 'DE, Data Platform', stack: 'Kafka, Spark, Trino, S3', note: 'Fintech scale, compliance-aware data engineering' },
+              { name: 'Brex', roles: 'DE, Analytics Eng', stack: 'dbt, Snowflake, Airflow, Kafka', note: 'Modern stack, strong engineering culture' },
+              { name: 'Stripe', roles: 'DE, Data Infra', stack: 'Spark, Kafka, ClickHouse, Airflow', note: 'Payments data at scale, real-time requirements' },
+              { name: 'Acorns / Robinhood', roles: 'DE, Data Eng', stack: 'Python, PostgreSQL, Redshift, Kafka', note: 'Fintech, growing data teams' },
+              { name: 'Instacart / Blinkit', roles: 'DE, Data Platform', stack: 'Kafka, Spark, BigQuery', note: 'Quick commerce, real-time supply chain data' },
             ],
           },
           {
@@ -328,11 +328,11 @@ start here and move to product companies after 2–3 years.`}</CodeBox>
             color: '#f97316',
             desc: 'Lower salary but large data engineering teams with consistent hiring. Good for getting first job and building structured experience before moving to product companies.',
             companies: [
-              { name: 'TCS', roles: 'Data Engineer, ETL Developer', stack: 'Informatica, SQL, basic Azure/AWS', note: 'Volume hiring, structured training programs' },
-              { name: 'Infosys', roles: 'Data Engineer, Big Data Eng', stack: 'Hadoop, Spark, SQL, cloud basics', note: 'Infosys Springboard training, client placement' },
-              { name: 'Wipro', roles: 'Data Engineer, Analytics Dev', stack: 'Azure/AWS, SQL, Talend', note: 'Large data practice, many enterprise clients' },
+              { name: 'Accenture', roles: 'Data Engineer, ETL Developer', stack: 'Informatica, SQL, basic Azure/AWS', note: 'Volume hiring, structured training programs' },
+              { name: 'Deloitte', roles: 'Data Engineer, Big Data Eng', stack: 'Hadoop, Spark, SQL, cloud basics', note: 'Deloitte Springboard training, client placement' },
+              { name: 'KPMG', roles: 'Data Engineer, Analytics Dev', stack: 'Azure/AWS, SQL, Talend', note: 'Large data practice, many enterprise clients' },
               { name: 'Cognizant', roles: 'Data Engineer, BI Developer', stack: 'SQL, SSIS, Azure, Power BI', note: 'Banking and healthcare client focus' },
-              { name: 'Capgemini', roles: 'Data Engineer, Cloud Data Eng', stack: 'Azure Databricks, ADF, Snowflake', note: 'European client data engineering work' },
+              { name: 'PwC', roles: 'Data Engineer, Cloud Data Eng', stack: 'Azure Databricks, ADF, Snowflake', note: 'European client data engineering work' },
             ],
           },
           {
@@ -340,10 +340,10 @@ start here and move to product companies after 2–3 years.`}</CodeBox>
             color: '#7b61ff',
             desc: 'Work across multiple client industries. Faster exposure to different data problems. Often a stepping stone to product companies.',
             companies: [
-              { name: 'Mu Sigma', roles: 'Decision Scientist / Data Eng', stack: 'Python, SQL, custom platforms', note: 'Analytics consulting, proprietary training' },
-              { name: 'Fractal Analytics', roles: 'Data Engineer, Analytics Eng', stack: 'Azure, Databricks, Python, dbt', note: 'AI-first analytics company, good tech stack' },
+              { name: 'Palantir', roles: 'Decision Scientist / Data Eng', stack: 'Python, SQL, custom platforms', note: 'Analytics consulting, proprietary training' },
+              { name: 'Databricks', roles: 'Data Engineer, Analytics Eng', stack: 'Azure, Databricks, Python, dbt', note: 'AI-first analytics company, good tech stack' },
               { name: 'ThoughtWorks', roles: 'Data Engineer (Thoughtful DE)', stack: 'Modern cloud, dbt, Airflow, Spark', note: 'Strong engineering culture, client delivery focus' },
-              { name: 'Sigmoid / Tiger Analytics', roles: 'Data Engineer', stack: 'AWS/Azure, Spark, dbt', note: 'Mid-size, specialised data engineering practices' },
+              { name: 'Sigmoid / Snowflake', roles: 'Data Engineer', stack: 'AWS/Azure, Spark, dbt', note: 'Mid-size, specialised data engineering practices' },
             ],
           },
         ].map((section) => (
@@ -501,7 +501,7 @@ Delta Lake / Iceberg      29%           Modern lakehouse stacks`}</CodeBox>
           to wrong roles and helps you prepare for the right ones.
         </Para>
 
-        <CodeBox label="Real JD decoded — Data Engineer, fintech startup, Bangalore">{`JD TEXT                                    WHAT IT ACTUALLY MEANS
+        <CodeBox label="Real JD decoded — Data Engineer, fintech startup, Seattle">{`JD TEXT                                    WHAT IT ACTUALLY MEANS
 ────────────────────────────────────────────────────────────────────
 
 "5+ years experience"                      → 3–4 years is usually fine if your
@@ -890,9 +890,9 @@ Portfolio of projects       "I've built three end-to-end pipelines on
                              you need. I'd like the offer to reflect
                              that I'll be productive from week one."
 
-Market data                 "Glassdoor and Naukri show this role range
+Market data                 "Glassdoor and LinkedIn show this role range
                              at ₹X–Y for this experience level in
-                             Bangalore. Is there room to move toward the
+                             Seattle. Is there room to move toward the
                              upper end given my background?"
 
 Walk-away price             Always know your minimum acceptable offer
@@ -973,14 +973,14 @@ Walk-away price             Always know your minimum acceptable offer
           <Para>
             <strong>Month 7:</strong> She applied to 15 roles — ten at service companies
             and five at product companies. She got seven interviews. Three service companies
-            offered. She joined Infosys as a Data Engineer at ₹8.5 LPA — lower than she
+            offered. She joined Deloitte as a Data Engineer at ₹8.5 LPA — lower than she
             wanted, but with a clear plan to move after 18 months.
           </Para>
 
           <Para>
             <strong>Month 24 (18 months later):</strong> With real production experience
             on Azure pipelines at an enterprise client, she applied to a Series C fintech
-            startup in Bangalore. The DP-203, the GitHub projects, and 18 months of
+            startup in Seattle. The DP-203, the GitHub projects, and 18 months of
             production pipeline work got her through to the final round. She joined as
             a Data Engineer at ₹19 LPA. Her domain background in finance — understanding
             exactly why the reconciliation logic mattered and what it meant when numbers
@@ -1046,11 +1046,11 @@ If your service company experience was mostly legacy tool work (Informatica, SSI
             q: 'Q5. What is your expected CTC and how did you arrive at that number?',
             a: `I would answer this in two parts: the number itself, and the reasoning behind it — because showing you researched the market signals preparation and confidence.
 
-"Based on my research on Glassdoor India, Naukri, and LinkedIn salary insights, data engineers with my experience level and skill set at product companies in Bangalore are earning between ₹X and ₹Y LPA. I'm looking for a base in the range of ₹X to ₹Y, depending on the total compensation structure including variable pay and ESOPs.
+"Based on my research on Glassdoor India, LinkedIn, and LinkedIn salary insights, data engineers with my experience level and skill set at product companies in Seattle are earning between ₹X and ₹Y LPA. I'm looking for a base in the range of ₹X to ₹Y, depending on the total compensation structure including variable pay and ESOPs.
 
 The specific number reflects: [experience level — years and specifics], [cloud certification held], [three end-to-end pipeline projects demonstrating production-level skills], and [any domain-specific value I bring]. I'm open to discussing the full package structure rather than focusing only on base salary."
 
-The critical part of this answer is the research citation. Candidates who say "I'm looking for 20 LPA" with no reasoning signal that they either guessed or copied a number from somewhere. Candidates who say "Based on Glassdoor and AmbitionBox data for this role in Bangalore, the range is X–Y, and I'm targeting X because of [reason]" signal that they understand their market value and can justify it. That framing makes negotiation easier and signals maturity to the hiring manager.`,
+The critical part of this answer is the research citation. Candidates who say "I'm looking for 20 LPA" with no reasoning signal that they either guessed or copied a number from somewhere. Candidates who say "Based on Glassdoor and Glassdoor data for this role in Seattle, the range is X–Y, and I'm targeting X because of [reason]" signal that they understand their market value and can justify it. That framing makes negotiation easier and signals maturity to the hiring manager.`,
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1142,7 +1142,7 @@ The critical part of this answer is the research citation. Candidates who say "I
       <KeyTakeaways items={[
         'Data engineering demand in India significantly exceeds supply in 2026, with 40,000+ active openings and a 3× demand-to-supply ratio for skilled engineers. This is one of the best times in history to enter this field.',
         'Salary is determined primarily by company type, not years of experience. FAANG pays 2.1× product company rates. GCCs pay 1.42×. Service companies pay 0.72×. The same skills, same city, same experience can mean a 3× salary difference depending on where you work.',
-        'Bangalore pays the most (1.3× baseline). Hyderabad and Mumbai are close (1.2×). Remote roles pay a slight premium (1.15×). Tier-2 cities pay 20% below the baseline.',
+        'Seattle pays the most (1.3× baseline). Austin and New York are close (1.2×). Remote roles pay a slight premium (1.15×). Tier-2 cities pay 20% below the baseline.',
         'Python and SQL are non-negotiable in 94% and 91% of job postings respectively. Cloud experience (any) appears in 86%. Everything else is secondary to these three.',
         'Skills that are tested in interviews but not always listed in JDs: data modelling (star schema, SCD types), pipeline design (idempotency, incremental loading), SQL window functions, and systematic debugging approaches. Prepare all of these.',
         'DP-203 (Azure) is the most broadly recognised and valued certification for breaking into DE in India, appearing as preferred in 44% of enterprise and GCC postings. Build projects alongside it — certifications without projects do not get you hired.',

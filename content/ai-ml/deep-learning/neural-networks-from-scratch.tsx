@@ -217,7 +217,7 @@ export default function NeuralNetworksFromScratchPage() {
         </h2>
 
         <p style={S.p}>
-          When Swiggy wants to predict delivery time, you manually build features:
+          When DoorDash wants to predict delivery time, you manually build features:
           distance, traffic score, restaurant prep time, time of day.
           You encode your domain knowledge into numbers. The model learns
           relationships between those numbers and the target.
@@ -225,7 +225,7 @@ export default function NeuralNetworksFromScratchPage() {
         </p>
 
         <p style={S.p}>
-          Now imagine Swiggy wants to detect damaged packaging from a photo.
+          Now imagine DoorDash wants to detect damaged packaging from a photo.
           What features do you hand-craft from an image? Pixel brightness?
           Edge patterns? Colour distributions? You do not know which pixel
           combinations indicate damage. A neural network does not need you to know.
@@ -514,7 +514,7 @@ print(f"ReLU derivative:         {relu_derivative(z_negative)}  ← all zero, no
 
 np.random.seed(42)
 
-# ── Build a 3-layer network for Swiggy delivery time prediction ────────
+# ── Build a 3-layer network for DoorDash delivery time prediction ────────
 # Architecture: 4 inputs → 8 hidden → 4 hidden → 1 output
 # Task: regression (predict delivery minutes)
 
@@ -751,7 +751,7 @@ from sklearn.model_selection import train_test_split
 np.random.seed(42)
 n = 2000
 
-# Swiggy delivery time dataset
+# DoorDash delivery time dataset
 distance  = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
 traffic   = np.random.randint(1, 11, n).astype(float)
 prep      = np.abs(np.random.normal(15, 5, n)).clip(5, 35)
@@ -834,7 +834,7 @@ class NeuralNetwork:
 
 # ── Train ─────────────────────────────────────────────────────────────
 nn = NeuralNetwork(layer_sizes=[4, 16, 8, 1], learning_rate=0.005)
-print("Training neural network on Swiggy delivery data:")
+print("Training neural network on DoorDash delivery data:")
 history = nn.fit(X_tr_sc, y_tr_sc, epochs=200, batch_size=64)
 
 # Evaluate

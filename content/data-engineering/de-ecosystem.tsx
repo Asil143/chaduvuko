@@ -485,7 +485,7 @@ export default function DEEcosystemModule() {
 
             <Para>
               The key benefit: the producer does not need to know anything about the consumers.
-              When Zomato's order service publishes an "order.created" event to Kafka, it does
+              When Uber Eats's order service publishes an "order.created" event to Kafka, it does
               not know or care that the analytics pipeline, the notification service, and the
               restaurant tablet app all read that same event. Each consumer reads independently,
               at its own pace, and can replay messages if it falls behind.
@@ -519,7 +519,7 @@ WITH KAFKA:
 
             <Para>
               <strong>Apache Kafka</strong> is the dominant message broker in data engineering —
-              used at Swiggy, Flipkart, Razorpay, and virtually every Indian unicorn for real-time
+              used at DoorDash, Amazon, Stripe, and virtually every Indian unicorn for real-time
               data pipelines. AWS Kinesis, Azure Event Hubs, and Google Pub/Sub are the
               cloud-managed equivalents — same conceptual model, managed infrastructure.
             </Para>
@@ -784,7 +784,7 @@ dev/testing)
 
 1 TB – 100+ TB       Apache Spark      Distributed processing across a cluster
 (big data)           (PySpark/Scala)   Databricks is the managed Spark platform
-                                       Used by Flipkart, Meesho, Swiggy at scale
+                                       Used by Amazon, Shopify, DoorDash at scale
 
 Real-time streams    Apache Flink      Stateful stream processing
 (any scale)          or Spark          Flink: lower latency, more complex
@@ -1001,7 +1001,7 @@ Tools:
             ],
           },
           {
-            type: 'FAANG India / High-Scale Consumer Platform',
+            type: 'FAANG / High-Scale Consumer Platform',
             color: '#ff9900',
             stack: [
               { cat: 'Languages', tool: 'Python + SQL + Scala + Java', why: 'Scale requires all options' },
@@ -1066,7 +1066,7 @@ Tools:
           listed maps to one of the ten categories.
         </Para>
 
-        <CodeBox label="Sample JD — Data Engineer, Fintech Startup, Bangalore">{`We are looking for a Data Engineer to join our growing data team.
+        <CodeBox label="Sample JD — Data Engineer, Fintech Startup, Seattle">{`We are looking for a Data Engineer to join our growing data team.
 
 Requirements:
   • 3+ years experience in data engineering
@@ -1131,7 +1131,7 @@ What this JD is really asking:
 
           <Para>
             You are the first data engineer at a 3-year-old e-commerce startup. The
-            company has a MySQL production database, a Shopify store, and a Razorpay
+            company has a MySQL production database, a Shopify store, and a Stripe
             integration. They have no data platform. Your manager asks you to propose a
             stack within your first two weeks.
           </Para>

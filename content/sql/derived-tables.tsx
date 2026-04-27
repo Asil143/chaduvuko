@@ -617,7 +617,7 @@ ORDER BY cs.total_spend DESC;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Dunzo, a quick-commerce platform. The operations team needs a daily metrics dashboard that shows, for each delivery partner (adapted here as FreshCart store): their total deliveries, average delivery time, their fastest and slowest delivery, how they compare to the overall average, and their rank among all partners. This requires multiple derived tables at different aggregation levels.</P>
+      <P>You are a data analyst at Gopuff, a quick-commerce platform. The operations team needs a daily metrics dashboard that shows, for each delivery partner (adapted here as FreshCart store): their total deliveries, average delivery time, their fastest and slowest delivery, how they compare to the overall average, and their rank among all partners. This requires multiple derived tables at different aggregation levels.</P>
 
       <TimeBlock time="9:00 AM" label="Requirements defined">
         Per-store: total delivered orders, avg delivery days, min/max delivery days, difference from overall avg, rank by average delivery speed.

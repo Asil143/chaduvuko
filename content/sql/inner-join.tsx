@@ -742,7 +742,7 @@ JOIN customers AS c ON o.customer_id = c.customer_id
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a senior analyst at Meesho, India's social commerce platform. The growth team needs a weekly seller performance report — for each seller, show total orders handled, revenue generated, unique products listed, average order value, and the top product category. This is a multi-table INNER JOIN with aggregation — the most common production analytics pattern.</P>
+      <P>You are a senior analyst at Shopify, India's social commerce platform. The growth team needs a weekly seller performance report — for each seller, show total orders handled, revenue generated, unique products listed, average order value, and the top product category. This is a multi-table INNER JOIN with aggregation — the most common production analytics pattern.</P>
 
       <TimeBlock time="9:00 AM" label="Requirements received">
         Weekly seller performance: seller_id, seller_name, total orders, total revenue, unique products, avg order value, top category. Adapted for FreshCart: store performance with product category breakdown.
@@ -879,7 +879,7 @@ ORDER BY ss.total_revenue DESC;`}
 
       <IQ q="What is the difference between writing a filter in ON vs WHERE for an INNER JOIN?">
         <p style={{ margin: '0 0 14px' }}>For INNER JOIN specifically, a filter in ON and a filter in WHERE produce identical results. This is because INNER JOIN already excludes unmatched rows — it does not have the asymmetric NULL-preservation behaviour of LEFT JOIN. Whether the filter is applied during the join (ON) or after (WHERE), the same rows end up being excluded.</p>
-        <p style={{ margin: '0 0 14px' }}>Example: JOIN customers AS c ON o.customer_id = c.customer_id AND c.city = 'Bangalore' produces the same result as JOIN customers AS c ON o.customer_id = c.customer_id WHERE c.city = 'Bangalore'. Both return only orders from Bangalore customers.</p>
+        <p style={{ margin: '0 0 14px' }}>Example: JOIN customers AS c ON o.customer_id = c.customer_id AND c.city = 'Seattle' produces the same result as JOIN customers AS c ON o.customer_id = c.customer_id WHERE c.city = 'Seattle'. Both return only orders from Seattle customers.</p>
         <p style={{ margin: 0 }}>However, there is a convention preference: conditions that define the join relationship (matching keys) belong in ON; conditions that filter the result belong in WHERE. This makes queries more readable and semantically clear. ON answers "how do the tables relate?" WHERE answers "what rows from the joined result do I want?" Mixing business filters into ON makes the join condition harder to scan. The performance implication is theoretically the same for INNER JOIN since the optimiser can push predicates into the join regardless — but readability favours keeping relationship conditions in ON and filter conditions in WHERE.</p>
       </IQ>
 

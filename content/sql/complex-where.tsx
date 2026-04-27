@@ -147,34 +147,34 @@ export default function ComplexWhere() {
 
       <SQLPlayground
         initialQuery={`-- The classic precedence bug
--- INTENTION: "Gold OR Platinum customers from Bangalore"
--- ACTUAL: "All Gold customers (any city) + Platinum customers from Bangalore"
+-- INTENTION: "Gold OR Platinum customers from Seattle"
+-- ACTUAL: "All Gold customers (any city) + Platinum customers from Seattle"
 
 SELECT first_name, city, loyalty_tier
 FROM customers
 WHERE loyalty_tier = 'Gold'
    OR loyalty_tier = 'Platinum'
-  AND city = 'Bangalore'
+  AND city = 'Seattle'
 ORDER BY loyalty_tier, city;
--- Count the Gold customers from non-Bangalore cities — they should not be here`}
+-- Count the Gold customers from non-Seattle cities — they should not be here`}
         height={160}
         showSchema={true}
       />
 
       <SQLPlayground
         initialQuery={`-- CORRECT: parentheses enforce the intended grouping
--- Now both Gold AND Platinum require the Bangalore condition
+-- Now both Gold AND Platinum require the Seattle condition
 
 SELECT first_name, city, loyalty_tier
 FROM customers
 WHERE (loyalty_tier = 'Gold' OR loyalty_tier = 'Platinum')
-  AND city = 'Bangalore'
+  AND city = 'Seattle'
 ORDER BY loyalty_tier;`}
         height={140}
         showSchema={false}
       />
 
-      <P>Run both queries and compare the row counts. The first returns more rows — the extra rows are Gold customers from cities other than Bangalore that should not appear. The second returns only what was intended.</P>
+      <P>Run both queries and compare the row counts. The first returns more rows — the extra rows are Gold customers from cities other than Seattle that should not appear. The second returns only what was intended.</P>
 
       <Callout type="warning">
         The AND-before-OR precedence bug is a <strong>silent data quality issue</strong> — the query runs without error and returns results that look plausible. The only way to catch it is to understand precedence rules and verify row counts against expectations. Always use parentheses when mixing AND and OR.
@@ -220,7 +220,7 @@ ORDER BY total_amount DESC;`}
 
       <SQLPlayground
         initialQuery={`-- Multi-level: inner OR groups, outer AND conditions
--- (Bangalore Platinum OR Hyderabad Gold) AND joined after 2021
+-- (Seattle Platinum OR Austin Gold) AND joined after 2021
 SELECT
   first_name || ' ' || last_name  AS customer,
   city,
@@ -228,9 +228,9 @@ SELECT
   joined_date
 FROM customers
 WHERE (
-    (city = 'Bangalore' AND loyalty_tier = 'Platinum')
+    (city = 'Seattle' AND loyalty_tier = 'Platinum')
     OR
-    (city = 'Hyderabad' AND loyalty_tier = 'Gold')
+    (city = 'Austin' AND loyalty_tier = 'Gold')
   )
   AND joined_date >= '2022-01-01'
 ORDER BY city;`}
@@ -252,7 +252,7 @@ ORDER BY total_amount DESC;`}
       />
 
       <ProTip>
-        A useful mental model: read your WHERE clause in English first, identify every "and" and "or" in the business rule, then map them to parenthesised groups. "I want Gold or Platinum customers from Bangalore who joined after 2021" breaks down as: (Gold OR Platinum) AND Bangalore AND joined after 2021. Write the parentheses to match the English groupings, not to match the left-to-right order of the words.
+        A useful mental model: read your WHERE clause in English first, identify every "and" and "or" in the business rule, then map them to parenthesised groups. "I want Gold or Platinum customers from Seattle who joined after 2021" breaks down as: (Gold OR Platinum) AND Seattle AND joined after 2021. Write the parentheses to match the English groupings, not to match the left-to-right order of the words.
       </ProTip>
 
       <HR />
@@ -340,9 +340,9 @@ WHERE order_status = 'Cancelled'
       <CodeBlock
         label="De Morgan's Laws in SQL"
         code={`-- Law 1: NOT (A OR B) = NOT A AND NOT B
-NOT (city = 'Bangalore' OR city = 'Mumbai')
+NOT (city = 'Seattle' OR city = 'New York')
 -- is identical to:
-city <> 'Bangalore' AND city <> 'Mumbai'
+city <> 'Seattle' AND city <> 'New York'
 
 -- Law 2: NOT (A AND B) = NOT A OR NOT B
 NOT (in_stock = true AND unit_price > 200)
@@ -360,7 +360,7 @@ in_stock = false OR unit_price <= 200
 
 -- Version 1: NOT with OR group
 SELECT COUNT(*) AS v1 FROM customers
-WHERE NOT (city = 'Bangalore' OR city = 'Mumbai');`}
+WHERE NOT (city = 'Seattle' OR city = 'New York');`}
         height={100}
         showSchema={false}
       />
@@ -368,8 +368,8 @@ WHERE NOT (city = 'Bangalore' OR city = 'Mumbai');`}
       <SQLPlayground
         initialQuery={`-- Version 2: De Morgan applied — NOT A AND NOT B
 SELECT COUNT(*) AS v2 FROM customers
-WHERE city <> 'Bangalore'
-  AND city <> 'Mumbai';`}
+WHERE city <> 'Seattle'
+  AND city <> 'New York';`}
         height={90}
         showSchema={false}
       />
@@ -377,7 +377,7 @@ WHERE city <> 'Bangalore'
       <SQLPlayground
         initialQuery={`-- Version 3: NOT IN
 SELECT COUNT(*) AS v3 FROM customers
-WHERE city NOT IN ('Bangalore', 'Mumbai');
+WHERE city NOT IN ('Seattle', 'New York');
 -- All three return identical counts`}
         height={90}
         showSchema={false}
@@ -458,7 +458,7 @@ ORDER BY in_stock, margin_pct DESC;`}
 
       <div style={{ background: 'var(--surface)', border: `1px solid ${C}20`, borderRadius: 10, padding: '20px 24px', margin: '28px 0 24px' }}>
         <p style={{ fontSize: 11, color: C, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Business Rule 03</p>
-        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find employees who are either Store Managers with salary above ₹50,000, OR Cashiers in Bangalore stores, OR any employee hired before 2020 earning more than ₹60,000."</p>
+        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find employees who are either Store Managers with salary above ₹50,000, OR Cashiers in Seattle stores, OR any employee hired before 2020 earning more than ₹60,000."</p>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
           Three OR groups, each group has internal AND conditions
         </p>
@@ -474,7 +474,7 @@ ORDER BY in_stock, margin_pct DESC;`}
 FROM employees AS e
 JOIN stores AS s ON e.store_id = s.store_id
 WHERE (e.role = 'Store Manager' AND e.salary > 50000)
-   OR (e.role = 'Cashier' AND s.city = 'Bangalore')
+   OR (e.role = 'Cashier' AND s.city = 'Seattle')
    OR (e.hire_date < '2020-01-01' AND e.salary > 60000)
 ORDER BY e.salary DESC;`}
         height={195}
@@ -504,14 +504,14 @@ WHERE (order_status = 'Cancelled' OR order_status = 'Returned')
   AND total_amount > 300
 
 -- Convention 3: Align opening parentheses with the operator before them
-WHERE (city = 'Bangalore' AND loyalty_tier = 'Platinum')
-   OR (city = 'Hyderabad' AND loyalty_tier = 'Gold')
+WHERE (city = 'Seattle' AND loyalty_tier = 'Platinum')
+   OR (city = 'Austin' AND loyalty_tier = 'Gold')
 
 -- Convention 4: Multi-line groups use consistent indentation
 WHERE (
-    (city = 'Bangalore' AND loyalty_tier = 'Platinum')
+    (city = 'Seattle' AND loyalty_tier = 'Platinum')
     OR
-    (city = 'Hyderabad' AND loyalty_tier = 'Gold')
+    (city = 'Austin' AND loyalty_tier = 'Gold')
   )
   AND joined_date >= '2022-01-01'
 
@@ -632,7 +632,7 @@ WHERE order_status = 'Delivered'
       />
 
       <ProTip>
-        The fastest debugging technique for a complex WHERE: temporarily replace the SELECT columns with SELECT *, remove LIMIT, and scan the results for any row that should obviously not be there. A Gold customer from Delhi appearing in a "Platinum Bangalore customers" query tells you immediately that the loyalty_tier condition or the city condition has a precedence bug. One wrong row is usually enough to identify the broken condition.
+        The fastest debugging technique for a complex WHERE: temporarily replace the SELECT columns with SELECT *, remove LIMIT, and scan the results for any row that should obviously not be there. A Gold customer from Delhi appearing in a "Platinum Seattle customers" query tells you immediately that the loyalty_tier condition or the city condition has a precedence bug. One wrong row is usually enough to identify the broken condition.
       </ProTip>
 
       <HR />
@@ -727,14 +727,14 @@ SELECT
   CASE
     WHEN c.loyalty_tier = 'Platinum' THEN 'Segment A'
     WHEN c.loyalty_tier = 'Gold'
-     AND c.city IN ('Bangalore','Mumbai','Delhi','Hyderabad') THEN 'Segment B'
+     AND c.city IN ('Seattle','New York','Delhi','Austin') THEN 'Segment B'
     ELSE 'Segment C'
   END  AS campaign_segment
 FROM customers AS c
 WHERE c.loyalty_tier = 'Platinum'
    OR (
     c.loyalty_tier = 'Gold'
-    AND c.city IN ('Bangalore', 'Mumbai', 'Delhi', 'Hyderabad')
+    AND c.city IN ('Seattle', 'New York', 'Delhi', 'Austin')
     AND c.joined_date >= '2022-01-01'
   )
    OR (
@@ -785,7 +785,7 @@ ORDER BY in_stock, margin_pct;`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are an analyst at PhonePe, India's largest UPI payments platform. The risk team sends a request: they need a list of transactions matching a specific suspicious pattern for manual review. The pattern has multiple conditions across three dimensions — amount, timing, and transaction type.</P>
+      <P>You are an analyst at Venmo, India's largest UPI payments platform. The risk team sends a request: they need a list of transactions matching a specific suspicious pattern for manual review. The pattern has multiple conditions across three dimensions — amount, timing, and transaction type.</P>
 
       <TimeBlock time="2:00 PM" label="Risk team requirement arrives">
         The risk manager describes the pattern in plain English: "We want transactions that are either: (1) UPI transactions above ₹50,000 at any merchant, (2) transactions between ₹10,000 and ₹50,000 where the same user made more than 3 transactions in a single day, or (3) any wallet transfer to a new account where the receiver joined in the last 30 days AND the amount is above ₹5,000."
@@ -847,14 +847,14 @@ ORDER BY o.total_amount DESC;`}
 
       <IQ q="What is operator precedence in SQL WHERE clauses and why does it cause bugs?">
         <p style={{ margin: '0 0 14px' }}>Operator precedence determines the order in which SQL evaluates logical operators when multiple operators appear in the same WHERE clause without explicit parentheses. The order is: parentheses first (highest), then arithmetic operators, then comparison operators (=, &lt;&gt;, LIKE, BETWEEN, IN, IS NULL), then NOT, then AND, and finally OR (lowest). This means AND binds more tightly than OR.</p>
-        <p style={{ margin: '0 0 14px' }}>The most common precedence bug arises when mixing AND and OR without parentheses. WHERE tier = 'Gold' OR tier = 'Platinum' AND city = 'Bangalore' is evaluated as WHERE tier = 'Gold' OR (tier = 'Platinum' AND city = 'Bangalore') — because AND is evaluated before OR. This returns all Gold customers from any city, plus Platinum customers only from Bangalore. The intended query — Gold or Platinum customers from Bangalore — requires explicit parentheses: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Bangalore'.</p>
+        <p style={{ margin: '0 0 14px' }}>The most common precedence bug arises when mixing AND and OR without parentheses. WHERE tier = 'Gold' OR tier = 'Platinum' AND city = 'Seattle' is evaluated as WHERE tier = 'Gold' OR (tier = 'Platinum' AND city = 'Seattle') — because AND is evaluated before OR. This returns all Gold customers from any city, plus Platinum customers only from Seattle. The intended query — Gold or Platinum customers from Seattle — requires explicit parentheses: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Seattle'.</p>
         <p style={{ margin: 0 }}>The bug is insidious because the query runs without error and returns results that look plausible — it just returns more rows than intended. Without knowing the exact expected count, the bug is invisible. The prevention is simple: always use explicit parentheses when mixing AND and OR in the same WHERE clause. Even when precedence would give the correct result, parentheses make the intent clear and prevent future bugs when conditions are modified.</p>
       </IQ>
 
       <IQ q="How do you translate a complex business rule into a correctly structured WHERE clause?">
         <p style={{ margin: '0 0 14px' }}>The systematic process: first, read the business rule in plain English and identify every condition. Each condition becomes a comparison expression. The words "and", "both", "must also" map to AND. The words "or", "either...or", "any of" map to OR. The word "not" maps to NOT.</p>
-        <p style={{ margin: '0 0 14px' }}>Second, identify the groupings — which conditions belong together as a unit before being combined with others. In the rule "Gold or Platinum customers from Bangalore who joined after 2021," the "from Bangalore" and "joined after 2021" apply to the combined (Gold OR Platinum) group — not just to Platinum. The parenthesised structure is: (Gold OR Platinum) AND Bangalore AND after 2021.</p>
-        <p style={{ margin: 0 }}>Third, write the WHERE clause with explicit parentheses matching the English groupings: WHERE (loyalty_tier = 'Gold' OR loyalty_tier = 'Platinum') AND city = 'Bangalore' AND joined_date {'>'}= '2022-01-01'. Fourth, verify by running COUNT(*) with each condition group in isolation, then combined, and checking that each count makes sense. A quick sanity check: does each row in the result satisfy all the conditions described in the business rule? Sample 5 rows and verify manually. This four-step process — identify, group, write, verify — works for any business rule regardless of complexity.</p>
+        <p style={{ margin: '0 0 14px' }}>Second, identify the groupings — which conditions belong together as a unit before being combined with others. In the rule "Gold or Platinum customers from Seattle who joined after 2021," the "from Seattle" and "joined after 2021" apply to the combined (Gold OR Platinum) group — not just to Platinum. The parenthesised structure is: (Gold OR Platinum) AND Seattle AND after 2021.</p>
+        <p style={{ margin: 0 }}>Third, write the WHERE clause with explicit parentheses matching the English groupings: WHERE (loyalty_tier = 'Gold' OR loyalty_tier = 'Platinum') AND city = 'Seattle' AND joined_date {'>'}= '2022-01-01'. Fourth, verify by running COUNT(*) with each condition group in isolation, then combined, and checking that each count makes sense. A quick sanity check: does each row in the result satisfy all the conditions described in the business rule? Sample 5 rows and verify manually. This four-step process — identify, group, write, verify — works for any business rule regardless of complexity.</p>
       </IQ>
 
       <IQ q="What are De Morgan's Laws and how are they useful in SQL?">
@@ -866,7 +866,7 @@ ORDER BY o.total_amount DESC;`}
       <IQ q="How do you debug a WHERE clause that returns the wrong number of rows?">
         <p style={{ margin: '0 0 14px' }}>The systematic debugging process starts with establishing the expected count. Before declaring the result wrong, calculate what you expect: "This table has 30 orders. About 18 are delivered. Of those, maybe 8 were paid by UPI. Of those, maybe 4 were above ₹500." If the query returns 12 instead of 4, the filter is too broad.</p>
         <p style={{ margin: '0 0 14px' }}>Next, test each condition group in isolation. Replace the full WHERE with just the first group and run COUNT(*). Then test the second group alone. Then combine them. For AND chains, each added condition should reduce or maintain the count. If adding a condition increases the count, you accidentally wrote OR. For OR chains, each added alternative should increase or maintain the count. If adding an OR alternative reduces the count, you have a precedence issue where AND is stealing from your OR group.</p>
-        <p style={{ margin: 0 }}>The most effective visual debugging technique: SELECT * from the full query (remove LIMIT) and scan the results for any row that obviously should not be there. A Gold customer from Delhi in a "Platinum Bangalore customers" result immediately identifies a missing parenthesis around the loyalty tier OR condition. One wrong row tells you more than a count discrepancy because you can see exactly which condition failed for that specific row. Once identified, fix the condition, rerun, and verify the count matches the expectation before closing the debug session.</p>
+        <p style={{ margin: 0 }}>The most effective visual debugging technique: SELECT * from the full query (remove LIMIT) and scan the results for any row that obviously should not be there. A Gold customer from Delhi in a "Platinum Seattle customers" result immediately identifies a missing parenthesis around the loyalty tier OR condition. One wrong row tells you more than a count discrepancy because you can see exactly which condition failed for that specific row. Once identified, fix the condition, rerun, and verify the count matches the expectation before closing the debug session.</p>
       </IQ>
 
       <IQ q="When should you split a complex WHERE into a subquery or CTE instead of keeping it in one WHERE clause?">
@@ -881,9 +881,9 @@ ORDER BY o.total_amount DESC;`}
       <Part n="13" title="Errors You Will Hit — And Exactly Why They Happen" />
 
       <Err
-        msg="Query returns more rows than expected — Gold customers from other cities appear in a Bangalore-only result"
-        cause="Operator precedence bug: AND evaluated before OR. WHERE tier = 'Gold' OR tier = 'Platinum' AND city = 'Bangalore' evaluates as WHERE tier = 'Gold' OR (tier = 'Platinum' AND city = 'Bangalore'). The AND only binds to the Platinum condition, not the Gold condition. Gold customers from any city are returned because there is no city restriction on the Gold side of the OR."
-        fix="Add parentheses to group the OR conditions first: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Bangalore'. Run COUNT(*) with and without the parentheses to verify the row count difference matches your expectation. As a general rule: any time you mix AND and OR in the same WHERE clause, add parentheses around every OR group regardless of whether precedence would technically give the correct result."
+        msg="Query returns more rows than expected — Gold customers from other cities appear in a Seattle-only result"
+        cause="Operator precedence bug: AND evaluated before OR. WHERE tier = 'Gold' OR tier = 'Platinum' AND city = 'Seattle' evaluates as WHERE tier = 'Gold' OR (tier = 'Platinum' AND city = 'Seattle'). The AND only binds to the Platinum condition, not the Gold condition. Gold customers from any city are returned because there is no city restriction on the Gold side of the OR."
+        fix="Add parentheses to group the OR conditions first: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Seattle'. Run COUNT(*) with and without the parentheses to verify the row count difference matches your expectation. As a general rule: any time you mix AND and OR in the same WHERE clause, add parentheses around every OR group regardless of whether precedence would technically give the correct result."
       />
 
       <Err
@@ -964,7 +964,7 @@ ORDER BY
       <KeyTakeaways
         items={[
           'Operator precedence order: parentheses → arithmetic → comparisons → NOT → AND → OR. AND always evaluates before OR when no parentheses are present.',
-          'The most common production bug: WHERE tier = \'Gold\' OR tier = \'Platinum\' AND city = \'Bangalore\' is not "(Gold OR Platinum) AND Bangalore" — AND runs first, making it "Gold (any city) OR (Platinum AND Bangalore)."',
+          'The most common production bug: WHERE tier = \'Gold\' OR tier = \'Platinum\' AND city = \'Seattle\' is not "(Gold OR Platinum) AND Seattle" — AND runs first, making it "Gold (any city) OR (Platinum AND Seattle)."',
           'Always use explicit parentheses when mixing AND and OR. Even when precedence gives the correct answer, parentheses communicate intent and prevent future bugs when conditions are modified.',
           'AND narrows: every added AND can only reduce or maintain the result count. OR broadens: every added OR can only increase or maintain the result count. If adding AND increases the count, you have an OR where you meant AND.',
           'De Morgan\'s Laws: NOT (A OR B) = NOT A AND NOT B. NOT (A AND B) = NOT A OR NOT B. Use these to rewrite NOT conditions into equivalent positive forms for clarity.',

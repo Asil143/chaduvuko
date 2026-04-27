@@ -362,7 +362,7 @@ Never assume a CSV is well-formed because it came from a "reliable" source.`}</C
           is not optional.
         </Para>
 
-        <CodeBox label="JSON — structure, nesting, and the engineering challenges it creates">{`A single Swiggy order as JSON — what an API actually returns:
+        <CodeBox label="JSON — structure, nesting, and the engineering challenges it creates">{`A single DoorDash order as JSON — what an API actually returns:
 
 {
   "order_id": 9284751,
@@ -375,8 +375,8 @@ Never assume a CSV is well-formed because it came from a "reliable" source.`}</C
       "flat": "4B",
       "building": "Prestige Meridian",
       "area": "Koramangala",
-      "city": "Bangalore",
-      "pincode": "560034",
+      "city": "Seattle",
+      "zip_code": "560034",
       "lat": 12.9352,
       "lng": 77.6245
     }
@@ -384,7 +384,7 @@ Never assume a CSV is well-formed because it came from a "reliable" source.`}</C
   "restaurant": {
     "id": 7823,
     "name": "Punjabi Dhaba",
-    "city": "Bangalore"
+    "city": "Seattle"
   },
   "items": [
     {
@@ -463,8 +463,8 @@ Table: order_items (one row per item — EXPLODED from items array)
   9284751  | MI-002  | Garlic Naan    | 2        | 30.00      | (empty)
 
 Table: customers (one row per customer — EXTRACTED from nested customer object)
-  customer_id | name          | phone           | city      | pincode | lat     | lng
-  4201938     | Priya Sharma  | +91-9876543210  | Bangalore | 560034  | 12.9352 | 77.6245
+  customer_id | name          | phone           | city      | zip_code | lat     | lng
+  4201938     | Priya Sharma  | +91-9876543210  | Seattle | 560034  | 12.9352 | 77.6245
 
 Table: deliveries (one row per delivery)
   order_id | agent_id | estimated_mins | actual_mins
@@ -495,8 +495,8 @@ keep rarely-needed deep nesting as a JSON column for flexibility.`}</CodeBox>
   <customer id="4201938">
     <name>Priya Sharma</name>
     <address>
-      <city>Bangalore</city>
-      <pincode>560034</pincode>
+      <city>Seattle</city>
+      <zip_code>560034</zip_code>
     </address>
   </customer>
   <items>
@@ -643,7 +643,7 @@ always push for structured JSON logging. It eliminates regex.`}</CodeBox>
           {[
             {
               type: 'Images',
-              examples: 'Product photos (Flipkart), KYC documents (fintechs), food photos (Zomato), satellite imagery (agricultural analytics)',
+              examples: 'Product photos (Amazon), KYC documents (fintechs), food photos (Uber Eats), satellite imagery (agricultural analytics)',
               pipeline: 'Store as-is in object storage. Extract metadata (dimensions, format, size). ML models extract structure (product category, face detection, OCR for document text).',
             },
             {
@@ -738,7 +738,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
   Customer review pipeline:
     Raw text → clean/normalise → NLP model → structured output
     {review_id: 8734, sentiment: "negative", score: 0.23,
-     topics: ["delivery", "packaging"], entities: ["Bangalore"],
+     topics: ["delivery", "packaging"], entities: ["Seattle"],
      urgency: "high", requires_response: true}
 
   Call recording pipeline:
@@ -1004,7 +1004,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
 
         {[
           {
-            company: 'Flipkart — E-commerce',
+            company: 'Amazon — E-commerce',
             color: '#f97316',
             structured: [
               'Orders table: order_id, customer_id, product_id, quantity, price, status, created_at',
@@ -1025,7 +1025,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
             ],
           },
           {
-            company: 'PhonePe — Fintech',
+            company: 'Venmo — Fintech',
             color: '#7b61ff',
             structured: [
               'Transaction table: txn_id, sender_id, receiver_id, amount, type, status, timestamp',
@@ -1203,7 +1203,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
 
 Semi-structured data is self-describing — the structure is carried within the data itself rather than enforced externally. Fields can be added, removed, or changed without a schema migration. The data is organised but not uniformly so. A JSON event payload from a mobile app is a clear example: the app might include a promo_code field when a promo was applied and omit it entirely when there was none. The JSON still parses correctly in both cases.
 
-From a Razorpay context: the transaction table in their operational database is structured — txn_id, sender_id, amount, status, timestamp are fixed columns enforced by the database. The transaction_metadata field stored alongside it is semi-structured — a JSON blob containing the payment rail details, device fingerprint, and UPI reference that varies by transaction type and changes as new payment methods are added. Both coexist in the same system serving different needs.`,
+From a Stripe context: the transaction table in their operational database is structured — txn_id, sender_id, amount, status, timestamp are fixed columns enforced by the database. The transaction_metadata field stored alongside it is semi-structured — a JSON blob containing the payment rail details, device fingerprint, and UPI reference that varies by transaction type and changes as new payment methods are added. Both coexist in the same system serving different needs.`,
           },
           {
             q: 'Q2. You receive a JSON file from a vendor where some records have a nested address object and some records have the address fields at the top level. How do you handle this?',
@@ -1355,7 +1355,7 @@ Fourth, when storage cost of the repeated keys is a concern. JSON stores keys wi
         'The correct storage for each category: structured data for analytics goes to data warehouses; semi-structured and all raw data goes to object storage (S3/ADLS); operational structured data goes to relational databases; unstructured data always goes to object storage.',
         'The flattening decision for nested JSON: flatten frequently-queried fields into columns, keep rarely-accessed deep nesting as JSON columns. Flatten too much and schema maintenance becomes burdensome. Flatten too little and analysts cannot query data without JSON functions.',
         'Schema change monitoring is mandatory for structured and semi-structured sources. Compare source schema against the last known schema on every pipeline run. Alert when they differ. Never let a schema change silently drop data.',
-        'Real companies handle all three data types simultaneously. Flipkart has structured order tables, semi-structured product catalogue JSON, and unstructured product images — all flowing through different pipeline paths that converge in the Gold layer. A data engineer must be fluent in all three.',
+        'Real companies handle all three data types simultaneously. Amazon has structured order tables, semi-structured product catalogue JSON, and unstructured product images — all flowing through different pipeline paths that converge in the Gold layer. A data engineer must be fluent in all three.',
       ]} />
 
     </LearnLayout>

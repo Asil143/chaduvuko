@@ -873,13 +873,13 @@ int main() {
           {
             icon: '💬',
             title: 'Message Delivery — WhatsApp, Kafka',
-            company: 'WhatsApp · Zomato · Swiggy',
-            desc: 'Messages are queued at the server and delivered in order. Apache Kafka is essentially a distributed queue that handles billions of messages per day for companies like Swiggy.',
+            company: 'WhatsApp · Uber Eats · DoorDash',
+            desc: 'Messages are queued at the server and delivered in order. Apache Kafka is essentially a distributed queue that handles billions of messages per day for companies like DoorDash.',
           },
           {
             icon: '🌐',
             title: 'Web Server Request Handling',
-            company: 'Razorpay · PhonePe · Zerodha',
+            company: 'Stripe · Venmo · Robinhood',
             desc: 'When thousands of requests hit a payment API at once, they are queued. The server processes them one by one — fairly, in order — preventing overload.',
           },
           {

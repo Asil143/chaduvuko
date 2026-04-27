@@ -6,14 +6,14 @@ export const javaDeveloperRoadmap: Roadmap = {
   title: 'Java Developer',
   subtitle: 'Core Java to Spring Boot microservices',
   category: 'role',
-  description: 'From Java fundamentals through Spring Boot, JPA, microservices, Kafka, and cloud deployment. Java is the dominant language at Indian banks, fintech, and large enterprises — TCS, Infosys, Razorpay, and PayTM.',
+  description: 'From Java fundamentals through Spring Boot, JPA, microservices, Kafka, and cloud deployment. Java is the dominant language at Indian banks, fintech, and large enterprises — Accenture, Deloitte, Stripe, and PayTM.',
   level: 'beginner',
   estimatedTime: '4–5 months',
   salaryData: [
-    { company: 'Service (TCS / Wipro)', range: '₹4–8 LPA', note: 'Most common entry; Spring Boot expected' },
-    { company: 'Fintech startup', range: '₹12–22 LPA', note: 'Razorpay, PayTM, Juspay' },
+    { company: 'Service (Accenture / KPMG)', range: '₹4–8 LPA', note: 'Most common entry; Spring Boot expected' },
+    { company: 'Fintech startup', range: '₹12–22 LPA', note: 'Stripe, PayTM, Braintree' },
     { company: 'MNC India (SAP / Oracle)', range: '₹18–32 LPA', note: 'Enterprise Java experience' },
-    { company: 'FAANG India', range: '₹30–60 LPA', note: 'Deep DSA + distributed systems' },
+    { company: 'FAANG', range: '₹30–60 LPA', note: 'Deep DSA + distributed systems' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your Java developer journey starts. Mark complete to unlock language foundations.', x: 305, y: 20, width: 150, height: 60 },

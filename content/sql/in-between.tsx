@@ -124,7 +124,7 @@ column IN (value1, value2, value3, ...)
 column = value1 OR column = value2 OR column = value3 ...
 
 -- Examples:
-WHERE city IN ('Bangalore', 'Hyderabad', 'Mumbai')
+WHERE city IN ('Seattle', 'Austin', 'New York')
 WHERE order_status IN ('Cancelled', 'Returned')
 WHERE loyalty_tier IN ('Gold', 'Platinum')
 WHERE product_id IN (1, 5, 9, 17, 21)`}
@@ -134,10 +134,10 @@ WHERE product_id IN (1, 5, 9, 17, 21)`}
 
       <SQLPlayground
         initialQuery={`-- Customers in metro cities
--- Much cleaner than: city = 'Bangalore' OR city = 'Hyderabad' OR city = 'Mumbai'
+-- Much cleaner than: city = 'Seattle' OR city = 'Austin' OR city = 'New York'
 SELECT first_name, last_name, city, loyalty_tier
 FROM customers
-WHERE city IN ('Bangalore', 'Hyderabad', 'Mumbai')
+WHERE city IN ('Seattle', 'Austin', 'New York')
 ORDER BY city, last_name;`}
         height={130}
         showSchema={true}
@@ -215,7 +215,7 @@ column NOT IN (value1, value2, value3, ...)
 column <> value1 AND column <> value2 AND column <> value3 ...
 
 -- Examples:
-WHERE city NOT IN ('Bangalore', 'Mumbai')
+WHERE city NOT IN ('Seattle', 'New York')
 WHERE order_status NOT IN ('Cancelled', 'Returned')
 WHERE loyalty_tier NOT IN ('Bronze')`}
       />
@@ -224,7 +224,7 @@ WHERE loyalty_tier NOT IN ('Bronze')`}
         initialQuery={`-- Customers NOT in the two largest metros
 SELECT first_name, last_name, city, loyalty_tier
 FROM customers
-WHERE city NOT IN ('Bangalore', 'Mumbai')
+WHERE city NOT IN ('Seattle', 'New York')
 ORDER BY city, last_name;`}
         height={120}
         showSchema={true}
@@ -539,7 +539,7 @@ SELECT
   joined_date
 FROM customers
 WHERE loyalty_tier IN ('Gold', 'Platinum')
-  AND city NOT IN ('Bangalore', 'Mumbai', 'Delhi')
+  AND city NOT IN ('Seattle', 'New York', 'Delhi')
   AND joined_date BETWEEN '2021-01-01' AND '2022-12-31'
 ORDER BY loyalty_tier, joined_date;`}
         height={170}
@@ -640,10 +640,10 @@ WHERE unit_price BETWEEN NULL AND 200
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are an analyst at Razorpay's merchant analytics team. The merchant success team needs three different reports for their quarterly business review. All three need to be ready within an hour.</P>
+      <P>You are an analyst at Stripe's merchant analytics team. The merchant success team needs three different reports for their quarterly business review. All three need to be ready within an hour.</P>
 
       <TimeBlock time="2:00 PM" label="Report 1 — Merchant tier segmentation">
-        The growth team wants to see merchants segmented by monthly transaction volume into three bands: small (under ₹1 lakh), medium (₹1 lakh to ₹10 lakh), and large (above ₹10 lakh). They want the count per tier. Adapted for FreshCart: orders segmented by amount bands.
+        The growth team wants to see merchants segmented by monthly transaction volume into three bands: small (under ₹1 thousand), medium (₹1 thousand to ₹10 thousand), and large (above ₹10 thousand). They want the count per tier. Adapted for FreshCart: orders segmented by amount bands.
       </TimeBlock>
 
       <SQLPlayground
@@ -717,7 +717,7 @@ ORDER BY q1_revenue DESC;`}
       <Part n="12" title="Interview Prep — 5 Questions With Complete Answers" />
 
       <IQ q="What does the IN operator do and what is it equivalent to?">
-        <p style={{ margin: '0 0 14px' }}>IN checks whether a column value matches any value in a specified list. WHERE city IN ('Bangalore', 'Hyderabad', 'Mumbai') returns rows where city is any of the three cities. It is exactly equivalent to multiple OR conditions using equality: WHERE city = 'Bangalore' OR city = 'Hyderabad' OR city = 'Mumbai'. The query optimiser typically converts IN to OR internally, so they produce identical execution plans and have identical performance for hardcoded lists.</p>
+        <p style={{ margin: '0 0 14px' }}>IN checks whether a column value matches any value in a specified list. WHERE city IN ('Seattle', 'Austin', 'New York') returns rows where city is any of the three cities. It is exactly equivalent to multiple OR conditions using equality: WHERE city = 'Seattle' OR city = 'Austin' OR city = 'New York'. The query optimiser typically converts IN to OR internally, so they produce identical execution plans and have identical performance for hardcoded lists.</p>
         <p style={{ margin: '0 0 14px' }}>IN is preferred over multiple OR conditions for three reasons. First, readability â€” IN lists the values once, clearly, without repeating the column name before every value. With five values, OR requires writing the column name and = operator five times. IN writes it once. Second, maintainability â€” adding a new value to an IN list requires adding one value inside the parentheses. Adding a value to OR conditions requires adding a full new OR clause. Third, correctness â€” IN with many values is harder to accidentally miswrite than a long chain of OR conditions, which requires careful attention to whether each uses = (not &lt;&gt; or &gt;= by mistake).</p>
         <p style={{ margin: 0 }}>IN also accepts a subquery instead of a hardcoded list: WHERE customer_id IN (SELECT customer_id FROM orders WHERE ...). This is dynamic IN — the list of values is computed by the subquery at runtime rather than hardcoded in the query. The subquery must return exactly one column. This pattern is a simpler alternative to JOIN for existence checks, though JOINs are often preferred for performance on large datasets.</p>
       </IQ>
@@ -778,14 +778,14 @@ ORDER BY q1_revenue DESC;`}
       <Err
         msg="IN with subquery errors — subquery returns multiple columns"
         cause="The subquery inside IN returns more than one column. IN requires the subquery to return exactly one column — the value to compare against. SELECT customer_id, first_name FROM customers returns two columns, so WHERE customer_id IN (SELECT customer_id, first_name FROM customers) fails with an error like 'subquery must return only one column'."
-        fix="Select only the column needed for the comparison: WHERE customer_id IN (SELECT customer_id FROM customers WHERE ...). If you accidentally included extra columns, remove them. If you need data from multiple columns, use a JOIN or EXISTS instead of IN. EXISTS does not require a single-column subquery: WHERE EXISTS (SELECT 1 FROM customers c WHERE c.customer_id = o.customer_id AND c.city = 'Bangalore') — the 1 is a placeholder, EXISTS only cares whether any row exists."
+        fix="Select only the column needed for the comparison: WHERE customer_id IN (SELECT customer_id FROM customers WHERE ...). If you accidentally included extra columns, remove them. If you need data from multiple columns, use a JOIN or EXISTS instead of IN. EXISTS does not require a single-column subquery: WHERE EXISTS (SELECT 1 FROM customers c WHERE c.customer_id = o.customer_id AND c.city = 'Seattle') — the 1 is a placeholder, EXISTS only cares whether any row exists."
       />
 
       <HR />
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart weekly operations report needs three things from one combined query: Show all orders where (1) the store is one of the Bangalore or Hyderabad stores (ST001, ST002, ST003, ST004), AND (2) the total_amount is between ₹400 and ₹1,500, AND (3) the order_status is NOT one of 'Cancelled' or 'Returned'. Show order_id, store_id, order_date, order_status, payment_method, and total_amount. Sort by total_amount descending."
+        question="The FreshCart weekly operations report needs three things from one combined query: Show all orders where (1) the store is one of the Seattle or Austin stores (ST001, ST002, ST003, ST004), AND (2) the total_amount is between ₹400 and ₹1,500, AND (3) the order_status is NOT one of 'Cancelled' or 'Returned'. Show order_id, store_id, order_date, order_status, payment_method, and total_amount. Sort by total_amount descending."
         hint="Three conditions: store_id IN (...), total_amount BETWEEN 400 AND 1500, order_status NOT IN ('Cancelled', 'Returned'). All three connected with AND."
         answer={`SELECT
   order_id,
@@ -807,7 +807,7 @@ ORDER BY total_amount DESC;`}
       {/* ── Key Takeaways ── */}
       <KeyTakeaways
         items={[
-          'IN checks whether a column value matches any value in a list. WHERE city IN (\'Bangalore\', \'Hyderabad\') is equivalent to WHERE city = \'Bangalore\' OR city = \'Hyderabad\' — just cleaner.',
+          'IN checks whether a column value matches any value in a list. WHERE city IN (\'Seattle\', \'Austin\') is equivalent to WHERE city = \'Seattle\' OR city = \'Austin\' — just cleaner.',
           'NOT IN excludes rows matching any value in the list. It is equivalent to multiple &lt;&gt; conditions combined with AND.',
           'BETWEEN checks for an inclusive range. WHERE price BETWEEN 50 AND 200 includes both 50 and 200. It is equivalent to WHERE price >= 50 AND price <= 200.',
           'NOT BETWEEN excludes the range. It is equivalent to column &lt; lower OR column > upper — the boundary values themselves are excluded from NOT BETWEEN results.',

@@ -743,7 +743,7 @@ def fetch_payments_safe(params: dict) -> dict:
             timeout=30,
         )
     except CircuitOpenError:
-        log.warning('Razorpay API circuit is OPEN — skipping payment fetch')
+        log.warning('Stripe API circuit is OPEN — skipping payment fetch')
         # Return empty result or raise depending on pipeline logic
         return {'items': [], 'cursor': None}
     except Exception as exc:
@@ -1388,7 +1388,7 @@ python dlq_reprocess.py \
             q: 'Q1. How do you decide whether to retry an error or fail immediately? Walk me through your classification system.',
             a: `The core principle is simple: transient errors should be retried, permanent errors should fail immediately and alert. The classification determines everything about how the pipeline responds.
 
-Transient errors are failures where the same request would likely succeed if tried again — the underlying cause is temporary and will resolve without code changes. Network timeouts, HTTP 503 service unavailable, 502 bad gateway, database connection timeouts, and HTTP 429 rate limit responses all fall here. A Razorpay API returning 503 during a deploy will return 200 seconds later. A database returning a connection timeout during peak load will accept connections a minute later. For these, retry with exponential backoff and jitter.
+Transient errors are failures where the same request would likely succeed if tried again — the underlying cause is temporary and will resolve without code changes. Network timeouts, HTTP 503 service unavailable, 502 bad gateway, database connection timeouts, and HTTP 429 rate limit responses all fall here. A Stripe API returning 503 during a deploy will return 200 seconds later. A database returning a connection timeout during peak load will accept connections a minute later. For these, retry with exponential backoff and jitter.
 
 Permanent errors are failures where retrying will produce the same failure — the cause requires a code change, configuration change, or external intervention to fix. HTTP 401 unauthorized means the credentials are wrong and will continue to be wrong until someone rotates them. HTTP 400 bad request means the pipeline is sending a malformed request. A schema mismatch means a column was renamed in the source. Data validation failures mean a specific record is genuinely invalid. For these, fail immediately, send an alert, and do not waste time retrying.
 
@@ -1428,7 +1428,7 @@ The circuit breaker has three states. Closed is normal operation — all request
 
 In data engineering, circuit breakers are most valuable when a pipeline calls external services that can become temporarily unavailable: payment APIs, shipping APIs, geocoding services, CRM systems. Without a circuit breaker, a pipeline calling a temporarily down API keeps trying, consuming connection pool slots, creating timeout delays, and potentially cascading the failure to other parts of the pipeline. With a circuit breaker, once the API is clearly down, new requests fail immediately, the pipeline logs the circuit open state, and the circuit automatically tests recovery.
 
-For internal services like databases, circuit breakers are less necessary because database connection pooling already provides similar protection. But for external third-party APIs where the pipeline has no visibility into the service's health — Razorpay, ShipFast, a vendor SFTP — a circuit breaker prevents 15 minutes of timeout waits from blocking an entire pipeline run.
+For internal services like databases, circuit breakers are less necessary because database connection pooling already provides similar protection. But for external third-party APIs where the pipeline has no visibility into the service's health — Stripe, ShipFast, a vendor SFTP — a circuit breaker prevents 15 minutes of timeout waits from blocking an entire pipeline run.
 
 The circuit breaker threshold should be tuned to the service's typical failure patterns. A service with occasional brief 503 errors during deploys should have a higher failure threshold (10 failures in 60 seconds) than a service with consistently high reliability where any failure is unusual.`,
           },

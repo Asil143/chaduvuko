@@ -386,7 +386,7 @@ export default function SkillTree({ roadmap }: Props) {
           <div style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 12, padding: '18px 20px' }}>
             <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: '.12em', textTransform: 'uppercase' as const, color: '#0a8c3e' }}>Reward — unlocked after 5 nodes complete</div>
             <div style={{ fontSize: 15, fontWeight: 500, color: 'var(--text)', marginTop: 5 }}>{roadmap.title} salaries · India 2026</div>
-            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2, marginBottom: 14 }}>Bangalore · 2–4 yrs exp · Glassdoor, Naukri, AmbitionBox</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2, marginBottom: 14 }}>Seattle · 2–4 yrs exp · Glassdoor, LinkedIn, Glassdoor</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(130px,1fr))', gap: 7 }}>
               {roadmap.salaryData.map((entry, i) => (
                 <div key={i} style={{ background: 'var(--surface)', borderRadius: 9, padding: '12px 13px', border: '1px solid var(--border)' }}>

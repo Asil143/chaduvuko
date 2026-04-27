@@ -12,8 +12,8 @@ export const genaiDeveloperRoadmap: Roadmap = {
   salaryData: [
     { company: 'Startup (early stage)', range: '₹10–18 LPA', note: 'Strong project portfolio essential' },
     { company: 'Mid-stage startup', range: '₹18–32 LPA', note: 'RAG + agent experience valued' },
-    { company: 'MNC / GCC', range: '₹25–45 LPA', note: 'Infosys AI Lab, Deloitte AI' },
-    { company: 'AI-first company', range: '₹35–60 LPA', note: 'Sarvam AI, Krutrim, etc.' },
+    { company: 'MNC / GCC', range: '₹25–45 LPA', note: 'Deloitte AI Lab, Deloitte AI' },
+    { company: 'AI-first company', range: '₹35–60 LPA', note: 'Cohere, Mistral, etc.' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your GenAI developer journey starts. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },

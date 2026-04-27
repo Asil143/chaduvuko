@@ -517,7 +517,7 @@ WITH RECURSIVE paths AS (
     distance                      AS total_distance,
     1                             AS hops
   FROM routes
-  WHERE from_node = 'Bangalore'
+  WHERE from_node = 'Seattle'
 
   UNION ALL
 
@@ -541,7 +541,7 @@ SELECT
   total_distance,
   hops
 FROM paths
-WHERE to_node = 'Mumbai'
+WHERE to_node = 'New York'
 ORDER BY total_distance
 LIMIT 5;`}
       />
@@ -551,18 +551,18 @@ LIMIT 5;`}
 -- Build a route graph inline and find all paths
 WITH routes(from_city, to_city, km) AS (
   VALUES
-    ('Bangalore', 'Mumbai',    981),
-    ('Bangalore', 'Hyderabad', 575),
-    ('Bangalore', 'Chennai',   346),
-    ('Hyderabad', 'Mumbai',    711),
-    ('Hyderabad', 'Pune',      560),
-    ('Chennai',   'Hyderabad', 630),
-    ('Pune',      'Mumbai',    150),
-    ('Mumbai',    'Pune',      150),
-    ('Mumbai',    'Delhi',    1400)
+    ('Seattle', 'New York',    981),
+    ('Seattle', 'Austin', 575),
+    ('Seattle', 'Chicago',   346),
+    ('Austin', 'New York',    711),
+    ('Austin', 'Boston',      560),
+    ('Chicago',   'Austin', 630),
+    ('Boston',      'New York',    150),
+    ('New York',    'Boston',      150),
+    ('New York',    'Delhi',    1400)
 ),
 RECURSIVE all_paths AS (
-  -- Anchor: start at Bangalore
+  -- Anchor: start at Seattle
   SELECT
     from_city,
     to_city,
@@ -570,7 +570,7 @@ RECURSIVE all_paths AS (
     ARRAY[from_city, to_city]     AS visited,
     1                             AS hops
   FROM routes
-  WHERE from_city = 'Bangalore'
+  WHERE from_city = 'Seattle'
 
   UNION ALL
 
@@ -915,7 +915,7 @@ ORDER BY depth, node_name;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a data engineer at Flipkart. The supply chain team needs a complete product component cost report — for any product, show every raw component it contains at any depth, the cumulative quantity needed, and the total cost contribution. The product hierarchy is 3–5 levels deep and changes weekly. They need this as an on-demand SQL query, not a hardcoded report.</P>
+      <P>You are a data engineer at Amazon. The supply chain team needs a complete product component cost report — for any product, show every raw component it contains at any depth, the cumulative quantity needed, and the total cost contribution. The product hierarchy is 3–5 levels deep and changes weekly. They need this as an on-demand SQL query, not a hardcoded report.</P>
 
       <TimeBlock time="2:00 PM" label="Requirement: explode any product's BOM on demand">
         Given a product_id, return all components at every depth, their cumulative quantities (multiplied through the hierarchy), and total cost. Works for any product regardless of depth.

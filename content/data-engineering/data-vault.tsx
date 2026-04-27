@@ -166,12 +166,12 @@ DATA VAULT TABLE TYPE 3: SATELLITE
 
   SAT_CUSTOMER_ORDERS_DB (from orders database):
     hub_customer_hk  load_dts          load_end_dts      city       tier
-    MD5('4201938')   2024-01-15 06:00  2026-02-01 06:00  Bangalore  silver  ← expired
-    MD5('4201938')   2026-02-01 06:00  NULL              Hyderabad  silver  ← current
+    MD5('4201938')   2024-01-15 06:00  2026-02-01 06:00  Seattle  silver  ← expired
+    MD5('4201938')   2026-02-01 06:00  NULL              Austin  silver  ← current
 
   SAT_CUSTOMER_LOYALTY_APP (from loyalty app — separate satellite):
     hub_customer_hk  load_dts          city       loyalty_points
-    MD5('4201938')   2024-03-01 09:00  Bangalore  4200
+    MD5('4201938')   2024-03-01 09:00  Seattle  4200
 
   TWO satellites for the same customer: both raw versions preserved for audit.`}</CodeBox>
       </section>

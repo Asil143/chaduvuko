@@ -50,7 +50,7 @@ const modules: Module[] = [
     num: '02', phase: 1, color: phaseColors[1], status: 'live', xp: 100, readTime: '30 min',
     title: 'What is Data Engineering?',
     slug: 'what-is-data-engineering',
-    description: 'The role, the career, a real day-in-the-life at a Bangalore startup, and why this job exists at all. The clearest explanation you will find anywhere.',
+    description: 'The role, the career, a real day-in-the-life at a Seattle startup, and why this job exists at all. The clearest explanation you will find anywhere.',
     topics: ['The role defined', 'Day-in-the-life', 'Why it exists', 'Career paths', 'What DEs actually build'],
   },
   {

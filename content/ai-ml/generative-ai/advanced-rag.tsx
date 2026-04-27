@@ -198,7 +198,7 @@ export default function AdvancedRAGPage() {
         </p>
 
         <p style={S.p}>
-          A Razorpay knowledge base assistant built with naive RAG will struggle
+          A Stripe knowledge base assistant built with naive RAG will struggle
           with queries like "what is error code 400?" — semantic search finds
           chunks about general payment errors (semantically similar) but misses
           the chunk that contains exactly "400" (keyword match). It will struggle
@@ -273,18 +273,18 @@ from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer
 import re
 
-# ── Razorpay knowledge base ───────────────────────────────────────────
+# ── Stripe knowledge base ───────────────────────────────────────────
 KB_CHUNKS = [
-    {'id': '1', 'text': 'Razorpay domestic payments settle within T+2 business days. Settlement excludes weekends and public holidays.'},
-    {'id': '2', 'text': 'International payments on Razorpay settle within T+7 business days with SWIFT charges of USD 15-25.'},
+    {'id': '1', 'text': 'Stripe domestic payments settle within T+2 business days. Settlement excludes weekends and public holidays.'},
+    {'id': '2', 'text': 'International payments on Stripe settle within T+7 business days with SWIFT charges of USD 15-25.'},
     {'id': '3', 'text': 'Error code BAD_REQUEST_ERROR occurs when mandatory payment parameters are missing or invalid in the API call.'},
     {'id': '4', 'text': 'Error code GATEWAY_ERROR indicates the bank gateway timed out. Retry the payment after 5 minutes.'},
     {'id': '5', 'text': 'Error code BAD_REQUEST_ERROR with description invalid_api_key means the API key is incorrect or expired.'},
     {'id': '6', 'text': 'Refunds for UPI payments take 2-3 business days. Credit card refunds take 5-7 business days.'},
     {'id': '7', 'text': 'Webhook signature verification uses HMAC SHA256. Compute the signature using the webhook secret from dashboard.'},
-    {'id': '8', 'text': 'The Razorpay payment link expires after 15 minutes by default. Custom expiry can be set via the API.'},
-    {'id': '9', 'text': 'Razorpay supports UPI, credit cards, debit cards, net banking, and wallets as payment methods.'},
-    {'id': '10', 'text': 'To enable international payments on Razorpay, submit KYC documents and business registration proof.'},
+    {'id': '8', 'text': 'The Stripe payment link expires after 15 minutes by default. Custom expiry can be set via the API.'},
+    {'id': '9', 'text': 'Stripe supports UPI, credit cards, debit cards, net banking, and wallets as payment methods.'},
+    {'id': '10', 'text': 'To enable international payments on Stripe, submit KYC documents and business registration proof.'},
 ]
 
 texts = [c['text'] for c in KB_CHUNKS]
@@ -556,7 +556,7 @@ PARENT_CHUNKS = [
     {
         'id': 'P1',
         'text': (
-            "Razorpay Settlement Overview. "
+            "Stripe Settlement Overview. "
             "Domestic payments settle within T+2 business days. "
             "International payments settle within T+7 business days. "
             "Settlement is initiated at 5 PM IST each business day. "
@@ -573,7 +573,7 @@ PARENT_CHUNKS = [
     {
         'id': 'P2',
         'text': (
-            "Razorpay Error Codes Reference. "
+            "Stripe Error Codes Reference. "
             "BAD_REQUEST_ERROR: mandatory parameters missing or invalid. "
             "GATEWAY_ERROR: bank gateway timeout, retry after 5 minutes. "
             "SERVER_ERROR: internal error, contact support if persistent. "
@@ -631,12 +631,12 @@ for r in results:
 
 # ── Technique 3: Query decomposition ─────────────────────────────────
 print("Query decomposition:")
-complex_query = "How do I set up Razorpay for international payments and what fees will I pay?"
+complex_query = "How do I set up Stripe for international payments and what fees will I pay?"
 print(f"Complex query: '{complex_query}'")
 print("Decompose into sub-queries:")
 sub_queries = [
-    "How do I enable international payments on Razorpay?",
-    "What are the fees for international payments on Razorpay?",
+    "How do I enable international payments on Stripe?",
+    "What are the fees for international payments on Stripe?",
 ]
 for q in sub_queries:
     print(f"  → '{q}'")`} />
@@ -798,14 +798,14 @@ def context_recall_score(retrieved_contexts: list[str],
 # ── Evaluate a full RAG example ───────────────────────────────────────
 rag_examples = [
     {
-        'question':   "What does GATEWAY_ERROR mean on Razorpay?",
+        'question':   "What does GATEWAY_ERROR mean on Stripe?",
         'retrieved':  ["Error code GATEWAY_ERROR indicates the bank gateway timed out. Retry the payment after 5 minutes."],
         'answer':     "GATEWAY_ERROR means the bank gateway timed out. You should retry the payment after 5 minutes.",
         'reference':  "GATEWAY_ERROR indicates the bank gateway timed out. Retry after 5 minutes.",
         'type':       'good — faithful and relevant',
     },
     {
-        'question':   "What does GATEWAY_ERROR mean on Razorpay?",
+        'question':   "What does GATEWAY_ERROR mean on Stripe?",
         'retrieved':  ["Error code GATEWAY_ERROR indicates the bank gateway timed out. Retry the payment after 5 minutes."],
         'answer':     "GATEWAY_ERROR typically means server overload. This is common during peak hours in India around 8-10 PM. Try switching payment methods or using a VPN.",
         'reference':  "GATEWAY_ERROR indicates the bank gateway timed out. Retry after 5 minutes.",
@@ -886,7 +886,7 @@ class ProductionRAGPipeline:
             f"[{i+1}] {c['text']}"
             for i, c in enumerate(chunks)
         ])
-        return f"""You are a Razorpay technical support assistant.
+        return f"""You are a Stripe technical support assistant.
 Answer the question using ONLY the context below.
 After your answer, list which source numbers you used as [1], [2], etc.
 If the answer is not in the context, say "I don't have that information."
@@ -998,7 +998,7 @@ for q in test_questions:
           covers the complete production agent: planning across multiple steps,
           calling real APIs, maintaining memory across turns, handling failures
           gracefully, and the architectural patterns used at companies like
-          Razorpay, Flipkart, and Swiggy to build internal AI tools
+          Stripe, Amazon, and DoorDash to build internal AI tools
           that handle thousands of requests per day.
         </p>
 

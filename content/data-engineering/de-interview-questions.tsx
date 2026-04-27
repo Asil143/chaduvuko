@@ -118,8 +118,8 @@ export default function DEInterviewQuestionsModule() {
       <HighlightBox>
         <Para>
           <strong>How to use this module:</strong> Every answer here is written
-          at the depth a senior engineer at Razorpay, Flipkart, Meesho, CRED,
-          or a FAANG India team would expect. Do not memorise these answers —
+          at the depth a senior engineer at Stripe, Amazon, Shopify, Brex,
+          or a FAANG team would expect. Do not memorise these answers —
           understand them. An interviewer who asks a follow-up question will
           immediately detect a memorised answer. Read an answer, close the page,
           explain it out loud as if to a colleague. That is the only way to
@@ -207,10 +207,10 @@ for record in pipeline:
 {`from functools import reduce
 
 orders = [
-    {'order_id': 'O1', 'total_paise': 34900, 'status': 'completed', 'city': 'Hyderabad'},
-    {'order_id': 'O2', 'total_paise': 0,     'status': 'cancelled', 'city': 'Bengaluru'},
-    {'order_id': 'O3', 'total_paise': 12500, 'status': 'completed', 'city': 'Hyderabad'},
-    {'order_id': 'O4', 'total_paise': 67000, 'status': 'completed', 'city': 'Mumbai'},
+    {'order_id': 'O1', 'total_paise': 34900, 'status': 'completed', 'city': 'Austin'},
+    {'order_id': 'O2', 'total_paise': 0,     'status': 'cancelled', 'city': 'San Francisco'},
+    {'order_id': 'O3', 'total_paise': 12500, 'status': 'completed', 'city': 'Austin'},
+    {'order_id': 'O4', 'total_paise': 67000, 'status': 'completed', 'city': 'New York'},
 ]
 
 # MAP: transform every element — 1-in, 1-out
@@ -595,14 +595,14 @@ class TestNormaliseOrder:
             'order_id': ' o1234 ',
             'total_paise': '34900',
             'status': 'COMPLETED',
-            'city': 'Hyderabad',
+            'city': 'Austin',
             'created_at': '2026-03-20T14:23:11Z',
         }
         result = normalise_order(raw)
         assert result['order_id'] == 'O1234'       # stripped and uppercased
         assert result['total_paise'] == 34900       # coerced to int
         assert result['status'] == 'completed'      # lowercased
-        assert result['city'] == 'Hyderabad'
+        assert result['city'] == 'Austin'
         assert result['order_date'] == '2026-03-20' # extracted from ISO timestamp
 
     def test_missing_city_becomes_none(self):
@@ -1700,13 +1700,13 @@ volume_query = """
     SELECT
         order_date,
         COUNT(*)                                      AS row_count,
-        SUM(total_paise) / 1e7                        AS total_revenue_crore
+        SUM(total_paise) / 1e7                        AS total_revenue_million
     FROM gold.daily_store_stats
     WHERE order_date = CURRENT_DATE - 1
 """
 # Alert: row_count < 8 (we expect 10 stores — if < 8, something is missing)
-# Alert: total_revenue_crore < 50 (business floor — if below, likely a bug)
-# Alert: total_revenue_crore > 500 (business ceiling — if above, likely a duplicate)
+# Alert: total_revenue_million < 50 (business floor — if below, likely a bug)
+# Alert: total_revenue_million > 500 (business ceiling — if above, likely a duplicate)
 
 # 3. SCHEMA — did the source schema change unexpectedly?
 # dbt tests catch this in the transformation layer:
@@ -1798,7 +1798,7 @@ df.filter(...).cache()   # forces materialisation — breaks lazy optimisation
 # Skewed: most tasks finish in 30s, one takes 45 minutes
 
 # Common causes:
-# 1. JOIN key with dominant value (CRED: one large enterprise customer)
+# 1. JOIN key with dominant value (Brex: one large enterprise customer)
 # 2. NULL join key (all NULLs hash to the same partition)
 # 3. Partition key = low-cardinality column (payment_method: UPI = 80%)
 
@@ -2205,11 +2205,11 @@ CREATE TABLE customers_dim (
 -- customer_id is what business users search by
 
 -- SCD Type 2 with surrogate keys:
--- Customer C98765 moves from Hyderabad to Bengaluru:
--- Old row: customer_sk=1001, customer_id='C98765', city='Hyderabad', is_current=FALSE
--- New row: customer_sk=1847, customer_id='C98765', city='Bengaluru', is_current=TRUE
--- Fact table rows from 2025 reference customer_sk=1001 (Hyderabad at the time)
--- Fact table rows from 2026 reference customer_sk=1847 (Bengaluru now)
+-- Customer C98765 moves from Austin to San Francisco:
+-- Old row: customer_sk=1001, customer_id='C98765', city='Austin', is_current=FALSE
+-- New row: customer_sk=1847, customer_id='C98765', city='San Francisco', is_current=TRUE
+-- Fact table rows from 2025 reference customer_sk=1001 (Austin at the time)
+-- Fact table rows from 2026 reference customer_sk=1847 (San Francisco now)
 -- Historical analysis is automatically correct — no additional logic needed`}
         </CodeBox>
       </QA>
@@ -2266,28 +2266,28 @@ CREATE TABLE customers_dim (
           reflects what actually happened or what the world looks like today.
         </Para>
         <CodeBox label="SCD types 1, 2, 3 — comparison">
-{`-- Scenario: customer Priya moves from Hyderabad to Bengaluru
--- We have historical orders from when she was in Hyderabad
+{`-- Scenario: customer Priya moves from Austin to San Francisco
+-- We have historical orders from when she was in Austin
 
 -- SCD TYPE 1: Overwrite — no history preserved
--- UPDATE customers SET city = 'Bengaluru' WHERE customer_id = 'C98765'
--- After: customer city = 'Bengaluru' — Hyderabad is gone from the record
--- Historical orders: "what city were these orders from?" → Bengaluru (WRONG)
+-- UPDATE customers SET city = 'San Francisco' WHERE customer_id = 'C98765'
+-- After: customer city = 'San Francisco' — Austin is gone from the record
+-- Historical orders: "what city were these orders from?" → San Francisco (WRONG)
 -- Use when: the old value was simply wrong (data correction), not a real change
 -- Example: fixing a misspelled city name
 
 -- SCD TYPE 2: Add new row — full history preserved (covered in Q26)
--- Old row stays: C98765, Hyderabad, valid_to=2026-03-19, is_current=FALSE
--- New row added: C98765, Bengaluru, valid_from=2026-03-20, is_current=TRUE
--- Historical orders reference old surrogate key → Hyderabad ✓
+-- Old row stays: C98765, Austin, valid_to=2026-03-19, is_current=FALSE
+-- New row added: C98765, San Francisco, valid_from=2026-03-20, is_current=TRUE
+-- Historical orders reference old surrogate key → Austin ✓
 -- Use when: the history of changes matters for analysis (most common for dimensions)
 
 -- SCD TYPE 3: Add new column — one version back
 -- ALTER TABLE customers ADD COLUMN previous_city VARCHAR(50)
 -- UPDATE customers
---   SET previous_city = city, city = 'Bengaluru'
+--   SET previous_city = city, city = 'San Francisco'
 --   WHERE customer_id = 'C98765'
--- After: customer has city='Bengaluru' and previous_city='Hyderabad'
+-- After: customer has city='San Francisco' and previous_city='Austin'
 -- Advantage: no row explosion for small dimensions with infrequent changes
 -- Disadvantage: only tracks ONE previous value — cannot handle two changes
 -- Use when: only one level of history is needed (e.g., "current vs previous tier")
@@ -2363,8 +2363,8 @@ FROM order_fact   -- average order value: derived from two additive facts ✓
         <CodeBox label="row vs columnar storage — the analytics advantage">
 {`# ROW-ORIENTED STORAGE (PostgreSQL, MySQL — OLTP optimised):
 # Each row is stored contiguously on disk
-# Row 1: [order_id=O1, customer_id=C1, total_paise=34900, status=completed, city=Hyderabad, ...]
-# Row 2: [order_id=O2, customer_id=C2, total_paise=12500, status=cancelled, city=Bengaluru, ...]
+# Row 1: [order_id=O1, customer_id=C1, total_paise=34900, status=completed, city=Austin, ...]
+# Row 2: [order_id=O2, customer_id=C2, total_paise=12500, status=cancelled, city=San Francisco, ...]
 # 
 # Fast for: fetching ONE complete row (point lookup: "give me order O1 with all its columns")
 # Slow for: reading ONE column across MANY rows (scan 1B rows × 10 columns to read 1 column)

@@ -190,7 +190,7 @@ export default function MLPipelinesFeatureStoresPage() {
         </h2>
 
         <p style={S.p}>
-          Every ML model at Swiggy, Razorpay, and Flipkart runs on a pipeline.
+          Every ML model at DoorDash, Stripe, and Amazon runs on a pipeline.
           The delivery time prediction model retrains every night on the day's
           orders. The fraud detection model retrains weekly as new fraud patterns
           emerge. The product recommendation model retrains daily as inventory
@@ -376,7 +376,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import os, tempfile
 
-# ── Simulate Swiggy delivery time prediction feature store ────────────
+# ── Simulate DoorDash delivery time prediction feature store ────────────
 
 # ── Step 1: Define feature views (the schema) ─────────────────────────
 # In a real Feast setup these are in feature_store.yaml + feature_repo/
@@ -690,7 +690,7 @@ print(f"\nPipeline result: {result}")`} />
       {/* ══ SECTION 5 — AIRFLOW DAG PATTERN ═════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Industry standard orchestration</span>
-        <h2 style={S.h2}>Airflow DAGs — the pattern used at Swiggy, Flipkart, and Razorpay</h2>
+        <h2 style={S.h2}>Airflow DAGs — the pattern used at DoorDash, Amazon, and Stripe</h2>
 
         <p style={S.p}>
           Apache Airflow is the most widely deployed ML orchestrator in India.
@@ -761,7 +761,7 @@ def evaluate_and_register_fn(**context):
 with DAG(
     dag_id="delivery_time_training",
     default_args=DEFAULT_ARGS,
-    description="Daily retraining of Swiggy delivery time model",
+    description="Daily retraining of DoorDash delivery time model",
     schedule_interval="0 2 * * *",   # 2 AM daily
     start_date=days_ago(1),
     catchup=False,
@@ -1069,7 +1069,7 @@ print("""
           'A feature store has two layers: the offline store (full history in S3/BigQuery/Parquet, used for training with point-in-time queries) and the online store (latest values in Redis, used for inference at ~1ms latency). Materialisation jobs sync the offline store to the online store, typically daily via an Airflow DAG.',
           'Point-in-time correct feature retrieval is mandatory for training. For each training event at time T, only use feature values computed from data with timestamp ≤ T. Fetching the latest features regardless of event time causes data leakage — the model appears excellent in evaluation but fails in production because future data is not available at inference time.',
           'Prefect turns Python functions into pipeline tasks with @task and @flow decorators. Tasks get retries, caching, and logging automatically. Flows define the DAG structure. Run locally for development, deploy to Prefect Cloud or self-hosted server for production scheduling.',
-          'Airflow DAGs define ML pipelines as Python — tasks are PythonOperator/BranchPythonOperator/EmailOperator nodes connected by >> dependencies. BranchPythonOperator enables conditional logic (pass data validation → train, fail → alert). XCom passes data between tasks. schedule_interval sets the cron schedule. Used by Swiggy, Flipkart, Razorpay, and most Indian unicorns.',
+          'Airflow DAGs define ML pipelines as Python — tasks are PythonOperator/BranchPythonOperator/EmailOperator nodes connected by >> dependencies. BranchPythonOperator enables conditional logic (pass data validation → train, fail → alert). XCom passes data between tasks. schedule_interval sets the cron schedule. Used by DoorDash, Amazon, Stripe, and most Indian unicorns.',
           'The most dangerous ML pipeline failure is silent: feature extraction succeeds but returns 0 or wrong rows, training proceeds on bad data, a degraded model is promoted. Always add explicit data quality gate tasks that check row counts, null rates, and value distributions before training. Make quality checks raise exceptions on failure — Airflow marks tasks as failed only on unhandled exceptions.',
         ]}
       />

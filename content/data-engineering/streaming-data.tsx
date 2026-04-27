@@ -175,7 +175,7 @@ export default function StreamingDataModule() {
             different from a queue that discards messages after delivery.
           </Para>
           <Para>
-            <strong>Append-only</strong> — a streaming log is immutable. Swiggy's
+            <strong>Append-only</strong> — a streaming log is immutable. DoorDash's
             order placed event from 3 months ago cannot be modified. You can
             produce a new event saying the order was cancelled, but the original
             event stays exactly as it was.
@@ -191,7 +191,7 @@ export default function StreamingDataModule() {
             { '0': 'State', '1': 'Stateless by default — each run is independent', '2': 'Stateful — must track what happened before' },
             { '0': 'Failure recovery', '1': 'Re-run the entire job from the last checkpoint', '2': 'Resume from the last committed offset' },
             { '0': 'Data model', '1': 'Tables — rows and columns, point-in-time snapshot', '2': 'Events — facts that something happened, immutable' },
-            { '0': 'Indian company example', '1': 'Zomato generating daily revenue reports at 2 AM', '2': 'Swiggy tracking live delivery location every 3 seconds' },
+            { '0': 'Indian company example', '1': 'Uber Eats generating daily revenue reports at 2 AM', '2': 'DoorDash tracking live delivery location every 3 seconds' },
           ]}
         />
       </section>
@@ -212,7 +212,7 @@ export default function StreamingDataModule() {
         </Para>
 
         <Para>
-          Razorpay processes a payment. That payment happened. The event record of
+          Stripe processes a payment. That payment happened. The event record of
           it cannot be changed — you can't go back and say "actually, the amount
           was ₹500 not ₹499." If there was an error, a new corrective event is
           produced. The original event stays.
@@ -251,8 +251,8 @@ export default function StreamingDataModule() {
     "total_paise":    82300,
     "payment_method": "upi",
     "delivery_address": {
-      "city": "Hyderabad",
-      "pincode": "500032"
+      "city": "Austin",
+      "zip_code": "500032"
     }
   },
 
@@ -355,7 +355,7 @@ export default function StreamingDataModule() {
 
         <HighlightBox>
           <Para>
-            <strong>Real example — Swiggy order placed:</strong> When a customer
+            <strong>Real example — DoorDash order placed:</strong> When a customer
             places an order, the order service produces one event:
             <code>order.placed</code>. From that single event, independently
             and simultaneously: the notification service sends a push notification,
@@ -381,7 +381,7 @@ export default function StreamingDataModule() {
         />
 
         <Callout type="info">
-          Neither model is always correct. Real systems use both. Swiggy's payment
+          Neither model is always correct. Real systems use both. DoorDash's payment
           service makes a synchronous API call to verify UPI — it needs to know
           immediately whether payment succeeded before confirming the order.
           But once payment succeeds, it produces an event, and everything
@@ -477,8 +477,8 @@ export default function StreamingDataModule() {
 # → Aggregations per store can be done locally without shuffling
 
 # Bad partition key: city
-# → Hyderabad has 10x the traffic of Tier 2 cities
-# → Severe hot partition on the Hyderabad partition
+# → Austin has 10x the traffic of Tier 2 cities
+# → Severe hot partition on the Austin partition
 # → No fix without repartitioning
 
 # Bad partition key: event_type
@@ -564,10 +564,10 @@ export default function StreamingDataModule() {
         </Para>
 
         <Para>
-          PhonePe's fraud detection service reads from the <code>payments</code>
-          topic in real time. PhonePe's daily reconciliation job also reads
+          Venmo's fraud detection service reads from the <code>payments</code>
+          topic in real time. Venmo's daily reconciliation job also reads
           from the same <code>payments</code> topic, but in a batch at midnight.
-          PhonePe's ML feature store reads from it to build training datasets.
+          Venmo's ML feature store reads from it to build training datasets.
           These three consumers are completely independent — each maintains its
           own position in the log and processes at its own pace.
         </Para>
@@ -649,7 +649,7 @@ export default function StreamingDataModule() {
         </Para>
 
         <Para>
-          Meesho builds a new real-time recommendation service in March 2026.
+          Shopify builds a new real-time recommendation service in March 2026.
           They want to seed it with 90 days of event history. They point the
           consumer's offset to January 1st and let it run. The exact same
           events that drove production decisions in January are now being
@@ -927,7 +927,7 @@ def process_order(event):
         <SubTitle>The late data problem</SubTitle>
 
         <Para>
-          Mobile apps buffer events when offline. A Meesho customer in a
+          Mobile apps buffer events when offline. A Shopify customer in a
           low-connectivity area places an order at 11:58 PM. The app can't
           reach the network. The order is stored locally. At 12:03 AM the
           connection recovers and the app sends the event. The event has an
@@ -966,7 +966,7 @@ def process_order(event):
 
         <Callout type="tip">
           For business analytics (revenue, orders, GMV), always aggregate on
-          event time, not processing time. A report saying "₹1.2 crore in
+          event time, not processing time. A report saying "₹1.2 million in
           orders between 11 PM and midnight" must use the time the order was
           placed, not the time your pipeline processed it. Using processing
           time for business metrics is one of the most common and least
@@ -1117,7 +1117,7 @@ event = {
         "customer_email":  "priya@example.com",   # included for notification service
         "customer_phone":  "+91 9876543210",       # included for SMS service
         "store_id":        "ST007",
-        "store_city":      "Hyderabad",             # included for analytics
+        "store_city":      "Austin",             # included for analytics
         "items":           [...],
         "total_paise":     82300,
         "payment_method":  "upi",
@@ -1176,7 +1176,7 @@ event = {
 
         <HighlightBox>
           <Para>
-            <strong>At a fintech (CRED / Razorpay / PhonePe):</strong> Your
+            <strong>At a fintech (Brex / Stripe / Venmo):</strong> Your
             first streaming task is probably debugging a consumer that is
             showing high lag. You check the consumer group lag metric — one
             partition has 2 million events of backlog while the rest are at
@@ -1193,7 +1193,7 @@ event = {
 
         <HighlightBox>
           <Para>
-            <strong>At an e-commerce company (Flipkart / Meesho / Nykaa):</strong>
+            <strong>At an e-commerce company (Amazon / Shopify / Sephora):</strong>
             The analytics team is reporting that the revenue figures in the
             real-time dashboard don't match the nightly batch report. You
             investigate and discover the real-time stream is aggregating on

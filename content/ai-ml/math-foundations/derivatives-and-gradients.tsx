@@ -156,7 +156,7 @@ export default function DerivativesGradientsPage() {
         </h2>
 
         <p style={S.p}>
-          Go back to the Swiggy delivery model. You trained a linear regression.
+          Go back to the DoorDash delivery model. You trained a linear regression.
           For an order with distance 4km, the model predicts 28 minutes.
           The actual delivery took 37 minutes. The model is off by 9 minutes.
         </p>
@@ -700,7 +700,7 @@ print(f"Loss after one step: {mse_loss(y_pred, y_true):.4f}")
           ))}
         </div>
 
-        <CodeBlock code={`# Complete gradient descent training loop for Swiggy delivery prediction
+        <CodeBlock code={`# Complete gradient descent training loop for DoorDash delivery prediction
 
 np.random.seed(42)
 n = 1000
@@ -1113,7 +1113,7 @@ print(f"w1.grad = {w1.grad:.3f}")   # ∂L/∂w1
 
 # import torch
 #
-# x  = torch.tensor([3.2, 2.0, 15.0, 7.0])       # one Swiggy order
+# x  = torch.tensor([3.2, 2.0, 15.0, 7.0])       # one DoorDash order
 # W  = torch.randn(4, 1, requires_grad=True)       # weights to learn
 # b  = torch.zeros(1,    requires_grad=True)       # bias to learn
 # y  = torch.tensor([37.0])                        # actual delivery time

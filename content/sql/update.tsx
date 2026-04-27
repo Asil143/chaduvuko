@@ -338,9 +338,9 @@ ORDER BY total_spent DESC;`}
 -- Each city tier gets a different target
 UPDATE stores
 SET monthly_target = CASE city
-  WHEN 'Bangalore' THEN monthly_target * 1.15  -- 15% increase for metro
-  WHEN 'Hyderabad' THEN monthly_target * 1.12  -- 12% increase
-  WHEN 'Mumbai'    THEN monthly_target * 1.15  -- 15% increase for metro
+  WHEN 'Seattle' THEN monthly_target * 1.15  -- 15% increase for metro
+  WHEN 'Austin' THEN monthly_target * 1.12  -- 12% increase
+  WHEN 'New York'    THEN monthly_target * 1.15  -- 15% increase for metro
   ELSE                  monthly_target * 1.08  -- 8% increase for other cities
 END;
 
@@ -363,9 +363,9 @@ SELECT
   city,
   monthly_target                                AS current_target,
   CASE city
-    WHEN 'Bangalore' THEN ROUND(monthly_target * 1.15, 2)
-    WHEN 'Hyderabad' THEN ROUND(monthly_target * 1.12, 2)
-    WHEN 'Mumbai'    THEN ROUND(monthly_target * 1.15, 2)
+    WHEN 'Seattle' THEN ROUND(monthly_target * 1.15, 2)
+    WHEN 'Austin' THEN ROUND(monthly_target * 1.12, 2)
+    WHEN 'New York'    THEN ROUND(monthly_target * 1.15, 2)
     ELSE                  ROUND(monthly_target * 1.08, 2)
   END                                           AS new_target
 FROM stores
@@ -444,25 +444,25 @@ ORDER BY discrepancy DESC;`}
       <CodeBlock
         label="The SELECT-before-UPDATE pattern"
         code={`-- WRONG: run the UPDATE directly
-UPDATE customers SET loyalty_tier = 'Platinum' WHERE city = 'Bangalore';
+UPDATE customers SET loyalty_tier = 'Platinum' WHERE city = 'Seattle';
 -- How many rows did that affect? Are you sure it was right?
 
 -- RIGHT: SELECT first, verify, then UPDATE
 -- Step 1: see exactly which rows will be affected
 SELECT customer_id, first_name, city, loyalty_tier
 FROM customers
-WHERE city = 'Bangalore';
+WHERE city = 'Seattle';
 -- Count: 5 rows. Check: they all look right.
 
 -- Step 2: now run the UPDATE with the same WHERE
 UPDATE customers
 SET loyalty_tier = 'Platinum'
-WHERE city = 'Bangalore';
+WHERE city = 'Seattle';
 
 -- Step 3: verify the change
 SELECT customer_id, first_name, city, loyalty_tier
 FROM customers
-WHERE city = 'Bangalore';`}
+WHERE city = 'Seattle';`}
       />
 
       <H>Rule 2 — always include WHERE</H>
@@ -497,12 +497,12 @@ BEGIN;
 
 UPDATE customers
 SET loyalty_tier = 'Platinum'
-WHERE city = 'Bangalore'
+WHERE city = 'Seattle'
   AND loyalty_tier = 'Gold';
 
 -- Check the result before committing
 SELECT COUNT(*), loyalty_tier FROM customers
-WHERE city = 'Bangalore'
+WHERE city = 'Seattle'
 GROUP BY loyalty_tier;
 
 -- If result looks wrong: ROLLBACK (undo everything)
@@ -513,7 +513,7 @@ COMMIT;`}
       />
 
       <H>Rule 4 — UPDATE only the minimum rows necessary</H>
-      <P>Use the most specific WHERE clause possible. UPDATE ... WHERE customer_id = 5 is safer than UPDATE ... WHERE city = 'Bangalore' which is safer than UPDATE ... WHERE loyalty_tier = 'Bronze'. The tighter the WHERE, the smaller the blast radius if something is wrong.</P>
+      <P>Use the most specific WHERE clause possible. UPDATE ... WHERE customer_id = 5 is safer than UPDATE ... WHERE city = 'Seattle' which is safer than UPDATE ... WHERE loyalty_tier = 'Bronze'. The tighter the WHERE, the smaller the blast radius if something is wrong.</P>
 
       <H>Rule 5 — verify the affected row count</H>
       <P>After UPDATE, check how many rows were changed. Most SQL clients show "N rows affected" — verify this number matches your expectation. 0 rows affected means your WHERE matched nothing (check for typos). 1000 rows affected when you expected 10 means something is very wrong.</P>
@@ -740,7 +740,7 @@ COMMIT;`}
       <IQ q="How do you safely update a large table with millions of rows?">
         <p style={{ margin: '0 0 14px' }}>Updating millions of rows in a single UPDATE statement holds a lock on those rows for the duration of the operation — potentially minutes or hours. During this time, other queries that need to read or write those rows are blocked, causing application timeouts and degraded performance. If the UPDATE fails, the rollback takes equally long. For tables actively used by a production application, a long-running UPDATE is essentially an outage.</p>
         <p style={{ margin: '0 0 14px' }}>The safe approach is batch updating — processing rows in chunks. Run the UPDATE with a LIMIT (or equivalent) of 1,000 to 10,000 rows per batch, commit after each batch, and repeat until zero rows are affected. Each batch holds locks for only a short time (milliseconds to seconds), commits immediately, and is individually rollbackable. The WHERE clause must be written so each successive batch picks up where the previous left off — typically by including AND updated_column &lt;&gt; new_value so already-updated rows are excluded from subsequent batches.</p>
-        <p style={{ margin: 0 }}>Batching is typically done from application code or a migration script in a loop: run the UPDATE, check the affected row count, sleep briefly to give other queries a chance to run, repeat until count is 0. For very large tables at companies like Flipkart or Swiggy (billions of rows), even batching may not be sufficient — the alternative is a blue-green table migration: create a new table with the correct data, swap the table name atomically, and drop the old table. This approach has zero downtime but is operationally more complex and requires careful application code management during the swap window.</p>
+        <p style={{ margin: 0 }}>Batching is typically done from application code or a migration script in a loop: run the UPDATE, check the affected row count, sleep briefly to give other queries a chance to run, repeat until count is 0. For very large tables at companies like Amazon or DoorDash (billions of rows), even batching may not be sufficient — the alternative is a blue-green table migration: create a new table with the correct data, swap the table name atomically, and drop the old table. This approach has zero downtime but is operationally more complex and requires careful application code management during the swap window.</p>
       </IQ>
 
       <HR />
@@ -782,8 +782,8 @@ COMMIT;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshCart's quarterly loyalty review has three updates to apply: (1) Upgrade any Bronze customer who joined before 2022 to Silver. (2) Upgrade any Silver customer from Bangalore or Hyderabad to Gold. (3) Apply a 5% price increase to all Staples products that are currently in stock. For each update, first write the SELECT to verify which rows will be affected, then write the UPDATE."
-        hint="Three separate updates, each with a SELECT first. Update 1: WHERE loyalty_tier = 'Bronze' AND joined_date < '2022-01-01'. Update 2: WHERE loyalty_tier = 'Silver' AND city IN ('Bangalore', 'Hyderabad'). Update 3: WHERE category = 'Staples' AND in_stock = true. Use ROUND(unit_price * 1.05, 2) for the price update."
+        question="FreshCart's quarterly loyalty review has three updates to apply: (1) Upgrade any Bronze customer who joined before 2022 to Silver. (2) Upgrade any Silver customer from Seattle or Austin to Gold. (3) Apply a 5% price increase to all Staples products that are currently in stock. For each update, first write the SELECT to verify which rows will be affected, then write the UPDATE."
+        hint="Three separate updates, each with a SELECT first. Update 1: WHERE loyalty_tier = 'Bronze' AND joined_date < '2022-01-01'. Update 2: WHERE loyalty_tier = 'Silver' AND city IN ('Seattle', 'Austin'). Update 3: WHERE category = 'Staples' AND in_stock = true. Use ROUND(unit_price * 1.05, 2) for the price update."
         answer={`-- Update 1: Bronze → Silver for pre-2022 customers
 -- SELECT first:
 SELECT customer_id, first_name, loyalty_tier, joined_date
@@ -800,13 +800,13 @@ WHERE loyalty_tier = 'Bronze' AND joined_date < '2022-01-01';
 SELECT customer_id, first_name, city, loyalty_tier
 FROM customers
 WHERE loyalty_tier = 'Silver'
-  AND city IN ('Bangalore', 'Hyderabad');
+  AND city IN ('Seattle', 'Austin');
 
 -- UPDATE:
 UPDATE customers
 SET loyalty_tier = 'Gold'
 WHERE loyalty_tier = 'Silver'
-  AND city IN ('Bangalore', 'Hyderabad');
+  AND city IN ('Seattle', 'Austin');
 
 -- Update 3: 5% price increase for in-stock Staples
 -- SELECT first:
@@ -819,7 +819,7 @@ WHERE category = 'Staples' AND in_stock = true;
 UPDATE products
 SET unit_price = ROUND(unit_price * 1.05, 2)
 WHERE category = 'Staples' AND in_stock = true;`}
-        explanation="Three independent updates, each following the golden rule: SELECT first, UPDATE second. Notice that Update 1 and Update 2 are intentionally separate — if they were combined, a Bronze customer from Bangalore who joined before 2022 would be upgraded to Silver in Update 1, and then immediately to Gold in Update 2 in the same session. That may or may not be the intended business rule. Running them as separate statements makes the sequence explicit and auditable. Update 3 uses a computed SET value — unit_price * 1.05 references the column's current value and ROUND controls the decimal precision. Each UPDATE affects only the rows that genuinely need to change."
+        explanation="Three independent updates, each following the golden rule: SELECT first, UPDATE second. Notice that Update 1 and Update 2 are intentionally separate — if they were combined, a Bronze customer from Seattle who joined before 2022 would be upgraded to Silver in Update 1, and then immediately to Gold in Update 2 in the same session. That may or may not be the intended business rule. Running them as separate statements makes the sequence explicit and auditable. Update 3 uses a computed SET value — unit_price * 1.05 references the column's current value and ROUND controls the decimal precision. Each UPDATE affects only the rows that genuinely need to change."
       />
 
       <HR />

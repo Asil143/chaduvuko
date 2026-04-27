@@ -801,7 +801,7 @@ SELECT
       {/* ── PART 12 ── */}
       <Part n="12" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Zepto. The growth team runs a weekly business review and needs three reports every Monday morning: (1) last week's revenue by day of week, (2) month-to-date revenue versus the same period last month, and (3) a 30-day delivery time trend. All three are date function queries.</P>
+      <P>You are a data analyst at Instacart. The growth team runs a weekly business review and needs three reports every Monday morning: (1) last week's revenue by day of week, (2) month-to-date revenue versus the same period last month, and (3) a 30-day delivery time trend. All three are date function queries.</P>
 
       <TimeBlock time="8:00 AM" label="Report 1 — last week by day">
         Filter to the last 7 days, group by day name, sort by revenue.

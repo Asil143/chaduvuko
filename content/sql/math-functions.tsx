@@ -756,7 +756,7 @@ FROM orders;`}
       {/* ── PART 12 ── */}
       <Part n="12" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at CRED, a fintech platform. The finance team needs a monthly P&L summary showing revenue, cost of goods, gross margin, gross margin percentage, standard deviation of transaction values, and identification of outlier transactions. All require combinations of math functions.</P>
+      <P>You are a data analyst at Brex, a fintech platform. The finance team needs a monthly P&L summary showing revenue, cost of goods, gross margin, gross margin percentage, standard deviation of transaction values, and identification of outlier transactions. All require combinations of math functions.</P>
 
       <TimeBlock time="10:00 AM" label="P&L summary requirements">
         Revenue, COGS, gross profit, gross margin %, avg transaction, stddev, outlier flag (beyond 2σ). All rounded to 2 dp, percentages to 1 dp.

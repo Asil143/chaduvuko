@@ -976,11 +976,11 @@ CREATE TABLE IF NOT EXISTS customer_credits (
 
 -- Seed data
 INSERT OR IGNORE INTO delivery_partners VALUES
-  (1,'Ravi Kumar',  '9900000001','Mumbai Central','bike',   1),
-  (2,'Priya Singh', '9900000002','Mumbai South',  'scooter',1);
+  (1,'Emma Johnson',  '9900000001','New York Central','bike',   1),
+  (2,'Priya Singh', '9900000002','New York South',  'scooter',1);
 
 INSERT OR IGNORE INTO sla_policies VALUES
-  (1,'ST001','Mumbai Central',120,100.00);
+  (1,'ST001','New York Central',120,100.00);
 
 -- 3 deliveries: order_ids 1,2,3 from FreshCart orders table
 INSERT OR IGNORE INTO deliveries VALUES

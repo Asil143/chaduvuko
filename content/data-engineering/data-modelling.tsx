@@ -295,7 +295,7 @@ DEGENERATE DIMENSIONS:
 
         <Para>
           A fact without context is just a number. ₹380 has no analytical value
-          until you know it was an order from a premium customer in Bangalore at
+          until you know it was an order from a premium customer in Seattle at
           a FreshCart store on a weekday evening. Dimension tables provide that
           context. Understanding what belongs in dimensions, how to structure them,
           and how surrogate keys work is essential for building models analysts can
@@ -383,23 +383,23 @@ HIERARCHY DESIGN NOTE:
   store_id    = 'ST001'  (from store management system)
 
 SURROGATE KEY: warehouse-generated integer, one per dimension row
-  customer_sk = 1  (first row in dim_customer — Bangalore version)
-  customer_sk = 2  (second row — same customer after moving to Hyderabad)
+  customer_sk = 1  (first row in dim_customer — Seattle version)
+  customer_sk = 2  (second row — same customer after moving to Austin)
 
 WHY SURROGATE KEYS ARE REQUIRED:
 
 REASON 1: SCD Type 2 — each historical version needs a unique key
-  Customer 4201938 moved from Bangalore to Hyderabad on 2026-02-01.
+  Customer 4201938 moved from Seattle to Austin on 2026-02-01.
   dim_customer has two rows:
-    customer_sk=1, customer_id=4201938, city='Bangalore', valid_from=2024-01-15, valid_to=2026-01-31
-    customer_sk=2, customer_id=4201938, city='Hyderabad', valid_from=2026-02-01, valid_to=NULL
+    customer_sk=1, customer_id=4201938, city='Seattle', valid_from=2024-01-15, valid_to=2026-01-31
+    customer_sk=2, customer_id=4201938, city='Austin', valid_from=2026-02-01, valid_to=NULL
 
   Fact table stores customer_sk at load time:
-    ORDER 9284751 placed 2026-01-10: stored customer_sk=1 → city='Bangalore' ✓
-    ORDER 9284755 placed 2026-03-01: stored customer_sk=2 → city='Hyderabad' ✓
+    ORDER 9284751 placed 2026-01-10: stored customer_sk=1 → city='Seattle' ✓
+    ORDER 9284755 placed 2026-03-01: stored customer_sk=2 → city='Austin' ✓
 
   Without surrogates: join on customer_id matches BOTH dimension rows.
-  With is_current=TRUE filter: ALL orders show 'Hyderabad' — historically wrong.
+  With is_current=TRUE filter: ALL orders show 'Austin' — historically wrong.
   Surrogates are the only correct solution for point-in-time accuracy.
 
 REASON 2: Source system independence
@@ -749,21 +749,21 @@ LEFT JOIN {{ ref('dim_payment_method') }} p ON o.payment_method = p.payment_meth
           </div>
 
           <Para>
-            Finance reports March revenue as ₹4.21 crore. Operations reports ₹3.87 crore.
-            Same company, same month — ₹34 lakh difference. The CEO asks for an explanation.
+            Finance reports March revenue as ₹4.21 million. Operations reports ₹3.87 million.
+            Same company, same month — ₹34 thousand difference. The CEO asks for an explanation.
           </Para>
 
           <CodeBox label="Diagnosing the metrics disagreement">{`-- Finance dashboard SQL (Metabase auto-generated):
 SELECT SUM(order_amount) FROM fct_orders
 WHERE order_date >= '2026-03-01' AND order_date < '2026-04-01';
--- Returns: 4.21 crore
+-- Returns: 4.21 million
 
 -- Operations dashboard SQL (analyst hand-written):
 SELECT SUM(order_amount) FROM fct_orders f
 JOIN dim_date d ON f.order_date_sk = d.date_sk
 WHERE d.month_name = 'March' AND d.year = 2026
   AND f.status = 'delivered';
--- Returns: 3.87 crore
+-- Returns: 3.87 million
 
 -- TWO DIFFERENCES FOUND:
 -- 1. Finance includes ALL statuses. Operations filters to 'delivered' only.
@@ -774,11 +774,11 @@ SELECT status, SUM(order_amount) AS revenue
 FROM fct_orders
 WHERE order_date >= '2026-03-01' AND order_date < '2026-04-01'
 GROUP BY 1 ORDER BY 2 DESC;
--- placed:     0.12 crore  ← Finance includes (not yet delivered)
--- confirmed:  0.08 crore  ← Finance includes
--- delivering: 0.06 crore  ← Finance includes
--- delivered:  3.87 crore  ← Operations reports only this ✓
--- cancelled:  0.08 crore  ← Finance includes CANCELLED orders!
+-- placed:     0.12 million  ← Finance includes (not yet delivered)
+-- confirmed:  0.08 million  ← Finance includes
+-- delivering: 0.06 million  ← Finance includes
+-- delivered:  3.87 million  ← Operations reports only this ✓
+-- cancelled:  0.08 million  ← Finance includes CANCELLED orders!
 
 -- Root cause: both queries are "correct" — they measure different things.
 -- Finance: GMV (all orders placed)
@@ -845,7 +845,7 @@ Practically, I write the grain declaration as a comment at the top of every dbt 
             q: 'Q3. Why are surrogate keys used in dimensional models instead of natural keys from source systems?',
             a: `Surrogate keys are warehouse-generated integers assigned to each row in a dimension table. They are required for four reasons.
 
-First and most important, SCD Type 2 support. When a dimension attribute changes and historical accuracy is required, the dimension table stores multiple rows for the same natural key — one per version. Customer 4201938 lived in Bangalore, then moved to Hyderabad — dim_customer has two rows, one per city. Without surrogate keys, the fact table cannot distinguish which version of the customer a historical order should join to. With surrogate keys (customer_sk=1 for Bangalore, customer_sk=2 for Hyderabad), orders placed in Bangalore join to customer_sk=1 and correctly show Bangalore. Point-in-time accuracy is only possible with surrogates.
+First and most important, SCD Type 2 support. When a dimension attribute changes and historical accuracy is required, the dimension table stores multiple rows for the same natural key — one per version. Customer 4201938 lived in Seattle, then moved to Austin — dim_customer has two rows, one per city. Without surrogate keys, the fact table cannot distinguish which version of the customer a historical order should join to. With surrogate keys (customer_sk=1 for Seattle, customer_sk=2 for Austin), orders placed in Seattle join to customer_sk=1 and correctly show Seattle. Point-in-time accuracy is only possible with surrogates.
 
 Second, source system independence. If the source migrates customer_id from integer to UUID, only dim_customer.customer_id changes. The surrogate key and all fact table foreign keys are unaffected — no millions of fact rows to update.
 
@@ -900,7 +900,7 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
             fix: 'The fact table must store the customer_sk (surrogate key) at load time, not the customer_id. The surrogate key lookup at load time uses the date-range join to find the active version: the customer_sk stored in the fact table for a 2021 order is the surrogate that was valid in 2021. At query time, join simply on customer_sk — no date range, no is_current filter — and you get the historically correct customer version automatically.',
           },
           {
-            error: `Finance and Operations both query "revenue" but return different numbers for the same month — one shows ₹4.21 crore, the other ₹3.87 crore`,
+            error: `Finance and Operations both query "revenue" but return different numbers for the same month — one shows ₹4.21 million, the other ₹3.87 million`,
             cause: 'There is no single canonical definition of "revenue" in the data model. Finance queries SUM(order_amount) with no status filter, including placed, cancelled, and in-progress orders. Operations queries only delivered orders. Both are using fct_orders but applying different business rules — neither is technically wrong, but the metric name "revenue" has two different definitions across two teams.',
             fix: 'Create a canonical dbt metrics layer that defines each business metric exactly once. A Gold dbt model mrt_monthly_revenue defines delivered_revenue (status=\'delivered\'), gross_order_value (all non-cancelled), and cancelled_value explicitly. Both Finance and Operations query the canonical model — they choose the appropriate column for their use case but can no longer accidentally define the metric differently. This is a modelling fix, not a pipeline fix.',
           },
@@ -940,7 +940,7 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
         'Conformed dimensions are shared across multiple fact tables with identical structure and meaning. dim_date is always conformed. Conformed dimensions enable cross-process analysis — comparing orders to payments for the same customer correctly. Non-conformed dimensions make cross-mart queries produce wrong results silently.',
         'Wide tables (OBT) embed all dimension attributes into a single table — zero joins at query time. Best for self-service analysts, BI tools, and columnar engines. Star schemas are better for SCD Type 2, multiple fact tables at different grains, and very large fact tables. The hybrid approach: star schema for canonical model + derived wide table for BI consumption.',
         'In dbt: use dbt_utils.generate_surrogate_key() for deterministic hash-based surrogate keys, dbt snapshots with strategy="check" for SCD Type 2 dimension tables, incremental materialisation with merge strategy for large fact tables, and the date-range join for point-in-time fact-to-dimension lookups.',
-        'Centralise business logic in dbt Gold models. A "revenue" metric disagreement between Finance and Operations (₹4.21 crore vs ₹3.87 crore) is always a missing canonical definition problem, not a data quality problem. One dbt model defines delivered_revenue, gross_order_value, and cancelled_value — both teams query the canonical model and can no longer accidentally apply different filters to the same metric name.',
+        'Centralise business logic in dbt Gold models. A "revenue" metric disagreement between Finance and Operations (₹4.21 million vs ₹3.87 million) is always a missing canonical definition problem, not a data quality problem. One dbt model defines delivered_revenue, gross_order_value, and cancelled_value — both teams query the canonical model and can no longer accidentally apply different filters to the same metric name.',
       ]} />
 
     </LearnLayout>

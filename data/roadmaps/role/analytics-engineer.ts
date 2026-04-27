@@ -11,7 +11,7 @@ export const analyticsEngineerRoadmap: Roadmap = {
   estimatedTime: '3–5 months',
   salaryData: [
     { company: 'Startup / Analytics firm', range: '₹8–14 LPA', note: 'Growing but still emerging role' },
-    { company: 'Mid-size startup', range: '₹14–24 LPA', note: 'Swiggy, Meesho, Razorpay data teams' },
+    { company: 'Mid-size startup', range: '₹14–24 LPA', note: 'DoorDash, Shopify, Stripe data teams' },
     { company: 'MNC / GCC (analytics)', range: '₹18–32 LPA', note: 'dbt + warehouse expertise' },
     { company: 'Data-first product company', range: '₹25–45 LPA', note: 'Full modern data stack' },
   ],

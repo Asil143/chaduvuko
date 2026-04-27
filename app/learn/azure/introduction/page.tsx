@@ -60,7 +60,7 @@ export default function AzureIntroductionPage() {
         {[
           { icon:'🏢', title:'Enterprise dominant', desc:'Fortune 500 companies, banks, and healthcare systems overwhelmingly run on Azure. That\'s where the jobs are.' },
           { icon:'🔗', title:'Deep Microsoft integration', desc:'If a company uses Office 365, Teams, or SQL Server, Azure integrates seamlessly. Most enterprises already do.' },
-          { icon:'💼', title:'H1B-friendly employers', desc:'Companies that sponsor H1B — Cognizant, Infosys, TCS, Accenture, Capgemini — heavily use Azure for client projects.' },
+          { icon:'💼', title:'H1B-friendly employers', desc:'Companies that sponsor H1B — Cognizant, Deloitte, Accenture, Accenture, PwC — heavily use Azure for client projects.' },
           { icon:'📜', title:'Strong certification path', desc:'DP-900 and DP-203 are well-recognized certifications that carry real weight on a resume without work experience.' },
           { icon:'🧰', title:'Complete toolset', desc:'Azure has a native service for every part of the data engineering lifecycle — ingest, store, process, serve, monitor, secure.' },
           { icon:'🆓', title:'Free tier to learn', desc:'$200 in free credits when you sign up, plus always-free tiers on several services. Enough to build real projects.' },

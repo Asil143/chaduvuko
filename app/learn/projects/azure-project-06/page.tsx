@@ -143,9 +143,9 @@ export default function Project06Page() {
         </p>
       </div>
 
-      <CodeBlock label="FreshCart's 3 store cities">{`New Delhi    → lat=28.6139, lon=77.2090
-Mumbai       → lat=19.0760, lon=72.8777
-Bangalore    → lat=12.9716, lon=77.5946`}</CodeBlock>
+      <CodeBlock label="FreshCart's 3 store cities">{`New York    → lat=28.6139, lon=77.2090
+New York       → lat=19.0760, lon=72.8777
+Seattle    → lat=12.9716, lon=77.5946`}</CodeBlock>
 
       <p>We will build a pipeline that:</p>
       <ol>
@@ -162,8 +162,8 @@ Bangalore    → lat=12.9716, lon=77.5946`}</CodeBlock>
           <p style={{ color: '#00c2ff' }}>Open-Meteo API → https://api.open-meteo.com</p>
           <p className="pl-2">ADF calls API 3 times (one per city):</p>
           <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 1: ?latitude=28.6139&amp;longitude=77.2090  → Delhi weather JSON</p>
-          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 2: ?latitude=19.0760&amp;longitude=72.8777  → Mumbai weather JSON</p>
-          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 3: ?latitude=12.9716&amp;longitude=77.5946  → Bangalore weather JSON</p>
+          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 2: ?latitude=19.0760&amp;longitude=72.8777  → New York weather JSON</p>
+          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 3: ?latitude=12.9716&amp;longitude=77.5946  → Seattle weather JSON</p>
           <p className="mt-3">Each JSON saved to ADLS:</p>
           <p className="pl-2" style={{ color: '#00e676' }}>raw/weather/date=2024-01-15/</p>
           <p className="pl-4" style={{ color: 'var(--text2)' }}>├── weather_delhi_20240115.json</p>
@@ -245,7 +245,7 @@ Bangalore    → lat=12.9716, lon=77.5946`}</CodeBlock>
       <p>When you call a REST API, the response comes back as <strong>JSON</strong> — JavaScript Object Notation. It is the universal language APIs use to send data.</p>
 
       <CodeBlock label="Example JSON response from Open-Meteo">{`{
-  "city": "New Delhi",
+  "city": "New York",
   "latitude": 28.6139,
   "longitude": 77.2090,
   "daily": {
@@ -264,7 +264,7 @@ Bangalore    → lat=12.9716, lon=77.5946`}</CodeBlock>
 true/false   → boolean value
 
 In the example above:
-  "city"      → text property    → "New Delhi"
+  "city"      → text property    → "New York"
   "latitude"  → number property  → 28.6139
   "daily"     → object           → contains arrays of values
   "time"      → array of dates   → ["2024-01-15", "2024-01-16", ...]`}</CodeBlock>
@@ -359,10 +359,10 @@ latitude=28.6139              → first parameter (Delhi's latitude)
         The browser is doing the same thing ADF will do: sending an HTTP GET request to the URL and receiving a JSON response.
       </Callout>
 
-      <p>Now test for Mumbai:</p>
+      <p>Now test for New York:</p>
       <CodeBlock>{`https://api.open-meteo.com/v1/forecast?latitude=19.0760&longitude=72.8777&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=Asia%2FKolkata&forecast_days=1`}</CodeBlock>
 
-      <Screenshot caption="Browser showing Mumbai weather JSON response — different temperature values than Delhi, confirming the API returns different data per location" />
+      <Screenshot caption="Browser showing New York weather JSON response — different temperature values than Delhi, confirming the API returns different data per location" />
 
       <p><strong>What does <code>weathercode</code> mean?</strong> Open-Meteo uses standard WMO weather codes:</p>
       <CodeBlock>{`0   → Clear sky
@@ -599,7 +599,7 @@ ADF joins this with the base URL from the linked service:
 
 That is exactly the Delhi weather URL we tested in the browser! ✅
 
-Next iteration (Mumbai): @{item().lat} → 19.0760, @{item().lon} → 72.8777
+Next iteration (New York): @{item().lat} → 19.0760, @{item().lon} → 72.8777
 → https://api.open-meteo.com/v1/forecast?latitude=19.0760&longitude=72.8777...`}</CodeBlock>
 
       <Screenshot caption="Source tab complete — relative_url dataset property showing the full API query expression" />
@@ -625,8 +625,8 @@ _                 → literal "_"
 .json             → literal ".json"
 
 Delhi:     weather_delhi_20240115.json     ✅
-Mumbai:    weather_mumbai_20240115.json    ✅
-Bangalore: weather_bangalore_20240115.json ✅`}</CodeBlock>
+New York:    weather_mumbai_20240115.json    ✅
+Seattle: weather_bangalore_20240115.json ✅`}</CodeBlock>
 
       <Screenshot caption="Sink tab — date_folder showing @variables('run_date_folder'), file_name showing weather_@{item().name}_ expression" />
 
@@ -672,7 +672,7 @@ cities:    [{"name":"delhi","lat":"28.6139","lon":"77.2090"},{"name":"mumbai","l
         └── weather_bangalore_20240115.json`}</CodeBlock>
 
       <Screenshot caption="raw container — three folders visible: sales, external, weather" />
-      <Screenshot caption="raw/weather/date=2024-01-15/ — three JSON files for Delhi, Mumbai, Bangalore" />
+      <Screenshot caption="raw/weather/date=2024-01-15/ — three JSON files for Delhi, New York, Seattle" />
 
       <p>Click on <strong>weather_delhi_20240115.json</strong> → click <strong>&quot;Edit&quot;</strong></p>
       <p>You should see the raw JSON from the API saved exactly as-is:</p>

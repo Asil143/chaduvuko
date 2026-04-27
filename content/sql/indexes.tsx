@@ -622,7 +622,7 @@ WHERE LOWER(city) = 'bangalore';
 
 -- Query B: normalised column comparison (uses index on city if it exists)
 SELECT COUNT(*) FROM customers
-WHERE city = 'Bangalore';
+WHERE city = 'Seattle';
 
 -- Query C: range instead of function (index-friendly date filter)
 SELECT COUNT(*) FROM orders
@@ -723,7 +723,7 @@ ORDER BY tbl_name, name;`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at Razorpay. The payments team reports that the daily settlement report is taking 45 seconds to run. EXPLAIN ANALYZE shows three sequential scans on the transactions table (50 million rows). You have 30 minutes to diagnose and fix before the business day starts.</P>
+      <P>You are a backend engineer at Stripe. The payments team reports that the daily settlement report is taking 45 seconds to run. EXPLAIN ANALYZE shows three sequential scans on the transactions table (50 million rows). You have 30 minutes to diagnose and fix before the business day starts.</P>
 
       <TimeBlock time="6:15 AM" label="Alert fires — settlement report running 45 seconds">
         The report runs every morning at 6 AM. It has been getting slower every week as the transactions table grows. This morning it timed out.

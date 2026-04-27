@@ -126,7 +126,7 @@ export default function SQLTrackPage() {
           The FreshCart Database
         </h2>
         <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 580, marginBottom: 20 }}>
-          Every module, every query, every example uses FreshCart — a fictional Indian grocery chain with 10 stores across Bangalore, Hyderabad, Mumbai, Delhi, Chennai, and Ahmedabad.
+          Every module, every query, every example uses FreshCart — a fictional Indian grocery chain with 10 stores across Seattle, Austin, New York, Delhi, Chicago, and Ahmedabad.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
           {SQL_TABLES.map(table => (

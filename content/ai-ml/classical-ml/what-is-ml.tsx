@@ -75,7 +75,7 @@ export default function WhatIsMLPage() {
       {/* ── SECTION 1: The problem ─────────────────────────────────────────── */}
       <div style={sec}>
         <span style={tag}>The problem that started everything</span>
-        <h2 style={h2}>It&apos;s 2015. You&apos;re a new engineer at Swiggy.</h2>
+        <h2 style={h2}>It&apos;s 2015. You&apos;re a new engineer at DoorDash.</h2>
 
         <p style={p}>
           Orders are coming in faster than anyone expected. Customers open the app, see a restaurant they want,
@@ -130,7 +130,7 @@ if restaurant == "popular_restaurant":
         </Highlight>
 
         <Callout type="tip">
-          This Swiggy delivery time problem is the running example for the entire Classical ML section. Every
+          This DoorDash delivery time problem is the running example for the entire Classical ML section. Every
           algorithm — Linear Regression, Decision Trees, XGBoost — will be explained using this same scenario.
           By the end of the section you will have built a complete delivery time predictor from scratch.
         </Callout>
@@ -206,8 +206,8 @@ if restaurant == "popular_restaurant":
               what: 'You provide labelled training examples — each input is paired with the correct output. The model learns the mapping from inputs to outputs by seeing thousands of these pairs.',
               analogy: 'Teaching a child to identify animals by showing them 1,000 photos, each labelled with the animal\'s name. The child learns from your labels.',
               examples: [
-                'Swiggy delivery time prediction — input: order details, label: actual delivery time (regression)',
-                'Razorpay fraud detection — input: transaction features, label: fraud / not fraud (classification)',
+                'DoorDash delivery time prediction — input: order details, label: actual delivery time (regression)',
+                'Stripe fraud detection — input: transaction features, label: fraud / not fraud (classification)',
                 'Gmail spam filter — input: email text + metadata, label: spam / not spam (classification)',
                 'HDFC loan approval — input: applicant financials, label: approved / rejected (classification)',
               ],
@@ -219,7 +219,7 @@ if restaurant == "popular_restaurant":
               what: 'You have data but no labels — no correct answers to learn from. The model looks for patterns, groupings, or structure that exists in the data on its own terms.',
               analogy: 'A librarian given 10,000 books with no categories. They group them by content similarity — biography, fiction, technical — without being told what the categories should be.',
               examples: [
-                'Flipkart customer segmentation — group 300M users by behaviour without predefined segments',
+                'Amazon customer segmentation — group 300M users by behaviour without predefined segments',
                 'Anomaly detection in payment networks — find unusual patterns without labelling what fraud looks like',
                 'Product catalogue clustering — group similar products without human-defined category trees',
                 'User journey analysis — discover common navigation paths without labelling intent',
@@ -233,7 +233,7 @@ if restaurant == "popular_restaurant":
               analogy: 'Teaching a dog to fetch. You do not explain fetching. You give treats when the dog picks up the ball and brings it back. The dog learns the behaviour through trial, error, and rewards.',
               examples: [
                 'Google DeepMind cooling data centres — RL agent reduced cooling energy by 40%',
-                'Zepto delivery route optimisation — agent learns which routes minimise time across all riders simultaneously',
+                'Instacart delivery route optimisation — agent learns which routes minimise time across all riders simultaneously',
                 'Algorithmic trading — agent learns when to buy and sell by receiving profit/loss as reward signal',
                 'AlphaGo — agent learned to play Go by playing millions of games against itself',
               ],
@@ -283,7 +283,7 @@ if restaurant == "popular_restaurant":
         <h2 style={h2}>The ML workflow — start to finish</h2>
 
         <p style={p}>
-          Every ML project at every company — from a two-person startup to Flipkart&apos;s 400-person data team —
+          Every ML project at every company — from a two-person startup to Amazon&apos;s 400-person data team —
           follows the same seven steps. The tools change. The algorithms change. The steps do not.
         </p>
 
@@ -394,7 +394,7 @@ if restaurant == "popular_restaurant":
             {
               term: 'Training data',
               def: 'The labelled examples you feed to the algorithm during learning. The model sees these inputs and their correct outputs.',
-              example: '400,000 historical Swiggy orders with their actual delivery times — the 80% split used to train the model.',
+              example: '400,000 historical DoorDash orders with their actual delivery times — the 80% split used to train the model.',
             },
             {
               term: 'Test data',
@@ -564,7 +564,7 @@ if restaurant == "popular_restaurant":
         </p>
         <p style={p}>
           The next page introduces the simplest possible supervised learning algorithm — Linear Regression —
-          and uses it to build an actual delivery time predictor for Swiggy. You will see every concept from
+          and uses it to build an actual delivery time predictor for DoorDash. You will see every concept from
           this page in working code.
         </p>
 
@@ -579,7 +579,7 @@ if restaurant == "popular_restaurant":
               Next up in Classical ML
             </div>
             <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-display)', letterSpacing: '-0.3px' }}>
-              Linear Regression — predicting Swiggy delivery time
+              Linear Regression — predicting DoorDash delivery time
             </div>
           </div>
           <span style={{

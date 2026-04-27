@@ -87,7 +87,7 @@ export default function Transactions() {
 
         <Para>
           Consider the most classic scenario in all of database theory.
-          You open Paytm and transfer ₹500 to a friend.
+          You open Square and transfer ₹500 to a friend.
           From the database's perspective, this involves two separate operations:
         </Para>
 
@@ -278,7 +278,7 @@ RELEASE SAVEPOINT after_order_created;
 {`-- In autocommit mode (default in MySQL, PostgreSQL psql):
 
 -- This UPDATE is automatically wrapped in a transaction and committed:
-UPDATE customers SET city = 'Bengaluru' WHERE customer_id = 1;
+UPDATE customers SET city = 'San Francisco' WHERE customer_id = 1;
 -- Equivalent to: BEGIN; UPDATE...; COMMIT;
 -- Cannot be rolled back after execution.
 
@@ -942,28 +942,28 @@ SHOW synchronous_commit;`}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 28 }}>
           {[
             {
-              company: 'Razorpay — Payment Processing',
+              company: 'Stripe — Payment Processing',
               color: '#0078d4',
               acid: 'All four ACID properties are non-negotiable',
               detail: 'Every payment involves debiting the customer\'s account, crediting the merchant, creating a transaction record, and updating the payment status. All four steps must be atomic — a partial payment that debits without crediting is a legal and financial disaster. Isolation at SERIALIZABLE level prevents two concurrent requests from processing the same payment twice. Durability ensures that a payment confirmed to the customer is permanently recorded even if the server crashes 10 milliseconds after the confirmation is sent.',
             },
             {
-              company: 'Swiggy — Order Management',
+              company: 'DoorDash — Order Management',
               color: 'var(--accent)',
               acid: 'Atomicity and Consistency critical; Isolation at READ COMMITTED',
-              detail: 'When a customer places an order, Swiggy must atomically: (1) create the order record, (2) deduct from inventory, (3) charge the payment, (4) notify the restaurant. These are wrapped in a transaction — if payment fails, the order and inventory changes are rolled back. They use READ COMMITTED isolation for the order listing page — it is acceptable for a customer to see an order that was created 50ms ago, and the lower locking overhead supports higher throughput.',
+              detail: 'When a customer places an order, DoorDash must atomically: (1) create the order record, (2) deduct from inventory, (3) charge the payment, (4) notify the restaurant. These are wrapped in a transaction — if payment fails, the order and inventory changes are rolled back. They use READ COMMITTED isolation for the order listing page — it is acceptable for a customer to see an order that was created 50ms ago, and the lower locking overhead supports higher throughput.',
             },
             {
-              company: 'Flipkart — Inventory Management',
+              company: 'Amazon — Inventory Management',
               color: '#f97316',
               acid: 'Lost update prevention critical during flash sales',
-              detail: 'During Big Billion Days sales with thousands of concurrent purchases of limited items, lost updates are the primary threat. Without proper isolation, two customers can simultaneously read stock=1, both think they can purchase, both write stock=0 — and both receive confirmation for an item that only has one unit. Flipkart uses SELECT FOR UPDATE on inventory rows during checkout, serialising access to each product\'s stock count. This causes some requests to queue, but prevents overselling.',
+              detail: 'During Big Billion Days sales with thousands of concurrent purchases of limited items, lost updates are the primary threat. Without proper isolation, two customers can simultaneously read stock=1, both think they can purchase, both write stock=0 — and both receive confirmation for an item that only has one unit. Amazon uses SELECT FOR UPDATE on inventory rows during checkout, serialising access to each product\'s stock count. This causes some requests to queue, but prevents overselling.',
             },
             {
-              company: 'CRED — Credit Score and Payments',
+              company: 'Brex — Credit Score and Payments',
               color: '#8b5cf6',
               acid: 'REPEATABLE READ for credit score calculations',
-              detail: 'Credit score calculations involve reading multiple tables (payment history, credit utilisation, account age) and computing a score. If a user\'s payment is processed between two reads in the same calculation, the score could be inconsistently computed. CRED uses REPEATABLE READ isolation for credit score transactions — all reads within the transaction see a consistent snapshot of the database as of when the transaction started, regardless of concurrent updates.',
+              detail: 'Credit score calculations involve reading multiple tables (payment history, credit utilisation, account age) and computing a score. If a user\'s payment is processed between two reads in the same calculation, the score could be inconsistently computed. Brex uses REPEATABLE READ isolation for credit score transactions — all reads within the transaction see a consistent snapshot of the database as of when the transaction started, regardless of concurrent updates.',
             },
           ].map((item) => (
             <div key={item.company} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: `4px solid ${item.color}`, borderRadius: 10, padding: '20px 24px' }}>
@@ -976,10 +976,10 @@ SHOW synchronous_commit;`}
           ))}
         </div>
 
-        <SubTitle>Complete Worked Example — Flipkart Checkout Transaction</SubTitle>
+        <SubTitle>Complete Worked Example — Amazon Checkout Transaction</SubTitle>
 
         <Para>
-          This is the kind of transaction that a backend engineer at Flipkart would write
+          This is the kind of transaction that a backend engineer at Amazon would write
           for the checkout flow. Notice how every ACID property is explicitly considered
           in the design.
         </Para>

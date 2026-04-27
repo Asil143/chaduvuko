@@ -10,10 +10,10 @@ export const backendDevRoadmap: Roadmap = {
   level: 'beginner',
   estimatedTime: '3–4 months',
   salaryData: [
-    { company: 'Service (TCS / Cognizant)', range: '₹6–9 LPA', note: 'Entry point for most' },
-    { company: 'Startup (Razorpay / Zerodha)', range: '₹14–24 LPA', note: 'Strong DSA + system design needed' },
+    { company: 'Service (Accenture / Cognizant)', range: '₹6–9 LPA', note: 'Entry point for most' },
+    { company: 'Startup (Stripe / Robinhood)', range: '₹14–24 LPA', note: 'Strong DSA + system design needed' },
     { company: 'MNC India', range: '₹18–32 LPA', note: 'Consistent demand' },
-    { company: 'FAANG India', range: '₹35–65 LPA', note: 'Top-tier DSA required' },
+    { company: 'FAANG', range: '₹35–65 LPA', note: 'Top-tier DSA required' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your backend journey starts. Mark complete to unlock the fundamentals.', x: 305, y: 20, width: 150, height: 60 },
@@ -25,7 +25,7 @@ export const backendDevRoadmap: Roadmap = {
     { id: 'rest', title: 'REST API Design', type: 'required', xp: 12, prerequisites: ['lang'], difficulty: 'beginner', time: '5 hrs', description: 'HTTP verbs, status codes, versioning, request validation, pagination. The daily output of a backend engineer.', x: 230, y: 220, width: 130, height: 60 },
     { id: 'auth', title: 'Auth (JWT / OAuth)', type: 'required', xp: 10, prerequisites: ['rest'], difficulty: 'intermediate', time: '4 hrs', description: 'JWT tokens, refresh flow, OAuth 2.0, bcrypt. Every app needs authentication.', x: 380, y: 220, width: 130, height: 60 },
     { id: 'redis', title: 'Redis & Caching', type: 'required', xp: 10, prerequisites: ['sql'], difficulty: 'intermediate', time: '4 hrs', description: 'In-memory caching, TTL, pub/sub, session storage. Reduces DB load and is a system design staple.', x: 80, y: 320, width: 130, height: 60 },
-    { id: 'queues', title: 'Message Queues', type: 'recommended', xp: 12, prerequisites: ['rest'], difficulty: 'intermediate', time: '5 hrs', description: 'Kafka or RabbitMQ for async processing. Decouples services and handles high throughput — common at Swiggy, Zomato, Razorpay.', x: 230, y: 320, width: 130, height: 60 },
+    { id: 'queues', title: 'Message Queues', type: 'recommended', xp: 12, prerequisites: ['rest'], difficulty: 'intermediate', time: '5 hrs', description: 'Kafka or RabbitMQ for async processing. Decouples services and handles high throughput — common at DoorDash, Uber Eats, Stripe.', x: 230, y: 320, width: 130, height: 60 },
     { id: 'docker', title: 'Docker', type: 'required', xp: 10, prerequisites: ['git'], difficulty: 'beginner', time: '3 hrs', description: 'Containers, Dockerfile, docker-compose for local dev. Modern backend code ships in containers.', x: 380, y: 320, width: 130, height: 60 },
     { id: 'testing', title: 'Testing (Unit + Integration)', type: 'required', xp: 10, prerequisites: ['rest'], difficulty: 'intermediate', time: '5 hrs', description: 'pytest / Jest, test doubles, integration tests with a real DB. Untested code is a production incident waiting to happen.', x: 530, y: 320, width: 130, height: 60 },
     { id: 'sysdesign', title: 'System Design', type: 'required', xp: 20, prerequisites: ['redis', 'queues', 'docker'], difficulty: 'advanced', time: '15 hrs', description: 'Load balancers, CAP theorem, consistent hashing, rate limiting, designing URL shorteners / payment systems. The gating round for ₹20 LPA+ offers.', x: 155, y: 420, width: 130, height: 60 },

@@ -502,9 +502,9 @@ CREATE VIEW vw_bangalore_orders AS
 SELECT o.*
 FROM orders AS o
 JOIN stores AS s ON o.store_id = s.store_id
-WHERE s.city = 'Bangalore';
+WHERE s.city = 'Seattle';
 
--- Staff in Bangalore only have access to this view:
+-- Staff in Seattle only have access to this view:
 -- SELECT * FROM vw_bangalore_orders
 -- They cannot query orders for other cities`}
       />
@@ -709,13 +709,13 @@ WHERE loyalty_tier != 'Bronze';   -- row filter
 
 -- UPDATE through the view (updates the base table):
 UPDATE vw_active_customers
-SET city = 'Hyderabad'
+SET city = 'Austin'
 WHERE customer_id = 5;
--- This executes: UPDATE customers SET city = 'Hyderabad' WHERE customer_id = 5
+-- This executes: UPDATE customers SET city = 'Austin' WHERE customer_id = 5
 
 -- INSERT through the view (inserts into base table):
 INSERT INTO vw_active_customers (first_name, last_name, email, city, loyalty_tier)
-VALUES ('Ananya', 'Reddy', 'ananya@test.com', 'Pune', 'Gold');
+VALUES ('Ananya', 'Reddy', 'ananya@test.com', 'Boston', 'Gold');
 
 -- PROBLEM: a user could INSERT a Bronze customer through the view
 -- even though the view filters out Bronze customers
@@ -912,7 +912,7 @@ ORDER BY revenue DESC;`}
       </IQ>
 
       <IQ q="Can you INSERT, UPDATE, or DELETE through a view?">
-        <p style={{ margin: '0 0 14px' }}>Yes, for simple views. A view is updatable when it meets these conditions: it selects from exactly one base table, it contains no GROUP BY or aggregate functions, no DISTINCT, no UNION, no LIMIT, no subqueries in the SELECT list, and no window functions. For updatable views, DML operations on the view are transparently passed through to the underlying base table — UPDATE vw_active_customers SET city = 'Mumbai' WHERE customer_id = 5 executes as UPDATE customers SET city = 'Mumbai' WHERE customer_id = 5.</p>
+        <p style={{ margin: '0 0 14px' }}>Yes, for simple views. A view is updatable when it meets these conditions: it selects from exactly one base table, it contains no GROUP BY or aggregate functions, no DISTINCT, no UNION, no LIMIT, no subqueries in the SELECT list, and no window functions. For updatable views, DML operations on the view are transparently passed through to the underlying base table — UPDATE vw_active_customers SET city = 'New York' WHERE customer_id = 5 executes as UPDATE customers SET city = 'New York' WHERE customer_id = 5.</p>
         <p style={{ margin: '0 0 14px' }}>WITH CHECK OPTION is an important addition to updatable views that have a WHERE filter. Without it, a user could INSERT a row through a view that does not satisfy the view's WHERE condition — the row would be inserted into the base table but immediately invisible through the view. WITH CHECK OPTION prevents this: any INSERT or UPDATE through the view must produce a row that satisfies the view's WHERE filter, or the operation fails with an error.</p>
         <p style={{ margin: 0 }}>For complex views (those with JOINs, aggregations, or other features that make automatic DML mapping impossible), PostgreSQL supports INSTEAD OF triggers — trigger functions that intercept DML on the view and execute custom logic to update the appropriate base tables. This allows any view to appear updatable, but requires explicit implementation of the DML logic. In practice, most views that need to be updatable are deliberately kept simple to avoid the complexity of INSTEAD OF triggers.</p>
       </IQ>

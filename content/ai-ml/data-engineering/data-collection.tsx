@@ -163,10 +163,10 @@ export default function DataCollectionPage() {
 
         <p style={S.p}>
           Every ML tutorial starts with a dataset already loaded — iris.csv,
-          mnist, titanic. The real world does not. At Swiggy, the order data
+          mnist, titanic. The real world does not. At DoorDash, the order data
           lives in a PostgreSQL database behind an internal API.
-          At Razorpay, transaction records are in a Redshift warehouse
-          partitioned by date. At Zepto, inventory data is a stream of events
+          At Stripe, transaction records are in a Redshift warehouse
+          partitioned by date. At Instacart, inventory data is a stream of events
           in Kafka. At a startup, it might be a Google Sheet someone exports manually.
         </p>
 
@@ -280,7 +280,7 @@ from typing import Optional
 response = requests.get(
     'https://api.open-meteo.com/v1/forecast',
     params={
-        'latitude':  12.9716,     # Bangalore
+        'latitude':  12.9716,     # Seattle
         'longitude': 77.5946,
         'daily':     'temperature_2m_max,temperature_2m_min,precipitation_sum',
         'timezone':  'Asia/Kolkata',
@@ -333,7 +333,7 @@ response = requests.get(
     'https://api.example.com/v1/data',
     params={
         'api_key': os.environ.get('MY_API_KEY'),   # NEVER hardcode keys
-        'city':    'Bangalore',
+        'city':    'Seattle',
     }
 )
 
@@ -370,7 +370,7 @@ session.headers.update({
 # Now every request from this session includes the headers automatically
 r1 = session.get('https://api.example.com/v1/orders')
 r2 = session.get('https://api.example.com/v1/restaurants')
-r3 = session.post('https://api.example.com/v1/query', json={'city': 'Mumbai'})
+r3 = session.post('https://api.example.com/v1/query', json={'city': 'New York'})
 
 # ── Loading credentials safely ─────────────────────────────────────────
 # NEVER do this:
@@ -686,7 +686,7 @@ def collect_all_pages(paginator) -> pd.DataFrame:
 session = make_session()
 paginator = paginate_offset(
     base_url='https://api.example.com/v1/orders',
-    params={'city': 'Bangalore', 'status': 'delivered'},
+    params={'city': 'Seattle', 'status': 'delivered'},
     headers={'Authorization': 'Bearer token'},
     page_size=100,
     data_key='orders',
@@ -717,7 +717,7 @@ import sqlite3
 
 # ── SQLite — local, no server needed, great for development ───────────
 
-# Create an in-memory SQLite database with sample Swiggy data
+# Create an in-memory SQLite database with sample DoorDash data
 conn_sqlite = sqlite3.connect(':memory:')   # ':memory:' = in-RAM, no file
 
 # Create and populate tables
@@ -762,7 +762,7 @@ for i in range(n):
     delivery = 8.6 + 7.3*dist + 0.8*prep + 1.5*traffic + np.random.randn()*4
     rows.append((
         f'SW{i:06d}', rest_id, np.random.randint(1, 1001),
-        np.random.choice(['Bangalore','Mumbai','Delhi','Hyderabad']),
+        np.random.choice(['Seattle','New York','Delhi','Austin']),
         round(dist, 2), round(abs(np.random.normal(350, 150)), 0),
         round(delivery, 1), int(delivery > 45),
         f'2024-{np.random.randint(1,13):02d}-{np.random.randint(1,29):02d}',
@@ -872,7 +872,7 @@ print(f"Final shape: {df_large.shape}")
 
 # ── Parameterised queries — prevent SQL injection ──────────────────────
 # WRONG — never do string formatting into SQL
-city = "Bangalore"
+city = "Seattle"
 # bad_query = f"SELECT * FROM orders WHERE city = '{city}'"  # ← injection risk
 
 # CORRECT — use parameters
@@ -880,11 +880,11 @@ with engine.connect() as conn:
     # SQLAlchemy bindparams
     result = conn.execute(
         text("SELECT * FROM orders_enriched WHERE city = :city AND is_late = :late"),
-        {'city': 'Bangalore', 'late': 1}
+        {'city': 'Seattle', 'late': 1}
     )
     late_bangalore = pd.DataFrame(result.fetchall(), columns=result.keys())
 
-print(f"Late orders in Bangalore: {len(late_bangalore):,}")
+print(f"Late orders in Seattle: {len(late_bangalore):,}")
 
 # ── Connection pooling — reuse connections efficiently ─────────────────
 # For applications making many queries, pooling prevents connection overhead
@@ -905,7 +905,7 @@ engine_pooled = sa.create_engine(
 from google.cloud import bigquery
 import pandas as pd
 
-# Authenticate: set GOOGLE_APPLICATION_CREDENTIALS env var to path of service account JSON
+# Authenticate: set GOOGLE_APPLICATION_BrexENTIALS env var to path of service account JSON
 client = bigquery.Client(project='your-gcp-project-id')
 
 # Run a query and return a DataFrame
@@ -1027,7 +1027,7 @@ df_csv = pd.read_csv(
 df_pq = pd.read_parquet(
     'orders.parquet',
     columns=['order_id','city','distance_km','delivery_time'],  # column pruning
-    filters=[('city', '==', 'Bangalore'), ('delivery_time', '<', 60)],  # row filtering
+    filters=[('city', '==', 'Seattle'), ('delivery_time', '<', 60)],  # row filtering
 )
 
 # JSON lines (jsonl) — one JSON object per line
@@ -1042,10 +1042,10 @@ import pyarrow.dataset as ds
 dataset = ds.dataset(
     'data/orders/',              # directory with part-000.parquet, part-001.parquet etc.
     format='parquet',
-    partitioning='hive',         # handles city=Bangalore/year=2024/part-0.parquet
+    partitioning='hive',         # handles city=Seattle/year=2024/part-0.parquet
 )
 df_partitioned = dataset.to_table(
-    filter=ds.field('city').isin(['Bangalore', 'Mumbai']),
+    filter=ds.field('city').isin(['Seattle', 'New York']),
     columns=['order_id', 'distance_km', 'delivery_time'],
 ).to_pandas()
 
@@ -1060,7 +1060,7 @@ s3 = boto3.client(
     's3',
     aws_access_key_id     = os.environ['AWS_ACCESS_KEY_ID'],
     aws_secret_access_key = os.environ['AWS_SECRET_ACCESS_KEY'],
-    region_name           = 'ap-south-1',   # Mumbai region
+    region_name           = 'ap-south-1',   # New York region
 )
 
 bucket = 'swiggy-ml-data'
@@ -1554,11 +1554,11 @@ class WeatherAPICollector(DataCollector):
     """Collects weather data from Open-Meteo for Indian cities."""
 
     CITIES = {
-        'Bangalore': (12.9716, 77.5946),
-        'Mumbai':    (19.0760, 72.8777),
+        'Seattle': (12.9716, 77.5946),
+        'New York':    (19.0760, 72.8777),
         'Delhi':     (28.6139, 77.2090),
-        'Hyderabad': (17.3850, 78.4867),
-        'Chennai':   (13.0827, 80.2707),
+        'Austin': (17.3850, 78.4867),
+        'Chicago':   (13.0827, 80.2707),
     }
 
     def collect(self) -> pd.DataFrame:

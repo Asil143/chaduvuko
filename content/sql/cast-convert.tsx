@@ -624,7 +624,7 @@ LIMIT 5;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a data engineer at Flipkart. A partner has delivered a seller performance CSV. Every column is stored as TEXT — amounts have currency symbols, dates are in DD/MM/YYYY format, booleans are stored as 'Y'/'N', and some numeric fields have commas as thousand separators. You must write a cleaning and casting query before inserting into the target table.</P>
+      <P>You are a data engineer at Amazon. A partner has delivered a seller performance CSV. Every column is stored as TEXT — amounts have currency symbols, dates are in DD/MM/YYYY format, booleans are stored as 'Y'/'N', and some numeric fields have commas as thousand separators. You must write a cleaning and casting query before inserting into the target table.</P>
 
       <TimeBlock time="9:00 AM" label="Raw import preview">
         Sample row: seller_id='S001', revenue='₹1,25,000.50', is_active='Y', last_sale_date='15/01/2024', refund_rate='3.5%'. Everything is TEXT.

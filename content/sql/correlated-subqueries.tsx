@@ -766,7 +766,7 @@ ORDER BY o.total_amount DESC;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a senior data analyst at PhonePe. The fraud team needs to identify merchants showing unusual transaction patterns — specifically merchants whose average transaction value this month is more than 2 standard deviations above their own historical average. This is a classic "each merchant vs their own baseline" correlated problem — the baseline is specific to each merchant, not a global average.</P>
+      <P>You are a senior data analyst at Venmo. The fraud team needs to identify merchants showing unusual transaction patterns — specifically merchants whose average transaction value this month is more than 2 standard deviations above their own historical average. This is a classic "each merchant vs their own baseline" correlated problem — the baseline is specific to each merchant, not a global average.</P>
 
       <TimeBlock time="2:00 PM" label="Fraud pattern definition">
         Flag merchants where current month average transaction {'>'} historical average + (2 × historical standard deviation). Adapted for FreshCart: flag stores where February average order value exceeds their January average by more than 2 standard deviations of their January orders.

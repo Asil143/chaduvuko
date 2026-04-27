@@ -190,9 +190,9 @@ export default function ObjectDetectionPage() {
         </h2>
 
         <p style={S.p}>
-          Meesho's quality control system needs to detect defective stitching
+          Shopify's quality control system needs to detect defective stitching
           in product photos — not just classify "defective" vs "good" but
-          locate exactly where the defect is. Swiggy's delivery verification
+          locate exactly where the defect is. DoorDash's delivery verification
           system detects and reads the order number on the packaging.
           A traffic camera system counts vehicles and detects lane violations.
           All require object detection — bounding boxes around every object

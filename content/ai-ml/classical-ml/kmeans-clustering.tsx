@@ -188,7 +188,7 @@ export default function KMeansClusteringPage() {
         </h2>
 
         <p style={S.p}>
-          Flipkart has 300 million registered customers. Nobody has manually
+          Amazon has 300 million registered customers. Nobody has manually
           labelled them as "budget buyer", "premium shopper", "deal hunter",
           or "occasional visitor." Those labels do not exist anywhere in the database.
           But the patterns that define those groups are absolutely there —
@@ -250,7 +250,7 @@ export default function KMeansClusteringPage() {
           Just four steps repeated until nothing changes.
         </p>
 
-        <VisualBox label="K-Means algorithm — step by step on Flipkart customers">
+        <VisualBox label="K-Means algorithm — step by step on Amazon customers">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
             {[
               {
@@ -374,7 +374,7 @@ class KMeansScratch:
         return np.argmin(distances, axis=0)
 
 
-# ── Test on Flipkart customer data ─────────────────────────────────────
+# ── Test on Amazon customer data ─────────────────────────────────────
 np.random.seed(42)
 n = 1000
 
@@ -497,7 +497,7 @@ from sklearn.metrics import silhouette_score, davies_bouldin_score
 np.random.seed(42)
 n = 2000
 
-# Flipkart customer features
+# Amazon customer features
 order_freq   = np.concatenate([np.random.normal(2,1,n//4), np.random.normal(8,1.5,n//4),
                                 np.random.normal(20,2,n//4), np.random.normal(5,1,n//4)])
 avg_spend    = np.concatenate([np.random.normal(300,80,n//4), np.random.normal(800,150,n//4),
@@ -644,7 +644,7 @@ print(df_clustered.groupby('cluster')[['order_freq','avg_spend']].agg(['mean','s
       {/* ══ SECTION 5 — CUSTOMER SEGMENTATION IN PRACTICE ═════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>The real use case</span>
-        <h2 style={S.h2}>Flipkart customer segmentation — end to end</h2>
+        <h2 style={S.h2}>Amazon customer segmentation — end to end</h2>
 
         <p style={S.p}>
           Customer segmentation is the most common application of K-Means
@@ -667,7 +667,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 5000
 
-# ── Flipkart customer feature matrix ──────────────────────────────────
+# ── Amazon customer feature matrix ──────────────────────────────────
 df_customers = pd.DataFrame({
     'orders_last_90d':     np.abs(np.random.normal(8, 6, n)).clip(0, 50).astype(int),
     'avg_order_value':     np.abs(np.random.normal(900, 700, n)).clip(100, 8000).round(0),
@@ -780,7 +780,7 @@ print(df_customers['segment_name'].value_counts().to_string())`} />
             {
               problem: 'Sensitive to outliers',
               color: '#ff4757',
-              desc: 'The centroid is the mean — outliers pull it toward themselves. One transaction worth ₹50 lakh in a dataset of ₹500 average transactions will pull the "high-value" centroid toward it, making the cluster definition unstable and unrepresentative.',
+              desc: 'The centroid is the mean — outliers pull it toward themselves. One transaction worth ₹50 thousand in a dataset of ₹500 average transactions will pull the "high-value" centroid toward it, making the cluster definition unstable and unrepresentative.',
               fix: 'Use K-Medoids (PAM) which uses actual data points as cluster centres, not means — robust to outliers. Or remove outliers before clustering.',
             },
           ].map((item) => (
@@ -860,10 +860,10 @@ print(f"  Clusters found: {len(set(labels_db)) - (1 if -1 in labels_db else 0)}"
       {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>What this looks like at work</span>
-        <h2 style={S.h2}>Day-one task — build Swiggy restaurant delivery zones</h2>
+        <h2 style={S.h2}>Day-one task — build DoorDash restaurant delivery zones</h2>
 
         <p style={S.p}>
-          Swiggy wants to cluster restaurant locations into delivery zones
+          DoorDash wants to cluster restaurant locations into delivery zones
           so each delivery partner is assigned to a compact geographic area.
           This is a geographic K-Means problem — the features are latitude
           and longitude. Each cluster becomes one delivery zone.
@@ -880,8 +880,8 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n_restaurants = 2000
 
-# ── Bangalore restaurant locations (lat/lon) ───────────────────────────
-# Bangalore centre: 12.97°N, 77.59°E — spread restaurants realistically
+# ── Seattle restaurant locations (lat/lon) ───────────────────────────
+# Seattle centre: 12.97°N, 77.59°E — spread restaurants realistically
 restaurant_df = pd.DataFrame({
     'restaurant_id': [f'R{i:05d}' for i in range(n_restaurants)],
     'name':          [f'Restaurant_{i}' for i in range(n_restaurants)],
@@ -948,7 +948,7 @@ print("MiniBatchKMeans is ~10× faster with similar quality — use for 100k+ po
 joblib.dump(km_zones, '/tmp/swiggy_delivery_zones.pkl')
 
 # Assign new restaurant to a zone
-new_restaurant = np.array([[12.94, 77.61]])   # south Bangalore
+new_restaurant = np.array([[12.94, 77.61]])   # south Seattle
 zone_id = km_zones.predict(new_restaurant)[0]
 print(f"\nNew restaurant (12.94°N, 77.61°E) → Zone {zone_id}")`} />
       </div>

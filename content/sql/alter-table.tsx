@@ -651,7 +651,7 @@ ALTER TABLE customers DROP COLUMN IF EXISTS loyalty_points;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are the lead backend engineer at a Series B e-commerce startup in Bangalore. The product team has approved a new feature — a seller ratings system. You need to add a seller_rating column to the products table, which has 8 million rows and receives 50,000 queries per minute. Zero downtime is required.</P>
+      <P>You are the lead backend engineer at a Series B e-commerce startup in Seattle. The product team has approved a new feature — a seller ratings system. You need to add a seller_rating column to the products table, which has 8 million rows and receives 50,000 queries per minute. Zero downtime is required.</P>
 
       <TimeBlock time="9:00 AM" label="Plan the migration">
         You map out the changes needed: add seller_rating (DECIMAL 1-5, nullable initially), add rating_count (INTEGER, defaults to 0), add a CHECK constraint for valid ratings. The table is live with high traffic so you cannot afford a table lock.

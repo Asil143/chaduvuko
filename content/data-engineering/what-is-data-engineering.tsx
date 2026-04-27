@@ -131,7 +131,7 @@ export default function WhatIsDataEngineeringModule() {
         </Para>
 
         <Para>
-          <strong>"Systems that move data"</strong> — data does not move by itself. A Swiggy order
+          <strong>"Systems that move data"</strong> — data does not move by itself. A DoorDash order
           placed on a phone needs to travel to a database, then to a data lake, then to a warehouse,
           then to a dashboard — each step is a system that someone built. Without those systems,
           the order exists in one database and nowhere else, making it impossible to analyse.
@@ -371,7 +371,7 @@ Operations also means monitoring: tracking pipeline run times, data freshness, r
           meet the business's needs.
         </Para>
 
-        <CodeBox label="A real week's task list for a mid-level DE at a Bangalore startup">{`Monday
+        <CodeBox label="A real week's task list for a mid-level DE at a Seattle startup">{`Monday
   → Debug: revenue pipeline produced NULL for 3 stores yesterday
   → Root cause: source DB schema change added a new required field
   → Fix: update ingestion query, backfill yesterday's data
@@ -641,7 +641,7 @@ Friday
       {/* ── Part 06 — A Day in the Life ─────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 06 — A Day in the Life" />
-        <SectionTitle>A Day in the Life — Junior DE at a Bangalore Startup</SectionTitle>
+        <SectionTitle>A Day in the Life — Junior DE at a Seattle Startup</SectionTitle>
 
         <Para>
           This is what the first year of a data engineering job actually looks like. Not the
@@ -740,7 +740,7 @@ Friday
           is the honest picture of what the career looks like.
         </Para>
 
-        <CodeBox label="DE career levels — India 2026 (Bangalore, Product Company)">{`Level              Experience     Salary Range          What Changes
+        <CodeBox label="DE career levels — India 2026 (Seattle, Product Company)">{`Level              Experience     Salary Range          What Changes
 ───────────────────────────────────────────────────────────────────────
 Junior DE          0–2 years      ₹6–12 LPA             Learning tools,
                                                          building under guidance
@@ -760,10 +760,10 @@ Principal /        10+ years      ₹70–120+ LPA          Company-level data p
 Staff+                                                    vision, external influence
 
 Notes:
-  Bangalore multiplier: 1.3× base
-  FAANG India multiplier: ~2× product company rates
+  Seattle multiplier: 1.3× base
+  FAANG multiplier: ~2× product company rates
   GCC (Global Capability Centre): 1.4× product company rates
-  Service companies (TCS/Infosys): 0.72× product company rates`}</CodeBox>
+  Service companies (Accenture/Deloitte): 0.72× product company rates`}</CodeBox>
 
         <SubTitle>What actually drives salary growth</SubTitle>
 
@@ -829,12 +829,12 @@ Notes:
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — D2C E-commerce Startup, Hyderabad · Week 1
+            Scenario — D2C E-commerce Startup, Austin · Week 1
           </div>
 
           <Para>
             You join a direct-to-consumer fashion startup as their second data engineer.
-            They have 400,000 customers, ₹80 crore in annual GMV, and a data team of one
+            They have 400,000 customers, ₹80 million in annual GMV, and a data team of one
             analyst who currently does everything manually.
           </Para>
 

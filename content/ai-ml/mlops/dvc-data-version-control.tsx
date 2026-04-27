@@ -704,7 +704,7 @@ print(f"\nBest experiment: n_estimators={best['n_estimators']} "
         <span style={S.tag}>Team collaboration</span>
         <h2 style={S.h2}>The complete Git + DVC daily workflow for an ML team</h2>
 
-        <CodeBlock code={`# ── Complete Git + DVC workflow for a Swiggy ML team ────────────────
+        <CodeBlock code={`# ── Complete Git + DVC workflow for a DoorDash ML team ────────────────
 
 # ── Project structure ─────────────────────────────────────────────────
 PROJECT_STRUCTURE = """
@@ -880,8 +880,8 @@ for cmd, desc in cmd_ref:
         <p style={S.p}>
           Module 75 is the final module of the MLOps section and one of the
           most practically valuable in the entire track — ML System Design.
-          Given a real-world ML problem (build Swiggy's delivery time prediction
-          system from scratch, or Razorpay's fraud detection system), how do you
+          Given a real-world ML problem (build DoorDash's delivery time prediction
+          system from scratch, or Stripe's fraud detection system), how do you
           design the full architecture? Data collection, feature engineering,
           model selection, serving infrastructure, monitoring, and the tradeoffs
           at each decision. This is what senior ML engineering interviews test

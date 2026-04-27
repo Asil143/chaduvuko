@@ -354,7 +354,7 @@ SELECT * FROM orders;   -- PostgreSQL looks in silver first, then gold
 
   INTEGER     4 bytes   -2,147,483,648 to 2,147,483,647 (~2.1 billion)
                         Use: most IDs, counts, quantities
-                        Danger: Swiggy order IDs exceeded 2B — use BIGINT
+                        Danger: DoorDash order IDs exceeded 2B — use BIGINT
 
   BIGINT      8 bytes   -9.2 quintillion to 9.2 quintillion
                         Use: all auto-increment primary keys, timestamps
@@ -431,7 +431,7 @@ TIMESTAMP     Date + time without timezone: 2026-03-17 20:14:32
               Storage: 8 bytes
               Use: NEVER for production data that spans timezones
               Problem: "20:14:32" means nothing without knowing the timezone
-                       A Mumbai user at 8:14 PM is 14:44 UTC
+                       A New York user at 8:14 PM is 14:44 UTC
                        A London user at 8:14 PM is 20:14 UTC
                        Stored without timezone, these are indistinguishable
 
@@ -678,7 +678,7 @@ UNIQUE in data engineering pipelines:
           ]}
           keys={['dim', 'natural', 'surrogate']}
           rows={[
-            { dim: 'Definition', natural: 'A column that exists in the real world and uniquely identifies the entity (email, ISBN, PAN number)', surrogate: 'A generated identifier with no meaning outside the database (auto-increment integer, UUID)' },
+            { dim: 'Definition', natural: 'A column that exists in the real world and uniquely identifies the entity (email, ISBN, SSN last 4)', surrogate: 'A generated identifier with no meaning outside the database (auto-increment integer, UUID)' },
             { dim: 'Stability', natural: 'Can change — users change email, companies rebrand', surrogate: 'Never changes — it was generated and has no real-world meaning to update' },
             { dim: 'Join performance', natural: 'Slower — larger values (strings) create bigger, slower indexes', surrogate: 'Faster — integers are small and fast to index and compare' },
             { dim: 'Readability', natural: 'Self-documenting — you can see what the row represents from the key', surrogate: 'Opaque — "47291" means nothing without looking up the row' },
@@ -1128,7 +1128,7 @@ Benefits:
           <Para>
             <strong>Problem 3 — TIMESTAMP without timezone:</strong> Both <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>created</code> and{' '}
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>updated</code> are TIMESTAMP (no timezone).
-            This company serves customers across India, and the Bangalore office is in
+            This company serves customers across India, and the Seattle office is in
             IST (+5:30). When a report counts "orders placed today" using{' '}
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>WHERE DATE(created) = CURRENT_DATE</code>,
             the result changes depending on whether the query runs in IST or UTC context.

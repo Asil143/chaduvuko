@@ -146,7 +146,7 @@ WHERE customer_id = current_setting('app.current_customer_id')::INT;
 CREATE VIEW employee_public AS
 SELECT employee_id, name, department, title, hire_date
 FROM employees;
--- salary, bank_account, pan_number columns are excluded
+-- salary, bank_account, ssn_last4 columns are excluded
 -- Grant SELECT on employee_public to reporting role — they never see salary
 
 -- CREATE OR REPLACE: modify an existing view without dropping it
@@ -191,7 +191,7 @@ DROP VIEW order_summary RESTRICT;                -- fail if any dependent views 
 {`-- Your query:
 SELECT customer_name, total_amount
 FROM order_summary
-WHERE customer_city = 'Bengaluru'
+WHERE customer_city = 'San Francisco'
   AND total_amount > 500;
 
 -- AFTER QUERY REWRITING (what the optimiser actually sees):
@@ -199,17 +199,17 @@ SELECT c.name AS customer_name, o.total_amount
 FROM orders o
 JOIN customers c   ON o.customer_id   = c.customer_id
 JOIN restaurants r ON o.restaurant_id = r.restaurant_id
-WHERE c.city = 'Bengaluru'          -- ← predicate pushed INTO the view's query
+WHERE c.city = 'San Francisco'          -- ← predicate pushed INTO the view's query
   AND o.total_amount > 500;          -- ← predicate pushed INTO the view's query
 
 -- The optimiser can now:
--- 1. Use index on customers.city to filter Bengaluru customers first
+-- 1. Use index on customers.city to filter San Francisco customers first
 -- 2. Use index on orders.total_amount for the > 500 filter
 -- 3. Choose optimal join order
 -- Exactly the same plan as if you'd written the join yourself
 
 -- VERIFY how PostgreSQL expands a view:
-EXPLAIN SELECT * FROM order_summary WHERE customer_city = 'Bengaluru';
+EXPLAIN SELECT * FROM order_summary WHERE customer_city = 'San Francisco';
 -- The plan shows the underlying tables, not the view name
 -- Confirms that query rewriting happened and predicates were pushed down`}
         </CodeBox>
@@ -239,11 +239,11 @@ FROM customers
 WHERE is_active = true;
 
 -- These DML operations work automatically:
-UPDATE active_customers SET city = 'Bengaluru' WHERE customer_id = 42;
--- Translates to: UPDATE customers SET city = 'Bengaluru' WHERE customer_id = 42
+UPDATE active_customers SET city = 'San Francisco' WHERE customer_id = 42;
+-- Translates to: UPDATE customers SET city = 'San Francisco' WHERE customer_id = 42
 
 INSERT INTO active_customers (name, email, city)
-VALUES ('New User', 'new@email.com', 'Pune');
+VALUES ('New User', 'new@email.com', 'Boston');
 -- Translates to: INSERT INTO customers (name, email, city) VALUES (...)
 -- NOTE: is_active column not in view — inserted with its DEFAULT value
 
@@ -583,9 +583,9 @@ END;
 $$;
 
 -- USE SET-RETURNING FUNCTION IN FROM CLAUSE:
-SELECT * FROM get_top_customers('Bengaluru', 5);
+SELECT * FROM get_top_customers('San Francisco', 5);
 SELECT customer_name, total_spent
-FROM get_top_customers('Bengaluru')
+FROM get_top_customers('San Francisco')
 WHERE total_spent > 500;`}
         </CodeBox>
 
@@ -1130,7 +1130,7 @@ CREATE TABLE employees (
     name         VARCHAR(100),
     email        VARCHAR(150),
     salary       DECIMAL(12,2),   -- SENSITIVE
-    pan_number   CHAR(10),        -- SENSITIVE
+    ssn_last4   CHAR(10),        -- SENSITIVE
     department   VARCHAR(100),
     hire_date    DATE
 );
@@ -1144,7 +1144,7 @@ FROM employees;
 CREATE ROLE hr_analyst;
 GRANT SELECT ON employees_public TO hr_analyst;
 -- hr_analyst can see employee_id, name, email, department, hire_date
--- hr_analyst CANNOT see salary or pan_number (those columns don't exist in the view)
+-- hr_analyst CANNOT see salary or ssn_last4 (those columns don't exist in the view)
 
 -- Payroll role: needs salary but not PAN
 CREATE VIEW employees_payroll AS
@@ -1231,7 +1231,7 @@ GRANT EXECUTE ON FUNCTION get_my_salary(INT) TO authenticated_role;
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Swiggy Ops Dashboard — Three-Layer Reporting Architecture
+            DoorDash Ops Dashboard — Three-Layer Reporting Architecture
           </div>
 
           <CodeBox label="Layer 1 — Security views (what analysts actually query)">
@@ -1282,7 +1282,7 @@ CREATE INDEX idx_dcs_day ON daily_city_stats(order_day);
 SELECT order_day, customer_city, delivered_revenue
 FROM daily_city_stats
 WHERE order_day >= CURRENT_DATE - INTERVAL '30 days'
-  AND customer_city = 'Bengaluru'
+  AND customer_city = 'San Francisco'
 ORDER BY order_day;`}
           </CodeBox>
 

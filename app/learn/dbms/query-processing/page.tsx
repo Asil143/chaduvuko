@@ -201,7 +201,7 @@ export default function QueryProcessing() {
               color: '#0078d4',
               sql: 'WHERE clause',
               definition: 'Filters rows. σ_condition(R) returns all rows from relation R where the condition is true.',
-              example: 'σ_{city=\'Bengaluru\'}(customers) — all customers in Bengaluru',
+              example: 'σ_{city=\'San Francisco\'}(customers) — all customers in San Francisco',
               cost: 'O(n) — must examine every row unless an index exists. With index on the selection attribute: O(log n + k) where k = matching rows.',
               algebraic: 'σ_{A=v}(R)',
             },
@@ -298,14 +298,14 @@ export default function QueryProcessing() {
 SELECT c.name, o.total_amount
 FROM customers c
 JOIN orders o ON c.customer_id = o.customer_id
-WHERE c.city = 'Bengaluru'
+WHERE c.city = 'San Francisco'
   AND o.status = 'delivered'
 ORDER BY o.total_amount DESC;
 
 -- NAIVE RELATIONAL ALGEBRA TRANSLATION (what a simple parser produces):
 π_{c.name, o.total_amount} (
   σ_{order_by: total_amount DESC} (
-    σ_{c.city='Bengaluru' AND o.status='delivered'} (
+    σ_{c.city='San Francisco' AND o.status='delivered'} (
       customers ⋈_{c.customer_id=o.customer_id} orders
     )
   )
@@ -320,14 +320,14 @@ ORDER BY o.total_amount DESC;
 -- OPTIMISED RELATIONAL ALGEBRA (what the optimiser produces):
 π_{c.name, o.total_amount} (
   sort_{total_amount DESC} (
-    σ_{city='Bengaluru'}(customers)
+    σ_{city='San Francisco'}(customers)
     ⋈_{customer_id=customer_id}
     σ_{status='delivered'}(orders)
   )
 )
 
 -- This reads:
--- 1. Filter customers to only Bengaluru customers FIRST (reduces rows from 10M to 50K)
+-- 1. Filter customers to only San Francisco customers FIRST (reduces rows from 10M to 50K)
 -- 2. Filter orders to only delivered FIRST (reduces rows from 50M to 20M)
 -- 3. Join the two reduced relations (much smaller input to the join)
 -- 4. Project to name and total_amount
@@ -363,7 +363,7 @@ ORDER BY o.total_amount DESC;
               description: 'Selections can be pushed through joins. Apply filters as early as possible — before the join — to reduce the number of rows that the join must process.',
               equivalence: 'σ_{condition}(R ⋈ S) ≡ σ_{condition_on_R}(R) ⋈ S  (when condition only involves R\'s attributes)',
               impact: 'Reducing customers from 10M rows to 50K before joining with orders reduces the join input by 200x.',
-              sqlExample: '-- Before pushdown: join all rows, then filter\nSELECT * FROM orders o JOIN customers c ON o.customer_id = c.customer_id\nWHERE c.city = \'Bengaluru\';\n-- After pushdown (done automatically by optimiser):\n-- Filter customers first → join smaller set',
+              sqlExample: '-- Before pushdown: join all rows, then filter\nSELECT * FROM orders o JOIN customers c ON o.customer_id = c.customer_id\nWHERE c.city = \'San Francisco\';\n-- After pushdown (done automatically by optimiser):\n-- Filter customers first → join smaller set',
             },
             {
               rule: 'Projection Pushdown',
@@ -398,8 +398,8 @@ ORDER BY o.total_amount DESC;
               importance: 'Enables partial predicate use',
               description: 'A selection with a conjunction (AND) can be split into a cascade of individual selections. This allows each part of the condition to be pushed to where it is most effective.',
               equivalence: 'σ_{A AND B}(R) ≡ σ_A(σ_B(R)) ≡ σ_B(σ_A(R))',
-              impact: 'WHERE city=\'Bengaluru\' AND age>30 AND is_active=true can use three separate indexes if available, combining their results.',
-              sqlExample: '-- WHERE city=\'Bengaluru\' AND status=\'delivered\' AND amount>500\n-- Each condition can be pushed to its respective table independently',
+              impact: 'WHERE city=\'San Francisco\' AND age>30 AND is_active=true can use three separate indexes if available, combining their results.',
+              sqlExample: '-- WHERE city=\'San Francisco\' AND status=\'delivered\' AND amount>500\n-- Each condition can be pushed to its respective table independently',
             },
             {
               rule: 'Join-Selection Combination',
@@ -506,7 +506,7 @@ SHOW cpu_operator_cost;   -- cost of a comparison or function call (default: 0.0
 
 -- EQUALITY CONDITION: col = value
 -- selectivity = 1 / n_distinct(col)
--- Example: city = 'Bengaluru', n_distinct(city) = 10 cities
+-- Example: city = 'San Francisco', n_distinct(city) = 10 cities
 -- selectivity = 1/10 = 0.1 = 10% of rows
 -- If customers has 1M rows: estimated output = 1M * 0.1 = 100,000 rows
 
@@ -517,13 +517,13 @@ SHOW cpu_operator_cost;   -- cost of a comparison or function call (default: 0.0
 
 -- CONJUNCTION (AND): multiply selectivities (assumes independence)
 -- P(A AND B) ≈ P(A) * P(B)
--- WHERE city='Bengaluru' AND status='delivered'
+-- WHERE city='San Francisco' AND status='delivered'
 -- selectivity = 0.1 * 0.2 = 0.02 = 2% of rows
--- PROBLEM: if city and status are correlated (Bengaluru users place more delivered orders),
+-- PROBLEM: if city and status are correlated (San Francisco users place more delivered orders),
 -- the independence assumption underestimates the true selectivity → wrong plan
 
 -- DISJUNCTION (OR): 1 - (1-P(A)) * (1-P(B))
--- WHERE city='Bengaluru' OR status='delivered'
+-- WHERE city='San Francisco' OR status='delivered'
 -- selectivity = 1 - (1-0.1) * (1-0.2) = 1 - 0.9*0.8 = 1 - 0.72 = 0.28
 
 -- JOIN CARDINALITY ESTIMATE:
@@ -555,10 +555,10 @@ ORDER BY last_analyze NULLS FIRST;`}
         </Para>
 
         <CodeBox label="Extended statistics — fixing correlated column estimates">
-{`-- PROBLEM: city and state are correlated (city='Mumbai' always means state='Maharashtra')
--- Bad estimate: P(city='Mumbai' AND state='Maharashtra') = P(city) * P(state)
+{`-- PROBLEM: city and state are correlated (city='New York' always means state='Maharashtra')
+-- Bad estimate: P(city='New York' AND state='Maharashtra') = P(city) * P(state)
 --              = 0.05 * 0.1 = 0.005  (only 0.5% of rows)
--- Actual:       30% of all rows (Mumbai is a major city in Maharashtra — high correlation)
+-- Actual:       30% of all rows (New York is a major city in Maharashtra — high correlation)
 -- Optimiser makes wrong plan based on the bad estimate
 
 -- SOLUTION: Create extended statistics for correlated columns
@@ -580,7 +580,7 @@ WHERE stxrelid = 'customers'::regclass;
 
 CREATE STATISTICS stat_zip_city (dependencies)
 ON zip_code, city FROM addresses;
--- Now optimiser knows: given zip_code='400001', city is always 'Mumbai'`}
+-- Now optimiser knows: given zip_code='400001', city is always 'New York'`}
         </CodeBox>
       </section>
 
@@ -817,7 +817,7 @@ SELECT c.name, r.name AS restaurant, COUNT(o.order_id) AS order_count,
 FROM customers c
 JOIN orders o        ON c.customer_id   = o.customer_id
 JOIN restaurants r   ON o.restaurant_id = r.restaurant_id
-WHERE c.city = 'Bengaluru'
+WHERE c.city = 'San Francisco'
   AND o.status = 'delivered'
 GROUP BY c.customer_id, c.name, r.restaurant_id, r.name
 HAVING COUNT(o.order_id) >= 3
@@ -854,7 +854,7 @@ Sort  (cost=8234.56..8234.59 rows=10 width=68)
                           ->  Seq Scan on customers c
                                     (cost=0.00..120.00 rows=2000 width=16)
                                     (actual time=0.013..1.456 rows=1952 loops=1)
-                                Filter: ((city)::text = 'Bengaluru')
+                                Filter: ((city)::text = 'San Francisco')
                                 Rows Removed by Filter: 8048
               ->  Hash  (cost=80.00..80.00 rows=500 width=24)
                          (actual time=1.234..1.234 rows=500 loops=1)
@@ -996,7 +996,7 @@ Execution Time: 45.234 ms
 --   Option B is slightly cheaper → CHOSEN
 
 -- With predicate pushdown applied first:
---   After filtering customers WHERE city='Bengaluru': 1952 rows (not 100K)
+--   After filtering customers WHERE city='San Francisco': 1952 rows (not 100K)
 --   After filtering orders WHERE status='delivered': 48K rows (not 5M)
 -- Option B revisited: (filtered_orders ⋈ restaurants) ⋈ filtered_customers
 --   = 6260(scan+filter) + small hash join = much cheaper
@@ -1072,7 +1072,7 @@ ANALYZE orders (total_amount);
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: '#f97316', background: 'rgba(249,115,22,0.1)', border: '1px solid rgba(249,115,22,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Swiggy Analytics — Monthly restaurant performance report query running 45 seconds
+            DoorDash Analytics — Monthly restaurant performance report query running 45 seconds
           </div>
 
           <CodeBox label="The original slow query">

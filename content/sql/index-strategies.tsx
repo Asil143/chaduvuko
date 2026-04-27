@@ -753,7 +753,7 @@ ORDER BY dead_pct DESC NULLS LAST;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a senior engineer at Zepto. The ops team reports that order placements have slowed by 40% over the last month. After investigation, the orders table now has 18 indexes — accumulated over 2 years of "fix this slow query" patches. Many are unused, several are redundant. You perform a systematic index audit and reduce from 18 to 7 indexes, cutting write overhead by 60% and restoring order placement speed.</P>
+      <P>You are a senior engineer at Instacart. The ops team reports that order placements have slowed by 40% over the last month. After investigation, the orders table now has 18 indexes — accumulated over 2 years of "fix this slow query" patches. Many are unused, several are redundant. You perform a systematic index audit and reduce from 18 to 7 indexes, cutting write overhead by 60% and restoring order placement speed.</P>
 
       <TimeBlock time="10:00 AM" label="18 indexes on the orders table — audit reveals the accumulation">
         Over 2 years: 5 indexes added for reports that were retired, 3 duplicates from different developers, 2 indexes with zero scans since the last statistics reset, 1 index on a column with only 2 distinct values.

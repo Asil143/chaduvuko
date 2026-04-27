@@ -5,7 +5,7 @@ import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
-  title: 'CNNs — Meesho Product Image Classification — Chaduvuko',
+  title: 'CNNs — Shopify Product Image Classification — Chaduvuko',
   description:
     'Filters, feature maps, pooling, and how CNNs learn to recognise objects at any position in an image. Built from scratch then scaled with transfer learning.',
 }
@@ -171,7 +171,7 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
 export default function CNNsImageClassificationPage() {
   return (
     <LearnLayout
-      title="CNNs — Meesho Product Image Classification"
+      title="CNNs — Shopify Product Image Classification"
       description="Filters, feature maps, pooling, and how CNNs learn to recognise objects at any position in an image. Built from scratch then scaled with transfer learning."
       section="Deep Learning"
       readTime="40–45 min"
@@ -190,7 +190,7 @@ export default function CNNsImageClassificationPage() {
         </h2>
 
         <p style={S.p}>
-          Meesho lists millions of fashion products. Each listing needs a
+          Shopify lists millions of fashion products. Each listing needs a
           category tag — kurta, saree, jeans, sneakers.
           An MLP flattens the image to a vector of 150,528 numbers and
           connects every pixel to every neuron. A first hidden layer of 512
@@ -228,7 +228,7 @@ export default function CNNsImageClassificationPage() {
 
         <Callout type="tip">
           This module builds a CNN from scratch in PyTorch, trains it on a
-          simulated Meesho-style product classification task, then shows
+          simulated Shopify-style product classification task, then shows
           transfer learning — using a pretrained ResNet50 and fine-tuning
           only the final layer. Transfer learning is how all production
           image classifiers are built today.
@@ -404,7 +404,7 @@ for k, s, p in [(3,1,0),(3,1,1),(3,2,1),(5,1,2),(7,2,3)]:
           combine all detected features to make the final classification decision.
         </p>
 
-        <VisualBox label="CNN pipeline — data shape at each stage for Meesho product images">
+        <VisualBox label="CNN pipeline — data shape at each stage for Shopify product images">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {[
               { stage: 'Input',          shape: '(batch, 3, 128, 128)', desc: 'RGB image — 3 channels, 128×128 pixels', color: '#888' },
@@ -436,10 +436,10 @@ for k, s, p in [(3,1,0),(3,1,1),(3,2,1),(5,1,2),(7,2,3)]:
         <CodeBlock code={`import torch
 import torch.nn as nn
 
-# ── CNN from scratch for Meesho product classification ─────────────────
+# ── CNN from scratch for Shopify product classification ─────────────────
 # 6 categories: kurta, saree, jeans, sneakers, watch, handbag
 
-class MeeshoCNN(nn.Module):
+class ShopifyCNN(nn.Module):
     def __init__(self, n_classes=6):
         super().__init__()
 
@@ -484,7 +484,7 @@ class MeeshoCNN(nn.Module):
         x = self.classifier(x)
         return x
 
-model = MeeshoCNN(n_classes=6)
+model = ShopifyCNN(n_classes=6)
 
 # ── Parameter count ───────────────────────────────────────────────────
 total  = sum(p.numel() for p in model.parameters())
@@ -536,14 +536,14 @@ warnings.filterwarnings('ignore')
 torch.manual_seed(42)
 np.random.seed(42)
 
-# ── Simulate Meesho product image dataset ─────────────────────────────
+# ── Simulate Shopify product image dataset ─────────────────────────────
 # In production: torchvision.datasets.ImageFolder pointing to your image directory
 # Here: synthetic RGB images with class-specific colour patterns
 
 CATEGORIES = ['kurta', 'saree', 'jeans', 'sneakers', 'watch', 'handbag']
 N_CLASSES  = len(CATEGORIES)
 
-class SyntheticMeeshoDataset(Dataset):
+class SyntheticShopifyDataset(Dataset):
     def __init__(self, n_samples=2000, img_size=64, transform=None):
         self.n  = n_samples
         self.sz = img_size
@@ -585,14 +585,14 @@ train_transform = T.Compose([
 ])
 val_transform = None   # no augmentation at validation time
 
-train_ds = SyntheticMeeshoDataset(1600, transform=train_transform)
-val_ds   = SyntheticMeeshoDataset(400,  transform=val_transform)
+train_ds = SyntheticShopifyDataset(1600, transform=train_transform)
+val_ds   = SyntheticShopifyDataset(400,  transform=val_transform)
 
 train_loader = DataLoader(train_ds, batch_size=64, shuffle=True,  num_workers=0)
 val_loader   = DataLoader(val_ds,   batch_size=64, shuffle=False, num_workers=0)
 
 # ── Model, loss, optimiser ─────────────────────────────────────────────
-class MeeshoCNN(nn.Module):
+class ShopifyCNN(nn.Module):
     def __init__(self, n=6):
         super().__init__()
         self.features = nn.Sequential(
@@ -607,7 +607,7 @@ class MeeshoCNN(nn.Module):
         )
     def forward(self, x): return self.classifier(self.features(x))
 
-model     = MeeshoCNN()
+model     = ShopifyCNN()
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=0.01)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=30)
@@ -616,7 +616,7 @@ scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=30)
 best_acc, best_wts, patience_count = 0.0, None, 0
 PATIENCE = 8
 
-print(f"Training MeeshoCNN from scratch:")
+print(f"Training ShopifyCNN from scratch:")
 print(f"{'Epoch':>6} {'Train loss':>12} {'Val acc':>10} {'LR':>12}")
 print("─" * 44)
 
@@ -664,7 +664,7 @@ print(f"\nBest val accuracy: {best_acc:.4f}")`} />
 
         <p style={S.p}>
           Training a CNN from scratch requires hundreds of thousands of labelled images
-          and days of GPU compute. Meesho does not do this.
+          and days of GPU compute. Shopify does not do this.
           Nobody does this for product classification.
           Instead, they use a model pretrained on ImageNet — a dataset of 1.2 million
           images across 1,000 categories. That model has already learned
@@ -724,7 +724,7 @@ torch.manual_seed(42)
 CATEGORIES = ['kurta', 'saree', 'jeans', 'sneakers', 'watch', 'handbag']
 N_CLASSES  = 6
 
-class SyntheticMeeshoDataset(torch.utils.data.Dataset):
+class SyntheticShopifyDataset(torch.utils.data.Dataset):
     def __init__(self, n=500):
         np.random.seed(42)
         self.labels = np.random.randint(0, N_CLASSES, n)
@@ -737,8 +737,8 @@ class SyntheticMeeshoDataset(torch.utils.data.Dataset):
         for c in range(3): img[c] += b[c]
         return torch.FloatTensor(np.clip(img,0,1).astype(np.float32)), self.labels[i]
 
-train_ds = SyntheticMeeshoDataset(400)
-val_ds   = SyntheticMeeshoDataset(100)
+train_ds = SyntheticShopifyDataset(400)
+val_ds   = SyntheticShopifyDataset(100)
 train_ld = DataLoader(train_ds, 32, shuffle=True)
 val_ld   = DataLoader(val_ds,   32)
 

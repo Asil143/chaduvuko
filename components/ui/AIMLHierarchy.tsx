@@ -23,7 +23,7 @@ const concepts: Concept[] = [
     examples: [
       'Google Maps rerouting you around traffic in real time — uses ML, which lives inside AI',
       'Face ID unlocking your phone — uses Deep Learning, which is inside ML, which is inside AI',
-      'Fraud detection at Razorpay blocking suspicious payments — uses classical ML',
+      'Fraud detection at Stripe blocking suspicious payments — uses classical ML',
     ],
     notText: 'AI is NOT just robots or science fiction. 99% of AI today is invisible software — recommendation engines, spam filters, search rankings. You use it dozens of times a day without knowing.',
     color: '#7F77DD',
@@ -36,7 +36,7 @@ const concepts: Concept[] = [
     analogy: "Old way: write \"if spam words detected → move to spam.\" ML way: show the model 10 million spam emails and 10 million real ones — it discovers what spam looks like on its own. You never wrote a single rule about Nigerian princes.",
     examples: [
       "Spotify predicting the next song you'll like — trained on millions of listening sessions",
-      'Swiggy estimating delivery time before you order — learned from thousands of past orders with traffic + weather + kitchen load data',
+      'DoorDash estimating delivery time before you order — learned from thousands of past orders with traffic + weather + kitchen load data',
       "Gmail's spam filter — learned what spam looks like from billions of emails, not from a rulebook anyone wrote",
     ],
     notText: 'Not all AI is ML. A chess engine following hand-coded evaluation rules is AI but not ML. ML specifically means the system changed its internal behaviour by learning from data — not by following rules a human wrote.',

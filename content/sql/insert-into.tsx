@@ -110,7 +110,7 @@ INSERT INTO customers (
   phone,
   city,
   state,
-  pincode,
+  zip_code,
   joined_date,
   loyalty_tier
 )
@@ -202,7 +202,7 @@ VALUES
         initialQuery={`-- Multi-row insert: add three new customers at once
 INSERT INTO customers (first_name, last_name, email, city, state, joined_date, loyalty_tier)
 VALUES
-  ('Arjun',  'Mehta',  'arjun.mehta@gmail.com',  'Pune',      'Maharashtra', '2024-03-01', 'Silver'),
+  ('Arjun',  'Mehta',  'arjun.mehta@gmail.com',  'Boston',      'Maharashtra', '2024-03-01', 'Silver'),
   ('Sneha',  'Pillai', 'sneha.pillai@yahoo.com',  'Trivandrum','Kerala',      '2024-03-15', 'Bronze'),
   ('Vikram', 'Bose',   'vikram.bose@outlook.com', 'Kolkata',   'West Bengal', '2024-04-01', 'Gold');
 
@@ -334,7 +334,7 @@ LIMIT 10;`}
         label="RETURNING clause — PostgreSQL and DuckDB"
         code={`-- Insert and get back the generated customer_id
 INSERT INTO customers (first_name, last_name, email, city, joined_date)
-VALUES ('Kavya', 'Reddy', 'kavya@gmail.com', 'Hyderabad', '2024-04-10')
+VALUES ('Kavya', 'Reddy', 'kavya@gmail.com', 'Austin', '2024-04-10')
 RETURNING customer_id, first_name, joined_date;
 
 -- Returns:
@@ -383,7 +383,7 @@ RETURNING
         code={`-- If a customer with this email already exists, do nothing
 -- Without this, a duplicate email INSERT would throw an error
 INSERT INTO customers (first_name, last_name, email, city, joined_date)
-VALUES ('Aisha', 'Khan', 'aisha.khan@gmail.com', 'Bangalore', '2024-01-05')
+VALUES ('Aisha', 'Khan', 'aisha.khan@gmail.com', 'Seattle', '2024-01-05')
 ON CONFLICT (email) DO NOTHING;
 
 -- The (email) specifies WHICH unique constraint to check
@@ -443,7 +443,7 @@ ON DUPLICATE KEY UPDATE
 -- ON CONFLICT DO NOTHING skips the insert silently
 
 INSERT INTO customers (first_name, last_name, email, city, joined_date)
-VALUES ('Aisha', 'Khan', 'aisha.khan@gmail.com', 'Mumbai', '2024-04-10')
+VALUES ('Aisha', 'Khan', 'aisha.khan@gmail.com', 'New York', '2024-04-10')
 ON CONFLICT (email) DO NOTHING;
 
 -- Verify original record is unchanged
@@ -673,7 +673,7 @@ SET joined_date = STR_TO_DATE(@joined_date, '%Y-%m-%d');`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at Zepto, a 10-minute grocery delivery startup. It is 8 PM on a Friday. A new batch of 500 stores has been approved for onboarding — their data is in a staging table from the operations team's form submissions. You need to load them into production safely before the weekend.</P>
+      <P>You are a backend engineer at Instacart, a 10-minute grocery delivery startup. It is 8 PM on a Friday. A new batch of 500 stores has been approved for onboarding — their data is in a staging table from the operations team's form submissions. You need to load them into production safely before the weekend.</P>
 
       <TimeBlock time="8:00 PM" label="Data arrives in staging table">
         The operations team has loaded the raw store data into stores_staging. Before touching production, you inspect the staging data.

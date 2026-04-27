@@ -220,16 +220,16 @@ export default function DataFormatsModule() {
 ORDER DATA:
   order_id | customer_id | city       | amount | status
   ─────────────────────────────────────────────────────
-  9284751  | 4201938     | Bangalore  | 380.00 | delivered
-  9284752  | 1092847     | Mumbai     | 220.00 | cancelled
-  9284753  | 8374621     | Hyderabad  | 540.00 | confirmed
-  9284754  | 2938471     | Bangalore  | 180.00 | delivered
+  9284751  | 4201938     | Seattle  | 380.00 | delivered
+  9284752  | 1092847     | New York     | 220.00 | cancelled
+  9284753  | 8374621     | Austin  | 540.00 | confirmed
+  9284754  | 2938471     | Seattle  | 180.00 | delivered
 
 ROW FORMAT (CSV / Avro):
-  Disk block 1: [9284751, 4201938, Bangalore, 380.00, delivered]
-  Disk block 2: [9284752, 1092847, Mumbai,    220.00, cancelled]
-  Disk block 3: [9284753, 8374621, Hyderabad, 540.00, confirmed]
-  Disk block 4: [9284754, 2938471, Bangalore, 180.00, delivered]
+  Disk block 1: [9284751, 4201938, Seattle, 380.00, delivered]
+  Disk block 2: [9284752, 1092847, New York,    220.00, cancelled]
+  Disk block 3: [9284753, 8374621, Austin, 540.00, confirmed]
+  Disk block 4: [9284754, 2938471, Seattle, 180.00, delivered]
 
   Query: SELECT SUM(amount) FROM orders
   Must read: ALL 5 columns × 4 rows = 20 values read, 4 needed
@@ -237,7 +237,7 @@ ROW FORMAT (CSV / Avro):
 COLUMNAR FORMAT (Parquet / ORC):
   Column "order_id":    [9284751, 9284752, 9284753, 9284754]
   Column "customer_id": [4201938, 1092847, 8374621, 2938471]
-  Column "city":        [Bangalore, Mumbai, Hyderabad, Bangalore]
+  Column "city":        [Seattle, New York, Austin, Seattle]
   Column "amount":      [380.00, 220.00, 540.00, 180.00]
   Column "status":      [delivered, cancelled, confirmed, delivered]
 
@@ -285,14 +285,14 @@ COLUMNAR FORMAT (Parquet / ORC):
         <CodeBox label="CSV internals — what the bytes actually look like">{`orders.csv — opened in a text editor:
 
 order_id,customer_id,city,amount,status
-9284751,4201938,Bangalore,380.00,delivered
-9284752,1092847,Mumbai,220.00,cancelled
-9284753,8374621,Hyderabad,540.00,confirmed
+9284751,4201938,Seattle,380.00,delivered
+9284752,1092847,New York,220.00,cancelled
+9284753,8374621,Austin,540.00,confirmed
 
 What the file actually is on disk:
   order_id,customer_id,city,amount,status\n
-  9284751,4201938,Bangalore,380.00,delivered\n
-  9284752,1092847,Mumbai,220.00,cancelled\n
+  9284751,4201938,Seattle,380.00,delivered\n
+  9284752,1092847,New York,220.00,cancelled\n
 
   \n = newline character (line ending)
   Every value is a string — there are no types
@@ -301,12 +301,12 @@ What the file actually is on disk:
 
 Quoting rule (RFC 4180):
   If a value contains the delimiter, wrap it in double quotes:
-  9284755,4201938,"Mumbai, Maharashtra",380.00,delivered
+  9284755,4201938,"New York, Maharashtra",380.00,delivered
                   ──────────────────── 
                   quoted because it contains a comma
 
   If a value contains double quotes, escape them by doubling:
-  9284756,4201938,"Hotel ""Grand"" Mumbai",380.00,delivered`}</CodeBox>
+  9284756,4201938,"Hotel ""Grand"" New York",380.00,delivered`}</CodeBox>
 
         <SubTitle>What CSV does well and where it breaks</SubTitle>
 
@@ -415,18 +415,18 @@ Quoting rule (RFC 4180):
 
         <CodeBox label="JSON array vs NDJSON — how large datasets are stored">{`WRONG for large datasets — single JSON array:
 [
-  {"order_id": 9284751, "amount": 380.00, "city": "Bangalore"},
-  {"order_id": 9284752, "amount": 220.00, "city": "Mumbai"},
+  {"order_id": 9284751, "amount": 380.00, "city": "Seattle"},
+  {"order_id": 9284752, "amount": 220.00, "city": "New York"},
   ... 999,998 more records ...
-  {"order_id": 10284750, "amount": 540.00, "city": "Hyderabad"}
+  {"order_id": 10284750, "amount": 540.00, "city": "Austin"}
 ]
 Problem: entire file must be read before any record can be parsed.
          1 GB file = hold 1 GB in memory to read record 1.
 
 CORRECT for large datasets — NDJSON / JSON Lines:
-{"order_id": 9284751, "amount": 380.00, "city": "Bangalore"}
-{"order_id": 9284752, "amount": 220.00, "city": "Mumbai"}
-{"order_id": 9284753, "amount": 540.00, "city": "Hyderabad"}
+{"order_id": 9284751, "amount": 380.00, "city": "Seattle"}
+{"order_id": 9284752, "amount": 220.00, "city": "New York"}
+{"order_id": 9284753, "amount": 540.00, "city": "Austin"}
 
 Each line is a complete, valid JSON object.
 Parsers read line by line — constant memory regardless of file size.
@@ -451,7 +451,7 @@ Python reading NDJSON efficiently:
         <CodeBox label="JSON key repetition overhead — why JSON is storage-inefficient">{`10 million order records stored as JSON:
 
 Each record:
-  {"order_id":9284751,"customer_id":4201938,"city":"Bangalore",
+  {"order_id":9284751,"customer_id":4201938,"city":"Seattle",
    "amount":380.00,"status":"delivered","created_at":"2026-03-17"}
 
 Key name overhead per record:
@@ -540,10 +540,10 @@ FILE STRUCTURE:
 │   │     Compression: SNAPPY                      │
 │   │     Min: 50.00  Max: 4999.00  Nulls: 0      │
 │   ├── Column Chunk: city                        │
-│   │     [Bangalore, Mumbai, Bangalore ...]       │
+│   │     [Seattle, New York, Seattle ...]       │
 │   │     Encoding: RLE_DICTIONARY                 │
 │   │     Compression: SNAPPY                      │
-│   │     Min: Bangalore  Max: Pune  Nulls: 0     │
+│   │     Min: Seattle  Max: Boston  Nulls: 0     │
 │   └── Column Chunk: status                      │
 │         [delivered, cancelled, delivered ...]    │
 │         Encoding: RLE_DICTIONARY (few values)    │
@@ -571,15 +571,15 @@ which row groups to read — without opening them.`}</CodeBox>
           contain matching rows.
         </Para>
 
-        <CodeBox label="Predicate pushdown — skipping row groups without reading them">{`Query: SELECT SUM(amount) FROM orders WHERE city = 'Bangalore'
+        <CodeBox label="Predicate pushdown — skipping row groups without reading them">{`Query: SELECT SUM(amount) FROM orders WHERE city = 'Seattle'
 
 Parquet file has 10 row groups (1M rows each = 10M total rows)
 
 Footer statistics for "city" column per row group:
-  Row Group 1:  Min=Bangalore, Max=Pune      → MAY contain Bangalore ✓ read
-  Row Group 2:  Min=Chennai,   Max=Delhi     → CANNOT contain Bangalore ✗ skip
-  Row Group 3:  Min=Ahmedabad, Max=Bangalore → MAY contain Bangalore ✓ read
-  Row Group 4:  Min=Delhi,     Max=Hyderabad → CANNOT contain Bangalore ✗ skip
+  Row Group 1:  Min=Seattle, Max=Boston      → MAY contain Seattle ✓ read
+  Row Group 2:  Min=Chicago,   Max=Delhi     → CANNOT contain Seattle ✗ skip
+  Row Group 3:  Min=Ahmedabad, Max=Seattle → MAY contain Seattle ✓ read
+  Row Group 4:  Min=Delhi,     Max=Austin → CANNOT contain Seattle ✗ skip
   ...
 
 Result: 6 of 10 row groups are skipped entirely.
@@ -611,7 +611,7 @@ PLAIN               Store values as-is              Small columns, floats
 DICTIONARY          Build a dictionary of unique     String columns with few
                     values, store index numbers       unique values (city, status,
                     instead of repeating strings      category, country code)
-                    "Bangalore"→0, "Mumbai"→1
+                    "Seattle"→0, "New York"→1
                     [0,1,0,0,1,0] instead of names
 
 RLE (Run-Length     Consecutive repeating values     Boolean columns, sorted
@@ -705,8 +705,8 @@ GZIP:   slower, better ratio (~4-5×) — use for archival storage`}</CodeBox>
 
 Avro binary data (what the file actually stores):
   No field names. Just values in schema-defined order:
-  [9284751][4201938][9:Bangalore][380.00][9:delivered][null]
-  [9284752][1092847][6:Mumbai]   [220.00][9:cancelled][null]
+  [9284751][4201938][9:Seattle][380.00][9:delivered][null]
+  [9284752][1092847][6:New York]   [220.00][9:cancelled][null]
 
   Field names are looked up from the schema, not stored with data.
   This makes Avro files smaller than JSON (no key repetition)
@@ -1069,7 +1069,7 @@ Format choice is a cost decision as much as a performance decision.`}</CodeBox>
 
 The first is columnar storage. CSV stores all columns for a row together. When a query needs only two columns from a 20-column table, CSV must read all 20 columns for every row just to extract the two needed. Parquet stores each column separately — only the two queried columns are read from disk. For a 100-million-row table, this reduces I/O by 90%.
 
-The second is predicate pushdown using column statistics. Parquet's file footer stores the minimum and maximum value for every column in every row group (a chunk of ~100,000 rows). Before reading any data, a query engine reads the footer and identifies which row groups cannot possibly contain matching rows. A filter on city = 'Bangalore' can skip entire row groups where min_city > 'Bangalore' or max_city < 'Bangalore', without reading those rows at all.
+The second is predicate pushdown using column statistics. Parquet's file footer stores the minimum and maximum value for every column in every row group (a chunk of ~100,000 rows). Before reading any data, a query engine reads the footer and identifies which row groups cannot possibly contain matching rows. A filter on city = 'Seattle' can skip entire row groups where min_city > 'Seattle' or max_city < 'Seattle', without reading those rows at all.
 
 Combined, these two mechanisms mean a query that reads 50 GB of CSV might read only 300 MB of Parquet — the same query, the same data, the same hardware, 160× less I/O. Less I/O means faster query completion and lower cost in cloud environments that charge per byte scanned.`,
           },

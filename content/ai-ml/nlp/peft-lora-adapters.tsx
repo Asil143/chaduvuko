@@ -210,7 +210,7 @@ export default function PeftLoraAdaptersPage() {
 
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
-            A senior engineer at Razorpay knows everything about payments.
+            A senior engineer at Stripe knows everything about payments.
             You want to teach them your company's specific internal processes.
             You do not re-hire them and retrain them from scratch —
             you give them a small notebook of company-specific notes
@@ -899,7 +899,7 @@ sql_model = PeftModel.from_pretrained(base, './lora-sql-adapter')
           Retrieval-Augmented Generation (RAG) solves this by combining
           a retriever (find relevant documents from a vector database)
           with a generator (produce an answer grounded in those documents).
-          Module 52 builds a complete RAG pipeline for a Razorpay knowledge base.
+          Module 52 builds a complete RAG pipeline for a Stripe knowledge base.
         </p>
 
         <div style={{

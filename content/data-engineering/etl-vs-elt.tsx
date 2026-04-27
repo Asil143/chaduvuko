@@ -356,7 +356,7 @@ TYPICAL ETL TOOLS AND WHEN USED:
         {[
           {
             scenario: 'PII masking before data reaches any analytical system',
-            detail: 'If data contains personal information (Aadhaar numbers, phone numbers, email addresses) that must be masked or hashed before landing in any analytical layer, ETL is required. The raw data cannot be allowed to reach the warehouse — it must be masked in the pipeline before loading. ELT would land the raw PII in the warehouse first, creating a compliance violation.',
+            detail: 'If data contains personal information (SSN numbers, phone numbers, email addresses) that must be masked or hashed before landing in any analytical layer, ETL is required. The raw data cannot be allowed to reach the warehouse — it must be masked in the pipeline before loading. ELT would land the raw PII in the warehouse first, creating a compliance violation.',
             example: 'A healthcare platform hashing patient IDs and masking phone numbers before loading to the analytics warehouse.',
           },
           {
@@ -611,7 +611,7 @@ HOW dbt FITS INTO ELT:
   SOURCES
   ─────────────────────────────────────────────────────────────────────────
   PostgreSQL (orders, customers)
-  Razorpay API (payments)
+  Stripe API (payments)
   ShipFast API (deliveries)
   Internal customer review data (contains PII)
   ML pipeline (model predictions)
@@ -619,7 +619,7 @@ HOW dbt FITS INTO ELT:
   INGESTION LAYER (thin EL — Python scripts / Fivetran / Airbyte)
   ─────────────────────────────────────────────────────────────────────────
   PostgreSQL CDC → raw.orders (EL — no transformation)
-  Razorpay API  → raw.payments (EL — minimal typing for load)
+  Stripe API  → raw.payments (EL — minimal typing for load)
   ShipFast API  → raw.deliveries (EL — minimal typing for load)
 
   ETL EXCEPTIONS — Python pipelines that transform BEFORE loading:

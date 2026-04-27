@@ -162,10 +162,10 @@ export default function EncodingCategoricalFeaturesPage() {
         </h2>
 
         <p style={S.p}>
-          The Swiggy orders dataset has a <span style={S.code as React.CSSProperties}>restaurant</span> column
+          The DoorDash orders dataset has a <span style={S.code as React.CSSProperties}>restaurant</span> column
           containing "Pizza Hut", "Biryani Blues", "McDonald's".
           The <span style={S.code as React.CSSProperties}>city</span> column has
-          "Bangalore", "Mumbai", "Delhi". The{' '}
+          "Seattle", "New York", "Delhi". The{' '}
           <span style={S.code as React.CSSProperties}>time_slot</span> column has
           "breakfast", "lunch", "evening", "dinner".
           Not a single number in sight — and every ML algorithm from linear
@@ -245,7 +245,7 @@ n = 8_000
 
 restaurants = ['Pizza Hut', 'Biryani Blues', "McDonald's", "Haldiram's",
                'Dominos', 'KFC', 'Subway', 'Burger King']
-cities      = ['Bangalore', 'Mumbai', 'Delhi', 'Hyderabad', 'Pune', 'Chennai']
+cities      = ['Seattle', 'New York', 'Delhi', 'Austin', 'Boston', 'Chicago']
 time_slots  = ['breakfast', 'lunch', 'evening', 'dinner']
 ratings_cat = ['poor', 'average', 'good', 'excellent']   # ordinal
 
@@ -587,7 +587,7 @@ for name in ohe.get_feature_names_out(cat_cols):
 # Restaurant not seen during training → all zeros for that restaurant's columns
 # The model falls back to "none of the known restaurants" behaviour (baseline)
 new_order = pd.DataFrame({'restaurant': ['New Brand Burger'],
-                          'city':       ['Bangalore'],
+                          'city':       ['Seattle'],
                           'time_slot':  ['lunch']})
 encoded_new = ohe.transform(new_order)
 print(f"\nUnknown restaurant encoded as: {encoded_new[0, :8]}")  # all zeros

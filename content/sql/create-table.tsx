@@ -578,7 +578,7 @@ CREATE TABLE IF NOT EXISTS customers (...);
   opened_date     DATE           NOT NULL,
   monthly_target  DECIMAL(12, 2) NOT NULL
                   CHECK (monthly_target > 0)
-  -- DECIMAL(12,2): store targets can be large (crores)
+  -- DECIMAL(12,2): store targets can be large (millions)
   -- CHECK ensures a target of zero or negative is impossible
 );`}
       />
@@ -596,7 +596,7 @@ CREATE TABLE IF NOT EXISTS customers (...);
   -- VARCHAR not INTEGER: phone numbers have leading zeros and country codes
   city         VARCHAR(100),
   state        VARCHAR(100),
-  pincode      VARCHAR(10),
+  zip_code      VARCHAR(10),
   -- All nullable: collected progressively, not all at registration
   joined_date  DATE           NOT NULL DEFAULT CURRENT_DATE,
   loyalty_tier VARCHAR(20)    NOT NULL DEFAULT 'Bronze'
@@ -791,7 +791,7 @@ CREATE TABLE customers (...);`}
       {/* ── PART 13 ── */}
       <Part n="13" title="What This Looks Like at Work" />
 
-      <P>You join a Bangalore health-tech startup as their first data engineer. The company is building a telemedicine platform — doctors, patients, appointments, and prescriptions. You are asked to design and create the initial database schema. This is a greenfield project — there is no existing schema.</P>
+      <P>You join a Seattle health-tech startup as their first data engineer. The company is building a telemedicine platform — doctors, patients, appointments, and prescriptions. You are asked to design and create the initial database schema. This is a greenfield project — there is no existing schema.</P>
 
       <TimeBlock time="9:00 AM" label="Requirements gathering">
         The product manager walks you through the domain: patients register with their name, date of birth, and contact details. Doctors have a specialisation and a consultation fee. Appointments connect a patient to a doctor at a specific date and time, with a status (scheduled, completed, cancelled). Prescriptions belong to appointments and contain medication details.

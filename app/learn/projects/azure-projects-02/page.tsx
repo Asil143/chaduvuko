@@ -57,12 +57,12 @@ function Screenshot({ caption }: { caption: string }) {
 }
 
 const storeFiles = [
-  { file: 'store_ST001_sales.csv', store: 'ST001', city: 'New Delhi' },
-  { file: 'store_ST002_sales.csv', store: 'ST002', city: 'Mumbai' },
-  { file: 'store_ST003_sales.csv', store: 'ST003', city: 'Bangalore' },
-  { file: 'store_ST004_sales.csv', store: 'ST004', city: 'Chennai' },
-  { file: 'store_ST005_sales.csv', store: 'ST005', city: 'Hyderabad' },
-  { file: 'store_ST006_sales.csv', store: 'ST006', city: 'Pune' },
+  { file: 'store_ST001_sales.csv', store: 'ST001', city: 'New York' },
+  { file: 'store_ST002_sales.csv', store: 'ST002', city: 'New York' },
+  { file: 'store_ST003_sales.csv', store: 'ST003', city: 'Seattle' },
+  { file: 'store_ST004_sales.csv', store: 'ST004', city: 'Chicago' },
+  { file: 'store_ST005_sales.csv', store: 'ST005', city: 'Austin' },
+  { file: 'store_ST006_sales.csv', store: 'ST006', city: 'Boston' },
   { file: 'store_ST007_sales.csv', store: 'ST007', city: 'Kolkata' },
   { file: 'store_ST008_sales.csv', store: 'ST008', city: 'Ahmedabad' },
   { file: 'store_ST009_sales.csv', store: 'ST009', city: 'Jaipur' },

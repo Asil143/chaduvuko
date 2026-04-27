@@ -186,7 +186,7 @@ export default function FeatureEngineeringPage() {
           in most Kaggle competitions uses a standard model on engineered features —
           not a novel architecture on raw data.
           This module teaches every major technique with working code
-          on the Swiggy dataset.
+          on the DoorDash dataset.
         </p>
 
         <HBox color="#1D9E75">
@@ -238,7 +238,7 @@ export default function FeatureEngineeringPage() {
       {/* ══ SECTION 2 — SETUP ══════════════════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Setup</span>
-        <h2 style={S.h2}>Load the clean Swiggy dataset</h2>
+        <h2 style={S.h2}>Load the clean DoorDash dataset</h2>
 
         <CodeBlock code={`import pandas as pd
 import numpy as np
@@ -254,10 +254,10 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 10_000
 
-# Generate clean Swiggy dataset (Module 16 output)
+# Generate clean DoorDash dataset (Module 16 output)
 restaurants = ['Pizza Hut','Biryani Blues',"McDonald's","Haldiram's",
                'Dominos','KFC','Subway','Burger King']
-cities      = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai']
+cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
 time_slots  = ['breakfast','lunch','evening','dinner']
 
 distance   = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15).round(2)
@@ -1680,7 +1680,7 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
               Ordinary least squares, gradient descent, regularisation (Ridge, Lasso, ElasticNet),
-              and how to diagnose and fix every failure mode — all on the Swiggy dataset.
+              and how to diagnose and fix every failure mode — all on the DoorDash dataset.
             </p>
           </div>
           <div style={{

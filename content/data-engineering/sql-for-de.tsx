@@ -960,16 +960,16 @@ ORDER BY 2, 1;`}</CodeBox>
 
 -- UPSERT pattern (INSERT or UPDATE):
 INSERT INTO silver.customers (customer_id, name, city, updated_at)
-VALUES (4201938, 'Priya Sharma', 'Hyderabad', NOW())
+VALUES (4201938, 'Priya Sharma', 'Austin', NOW())
 ON CONFLICT (customer_id)
 DO UPDATE SET
     city       = EXCLUDED.city,
     updated_at = EXCLUDED.updated_at;
--- If customer 4201938 exists: update city from 'Bangalore' to 'Hyderabad'
+-- If customer 4201938 exists: update city from 'Seattle' to 'Austin'
 -- If not: insert as new row
 
--- PROBLEM: all historical analysis now shows Hyderabad
--- "How much did Priya spend while she lived in Bangalore?" → impossible to answer
+-- PROBLEM: all historical analysis now shows Austin
+-- "How much did Priya spend while she lived in Seattle?" → impossible to answer
 -- Use SCD Type 2 if that question matters to the business`}</CodeBox>
 
         <CodeBox label="SCD Type 2 — add new row (full history preserved)">{`-- SCD TYPE 2: add a new row for each change, expire the old row
@@ -1002,7 +1002,7 @@ WHERE customer_id = 4201938
 INSERT INTO silver.customers_scd2
     (customer_id, name, city, tier, valid_from, valid_to, is_current)
 VALUES
-    (4201938, 'Priya Sharma', 'Hyderabad', 'Gold', CURRENT_DATE, NULL, TRUE);
+    (4201938, 'Priya Sharma', 'Austin', 'Gold', CURRENT_DATE, NULL, TRUE);
 
 -- QUERY: "What city was Priya in when she placed order 9284751?"
 SELECT c.city
@@ -1011,8 +1011,8 @@ JOIN silver.customers_scd2 c
   ON o.customer_id = c.customer_id
  AND o.order_date BETWEEN c.valid_from AND COALESCE(c.valid_to, '9999-12-31')
 WHERE o.order_id = 9284751;
--- Returns 'Bangalore' if the order was placed before the move
--- Returns 'Hyderabad' if placed after
+-- Returns 'Seattle' if the order was placed before the move
+-- Returns 'Austin' if placed after
 
 
 -- dbt snapshot pattern (generates SCD2 automatically):
@@ -1628,16 +1628,16 @@ The key distinction to understand: ROW_NUMBER should be used for deduplication r
 
 The table has three metadata columns: valid_from (the date this version became active), valid_to (the date this version was superseded — NULL for the current version), and is_current (a boolean flag for easy filtering of current records).
 
-When a customer's city changes from Bangalore to Hyderabad, two operations are needed in a single transaction. First, expire the currently active row by setting valid_to to yesterday's date and is_current to FALSE. Second, insert a new row with the new city, valid_from set to today's date, valid_to set to NULL, and is_current set to TRUE.
+When a customer's city changes from Seattle to Austin, two operations are needed in a single transaction. First, expire the currently active row by setting valid_to to yesterday's date and is_current to FALSE. Second, insert a new row with the new city, valid_from set to today's date, valid_to set to NULL, and is_current set to TRUE.
 
 UPDATE silver.customers_scd2
 SET valid_to = CURRENT_DATE - 1, is_current = FALSE
 WHERE customer_id = 4201938 AND is_current = TRUE;
 
 INSERT INTO silver.customers_scd2 (customer_id, name, city, valid_from, valid_to, is_current)
-VALUES (4201938, 'Priya Sharma', 'Hyderabad', CURRENT_DATE, NULL, TRUE);
+VALUES (4201938, 'Priya Sharma', 'Austin', CURRENT_DATE, NULL, TRUE);
 
-The value of this pattern becomes clear when you need to answer time-sensitive questions. To find the city a customer lived in when they placed a specific order, join the order to the SCD2 table on both customer_id and the condition that the order date falls within the row's valid_from to valid_to range. This correctly returns Bangalore for orders placed before the move and Hyderabad for orders placed after.
+The value of this pattern becomes clear when you need to answer time-sensitive questions. To find the city a customer lived in when they placed a specific order, join the order to the SCD2 table on both customer_id and the condition that the order date falls within the row's valid_from to valid_to range. This correctly returns Seattle for orders placed before the move and Austin for orders placed after.
 
 In practice, most teams implement SCD2 using dbt snapshots rather than hand-written UPDATE/INSERT logic, because dbt handles the expiry and insertion atomically based on a change detection strategy.`,
           },
@@ -1666,7 +1666,7 @@ In data engineering, UNION ALL should be the default choice in almost all cases,
 
 First, performance: UNION ALL is consistently faster. On a warehouse query combining two large tables, the difference can be seconds versus minutes.
 
-Second, correctness for source combination: when you are combining data from multiple sources into one unified table — all payments from Razorpay, Paytm, and PhonePe into a single payments table — you typically want all records from all sources. A legitimate payment in Razorpay that happens to have the same amount and timestamp as a Paytm payment would be silently removed by UNION but correctly preserved by UNION ALL.
+Second, correctness for source combination: when you are combining data from multiple sources into one unified table — all payments from Stripe, Square, and Venmo into a single payments table — you typically want all records from all sources. A legitimate payment in Stripe that happens to have the same amount and timestamp as a Square payment would be silently removed by UNION but correctly preserved by UNION ALL.
 
 Third, explicit deduplication: if deduplication is needed, it is better to do it explicitly and intentionally — using ROW_NUMBER or DISTINCT with specific column-level logic — rather than implicitly through UNION. Explicit deduplication lets you control which duplicate copy is kept and makes the deduplication intent visible to code reviewers.
 

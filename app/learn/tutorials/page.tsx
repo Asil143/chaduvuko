@@ -13,7 +13,7 @@ const subjects = [
     title: 'Data Engineering',
     status: 'live',
     href: '/learn/data-engineering',
-    desc: 'From zero to production-grade pipelines — batch, streaming, cloud storage, dbt, Spark. Built for the Indian job market.',
+    desc: 'From zero to production-grade pipelines — batch, streaming, cloud storage, dbt, Spark. Built for the US job market.',
     pills: ['Pipelines', 'SQL', 'Python', 'Batch', 'Streaming', 'Spark', 'dbt'],
   },
   {
@@ -76,7 +76,7 @@ const subjects = [
     title: 'Interview Prep — All Roles',
     status: 'live',
     href: '/learn/interview',
-    desc: 'Structured Q&A for every tech role — System Design, Coding Rounds, HR Round, Resume. FAANG India to campus placements.',
+    desc: 'Structured Q&A for every tech role — System Design, Coding Rounds, HR Round, Resume. FAANG to campus placements.',
     pills: ['System Design', 'Coding Rounds', 'HR Round', 'Resume', 'Behavioural'],
   },
 
@@ -475,13 +475,13 @@ const subjects = [
     title: 'Campus Placements',
     status: 'soon',
     href: '#',
-    desc: 'TCS, Wipro, Infosys, Cognizant, Accenture — Aptitude, Technical Round, HR Round, Group Discussion.',
+    desc: 'Accenture, KPMG, Deloitte, Cognizant, Accenture — Aptitude, Technical Round, HR Round, Group Discussion.',
     pills: ['Aptitude', 'Technical Round', 'HR Round', 'Group Discussion', 'GD Tips'],
   },
   {
     cat: 'tech',
     badge: 'Interview',
-    title: 'FAANG India Prep',
+    title: 'FAANG Prep',
     status: 'soon',
     href: '#',
     desc: 'Google, Amazon, Microsoft, Meta, Apple India — DSA patterns, System Design, Behavioural interviews.',

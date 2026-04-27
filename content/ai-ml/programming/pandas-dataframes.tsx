@@ -7,7 +7,7 @@ import MLPageHeader from '@/components/content/MLPageHeader'
 export const metadata: Metadata = {
   title: 'Pandas DataFrames — Chaduvuko',
   description:
-    'Load, clean, transform and explore real datasets. GroupBy, merge, missing values, pivot tables, and every operation ML projects actually need — with Swiggy and Razorpay examples throughout.',
+    'Load, clean, transform and explore real datasets. GroupBy, merge, missing values, pivot tables, and every operation ML projects actually need — with DoorDash and Stripe examples throughout.',
 }
 
 const S = {
@@ -147,7 +147,7 @@ export default function PandasDataFramesPage() {
   return (
     <LearnLayout
       title="Pandas DataFrames"
-      description="Load, clean, transform and explore real datasets. Every Pandas operation ML projects actually use — with Swiggy and Razorpay examples throughout."
+      description="Load, clean, transform and explore real datasets. Every Pandas operation ML projects actually use — with DoorDash and Stripe examples throughout."
       section="Programming Ecosystem"
       readTime="55–65 min"
       updatedAt="March 2026"
@@ -180,7 +180,7 @@ export default function PandasDataFramesPage() {
         </p>
 
         <p style={S.p}>
-          The running dataset in this module is a simulated Swiggy order table —
+          The running dataset in this module is a simulated DoorDash order table —
           10,000 rows with order IDs, restaurant names, distances, delivery times,
           ratings, and some intentional data quality issues. By the end of this module
           you'll have cleaned it, explored it, engineered features from it,
@@ -389,13 +389,13 @@ print(f"Type of df[['distance_km']]: {type(df[['distance_km']])}")  # DataFrame 
 import numpy as np
 import io
 
-# ── Generate realistic Swiggy dataset for this entire module ──────────
+# ── Generate realistic DoorDash dataset for this entire module ──────────
 np.random.seed(42)
 n = 10_000
 
 restaurants = ['Pizza Hut','Biryani Blues','McDonald\\'s','Haldiram\\'s',
-               'Dominos','KFC','Subway','Burger King','Barbeque Nation','Zomato Café']
-cities      = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai']
+               'Dominos','KFC','Subway','Burger King','Barbeque Nation','Uber Eats Café']
+cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
 time_slots  = ['breakfast','lunch','evening','dinner']
 
 df_raw = pd.DataFrame({
@@ -577,7 +577,7 @@ print(f"Numeric columns: {num_cols}")`} />
                 df.loc[0, 'distance_km']<br />
                 df.loc[0:5, 'distance_km']<br />
                 df.loc[:, 'city':'rating']<br />
-                df.loc[df['city']=='Bangalore']<br />
+                df.loc[df['city']=='Seattle']<br />
                 <span style={{ color: '#378ADD' }}>End label IS included</span>
               </div>
             </div>
@@ -619,8 +619,8 @@ subset = df.loc[0:4, ['distance_km', 'delivery_time', 'star_rating']]
 print(subset)
 
 # Boolean condition inside .loc
-bangalore = df.loc[df['city'] == 'Bangalore']
-print(f"\\nBangalore orders: {len(bangalore):,}")
+bangalore = df.loc[df['city'] == 'Seattle']
+print(f"\\nSeattle orders: {len(bangalore):,}")
 
 # Compound condition
 evening_far = df.loc[
@@ -708,7 +708,7 @@ print(f"Moderate distance, good rating: {len(moderate):,}")`} />
                 padding: '5px 9px', background: 'var(--bg2)', borderRadius: 4,
                 fontStyle: 'italic',
               }}>
-                Swiggy example: {item.example}
+                DoorDash example: {item.example}
               </div>
             </div>
           ))}
@@ -847,8 +847,8 @@ df['is_weekend'] = df['time_slot'].map(
 )
 
 # Map using another Series (like a dict from another table)
-city_tier = pd.Series({'Bangalore': 'T1', 'Mumbai': 'T1', 'Delhi': 'T1',
-                        'Hyderabad': 'T1', 'Pune': 'T2', 'Chennai': 'T2'})
+city_tier = pd.Series({'Seattle': 'T1', 'New York': 'T1', 'Delhi': 'T1',
+                        'Austin': 'T1', 'Boston': 'T2', 'Chicago': 'T2'})
 df['city_tier'] = df['city'].map(city_tier)
 print(f"\\nCity tier distribution:\\n{df['city_tier'].value_counts()}")
 
@@ -1018,7 +1018,7 @@ df = pd.read_csv('/tmp/swiggy_orders.csv')
 # Restaurant metadata table
 restaurant_meta = pd.DataFrame({
     'restaurant':    ['Pizza Hut','Biryani Blues','McDonald\\'s','Haldiram\\'s',
-                      'Dominos','KFC','Subway','Burger King','Barbeque Nation','Zomato Café'],
+                      'Dominos','KFC','Subway','Burger King','Barbeque Nation','Uber Eats Café'],
     'cuisine_type':  ['Italian','Indian','American','Indian','Italian',
                       'American','American','American','Indian','Fusion'],
     'price_band':    ['medium','medium','low','low','low','low','low','low','high','medium'],
@@ -1028,7 +1028,7 @@ restaurant_meta = pd.DataFrame({
 
 # City metadata table
 city_meta = pd.DataFrame({
-    'city':          ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai'],
+    'city':          ['Seattle','New York','Delhi','Austin','Boston','Chicago'],
     'city_tier':     [1, 1, 1, 1, 2, 2],
     'avg_income_lpa': [14.2, 16.8, 12.4, 13.1, 11.8, 10.9],
     'traffic_index': [8.2, 8.8, 7.9, 7.1, 6.4, 6.8],
@@ -1349,7 +1349,7 @@ print(f"\\nSaved ML-ready dataset: {feature_df.shape}")`} />
         <ErrorBlock
           error="SettingWithCopyWarning: A value is trying to be set on a copy of a slice"
           cause="You selected a subset of a DataFrame (which might be a view or a copy — Pandas can't always tell), then tried to modify it. This is the most common Pandas warning and it means your assignment may or may not have worked on the original DataFrame."
-          fix="Use .copy() explicitly: df_sub = df[df['city']=='Bangalore'].copy() then modify df_sub. Or use .loc to modify the original: df.loc[df['city']=='Bangalore', 'column'] = value. The chained assignment df[mask]['col'] = val is always wrong — never do it."
+          fix="Use .copy() explicitly: df_sub = df[df['city']=='Seattle'].copy() then modify df_sub. Or use .loc to modify the original: df.loc[df['city']=='Seattle', 'column'] = value. The chained assignment df[mask]['col'] = val is always wrong — never do it."
         />
 
         <ErrorBlock

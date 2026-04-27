@@ -199,7 +199,7 @@ export default function ModelInterpretabilityPage() {
 
         <p style={S.p}>
           But even outside regulation, interpretability matters for trust.
-          A data scientist at CRED who cannot explain why the model rejected
+          A data scientist at Brex who cannot explain why the model rejected
           a specific applicant cannot debug the model when it makes systematic
           errors. Cannot detect bias. Cannot improve it. The model is a black box
           that produces outputs nobody understands — including the people responsible for it.
@@ -316,7 +316,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 3000
 
-# CRED loan default dataset
+# Brex loan default dataset
 income        = np.abs(np.random.normal(50_000, 30_000, n)).clip(8_000, 500_000)
 existing_emis = np.abs(np.random.normal(8_000, 6_000, n)).clip(0, 80_000)
 credit_score  = np.abs(np.random.normal(680, 80, n)).clip(300, 900)
@@ -830,10 +830,10 @@ for feat, sv in sorted(zip(feat_names, shap_vals),
       {/* ══ SECTION 6 — PRODUCTION EXPLANATION PIPELINE ════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>What this looks like at work</span>
-        <h2 style={S.h2}>Production explanation pipeline — CRED loan rejection letters</h2>
+        <h2 style={S.h2}>Production explanation pipeline — Brex loan rejection letters</h2>
 
         <p style={S.p}>
-          At CRED, when a loan application is rejected the system must
+          At Brex, when a loan application is rejected the system must
           generate a plain-English explanation that satisfies RBI guidelines.
           The explanation must name the specific factors that led to rejection,
           not just say "algorithmic decision." Here is the complete pipeline.

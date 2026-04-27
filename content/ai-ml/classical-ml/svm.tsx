@@ -188,7 +188,7 @@ export default function SVMPage() {
         </h2>
 
         <p style={S.p}>
-          Imagine Razorpay's fraud detection system. You have thousands of transactions —
+          Imagine Stripe's fraud detection system. You have thousands of transactions —
           some fraudulent, some legitimate. You train a logistic regression.
           It draws a line that separates them correctly on the training data.
           But there are infinitely many lines that separate them correctly.
@@ -451,7 +451,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 2000
 
-# Razorpay transaction features
+# Stripe transaction features
 transaction_amount = np.abs(np.random.normal(500, 400, n)).clip(10, 5000)
 time_since_last    = np.abs(np.random.normal(24, 20, n)).clip(0.1, 200)
 merchant_risk      = np.random.uniform(0, 1, n)
@@ -786,7 +786,7 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 3000
 
-# Razorpay fraud detection — production pipeline
+# Stripe fraud detection — production pipeline
 transaction_amount = np.abs(np.random.normal(500, 400, n)).clip(10, 5000)
 time_since_last    = np.abs(np.random.normal(24, 20, n)).clip(0.1, 200)
 merchant_risk      = np.random.uniform(0, 1, n)

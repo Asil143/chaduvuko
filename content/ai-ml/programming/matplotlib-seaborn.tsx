@@ -423,10 +423,10 @@ sns.set_theme(
       {/* ══ SECTION 3 — GENERATE DATASET ═══════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Setup</span>
-        <h2 style={S.h2}>The Swiggy dataset used throughout this module</h2>
+        <h2 style={S.h2}>The DoorDash dataset used throughout this module</h2>
 
         <p style={S.p}>
-          All plots in this module use the same simulated Swiggy orders dataset
+          All plots in this module use the same simulated DoorDash orders dataset
           from Module 10. Run this setup block once before the rest of the module.
         </p>
 
@@ -441,7 +441,7 @@ n = 5_000
 
 restaurants = ['Pizza Hut','Biryani Blues','McDonald\\'s','Haldiram\\'s',
                'Dominos','KFC','Subway','Burger King']
-cities      = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai']
+cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
 time_slots  = ['breakfast','lunch','evening','dinner']
 
 distance   = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
@@ -910,7 +910,7 @@ plt.show()`} />
 
         <CodeBlock code={`# ── Regular grid subplots ─────────────────────────────────────────────
 fig, axes = plt.subplots(2, 3, figsize=(18, 10))
-fig.suptitle('Swiggy EDA Dashboard', fontsize=16, fontweight='bold')
+fig.suptitle('DoorDash EDA Dashboard', fontsize=16, fontweight='bold')
 
 # Flatten for easy indexing
 axs = axes.flatten()   # shape (2,3) → (6,) for easy looping

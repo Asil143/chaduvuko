@@ -201,7 +201,7 @@ export default function AzureMLPage() {
 
         <p style={S.p}>
           Azure ML is the dominant cloud ML platform in Indian enterprise.
-          HDFC Bank, ICICI, Infosys, Wipro, TCS, and most large Indian
+          HDFC Bank, ICICI, Deloitte, KPMG, Accenture, and most large Indian
           corporates run on Azure. If you join an enterprise ML team at an
           Indian bank, insurance company, or IT services firm, you will
           almost certainly work with Azure ML. The skills map directly:

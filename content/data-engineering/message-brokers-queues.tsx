@@ -164,7 +164,7 @@ export default function MessageBrokersQueuesModule() {
           </Para>
           <Para>
             <strong>Temporal decoupling —</strong> the consumer does not need
-            to be running when the producer sends. A Razorpay payment event
+            to be running when the producer sends. A Stripe payment event
             written at 3 AM is still there for the analytics consumer that
             starts processing at 6 AM. The broker held it safely in between.
           </Para>
@@ -177,7 +177,7 @@ export default function MessageBrokersQueuesModule() {
           <Para>
             <strong>Rate decoupling —</strong> the producer and consumer can
             run at completely different speeds. The broker absorbs the
-            difference. If Swiggy's order service produces 50,000 events per
+            difference. If DoorDash's order service produces 50,000 events per
             second during the dinner rush but the fraud detection consumer
             can only process 10,000 per second, the broker buffers 40,000
             events per second of lag without the producer slowing down or
@@ -246,7 +246,7 @@ export default function MessageBrokersQueuesModule() {
 # No message was delivered twice. No message was skipped.
 # Neither consumer can go back and re-read M1. It is gone.
 
-# Real use case: Flipkart order fulfilment
+# Real use case: Amazon order fulfilment
 # 10,000 orders sitting in a queue
 # 50 fulfilment worker threads all pulling from the same queue
 # Each order is processed by exactly one worker — no double fulfilment`}
@@ -263,7 +263,7 @@ export default function MessageBrokersQueuesModule() {
         </Para>
 
         <Para>
-          This is the publish-subscribe (pub-sub) pattern. Meesho's order
+          This is the publish-subscribe (pub-sub) pattern. Shopify's order
           service publishes an <code>order.placed</code> event to the
           <code>orders</code> topic. The notification service subscribes and
           sends a confirmation SMS. The inventory service subscribes and
@@ -305,7 +305,7 @@ export default function MessageBrokersQueuesModule() {
             { '0': 'State', '1': 'Queue empties as messages are consumed', '2': 'Log grows until retention period expires' },
             { '0': 'Ordering', '1': 'FIFO within the queue; across competing consumers, no global order', '2': 'Strict order within a partition' },
             { '0': 'Use for', '1': 'Task distribution — email jobs, resize jobs, payment processing workers', '2': 'Event broadcasting — notify many systems of the same event' },
-            { '0': 'Indian example', '1': 'Nykaa image resize queue — 1 image, 1 worker, processed once', '2': 'Swiggy order topic — 1 event, consumed by 8 different services' },
+            { '0': 'Indian example', '1': 'Sephora image resize queue — 1 image, 1 worker, processed once', '2': 'DoorDash order topic — 1 event, consumed by 8 different services' },
           ]}
         />
 
@@ -1024,7 +1024,7 @@ while True:
 
         <HighlightBox>
           <Para>
-            <strong>At a fintech (Razorpay / PhonePe):</strong> A production
+            <strong>At a fintech (Stripe / Venmo):</strong> A production
             incident — the payment reconciliation job is showing duplicate
             transactions in its output. You are asked to investigate. You
             check the producer configuration: <code>enable.idempotence=false</code>
@@ -1039,7 +1039,7 @@ while True:
 
         <HighlightBox>
           <Para>
-            <strong>At an e-commerce company (Nykaa / Myntra):</strong>
+            <strong>At an e-commerce company (Sephora / Myntra):</strong>
             You are asked to design a new notification system. Orders topic
             already exists. Inventory, fraud, loyalty, and analytics services
             all need to react to new orders. The architecture decision is:

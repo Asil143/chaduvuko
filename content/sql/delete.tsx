@@ -314,7 +314,7 @@ CREATE VIEW active_customers AS
 SELECT * FROM customers WHERE is_deleted = false;
 
 -- Application code queries the view, never the base table
-SELECT * FROM active_customers WHERE city = 'Bangalore';
+SELECT * FROM active_customers WHERE city = 'Seattle';
 -- Automatically excludes deleted customers
 
 -- Admin/audit queries use the base table directly
@@ -604,7 +604,7 @@ VALUES ('RETENTION_PURGE', 'orders', [affected_count], NOW());`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at Zepto. The product team runs a referral program — customers get a bonus when they refer a new user. The fraud team has identified 23 referral bonus credits that were fraudulently generated — a user created fake accounts to claim multiple bonuses. You need to delete these credits safely from the production database.</P>
+      <P>You are a backend engineer at Instacart. The product team runs a referral program — customers get a bonus when they refer a new user. The fraud team has identified 23 referral bonus credits that were fraudulently generated — a user created fake accounts to claim multiple bonuses. You need to delete these credits safely from the production database.</P>
 
       <TimeBlock time="11:00 AM" label="Fraud team shares the list">
         They send a CSV with 23 referral_credit_ids that were fraudulently generated. You load them into a staging table: fraudulent_credits_2024_04.
@@ -710,7 +710,7 @@ VALUES (
       <IQ q="What is soft delete and why do most production applications prefer it over hard delete?">
         <p style={{ margin: '0 0 14px' }}>Soft delete is a pattern where rows are never physically removed from the database — instead a column (typically is_deleted BOOLEAN or deleted_at TIMESTAMP) is set to mark the row as logically deleted. All normal application queries include WHERE is_deleted = false (or WHERE deleted_at IS NULL) to exclude soft-deleted rows. The actual data remains in the database indefinitely or until a scheduled hard delete after a retention period.</p>
         <p style={{ margin: '0 0 14px' }}>Four reasons production applications prefer soft delete: First, auditability — regulators, auditors, and compliance teams need to see the full history of what happened to every record. A hard-deleted row leaves no trace. A soft-deleted row is permanently visible to audit queries. Second, recovery — users accidentally delete things daily. With soft delete, recovery is UPDATE is_deleted = false — instant. With hard delete, recovery requires a database backup restore, potentially losing hours of other changes. Third, referential integrity — a hard-deleted customer still has orders in the orders table that now reference a non-existent customer. Soft delete keeps the customer row, preserving all relationships. Fourth, analytics — churned customers, removed products, and cancelled subscriptions have analytical value. Their historical data answers questions about why users leave and which products fail.</p>
-        <p style={{ margin: 0 }}>The trade-offs: soft delete means the table grows indefinitely unless a periodic hard delete runs for very old soft-deleted rows. All queries must include the is_deleted filter — missing it returns deleted rows, which is a bug. Indexes must be designed to efficiently filter on is_deleted. And UNIQUE constraints become complex — if an email is soft-deleted, can a new user register with the same email? These are solvable problems, but they require deliberate design. Most Indian tech companies (Swiggy, Razorpay, CRED) use soft delete for user-facing data and compliance-sensitive tables, and use hard delete only for truly ephemeral data like session tokens and temporary processing records.</p>
+        <p style={{ margin: 0 }}>The trade-offs: soft delete means the table grows indefinitely unless a periodic hard delete runs for very old soft-deleted rows. All queries must include the is_deleted filter — missing it returns deleted rows, which is a bug. Indexes must be designed to efficiently filter on is_deleted. And UNIQUE constraints become complex — if an email is soft-deleted, can a new user register with the same email? These are solvable problems, but they require deliberate design. Most Indian tech companies (DoorDash, Stripe, Brex) use soft delete for user-facing data and compliance-sensitive tables, and use hard delete only for truly ephemeral data like session tokens and temporary processing records.</p>
       </IQ>
 
       <IQ q="How do CASCADE deletes work and what are the risks?">

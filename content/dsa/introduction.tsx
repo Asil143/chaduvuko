@@ -293,7 +293,7 @@ export default function DSAIntroductionPage() {
           {
             number: '02',
             title: 'Efficiency matters at scale',
-            body: 'When Swiggy processes 10 million orders a day, a slow algorithm is not just inconvenient — it causes system crashes and financial loss. Engineers who understand complexity know how to write code that holds up under real load.',
+            body: 'When DoorDash processes 10 million orders a day, a slow algorithm is not just inconvenient — it causes system crashes and financial loss. Engineers who understand complexity know how to write code that holds up under real load.',
           },
           {
             number: '03',
@@ -326,7 +326,7 @@ export default function DSAIntroductionPage() {
       </div>
 
       <Callout type="tip">
-        <strong>Real talk:</strong> Even if you never work at Google or Flipkart, DSA makes you a
+        <strong>Real talk:</strong> Even if you never work at Google or Amazon, DSA makes you a
         better programmer. You will write faster code, catch bugs earlier, and understand
         why systems behave the way they do. It is worth learning regardless of your goal.
       </Callout>
@@ -401,7 +401,7 @@ export default function DSAIntroductionPage() {
       </div>
 
       <Callout type="example">
-        <strong>Analogy:</strong> Your name is "Rahul." That is your label. Your Aadhaar number
+        <strong>Analogy:</strong> Your name is "Rahul." That is your label. Your SSN number
         is your actual address in the government system. The government does not think of you
         as "Rahul" — it thinks of you as a 12-digit number. Variables work the same way.
         The name is for you. The address is for the computer.

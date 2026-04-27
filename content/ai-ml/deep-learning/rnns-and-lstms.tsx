@@ -190,7 +190,7 @@ export default function RNNsAndLSTMsPage() {
         </h2>
 
         <p style={S.p}>
-          Flipkart wants to predict whether a user will make a purchase
+          Amazon wants to predict whether a user will make a purchase
           in the next 10 minutes based on their browsing session:
           home page → search "running shoes" → product page → add to cart → remove from cart.
           An MLP treats each action independently — it sees five inputs
@@ -348,7 +348,7 @@ class RNNCellScratch:
         # hₜ = tanh(Wx @ xₜ + Wh @ hₜ₋₁ + b)
         return np.tanh(self.Wx @ x + self.Wh @ h_prev + self.b)
 
-# ── Process a Flipkart session sequence ───────────────────────────────
+# ── Process a Amazon session sequence ───────────────────────────────
 np.random.seed(42)
 input_size  = 8    # embedding dimension per action
 hidden_size = 16
@@ -500,7 +500,7 @@ class LSTMCellScratch:
 
         return h, C, {'f': f, 'i': i, 'g': g, 'o': o}
 
-# ── Process Flipkart session with LSTM ────────────────────────────────
+# ── Process Amazon session with LSTM ────────────────────────────────
 np.random.seed(42)
 input_size  = 8
 hidden_size = 16
@@ -617,7 +617,7 @@ print(f"  h_n shape:    {tuple(h_bi.shape)}    ← 2 directions × 1 layer")`} /
       {/* ══ SECTION 5 — SEQUENCE CLASSIFICATION ════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Real task — purchase intent prediction</span>
-        <h2 style={S.h2}>LSTM for Flipkart session classification — will this user buy?</h2>
+        <h2 style={S.h2}>LSTM for Amazon session classification — will this user buy?</h2>
 
         <CodeBlock code={`import torch
 import torch.nn as nn
@@ -631,7 +631,7 @@ warnings.filterwarnings('ignore')
 torch.manual_seed(42)
 np.random.seed(42)
 
-# ── Simulate Flipkart browsing sessions ───────────────────────────────
+# ── Simulate Amazon browsing sessions ───────────────────────────────
 # Each session: variable-length sequence of actions
 # Each action: 16-dim feature vector (action type, time on page, etc.)
 # Label: 1 = purchased within 30 min, 0 = did not
@@ -640,7 +640,7 @@ N_SESSIONS  = 2000
 INPUT_SIZE  = 16
 MAX_SEQ_LEN = 20
 
-class FlipkartSessionDataset(Dataset):
+class AmazonSessionDataset(Dataset):
     def __init__(self, n=N_SESSIONS):
         np.random.seed(42)
         self.sessions = []
@@ -668,7 +668,7 @@ def collate_fn(batch):
     padded = nn.utils.rnn.pad_sequence(sequences, batch_first=True)
     return padded, torch.tensor(labels, dtype=torch.long), lengths
 
-dataset    = FlipkartSessionDataset()
+dataset    = AmazonSessionDataset()
 train_ds, val_ds = torch.utils.data.random_split(dataset, [1600, 400])
 train_ld   = DataLoader(train_ds, batch_size=64, shuffle=True,  collate_fn=collate_fn)
 val_ld     = DataLoader(val_ds,   batch_size=64, shuffle=False, collate_fn=collate_fn)
@@ -709,7 +709,7 @@ scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=5, factor=0
 # ── Training loop ─────────────────────────────────────────────────────
 best_auc, best_wts, patience_count = 0.0, None, 0
 
-print("Training SessionLSTM on Flipkart purchase intent:")
+print("Training SessionLSTM on Amazon purchase intent:")
 print(f"{'Epoch':>6} {'Train loss':>12} {'Val AUC':>10}")
 print("─" * 32)
 
@@ -755,13 +755,13 @@ print(f"\nBest val AUC: {best_auc:.4f}")`} />
       {/* ══ SECTION 6 — TIME SERIES FORECASTING ════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>The other main use case</span>
-        <h2 style={S.h2}>LSTM for time series — Zepto demand forecasting</h2>
+        <h2 style={S.h2}>LSTM for time series — Instacart demand forecasting</h2>
 
         <p style={S.p}>
           Beyond classification, LSTMs are widely used for
           <strong style={{ color: '#1D9E75' }}> sequence-to-value regression</strong>:
           given the last N time steps, predict the next value.
-          Zepto predicts hourly demand for each SKU at each dark store —
+          Instacart predicts hourly demand for each SKU at each dark store —
           the last 24 hours of sales predict the next hour.
           This is a many-to-one sequence regression problem.
         </p>
@@ -777,7 +777,7 @@ warnings.filterwarnings('ignore')
 torch.manual_seed(42)
 np.random.seed(42)
 
-# ── Simulate Zepto hourly demand data ─────────────────────────────────
+# ── Simulate Instacart hourly demand data ─────────────────────────────────
 # 1 SKU at 1 dark store, hourly demand for 60 days = 1440 hours
 hours = np.arange(1440)
 # Demand = base + daily pattern + weekly pattern + noise
@@ -841,7 +841,7 @@ model     = DemandLSTM()
 criterion = nn.MSELoss()
 optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=0.01)
 
-print("Training Zepto demand forecaster (LSTM):")
+print("Training Instacart demand forecaster (LSTM):")
 for epoch in range(1, 51):
     model.train()
     for Xb, yb in loader:

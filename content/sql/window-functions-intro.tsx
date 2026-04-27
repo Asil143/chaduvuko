@@ -805,7 +805,7 @@ LIMIT 8;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Meesho. The growth team needs a weekly seller performance report for the last month: each seller's daily revenue, their 7-day moving average, their rank by revenue within their city, how their current week compares to last week (WoW change), and their cumulative revenue for the month. Without window functions this would require multiple queries and a complex join. With window functions it is one query.</P>
+      <P>You are a data analyst at Shopify. The growth team needs a weekly seller performance report for the last month: each seller's daily revenue, their 7-day moving average, their rank by revenue within their city, how their current week compares to last week (WoW change), and their cumulative revenue for the month. Without window functions this would require multiple queries and a complex join. With window functions it is one query.</P>
 
       <TimeBlock time="10:00 AM" label="Requirements: daily seller report with 5 computed metrics">
         Daily revenue, 7-day MA, city rank, WoW change, cumulative monthly revenue. All in one result set. Adapted for FreshCart stores.

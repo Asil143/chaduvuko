@@ -574,7 +574,7 @@ print(f"  np.dot(hiphop, classical): {np.dot(a, c):.3f}")`} />
         <h2 style={S.h2}>The raw dot product has a flaw: bigger vectors always win</h2>
 
         <p style={S.p}>
-          Imagine two users on Swiggy. User A orders 50 times a month and rates
+          Imagine two users on DoorDash. User A orders 50 times a month and rates
           most orders highly — they are an extremely active user with large numbers
           everywhere in their feature vector. User B orders 5 times a month
           but has exactly the same taste preferences, just scaled down.
@@ -754,7 +754,7 @@ for i, row_label in enumerate(labels):
 
           <StepBox num={3} title="Embedding search — finding similar items at scale">
             <p style={{ ...S.ps, marginBottom: 0 }}>
-              When Flipkart searches for products similar to what you clicked,
+              When Amazon searches for products similar to what you clicked,
               it stores every product as a vector (embedding) in a vector database.
               Finding the most similar products is finding the vectors with the
               highest cosine similarity to your query vector.
@@ -863,7 +863,7 @@ for name, score in ranked:
 
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
-            Two cities on a map: Mumbai (18.97°N, 72.83°E) and Pune (18.52°N, 73.85°E).
+            Two cities on a map: New York (18.97°N, 72.83°E) and Boston (18.52°N, 73.85°E).
             The Euclidean distance between them as points on the map is roughly
             √((18.97−18.52)² + (72.83−73.85)²) — just like the Pythagorean theorem
             applied to their coordinate difference. This is Euclidean distance.
@@ -964,7 +964,7 @@ print("  → For segmentation by ACTIVITY LEVEL: use euclidean")`} />
       {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>What this looks like at work</span>
-        <h2 style={S.h2}>Day-one task at Flipkart — build a product similarity engine</h2>
+        <h2 style={S.h2}>Day-one task at Amazon — build a product similarity engine</h2>
 
         <p style={S.p}>
           Your lead sends you a task: "Users who view a product should see similar
@@ -977,7 +977,7 @@ print("  → For segmentation by ACTIVITY LEVEL: use euclidean")`} />
 from sklearn.preprocessing import normalize
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Flipkart electronics — simplified feature vectors
+# Amazon electronics — simplified feature vectors
 # Features: [price_normalised, brand_premium, battery_life, screen_size,
 #            camera_quality, performance_score, weight_light]
 products = {
@@ -1020,7 +1020,7 @@ for product in ['iPhone 15', 'Redmi Note 13', 'iPad Air', 'Boat Earbuds']:
         print(f"    → {rec:<22}: {bar} {score:.3f}")
     print()
 
-# ── Production note: in real Flipkart, embeddings come from a trained
+# ── Production note: in real Amazon, embeddings come from a trained
 # neural network (not hand-crafted features). The similarity computation
 # is identical — just replace the hand-crafted vectors with model embeddings.
 print("In production:")

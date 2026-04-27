@@ -520,7 +520,7 @@ JOIN salary_bands AS sb ON e.salary BETWEEN sb.min_salary AND sb.max_salary
 -- Multiple conditions in ON
 JOIN stores AS s
   ON o.store_id = s.store_id
-  AND s.city = 'Bangalore'       -- additional filter in the join condition
+  AND s.city = 'Seattle'       -- additional filter in the join condition
 
 -- Expression in ON
 JOIN products AS p
@@ -588,7 +588,7 @@ FROM orders AS o
 JOIN customers AS c ON o.customer_id = c.customer_id
 JOIN stores    AS s ON o.store_id    = s.store_id
 WHERE o.order_status = 'Delivered'
-  AND s.city = 'Bangalore'
+  AND s.city = 'Seattle'
 ORDER BY o.total_amount DESC;`}
         height={220}
         showSchema={true}
@@ -720,7 +720,7 @@ LIMIT 10;`}
       {/* ── PART 12 ── */}
       <Part n="12" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Flipkart. The customer success team asks for a report: all orders placed in the last quarter with customer details, product details, and store details — everything in one flat result for their CRM import. This is the most common real-world JOIN task: assembling a flat report from a normalised schema.</P>
+      <P>You are a data analyst at Amazon. The customer success team asks for a report: all orders placed in the last quarter with customer details, product details, and store details — everything in one flat result for their CRM import. This is the most common real-world JOIN task: assembling a flat report from a normalised schema.</P>
 
       <TimeBlock time="10:00 AM" label="Request received">
         The team needs: order_id, order_date, customer full name, customer email, customer city, loyalty tier, product name, product category, quantity, line total, store city, order status. All in one result — one row per order line item.

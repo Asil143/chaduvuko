@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 
 const SUGGESTIONS = [
   'I want to become a Data Engineer — where do I start?',
-  'What salary can I expect at Flipkart as a junior DE?',
+  'What salary can I expect at Amazon as a junior DE?',
   'My ADF pipeline failed — PipelineRunFailed error, how to debug?',
   'I know Python basics. What should I learn next?',
 ]

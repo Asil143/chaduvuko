@@ -188,7 +188,7 @@ export default function LightGBMPage() {
         </h2>
 
         <p style={S.p}>
-          Flipkart runs 1.5 million transactions per day.
+          Amazon runs 1.5 million transactions per day.
           Their ML team wants to retrain the product recommendation model
           every night on the last 30 days of data — that is 45 million rows.
           XGBoost takes 6 hours to train on this. The retraining window
@@ -200,7 +200,7 @@ export default function LightGBMPage() {
           make gradient boosting fast enough for large-scale production datasets.
           They introduced three algorithmic innovations that together
           produce a 10–20× speedup over XGBoost with equal or better accuracy.
-          The same Flipkart job now completes in 25 minutes.
+          The same Amazon job now completes in 25 minutes.
         </p>
 
         <p style={S.p}>
@@ -447,7 +447,7 @@ export default function LightGBMPage() {
       {/* ══ SECTION 4 — FIRST LIGHTGBM MODEL ══════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Getting started</span>
-        <h2 style={S.h2}>Your first LightGBM model — Flipkart demand forecasting</h2>
+        <h2 style={S.h2}>Your first LightGBM model — Amazon demand forecasting</h2>
 
         <CodeBlock code={`import numpy as np
 import pandas as pd
@@ -463,11 +463,11 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 50_000   # large dataset — where LightGBM shines
 
-# ── Flipkart daily product demand dataset ─────────────────────────────
+# ── Amazon daily product demand dataset ─────────────────────────────
 categories    = ['Electronics','Fashion','Home','Books','Sports',
                   'Beauty','Grocery','Toys']
-warehouses    = ['Mumbai','Delhi','Bangalore','Hyderabad','Chennai',
-                  'Pune','Kolkata','Ahmedabad']
+warehouses    = ['New York','Delhi','Seattle','Austin','Chicago',
+                  'Boston','Kolkata','Ahmedabad']
 
 df = pd.DataFrame({
     'category':          np.random.choice(categories, n),
@@ -597,7 +597,7 @@ n = 20_000
 df_cat = pd.DataFrame({
     'category':    np.random.choice(['Electronics','Fashion','Home',
                                       'Books','Sports'], n),
-    'warehouse':   np.random.choice(['Mumbai','Delhi','Bangalore','Hyderabad'], n),
+    'warehouse':   np.random.choice(['New York','Delhi','Seattle','Austin'], n),
     'day_of_week': np.random.randint(0, 7, n).astype(float),
     'price':       np.abs(np.random.normal(800, 600, n)).clip(50, 10_000),
     'discount':    np.random.uniform(0, 0.6, n),
@@ -859,7 +859,7 @@ print("  All three give similar MAE — speed is the differentiator")`} />
       {/* ══ SECTION 8 — PRODUCTION PIPELINE ════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>What this looks like at work</span>
-        <h2 style={S.h2}>Complete production pipeline — Flipkart demand forecasting</h2>
+        <h2 style={S.h2}>Complete production pipeline — Amazon demand forecasting</h2>
 
         <CodeBlock code={`import numpy as np
 import pandas as pd
@@ -877,7 +877,7 @@ np.random.seed(42)
 n = 30_000
 
 categories = ['Electronics','Fashion','Home','Books','Sports','Beauty']
-warehouses = ['Mumbai','Delhi','Bangalore','Hyderabad','Chennai','Pune']
+warehouses = ['New York','Delhi','Seattle','Austin','Chicago','Boston']
 
 df_prod = pd.DataFrame({
     'category':          np.random.choice(categories, n),
@@ -1035,8 +1035,8 @@ print("\nProduction bundle saved.")`} />
         <p style={S.p}>
           Module 32 begins unsupervised learning — K-Means Clustering.
           Instead of predicting a label, you find hidden groups in data.
-          Flipkart uses it to segment 300 million customers.
-          Swiggy uses it to cluster delivery zones.
+          Amazon uses it to segment 300 million customers.
+          DoorDash uses it to cluster delivery zones.
           The algorithm requires no labels — it discovers structure
           that was always there but never explicitly defined.
         </p>

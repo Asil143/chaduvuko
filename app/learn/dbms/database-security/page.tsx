@@ -514,7 +514,7 @@ ALTER ROLE dba_role BYPASSRLS;
 -- ─────────────────────────────────────────────────────────────────
 -- COLUMN-LEVEL SECURITY via views + privileges
 -- ─────────────────────────────────────────────────────────────────
--- Hide salary and PAN number from most users:
+-- Hide salary and SSN last 4 from most users:
 CREATE VIEW employees_public AS
 SELECT employee_id, name, department, title, hire_date
 FROM employees;
@@ -812,7 +812,7 @@ aws rds create-db-instance \
 CREATE EXTENSION pgcrypto;
 
 -- Encrypt on insert (using symmetric encryption with application-managed key):
-INSERT INTO customers (name, email, pan_number, bank_account)
+INSERT INTO customers (name, email, ssn_last4, bank_account)
 VALUES (
     'Rahul Sharma',
     'rahul@email.com',
@@ -822,7 +822,7 @@ VALUES (
 
 -- Decrypt on select (only if application knows the key):
 SELECT name, email,
-       pgp_sym_decrypt(pan_number::bytea, 'encryption_key_from_vault') AS pan_plain
+       pgp_sym_decrypt(ssn_last4::bytea, 'encryption_key_from_vault') AS pan_plain
 FROM customers
 WHERE customer_id = 42;
 
@@ -890,7 +890,7 @@ pg_ctl reload
 SELECT
     name,
     -- Show only last 4 digits of PAN: XXXXX1234F
-    'XXXXX' || RIGHT(pan_number, 5) AS masked_pan,
+    'XXXXX' || RIGHT(ssn_last4, 5) AS masked_pan,
     -- Show only domain of email: r***@email.com
     LEFT(email, 1) || '***@' || SPLIT_PART(email, '@', 2) AS masked_email,
     -- Show only last 4 digits of account: XXXX-XXXX-XXXX-3456
@@ -902,7 +902,7 @@ FROM customers;
 CREATE VIEW customers_masked AS
 SELECT
     customer_id, name, city,
-    'XXXXX' || RIGHT(pan_number, 5)                    AS pan_number,
+    'XXXXX' || RIGHT(ssn_last4, 5)                    AS ssn_last4,
     LEFT(email,1) || '***@' || SPLIT_PART(email,'@',2) AS email
 FROM customers;
 

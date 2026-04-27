@@ -87,8 +87,8 @@ export default function SlowlyChangingDimensionsModule() {
 
         <Para>
           Dimension tables describe business entities — customers, stores, products,
-          employees. These entities are not static. A customer moves from Bangalore
-          to Hyderabad. A store changes its manager. A product gets recategorised
+          employees. These entities are not static. A customer moves from Seattle
+          to Austin. A store changes its manager. A product gets recategorised
           from "snacks" to "premium snacks." A salesperson moves from one region
           to another.
         </Para>
@@ -216,12 +216,12 @@ TYPE 1 IMPLEMENTATION:
   ;
 
   EFFECT ON HISTORICAL FACT ROWS:
-    Before update: manager = 'Priya Nair'
+    Before update: manager = 'Olivia Brown'
     After update:  manager = 'Rahul Sharma' (overwritten)
 
     fct_orders joined to dim_store WHERE store_id = 'ST001':
     ALL historical orders now show manager_name = 'Rahul Sharma'
-    — even orders placed when Priya Nair was the manager.
+    — even orders placed when Olivia Brown was the manager.
 
     This is the correct behaviour for Type 1.
     If you want historical orders to show who the manager was at the time,
@@ -258,15 +258,15 @@ TYPE 1 IN dbt:
 
         <CodeBox label="SCD Type 2 — full implementation with version tracking">{`DIM_CUSTOMER WITH SCD TYPE 2:
 
-Initial state — customer 4201938 registered from Bangalore:
+Initial state — customer 4201938 registered from Seattle:
   customer_sk  customer_id  city        tier      valid_from   valid_to    is_current
   ───────────────────────────────────────────────────────────────────────────────────
-  1            4201938      Bangalore   silver    2024-01-15   NULL        TRUE
+  1            4201938      Seattle   silver    2024-01-15   NULL        TRUE
 
 Customer places order 9284751 on 2024-06-10:
   fct_orders: order_sk=..., customer_sk=1, order_amount=380  ← joins to row 1
 
-Customer moves to Hyderabad, updates profile on 2026-02-01:
+Customer moves to Austin, updates profile on 2026-02-01:
 
 CHANGE OPERATION:
   -- Step 1: expire the current row
@@ -280,13 +280,13 @@ CHANGE OPERATION:
   INSERT INTO dim_customer
       (customer_sk, customer_id, city, tier, valid_from, valid_to, is_current)
   VALUES
-      (2, 4201938, 'Hyderabad', 'silver', '2026-02-01', NULL, TRUE);
+      (2, 4201938, 'Austin', 'silver', '2026-02-01', NULL, TRUE);
 
 RESULTING TABLE STATE:
   customer_sk  customer_id  city        tier    valid_from   valid_to    is_current
   ────────────────────────────────────────────────────────────────────────────────
-  1            4201938      Bangalore   silver  2024-01-15   2026-01-31  FALSE  ← expired
-  2            4201938      Hyderabad   silver  2026-02-01   NULL        TRUE   ← current
+  1            4201938      Seattle   silver  2024-01-15   2026-01-31  FALSE  ← expired
+  2            4201938      Austin   silver  2026-02-01   NULL        TRUE   ← current
 
 Customer places order 9284755 on 2026-03-01:
   fct_orders: order_sk=..., customer_sk=2, order_amount=460  ← joins to row 2
@@ -298,26 +298,26 @@ SELECT c.city
 FROM fct_orders f
 JOIN dim_customer c ON f.customer_sk = c.customer_sk
 WHERE f.order_sk = <order_sk_for_9284751>;
--- Returns: 'Bangalore' ← correct — the fact stored customer_sk=1 at load time
+-- Returns: 'Seattle' ← correct — the fact stored customer_sk=1 at load time
 
 -- What is customer 4201938's current city?
 SELECT city FROM dim_customer
 WHERE customer_id = 4201938 AND is_current = TRUE;
--- Returns: 'Hyderabad' ← correct
+-- Returns: 'Austin' ← correct
 
 -- Revenue by customer city, historically accurate:
 SELECT c.city, SUM(f.order_amount)
 FROM fct_orders f
 JOIN dim_customer c ON f.customer_sk = c.customer_sk
 GROUP BY c.city;
--- order_sk from 2024: joins to customer_sk=1 → Bangalore
--- order_sk from 2026: joins to customer_sk=2 → Hyderabad
+-- order_sk from 2024: joins to customer_sk=1 → Seattle
+-- order_sk from 2026: joins to customer_sk=2 → Austin
 -- Both cities get credit for orders placed when the customer was there ✓
 
 WRONG APPROACH (joining on natural key with is_current):
   JOIN dim_customer c ON f.customer_id = c.customer_id AND c.is_current = TRUE
   -- This joins ALL orders (including 2024 ones) to the CURRENT version
-  -- The 2024 Bangalore order now shows 'Hyderabad' — historically wrong ✗`}</CodeBox>
+  -- The 2024 Seattle order now shows 'Austin' — historically wrong ✗`}</CodeBox>
 
         <SubTitle>Type 2 — choosing which attributes to track</SubTitle>
 
@@ -329,7 +329,7 @@ WRONG APPROACH (joining on natural key with is_current):
         </Para>
 
         {[
-          { attr: 'customer.city', type2: 'Yes', reason: 'Revenue attribution by city requires knowing where the customer was when they ordered. A customer who moved from Bangalore to Hyderabad should have their Bangalore-period orders counted in Bangalore\'s revenue.' },
+          { attr: 'customer.city', type2: 'Yes', reason: 'Revenue attribution by city requires knowing where the customer was when they ordered. A customer who moved from Seattle to Austin should have their Seattle-period orders counted in Seattle\'s revenue.' },
           { attr: 'customer.tier', type2: 'Yes', reason: 'Customer tier at the time of purchase drives cohort analysis. Was this order placed when they were a silver or gold customer? The answer affects churn and upgrade analysis.' },
           { attr: 'store.manager_name', type2: 'Maybe', reason: 'If the business asks "how did each manager perform during their tenure?" — Type 2. If historical manager accuracy is never needed — Type 1.' },
           { attr: 'customer.phone_number', type2: 'No', reason: 'Contact information — reports never ask "what was the customer\'s phone number when they placed that order?" Type 1 is correct.' },
@@ -563,8 +563,8 @@ OPTION B: seed historical versions from a separate data source
   If you have an audit log, CDC history in Bronze, or source system history:
   Build a seed file or staging model with historical versions:
     customer_id  city         tier    updated_at
-    4201938      Bangalore    silver  2024-01-15  ← original registration
-    4201938      Hyderabad    silver  2026-02-01  ← after move
+    4201938      Seattle    silver  2024-01-15  ← original registration
+    4201938      Austin    silver  2026-02-01  ← after move
 
   Manually insert these into the snapshot table in the correct format
   BEFORE running dbt snapshot for the first time.
@@ -630,18 +630,18 @@ MONITORING SNAPSHOT HEALTH:
 
 INITIAL STATE:
   customer_sk  customer_id  city        previous_city  tier    previous_tier
-  1            4201938      Bangalore   NULL           silver  NULL
+  1            4201938      Seattle   NULL           silver  NULL
 
 CUSTOMER MOVES TO HYDERABAD (2026-02-01):
   UPDATE dim_customer
   SET previous_city    = city,          -- save current → previous
-      city             = 'Hyderabad',   -- new current
+      city             = 'Austin',   -- new current
       city_changed_at  = '2026-02-01'
   WHERE customer_id = 4201938;
 
 RESULTING ROW:
   customer_sk  customer_id  city         previous_city  tier    previous_tier
-  1            4201938      Hyderabad    Bangalore      silver  NULL
+  1            4201938      Austin    Seattle      silver  NULL
 
 QUERIES ENABLED BY TYPE 3:
   -- Revenue from customers who recently moved to each city:
@@ -657,12 +657,12 @@ QUERIES ENABLED BY TYPE 3:
 
 TYPE 3 LIMITATIONS:
   ✗ Only one level of history (current + previous)
-     If customer moves again (Hyderabad → Mumbai):
-       previous_city becomes Hyderabad (Bangalore is LOST)
+     If customer moves again (Austin → New York):
+       previous_city becomes Austin (Seattle is LOST)
   ✗ No point-in-time accuracy for fact table joins
      All orders always join to the same single row — no version control
-     A 2024 order in Bangalore and a 2026 order in Hyderabad both join
-     to the same row (current city = Mumbai eventually)
+     A 2024 order in Seattle and a 2026 order in Austin both join
+     to the same row (current city = New York eventually)
   ✗ Works only when the change trajectory is: old → new (two states)
      Not suitable for attributes that change frequently
 
@@ -703,13 +703,13 @@ TYPE 3 IS RARELY THE BEST CHOICE:
 dim_customer (current versions only — lean table):
   customer_sk  customer_id  city       tier    updated_at
   ──────────────────────────────────────────────────────
-  1            4201938      Hyderabad  silver  2026-02-01
+  1            4201938      Austin  silver  2026-02-01
 
 dim_customer_history (all historical versions):
   customer_history_sk  customer_id  city       tier    valid_from   valid_to
   ────────────────────────────────────────────────────────────────────────────
-  100                  4201938      Bangalore  silver  2024-01-15   2026-01-31
-  101                  4201938      Hyderabad  silver  2026-02-01   NULL
+  100                  4201938      Seattle  silver  2024-01-15   2026-01-31
+  101                  4201938      Austin  silver  2026-02-01   NULL
 
 BENEFITS:
   dim_customer stays small → fast for current-state queries
@@ -750,14 +750,14 @@ dim_customer (Type 6 — history + current value in every row):
   valid_to         DATE           ← when this version expired (NULL = current)
   is_current       BOOLEAN
 
-TABLE STATE (customer moved Bangalore → Hyderabad):
+TABLE STATE (customer moved Seattle → Austin):
   customer_sk  customer_id  city       current_city  valid_from   valid_to    is_current
   ──────────────────────────────────────────────────────────────────────────────────────
-  1            4201938      Bangalore  Hyderabad     2024-01-15   2026-01-31  FALSE
-  2            4201938      Hyderabad  Hyderabad     2026-02-01   NULL        TRUE
+  1            4201938      Seattle  Austin     2024-01-15   2026-01-31  FALSE
+  2            4201938      Austin  Austin     2026-02-01   NULL        TRUE
 
-NOTE: current_city = 'Hyderabad' in BOTH rows, even the historical row.
-      city        = 'Bangalore' in the historical row (point-in-time accurate).
+NOTE: current_city = 'Austin' in BOTH rows, even the historical row.
+      city        = 'Seattle' in the historical row (point-in-time accurate).
 
 QUERIES ENABLED BY TYPE 6:
   -- Historical revenue by city (point-in-time accurate):
@@ -770,7 +770,7 @@ QUERIES ENABLED BY TYPE 6:
   SELECT c.current_city, SUM(f.order_amount)
   FROM fct_orders f JOIN dim_customer c ON f.customer_sk = c.customer_sk
   GROUP BY c.current_city;
-  -- Uses c.current_city ← all orders attributed to Hyderabad (where customer is now) ✓
+  -- Uses c.current_city ← all orders attributed to Austin (where customer is now) ✓
   -- No need to join only to is_current=TRUE rows — current_city is in every row
 
   -- Both queries from ONE fact table join — no separate dim query needed.
@@ -779,7 +779,7 @@ QUERIES ENABLED BY TYPE 6:
 UPDATE PROCEDURE (when city changes):
   -- Step 1: update current_city in ALL existing rows for this customer:
   UPDATE dim_customer
-  SET current_city = 'Hyderabad'    -- Type 1 overwrite on all versions
+  SET current_city = 'Austin'    -- Type 1 overwrite on all versions
   WHERE customer_id = 4201938;
 
   -- Step 2: expire the current row + insert new version (Type 2):
@@ -789,7 +789,7 @@ UPDATE PROCEDURE (when city changes):
 
   INSERT INTO dim_customer
       (customer_sk, customer_id, city, current_city, valid_from, valid_to, is_current)
-  VALUES (2, 4201938, 'Hyderabad', 'Hyderabad', '2026-02-01', NULL, TRUE);
+  VALUES (2, 4201938, 'Austin', 'Austin', '2026-02-01', NULL, TRUE);
 
   dbt SNAPSHOT does NOT natively support Type 6.
   Type 6 requires a custom dbt macro or a Python pipeline.`}</CodeBox>
@@ -817,8 +817,8 @@ UPDATE PROCEDURE (when city changes):
 dim_customer (pure Type 2 — no current_city column needed):
   customer_sk  customer_id  city       tier    valid_from   valid_to    is_current
   ───────────────────────────────────────────────────────────────────────────────
-  1            4201938      Bangalore  silver  2024-01-15   2026-01-31  FALSE
-  2            4201938      Hyderabad  silver  2026-02-01   NULL        TRUE
+  1            4201938      Seattle  silver  2024-01-15   2026-01-31  FALSE
+  2            4201938      Austin  silver  2026-02-01   NULL        TRUE
 
 fct_orders (with DUAL surrogate keys):
   order_sk  history_customer_sk  current_customer_sk  order_amount  order_date
@@ -836,8 +836,8 @@ QUERIES:
   FROM fct_orders f
   JOIN dim_customer c ON f.history_customer_sk = c.customer_sk
   GROUP BY c.city;
-  -- Order 100: joins to SK=1 → city='Bangalore'
-  -- Order 101: joins to SK=2 → city='Hyderabad' ✓ historically accurate
+  -- Order 100: joins to SK=1 → city='Seattle'
+  -- Order 101: joins to SK=2 → city='Austin' ✓ historically accurate
 
   -- Current revenue by city (where customers are TODAY):
   SELECT c.city, SUM(f.order_amount)
@@ -845,8 +845,8 @@ QUERIES:
   JOIN dim_customer c ON f.current_customer_sk = c.customer_sk
   WHERE c.is_current = TRUE
   GROUP BY c.city;
-  -- Both orders join to SK=2 → city='Hyderabad'
-  -- "How much revenue came from customers who are NOW in Hyderabad?" ✓
+  -- Both orders join to SK=2 → city='Austin'
+  -- "How much revenue came from customers who are NOW in Austin?" ✓
 
 TYPE 7 COMPLEXITY:
   Requires updating current_customer_sk in the fact table when
@@ -934,10 +934,10 @@ REAL EXAMPLES FROM FOOD DELIVERY PLATFORMS:
           </div>
 
           <Para>
-            The growth team presents a report showing Hyderabad revenue growing
-            50% in Q1 2026. The Bangalore team disputes the numbers — several
+            The growth team presents a report showing Austin revenue growing
+            50% in Q1 2026. The Seattle team disputes the numbers — several
             major customers they know personally appear to be attributed to
-            Hyderabad. You are asked to investigate.
+            Austin. You are asked to investigate.
           </Para>
 
           <CodeBox label="SCD investigation — finding the Type 1 where Type 2 was needed">{`-- Step 1: Check the customer dimension for suspected customers
@@ -947,8 +947,8 @@ WHERE customer_id IN (4201938, 4201939, 4201940, 4201941)
 ORDER BY customer_id;
 
 -- Returns only ONE row per customer:
--- 4201938  Hyderabad  2024-01-15  NULL  TRUE
--- 4201939  Hyderabad  2024-03-02  NULL  TRUE
+-- 4201938  Austin  2024-01-15  NULL  TRUE
+-- 4201939  Austin  2024-03-02  NULL  TRUE
 -- etc.
 
 -- Only one row per customer — no version history.
@@ -962,13 +962,13 @@ FROM bronze.customers_cdc
 WHERE customer_id = 4201938
 ORDER BY updated_at;
 -- Returns:
--- 4201938  Bangalore  2024-01-15  insert  ← registered in Bangalore
--- 4201938  Hyderabad  2026-02-01  update  ← moved to Hyderabad
+-- 4201938  Seattle  2024-01-15  insert  ← registered in Seattle
+-- 4201938  Austin  2026-02-01  update  ← moved to Austin
 
--- Confirmed: customer 4201938 was in Bangalore until 2026-02-01.
--- The dim_customer table overwrote 'Bangalore' with 'Hyderabad' (Type 1).
--- ALL historical orders from 2024 and 2025 now show city = 'Hyderabad'.
--- This is why Hyderabad revenue looks inflated and Bangalore looks deflated.
+-- Confirmed: customer 4201938 was in Seattle until 2026-02-01.
+-- The dim_customer table overwrote 'Seattle' with 'Austin' (Type 1).
+-- ALL historical orders from 2024 and 2025 now show city = 'Austin'.
+-- This is why Austin revenue looks inflated and Seattle looks deflated.
 
 -- Step 3: Estimate the impact
 SELECT
@@ -980,11 +980,11 @@ FROM fct_orders f
 JOIN dim_customer c ON f.customer_sk = c.customer_sk
 JOIN bronze.customers_cdc cdc ON f.customer_id = cdc.customer_id
     AND f.order_date < '2026-02-01'   -- orders placed before the move
-WHERE c.city = 'Hyderabad'           -- currently attributed to Hyderabad
-  AND cdc.city = 'Bangalore'         -- but were actually in Bangalore
+WHERE c.city = 'Austin'           -- currently attributed to Austin
+  AND cdc.city = 'Seattle'         -- but were actually in Seattle
   AND cdc._change_type = 'insert'    -- initial registration city
 GROUP BY 1, 2;
--- Shows: 18,234 orders, ₹1.47 crore misattributed from Bangalore to Hyderabad
+-- Shows: 18,234 orders, ₹1.47 million misattributed from Seattle to Austin
 
 -- MIGRATION PLAN:
 -- 1. Build SCD Type 2 snapshot from Bronze CDC history
@@ -1026,7 +1026,7 @@ Type 1 overwrites the existing value with the new value. No history is preserved
 
 Type 2 preserves full history by adding a new row for each version of the entity. The old row is expired with a valid_to date and is_current set to FALSE. A new row is inserted with the new attribute values, valid_from set to today, valid_to NULL, and is_current TRUE. Surrogate keys uniquely identify each version — the fact table stores the surrogate key of the version active at the time of the fact, enabling point-in-time accurate queries.
 
-Use Type 2 when historical accuracy matters for analysis. If the business asks "how much revenue came from customers in Bangalore?" — they mean Bangalore at the time of the order, not their current city. A customer who moved from Bangalore to Hyderabad should have their Bangalore-period orders counted in Bangalore. Type 2 enables this. Type 1 would reassign all their historical orders to Hyderabad as soon as they moved.
+Use Type 2 when historical accuracy matters for analysis. If the business asks "how much revenue came from customers in Seattle?" — they mean Seattle at the time of the order, not their current city. A customer who moved from Seattle to Austin should have their Seattle-period orders counted in Seattle. Type 2 enables this. Type 1 would reassign all their historical orders to Austin as soon as they moved.
 
 The practical rule: if a business analyst would be confused by the historical numbers changing when a dimension attribute changes, you need Type 2. If the historical numbers are irrelevant and only current state matters, Type 1 is simpler and correct.`,
           },
@@ -1048,7 +1048,7 @@ The snapshot also supports invalidate_hard_deletes=True, which expires a snapsho
 
 In Type 2, a query for "revenue by city where customers are currently" requires filtering dim_customer WHERE is_current = TRUE and joining only current rows. Historical orders cannot show what city their customer is in today without a separate lookup. In Type 6, a current_city column is maintained in all rows via Type 1 overwrite — when a customer changes city, current_city is updated to the new city in every row (past and current versions). The city column still contains the historically accurate value for each version.
 
-This enables two different queries from the same fact-to-dimension join without needing separate lookups. Using city gives historically accurate attribution — a Bangalore-period order shows Bangalore. Using current_city gives current-state attribution — the same Bangalore-period order shows Hyderabad (where the customer is now). Both are useful for different analytical questions.
+This enables two different queries from the same fact-to-dimension join without needing separate lookups. Using city gives historically accurate attribution — a Seattle-period order shows Seattle. Using current_city gives current-state attribution — the same Seattle-period order shows Austin (where the customer is now). Both are useful for different analytical questions.
 
 Use Type 6 when you genuinely need both historical and current-state city queries with equal frequency and you want to serve both from a single join. The trade-off is complexity: updating current_city across all version rows when a customer changes city is an additional operation, and the column is denormalised in the dimension table.
 
@@ -1070,7 +1070,7 @@ If the decision is Type 1 (correction), also consider whether the Medallion Arch
             q: 'Q5. What are the risks of running a dbt snapshot too infrequently? What operational problems does this cause?',
             a: `Running dbt snapshots infrequently introduces three specific operational problems.
 
-First and most serious: intermediate states are lost. A customer changes city from Bangalore to Hyderabad on Monday and then moves to Mumbai on Wednesday. If the snapshot only runs weekly on Sunday, both changes happen between runs. When Sunday arrives, the snapshot detects a change from Bangalore to Mumbai and creates one new version row. The intermediate Hyderabad state is never captured. Any orders placed while the customer was in Hyderabad (Monday through Wednesday) will never have a correct historical city — there is no "Hyderabad version" to join to. The dbt timestamp strategy only detects that something changed between runs — not all the intermediate changes.
+First and most serious: intermediate states are lost. A customer changes city from Seattle to Austin on Monday and then moves to New York on Wednesday. If the snapshot only runs weekly on Sunday, both changes happen between runs. When Sunday arrives, the snapshot detects a change from Seattle to New York and creates one new version row. The intermediate Austin state is never captured. Any orders placed while the customer was in Austin (Monday through Wednesday) will never have a correct historical city — there is no "Austin version" to join to. The dbt timestamp strategy only detects that something changed between runs — not all the intermediate changes.
 
 Second: version rows have incorrect valid_from dates. The timestamp strategy sets dbt_valid_from to when the snapshot ran, not when the change occurred in the source. If the snapshot runs weekly and a customer changed city on Tuesday, the new version row will show valid_from as Sunday (when snapshot ran) rather than Tuesday (when the change actually happened). This means orders placed between Tuesday and Sunday are joined to the wrong version — orders before Sunday appear to predate the move even though the move already happened.
 

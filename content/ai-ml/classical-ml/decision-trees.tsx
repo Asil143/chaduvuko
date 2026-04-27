@@ -1084,7 +1084,7 @@ print(f"Actual interest rate:                    {interest_rate_test.iloc[0]:.2f
             become straightforward — they are just collections of trees
             combined in different ways. The algorithm you built from scratch
             in this module IS the algorithm inside every XGBoost model at
-            Razorpay, Zepto, and every Indian unicorn running tabular ML.
+            Stripe, Instacart, and every Indian unicorn running tabular ML.
           </p>
         </HBox>
 
@@ -1222,7 +1222,7 @@ print("\nModel and decision rules saved for compliance audit.")`} />
               fontSize: 15, fontWeight: 700, color: 'var(--text)',
               fontFamily: 'var(--font-display)', letterSpacing: '-0.3px',
             }}>
-              Random Forest — Zepto Stock Prediction
+              Random Forest — Instacart Stock Prediction
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
               Bagging, random feature subsets, out-of-bag evaluation,

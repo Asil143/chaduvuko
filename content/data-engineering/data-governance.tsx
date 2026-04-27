@@ -607,7 +607,7 @@ lf.create_data_cells_filter(
 
         <CodeBox label="PII classification — automated tagging with sensitivity levels">{`# PII CLASSIFICATION TAXONOMY:
 # Level 1 — Direct identifiers (highest sensitivity):
-#   customer_email, phone_number, national_id (Aadhaar), passport_number
+#   customer_email, phone_number, national_id (SSN), passport_number
 #   bank_account_number, credit_card_number
 # Level 2 — Indirect identifiers (can identify combined with other data):
 #   full_name, address, date_of_birth, ip_address, device_id, GPS coordinates
@@ -1097,7 +1097,7 @@ The entire process should be idempotent — running it twice for the same custom
 
 The four principles are: domain ownership (orders team owns orders data), data as a product (each domain's data asset has an owner, SLA, schema contract, and documentation), self-serve infrastructure (domain teams can build pipelines without needing central DE for every request), and federated governance (quality standards and access control rules defined centrally, implemented locally).
 
-Data mesh is appropriate when a central data engineering team has become a bottleneck — domain teams wait weeks for the central team to build pipelines for their data, and the central team cannot scale to serve all domains. This typically happens at organisations with more than 200 engineers and ten or more distinct product domains. Zomato, Flipkart, and PhonePe at scale face these bottlenecks.
+Data mesh is appropriate when a central data engineering team has become a bottleneck — domain teams wait weeks for the central team to build pipelines for their data, and the central team cannot scale to serve all domains. This typically happens at organisations with more than 200 engineers and ten or more distinct product domains. Uber Eats, Amazon, and Venmo at scale face these bottlenecks.
 
 The risks of adopting it too early are significant. Data mesh requires that domain teams have data engineering capability — they must be able to build and maintain pipelines, write dbt models, and manage data quality for their domain. Most domain teams do not have this capability without significant hiring or training. The result is inconsistent data quality across domains: the payments team produces excellent data products, the logistics team produces undocumented and untested tables that nobody trusts. Governance standards exist on paper but are not enforced because the central team no longer reviews every pipeline.
 
@@ -1167,7 +1167,7 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
         'Business glossary centralises business term definitions. "Net Revenue," "GMV," and "Active Customer" each have one canonical definition approved by the business, linked to the column(s) that implement it. Eliminates the meeting where Finance and Product report different revenue numbers.',
         'Role-based access control: pipeline service account reads Bronze, writes Silver/Gold. Analyst role reads Silver/Gold only, never Bronze (which has raw PII). BI service account reads Gold only. Always use FUTURE GRANTS so new tables automatically inherit the correct permissions without manual grant statements.',
         'Column masking policies in Snowflake apply masking logic transparently based on the querying role — analysts always query silver.customers but see masked emails. Superior to maintaining separate views per role: one policy, one maintenance point, invisible to query writers. Masking does NOT apply to OWNERSHIP or ACCOUNTADMIN roles.',
-        'PII classification levels: Level 1 (direct identifiers — email, phone, Aadhaar), Level 2 (indirect — name, address, IP), Level 3 (quasi-identifiers — city, age), Level 4 (non-PII). Tag every column with its level in dbt schema.yml meta fields. Apply masking at Silver layer for Level 1 and Level 2.',
+        'PII classification levels: Level 1 (direct identifiers — email, phone, SSN), Level 2 (indirect — name, address, IP), Level 3 (quasi-identifiers — city, age), Level 4 (non-PII). Tag every column with its level in dbt schema.yml meta fields. Apply masking at Silver layer for Level 1 and Level 2.',
         'GDPR right-to-erasure: replace PII values with a sentinel (GDPR_ERASED) rather than deleting rows. Update Bronze → Silver → Gold in that order. This is the only legitimate UPDATE to the append-only Bronze layer — legal compliance supersedes the immutability design principle. Record the erasure in governance.erasure_requests. Publish an erasure event for downstream systems.',
         'Data mesh is an organisational pattern, not a technology choice. Appropriate when a central DE team is a bottleneck at scale (200+ engineers, 10+ domains). Domain teams own their data products. Central platform team provides infrastructure and standards. Adopting it too early produces inconsistent quality across domains because domain teams lack DE capability.',
         'Lineage for impact analysis workflow: before changing a model, run dbt ls --select +model_name+ to find all downstream models. Cross-check in DataHub for non-dbt consumers (BI tools, APIs). Update all downstream models together in one deployment. Never change a Gold column definition without knowing all downstream consumers — one unplanned downstream breakage erodes team trust more than any performance issue.',

@@ -6,14 +6,14 @@ export const frontendRoadmap: Roadmap = {
   title: 'Frontend Developer',
   subtitle: 'HTML to production-grade React apps',
   category: 'role',
-  description: 'From HTML and CSS fundamentals through React, TypeScript, performance, accessibility, and deploying production-grade web apps. Aligned with what Indian product companies — Razorpay, Groww, CRED — expect.',
+  description: 'From HTML and CSS fundamentals through React, TypeScript, performance, accessibility, and deploying production-grade web apps. Aligned with what Indian product companies — Stripe, Acorns, Brex — expect.',
   level: 'beginner',
   estimatedTime: '3–4 months',
   salaryData: [
     { company: 'Service / Agency', range: '₹4–8 LPA', note: 'Most common entry point' },
-    { company: 'Startup (Groww / Zerodha)', range: '₹12–22 LPA', note: 'React + TS portfolio required' },
+    { company: 'Startup (Acorns / Robinhood)', range: '₹12–22 LPA', note: 'React + TS portfolio required' },
     { company: 'Product MNC', range: '₹18–32 LPA', note: 'Performance + accessibility expected' },
-    { company: 'FAANG India', range: '₹30–55 LPA', note: 'Deep JS + system design' },
+    { company: 'FAANG', range: '₹30–55 LPA', note: 'Deep JS + system design' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your frontend journey starts. Mark complete to unlock web foundations.', x: 305, y: 20, width: 150, height: 60 },

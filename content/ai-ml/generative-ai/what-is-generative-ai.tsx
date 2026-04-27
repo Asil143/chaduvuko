@@ -177,9 +177,9 @@ export default function WhatIsGenerativeAIPage() {
         <p style={S.p}>
           Why does this matter for Indian tech? Myntra uses generative models
           to create product variations — same design, different colours —
-          without photographing each one. Swiggy uses them to generate
+          without photographing each one. DoorDash uses them to generate
           synthetic training data for rare dish categories with few real photos.
-          Razorpay uses LLMs (the largest generative models) to draft
+          Stripe uses LLMs (the largest generative models) to draft
           merchant communications. Every use case involves creating new content
           from a learned distribution.
         </p>
@@ -612,7 +612,7 @@ client = Groq(api_key=os.environ.get('GROQ_API_KEY', 'demo'))
 # Autoregressive generation — sample one token at a time
 # response = client.chat.completions.create(
 #     model='llama-3.3-70b-versatile',
-#     messages=[{'role': 'user', 'content': 'Write a product description for a Meesho kurta'}],
+#     messages=[{'role': 'user', 'content': 'Write a product description for a Shopify kurta'}],
 #     temperature=0.8,   # higher = more creative/diverse
 #     max_tokens=200,
 # )

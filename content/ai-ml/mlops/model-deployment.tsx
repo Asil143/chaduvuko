@@ -7,7 +7,7 @@ import MLPageHeader from '@/components/content/MLPageHeader'
 export const metadata: Metadata = {
   title: 'Model Deployment — FastAPI, Docker, Kubernetes — Chaduvuko',
   description:
-    'Wrap your model in a FastAPI endpoint, containerise with Docker, scale with Kubernetes. Full working deployment of the Swiggy delivery time model.',
+    'Wrap your model in a FastAPI endpoint, containerise with Docker, scale with Kubernetes. Full working deployment of the DoorDash delivery time model.',
 }
 
 const S = {
@@ -172,7 +172,7 @@ export default function ModelDeploymentPage() {
   return (
     <LearnLayout
       title="Model Deployment — FastAPI, Docker, Kubernetes"
-      description="Wrap your model in a FastAPI endpoint, containerise with Docker, scale with Kubernetes. Full working deployment of the Swiggy delivery time model."
+      description="Wrap your model in a FastAPI endpoint, containerise with Docker, scale with Kubernetes. Full working deployment of the DoorDash delivery time model."
       section="MLOps and Production"
       readTime="55–60 min"
       updatedAt="March 2026"
@@ -200,7 +200,7 @@ export default function ModelDeploymentPage() {
         </p>
 
         <p style={S.p}>
-          Swiggy's delivery time prediction API serves 200,000 requests
+          DoorDash's delivery time prediction API serves 200,000 requests
           per minute during dinner peak hours. A single Python process handles
           perhaps 50 requests per second. To handle 200,000 per minute
           (3,333 per second) you need roughly 70 parallel processes.
@@ -378,7 +378,7 @@ async def lifespan(app: FastAPI):
 
 # ── FastAPI app ───────────────────────────────────────────────────────
 app = FastAPI(
-    title='Swiggy Delivery Time Prediction API',
+    title='DoorDash Delivery Time Prediction API',
     description='Predicts delivery time for a given order and driver.',
     version='1.0.0',
     lifespan=lifespan,
@@ -808,7 +808,7 @@ for cmd, desc in commands:
         <h2 style={S.h2}>Rolling updates, canary releases, and blue-green deployment</h2>
 
         <p style={S.p}>
-          Swiggy cannot take the delivery time model offline to update it.
+          DoorDash cannot take the delivery time model offline to update it.
           Every second of downtime means delayed delivery estimates, poor user experience,
           and drivers idling without assignments. Production model updates must be
           zero-downtime. Three patterns handle this with increasing safety.
@@ -1006,7 +1006,7 @@ async def benchmark_endpoint():
 
 # asyncio.run(benchmark_endpoint())
 
-# ── SLO targets for Swiggy delivery prediction ────────────────────────
+# ── SLO targets for DoorDash delivery prediction ────────────────────────
 print("Production SLO targets:")
 slos = [
     ('Availability',   '99.9%',   '< 45 min downtime per month'),
@@ -1048,7 +1048,7 @@ for metric, target, desc in slos:
         <ErrorBlock
           error="Docker image is 4GB — slow to pull on new nodes, long cold starts"
           cause="The base image includes development tools (gcc, g++, cmake) that are only needed to build Python packages, not to run them. Or the model artifact itself is included in the image — a 2GB PyTorch model baked into the image means every code change requires rebuilding and pushing a 2GB image. Or requirements.txt includes unnecessary packages (Jupyter, matplotlib, seaborn)."
-          fix="Use a multi-stage build: install packages in a builder stage with gcc, copy only the installed packages to a slim runtime stage. Use python:3.11-slim not python:3.11 (saves 800MB). Never bake the model artifact into the image — load it at startup from S3/GCS via the MODEL_PATH env var, or mount it as a Kubernetes PersistentVolume. Keep requirements.txt minimal — separate dev-requirements.txt (Jupyter, matplotlib) from production requirements.txt."
+          fix="Use a multi-stage build: install packages in a builder stage with gcc, copy only the installed packages to a slim runtime stage. Use python:3.11-slim not python:3.11 (saves 800MB). Never bake the model artifact into the image — load it at startup from S3/GCS via the MODEL_PATH env var, or mount it as a Kubernetes PerforceVolume. Keep requirements.txt minimal — separate dev-requirements.txt (Jupyter, matplotlib) from production requirements.txt."
         />
       </div>
 
@@ -1065,7 +1065,7 @@ for metric, target, desc in slos:
         <p style={S.p}>
           Deploying a model is not the end — it is the beginning of monitoring.
           Models degrade silently as the world changes around them.
-          The fraud patterns Razorpay trained on in January look different
+          The fraud patterns Stripe trained on in January look different
           by June. The delivery time patterns from pre-monsoon do not hold
           during monsoon season. Module 72 covers drift detection and monitoring —
           how to know your model is degrading before users notice,
@@ -1110,7 +1110,7 @@ for metric, target, desc in slos:
 
       <KeyTakeaways
         items={[
-          'The production ML deployment stack is three layers: FastAPI (wrap model in HTTP endpoint with validation, health checks, and versioning), Docker (package everything into a reproducible container), Kubernetes (run, scale, and update containers without downtime). This is the standard at Swiggy, Flipkart, Razorpay, and every Indian unicorn.',
+          'The production ML deployment stack is three layers: FastAPI (wrap model in HTTP endpoint with validation, health checks, and versioning), Docker (package everything into a reproducible container), Kubernetes (run, scale, and update containers without downtime). This is the standard at DoorDash, Amazon, Stripe, and every Indian unicorn.',
           'A production FastAPI model API needs four endpoints beyond /predict: /health (liveness probe — is the container alive), /ready (readiness probe — is the model loaded), /v1/predict (versioned, never break old clients), and /v1/predict/batch (batch endpoint for throughput). Always validate inputs with Pydantic before they reach the model.',
           'Use multi-stage Docker builds to keep images small: build stage installs gcc and dependencies, runtime stage copies only the installed packages. python:3.11-slim not python:3.11. Never bake model artifacts into the image — load from S3/GCS at startup via MODEL_PATH env var. Target: under 200MB for scikit-learn models.',
           'Kubernetes Deployment + Service + HPA is the standard serving setup. Key settings: maxUnavailable: 0 (never drop below desired replicas during update), livenessProbe initialDelaySeconds = model load time (60-120s), readinessProbe removes pod from load balancer if model is not ready, resource requests and limits prevent one pod from starving others.',

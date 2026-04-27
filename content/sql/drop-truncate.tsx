@@ -572,7 +572,7 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO analyst_user;
       {/* ── PART 09 ── */}
       <Part n="09" title="What This Looks Like at Work" />
 
-      <P>You are a data engineer at a Bangalore startup. The QA team runs integration tests against a staging database every night. The tests require a fresh database with known seed data at the start of each run. Currently the process takes 45 minutes — most of which is DELETE statements removing old test data row by row. You are asked to optimise it.</P>
+      <P>You are a data engineer at a Seattle startup. The QA team runs integration tests against a staging database every night. The tests require a fresh database with known seed data at the start of each run. Currently the process takes 45 minutes — most of which is DELETE statements removing old test data row by row. You are asked to optimise it.</P>
 
       <TimeBlock time="10:00 AM" label="Analyse the current process">
         The current nightly script runs DELETE FROM order_items WHERE created_at &lt; NOW(), DELETE FROM orders, DELETE FROM customers — in dependency order, but row by row. With 2 million rows accumulated from months of tests, the DELETE loop takes 40 minutes.
@@ -701,7 +701,7 @@ WHERE event = 'NIGHTLY_RESET'
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a complete database reset script for FreshCart's staging environment. The script should: (1) Check that the current database is 'freshmart_staging' and abort with a clear error message if not. (2) Truncate all six FreshCart tables in the correct dependency order, restarting all sequences. (3) After truncating, insert one test store (ST001, 'FreshCart Test Store', 'Bangalore', 'Karnataka', 'Test Manager', today's date, monthly target 500000). (4) Verify the reset worked by showing row counts for all six tables."
+        question="Write a complete database reset script for FreshCart's staging environment. The script should: (1) Check that the current database is 'freshmart_staging' and abort with a clear error message if not. (2) Truncate all six FreshCart tables in the correct dependency order, restarting all sequences. (3) After truncating, insert one test store (ST001, 'FreshCart Test Store', 'Seattle', 'Karnataka', 'Test Manager', today's date, monthly target 500000). (4) Verify the reset worked by showing row counts for all six tables."
         hint="Dependency order for truncate: order_items → orders → employees → customers → products → stores. Use RESTART IDENTITY. The database check uses a DO $$ BEGIN IF ... END $$; block."
         answer={`-- FreshCart Staging Reset Script
 -- DEVELOPMENT/STAGING ONLY
@@ -726,7 +726,7 @@ TRUNCATE TABLE stores       RESTART IDENTITY;
 
 -- Step 3: Insert one test store
 INSERT INTO stores (store_id, store_name, city, state, manager_name, opened_date, monthly_target)
-VALUES ('ST001', 'FreshCart Test Store', 'Bangalore', 'Karnataka', 'Test Manager', CURRENT_DATE, 500000.00);
+VALUES ('ST001', 'FreshCart Test Store', 'Seattle', 'Karnataka', 'Test Manager', CURRENT_DATE, 500000.00);
 
 -- Step 4: Verify row counts
 SELECT 'order_items' AS table_name, COUNT(*) AS row_count FROM order_items

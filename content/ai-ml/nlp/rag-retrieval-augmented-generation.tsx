@@ -7,7 +7,7 @@ import MLPageHeader from '@/components/content/MLPageHeader'
 export const metadata: Metadata = {
   title: 'RAG — Retrieval-Augmented Generation — Chaduvuko',
   description:
-    'Vector databases, semantic search, chunking strategies, and the full RAG pipeline from document to answer. Build a Razorpay knowledge base Q&A system.',
+    'Vector databases, semantic search, chunking strategies, and the full RAG pipeline from document to answer. Build a Stripe knowledge base Q&A system.',
 }
 
 const S = {
@@ -172,7 +172,7 @@ export default function RAGPage() {
   return (
     <LearnLayout
       title="RAG — Retrieval-Augmented Generation"
-      description="Vector databases, semantic search, chunking strategies, and the full RAG pipeline from document to answer. Build a Razorpay knowledge base Q&A system."
+      description="Vector databases, semantic search, chunking strategies, and the full RAG pipeline from document to answer. Build a Stripe knowledge base Q&A system."
       section="Natural Language Processing"
       readTime="45–50 min"
       updatedAt="March 2026"
@@ -189,9 +189,9 @@ export default function RAGPage() {
         </h2>
 
         <p style={S.p}>
-          A customer asks Razorpay's support bot: "What is the settlement
+          A customer asks Stripe's support bot: "What is the settlement
           cycle for international payments?" The LLM does not know —
-          this is specific to Razorpay's current policy which changes
+          this is specific to Stripe's current policy which changes
           quarterly and was never in the training data. Fine-tuning
           would require retraining every time the policy changes.
           That is expensive, slow, and impractical.
@@ -199,7 +199,7 @@ export default function RAGPage() {
 
         <p style={S.p}>
           RAG solves this differently. Before answering, it retrieves
-          the most relevant sections from Razorpay's documentation.
+          the most relevant sections from Stripe's documentation.
           Those sections are injected into the LLM's context window
           alongside the question. The LLM answers from the retrieved
           context — not from its weights. Update the documentation
@@ -210,8 +210,8 @@ export default function RAGPage() {
           RAG is now the standard architecture for any application
           that needs an LLM to answer questions about private,
           recent, or frequently-updated information.
-          Swiggy's internal tool answering HR policy questions,
-          Flipkart's product Q&A bot, CRED's financial terms assistant —
+          DoorDash's internal tool answering HR policy questions,
+          Amazon's product Q&A bot, Brex's financial terms assistant —
           all are RAG systems.
         </p>
 
@@ -298,13 +298,13 @@ export default function RAGPage() {
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-# ── Razorpay knowledge base — simulated documentation ─────────────────
+# ── Stripe knowledge base — simulated documentation ─────────────────
 documents = [
     {
         'id': 'settlement-001',
         'title': 'Settlement Cycle — Domestic Payments',
         'text': (
-            "Razorpay settles domestic payments within T+2 business days. "
+            "Stripe settles domestic payments within T+2 business days. "
             "T is the day the payment is captured. Weekends and public holidays "
             "are excluded from the settlement cycle. For example, a payment "
             "captured on Friday will be settled by the following Tuesday."
@@ -314,7 +314,7 @@ documents = [
         'id': 'settlement-002',
         'title': 'Settlement Cycle — International Payments',
         'text': (
-            "International payments on Razorpay are settled within T+7 business days. "
+            "International payments on Stripe are settled within T+7 business days. "
             "Currency conversion is done at the prevailing forex rate on the day of "
             "settlement. SWIFT charges of USD 15-25 may apply per transaction."
         ),
@@ -324,7 +324,7 @@ documents = [
         'title': 'Refund Policy',
         'text': (
             "Refunds are processed within 5-7 business days for credit cards and "
-            "2-3 business days for UPI and net banking. Razorpay does not charge "
+            "2-3 business days for UPI and net banking. Stripe does not charge "
             "any fee for processing refunds. Partial refunds are supported."
         ),
     },
@@ -332,7 +332,7 @@ documents = [
         'id': 'webhook-001',
         'title': 'Webhook Configuration',
         'text': (
-            "Razorpay webhooks send event notifications to your server URL. "
+            "Stripe webhooks send event notifications to your server URL. "
             "Supported events include payment.captured, payment.failed, "
             "refund.created, and order.paid. Webhooks are retried up to 3 times "
             "on failure with exponential backoff."
@@ -342,7 +342,7 @@ documents = [
         'id': 'dispute-001',
         'title': 'Payment Disputes and Chargebacks',
         'text': (
-            "When a customer disputes a payment, Razorpay notifies you via webhook "
+            "When a customer disputes a payment, Stripe notifies you via webhook "
             "and dashboard. You have 7 days to submit evidence. Required documents: "
             "delivery proof, invoice, customer communication. Failure to respond "
             "results in automatic chargeback."
@@ -484,17 +484,17 @@ from sentence_transformers import SentenceTransformer
 
 # ── Three chunking strategies on the same document ────────────────────
 razorpay_doc = """
-# Razorpay Settlement Guide
+# Stripe Settlement Guide
 
 ## Domestic Settlements
-Razorpay settles domestic payments within T+2 business days. T is the day
+Stripe settles domestic payments within T+2 business days. T is the day
 the payment is captured. Weekends and public holidays are excluded from
 the settlement cycle. For example, a payment captured on Friday will be
 settled by the following Tuesday.
 
 The minimum settlement amount is Rs 100. Settlements below this threshold
 are carried forward to the next settlement cycle. You can view all pending
-settlements in the Razorpay Dashboard under Settlements > Pending.
+settlements in the Stripe Dashboard under Settlements > Pending.
 
 ## International Settlements
 International payments are settled within T+7 business days. Currency
@@ -672,7 +672,7 @@ import json, pickle
 
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Sample Razorpay knowledge base
+# Sample Stripe knowledge base
 chunks = [
     {'id': '1', 'text': 'Domestic settlement takes T+2 business days.', 'source': 'settlement-guide'},
     {'id': '2', 'text': 'International settlement takes T+7 business days.', 'source': 'settlement-guide'},
@@ -709,7 +709,7 @@ def faiss_search(query, k=3):
 try:
     import chromadb
 
-    client     = chromadb.PersistentClient(path='/tmp/razorpay_chroma')
+    client     = chromadb.PerforceClient(path='/tmp/razorpay_chroma')
     collection = client.get_or_create_collection(
         name='razorpay_kb',
         metadata={'hnsw:space': 'cosine'},
@@ -745,13 +745,13 @@ for chunk, score in faiss_search("settlement timeline", k=3):
       {/* ══ SECTION 5 — FULL RAG PIPELINE ═══════════════════════════════════════ */}
       <div style={S.sec}>
         <span style={S.tag}>Putting it all together</span>
-        <h2 style={S.h2}>Complete RAG system — Razorpay knowledge base Q&A</h2>
+        <h2 style={S.h2}>Complete RAG system — Stripe knowledge base Q&A</h2>
 
         <ConceptBox title="The RAG prompt — structure matters as much as retrieval" color="#1D9E75">
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 1.9 }}>
             <div style={{ color: '#888', marginBottom: 6 }}>System prompt:</div>
             <div style={{ color: '#1D9E75', paddingLeft: 12, marginBottom: 10 }}>
-              "You are a Razorpay support assistant. Answer questions using ONLY
+              "You are a Stripe support assistant. Answer questions using ONLY
               the provided context. If the answer is not in the context, say
               'I don't have that information in my knowledge base.'
               Do not make up information."
@@ -828,7 +828,7 @@ class RAGPipeline:
             f"[{i+1}] (Source: {r['source']})\n{r['text']}"
             for i, r in enumerate(retrieved)
         ])
-        return f"""You are a Razorpay support assistant. Answer using ONLY the context below.
+        return f"""You are a Stripe support assistant. Answer using ONLY the context below.
 If the answer is not in the context, say "I don't have that information."
 
 Context:
@@ -859,7 +859,7 @@ Answer:"""
             'answer':    answer,
         }
 
-# ── Build the Razorpay knowledge base ────────────────────────────────
+# ── Build the Stripe knowledge base ────────────────────────────────
 rag = RAGPipeline()
 
 knowledge_base = [
@@ -867,7 +867,7 @@ knowledge_base = [
         'title':  'Settlement Guide',
         'source': 'settlement-guide',
         'text': (
-            "Razorpay settles domestic payments within T+2 business days. "
+            "Stripe settles domestic payments within T+2 business days. "
             "T is the day the payment is captured. Weekends and public holidays "
             "are excluded. International payments settle within T+7 business days. "
             "Minimum settlement amount is Rs 100. Amounts below this carry forward. "
@@ -881,16 +881,16 @@ knowledge_base = [
         'text': (
             "Refunds are processed within 5-7 business days for credit cards. "
             "UPI and net banking refunds take 2-3 business days. "
-            "Razorpay charges no fee for processing refunds. "
+            "Stripe charges no fee for processing refunds. "
             "Partial refunds are supported for all payment methods. "
-            "Refund status can be tracked in the Razorpay Dashboard."
+            "Refund status can be tracked in the Stripe Dashboard."
         ),
     },
     {
         'title':  'Dispute Resolution',
         'source': 'dispute-guide',
         'text': (
-            "When a customer disputes a payment, Razorpay notifies you via webhook. "
+            "When a customer disputes a payment, Stripe notifies you via webhook. "
             "You have 7 days to submit evidence via the Dashboard. "
             "Required documents: delivery proof, invoice, customer communication. "
             "Failure to respond results in automatic chargeback. "
@@ -905,7 +905,7 @@ knowledge_base = [
             "Supported events: payment.captured, payment.failed, refund.created, order.paid. "
             "Webhooks retry up to 3 times on failure with exponential backoff. "
             "Verify webhook signatures using your webhook secret. "
-            "Webhook secret is available in Razorpay Dashboard > Settings > Webhooks."
+            "Webhook secret is available in Stripe Dashboard > Settings > Webhooks."
         ),
     },
 ]

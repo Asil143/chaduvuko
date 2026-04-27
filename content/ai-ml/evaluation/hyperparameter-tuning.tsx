@@ -615,7 +615,7 @@ study_persistent = optuna.create_study(
 )
 # Run 10 more trials — adds to existing results
 study_persistent.optimize(objective_with_pruning, n_trials=10)
-print(f"\nPersistent study '{study_persistent.study_name}':")
+print(f"\nPerforce study '{study_persistent.study_name}':")
 print(f"  Total trials: {len(study_persistent.trials)}")
 print(f"  Best AUC:     {study_persistent.best_value:.4f}")
 print(f"  Saved to:     optuna_cred_credit.db  ← can resume any time")

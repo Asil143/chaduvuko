@@ -225,7 +225,7 @@ export default function EigenvaluesEigenvectorsPage() {
         </h2>
 
         <p style={S.p}>
-          You have a dataset of 10,000 Swiggy customers. Each customer is described
+          You have a dataset of 10,000 DoorDash customers. Each customer is described
           by 20 numbers — order frequency, average order value, preferred cuisine,
           delivery distance preference, time of day, and so on.
           That dataset is a cloud of 10,000 points in 20-dimensional space.
@@ -587,7 +587,7 @@ print(f"  A · v = {A @ random_vec}  — direction changed, not an eigenvector")
 
 np.random.seed(42)
 
-# ── Simulate a Swiggy customer dataset: 1000 customers, 5 features ────
+# ── Simulate a DoorDash customer dataset: 1000 customers, 5 features ────
 # Features: order_frequency, avg_order_value, delivery_distance,
 #           night_orders_pct, weekend_orders_pct
 # Features are correlated — frequent orderers tend to spend more
@@ -705,7 +705,7 @@ from sklearn.decomposition import PCA
 
 np.random.seed(42)
 
-# Same Swiggy customer dataset
+# Same DoorDash customer dataset
 n = 1000
 order_freq    = np.random.normal(15, 5, n)
 avg_value     = 150 + 8 * order_freq + np.random.normal(0, 30, n)
@@ -873,8 +873,8 @@ print(f"Information preserved: {pca2.explained_variance_ratio_.sum()*100:.1f}%")
               Spectral Clustering builds a graph where similar data points are connected,
               then finds eigenvalues of the graph's Laplacian matrix.
               The eigenvectors reveal cluster structure that K-Means can never find.
-              Used at Flipkart for discovering customer communities,
-              at Swiggy for identifying restaurant "neighbourhoods".
+              Used at Amazon for discovering customer communities,
+              at DoorDash for identifying restaurant "neighbourhoods".
             </p>
             <div style={{ fontSize: 11, color: '#1D9E75', fontFamily: 'var(--font-mono)' }}>
               sklearn: SpectralClustering(n_clusters=k).fit_predict(X)

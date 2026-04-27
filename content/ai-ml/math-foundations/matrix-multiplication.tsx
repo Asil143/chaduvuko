@@ -705,7 +705,7 @@ print(relu(x1) + relu(x2))     # [2., 3.]  ← DIFFERENT
                 (batch=32, features=4)
               </div>
               <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-                32 Swiggy orders, each with 4 features
+                32 DoorDash orders, each with 4 features
               </div>
             </div>
 
@@ -797,7 +797,7 @@ print(relu(x1) + relu(x2))     # [2., 3.]  ← DIFFERENT
 
 np.random.seed(42)
 
-# 32 Swiggy orders, 4 features each
+# 32 DoorDash orders, 4 features each
 X = np.random.randn(32, 4)
 
 # ── Layer 1: 4 features → 64 neurons ──────────────────────────────────

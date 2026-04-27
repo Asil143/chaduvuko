@@ -357,7 +357,7 @@ export default function SystemDesignDEModule() {
             { '0': 'Parquet compression ratio', '1': '5–10x vs CSV for structured data', '2': 'A 10 GB CSV lands as ~1–2 GB in Parquet' },
             { '0': 'Kafka message overhead', '1': '~100–200 bytes per message', '2': 'Minimum event size in a topic' },
             { '0': 'S3 / ADLS PUT latency', '1': '10–50 ms per request', '2': 'Small file write cost — why small files kill performance' },
-            { '0': 'Cross-region network latency', '1': '50–200 ms (Mumbai ↔ Singapore)', '2': 'Minimum latency for synchronous cross-region operations' },
+            { '0': 'Cross-region network latency', '1': '50–200 ms (New York ↔ Singapore)', '2': 'Minimum latency for synchronous cross-region operations' },
             { '0': '1 day in seconds', '1': '86,400 ≈ 100,000', '2': 'Quick conversion for per-second → per-day estimates' },
           ]}
         />
@@ -530,8 +530,8 @@ daily_raw_storage = daily_orders * raw_event_size_json  # 5M × 350B = 1.75 GB/d
           hours). Streaming: complex, expensive, lower throughput per dollar,
           lower latency (seconds). Use streaming when latency is a business
           requirement — not because it sounds more impressive. A daily revenue
-          report at Zomato does not need streaming. A fraud detection system at
-          Razorpay does.
+          report at Uber Eats does not need streaming. A fraud detection system at
+          Stripe does.
         </Para>
 
         <SubTitle>2 — Normalisation vs denormalisation</SubTitle>
@@ -603,7 +603,7 @@ daily_raw_storage = daily_orders * raw_event_size_json  # 5M × 350B = 1.75 GB/d
 
         <Para>
           <strong>Prompt:</strong> Design a system to ingest payment events from
-          Razorpay's payment gateway in real time. 5 million transactions per day,
+          Stripe's payment gateway in real time. 5 million transactions per day,
           peak 2,000 transactions per second. Events must be available for
           fraud detection within 2 seconds of occurring. Raw events must be
           retained for 7 years for regulatory compliance. Analytics team
@@ -722,7 +722,7 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
         <SectionTitle>Design 2 — Data Warehouse for a Mid-Size E-Commerce Company</SectionTitle>
 
         <Para>
-          <strong>Prompt:</strong> Meesho has 15 engineers and is growing fast.
+          <strong>Prompt:</strong> Shopify has 15 engineers and is growing fast.
           They have operational data in PostgreSQL (orders, users, products),
           MongoDB (product catalogue, reviews), and Firebase (mobile app events).
           The analytics team is running ad-hoc queries directly on the production
@@ -762,7 +762,7 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
 # Fivetran detects row-level changes using PostgreSQL WAL (logical replication)
 # Streams changes to Snowflake staging tables in near-real-time
 # Why Fivetran: 15-person team cannot maintain custom CDC pipelines
-# Cost: ~$500/month for Meesho's volume — justified by engineering time saved
+# Cost: ~$500/month for Shopify's volume — justified by engineering time saved
 
 # Source 2: MongoDB → Fivetran MongoDB connector
 # Full refresh weekly for product catalogue (CDC on MongoDB is trickier)
@@ -847,7 +847,7 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
         <SectionTitle>Design 3 — Feature Store for an ML Platform</SectionTitle>
 
         <Para>
-          <strong>Prompt:</strong> Swiggy's ML team is training and serving
+          <strong>Prompt:</strong> DoorDash's ML team is training and serving
           recommendation and ETA prediction models. Feature computation is
           duplicated across 6 different ML projects. Some features need to be
           available at serving time in under 5ms. Some features are expensive
@@ -972,7 +972,7 @@ feature_groups = {
         <SectionTitle>Design 4 — Backfilling 3 Years of Historical Data Without Disrupting Production</SectionTitle>
 
         <Para>
-          <strong>Prompt:</strong> Flipkart's data team built a new customer
+          <strong>Prompt:</strong> Amazon's data team built a new customer
           lifetime value (CLTV) model that needs 3 years of order history in
           the data warehouse. The warehouse only has 6 months of data. Design
           a backfill pipeline to load 3 years of historical data from the
@@ -1092,10 +1092,10 @@ spark.sql("""
       {/* ── Part 10 — Design 5: Real-Time Analytics Dashboard ────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Design 05 — Real-Time Dashboard" />
-        <SectionTitle>Design 5 — Real-Time Analytics Dashboard for Swiggy Operations</SectionTitle>
+        <SectionTitle>Design 5 — Real-Time Analytics Dashboard for DoorDash Operations</SectionTitle>
 
         <Para>
-          <strong>Prompt:</strong> Swiggy's operations team needs a live dashboard
+          <strong>Prompt:</strong> DoorDash's operations team needs a live dashboard
           showing: orders placed in the last 1 minute, active delivery partners
           by city, average delivery time (rolling 30 minutes), and revenue by
           city (current hour). The dashboard must refresh every 10 seconds and
@@ -1126,13 +1126,13 @@ spark.sql("""
 {
     "updated_at": "2026-03-20T14:23:50Z",
     "by_city": {
-        "Bengaluru": {
+        "San Francisco": {
             "orders_last_1min":       342,
             "active_partners":        1847,
             "avg_delivery_time_30min": 28.4,    # minutes
             "revenue_current_hour":    8432500,  # paise
         },
-        "Hyderabad": {
+        "Austin": {
             "orders_last_1min":       218,
             ...
         },
@@ -1257,7 +1257,7 @@ spark.sql("""
 
         <HighlightBox>
           <Para>
-            <strong>In a senior DE interview (CRED / Razorpay / Flipkart):</strong>
+            <strong>In a senior DE interview (Brex / Stripe / Amazon):</strong>
             You are given 45 minutes to design a "data platform for a payments
             company." The first 10 minutes should be entirely questions — volume,
             latency, team size, compliance requirements, existing infrastructure.

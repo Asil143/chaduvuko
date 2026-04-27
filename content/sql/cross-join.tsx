@@ -84,7 +84,7 @@ export default function CrossJoin() {
       updatedAt="April 2026"
     >
       <WhyMatters track="sql">
-        Zepto's operations team runs JOIN queries every morning to match delivery partner IDs to order IDs. This is that query.
+        Instacart's operations team runs JOIN queries every morning to match delivery partner IDs to order IDs. This is that query.
       </WhyMatters>
 
       {/* ── PART 01 ── */}

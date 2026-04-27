@@ -1403,7 +1403,7 @@ The first problem is that each directory would contain almost no data. If you ha
 
 The second problem is metadata overhead. Listing 10 million S3 directories requires 10,000 API calls (S3 paginates at 1,000 objects per call). The Glue catalog would have 10 million partition entries. Query planning, which must read the catalog to determine which partitions to prune, takes minutes instead of milliseconds.
 
-The third problem is that partition pruning rarely helps for customer_id in practice. Analytical queries almost never say WHERE customer_id = 4201938. They say WHERE city = 'Bangalore' or WHERE date BETWEEN '2026-01-01' AND '2026-03-17'. The customer_id column does not appear in the WHERE clauses of the queries that would benefit from partition pruning.
+The third problem is that partition pruning rarely helps for customer_id in practice. Analytical queries almost never say WHERE customer_id = 4201938. They say WHERE city = 'Seattle' or WHERE date BETWEEN '2026-01-01' AND '2026-03-17'. The customer_id column does not appear in the WHERE clauses of the queries that would benefit from partition pruning.
 
 The rule for choosing partition columns: they should have low-to-medium cardinality (date has 365 values per year, store_id might have 10–1,000 values, product_category might have 50–100 values), they should be the most common filter in analytical queries, and they should produce partitions large enough to avoid the small file problem (each partition should ideally have at least 100 MB of data).`,
           },

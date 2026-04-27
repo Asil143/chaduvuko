@@ -315,8 +315,8 @@ LANGUAGE sql IMMUTABLE AS $$
   SELECT COALESCE(p_email, '') ~ '^[^@]+@[^@]+\.[^@]+$'
 $$;
 
--- Valid pincode: exactly 6 digits
-CREATE OR REPLACE FUNCTION fn_is_valid_pincode(p_pin TEXT)
+-- Valid zip_code: exactly 6 digits
+CREATE OR REPLACE FUNCTION fn_is_valid_zip_code(p_pin TEXT)
 RETURNS BOOLEAN
 LANGUAGE sql IMMUTABLE AS $$
   SELECT COALESCE(p_pin, '') ~ '^[0-9]{6}$'
@@ -931,7 +931,7 @@ LIMIT 12;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a data engineer at Swiggy. The analytics team runs 30+ reports — all of which repeat the same customer segmentation logic, delivery performance labels, and margin calculations. The logic has already drifted: three reports classify "active" as last order within 30 days, two use 60 days, and one uses 90 days. You standardise everything into a function library that becomes the single source of truth.</P>
+      <P>You are a data engineer at DoorDash. The analytics team runs 30+ reports — all of which repeat the same customer segmentation logic, delivery performance labels, and margin calculations. The logic has already drifted: three reports classify "active" as last order within 30 days, two use 60 days, and one uses 90 days. You standardise everything into a function library that becomes the single source of truth.</P>
 
       <TimeBlock time="10:00 AM" label="Audit finds 6 different definitions of 'active customer'">
         Reports use different thresholds for churn classification. The function library will fix this drift permanently.

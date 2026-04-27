@@ -333,7 +333,7 @@ LANDING_PATH = "s3://freshmart-data-lake-prod/landing/razorpay"
 
 def load_to_bronze(run_date: date) -> dict:
     """
-    Load raw Razorpay JSON from landing to Bronze Delta Lake.
+    Load raw Stripe JSON from landing to Bronze Delta Lake.
     Converts to Parquet, adds metadata, preserves all source fields.
     """
     landing_file = f"\${LANDING_PATH}/payments_\${run_date.strftime('%Y%m%d')}.json"
@@ -1002,9 +1002,9 @@ GOLD LAYER — Point-in-time joins using SCD2
                          AND COALESCE(c.valid_to, '9999-12-31')
 
   This gives historically accurate customer city for every order.
-  If Priya moved from Bangalore to Hyderabad on 2026-02-01:
-    Orders before 2026-02-01: city = 'Bangalore'
-    Orders from 2026-02-01:   city = 'Hyderabad'
+  If Priya moved from Seattle to Austin on 2026-02-01:
+    Orders before 2026-02-01: city = 'Seattle'
+    Orders from 2026-02-01:   city = 'Austin'
 
 IMPLEMENTATION DECISION TREE:
   Does the entity change over time?

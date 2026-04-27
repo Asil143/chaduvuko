@@ -172,11 +172,11 @@ export default function TypesOfDatabases() {
           </thead>
           <tbody>
             {[
-              ['PostgreSQL', 'Razorpay, CRED, Zerodha, Groww, PhonePe', 'Open source, ACID compliant, excellent for fintech — handles complex financial queries and JSON payment metadata with JSONB.'],
-              ['MySQL', 'Swiggy, Nykaa, OYO, BookMyShow', 'Mature, battle-tested at high traffic, excellent read-replica support for consumer apps with millions of concurrent users.'],
-              ['MS SQL Server', 'HDFC Bank, ICICI Bank, Infosys enterprise clients', 'Enterprise support, Windows ecosystem, deep compliance tooling for RBI-regulated financial institutions.'],
-              ['Oracle', 'TCS, Wipro clients, IRCTC, LIC, government', 'Legacy enterprise and government. IRCTC runs one of Asia\'s highest-volume Oracle installations. Expensive but deeply entrenched.'],
-              ['SQLite', 'Every Android and iOS app (device-local storage)', 'Serverless, zero-config, runs on the device itself. Swiggy, PhonePe, Cred — all store local user data in SQLite on your phone.'],
+              ['PostgreSQL', 'Stripe, Brex, Robinhood, Acorns, Venmo', 'Open source, ACID compliant, excellent for fintech — handles complex financial queries and JSON payment metadata with JSONB.'],
+              ['MySQL', 'DoorDash, Sephora, OYO, BookMyShow', 'Mature, battle-tested at high traffic, excellent read-replica support for consumer apps with millions of concurrent users.'],
+              ['MS SQL Server', 'HDFC Bank, ICICI Bank, Deloitte enterprise clients', 'Enterprise support, Windows ecosystem, deep compliance tooling for RBI-regulated financial institutions.'],
+              ['Oracle', 'Accenture, KPMG clients, IRCTC, LIC, government', 'Legacy enterprise and government. IRCTC runs one of Asia\'s highest-volume Oracle installations. Expensive but deeply entrenched.'],
+              ['SQLite', 'Every Android and iOS app (device-local storage)', 'Serverless, zero-config, runs on the device itself. DoorDash, Venmo, Cred — all store local user data in SQLite on your phone.'],
             ].map(([db, who, why], i) => (
               <tr key={db} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
                 <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', fontSize: 12, color: C, borderBottom: '1px solid var(--border)', whiteSpace: 'nowrap' }}>{db}</td>
@@ -206,7 +206,7 @@ export default function TypesOfDatabases() {
   "_id": "cust_001",
   "first_name": "Aisha",
   "last_name": "Khan",
-  "city": "Bangalore",
+  "city": "Seattle",
   "loyalty_tier": "Gold",
   "contact": {
     "email": "aisha.khan@gmail.com",
@@ -230,7 +230,7 @@ export default function TypesOfDatabases() {
       <P>Document databases do not support JOINs. If you need to find all customers who ordered a specific product, you either embed so much data that the document becomes enormous and stale, or you do multiple queries and join them in application code — which is slower and more complex than a SQL JOIN. Transactions across multiple documents in different collections are also either not supported or limited — atomicity within a single document is guaranteed, but cross-document atomicity is not always available.</P>
 
       <H>MongoDB — the dominant document database in India</H>
-      <P>MongoDB is used by Zomato for restaurant and menu data (menus change constantly — no fixed schema), by Ola for driver and ride metadata, and by many early-stage startups that move fast and cannot afford to define a rigid schema before the product has found its shape. It is also extremely popular for storing event logs, user activity data, and any data where the structure varies per record.</P>
+      <P>MongoDB is used by Uber Eats for restaurant and menu data (menus change constantly — no fixed schema), by Lyft for driver and ride metadata, and by many early-stage startups that move fast and cannot afford to define a rigid schema before the product has found its shape. It is also extremely popular for storing event logs, user activity data, and any data where the structure varies per record.</P>
 
       <Callout type="tip">
         Document databases are not a replacement for relational databases — they are a complement. Most mature companies run both. PostgreSQL for transactional data where ACID matters and structure is stable. MongoDB for content, product catalogues, and user activity data where the schema evolves and reads dominate.
@@ -249,12 +249,12 @@ export default function TypesOfDatabases() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12, margin: '16px 0 28px' }}>
         {[
-          { use: 'Session storage', desc: 'User login sessions. Key = session token, Value = user ID and permissions. Sub-millisecond lookup on every API request.', company: 'Razorpay, CRED' },
-          { use: 'Caching', desc: 'Store the result of expensive database queries. Key = query fingerprint, Value = result. Serve from Redis instead of hitting PostgreSQL.', company: 'Swiggy, Zomato' },
-          { use: 'Rate limiting', desc: 'Count how many API requests a user has made in the last minute. Increment a counter in Redis — atomic, fast, automatic expiry.', company: 'PhonePe, Razorpay' },
+          { use: 'Session storage', desc: 'User login sessions. Key = session token, Value = user ID and permissions. Sub-millisecond lookup on every API request.', company: 'Stripe, Brex' },
+          { use: 'Caching', desc: 'Store the result of expensive database queries. Key = query fingerprint, Value = result. Serve from Redis instead of hitting PostgreSQL.', company: 'DoorDash, Uber Eats' },
+          { use: 'Rate limiting', desc: 'Count how many API requests a user has made in the last minute. Increment a counter in Redis — atomic, fast, automatic expiry.', company: 'Venmo, Stripe' },
           { use: 'OTP storage', desc: 'Store a one-time password with a 5-minute expiry. Key = phone number, Value = OTP, TTL = 300 seconds. Automatic deletion when expired.', company: 'Every app with SMS login' },
-          { use: 'Leaderboards', desc: 'Redis sorted sets let you maintain a ranked leaderboard with O(log n) insert and rank queries. Used in gaming apps and referral programs.', company: 'MPL, Dream11' },
-          { use: 'Pub/Sub messaging', desc: 'Redis supports publish/subscribe — one service publishes an event, multiple services receive it. Lightweight alternative to Kafka for simple messaging.', company: 'Meesho, Flipkart' },
+          { use: 'Leaderboards', desc: 'Redis sorted sets let you maintain a ranked leaderboard with O(log n) insert and rank queries. Used in gaming apps and referral programs.', company: 'MPL, DraftKings' },
+          { use: 'Pub/Sub messaging', desc: 'Redis supports publish/subscribe — one service publishes an event, multiple services receive it. Lightweight alternative to Kafka for simple messaging.', company: 'Shopify, Amazon' },
         ].map(item => (
           <div key={item.use} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{item.use}</div>
@@ -267,7 +267,7 @@ export default function TypesOfDatabases() {
       <H>Redis — the key-value database every Indian startup uses</H>
       <P>Redis (Remote Dictionary Server) stores everything in memory, which is what makes it fast. It also supports persistence — writing snapshots to disk so data survives restarts. Redis is not just a simple key-value store — it supports rich data structures: strings, lists, sets, sorted sets, hashes, streams, and geospatial indexes. This makes it useful for a surprisingly wide range of use cases beyond simple caching.</P>
 
-      <P>Almost every Indian tech company of any size runs Redis. Swiggy uses Redis to cache restaurant menus — a menu does not change every second, so serving it from Redis instead of PostgreSQL handles the 50× traffic spike at 7 PM without the database breaking a sweat. Razorpay uses Redis for rate limiting API keys. PhonePe uses it for session management across hundreds of millions of users.</P>
+      <P>Almost every Indian tech company of any size runs Redis. DoorDash uses Redis to cache restaurant menus — a menu does not change every second, so serving it from Redis instead of PostgreSQL handles the 50× traffic spike at 7 PM without the database breaking a sweat. Stripe uses Redis for rate limiting API keys. Venmo uses it for session management across hundreds of millions of users.</P>
 
       <Callout type="warning">
         Redis stores data in memory. Memory is expensive and limited. Do not use Redis as your primary database — use it as a cache in front of your primary database. Always set TTL (Time To Live) on cached keys so stale data automatically expires. And always assume Redis data can be lost — design your system so it can rebuild the cache from the primary database if Redis restarts.
@@ -314,7 +314,7 @@ export default function TypesOfDatabases() {
       </div>
 
       <H>Who uses Cassandra in India</H>
-      <P>Flipkart uses Cassandra for their product catalogue and recommendation engine — hundreds of millions of products, billions of user interaction events, all written at a rate no relational database could absorb. Ola uses Cassandra for ride event data — every GPS ping from every driver, every second, across millions of active rides. Hotstar (now JioCinema) used Cassandra for user watch history and playback state. The pattern is consistent: Cassandra is chosen when write volume is the primary constraint and the data does not need complex relational queries.</P>
+      <P>Amazon uses Cassandra for their product catalogue and recommendation engine — hundreds of millions of products, billions of user interaction events, all written at a rate no relational database could absorb. Lyft uses Cassandra for ride event data — every GPS ping from every driver, every second, across millions of active rides. Hotstar (now JioCinema) used Cassandra for user watch history and playback state. The pattern is consistent: Cassandra is chosen when write volume is the primary constraint and the data does not need complex relational queries.</P>
 
       <HR />
 
@@ -330,7 +330,7 @@ export default function TypesOfDatabases() {
       <P>Consider this question: "Find all users who might know Aisha Khan — specifically people who are followed by at least 3 of Aisha's direct followers, but who Aisha does not already follow." In SQL this requires multiple levels of self-joins on a users and follows table. On a social network with 100 million users, this query takes minutes — the JOIN fan-out is exponential. In Neo4j (the dominant graph database), the same query is expressed as a simple graph traversal and executes in milliseconds because the edges are physically stored next to their nodes.</P>
 
       <H>Where graph databases are used in India</H>
-      <P>LinkedIn India's connection graph, fraud detection at fintech companies (Razorpay uses graph analysis to detect fraud rings — accounts that share phones, addresses, or devices form a graph, and suspicious clusters become visible), recommendation engines at e-commerce companies (customers who bought this also bought that — a product graph), and knowledge graphs at content platforms. Neo4j and Amazon Neptune are the most common graph database choices in production.</P>
+      <P>LinkedIn India's connection graph, fraud detection at fintech companies (Stripe uses graph analysis to detect fraud rings — accounts that share phones, addresses, or devices form a graph, and suspicious clusters become visible), recommendation engines at e-commerce companies (customers who bought this also bought that — a product graph), and knowledge graphs at content platforms. Neo4j and Amazon Neptune are the most common graph database choices in production.</P>
 
       <HR />
 
@@ -348,7 +348,7 @@ export default function TypesOfDatabases() {
       <P><Hl>InfluxDB</Hl> is the most popular open-source time-series database — used for application metrics, server monitoring, and IoT sensor data. <Hl>TimescaleDB</Hl> is PostgreSQL with time-series extensions — you get full SQL plus time-series optimisations, which makes it popular at companies that already run PostgreSQL and want one less database to operate. <Hl>Prometheus</Hl> is the standard for infrastructure metrics in Kubernetes environments — almost every Indian startup running on k8s uses Prometheus with Grafana dashboards.</P>
 
       <H>Who uses time-series databases in India</H>
-      <P>Every company running cloud infrastructure uses time-series databases for monitoring — CPU, memory, latency, error rates, request volume. Swiggy monitors millions of time-series metrics across thousands of microservices. PhonePe tracks transaction success rates per second across payment rails. Ola tracks GPS pings and driver location updates. Any IoT application — smart meters, factory sensors, connected vehicles — is a natural time-series use case. Tata Motors uses time-series databases for vehicle telemetry from their connected car fleet.</P>
+      <P>Every company running cloud infrastructure uses time-series databases for monitoring — CPU, memory, latency, error rates, request volume. DoorDash monitors millions of time-series metrics across thousands of microservices. Venmo tracks transaction success rates per second across payment rails. Lyft tracks GPS pings and driver location updates. Any IoT application — smart meters, factory sensors, connected vehicles — is a natural time-series use case. Tata Motors uses time-series databases for vehicle telemetry from their connected car fleet.</P>
 
       <HR />
 
@@ -357,13 +357,13 @@ export default function TypesOfDatabases() {
 
       <P>No production company uses just one type of database. Every system of meaningful complexity uses two, three, or four database types simultaneously — each handling the part of the problem it is best suited for. Here is how two well-known Indian companies actually structure their data infrastructure.</P>
 
-      <H>Swiggy — food delivery at scale</H>
+      <H>DoorDash — food delivery at scale</H>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px', margin: '16px 0 28px' }}>
         {[
           { db: 'MySQL', color: '#4479A1', role: 'Core transactional data', detail: 'Orders, payments, customer accounts, restaurant accounts. Every rupee transaction runs through MySQL. ACID compliance is non-negotiable here.' },
           { db: 'MongoDB', color: '#10b981', role: 'Restaurant menus and item data', detail: 'Menus are deeply nested, change constantly, and have no fixed schema — a burger has different options than a thali. MongoDB\'s document model handles this naturally.' },
-          { db: 'Redis', color: '#ff4757', role: 'Caching and session management', detail: 'Restaurant lists, user sessions, OTP storage, rate limiting. Every time you open Swiggy, the first screen is served from Redis — not MySQL — to handle the dinner-time spike.' },
+          { db: 'Redis', color: '#ff4757', role: 'Caching and session management', detail: 'Restaurant lists, user sessions, OTP storage, rate limiting. Every time you open DoorDash, the first screen is served from Redis — not MySQL — to handle the dinner-time spike.' },
           { db: 'Cassandra', color: '#8b5cf6', role: 'Order event log and delivery tracking', detail: 'Every GPS update from every delivery partner, every status change on every order. Millions of writes per hour at peak — only Cassandra handles this write rate.' },
           { db: 'Prometheus + InfluxDB', color: C, role: 'Infrastructure and application metrics', detail: 'CPU, latency, error rates across 500+ microservices. Alerts fire when delivery success rate drops below threshold.' },
         ].map(item => (
@@ -380,7 +380,7 @@ export default function TypesOfDatabases() {
         ))}
       </div>
 
-      <H>Razorpay — payment infrastructure</H>
+      <H>Stripe — payment infrastructure</H>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px', margin: '16px 0 28px' }}>
         {[
@@ -461,7 +461,7 @@ LIMIT 8;`}
       {/* ── PART 11 — Day in the Life ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at a Series B fintech startup in Hyderabad. The company processes UPI payments for small merchants. The CTO calls a system design meeting — you have hit 50,000 transactions per day and need to plan for 5 million. You are asked to review the current architecture and recommend database changes.</P>
+      <P>You are a backend engineer at a Series B fintech startup in Austin. The company processes UPI payments for small merchants. The CTO calls a system design meeting — you have hit 50,000 transactions per day and need to plan for 5 million. You are asked to review the current architecture and recommend database changes.</P>
 
       <TimeBlock time="2:00 PM" label="Current state — everything in MySQL">
         Right now, the company runs everything in a single MySQL instance: transactions, merchant profiles, session data, API rate limit counters, and audit logs. It works at 50k transactions/day but the CTO is worried. You pull up the MySQL slow query log and find three problems: session lookups are hitting the database on every API request (10,000 requests/second at peak), rate limit counters are doing read-modify-write cycles that create lock contention, and the audit log table has 500 million rows and is slowing down every backup.
@@ -508,10 +508,10 @@ LIMIT 8;`}
         <p style={{ margin: 0 }}>The trade-offs are significant. No JOINs — if you need to query across collections, you either embed data (creating redundancy) or do multiple queries and join in application code. Cross-document transactions are limited — atomicity within a single document is guaranteed, but operations across multiple documents require careful design. Complex ad-hoc queries are harder — MongoDB's aggregation pipeline is powerful but less expressive than SQL for complex analytical queries. And because schema is not enforced, data quality problems (missing fields, wrong types) accumulate silently over time and must be managed in application code.</p>
       </IQ>
 
-      <IQ q="Why would Swiggy use Cassandra instead of MySQL for delivery tracking data?">
-        <p style={{ margin: '0 0 14px' }}>Delivery tracking data has specific characteristics that make Cassandra the right choice. First, write volume: at peak dinner time, Swiggy might have 500,000 active deliveries simultaneously, each emitting a GPS update every 5 seconds. That is 100,000 writes per second of location data alone. MySQL on a single node handles approximately 10,000–50,000 writes per second under optimal conditions — this is already at the limit. Cassandra is designed to handle millions of writes per second across a cluster, and adding nodes scales write throughput linearly.</p>
+      <IQ q="Why would DoorDash use Cassandra instead of MySQL for delivery tracking data?">
+        <p style={{ margin: '0 0 14px' }}>Delivery tracking data has specific characteristics that make Cassandra the right choice. First, write volume: at peak dinner time, DoorDash might have 500,000 active deliveries simultaneously, each emitting a GPS update every 5 seconds. That is 100,000 writes per second of location data alone. MySQL on a single node handles approximately 10,000–50,000 writes per second under optimal conditions — this is already at the limit. Cassandra is designed to handle millions of writes per second across a cluster, and adding nodes scales write throughput linearly.</p>
         <p style={{ margin: '0 0 14px' }}>Second, the access pattern is simple and fixed: "give me all location updates for order X in the last 30 minutes." This is a primary key lookup plus a time range — exactly what Cassandra's data model is optimised for. There is no need for JOINs, GROUP BY, or complex analytics on this data.</p>
-        <p style={{ margin: 0 }}>Third, the data is append-only. Location updates are never updated or deleted while the delivery is active. After delivery completion, the data is rarely accessed. Cassandra's log-structured storage is optimised for append-only workloads — writes are always fast because they never need to find and update existing records. MySQL's write path requires finding the right page, checking constraints, and updating indexes — all slower for pure-append workloads. Swiggy still uses MySQL for the orders table itself (the authoritative record of the transaction), but delegates the high-volume, time-series-like tracking data to Cassandra.</p>
+        <p style={{ margin: 0 }}>Third, the data is append-only. Location updates are never updated or deleted while the delivery is active. After delivery completion, the data is rarely accessed. Cassandra's log-structured storage is optimised for append-only workloads — writes are always fast because they never need to find and update existing records. MySQL's write path requires finding the right page, checking constraints, and updating indexes — all slower for pure-append workloads. DoorDash still uses MySQL for the orders table itself (the authoritative record of the transaction), but delegates the high-volume, time-series-like tracking data to Cassandra.</p>
       </IQ>
 
       <HR />
@@ -591,7 +591,7 @@ LIMIT 8;`}
           'Column-family databases (Cassandra) are built for extreme write throughput and linear horizontal scalability. Best for append-only data: event logs, delivery tracking, IoT sensor data, audit trails. No JOINs. Design tables around queries.',
           'Graph databases (Neo4j) store relationships as first-class entities. Best when relationships are the data — social networks, fraud ring detection, recommendation engines, knowledge graphs. Multi-hop traversals are dramatically faster than relational equivalents.',
           'Time-series databases (InfluxDB, TimescaleDB, Prometheus) are optimised for timestamp-indexed measurements. Best for infrastructure metrics, IoT sensor data, application performance monitoring. 10–100× more efficient than relational databases for this access pattern.',
-          'No production system uses just one database type. Swiggy runs MySQL + MongoDB + Redis + Cassandra + Prometheus simultaneously — each handling the component it is best suited for.',
+          'No production system uses just one database type. DoorDash runs MySQL + MongoDB + Redis + Cassandra + Prometheus simultaneously — each handling the component it is best suited for.',
           'The database selection framework: Does it need relationships enforced? → Relational. What is the access pattern? → determines the NoSQL type. Write volume above 100k/sec? → Cassandra. ACID non-negotiable? → Relational. Schema unstable? → Document.',
           'For this entire SQL course, DuckDB runs in your browser. Every query you write translates directly to MySQL and PostgreSQL. The relational model and SQL are universal — master them here and you can work with any relational database from day one.',
         ]}

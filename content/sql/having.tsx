@@ -692,7 +692,7 @@ ORDER BY a.revenue DESC;`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Razorpay, India's largest payment gateway. The risk team has asked you to identify merchant accounts showing unusual activity patterns that may indicate fraud or policy violations. They have given you three criteria that define "flagged" merchants.</P>
+      <P>You are a data analyst at Stripe, India's largest payment gateway. The risk team has asked you to identify merchant accounts showing unusual activity patterns that may indicate fraud or policy violations. They have given you three criteria that define "flagged" merchants.</P>
 
       <TimeBlock time="3:00 PM" label="Risk team criteria arrive">
         Flag any merchant where: (1) average transaction value exceeds ₹5,000 AND total transaction count is below 10 (low volume, high value — unusual), (2) OR cancellation rate exceeds 30% of all transactions, (3) OR they have only 1 distinct payment method used (legitimate merchants typically use multiple methods). Adapted for FreshCart: flag stores matching analogous patterns.

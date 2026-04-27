@@ -328,14 +328,14 @@ ORDER BY a.customer_id, a.order_date;`}
       <CodeBlock
         label="Pair deduplication — why a.id < b.id is essential"
         code={`-- WITHOUT deduplication:
--- Customer 1 and Customer 2 in Bangalore appear as:
--- (1, 2, Bangalore) ← pair
--- (2, 1, Bangalore) ← duplicate of the same pair
--- (1, 1, Bangalore) ← self-match (same customer!)
+-- Customer 1 and Customer 2 in Seattle appear as:
+-- (1, 2, Seattle) ← pair
+-- (2, 1, Seattle) ← duplicate of the same pair
+-- (1, 1, Seattle) ← self-match (same customer!)
 -- Total: 3 rows for 1 unique pair
 
 -- WITH a.customer_id < b.customer_id:
--- Only (1, 2, Bangalore) survives — unique, no self-match
+-- Only (1, 2, Seattle) survives — unique, no self-match
 -- Total: 1 row for 1 unique pair
 
 -- Use < for unordered pairs (A,B same as B,A)
@@ -562,7 +562,7 @@ ORDER BY orders_together DESC;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a people analytics engineer at Swiggy. The HR team needs an org chart report for a performance review cycle. They need: each employee listed with their direct manager, the manager's manager, how many peers (colleagues with the same manager) each employee has, and whether they earn more or less than their manager. Everything from a single self-referencing employees table.</P>
+      <P>You are a people analytics engineer at DoorDash. The HR team needs an org chart report for a performance review cycle. They need: each employee listed with their direct manager, the manager's manager, how many peers (colleagues with the same manager) each employee has, and whether they earn more or less than their manager. Everything from a single self-referencing employees table.</P>
 
       <TimeBlock time="2:00 PM" label="Requirements arrive">
         Org chart with four data points per employee: manager name, manager's manager name, peer count, and salary comparison vs manager.

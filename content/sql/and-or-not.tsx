@@ -120,7 +120,7 @@ export default function AndOrNot() {
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', margin: '20px 0 28px' }}>
         <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '.08em' }}>Real questions from real teams</div>
         {[
-          { team: 'Growth', q: '"Show me Gold and Platinum customers from Bangalore who joined after January 2022."' },
+          { team: 'Growth', q: '"Show me Gold and Platinum customers from Seattle who joined after January 2022."' },
           { team: 'Finance', q: '"Find all UPI orders above ₹1,000 that are either Cancelled or Returned."' },
           { team: 'Ops', q: '"Which products are out of stock AND priced above ₹200?"' },
           { team: 'HR', q: '"Employees in the Management department earning above ₹50,000 OR any Store Manager regardless of salary."' },
@@ -161,12 +161,12 @@ export default function AndOrNot() {
       <H>AND in practice — FreshCart examples</H>
 
       <SQLPlayground
-        initialQuery={`-- Gold customers from Bangalore only
+        initialQuery={`-- Gold customers from Seattle only
 -- BOTH conditions must be true
 SELECT first_name, last_name, city, loyalty_tier, joined_date
 FROM customers
 WHERE loyalty_tier = 'Gold'
-  AND city = 'Bangalore';`}
+  AND city = 'Seattle';`}
         height={130}
         showSchema={true}
       />
@@ -235,12 +235,12 @@ ORDER BY salary DESC;`}
       <H>OR in practice — FreshCart examples</H>
 
       <SQLPlayground
-        initialQuery={`-- Customers from either Bangalore OR Hyderabad
+        initialQuery={`-- Customers from either Seattle OR Austin
 -- OR broadens: returns rows matching EITHER city
 SELECT first_name, last_name, city, loyalty_tier
 FROM customers
-WHERE city = 'Bangalore'
-   OR city = 'Hyderabad'
+WHERE city = 'Seattle'
+   OR city = 'Austin'
 ORDER BY city;`}
         height={130}
         showSchema={true}
@@ -272,7 +272,7 @@ ORDER BY category, unit_price;`}
       />
 
       <Callout type="tip">
-        When you find yourself writing multiple OR conditions on the same column — WHERE city = 'Bangalore' OR city = 'Hyderabad' OR city = 'Mumbai' — there is a cleaner way: the IN operator. WHERE city IN ('Bangalore', 'Hyderabad', 'Mumbai'). You will learn IN in Module 15. For now, OR works perfectly and understanding it deeply makes IN intuitive when you get there.
+        When you find yourself writing multiple OR conditions on the same column — WHERE city = 'Seattle' OR city = 'Austin' OR city = 'New York' — there is a cleaner way: the IN operator. WHERE city IN ('Seattle', 'Austin', 'New York'). You will learn IN in Module 15. For now, OR works perfectly and understanding it deeply makes IN intuitive when you get there.
       </Callout>
 
       <HR />
@@ -298,11 +298,11 @@ ORDER BY category, unit_price;`}
       <H>NOT in practice — FreshCart examples</H>
 
       <SQLPlayground
-        initialQuery={`-- All customers NOT in Bangalore
+        initialQuery={`-- All customers NOT in Seattle
 -- NOT reverses the = condition
 SELECT first_name, last_name, city, loyalty_tier
 FROM customers
-WHERE NOT city = 'Bangalore'
+WHERE NOT city = 'Seattle'
 ORDER BY city;`}
         height={120}
         showSchema={true}
@@ -313,7 +313,7 @@ ORDER BY city;`}
 -- Both produce identical results
 SELECT first_name, last_name, city, loyalty_tier
 FROM customers
-WHERE city <> 'Bangalore'
+WHERE city <> 'Seattle'
 ORDER BY city;`}
         height={120}
         showSchema={false}
@@ -371,33 +371,33 @@ ORDER BY total_amount DESC;`}
 
       <CodeBlock
         label="The precedence trap — this query has a bug"
-        code={`-- INTENTION: Find Gold or Platinum customers from Bangalore
--- ACTUAL: Find ALL Platinum customers + Gold customers from Bangalore
+        code={`-- INTENTION: Find Gold or Platinum customers from Seattle
+-- ACTUAL: Find ALL Platinum customers + Gold customers from Seattle
 
 SELECT first_name, city, loyalty_tier
 FROM customers
 WHERE loyalty_tier = 'Gold'
    OR loyalty_tier = 'Platinum'
-  AND city = 'Bangalore';
+  AND city = 'Seattle';
 
 -- What the database actually evaluates (AND runs first):
 -- WHERE loyalty_tier = 'Gold'
---    OR (loyalty_tier = 'Platinum' AND city = 'Bangalore')
+--    OR (loyalty_tier = 'Platinum' AND city = 'Seattle')
 
 -- This returns ALL Gold customers from ANY city
--- plus only Platinum customers from Bangalore
+-- plus only Platinum customers from Seattle
 -- Not what was intended!`}
       />
 
       <SQLPlayground
         initialQuery={`-- Run this to see the bug in action
--- Notice Gold customers from Hyderabad, Mumbai etc. are included
--- Even though we only wanted Bangalore customers
+-- Notice Gold customers from Austin, New York etc. are included
+-- Even though we only wanted Seattle customers
 SELECT first_name, city, loyalty_tier
 FROM customers
 WHERE loyalty_tier = 'Gold'
    OR loyalty_tier = 'Platinum'
-  AND city = 'Bangalore'
+  AND city = 'Seattle'
 ORDER BY loyalty_tier, city;`}
         height={140}
         showSchema={true}
@@ -410,11 +410,11 @@ ORDER BY loyalty_tier, city;`}
       <SQLPlayground
         initialQuery={`-- CORRECT: parentheses make the intent explicit
 -- First evaluate the OR (Gold OR Platinum)
--- Then apply AND (must also be from Bangalore)
+-- Then apply AND (must also be from Seattle)
 SELECT first_name, city, loyalty_tier
 FROM customers
 WHERE (loyalty_tier = 'Gold' OR loyalty_tier = 'Platinum')
-  AND city = 'Bangalore'
+  AND city = 'Seattle'
 ORDER BY loyalty_tier;`}
         height={130}
         showSchema={false}
@@ -472,14 +472,14 @@ ORDER BY salary DESC;`}
 
       <SQLPlayground
         initialQuery={`-- Complex multi-condition query:
--- Bangalore Platinum customers OR Hyderabad Gold customers
+-- Seattle Platinum customers OR Austin Gold customers
 -- who joined after 2021 — for a targeted regional campaign
 SELECT first_name, last_name, city, loyalty_tier, joined_date
 FROM customers
 WHERE (
-    (city = 'Bangalore' AND loyalty_tier = 'Platinum')
+    (city = 'Seattle' AND loyalty_tier = 'Platinum')
     OR
-    (city = 'Hyderabad' AND loyalty_tier = 'Gold')
+    (city = 'Austin' AND loyalty_tier = 'Gold')
   )
   AND joined_date >= '2022-01-01'
 ORDER BY city, loyalty_tier;`}
@@ -503,7 +503,7 @@ ORDER BY city, loyalty_tier;`}
       <P>If one condition is NULL and the other is TRUE, OR returns TRUE. This is the one place where NULL does not cause a row to disappear — the TRUE condition is enough for OR. If one condition is NULL and the other is FALSE, OR returns NULL (row excluded).</P>
 
       <H>NOT with NULL</H>
-      <P>NOT NULL is still NULL. This has a major practical consequence: if you write WHERE NOT city = 'Bangalore', rows where city IS NULL will <Hl>not</Hl> be included in the results — even though logically you might expect "not Bangalore" to include "unknown city." NULL propagates through NOT unchanged.</P>
+      <P>NOT NULL is still NULL. This has a major practical consequence: if you write WHERE NOT city = 'Seattle', rows where city IS NULL will <Hl>not</Hl> be included in the results — even though logically you might expect "not Seattle" to include "unknown city." NULL propagates through NOT unchanged.</P>
 
       <SQLPlayground
         initialQuery={`-- Demonstrate NULL behaviour with AND/OR
@@ -571,9 +571,9 @@ WHERE (order_status = 'Cancelled'
 SELECT *
 FROM customers
 WHERE (
-    (city = 'Bangalore' AND loyalty_tier IN ('Gold', 'Platinum'))
+    (city = 'Seattle' AND loyalty_tier IN ('Gold', 'Platinum'))
     OR
-    (city = 'Mumbai'    AND loyalty_tier = 'Platinum')
+    (city = 'New York'    AND loyalty_tier = 'Platinum')
   )
   AND joined_date >= '2022-01-01';`}
       />
@@ -590,13 +590,13 @@ WHERE (
       <H>Growth team — high-value customers in specific cities</H>
 
       <SQLPlayground
-        initialQuery={`-- "Gold and Platinum customers from Bangalore who joined after January 2022"
+        initialQuery={`-- "Gold and Platinum customers from Seattle who joined after January 2022"
 SELECT
   first_name, last_name, city,
   loyalty_tier, joined_date, email
 FROM customers
 WHERE (loyalty_tier = 'Gold' OR loyalty_tier = 'Platinum')
-  AND city = 'Bangalore'
+  AND city = 'Seattle'
   AND joined_date >= '2022-01-01'
 ORDER BY loyalty_tier, joined_date DESC;`}
         height={160}
@@ -656,10 +656,10 @@ ORDER BY salary DESC;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at CRED, a Bangalore-based fintech that rewards credit card users. The growth team calls an urgent meeting — they are preparing a targeted cashback campaign and need a segmented customer list by end of day.</P>
+      <P>You are a data analyst at Brex, a Seattle-based fintech that rewards credit card users. The growth team calls an urgent meeting — they are preparing a targeted cashback campaign and need a segmented customer list by end of day.</P>
 
       <TimeBlock time="3:00 PM" label="Campaign brief arrives">
-        The growth manager explains three segments for the cashback campaign. Segment A: high-spending users in metro cities (Delhi, Bangalore, Mumbai) who have been active in the last 60 days. Segment B: users in Tier 2 cities who have a credit score above 750 but have been inactive for more than 30 days — the reactivation target. Segment C: new users (joined in the last 90 days) who have already completed at least one high-value transaction. Each segment needs a separate list with user IDs, cities, and relevant metrics.
+        The growth manager explains three segments for the cashback campaign. Segment A: high-spending users in metro cities (Delhi, Seattle, New York) who have been active in the last 60 days. Segment B: users in Tier 2 cities who have a credit score above 750 but have been inactive for more than 30 days — the reactivation target. Segment C: new users (joined in the last 90 days) who have already completed at least one high-value transaction. Each segment needs a separate list with user IDs, cities, and relevant metrics.
       </TimeBlock>
 
       <TimeBlock time="3:15 PM" label="You translate the brief into WHERE conditions">
@@ -676,9 +676,9 @@ SELECT
   c.city,
   c.loyalty_tier
 FROM customers c
-WHERE (c.city = 'Bangalore'
+WHERE (c.city = 'Seattle'
     OR c.city = 'Delhi'
-    OR c.city = 'Mumbai')
+    OR c.city = 'New York')
   AND (c.loyalty_tier = 'Gold'
     OR c.loyalty_tier = 'Platinum')
 ORDER BY c.city;`}
@@ -699,19 +699,19 @@ ORDER BY c.city;`}
 
       <IQ q="What is operator precedence in SQL and why does it matter for AND and OR?">
         <p style={{ margin: '0 0 14px' }}>Operator precedence determines the order in which SQL evaluates logical operators when multiple operators appear in the same WHERE clause. In SQL, NOT has the highest precedence, AND has the second highest, and OR has the lowest. This means SQL evaluates NOT conditions first, then AND conditions, and finally OR conditions — regardless of the order they appear in the query text.</p>
-        <p style={{ margin: '0 0 14px' }}>This matters because mixing AND and OR without parentheses can produce results that differ from what was intended. For example: WHERE tier = 'Gold' OR tier = 'Platinum' AND city = 'Bangalore' is evaluated as WHERE tier = 'Gold' OR (tier = 'Platinum' AND city = 'Bangalore') — because AND binds before OR. This returns all Gold customers from any city plus Platinum customers from Bangalore only, rather than Gold and Platinum customers from Bangalore as the author likely intended.</p>
-        <p style={{ margin: 0 }}>The correct approach is always to use parentheses when combining AND and OR: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Bangalore'. Parentheses override precedence completely — expressions inside parentheses are always evaluated first. Even when precedence would naturally produce the correct result, writing explicit parentheses makes intent clear to anyone reading the query and prevents bugs when conditions are added or modified later.</p>
+        <p style={{ margin: '0 0 14px' }}>This matters because mixing AND and OR without parentheses can produce results that differ from what was intended. For example: WHERE tier = 'Gold' OR tier = 'Platinum' AND city = 'Seattle' is evaluated as WHERE tier = 'Gold' OR (tier = 'Platinum' AND city = 'Seattle') — because AND binds before OR. This returns all Gold customers from any city plus Platinum customers from Seattle only, rather than Gold and Platinum customers from Seattle as the author likely intended.</p>
+        <p style={{ margin: 0 }}>The correct approach is always to use parentheses when combining AND and OR: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Seattle'. Parentheses override precedence completely — expressions inside parentheses are always evaluated first. Even when precedence would naturally produce the correct result, writing explicit parentheses makes intent clear to anyone reading the query and prevents bugs when conditions are added or modified later.</p>
       </IQ>
 
       <IQ q="What is the difference between AND and OR? When would you use each?">
         <p style={{ margin: '0 0 14px' }}>AND returns TRUE only when both conditions are true — it narrows results by requiring all conditions to be satisfied simultaneously. Every additional AND condition makes the filter more restrictive. OR returns TRUE when at least one condition is true — it broadens results by accepting rows that satisfy any of the conditions. Every additional OR condition makes the filter more permissive.</p>
-        <p style={{ margin: '0 0 14px' }}>Use AND when you need rows that satisfy multiple criteria simultaneously: orders that are both delivered AND paid by UPI AND above ₹1,000. All three characteristics must be present in the same row. Use OR when you need rows that match any of several alternative criteria: customers from Bangalore OR Hyderabad OR Mumbai. A customer matching any one city qualifies.</p>
-        <p style={{ margin: 0 }}>A practical test: if you read the question with "AND" and "OR" literally, the answer is usually correct. "Give me customers from Bangalore AND with Gold tier" — AND. "Give me customers from Bangalore OR Hyderabad" — OR. "Give me Gold or Platinum customers from Bangalore" — the "or" applies to tier, so OR for tier, then AND for the city: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Bangalore'.</p>
+        <p style={{ margin: '0 0 14px' }}>Use AND when you need rows that satisfy multiple criteria simultaneously: orders that are both delivered AND paid by UPI AND above ₹1,000. All three characteristics must be present in the same row. Use OR when you need rows that match any of several alternative criteria: customers from Seattle OR Austin OR New York. A customer matching any one city qualifies.</p>
+        <p style={{ margin: 0 }}>A practical test: if you read the question with "AND" and "OR" literally, the answer is usually correct. "Give me customers from Seattle AND with Gold tier" — AND. "Give me customers from Seattle OR Austin" — OR. "Give me Gold or Platinum customers from Seattle" — the "or" applies to tier, so OR for tier, then AND for the city: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Seattle'.</p>
       </IQ>
 
       <IQ q="How does NOT work and what are its limitations with NULL?">
         <p style={{ margin: '0 0 14px' }}>NOT reverses the logical result of a condition. A condition that evaluates to TRUE becomes FALSE, and a condition that evaluates to FALSE becomes TRUE. NOT NULL, however, is still NULL — the unknown reversed is still unknown. This is the fundamental limitation of NOT with nullable columns.</p>
-        <p style={{ margin: '0 0 14px' }}>The practical consequence: WHERE NOT city = 'Bangalore' returns rows where city is any value other than 'Bangalore' but does NOT return rows where city IS NULL. Rows with a null city silently disappear from the results. If you want to include null values in a NOT condition, you must explicitly add them: WHERE (city &lt;&gt; 'Bangalore' OR city IS NULL).</p>
+        <p style={{ margin: '0 0 14px' }}>The practical consequence: WHERE NOT city = 'Seattle' returns rows where city is any value other than 'Seattle' but does NOT return rows where city IS NULL. Rows with a null city silently disappear from the results. If you want to include null values in a NOT condition, you must explicitly add them: WHERE (city &lt;&gt; 'Seattle' OR city IS NULL).</p>
         <p style={{ margin: 0 }}>NOT is most commonly used in two forms: NOT LIKE (does not match a pattern), NOT IN (value not in a list), and NOT EXISTS (no matching rows in a subquery). The NOT IN form has a particularly dangerous NULL interaction — if the IN list contains even one NULL value, NOT IN returns zero rows for the entire query, which is almost never what was intended. This is why NOT EXISTS is often preferred over NOT IN for correlated subqueries. You will learn this in Module 38.</p>
       </IQ>
 
@@ -722,9 +722,9 @@ ORDER BY c.city;`}
       </IQ>
 
       <IQ q="How would you write a WHERE clause to find customers who are NOT from the top three cities?">
-        <p style={{ margin: '0 0 14px' }}>There are several correct approaches with different trade-offs. The most readable approach uses NOT with an OR group: WHERE NOT (city = 'Bangalore' OR city = 'Hyderabad' OR city = 'Mumbai'). This is evaluated as: exclude rows where city is any of the three. By De Morgan's law, this is equivalent to: WHERE city &lt;&gt; 'Bangalore' AND city &lt;&gt; 'Hyderabad' AND city &lt;&gt; 'Mumbai'.</p>
-        <p style={{ margin: '0 0 14px' }}>A more concise and equally readable approach uses NOT IN: WHERE city NOT IN ('Bangalore', 'Hyderabad', 'Mumbai'). This is cleaner for more than two or three values. Both approaches are semantically identical and produce the same results.</p>
-        <p style={{ margin: 0 }}>The critical caveat: if the city column can contain NULL values, neither NOT with OR nor NOT IN will include rows where city is NULL — they will silently exclude them. If you want to include customers with an unknown city alongside those from non-top-three cities, add an explicit NULL check: WHERE (city NOT IN ('Bangalore', 'Hyderabad', 'Mumbai') OR city IS NULL). In the FreshCart customers table, city is defined NOT NULL, so this is not an issue — but in any table where nullable city is possible, the NULL case must be handled explicitly.</p>
+        <p style={{ margin: '0 0 14px' }}>There are several correct approaches with different trade-offs. The most readable approach uses NOT with an OR group: WHERE NOT (city = 'Seattle' OR city = 'Austin' OR city = 'New York'). This is evaluated as: exclude rows where city is any of the three. By De Morgan's law, this is equivalent to: WHERE city &lt;&gt; 'Seattle' AND city &lt;&gt; 'Austin' AND city &lt;&gt; 'New York'.</p>
+        <p style={{ margin: '0 0 14px' }}>A more concise and equally readable approach uses NOT IN: WHERE city NOT IN ('Seattle', 'Austin', 'New York'). This is cleaner for more than two or three values. Both approaches are semantically identical and produce the same results.</p>
+        <p style={{ margin: 0 }}>The critical caveat: if the city column can contain NULL values, neither NOT with OR nor NOT IN will include rows where city is NULL — they will silently exclude them. If you want to include customers with an unknown city alongside those from non-top-three cities, add an explicit NULL check: WHERE (city NOT IN ('Seattle', 'Austin', 'New York') OR city IS NULL). In the FreshCart customers table, city is defined NOT NULL, so this is not an issue — but in any table where nullable city is possible, the NULL case must be handled explicitly.</p>
       </IQ>
 
       <HR />
@@ -733,13 +733,13 @@ ORDER BY c.city;`}
       <Part n="12" title="Errors You Will Hit — And Exactly Why They Happen" />
 
       <Err
-        msg="Query returns more rows than expected — WHERE city = 'Bangalore' OR city = 'Hyderabad' AND loyalty_tier = 'Gold'"
-        cause="Operator precedence bug — AND evaluates before OR. The query is actually evaluated as: WHERE city = 'Bangalore' OR (city = 'Hyderabad' AND loyalty_tier = 'Gold'). This returns ALL Bangalore customers regardless of tier, plus only Gold customers from Hyderabad. If the intention was Gold customers from both cities, the result includes non-Gold Bangalore customers which should not be there."
-        fix="Always use parentheses when combining AND and OR: WHERE (city = 'Bangalore' OR city = 'Hyderabad') AND loyalty_tier = 'Gold'. To debug, run SELECT COUNT(*) with each version and compare to expected counts. If your table has 8 Bangalore customers and 4 Hyderabad-Gold customers, the buggy query returns 12. The fixed query returns only the Bangalore-Gold plus Hyderabad-Gold count."
+        msg="Query returns more rows than expected — WHERE city = 'Seattle' OR city = 'Austin' AND loyalty_tier = 'Gold'"
+        cause="Operator precedence bug — AND evaluates before OR. The query is actually evaluated as: WHERE city = 'Seattle' OR (city = 'Austin' AND loyalty_tier = 'Gold'). This returns ALL Seattle customers regardless of tier, plus only Gold customers from Austin. If the intention was Gold customers from both cities, the result includes non-Gold Seattle customers which should not be there."
+        fix="Always use parentheses when combining AND and OR: WHERE (city = 'Seattle' OR city = 'Austin') AND loyalty_tier = 'Gold'. To debug, run SELECT COUNT(*) with each version and compare to expected counts. If your table has 8 Seattle customers and 4 Austin-Gold customers, the buggy query returns 12. The fixed query returns only the Seattle-Gold plus Austin-Gold count."
       />
 
       <Err
-        msg="ERROR: syntax error at or near 'AND' — WHERE AND city = 'Bangalore'"
+        msg="ERROR: syntax error at or near 'AND' — WHERE AND city = 'Seattle'"
         cause="AND and OR must connect two complete conditions — they cannot appear at the start of a WHERE clause with nothing before them, and they cannot appear between a condition and nothing. This error happens when a condition is accidentally deleted leaving only the AND/OR connector, or when copying and pasting conditions in the wrong order."
         fix="Ensure AND and OR always connect exactly two complete conditions. Each side of AND/OR must be a valid condition: column operator value, or a parenthesised group of conditions. Check that you have not accidentally deleted the first condition in the pair. In editors that highlight syntax, AND/OR at the start of a clause (with nothing before it) is visually obvious as a red highlight."
       />
@@ -752,14 +752,14 @@ ORDER BY c.city;`}
 
       <Err
         msg="Query is correct but very slow — WHERE LOWER(city) = 'bangalore' OR LOWER(city) = 'hyderabad'"
-        cause="Applying a function to the column side of OR conditions (LOWER(city)) prevents the database from using an index on the city column. The index stores raw city values ('Bangalore', 'Hyderabad') — not their lowercase equivalents. When LOWER() is applied, the database cannot use the index and must scan every row, applying LOWER() to each one. On a table with millions of rows, this causes a full table scan that is orders of magnitude slower than an index lookup."
-        fix="Two approaches. First, standardise data at insertion time — store all city values in consistent case ('Bangalore' not 'bangalore') and use case-sensitive comparison: WHERE city = 'Bangalore' OR city = 'Hyderabad'. This allows index usage. Second, if consistent casing cannot be guaranteed, create a functional index on LOWER(city): CREATE INDEX idx_customers_city_lower ON customers (LOWER(city)); — then WHERE LOWER(city) = 'bangalore' OR LOWER(city) = 'hyderabad' can use this index. For performance-critical queries, always check whether index usage is possible with EXPLAIN ANALYZE (covered in Module 57)."
+        cause="Applying a function to the column side of OR conditions (LOWER(city)) prevents the database from using an index on the city column. The index stores raw city values ('Seattle', 'Austin') — not their lowercase equivalents. When LOWER() is applied, the database cannot use the index and must scan every row, applying LOWER() to each one. On a table with millions of rows, this causes a full table scan that is orders of magnitude slower than an index lookup."
+        fix="Two approaches. First, standardise data at insertion time — store all city values in consistent case ('Seattle' not 'bangalore') and use case-sensitive comparison: WHERE city = 'Seattle' OR city = 'Austin'. This allows index usage. Second, if consistent casing cannot be guaranteed, create a functional index on LOWER(city): CREATE INDEX idx_customers_city_lower ON customers (LOWER(city)); — then WHERE LOWER(city) = 'bangalore' OR LOWER(city) = 'hyderabad' can use this index. For performance-critical queries, always check whether index usage is possible with EXPLAIN ANALYZE (covered in Module 57)."
       />
 
       <Err
-        msg="Unexpected results — NOT city = 'Bangalore' excludes NULL city rows"
-        cause="NOT condition propagates NULL. Rows where city IS NULL evaluate NOT NULL = NULL (not FALSE, and not TRUE) — and the WHERE clause discards NULL results. If you intended WHERE NOT city = 'Bangalore' to mean 'all customers not specifically in Bangalore — including those with no city recorded,' the query silently excludes the NULL-city rows without any error or warning."
-        fix="Explicitly include NULL rows: WHERE city <> 'Bangalore' OR city IS NULL. The OR city IS NULL clause captures rows that were being silently excluded. This pattern — adding OR column IS NULL — is the standard fix whenever you need a NOT condition to include rows with null values. Run SELECT COUNT(*) FROM customers WHERE city IS NULL before and after to confirm whether NULL rows are present and whether your fix captures them."
+        msg="Unexpected results — NOT city = 'Seattle' excludes NULL city rows"
+        cause="NOT condition propagates NULL. Rows where city IS NULL evaluate NOT NULL = NULL (not FALSE, and not TRUE) — and the WHERE clause discards NULL results. If you intended WHERE NOT city = 'Seattle' to mean 'all customers not specifically in Seattle — including those with no city recorded,' the query silently excludes the NULL-city rows without any error or warning."
+        fix="Explicitly include NULL rows: WHERE city <> 'Seattle' OR city IS NULL. The OR city IS NULL clause captures rows that were being silently excluded. This pattern — adding OR column IS NULL — is the standard fix whenever you need a NOT condition to include rows with null values. Run SELECT COUNT(*) FROM customers WHERE city IS NULL before and after to confirm whether NULL rows are present and whether your fix captures them."
       />
 
       <HR />
@@ -797,10 +797,10 @@ ORDER BY total_amount DESC;`}
           'NOT reverses a condition: TRUE becomes FALSE, FALSE becomes TRUE. NOT NULL is still NULL — rows with null values are silently excluded by NOT conditions.',
           'Operator precedence: NOT first, AND second, OR last. SQL evaluates AND before OR in the same WHERE clause regardless of left-to-right reading order.',
           'Always use parentheses when mixing AND and OR — even when precedence would give the correct result. Explicit parentheses prevent bugs and make intent clear.',
-          'The classic precedence bug: WHERE tier = \'Gold\' OR tier = \'Platinum\' AND city = \'Bangalore\' is not "Gold or Platinum customers from Bangalore." AND binds first, making it: Gold (any city) OR (Platinum AND Bangalore). Fix: (tier = \'Gold\' OR tier = \'Platinum\') AND city = \'Bangalore\'.',
+          'The classic precedence bug: WHERE tier = \'Gold\' OR tier = \'Platinum\' AND city = \'Seattle\' is not "Gold or Platinum customers from Seattle." AND binds first, making it: Gold (any city) OR (Platinum AND Seattle). Fix: (tier = \'Gold\' OR tier = \'Platinum\') AND city = \'Seattle\'.',
           'NOT IN returns zero rows if the list or the column contains any NULL values — because any comparison with NULL returns NULL, not FALSE. Use NOT EXISTS or add IS NOT NULL explicitly when NULL rows are possible.',
           'Applying functions to the column side of conditions (LOWER(city) = \'bangalore\') prevents index usage — a full table scan results. Standardise data on insert and use direct comparison instead.',
-          'When a NOT condition must include NULL rows, explicitly add OR column IS NULL: WHERE (city <> \'Bangalore\' OR city IS NULL).',
+          'When a NOT condition must include NULL rows, explicitly add OR column IS NULL: WHERE (city <> \'Seattle\' OR city IS NULL).',
           'Format multi-condition WHERE clauses with one condition per line, AND/OR at the start of each line. This makes commenting out individual conditions easy during debugging.',
         ]}
       />

@@ -189,7 +189,7 @@ export default function GradientBoostingPage() {
         </h2>
 
         <p style={S.p}>
-          You trained a Random Forest on Swiggy delivery time data and got
+          You trained a Random Forest on DoorDash delivery time data and got
           a mean absolute error of 4.2 minutes. Some orders are predicted
           well. Others are consistently wrong — long-distance orders during
           peak hours that the model always underestimates.
@@ -982,7 +982,7 @@ np.random.seed(42)
 n = 8_000
 
 restaurants = ['Pizza Hut','KFC','Dominos','Biryani Blues',"McDonald's",'Subway']
-cities      = ['Bangalore','Mumbai','Delhi','Hyderabad','Pune','Chennai']
+cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
 time_slots  = ['breakfast','lunch','evening','dinner']
 
 df = pd.DataFrame({
@@ -1068,10 +1068,10 @@ print("\nModel saved: /tmp/swiggy_delivery_gbm.pkl")
 # ── Score new orders ─────────────────────────────────────────────────
 new_orders = pd.DataFrame([
     {'distance_km':5.2,'traffic_score':8,'restaurant_prep':22,
-     'order_value':450,'restaurant':'KFC','city':'Bangalore',
+     'order_value':450,'restaurant':'KFC','city':'Seattle',
      'time_slot':'dinner','is_weekend':1},
     {'distance_km':1.5,'traffic_score':2,'restaurant_prep':10,
-     'order_value':180,'restaurant':'Dominos','city':'Mumbai',
+     'order_value':180,'restaurant':'Dominos','city':'New York',
      'time_slot':'lunch','is_weekend':0},
 ])
 preds = pipeline.predict(new_orders)
