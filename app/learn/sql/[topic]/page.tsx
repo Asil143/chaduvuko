@@ -67,9 +67,11 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
    'constraints':           () => import('@/content/sql/constraints'),
   'indexes':               () => import('@/content/sql/indexes'),
   // 'transactions':          () => import('@/content/sql/transactions'),
-  // 'sql-for-data-analysis': () => import('@/content/sql/sql-for-data-analysis'),
-  // 'interview-questions':   () => import('@/content/sql/interview-questions'),
-  // 'sql-projects':          () => import('@/content/sql/sql-projects'),
+  'acid-properties':       () => import('@/content/sql/acid-properties'),
+  'query-best-practices':  () => import('@/content/sql/query-best-practices'),
+  'sql-for-data-analysis': () => import('@/content/sql/sql-for-data-analysis'),
+  'interview-questions':   () => import('@/content/sql/interview-questions'),
+  'sql-projects':          () => import('@/content/sql/sql-projects'),
 
   // Add each new module here as you build it:
   // 'how-databases-work':     () => import('@/content/sql/how-databases-work'),
