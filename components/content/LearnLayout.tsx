@@ -13,6 +13,21 @@ import { QuizSection } from '@/components/ui/QuizSection'
 import { LinkedInGenerator } from '@/components/ui/LinkedInGenerator'
 import { SalaryWidget } from '@/components/ui/SalaryWidget'
 import { getPrevNext, getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
+import SQLSectionNav from '@/components/sql/SQLSectionNav'
+import { AIML_SECTIONS } from '@/data/aiml-curriculum'
+
+function getAIMLModuleNum(pathname: string): string | null {
+  const topicSlug = pathname.split('/').pop()
+  if (!topicSlug) return null
+  let num = 0
+  for (const sec of AIML_SECTIONS) {
+    for (const t of sec.topics) {
+      num++
+      if (t.slug === topicSlug) return String(num).padStart(2, '0')
+    }
+  }
+  return null
+}
 
 const RESUME_BULLETS: Record<string, string[]> = {
   '/learn/what-is-data-engineering': [
@@ -153,6 +168,11 @@ interface Props {
 
 export function LearnLayout({ children, title, description, section, readTime, updatedAt, breadcrumbs, showSalary, prev: prevOverride, next: nextOverride }: Props) {
   const pathname = usePathname()
+  const sqlMatch = pathname.match(/^\/learn\/sql\/([^/]+)$/)
+  const sqlSlug = sqlMatch ? sqlMatch[1] : null
+  const isAIML = pathname.startsWith('/learn/ai-ml/')
+  const aimlModuleNum = isAIML ? getAIMLModuleNum(pathname) : null
+  const displaySection = aimlModuleNum ? `AI/ML — Module ${aimlModuleNum}` : section
   const { prev: autoPrev, next: autoNext } = getPrevNext(pathname)
   const prev = prevOverride ? { ...prevOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoPrev
   const next = nextOverride ? { ...nextOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoNext
@@ -184,7 +204,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
               </nav>
             )}
             <div className="flex items-center gap-3 flex-wrap mb-2">
-              <span className="section-tag">{section}</span>
+              <span className="section-tag">{displaySection}</span>
               {diff && diffStyle && (
                 <span className="text-xs font-mono px-2.5 py-1 rounded-full"
                   style={{ background: diffStyle.bg, color: diffStyle.color, border: `1px solid ${diffStyle.border}` }}>
@@ -261,7 +281,10 @@ export function LearnLayout({ children, title, description, section, readTime, u
               </div>
 
               {/* Page content */}
-              <div className="prose-vedalera">{children}</div>
+              <div className="prose-vedalera">
+                {sqlSlug && <SQLSectionNav slug={sqlSlug} />}
+                {children}
+              </div>
 
               {showSalary && (
                 <div className="mt-12"><SalaryWidget /></div>

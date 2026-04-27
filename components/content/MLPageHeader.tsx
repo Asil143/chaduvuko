@@ -1,12 +1,23 @@
 'use client'
 
 import Link from 'next/link'
-import { getSectionBySlug } from '@/data/aiml-curriculum'
+import { getSectionBySlug, AIML_SECTIONS } from '@/data/aiml-curriculum'
 
 type Props = {
   section: string
   topic: string
   completedTopics?: string[]
+}
+
+function getModuleNum(sectionSlug: string, topicSlug: string): string {
+  let num = 0
+  for (const sec of AIML_SECTIONS) {
+    for (const t of sec.topics) {
+      num++
+      if (sec.slug === sectionSlug && t.slug === topicSlug) return String(num).padStart(2, '0')
+    }
+  }
+  return '??'
 }
 
 export default function MLPageHeader({ section, topic, completedTopics = [] }: Props) {
@@ -15,6 +26,7 @@ export default function MLPageHeader({ section, topic, completedTopics = [] }: P
 
   const currentTopic = sec.topics.find((t) => t.slug === topic)
   const color = sec.color
+  const moduleNum = getModuleNum(section, topic)
 
   return (
     <div style={{ marginBottom: 36 }}>
@@ -35,17 +47,17 @@ export default function MLPageHeader({ section, topic, completedTopics = [] }: P
       <Link href={`/learn/ai-ml/${section}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '4px 12px', borderRadius: 5, border: `1px solid ${color}40`, background: `${color}10`, textDecoration: 'none', marginBottom: 20 }}>
         <div style={{ width: 6, height: 6, borderRadius: '50%', background: color, flexShrink: 0 }} />
         <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase' as const, color, fontFamily: 'var(--font-mono)' }}>
-          Section {sec.num} · {sec.title}
+          Module {moduleNum} · {sec.title}
         </span>
       </Link>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
           <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' as const, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-            {sec.shortTitle} · {sec.topics.length} topics
+            {sec.shortTitle} · {sec.topics.length} modules
           </span>
           <span style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-            {completedTopics.length}/{sec.topics.length} done
+            Module {moduleNum}
           </span>
         </div>
 
