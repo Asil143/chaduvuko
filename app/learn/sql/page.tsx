@@ -88,6 +88,23 @@ export default function SQLTrackPage() {
         ))}
       </div>
 
+      {/* ── Notice box ──────────────────────────────────────────────────── */}
+      <div style={{
+        background: 'rgba(6,182,212,0.06)',
+        border: '1px solid rgba(6,182,212,0.2)',
+        borderRadius: 10,
+        padding: '16px 20px',
+        marginBottom: 40,
+        fontSize: 14,
+        color: 'var(--text)',
+        lineHeight: 1.7,
+      }}>
+        <strong style={{ color: '#06b6d4' }}>This track teaches SQL from first principles.</strong>{' '}
+        Every concept is introduced with visual examples, practiced immediately in the browser,
+        and connected to a real job context. You write real queries from Module 01 — no setup,
+        no install, no account required.
+      </div>
+
       {/* ── 4 Special Features ──────────────────────────────────────────── */}
       <div style={{ marginBottom: 40 }}>
         <div style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 16 }}>
@@ -126,7 +143,7 @@ export default function SQLTrackPage() {
           The FreshCart Database
         </h2>
         <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 580, marginBottom: 20 }}>
-          Every module, every query, every example uses FreshCart — a fictional Indian grocery chain with 10 stores across Seattle, Austin, New York, Delhi, Chicago, and Ahmedabad.
+          Every module, every query, every example uses FreshCart — a fictional US grocery chain with 10 stores across New York, Chicago, Seattle, Austin, Los Angeles, and Portland.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
           {SQL_TABLES.map(table => (

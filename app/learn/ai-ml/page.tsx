@@ -773,10 +773,10 @@ export default function AIMLTrack() {
       }}>
         {[
           { value: '60+',   label: 'Modules'         },
-          { value: '11',    label: 'Sections'         },
-          { value: '100+',  label: 'Topics covered'   },
+          { value: '12',    label: 'Sections'         },
+          { value: '200+',  label: 'Topics covered'   },
           { value: '~60h',  label: 'Total content'    },
-
+          { value: '100%',  label: 'Free forever'     },
         ].map((s) => (
           <div key={s.label}>
             <div style={{
@@ -805,6 +805,32 @@ export default function AIMLTrack() {
         Math, classical algorithms, deep learning, and generative AI. Cloud ML platforms (Azure ML,
         SageMaker, Vertex AI) each have their own dedicated tracks. This track makes you understand
         what every tool is actually doing before you touch it.
+      </div>
+
+      {/* ── What makes this different ──────────────────────────────────── */}
+      <div style={{ marginBottom: 40 }}>
+        <div style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 16 }}>
+          What makes this different
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+          {[
+            { icon: '🏭', title: 'Real company use cases',    desc: 'Every algorithm module is built around a real problem — DoorDash delivery time, Stripe fraud, Airbnb pricing, Shopify image classification. Not toy datasets.',  color: 'var(--green)' },
+            { icon: '🔩', title: 'From-scratch first',        desc: 'You build neural networks from NumPy before touching PyTorch. Understand the mechanics before the framework hides them.',                                              color: '#7F77DD'      },
+            { icon: '🩺', title: 'Error Library',             desc: 'Every project includes the exact errors you will hit, why they happen, and the precise fix. 80% of real ML engineering is debugging.',                               color: '#D85A30'      },
+            { icon: '🎯', title: '50 complete interview Qs',  desc: 'Module 80 covers 50 ML interview questions at senior engineer depth — classical ML, deep learning, system design, and behavioral rounds.',                          color: '#4285f4'      },
+          ].map(f => (
+            <div key={f.title} style={{
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: 10,
+              padding: '20px',
+            }}>
+              <div style={{ fontSize: 20, marginBottom: 12 }}>{f.icon}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>{f.title}</div>
+              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{f.desc}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ── Curriculum heading + section filter ────────────────────────── */}
