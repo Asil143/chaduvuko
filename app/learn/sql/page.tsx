@@ -10,7 +10,7 @@ type SectionFilter = 'all' | string
 export default function SQLTrackPage() {
   const [activeSection, setActiveSection] = useState<SectionFilter>('all')
 
-  const allModules = SQL_CURRICULUM.flatMap(s => s.modules.map(m => ({ ...m, sectionId: s.id, sectionTitle: s.title, color: s.color })))
+  const allModules = SQL_CURRICULUM.flatMap(s => s.modules.map(m => ({ ...m, sectionId: s.id, sectionTitle: s.title, color: s.color, difficulty: s.difficulty })))
 
   const filtered =
     activeSection === 'all'
@@ -352,19 +352,27 @@ export default function SQLTrackPage() {
                       </div>
                     </div>
 
-                    {/* Right — read time + CTA */}
+                    {/* Right — read time + difficulty + CTA */}
                     <div style={{
                       display: 'flex', flexDirection: 'column',
-                      alignItems: 'flex-end', gap: 12, paddingTop: 4,
+                      alignItems: 'flex-end', gap: 10, paddingTop: 4,
                     }}>
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{
-                          fontSize: 18, fontWeight: 800, color: 'var(--text)',
-                          fontFamily: 'var(--font-display)',
-                        }}>
-                          {mod.readTime}
+                        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>
+                          ⏱ {mod.readTime}
                         </div>
-                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>read time</div>
+                        <div style={{
+                          fontSize: 11, fontWeight: 600,
+                          color: mod.color,
+                          background: `${mod.color}12`,
+                          border: `1px solid ${mod.color}30`,
+                          borderRadius: 4,
+                          padding: '2px 8px',
+                          fontFamily: 'var(--font-mono)',
+                          display: 'inline-block',
+                        }}>
+                          {mod.difficulty}
+                        </div>
                       </div>
 
                       {isLive ? (

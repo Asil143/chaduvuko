@@ -35,18 +35,18 @@ const sectionColors: Record<number, string> = {
 }
 
 const sectionInfo = [
-  { id: 1,  title: 'Introduction'               },
-  { id: 2,  title: 'Math Foundations'            },
-  { id: 3,  title: 'Programming Ecosystem'       },
-  { id: 4,  title: 'Data Engineering for ML'     },
-  { id: 5,  title: 'Classical Machine Learning'  },
-  { id: 6,  title: 'Evaluation and Optimisation' },
-  { id: 7,  title: 'Deep Learning'               },
-  { id: 8,  title: 'Natural Language Processing' },
-  { id: 9,  title: 'Computer Vision'             },
-  { id: 10, title: 'Generative AI'               },
-  { id: 11, title: 'MLOps and Production'        },
-  { id: 12, title: 'Cloud ML Platforms'          },
+  { id: 1,  title: 'Introduction',               difficulty: 'Beginner'     },
+  { id: 2,  title: 'Math Foundations',            difficulty: 'Intermediate' },
+  { id: 3,  title: 'Programming Ecosystem',       difficulty: 'Beginner'     },
+  { id: 4,  title: 'Data Engineering for ML',     difficulty: 'Intermediate' },
+  { id: 5,  title: 'Classical Machine Learning',  difficulty: 'Intermediate' },
+  { id: 6,  title: 'Evaluation and Optimisation', difficulty: 'Intermediate' },
+  { id: 7,  title: 'Deep Learning',               difficulty: 'Advanced'     },
+  { id: 8,  title: 'Natural Language Processing', difficulty: 'Advanced'     },
+  { id: 9,  title: 'Computer Vision',             difficulty: 'Advanced'     },
+  { id: 10, title: 'Generative AI',               difficulty: 'Advanced'     },
+  { id: 11, title: 'MLOps and Production',        difficulty: 'Advanced'     },
+  { id: 12, title: 'Cloud ML Platforms',          difficulty: 'Intermediate' },
 ]
 
 const modules: Module[] = [
@@ -999,19 +999,27 @@ export default function AIMLTrack() {
                       </div>
                     </div>
 
-                    {/* Right — read time + CTA */}
+                    {/* Right — read time + difficulty + CTA */}
                     <div style={{
                       display: 'flex', flexDirection: 'column',
-                      alignItems: 'flex-end', gap: 12, paddingTop: 4,
+                      alignItems: 'flex-end', gap: 10, paddingTop: 4,
                     }}>
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{
-                          fontSize: 18, fontWeight: 800, color: 'var(--text)',
-                          fontFamily: 'var(--font-display)',
-                        }}>
-                          {mod.readTime}
+                        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>
+                          ⏱ {mod.readTime}
                         </div>
-                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>read time</div>
+                        <div style={{
+                          fontSize: 11, fontWeight: 600,
+                          color: mod.color,
+                          background: `${mod.color}12`,
+                          border: `1px solid ${mod.color}30`,
+                          borderRadius: 4,
+                          padding: '2px 8px',
+                          fontFamily: 'var(--font-mono)',
+                          display: 'inline-block',
+                        }}>
+                          {sectionInfo.find(s => s.id === mod.section)?.difficulty ?? 'Beginner'}
+                        </div>
                       </div>
 
                       {isLive ? (
