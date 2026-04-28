@@ -117,7 +117,7 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/dsa/advanced',             title: 'Advanced DSA Topics',           section: 'DSA', difficulty: 'Advanced',     color: '#8b5cf6', readTime: '20 min', xp: 200 },
 
   // DBMS Track
-  { href: '/learn/dbms',                           title: 'DBMS Overview',                  section: 'DBMS', difficulty: 'Beginner',     color: '#ec4899', readTime: '8 min',  xp: 100 },
+  { href: '/learn/dbms',                           title: 'DBMS Overview',                  section: 'DBMS', difficulty: 'Beginner',     color: '#ec4899', readTime: 'Self-paced', xp: 100 },
   { href: '/learn/dbms/introduction',              title: 'Introduction to Databases',       section: 'DBMS', difficulty: 'Beginner',     color: '#ec4899', readTime: '12 min', xp: 100 },
   { href: '/learn/dbms/data-models',               title: 'Data Models',                     section: 'DBMS', difficulty: 'Beginner',     color: '#ec4899', readTime: '12 min', xp: 100 },
   { href: '/learn/dbms/er-model',                  title: 'ER Model',                        section: 'DBMS', difficulty: 'Beginner',     color: '#ec4899', readTime: '14 min', xp: 100 },
