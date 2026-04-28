@@ -174,7 +174,7 @@ export default function DiffusionModelsPage() {
       title="Diffusion Models and Stable Diffusion"
       description="Forward noise, reverse denoising, DDPM, latent diffusion — how Stable Diffusion generates photorealistic images from text prompts."
       section="Generative AI"
-      readTime="45–50 min"
+      readTime="40–52 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="generative-ai" topic="diffusion-models" />

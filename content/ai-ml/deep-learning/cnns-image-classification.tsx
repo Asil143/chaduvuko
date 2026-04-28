@@ -174,7 +174,7 @@ export default function CNNsImageClassificationPage() {
       title="CNNs — Shopify Product Image Classification"
       description="Filters, feature maps, pooling, and how CNNs learn to recognise objects at any position in an image. Built from scratch then scaled with transfer learning."
       section="Deep Learning"
-      readTime="40–45 min"
+      readTime="45–58 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="deep-learning" topic="cnns-image-classification" />

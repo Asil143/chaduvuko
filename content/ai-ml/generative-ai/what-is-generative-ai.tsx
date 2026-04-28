@@ -142,7 +142,7 @@ export default function WhatIsGenerativeAIPage() {
       title="What is Generative AI?"
       description="GANs, VAEs, diffusion, and LLMs — what makes each one generative, and when each one is the right architecture. The shift from recognising to creating."
       section="Generative AI"
-      readTime="25–30 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="generative-ai" topic="what-is-generative-ai" />

@@ -174,7 +174,7 @@ export default function PeftLoraAdaptersPage() {
       title="Fine-Tuning with PEFT — LoRA and Adapters"
       description="Tune less than 1% of a model's parameters and get 95% of the performance. LoRA, adapters, and prefix tuning — when and how to use each."
       section="Natural Language Processing"
-      readTime="40–45 min"
+      readTime="36–46 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="nlp" topic="peft-lora-adapters" />

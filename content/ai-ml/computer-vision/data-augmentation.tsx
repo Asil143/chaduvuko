@@ -174,7 +174,7 @@ export default function DataAugmentationPage() {
       title="Data Augmentation — Training on Limited Image Data"
       description="Flips, crops, colour jitter, mixup, cutout — and how each one affects what the model learns. Multiply your dataset without collecting a single new image."
       section="Computer Vision"
-      readTime="25–30 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="computer-vision" topic="data-augmentation" />

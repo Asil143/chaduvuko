@@ -174,7 +174,7 @@ export default function AzureMLPage() {
       title="Azure ML — Studio, Pipelines and AutoML"
       description="Azure Machine Learning Studio, compute clusters, AML Pipelines, AutoML, model registry, and online endpoints. Production ML on Azure from scratch."
       section="Cloud ML Platforms"
-      readTime="50–55 min"
+      readTime="45–58 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="cloud-ml" topic="azure-ml" />

@@ -149,7 +149,7 @@ export default function EncodingCategoricalFeaturesPage() {
       title="Encoding Categorical Features"
       description="One-hot encoding, ordinal encoding, target encoding — what each one does to your data, which algorithms need which, and when each is the right choice."
       section="Data Engineering for ML"
-      readTime="40–50 min"
+      readTime="36–45 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='data-engineering' topic='encoding-categorical-features' />

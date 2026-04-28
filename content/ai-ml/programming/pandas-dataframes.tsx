@@ -149,7 +149,7 @@ export default function PandasDataFramesPage() {
       title="Pandas DataFrames"
       description="Load, clean, transform and explore real datasets. Every Pandas operation ML projects actually use — with DoorDash and Stripe examples throughout."
       section="Programming Ecosystem"
-      readTime="55–65 min"
+      readTime="45–58 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='programming' topic='pandas-dataframes' />

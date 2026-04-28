@@ -174,7 +174,7 @@ export default function ActivationFunctionsPage() {
       title="Activation Functions and Loss Functions"
       description="ReLU, GELU, Swish, sigmoid, softmax — and cross-entropy, MSE, Huber, focal loss. When to use each and why numerical stability matters more than you think."
       section="Deep Learning"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="deep-learning" topic="activation-functions" />

@@ -174,7 +174,7 @@ export default function VAEPage() {
       title="Variational Autoencoders — Learning Latent Representations"
       description="The reparameterisation trick, KL divergence loss, and why VAEs enable controllable generation through structured latent spaces."
       section="Generative AI"
-      readTime="35–40 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="generative-ai" topic="variational-autoencoders" />

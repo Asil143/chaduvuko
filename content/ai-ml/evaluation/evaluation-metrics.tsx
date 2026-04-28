@@ -174,7 +174,7 @@ export default function EvaluationMetricsPage() {
       title="Evaluation Metrics — Beyond Accuracy"
       description="Precision, recall, F1, ROC-AUC, PR-AUC, confusion matrices, and the business cost framing that turns metrics into decisions."
       section="Model Evaluation"
-      readTime="35–40 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="evaluation" topic="evaluation-metrics" />

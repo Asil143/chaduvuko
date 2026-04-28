@@ -174,7 +174,7 @@ export default function ROCAndAUCPage() {
       title="ROC Curve and AUC — Threshold-Independent Evaluation"
       description="What the ROC curve actually measures, why AUC equals a probability, and how to use operating points to choose a threshold for production."
       section="Model Evaluation"
-      readTime="25–30 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="evaluation" topic="roc-and-auc" />

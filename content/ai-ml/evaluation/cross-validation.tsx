@@ -174,7 +174,7 @@ export default function CrossValidationPage() {
       title="Cross-Validation and the Bias-Variance Tradeoff"
       description="From point estimates to confidence intervals. K-fold, stratified, and repeated CV — and when the bias-variance tradeoff determines which model to choose."
       section="Model Evaluation"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="evaluation" topic="cross-validation" />

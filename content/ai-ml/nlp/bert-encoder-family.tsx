@@ -174,7 +174,7 @@ export default function BertEncoderFamilyPage() {
       title="BERT and the Encoder-Only Family"
       description="Masked language modelling, next sentence prediction, fine-tuning on downstream tasks. The model that changed NLP — still powering classification and NER."
       section="Natural Language Processing"
-      readTime="40–45 min"
+      readTime="36–46 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="nlp" topic="bert-encoder-family" />

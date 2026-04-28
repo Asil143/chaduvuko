@@ -174,7 +174,7 @@ export default function OptimisersPage() {
       title="Optimisers — SGD, Adam, AdamW"
       description="Momentum, adaptive learning rates, and weight decay done right. Why AdamW replaced Adam as the default and when SGD still wins."
       section="Deep Learning"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="deep-learning" topic="optimisers" />

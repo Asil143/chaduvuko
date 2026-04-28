@@ -174,7 +174,7 @@ export default function TrainValTestSplitPage() {
       title="Train / Validation / Test Split"
       description="Why three splits not two. Holdout sets, stratified splits, data leakage across splits, and the time-series exception where random splits break everything."
       section="Data Engineering for ML"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="data-engineering" topic="train-val-test-split" />

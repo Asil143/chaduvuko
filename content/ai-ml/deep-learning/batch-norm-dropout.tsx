@@ -174,7 +174,7 @@ export default function TrainingDeepNetworksPage() {
       title="Training Deep Networks — Adam, BatchNorm, Dropout"
       description="The four techniques that separate a network that trains from one that trains well. Used in every production deep learning system."
       section="Deep Learning"
-      readTime="35–40 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="deep-learning" topic="training-deep-networks" />

@@ -149,7 +149,7 @@ export default function DataCollectionPage() {
       title="Data Collection — APIs, SQL, Files and Scraping"
       description="Where ML data actually comes from and how to pull it reliably. REST APIs with pagination, SQL queries at scale, Parquet pipelines, and scraping — all with production-grade error handling."
       section="Data Engineering"
-      readTime="55–65 min"
+      readTime="50–62 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='data-engineering' topic='data-collection' />

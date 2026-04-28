@@ -131,7 +131,7 @@ export default function AgentsToolUsePage() {
       title="Agents and Tool Use — Building Autonomous AI Systems"
       description="LLMs that plan, use tools, and execute multi-step tasks autonomously. ReAct, tool calling, memory, and the architecture patterns behind production AI agents."
       section="Generative AI"
-      readTime="50–55 min"
+      readTime="36–46 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="generative-ai" topic="agents-tool-use" />

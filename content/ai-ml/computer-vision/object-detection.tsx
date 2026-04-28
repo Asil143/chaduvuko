@@ -174,7 +174,7 @@ export default function ObjectDetectionPage() {
       title="Object Detection — YOLO and Feature Pyramids"
       description="Anchor boxes, IoU, non-maximum suppression, and why YOLO became the production standard for real-time detection. Built from concepts to code."
       section="Computer Vision"
-      readTime="40–45 min"
+      readTime="36–46 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="computer-vision" topic="object-detection" />

@@ -174,7 +174,7 @@ export default function RetrainingPipelinesPage() {
       title="Retraining Pipelines — Keeping Models Fresh"
       description="Champion-challenger evaluation, safe model promotion, and rollback patterns that protect production when a new model underperforms after deployment."
       section="MLOps and Production"
-      readTime="45–50 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="mlops" topic="retraining-pipelines" />

@@ -142,7 +142,7 @@ export default function MLSystemDesignPage() {
       title="ML System Design — End to End"
       description="Design any ML system from scratch. The framework, tradeoffs, capacity estimation, and how to present it in a senior ML engineering interview."
       section="MLOps and Production"
-      readTime="60–75 min"
+      readTime="55–70 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="mlops" topic="ml-system-design" />

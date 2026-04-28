@@ -174,7 +174,7 @@ export default function ExperimentTrackingPage() {
       title="Experiment Tracking with MLflow and Weights & Biases"
       description="Log every run, compare experiments, version models, register artifacts. Never lose a good experiment again."
       section="MLOps and Production"
-      readTime="40–45 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="mlops" topic="experiment-tracking" />

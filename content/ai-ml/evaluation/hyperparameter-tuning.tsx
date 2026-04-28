@@ -174,7 +174,7 @@ export default function HyperparameterTuningPage() {
       title="Hyperparameter Tuning with Optuna"
       description="Bayesian optimisation over GridSearch. Define a search space, let Optuna find the best hyperparameters with far fewer trials."
       section="Model Evaluation"
-      readTime="30–35 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="evaluation" topic="hyperparameter-tuning" />

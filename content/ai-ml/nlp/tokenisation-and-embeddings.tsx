@@ -174,7 +174,7 @@ export default function TokenisationAndEmbeddingsPage() {
       title="Tokenisation and Word Embeddings"
       description="BPE, WordPiece, SentencePiece — how text becomes numbers. Word2Vec, GloVe, and contextual embeddings from BERT. The foundation of every NLP system."
       section="Natural Language Processing"
-      readTime="35–40 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="nlp" topic="tokenisation-and-embeddings" />

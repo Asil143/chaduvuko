@@ -174,7 +174,7 @@ export default function LLMFineTuningPage() {
       title="LLM Fine-Tuning in Practice"
       description="When to fine-tune vs RAG vs prompt. Full LoRA fine-tuning walkthrough on a real dataset using HuggingFace Transformers and PEFT."
       section="Generative AI"
-      readTime="55–60 min"
+      readTime="50–65 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="generative-ai" topic="llm-fine-tuning" />

@@ -174,7 +174,7 @@ export default function RAGPage() {
       title="RAG — Retrieval-Augmented Generation"
       description="Vector databases, semantic search, chunking strategies, and the full RAG pipeline from document to answer. Build a Stripe knowledge base Q&A system."
       section="Natural Language Processing"
-      readTime="45–50 min"
+      readTime="40–52 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="nlp" topic="rag-retrieval-augmented-generation" />

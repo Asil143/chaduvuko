@@ -250,7 +250,7 @@ export default function AIMLLandscapePage() {
       title="The AI/ML Landscape — Tools, Roles and Career Paths"
       description="Every tool mapped. Every role defined. Every career path laid out. Know exactly where you fit before you write a single line of code."
       section="AI & ML — Introduction"
-      readTime="25–30 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       {/* Breadcrumb */}

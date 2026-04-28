@@ -174,7 +174,7 @@ export default function MLPipelinesFeatureStoresPage() {
       title="ML Pipelines and Feature Stores"
       description="Feature pipelines, training pipelines, inference pipelines. Feast for feature stores. Airflow and Prefect for orchestration. How production ML actually runs."
       section="MLOps and Production"
-      readTime="45–50 min"
+      readTime="40–52 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="mlops" topic="ml-pipelines-feature-stores" />

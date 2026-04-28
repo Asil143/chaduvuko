@@ -186,7 +186,7 @@ export default function PromptEngineeringPage() {
       title="Prompt Engineering"
       description="Zero-shot, few-shot, chain-of-thought, ReAct — the patterns that consistently improve LLM outputs. With real before/after examples for every technique."
       section="Natural Language Processing"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="nlp" topic="prompt-engineering" />

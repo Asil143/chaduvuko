@@ -174,7 +174,7 @@ export default function LLMAgentsPage() {
       title="LLM Agents and Tool Use"
       description="Function calling, memory, multi-agent coordination, and the architecture behind every production AI agent."
       section="Natural Language Processing"
-      readTime="40–45 min"
+      readTime="36–46 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="nlp" topic="llm-agents-and-tool-use" />

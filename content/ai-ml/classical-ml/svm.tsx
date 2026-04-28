@@ -174,7 +174,7 @@ export default function SVMPage() {
       title="Support Vector Machines"
       description="The algorithm that finds the widest possible boundary between classes. Margins, support vectors, the kernel trick, and when SVMs still beat neural networks."
       section="Classical ML"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="classical-ml" topic="svm" />

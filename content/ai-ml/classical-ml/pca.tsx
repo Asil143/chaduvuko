@@ -174,7 +174,7 @@ export default function PCAPage() {
       title="PCA — Dimensionality Reduction"
       description="Turn 100 features into 10 without losing most of the information. Explained variance, scree plots, reconstruction error, and when PCA helps and when it hurts."
       section="Classical ML"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="classical-ml" topic="pca" />

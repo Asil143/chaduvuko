@@ -207,7 +207,7 @@ export default function DotProductSimilarityPage() {
       title="Dot Product and Similarity"
       description="The operation behind every recommendation engine, embedding search, and attention mechanism — built from plain English first, then intuition, then math, then code."
       section="Math Foundations"
-      readTime="25–30 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="math-foundations" topic="dot-product-similarity" />

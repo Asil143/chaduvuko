@@ -174,7 +174,7 @@ export default function AdvancedRAGPage() {
       title="Advanced RAG — Reranking, Hybrid Search and Evaluation"
       description="Reranking retrieved chunks, hybrid dense-sparse search, RAG evaluation metrics, and the patterns that separate production RAG from toy RAG."
       section="Generative AI"
-      readTime="45–50 min"
+      readTime="36–46 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="generative-ai" topic="advanced-rag" />

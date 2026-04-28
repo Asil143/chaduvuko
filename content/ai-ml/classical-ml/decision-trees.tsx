@@ -165,7 +165,7 @@ export default function DecisionTreesPage() {
       title="Decision Trees — Loan Approval at HDFC"
       description="The algorithm that thinks in if-then questions. Gini impurity, information gain, pruning, and why decision trees are the foundation of every ensemble method."
       section="Classical ML"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='classical-ml' topic='decision-trees' />

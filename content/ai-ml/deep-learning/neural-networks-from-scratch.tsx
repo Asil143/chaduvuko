@@ -202,7 +202,7 @@ export default function NeuralNetworksFromScratchPage() {
       title="Neural Networks from Scratch"
       description="Forward pass, backpropagation, and gradient descent built in NumPy before touching PyTorch. The foundation every deep learning framework is built on."
       section="Deep Learning"
-      readTime="40–45 min"
+      readTime="40–52 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="deep-learning" topic="neural-networks-from-scratch" />

@@ -211,7 +211,7 @@ export default function EigenvaluesEigenvectorsPage() {
       title="Eigenvalues and Eigenvectors"
       description="The mathematical foundation of PCA, spectral clustering, and PageRank — built from plain English first, then intuition, then math, then code."
       section="Math Foundations"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="math-foundations" topic="eigenvalues-eigenvectors" />

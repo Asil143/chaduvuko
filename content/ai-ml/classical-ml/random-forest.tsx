@@ -165,7 +165,7 @@ export default function RandomForestPage() {
       title="Random Forest — Instacart Stock Prediction"
       description="Bagging, random feature subsets, out-of-bag evaluation, and the feature importance that actually works. Why Random Forest beats a single tree on every real dataset."
       section="Classical ML"
-      readTime="25–30 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='classical-ml' topic='random-forest' />

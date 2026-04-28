@@ -174,7 +174,7 @@ export default function KMeansClusteringPage() {
       title="K-Means Clustering — Customer Segmentation"
       description="Finding hidden groups in data without labels. Inertia, elbow method, silhouette scores, and when clustering is and is not the right approach."
       section="Classical ML"
-      readTime="25–30 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="classical-ml" topic="kmeans-clustering" />

@@ -174,7 +174,7 @@ export default function XGBoostPage() {
       title="XGBoost in Practice — End to End"
       description="Train, tune, and interpret XGBoost on a real dataset. Regularisation parameters, early stopping, SHAP values, and production deployment — all in one module."
       section="Classical ML"
-      readTime="40–45 min"
+      readTime="36–45 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="classical-ml" topic="xgboost" />

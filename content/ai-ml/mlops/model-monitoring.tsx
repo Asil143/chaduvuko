@@ -174,7 +174,7 @@ export default function ModelMonitoringPage() {
       title="Model Monitoring — Drift Detection and Retraining"
       description="How to know your model is degrading before users complain. Data drift, concept drift, Evidently AI, and automated retraining triggers."
       section="MLOps and Production"
-      readTime="45–50 min"
+      readTime="36–46 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="mlops" topic="model-monitoring" />

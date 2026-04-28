@@ -174,7 +174,7 @@ export default function ModelDeploymentPage() {
       title="Model Deployment — FastAPI, Docker, Kubernetes"
       description="Wrap your model in a FastAPI endpoint, containerise with Docker, scale with Kubernetes. Full working deployment of the DoorDash delivery time model."
       section="MLOps and Production"
-      readTime="55–60 min"
+      readTime="50–65 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="mlops" topic="model-deployment" />

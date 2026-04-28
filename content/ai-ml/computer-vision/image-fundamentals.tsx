@@ -174,7 +174,7 @@ export default function ImageFundamentalsPage() {
       title="Image Fundamentals — Pixels, Channels and Tensors"
       description="How computers see images. Pixel values, colour channels, image tensors, normalisation, and the preprocessing pipeline every vision model expects."
       section="Computer Vision"
-      readTime="30–35 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="computer-vision" topic="image-fundamentals" />

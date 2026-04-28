@@ -212,7 +212,7 @@ export default function SklearnInterfacePage() {
       title="Scikit-learn Interface"
       description="The API every sklearn algorithm shares. fit, transform, predict, Pipeline, ColumnTransformer — understand the interface once and every algorithm becomes obvious."
       section="Programming Ecosystem"
-      readTime="35–40 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="programming" topic="sklearn-interface" />

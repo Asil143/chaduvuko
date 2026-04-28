@@ -174,7 +174,7 @@ export default function GradientBoostingPage() {
       title="Gradient Boosting — How XGBoost and LightGBM Work"
       description="Sequential weak learners, residuals, learning rate, and why gradient boosting wins almost every tabular ML competition — built from plain English first."
       section="Classical ML"
-      readTime="35–40 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="classical-ml" topic="gradient-boosting" />

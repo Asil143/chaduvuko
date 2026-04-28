@@ -174,7 +174,7 @@ export default function DVCPage() {
       title="DVC — Data Version Control"
       description="Version datasets like code. DVC pipelines, remote storage, experiment tracking, and the full DVC + Git workflow for reproducible ML projects."
       section="MLOps and Production"
-      readTime="40–45 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="mlops" topic="dvc-data-version-control" />

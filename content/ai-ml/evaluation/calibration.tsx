@@ -174,7 +174,7 @@ export default function CalibrationPage() {
       title="Calibration — Are Your Probabilities Trustworthy?"
       description="Reliability diagrams, Brier score, and Platt scaling vs isotonic regression — when your model says 80% fraud probability, does it actually mean 80%?"
       section="Model Evaluation"
-      readTime="30–35 min"
+      readTime="18–24 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="evaluation" topic="calibration" />

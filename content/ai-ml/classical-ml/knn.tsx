@@ -174,7 +174,7 @@ export default function KNNPage() {
       title="K-Nearest Neighbours"
       description="The simplest possible ML algorithm — predict based on what your neighbours look like. Distance metrics, the curse of dimensionality, and when KNN actually works."
       section="Classical ML"
-      readTime="25–30 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="classical-ml" topic="knn" />

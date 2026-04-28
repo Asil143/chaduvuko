@@ -174,7 +174,7 @@ export default function GANsPage() {
       title="GANs — Generator vs Discriminator"
       description="Two networks in adversarial competition. Mode collapse, training instability, Wasserstein distance — the honest account of what makes GANs hard to train."
       section="Generative AI"
-      readTime="40–45 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="generative-ai" topic="gans-generator-discriminator" />

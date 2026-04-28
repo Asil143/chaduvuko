@@ -174,7 +174,7 @@ export default function LightGBMPage() {
       title="LightGBM — Fast Gradient Boosting at Scale"
       description="Leaf-wise tree growth, histogram-based splitting, and why LightGBM trains 10x faster than XGBoost on large datasets."
       section="Classical ML"
-      readTime="35–40 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="classical-ml" topic="lightgbm" />

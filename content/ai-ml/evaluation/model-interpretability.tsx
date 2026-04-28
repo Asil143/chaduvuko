@@ -174,7 +174,7 @@ export default function ModelInterpretabilityPage() {
       title="Model Interpretability — SHAP and LIME"
       description="Explain any individual prediction. Global feature importance, local SHAP explanations, LIME for black-box models, and presenting model decisions to regulators."
       section="Model Evaluation"
-      readTime="35–40 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="evaluation" topic="model-interpretability" />

@@ -174,7 +174,7 @@ export default function MLOpsOnCloudPage() {
       title="MLOps on Cloud — CI/CD for ML"
       description="GitHub Actions triggering retraining, model quality gates in CI, automated deployment to staging and production across Azure ML, SageMaker, and Vertex AI."
       section="Cloud ML Platforms"
-      readTime="50–55 min"
+      readTime="45–58 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="cloud-ml" topic="mlops-on-cloud" />

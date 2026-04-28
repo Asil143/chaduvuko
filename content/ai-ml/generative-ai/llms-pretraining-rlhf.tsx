@@ -174,7 +174,7 @@ export default function LLMsPretrainingRLHFPage() {
       title="LLMs — Pretraining, RLHF, and Scaling Laws"
       description="How GPT, Claude, and Gemini are built. Next-token prediction at scale, RLHF alignment, DPO, instruction tuning, and the laws that predict capability from compute."
       section="Generative AI"
-      readTime="50–55 min"
+      readTime="45–58 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="generative-ai" topic="llms-pretraining-rlhf" />

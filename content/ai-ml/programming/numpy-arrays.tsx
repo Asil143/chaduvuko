@@ -149,7 +149,7 @@ export default function NumpyArraysPage() {
       title="NumPy Arrays and Broadcasting"
       description="The backbone of all numerical ML in Python. Master arrays, indexing, vectorised operations, and broadcasting — the skills that make ML code fast."
       section="Programming Ecosystem"
-      readTime="50–60 min"
+      readTime="40–52 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='programming' topic='numpy-arrays' />

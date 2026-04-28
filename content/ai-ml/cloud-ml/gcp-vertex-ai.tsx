@@ -174,7 +174,7 @@ export default function VertexAIPage() {
       title="GCP Vertex AI — Pipelines and AutoML"
       description="Vertex AI Training, Pipelines, Feature Store, Model Registry, and online prediction endpoints. The GCP-native ML platform with best-in-class BigQuery integration."
       section="Cloud ML Platforms"
-      readTime="50–55 min"
+      readTime="40–52 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="cloud-ml" topic="gcp-vertex-ai" />

@@ -174,7 +174,7 @@ export default function TransformersAndAttentionPage() {
       title="Transformers and Self-Attention"
       description="Queries, keys, values, and why attention is all you need. Build a self-attention layer from scratch, then see how GPT and BERT use it."
       section="Deep Learning"
-      readTime="45–50 min"
+      readTime="45–58 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="deep-learning" topic="transformers-and-attention" />

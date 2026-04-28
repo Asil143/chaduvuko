@@ -174,7 +174,7 @@ export default function SemanticSegmentationPage() {
       title="Semantic Segmentation — Pixel-Level Classification"
       description="U-Net architecture, skip connections, and how segmentation powers medical imaging and autonomous vehicles. Label every pixel in one forward pass."
       section="Computer Vision"
-      readTime="35–40 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="computer-vision" topic="semantic-segmentation" />

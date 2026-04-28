@@ -149,7 +149,7 @@ export default function FeatureScalingPage() {
       title="Feature Scaling — Standardisation and Normalisation"
       description="Why scale matters, what StandardScaler and MinMaxScaler actually do under the hood, which algorithms break without scaling, and when to use each scaler."
       section="Classical ML"
-      readTime="35–45 min"
+      readTime="30–38 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='data-engineering' topic='feature-scaling' />

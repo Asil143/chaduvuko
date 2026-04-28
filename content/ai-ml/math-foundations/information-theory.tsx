@@ -143,7 +143,7 @@ export default function InformationTheoryPage() {
       title="Information Theory — Entropy, Cross-Entropy and KL Divergence"
       description="The information-theoretic foundations of ML. Why surprise is measurable, what entropy really means, and how every neural network loss function connects to information theory."
       section="Math Foundations"
-      readTime="45–55 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='math-foundations' topic='information-theory' />

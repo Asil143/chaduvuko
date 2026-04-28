@@ -149,7 +149,7 @@ export default function DataCleaningPage() {
       title="Data Cleaning and Validation"
       description="Turn raw, messy data into reliable ML training sets. Schema validation, duplicate detection, type coercion, outlier handling, and automated rules that catch problems before they reach your model."
       section="Data Engineering"
-      readTime="55–65 min"
+      readTime="45–58 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='data-engineering' topic='data-cleaning' />

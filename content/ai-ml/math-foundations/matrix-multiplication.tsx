@@ -204,7 +204,7 @@ export default function MatrixMultiplicationPage() {
       title="Matrix Multiplication and Linear Transformations"
       description="The single operation that powers every neural network. Understand this deeply and every layer in every model makes intuitive sense."
       section="Math Foundations"
-      readTime="40–50 min"
+      readTime="26–34 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='math-foundations' topic='matrix-multiplication' />

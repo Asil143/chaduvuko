@@ -174,7 +174,7 @@ export default function RNNsAndLSTMsPage() {
       title="RNNs and LSTMs — Sequence Modelling"
       description="Hidden states, vanishing gradients across time, and how LSTMs use gates to selectively remember and forget. Built from scratch before PyTorch."
       section="Deep Learning"
-      readTime="40–45 min"
+      readTime="36–46 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="deep-learning" topic="rnns-and-lstms" />

@@ -174,7 +174,7 @@ export default function NaiveBayesPage() {
       title="Naive Bayes — Probabilistic Text Classification"
       description="Bayes theorem applied to classification. Why the naive independence assumption works surprisingly well for spam filters and document classification."
       section="Classical ML"
-      readTime="25–30 min"
+      readTime="22–28 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section="classical-ml" topic="naive-bayes" />

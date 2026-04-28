@@ -149,7 +149,7 @@ export default function FeatureEngineeringPage() {
       title="Feature Engineering"
       description="Transform raw columns into powerful model inputs. Log transforms, interaction features, target encoding, cyclical encodings, embeddings, and the techniques that consistently beat model tuning."
       section="Data Engineering"
-      readTime="60–70 min"
+      readTime="45–55 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='data-engineering' topic='feature-engineering' />

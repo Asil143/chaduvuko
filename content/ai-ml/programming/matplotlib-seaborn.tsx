@@ -149,7 +149,7 @@ export default function MatplotlibSeabornPage() {
       title="Data Visualisation — Matplotlib and Seaborn"
       description="Every plot an ML engineer actually uses. Distributions, correlations, model evaluation, feature importance, and learning curves — with clean production-ready code."
       section="Programming Ecosystem"
-      readTime="50–60 min"
+      readTime="35–45 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='programming' topic='matplotlib-seaborn' />

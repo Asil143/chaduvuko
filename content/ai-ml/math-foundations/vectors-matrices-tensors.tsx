@@ -142,7 +142,7 @@ export default function VectorsMatricesTensorsPage() {
       title="Vectors, Matrices and Tensors"
       description="The language every ML algorithm speaks. From a single number to multi-dimensional arrays — visual intuition first, formula second."
       section="Math Foundations"
-      readTime="35–40 min"
+      readTime="30–38 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='math-foundations' topic='vectors-matrices-tensors' />

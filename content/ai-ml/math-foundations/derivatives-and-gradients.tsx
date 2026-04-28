@@ -143,7 +143,7 @@ export default function DerivativesGradientsPage() {
       title="Derivatives, Gradients and the Chain Rule"
       description="The mathematical engine behind every learning algorithm. How neural networks figure out which direction to improve — explained from scratch before any formula."
       section="Math Foundations"
-      readTime="40–50 min"
+      readTime="30–40 min"
       updatedAt="March 2026"
     >
       <MLPageHeader section='math-foundations' topic='derivatives-and-gradients' />
