@@ -79,7 +79,7 @@ export default function WhereClause() {
       title="Filtering Rows — WHERE Clause"
       description="Get only the rows you actually need — every comparison operator, every data type, and how the database evaluates filters internally"
       section="SQL — Module 06"
-      readTime="35 min"
+      readTime="12–16 min"
       updatedAt="April 2026"
     >
 

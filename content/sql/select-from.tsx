@@ -79,7 +79,7 @@ export default function SelectFrom() {
       title="Your First Query — SELECT & FROM"
       description="The two most important words in SQL — what they mean, how the database executes them, and every variation you will use in the real world"
       section="SQL — Module 05"
-      readTime="30 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

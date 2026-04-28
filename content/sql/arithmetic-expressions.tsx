@@ -79,7 +79,7 @@ export default function ArithmeticExpressions() {
       title="Column Calculations — Arithmetic & Expressions"
       description="Do math directly inside SQL — operators, precedence, integer division, ROUND, MOD, and building computed columns that power real business analytics"
       section="SQL — Module 12"
-      readTime="30 min"
+      readTime="8–12 min"
       updatedAt="April 2026"
     >
 

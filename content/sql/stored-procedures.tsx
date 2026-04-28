@@ -92,7 +92,7 @@ export default function StoredProcedures() {
       title="Stored Procedures"
       description="Reusable named programs stored inside the database — parameters, variables, control flow, exception handling, and when database-side logic beats application-layer logic"
       section="SQL — Module 48"
-      readTime="33 min"
+      readTime="14–20 min"
       updatedAt="April 2026"
     >
 

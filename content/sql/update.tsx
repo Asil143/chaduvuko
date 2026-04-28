@@ -79,7 +79,7 @@ export default function Update() {
       title="UPDATE — Modifying Existing Rows"
       description="Change data in existing rows — single column updates, multi-column updates, computed updates, UPDATE from another table, and the golden rule: SELECT before UPDATE"
       section="SQL — Module 21"
-      readTime="30 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

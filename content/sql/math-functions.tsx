@@ -93,7 +93,7 @@ export default function MathFunctions() {
       title="Math Functions"
       description="ROUND, FLOOR, CEIL, ABS, MOD, POWER, SQRT, LOG — every numeric operation for financial calculations, statistical analysis, data bucketing, and percentage computations"
       section="SQL — Module 43"
-      readTime="30 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

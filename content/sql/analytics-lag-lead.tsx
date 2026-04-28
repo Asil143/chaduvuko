@@ -79,7 +79,7 @@ export default function AnalyticsLagLead() {
       title="Analytics with LAG and LEAD"
       description="Period-over-period comparison, retention analysis, funnel drop-off, session gap detection, first and last event patterns — every time-series analytics pattern built on offset window functions"
       section="SQL — Module 53"
-      readTime="36 min"
+      readTime="14–20 min"
       updatedAt="April 2026"
     >
 

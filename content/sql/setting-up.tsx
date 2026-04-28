@@ -100,7 +100,7 @@ export default function SettingUp() {
       title="Setting Up Your Environment"
       description="Install MySQL or PostgreSQL locally, connect with a client, and understand how SQL tools work — or use the browser playground and skip straight to Module 05"
       section="SQL — Module 04"
-      readTime="30 min"
+      readTime="10–16 min"
       updatedAt="April 2026"
     >
 

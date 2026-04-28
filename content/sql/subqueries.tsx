@@ -103,7 +103,7 @@ export default function Subqueries() {
       title="Subqueries"
       description="Queries inside queries — scalar subqueries in SELECT, subqueries in WHERE and FROM, correlated subqueries, and when to use each type versus a JOIN or CTE"
       section="SQL — Module 36"
-      readTime="38 min"
+      readTime="14–20 min"
       updatedAt="April 2026"
     >
 

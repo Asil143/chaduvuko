@@ -79,7 +79,7 @@ export default function LimitFetch() {
       title="Limiting Results — LIMIT / OFFSET"
       description="Control exactly how many rows come back, implement pagination, and understand the performance implications of LIMIT on large tables"
       section="SQL — Module 09"
-      readTime="25 min"
+      readTime="8–12 min"
       updatedAt="April 2026"
     >
 

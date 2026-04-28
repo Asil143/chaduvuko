@@ -74,7 +74,7 @@ export default function QueryBestPractices() {
       title="Query Best Practices"
       description="Write clean, fast, readable SQL your team will thank you for — SARGability, avoiding SELECT *, NULL handling, and formatting conventions"
       section="SQL — Module 59"
-      readTime="14 min"
+      readTime="14–18 min"
       updatedAt="April 2026"
     >
 

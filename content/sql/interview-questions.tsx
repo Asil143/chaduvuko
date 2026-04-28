@@ -55,7 +55,7 @@ export default function InterviewQuestions() {
       title="Top 50 SQL Interview Questions"
       description="Every question that appears in data analyst and data engineer interviews — with complete answers, example queries, and the traps interviewers set"
       section="SQL — Module 61"
-      readTime="60 min"
+      readTime="55–70 min"
       updatedAt="April 2026"
     >
 

@@ -83,7 +83,7 @@ export default function WhatIsADatabase() {
       title="What is a Database?"
       description="The definition, the internals, the Indian companies using them, and why SQL is the most valuable skill you can learn in tech"
       section="SQL — Module 01"
-      readTime="35 min"
+      readTime="8–12 min"
       updatedAt="April 2026"
     >
 

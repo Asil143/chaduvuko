@@ -79,7 +79,7 @@ export default function RankingFunctions() {
       title="Ranking Functions"
       description="Advanced ranking — percentile rank, cumulative distribution, conditional rankings, multi-level leaderboards, and every production pattern where ranking drives business decisions"
       section="SQL — Module 52"
-      readTime="32 min"
+      readTime="14–20 min"
       updatedAt="April 2026"
     >
 

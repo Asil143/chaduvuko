@@ -79,7 +79,7 @@ export default function Aliases() {
       title="Renaming Columns — AS (Aliases)"
       description="Give columns and tables readable names, understand where aliases can and cannot be used, and write queries that communicate clearly to every reader"
       section="SQL — Module 13"
-      readTime="25 min"
+      readTime="7–10 min"
       updatedAt="April 2026"
     >
 

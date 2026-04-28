@@ -102,7 +102,7 @@ export default function TypesOfDatabases() {
       title="Types of Databases"
       description="Relational, Document, Key-Value, Column-Family, Graph, Time-Series — what each one is built for and how Indian companies use them"
       section="SQL — Module 03"
-      readTime="35 min"
+      readTime="8–12 min"
       updatedAt="April 2026"
     >
 

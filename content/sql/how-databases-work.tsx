@@ -79,7 +79,7 @@ export default function HowDatabasesWork() {
       title="How Databases Work"
       description="Tables, rows, columns, data types, primary keys, foreign keys, constraints — the complete building blocks"
       section="SQL — Module 02"
-      readTime="35 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

@@ -79,7 +79,7 @@ export default function OrderBy() {
       title="Sorting Results — ORDER BY"
       description="Control exactly how your results come back — ascending, descending, multiple columns, NULL handling, and sorting by expressions"
       section="SQL — Module 08"
-      readTime="25 min"
+      readTime="8–12 min"
       updatedAt="April 2026"
     >
 

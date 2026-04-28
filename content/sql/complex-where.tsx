@@ -79,7 +79,7 @@ export default function ComplexWhere() {
       title="Complex WHERE — Combining Conditions"
       description="Mastering brackets, operator precedence, AND vs OR logic, multi-layer filters, and building WHERE clauses that express any business rule precisely"
       section="SQL — Module 17"
-      readTime="30 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

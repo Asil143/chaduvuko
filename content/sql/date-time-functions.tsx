@@ -87,7 +87,7 @@ export default function DateTimeFunctions() {
       title="Date and Time Functions"
       description="Extract parts, calculate differences, truncate to periods, format for display, handle timezones — every temporal operation for time-series analytics and reporting"
       section="SQL — Module 42"
-      readTime="38 min"
+      readTime="14–18 min"
       updatedAt="April 2026"
     >
 

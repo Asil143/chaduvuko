@@ -108,7 +108,7 @@ export default function AndOrNot() {
       title="Multiple Conditions — AND, OR, NOT"
       description="Combine WHERE filters to answer complex business questions — precedence rules, truth tables, and every pattern you will use in production"
       section="SQL — Module 07"
-      readTime="35 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

@@ -97,7 +97,7 @@ export default function Views() {
       title="Views — Virtual Tables"
       description="Store a query as a named database object — create, replace, and drop views, build layered reporting abstractions, control access with views, and understand when materialized views beat regular ones"
       section="SQL — Module 45"
-      readTime="32 min"
+      readTime="12–16 min"
       updatedAt="April 2026"
     >
 

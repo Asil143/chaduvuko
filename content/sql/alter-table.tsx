@@ -79,7 +79,7 @@ export default function AlterTable() {
       title="ALTER TABLE"
       description="Modify table structure safely — add, rename, and drop columns, change data types, manage constraints, and run schema changes in production without downtime"
       section="SQL — Module 24"
-      readTime="30 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

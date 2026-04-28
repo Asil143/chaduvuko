@@ -119,7 +119,7 @@ export default function Transactions() {
       title="Transactions and ACID"
       description="How databases guarantee correctness — BEGIN, COMMIT, ROLLBACK, savepoints, isolation levels, and the concurrency anomalies that each level prevents"
       section="SQL — Module 47"
-      readTime="35 min"
+      readTime="12–16 min"
       updatedAt="April 2026"
     >
 

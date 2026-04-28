@@ -79,7 +79,7 @@ export default function CaseWhen() {
       title="CASE WHEN — Conditional Logic"
       description="SQL's if-else statement — build custom categories, conditional columns, pivot tables, and handle complex branching logic directly inside any query"
       section="SQL — Module 16"
-      readTime="35 min"
+      readTime="12–16 min"
       updatedAt="April 2026"
     >
 

@@ -79,7 +79,7 @@ export default function FullOuterJoin() {
       title="FULL OUTER JOIN"
       description="Keep all rows from both tables — reconciliation reports, symmetric difference queries, gap analysis across two data sources, and every pattern where neither side can be dropped"
       section="SQL — Module 33"
-      readTime="28 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

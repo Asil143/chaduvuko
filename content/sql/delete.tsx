@@ -79,7 +79,7 @@ export default function Delete() {
       title="DELETE — Removing Rows"
       description="Remove rows from tables safely — DELETE vs TRUNCATE, soft delete patterns, cascade deletes, referential integrity, and why SELECT before DELETE is non-negotiable"
       section="SQL — Module 22"
-      readTime="30 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

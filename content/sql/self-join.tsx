@@ -79,7 +79,7 @@ export default function SelfJoin() {
       title="SELF JOIN"
       description="Join a table to itself — manager-employee hierarchies, comparing rows within the same table, finding duplicates, and every pattern where two rows of the same table need to be compared"
       section="SQL — Module 34"
-      readTime="30 min"
+      readTime="12–16 min"
       updatedAt="April 2026"
     >
 

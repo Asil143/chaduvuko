@@ -79,7 +79,7 @@ export default function DerivedTables() {
       title="Derived Tables"
       description="Subqueries in FROM as reusable virtual tables — pre-aggregation, multi-step analytics, fan-out prevention, filtering before joining, and when to choose derived tables over CTEs"
       section="SQL — Module 40"
-      readTime="32 min"
+      readTime="10–14 min"
       updatedAt="April 2026"
     >
 

@@ -79,7 +79,7 @@ export default function CteWithClause() {
       title="CTE — WITH Clause"
       description="Named intermediate results that make complex queries readable — single CTEs, chained multi-step CTEs, reuse within one query, DML with CTEs, and performance considerations"
       section="SQL — Module 41"
-      readTime="35 min"
+      readTime="14–20 min"
       updatedAt="April 2026"
     >
 

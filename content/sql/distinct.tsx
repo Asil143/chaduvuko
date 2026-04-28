@@ -79,7 +79,7 @@ export default function Distinct() {
       title="Removing Duplicates — DISTINCT"
       description="Return only unique values, understand how DISTINCT works across single and multiple columns, its performance cost, and when to use GROUP BY instead"
       section="SQL — Module 10"
-      readTime="25 min"
+      readTime="7–10 min"
       updatedAt="April 2026"
     >
 

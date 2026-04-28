@@ -103,7 +103,7 @@ export default function JoinsIntro() {
       title="Introduction to JOINs"
       description="Combine data from multiple tables — what JOINs are, why relational databases need them, the four JOIN types, ON vs USING, table aliases, and every foundational pattern you will build on"
       section="SQL — Module 30"
-      readTime="40 min"
+      readTime="12–16 min"
       updatedAt="April 2026"
     >
 

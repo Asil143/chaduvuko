@@ -96,7 +96,7 @@ export default function Normalization() {
       title="Normalisation"
       description="Design relational schemas that eliminate redundancy, prevent update anomalies, and stay consistent — 1NF through 3NF explained with real FreshCart examples"
       section="SQL — Module 26"
-      readTime="40 min"
+      readTime="20–26 min"
       updatedAt="April 2026"
     >
 

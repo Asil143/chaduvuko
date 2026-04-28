@@ -97,7 +97,7 @@ export default function Indexes() {
       title="Indexes"
       description="How databases find rows without scanning every row — B-tree, hash, composite, partial, and functional indexes; when to create them; and diagnosing slow queries with EXPLAIN ANALYZE"
       section="SQL — Module 46"
-      readTime="35 min"
+      readTime="14–20 min"
       updatedAt="April 2026"
     >
 
