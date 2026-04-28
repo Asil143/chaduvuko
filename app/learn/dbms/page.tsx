@@ -219,6 +219,33 @@ export default function DBMSTrackPage() {
         This track explains it the way a senior engineer would explain it to you over chai.
       </Callout>
 
+      {/* ── What makes this different ── */}
+      <div style={{ marginBottom: 40, marginTop: 32 }}>
+        <div style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 16 }}>
+          What makes this different
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+          {[
+            { icon: '◎', title: 'GATE + Placement Ready',    desc: 'Every topic mapped to GATE syllabus, campus placement rounds, and product company interviews — one track covers all three.', color: '#ec4899' },
+            { icon: '⊞', title: 'Visual Theory Diagrams',    desc: 'ER diagrams, B+ trees, lock graphs, and ARIES recovery drawn step by step — not just textbook definitions.', color: '#0078d4' },
+            { icon: '▶', title: '60 Interview Questions',     desc: 'A full module of categorized Q&A — service companies, product companies, and GATE-level questions with complete answers.', color: '#00e676', href: '/learn/dbms/interview-questions' },
+            { icon: '≡', title: 'Theory + SQL Together',      desc: 'DBMS theory and SQL practice taught in the same track so you understand why the syntax works, not just how to write it.', color: '#8b5cf6' },
+          ].map(f => (
+            <div key={f.title} style={{
+              background: 'var(--surface)', border: '1px solid var(--border)',
+              borderRadius: 10, padding: '20px',
+            }}>
+              <div style={{ fontSize: 20, color: f.color, marginBottom: 12 }}>{f.icon}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>{f.title}</div>
+              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: f.href ? 12 : 0 }}>{f.desc}</div>
+              {f.href && (
+                <a href={f.href} style={{ fontSize: 12, color: f.color, textDecoration: 'none', fontWeight: 600 }}>Open →</a>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ── Curriculum heading + section filter ── */}
       <div style={{ marginTop: 48, marginBottom: 8 }}>
         <div style={{
