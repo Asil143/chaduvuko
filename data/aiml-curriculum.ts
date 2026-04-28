@@ -12,6 +12,7 @@ export type Section = {
   title: string
   shortTitle: string
   color: string
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced'
   topics: Topic[]
 }
 
@@ -22,6 +23,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Introduction',
     shortTitle: 'Intro',
     color: '#00e676',
+    difficulty: 'Beginner',
     topics: [
       { slug: 'what-is-ai',      title: 'What is AI? ML, DL and GenAI Explained',           status: 'live' },
       { slug: 'ai-ml-landscape', title: 'The AI/ML Landscape — Tools, Roles, Career Paths',  status: 'live' },
@@ -33,6 +35,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Math Foundations',
     shortTitle: 'Math',
     color: '#7F77DD',
+    difficulty: 'Intermediate',
     topics: [
       { slug: 'vectors-matrices-tensors',  title: 'Vectors, Matrices and Tensors',                   status: 'live' },
       { slug: 'matrix-multiplication',     title: 'Matrix Multiplication and Linear Transformations', status: 'live' },
@@ -49,6 +52,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Programming Ecosystem',
     shortTitle: 'Python',
     color: '#888888',
+    difficulty: 'Beginner',
     topics: [
       { slug: 'python-for-ml',      title: 'Python for Machine Learning',  status: 'live' },
       { slug: 'numpy-arrays',       title: 'NumPy Arrays and Broadcasting', status: 'live' },
@@ -63,6 +67,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Data Engineering for ML',
     shortTitle: 'Data Eng',
     color: '#1D9E75',
+    difficulty: 'Intermediate',
     topics: [
       { slug: 'data-collection',               title: 'Data Collection — APIs, SQL, Files and Scraping',   status: 'live' },
       { slug: 'data-cleaning',                 title: 'Missing Values, Outliers and Data Cleaning',         status: 'live' },
@@ -78,6 +83,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Classical Machine Learning',
     shortTitle: 'Classical ML',
     color: '#378ADD',
+    difficulty: 'Intermediate',
     topics: [
       { slug: 'what-is-ml',          title: 'What is Machine Learning?',                status: 'live' },
       { slug: 'linear-regression',   title: 'Linear Regression',                        status: 'live' },
@@ -100,6 +106,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Evaluation and Optimisation',
     shortTitle: 'Evaluation',
     color: '#BA7517',
+    difficulty: 'Intermediate',
     topics: [
       { slug: 'evaluation-metrics',     title: 'Evaluation Metrics — Beyond Accuracy',                  status: 'live' },
       { slug: 'calibration',            title: 'Calibration — Are Your Probabilities Trustworthy?',     status: 'live' },
@@ -116,6 +123,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Deep Learning',
     shortTitle: 'Deep Learning',
     color: '#D85A30',
+    difficulty: 'Advanced',
     topics: [
       { slug: 'neural-networks-from-scratch', title: 'Neural Networks from Scratch', status: 'live' },
       { slug: 'backpropagation',      title: 'Backpropagation — How Neural Networks Learn', status: 'live' },
@@ -133,6 +141,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Natural Language Processing',
     shortTitle: 'NLP',
     color: '#D4537E',
+    difficulty: 'Advanced',
     topics: [
       { slug: 'tokenisation-and-embeddings',       title: 'Tokenisation and Word Embeddings',      status: 'live' },
       { slug: 'bert-encoder-family',    title: 'BERT and the Encoder-Only Family',       status: 'live' },
@@ -148,6 +157,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Computer Vision',
     shortTitle: 'Vision',
     color: '#0F6E56',
+    difficulty: 'Advanced',
     topics: [
       { slug: 'image-fundamentals',    title: 'Image Fundamentals',    status: 'live' },
       { slug: 'data-augmentation',     title: 'Data Augmentation',     status: 'live' },
@@ -162,6 +172,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Generative AI',
     shortTitle: 'GenAI',
     color: '#9C27B0',
+    difficulty: 'Advanced',
     topics: [
       { slug: 'what-is-generative-ai', title: 'What is Generative AI?',                  status: 'live' },
       { slug: 'gans-generator-discriminator',                  title: 'GANs — Generator vs Discriminator',        status: 'live' },
@@ -180,6 +191,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'MLOps and Production',
     shortTitle: 'MLOps',
     color: '#639922',
+    difficulty: 'Advanced',
     topics: [
       { slug: 'ml-pipelines-feature-stores',         title: 'ML Pipelines and Feature Stores',         status: 'live' },
       { slug: 'experiment-tracking',  title: 'Experiment Tracking with MLflow and W&B', status: 'live' },
@@ -196,6 +208,7 @@ export const AIML_SECTIONS: Section[] = [
     title: 'Cloud ML Platforms',
     shortTitle: 'Cloud ML',
     color: '#4285f4',
+    difficulty: 'Intermediate',
     topics: [
       { slug: 'azure-ml',       title: 'Azure ML — Studio, Pipelines and AutoML',    status: 'live' },
       { slug: 'aws-sagemaker',  title: 'AWS SageMaker — Training Jobs and Pipelines', status: 'live' },

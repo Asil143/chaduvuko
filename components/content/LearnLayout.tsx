@@ -15,6 +15,7 @@ import { SalaryWidget } from '@/components/ui/SalaryWidget'
 import { getPrevNext, getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
 import SQLSectionNav from '@/components/sql/SQLSectionNav'
 import { AIML_SECTIONS } from '@/data/aiml-curriculum'
+import { SQL_CURRICULUM } from '@/data/sql-freshcart'
 
 function getAIMLModuleNum(pathname: string): string | null {
   const topicSlug = pathname.split('/').pop()
@@ -178,7 +179,13 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const next = nextOverride ? { ...nextOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoNext
   const meta = getPageMeta(pathname)
   const suggestedNext = NEXT_PAGES[pathname] ?? getNextPages(pathname)
-  const diff = meta?.difficulty
+
+  // Derive difficulty from curriculum data for SQL and AI/ML pages
+  const sqlSection = sqlSlug ? SQL_CURRICULUM.find(s => s.modules.some(m => m.slug === sqlSlug)) : null
+  const aimlSectionSlug = isAIML ? pathname.split('/')[3] : null
+  const aimlSection = aimlSectionSlug ? AIML_SECTIONS.find(s => s.slug === aimlSectionSlug) : null
+  const curriculumDiff = (sqlSection?.difficulty ?? aimlSection?.difficulty) as 'Beginner' | 'Intermediate' | 'Advanced' | undefined
+  const diff = meta?.difficulty ?? curriculumDiff
   const diffStyle = diff ? difficultyColors[diff] : null
 
   const [completed, setCompleted] = useState(false)

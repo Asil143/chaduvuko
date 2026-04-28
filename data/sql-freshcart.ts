@@ -423,12 +423,13 @@ export interface SQLSection {
   id: number;
   title: string;
   color: string;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   modules: SQLModule[];
 }
 
 export const SQL_CURRICULUM: SQLSection[] = [
   {
-    id: 1, title: 'Databases & Setup', color: '#10b981',
+    id: 1, title: 'Databases & Setup', color: '#10b981', difficulty: 'Beginner',
     modules: [
       { id: 1,  slug: 'what-is-a-database',      title: 'What is a Database?',                       description: 'Why spreadsheets fail at scale — and what databases do instead',       tags: ['Excel vs database','Why databases exist','Real-world scale','FreshCart intro'],                                                      status: 'live',        readTime: '8–12 min'  },
       { id: 2,  slug: 'how-databases-work',       title: 'How Databases Work',                        description: 'Tables, rows, columns, keys — the building blocks explained simply',  tags: ['Tables & rows','Columns','Primary keys','Foreign keys'],                                                                               status: 'live', readTime: '10–14 min' },
@@ -437,7 +438,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 2, title: 'Reading Data — SELECT', color: '#06b6d4',
+    id: 2, title: 'Reading Data — SELECT', color: '#06b6d4', difficulty: 'Beginner',
     modules: [
       { id: 5,  slug: 'select-from',              title: 'Your First Query — SELECT & FROM',          description: 'The two most important words in SQL',                               tags: ['SELECT','FROM','Reading columns','Basic syntax'],                                                                                     status: 'live', readTime: '10–14 min' },
       { id: 6,  slug: 'where-clause',             title: 'Filtering Rows — WHERE Clause',             description: 'Get only the rows you actually need',                              tags: ['WHERE','Equality filter','Comparison operators','Filtering rows'],                                                                     status: 'live', readTime: '12–16 min' },
@@ -452,7 +453,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 3, title: 'Filtering & Logic', color: '#f97316',
+    id: 3, title: 'Filtering & Logic', color: '#f97316', difficulty: 'Beginner',
     modules: [
       { id: 15, slug: 'in-between',               title: 'IN and BETWEEN Operators',                  description: 'Shorthand for multiple OR conditions and range checks',            tags: ['IN','NOT IN','BETWEEN','Range filters'],                                                                                              status: 'live', readTime: '8–12 min'  },
       { id: 16, slug: 'case-when',                title: 'CASE WHEN — Conditional Logic',             description: 'The SQL equivalent of an if-else statement',                       tags: ['CASE WHEN','THEN','ELSE','Conditional columns'],                                                                                      status: 'live', readTime: '12–16 min' },
@@ -460,7 +461,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 4, title: 'Writing & Changing Data', color: '#ef4444',
+    id: 4, title: 'Writing & Changing Data', color: '#ef4444', difficulty: 'Beginner',
     modules: [
       { id: 18, slug: 'data-types',               title: 'Data Types in SQL',                         description: 'INT, VARCHAR, DATE, BOOLEAN, DECIMAL — choosing the right type',  tags: ['INT','VARCHAR','DATE','BOOLEAN','DECIMAL','Choosing types'],                                                                          status: 'live', readTime: '12–16 min' },
       { id: 19, slug: 'create-table',             title: 'Creating Tables — CREATE TABLE',            description: 'Design and build your first database table',                       tags: ['CREATE TABLE','Column definitions','Data types','Table structure'],                                                                    status: 'live', readTime: '14–18 min' },
@@ -470,7 +471,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 5, title: 'Database Design', color: '#8b5cf6',
+    id: 5, title: 'Database Design', color: '#8b5cf6', difficulty: 'Intermediate',
     modules: [
       { id: 23, slug: 'constraints',              title: 'Constraints — Rules for Your Data',         description: 'PRIMARY KEY, FOREIGN KEY, NOT NULL, UNIQUE, DEFAULT, CHECK',      tags: ['PRIMARY KEY','FOREIGN KEY','NOT NULL','UNIQUE','DEFAULT','CHECK'],                                                                    status: 'live', readTime: '16–22 min' },
       { id: 24, slug: 'alter-table',              title: 'Changing Structure — ALTER TABLE',          description: 'Add, remove, or rename columns in an existing table',              tags: ['ALTER TABLE','ADD COLUMN','DROP COLUMN','RENAME'],                                                                                    status: 'live', readTime: '10–14 min' },
@@ -479,7 +480,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 6, title: 'Aggregation', color: '#10b981',
+    id: 6, title: 'Aggregation', color: '#10b981', difficulty: 'Intermediate',
     modules: [
       { id: 27, slug: 'aggregate-functions',      title: 'Aggregate Functions',                       description: 'COUNT, SUM, AVG, MIN, MAX — summarize your data',                 tags: ['COUNT','SUM','AVG','MIN','MAX','Summarizing data'],                                                                                   status: 'live', readTime: '12–16 min' },
       { id: 28, slug: 'group-by',                 title: 'Grouping Data — GROUP BY',                  description: 'The most powerful tool for data analysis in SQL',                  tags: ['GROUP BY','Grouping rows','Aggregate per group','Analysis patterns'],                                                                 status: 'live', readTime: '14–18 min' },
@@ -487,7 +488,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 7, title: 'Joins', color: '#06b6d4',
+    id: 7, title: 'Joins', color: '#06b6d4', difficulty: 'Intermediate',
     modules: [
       { id: 30, slug: 'joins-intro',              title: 'Introduction to Joins',                     description: 'Why data lives in multiple tables and how to combine it',          tags: ['Why joins exist','Relational model','Join concept','ON clause'],                                                                      status: 'live', readTime: '12–16 min' },
       { id: 31, slug: 'inner-join',               title: 'INNER JOIN — Only Matching Rows',           description: 'The most common join — rows that exist in both tables',            tags: ['INNER JOIN','Matching rows','ON condition','Most used join'],                                                                         status: 'live', readTime: '14–18 min' },
@@ -498,7 +499,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 8, title: 'Subqueries & Set Operations', color: '#ec4899',
+    id: 8, title: 'Subqueries & Set Operations', color: '#ec4899', difficulty: 'Intermediate',
     modules: [
       { id: 36, slug: 'subqueries',               title: 'Subqueries — Queries Inside Queries',       description: 'Use the result of one query inside another',                       tags: ['Subquery','Nested query','Subquery in WHERE','Subquery in SELECT'],                                                                   status: 'live', readTime: '14–20 min' },
       { id: 37, slug: 'correlated-subqueries',    title: 'Correlated Subqueries',                     description: 'Subqueries that reference the outer query — row by row',           tags: ['Correlated','Outer query reference','Row-by-row','Performance impact'],                                                               status: 'live', readTime: '14–20 min' },
@@ -508,7 +509,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 9, title: 'SQL Functions', color: '#f59e0b',
+    id: 9, title: 'SQL Functions', color: '#f59e0b', difficulty: 'Intermediate',
     modules: [
       { id: 41, slug: 'string-functions',         title: 'String Functions',                          description: 'UPPER, LOWER, CONCAT, LENGTH, TRIM, REPLACE, SUBSTRING',         tags: ['UPPER','LOWER','CONCAT','TRIM','SUBSTRING','REPLACE'],                                                                                status: 'live', readTime: '14–18 min' },
       { id: 42, slug: 'date-time-functions',      title: 'Date & Time Functions',                     description: 'NOW, DATEDIFF, DATE_FORMAT — work with dates like a pro',         tags: ['NOW','DATEDIFF','DATE_FORMAT','DATEPART','Date arithmetic'],                                                                          status: 'live', readTime: '14–18 min' },
@@ -517,7 +518,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 10, title: 'Advanced SQL Objects', color: '#ef4444',
+    id: 10, title: 'Advanced SQL Objects', color: '#ef4444', difficulty: 'Intermediate',
     modules: [
       { id: 45, slug: 'views',                    title: 'Views — Virtual Tables',                    description: 'Save a query as a named view — query it like a table',            tags: ['CREATE VIEW','Virtual table','Updatable views','View use cases'],                                                                     status: 'live', readTime: '12–16 min' },
       { id: 46, slug: 'indexes',                  title: 'Indexes — Making Queries Fast',             description: 'The single most impactful performance tool in SQL',                tags: ['CREATE INDEX','B-tree index','Composite index','When to index'],                                                                      status: 'live', readTime: '14–20 min' },
@@ -529,7 +530,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 11, title: 'Window Functions & CTEs', color: '#8b5cf6',
+    id: 11, title: 'Window Functions & CTEs', color: '#8b5cf6', difficulty: 'Advanced',
     modules: [
       { id: 52, slug: 'window-functions-intro',   title: 'Window Functions — OVER & PARTITION BY',    description: 'Aggregate without collapsing rows — the most powerful SQL feature', tags: ['OVER','PARTITION BY','Window frame','No GROUP BY collapse'],                                                                         status: 'live', readTime: '16–22 min' },
       { id: 53, slug: 'ranking-functions',        title: 'Ranking — ROW_NUMBER, RANK, DENSE_RANK',    description: 'Rank rows within groups — critical for interview questions',        tags: ['ROW_NUMBER','RANK','DENSE_RANK','NTILE','Ranking patterns'],                                                                         status: 'live', readTime: '14–20 min' },
@@ -539,7 +540,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 12, title: 'Performance & Optimization', color: '#10b981',
+    id: 12, title: 'Performance & Optimization', color: '#10b981', difficulty: 'Advanced',
     modules: [
       { id: 57, slug: 'explain-analyze',          title: 'EXPLAIN & EXPLAIN ANALYZE',                 description: 'Read the query execution plan — know why a query is slow',         tags: ['EXPLAIN','Query plan','Seq scan vs index scan','Execution cost'],                                                                     status: 'live', readTime: '14–20 min' },
       { id: 58, slug: 'index-strategies',         title: 'Index Strategies',                          description: 'Composite indexes, covering indexes, when NOT to index',           tags: ['Composite index','Covering index','Index selectivity','When to avoid'],                                                               status: 'live', readTime: '14–20 min' },
@@ -547,7 +548,7 @@ export const SQL_CURRICULUM: SQLSection[] = [
     ],
   },
   {
-    id: 13, title: 'Real-World & Interview', color: '#06b6d4',
+    id: 13, title: 'Real-World & Interview', color: '#06b6d4', difficulty: 'Advanced',
     modules: [
       { id: 60, slug: 'sql-for-data-analysis',    title: 'SQL for Data Analysis',                     description: 'Real case studies — revenue intelligence, cohort analysis, RFM segmentation', tags: ['Revenue analysis','Cohort analysis','RFM','FreshCart full query'],                                                              status: 'live', readTime: '28–36 min' },
       { id: 61, slug: 'interview-questions',      title: 'Top 50 SQL Interview Questions',            description: 'Every question with full explanation, query, and common traps',     tags: ['Window fn questions','Join questions','CTE questions','Tricky NULLs','50 answers'],                                                   status: 'live', readTime: '55–70 min' },
