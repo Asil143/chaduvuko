@@ -449,7 +449,48 @@ export default function NetworkTypesTopologies() {
       <HR />
 
       {/* ── PART 09 ── */}
-      <Part n="09" title="A Day at Cisco TAC — When Topology Determines the Blast Radius" />
+      <Part n="09" title="SD-WAN: When Software Replaced Physical Topology Decisions" />
+
+      <P>
+        Until around 2015, the WAN topology was a hardware decision. Connecting two offices meant ordering an MPLS circuit from AT&T, waiting 6–12 weeks for provisioning, and paying $800–$3,000/month per site. The topology was fixed by the carrier — a hub-and-spoke design where every branch communicated through a central hub site was common because it minimized the number of expensive MPLS circuits.
+      </P>
+
+      <P>
+        <Hl>SD-WAN (Software-Defined WAN)</Hl> changed this by decoupling the topology decision from the physical circuits. An SD-WAN system can simultaneously use MPLS, broadband internet (cable/DSL/fiber), 4G LTE, and satellite links — and intelligently route traffic across all of them based on real-time link quality measurement. The result: you can implement a full mesh or partial mesh WAN topology using cheap broadband internet circuits instead of expensive MPLS, while getting performance metrics that match or exceed legacy MPLS.
+      </P>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, margin: '20px 0 28px' }}>
+        {[
+          { label: 'Legacy MPLS WAN', color: '#6b7280', items: ['$1,500–$3,000/site/month', 'Hub-and-spoke (star) by default', '6–12 week provisioning', 'Fixed QoS (DiffServ-based)', 'Carrier-managed, opaque', 'Single vendor lock-in', 'No real-time visibility'] },
+          { label: 'SD-WAN (Cisco Viptela / VMware VeloCloud / Fortinet)', color: N, items: ['$200–$400/site/month (broadband)', 'Any topology (mesh, star, hybrid)', '1–3 hour provisioning (software)', 'Application-aware QoS', 'Full visibility and telemetry', 'Multi-vendor, multi-transport', 'Real-time path analytics'] },
+        ].map(({ label, color, items }) => (
+          <div key={label} style={{ border: `1px solid ${color}30`, borderRadius: 10, padding: '16px 18px', background: `${color}06` }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 10px' }}>{label}</p>
+            <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.9, margin: 0, paddingLeft: 18 }}>
+              {items.map(item => <li key={item}>{item}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <H>How SD-WAN Changes Topology Decision-Making</H>
+
+      <P>
+        With SD-WAN, a company with 50 branch offices can implement a full mesh logical topology using 50 × broadband circuits, each at $200/month ($10,000/month total), rather than the 1,225 MPLS circuits a physical full mesh would require. An SD-WAN overlay creates encrypted IPsec tunnels between all sites, and the SD-WAN controller manages routing across all tunnels. If one tunnel degrades (latency too high, packet loss detected), traffic automatically shifts to an alternate path — all without human intervention.
+      </P>
+
+      <P>
+        Companies like Cisco (Viptela), VMware (VeloCloud), Fortinet (FortiSASE), and Palo Alto Networks (Prisma SD-WAN) have built multi-billion dollar businesses on this premise. By 2026, over 60% of enterprise WAN spending has shifted from MPLS to SD-WAN + broadband, according to IDC. The topology decision has moved from &ldquo;what circuits can we afford?&rdquo; to &ldquo;what topology do we actually want?&rdquo; — a fundamental change in the economics of networking.
+      </P>
+
+      <ProTip>
+        When an interviewer asks about WAN topology, mentioning SD-WAN demonstrates you understand the current state of the industry, not just the textbook. The framing &ldquo;SD-WAN decouples logical topology from physical circuit constraints — you can implement full mesh semantics at star topology cost&rdquo; shows architectural thinking.
+      </ProTip>
+
+      <HR />
+
+      {/* ── PART 10 ── */}
+      <Part n="10" title="A Day at Cisco TAC — When Topology Determines the Blast Radius" />
 
       <P>You are a <Hl>Cisco Technical Assistance Center (TAC) Network Support Engineer</Hl> handling escalations from enterprise customers. This is a single morning — four escalations, each a different topology problem. This is exactly what your first week on the job looks like.</P>
 
@@ -499,8 +540,8 @@ export default function NetworkTypesTopologies() {
 
       <HR />
 
-      {/* ── PART 10 ── */}
-      <Part n="10" title="Interview Questions — What Hiring Managers Actually Ask" />
+      {/* ── PART 11 ── */}
+      <Part n="11" title="Interview Questions — What Hiring Managers Actually Ask" />
 
       <IQ q="What is the difference between a LAN and a WAN, and give me a real-world example where the distinction matters?">
         <P>LAN (Local Area Network) is confined to a single location — a building or campus — under single administrative control, using private infrastructure, with high bandwidth (1 Gbps typical, 100 Gbps in data centers) and low latency (sub-1ms). WAN (Wide Area Network) spans geographic regions, often crosses multiple providers, uses leased or public infrastructure, and has higher latency and lower per-link bandwidth than LAN.</P>
@@ -530,7 +571,18 @@ export default function NetworkTypesTopologies() {
 
       <HR />
 
-      <Part n="11" title="Common Misconceptions That Will Get You in Trouble" />
+      <IQ q="What is SD-WAN and how does it change the topology decision for a company with 30 branch offices?">
+        <P>SD-WAN (Software-Defined WAN) is a network architecture that separates the data plane (physical transport circuits: MPLS, broadband, LTE) from the control plane (policy and routing decisions). An SD-WAN overlay builds encrypted tunnels between all sites and manages routing based on real-time application performance metrics.</P>
+        <P>For 30 branch offices, the topology impact is significant. Legacy approach: hub-and-spoke star WAN using MPLS (all traffic routes through the central hub for security inspection) — costly but simple. SD-WAN approach: any topology is possible. A common design is a partial mesh where branches in the same region communicate directly (direct internet breakout) while sensitive traffic routes to a cloud-hosted security stack (SASE — Secure Access Service Edge). The cost drops from ~$30,000/month (30 × $1,000 MPLS circuits) to ~$6,000/month (30 × $200 broadband + SD-WAN licensing). The topology improves from hub-and-spoke to regional partial mesh. The tradeoff: operational complexity increases — you are now managing the overlay logic rather than relying on the carrier to manage the WAN.</P>
+      </IQ>
+
+      <IQ q="What is the difference between a collision domain and a broadcast domain?">
+        <P>A <strong style={{ color: N }}>collision domain</strong> is a network segment where only one device can transmit at a time without causing a collision. In bus topology, all devices share one collision domain. In a hub-based star, all ports share one collision domain. In a switch-based star, each port is its own collision domain — there are zero collisions in a modern full-duplex switched network.</P>
+        <P>A <strong style={{ color: N }}>broadcast domain</strong> is a network segment where a broadcast packet (destination MAC ff:ff:ff:ff:ff:ff or destination IP 255.255.255.255) reaches all devices. Switches do NOT separate broadcast domains — a broadcast on any port is forwarded out all other ports in the same VLAN. Only <strong>routers</strong> and <strong>VLANs</strong> separate broadcast domains. A broadcast storm (e.g., from a routing loop) affects every device in the broadcast domain simultaneously.</P>
+        <P>Practical distinction: you can have multiple collision domains within one broadcast domain (a switch with 24 ports — 24 collision domains, 1 broadcast domain unless VLANs are configured). Reducing broadcast domains requires either routers (L3) or VLANs. Too-large broadcast domains cause performance problems because every ARP request floods the entire segment — a /16 subnet with 65,000 devices generates enormous ARP broadcast traffic.</P>
+      </IQ>
+
+      <Part n="12" title="Common Misconceptions That Will Get You in Trouble" />
 
       <Err title="'The internet uses star topology'">
         The internet uses a partial mesh topology. Every ISP (Autonomous System) connects to multiple other ISPs via BGP peering. There is no central hub — if there were, the internet would have a single point of failure. The internet was designed by DARPA specifically to survive catastrophic failures, which requires topology with no center. The star-shaped pictures you see in diagrams showing your home connecting &quot;to the internet&quot; only show the last-mile connection, not the internet&apos;s internal structure.

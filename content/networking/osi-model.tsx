@@ -601,9 +601,66 @@ export default function OSIModel() {
         <P>This enables protocol independence because each layer can be changed without affecting layers above or below. IPv4 can be replaced by IPv6 at Layer 3 without changing the TCP protocol at Layer 4 or HTTP at Layer 7. Ethernet can be replaced by Wi-Fi at Layer 2 without changing IP at Layer 3. This modularity is why you can run HTTP/3 over QUIC/UDP while HTTP/2 runs over TCP/TLS — both HTTP versions work over any Layer 4 protocol because HTTP (Layer 7) does not know or care what is below it. TLS (Layer 6) does not know if it is over TCP or QUIC. This layered abstraction is the foundational design principle of the internet.</P>
       </IQ>
 
+      <IQ q="What is a socket and what is a 4-tuple? Why does it uniquely identify every active connection on earth?">
+        <P>A socket is an OS abstraction representing one end of a network connection — it is the combination of an IP address, a transport protocol, and a port number. When a process wants to send or receive data over a network, it opens a socket, which the OS binds to a specific (IP, protocol, port) triple.</P>
+        <P>The <strong style={{ color: N }}>4-tuple</strong> — (source IP, source port, destination IP, destination port) — uniquely identifies every active TCP connection in the world. Here is why: your home IP might be 73.45.22.198. Google&apos;s IP is 142.250.80.46. When your browser connects to Google on port 443, the OS assigns an ephemeral source port, say 54712. The 4-tuple is (73.45.22.198 : 54712 ↔ 142.250.80.46 : 443). Your phone simultaneously connected to the same Google server gets a different ephemeral port (e.g., 54713), creating a different 4-tuple. No two active connections share the same 4-tuple globally — this is how multiplexing works at Layer 4.</P>
+        <P>When you open 20 browser tabs all fetching from the same server, you have 20 different 4-tuples (same source IP, 20 different source ports, same destination IP, same destination port 443). The OS kernel uses the 4-tuple to demultiplex incoming packets to the correct socket — and thus to the correct browser tab.</P>
+      </IQ>
+
+      <IQ q="Explain the difference between connection-oriented and connectionless protocols with examples.">
+        <P>A <strong style={{ color: N }}>connection-oriented protocol</strong> establishes a logical connection before data exchange, maintains state throughout the communication, and formally terminates the connection at the end. TCP is the primary example. Before any data flows, the 3-way handshake establishes synchronized sequence numbers and confirms both endpoints are reachable. During data transfer, every packet is acknowledged, lost packets are retransmitted, and flow control prevents buffer overflow. Connection teardown uses a 4-way FIN/ACK sequence. The state machine defines which packets are valid at each stage — an ACK received in CLOSED state is an error.</P>
+        <P>A <strong style={{ color: N }}>connectionless protocol</strong> sends data without prior handshake, without maintained state, and without formal termination. UDP is the primary example. Each UDP datagram is independent — the sender fires it and has no knowledge of whether it arrived. The receiver has no knowledge of the sender&apos;s state. There is no retransmission, no ordering, no flow control. What connectionless buys you: no handshake latency (critical for DNS, which needs a single 20ms query-response, not a 3-way handshake first), no retransmission overhead (real-time audio is better with a gap than with a delayed retransmission that arrives too late to play), and lower CPU cost.</P>
+        <P>Real-world selection guide: use TCP when data integrity matters and latency has headroom (HTTP, SSH, database queries). Use UDP when latency is critical and the application can tolerate or handle loss itself (DNS, DHCP, VoIP/RTP, game state updates, video streaming with FEC).</P>
+      </IQ>
+
+      <IQ q="What is protocol overhead and why does it matter at Netflix scale?">
+        <P>Protocol overhead is the bytes added by protocol headers at each layer, reducing the fraction of each transmission used for actual data (payload efficiency). For a standard Ethernet frame carrying TCP/IP/HTTPS:</P>
+        <ul style={{ margin: '8px 0 12px', paddingLeft: 24, lineHeight: 1.9, fontSize: 14 }}>
+          <li>Ethernet header: 14 bytes (+ 8 bytes preamble/SFD, + 4 bytes FCS = 26 bytes total L2 overhead)</li>
+          <li>IPv4 header: 20 bytes minimum</li>
+          <li>TCP header: 20 bytes minimum (up to 60 bytes with options)</li>
+          <li>TLS record header: 5 bytes</li>
+          <li>Total overhead: ~79 bytes per 1,460 bytes of payload = 5.4% overhead</li>
+        </ul>
+        <P>At Netflix scale (700 Tbps peak egress), 5.4% overhead is 37.8 Tbps of protocol headers. That is bandwidth Netflix is paying CDN transit costs on but cannot bill to customers. This is why Netflix invested in QUIC (HTTP/3): QUIC over UDP has less overhead than TCP + TLS, and its 0-RTT resumption eliminates reconnection overhead for interrupted streams. Each 1% reduction in protocol overhead at Netflix&apos;s scale saves tens of millions in annual bandwidth costs.</P>
+      </IQ>
+
+      <IQ q="What is the difference between Layer 4 load balancing and Layer 7 load balancing?">
+        <P>A <strong style={{ color: N }}>Layer 4 load balancer</strong> makes routing decisions based on transport-layer information — source/destination IP and port. It sees the TCP 4-tuple but cannot inspect the content of the TCP stream. It balances connections at the TCP level: new connection from 10.0.0.5:54321 to port 443 → forward to backend server 192.168.1.10. This is extremely fast (can be done in hardware at line rate) but cannot distinguish between different types of requests in the same TCP connection or route based on URL, cookie, or HTTP header.</P>
+        <P>A <strong style={{ color: N }}>Layer 7 load balancer</strong> terminates the TCP (and TLS) connection, reads the application-layer payload, and makes routing decisions based on content. An HTTP request to /api/users goes to the API farm; /static/images goes to the CDN origin; /checkout goes to the payment-processing backend — all on the same TCP port 443, routed based on URL path. Layer 7 also enables sticky sessions (route by session cookie), blue-green deployments (route 10% of traffic to the new version), canary releases, and A/B testing. The cost: significantly higher CPU per connection because the load balancer must maintain two TCP connections (client↔LB, LB↔backend) and fully parse each HTTP request.</P>
+        <P>AWS Elastic Load Balancer offers both: CLB/NLB (Network Load Balancer) is Layer 4 at millions of requests per second. ALB (Application Load Balancer) is Layer 7 with URL-based routing, header manipulation, and WebSocket support. Nginx and HAProxy are the dominant open-source Layer 7 load balancers.</P>
+      </IQ>
+
+      <IQ q="An application team says 'we can't connect to the database.' Walk me through your OSI-layer diagnosis.">
+        <P>Systematic OSI-layer-by-layer elimination, fastest checks first:</P>
+        <ul style={{ margin: '8px 0 12px', paddingLeft: 24, lineHeight: 1.9, fontSize: 14 }}>
+          <li><strong style={{ color: '#ef4444' }}>L1/L2 (Physical/Data Link)</strong>: Is the application server&apos;s network interface up? (<code style={{ fontFamily: 'var(--font-mono)' }}>ip link show</code> / <code style={{ fontFamily: 'var(--font-mono)' }}>ethtool eth0</code>). Any interface errors? If the NIC shows &ldquo;DOWN&rdquo; or 100% input errors, stop here.</li>
+          <li><strong style={{ color: '#06b6d4' }}>L3 (Network)</strong>: Can we ping the database IP? (<code style={{ fontFamily: 'var(--font-mono)' }}>ping 10.0.0.50</code>). If ping fails but interface is up, it&apos;s a routing issue — check <code style={{ fontFamily: 'var(--font-mono)' }}>ip route show</code> and whether the database subnet has a route. Check security groups (AWS) or firewall rules.</li>
+          <li><strong style={{ color: '#f97316' }}>L4 (Transport)</strong>: Can we establish a TCP connection to the database port? (<code style={{ fontFamily: 'var(--font-mono)' }}>telnet 10.0.0.50 5432</code> or <code style={{ fontFamily: 'var(--font-mono)' }}>nc -zv 10.0.0.50 5432</code>). If this fails but ping works, the port is blocked — firewall/ACL issue or the database process is not listening.</li>
+          <li><strong style={{ color: N }}>L7 (Application)</strong>: If TCP connects but the application still fails, it&apos;s application-layer. Check TLS certificate validity, database credentials, max connection limits, or application-specific error logs. The database might be rejecting the connection due to auth failure, max_connections exceeded, or schema mismatch.</li>
+        </ul>
+        <P>The question to ask at each layer: &ldquo;Does this layer work in isolation?&rdquo; Start with the fastest check (L3 ping, 5 seconds) and work up. Do not start with application logs if you have not confirmed L3 connectivity — you are wasting time reading application errors that may be symptoms of a network issue, not causes.</P>
+      </IQ>
+
       <HR />
 
-      <Part n="11" title="OSI vs TCP/IP — The Model That Ships vs The Model That Explains" />
+      <Part n="11" title="More Common OSI Mistakes" />
+
+      <Err title="Placing TLS at Layer 7 instead of Layer 6">
+        In conversations about security, engineers sometimes say &ldquo;HTTPS encrypts at the application layer.&rdquo; Precisely, TLS operates at OSI Layer 6 (Presentation) — it encrypts data before it reaches Layer 7 (Application). HTTP is Layer 7. TLS is Layer 6. HTTPS is HTTP (L7) transported over TLS (L6). The distinction matters when you are doing SSL inspection (Layer 6 interception) or debugging TLS handshake failures — you are not debugging the HTTP application, you are debugging the cryptographic presentation layer.
+      </Err>
+
+      <Err title="Thinking 'Layer 3 switch' is just a marketing term">
+        A Layer 3 switch (multilayer switch) genuinely performs IP routing at hardware ASIC speed, not software. A traditional router uses a general-purpose CPU to make routing decisions in software — fast, but not line-rate for high packet-per-second workloads. A Layer 3 switch uses purpose-built TCAM hardware that makes routing decisions in a single clock cycle. A Cisco Catalyst 9500 can route 480 million packets per second at line rate. A software router doing the same at 480 Mpps would require 48+ CPU cores. For distribution and core switching in enterprise networks, L3 switches are the norm — not the exception.
+      </Err>
+
+      <Err title="Confusing 'firewall' with 'Layer 4 firewall'">
+        The word &ldquo;firewall&rdquo; without qualification is ambiguous — it could mean a stateless ACL (filters on IP/port, Layer 3–4), a stateful firewall (tracks TCP connections, Layer 4), or an NGFW/Layer 7 firewall (inspects application content). In an interview, always clarify which type: &ldquo;Are you asking about stateless packet filtering, stateful inspection, or application-layer inspection?&rdquo; A stateful firewall blocking an inbound TCP connection does so by tracking the TCP 3-way handshake — it allows return traffic only on established connections it has seen the SYN for. A stateless ACL blocking port 443 inbound would also block return traffic on port 443 unless explicitly permitted.
+      </Err>
+
+      <HR />
+
+      <Part n="12" title="OSI vs TCP/IP — The Model That Ships vs The Model That Explains" />
 
       <P>The TCP/IP model (also called the Department of Defense or DoD model) collapses OSI&apos;s 7 layers into 4:</P>
 

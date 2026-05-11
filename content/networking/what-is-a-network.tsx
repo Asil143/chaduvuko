@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -71,6 +74,13 @@ const Packet = ({ fields }: { fields: { name: string; value: string; bytes: stri
   </div>
 )
 
+const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: '#ff000008', border: '1px solid #ff000025', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Common Mistake — {title}</p>
+    <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{children}</p>
+  </div>
+)
+
 const Term = ({ word, def }: { word: string; def: string }) => (
   <div style={{ display: 'flex', gap: 0, marginBottom: 12, border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
     <div style={{ background: `${N}12`, borderRight: `1px solid ${N}20`, padding: '10px 16px', minWidth: 160, display: 'flex', alignItems: 'center' }}>
@@ -79,6 +89,98 @@ const Term = ({ word, def }: { word: string; def: string }) => (
     <div style={{ padding: '10px 16px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{def}</div>
   </div>
 )
+
+// ── Network Performance Simulator ────────────────────────────────────────────
+function NetworkPerfSim() {
+  const [bandwidth, setBandwidth] = useState(100)   // Mbps
+  const [latency, setLatency] = useState(20)        // ms RTT
+  const [packetLoss, setPacketLoss] = useState(0)   // %
+
+  // Theoretical max throughput (no overhead)
+  const rawBwMBs = bandwidth / 8
+
+  // TCP throughput formula (simplified): BDP / RTT with loss
+  // Mathis formula: MSS / (RTT * sqrt(loss)) for lossy links
+  const rttSec = latency / 1000
+  const mss = 1460 // bytes
+  // TCP window default: 65535 bytes (no window scaling)
+  const windowBytes = 65535
+  const tcpLimitedMBs = windowBytes / rttSec / 1_000_000
+  const lossPenalty = packetLoss > 0 ? (mss / (rttSec * Math.sqrt(packetLoss / 100))) / 1_000_000 : Infinity
+  const effectiveMBs = Math.min(rawBwMBs, tcpLimitedMBs, lossPenalty)
+  const pct = Math.round((effectiveMBs / rawBwMBs) * 100)
+
+  const appChecks = [
+    { name: 'VoIP call',          need: 0.008, latencyLimit: 150, ok: bandwidth >= 0.064 && latency <= 150 && packetLoss < 1 },
+    { name: '1080p video call',   need: 4,     latencyLimit: 200, ok: bandwidth >= 4    && latency <= 200 && packetLoss < 2 },
+    { name: 'Online gaming',      need: 3,     latencyLimit: 50,  ok: bandwidth >= 3    && latency <= 50  && packetLoss < 0.5 },
+    { name: '4K Netflix',         need: 25,    latencyLimit: 2000, ok: bandwidth >= 25  && latency <= 2000 && packetLoss < 3 },
+    { name: 'File download',      need: 50,    latencyLimit: 9999, ok: bandwidth >= 10  },
+    { name: 'Low-latency trading',need: 1,     latencyLimit: 1,   ok: bandwidth >= 1    && latency <= 1 },
+  ]
+
+  return (
+    <div style={{ background: 'var(--surface)', border: `1px solid ${N}30`, borderRadius: 12, padding: '24px', margin: '28px 0' }}>
+      <p style={{ fontSize: 11, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 20px' }}>Network Performance Simulator</p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 20, marginBottom: 24 }}>
+        {[
+          { label: 'Bandwidth', value: bandwidth, setter: setBandwidth, min: 1, max: 1000, step: 1, unit: 'Mbps', display: `${bandwidth} Mbps` },
+          { label: 'Round-Trip Latency', value: latency, setter: setLatency, min: 1, max: 400, step: 1, unit: 'ms', display: `${latency} ms RTT` },
+          { label: 'Packet Loss', value: packetLoss, setter: setPacketLoss, min: 0, max: 10, step: 0.1, unit: '%', display: `${packetLoss.toFixed(1)} %` },
+        ].map(({ label, value, setter, min, max, step, display }) => (
+          <div key={label}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>{label}</span>
+              <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', fontWeight: 700, color: N }}>{display}</span>
+            </div>
+            <input
+              type="range" min={min} max={max} step={step} value={value}
+              onChange={e => setter(Number(e.target.value))}
+              style={{ width: '100%', accentColor: N }}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
+        <div style={{ background: '#3b82f608', border: '1px solid #3b82f625', borderRadius: 8, padding: '12px 14px' }}>
+          <p style={{ fontSize: 11, color: '#3b82f6', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 6px' }}>Max bandwidth</p>
+          <p style={{ fontSize: 16, fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--text)', margin: 0 }}>{rawBwMBs.toFixed(1)} MB/s</p>
+        </div>
+        <div style={{ background: `${N}08`, border: `1px solid ${N}25`, borderRadius: 8, padding: '12px 14px' }}>
+          <p style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 6px' }}>Effective TCP throughput</p>
+          <p style={{ fontSize: 16, fontFamily: 'var(--font-mono)', fontWeight: 700, color: N, margin: 0 }}>{Math.min(effectiveMBs, rawBwMBs).toFixed(2)} MB/s</p>
+        </div>
+        <div style={{ background: pct >= 70 ? `${N}08` : '#ef444408', border: `1px solid ${pct >= 70 ? N : '#ef4444'}25`, borderRadius: 8, padding: '12px 14px' }}>
+          <p style={{ fontSize: 11, color: pct >= 70 ? N : '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 6px' }}>Efficiency</p>
+          <p style={{ fontSize: 16, fontFamily: 'var(--font-mono)', fontWeight: 700, color: pct >= 70 ? N : '#ef4444', margin: 0 }}>{Math.min(pct, 100)}%</p>
+        </div>
+      </div>
+
+      {latency > 100 && packetLoss === 0 && (
+        <p style={{ fontSize: 12, color: '#f59e0b', background: '#f59e0b08', border: '1px solid #f59e0b25', borderRadius: 6, padding: '8px 12px', margin: '0 0 16px', fontFamily: 'var(--font-mono)' }}>
+          ⚠ High latency: TCP window ({windowBytes.toLocaleString()} bytes) limits throughput to {(tcpLimitedMBs * 8).toFixed(0)} Mbps regardless of {bandwidth} Mbps bandwidth. TCP window scaling needed.
+        </p>
+      )}
+      {packetLoss > 0.5 && (
+        <p style={{ fontSize: 12, color: '#ef4444', background: '#ef444408', border: '1px solid #ef444430', borderRadius: 6, padding: '8px 12px', margin: '0 0 16px', fontFamily: 'var(--font-mono)' }}>
+          ✗ Packet loss detected: {packetLoss.toFixed(1)}% loss causes TCP congestion control to throttle throughput severely. Even 1% loss can reduce throughput by 90% on high-bandwidth links.
+        </p>
+      )}
+
+      <p style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 10px' }}>Application viability</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {appChecks.map(({ name, ok }) => (
+          <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ color: ok ? N : '#ef4444', fontSize: 14, fontWeight: 700, width: 16 }}>{ok ? '✓' : '✗'}</span>
+            <span style={{ fontSize: 13, color: ok ? 'var(--text)' : 'var(--muted)' }}>{name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function WhatIsANetwork() {
   return (
@@ -324,7 +426,79 @@ export default function WhatIsANetwork() {
       <HR />
 
       {/* ── PART 07 ── */}
-      <Part n="07" title="What Happens When You Press Enter — The Complete Journey of One HTTP Request" />
+      <Part n="07" title="Interactive: Network Performance Simulator" />
+
+      <P>
+        Use this simulator to understand how bandwidth, latency, and packet loss combine to determine what a user actually experiences. These relationships are non-intuitive — a 10× bandwidth increase can have zero effect on certain workloads, while a 5ms latency improvement can double throughput for others.
+      </P>
+
+      <NetworkPerfSim />
+
+      <HR />
+
+      {/* ── PART 08 ── */}
+      <Part n="08" title="The Internet's Physical Architecture — Tier 1, Tier 2, IXPs, and CDNs" />
+
+      <P>
+        The internet is not a single network — it is a collection of over <Hl>75,000 autonomous systems (ASes)</Hl>, each operated by a different organization: ISPs, universities, corporations, government agencies, and cloud providers. These ASes exchange routing information using BGP (Border Gateway Protocol) and interconnect at physical locations called <Hl>Internet Exchange Points (IXPs)</Hl>.
+      </P>
+
+      <H>The Three-Tier ISP Hierarchy</H>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 3, margin: '20px 0 28px' }}>
+        {[
+          { tier: 'Tier 1', color: '#ef4444', examples: 'AT&T, Verizon, Lumen (CenturyLink), NTT, Deutsche Telekom', desc: 'Own and operate the global backbone fiber — massive undersea cables and transcontinental terrestrial fiber. They peer with each other for free (settlement-free peering) because the traffic flows are roughly balanced. Every packet on the public internet crosses at least one Tier 1 network. Tier 1 ISPs do NOT pay anyone for transit — they reach all destinations through their own infrastructure or peering agreements.' },
+          { tier: 'Tier 2', color: '#f59e0b', examples: 'Comcast, Cox, Charter, COLT, Cogent, HE.net', desc: 'Regional ISPs that peer freely with some networks but pay Tier 1 ISPs for full internet access (transit). A Tier 2 ISP buys a transit connection to a Tier 1 ISP, giving it access to all routes the Tier 1 has. This is the bulk of what most people think of as "the internet" — the middle mile between homes and the backbone.' },
+          { tier: 'Tier 3', color: N, examples: 'Your local cable company, regional CLEC, small DSL provider', desc: 'Last-mile providers that deliver connectivity to end users. They buy transit from Tier 2 (or sometimes Tier 1) ISPs. A small ISP in Austin, TX might buy transit from Cogent (Tier 2), which buys from multiple Tier 1s. Your home internet packet crosses all three tiers on its way to a major website — 3+ autonomous systems, each with its own routing policy.' },
+        ].map(({ tier, color, examples, desc }) => (
+          <div key={tier} style={{ border: `1px solid ${color}30`, borderRadius: 10, padding: '16px 20px', background: `${color}06` }}>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ background: color, color: '#fff', fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 800, padding: '3px 10px', borderRadius: 4 }}>{tier}</span>
+              <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{examples}</span>
+            </div>
+            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>{desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <H>Internet Exchange Points (IXPs)</H>
+
+      <P>
+        An IXP is a physical location where multiple networks connect to exchange traffic directly, bypassing the need to route through a third-party ISP. The largest IXPs — DE-CIX in Frankfurt, AMS-IX in Amsterdam, and Equinix IX in the US — each handle <Hl>over 10 Tbps of peak traffic</Hl>. Instead of Google paying Comcast to carry traffic to Comcast&rsquo;s customers, Google connects to the same IXP as Comcast and exchanges traffic for free (or at a flat port fee). This arrangement benefits both: Google pays less for transit, Comcast&rsquo;s customers get faster access to Google.
+      </P>
+
+      <P>
+        The practical effect: a packet from your Comcast home connection to Google might travel 5ms to the nearest IXP where Comcast and Google meet, rather than 30ms through multiple transit providers. This is why your ping to Google is often lower than your ping to a less well-connected site of similar geographic distance — Google has more peering relationships closer to you.
+      </P>
+
+      <H>Content Delivery Networks (CDNs) — The Last-Hop Cache</H>
+
+      <P>
+        CDNs like Cloudflare, AWS CloudFront, Akamai, and Fastly solve a fundamental problem: even with Tier 1 backbone speed, latency from originating servers to global users is constrained by the speed of light. A user in Mumbai requesting content from a New York origin server faces a minimum <Hl>~80ms one-way propagation delay</Hl> — irreducible by any amount of bandwidth. CDNs solve this by placing cached copies of content at edge nodes in every major city worldwide.
+      </P>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, margin: '20px 0 28px' }}>
+        {[
+          { label: 'Without CDN', scenario: 'User in Mumbai → origin server in New York', latency: '~80ms one-way, ~160ms RTT', impact: 'Every cacheable resource (images, JS, CSS) costs 160ms+ to fetch. A page with 50 resources takes 8+ seconds even with HTTP/2 multiplexing.' },
+          { label: 'With CDN (Cloudflare)', scenario: 'User in Mumbai → Cloudflare edge in Mumbai', latency: '~2ms one-way, ~4ms RTT', impact: 'Cached resources return in 4ms. Origin is only contacted for dynamic uncached content. Same 50-resource page loads in under 1 second.' },
+        ].map(({ label, scenario, latency, impact }) => (
+          <div key={label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '16px 18px' }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 10px' }}>{label}</p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 6px' }}><strong style={{ color: 'var(--text)' }}>Path:</strong> {scenario}</p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 6px', fontFamily: 'var(--font-mono)' }}><strong style={{ color: N }}>Latency:</strong> {latency}</p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{impact}</p>
+          </div>
+        ))}
+      </div>
+
+      <ProTip>
+        The &ldquo;network speed&rdquo; number your ISP advertises (e.g., &ldquo;1 Gbps fiber&rdquo;) only describes the last-mile link from your home to the ISP&rsquo;s network edge. The experience of fetching content from a server depends on the entire path — your ISP, their transit provider, the CDN or origin network, and all the peering relationships in between. A 100 Mbps connection with direct CDN peering will load pages faster than a 1 Gbps connection with poor routing to the same CDN.
+      </ProTip>
+
+      <HR />
+
+      {/* ── PART 09 ── */}
+      <Part n="09" title="What Happens When You Press Enter — The Complete Journey of One HTTP Request" />
 
       <P>This is the question that appears in every senior networking interview at Google, Amazon, Cloudflare, and Netflix. Walking through it precisely — not vaguely — is the clearest demonstration of real networking knowledge. Here is the complete, technically accurate answer for a request to <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4, fontSize: 13 }}>https://www.example.com/</code></P>
 
@@ -378,8 +552,8 @@ export default function WhatIsANetwork() {
 
       <HR />
 
-      {/* ── PART 08 ── */}
-      <Part n="08" title="A Day in the Life — Network Engineering at a US Tech Company" />
+      {/* ── PART 10 ── */}
+      <Part n="10" title="A Day in the Life — Network Engineering at Cloudflare" />
 
       <P>You are a Network Engineer at Cloudflare, one month after starting. Here is an actual day — not a theoretical one — showing how everything you are learning applies in production.</P>
 
@@ -413,8 +587,45 @@ export default function WhatIsANetwork() {
 
       <HR />
 
-      {/* ── PART 09 ── */}
-      <Part n="09" title="Interview Prep — 5 Questions With Complete Answers" />
+      {/* ── PART 11 ── */}
+      <Part n="11" title="A Day in the Life — AWS Networking Incident" />
+
+      <P>
+        <strong>Company:</strong> Amazon Web Services, Seattle WA. <strong>Role:</strong> Network Engineer, AWS Global Infrastructure. <strong>Date:</strong> Wednesday morning. <strong>Situation:</strong> A misconfigured BGP advertisement from an internal automation tool briefly leaks internal routing information to the public internet, causing widespread connectivity disruption to several AWS regions.
+      </P>
+
+      <div style={{ background: 'var(--surface)', border: `1px solid ${N}20`, borderRadius: 12, padding: '24px 28px', margin: '28px 0' }}>
+
+        <TimeBlock time="10:43 AM" label="Automated alert — BGP route anomaly">
+          The internal BGP monitoring system fires: an unusually large number of more-specific routes (longer-than-expected prefix lengths) are being propagated from one of the AWS edge routers. Route-origin validation is flagging dozens of prefixes as &ldquo;unknown.&rdquo; The on-call engineer opens the BGP looking glass and immediately sees thousands of new prefixes appearing in the table — routes that should only be in the internal fabric have escaped into the external peering sessions.
+        </TimeBlock>
+
+        <TimeBlock time="10:47 AM" label="Scope assessment — how far did the leak travel?">
+          The engineer queries route-collector data from RIPE NCC and RouteViews to see if the leaked prefixes are visible in the global routing table. They are — three Tier 1 ISPs have accepted the leaked routes and are propagating them. Because the leaked routes are more-specific (e.g., /28s where the legitimate route is a /16), some ISPs are preferring the leaked routes over the correct ones, causing traffic to be misrouted. This is a BGP leak, not a hijack — but the effect on traffic is the same.
+        </TimeBlock>
+
+        <TimeBlock time="10:52 AM" label="Root cause identified — automation script bug">
+          The engineer traces the source: an automated capacity-expansion script that provisions new router configs ran with an incorrect peer group assignment. It added the internal iBGP peer group to an eBGP peering session — causing internal routes to be advertised externally with no route filters in place. The script had a bug introduced in a code review three days earlier: a dictionary key name change that wasn&rsquo;t propagated to the peer-group assignment logic. Internal routes have no-export community tags in most cases, but a new batch of addresses provisioned that morning had not yet been tagged.
+        </TimeBlock>
+
+        <TimeBlock time="10:54 AM" label="Mitigation — tear down affected sessions">
+          The engineer runs a targeted BGP session reset on the five affected eBGP sessions, removing all advertised routes and re-establishing clean sessions with the correct peer group. Simultaneously, the automation script is rolled back in the CI/CD pipeline to prevent further executions. The leaked routes withdraw from the global table within 60–90 seconds as BGP UPDATE messages with withdrawal flags propagate.
+        </TimeBlock>
+
+        <TimeBlock time="11:06 AM" label="Verification and post-incident">
+          RouteViews confirms all leaked prefixes are gone from the global table. Affected services (one AWS region had elevated error rates during the leak window) return to baseline. The postmortem action items: (1) add route filter validation to all automation scripts that modify eBGP configs — any script that adds a peer must verify the peer group is external-only, (2) tag all new address blocks with no-export community immediately on provisioning rather than lazily, (3) add automated route-count anomaly detection that fires before manual monitoring catches it. The fix to the dictionary key bug is trivial — but the absence of the safety checks is what turned a minor code bug into an internet-visible incident.
+        </TimeBlock>
+
+      </div>
+
+      <Err title="Assuming automation prevents human error">
+        Automation reduces manual errors but introduces a new category: bugs in the automation itself propagate at machine speed. A manual BGP configuration mistake affects one router. An automated script with the same mistake affects hundreds of routers in seconds. The lesson from this incident (and from the 2021 Facebook outage, which was also an automated BGP change gone wrong) is that automation for network-critical changes requires multiple layers of validation: static analysis, test environments, staged rollouts, and automated rollback triggers.
+      </Err>
+
+      <HR />
+
+      {/* ── PART 12 ── */}
+      <Part n="12" title="Interview Prep — 9 Questions With Complete Answers" />
 
       <IQ q="What is a computer network and what is a packet?">
         <p style={{ margin: '0 0 14px' }}>A computer network is a system of two or more devices that communicate by exchanging packets over physical or wireless transmission media, governed by protocols — agreed-upon rules specifying exactly how data is formatted, addressed, transmitted, received, and acknowledged.</p>
@@ -451,8 +662,32 @@ export default function WhatIsANetwork() {
 
       <HR />
 
-      {/* ── PART 10 ── */}
-      <Part n="10" title="Common Misconceptions — What Beginners Get Wrong" />
+      <IQ q="What is an MTU and what happens when a packet exceeds it?">
+        <p style={{ margin: '0 0 10px' }}>MTU (Maximum Transmission Unit) is the largest payload an Ethernet frame can carry — <strong style={{ color: N }}>1,500 bytes</strong> on standard Ethernet. This limit is set by the original IEEE 802.3 specification and has been preserved for 40 years of backwards compatibility.</p>
+        <p style={{ margin: '0 0 10px' }}>When an IP packet exceeds the MTU, it must be <strong>fragmented</strong> — split into smaller fragments, each with its own IP header. Fragments are reassembled at the destination by the receiving IP stack. Fragmentation is expensive: it doubles CPU work at both ends, increases the chance of the entire original packet being lost if any single fragment drops, and is performed in software rather than hardware on most systems.</p>
+        <p style={{ margin: 0 }}>Modern networks use Path MTU Discovery (PMTUD — RFC 1191) to avoid fragmentation: the sender sets the DF (Don&rsquo;t Fragment) bit and sends the largest packet it thinks will fit. If a router on the path encounters a packet that exceeds its link MTU, it sends back an ICMP &ldquo;Fragmentation Needed&rdquo; message with the allowed MTU. The sender reduces its packet size accordingly. PMTUD breaks on networks where ICMP is blocked — causing mysterious failures where small transfers work but large ones silently hang.</p>
+      </IQ>
+
+      <IQ q="What is the difference between unicast, broadcast, and multicast?">
+        <p style={{ margin: '0 0 10px' }}><strong style={{ color: N }}>Unicast</strong>: a packet sent from one source to exactly one destination. The vast majority of internet traffic is unicast — your browser fetching a webpage, an SSH session, a REST API call. The destination IP is a specific host address.</p>
+        <p style={{ margin: '0 0 10px' }}><strong style={{ color: N }}>Broadcast</strong>: a packet sent to all devices on a network segment simultaneously. IPv4 uses 255.255.255.255 as the limited broadcast address (reaches all devices on the local subnet) or the directed broadcast (e.g., 192.168.1.255 for the 192.168.1.0/24 subnet). ARP requests are broadcasts — the sender does not know which device has a particular IP, so it asks all devices at once. Broadcast domains are bounded by routers — a broadcast does not cross a router (this is why VLANs isolate broadcast domains). IPv6 eliminates broadcast entirely, replacing it with multicast.</p>
+        <p style={{ margin: 0 }}><strong style={{ color: N }}>Multicast</strong>: a packet sent from one source to a group of interested receivers (many-to-many). Multicast uses IP addresses in the 224.0.0.0/4 range (IPv4) or ff00::/8 (IPv6). Applications subscribe to multicast groups. The network only delivers the stream to subscribing devices rather than everyone. Used by: IPTV (cable TV over IP), video conferencing backbones, routing protocols (OSPF uses 224.0.0.5/224.0.0.6, EIGRP uses 224.0.0.10), stock exchange market data feeds.</p>
+      </IQ>
+
+      <IQ q="Explain NAT. Why does it exist and what are its downsides?">
+        <p style={{ margin: '0 0 10px' }}>NAT (Network Address Translation) was created to solve IPv4 address exhaustion. The entire IPv4 address space is only 2³² = 4.3 billion addresses — far fewer than the number of internet-connected devices. NAT allows many devices on a private network (using RFC 1918 addresses: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) to share a single public IP address.</p>
+        <p style={{ margin: '0 0 10px' }}>How it works: when a device on your home network (say, 192.168.1.5) sends a packet to the internet, the router rewrites the source IP from 192.168.1.5 to its public IP (say, 73.45.22.198) and records the mapping (192.168.1.5:54321 → 73.45.22.198:54321) in a NAT table. When the response arrives at 73.45.22.198:54321, the router translates it back to 192.168.1.5:54321 and delivers it. This is called PAT (Port Address Translation) or masquerading.</p>
+        <p style={{ margin: 0 }}>Downsides: (1) NAT breaks the end-to-end principle — devices behind NAT cannot receive inbound connections unless they initiate outbound first or the router is configured with port forwarding. (2) NAT requires stateful tracking — the router must maintain the translation table, consuming memory and CPU. (3) NAT complicates protocols that embed IP addresses in their payload (FTP, SIP, IPsec) — these require Application Layer Gateways (ALGs) to rewrite the embedded addresses. (4) NAT breaks network transparency — you cannot determine a device&rsquo;s true address from a packet. This is why IPv6 (with its vast address space) eliminates the need for NAT entirely.</p>
+      </IQ>
+
+      <IQ q="What is a CDN and why does it reduce latency beyond just caching?">
+        <p style={{ margin: '0 0 10px' }}>A CDN (Content Delivery Network) places infrastructure — servers, network links, and routing capacity — at hundreds of locations (points of presence, or PoPs) around the world. Users are directed to the nearest PoP, minimizing the number of network hops and the geographic distance their traffic must travel.</p>
+        <p style={{ margin: '0 0 10px' }}>Caching (storing copies of static content closer to users) is the obvious benefit. But CDNs offer more: (1) <strong>TCP optimization</strong> — the CDN terminates the user&rsquo;s TCP connection locally, using the PoP&rsquo;s low-latency connection to the user for the handshake, then forwards the request over a pre-established, multiplexed connection to the origin. This eliminates multiple round trips for TLS + TCP handshake that the user would otherwise pay. (2) <strong>Protocol acceleration</strong> — CDNs can use QUIC, HTTP/2, and other modern protocols on the user-facing side even if the origin only speaks HTTP/1.1. (3) <strong>DDoS absorption</strong> — distributed infrastructure means attack traffic is spread across 296 PoPs, each absorbing a fraction, instead of overwhelming a single origin. (4) <strong>BGP anycast</strong> — the same IP address is announced from all PoPs simultaneously; the internet&rsquo;s routing algorithms automatically direct each user to the topologically nearest PoP.</p>
+        <p style={{ margin: 0 }}>Cloudflare&rsquo;s network is a good example: their 296 PoPs worldwide handle roughly 20% of all web traffic. A user in any major city is within &lt;10ms of a Cloudflare edge node. Even for dynamic, uncacheable content, the user&rsquo;s TCP and TLS handshakes complete in 10ms instead of 150ms — reducing time-to-first-byte by 140ms regardless of caching.</p>
+      </IQ>
+
+      {/* ── PART 13 ── */}
+      <Part n="13" title="Common Misconceptions — What Beginners Get Wrong" />
 
       <P>These are the misconceptions that confuse beginners and cause incorrect answers in interviews and incorrect diagnoses in troubleshooting:</P>
 

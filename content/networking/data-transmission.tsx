@@ -479,6 +479,24 @@ export default function DataTransmission() {
 
       <HR />
 
+      <IQ q="Explain full-duplex vs half-duplex and the consequences of a duplex mismatch.">
+        <P>Full-duplex allows simultaneous bidirectional data transmission — a device can send and receive at the same time at full link speed. This is how all modern Ethernet switches work: each port has a dedicated full-duplex connection to the switch backplane. No collisions occur because each direction of traffic has its own path. A 1 Gbps full-duplex link delivers 1 Gbps in each direction simultaneously.</P>
+        <P>Half-duplex allows transmission in only one direction at a time. Devices must take turns. CSMA/CD governs access — listen before transmitting, back off and retry on collision. Effective throughput is typically 50–60% of link speed due to collision overhead. Required when multiple devices share the same physical medium (bus topology, old hubs).</P>
+        <P>Duplex mismatch is a common and insidious misconfiguration. When one device auto-negotiates to full-duplex and the other is forced to half-duplex (or vice versa), the full-duplex device transmits freely while the half-duplex device treats those transmissions as collisions. The full-duplex device&apos;s interface statistics show no errors (it thinks it&apos;s full-duplex and working correctly). The half-duplex device shows massive late collision errors. Throughput drops to 10–20% of link speed. The symptom looks like a physical Layer 1 problem but is actually a Layer 1 configuration mismatch. Always either hard-code both ends to full-duplex or let both auto-negotiate — never mix manual and auto.</P>
+      </IQ>
+
+      <IQ q="What is DOCSIS and how does cable TV infrastructure deliver broadband?">
+        <P>DOCSIS (Data Over Cable Service Interface Specification) is the protocol stack that enables internet service over existing cable TV coaxial infrastructure. ISPs like Comcast, Charter (Spectrum), and Cox deliver broadband over the same coax originally installed for cable TV.</P>
+        <P>The architecture: ISP headend → fiber to neighborhood node (HFC — Hybrid Fiber-Coax) → coaxial cable to homes. The fiber portion carries high-capacity traffic from the ISP core. The coaxial portion is a shared medium (like bus topology) where all homes on the same coaxial segment share bandwidth. The CMTS (Cable Modem Termination System) at the headend communicates with cable modems at each home.</P>
+        <P>DOCSIS uses QAM (Quadrature Amplitude Modulation) to encode data on the cable RF spectrum: DOCSIS 3.1 uses OFDM with up to 4096-QAM (12 bits/symbol). A single 192 MHz OFDM channel achieves up to 1.89 Gbps downstream. Multiple channels bonded together achieve multi-gigabit speeds. DOCSIS 3.1 (current deployment) supports 10 Gbps downstream, 1 Gbps upstream. DOCSIS 4.0 (in rollout 2024–2027) supports 10 Gbps symmetric. The upstream spectrum is limited and shared, which is why upload speeds are typically 5–10% of download on cable (asymmetric design from cable TV era).</P>
+      </IQ>
+
+      <IQ q="What is the difference between latency and lag in gaming, and what components can a gamer actually control?">
+        <P>&ldquo;Lag&rdquo; is the perceived delay between player action and game response. It includes: network latency (propagation + queuing), server processing time, and display latency. Network latency is what most people mean when they complain about lag.</P>
+        <P>Components a gamer can control: (1) <strong>Game server selection</strong> — choose the geographically closest server. NYC→East US server: ~15ms. NYC→West US server: ~70ms. NYC→European server: ~100ms. This is propagation delay — you can only reduce it by choosing closer servers. (2) <strong>Wired vs wireless</strong> — Wi-Fi adds 2–10ms of additional latency vs wired Ethernet, plus jitter from interference. For competitive play, wired is always better. (3) <strong>Bufferbloat</strong> — if your router&apos;s buffer fills during gaming + downloading, queuing delay can add 100–500ms of spike latency. Enable QoS or FQ-CoDel on your router to prioritize gaming UDP packets over background downloads. (4) <strong>ISP and routing quality</strong> — a premium ISP with good peering to gaming networks (Comcast, AT&T) typically has 5–10ms better latency to major game servers than budget ISPs with poor BGP peering.</P>
+        <P>Components you cannot control: propagation delay to the server (set by physics), server processing time (set by game server hardware), and display pipeline latency (monitor refresh rate, display lag — a separate topic). Targeting sub-30ms ping to your game server, with stable jitter under 5ms, covers 99% of what network tuning can achieve.</P>
+      </IQ>
+
       <Part n="10" title="Common Misconceptions" />
 
       <Err title="'Bandwidth IS speed — more Mbps = faster internet'">
