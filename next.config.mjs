@@ -13,7 +13,8 @@ const withMDX = createMDX({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
-  serverExternalPackages: ['sql.js'],
+  serverExternalPackages: ['sql.js', 'three', '@react-three/fiber', '@react-three/drei'],
+  transpilePackages: ['three', '@react-three/fiber', '@react-three/drei'],
   async headers() {
     return [
       {
