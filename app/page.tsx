@@ -69,7 +69,8 @@ const tracksAll = [
   { cat:'devops',icon:'🏗️', name:'Terraform',              desc:'Infrastructure as Code', pills:['HCL','AWS/GCP/Azure','State Mgmt','Modules'],    jobs:'DevOps Eng · Cloud Architect',               status:'soon', href:'#' },
   { cat:'devops',icon:'🔄',  name:'CI/CD Pipelines',        desc:'GitHub Actions, Jenkins, ArgoCD', pills:['GitHub Actions','Jenkins','ArgoCD','GitOps'], jobs:'DevOps Eng · SRE',                      status:'soon', href:'#' },
   { cat:'devops',icon:'🐧',  name:'Linux',                  desc:'Command line and system administration', pills:['Bash','File System','Networking','Permissions'], jobs:'SysAdmin · DevOps Eng',            status:'soon', href:'#' },
-  { cat:'devops',icon:'🛡️', name:'Cybersecurity',          desc:'Ethical hacking and defence techniques', pills:['Pen Testing','OWASP','SIEM','Networks'], jobs:'Security Analyst · Pen Tester',          status:'soon', href:'#' },
+  { cat:'devops',icon:'🛡️', name:'Cybersecurity',          desc:'Ethical hacking and defence techniques', pills:['Pen Testing','OWASP','SIEM','Networks'], jobs:'Security Analyst · Pen Tester',          status:'live', href:'/learn/cybersecurity' },
+  { cat:'devops',icon:'🌐', name:'Networking Fundamentals', desc:'LAN, WAN, TCP/IP, DNS, TLS — every protocol a network or security engineer must know', pills:['TCP/IP','Subnetting','DNS','Routing','Firewalls'], jobs:'Network Engineer · DevOps · Security Analyst', status:'live', href:'/learn/networking' },
   // Databases
   { cat:'db',    icon:'🐘',  name:'PostgreSQL',             desc:'Advanced relational database mastery', pills:['JSONB','Full Text Search','Partitioning','Extensions'], jobs:'DBA · Backend Dev',            status:'soon', href:'#' },
   { cat:'db',    icon:'🍃',  name:'MongoDB',                desc:'NoSQL document database at scale', pills:['Aggregation Pipeline','Indexes','Atlas','Replication'], jobs:'Backend Dev · Full Stack Dev',   status:'soon', href:'#' },
@@ -78,7 +79,7 @@ const tracksAll = [
   // CS Core
   { cat:'cs',    icon:'⚙️',  name:'System Design',          desc:'Design scalable systems like a senior', pills:['HLD','LLD','Scalability','CAP Theorem','Trade-offs'], jobs:'Senior Engineer · Tech Lead · Architect', status:'soon', href:'#' },
   { cat:'cs',    icon:'🖥️', name:'Operating Systems',      desc:'Processes, memory, scheduling, concurrency', pills:['Processes','Memory Mgmt','Scheduling','IPC'], jobs:'Technical Interviews · Systems Engineering', status:'soon', href:'#' },
-  { cat:'cs',    icon:'🌐',  name:'Computer Networks',      desc:'TCP/IP, HTTP, DNS, and beyond', pills:['TCP/IP','HTTP/HTTPS','DNS','Load Balancers'],  jobs:'DevOps Eng · Backend Dev · Technical Interviews', status:'soon', href:'#' },
+  { cat:'cs',    icon:'🌐',  name:'Computer Networks',      desc:'TCP/IP, HTTP, DNS, and beyond', pills:['TCP/IP','HTTP/HTTPS','DNS','Load Balancers'],  jobs:'DevOps Eng · Backend Dev · Technical Interviews', status:'live', href:'/learn/networking' },
   // Mobile
   { cat:'mobile',icon:'🤖',  name:'Android Development',    desc:'Native Android with Kotlin', pills:['Kotlin','Jetpack Compose','MVVM','Room DB'],   jobs:'Android Dev · Mobile Dev',                   status:'soon', href:'#' },
   { cat:'mobile',icon:'🦋',  name:'Flutter',                desc:'Cross-platform iOS and Android with Dart', pills:['Dart','Widgets','BLoC','Firebase'], jobs:'Mobile Dev · Flutter Dev',                 status:'soon', href:'#' },
