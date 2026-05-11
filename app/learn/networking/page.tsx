@@ -230,93 +230,167 @@ export default function NetworkingTrackPage() {
           const isLive = mod.status === 'live'
           const href   = isLive ? `/learn/networking/${mod.slug}` : '#'
 
-          const diffColor: Record<string, string> = {
-            Beginner:     '#10b981',
-            Intermediate: '#f97316',
-            Advanced:     '#ef4444',
-          }
-          const dc = diffColor[mod.difficulty] ?? '#10b981'
-
           return (
-            <div key={mod.id} style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 12,
-              overflow: 'hidden',
-              opacity: isLive ? 1 : 0.55,
-            }}>
-              <Link href={href} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div style={{ padding: '18px 20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
+            <div key={mod.id}>
+
+              {/* Section header — 'all' view only */}
+              {activeSection === 'all' && (idx === 0 || filtered[idx - 1].sectionId !== mod.sectionId) && (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  padding: idx === 0 ? '16px 0 10px' : '28px 0 10px',
+                }}>
+                  <div style={{
+                    width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
+                    background: `${mod.color}18`, border: `1px solid ${mod.color}44`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 11, fontWeight: 900, color: mod.color,
+                    fontFamily: 'var(--font-mono)',
+                  }}>
+                    {mod.sectionId}
+                  </div>
+                  <span style={{
+                    fontSize: 11, fontWeight: 700, color: mod.color,
+                    fontFamily: 'var(--font-mono)', letterSpacing: '.1em',
+                    textTransform: 'uppercase',
+                  }}>
+                    Section {mod.sectionId} — {mod.sectionTitle}
+                  </span>
+                </div>
+              )}
+
+              {/* Card */}
+              <div style={{
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                borderRadius: 12,
+                overflow: 'hidden',
+                opacity: isLive ? 1 : 0.88,
+                transition: 'border-color 0.2s',
+              }}>
+                {/* Colored top accent bar */}
+                <div style={{ height: 3, background: mod.color, opacity: 0.75 }} />
+
+                <div style={{ padding: '20px 24px' }}>
+                  <div style={{
+                    display: 'flex', alignItems: 'flex-start',
+                    justifyContent: 'space-between', gap: 16, flexWrap: 'wrap',
+                  }}>
+
+                    {/* Left */}
+                    <div style={{ flex: 1, minWidth: 240 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                         <span style={{
-                          fontFamily: 'var(--font-mono)', fontSize: 11,
-                          color: mod.color, fontWeight: 700,
+                          fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
+                          color: mod.color,
+                          background: `${mod.color}18`,
+                          border: `1px solid ${mod.color}33`,
+                          borderRadius: 6, padding: '3px 8px',
                         }}>
-                          {String(mod.id).padStart(2, '0')}
+                          MODULE {String(mod.id).padStart(2, '0')}
                         </span>
-                        <span style={{
-                          fontSize: 10, fontWeight: 700,
-                          color: dc,
-                          background: `${dc}15`,
-                          border: `1px solid ${dc}30`,
-                          borderRadius: 4, padding: '2px 7px',
-                          letterSpacing: '.06em', textTransform: 'uppercase',
-                        }}>
-                          {mod.difficulty}
-                        </span>
-                        <span style={{ fontSize: 11, color: 'var(--muted)' }}>
-                          🕐 {mod.readTime}
-                        </span>
-                        {!isLive && (
+                        {isLive ? (
                           <span style={{
-                            fontSize: 10, color: 'var(--muted)',
-                            background: 'var(--border)', borderRadius: 4,
-                            padding: '2px 7px', letterSpacing: '.06em', textTransform: 'uppercase',
+                            fontSize: 10, fontWeight: 700, color: 'var(--green)',
+                            background: 'rgba(0,230,118,0.12)',
+                            border: '1px solid rgba(0,230,118,0.3)',
+                            borderRadius: 20, padding: '2px 10px', letterSpacing: '.08em',
                           }}>
-                            Soon
+                            ✓ LIVE
+                          </span>
+                        ) : (
+                          <span style={{
+                            fontSize: 10, fontWeight: 600, color: 'var(--muted)',
+                            background: 'var(--bg2)', border: '1px solid var(--border)',
+                            borderRadius: 20, padding: '2px 10px', letterSpacing: '.08em',
+                          }}>
+                            COMING SOON
                           </span>
                         )}
                       </div>
-                      <div style={{
-                        fontSize: 15, fontWeight: 700,
-                        color: 'var(--text)', marginBottom: 4,
-                        lineHeight: 1.4,
+
+                      <h3 style={{
+                        fontSize: 17, fontWeight: 800, color: 'var(--text)',
+                        fontFamily: 'var(--font-display)', marginBottom: 6,
+                        letterSpacing: '-0.4px', lineHeight: 1.3,
                       }}>
                         {mod.title}
-                      </div>
-                      <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 10 }}>
+                      </h3>
+
+                      <p style={{
+                        fontSize: 13, color: 'var(--muted)', lineHeight: 1.65,
+                        marginBottom: 14, maxWidth: 560,
+                      }}>
                         {mod.description}
-                      </div>
+                      </p>
+
+                      {/* Topic pills */}
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                         {mod.tags.map(tag => (
                           <span key={tag} style={{
                             fontSize: 11, color: 'var(--muted)',
-                            background: 'var(--background)',
-                            border: '1px solid var(--border)',
-                            borderRadius: 4, padding: '2px 8px',
+                            background: 'var(--bg2)', border: '1px solid var(--border)',
+                            borderRadius: 20, padding: '3px 10px',
+                            fontFamily: 'var(--font-mono)',
                           }}>
                             {tag}
                           </span>
                         ))}
                       </div>
                     </div>
-                    {isLive && (
-                      <div style={{
-                        width: 32, height: 32, borderRadius: '50%',
-                        border: `1px solid ${mod.color}40`,
-                        background: `${mod.color}10`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        flexShrink: 0,
-                        fontSize: 14, color: mod.color,
-                      }}>
-                        →
+
+                    {/* Right — read time + difficulty + CTA */}
+                    <div style={{
+                      display: 'flex', flexDirection: 'column',
+                      alignItems: 'flex-end', gap: 10, paddingTop: 4,
+                    }}>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>
+                          ⏱ {mod.readTime}
+                        </div>
+                        <div style={{
+                          fontSize: 11, fontWeight: 600,
+                          color: mod.color,
+                          background: `${mod.color}12`,
+                          border: `1px solid ${mod.color}30`,
+                          borderRadius: 4,
+                          padding: '2px 8px',
+                          fontFamily: 'var(--font-mono)',
+                          display: 'inline-block',
+                        }}>
+                          {mod.difficulty}
+                        </div>
                       </div>
-                    )}
+
+                      {isLive ? (
+                        <Link href={href} style={{
+                          display: 'inline-block',
+                          background: mod.color,
+                          color: '#000',
+                          fontSize: 12, fontWeight: 700,
+                          borderRadius: 8, padding: '8px 18px',
+                          textDecoration: 'none',
+                          letterSpacing: '.04em', whiteSpace: 'nowrap',
+                        }}>
+                          Start →
+                        </Link>
+                      ) : (
+                        <span style={{
+                          display: 'inline-block',
+                          background: 'var(--bg2)', color: 'var(--muted)',
+                          fontSize: 12, fontWeight: 600,
+                          borderRadius: 8, padding: '8px 18px',
+                          letterSpacing: '.04em', cursor: 'not-allowed',
+                          border: '1px solid var(--border)', whiteSpace: 'nowrap',
+                        }}>
+                          Soon
+                        </span>
+                      )}
+                    </div>
+
                   </div>
                 </div>
-              </Link>
+              </div>
+
             </div>
           )
         })}
