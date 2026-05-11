@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -87,7 +88,7 @@ export default function WhatIsDataModule() {
     <LearnLayout
       title="What is Data? How Computers Store Information"
       description="The foundation of everything — bits, bytes, files, and why data needs engineers."
-      section="Data Engineering"
+      section="Data Engineering — Module 01"
       readTime="55 min"
       updatedAt="March 2026"
     >
@@ -1103,6 +1104,19 @@ Practically, this means: preserving source timestamps so analysts know when even
         'The data engineer exists because data is generated too fast, from too many sources, in too many formats, for any manual process to handle. The job is to build the automated systems that make raw data reliably usable.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 02 introduces data engineering as a role — what data engineers actually build, why companies hire them, and what a real day in the life looks like from morning standup to deployment.
+        </p>
+        <Link href="/learn/data-engineering/what-is-data-engineering" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 02 → What is Data Engineering?
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

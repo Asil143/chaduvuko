@@ -91,7 +91,7 @@ export default function StoredProcedures() {
     <LearnLayout
       title="Stored Procedures"
       description="Reusable named programs stored inside the database — parameters, variables, control flow, exception handling, and when database-side logic beats application-layer logic"
-      section="SQL — Module 48"
+      section="SQL — Module 49"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -1232,10 +1232,10 @@ $$;
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 49</strong>, you learn User-Defined Functions — scalar functions, table-valued functions, SQL functions vs PL/pgSQL functions, IMMUTABLE vs STABLE vs VOLATILE, and building a reusable function library.
+          In <strong>Module 50</strong>, you learn User-Defined Functions — scalar functions, table-valued functions, SQL functions vs PL/pgSQL functions, IMMUTABLE vs STABLE vs VOLATILE, and building a reusable function library.
         </p>
         <Link href="/learn/sql/user-defined-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 49 → User-Defined Functions
+          Module 50 → User-Defined Functions
         </Link>
       </div>
 

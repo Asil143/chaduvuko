@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function FilesAtScaleModule() {
     <LearnLayout
       title="Working with Files at Scale"
       description="File organisation, compression, partitioning, the small file problem, and format conversion pipelines."
-      section="Data Engineering"
+      section="Data Engineering — Module 19"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -1536,6 +1537,19 @@ Fifth, check for missing or stale statistics. Query optimisers use column statis
         'When an Athena or Spark query is suddenly slow: check data scanned (should match partition size), count files per partition (thousands of tiny files = small file problem), verify format is Parquet not CSV/JSON, confirm partition pruning is firing (no functions on partition columns in WHERE), and check if MSCK REPAIR TABLE needs to be run to register new partitions.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 20 introduces the data pipeline — its anatomy from ingestion to serving, the design principles that separate maintainable pipelines from ones that break every week, and the anti-patterns that look reasonable until production.
+        </p>
+        <Link href="/learn/data-engineering/what-is-a-pipeline" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 20 → What is a Data Pipeline?
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

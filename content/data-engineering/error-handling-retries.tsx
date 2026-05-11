@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function ErrorHandlingRetriesModule() {
     <LearnLayout
       title="Error Handling, Retries, and Dead Letter Queues"
       description="Classifying errors, exponential backoff with jitter, circuit breakers, DLQ design, and building pipelines that recover automatically."
-      section="Data Engineering"
+      section="Data Engineering — Module 27"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -1535,6 +1536,19 @@ The redesigned error flow: row-level data errors → DLQ (row processed, pipelin
         'The four-tier alerting model: P1 (page immediately) — SLA breach, authentication failure, schema mismatch, 5% DLQ rate. P2 (investigate within 1 hour) — all retries exhausted, DLQ growing across consecutive runs. P3 (investigate within 24 hours) — single run failed but recovered, DLQ has new records. No alert — log only — transient errors that resolved, successful runs.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 28 covers pipeline orchestration — what a scheduler actually does, how DAGs model dependencies, what backfill means and why it is hard, and the design decisions that determine how maintainable an orchestration layer is.
+        </p>
+        <Link href="/learn/data-engineering/pipeline-orchestration" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 28 → Pipeline Orchestration — What a Scheduler Does
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

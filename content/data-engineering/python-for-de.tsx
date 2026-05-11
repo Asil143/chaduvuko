@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -75,7 +76,7 @@ export default function PythonForDEModule() {
     <LearnLayout
       title="Python for Data Engineering"
       description="File I/O at scale, REST APIs with retries, error handling, logging, generators, and testable code."
-      section="Data Engineering"
+      section="Data Engineering — Module 14"
       readTime="90 min"
       updatedAt="March 2026"
     >
@@ -1983,6 +1984,19 @@ For completeness verification, I would reconcile against an authoritative total 
         'Dead letter queues are essential for production pipelines. When a record fails all retries, write it to a DLQ file with the error context and continue processing the rest. Never silently discard failed records and never halt an entire pipeline because one record is bad.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 15 covers SQL at the data engineering level — window functions, complex CTEs, deduplication patterns, and the advanced queries that every real DE interview actually tests.
+        </p>
+        <Link href="/learn/data-engineering/sql-for-de" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 15 → SQL for Data Engineers — Beyond the Basics
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -135,7 +136,7 @@ export default function DataFormatsModule() {
     <LearnLayout
       title="Data Formats — CSV, JSON, Parquet, Avro, ORC"
       description="How each format works internally, when to use it, and what breaks when you pick the wrong one."
-      section="Data Engineering"
+      section="Data Engineering — Module 08"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -1218,6 +1219,19 @@ I would present this to the analyst as a two-week migration project with measura
         'Format choice is a cost decision. At 100 million rows, CSV costs 3× more in S3 storage than Parquet. At 10 billion rows, the annual cost difference between CSV and Parquet can exceed $10,000. Format migrations at companies still using CSV in their data lakes typically produce 5–10× storage reduction and pay back migration effort in weeks.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 09 goes inside a database engine — storage on disk, B-tree indexes, the buffer pool, and the Write-Ahead Log that makes durability possible across crashes and restarts.
+        </p>
+        <Link href="/learn/data-engineering/databases-internals" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 09 → Databases — What They Are and How They Work Internally
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

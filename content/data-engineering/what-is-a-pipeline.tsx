@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function WhatIsAPipelineModule() {
     <LearnLayout
       title="What is a Data Pipeline? Anatomy and Design Principles"
       description="The anatomy of every pipeline, the design principles that make them reliable, and the patterns that separate good from fragile."
-      section="Data Engineering"
+      section="Data Engineering — Module 20"
       readTime="55 min"
       updatedAt="March 2026"
     >
@@ -1324,6 +1325,19 @@ The distinction matters practically: a pipeline can exist without a DAG (a cron 
         'A pipeline and a DAG are not the same thing. A pipeline is a data flow. A DAG is the dependency graph that orchestrates multiple pipelines or tasks. An Airflow DAG for the morning data platform may contain 15 tasks across 6 pipelines.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 21 covers the three processing models — batch, streaming, and micro-batch — with real latency and throughput numbers so you can match the right model to any business requirement.
+        </p>
+        <Link href="/learn/data-engineering/batch-vs-streaming" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 21 → Batch vs Streaming vs Micro-Batch
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -74,7 +75,7 @@ export default function DataModellingModule() {
     <LearnLayout
       title="Data Modelling — Dimensional Modelling, Star Schema, Facts and Dimensions"
       description="Dimensional modelling from first principles — grain, fact types, dimension design, surrogate keys, conformed dimensions, and the modern wide-table pattern."
-      section="Data Engineering"
+      section="Data Engineering — Module 33"
       readTime="65 min"
       updatedAt="March 2026"
     >
@@ -943,6 +944,19 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
         'Centralise business logic in dbt Gold models. A "revenue" metric disagreement between Finance and Operations (₹4.21 million vs ₹3.87 million) is always a missing canonical definition problem, not a data quality problem. One dbt model defines delivered_revenue, gross_order_value, and cancelled_value — both teams query the canonical model and can no longer accidentally apply different filters to the same metric name.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 34 covers Slowly Changing Dimensions — what happens when a customer moves city or changes job title, and the three SCD types that handle historical tracking correctly, partially, or not at all.
+        </p>
+        <Link href="/learn/data-engineering/slowly-changing-dimensions" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 34 → Slowly Changing Dimensions — SCD Types 1, 2 and 3
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

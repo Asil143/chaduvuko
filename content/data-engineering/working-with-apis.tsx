@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function WorkingWithAPIsModule() {
     <LearnLayout
       title="Working with APIs — REST, Auth, Pagination, Rate Limits"
       description="How APIs work, every auth pattern, all pagination styles, rate limits, and webhooks vs polling."
-      section="Data Engineering"
+      section="Data Engineering — Module 18"
       readTime="70 min"
       updatedAt="March 2026"
     >
@@ -1888,6 +1889,19 @@ The practical difference in implementation: API key pipelines send the same stat
         'Always test a new API manually with curl before writing code. Check authentication works, understand the response structure, read the rate limit headers, confirm the pagination style, and download a small sample to inspect field names and types. Ten minutes with curl prevents hours of debugging misunderstood API behaviour.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 19 covers working with files at scale — partitioning strategies, compression trade-offs, the small file problem, and how columnar formats like Parquet store and retrieve data internally.
+        </p>
+        <Link href="/learn/data-engineering/files-at-scale" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 19 → Working with Files at Scale
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

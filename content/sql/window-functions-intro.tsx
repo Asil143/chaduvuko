@@ -99,7 +99,7 @@ export default function WindowFunctionsIntro() {
     <LearnLayout
       title="Window Functions"
       description="Compute aggregates across related rows without collapsing them — ROW_NUMBER, RANK, DENSE_RANK, NTILE, LAG, LEAD, running totals, moving averages, and the PARTITION BY / ORDER BY frame"
-      section="SQL — Module 51"
+      section="SQL — Module 52"
       readTime="16–22 min"
       updatedAt="April 2026"
     >
@@ -1045,10 +1045,10 @@ ORDER BY order_date, daily_rank;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 52</strong>, you learn Ranking Functions in depth — advanced RANK patterns, percentile ranks, conditional rankings, multi-level rankings, and every production scenario where ranking drives business decisions.
+          In <strong>Module 53</strong>, you learn Ranking Functions in depth — advanced RANK patterns, percentile ranks, conditional rankings, multi-level rankings, and every production scenario where ranking drives business decisions.
         </p>
         <Link href="/learn/sql/ranking-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 52 → Ranking Functions
+          Module 53 → Ranking Functions
         </Link>
       </div>
 

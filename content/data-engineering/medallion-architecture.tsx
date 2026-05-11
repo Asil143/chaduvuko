@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function MedallionArchitectureModule() {
     <LearnLayout
       title="Medallion Architecture — Bronze, Silver, Gold"
       description="What belongs in each layer, the exact transformations at each boundary, dbt and Spark integration, SCD handling, and governing a three-tier lakehouse."
-      section="Data Engineering"
+      section="Data Engineering — Module 30"
       readTime="65 min"
       updatedAt="March 2026"
     >
@@ -1287,6 +1288,19 @@ This controlled propagation is why the architecture separates Bronze, Silver, an
         'The DLQ is the most valuable diagnostic tool in the Medallion Architecture. When Silver has fewer rows than expected, the DLQ shows exactly which rows were rejected and why. When a metric is wrong, the DLQ often contains the missing records with the validation error that explains the discrepancy. Without DLQ, missing data is invisible. With DLQ, it is queryable.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 31 covers data warehouse internals — how columnar storage makes analytical queries 10-100× faster, and how partitioning, clustering, and distribution affect both performance and cost.
+        </p>
+        <Link href="/learn/data-engineering/warehouse-concepts" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 31 → Data Warehouse Concepts — Columnar Storage and Distribution
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

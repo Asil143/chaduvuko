@@ -78,7 +78,7 @@ export default function RankingFunctions() {
     <LearnLayout
       title="Ranking Functions"
       description="Advanced ranking — percentile rank, cumulative distribution, conditional rankings, multi-level leaderboards, and every production pattern where ranking drives business decisions"
-      section="SQL — Module 52"
+      section="SQL — Module 53"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -86,11 +86,11 @@ export default function RankingFunctions() {
       {/* ── PART 01 ── */}
       <Part n="01" title="The Full Ranking Toolkit" />
 
-      <P>Module 51 introduced ROW_NUMBER, RANK, DENSE_RANK, and NTILE. This module goes deeper — covering the statistical ranking functions PERCENT_RANK and CUME_DIST, the ordered-set aggregate PERCENTILE_CONT, conditional and multi-level ranking, and the production patterns that appear in leaderboards, cohort analysis, and performance tiers.</P>
+      <P>Module 52 introduced ROW_NUMBER, RANK, DENSE_RANK, and NTILE. This module goes deeper — covering the statistical ranking functions PERCENT_RANK and CUME_DIST, the ordered-set aggregate PERCENTILE_CONT, conditional and multi-level ranking, and the production patterns that appear in leaderboards, cohort analysis, and performance tiers.</P>
 
       <CodeBlock
         label="Complete ranking function reference"
-        code={`-- Positional ranking (covered in Module 51):
+        code={`-- Positional ranking (covered in Module 52):
 ROW_NUMBER() OVER (PARTITION BY grp ORDER BY col)  -- 1,2,3,4 — always unique
 RANK()       OVER (PARTITION BY grp ORDER BY col)  -- 1,1,3,4 — gaps after ties
 DENSE_RANK() OVER (PARTITION BY grp ORDER BY col)  -- 1,1,2,3 — no gaps
@@ -1066,10 +1066,10 @@ ORDER BY category, revenue_rank;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 53</strong>, you learn Analytics with LAG and LEAD — every period-over-period pattern, retention analysis, funnel drop-off, session gap detection, and time-series analytics built on offset window functions.
+          In <strong>Module 54</strong>, you learn Analytics with LAG and LEAD — every period-over-period pattern, retention analysis, funnel drop-off, session gap detection, and time-series analytics built on offset window functions.
         </p>
         <Link href="/learn/sql/analytics-lag-lead" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 53 → Analytics with LAG and LEAD
+          Module 54 → Analytics with LAG and LEAD
         </Link>
       </div>
 

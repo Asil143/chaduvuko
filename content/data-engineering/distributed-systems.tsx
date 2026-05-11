@@ -2,6 +2,7 @@
 
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function DistributedSystemsModule() {
     <LearnLayout
       title="Distributed Systems for Data Engineers"
       description="CAP theorem applied to real data systems, consistency models, replication strategies, partitioning and sharding, distributed joins, fault tolerance and delivery semantics, consensus protocols, and the Saga pattern — explained for data engineers, not distributed systems PhDs."
-      section="Data Engineering · Phase 6"
+      section="Data Engineering — Module 42"
       readTime="65 min"
       updatedAt="March 2026"
     >
@@ -1300,6 +1301,19 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
         'The Saga pattern handles distributed transactions across multiple services without two-phase commit. Each step is a local transaction. Failures trigger compensating transactions in reverse order. Every step and compensation must be idempotent because events can be delivered more than once.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 43 covers performance tuning — how to identify whether a pipeline is I/O bound, CPU bound, or network bound, and the specific techniques for fixing each bottleneck type without rebuilding everything.
+        </p>
+        <Link href="/learn/data-engineering/performance-tuning" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 43 → Performance Tuning and Cost Optimisation
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

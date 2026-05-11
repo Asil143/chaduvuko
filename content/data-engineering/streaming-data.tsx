@@ -2,6 +2,7 @@
 
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function StreamingDataModule() {
     <LearnLayout
       title="Streaming Data — What It Is and How It Works"
       description="Event-driven architecture, producers, consumers, offsets, partitions, consumer groups, delivery semantics, time, and ordering — the complete conceptual foundation before you touch Kafka or Flink."
-      section="Data Engineering · Phase 6"
+      section="Data Engineering — Module 40"
       readTime="55 min"
       updatedAt="March 2026"
     >
@@ -1235,6 +1236,19 @@ event = {
         'Event notification (thin event + callback), event-carried state transfer (fat event, no callback), and event sourcing (log is the database) are three distinct patterns with different coupling, resilience, and complexity trade-offs.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 41 covers message brokers and queues — how messages flow from producer to consumer, durability guarantees, ordering, replayability, and the difference between at-least-once and exactly-once delivery.
+        </p>
+        <Link href="/learn/data-engineering/message-brokers-queues" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 41 → Message Brokers and Queues — Internal Mechanics
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

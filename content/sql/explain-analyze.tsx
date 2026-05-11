@@ -96,7 +96,7 @@ export default function ExplainAnalyze() {
     <LearnLayout
       title="EXPLAIN and Query Optimisation"
       description="Read execution plans, spot bottlenecks, understand every node type, and apply the systematic workflow that turns a 30-second query into a 300-millisecond one"
-      section="SQL — Module 55"
+      section="SQL — Module 57"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -1041,10 +1041,10 @@ LIMIT 20;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 56</strong>, you learn Index Strategies in depth — composite index design, covering indexes, partial indexes, when indexes hurt, and the full decision framework for production index management.
+          In <strong>Module 58</strong>, you learn Index Strategies in depth — composite index design, covering indexes, partial indexes, when indexes hurt, and the full decision framework for production index management.
         </p>
         <Link href="/learn/sql/index-strategies" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 56 → Index Strategies
+          Module 58 → Index Strategies
         </Link>
       </div>
 

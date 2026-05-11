@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function DataLakeArchitectureModule() {
     <LearnLayout
       title="Data Lake Architecture"
       description="What a data lake is, why it was invented, zone-based organisation, compute-storage separation, and the rise of the lakehouse."
-      section="Data Engineering"
+      section="Data Engineering — Module 29"
       readTime="55 min"
       updatedAt="March 2026"
     >
@@ -1185,6 +1186,19 @@ For new projects in 2026, Iceberg is the most future-proof choice due to its eng
         'VACUUM must never run with retention below 7 days (168 hours). The 7-day minimum protects concurrent readers and time travel users. Run VACUUM weekly with 168-hour retention. OPTIMIZE (compaction) should run daily on recently written partitions. Z-ORDER on the most common filter columns reduces data skipping overhead.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 30 covers the Medallion Architecture — why it became the dominant data lake design pattern, what each layer does, and the decisions that determine what data belongs where.
+        </p>
+        <Link href="/learn/data-engineering/medallion-architecture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 30 → Medallion Architecture — Bronze, Silver, Gold
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

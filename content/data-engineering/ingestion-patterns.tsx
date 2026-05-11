@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function IngestionPatternsModule() {
     <LearnLayout
       title="Data Ingestion Patterns — Full Load, Incremental, CDC"
       description="The three patterns that cover every source — when each is correct, how each fails, and how to choose."
-      section="Data Engineering"
+      section="Data Engineering — Module 23"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -1183,6 +1184,19 @@ The correct monitoring setup: query pg_replication_slots regularly and alert whe
         'Most production platforms use all three patterns simultaneously: full load for reference tables (nightly, fast), incremental for large transaction tables (every 15 minutes), and CDC for financial and customer tables where deletes matter (continuous). Match the pattern to the table\'s characteristics, not to a personal preference.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 24 goes deep on Change Data Capture — log-based, trigger-based, and query-based CDC from the inside, including production gotchas around replication lag, schema changes, and log retention.
+        </p>
+        <Link href="/learn/data-engineering/change-data-capture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 24 → Change Data Capture (CDC) — How It Works Under the Hood
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

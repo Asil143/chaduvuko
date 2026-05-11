@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -83,7 +84,7 @@ export default function HowDataMovesModule() {
     <LearnLayout
       title="How Data Moves Through a Company"
       description="The complete end-to-end journey — from data creation to business decisions."
-      section="Data Engineering"
+      section="Data Engineering — Module 03"
       readTime="55 min"
       updatedAt="March 2026"
     >
@@ -1128,6 +1129,19 @@ This systematic approach means I never spend more than 15–20 minutes finding t
         'The serving layer is not just "put data in the warehouse." It means different things for different consumers: pre-aggregated Gold for analysts, Silver features for scientists, feature stores for ML engineers, reverse ETL for operational systems.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 04 maps the entire DE tool ecosystem — ingestion, storage, processing, orchestration, and serving — so every tool you encounter has a context before you study any one of them.
+        </p>
+        <Link href="/learn/data-engineering/de-ecosystem" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 04 → The Data Engineering Ecosystem
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

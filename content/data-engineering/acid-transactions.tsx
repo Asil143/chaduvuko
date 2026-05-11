@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -132,7 +133,7 @@ export default function ACIDTransactionsModule() {
     <LearnLayout
       title="ACID Properties and Transactions"
       description="Why ACID exists, what each property means, and what happens when it breaks."
-      section="Data Engineering"
+      section="Data Engineering — Module 13"
       readTime="50 min"
       updatedAt="March 2026"
     >
@@ -1320,6 +1321,19 @@ This is exactly what dbt tests are for. A unique test on order_id catches the du
         'The most common ACID violation in production data pipelines is not a theoretical failure — it is missing explicit transaction boundaries on batch writes combined with missing UNIQUE constraints on business keys. These two omissions together turn a routine connection timeout into a financial data discrepancy.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 14 covers Python for data pipelines — file I/O at scale, REST APIs, exponential backoff, generators, and the patterns that separate scripts that break from pipelines that survive production.
+        </p>
+        <Link href="/learn/data-engineering/python-for-de" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 14 → Python for Data Engineering
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

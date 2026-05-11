@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -79,7 +80,7 @@ export default function DEIndiaJobMarketModule() {
     <LearnLayout
       title="Data Engineering in the Indian Job Market (2026)"
       description="Salaries, companies, skills, JD decoding, and breaking in from non-IT."
-      section="Data Engineering"
+      section="Data Engineering — Module 06"
       readTime="50 min"
       updatedAt="March 2026"
     >
@@ -1152,6 +1153,19 @@ The critical part of this answer is the research citation. Candidates who say "I
         'Always negotiate salary. Always. The worst outcome of negotiating is being told the offer is firm — which is acceptable and not offensive. Most hiring managers have 10–20% flexibility that they will only use if asked. Accepting the first number is a financial mistake that compounds over your career.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 07 introduces the three categories of data every engineer works with daily — structured tables, semi-structured JSON, and unstructured text and images — and what each demands from your pipeline.
+        </p>
+        <Link href="/learn/data-engineering/data-types-structured" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 07 → Structured, Semi-Structured and Unstructured Data
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

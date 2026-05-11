@@ -96,7 +96,7 @@ export default function Triggers() {
     <LearnLayout
       title="Triggers"
       description="Automatic database responses to data changes — BEFORE and AFTER triggers, row-level vs statement-level, the NEW and OLD records, audit logging, cascading updates, and when triggers hurt more than they help"
-      section="SQL — Module 50"
+      section="SQL — Module 51"
       readTime="14–18 min"
       updatedAt="April 2026"
     >
@@ -1268,10 +1268,10 @@ ORDER BY oi.order_id;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 51</strong>, you learn Window Functions in depth — ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD, running totals, moving averages, and the PARTITION BY and ORDER BY frame clauses that power time-series analytics.
+          In <strong>Module 52</strong>, you learn Window Functions in depth — ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD, running totals, moving averages, and the PARTITION BY and ORDER BY frame clauses that power time-series analytics.
         </p>
         <Link href="/learn/sql/window-functions-intro" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 51 → Window Functions
+          Module 52 → Window Functions
         </Link>
       </div>
 

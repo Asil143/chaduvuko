@@ -3,6 +3,7 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Interview Prep — 60 Complete Answers | Data Engineering | Chaduvuko',
@@ -109,7 +110,7 @@ export default function DEInterviewQuestionsModule() {
     <LearnLayout
       title="Interview Prep — 60 Complete Answers"
       description="60 complete data engineering interview answers across Python, SQL, pipelines, Spark, Kafka, data modelling, warehousing, cloud, distributed systems, system design, and behavioural — written at senior engineer depth."
-      section="Data Engineering · Phase 6"
+      section="Data Engineering — Module 47"
       readTime="90 min"
       updatedAt="March 2026"
     >
@@ -2893,6 +2894,20 @@ spark.sql("OPTIMIZE orders WHERE order_date >= '2026-01-01'")`}
         'In behavioural questions, the evaluator wants to see: systematic thinking under pressure, ownership of failures (not blame), data-driven decision-making, and proactive communication with stakeholders. Generic "team player" answers fail.',
         'The three trends to know going into 2026 interviews: Apache Iceberg as the open table format standard, AI-assisted pipeline development (know the tools and their limits), and streaming as the default for low-latency use cases that were previously batch-only.',
       ]} />
+
+
+      {/* ── Track Complete CTA ─────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          You have completed the Data Engineering track
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          All 47 modules complete. Return to the track index to review any module, or explore the SQL, DBMS, or AI/ML tracks to continue building depth.
+        </p>
+        <Link href="/learn/data-engineering" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Back to Data Engineering Track
+        </Link>
+      </div>
 
     </LearnLayout>
   )

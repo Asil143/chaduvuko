@@ -380,7 +380,7 @@ FOREIGN KEY (manager_id) REFERENCES employees(employee_id)`}
                    ('Delivered','Processing','Cancelled','Returned')),
   payment_method VARCHAR(20)    NOT NULL
                  CHECK (payment_method IN
-                   ('UPI','Card','COD','NetBanking')),
+                   ('Credit Card','Debit Card','Apple Pay','Cash')),
   total_amount   DECIMAL(10,2)  NOT NULL
                  CHECK (total_amount >= 0),
 

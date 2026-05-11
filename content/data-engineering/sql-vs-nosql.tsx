@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -132,7 +133,7 @@ export default function SQLvsNoSQLModule() {
     <LearnLayout
       title="SQL vs NoSQL — The Real Difference"
       description="What each one trades off, four NoSQL families from first principles, and how to choose."
-      section="Data Engineering"
+      section="Data Engineering — Module 10"
       readTime="55 min"
       updatedAt="March 2026"
     >
@@ -1286,6 +1287,19 @@ In practice, most data engineering work involves the relational model. Graph dat
         'Most applications never need NoSQL. PostgreSQL handles hundreds of millions of rows comfortably with proper indexing. Do not introduce NoSQL complexity until relational genuinely cannot handle the workload. The wrong database for the access pattern always causes more problems than it solves.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 11 compares the three main enterprise data storage strategies — the traditional warehouse, the data lake, and the emerging lakehouse — with honest trade-offs for each.
+        </p>
+        <Link href="/learn/data-engineering/warehouse-lake-lakehouse" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 11 → Data Warehouse vs Data Lake vs Lakehouse
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

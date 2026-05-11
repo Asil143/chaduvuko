@@ -106,7 +106,7 @@ export default function WhatIsADatabase() {
 
       <P><Hl>"Multiple users never corrupt each other's changes"</Hl> — right now, thousands of people are placing DoorDash orders simultaneously. Two customers might order the last item in a restaurant's inventory at the exact same moment. The database ensures exactly one of them gets it and the other sees "out of stock." Without this guarantee, both orders would go through and the restaurant would be in chaos.</P>
 
-      <P><Hl>"Committed data survives any crash"</Hl> — the moment your UPI payment shows "Success," that record is permanent. Even if the bank's server loses power one millisecond later, the transaction is not lost. The database writes to a log on disk before confirming success — if it crashes, it replays the log on restart. This is called durability.</P>
+      <P><Hl>"Committed data survives any crash"</Hl> — the moment your credit card payment shows "Approved," that record is permanent. Even if the bank's server loses power one millisecond later, the transaction is not lost. The database writes to a log on disk before confirming success — if it crashes, it replays the log on restart. This is called durability.</P>
 
       <P>Together these four guarantees are called <Hl>ACID</Hl> — Atomicity, Consistency, Isolation, Durability. You will learn them deeply in Module 47. For now, know this: every reliable software system you have ever used runs on a database because of these four guarantees. Nothing else provides them.</P>
 
@@ -171,10 +171,10 @@ export default function WhatIsADatabase() {
             </thead>
             <tbody>
               {[
-                ['1', 'Aisha',  'Seattle', 'Gold',   '2022-03-15'],
-                ['2', 'Ravi',   'Austin', 'Silver', '2021-07-22'],
-                ['3', 'Priya',  'New York',    'Bronze', '2023-01-10'],
-                ['4', 'Arjun',  'Ahmedabad', 'Platinum','2022-11-05'],
+                ['1', 'Emma',    'Seattle',  'Gold',     '2022-03-15'],
+                ['2', 'Liam',    'Chicago',  'Silver',   '2021-07-22'],
+                ['3', 'Olivia',  'Los Angeles', 'Bronze','2023-01-10'],
+                ['4', 'Noah',    'Phoenix',  'Platinum', '2022-11-05'],
               ].map((row, i) => (
                 <tr key={i} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
                   {row.map((cell, j) => (
@@ -289,15 +289,15 @@ export default function WhatIsADatabase() {
       {/* ── PART 06 ── */}
       <Part n="06" title="The FreshCart Database — Your SQL Dataset for All 62 Modules" />
 
-      <P>Every single module in this course — from Module 01 to Module 62 — uses the same database: <Hl>FreshCart</Hl>. A fictional Indian grocery chain. 10 stores across Seattle, Austin, New York, Delhi, Chicago, Boston, and Ahmedabad. Real Indian brands — Amul, Tata, Nestle, Britannia, P&G. Realistic prices, realistic data.</P>
+      <P>Every single module in this course — from Module 01 to Module 62 — uses the same database: <Hl>FreshCart</Hl>. A fictional US grocery chain. 10 stores across New York, Chicago, Los Angeles, Seattle, Austin, and Portland. Real-world brands — King Arthur, Tillamook, Vital Farms, Starbucks, Head &amp; Shoulders. Realistic prices, realistic data.</P>
       <P>You will know this database so well by Module 62 that you could rebuild it from memory. That depth of familiarity with one dataset is intentional — every query you write will feel meaningful, not academic.</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12, margin: '24px 0 32px' }}>
         {[
-          { name: 'customers',   color: C,        rows: 20,  cols: 10, desc: '20 customers across 7 Indian cities. Bronze, Silver, Gold, Platinum loyalty tiers. Joined dates from 2020–2023.' },
-          { name: 'orders',      color: '#f97316', rows: 30,  cols: 8,  desc: '30 orders from January–March 2024. Statuses: Delivered, Processing, Cancelled, Returned. UPI, Card, COD, NetBanking.' },
+          { name: 'customers',   color: C,        rows: 20,  cols: 10, desc: '20 customers across 7 US cities. Bronze, Silver, Gold, Platinum loyalty tiers. Joined dates from 2020–2023.' },
+          { name: 'orders',      color: '#f97316', rows: 30,  cols: 8,  desc: '30 orders from January–March 2024. Statuses: Delivered, Processing, Cancelled, Returned. Credit Card, Debit Card, Apple Pay, Cash.' },
           { name: 'order_items', color: '#8b5cf6', rows: 118, cols: 7,  desc: '118 line items. Which products were in each order, at what quantity, with what discount.' },
-          { name: 'products',    color: '#10b981', rows: 25,  cols: 9,  desc: '25 products — Amul Butter, Maggi, Parle-G, Head & Shoulders, Fortune Oil. Across Staples, Dairy, Beverages, Personal Care.' },
+          { name: 'products',    color: '#10b981', rows: 25,  cols: 9,  desc: '25 products — Whole Milk, All-Purpose Flour, Honeycrisp Apples, Head & Shoulders, Starbucks Coffee. Across Staples, Dairy, Beverages, Personal Care.' },
           { name: 'stores',      color: '#0078d4', rows: 10,  cols: 7,  desc: '10 stores: ST001–ST010. Each with a city, manager name, opening date, and monthly revenue target.' },
           { name: 'employees',   color: '#f59e0b', rows: 15,  cols: 9,  desc: '15 employees with roles, salaries, hire dates, and a self-referencing manager_id for the org hierarchy.' },
         ].map(t => (
@@ -363,7 +363,7 @@ ORDER BY revenue DESC;`}
       </TimeBlock>
 
       <TimeBlock time="9:00 AM" label="Standup — you get a data request">
-        The growth team lead asks: "Can you find all merchants in Tier 2 cities whose monthly transaction volume dropped more than 20% from January to February? We need it for the 11 AM review." Before SQL, this request would take all morning. You say: "I'll have it by 10:30."
+        The growth team lead asks: "Can you find all merchants in smaller markets whose monthly transaction volume dropped more than 20% from January to February? We need it for the 11 AM review." Before SQL, this request would take all morning. You say: "I'll have it by 10:30."
       </TimeBlock>
 
       <TimeBlock time="9:15 AM — 10:15 AM" label="Write the analysis query">
@@ -375,7 +375,7 @@ ORDER BY revenue DESC;`}
       </TimeBlock>
 
       <TimeBlock time="11:30 AM" label="Ad hoc investigation">
-        An alert fires: the fraud detection dashboard shows a spike in declined transactions in Karnataka. You query the transactions table directly, slicing by state, merchant category, and time. Within 20 minutes you identify it is concentrated in one payment instrument — a specific bank's debit cards — and escalate to the engineering team with the exact query and numbers. Investigation that used to take hours took 20 minutes because you can query the data directly.
+        An alert fires: the fraud detection dashboard shows a spike in declined transactions in the Pacific Northwest. You query the transactions table directly, slicing by state, merchant category, and time. Within 20 minutes you identify it is concentrated in one payment instrument — a specific bank's debit cards — and escalate to the engineering team with the exact query and numbers. Investigation that used to take hours took 20 minutes because you can query the data directly.
       </TimeBlock>
 
       <TimeBlock time="2:00 PM" label="Building a new metric">
@@ -383,7 +383,7 @@ ORDER BY revenue DESC;`}
       </TimeBlock>
 
       <ProTip>
-        In most Indian tech companies, the ability to query data independently — without waiting for a data engineer to pull it for you — is the single biggest differentiator between a junior analyst and a senior one. Every product, growth, ops, finance, and marketing role uses SQL daily. It is the highest return-per-hour skill you can learn in the first year of any tech career.
+        At any tech company, the ability to query data independently — without waiting for a data engineer to pull it for you — is the single biggest differentiator between a junior analyst and a senior one. Every product, growth, ops, finance, and marketing role uses SQL daily. It is the highest return-per-hour skill you can learn in the first year of any tech career.
       </ProTip>
 
       <HR />
@@ -460,13 +460,13 @@ ORDER BY revenue DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="A customer in Seattle places an order on FreshCart's app. She buys Amul Milk, Tata Atta, and Maggi. How many tables in the FreshCart database are involved in storing that single transaction — and which ones are they?"
+        question="A customer in Seattle places an order on FreshCart's app. She buys Whole Milk, All-Purpose Flour, and Instant Ramen. How many tables in the FreshCart database are involved in storing that single transaction — and which ones are they?"
         hint="Think step by step: who placed it (1 table), what is the order itself (1 table), what products were bought (how many tables does that involve)?"
         answer={`5 tables are involved:
 
-1. customers — stores who placed the order (Aisha Khan, Seattle, Gold tier)
-2. orders — stores the order itself (order_id, date, store, status, payment method, total)  
-3. order_items — stores 3 rows, one per product (Amul Milk × 1, Tata Atta × 1, Maggi × 2)
+1. customers — stores who placed the order (Emma Johnson, Seattle, Gold tier)
+2. orders — stores the order itself (order_id, date, store, status, payment method, total)
+3. order_items — stores 3 rows, one per product (Whole Milk × 1, All-Purpose Flour × 2, Instant Ramen × 2)
 4. products — each order_items row links here to get the product name, price, and category
 5. stores — the orders row links here to record which FreshCart location processed the order
 
@@ -486,7 +486,7 @@ The employees table is not directly involved in recording the transaction, thoug
           'Foreign Keys create enforced links between tables. You cannot insert a row that references a parent that does not exist. This prevents orphaned records and is the foundation of every JOIN query you will write.',
           'RDBMS (Relational Database Management System) is the category that MySQL, PostgreSQL, Oracle, SQL Server, and SQLite belong to. SQL is the standardised query language for this model — 95% identical across all of them.',
           'In Indian tech: PostgreSQL is default at fintech startups (Stripe, Brex, Robinhood). MySQL dominates high-traffic consumer apps (DoorDash, Sephora). MS SQL Server is standard in banking (HDFC, ICICI). SQLite runs inside every mobile app.',
-          'FreshCart — 6 tables, 218 total rows, realistic Indian data — is the dataset for all 62 modules. Learn it once and use it for every single query in the course.',
+          'FreshCart — 6 tables, 218 total rows, realistic US data — is the dataset for all 62 modules. Learn it once and use it for every single query in the course.',
           'A live SQL playground powered by DuckDB-WASM runs on every module page. Zero install, zero account, zero server — the FreshCart database is pre-loaded and ready the moment the page opens.',
           'SQL is not just a "data" skill. Every product manager, growth analyst, operations lead, and finance analyst at every Indian tech company uses SQL daily. It is the highest-return technical skill learnable in under 3 months.',
         ]}

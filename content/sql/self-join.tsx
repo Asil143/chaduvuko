@@ -205,7 +205,7 @@ ORDER BY senior.employee_id NULLS LAST,
       />
 
       <Callout type="info">
-        The three-level hierarchy query with explicit JOINs works well for shallow trees (2-3 levels). For trees of arbitrary depth — organisational charts, file systems, category hierarchies — you need recursive CTEs (covered in Module 48). Self JOIN handles a fixed known depth; recursive CTE handles unlimited depth.
+        The three-level hierarchy query with explicit JOINs works well for shallow trees (2-3 levels). For trees of arbitrary depth — organisational charts, file systems, category hierarchies — you need recursive CTEs (covered in Module 56). Self JOIN handles a fixed known depth; recursive CTE handles unlimited depth.
       </Callout>
 
       <HR />
@@ -455,7 +455,7 @@ ORDER BY emp.role, emp.salary;`}
       />
 
       <ProTip>
-        Sequential row comparison with SELF JOIN works but can be verbose — especially when finding "the immediately next row." Window functions (LAG and LEAD, Module 46) are the modern, cleaner solution for this pattern. SELF JOIN is worth knowing for databases that do not support window functions and for situations where the "next row" definition is complex enough that a subquery is clearer than a window expression.
+        Sequential row comparison with SELF JOIN works but can be verbose — especially when finding "the immediately next row." Window functions (LAG and LEAD, Module 54) are the modern, cleaner solution for this pattern. SELF JOIN is worth knowing for databases that do not support window functions and for situations where the "next row" definition is complex enough that a subquery is clearer than a window expression.
       </ProTip>
 
       <HR />
@@ -756,9 +756,9 @@ ORDER BY a.category, price_difference;`}
           'For pair comparison: add a.id < b.id to the ON condition. This prevents duplicate pairs (A,B) and (B,A) and self-matches (A,A). Use <> instead of < when direction matters.',
           'Three-level hierarchy: chain three aliases with LEFT JOINs — emp → mgr → senior. Use LEFT JOIN at every level to preserve employees at the top of each sub-hierarchy.',
           'Product co-occurrence: JOIN order_items AS oi1 to order_items AS oi2 on order_id AND oi1.product_id < oi2.product_id. Then join each alias to products to get names. This finds which products are purchased together.',
-          'SELF JOIN for sequential comparison (comparing each row to its predecessor) is verbose. Window functions LAG and LEAD (Module 46) are the cleaner modern solution for this pattern.',
+          'SELF JOIN for sequential comparison (comparing each row to its predecessor) is verbose. Window functions LAG and LEAD (Module 54) are the cleaner modern solution for this pattern.',
           'Duplicate detection: JOIN table AS a to itself AS b on the columns that define a duplicate AND a.id < b.id. Rows that match on those columns are potential duplicates.',
-          'For arbitrary-depth hierarchies (unknown number of levels), SELF JOIN with fixed aliases handles only known depth. Recursive CTEs (Module 48) handle unlimited depth.',
+          'For arbitrary-depth hierarchies (unknown number of levels), SELF JOIN with fixed aliases handles only known depth. Recursive CTEs (Module 56) handle unlimited depth.',
         ]}
       />
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function CDCModule() {
     <LearnLayout
       title="Change Data Capture (CDC) — Deep Dive"
       description="WAL internals, Debezium architecture, Schema Registry, the Outbox Pattern, event ordering, and operating CDC in production."
-      section="Data Engineering"
+      section="Data Engineering — Module 24"
       readTime="70 min"
       updatedAt="March 2026"
     >
@@ -1582,6 +1583,19 @@ The entire pipeline from application deletion to warehouse erasure completes in 
         'CDC for data lakes: do not write each event directly to S3. Use a Spark Structured Streaming micro-batch consumer (5-minute trigger) that reads from Kafka and upserts to Delta Lake. Run Delta OPTIMIZE daily to compact the small files the micro-batch pattern creates. Handle DELETE events explicitly — mark as soft-deleted or use Delta MERGE DELETE clause.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 25 builds a complete batch pipeline from scratch — extract, validate, transform, load, checkpoint — with full working Python code and every production decision explained as it is made.
+        </p>
+        <Link href="/learn/data-engineering/batch-pipeline-from-scratch" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 25 → Building a Batch Pipeline From Scratch
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

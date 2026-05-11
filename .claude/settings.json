@@ -7,10 +7,27 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/learn/sql)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/learn/sql/select-from)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/learn/sql/joins)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/learn/ai-ml)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/learn/ai-ml)",
+      "Bash(grep -n \"id:.*title:\\\\|^  {$\" /Users/asil/Chaduvuko/data/sql-freshcart.ts)",
+      "Bash(sed -i '' 's/id: 1, title: '\\\\''Databases & Setup'\\\\'', color: '\\\\''#10b981'\\\\'',/id: 1, title: '\\\\''Databases \\\\& Setup'\\\\'', color: '\\\\''#10b981'\\\\'', difficulty: '\\\\''Beginner'\\\\'',/' /Users/asil/Chaduvuko/data/sql-freshmart.ts)",
+      "Bash(sed -i '' 's/id: 2, title: '\\\\''Reading Data — SELECT'\\\\'', color: '\\\\''#06b6d4'\\\\'',/id: 2, title: '\\\\''Reading Data — SELECT'\\\\'', color: '\\\\''#06b6d4'\\\\'', difficulty: '\\\\''Beginner'\\\\'',/' /Users/asil/Chaduvuko/data/sql-freshmart.ts)",
+      "Bash(sed -i '' 's/id: 3, title: '\\\\''Filtering \\\\& Logic'\\\\'', color: '\\\\''#f97316'\\\\'',/id: 3, title: '\\\\''Filtering \\\\& Logic'\\\\'', color: '\\\\''#f97316'\\\\'', difficulty: '\\\\''Beginner'\\\\'',/' /Users/asil/Chaduvuko/data/sql-freshmart.ts)",
+      "Bash(sed -i '' 's/id: 4, title: '\\\\''Writing \\\\& Changing Data'\\\\'', color: '\\\\''#ef4444'\\\\'',/id: 4, title: '\\\\''Writing \\\\& Changing Data'\\\\'', color: '\\\\''#ef4444'\\\\'', difficulty: '\\\\''Beginner'\\\\'',/' /Users/asil/Chaduvuko/data/sql-freshmart.ts)",
+      "Bash(sed -i '' 's/id: 5, title: '\\\\''Database Design'\\\\'', color: '\\\\''#8b5cf6'\\\\'',/id: 5, title: '\\\\''Database Design'\\\\'', color: '\\\\''#8b5cf6'\\\\'', difficulty: '\\\\''Intermediate'\\\\'',/' /Users/asil/Chaduvuko/data/sql-freshmart.ts)",
+      "Bash(gh run *)",
+      "Bash(gh repo *)",
+      "Bash(grep -n \"id:.*section\\\\b\\\\|{ id: [0-9]\\\\+, title:\" /Users/asil/Chaduvuko/data/sql-freshcart.ts)",
+      "Bash(grep -n \"^  {$\\\\|^  { id:\" /Users/asil/Chaduvuko/data/sql-freshcart.ts)",
+      "Bash(grep -A1 \"^  {$\")",
+      "Bash(sort -t'e' -k2 -n)",
+      "Bash(awk -F'\"' '{print $2, FILENAME}')",
+      "Bash(grep -v \":1$\")",
+      "Bash(mkdir -p /Users/asil/Chaduvuko/content/cybersecurity && mkdir -p /Users/asil/Chaduvuko/app/learn/cybersecurity/\\\\[topic\\\\] && echo \"Directories created\")",
+      "Bash(grep -n '`$' /Users/asil/Chaduvuko/content/cybersecurity/home-lab-setup.tsx)"
     ],
     "additionalDirectories": [
-      "/Users/asil/Chaduvuko/app/learn/sql/[topic]"
+      "/Users/asil/Chaduvuko/app/learn/sql/[topic]",
+      "/Users/asil/Chaduvuko/app/learn/cybersecurity"
     ]
   }
 }

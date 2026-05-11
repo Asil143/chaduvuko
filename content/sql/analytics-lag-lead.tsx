@@ -78,7 +78,7 @@ export default function AnalyticsLagLead() {
     <LearnLayout
       title="Analytics with LAG and LEAD"
       description="Period-over-period comparison, retention analysis, funnel drop-off, session gap detection, first and last event patterns — every time-series analytics pattern built on offset window functions"
-      section="SQL — Module 53"
+      section="SQL — Module 54"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -1100,10 +1100,10 @@ ORDER BY store_id, order_date;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 54</strong>, you learn Recursive CTEs — querying hierarchical data like org charts, category trees, and bill-of-materials without fixed-depth self-joins, using the WITH RECURSIVE pattern.
+          In <strong>Module 56</strong>, you learn Recursive CTEs — querying hierarchical data like org charts, category trees, and bill-of-materials without fixed-depth self-joins, using the WITH RECURSIVE pattern.
         </p>
         <Link href="/learn/sql/recursive-cte" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 54 → Recursive CTEs
+          Module 56 → Recursive CTEs
         </Link>
       </div>
 

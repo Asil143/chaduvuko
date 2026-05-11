@@ -395,7 +395,7 @@ export default function DataEngineeringTrack() {
   return (
     <LearnLayout
       title="Data Engineering"
-      description="From zero to production-grade DE — 46 modules, no prerequisites"
+      description="From zero to production-grade DE — 47 modules, no prerequisites"
       section="Data Engineering"
       readTime="Self-paced"
       updatedAt="March 2026"
@@ -496,7 +496,7 @@ export default function DataEngineeringTrack() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              46 Modules. Zero to Advanced.
+              47 Modules. Zero to Advanced.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Every concept is

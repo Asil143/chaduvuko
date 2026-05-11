@@ -90,7 +90,7 @@ export default function IndexStrategies() {
     <LearnLayout
       title="Index Strategies"
       description="Production index design — composite column order, covering indexes, partial indexes, functional indexes, index-only scans, the write cost tradeoff, and the complete decision framework for when to add or drop an index"
-      section="SQL — Module 56"
+      section="SQL — Module 58"
       readTime="14–20 min"
       updatedAt="April 2026"
     >
@@ -1024,10 +1024,10 @@ ORDER BY pg_relation_size(indexrelid) DESC;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 57</strong>, you learn Query Best Practices — the full set of SQL writing habits that separate beginner queries from production-grade code: sargability, NULL handling, anti-patterns, and writing SQL that stays fast as data grows.
+          In <strong>Module 59</strong>, you learn Query Best Practices — the full set of SQL writing habits that separate beginner queries from production-grade code: sargability, NULL handling, anti-patterns, and writing SQL that stays fast as data grows.
         </p>
         <Link href="/learn/sql/query-best-practices" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 57 → Query Best Practices
+          Module 59 → Query Best Practices
         </Link>
       </div>
 

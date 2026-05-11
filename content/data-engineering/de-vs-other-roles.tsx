@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -79,7 +80,7 @@ export default function RolesComparisonModule() {
     <LearnLayout
       title="Data Engineer vs Analyst vs Scientist vs ML Engineer"
       description="Clear permanent boundaries between the four most confused roles in tech."
-      section="Data Engineering"
+      section="Data Engineering — Module 05"
       readTime="45 min"
       updatedAt="March 2026"
     >
@@ -1214,6 +1215,19 @@ The broader principle: data engineering success is measured by whether downstrea
         'For non-IT background candidates, Data Analyst (4–6 months to first job with SQL) is the most accessible entry point. Data Engineer (6–9 months) is next. Data Science requires longer because of the statistics foundation needed.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 06 covers the Indian data engineering job market — real salary data by city and company type, the companies hiring most aggressively, and how to break in from a non-IT background.
+        </p>
+        <Link href="/learn/data-engineering/de-india-job-market" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 06 → Data Engineering in the Indian Job Market (2026)
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -75,7 +76,7 @@ export default function BatchPipelineFromScratchModule() {
     <LearnLayout
       title="Building a Batch Pipeline From Scratch"
       description="From requirements to production deployment — schema validation, chunked extraction, transformation, upserts, observability, testing, and scheduling."
-      section="Data Engineering"
+      section="Data Engineering — Module 25"
       readTime="75 min"
       updatedAt="March 2026"
     >
@@ -1815,6 +1816,19 @@ The overall philosophy: write pure functions wherever possible (transformation, 
         'The three most common first-week issues: (1) unexpected rejections from unknown status values — inspect the DLQ, add source filter or update valid set; (2) slow runs from large backlogs after outages — add consecutive-failure monitoring to catch outages early; (3) unexpected Snowflake compute costs from MERGE full-table scans — add partition filter to the MERGE ON condition.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 26 covers idempotency and atomicity — the two properties that separate toy pipelines from production ones — and exactly how to make pipelines safe to restart after any failure at any stage.
+        </p>
+        <Link href="/learn/data-engineering/idempotency-atomicity" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 26 → Idempotency, Atomicity and Pipeline Restartability
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

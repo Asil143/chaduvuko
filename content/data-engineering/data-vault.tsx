@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -55,7 +56,7 @@ export default function DataVaultModule() {
     <LearnLayout
       title="Data Vault 2.0"
       description="Hubs, links, and satellites from first principles — hash keys, loading patterns, Business Vault, PIT tables, and when to choose Data Vault over dimensional modelling."
-      section="Data Engineering"
+      section="Data Engineering — Module 35"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -763,6 +764,19 @@ The critical mistake is choosing Data Vault because it sounds more enterprise-gr
         'The hybrid enterprise pattern: Data Vault for integration (Raw Vault + Business Vault), dimensional model for delivery (Information Mart). Never choose Data Vault because it sounds more enterprise-grade — the complexity cost is real and must be justified by specific multi-source integration and auditability requirements.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 36 covers data quality — the six dimensions (completeness, accuracy, consistency, uniqueness, timeliness, validity), how to test for each in dbt, and what breaks downstream when quality is skipped.
+        </p>
+        <Link href="/learn/data-engineering/data-quality" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 36 → Data Quality — Dimensions, Testing and Validation
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -56,7 +57,7 @@ export default function PerformanceTuningModule() {
     <LearnLayout
       title="Performance Tuning — Spark, SQL, and Pipeline Optimisation"
       description="Spark execution model, partitioning, shuffles, broadcast joins, predicate pushdown, SQL query planning, incremental strategies, and diagnosing slow pipelines."
-      section="Data Engineering"
+      section="Data Engineering — Module 43"
       readTime="70 min"
       updatedAt="March 2026"
     >
@@ -1116,6 +1117,19 @@ Fifth, check for architectural issues: is the same source data read multiple tim
         'Cache strategically: if the same DataFrame is read twice in one pipeline run, cache() after the first read, use for both downstream operations, then unpersist() after use. Each S3 read has real cost in time and money. Redundant reads of large DataFrames are the easiest pipeline performance wins to find and fix.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 44 covers DataOps and CI/CD for data pipelines — how to test pipeline changes before they hit production, staging environment design, rollback strategies, and automated deployment patterns.
+        </p>
+        <Link href="/learn/data-engineering/cicd-pipelines" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 44 → DataOps and CI/CD for Data Pipelines
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

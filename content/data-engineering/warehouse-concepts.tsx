@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function WarehouseConceptsModule() {
     <LearnLayout
       title="Data Warehouse Concepts"
       description="Columnar storage, query execution, result caching, virtual warehouses, cluster keys, and why Snowflake queries are fast."
-      section="Data Engineering"
+      section="Data Engineering — Module 31"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -1149,6 +1150,19 @@ Fifth, check if the result cache was invalidated more frequently. If the pipelin
         'Read query profiles after any slow query. In Snowflake: check partitions scanned vs total (pruning), spill to disk (warehouse too small), and the slowest operator (bottleneck). In PostgreSQL EXPLAIN ANALYZE: check for Seq Scan where Index Scan is expected, large discrepancy between estimated and actual rows (stale statistics), and DS_DIST_BOTH in Redshift (wrong distribution keys).',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 32 covers Lakehouse Architecture — why it emerged, how table formats like Delta Lake and Iceberg bring ACID guarantees to object storage, and how it combines the best of warehouses and data lakes.
+        </p>
+        <Link href="/learn/data-engineering/lakehouse-architecture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 32 → Lakehouse Architecture — Why It Exists and How It Works
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

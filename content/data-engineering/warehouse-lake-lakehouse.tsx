@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -132,7 +133,7 @@ export default function WarehouseLakeLakehouseModule() {
     <LearnLayout
       title="Data Warehouse vs Data Lake vs Lakehouse"
       description="Three answers to where we store data — the honest trade-offs and how to choose."
-      section="Data Engineering"
+      section="Data Engineering — Module 11"
       readTime="55 min"
       updatedAt="March 2026"
     >
@@ -1174,6 +1175,19 @@ Expected outcome: keep 1 TB in Snowflake at $480/month, move 3.5 TB to S3 Delta 
         'The most impactful single migration a data engineer can make on a legacy CSV data lake is: convert all files to Parquet + add date partitioning + add Delta Lake. This typically reduces query time by 10–20×, reduces storage cost by 5–10×, and adds GDPR-compliant deletion capability — all without changing the downstream SQL interface.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 12 covers the building blocks of every database — schemas, tables, primary keys, foreign keys, and indexes — at the depth that separates engineers who can design from engineers who can only query.
+        </p>
+        <Link href="/learn/data-engineering/schemas-tables-keys" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 12 → Schemas, Tables, Keys and Indexes
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

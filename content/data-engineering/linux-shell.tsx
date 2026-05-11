@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -75,7 +76,7 @@ export default function LinuxShellModule() {
     <LearnLayout
       title="Linux and Shell Scripting for Data Engineers"
       description="The commands and scripts every DE uses daily — files, processes, cron, log analysis, and bash."
-      section="Data Engineering"
+      section="Data Engineering — Module 16"
       readTime="65 min"
       updatedAt="March 2026"
     >
@@ -1445,6 +1446,19 @@ This entire check takes about two minutes and catches the most common ingestion-
         'The diagnostic sequence for a stuck pipeline: ps aux to check it is running, df -h to check disk, du -sh to find the space consumer, lsof -p PID to check open files, tail -f on the log file to see last activity, and pg_stat_activity to check for database lock waits. These five checks diagnose 90% of production pipeline failures.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 17 covers Git for data teams — branching strategies, managing large data files, pre-commit hooks, and the workflows that keep teams moving without stepping on each other.
+        </p>
+        <Link href="/learn/data-engineering/git-for-data" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 17 → Git and Version Control for Data Projects
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

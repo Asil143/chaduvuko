@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function IdempotencyAtomicityModule() {
     <LearnLayout
       title="Idempotency, Atomicity, and Pipeline Restartability"
       description="The three properties that separate reliable pipelines from fragile ones — precise definitions, implementation at every layer, and automatic failure recovery."
-      section="Data Engineering"
+      section="Data Engineering — Module 26"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -1397,6 +1398,19 @@ The broader principle: the pipeline should have no externally-visible side effec
         'The root cause of most data quality incidents is non-idempotent pipelines combined with a trigger that causes a rerun: manual backfill, Airflow bug, infrastructure restart, or test run in production. The defence is making every pipeline idempotent by default — not as an afterthought when the incident happens.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 27 covers error handling and retries — the categories of pipeline failures, exponential backoff patterns, dead letter queues, and how to build alerting that pages the right person at the right time.
+        </p>
+        <Link href="/learn/data-engineering/error-handling-retries" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 27 → Error Handling, Retries and Dead Letter Queues
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

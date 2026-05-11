@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -79,7 +80,7 @@ export default function DEEcosystemModule() {
     <LearnLayout
       title="The Data Engineering Ecosystem — Map of All the Tools"
       description="Every tool category, what it solves, and how they all connect."
-      section="Data Engineering"
+      section="Data Engineering — Module 04"
       readTime="50 min"
       updatedAt="March 2026"
     >
@@ -1346,6 +1347,19 @@ I would not implement a table format (Delta Lake, Iceberg) or a formal data qual
         'Match your stack to your current scale and team size, not to what FAANG uses. A two-person team does not need Kubernetes-managed Airflow, multi-cluster Kafka, and Apache Iceberg. Simplicity compounds: the simpler the stack, the faster you build, the more reliable you ship.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 05 draws permanent, clear boundaries between data engineers, analysts, scientists, and ML engineers — who does what, where each role ends, and which one matches what you want to build.
+        </p>
+        <Link href="/learn/data-engineering/de-vs-other-roles" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 05 → Data Engineer vs Analyst vs Scientist vs ML Engineer
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

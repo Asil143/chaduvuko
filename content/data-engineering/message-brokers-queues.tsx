@@ -2,6 +2,7 @@
 
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function MessageBrokersQueuesModule() {
     <LearnLayout
       title="Message Brokers and Queues — How They Work Internally"
       description="How messages flow from producer to consumer. Queues vs topics, durability, replication, compaction, backpressure, dead letter queues, ordering guarantees, and exactly-once semantics — the internal mechanics without tool noise."
-      section="Data Engineering · Phase 6"
+      section="Data Engineering — Module 41"
       readTime="50 min"
       updatedAt="March 2026"
     >
@@ -1081,6 +1082,19 @@ while True:
         'Ordering is guaranteed within a partition, not across partitions or across the whole topic. The three most common ordering violations in production are: in-flight producer retries, merging events from multiple partitions by arrival time, and unclean leader election with acks=1.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 42 covers distributed systems — CAP theorem, consistency models, partitioning, replication, and fault tolerance — explained with data engineering scenarios, not abstract distributed systems theory.
+        </p>
+        <Link href="/learn/data-engineering/distributed-systems" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 42 → Distributed Systems for Data Engineers
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

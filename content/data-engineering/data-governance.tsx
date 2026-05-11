@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -56,7 +57,7 @@ export default function DataGovernanceModule() {
     <LearnLayout
       title="Data Governance — Lineage, Cataloging, Access Control, and Data Mesh"
       description="What governance actually means in practice — lineage, cataloging, access control, GDPR, PII handling, and the data mesh organizational pattern."
-      section="Data Engineering"
+      section="Data Engineering — Module 38"
       readTime="65 min"
       updatedAt="March 2026"
     >
@@ -1173,6 +1174,19 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
         'Lineage for impact analysis workflow: before changing a model, run dbt ls --select +model_name+ to find all downstream models. Cross-check in DataHub for non-dbt consumers (BI tools, APIs). Update all downstream models together in one deployment. Never change a Gold column definition without knowing all downstream consumers — one unplanned downstream breakage erodes team trust more than any performance issue.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 39 covers security and compliance — encryption at rest and in transit, PII handling, GDPR, and the India DPDP Act — with practical patterns for building pipelines that are compliant by design.
+        </p>
+        <Link href="/learn/data-engineering/security-compliance" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 39 → Security and Compliance for Data Engineers
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

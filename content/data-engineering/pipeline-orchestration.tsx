@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function PipelineOrchestrationModule() {
     <LearnLayout
       title="Pipeline Orchestration — Airflow, DAGs, Scheduling, and Dependency Management"
       description="What orchestration actually does, Airflow architecture, DAG design, scheduling, backfills, Sensors, and when to use alternatives."
-      section="Data Engineering"
+      section="Data Engineering — Module 28"
       readTime="65 min"
       updatedAt="March 2026"
     >
@@ -1351,6 +1352,19 @@ Use Sensors when: you need to check an external condition that is not controlled
         'Airflow is dominant and must be known deeply. Prefect is Pythonic and easier for local development. Dagster is asset-centric and has strong data lineage — aligns well with the dbt+ELT pattern. For interviews: know Airflow thoroughly, know Prefect/Dagster conceptually, have an opinion on trade-offs.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 29 covers data lake architecture — how to design zones that stay useful for years, the raw and processed zone patterns, and the five anti-patterns that turn a data lake into an unmaintainable swamp.
+        </p>
+        <Link href="/learn/data-engineering/data-lake-architecture" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 29 → Data Lake Architecture — Design, Zones and Anti-Patterns
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

@@ -96,7 +96,7 @@ export default function UserDefinedFunctions() {
     <LearnLayout
       title="User-Defined Functions"
       description="Build reusable scalar, table-valued, and SQL functions — IMMUTABLE vs STABLE vs VOLATILE, overloading, security definer, and assembling a production function library"
-      section="SQL — Module 49"
+      section="SQL — Module 50"
       readTime="12–18 min"
       updatedAt="April 2026"
     >
@@ -1194,10 +1194,10 @@ LIMIT 10;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 50</strong>, you learn Triggers — automatic database responses to INSERT, UPDATE, and DELETE events, with row-level and statement-level triggers, BEFORE vs AFTER timing, and audit log patterns.
+          In <strong>Module 51</strong>, you learn Triggers — automatic database responses to INSERT, UPDATE, and DELETE events, with row-level and statement-level triggers, BEFORE vs AFTER timing, and audit log patterns.
         </p>
         <Link href="/learn/sql/triggers" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 50 → Triggers
+          Module 51 → Triggers
         </Link>
       </div>
 

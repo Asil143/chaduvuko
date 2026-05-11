@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -132,7 +133,7 @@ export default function SchemasTablesKeysModule() {
     <LearnLayout
       title="Schemas, Tables, Keys and Indexes — The Building Blocks"
       description="The foundation of every database — what each concept is and why it matters."
-      section="Data Engineering"
+      section="Data Engineering — Module 12"
       readTime="50 min"
       updatedAt="March 2026"
     >
@@ -1332,6 +1333,19 @@ Third, DECIMAL type correction if financial amounts are stored as FLOAT. The flo
         'Data warehouses define constraints as documentation but do not enforce them. Your pipeline code and dbt tests are the enforcement layer in a warehouse. Always add at minimum: unique tests on primary key columns, not-null tests on required columns, and relationship tests on foreign key columns.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 13 explains ACID properties and transactions — what each guarantee means in practice, and exactly what breaks in each real failure scenario when those guarantees are violated.
+        </p>
+        <Link href="/learn/data-engineering/acid-transactions" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 13 → ACID Properties and Transactions
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

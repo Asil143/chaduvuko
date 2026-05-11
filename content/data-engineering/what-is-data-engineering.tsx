@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -87,7 +88,7 @@ export default function WhatIsDataEngineeringModule() {
     <LearnLayout
       title="What is Data Engineering?"
       description="The role, the lifecycle, what DEs actually do, and how to break in."
-      section="Data Engineering"
+      section="Data Engineering — Module 02"
       readTime="50 min"
       updatedAt="March 2026"
     >
@@ -1053,6 +1054,19 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
         'The fastest path to a first DE job from a non-IT background: Python + SQL + 3 real projects on cloud free tiers + one cloud certification + GitHub portfolio. Achievable in 6–9 months of focused work.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 03 traces data from the moment a user places an order all the way to the dashboard a business leader reads the next morning — the complete end-to-end story.
+        </p>
+        <Link href="/learn/data-engineering/how-data-moves" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 03 → How Data Moves Through a Company
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

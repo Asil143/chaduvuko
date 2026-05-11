@@ -108,7 +108,7 @@ export default function DataTypes() {
     <LearnLayout
       title="SQL Data Types"
       description="What types exist, which to choose for each use case, how types affect storage and performance, and how type mismatches cause silent bugs in calculations and comparisons"
-      section="SQL — Module 17"
+      section="SQL — Module 18"
       readTime="12–16 min"
       updatedAt="April 2026"
     >

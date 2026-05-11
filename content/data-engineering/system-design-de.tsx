@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import  { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Data Engineering System Design — How to Design Any Data System | Chaduvuko',
@@ -154,7 +155,7 @@ export default function SystemDesignDEModule() {
     <LearnLayout
       title="Data Engineering System Design"
       description="A complete framework for designing any data system from scratch — capacity estimation, storage selection, pipeline architecture, trade-off analysis, and five complete worked designs."
-      section="Data Engineering · Phase 6"
+      section="Data Engineering — Module 46"
       readTime="80 min"
       updatedAt="March 2026"
     >
@@ -1301,6 +1302,54 @@ spark.sql("""
         </HighlightBox>
       </section>
 
+      <Divider />
+
+      {/* ── Error Library ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }}>
+        <SectionTag text="// Error Library" />
+        <SectionTitle>Design Mistakes You Will Make — And Exactly Why They Happen</SectionTitle>
+
+        {[
+          {
+            error: `Architecture review rejected: proposed design requires globally ordered events across all Kafka partitions at 50,000 events/second`,
+            cause: 'Global ordering in Kafka requires a single partition — no parallelism. A single Kafka partition handles roughly 10-50MB/s depending on message size. At 50,000 events/second with average 1KB messages, that is 50MB/s — well beyond a single partition. The design cannot work at the stated throughput. Kafka guarantees ordering within a partition, not across partitions.',
+            fix: 'Almost all "I need global ordering" requirements dissolve when examined carefully. You usually need ordering per entity (per customer, per order), not global ordering. Partition by the entity key — customer_id or order_id — and you get guaranteed ordering within each entity\'s partition. State explicitly in the design: "ordering is guaranteed per [entity] via consistent partition key." The interviewer is satisfied because this is the correct answer, not a workaround.',
+          },
+          {
+            error: `Production PostgreSQL begins timing out at 02:15 every night — investigation reveals a pipeline runs a GROUP BY query that takes 8 minutes and locks rows during peak background job window`,
+            cause: 'Analytics queries against OLTP databases are a design anti-pattern that works until it doesn\'t. The query was running in development against a 100k-row table with no problem. In production with 20 million rows and concurrent writes, the aggregation takes 8 minutes, holds shared locks, and causes transaction timeouts for application writes. The design failed to separate analytical reads from transactional writes.',
+            fix: 'Read from a read replica — PostgreSQL, MySQL, and all cloud-managed databases support read replicas that receive writes but accept zero-impact analytical reads. Or extract data to the warehouse and run analytics there — that is what a warehouse is for. Never run non-trivial aggregations against a production OLTP primary. If this is an existing system you\'re inheriting: add the read replica immediately, reroute the pipeline to it, and queue the proper warehouse pipeline for the next sprint.',
+          },
+          {
+            error: `Data warehouse cost increased 10× in one month — 200 concurrent dashboard users each generate a full table scan every 10 seconds`,
+            cause: 'The architecture served a real-time dashboard by querying Snowflake or BigQuery directly on every refresh. At 10-second refresh intervals with 200 users: 200 × 6 queries/minute = 1,200 full table scans per minute. Columnar warehouses charge per byte scanned — 1,200 scans of a 50GB table at $5/TB = $300/hour. The design optimised for development convenience (one query, always fresh) without estimating query cost at scale.',
+            fix: 'Real-time dashboards must not read from the warehouse on every refresh. Design a pre-computation layer: a streaming aggregation job (Spark Structured Streaming, Flink) writes aggregate results — revenue_by_hour, active_users_by_region — into Redis every 30 seconds. The dashboard API reads from Redis. Sub-millisecond latency, zero scan cost, 200 concurrent users change nothing. The warehouse runs scheduled batch queries for deeper historical analysis. Separate real-time serving from historical analysis at the architecture level.',
+          },
+          {
+            error: `Backfill pipeline produces 2× row count — second run inserted duplicates because the first run timed out at 60% complete and was restarted from the beginning`,
+            cause: 'The backfill used INSERT INTO ... SELECT without any deduplication logic. The first run inserted 60% of rows then timed out. The restart ran the full extraction again and inserted all rows — including 60% that already existed. OLAP tables do not enforce primary key uniqueness by default in most warehouses (Snowflake, BigQuery, Redshift). Duplicates were silently accepted, and SUM(revenue) is now 1.6× the real number.',
+            fix: 'Every pipeline write must be idempotent. For backfill: use MERGE (upsert) with the natural primary key, not INSERT. Or partition by date and use OVERWRITE PARTITION — each run overwrites only its partition, not the whole table. Chunk the backfill into date ranges: process one month at a time, mark each chunk complete in a checkpoint table, and restart from the last incomplete chunk. Test idempotency explicitly before running backfill: run twice on a dev table, assert row count is unchanged after the second run.',
+          },
+          {
+            error: `All downstream consumers crash after producer deployed a schema change — new required field with no default value breaks deserialization of existing messages in the topic`,
+            cause: 'The design had no schema evolution strategy. The producer team added a required field is_promotional_order (non-nullable boolean) and deployed. The Kafka topic still contains millions of old messages without this field. When consumers read old messages and try to deserialize them into the new schema, deserialization fails with a field missing error. All consumers are stuck — they cannot skip the old messages, so the consumer group offset cannot advance.',
+            fix: 'All schema changes must be backward-compatible until all old messages are consumed. Adding a required field is a breaking change — add it as optional with a default value instead. Use a schema registry (Confluent Schema Registry, AWS Glue Schema Registry) to enforce compatibility rules at publish time: reject schema changes that are not BACKWARD compatible. The compatibility check runs before the producer is allowed to publish — breaking changes are caught in CI, not in production. For this incident: roll back the producer to the old schema, let consumers drain the backlog, then redeploy with the field as optional.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--red,#ff4757)', marginBottom: 12, background: 'rgba(255,71,87,0.08)', border: '1px solid rgba(255,71,87,0.2)', borderRadius: 6, padding: '8px 12px', lineHeight: 1.5 }}>{item.error}</div>
+            <div style={{ marginBottom: 8 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase' }}>Cause: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.cause}</span>
+            </div>
+            <div>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase' }}>Fix: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.fix}</span>
+            </div>
+          </div>
+        ))}
+      </section>
+
       <KeyTakeaways items={[
         'Never start designing before asking requirements. Volume, velocity, latency SLA, consistency requirements, team size, and cost constraints determine every architectural decision. A design for 10k events/day and a design for 10M events/second have almost nothing in common.',
         'Capacity estimation drives decisions. Calculate storage per day, peak throughput in events/second and MB/second, compute requirements per event, and total cost at scale. Use these numbers to justify tool choices — not intuition.',
@@ -1314,6 +1363,19 @@ spark.sql("""
         'Senior candidates are distinguished not by knowing more tools, but by asking better questions, estimating before deciding, articulating trade-offs precisely, and proactively identifying failure modes before the interviewer finds them.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 47 is 60 complete interview answers across Python, SQL, pipelines, data modelling, architecture, system design, and behavioural questions — written at senior engineer depth and ready to use.
+        </p>
+        <Link href="/learn/data-engineering/de-interview-questions" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 47 → Interview Prep — 60 Complete Answers
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

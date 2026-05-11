@@ -78,7 +78,7 @@ export default function RecursiveCte() {
     <LearnLayout
       title="Recursive CTEs"
       description="Query hierarchical and graph data without fixed-depth self-joins — org charts, category trees, bill-of-materials, path finding, and number generation using WITH RECURSIVE"
-      section="SQL — Module 54"
+      section="SQL — Module 56"
       readTime="16–24 min"
       updatedAt="April 2026"
     >
@@ -1224,10 +1224,10 @@ ORDER BY sort_key;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 55</strong>, you learn EXPLAIN and Query Optimisation — reading execution plans, identifying bottlenecks, rewriting slow queries, and the systematic approach to making any query faster.
+          In <strong>Module 57</strong>, you learn EXPLAIN and Query Optimisation — reading execution plans, identifying bottlenecks, rewriting slow queries, and the systematic approach to making any query faster.
         </p>
         <Link href="/learn/sql/explain-analyze" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 55 → EXPLAIN and Query Optimisation
+          Module 57 → EXPLAIN and Query Optimisation
         </Link>
       </div>
 

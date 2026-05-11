@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -56,7 +57,7 @@ export default function InfrastructureAsCodeModule() {
     <LearnLayout
       title="Infrastructure as Code for Data Engineering"
       description="Terraform fundamentals, provisioning Snowflake warehouses, S3 buckets, Airflow environments, IAM roles, and managing data infrastructure with state, modules, and CI/CD."
-      section="Data Engineering"
+      section="Data Engineering — Module 45"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -1256,6 +1257,19 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
         'Onboarding a new engineer with IaC: add their email to the analysts variable list, open a PR, CI runs terraform plan showing the user creation, merge after review, Terraform provisions the Snowflake user with correct roles, IAM policies, and dev S3 access in minutes. Offboarding is the reverse: remove the email, PR, merge, access revoked automatically. Zero tickets, zero forgotten accounts.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 46 covers data engineering system design — the complete framework for designing any data system from scratch, with five fully worked designs for scenarios you will encounter in senior interviews and real jobs.
+        </p>
+        <Link href="/learn/data-engineering/system-design-de" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 46 → Data Engineering System Design
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

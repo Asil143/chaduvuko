@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -56,7 +57,7 @@ export default function CICDPipelinesModule() {
     <LearnLayout
       title="CI/CD for Data Pipelines"
       description="Testing dbt models in CI, environment promotion, blue-green deployments, Airflow deployment patterns, slim CI, and building a safe deployment pipeline for data transformations."
-      section="Data Engineering"
+      section="Data Engineering — Module 44"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -1122,6 +1123,19 @@ The goal is not process for its own sake — it is making the data platform trus
         'The PR process and CI gates are an investment in trust. Analysts who have been burned by wrong data distrust every number. Analysts who trust the data use it confidently and make better decisions. The minutes spent in CI are returned many times over in analyst confidence, fewer post-incident investigations, and stakeholder trust in the data platform.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 45 covers Infrastructure as Code — provisioning cloud data infrastructure with Terraform so your environments are version-controlled, reproducible, and never subject to configuration drift.
+        </p>
+        <Link href="/learn/data-engineering/infrastructure-as-code" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 45 → Infrastructure as Code for Data Engineers
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -56,7 +57,7 @@ export default function DataQualityModule() {
     <LearnLayout
       title="Data Quality — Dimensions, Testing, Monitoring, and Contracts"
       description="The six dimensions of quality, dbt tests at every layer, anomaly detection, data contracts, and building quality into pipelines rather than checking at the end."
-      section="Data Engineering"
+      section="Data Engineering — Module 36"
       readTime="65 min"
       updatedAt="March 2026"
     >
@@ -1343,6 +1344,19 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
         'The quality monitoring schema (monitoring.data_quality_results) records every check result: table, check name, status, failure count, failure rate, timestamp. Use it for: daily quality scorecards, trend analysis (quality improving or degrading?), SLA reporting, and post-incident investigation to determine when quality first degraded.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 37 covers data observability — pipeline metrics, structured logging, anomaly detection, and the alerting design that ensures you know about data problems before your stakeholders do.
+        </p>
+        <Link href="/learn/data-engineering/monitoring-observability" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 37 → Data Observability — Metrics, Logging and Anomaly Detection
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

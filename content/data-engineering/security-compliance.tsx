@@ -1,6 +1,7 @@
 // app/learn/data-engineering/security-compliance/page.tsx
 
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 import { Metadata } from 'next'
@@ -188,7 +189,7 @@ export default function SecurityCompliancePage() {
     <LearnLayout
       title="Security and Compliance for Data Engineers"
       description="GDPR and the India DPDP Act — what they mean for your pipelines and how to build systems that are compliant by design."
-      section="Data Engineering · Phase 6"
+      section="Data Engineering — Module 39"
       readTime="50 min"
       updatedAt="March 2026"
     >
@@ -936,6 +937,19 @@ connection_string = (
         'Compliance is cheapest when built in at design time. Retrofitting a non-compliant pipeline is 10× harder.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 40 covers streaming data — event-driven architecture, producers and consumers, offsets, consumer groups, and replay — the core concepts behind every streaming system, without locking you to a specific tool.
+        </p>
+        <Link href="/learn/data-engineering/streaming-data" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 40 → Streaming Data — What It Is and How It Works
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

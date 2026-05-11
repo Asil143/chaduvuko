@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function GitForDataModule() {
     <LearnLayout
       title="Git and Version Control for Data Projects"
       description="Branching strategies, large file handling, dbt workflows, CI/CD, and undoing mistakes safely."
-      section="Data Engineering"
+      section="Data Engineering — Module 17"
       readTime="55 min"
       updatedAt="March 2026"
     >
@@ -1590,6 +1591,19 @@ Step four: prevent recurrence. Add .env and any other credential-containing file
         'A good data PR includes: what changed and why, what tests were added, how to verify the output, and downstream impact. Review checks: NULL handling, duplicate risk from JOINs, filter pushdown, test coverage on grain columns, and naming consistency.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 18 covers REST APIs for data ingestion — authentication, pagination, rate limiting, and how to build robust ingestion classes that handle all three reliably without manual intervention.
+        </p>
+        <Link href="/learn/data-engineering/working-with-apis" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 18 → Working with APIs — REST, Auth, Pagination, Rate Limits
+        </Link>
+      </div>
     </LearnLayout>
   )
 }

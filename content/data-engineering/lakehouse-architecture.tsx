@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
+import Link from 'next/link'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
@@ -128,7 +129,7 @@ export default function LakehouseArchitectureModule() {
     <LearnLayout
       title="Lakehouse Architecture"
       description="How the lakehouse converges lake and warehouse, open table format mechanics, ACID on object storage, Unity Catalog, Iceberg in practice, and when to choose it."
-      section="Data Engineering"
+      section="Data Engineering — Module 32"
       readTime="60 min"
       updatedAt="March 2026"
     >
@@ -1270,6 +1271,19 @@ My typical recommendation: if the team is building a new platform and has both M
         'Choose the lakehouse when ML and SQL analytics must share data without duplication, data volume is large enough that duplication is expensive, multiple engines are required, or building a new platform. Stick with a managed warehouse (Snowflake, BigQuery) when the workload is primarily SQL analytics, team has no Spark expertise, sub-second interactive performance is critical, or an existing warehouse investment is in place.',
       ]} />
 
+    
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 33 covers dimensional modelling — grain declaration, the four fact table types, star schema design, surrogate keys, and the modern wide-table pattern used in lakehouse architectures.
+        </p>
+        <Link href="/learn/data-engineering/data-modelling" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 33 → Data Modelling — Dimensional, Star and Snowflake Schema
+        </Link>
+      </div>
     </LearnLayout>
   )
 }
