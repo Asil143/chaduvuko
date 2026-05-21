@@ -132,14 +132,14 @@
     margin-bottom: 0.75rem;
   }
 
-  .prose-vedalera p {
+  .prose-chaduvuko p {
     font-family: 'Lora', serif;
     font-size: 1.05rem;
     color: var(--text2);
     line-height: 1.85;
     margin-bottom: 1.4rem;
   }
-  .prose-vedalera h2 {
+  .prose-chaduvuko h2 {
     font-family: 'Syne', sans-serif;
     font-weight: 700;
     font-size: 1.5rem;
@@ -149,14 +149,14 @@
     padding-top: 2.5rem;
     border-top: 1px solid var(--border);
   }
-  .prose-vedalera h3 {
+  .prose-chaduvuko h3 {
     font-family: 'Syne', sans-serif;
     font-weight: 600;
     font-size: 1.1rem;
     color: var(--text);
     margin: 2rem 0 0.65rem;
   }
-  .prose-vedalera strong { color: var(--text); font-weight: 600; }
+  .prose-chaduvuko strong { color: var(--text); font-weight: 600; }
 
   .callout {
     background: var(--bg2);

@@ -3,9 +3,9 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { X, Zap, Flame, BookOpen, Trophy, ChevronRight, LayoutDashboard } from 'lucide-react'
 
-const KEY_COMPLETED  = 'vedalera_progress'
-const KEY_XP         = 'vedalera_xp'
-const KEY_STREAK     = 'vedalera_streak'
+const KEY_COMPLETED  = 'chaduvuko_progress'
+const KEY_XP         = 'chaduvuko_xp'
+const KEY_STREAK     = 'chaduvuko_streak'
 
 const ALL_LESSONS = [
   { href: '/learn/what-is-data-engineering', title: 'What is Data Engineering?',  track: 'Foundations', color: '#00c2ff' },

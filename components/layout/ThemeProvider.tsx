@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import { THEMES } from '@/components/ui/ThemePicker'
 
-const KEY = 'vedalera_theme'
+const KEY = 'chaduvuko_theme'
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {

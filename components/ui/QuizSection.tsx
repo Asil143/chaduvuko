@@ -33,7 +33,7 @@ export function QuizSection({ pageHref, onPass }: Props) {
       setXpAwarded(true)
       onPass?.(QUIZ_XP)
       try {
-        const key = 'vedalera_quiz_pass'
+        const key = 'chaduvuko_quiz_pass'
         const existing = JSON.parse(localStorage.getItem(key) || '[]')
         if (!existing.includes(pageHref)) {
           localStorage.setItem(key, JSON.stringify([...existing, pageHref]))

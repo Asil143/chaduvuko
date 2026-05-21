@@ -46,10 +46,10 @@ const BADGES = [
   { id: 'all_done',       label: 'Data Engineer',    icon: '🎓', desc: 'Complete every lesson',                check: (c: Set<string>) => LESSONS.every(l => c.has(l.id)) },
 ]
 
-const KEY_COMPLETED = 'vedalera_progress'
-const KEY_XP = 'vedalera_xp'
-const KEY_STREAK = 'vedalera_streak'
-const KEY_LAST_VISIT = 'vedalera_last_visit'
+const KEY_COMPLETED = 'chaduvuko_progress'
+const KEY_XP = 'chaduvuko_xp'
+const KEY_STREAK = 'chaduvuko_streak'
+const KEY_LAST_VISIT = 'chaduvuko_last_visit'
 
 function getLevel(xp: number) {
   return LEVELS.findLast(l => xp >= l.min) || LEVELS[0]

@@ -7,7 +7,7 @@ const topics = [
   { icon: '☁️', title: 'Azure updates', desc: 'New ADF features, Databricks releases, Fabric announcements' },
   { icon: '🟠', title: 'AWS releases', desc: 'Glue, Redshift, and Kinesis updates and new launches' },
   { icon: '🔵', title: 'GCP news', desc: 'BigQuery features, Dataflow improvements, Composer updates' },
-  { icon: '📚', title: 'New tutorials', desc: 'Notified when new tutorial pages go live on VedaEra' },
+  { icon: '📚', title: 'New tutorials', desc: 'Notified when new tutorial pages go live on Chaduvuko' },
   { icon: '🏗️', title: 'New projects', desc: 'Alerts when new end-to-end project walkthroughs publish' },
   { icon: '🎯', title: 'Interview tips', desc: 'Weekly question and detailed answer to practice with' },
 ]
@@ -53,7 +53,7 @@ export default function NewsletterPage() {
                 <CheckCircle size={48} className="mx-auto mb-4" style={{ color: 'var(--green)' }} />
                 <h2 className="font-display font-bold text-xl mb-2" style={{ color: 'var(--text)' }}>You are in!</h2>
                 <p className="text-sm mb-6" style={{ color: 'var(--muted)', fontFamily: 'Lora, serif' }}>
-                  Welcome to the VedaEra community. Watch your inbox for the first edition.
+                  Welcome to the Chaduvuko community. Watch your inbox for the first edition.
                 </p>
                 <Link href="/learn/roadmap" className="btn-primary">
                   Start the Roadmap <ArrowRight size={14} />
@@ -62,7 +62,7 @@ export default function NewsletterPage() {
             ) : (
               <>
                 <h2 className="font-display font-bold text-xl mb-1.5" style={{ color: 'var(--text)' }}>Get the weekly digest</h2>
-                <p className="text-sm mb-6" style={{ color: 'var(--muted)' }}>Join engineers learning data engineering with VedaEra.</p>
+                <p className="text-sm mb-6" style={{ color: 'var(--muted)' }}>Join engineers learning data engineering with Chaduvuko.</p>
                 <form onSubmit={handleSubmit} className="space-y-3">
                   <div>
                     <label className="block text-xs font-mono mb-1.5" style={{ color: 'var(--muted)' }}>Email address</label>

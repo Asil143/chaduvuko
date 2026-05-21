@@ -288,7 +288,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
               </div>
 
               {/* Page content */}
-              <div className="prose-vedalera">
+              <div className="prose-chaduvuko">
                 {sqlSlug && <SQLSectionNav slug={sqlSlug} />}
                 {children}
               </div>

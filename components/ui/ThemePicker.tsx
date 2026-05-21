@@ -60,7 +60,7 @@ export const THEMES = [
   },
 ]
 
-const KEY = 'vedalera_theme'
+const KEY = 'chaduvuko_theme'
 
 export function applyTheme(id: string) {
   const theme = THEMES.find(t => t.id === id) || THEMES[1]
