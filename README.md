@@ -1,72 +1,163 @@
-<h1 align="center">
-  <br>
-  ⚡ Chaduvuko
-  <br>
-</h1>
-
-<h3 align="center">Free, structured learning for data engineers and developers.</h3>
+<h1 align="center">Chaduvuko</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=nextdotjs" />
-  <img src="https://img.shields.io/badge/Supabase-Auth%20%2B%20DB-3ecf8e?style=flat-square&logo=supabase" />
-  <img src="https://img.shields.io/badge/DuckDB-WebAssembly-f7c94b?style=flat-square" />
+  <strong>Learn how real companies build real systems. Free. Structured. Practical.</strong>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/Live-chaduvuko.com-0070f3?style=flat-square" />
+  <img src="https://img.shields.io/badge/Stack-Next.js_14-black?style=flat-square&logo=nextdotjs" />
+  <img src="https://img.shields.io/badge/SQL-DuckDB_WebAssembly-f7c94b?style=flat-square" />
+  <img src="https://img.shields.io/badge/Content-80%2B_Topics_Free-34d399?style=flat-square" />
+  <img src="https://img.shields.io/badge/Status-Under_Active_Development-orange?style=flat-square" />
 </p>
 
-<p align="center">
-  Most learning platforms are either too expensive, too shallow, or just a pile of YouTube links.
-  Chaduvuko is structured, free, and built by someone who went through the grind.
-</p>
+---
+
+## The Problem
+
+Most learning platforms teach you how to write a SQL query. None of them teach you how SQL fits into a real data pipeline at a company running 100TB of data through Snowflake, Azure Synapse, and a Databricks cluster.
+
+Most tutorials show you a toy example. Nobody shows you what the actual AWS Glue job looks like. What the Firestore security rule looks like. What the ADF pipeline looks like when it runs in production at 2 AM.
+
+That's the gap.
+
+Students — especially international students, B.Tech graduates, and self-taught engineers — spend years learning things that look like real skills but don't map to how systems actually work at companies. They graduate knowing Python syntax but not how to build a Spark job that reads from ADLS Gen2 and writes to Azure Synapse with proper partitioning and error handling.
+
+Chaduvuko shows you the real thing.
 
 ---
 
 ## What is Chaduvuko?
 
-**Chaduvuko** (చదువుకో) means "study" in Telugu. It's a full-stack learning platform focused on practical, job-ready skills in data engineering, cloud, AI/ML, and software development.
+**Chaduvuko** (చదువుకో) means *"study"* in Telugu.
 
-No paywalls. No fluff. Just structured tracks that take you from zero to interview-ready.
+It's a free learning platform built around one idea: **show how day-to-day tasks look at big companies.** Not theory. Not toy examples. Real workflows, real tools, real architecture — explained clearly enough that you can go use them tomorrow.
 
 Live at → **[chaduvuko.com](https://chaduvuko.com)**
 
----
-
-## Learning Tracks
-
-| Domain | Tracks |
-|--------|--------|
-| ☁️ Cloud | Azure (DP-900, AZ-900), AWS, GCP |
-| 🗄️ Data | Data Engineering, SQL, DBMS |
-| 🤖 AI/ML | Machine Learning, Deep Learning |
-| 💻 Programming | Python, Java, JavaScript |
-| 🌐 Web | React, Next.js, Node.js |
-| 🔐 Systems | Networking, Cybersecurity, DSA |
-
-**15+ tracks · 100+ hours of content · $0**
+No paywalls. No course fees. No ads. Just content.
 
 ---
 
-## Features
+## Who It's For
 
-### 📚 Structured Learning Paths
-Each track is broken into modules → lessons → exercises. No jumping around.
+- Engineering students (B.Tech, M.S.) preparing for data/software roles
+- International students learning cloud platforms for the US job market
+- Self-taught developers trying to bridge the gap between tutorials and production systems
+- Anyone preparing for GATE, technical interviews, or cloud certifications
 
-### 🏃 Interactive Playground
-- **SQL Playground** — Run queries directly in the browser via DuckDB WebAssembly (zero backend needed)
-- **Code Editor** — Monaco editor (same as VS Code) embedded in lessons
+---
 
-### 👤 Progress Tracking
-- GitHub OAuth login via Supabase
-- Lesson completion tracking
-- Resume from where you left off across devices
+## What's Built
 
-### 🗺️ Roadmaps
-Visual learning roadmaps for each career path — see the full journey before you start.
+### Cloud Platforms — 20+ modules
 
-### 📝 Blog
-Deep-dive articles on data engineering concepts, cloud certifications, and career advice.
+**Azure** (8 services, in-depth):
+- Azure Data Factory — pipelines, triggers, linked services, copy activity
+- ADLS Gen2 — hierarchical namespace, access tiers, lifecycle policies
+- Databricks — clusters, notebooks, Delta Lake, PySpark
+- Azure Synapse Analytics — dedicated pools, serverless SQL, integration with ADF
+- Event Hubs — streaming ingestion, consumer groups, Kafka compatibility
+- Key Vault — secrets management, managed identity integration
+- Microsoft Fabric — unified analytics, lakehouse, OneLake
+- Azure Introduction — regions, resource groups, IAM, pricing
 
-### 🎯 Interview Prep
-Curated question banks and topic walkthroughs for technical interviews.
+**AWS** (8 services):
+- S3 — buckets, storage classes, lifecycle, presigned URLs
+- Glue — crawlers, jobs, DynamicFrames, bookmarks
+- Redshift — distribution styles, COPY command, Spectrum
+- EMR — cluster types, Spark on EMR, cost optimization
+- Athena — partitioning, query optimization, Glue catalog integration
+- Kinesis — Data Streams vs Firehose, shards, consumer scaling
+- Lake Formation — permissions model, data lake governance
+- Step Functions — state machines, error handling, orchestration
+
+**GCP** (5 services):
+- BigQuery — slots, partitioning, clustering, BI Engine
+- Pub/Sub — topics, subscriptions, push vs pull
+- Dataflow — Apache Beam pipelines, streaming, windowing
+- Cloud Composer — managed Airflow, DAGs, operators
+- GCP Introduction — projects, IAM, service accounts
+
+### Data Engineering — Core Foundations
+- What is Data Engineering and why it matters
+- Full SQL track — queries, joins, window functions, CTEs, indexing, query optimization
+- SQL Playground — run SQL live in the browser (DuckDB WebAssembly, no server)
+- SQL cheatsheet
+- End-to-end Azure project walkthroughs (6 projects)
+- Interview prep for data engineering roles
+
+### DBMS — 20+ Deep Topics
+Full database management system curriculum from fundamentals to advanced:
+- ER Model, Relational Model, Relational Algebra
+- Normalization (1NF through BCNF)
+- Functional Dependencies
+- Transactions, ACID, Concurrency Control
+- Crash Recovery, B-Trees, Hashing, Indexes
+- Query Processing and Optimization
+- Distributed Databases, NoSQL
+- Views, Procedures, Triggers
+- Database Security
+- Complete interview question bank
+
+### Networking — PhD-Depth Content
+- TCP/IP protocol stack, DNS, HTTP/HTTPS, DHCP
+- Email protocols (SMTP, IMAP, POP3)
+- FTP and SFTP
+- SNMP and Syslog
+- Network topology (with interactive 3D visualizations built in Three.js)
+
+### DSA (Data Structures & Algorithms)
+- Algorithms and data structures for technical interviews
+- Topic-based deep dives
+
+### Cybersecurity
+- Security fundamentals for engineers
+
+### AI/ML
+- Machine learning fundamentals
+- ML interview preparation
+
+### Programming Foundations
+- Python (data engineering focus)
+- SQL (PostgreSQL)
+- SQL joins in-depth
+
+### For Indian Students Specifically
+- B.Tech branch/subject content
+- School (intermediate) content
+- Competitive exam prep (GATE-oriented)
+- Industry-focused content
+
+---
+
+## Platform Features
+
+### SQL Playground
+Run SQL queries live in the browser. No server. No setup. DuckDB compiled to WebAssembly runs entirely in the browser tab.
+
+```sql
+-- Try it on chaduvuko.com/learn/sql/playground
+SELECT
+  department,
+  COUNT(*) as employees,
+  AVG(salary) as avg_salary
+FROM employees
+GROUP BY department
+ORDER BY avg_salary DESC;
+```
+
+### Interactive 3D Network Topology
+Three.js + React Three Fiber visualizations of network topologies — bus, ring, star, mesh. Built so students can see how packets actually travel, not just read about it.
+
+### Progress Tracking
+- GitHub OAuth via Supabase
+- Lesson completion tracking per user
+- Resume from any device
+
+### Roadmaps
+Visual career roadmaps: Data Engineer, Cloud Engineer, Backend Developer. See the full path before you start so you know what you're building toward.
 
 ---
 
@@ -74,58 +165,48 @@ Curated question banks and topic walkthroughs for technical interviews.
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Next.js 14 (App Router) |
-| Styling | Tailwind CSS + CSS Variables |
-| Auth | Supabase (GitHub OAuth) |
-| Database | Supabase Postgres |
-| SQL Engine | DuckDB WebAssembly (browser-native) |
-| Code Editor | Monaco Editor |
-| 3D/Visuals | Three.js + React Three Fiber |
+| Framework | Next.js 14 (App Router, SSR, static generation) |
+| Styling | Tailwind CSS + CSS custom properties |
+| Auth | Supabase (GitHub OAuth, session management) |
+| Database | Supabase Postgres (progress tracking) |
+| SQL Engine | DuckDB WebAssembly (browser-native, zero server) |
+| Code Editor | Monaco Editor (same engine as VS Code) |
+| 3D Visuals | Three.js + React Three Fiber |
 | Animations | Framer Motion |
-| Content | MDX (Markdown + JSX components) |
+| Content | MDX + React components |
 | Deployment | Vercel |
 
 ---
 
-## Project Structure
+## What's Different
 
-```
-chaduvuko/
-├── app/
-│   ├── page.tsx              ← Landing page
-│   ├── learn/
-│   │   └── page.tsx          ← Learning hub (15+ track cards)
-│   ├── playground/           ← Interactive SQL/code environment
-│   ├── dashboard/            ← User progress dashboard
-│   ├── blog/                 ← Articles
-│   └── api/                  ← Route handlers
-├── content/
-│   ├── data-engineering/     ← ADF, Spark, Databricks, etc.
-│   ├── networking/           ← TCP/IP, DNS, HTTP, protocols
-│   ├── sql/                  ← Queries, joins, window functions
-│   ├── ai-ml/                ← ML fundamentals
-│   ├── cybersecurity/        ← Security concepts
-│   └── dsa/                  ← Algorithms + data structures
-├── components/               ← Reusable UI components
-└── lib/                      ← Supabase client, helpers
-```
+| | Chaduvuko | Udemy | Coursera | YouTube |
+|---|-----------|-------|----------|---------|
+| Free | ✅ | ❌ | ❌ mostly | ✅ |
+| Structured paths | ✅ | ✅ | ✅ | ❌ |
+| SQL runs in browser | ✅ | ❌ | ❌ | ❌ |
+| Production-level depth | ✅ | Varies | Varies | Varies |
+| No ads | ✅ | ❌ | ❌ | ❌ |
+| 3D visualizations | ✅ | ❌ | ❌ | ❌ |
+| B.Tech + competitive exam content | ✅ | ❌ | ❌ | Scattered |
 
 ---
 
-## What Makes It Different
+## What's Coming
 
-| Feature | Chaduvuko | Udemy | YouTube |
-|---------|-----------|-------|---------|
-| Free forever | ✅ | ❌ | ✅ |
-| Structured paths | ✅ | ✅ | ❌ |
-| In-browser SQL runner | ✅ | ❌ | ❌ |
-| Progress tracking | ✅ | ✅ | ❌ |
-| No ads | ✅ | ❌ | ❌ |
-| Job-focused content | ✅ | Mixed | Mixed |
+- [ ] Chaduvuko Playground v2 — run Python in-browser (Pyodide WebAssembly)
+- [ ] Spark/PySpark interactive environment
+- [ ] Track completion certificates
+- [ ] GCP Professional Data Engineer track
+- [ ] Kafka and real-time streaming module
+- [ ] dbt (data build tool) full track
+- [ ] Video walkthroughs for project modules
+- [ ] Community Q&A per lesson
+- [ ] Mobile app
 
 ---
 
-## Getting Started
+## Run Locally
 
 ```bash
 git clone https://github.com/Asil143/chaduvuko.git
@@ -134,30 +215,39 @@ npm install
 ```
 
 Create `.env.local`:
-```env
+```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 ```
 
 ```bash
 npm run dev
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+---
+
+## Why This Exists
+
+Most educational content is built for a Western, English-first, already-employed audience. The gap is enormous for:
+
+- A B.Tech graduate in India who wants to work as a data engineer but has never seen a real cloud pipeline
+- An international student in the US who knows SQL from a textbook but has never used Spark
+- A self-taught developer who needs to understand how systems actually scale
+
+Chaduvuko is built for those people. The content depth is calibrated to what you need to actually get hired and do the job — not to sell you the next course level.
 
 ---
 
 ## Contributing
 
-Found a mistake? Want to add content for a track? PRs are welcome.
-
-Each track lives in `content/<track-name>/` as `.tsx` MDX files. Follow the pattern of existing modules.
+Want to add content for a track? All content lives in `app/learn/<track>/` as Next.js pages. Follow the pattern of existing modules and open a PR.
 
 ---
 
 ## License
 
-MIT — free to use, fork, and learn from.
+MIT
 
 ---
 
