@@ -75,10 +75,18 @@ const WowBox = ({ emoji, title, children }: { emoji: string; title: string; chil
   </div>
 )
 
-// Warning / common-mistake box
+// Warning box — yellow, for important cautions
 const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div style={{ background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.25)', borderRadius: 12, padding: '16px 20px', margin: '24px 0' }}>
     <p style={{ fontSize: 11, color: '#fbbf24', fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>⚠ {title}</p>
+    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
+  </div>
+)
+
+// Common mistake box — red, for misconceptions that trip people up
+const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 12, padding: '16px 20px', margin: '24px 0' }}>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Common Mistake — {title}</p>
     <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
@@ -1447,9 +1455,42 @@ Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 
       <Divider />
 
-      {/* ── CHAPTER 13: Interview Questions ────────────────────────────── */}
+      {/* ── CHAPTER 13: Common Misconceptions ──────────────────────────── */}
       <Chapter
         n="13"
+        title="Common Misconceptions That Will Get You in Trouble"
+        subtitle="These are the beliefs that sound right, feel right, and are wrong. Internalise these before your next interview or production incident."
+      />
+
+      <Err title="More bandwidth = faster internet">
+        Bandwidth is the pipe width. Latency is the pipe length. For interactive applications — web pages, video calls, online gaming, SSH — latency dominates the experience. A 1 Gbps connection with 200ms latency will feel slower for web browsing than a 20 Mbps connection with 10ms latency. The first page load involves DNS (1 round trip), TCP handshake (1 round trip), TLS handshake (1–2 round trips), and the actual HTTP request (1 round trip) — at 200ms RTT, that is 800ms before you see anything. At 10ms RTT, it is 40ms. Bandwidth matters for large file transfers; latency matters for everything interactive.
+      </Err>
+
+      <Err title="HTTPS means the website is safe and trustworthy">
+        HTTPS means the connection between your browser and the server is encrypted and authenticated. It says nothing about what the server does with your data, whether the site is legitimate, or whether the owner has good intentions. Phishing sites, scam stores, and malware distribution sites all use HTTPS. The padlock icon means "your connection to this site is private" — not "this site is trustworthy." Certificate Authorities verify that the certificate belongs to the domain name (DV certificates) or the organization (EV certificates), but even DV certs are trivially available for any domain, including <code style={{ fontSize: 13, background: '#ef444415', color: '#ef4444', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>paypa1.com</code>.
+      </Err>
+
+      <Err title="WiFi and the internet are the same thing">
+        WiFi is your Local Area Network — the radio network connecting your devices to your router. The internet is the global network your router connects to via your ISP. You can have WiFi with no internet (your router is on, but your ISP connection is down — devices can still talk to each other and to your router). You can have internet with no WiFi (an Ethernet cable directly to your router). When your "internet is down," the first diagnostic step is exactly this: can you ping your router (192.168.1.1)? If yes, the WiFi LAN is working and the problem is the ISP's WAN connection. If no, the problem is your local network.
+      </Err>
+
+      <Err title="Packets always take the same path from A to B">
+        Packet switching routes each packet independently. Two consecutive packets in the same TCP connection can travel entirely different paths — one via Singapore, one via London — and arrive at the destination out of order. TCP uses sequence numbers to reassemble them in the correct order regardless of arrival order. This is by design: if one path becomes congested or fails, individual packets reroute without the entire connection needing to restart. It also means that adding more hops (traceroute shows longer paths) doesn't necessarily mean higher latency — a longer path through faster routers can beat a shorter path through congested ones.
+      </Err>
+
+      <Err title="DNS is just a lookup — it doesn't affect performance or security">
+        DNS is on the critical path of every network connection. Slow DNS adds directly to page load time (every uncached hostname = one DNS round trip before any connection can begin). DNS failures make everything unreachable even if the network and servers are perfectly healthy — Facebook's 2021 outage was primarily a DNS problem. DNS is also a major attack vector: DNS hijacking (redirecting queries to malicious servers), DNS cache poisoning (Kaminsky attack), and DNS-based DDoS amplification (open resolvers used to flood targets). Use DNSSEC to sign your zones, DNS-over-HTTPS (DoH) or DNS-over-TLS (DoT) to prevent interception, and a reputable recursive resolver (1.1.1.1, 8.8.8.8) rather than your ISP's default which may be slow and logged.
+      </Err>
+
+      <Err title="TCP is always reliable — it never loses data">
+        TCP guarantees delivery of data to the application, but this reliability is achieved through retransmission — which takes time. In high-packet-loss environments (satellite, mobile on poor signal), TCP's retransmission timeouts can cause seconds of latency per lost packet, making it feel completely broken even though it is technically "working." TCP also does not protect against data corruption that passes CRC checks. And at the application level, TCP only guarantees ordered, reliable delivery to the socket buffer — if your application crashes before reading the buffer, the data is lost. "TCP is reliable" means "lost packets are retransmitted," not "your application always receives all data."
+      </Err>
+
+      <Divider />
+
+      {/* ── CHAPTER 14: Interview Questions ────────────────────────────── */}
+      <Chapter
+        n="14"
         title="Interview Questions — Test Your Understanding"
         subtitle="From entry-level to research-level. Each answer reveals a deeper layer of how networks actually work."
       />

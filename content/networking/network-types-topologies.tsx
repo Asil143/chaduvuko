@@ -73,9 +73,18 @@ const WowBox = ({ emoji, title, children }: { emoji: string; title: string; chil
   </div>
 )
 
+// Warning box — yellow, for important cautions
 const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div style={{ background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.25)', borderRadius: 12, padding: '16px 20px', margin: '24px 0' }}>
     <p style={{ fontSize: 11, color: '#fbbf24', fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>⚠ {title}</p>
+    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
+  </div>
+)
+
+// Common mistake box — red, for misconceptions that trip people up
+const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 12, padding: '16px 20px', margin: '24px 0' }}>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Common Mistake — {title}</p>
     <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
@@ -722,9 +731,9 @@ Efficiency drops sharply with more devices:
         The single biggest failure mode of bus topology was physical: <Accent>one break, everyone goes down</Accent>. A cable cut, a bad connector, even a loose BNC terminator at either end — and every device on the bus lost connectivity instantly. There was no alternative path. Network troubleshooting in the bus era involved walking the entire cable run with an ohmmeter looking for a break. Engineers who grew up in this era still flinch at coaxial cable.
       </Para>
 
-      <Warn title="Bus topology is essentially dead for LANs">
-        You will not build a bus topology network today. But you will encounter the concept in two places: (1) exam questions, where understanding bus is the starting point for understanding why star topology became dominant; (2) industrial networks — the CAN bus (Controller Area Network) in every modern car is literally a bus topology. Your car's ECU, ABS controller, airbag system, and infotainment all share a two-wire CAN bus. Industrial settings tolerate bus topology because the devices are few, the cable runs are short, and the environment is controlled.
-      </Warn>
+      <Err title="Bus topology is still used in modern networks">
+        You will not build a bus topology LAN today. But you will encounter the concept in two places: (1) exam questions, where understanding bus is the starting point for understanding why star topology became dominant; (2) industrial networks — the CAN bus (Controller Area Network) in every modern car is literally a bus topology. Your car's ECU, ABS controller, airbag system, and infotainment all share a two-wire CAN bus. Industrial settings tolerate bus topology because the devices are few, the cable runs are short, and the environment is controlled. Never design a new office or data center network with bus topology.
+      </Err>
 
       <Divider />
 
@@ -1126,9 +1135,42 @@ Storage (SAN):
 
       <Divider />
 
-      {/* ── CHAPTER 13: Interview Questions ────────────────────────────── */}
+      {/* ── CHAPTER 13: Common Misconceptions ──────────────────────────── */}
       <Chapter
         n="13"
+        title="Common Misconceptions That Will Get You in Trouble"
+        subtitle="These are the assumptions that cause real outages, failed interviews, and poorly designed networks."
+      />
+
+      <Err title="A hub and a switch are the same thing">
+        Hubs and switches both create a star topology, but they behave completely differently. A hub (Layer 1) repeats every incoming signal to all ports — every device sees every other device's traffic, all devices share one collision domain, and bandwidth is shared. A switch (Layer 2) learns MAC addresses and forwards frames only to the correct port — each port gets dedicated full-duplex bandwidth, no collisions, and traffic is private between source and destination. A hub with 10 devices sharing 100 Mbps gives each device about 5–10 Mbps effective throughput due to collisions. A switch gives each device the full 100 Mbps dedicated. Hubs have not been sold for new deployments since around 2000.
+      </Err>
+
+      <Err title="Star topology has no single point of failure">
+        Star topology has one critical single point of failure: the central switch. If the switch dies, every device connected to it loses connectivity — even though no individual cable has failed. This is often misunderstood because star topology correctly isolates individual device failures (one bad cable = one device offline). To eliminate the SPOF at the switch level, you need redundant switches (two switches connected to each other, with all critical devices dual-homed to both) or a switch stack (multiple physical switches acting as one logical unit). High-availability environments always deploy redundant core switches, not single switches.
+      </Err>
+
+      <Err title="LAN is always faster than WAN">
+        LAN technologies (Gigabit Ethernet, 10GbE WiFi 6) are typically faster than consumer WAN connections, but this is not universal. A direct 400 Gbps fiber WAN link between two data centers can vastly outperform a congested WiFi LAN sharing 300 Mbps among 50 devices. In cloud environments, your "LAN" might be a virtual network inside AWS with 10–25 Gbps between instances — while some enterprise WAN links (MPLS, leased fiber) deliver higher throughput than many office LANs. The defining characteristic of LAN vs WAN is geographic scope and ownership, not speed.
+      </Err>
+
+      <Err title="Ring topology is completely dead">
+        Token Ring (IBM's LAN implementation) is dead — no enterprise uses Token Ring for local networks. But ring topology itself is very much alive in backbone networks. SONET/SDH rings carry national telephone traffic and internet backbone links in every country. The dual counter-rotating ring with automatic 50ms protection switching makes it ideal for carrier infrastructure where continuous operation is mandatory. When your ISP's backbone fails and fails back in under a minute, SONET ring protection is likely responsible. Confusing "Token Ring is dead" with "ring topology is dead" is a common exam error.
+      </Err>
+
+      <Err title="Mesh topology means every device connects to every other device">
+        Full mesh (every node connects to every other node) is one specific type of mesh — and it is rarely used because the link count grows as n×(n-1)/2 (10 nodes = 45 links, 100 nodes = 4,950 links). Most real-world mesh networks are partial meshes — each node connects to a strategic subset of others, chosen for redundancy and traffic patterns. The internet itself is a partial mesh of 80,000 Autonomous Systems. Data center spine-leaf is a structured partial mesh (every leaf connects to every spine, but leaves don't connect to each other). When someone says "we use mesh topology," they almost always mean partial mesh.
+      </Err>
+
+      <Err title="Three-tier network design is always the right answer for enterprise">
+        Three-tier (core/distribution/access) was the enterprise standard for north-south traffic in the client-server era. It becomes a bottleneck for east-west traffic (server-to-server, microservice-to-microservice) — all east-west traffic must climb to the core and back down. Modern virtualized data centers and containerized workloads generate primarily east-west traffic. For these environments, leaf-spine is the correct architecture: always exactly 2 hops, always ECMP load-balanced, scales linearly by adding switches. Three-tier for a new data center design in 2025 is an outdated choice; three-tier for a campus LAN serving end-user devices is still appropriate.
+      </Err>
+
+      <Divider />
+
+      {/* ── CHAPTER 14: Interview Questions ────────────────────────────── */}
+      <Chapter
+        n="14"
         title="Interview Questions — Test Your Understanding"
         subtitle="From entry-level definitions to senior architecture discussions."
       />
