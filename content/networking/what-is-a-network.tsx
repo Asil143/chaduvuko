@@ -113,6 +113,114 @@ const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermedia
   )
 }
 
+// ─── Interactive Component: Packet Layers 3D ─────────────────────────────────
+
+function PacketLayers3D() {
+  const [active, setActive] = useState<number | null>(null)
+  const layers = [
+    {
+      name: 'Ethernet Frame', abbr: 'L2', color: '#3b82f6', size: '14-byte header',
+      fields: [
+        'Destination MAC: B8:E8:56:44:55:66 (your router)',
+        'Source MAC: A4:C3:F0:11:22:33 (your device)',
+        'EtherType: 0x0800 → IPv4 payload follows',
+      ],
+      why: 'Delivers the packet only on your local network segment. Stripped and replaced at every router — the public internet never sees your MAC address.',
+    },
+    {
+      name: 'IP Packet', abbr: 'L3', color: '#8b5cf6', size: '20-byte header',
+      fields: [
+        'Source IP: 192.168.1.5',
+        'Destination IP: 142.250.182.4 (Google)',
+        'Protocol: 6 → TCP',
+        'TTL: 64 (decremented at each router hop)',
+      ],
+      why: 'Routes the packet across the entire internet end-to-end. Survives all router hops unchanged (unless NAT rewrites it).',
+    },
+    {
+      name: 'TCP Segment', abbr: 'L4', color: '#f97316', size: '20-byte header',
+      fields: [
+        'Source Port: 54321 (ephemeral)',
+        'Destination Port: 443 (HTTPS)',
+        'Sequence Number: 1001 (position in byte stream)',
+        'Flags: SYN / ACK / FIN / RST / PSH',
+      ],
+      why: 'Manages the reliable, ordered connection. Sequence numbers let TCP reassemble out-of-order packets and detect losses.',
+    },
+    {
+      name: 'HTTP Payload', abbr: 'L7', color: '#10b981', size: 'up to 1,460 bytes',
+      fields: [
+        'GET / HTTP/1.1',
+        'Host: google.com',
+        'Accept-Encoding: gzip, deflate, br',
+        'User-Agent: Chrome/120.0',
+      ],
+      why: 'The actual data your browser cares about. All lower layers are just infrastructure to reliably deliver these bytes.',
+    },
+  ]
+
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 4px' }}>3D Visualization — TCP/IP Encapsulation</p>
+      <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 24px' }}>Click any layer to inspect its header fields. Outer layers wrap inner ones — like envelopes inside envelopes.</p>
+
+      <div style={{ perspective: '900px', perspectiveOrigin: '50% 30%', marginBottom: 8 }}>
+        <div style={{ transform: 'rotateX(26deg)', transformStyle: 'preserve-3d' }}>
+          {layers.map((layer, i) => (
+            <div
+              key={layer.abbr}
+              onClick={() => setActive(active === i ? null : i)}
+              style={{
+                marginLeft: `${i * 22}px`,
+                background: active === i ? `${layer.color}20` : `${layer.color}10`,
+                border: `1px solid ${layer.color}35`,
+                borderLeft: `4px solid ${layer.color}`,
+                borderRadius: 10,
+                padding: '13px 16px',
+                marginBottom: 7,
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+                boxShadow: `0 ${(4 - i) * 5}px ${(4 - i) * 10}px rgba(0,0,0,0.35)`,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+              }}
+            >
+              <span style={{ fontSize: 10, fontWeight: 800, color: layer.color, fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.1em', background: `${layer.color}22`, padding: '3px 8px', borderRadius: 5, flexShrink: 0 }}>
+                {layer.abbr}
+              </span>
+              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', flex: 1 }}>{layer.name}</span>
+              <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>{layer.size}</span>
+              <span style={{ fontSize: 11, color: layer.color, flexShrink: 0 }}>{active === i ? '▲' : '▼'}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {active !== null && (
+        <div style={{ marginTop: 8, background: `${layers[active].color}08`, border: `1px solid ${layers[active].color}30`, borderRadius: 12, padding: '16px 20px' }}>
+          <p style={{ fontSize: 12, fontWeight: 700, color: layers[active].color, fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 12px' }}>
+            {layers[active].abbr} — {layers[active].name}
+          </p>
+          {layers[active].fields.map((f, fi) => (
+            <div key={fi} style={{ display: 'flex', gap: 10, marginBottom: 7, alignItems: 'flex-start' }}>
+              <span style={{ color: layers[active].color, flexShrink: 0 }}>▸</span>
+              <code style={{ fontSize: 13, color: 'var(--text)', fontFamily: FONT_MONO, lineHeight: 1.6 }}>{f}</code>
+            </div>
+          ))}
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: '14px 0 0', borderTop: `1px solid ${layers[active].color}20`, paddingTop: 12 }}>
+            <strong style={{ color: 'var(--text)' }}>Why it exists: </strong>{layers[active].why}
+          </p>
+        </div>
+      )}
+
+      <p style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'center', margin: '16px 0 0', fontStyle: 'italic' }}>
+        Each layer's header is added by the sender's OS and stripped by the receiver at the matching layer.
+      </p>
+    </div>
+  )
+}
+
 // ─── Interactive Component 1: Home Network Diagram ────────────────────────────
 
 function HomeNetworkDiagram() {
@@ -820,6 +928,8 @@ export default function WhatIsANetworkModule() {
       <Para>
         The <Accent>MTU (Maximum Transmission Unit)</Accent> of 1,500 bytes is not arbitrary — it is the maximum payload size that Ethernet (the most common link-layer protocol) defined in the 1980s. If your data is larger, it gets fragmented into multiple packets automatically.
       </Para>
+
+      <PacketLayers3D />
 
       <PacketJourney />
 
