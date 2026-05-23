@@ -5,7 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Html } from '@react-three/drei'
 import * as THREE from 'three'
 
-export type TopologyType = 'bus' | 'star' | 'ring' | 'mesh' | 'hybrid'
+export type TopologyType = 'bus' | 'star' | 'ring' | 'mesh' | 'tree' | 'hybrid'
 
 // ─── Shared: PC Node ─────────────────────────────────────────────────────────
 function PCNode({
@@ -307,6 +307,63 @@ function MeshTopology({ activeNode, setActiveNode }: { activeNode: number | null
   )
 }
 
+// ─── TREE / Hierarchical Topology ────────────────────────────────────────────
+function TreeTopology({ activeNode, setActiveNode }: { activeNode: number | null; setActiveNode: (n: number | null) => void }) {
+  const coreColor = '#8b5cf6'
+  const distColor = '#3b82f6'
+  const accessColor = '#10b981'
+
+  const core: [number, number, number] = [0, 1.9, 0]
+  const dists: [number, number, number][] = [[-2.2, 0.4, 0], [2.2, 0.4, 0]]
+  const pcs: [number, number, number][] = [
+    [-3.2, -1.3, 0], [-1.2, -1.3, 0],
+    [ 1.2, -1.3, 0], [ 3.2, -1.3, 0],
+  ]
+
+  const SwitchBox = ({ pos, color, label }: { pos: [number, number, number]; color: string; label: string }) => (
+    <group position={pos}>
+      <mesh castShadow>
+        <boxGeometry args={[0.75, 0.18, 0.42]} />
+        <meshStandardMaterial color="#0f172a" emissive={new THREE.Color(color)} emissiveIntensity={0.5} roughness={0.2} metalness={0.9} />
+      </mesh>
+      <Html position={[0, 0.22, 0]} center distanceFactor={8}>
+        <div style={{ fontSize: 9, color, fontFamily: 'monospace', fontWeight: 800, whiteSpace: 'nowrap', pointerEvents: 'none' }}>{label}</div>
+      </Html>
+    </group>
+  )
+
+  return (
+    <>
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[5, 8, 5]} intensity={0.8} castShadow />
+      {dists.map((d, i) => <Cable key={`cd-${i}`} from={core} to={d} color={coreColor} opacity={0.75} thickness={0.03} />)}
+      <SwitchBox pos={core} color={coreColor} label="CORE" />
+      <pointLight position={core} color={coreColor} intensity={1.2} distance={3} />
+      {pcs.map((pc, i) => {
+        const distIdx = Math.floor(i / 2)
+        return <Cable key={`dp-${i}`} from={dists[distIdx]} to={pc} color={distColor} opacity={0.55} thickness={0.018} />
+      })}
+      {dists.map((d, i) => <SwitchBox key={i} pos={d} color={distColor} label={`DIST-${i + 1}`} />)}
+      {pcs.map((pc, i) => (
+        <PCNode key={i} position={pc} label={`PC-${i + 1}`} color={accessColor}
+          isActive={activeNode === i} isHighlighted={false}
+          onClick={() => setActiveNode(activeNode === i ? null : i)} />
+      ))}
+      {activeNode !== null && (
+        <Packet from={pcs[activeNode]} to={core} color={accessColor} duration={2.2} delay={0} />
+      )}
+      <Html position={[0, -2.6, 0]} center distanceFactor={7}>
+        <div style={{ fontSize: 10, color: '#475569', fontFamily: 'monospace', whiteSpace: 'nowrap', pointerEvents: 'none' }}>
+          <span style={{ color: coreColor }}>■ Core</span>{'  '}
+          <span style={{ color: distColor }}>■ Distribution</span>{'  '}
+          <span style={{ color: accessColor }}>■ Access</span>{'  — click a PC'}
+        </div>
+      </Html>
+      <OrbitControls enablePan={false} minDistance={4} maxDistance={14} minPolarAngle={0.1} maxPolarAngle={Math.PI / 1.9} />
+    </>
+  )
+}
+
 // ─── HYBRID (Star-of-Stars / Enterprise) Topology ────────────────────────────
 function HybridTopology({ activeNode, setActiveNode }: { activeNode: number | null; setActiveNode: (n: number | null) => void }) {
   // Core layer: 2 core switches connected (partial mesh)
@@ -381,6 +438,7 @@ const LABELS: Record<TopologyType, string> = {
   star:   'STAR TOPOLOGY',
   ring:   'RING TOPOLOGY',
   mesh:   'MESH TOPOLOGY (FULL)',
+  tree:   'TREE / HIERARCHICAL',
   hybrid: 'HYBRID (3-TIER ENTERPRISE)',
 }
 const COLORS: Record<TopologyType, string> = {
@@ -388,6 +446,7 @@ const COLORS: Record<TopologyType, string> = {
   star:   '#3b82f6',
   ring:   '#8b5cf6',
   mesh:   '#f97316',
+  tree:   '#8b5cf6',
   hybrid: '#ef4444',
 }
 
@@ -406,6 +465,7 @@ export default function TopologyDiagram3D({ type, height = 380 }: { type: Topolo
             {type === 'star'   && <StarTopology   activeNode={activeNode} setActiveNode={setActiveNode} />}
             {type === 'ring'   && <RingTopology   activeNode={activeNode} setActiveNode={setActiveNode} />}
             {type === 'mesh'   && <MeshTopology   activeNode={activeNode} setActiveNode={setActiveNode} />}
+            {type === 'tree'   && <TreeTopology   activeNode={activeNode} setActiveNode={setActiveNode} />}
             {type === 'hybrid' && <HybridTopology activeNode={activeNode} setActiveNode={setActiveNode} />}
           </Suspense>
         </Canvas>

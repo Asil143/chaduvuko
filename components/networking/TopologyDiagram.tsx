@@ -14,7 +14,7 @@ const TopologyDiagram3D = dynamic(() => import('./TopologyDiagram3D'), {
   ),
 })
 
-export type TopologyType = 'bus' | 'star' | 'ring' | 'mesh' | 'hybrid'
+export type TopologyType = 'bus' | 'star' | 'ring' | 'mesh' | 'tree' | 'hybrid'
 
 interface TopologyDiagramProps {
   type: TopologyType

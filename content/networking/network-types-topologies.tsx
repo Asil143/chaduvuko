@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
+import TopologyDiagram from '@/components/networking/TopologyDiagram'
+import type { TopologyType } from '@/components/networking/TopologyDiagram'
 
 const G = '#10b981'
 const FONT_MONO = 'var(--font-mono)'
@@ -363,148 +365,15 @@ Full mesh: n×(n-1)/2 links
   },
 ]
 
-function TopologyDiagram3D({ name, color }: { name: string; color: string }) {
-  const W = 380, H = 210
-
-  type TNode = { id: string; x: number; y: number; r: number; label: string; hub: boolean }
-  type TLink = { a: string; b: string }
-  type TConf = { nodes: TNode[]; links: TLink[]; bus?: boolean }
-
-  const mk = (id: string, x: number, y: number, label: string, hub = false, r = 0): TNode =>
-    ({ id, x, y, r: r || (hub ? 18 : 12), label, hub })
-
-  const CONFIGS: Record<string, TConf> = {
-    Bus: {
-      bus: true,
-      nodes: [
-        mk('A', 50, 55, 'PC A'), mk('B', 120, 55, 'PC B'), mk('C', 190, 55, 'PC C'),
-        mk('D', 260, 55, 'PC D'), mk('E', 330, 55, 'PC E'),
-      ],
-      links: [],
-    },
-    Star: {
-      nodes: [
-        mk('sw', 190, 108, 'Switch', true),
-        mk('A', 80, 42, 'PC A'), mk('B', 190, 22, 'PC B'), mk('C', 300, 42, 'PC C'),
-        mk('D', 320, 158, 'PC D'), mk('E', 190, 188, 'PC E'), mk('F', 60, 158, 'PC F'),
-      ],
-      links: [
-        { a: 'sw', b: 'A' }, { a: 'sw', b: 'B' }, { a: 'sw', b: 'C' },
-        { a: 'sw', b: 'D' }, { a: 'sw', b: 'E' }, { a: 'sw', b: 'F' },
-      ],
-    },
-    Ring: {
-      nodes: [0, 1, 2, 3, 4, 5].map(i => {
-        const ang = (i * Math.PI * 2) / 6 - Math.PI / 2
-        return mk(`N${i}`, Math.round(190 + 82 * Math.cos(ang)), Math.round(108 + 72 * Math.sin(ang)), `Node ${i + 1}`)
-      }),
-      links: [0, 1, 2, 3, 4, 5].map(i => ({ a: `N${i}`, b: `N${(i + 1) % 6}` })),
-    },
-    Mesh: {
-      nodes: [
-        mk('A', 190, 28, 'Router A'), mk('B', 78, 98, 'Router B'), mk('C', 302, 98, 'Router C'),
-        mk('D', 118, 185, 'Router D'), mk('E', 262, 185, 'Router E'),
-      ],
-      links: [
-        { a: 'A', b: 'B' }, { a: 'A', b: 'C' }, { a: 'A', b: 'D' }, { a: 'A', b: 'E' },
-        { a: 'B', b: 'C' }, { a: 'B', b: 'D' }, { a: 'B', b: 'E' },
-        { a: 'C', b: 'D' }, { a: 'C', b: 'E' }, { a: 'D', b: 'E' },
-      ],
-    },
-    Tree: {
-      nodes: [
-        mk('core', 190, 28, 'Core', true),
-        mk('d1', 100, 100, 'Dist 1', true), mk('d2', 280, 100, 'Dist 2', true),
-        mk('a1', 48, 178, 'Access'), mk('a2', 152, 178, 'Access'),
-        mk('a3', 228, 178, 'Access'), mk('a4', 332, 178, 'Access'),
-      ],
-      links: [
-        { a: 'core', b: 'd1' }, { a: 'core', b: 'd2' },
-        { a: 'd1', b: 'a1' }, { a: 'd1', b: 'a2' },
-        { a: 'd2', b: 'a3' }, { a: 'd2', b: 'a4' },
-      ],
-    },
-    Hybrid: {
-      nodes: [
-        mk('sw1', 100, 108, 'Switch', true), mk('sw2', 280, 108, 'Router', true),
-        mk('A', 28, 55, 'PC A'), mk('B', 100, 28, 'PC B'), mk('C', 172, 55, 'PC C'),
-        mk('R1', 218, 45, 'Ring 1'), mk('R2', 340, 45, 'Ring 2'), mk('R3', 340, 170, 'Ring 3'),
-      ],
-      links: [
-        { a: 'sw1', b: 'A' }, { a: 'sw1', b: 'B' }, { a: 'sw1', b: 'C' }, { a: 'sw1', b: 'sw2' },
-        { a: 'sw2', b: 'R1' }, { a: 'sw2', b: 'R3' }, { a: 'R1', b: 'R2' }, { a: 'R2', b: 'R3' },
-      ],
-    },
-  }
-
-  const cfg = CONFIGS[name] || CONFIGS.Star
-  const nm: Record<string, TNode> = {}
-  cfg.nodes.forEach(nd => { nm[nd.id] = nd })
-
-  const animPath = (() => {
-    if (cfg.bus) return 'M 20 115 L 360 115'
-    if (cfg.links.length > 0) {
-      const a = nm[cfg.links[0].a], b = nm[cfg.links[0].b]
-      if (a && b) return `M ${a.x} ${a.y} L ${b.x} ${b.y}`
-    }
-    return ''
-  })()
-
-  return (
-    <div style={{ background: '#0d1117', borderRadius: 10, padding: '16px 12px' }}>
-      <div style={{ perspective: '700px', perspectiveOrigin: '50% 45%' }}>
-        <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 'auto', display: 'block', transform: 'rotateX(18deg)', transformOrigin: '50% 50%', overflow: 'visible' }}>
-          <defs>
-            {cfg.nodes.map(nd => (
-              <radialGradient key={`g${nd.id}`} id={`g${nd.id}`} cx="38%" cy="32%" r="65%">
-                <stop offset="0%" stopColor={nd.hub ? color : '#475569'} />
-                <stop offset="100%" stopColor={nd.hub ? `${color}55` : '#1e293b'} />
-              </radialGradient>
-            ))}
-          </defs>
-
-          {cfg.bus && <line x1={20} y1={115} x2={360} y2={115} stroke={color} strokeWidth={3} strokeOpacity={0.85} />}
-          {cfg.bus && cfg.nodes.map(nd => (
-            <line key={`dp${nd.id}`} x1={nd.x} y1={nd.y + nd.r} x2={nd.x} y2={115} stroke={color} strokeWidth={1.2} strokeOpacity={0.5} />
-          ))}
-
-          {cfg.links.map((lk, li) => {
-            const a = nm[lk.a], b = nm[lk.b]
-            if (!a || !b) return null
-            return <line key={li} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={color} strokeWidth={1.3} strokeOpacity={0.45} />
-          })}
-
-          {cfg.nodes.map(nd => (
-            <g key={nd.id}>
-              <ellipse cx={nd.x} cy={nd.y + nd.r + 2} rx={nd.r * 0.85} ry={3} fill="rgba(0,0,0,0.35)" />
-              <circle cx={nd.x} cy={nd.y} r={nd.r + 5} fill="none" stroke={color} strokeWidth={0.6} strokeOpacity={0.3} strokeDasharray="3 3" />
-              <circle cx={nd.x} cy={nd.y} r={nd.r} fill={`url(#g${nd.id})`} stroke={color} strokeWidth={nd.hub ? 1.5 : 0.8} strokeOpacity={0.9} />
-              {nd.label && (
-                <text x={nd.x} y={nd.y + nd.r + 15} textAnchor="middle" fontSize={9} fill="#64748b" fontFamily="monospace" fontWeight="600">
-                  {nd.label}
-                </text>
-              )}
-            </g>
-          ))}
-
-          {animPath && (
-            <circle r={3} fill={color} fillOpacity={0.9}>
-              <animateMotion dur="2s" repeatCount="indefinite" path={animPath} />
-            </circle>
-          )}
-        </svg>
-      </div>
-      <p style={{ fontSize: 11, color: '#475569', textAlign: 'center', margin: '8px 0 0', fontFamily: FONT_MONO }}>
-        {name} — perspective diagram
-      </p>
-    </div>
-  )
+const TOPO_TYPE_MAP: Record<string, TopologyType> = {
+  Bus: 'bus', Star: 'star', Ring: 'ring', Mesh: 'mesh', Tree: 'tree', Hybrid: 'hybrid',
 }
 
 function TopologyExplorer() {
   const [selected, setSelected] = useState('Star')
   const [tab, setTab] = useState<'diagram' | 'pros' | 'failure'>('diagram')
   const top = topologies.find(t => t.name === selected)!
+  const topoType = TOPO_TYPE_MAP[selected]
 
   return (
     <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, margin: '32px 0' }}>
@@ -558,7 +427,7 @@ function TopologyExplorer() {
         ))}
       </div>
 
-      {tab === 'diagram' && <TopologyDiagram3D name={selected} color={top.color} />}
+      {tab === 'diagram' && topoType && <TopologyDiagram type={topoType} height={400} />}
 
       {tab === 'pros' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
