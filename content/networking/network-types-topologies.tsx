@@ -5,6 +5,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 import TopologyDiagram from '@/components/networking/TopologyDiagram'
 import type { TopologyType } from '@/components/networking/TopologyDiagram'
+import { AllTopologyPreviews } from '@/components/networking/TopologyPreviewCard'
 
 const G = '#10b981'
 const FONT_MONO = 'var(--font-mono)'
@@ -690,6 +691,8 @@ export default function NetworkTypesTopologies() {
       <Para>
         Physical topology describes how devices are physically wired to each other — the actual shape of the cables. There are six fundamental topologies. Every real-world network is built from some combination of them.
       </Para>
+
+      <AllTopologyPreviews />
 
       <TopologyExplorer />
 
