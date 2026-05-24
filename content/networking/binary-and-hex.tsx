@@ -4,891 +4,1290 @@ import { useState } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
-const N = '#10b981'
+// ─── Helper components ────────────────────────────────────────────────────────
 
-const Part = ({ n, title }: { n: string; title: string }) => (
-  <div style={{ marginBottom: 28 }}>
-    <p style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 8px', letterSpacing: '.1em' }}>// Part {n}</p>
-    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px,3vw,30px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
-  </div>
-)
+const ACC = '#10b981'
 
-const P = ({ children }: { children: React.ReactNode }) => (
-  <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, margin: '0 0 18px' }}>{children}</p>
-)
-
-const H = ({ children }: { children: React.ReactNode }) => (
-  <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: '32px 0 12px' }}>{children}</h3>
-)
-
-const Hl = ({ children }: { children: React.ReactNode }) => (
-  <strong style={{ color: N }}>{children}</strong>
-)
-
-const HR = () => <div style={{ borderTop: '1px solid var(--border)', margin: '48px 0' }} />
-
-const ProTip = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: `${N}08`, border: `1px solid ${N}20`, borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Pro Tip</p>
-    <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{children}</p>
-  </div>
-)
-
-const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Common Mistake — {title}</p>
-    <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{children}</p>
-  </div>
-)
-
-const IQ = ({ q, children }: { q: string; children: React.ReactNode }) => (
-  <div style={{ marginBottom: 40 }}>
-    <div style={{ background: `${N}10`, border: `1px solid ${N}25`, borderRadius: '8px 8px 0 0', padding: '14px 18px', fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>Q: {q}</div>
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
-  </div>
-)
-
-const TimeBlock = ({ time, label, children }: { time: string; label: string; children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 20, marginBottom: 28 }}>
-    <div style={{ flexShrink: 0, textAlign: 'right', width: 100 }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)' }}>{time}</div>
+function Chapter({ n, title }: { n: number; title: string }) {
+  const num = String(n).padStart(2, '0')
+  return (
+    <div style={{ marginBottom: 32 }}>
+      <p style={{ fontSize: 11, color: ACC, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>
+        // CHAPTER {num}
+      </p>
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>
+        {title}
+      </h2>
     </div>
-    <div style={{ flex: 1, borderLeft: `2px solid ${N}30`, paddingLeft: 20, paddingBottom: 8 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{label}</div>
-      <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8 }}>{children}</div>
-    </div>
-  </div>
-)
+  )
+}
 
-const Term = ({ word, def }: { word: string; def: string }) => (
-  <div style={{ display: 'flex', gap: 0, marginBottom: 12, border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
-    <div style={{ background: `${N}12`, borderRight: `1px solid ${N}20`, padding: '10px 16px', minWidth: 160, display: 'flex', alignItems: 'center' }}>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: N }}>{word}</span>
-    </div>
-    <div style={{ padding: '10px 16px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{def}</div>
-  </div>
-)
+function Divider() {
+  return <div style={{ borderTop: '1px solid var(--border)', margin: '56px 0' }} />
+}
 
-// ── Interactive Base Converter ────────────────────────────────────────────────
-function BaseConverter() {
+function Para({ children }: { children: React.ReactNode }) {
+  return <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, margin: '0 0 18px' }}>{children}</p>
+}
+
+function H2({ children }: { children: React.ReactNode }) {
+  return <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', margin: '36px 0 14px', letterSpacing: '-0.5px' }}>{children}</h3>
+}
+
+function H3({ children }: { children: React.ReactNode }) {
+  return <h4 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', margin: '28px 0 10px' }}>{children}</h4>
+}
+
+function Accent({ children }: { children: React.ReactNode }) {
+  return <strong style={{ color: ACC, fontWeight: 700 }}>{children}</strong>
+}
+
+function Code({ children }: { children: React.ReactNode }) {
+  return <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13, background: '#1e293b', color: '#e2e8f0', padding: '2px 7px', borderRadius: 5 }}>{children}</code>
+}
+
+function CodeBlock({ children }: { children: React.ReactNode }) {
+  return (
+    <pre style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, background: '#0d1525', border: '1px solid #1e293b', borderRadius: 10, padding: '18px 20px', overflowX: 'auto', lineHeight: 1.7, color: '#94a3b8', margin: '18px 0 24px' }}>
+      {children}
+    </pre>
+  )
+}
+
+function StoryBox({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ background: '#0a1628', border: '1px solid #1e3a5f', borderLeft: '4px solid #3b82f6', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#cbd5e1', lineHeight: 1.85 }}>
+      {children}
+    </div>
+  )
+}
+
+function WowBox({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ background: '#0a1a12', border: '1px solid #166534', borderLeft: '4px solid #10b981', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#bbf7d0', lineHeight: 1.85 }}>
+      <span style={{ fontWeight: 800, color: '#10b981', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>WOW FACT</span>
+      {children}
+    </div>
+  )
+}
+
+function Warn({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ background: '#1a1400', border: '1px solid #854d0e', borderLeft: '4px solid #f59e0b', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#fef08a', lineHeight: 1.85 }}>
+      <span style={{ fontWeight: 800, color: '#f59e0b', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>CAUTION</span>
+      {children}
+    </div>
+  )
+}
+
+function Err({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ background: '#1a0a0a', border: '1px solid #991b1b', borderLeft: '4px solid #ef4444', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#fecaca', lineHeight: 1.85 }}>
+      <span style={{ fontWeight: 800, color: '#ef4444', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>MISCONCEPTION</span>
+      {children}
+    </div>
+  )
+}
+
+const LEVEL_COLORS: Record<string, string> = {
+  Beginner: '#10b981',
+  Intermediate: '#3b82f6',
+  Senior: '#8b5cf6',
+  PhD: '#f97316',
+}
+
+function IQ({ level, children }: { level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) {
+  const c = LEVEL_COLORS[level]
+  return (
+    <div style={{ background: '#080d18', border: `1px solid ${c}40`, borderRadius: 12, padding: '18px 22px', margin: '22px 0' }}>
+      <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 800, color: c, background: `${c}18`, border: `1px solid ${c}40`, borderRadius: 20, padding: '3px 10px', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 10 }}>
+        {level}
+      </span>
+      <div style={{ fontSize: 14.5, color: '#cbd5e1', lineHeight: 1.85 }}>{children}</div>
+    </div>
+  )
+}
+
+// ─── Interactive 1: Number Base Converter ─────────────────────────────────────
+
+function NumberConverter() {
   const [input, setInput] = useState('192')
-  const [base, setBase] = useState<'decimal' | 'binary' | 'hex'>('decimal')
+  const [base, setBase] = useState<'decimal' | 'binary' | 'hex' | 'octal'>('decimal')
 
-  let decimal = 0
+  let value = 0
   let parseError = false
-
   try {
-    if (base === 'decimal') {
-      decimal = parseInt(input, 10)
-      if (isNaN(decimal) || decimal < 0 || decimal > 4294967295) parseError = true
-    } else if (base === 'binary') {
-      if (!/^[01]+$/.test(input)) parseError = true
-      else decimal = parseInt(input, 2)
-    } else {
-      if (!/^[0-9a-fA-F]+$/.test(input)) parseError = true
-      else decimal = parseInt(input, 16)
-    }
+    if (base === 'decimal') value = parseInt(input, 10)
+    else if (base === 'binary') value = parseInt(input, 2)
+    else if (base === 'hex') value = parseInt(input, 16)
+    else value = parseInt(input, 8)
+    if (isNaN(value) || value < 0 || value > 0xFFFFFFFF) parseError = true
   } catch {
     parseError = true
   }
 
-  const toBin = (n: number) => n.toString(2).padStart(8, '0')
-  const toHex = (n: number) => n.toString(16).toUpperCase().padStart(2, '0')
+  const dec = parseError ? '—' : value.toString(10)
+  const bin = parseError ? '—' : value.toString(2).padStart(value > 255 ? 32 : value > 15 ? 8 : 4, '0')
+  const hex = parseError ? '—' : value.toString(16).toUpperCase().padStart(2, '0')
+  const oct = parseError ? '—' : value.toString(8)
 
-  const isOctet = !parseError && decimal >= 0 && decimal <= 255
-  const isValidU32 = !parseError && decimal >= 0 && decimal <= 4294967295
+  // Build nibble groups for binary
+  const binGroups = !parseError ? (bin.match(/.{1,4}/g) ?? []) : []
+  const hexGroups = !parseError && bin.length > 8
+    ? (value.toString(16).toUpperCase().padStart(8, '0').match(/.{1,2}/g) ?? [])
+    : []
 
-  const binStr = isValidU32 ? decimal.toString(2).padStart(32, '0') : '????????????????????????????????????????'
-  const octets = isOctet ? [decimal] : isValidU32 ? [
-    (decimal >>> 24) & 0xff,
-    (decimal >>> 16) & 0xff,
-    (decimal >>> 8) & 0xff,
-    decimal & 0xff,
-  ] : []
+  const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f97316', '#ef4444', '#06b6d4', '#ec4899', '#f59e0b']
 
   return (
-    <div style={{ background: 'var(--surface)', border: `1px solid ${N}30`, borderRadius: 12, padding: '24px', margin: '28px 0' }}>
-      <p style={{ fontSize: 11, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 16px' }}>Interactive Base Converter</p>
+    <div style={{ margin: '28px 0', background: '#080d18', border: '1px solid #1e293b', borderRadius: 14, overflow: 'hidden' }}>
+      {/* Input */}
+      <div style={{ padding: '16px 20px', borderBottom: '1px solid #1e293b', display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
+        <input
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          style={{ background: '#0d1525', border: `1px solid ${parseError ? '#ef4444' : '#1e293b'}`, borderRadius: 8, color: '#e2e8f0', padding: '8px 14px', fontSize: 16, fontFamily: 'monospace', width: 160 }}
+          placeholder="Enter a number"
+        />
+        <div style={{ display: 'flex', gap: 6 }}>
+          {(['decimal', 'binary', 'hex', 'octal'] as const).map(b => (
+            <button
+              key={b}
+              onClick={() => setBase(b)}
+              style={{
+                padding: '6px 12px', borderRadius: 16, border: `1px solid ${base === b ? ACC : '#1e293b'}`,
+                background: base === b ? `${ACC}18` : 'transparent',
+                color: base === b ? ACC : '#64748b',
+                fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'monospace',
+              }}
+            >{b}</button>
+          ))}
+        </div>
+      </div>
 
-      {/* Base selector */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-        {(['decimal', 'binary', 'hex'] as const).map(b => (
+      <div style={{ padding: '18px 20px' }}>
+        {/* Results grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
+          {[
+            { label: 'Decimal (base 10)', value: dec, color: '#10b981' },
+            { label: 'Hexadecimal (base 16)', value: `0x${hex}`, color: '#3b82f6' },
+            { label: 'Octal (base 8)', value: `0${oct}`, color: '#8b5cf6' },
+          ].map(r => (
+            <div key={r.label} style={{ background: '#0d1525', borderRadius: 8, padding: '12px 16px' }}>
+              <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 4 }}>{r.label}</div>
+              <div style={{ fontSize: 18, fontWeight: 800, color: r.color, fontFamily: 'monospace' }}>{r.value}</div>
+            </div>
+          ))}
+          <div style={{ background: '#0d1525', borderRadius: 8, padding: '12px 16px', gridColumn: '1 / -1' }}>
+            <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 8 }}>Binary (base 2)</div>
+            {!parseError && (
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                {binGroups.map((g, gi) => (
+                  <div key={gi} style={{ display: 'flex', gap: 2 }}>
+                    {g.split('').map((b, bi) => (
+                      <div key={bi} style={{
+                        width: 28, height: 28, borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        background: b === '1' ? `${COLORS[gi % COLORS.length]}20` : '#0a0f1e',
+                        border: `1px solid ${b === '1' ? COLORS[gi % COLORS.length] + '60' : '#1e293b'}`,
+                        color: b === '1' ? COLORS[gi % COLORS.length] : '#334155',
+                        fontSize: 13, fontWeight: 800, fontFamily: 'monospace',
+                      }}>{b}</div>
+                    ))}
+                    {gi < binGroups.length - 1 && <div style={{ width: 4 }} />}
+                  </div>
+                ))}
+              </div>
+            )}
+            {parseError && <div style={{ color: '#ef4444', fontFamily: 'monospace', fontSize: 13 }}>invalid input for {base} base</div>}
+          </div>
+        </div>
+
+        {/* Byte breakdown for > 1 byte values */}
+        {!parseError && value > 255 && hexGroups.length > 0 && (
+          <div style={{ background: '#0a0f1e', borderRadius: 8, padding: '12px 16px', marginBottom: 12 }}>
+            <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 8 }}>Byte breakdown (most significant first)</div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {hexGroups.map((hb, i) => (
+                <div key={i} style={{ background: `${COLORS[i % COLORS.length]}10`, border: `1px solid ${COLORS[i % COLORS.length]}40`, borderRadius: 6, padding: '6px 10px', textAlign: 'center' }}>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: COLORS[i % COLORS.length], fontFamily: 'monospace' }}>0x{hb}</div>
+                  <div style={{ fontSize: 10, color: '#475569', fontFamily: 'monospace' }}>byte {i + 1}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div style={{ fontSize: 11, color: '#334155', fontFamily: 'monospace', textAlign: 'center' }}>
+          try networking values: 255, 192, 172, 10, 65535, 0xDEADBEEF
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Interactive 2: Bitwise Operations Lab ────────────────────────────────────
+
+const BITWISE_OPS = [
+  { name: 'AND (&)', symbol: '&', color: '#10b981', op: (a: number, b: number) => a & b, desc: 'Both bits must be 1 to get 1. Used for subnet masks — extracts the network portion of an IP address.' },
+  { name: 'OR (|)', symbol: '|', color: '#3b82f6', op: (a: number, b: number) => a | b, desc: 'Either bit being 1 produces 1. Used to set specific bits in a flags register.' },
+  { name: 'XOR (^)', symbol: '^', color: '#8b5cf6', op: (a: number, b: number) => a ^ b, desc: 'Exactly one bit must be 1 to get 1. Used in CRC checksums and parity calculations.' },
+  { name: 'NOT (~)', symbol: '~', color: '#f97316', op: (a: number) => (~a) & 0xFF, desc: 'Flips every bit. Used to invert subnet masks: ~255.0.0.0 = 0.255.255.255 (wildcard mask for ACLs).' },
+  { name: 'Left Shift (<<)', symbol: '<<', color: '#ef4444', op: (a: number, b: number) => (a << b) & 0xFF, desc: 'Shifts bits left, filling right with zeros. Left shift by n = multiply by 2ⁿ. Used for fast power-of-2 operations.' },
+  { name: 'Right Shift (>>)', symbol: '>>', color: '#06b6d4', op: (a: number, b: number) => (a >> b) & 0xFF, desc: 'Shifts bits right, filling left with zeros. Right shift by n = integer divide by 2ⁿ. Used to extract high bytes.' },
+]
+
+function toBin8(n: number) {
+  return (n & 0xFF).toString(2).padStart(8, '0')
+}
+
+function BitwiseLab() {
+  const [opIdx, setOpIdx] = useState(0)
+  const [inputA, setInputA] = useState('192')
+  const [inputB, setInputB] = useState('255')
+
+  const op = BITWISE_OPS[opIdx]
+  const a = parseInt(inputA, 10) & 0xFF
+  const b = parseInt(inputB, 10) & 0xFF
+  const isUnary = op.name.startsWith('NOT')
+  const isShift = op.name.includes('Shift')
+  const result = isUnary ? op.op(a, 0) : op.op(a, isShift ? (b & 7) : b)
+  const aBin = toBin8(a)
+  const bBin = toBin8(b)
+  const rBin = toBin8(result)
+  const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f97316', '#ef4444', '#06b6d4', '#ec4899']
+
+  return (
+    <div style={{ margin: '28px 0', background: '#080d18', border: '1px solid #1e293b', borderRadius: 14, overflow: 'hidden' }}>
+      {/* Op selector */}
+      <div style={{ padding: '14px 18px', borderBottom: '1px solid #1e293b', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        {BITWISE_OPS.map((o, i) => (
           <button
-            key={b}
-            onClick={() => { setBase(b); setInput(b === 'decimal' ? '192' : b === 'binary' ? '11000000' : 'C0') }}
+            key={o.name}
+            onClick={() => setOpIdx(i)}
             style={{
-              padding: '6px 16px', borderRadius: 6, border: `1px solid ${base === b ? N : 'var(--border)'}`,
-              background: base === b ? `${N}18` : 'transparent',
-              color: base === b ? N : 'var(--muted)', fontSize: 13, fontWeight: 600, cursor: 'pointer', textTransform: 'capitalize',
+              padding: '5px 12px', borderRadius: 16, border: `1px solid ${i === opIdx ? o.color : '#1e293b'}`,
+              background: i === opIdx ? `${o.color}18` : 'transparent',
+              color: i === opIdx ? o.color : '#64748b',
+              fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'monospace',
             }}
-          >{b}</button>
+          >{o.name}</button>
         ))}
       </div>
 
-      <input
-        value={input}
-        onChange={e => setInput(e.target.value)}
-        placeholder={base === 'decimal' ? '0–4294967295' : base === 'binary' ? '00000000–11111111' : '00–FF'}
-        style={{
-          width: '100%', padding: '10px 14px', borderRadius: 8,
-          border: `1px solid ${parseError ? '#ef4444' : N + '40'}`,
-          background: 'var(--bg)', color: 'var(--text)', fontSize: 15,
-          fontFamily: 'var(--font-mono)', boxSizing: 'border-box', marginBottom: 20,
-        }}
-      />
+      <div style={{ padding: '18px 20px' }}>
+        <p style={{ fontSize: 13, color: '#94a3b8', marginBottom: 18 }}>{op.desc}</p>
 
-      {parseError && <p style={{ color: '#ef4444', fontSize: 13, margin: '-12px 0 16px' }}>Invalid {base} value</p>}
-
-      {!parseError && isValidU32 && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
-          {[
-            { label: 'Decimal', value: decimal.toString(10), accent: '#3b82f6' },
-            { label: 'Binary', value: decimal.toString(2), accent: '#f59e0b' },
-            { label: 'Hexadecimal', value: '0x' + decimal.toString(16).toUpperCase(), accent: N },
-          ].map(({ label, value, accent }) => (
-            <div key={label} style={{ background: `${accent}08`, border: `1px solid ${accent}25`, borderRadius: 8, padding: '12px 14px' }}>
-              <p style={{ fontSize: 11, color: accent, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', textTransform: 'uppercase' }}>{label}</p>
-              <p style={{ fontSize: 14, fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--text)', margin: 0, wordBreak: 'break-all' }}>{value}</p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Octet visual for single 0–255 value */}
-      {isOctet && (
-        <>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px' }}>8-bit positional breakdown:</p>
-          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-            {[128, 64, 32, 16, 8, 4, 2, 1].map((pw, i) => {
-              const bit = (decimal >> (7 - i)) & 1
-              return (
-                <div key={pw} style={{ textAlign: 'center', minWidth: 44 }}>
-                  <div style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 4 }}>2{String(7 - i).replace(/(\d)/, (m) => ['⁰','¹','²','³','⁴','⁵','⁶','⁷'][parseInt(m)] || m)}</div>
-                  <div style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 4 }}>{pw}</div>
-                  <div style={{
-                    width: 40, height: 40, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: bit ? `${N}20` : '#ffffff08', border: `1px solid ${bit ? N : 'var(--border)'}`,
-                    fontSize: 16, fontWeight: 700, fontFamily: 'var(--font-mono)', color: bit ? N : 'var(--muted)',
-                  }}>{bit}</div>
-                </div>
-              )
-            })}
+        {/* Inputs */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>A (0-255)</label>
+            <input value={inputA} onChange={e => setInputA(e.target.value)} style={{ background: '#0d1525', border: '1px solid #1e293b', borderRadius: 6, color: '#e2e8f0', padding: '6px 10px', fontSize: 14, fontFamily: 'monospace', width: 80 }} />
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: '12px 0 0', fontFamily: 'var(--font-mono)' }}>
-            {[128, 64, 32, 16, 8, 4, 2, 1].filter((pw, i) => ((decimal >> (7 - i)) & 1)).map(pw => pw).join(' + ') || '0'} = {decimal}
-          </p>
-        </>
-      )}
+          {!isUnary && (
+            <>
+              <div style={{ fontSize: 22, color: op.color, fontFamily: 'monospace', fontWeight: 900, marginTop: 18 }}>{op.symbol}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>{isShift ? 'Shift by (0-7)' : 'B (0-255)'}</label>
+                <input value={inputB} onChange={e => setInputB(e.target.value)} style={{ background: '#0d1525', border: '1px solid #1e293b', borderRadius: 6, color: '#e2e8f0', padding: '6px 10px', fontSize: 14, fontFamily: 'monospace', width: 80 }} />
+              </div>
+            </>
+          )}
+        </div>
 
-      {/* IPv4 address breakdown for 32-bit values */}
-      {isValidU32 && !isOctet && octets.length === 4 && (
-        <>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 10px' }}>As IPv4 address — four 8-bit octets:</p>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-            {octets.map((oct, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ background: `${N}10`, border: `1px solid ${N}25`, borderRadius: 8, padding: '8px 14px', textAlign: 'center' }}>
-                  <p style={{ fontSize: 10, color: N, fontFamily: 'var(--font-mono)', margin: '0 0 4px' }}>Octet {i + 1}</p>
-                  <p style={{ fontSize: 15, fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--text)', margin: '0 0 2px' }}>{oct}</p>
-                  <p style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--muted)', margin: 0 }}>{toBin(oct)}</p>
-                  <p style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: N, margin: 0 }}>0x{toHex(oct)}</p>
+        {/* Bit grid */}
+        {[
+          { label: `A = ${a} (0x${a.toString(16).padStart(2, '0').toUpperCase()})`, bits: aBin, color: '#94a3b8' },
+          ...(!isUnary ? [{ label: `${isShift ? 'Shift' : 'B'} = ${isShift ? b & 7 : b}`, bits: bBin, color: '#64748b' }] : []),
+          { label: `Result = ${result} (0x${result.toString(16).padStart(2, '0').toUpperCase()})`, bits: rBin, color: op.color },
+        ].map((row, ri) => (
+          <div key={ri} style={{ marginBottom: ri === (isUnary ? 1 : 2) ? 0 : 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 11, color: row.color, fontFamily: 'monospace', minWidth: ri === (isUnary ? 1 : 2) ? 160 : 140 }}>{row.label}</span>
+            <div style={{ display: 'flex', gap: 3 }}>
+              {row.bits.split('').map((b, bi) => (
+                <div key={bi} style={{
+                  width: 28, height: 28, borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: b === '1' ? `${row.color}20` : '#0a0f1e',
+                  border: `1px solid ${b === '1' ? row.color + '60' : '#1e293b'}`,
+                  color: b === '1' ? row.color : '#334155',
+                  fontSize: 13, fontWeight: 800, fontFamily: 'monospace',
+                  transition: 'all .15s',
+                }}>{b}</div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {/* Networking context */}
+        <div style={{ marginTop: 20, background: '#0a1628', borderLeft: `3px solid ${op.color}`, borderRadius: 8, padding: '12px 16px' }}>
+          <div style={{ fontSize: 11, color: op.color, fontFamily: 'monospace', fontWeight: 800, marginBottom: 6 }}>NETWORKING USE</div>
+          {opIdx === 0 && (
+            <div style={{ fontSize: 12, color: '#94a3b8', fontFamily: 'monospace' }}>
+              IP 192.168.1.50 AND mask 255.255.255.0 = 192.168.1.0 (network address)<br />
+              Try: A=192, B=255 → 192.168.1.x is on network 192.168.1.0/24
+            </div>
+          )}
+          {opIdx === 1 && (
+            <div style={{ fontSize: 12, color: '#94a3b8', fontFamily: 'monospace' }}>
+              Network 192.168.1.0 OR broadcast suffix 0.0.0.255 = 192.168.1.255<br />
+              Used to calculate broadcast address from network + wildcard mask
+            </div>
+          )}
+          {opIdx === 2 && (
+            <div style={{ fontSize: 12, color: '#94a3b8', fontFamily: 'monospace' }}>
+              CRC calculation XORs data bits with polynomial repeatedly<br />
+              XOR of same value = 0: used for parity checks across multiple bytes
+            </div>
+          )}
+          {opIdx === 3 && (
+            <div style={{ fontSize: 12, color: '#94a3b8', fontFamily: 'monospace' }}>
+              ~255 = 0 (inverts subnet mask → wildcard for Cisco ACLs)<br />
+              ~252 = 3 → /30 subnet wildcard (0.0.0.3, allows 4 hosts)
+            </div>
+          )}
+          {opIdx === 4 && (
+            <div style={{ fontSize: 12, color: '#94a3b8', fontFamily: 'monospace' }}>
+              1 {'<<'} 7 = 128 (MSB set, /1 mask)<br />
+              Used to build subnet masks: (0xFFFFFFFF {'<<'} (32-prefix)) creates any /prefix
+            </div>
+          )}
+          {opIdx === 5 && (
+            <div style={{ fontSize: 12, color: '#94a3b8', fontFamily: 'monospace' }}>
+              Extract octets: (0xC0A80132 {'>>'} 24) & 0xFF = 192 (first octet)<br />
+              (0xC0A80132 {'>>'} 16) & 0xFF = 168, {'>>'} 8 & 0xFF = 1, & 0xFF = 50
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Interactive 3: IP Address Dissector ──────────────────────────────────────
+
+function parseIPv4(ip: string): number[] | null {
+  const parts = ip.split('.')
+  if (parts.length !== 4) return null
+  const nums = parts.map(p => parseInt(p, 10))
+  if (nums.some(n => isNaN(n) || n < 0 || n > 255)) return null
+  return nums
+}
+
+function cidrToMask(prefix: number): number[] {
+  const mask = prefix === 0 ? 0 : (~0 << (32 - prefix)) >>> 0
+  return [(mask >>> 24) & 0xFF, (mask >>> 16) & 0xFF, (mask >>> 8) & 0xFF, mask & 0xFF]
+}
+
+function IPDissector() {
+  const [ipStr, setIpStr] = useState('192.168.10.50')
+  const [prefix, setPrefix] = useState(24)
+
+  const octets = parseIPv4(ipStr)
+  const valid = octets !== null
+  const mask = cidrToMask(prefix)
+
+  const networkOctets = octets ? octets.map((o, i) => o & mask[i]) : []
+  const broadcastOctets = octets ? networkOctets.map((o, i) => o | (~mask[i] & 0xFF)) : []
+  const firstHost = networkOctets.length ? [...networkOctets.slice(0, 3), networkOctets[3] + 1] : []
+  const lastHost = broadcastOctets.length ? [...broadcastOctets.slice(0, 3), broadcastOctets[3] - 1] : []
+  const totalHosts = prefix < 31 ? Math.pow(2, 32 - prefix) - 2 : prefix === 31 ? 2 : 1
+
+  const OCTET_COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f97316']
+
+  function OctetBits({ octet, highlight, color }: { octet: number; highlight: number; color: string }) {
+    const bits = octet.toString(2).padStart(8, '0')
+    return (
+      <div style={{ display: 'flex', gap: 2 }}>
+        {bits.split('').map((b, i) => (
+          <div key={i} style={{
+            width: 22, height: 22, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: i < highlight ? `${color}25` : '#0a0f1e',
+            border: `1px solid ${i < highlight ? color + '70' : '#1e293b'}`,
+            color: i < highlight ? color : '#334155',
+            fontSize: 11, fontWeight: 800, fontFamily: 'monospace',
+          }}>{b}</div>
+        ))}
+      </div>
+    )
+  }
+
+  // Compute per-octet highlight counts
+  const highlights = [
+    Math.min(prefix, 8),
+    Math.min(Math.max(prefix - 8, 0), 8),
+    Math.min(Math.max(prefix - 16, 0), 8),
+    Math.min(Math.max(prefix - 24, 0), 8),
+  ]
+
+  return (
+    <div style={{ margin: '28px 0', background: '#080d18', border: '1px solid #1e293b', borderRadius: 14, overflow: 'hidden' }}>
+      <div style={{ padding: '16px 20px', borderBottom: '1px solid #1e293b', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>IPv4 Address</label>
+          <input
+            value={ipStr}
+            onChange={e => setIpStr(e.target.value)}
+            style={{ background: '#0d1525', border: `1px solid ${valid ? '#1e293b' : '#ef4444'}`, borderRadius: 6, color: '#e2e8f0', padding: '6px 12px', fontSize: 14, fontFamily: 'monospace', width: 160 }}
+          />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>Prefix length: /{prefix}</label>
+          <input type="range" min={1} max={32} value={prefix} onChange={e => setPrefix(Number(e.target.value))}
+            style={{ width: 160, accentColor: ACC }} />
+        </div>
+      </div>
+
+      {valid && octets && (
+        <div style={{ padding: '18px 20px' }}>
+          {/* Bit layout */}
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 10 }}>
+              IP address bit layout — <span style={{ color: '#10b981' }}>network bits (/{prefix})</span> / <span style={{ color: '#334155' }}>host bits</span>
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+              {octets.map((octet, i) => (
+                <div key={i} style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 11, color: OCTET_COLORS[i], fontFamily: 'monospace', marginBottom: 4, fontWeight: 700 }}>
+                    .{octet}
+                  </div>
+                  <OctetBits octet={octet} highlight={highlights[i]} color={OCTET_COLORS[i]} />
                 </div>
-                {i < 3 && <span style={{ fontSize: 18, color: 'var(--muted)', fontWeight: 700 }}>.</span>}
+              ))}
+            </div>
+          </div>
+
+          {/* Results */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            {[
+              { label: 'Subnet Mask', value: mask.join('.'), color: '#10b981' },
+              { label: 'Network Address', value: networkOctets.join('.'), color: '#3b82f6' },
+              { label: 'Broadcast Address', value: broadcastOctets.join('.'), color: '#ef4444' },
+              { label: 'Usable Hosts', value: totalHosts.toLocaleString(), color: '#f97316' },
+              { label: 'First Host', value: firstHost.join('.'), color: '#8b5cf6' },
+              { label: 'Last Host', value: lastHost.join('.'), color: '#06b6d4' },
+            ].map(r => (
+              <div key={r.label} style={{ background: '#0d1525', borderRadius: 8, padding: '10px 14px' }}>
+                <div style={{ fontSize: 10, color: '#475569', fontFamily: 'monospace', marginBottom: 3 }}>{r.label}</div>
+                <div style={{ fontSize: 15, fontWeight: 800, color: r.color, fontFamily: 'monospace' }}>{r.value}</div>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 13, fontFamily: 'var(--font-mono)', color: 'var(--muted)', margin: '12px 0 0' }}>
-            IPv4: {octets.join('.')} &nbsp;|&nbsp; Binary: {binStr.match(/.{8}/g)?.join('.') ?? binStr}
-          </p>
-        </>
+
+          <div style={{ marginTop: 14, padding: '10px 14px', background: '#0a0f1e', borderRadius: 8, fontSize: 12, color: '#475569', fontFamily: 'monospace' }}>
+            Try: 10.0.0.1/8 (Class A), 172.16.0.1/12 (Class B), 192.168.0.1/24 (Class C), 192.168.1.200/28 (/28 subnet)
+          </div>
+        </div>
       )}
-    </div>
-  )
-}
-
-// ── Subnet Mask Visualizer ────────────────────────────────────────────────────
-const SUBNET_PRESETS = [
-  { label: '/8', cidr: 8, mask: '255.0.0.0', hosts: 16777214 },
-  { label: '/16', cidr: 16, mask: '255.255.0.0', hosts: 65534 },
-  { label: '/24', cidr: 24, mask: '255.255.255.0', hosts: 254 },
-  { label: '/25', cidr: 25, mask: '255.255.255.128', hosts: 126 },
-  { label: '/26', cidr: 26, mask: '255.255.255.192', hosts: 62 },
-  { label: '/27', cidr: 27, mask: '255.255.255.224', hosts: 30 },
-  { label: '/28', cidr: 28, mask: '255.255.255.240', hosts: 14 },
-  { label: '/30', cidr: 30, mask: '255.255.255.252', hosts: 2 },
-]
-
-function SubnetVisualizer() {
-  const [selected, setSelected] = useState(2) // /24 default
-  const preset = SUBNET_PRESETS[selected]
-  const bits = Array.from({ length: 32 }, (_, i) => i < preset.cidr ? 1 : 0)
-
-  return (
-    <div style={{ background: 'var(--surface)', border: `1px solid ${N}30`, borderRadius: 12, padding: '24px', margin: '28px 0' }}>
-      <p style={{ fontSize: 11, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 16px' }}>Subnet Mask Bit Visualizer</p>
-
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
-        {SUBNET_PRESETS.map((p, i) => (
-          <button
-            key={p.label}
-            onClick={() => setSelected(i)}
-            style={{
-              padding: '6px 14px', borderRadius: 6,
-              border: `1px solid ${selected === i ? N : 'var(--border)'}`,
-              background: selected === i ? `${N}18` : 'transparent',
-              color: selected === i ? N : 'var(--muted)', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-            }}
-          >{p.label}</button>
-        ))}
-      </div>
-
-      {/* 32-bit grid */}
-      <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap', marginBottom: 12 }}>
-        {bits.map((bit, i) => (
-          <div
-            key={i}
-            style={{
-              width: 24, height: 24, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: bit ? `${N}25` : '#ef444415',
-              border: `1px solid ${bit ? N + '50' : '#ef444440'}`,
-              fontSize: 10, fontFamily: 'var(--font-mono)', fontWeight: 700,
-              color: bit ? N : '#ef4444',
-            }}
-          >{bit}</div>
-        ))}
-      </div>
-
-      <div style={{ display: 'flex', gap: 16, fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
-        <span style={{ color: N, fontWeight: 600 }}>■ Network bits: {preset.cidr}</span>
-        <span style={{ color: '#ef4444', fontWeight: 600 }}>■ Host bits: {32 - preset.cidr}</span>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-        <div style={{ background: '#ffffff05', borderRadius: 8, padding: '12px 14px', border: '1px solid var(--border)' }}>
-          <p style={{ fontSize: 11, color: 'var(--muted)', margin: '0 0 4px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Subnet Mask</p>
-          <p style={{ fontSize: 14, fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--text)', margin: 0 }}>{preset.mask}</p>
-        </div>
-        <div style={{ background: '#ffffff05', borderRadius: 8, padding: '12px 14px', border: '1px solid var(--border)' }}>
-          <p style={{ fontSize: 11, color: 'var(--muted)', margin: '0 0 4px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Usable Hosts</p>
-          <p style={{ fontSize: 14, fontFamily: 'var(--font-mono)', fontWeight: 700, color: N, margin: 0 }}>{preset.hosts.toLocaleString()}</p>
-        </div>
-        <div style={{ background: '#ffffff05', borderRadius: 8, padding: '12px 14px', border: '1px solid var(--border)' }}>
-          <p style={{ fontSize: 11, color: 'var(--muted)', margin: '0 0 4px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Total Addresses</p>
-          <p style={{ fontSize: 14, fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--text)', margin: 0 }}>{(preset.hosts + 2).toLocaleString()}</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ── Hex Color Decoder ─────────────────────────────────────────────────────────
-function HexColorDecoder() {
-  const [hex, setHex] = useState('FF5733')
-  const clean = hex.replace('#', '').slice(0, 6).toUpperCase()
-  const isValid = /^[0-9A-Fa-f]{6}$/.test(clean)
-  const r = isValid ? parseInt(clean.slice(0, 2), 16) : 0
-  const g = isValid ? parseInt(clean.slice(2, 4), 16) : 0
-  const b = isValid ? parseInt(clean.slice(4, 6), 16) : 0
-
-  return (
-    <div style={{ background: 'var(--surface)', border: `1px solid ${N}30`, borderRadius: 12, padding: '24px', margin: '28px 0' }}>
-      <p style={{ fontSize: 11, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 16px' }}>Hex Color Decoder — CSS Colors Are Pure Hex Math</p>
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 20, flexWrap: 'wrap' }}>
-        <input
-          value={hex}
-          onChange={e => setHex(e.target.value.replace(/[^0-9a-fA-F#]/g, ''))}
-          placeholder="FF5733"
-          style={{
-            padding: '10px 14px', borderRadius: 8, border: `1px solid ${N}40`,
-            background: 'var(--bg)', color: 'var(--text)', fontSize: 15,
-            fontFamily: 'var(--font-mono)', width: 140,
-          }}
-        />
-        {isValid && (
-          <div style={{
-            width: 56, height: 40, borderRadius: 8, border: '1px solid var(--border)',
-            background: `#${clean}`,
-          }} />
-        )}
-      </div>
-
-      {isValid && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-          {[
-            { ch: 'Red', hex: clean.slice(0, 2), val: r, accent: '#ef4444' },
-            { ch: 'Green', hex: clean.slice(2, 4), val: g, accent: '#22c55e' },
-            { ch: 'Blue', hex: clean.slice(4, 6), val: b, accent: '#3b82f6' },
-          ].map(({ ch, hex: h, val, accent }) => (
-            <div key={ch} style={{ background: `${accent}10`, border: `1px solid ${accent}30`, borderRadius: 8, padding: '14px' }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: accent, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 6px' }}>{ch}</p>
-              <p style={{ fontSize: 18, fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' }}>0x{h}</p>
-              <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 2px', fontFamily: 'var(--font-mono)' }}>{val} decimal</p>
-              <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, fontFamily: 'var(--font-mono)' }}>{val.toString(2).padStart(8, '0')} binary</p>
-              <div style={{ marginTop: 8, height: 6, borderRadius: 3, background: 'var(--border)' }}>
-                <div style={{ height: '100%', borderRadius: 3, background: accent, width: `${(val / 255) * 100}%` }} />
-              </div>
-            </div>
-          ))}
+      {!valid && (
+        <div style={{ padding: '20px', textAlign: 'center', color: '#ef4444', fontFamily: 'monospace', fontSize: 13 }}>
+          invalid IPv4 address — enter 4 octets 0-255 separated by dots
         </div>
       )}
     </div>
   )
 }
 
-export default function BinaryAndHex() {
+// ─── Module ────────────────────────────────────────────────────────────────────
+
+export default function BinaryAndHexPage() {
   return (
     <LearnLayout
       title="Binary and Hexadecimal"
-      description="Every IP address, MAC address, subnet mask, and port number is binary under the hood. Learn to read and manipulate the number systems that power every networking concept in this course."
-      section="Networking Fundamentals"
-      readTime="30 min"
+      description="The mathematical foundation of all networking — every IP address, MAC address, and subnet mask is binary arithmetic in disguise."
+      section="Networking Fundamentals — Module 06"
+      readTime="20–28 min"
       updatedAt="May 2026"
     >
+      {/* ── Chapter 01 ── */}
+      <Chapter n={1} title="Why Computers Only Know Two Things" />
 
-      {/* ── PART 1 ── */}
-      <Part n="01" title="Why Engineers Must Own These Number Systems" />
+      <StoryBox>
+        You&apos;re a hardware engineer in 1945. You need to build a machine that can do arithmetic.
+        You could use 10 voltage levels for decimal digits — but distinguishing 0.1V from 0.2V from 0.3V
+        at speed, in the presence of electrical noise, is nearly impossible. Or you use just two levels:
+        5V (one) and 0V (zero). A signal is either clearly high or clearly low. If noise adds 0.5V to a
+        0V signal, you still read it as zero. This tolerance for noise is why every digital computer
+        ever built — from ENIAC to your iPhone — operates in binary.
+      </StoryBox>
 
-      <P>
-        A network engineer who cannot read binary is like a surgeon who cannot read an X-ray. You can follow a procedure, but you cannot diagnose. When a Cisco router prints <Hl>10.0.0.0/8</Hl> in a routing table, when Wireshark shows <Hl>0x0800</Hl> as the EtherType, when an AWS security group rule shows <Hl>192.168.1.0/255.255.255.192</Hl> — you need to decompose those values instantly, in your head, without a calculator.
-      </P>
+      <Para>
+        Binary isn&apos;t arbitrary. It&apos;s the natural language of circuits, transistors, and physical switches —
+        things that are either on or off, conducting or not conducting, magnetized one way or the other.
+        Decimal is the natural language of human beings who have 10 fingers. Hexadecimal exists because
+        binary numbers get long and hard to read, and four binary digits map perfectly to one hex digit.
+      </Para>
 
-      <P>
-        This module is not about math for its own sake. Every concept here maps directly to something you will configure, debug, or explain within the next ten modules. Subnetting is nothing but binary AND operations on two 32-bit numbers. VLANs are identified by 12-bit binary tags. TLS record lengths are encoded as big-endian hex in packet captures. MAC addresses are 48-bit hex literals. VXLAN uses a 24-bit network identifier. IPv6 is 128-bit hex. The pattern is everywhere.
-      </P>
+      <Para>
+        In networking, you use all three constantly: IP addresses and subnet masks are binary arithmetic.
+        MAC addresses, TCP flags, and Ethernet types are expressed in hexadecimal. Subnet calculations
+        are binary AND operations. DNS record sizes are in decimal. You cannot fully understand any of
+        these without understanding the number systems underneath.
+      </Para>
 
-      <P>
-        There are three number systems a network engineer uses daily: <Hl>decimal</Hl> (base-10, for human communication), <Hl>binary</Hl> (base-2, for what hardware actually processes), and <Hl>hexadecimal</Hl> (base-16, for a compact human representation of binary). All three represent the same underlying values — just in different notations. Converting between them is mechanical and fast once your fingers know the patterns.
-      </P>
+      <WowBox>
+        The binary number system was mathematically formalized by Gottfried Wilhelm Leibniz in 1703,
+        who was inspired by the I Ching — an ancient Chinese divination system using broken and unbroken
+        lines (which can be interpreted as 0 and 1). Leibniz saw it as proof that all reasoning could
+        be reduced to calculation. He was 240 years ahead of the transistor that would make this possible.
+      </WowBox>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, margin: '28px 0' }}>
-        {[
-          { base: 'Binary', symbol: '2', digits: '0, 1', useCase: 'Subnet masks, CIDR bits, flag fields, hardware logic', accent: '#f59e0b' },
-          { base: 'Decimal', symbol: '10', useCase: 'IPv4 octets displayed to humans, port numbers, TTL values', digits: '0–9', accent: '#3b82f6' },
-          { base: 'Hexadecimal', symbol: '16', useCase: 'MAC addresses, EtherTypes, IPv6 addresses, TLS record parsing', digits: '0–9, A–F', accent: N },
-        ].map(({ base, symbol, digits, useCase, accent }) => (
-          <div key={base} style={{ background: `${accent}08`, border: `1px solid ${accent}25`, borderRadius: 10, padding: '18px' }}>
-            <div style={{ fontSize: 28, fontFamily: 'var(--font-mono)', fontWeight: 900, color: accent, marginBottom: 8 }}>Base {symbol}</div>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' }}>{base}</p>
-            <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 10px', fontFamily: 'var(--font-mono)' }}>Digits: {digits}</p>
-            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{useCase}</p>
-          </div>
-        ))}
-      </div>
+      <Divider />
 
-      <HR />
+      {/* ── Chapter 02 ── */}
+      <Chapter n={2} title="Decimal: The System You Already Know" />
 
-      {/* ── PART 2 ── */}
-      <Part n="02" title="Binary: The Language of Silicon" />
+      <Para>
+        Understanding decimal&apos;s structure lets you understand every other base. Decimal (base 10) uses
+        10 symbols: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. Each position in a number represents a power of 10,
+        increasing from right to left.
+      </Para>
 
-      <P>
-        A transistor has two states: on (1) and off (0). Every CPU, NIC, switch ASIC, and router forwarding engine is built from billions of these switches. When data travels over a wire, it is literally voltage pulses representing 1s and 0s. Binary is not an abstraction — it is the physical reality of networking hardware.
-      </P>
+      <CodeBlock>{`Decimal 4,937 decomposed:
+  4 × 10³ = 4 × 1,000 = 4,000
+  9 × 10² = 9 × 100   =   900
+  3 × 10¹ = 3 × 10    =    30
+  7 × 10⁰ = 7 × 1     =     7
+  ────────────────────────────
+                         4,937
 
-      <H>Place Values and Positional Notation</H>
+The pattern: digit × (base)^(position from right starting at 0)
+This same pattern works for binary (base 2) and hex (base 16)`}</CodeBlock>
 
-      <P>
-        In decimal, each digit position is a power of 10: the ones column (10⁰=1), tens (10¹=10), hundreds (10²=100), and so on. Binary uses the same positional logic, but each position is a power of 2.
-      </P>
+      <Para>
+        The insight: number bases are just conventions about <Accent>how many symbols you use before
+        you roll over to the next position</Accent>. Base 10 rolls over at 10. Base 2 rolls over at 2.
+        Base 16 rolls over at 16. The underlying quantity — "how many things" — is the same regardless
+        of how you write it.
+      </Para>
 
-      <P>
-        For an 8-bit value (one octet — the fundamental unit of IPv4), the place values from left (most significant) to right (least significant) are: <Hl>128, 64, 32, 16, 8, 4, 2, 1</Hl>. These eight values sum to 255, which is 2⁸−1, the maximum 8-bit unsigned integer. To decode a binary octet, identify which bits are 1, then add their corresponding place values.
-      </P>
+      <Divider />
 
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}25`, borderRadius: 10, padding: '20px 24px', margin: '24px 0', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
-        <p style={{ color: N, margin: '0 0 12px', fontWeight: 700 }}>// Decode binary 11000000 (the first octet of 192.168.1.1)</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 6px' }}>Position:  128  64  32  16   8   4   2   1</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 6px' }}>Bit:         1   1   0   0   0   0   0   0</p>
-        <p style={{ color: 'var(--text)', margin: '0 0 8px' }}>Active:    128 + 64 = 192  ✓</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 6px' }}>Position:  128  64  32  16   8   4   2   1</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 6px' }}>Bit:         1   0   1   0   1   0   0   0</p>
-        <p style={{ color: 'var(--text)', margin: 0 }}>Active:    128 + 32 + 8 = 168  ✓  (second octet of 192.168.1.1)</p>
-      </div>
+      {/* ── Chapter 03 ── */}
+      <Chapter n={3} title="Binary: The Language of Hardware" />
 
-      <H>Decimal to Binary: The Subtraction Method</H>
+      <Para>
+        Binary (base 2) uses only two symbols: 0 and 1. Each position represents a power of 2.
+        A single binary digit is a <Accent>bit</Accent> (binary digit). Eight bits make a <Accent>byte</Accent>.
+        A byte can represent 2⁸ = 256 distinct values (0–255), which is why IPv4 octets range from 0 to 255.
+      </Para>
 
-      <P>
-        To convert decimal to binary, work left to right through the place values. At each position, if the remaining value is ≥ that place value, write a 1 and subtract. Otherwise write a 0 and move on. This is the method CCNA students use to calculate subnet boundaries in under 10 seconds on an exam.
-      </P>
+      <H2>Converting Binary to Decimal</H2>
 
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}25`, borderRadius: 10, padding: '20px 24px', margin: '24px 0', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
-        <p style={{ color: N, margin: '0 0 12px', fontWeight: 700 }}>// Convert 172 to binary</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>172 ≥ 128? YES → bit=1, remainder = 172-128 = 44</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}> 44 ≥  64? NO  → bit=0, remainder = 44</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}> 44 ≥  32? YES → bit=1, remainder = 44-32 = 12</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}> 12 ≥  16? NO  → bit=0, remainder = 12</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}> 12 ≥   8? YES → bit=1, remainder = 12-8 = 4</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>  4 ≥   4? YES → bit=1, remainder = 4-4 = 0</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>  0 ≥   2? NO  → bit=0</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 12px' }}>  0 ≥   1? NO  → bit=0</p>
-        <p style={{ color: 'var(--text)', margin: 0, fontWeight: 700 }}>172 (decimal) = 10101100 (binary) ✓</p>
-      </div>
+      <CodeBlock>{`Binary 11000000 → Decimal:
+  1 × 2⁷ = 1 × 128 = 128
+  1 × 2⁶ = 1 × 64  =  64
+  0 × 2⁵ = 0 × 32  =   0
+  0 × 2⁴ = 0 × 16  =   0
+  0 × 2³ = 0 × 8   =   0
+  0 × 2² = 0 × 4   =   0
+  0 × 2¹ = 0 × 2   =   0
+  0 × 2⁰ = 0 × 1   =   0
+  ────────────────────────
+                      192   ← first octet of 192.168.x.x networks
 
-      <ProTip>
-        Memorize the 8 place values: 128, 64, 32, 16, 8, 4, 2, 1. Senior engineers recite them like a phone number. For any octet between 0–255, you can decode it in about 3 seconds. In a live troubleshooting session, being able to verify &ldquo;10.10.50.0/24 — the .50 octet is 00110010 so the first host is .1 and broadcast is .255&rdquo; without opening a calculator signals competence.
-      </ProTip>
+Shortcut — memorize these powers of 2:
+  2⁷  2⁶  2⁵  2⁴  2³  2²  2¹  2⁰
+  128  64  32  16   8   4   2   1`}</CodeBlock>
 
-      <H>The Critical Subnet Mask Binary Patterns</H>
+      <H2>Converting Decimal to Binary</H2>
 
-      <P>
-        Subnet masks have a specific constraint: all network bits must be <Hl>contiguous 1s from the left</Hl>, followed by contiguous 0s. This means only 9 valid octet values appear in subnet masks: 0, 128, 192, 224, 240, 248, 252, 254, 255. Knowing their binary representations cold is non-negotiable for subnetting.
-      </P>
+      <CodeBlock>{`Method 1: Subtraction (greedily subtract largest power of 2 that fits)
+  172 → 128 fits? Yes. Bit 7 = 1. Remainder = 172 - 128 = 44
+        64 fits? No. Bit 6 = 0.
+        32 fits? Yes. Bit 5 = 1. Remainder = 44 - 32 = 12
+        16 fits? No. Bit 4 = 0.
+         8 fits? Yes. Bit 3 = 1. Remainder = 12 - 8 = 4
+         4 fits? Yes. Bit 2 = 1. Remainder = 4 - 4 = 0
+         2 fits? No. Bit 1 = 0.
+         1 fits? No. Bit 0 = 0.
+  Result: 10101100 (172 in binary)
 
-      <div style={{ overflowX: 'auto', margin: '24px 0' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, fontFamily: 'var(--font-mono)' }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${N}30` }}>
-              {['Decimal', 'Binary', 'Network Bits', 'Usage'].map(h => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', color: N, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '.05em' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['0',   '00000000', '0', 'All host bits — last octet of /8, /16, /24'],
-              ['128', '10000000', '1', 'Last octet of /25 split'],
-              ['192', '11000000', '2', 'Last octet of /26 split (64 hosts each)'],
-              ['224', '11100000', '3', 'Last octet of /27 split (32 hosts each)'],
-              ['240', '11110000', '4', 'Last octet of /28 split (16 hosts each)'],
-              ['248', '11111000', '5', 'Last octet of /29 split (8 hosts each)'],
-              ['252', '11111100', '6', 'Last octet of /30 — point-to-point links'],
-              ['254', '11111110', '7', 'Last octet of /31 — loopback / RFC 3021'],
-              ['255', '11111111', '8', 'Fully masked octet — classful A/B/C boundary'],
-            ].map(([dec, bin, bits, usage], i) => (
-              <tr key={dec} style={{ background: i % 2 ? 'var(--surface)' : 'transparent', borderBottom: '1px solid var(--border)' }}>
-                <td style={{ padding: '10px 14px', color: '#3b82f6', fontWeight: 700 }}>{dec}</td>
-                <td style={{ padding: '10px 14px', color: '#f59e0b', letterSpacing: 2 }}>{bin}</td>
-                <td style={{ padding: '10px 14px', color: N }}>{bits}</td>
-                <td style={{ padding: '10px 14px', color: 'var(--muted)', fontFamily: 'inherit', fontSize: 12 }}>{usage}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+Method 2: Division by 2 (collect remainders, read bottom to top)
+  172 ÷ 2 = 86  r 0
+   86 ÷ 2 = 43  r 0
+   43 ÷ 2 = 21  r 1
+   21 ÷ 2 = 10  r 1
+   10 ÷ 2 =  5  r 0
+    5 ÷ 2 =  2  r 1
+    2 ÷ 2 =  1  r 0
+    1 ÷ 2 =  0  r 1
+  Read bottom to top: 10101100 ✓`}</CodeBlock>
 
-      <Err title="Treating /24 and 255.255.255.0 as different things">
-        They are identical. <code style={{ fontFamily: 'var(--font-mono)', color: N }}>/24</code> (CIDR notation) and <code style={{ fontFamily: 'var(--font-mono)', color: N }}>255.255.255.0</code> (dotted-decimal notation) both mean 24 consecutive 1-bits: <code style={{ fontFamily: 'var(--font-mono)', color: '#f59e0b' }}>11111111.11111111.11111111.00000000</code>. The confusion leads to copy-paste errors in firewall rules — someone types <code>/255.255.255.0</code> in a CIDR field and wonders why the rule rejects.
+      <H3>The Critical 8 IP Address Octets to Memorize</H3>
+
+      <CodeBlock>{`Decimal  Binary      Hex   Networking meaning
+──────────────────────────────────────────────────────────
+0        00000000    0x00  All-zero octet (network bits)
+10       00001010    0x0A  Class A private range start
+128      10000000    0x80  /1 mask, MSB set
+172      10101100    0xAC  Class B private range start
+192      11000000    0xC0  Class C private range start
+224      11100000    0xE0  Class D multicast start
+240      11110000    0xF0  /4 subnet mask (nibble boundary)
+255      11111111    0xFF  All-ones (255.255.255.255 broadcast)`}</CodeBlock>
+
+      <WowBox>
+        The IPv4 address 192.168.1.1 in binary is 11000000.10101000.00000001.00000001.
+        Every router decision — "does this packet stay on my local network or go to the gateway?" —
+        is computed by ANDing the destination IP and subnet mask in binary and comparing to the
+        network address. Routers do this for every single packet, millions of times per second,
+        entirely in binary arithmetic implemented in silicon.
+      </WowBox>
+
+      <Divider />
+
+      {/* ── Chapter 04 ── */}
+      <Chapter n={4} title="Hexadecimal: Binary Made Human-Readable" />
+
+      <Para>
+        Binary is precise but verbose. Writing a MAC address as
+        <Code>00100000110001100110001100011001001101000110</Code> is error-prone and unreadable.
+        Hexadecimal (base 16) solves this: every 4 binary bits map to exactly 1 hex digit.
+        The same MAC address becomes <Code>20:C6:63:19:34:60</Code>.
+      </Para>
+
+      <H2>Hex Symbols</H2>
+
+      <CodeBlock>{`Hex needs 16 symbols (0-15). Letters extend the decimal digits 0-9:
+  Decimal:  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+  Hex:      0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+  Binary: 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011 1100 1101 1110 1111
+
+Prefix conventions:
+  0x prefix: C code, Python, Wireshark  → 0xFF = 255
+  # prefix:  CSS colors                  → #FF0000 = red
+  h suffix:  Assembly, some docs         → FFh = 255
+  \\x escape: byte strings in Python      → b"\\xFF"`}</CodeBlock>
+
+      <H2>Converting Between Binary and Hex</H2>
+
+      <CodeBlock>{`Binary → Hex: group into nibbles (4 bits) from right, convert each
+
+  Binary: 1100 0000 . 1010 1000 . 0000 0001 . 0011 0010
+  Groups:  C    0     A    8      0    1      3    2
+  Hex:    C0        A8           01           32
+
+  → 0xC0A80132 = 192.168.1.50 as a 32-bit integer
+
+Hex → Binary: expand each hex digit to 4 bits
+
+  MAC: AC:DE:48:00:00:80
+  A    C    D    E    4    8    0    0    0    0    8    0
+  1010 1100 1101 1110 0100 1000 0000 0000 0000 0000 1000 0000`}</CodeBlock>
+
+      <H3>Hex in Networking: Where You&apos;ll See It Daily</H3>
+
+      <CodeBlock>{`Context                    Example                    What it means
+──────────────────────────────────────────────────────────────────────────────
+MAC address                00:1A:2B:3C:4D:5E          6-byte hardware address
+EtherType field            0x0800                     IPv4 packet follows
+IPv6 address               2001:0db8::1               128-bit address in hex
+TCP flags (hex dump)       0x002 = 0000 0000 0010     SYN flag set
+IP packet (hex dump)       45 00 00 3c 1c 46 40 00    IP header bytes
+ARP opcode                 0x0001 = request           0x0002 = reply
+VLAN tag                   0x8100                     802.1Q tagged frame
+HTTP/2 frame               00 00 12 01 04             HEADERS frame, 18 bytes`}</CodeBlock>
+
+      <NumberConverter />
+
+      <Divider />
+
+      {/* ── Chapter 05 ── */}
+      <Chapter n={5} title="Octal: The Forgotten Third Base" />
+
+      <Para>
+        Octal (base 8) uses digits 0–7. Each octal digit represents 3 binary bits. While less common than
+        hex in networking, octal appears in Unix/Linux file permissions and occasionally in legacy protocols.
+      </Para>
+
+      <CodeBlock>{`Unix file permissions: chmod 755
+  7 = 111 = rwx (owner: read, write, execute)
+  5 = 101 = r-x (group: read, execute)
+  5 = 101 = r-x (others: read, execute)
+
+chmod 644:
+  6 = 110 = rw- (owner: read, write)
+  4 = 100 = r-- (group: read only)
+  4 = 100 = r-- (others: read only)
+
+chmod 600:  private SSH key  (owner read/write only)
+chmod 755:  executables, directories
+chmod 644:  public files (configs, HTML)
+
+Python octal literal: 0o755 = 493 decimal = 0x1ED hex`}</CodeBlock>
+
+      <Para>
+        When you see a decimal number starting with 0 in C code (<Code>0755</Code>), it&apos;s an octal literal
+        — a common source of bugs. In Python 3, octal requires the <Code>0o</Code> prefix to avoid confusion.
+        In networking code, always be explicit about your base.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 06 ── */}
+      <Chapter n={6} title="Bits, Bytes, and the Data Size Hierarchy" />
+
+      <Para>
+        Networking uses a consistent set of data units. The confusion between bits and bytes causes real
+        problems — ISPs advertise speeds in bits (Mbps) while operating systems show downloads in bytes (MB/s).
+        A "100 Mbps" connection delivers a maximum of 12.5 MB/s of actual data.
+      </Para>
+
+      <H2>Units and Prefixes</H2>
+
+      <CodeBlock>{`Unit      Symbol  Size              Common use
+──────────────────────────────────────────────────────────────────────
+Bit       b       1 binary digit    Network speeds (Mbps, Gbps)
+Nibble    —       4 bits            One hex digit
+Byte      B       8 bits            File sizes, RAM, storage
+Kilobyte  KB      1,024 bytes       Small files, packets
+Megabyte  MB      1,048,576 bytes   Files, RAM
+Gigabyte  GB      1,073,741,824 B   Storage, RAM
+Terabyte  TB      1,099,511,627,776 Disk arrays, backups
+
+SI prefix (decimal) vs IEC prefix (binary):
+  KB = 1,000 bytes    KiB = 1,024 bytes
+  MB = 1,000,000 B    MiB = 1,048,576 B
+  GB = 10⁹ B          GiB = 2³⁰ B
+
+Network speeds are in BITS:
+  100 Mbps = 100,000,000 bits/sec = 12,500,000 bytes/sec ≈ 11.9 MiB/s
+
+MTU:    1,500 bytes = 1,500 × 8 = 12,000 bits per Ethernet frame
+IPv4 header: 20 bytes minimum = 160 bits
+TCP header:  20 bytes minimum = 160 bits`}</CodeBlock>
+
+      <Warn>
+        <Code>Mb</Code> ≠ <Code>MB</Code>. Megabit vs Megabyte, a factor of 8 difference.
+        <Code>Mbps</Code> = megabits per second (network speed). <Code>MB/s</Code> = megabytes per second
+        (file transfer rate). When a speed test shows 100 Mbps and your download manager shows 11 MB/s,
+        that&apos;s correct — 100 / 8 = 12.5 MB/s, minus some overhead = ~11 MB/s. ISPs advertise in bits.
+        Operating systems display in bytes. Keep the factor of 8 in your head at all times.
+      </Warn>
+
+      <Divider />
+
+      {/* ── Chapter 07 ── */}
+      <Chapter n={7} title="Bitwise Operations: Binary Arithmetic on Networks" />
+
+      <Para>
+        Bitwise operations work on individual bits of numbers. They are the foundation of subnet calculations,
+        packet flag manipulation, access control list matching, and cryptographic operations.
+        Every modern CPU has hardware instructions for all bitwise operations — they execute in a single clock cycle.
+      </Para>
+
+      <BitwiseLab />
+
+      <H2>Subnet Masking: AND in Action</H2>
+
+      <Para>
+        Every router on the planet uses bitwise AND to make routing decisions. When a packet arrives, the
+        router ANDs the destination IP with each route&apos;s mask and compares to the route&apos;s network address.
+        The longest matching prefix wins:
+      </Para>
+
+      <CodeBlock>{`Packet destination: 192.168.10.55
+
+Route 1: 0.0.0.0/0    → match ANY (default route)
+  mask:  00000000.00000000.00000000.00000000
+  IP:    11000000.10101000.00001010.00110111
+  AND:   00000000.00000000.00000000.00000000 = 0.0.0.0 = route prefix ✓ (0-bit match)
+
+Route 2: 192.168.0.0/16 → wider match
+  mask:  11111111.11111111.00000000.00000000
+  IP:    11000000.10101000.00001010.00110111
+  AND:   11000000.10101000.00000000.00000000 = 192.168.0.0 ✓ (16-bit match)
+
+Route 3: 192.168.10.0/24 → most specific match → WINNER
+  mask:  11111111.11111111.11111111.00000000
+  IP:    11000000.10101000.00001010.00110111
+  AND:   11000000.10101000.00001010.00000000 = 192.168.10.0 ✓ (24-bit match)`}</CodeBlock>
+
+      <Divider />
+
+      {/* ── Chapter 08 ── */}
+      <Chapter n={8} title="Subnet Masks: Binary Boundaries for Networks" />
+
+      <Para>
+        A subnet mask is a 32-bit number where all network bits are 1 and all host bits are 0.
+        The network bits must be contiguous from the left — there are no gaps allowed in a valid mask.
+        CIDR notation (e.g., /24) simply counts the number of 1 bits.
+      </Para>
+
+      <H2>Building Subnet Masks from Prefix Length</H2>
+
+      <CodeBlock>{`/8  mask = 11111111.00000000.00000000.00000000 = 255.0.0.0
+/16 mask = 11111111.11111111.00000000.00000000 = 255.255.0.0
+/24 mask = 11111111.11111111.11111111.00000000 = 255.255.255.0
+/25 mask = 11111111.11111111.11111111.10000000 = 255.255.255.128
+/26 mask = 11111111.11111111.11111111.11000000 = 255.255.255.192
+/27 mask = 11111111.11111111.11111111.11100000 = 255.255.255.224
+/28 mask = 11111111.11111111.11111111.11110000 = 255.255.255.240
+/29 mask = 11111111.11111111.11111111.11111000 = 255.255.255.248
+/30 mask = 11111111.11111111.11111111.11111100 = 255.255.255.252
+/31 mask = 11111111.11111111.11111111.11111110 = 255.255.255.254 (point-to-point)
+/32 mask = 11111111.11111111.11111111.11111111 = 255.255.255.255 (host route)
+
+Formula for usable hosts: 2^(32-prefix) - 2
+  /24 → 2⁸ - 2 = 254 hosts
+  /25 → 2⁷ - 2 = 126 hosts
+  /26 → 2⁶ - 2 =  62 hosts
+  /27 → 2⁵ - 2 =  30 hosts
+  /28 → 2⁴ - 2 =  14 hosts
+  /29 → 2³ - 2 =   6 hosts
+  /30 → 2² - 2 =   2 hosts (point-to-point links)`}</CodeBlock>
+
+      <IPDissector />
+
+      <H2>Calculating Subnets Mentally</H2>
+
+      <Para>
+        For any subnet, you need four values: network address, subnet mask, broadcast address, and usable host range.
+        The pattern for the last octet (for /24 through /32):
+      </Para>
+
+      <CodeBlock>{`For 192.168.1.0/26 (64 addresses per subnet, 4 subnets in /24):
+  Subnet 0: 192.168.1.0   – 192.168.1.63   (hosts .1-.62)
+  Subnet 1: 192.168.1.64  – 192.168.1.127  (hosts .65-.126)
+  Subnet 2: 192.168.1.128 – 192.168.1.191  (hosts .129-.190)
+  Subnet 3: 192.168.1.192 – 192.168.1.255  (hosts .193-.254)
+
+Block size = 256 - mask_octet = 256 - 192 = 64
+Subnets start at multiples of block size: 0, 64, 128, 192
+Given 192.168.1.100: 100/64 = 1 → subnet 192.168.1.64/26`}</CodeBlock>
+
+      <Divider />
+
+      {/* ── Chapter 09 ── */}
+      <Chapter n={9} title="MAC Addresses: 48-Bit Hardware Identity" />
+
+      <Para>
+        A MAC (Media Access Control) address is a 48-bit (6-byte) identifier burned into every network
+        interface card at manufacture. It&apos;s expressed as 6 pairs of hex digits separated by colons
+        (Linux: <Code>aa:bb:cc:dd:ee:ff</Code>) or hyphens (Windows: <Code>AA-BB-CC-DD-EE-FF</Code>).
+      </Para>
+
+      <H2>MAC Address Structure</H2>
+
+      <CodeBlock>{`MAC address: 00:1A:2B:3C:4D:5E
+
+  Byte 0   Byte 1   Byte 2   | Byte 3   Byte 4   Byte 5
+  ─────────────────────────────────────────────────────
+  0 0 : 1 A : 2 B             3 C : 4 D : 5 E
+  └──────────────────┘         └─────────────────────┘
+      OUI (Organizationally       Device identifier
+      Unique Identifier)          (vendor-assigned)
+      = 00:1A:2B = vendor
+
+Bit 0 of byte 0 (LSB) = multicast bit:
+  0 = unicast (one device)
+  1 = multicast/broadcast (group of devices)
+
+Bit 1 of byte 0 = locally administered:
+  0 = globally unique (factory-assigned OUI)
+  1 = locally administered (manually set, VM-generated)
+
+Special addresses:
+  FF:FF:FF:FF:FF:FF  = broadcast (all devices on segment)
+  01:00:5E:xx:xx:xx  = IPv4 multicast (IANA-assigned prefix)
+  33:33:xx:xx:xx:xx  = IPv6 multicast`}</CodeBlock>
+
+      <H3>OUI Lookup</H3>
+
+      <Para>
+        The first 3 bytes of a MAC address identify the vendor. IEEE maintains the OUI (Organizationally
+        Unique Identifier) database. You can use this to identify devices on a network:
+        <Code>00:0C:29</Code> = VMware virtual machine, <Code>AC:DE:48</Code> = Private (locally administered),
+        <Code>00:50:56</Code> = VMware, <Code>2C:F0:5D</Code> = Apple.
+        Wireshark automatically resolves OUIs in captured packets.
+      </Para>
+
+      <WowBox>
+        IPv6 Stateless Address Autoconfiguration (SLAAC) derives a host&apos;s IPv6 address from its MAC address
+        using a process called EUI-64. The MAC address <Code>00:1A:2B:3C:4D:5E</Code> becomes the IPv6 interface
+        identifier <Code>021A:2BFF:FE3C:4D5E</Code> by inserting <Code>FF:FE</Code> in the middle and flipping
+        bit 6 of byte 0. This made IPv6 addresses predictable — a privacy concern. RFC 4941 introduced
+        "privacy extensions" that use random addresses instead. Your laptop probably changes its IPv6 address
+        every few hours.
+      </WowBox>
+
+      <Divider />
+
+      {/* ── Chapter 10 ── */}
+      <Chapter n={10} title="Hex Dumps: Reading Raw Network Data" />
+
+      <Para>
+        When you capture network traffic with Wireshark or tcpdump, the raw bytes are displayed as a hex dump.
+        Learning to read hex dumps lets you verify exactly what a protocol sends — the ground truth beneath
+        all abstractions.
+      </Para>
+
+      <H2>Anatomy of a Hex Dump</H2>
+
+      <CodeBlock>{`$ tcpdump -X -c 1 host 8.8.8.8
+16:42:31 IP myhost.54321 > dns.google.domain: 12345+ A? google.com. (28)
+        0x0000:  4500 003c 1c46 4000 4011 f8c7 c0a8 0132  E..<.F@.@......2
+        0x0010:  0808 0808 d431 0035 0028 3d4b abcd 0100  .....1.5.(=K....
+        0x0020:  0001 0000 0000 0000 0667 6f6f 676c 6503  .........google.
+        0x0030:  636f 6d00 0001 0001                      com.....
+
+Offset  Hex bytes (16 per line)           ASCII (. = non-printable)
+──────────────────────────────────────────────────────────────────────
+0x0000: 45 00  = IP version (4) + IHL (5), DSCP/ECN = 0
+        00 3c  = Total length = 60 bytes
+        1c 46  = ID = 0x1C46
+        40 00  = Flags (Don't Fragment), Fragment offset 0
+        40     = TTL = 64
+        11     = Protocol = 17 (UDP)
+        f8 c7  = Header checksum
+        c0 a8 01 32 = Source IP 192.168.1.50
+        08 08 08 08 = Destination IP 8.8.8.8
+
+0x0010: d4 31  = Source port 54321 (UDP header)
+        00 35  = Destination port 53 (DNS)
+        00 28  = UDP length 40 bytes
+        3d 4b  = UDP checksum
+
+0x0012+: DNS query bytes (ID, flags, question for "google.com" A record)`}</CodeBlock>
+
+      <H2>Reading Hex Dumps Systematically</H2>
+
+      <CodeBlock>{`Step 1: Identify the protocol layer (first byte tells you a lot)
+  0x45 → 4 = IPv4, 5 = 5×4=20 byte header (IHL)
+  First 20 bytes = IPv4 header
+
+Step 2: Find protocol field (byte 9 in IP header = 0x06 TCP, 0x11 UDP, 0x01 ICMP)
+  Then parse the next header accordingly
+
+Step 3: Use Wireshark's "Follow TCP Stream" to see application-layer data decoded
+  or use: wireshark -R "http" -T fields -e http.request.uri capture.pcap
+
+Quick reference for common first bytes:
+  45 = IPv4, IHL=20 (common)
+  60 = IPv6 (version 6, traffic class 0)
+  FF FF FF FF = broadcast MAC or broadcast IP
+  08 00 = EtherType IPv4
+  86 DD = EtherType IPv6
+  08 06 = EtherType ARP`}</CodeBlock>
+
+      <Divider />
+
+      {/* ── Chapter 11 ── */}
+      <Chapter n={11} title="Binary in Protocols: Flags, Fields, and Bit Manipulation" />
+
+      <Para>
+        Protocols pack enormous amounts of information into small numbers of bytes using individual bits
+        as flags. The TCP header is a masterclass in this: 20 bytes contain the complete state of a
+        TCP connection, with 9 individual control bits.
+      </Para>
+
+      <H2>TCP Flags: 9 Bits That Control Everything</H2>
+
+      <CodeBlock>{`TCP Control Bits (flags) — bits 8-15 of bytes 12-13 in TCP header:
+  Bit 8:  CWR (Congestion Window Reduced) — ECN response
+  Bit 9:  ECE (ECN-Echo) — router signaled congestion
+  Bit 10: URG (Urgent) — urgent pointer field is valid
+  Bit 11: ACK (Acknowledgment) — ack number is valid
+  Bit 12: PSH (Push) — deliver data to application immediately
+  Bit 13: RST (Reset) — abort connection
+  Bit 14: SYN (Synchronize) — start of connection
+  Bit 15: FIN (Finish) — sender has finished sending
+
+Common flag combinations:
+  0x002 = 0000 0010 = SYN          (connection initiation)
+  0x012 = 0001 0010 = SYN+ACK      (server response)
+  0x010 = 0001 0000 = ACK          (acknowledgment)
+  0x018 = 0001 1000 = PSH+ACK      (data with push)
+  0x011 = 0001 0001 = FIN+ACK      (graceful close)
+  0x004 = 0000 0100 = RST          (connection abort)
+
+In Wireshark display filter:
+  tcp.flags.syn == 1              → show SYN packets
+  tcp.flags == 0x002              → show only pure SYN (no ACK)
+  tcp.flags.rst == 1              → show RST (connection resets)`}</CodeBlock>
+
+      <H3>IPv4 Flags and Fragment Offset</H3>
+
+      <CodeBlock>{`IPv4 flags (3 bits in bits 6-8 of the 6th and 7th bytes):
+  Bit 6 (reserved): always 0
+  Bit 7: DF (Don't Fragment) — router MUST NOT fragment, or drop+ICMP error
+  Bit 8: MF (More Fragments) — more fragments follow this one
+
+Fragment offset (13 bits): byte offset of this fragment ÷ 8
+
+Example - 4000-byte packet sent over 1500-byte MTU link:
+  Fragment 1: offset=0,   MF=1, data bytes 0-1479
+  Fragment 2: offset=185, MF=1, data bytes 1480-2959 (1480÷8=185)
+  Fragment 3: offset=370, MF=0, data bytes 2960-3999 (last fragment)`}</CodeBlock>
+
+      <Divider />
+
+      {/* ── Chapter 12 ── */}
+      <Chapter n={12} title="Practical Conversions: Mental Arithmetic for Network Engineers" />
+
+      <Para>
+        You&apos;ll need to do conversions quickly in your head during troubleshooting. Here are the patterns
+        that experienced network engineers recognize instantly.
+      </Para>
+
+      <H2>Subnet Mask Quick Reference</H2>
+
+      <CodeBlock>{`/prefix  Mask                 Block size  Hosts  Hex mask
+────────────────────────────────────────────────────────────────────────
+/8       255.0.0.0            16,777,216  16M    0xFF000000
+/16      255.255.0.0          65,536      65K    0xFFFF0000
+/24      255.255.255.0        256         254    0xFFFFFF00
+/25      255.255.255.128      128         126    0xFFFFFF80
+/26      255.255.255.192      64           62    0xFFFFFFC0
+/27      255.255.255.224      32           30    0xFFFFFFE0
+/28      255.255.255.240      16           14    0xFFFFFFF0
+/29      255.255.255.248      8             6    0xFFFFFFF8
+/30      255.255.255.252      4             2    0xFFFFFFFC
+
+Trick: last octet of mask = 256 - block_size
+  /26 → block = 64 → mask last octet = 256 - 64 = 192 ✓
+  /27 → block = 32 → mask last octet = 256 - 32 = 224 ✓`}</CodeBlock>
+
+      <H2>Private IP Ranges in Binary</H2>
+
+      <CodeBlock>{`RFC 1918 private ranges — binary pattern makes them memorable:
+
+10.0.0.0/8:
+  Binary: 0000 1010. xxxxxxxx. xxxxxxxx. xxxxxxxx
+  Hex:    0x0A000000/0xFF000000 (16,777,216 addresses)
+
+172.16.0.0/12:
+  Binary: 1010 1100. 0001xxxx. xxxxxxxx. xxxxxxxx
+  Hex:    0xAC100000/0xFFF00000 (1,048,576 addresses)
+  Range:  172.16.0.0 – 172.31.255.255
+
+192.168.0.0/16:
+  Binary: 1100 0000. 1010 1000. xxxxxxxx. xxxxxxxx
+  Hex:    0xC0A80000/0xFFFF0000 (65,536 addresses)
+
+Loopback: 127.0.0.0/8
+  Binary: 0111 1111. xxxxxxxx. xxxxxxxx. xxxxxxxx
+  127.0.0.1 = the local machine (lo interface)`}</CodeBlock>
+
+      <Divider />
+
+      {/* ── Chapter 13 ── */}
+      <Chapter n={13} title="Common Misconceptions" />
+
+      <Err>
+        <strong>"Hexadecimal and binary are separate number systems."</strong><br /><br />
+        They represent the same quantity — just written differently. <Code>0xC0</Code>, <Code>11000000</Code>,
+        and <Code>192</Code> are identical values. Hex is just a compact notation for binary:
+        every hex digit is exactly 4 binary bits. Converting between them is substitution, not calculation.
+        When a Wireshark hex dump shows <Code>0x0800</Code>, you&apos;re not reading "hexadecimal" —
+        you&apos;re reading "2048 expressed in hex because it&apos;s easier than 0000100000000000 in binary."
       </Err>
 
-      <H>Binary Bitwise Operations</H>
-
-      <P>
-        Three bitwise operations appear constantly in networking. The most critical is AND — it is literally how a router calculates the network address from an IP address and subnet mask.
-      </P>
-
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}25`, borderRadius: 10, padding: '20px 24px', margin: '24px 0', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
-        <p style={{ color: N, margin: '0 0 16px', fontWeight: 700 }}>// AND — both bits must be 1 → used for network address calculation</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>IP:   192.168.10.50  →  11000000.10101000.00001010.00110010</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Mask: 255.255.255.0  →  11111111.11111111.11111111.00000000</p>
-        <p style={{ color: 'var(--text)', margin: '0 0 4px' }}>AND:  192.168.10.0   →  11000000.10101000.00001010.00000000</p>
-        <p style={{ color: N, margin: '20px 0 8px', fontWeight: 700 }}>// OR — either bit is 1 → used to derive broadcast address</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Network: 192.168.10.0  →  ...00001010.00000000</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Inv mask: 0.0.0.255     →  ...00000000.11111111</p>
-        <p style={{ color: 'var(--text)', margin: '0 0 4px' }}>OR:       192.168.10.255 →  ...00001010.11111111</p>
-        <p style={{ color: N, margin: '20px 0 8px', fontWeight: 700 }}>// NOT — flip all bits → used to compute wildcard masks (Cisco ACLs)</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Mask:     255.255.255.0  →  11111111.11111111.11111111.00000000</p>
-        <p style={{ color: 'var(--text)', margin: 0 }}>Wildcard: 0.0.0.255      →  00000000.00000000.00000000.11111111</p>
-      </div>
-
-      <P>
-        When you configure a Cisco access-list with <Hl>access-list 1 permit 10.0.0.0 0.0.0.255</Hl>, that <code style={{ fontFamily: 'var(--font-mono)' }}>0.0.0.255</code> is a wildcard mask — the bitwise NOT of <code style={{ fontFamily: 'var(--font-mono)' }}>255.255.255.0</code>. Bits set to 0 in the wildcard must match exactly; bits set to 1 are &ldquo;don&rsquo;t care.&rdquo; This is a different convention than subnet masks, which trips up many candidates.
-      </P>
-
-      <SubnetVisualizer />
-
-      <HR />
-
-      {/* ── PART 3 ── */}
-      <Part n="03" title="Hexadecimal: Binary Made Readable" />
-
-      <P>
-        Binary is unambiguous and hardware-native, but reading 48 bits of 0s and 1s for a MAC address is slow and error-prone. Hexadecimal solves this by grouping every 4 binary bits into one hex digit. Since 2⁴ = 16, each hex digit maps exactly to one nibble (4 bits), and one byte (8 bits) = two hex digits. This makes hex the standard representation for any binary data in protocol documentation, packet captures, and hardware addresses.
-      </P>
-
-      <H>The Hex Digit Map</H>
-
-      <div style={{ overflowX: 'auto', margin: '20px 0' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${N}30` }}>
-              {['Decimal', 'Binary (4-bit)', 'Hex'].map(h => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', color: N, fontWeight: 700, fontSize: 11, textTransform: 'uppercase' }}>{h}</th>
-              ))}
-              {['Decimal', 'Binary (4-bit)', 'Hex'].map(h => (
-                <th key={h + '2'} style={{ padding: '10px 14px', textAlign: 'left', color: N, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', borderLeft: `1px solid ${N}20` }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              [0, '0000', '0', 8, '1000', '8'],
-              [1, '0001', '1', 9, '1001', '9'],
-              [2, '0010', '2', 10, '1010', 'A'],
-              [3, '0011', '3', 11, '1011', 'B'],
-              [4, '0100', '4', 12, '1100', 'C'],
-              [5, '0101', '5', 13, '1101', 'D'],
-              [6, '0110', '6', 14, '1110', 'E'],
-              [7, '0111', '7', 15, '1111', 'F'],
-            ].map(([d1, b1, h1, d2, b2, h2], i) => (
-              <tr key={i} style={{ background: i % 2 ? 'var(--surface)' : 'transparent', borderBottom: '1px solid var(--border)' }}>
-                <td style={{ padding: '8px 14px', fontFamily: 'var(--font-mono)', color: '#3b82f6' }}>{d1}</td>
-                <td style={{ padding: '8px 14px', fontFamily: 'var(--font-mono)', color: '#f59e0b', letterSpacing: 2 }}>{b1}</td>
-                <td style={{ padding: '8px 14px', fontFamily: 'var(--font-mono)', color: N, fontWeight: 700 }}>{h1}</td>
-                <td style={{ padding: '8px 14px', fontFamily: 'var(--font-mono)', color: '#3b82f6', borderLeft: `1px solid ${N}20` }}>{d2}</td>
-                <td style={{ padding: '8px 14px', fontFamily: 'var(--font-mono)', color: '#f59e0b', letterSpacing: 2 }}>{b2}</td>
-                <td style={{ padding: '8px 14px', fontFamily: 'var(--font-mono)', color: N, fontWeight: 700 }}>{h2}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <P>
-        The digits 0–9 are the same in decimal and hex. A–F are the critical additions. The trick most engineers use: if you see A, it&rsquo;s 10. B=11, C=12, D=13, E=14, F=15. &ldquo;Alphabetically after 9, count up from 10.&rdquo;
-      </P>
-
-      <H>Converting Between Binary and Hex</H>
-
-      <P>
-        This conversion is the one you do most frequently in packet analysis. The rule is: split binary into groups of 4, convert each group to one hex digit. Going the other way, expand each hex digit to exactly 4 binary bits.
-      </P>
-
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}25`, borderRadius: 10, padding: '20px 24px', margin: '24px 0', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
-        <p style={{ color: N, margin: '0 0 12px', fontWeight: 700 }}>// Binary → Hex: group by 4 bits</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Binary: 1010 1111 0001 0011</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Groups: 1010 | 1111 | 0001 | 0011</p>
-        <p style={{ color: 'var(--text)', margin: '0 0 20px' }}>Hex:    A      F      1      3   →  0xAF13</p>
-
-        <p style={{ color: N, margin: '0 0 12px', fontWeight: 700 }}>// Hex → Binary: expand each digit to 4 bits</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Hex:    0x2C → 2    C</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Binary:        0010 1100</p>
-        <p style={{ color: 'var(--text)', margin: 0 }}>Decimal: 0x2C = 2×16 + 12 = 32 + 12 = 44</p>
-      </div>
-
-      <H>Hex in Networking: Real-World Appearances</H>
-
-      <div style={{ margin: '24px 0' }}>
-        <Term word="MAC Address" def="48-bit hardware address, written as 6 hex octets: aa:bb:cc:dd:ee:ff — first 3 octets (OUI) identify the manufacturer, last 3 are the device serial." />
-        <Term word="EtherType" def="2-byte hex field in Ethernet frames: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q VLAN tag. Wireshark shows these constantly." />
-        <Term word="IPv6 Address" def="128 bits written as 8 groups of 4 hex digits: 2001:0db8:85a3:0000:0000:8a2e:0370:7334. Leading zeros per group can be collapsed." />
-        <Term word="TLS Record" def="Each TLS record starts with a 1-byte content type, 2-byte version, 2-byte length — all shown in hex in Wireshark&apos;s bytes pane." />
-        <Term word="VLAN Tag (802.1Q)" def="4-byte insertion into Ethernet header: 0x8100 (TPID) + 3-bit PCP + 1-bit DEI + 12-bit VLAN ID. The 12-bit ID supports 4094 VLANs (0x000 and 0xFFF reserved)." />
-        <Term word="BGP AS Number" def="32-bit values shown in hex in low-level BGP packets: AS 65000 = 0xFDE8. 2-byte ASNs (legacy) fit in 0x0000–0xFFFF." />
-      </div>
-
-      <HexColorDecoder />
-
-      <P>
-        The hex color decoder demonstrates something useful: CSS colors like <Hl>#FF5733</Hl> are pure hex math — two digits per RGB channel, each representing 0–255. When you&rsquo;ve internalized hex, you can look at <code style={{ fontFamily: 'var(--font-mono)' }}>#0A0A0A</code> and instantly know it&rsquo;s a very dark near-black (10, 10, 10 in RGB). The same mental model applies to reading packet bytes.
-      </P>
-
-      <HR />
-
-      {/* ── PART 4 ── */}
-      <Part n="04" title="The Interactive Converter and Deep Practice" />
-
-      <BaseConverter />
-
-      <H>Hex Arithmetic: Adding and Subtracting</H>
-
-      <P>
-        You occasionally need to add or subtract hex values manually — for example, calculating the last usable host in a subnet or decoding a relative sequence number offset in a TCP stream. The rules are the same as decimal arithmetic, but you carry at 16 instead of 10.
-      </P>
-
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}25`, borderRadius: 10, padding: '20px 24px', margin: '24px 0', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
-        <p style={{ color: N, margin: '0 0 12px', fontWeight: 700 }}>// Hex addition: 0xA8 + 0x3F</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Ones column: 8 + F = 8 + 15 = 23 decimal = 1×16 + 7 → write 7, carry 1</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Sixteens col: A + 3 + 1(carry) = 10 + 3 + 1 = 14 decimal = E</p>
-        <p style={{ color: 'var(--text)', margin: '0 0 20px' }}>0xA8 + 0x3F = 0xE7  (168 + 63 = 231 ✓)</p>
-
-        <p style={{ color: N, margin: '0 0 12px', fontWeight: 700 }}>// Practical: last host in 192.168.1.0/26 (64 addresses)</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Network:   192.168.1.0   → last octet 0x00</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Block size: 64 = 0x40</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Broadcast: 0x00 + 0x40 - 0x01 = 0x3F = 63</p>
-        <p style={{ color: 'var(--text)', margin: 0 }}>Last host: 192.168.1.62 | Broadcast: 192.168.1.63</p>
-      </div>
-
-      <H>Two&rsquo;s Complement: Negative Numbers in Binary</H>
-
-      <P>
-        Network protocols rarely use negative numbers in headers, but understanding two&rsquo;s complement matters for: interpreting TCP sequence number arithmetic (which wraps at 2³²), understanding signed vs unsigned port/length fields, and reading error codes in ICMP or BGP NOTIFICATION messages.
-      </P>
-
-      <P>
-        In an n-bit two&rsquo;s complement system, the most significant bit is the sign bit: 0 = positive, 1 = negative. To negate a value, invert all bits then add 1. For an 8-bit signed integer, the range is −128 to +127 (0x80 to 0x7F). For 16-bit signed: −32768 to +32767. TCP sequence numbers are 32-bit <Hl>unsigned</Hl> (0 to 2³²−1) — they wrap around, and TCP&rsquo;s sequence number comparison uses modular arithmetic rather than simple greater-than.
-      </P>
-
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}25`, borderRadius: 10, padding: '20px 24px', margin: '24px 0', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
-        <p style={{ color: N, margin: '0 0 12px', fontWeight: 700 }}>// Two&apos;s complement of -1 in 8-bit</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>+1 in binary: 00000001</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Invert bits:  11111110</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Add 1:        11111111  ← this is -1 (0xFF)</p>
-        <p style={{ color: 'var(--text)', margin: '0 0 20px' }}>0xFF as signed 8-bit = -1.  As unsigned 8-bit = 255.</p>
-
-        <p style={{ color: N, margin: '0 0 8px', fontWeight: 700 }}>// TCP sequence number wrap-around (RFC 793)</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Max uint32: 0xFFFFFFFF = 4,294,967,295</p>
-        <p style={{ color: 'var(--text)', margin: 0 }}>SEQ 0xFFFFFF00 + 512 bytes → wraps to 0x000001FF  (valid, expected)</p>
-      </div>
-
-      <ProTip>
-        When you see 0xFF in a protocol field, immediately think &ldquo;all ones&rdquo; — 11111111 in binary. This value often has special meaning: ARP uses 0xFF:FF:FF:FF:FF:FF as the broadcast MAC, ICMP uses TTL=0xFF (255) for some probe tools, and VLAN 0xFFF (4095) is reserved and cannot be assigned. All-ones patterns signal broadcast, maximum, or reserved in protocol design.
-      </ProTip>
-
-      <HR />
-
-      {/* ── PART 5 ── */}
-      <Part n="05" title="How This Applies to Every Module Ahead" />
-
-      <H>IPv4 Addressing (Module 10–11)</H>
-
-      <P>
-        Every IPv4 address is a 32-bit binary number. Subnetting is binary AND between the address and mask. CIDR notation is a count of leading 1-bits. The number of host addresses in a subnet is <Hl>2^(host bits) − 2</Hl> (subtract network and broadcast). You cannot subnet without binary.
-      </P>
-
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}25`, borderRadius: 10, padding: '20px 24px', margin: '24px 0', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
-        <p style={{ color: N, margin: '0 0 10px', fontWeight: 700 }}>// How many hosts fit in 10.0.0.0/22?</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>/22 means 22 network bits, 10 host bits</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>Host addresses = 2^10 - 2 = 1024 - 2 = 1,022</p>
-        <p style={{ color: 'var(--text)', margin: '0 0 16px' }}>Range: 10.0.0.1 → 10.0.3.254  | Broadcast: 10.0.3.255</p>
-        <p style={{ color: N, margin: '0 0 10px', fontWeight: 700 }}>// Subnet mask for /22</p>
-        <p style={{ color: 'var(--muted)', margin: '0 0 4px' }}>11111111.11111111.11111100.00000000</p>
-        <p style={{ color: 'var(--text)', margin: 0 }}>255.255.252.0</p>
-      </div>
-
-      <H>MAC Addresses and Ethernet (Module 08–09)</H>
-
-      <P>
-        MAC addresses are 48-bit binary numbers written in hex: <Hl>aa:bb:cc:dd:ee:ff</Hl>. The OUI (Organizationally Unique Identifier) is the first 24 bits (3 bytes). The broadcast MAC is all 1s: <Hl>ff:ff:ff:ff:ff:ff</Hl>. The multicast bit is bit 0 of the first byte (LSB) — if it&rsquo;s 1, the address is multicast. You need hex to read these.
-      </P>
-
-      <H>IPv6 (Module 12)</H>
-
-      <P>
-        IPv6 is 128-bit hex. That&rsquo;s it. The address <Hl>2001:0db8:85a3::8a2e:0370:7334</Hl> is eight groups of 16-bit hex values. The <Hl>::</Hl> is shorthand for consecutive all-zero groups. Expanding it: <code style={{ fontFamily: 'var(--font-mono)' }}>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code>. Without hex fluency, IPv6 addresses are just noise.
-      </P>
-
-      <H>VLANs, QoS, and 802.1Q (Module 15)</H>
-
-      <P>
-        The 802.1Q tag inserts a 4-byte field into the Ethernet header. Bytes 1–2 are always <Hl>0x8100</Hl> (the TPID). The next 12 bits are the VLAN ID (0–4095, with 0 and 4095 reserved). Reading a 802.1Q tag in Wireshark requires you to extract the 12-bit VLAN ID from a 2-byte hex field by applying a binary mask: <code style={{ fontFamily: 'var(--font-mono)' }}>0x10AC & 0x0FFF = 0x00AC = VLAN 172</code>.
-      </P>
-
-      <H>TLS and Packet Analysis (Module 18)</H>
-
-      <P>
-        TLS records in Wireshark are displayed as raw hex bytes. The first byte tells you the record type: <Hl>0x16</Hl> = Handshake, <Hl>0x17</Hl> = Application Data, <Hl>0x15</Hl> = Alert. Bytes 2–3 encode the TLS version: <Hl>0x0303</Hl> = TLS 1.2, <Hl>0x0304</Hl> = TLS 1.3 (legacy_record_version). Bytes 4–5 are a big-endian 16-bit length. You decode this from hex in real-time during a packet analysis session.
-      </P>
-
-      <HR />
-
-      {/* ── PART 6 ── */}
-      <Part n="06" title="A Day in the Life: Google SRE Debugs a Routing Loop" />
-
-      <P>
-        <strong>Company:</strong> Google, Mountain View, CA. <strong>Role:</strong> Network SRE, Core WAN team. <strong>Date:</strong> Tuesday morning, 9:12 AM. <strong>Situation:</strong> A BGP route leak combined with a misconfigured prefix-list using wrong hex masks is causing a forwarding loop affecting 3% of traffic toward a Google Cloud region. The on-call SRE needs to isolate and fix it — fast.
-      </P>
-
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}20`, borderRadius: 12, padding: '24px 28px', margin: '28px 0' }}>
-
-        <TimeBlock time="09:12" label="PagerDuty fires — elevated RTT to us-west1">
-          The alert shows RTT from backbone PoP to us-west1 jumped from 8ms to 340ms. The SRE opens the internal traffic dashboard and sees a TTL-exceeded ICMP flood in the MPLS core. TTL exhaustion means packets are looping. First task: find the loop.
-        </TimeBlock>
-
-        <TimeBlock time="09:17" label="Router trace shows suspicious hop">
-          Running a traceroute from the Google backbone: hops 7 and 8 repeat, with TTL decrementing each time. The SRE SSH&rsquo;s into both routers to check the forwarding table. BGP shows a route for <code style={{ fontFamily: 'var(--font-mono)', color: N }}>10.88.64.0/18</code> pointing back and forth between the two routers. Neither has a valid exit path for that prefix — they are forwarding to each other.
-        </TimeBlock>
-
-        <TimeBlock time="09:24" label="Investigate prefix-list — find the hex mistake">
-          The route is being accepted because a prefix-list filter on both routers is supposed to block <code style={{ fontFamily: 'var(--font-mono)', color: N }}>10.88.64.0/18</code> and more-specifics, but it&rsquo;s not matching. The SRE reads the filter config: <code style={{ fontFamily: 'var(--font-mono)', color: '#ef4444' }}>prefix-list BLOCK seq 10 deny 10.88.0.0/14 ge 18</code>. This should block /18s within 10.88.0.0/14. But 10.88.64.0 is not in 10.88.0.0/14 — it&rsquo;s in <code style={{ fontFamily: 'var(--font-mono)', color: N }}>10.88.0.0/10</code>.
-          <br /><br />
-          The SRE runs the binary check: 10.88.0.0/14 → last two bits of the 10-bit prefix determine the /14 boundary. 10.88 in binary: 00001010.01011000. A /14 mask covers the first 14 bits: 00001010.010110xx. The range is 10.88.0.0–10.91.255.255. The leaked route is 10.88.64.0 — which IS in range. So the prefix-list should match. Why doesn&rsquo;t it?
-        </TimeBlock>
-
-        <TimeBlock time="09:33" label="Binary decoding reveals the root cause">
-          The SRE pulls the raw router config via RESTCONF and sees the prefix-list was generated by an automation script that produced the wrong mask. The script computed the mask in hex and got the bit boundary wrong: it output <code style={{ fontFamily: 'var(--font-mono)', color: '#ef4444' }}>0xFFFC0000</code> (which is /14 correct) but the ge 18 condition was never applied because the version of the script used a signed integer comparison — it treated the prefix length as a signed 8-bit value and compared it to 18, but the leaked route had a prefix length field in the NLRI encoded as <code style={{ fontFamily: 'var(--font-mono)', color: '#ef4444' }}>0x92</code> in the BGP UPDATE. In unsigned 8-bit, 0x92 = 146. In signed 8-bit two&rsquo;s complement, 0x92 = −110. The filter was comparing −110 &gt;= 18 → false. Route passes. Loop forms.
-        </TimeBlock>
-
-        <TimeBlock time="09:41" label="Fix deployed — loop breaks within 30 seconds">
-          The SRE patches the automation script to use unsigned 8-bit comparison (prefix lengths are always 0–32 for IPv4, so they fit in 6 bits — treating them as signed 8-bit was the bug). The correct filter is pushed. Both routers drop the looping route. BGP converges. RTT returns to 8ms. Incident closed: 29 minutes.
-        </TimeBlock>
-
-        <TimeBlock time="10:05" label="Postmortem: binary type safety in automation">
-          The postmortem action item: add a test suite to the prefix-list generator that verifies all prefix lengths are decoded as unsigned. The document notes that 0x80–0xFF in BGP NLRI prefix-length fields should be treated as invalid (prefix lengths &gt; 128 for IPv6 or &gt; 32 for IPv4 are impossible), and the parser should reject them rather than coercing them through signed arithmetic. A new validation check is added that flags any hex-decoded prefix length where the high bit is set.
-        </TimeBlock>
-
-      </div>
-
-      <P>
-        The entire incident traces back to one wrong assumption: that a binary byte used for a prefix length could be treated as a signed integer. The SRE who diagnosed it needed to know: (1) two&rsquo;s complement representation of 0x92, (2) that 0x92 unsigned = 146 and signed = −110, and (3) that BGP NLRI prefix-length fields are unsigned. All three are binary/hex fundamentals.
-      </P>
-
-      <HR />
-
-      {/* ── PART 7 ── */}
-      <Part n="07" title="Number System Fast-Reference" />
-
-      <H>Powers of 2 You Must Know Cold</H>
-
-      <div style={{ overflowX: 'auto', margin: '20px 0' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, fontFamily: 'var(--font-mono)' }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${N}30` }}>
-              {['Power', 'Value', 'Hex', 'Networking significance'].map(h => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', color: N, fontWeight: 700, fontSize: 11, textTransform: 'uppercase' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['2⁰', '1', '0x01', 'Minimum /32 host route'],
-              ['2¹', '2', '0x02', '/31 p2p subnet (RFC 3021), 0 usable hosts by old rules'],
-              ['2²', '4', '0x04', '/30 point-to-point (2 usable hosts)'],
-              ['2³', '8', '0x08', '/29 (6 usable)'],
-              ['2⁴', '16', '0x10', '/28 (14 usable), one hex digit'],
-              ['2⁵', '32', '0x20', '/27 (30 usable)'],
-              ['2⁶', '64', '0x40', '/26 (62 usable)'],
-              ['2⁷', '128', '0x80', '/25, also the MSB of a byte'],
-              ['2⁸', '256', '0x100', '/24 (254 usable) — most common subnet'],
-              ['2⁹', '512', '0x200', '/23 (510 usable)'],
-              ['2¹⁰', '1,024', '0x400', '/22 (1022 usable), also 1 KB'],
-              ['2¹²', '4,096', '0x1000', 'Max VLANs (802.1Q 12-bit field)'],
-              ['2¹⁶', '65,536', '0x10000', '/16 subnet, 65,534 usable, also 64 KB'],
-              ['2²⁴', '16,777,216', '0x1000000', '/8 (Class A), BGP max-prefix common limit'],
-              ['2³²', '4,294,967,296', '0x100000000', 'Max IPv4 addresses, also uint32 overflow boundary'],
-              ['2⁴⁸', '281,474,976,710,656', '~281T', 'MAC address space (48-bit)'],
-              ['2¹²⁸', '~3.4×10³⁸', '—', 'IPv6 total address space'],
-            ].map(([pw, val, hex, note], i) => (
-              <tr key={pw} style={{ background: i % 2 ? 'var(--surface)' : 'transparent', borderBottom: '1px solid var(--border)' }}>
-                <td style={{ padding: '8px 14px', color: '#f59e0b', fontWeight: 700 }}>{pw}</td>
-                <td style={{ padding: '8px 14px', color: 'var(--text)' }}>{val}</td>
-                <td style={{ padding: '8px 14px', color: N }}>{hex}</td>
-                <td style={{ padding: '8px 14px', color: 'var(--muted)', fontFamily: 'inherit', fontSize: 12 }}>{note}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <H>Quick Conversion Cheat Sheet</H>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, margin: '20px 0' }}>
-        <div style={{ background: '#f59e0b08', border: '1px solid #f59e0b25', borderRadius: 10, padding: '18px' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: '#f59e0b', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 12px' }}>Binary → Decimal</p>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, fontFamily: 'var(--font-mono)', margin: 0 }}>
-            1. Read bits left to right<br />
-            2. Sum place values where bit = 1<br />
-            3. 11000000 = 128+64 = 192<br />
-            4. 10101000 = 128+32+8 = 168
-          </p>
-        </div>
-        <div style={{ background: `${N}08`, border: `1px solid ${N}25`, borderRadius: 10, padding: '18px' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 12px' }}>Decimal → Binary</p>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, fontFamily: 'var(--font-mono)', margin: 0 }}>
-            1. Work through 128,64,32,16,8,4,2,1<br />
-            2. Subtract if ≥ value, write 1<br />
-            3. 192 → 128✓64✓ = 11000000<br />
-            4. 168 → 128✓32✓8✓ = 10101000
-          </p>
-        </div>
-        <div style={{ background: '#3b82f608', border: '1px solid #3b82f625', borderRadius: 10, padding: '18px' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: '#3b82f6', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 12px' }}>Hex → Decimal</p>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, fontFamily: 'var(--font-mono)', margin: 0 }}>
-            1. Each digit × 16^position<br />
-            2. 0xC0 = 12×16 + 0 = 192<br />
-            3. 0xA8 = 10×16 + 8 = 168<br />
-            4. 0x1F4 = 1×256 + 15×16 + 4 = 500
-          </p>
-        </div>
-        <div style={{ background: '#8b5cf608', border: '1px solid #8b5cf625', borderRadius: 10, padding: '18px' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: '#8b5cf6', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', margin: '0 0 12px' }}>Hex → Binary</p>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, fontFamily: 'var(--font-mono)', margin: 0 }}>
-            1. Each hex digit → 4 bits<br />
-            2. 0xC0 = C(1100) 0(0000) = 11000000<br />
-            3. 0xA8 = A(1010) 8(1000) = 10101000<br />
-            4. 0xFF = F(1111) F(1111) = 11111111
-          </p>
-        </div>
-      </div>
-
-      <HR />
-
-      {/* ── PART 8 ── */}
-      <Part n="08" title="Interview Questions" />
-
-      <IQ q="What is the binary representation of 255.255.255.192, and what CIDR prefix does it represent?">
-        <p style={{ margin: '0 0 10px' }}>255.255.255.192 in binary:</p>
-        <ul style={{ margin: '0 0 12px', paddingLeft: 24, lineHeight: 1.9 }}>
-          <li>255 = 11111111</li>
-          <li>255 = 11111111</li>
-          <li>255 = 11111111</li>
-          <li>192 = 11000000 (128+64)</li>
-        </ul>
-        <p style={{ margin: '0 0 10px' }}>Full binary: <code style={{ fontFamily: 'var(--font-mono)', color: N }}>11111111.11111111.11111111.11000000</code></p>
-        <p style={{ margin: 0 }}>Count the 1-bits: 24 from the first three octets + 2 from the last = <strong style={{ color: N }}>26 network bits = /26</strong>. A /26 subnet has 2^6 − 2 = <strong>62 usable host addresses</strong>.</p>
-      </IQ>
-
-      <IQ q="A Cisco ACL uses wildcard mask 0.0.3.255 to match a range of IPs. What range does 172.16.0.0 with that wildcard cover?">
-        <p style={{ margin: '0 0 10px' }}>The wildcard mask 0.0.3.255 means &ldquo;the last 10 bits are don&rsquo;t care.&rdquo; The subnet mask equivalent is its bitwise complement: 255.255.252.0 = /22.</p>
-        <p style={{ margin: '0 0 10px' }}>172.16.0.0/22 covers 172.16.0.0 through 172.16.3.255 — that is 2^10 = 1,024 addresses (1,022 usable hosts).</p>
-        <p style={{ margin: 0 }}>The bits that must match: the first 22 bits of 172.16.0.0 (10101100.00010000.000000xx.xxxxxxxx). Any IP in 172.16.0.0–172.16.3.255 has those same first 22 bits set, so the ACL matches the entire /22 block.</p>
-      </IQ>
-
-      <IQ q="In a Wireshark capture you see EtherType 0x86DD. What protocol is this, and why does the EtherType field matter?">
-        <p style={{ margin: '0 0 10px' }}>0x86DD is <strong style={{ color: N }}>IPv6</strong>. The EtherType field (bytes 12–13 of the Ethernet frame) tells the receiver how to parse the payload. Common values: 0x0800 = IPv4, 0x0806 = ARP, 0x8100 = 802.1Q VLAN, 0x8847 = MPLS unicast, 0x86DD = IPv6.</p>
-        <p style={{ margin: 0 }}>If EtherType is 0x8100, there is a 4-byte 802.1Q tag inserted before the actual EtherType — the real payload type is in the 2 bytes after the VLAN tag. Tools like Wireshark handle this automatically, but when writing a BPF filter or parsing raw frames in code, you must account for the tag offset.</p>
-      </IQ>
-
-      <IQ q="How many addresses are in the block 10.0.0.0/20, and what is the broadcast address?">
-        <p style={{ margin: '0 0 10px' }}>/20 means 20 network bits, 12 host bits. Addresses = 2^12 = <strong style={{ color: N }}>4,096</strong>. Usable hosts = 4,094.</p>
-        <p style={{ margin: '0 0 10px' }}>Broadcast: to find it, write the network address in binary, set all host bits to 1:</p>
-        <p style={{ margin: '0 0 10px', fontFamily: 'var(--font-mono)', fontSize: 13 }}>10.0.0.0 = 00001010.00000000.00000000.00000000</p>
-        <p style={{ margin: '0 0 10px', fontFamily: 'var(--font-mono)', fontSize: 13 }}>Mask /20: first 20 bits fixed, last 12 set to 1:</p>
-        <p style={{ margin: '0 0 10px', fontFamily: 'var(--font-mono)', fontSize: 13 }}>00001010.00000000.00001111.11111111</p>
-        <p style={{ margin: 0 }}>Broadcast = <strong style={{ color: N }}>10.0.15.255</strong>. The block covers 10.0.0.0–10.0.15.255.</p>
-      </IQ>
-
-      <IQ q="What is the significance of the 7th bit (bit index 6) in a MAC address's first byte?">
-        <p style={{ margin: '0 0 10px' }}>In MAC addresses, two special bits live in the first byte:</p>
-        <ul style={{ margin: '0 0 12px', paddingLeft: 24, lineHeight: 1.9 }}>
-          <li><strong>Bit 0 (LSB)</strong> — Multicast/Unicast bit. If 1, the address is a multicast or broadcast address (e.g., ff:ff:ff:ff:ff:ff for broadcast). If 0, it&rsquo;s unicast.</li>
-          <li><strong>Bit 1 (second LSB)</strong> — Locally Administered bit. If 1, the address was assigned by an admin or generated locally (VMs, Docker containers, VMware VMs all set this). If 0, it&rsquo;s a globally unique OUI-assigned address (burned into hardware by the manufacturer).</li>
-        </ul>
-        <p style={{ margin: 0 }}>Example: a Docker container MAC of <code style={{ fontFamily: 'var(--font-mono)', color: N }}>02:42:ac:11:00:02</code> — the first byte is 0x02 = 00000010 in binary. Bit 1 is set: locally administered. Bit 0 is clear: unicast. This is why Docker bridges start with 02:42 — it signals software-assigned addresses.</p>
-      </IQ>
-
-      <HR />
-
-      {/* ── PART 9 ── */}
-      <Part n="09" title="Common Mistakes" />
-
-      <Err title="Confusing network bits and host bits when calculating subnet size">
-        A /26 has 26 network bits and 6 host bits, giving 2^6 = 64 addresses (62 usable). Beginners sometimes subtract the /26 prefix from 32 but then calculate hosts as 2^6 = 64 and forget to subtract 2 (network and broadcast addresses). Worse: some get confused and try 2^26 — yielding 67 million, which is obviously wrong for a LAN subnet.
+      <Err>
+        <strong>"The subnet mask 255.255.255.0 means you can have 255 hosts."</strong><br /><br />
+        A /24 (255.255.255.0) network has 256 addresses (0–255) but only 254 usable hosts.
+        The all-zeros host (e.g., 192.168.1.0) is the network address — cannot be assigned to a host.
+        The all-ones host (192.168.1.255) is the broadcast address — packets sent here reach all hosts.
+        Both are reserved. 256 − 2 = 254 usable hosts. For /30 (point-to-point): 4 − 2 = 2 hosts,
+        which is exactly right for a router-to-router link.
       </Err>
 
-      <Err title="Using signed integer libraries to parse binary protocol fields">
-        As shown in the Google incident: protocol header fields (prefix lengths, TTL, port numbers) are unsigned unless explicitly documented as signed. Always use unsigned types (uint8_t, uint16_t, uint32_t in C/Go, or unsigned integers in Python struct.unpack with capital format codes). Treating TTL=0x80 (128) as a signed value gives −128 — a negative hop count that makes no sense and breaks comparisons.
+      <Err>
+        <strong>"A /16 subnet can only have hosts in the 172.16.x.x range."</strong><br /><br />
+        A subnet mask of /16 means the first 16 bits are the network, the last 16 bits are the host.
+        But which bits are network and which are host depends entirely on what the network address is.
+        10.0.0.0/16 means hosts 10.0.0.1 through 10.0.255.254 — completely different range from
+        172.16.0.0/16. The mask defines the <em>structure</em>; the network address defines
+        the <em>range</em>. You can subnet any address space with any valid prefix length.
       </Err>
 
-      <Err title="Writing CIDR blocks with the host bits non-zero">
-        <code style={{ fontFamily: 'var(--font-mono)', color: '#ef4444' }}>192.168.1.5/24</code> is technically a host address written with a mask, not a network block. The network block is <code style={{ fontFamily: 'var(--font-mono)', color: N }}>192.168.1.0/24</code>. Many router CLIs and firewall UIs accept the non-zero form but normalize it silently — however, Python&rsquo;s <code style={{ fontFamily: 'var(--font-mono)' }}>ipaddress.ip_network()</code> and AWS&rsquo;s CIDR validator will throw an error. Always zero out the host bits when writing network blocks.
+      <Err>
+        <strong>"Bits and bytes are the same thing."</strong><br /><br />
+        1 byte = 8 bits. This factor-of-8 confusion causes real-world misunderstandings constantly.
+        Your ISP sells you "100 Mbps" (megabits per second). Your browser shows download at "11 MB/s"
+        (megabytes per second). Both are correct — 100 Mbps ÷ 8 = 12.5 MB/s, minus protocol overhead
+        ≈ 11–12 MB/s. Network engineers abbreviate: lowercase b = bit (Mb), uppercase B = byte (MB).
+        Mixing them up in calculations gives results off by a factor of 8.
       </Err>
 
-      <Err title="Forgetting big-endian byte order in multi-byte hex fields">
-        Network protocols use big-endian (most significant byte first) for multi-byte integers, per RFC 791. When you see bytes <code style={{ fontFamily: 'var(--font-mono)' }}>00 50</code> in a TCP port field in Wireshark, the port is 0x0050 = 80 (HTTP) — not 0x5000 = 20480. x86/ARM CPUs are little-endian, so when writing socket code in C, you must call <code style={{ fontFamily: 'var(--font-mono)' }}>htons()</code> / <code style={{ fontFamily: 'var(--font-mono)' }}>htonl()</code> to convert. Forgetting this converts port 80 to port 20480, and your connection silently goes to the wrong port.
+      <Err>
+        <strong>"FF:FF:FF:FF:FF:FF is an invalid/error MAC address."</strong><br /><br />
+        FF:FF:FF:FF:FF:FF is the valid, standard Ethernet broadcast address. Every bit is 1.
+        Frames sent to this address are received and processed by every device on the local network segment.
+        ARP uses it to ask "who has IP x.x.x.x?" — the request must reach all devices because no one
+        knows the answer yet. DHCP discover packets are also sent to the broadcast MAC address.
+        It is not an error — it&apos;s a deliberately designed group address.
       </Err>
 
-      <HR />
+      <Err>
+        <strong>"You can&apos;t have a valid subnet mask like 255.255.255.128."</strong><br /><br />
+        <Code>255.255.255.128</Code> is a perfectly valid /25 subnet mask. The binary is
+        11111111.11111111.11111111.10000000 — all ones on the left, all zeros on the right, no gaps.
+        Any mask that is a contiguous sequence of 1s followed by contiguous 0s is valid. A mask like
+        255.255.128.255 would be invalid (gap in the 1s). With /25, a /24 network is split in half:
+        0–127 and 128–255, giving two subnets of 126 usable hosts each.
+      </Err>
+
+      <Divider />
+
+      {/* ── Chapter 14 ── */}
+      <Chapter n={14} title="Test Your Understanding" />
+
+      <IQ level="Beginner">
+        <strong>Q: What is the decimal value of the binary number 10110100?</strong>
+        <br /><br />
+        Reading each bit from left (bit 7) to right (bit 0):
+        1×128 + 0×64 + 1×32 + 1×16 + 0×8 + 1×4 + 0×2 + 0×1 = 128 + 32 + 16 + 4 = 180.
+        Quick check: 10110100 in hex — group as 1011 (= B = 11) and 0100 (= 4) = 0xB4 = 11×16 + 4 = 176 + 4 = 180. ✓
+      </IQ>
+
+      <IQ level="Beginner">
+        <strong>Q: A server has IP address 10.20.30.40 and subnet mask 255.255.255.0. What is its network address and broadcast address?</strong>
+        <br /><br />
+        Network address = IP AND mask: 10.20.30.40 AND 255.255.255.0 = 10.20.30.0.
+        (The last octet: 40 AND 0 = 0.)
+        Broadcast address = network OR (NOT mask): NOT 255.255.255.0 = 0.0.0.255.
+        10.20.30.0 OR 0.0.0.255 = 10.20.30.255.
+        Usable hosts: 10.20.30.1 through 10.20.30.254 (254 hosts).
+      </IQ>
+
+      <IQ level="Intermediate">
+        <strong>Q: You need 50 hosts on a subnet. What is the smallest subnet (/prefix) that works, and what is the waste?</strong>
+        <br /><br />
+        Need 50 hosts → need 50 + 2 = 52 addresses (network + broadcast).
+        Next power of 2 ≥ 52 is 64 = 2⁶, which means 6 host bits → /26 (32 - 6 = 26).
+        /26 provides 2⁶ - 2 = 62 usable hosts. Waste = 62 - 50 = 12 host addresses wasted.
+        /27 provides only 2⁵ - 2 = 30 hosts — not enough.
+        So /26 (255.255.255.192) is the answer. Block size = 64, subnets start at multiples of 64.
+      </IQ>
+
+      <IQ level="Intermediate">
+        <strong>Q: A Wireshark hex dump shows the bytes <Code>C0 A8 01 01</Code>. What IPv4 address does this represent?</strong>
+        <br /><br />
+        Convert each byte from hex to decimal: 0xC0 = 192, 0xA8 = 168, 0x01 = 1, 0x01 = 1.
+        The IPv4 address is 192.168.1.1 — a common default gateway address.
+        The conversion: C0 = 12×16 + 0 = 192; A8 = 10×16 + 8 = 168; both 01 = 1.
+        In binary: 11000000.10101000.00000001.00000001.
+      </IQ>
+
+      <IQ level="Senior">
+        <strong>Q: How would you programmatically generate all subnet addresses for 10.0.0.0/8 divided into /24 subnets using bitwise operations in Python?</strong>
+        <br /><br />
+        The key insight: /8 to /24 means 16 bits of subnet space (256 × 256 = 65,536 subnets).
+        <CodeBlock>{`import ipaddress
+
+# Bit-manipulation approach
+network_int = 0x0A000000  # 10.0.0.0 as 32-bit int
+mask_24 = 0xFFFFFF00      # /24 mask
+
+# Number of /24 subnets in a /8 = 2^(24-8) = 65536
+for subnet_id in range(1 << (24 - 8)):   # 0 to 65535
+    # Left-shift subnet_id into the 16-24 bit range
+    subnet_net = network_int | (subnet_id << 8)
+    # Extract octets
+    o = [(subnet_net >> (24 - 8*i)) & 0xFF for i in range(4)]
+    print(f"{o[0]}.{o[1]}.{o[2]}.{o[3]}/24")
+    # → 10.0.0.0/24, 10.0.1.0/24, ..., 10.255.255.0/24`}</CodeBlock>
+        The <Code>&lt;&lt; 8</Code> shifts the subnet counter to occupy bits 8–23 (the middle two octets),
+        preserving the 10.x.x.0 structure. The bit manipulation directly mirrors how hardware computes
+        subnet boundaries.
+      </IQ>
+
+      <IQ level="Senior">
+        <strong>Q: IPv6 uses EUI-64 to derive interface identifiers from MAC addresses. What is the binary manipulation involved, and why was it considered a privacy problem?</strong>
+        <br /><br />
+        EUI-64 process for MAC <Code>00:1A:2B:3C:4D:5E</Code>:
+        (1) Split MAC at byte 3: <Code>00:1A:2B</Code> | <Code>3C:4D:5E</Code>
+        (2) Insert <Code>FF:FE</Code> in the middle: <Code>00:1A:2B:FF:FE:3C:4D:5E</Code>
+        (3) Flip bit 6 (Universal/Local bit) of first byte: <Code>00</Code> → bit 1 = 0 → flip → 0x02 → <Code>02:1A:2B:FF:FE:3C:4D:5E</Code>
+        (4) The 64-bit interface ID is <Code>021A:2BFF:FE3C:4D5E</Code>
+
+        Privacy issue: the interface ID is derived deterministically from the hardware MAC, which never changes.
+        An observer seeing IPv6 traffic from <Code>2001:db8:1::021A:2BFF:FE3C:4D5E</Code> can extract the
+        MAC address (revealing device vendor), track the device across different networks (same interface ID
+        regardless of prefix), and correlate activity over time. RFC 4941 (2007) introduced privacy
+        extensions: the interface identifier is replaced with a random value that changes every few hours,
+        making long-term tracking significantly harder. Modern OS implementations (Linux, macOS, Windows)
+        use privacy extensions by default.
+      </IQ>
+
+      <IQ level="PhD">
+        <strong>Q: Analyze the VLSM (Variable Length Subnet Masking) design for an enterprise with these requirements: 200 hosts in HQ, 50 hosts in Branch-A, 25 hosts in Branch-B, 6 WAN links each needing 2 hosts. Minimize address space waste using 192.168.1.0/24.</strong>
+        <br /><br />
+        VLSM allocates the largest subnets first from the address space, then fills smaller ones into gaps.
+        Sort requirements descending and assign smallest fitting prefix:
+
+        <CodeBlock>{`Requirement          Hosts needed  /prefix  Block   Waste
+──────────────────────────────────────────────────────────────
+HQ (200 hosts)       202 total     /24*     —       — (too big! need /23)
+
+Actually 200 hosts needs /24 → 254 hosts. 200 ≤ 254 ✓
+
+Allocation from 192.168.1.0/24:
+  HQ:          192.168.1.0/25    (126 hosts) — only 126! Adjust:
+
+Recalculate with /24 = 254 hosts for HQ:
+  → Need 192.168.0.0/23 or choose different base
+
+Fitting in 192.168.1.0/24 (256 total addresses):
+  200 hosts → /24 is the whole block → can't fit Branch-A/B too!
+
+Realistic fit:
+  Use 192.168.0.0/22 (1022 hosts total):
+  HQ:        192.168.0.0/24  → 254 hosts (200 used, 54 waste)
+  Branch-A:  192.168.1.0/26  →  62 hosts (50 used, 12 waste)
+  Branch-B:  192.168.1.64/27 →  30 hosts (25 used, 5 waste)
+  WAN-1..6:  192.168.1.96/30 ..192.168.1.116/30 → 2 hosts each
+             (6 × 4 = 24 addresses, all in 192.168.1.96/27)
+
+Summary: 200+50+25+12 = 287 used, 1022 total, ~28% waste
+vs flat /22: 287/1022 = 72% efficiency
+vs /24-only: would need multiple /24s, wasting 65,249 addresses`}</CodeBlock>
+        VLSM is powerful because it prevents the situation where a 200-host requirement forces allocating
+        a /24 (254 addresses) which then wastes 54 addresses that could have served another subnet.
+        Modern IPAM (IP Address Management) software automates this, but understanding the binary math
+        lets you verify allocations and debug misconfigurations.
+      </IQ>
+
+      <IQ level="PhD">
+        <strong>Q: How does Hamming code detect and correct single-bit errors, and what is its relationship to the parity bits in ECC RAM?</strong>
+        <br /><br />
+        Hamming codes (Richard Hamming, 1950) add redundancy bits at positions that are powers of 2
+        (1, 2, 4, 8, 16...). Each parity bit covers a specific subset of data bits — those whose position
+        number has that power of 2 set in binary.
+        <br /><br />
+        For 4 data bits (d1-d4), Hamming(7,4) adds 3 parity bits (p1, p2, p4):
+        p1 covers positions 1,3,5,7 (bit 0 set in position binary)
+        p2 covers positions 2,3,6,7 (bit 1 set)
+        p4 covers positions 4,5,6,7 (bit 2 set)
+        <br /><br />
+        To correct an error: receiver recomputes all parity bits and XORs them with received values.
+        Non-zero result = syndrome. The syndrome is the binary number of the corrupted bit position —
+        flip that bit to correct it. A syndrome of 0b101 = 5 means bit position 5 is corrupted.
+        <br /><br />
+        ECC RAM uses Hamming extended with an extra overall parity bit (SECDED: Single Error Correct,
+        Double Error Detect). A 64-bit data word gets 8 ECC bits, stored as 72 bits total. On every
+        read, the DRAM controller recomputes ECC. Single-bit errors are silently corrected (SECDED detects
+        and corrects). Double-bit errors are detected and reported as uncorrectable (causing kernel panic).
+        ECC RAM is required for servers, not because bit errors are common (cosmic ray rate ≈ 1 error/GB-month),
+        but because uncorrected errors cause silent data corruption — worse than a crash, because you don&apos;t
+        know the data is wrong. At cloud scale (millions of DRAM chips), ECC prevents thousands of potential
+        data corruptions per day.
+      </IQ>
+
+      <Divider />
 
       <KeyTakeaways items={[
-        'Every IP address, subnet mask, MAC address, and protocol field is binary under the hood — decimal and hex are just display formats.',
-        'Eight place values power all octet math: 128, 64, 32, 16, 8, 4, 2, 1. Memorize them. Subnetting is binary AND.',
-        'Hex groups 4 binary bits into one character (nibble). One byte = two hex digits. MAC addresses are 48-bit hex; IPv6 is 128-bit hex.',
-        'Only nine decimal values are valid in a subnet mask octet: 0, 128, 192, 224, 240, 248, 252, 254, 255 — each is a run of leading 1-bits.',
-        'Bitwise AND derives the network address. Bitwise OR derives the broadcast. Bitwise NOT converts a subnet mask to a wildcard mask.',
-        'CIDR /prefix is a count of leading 1-bits. Host bits = 32 − prefix. Usable hosts = 2^(host bits) − 2.',
-        'All multi-byte protocol fields are big-endian (network byte order). Port 80 = 0x0050 in the wire, not 0x5000.',
-        "Protocol fields are unsigned unless documented as signed — treating TTL or prefix-length as signed causes bugs that hide in production until traffic hits the edge case.",
+        'Binary (base 2) is the language of hardware — circuits are either on (1) or off (0). Decimal and hex are human-readable encodings of binary values.',
+        'Every hex digit represents exactly 4 binary bits. Converting between binary and hex is substitution, not arithmetic.',
+        'IP address math is binary AND, OR, and NOT operations. Subnet masking = IP AND mask = network address.',
+        'A /prefix means that many bits are 1 in the mask (from the left). Usable hosts = 2^(32−prefix) − 2.',
+        'Byte = 8 bits. Network speeds are in bits (Mbps). File sizes are in bytes (MB). 100 Mbps ÷ 8 = 12.5 MB/s.',
+        'TCP flags are individual bits in a 16-bit field. SYN=0x002, SYN+ACK=0x012, ACK=0x010, RST=0x004, FIN+ACK=0x011.',
+        'MAC addresses are 48-bit hex values. First 3 bytes = OUI (vendor). All-ones FF:FF:FF:FF:FF:FF = broadcast.',
+        'Bitwise AND extracts network address. NOT inverts mask for wildcard ACL calculation. XOR forms CRC checksums.',
+        'VLSM allocates variable prefix lengths — largest subnets first — to minimize IP address waste.',
+        'ECC RAM uses Hamming codes (SECDED) to automatically correct single-bit errors and detect double-bit errors.',
       ]} />
-
     </LearnLayout>
   )
 }
