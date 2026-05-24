@@ -4,691 +4,847 @@ import { useState } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
-const N = '#10b981'
+/* ── helper components ─────────────────────────────────────────────── */
+const G = '#10b981'
 
-const Part = ({ n, title }: { n: string; title: string }) => (
-  <div style={{ marginBottom: 28 }}>
-    <p style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 8px', letterSpacing: '.1em' }}>// Part {n}</p>
-    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px,3vw,30px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
+const Chapter = ({ n, title }: { n: number; title: string }) => (
+  <div style={{ marginBottom: 32 }}>
+    <p style={{ fontSize: 11, color: G, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em', textTransform: 'uppercase' }}>
+      Chapter {String(n).padStart(2, '0')}
+    </p>
+    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
   </div>
 )
 
-const P = ({ children }: { children: React.ReactNode }) => (
-  <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, margin: '0 0 18px' }}>{children}</p>
+const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin: '56px 0' }} />
+
+const Para = ({ children }: { children: React.ReactNode }) => (
+  <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.95, margin: '0 0 20px' }}>{children}</p>
 )
 
-const H = ({ children }: { children: React.ReactNode }) => (
-  <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: '32px 0 12px' }}>{children}</h3>
+const H2 = ({ children }: { children: React.ReactNode }) => (
+  <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', margin: '36px 0 14px', letterSpacing: '-0.5px' }}>{children}</h3>
 )
 
-const Hl = ({ children }: { children: React.ReactNode }) => (
-  <strong style={{ color: N }}>{children}</strong>
+const H3 = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', margin: '28px 0 10px' }}>{children}</h4>
 )
 
-const HR = () => <div style={{ borderTop: '1px solid var(--border)', margin: '48px 0' }} />
+const Accent = ({ children }: { children: React.ReactNode }) => (
+  <strong style={{ color: G, fontWeight: 700 }}>{children}</strong>
+)
 
-const ProTip = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: `${N}08`, border: `1px solid ${N}20`, borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Pro Tip</p>
-    <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{children}</p>
+const Code = ({ children }: { children: React.ReactNode }) => (
+  <code style={{ fontSize: 13, background: `${G}15`, color: G, padding: '2px 7px', borderRadius: 5, fontFamily: 'var(--font-mono)' }}>{children}</code>
+)
+
+const CodeBlock = ({ children }: { children: React.ReactNode }) => (
+  <pre style={{ background: '#0a0a0a', border: '1px solid #1f2937', borderRadius: 10, padding: '18px 20px', overflowX: 'auto', fontSize: 13, lineHeight: 1.75, color: '#e5e7eb', margin: '20px 0', fontFamily: 'var(--font-mono)' }}>
+    {children}
+  </pre>
+)
+
+const StoryBox = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'linear-gradient(135deg,#0f2027,#203a43,#2c5364)', border: `1px solid ${G}30`, borderRadius: 12, padding: '20px 24px', margin: '28px 0', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ position: 'absolute', top: 12, right: 16, fontSize: 22, opacity: 0.18 }}>📖</div>
+    <p style={{ fontSize: 11, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.12em', margin: '0 0 10px' }}>Story</p>
+    <div style={{ fontSize: 14, color: '#d1fae5', lineHeight: 1.9 }}>{children}</div>
+  </div>
+)
+
+const WowBox = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'linear-gradient(135deg,#1c1917,#292524)', border: '1px solid #f59e0b30', borderRadius: 12, padding: '20px 24px', margin: '28px 0', position: 'relative' }}>
+    <div style={{ position: 'absolute', top: 12, right: 16, fontSize: 22, opacity: 0.25 }}>⚡</div>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.12em', margin: '0 0 10px' }}>Wow Factor</p>
+    <div style={{ fontSize: 14, color: '#fef3c7', lineHeight: 1.9 }}>{children}</div>
+  </div>
+)
+
+const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: '#f59e0b08', border: '1px solid #f59e0b35', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Caution — {title}</p>
+    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
 const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Common Mistake — {title}</p>
-    <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{children}</p>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Misconception — {title}</p>
+    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
-const IQ = ({ q, children }: { q: string; children: React.ReactNode }) => (
-  <div style={{ marginBottom: 40 }}>
-    <div style={{ background: `${N}10`, border: `1px solid ${N}25`, borderRadius: '8px 8px 0 0', padding: '14px 18px', fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>Q: {q}</div>
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
-  </div>
-)
-
-const TimeBlock = ({ time, label, children }: { time: string; label: string; children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 20, marginBottom: 28 }}>
-    <div style={{ flexShrink: 0, textAlign: 'right', width: 100 }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)' }}>{time}</div>
-    </div>
-    <div style={{ flex: 1, borderLeft: `2px solid ${N}30`, paddingLeft: 20, paddingBottom: 8 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{label}</div>
-      <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8 }}>{children}</div>
-    </div>
-  </div>
-)
-
-const Term = ({ word, def }: { word: string; def: string }) => (
-  <div style={{ display: 'flex', gap: 0, marginBottom: 12, border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
-    <div style={{ background: `${N}12`, borderRight: `1px solid ${N}20`, padding: '10px 16px', minWidth: 160, display: 'flex', alignItems: 'center' }}>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: N }}>{word}</span>
-    </div>
-    <div style={{ padding: '10px 16px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{def}</div>
-  </div>
-)
-
-// ── IP Address Calculator ─────────────────────────────────────────────────────
-function parseIPOctets(ip: string): number[] | null {
-  const parts = ip.split('.')
-  if (parts.length !== 4) return null
-  const nums = parts.map(p => parseInt(p, 10))
-  if (nums.some(n => isNaN(n) || n < 0 || n > 255)) return null
-  return nums
+const LEVEL_COLORS: Record<string, string> = {
+  Beginner: '#10b981',
+  Intermediate: '#3b82f6',
+  Senior: '#8b5cf6',
+  PhD: '#f97316',
 }
 
-function octetsToInt(octets: number[]): number {
+const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) => (
+  <div style={{ marginBottom: 32 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 0 }}>
+      <span style={{ fontSize: 10, fontWeight: 700, color: '#000', background: LEVEL_COLORS[level], padding: '2px 9px', borderRadius: 20, letterSpacing: '.06em', textTransform: 'uppercase', flexShrink: 0 }}>{level}</span>
+      <div style={{ background: `${LEVEL_COLORS[level]}12`, border: `1px solid ${LEVEL_COLORS[level]}30`, borderRadius: '0 8px 0 0', padding: '12px 16px', fontSize: 14, fontWeight: 700, color: 'var(--text)', flex: 1 }}>Q: {q}</div>
+    </div>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '16px 18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
+  </div>
+)
+
+/* ── helper functions ──────────────────────────────────────────────── */
+function parseIPv4(ip: string): number[] | null {
+  const parts = ip.split('.').map(Number)
+  if (parts.length !== 4) return null
+  if (parts.some(p => isNaN(p) || p < 0 || p > 255)) return null
+  return parts
+}
+
+function cidrToSubnetMask(prefix: number): number[] {
+  const mask = ~((1 << (32 - prefix)) - 1) >>> 0
+  return [(mask >>> 24) & 0xFF, (mask >>> 16) & 0xFF, (mask >>> 8) & 0xFF, mask & 0xFF]
+}
+
+function octetsToNum(octets: number[]): number {
   return ((octets[0] << 24) | (octets[1] << 16) | (octets[2] << 8) | octets[3]) >>> 0
 }
 
-function intToOctets(n: number): number[] {
-  return [(n >>> 24) & 0xff, (n >>> 16) & 0xff, (n >>> 8) & 0xff, n & 0xff]
+function numToOctets(n: number): number[] {
+  return [(n >>> 24) & 0xFF, (n >>> 16) & 0xFF, (n >>> 8) & 0xFF, n & 0xFF]
 }
 
-function toBinary(octets: number[]): string {
-  return octets.map(o => o.toString(2).padStart(8, '0')).join('.')
-}
+/* ── interactive components ────────────────────────────────────────── */
 
-function IPCalc() {
-  const [ipStr, setIpStr] = useState('192.168.10.50')
+function IPv4AddressAnalyzer() {
+  const [input, setInput] = useState('192.168.10.50')
   const [prefix, setPrefix] = useState(24)
 
-  const octets = parseIPOctets(ipStr)
+  const octets = parseIPv4(input)
   const valid = octets !== null
 
-  const maskInt = valid ? (prefix === 0 ? 0 : (0xffffffff << (32 - prefix)) >>> 0) : 0
-  const maskOctets = intToOctets(maskInt)
+  let networkAddr = ''
+  let broadcastAddr = ''
+  let firstHost = ''
+  let lastHost = ''
+  let totalHosts = 0
+  let subnetMask = ''
+  let bits: number[] = []
+  let networkBits: number[] = []
+  let hostBits: number[] = []
 
-  const ipInt = valid ? octetsToInt(octets) : 0
-  const networkInt = valid ? (ipInt & maskInt) >>> 0 : 0
-  const broadcastInt = valid ? (networkInt | (~maskInt >>> 0)) >>> 0 : 0
-  const firstHostInt = networkInt + 1
-  const lastHostInt = broadcastInt - 1
-  const totalHosts = prefix <= 30 ? Math.pow(2, 32 - prefix) - 2 : (prefix === 31 ? 2 : 1)
+  if (valid && octets) {
+    const mask = cidrToSubnetMask(prefix)
+    subnetMask = mask.join('.')
+    const ipNum = octetsToNum(octets)
+    const maskNum = octetsToNum(mask)
+    const netNum = (ipNum & maskNum) >>> 0
+    const bcNum = (netNum | (~maskNum >>> 0)) >>> 0
+    networkAddr = numToOctets(netNum).join('.')
+    broadcastAddr = numToOctets(bcNum).join('.')
+    firstHost = numToOctets(netNum + 1).join('.')
+    lastHost = numToOctets(bcNum - 1).join('.')
+    totalHosts = Math.max(0, (1 << (32 - prefix)) - 2)
 
-  const networkOctets = intToOctets(networkInt)
-  const broadcastOctets = intToOctets(broadcastInt)
-  const firstHostOctets = intToOctets(firstHostInt)
-  const lastHostOctets = intToOctets(lastHostInt)
-  const wildcardOctets = maskOctets.map(b => 255 - b)
-
-  const isPrivate = valid && (
-    octets[0] === 10 ||
-    (octets[0] === 172 && octets[1] >= 16 && octets[1] <= 31) ||
-    (octets[0] === 192 && octets[1] === 168)
-  )
-  const isLoopback = valid && octets[0] === 127
-  const isLinkLocal = valid && octets[0] === 169 && octets[1] === 254
-  const isMulticast = valid && octets[0] >= 224 && octets[0] <= 239
-
-  const addrType = isLoopback ? 'Loopback' : isLinkLocal ? 'Link-Local (APIPA)' : isMulticast ? 'Multicast' : isPrivate ? 'Private (RFC 1918)' : 'Public'
-  const typeColor = isPrivate ? N : isLoopback || isLinkLocal ? '#f59e0b' : isMulticast ? '#8b5cf6' : '#3b82f6'
+    for (let i = 0; i < 4; i++) {
+      for (let b = 7; b >= 0; b--) {
+        bits.push((octets[i] >> b) & 1)
+      }
+    }
+    networkBits = bits.slice(0, prefix)
+    hostBits = bits.slice(prefix)
+  }
 
   return (
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', margin: '28px 0' }}>
-      <div style={{ padding: '18px 22px', borderBottom: '1px solid var(--border)', background: `${N}06` }}>
-        <p style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '.1em', margin: '0 0 4px' }}>// INTERACTIVE — IP ADDRESS CALCULATOR</p>
-        <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0 }}>Enter any IPv4 address and prefix length to see network, broadcast, host range, and binary representation.</p>
-      </div>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 13, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Interactive — IPv4 Address Analyzer</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 20px' }}>Enter an IPv4 address and prefix to analyze network, broadcast, and host ranges.</p>
 
-      <div style={{ padding: '20px 22px', display: 'flex', gap: 16, flexWrap: 'wrap', borderBottom: '1px solid var(--border)', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <input
-            value={ipStr}
-            onChange={e => setIpStr(e.target.value)}
-            style={{ padding: '10px 14px', borderRadius: 8, border: `1px solid ${valid ? 'var(--border)' : '#ef4444'}`, background: 'var(--background)', color: 'var(--text)', fontSize: 15, fontFamily: 'var(--font-mono)', fontWeight: 700, width: 180 }}
-            placeholder="192.168.1.1"
-          />
-          <span style={{ fontSize: 20, fontWeight: 700, color: 'var(--muted)' }}>/</span>
-          <input
-            type="number"
-            min={0}
-            max={32}
-            value={prefix}
-            onChange={e => setPrefix(Math.max(0, Math.min(32, parseInt(e.target.value) || 0)))}
-            style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--background)', color: 'var(--text)', fontSize: 15, fontFamily: 'var(--font-mono)', fontWeight: 700, width: 70 }}
-          />
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20, alignItems: 'flex-end' }}>
+        <div>
+          <label style={{ fontSize: 12, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>IP Address</label>
+          <input value={input} onChange={e => setInput(e.target.value)}
+            style={{ background: 'var(--bg)', border: `1px solid ${valid ? 'var(--border)' : '#ef4444'}`, borderRadius: 6, padding: '7px 12px', color: G, fontSize: 14, fontFamily: 'var(--font-mono)', width: 160 }} />
         </div>
-        {valid && (
-          <div style={{ background: `${typeColor}15`, border: `1px solid ${typeColor}40`, borderRadius: 8, padding: '6px 14px', fontSize: 12, fontWeight: 700, color: typeColor }}>
-            {addrType}
-          </div>
-        )}
+        <div>
+          <label style={{ fontSize: 12, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>Prefix /{prefix}</label>
+          <input type="range" min={1} max={30} value={prefix} onChange={e => setPrefix(Number(e.target.value))}
+            style={{ width: 120 }} />
+        </div>
       </div>
 
-      {valid ? (
-        <div style={{ padding: '20px 22px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginBottom: 20 }}>
+      {valid && (
+        <>
+          <div style={{ background: '#0a0a0a', borderRadius: 8, padding: '14px 16px', marginBottom: 16, fontFamily: 'var(--font-mono)', fontSize: 12 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0, marginBottom: 8 }}>
+              {bits.map((b, i) => (
+                <span key={i} style={{
+                  display: 'inline-block', width: 14, height: 18, textAlign: 'center', fontSize: 11, lineHeight: '18px',
+                  color: i < prefix ? '#fff' : '#6b7280',
+                  background: i < prefix ? (b ? G : '#374151') : (b ? '#374151' : '#0a0a0a'),
+                  borderRight: (i === 7 || i === 15 || i === 23) ? '2px solid #4b5563' : 'none',
+                  borderBottom: i < prefix ? `2px solid ${G}` : '2px solid #374151',
+                }}>
+                  {b}
+                </span>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: 16, fontSize: 11 }}>
+              <span style={{ color: G }}>Network bits: {prefix}</span>
+              <span style={{ color: '#6b7280' }}>Host bits: {32 - prefix}</span>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10 }}>
             {[
-              { label: 'Network Address', value: networkOctets.join('.'), sub: `/${prefix}` },
-              { label: 'Subnet Mask', value: maskOctets.join('.'), sub: `/${prefix} prefix` },
-              { label: 'Wildcard Mask', value: wildcardOctets.join('.'), sub: 'ACL wildcard' },
-              { label: 'First Host', value: prefix <= 30 ? firstHostOctets.join('.') : 'N/A', sub: '' },
-              { label: 'Last Host', value: prefix <= 30 ? lastHostOctets.join('.') : 'N/A', sub: '' },
-              { label: 'Broadcast', value: prefix <= 31 ? broadcastOctets.join('.') : 'N/A', sub: 'last address' },
-              { label: 'Usable Hosts', value: totalHosts.toLocaleString(), sub: `2^${32 - prefix}${prefix <= 30 ? '−2' : ''}` },
+              { label: 'Subnet Mask', value: subnetMask, color: '#3b82f6' },
+              { label: 'Network Address', value: networkAddr, color: G },
+              { label: 'Broadcast Address', value: broadcastAddr, color: '#ef4444' },
+              { label: 'First Host', value: firstHost, color: G },
+              { label: 'Last Host', value: lastHost, color: G },
+              { label: 'Usable Hosts', value: totalHosts.toLocaleString(), color: '#f59e0b' },
             ].map(item => (
-              <div key={item.label} style={{ background: 'var(--background)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px' }}>
-                <div style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 4 }}>{item.label}</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{item.value}</div>
-                {item.sub && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>{item.sub}</div>}
+              <div key={item.label} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px' }}>
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>{item.label}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)' }}>{item.value}</div>
               </div>
             ))}
           </div>
+        </>
+      )}
 
-          <div style={{ marginBottom: 16 }}>
-            <p style={{ fontSize: 11, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 8px' }}>Binary Representation</p>
-            <div style={{ background: 'var(--background)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 16px', fontFamily: 'var(--font-mono)', fontSize: 12 }}>
-              <div style={{ display: 'flex', gap: 8, marginBottom: 6, alignItems: 'baseline' }}>
-                <span style={{ color: 'var(--muted)', minWidth: 70, fontSize: 11 }}>IP:</span>
-                <span style={{ color: 'var(--text)' }}>{toBinary(octets)}</span>
-              </div>
-              <div style={{ display: 'flex', gap: 8, marginBottom: 6, alignItems: 'baseline' }}>
-                <span style={{ color: 'var(--muted)', minWidth: 70, fontSize: 11 }}>Mask:</span>
-                <span style={{ color: N }}>{toBinary(maskOctets)}</span>
-              </div>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'baseline' }}>
-                <span style={{ color: 'var(--muted)', minWidth: 70, fontSize: 11 }}>Network:</span>
-                <span>
-                  {toBinary(networkOctets).split('').map((bit, i) => {
-                    const dotIdx = Math.floor(i / 9)
-                    const bitPos = i - dotIdx * 9
-                    if (i % 9 === 8) return <span key={i} style={{ color: 'var(--border)' }}>.</span>
-                    const flatBit = i - dotIdx
-                    return (
-                      <span key={i} style={{ color: flatBit < prefix ? '#3b82f6' : '#ef4444' }}>{bit}</span>
-                    )
-                  })}
-                  <span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 10 }}>
-                    <span style={{ color: '#3b82f6' }}>■</span> network bits ({prefix})&nbsp;
-                    <span style={{ color: '#ef4444' }}>■</span> host bits ({32 - prefix})
-                  </span>
-                </span>
-              </div>
-            </div>
-          </div>
+      {!valid && (
+        <div style={{ background: '#ef444410', border: '1px solid #ef444430', borderRadius: 8, padding: 12 }}>
+          <p style={{ fontSize: 13, color: '#ef4444', margin: 0 }}>Invalid IPv4 address. Enter a valid address like 192.168.1.1</p>
         </div>
-      ) : (
-        <div style={{ padding: '20px 22px', color: '#ef4444', fontSize: 13 }}>Invalid IP address — enter in dotted decimal format (e.g., 192.168.1.1)</div>
       )}
     </div>
   )
 }
 
-// ── CIDR Supernetting Visualizer ──────────────────────────────────────────────
-const CIDR_EXAMPLES = [
-  { block: '10.0.0.0/8', desc: 'Class A private — 16,777,214 hosts', hosts: 16777214, subnets: '65536 /24s' },
-  { block: '172.16.0.0/12', desc: 'Class B private range — 1,048,574 hosts', hosts: 1048574, subnets: '4096 /24s' },
-  { block: '192.168.0.0/16', desc: 'Class C private range — 65,534 hosts', hosts: 65534, subnets: '256 /24s' },
-  { block: '192.168.1.0/24', desc: 'Typical home/small office LAN — 254 hosts', hosts: 254, subnets: '—' },
-  { block: '192.168.1.0/25', desc: 'Split /24 in half — 126 hosts each', hosts: 126, subnets: '2 × /25' },
-  { block: '192.168.1.0/26', desc: 'Quarter /24 — 62 hosts', hosts: 62, subnets: '4 × /26' },
-  { block: '192.168.1.0/27', desc: 'Eighth /24 — 30 hosts (switch VLANs)', hosts: 30, subnets: '8 × /27' },
-  { block: '192.168.1.0/30', desc: 'Point-to-point WAN link — 2 hosts', hosts: 2, subnets: '64 × /30' },
-  { block: '192.168.1.0/31', desc: 'RFC 3021 P2P — 2 hosts, no broadcast', hosts: 2, subnets: 'No broadcast' },
+const CLASSES = [
+  { cls: 'A', range: '1.0.0.0 – 126.255.255.255', firstBit: '0', prefix: '/8', privateRange: '10.0.0.0/8', hosts: '16,777,214', color: '#3b82f6', use: 'Originally for very large organizations (government, telcos). IANA reserved 10.0.0.0/8 for private use.' },
+  { cls: 'B', range: '128.0.0.0 – 191.255.255.255', firstBit: '10', prefix: '/16', privateRange: '172.16.0.0/12', hosts: '65,534', color: '#8b5cf6', use: 'Mid-size organizations. 172.16.0.0–172.31.255.255 are private. 16 contiguous /16 networks.' },
+  { cls: 'C', range: '192.0.0.0 – 223.255.255.255', firstBit: '110', prefix: '/24', privateRange: '192.168.0.0/16', hosts: '254', color: G, use: 'Small networks. 192.168.0.0–192.168.255.255 private. Most common for home and small office networks.' },
+  { cls: 'D', range: '224.0.0.0 – 239.255.255.255', firstBit: '1110', prefix: 'N/A', privateRange: 'N/A', hosts: 'N/A', color: '#f59e0b', use: 'Multicast addresses. Not for regular host assignment. Used for routing protocols (OSPF, EIGRP), streaming.' },
+  { cls: 'E', range: '240.0.0.0 – 255.255.255.255', firstBit: '1111', prefix: 'N/A', privateRange: 'N/A', hosts: 'N/A', color: '#6b7280', use: 'Reserved for experimental use. 255.255.255.255 is limited broadcast. Never used in production.' },
 ]
 
-export default function IPAddressing() {
+function IpClassExplorer() {
+  const [selected, setSelected] = useState<string | null>(null)
+  const cls = CLASSES.find(c => c.cls === selected)
+
   return (
-    <LearnLayout
-      title="IP Addressing"
-      description="IPv4 address structure, CIDR notation, private vs public ranges, subnetting math, special addresses, and how every packet finds its destination."
-      section="Networking Fundamentals"
-      readTime="27 min"
-      updatedAt="May 2026"
-    >
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 13, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Interactive — IPv4 Address Classes</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 20px' }}>Click a class to see range, default prefix, private ranges, and use cases.</p>
 
-      {/* ── PART 1 ── */}
-      <Part n="01" title="Why IP Addressing Exists" />
-
-      <P>
-        Ethernet MAC addresses solve a local problem: identifying devices on the same network segment. But MAC addresses are flat — they carry no topological information. There is no way to look at a MAC address and determine which continent, country, city, or building the device is in. If the internet used only MAC addresses for routing, every router in the world would need a table entry for every device on earth — billions of entries, updated continuously. This is the <Hl>scalability problem</Hl> that IP addressing solves.
-      </P>
-      <P>
-        <Hl>IP (Internet Protocol) addresses</Hl> are <Hl>hierarchical and topological</Hl>: they encode both the network a device belongs to and the device&apos;s identity within that network. This means a router in Tokyo only needs to know how to reach each <em>network prefix</em> (e.g., &quot;all 192.168.1.x addresses are over there&quot;) rather than every individual device. The internet&apos;s global routing table currently has ~900,000 prefixes — manageable — rather than 5 billion device entries — not manageable. This aggregation property is the entire reason IP addressing works at internet scale.
-      </P>
-
-      <HR />
-
-      {/* ── PART 2 ── */}
-      <Part n="02" title="IPv4 Address Structure" />
-
-      <P>
-        An IPv4 address is a 32-bit number, conventionally written as four decimal octets separated by dots: <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4, fontSize: 13 }}>192.168.1.1</code>. Each octet represents 8 bits (0–255). The total address space is 2³² = 4,294,967,296 addresses — which seemed vast in 1981 but was exhausted by 2011 due to the explosive growth of the internet and inefficient early allocation.
-      </P>
-
-      <H>The Two Parts of Every IP Address</H>
-      <P>
-        Every IPv4 address consists of two parts: the <Hl>network portion</Hl> (identifies which network the device is on) and the <Hl>host portion</Hl> (identifies the specific device within that network). A <Hl>subnet mask</Hl> or <Hl>prefix length</Hl> determines where the boundary falls. For the address 192.168.1.50/24: the first 24 bits (192.168.1) identify the network, and the last 8 bits (50) identify the host. All devices with addresses in 192.168.1.0/24 are on the same network and can communicate directly without a router.
-      </P>
-
-      <div style={{ overflowX: 'auto', margin: '12px 0 28px' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px', minWidth: 540 }}>
-          <div style={{ marginBottom: 12 }}>
-            <span style={{ color: 'var(--muted)', marginRight: 12 }}>Address:</span>
-            <span style={{ color: '#3b82f6' }}>11000000.10101000.00000001</span>
-            <span style={{ color: 'var(--border)' }}>.</span>
-            <span style={{ color: '#ef4444' }}>00110010</span>
-            <span style={{ color: 'var(--muted)', marginLeft: 16 }}>(192.168.1.50)</span>
-          </div>
-          <div style={{ marginBottom: 12 }}>
-            <span style={{ color: 'var(--muted)', marginRight: 12 }}>Mask /24:</span>
-            <span style={{ color: '#3b82f6' }}>11111111.11111111.11111111</span>
-            <span style={{ color: 'var(--border)' }}>.</span>
-            <span style={{ color: '#ef4444' }}>00000000</span>
-            <span style={{ color: 'var(--muted)', marginLeft: 16 }}>(255.255.255.0)</span>
-          </div>
-          <div style={{ display: 'flex', gap: 24, marginTop: 8, padding: '8px 0', borderTop: '1px solid var(--border)' }}>
-            <span><span style={{ color: '#3b82f6' }}>■</span> Network bits (24) → identifies the /24 subnet</span>
-            <span><span style={{ color: '#ef4444' }}>■</span> Host bits (8) → identifies the specific device</span>
-          </div>
-        </div>
-      </div>
-
-      <H>CIDR Notation</H>
-      <P>
-        <Hl>CIDR (Classless Inter-Domain Routing)</Hl> notation, defined in RFC 4632, expresses the prefix length as a number after a slash: 192.168.1.0/24. This replaced the original classful system (Classes A, B, and C) which wasted enormous amounts of address space by forcing every network into three fixed sizes (8-bit, 16-bit, or 24-bit host portions). CIDR allows any prefix length from /0 to /32, enabling precise allocation of exactly the number of addresses needed.
-      </P>
-
-      <div style={{ overflowX: 'auto', margin: '12px 0 24px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>
-          <thead>
-            <tr style={{ background: `${N}12` }}>
-              {['Prefix', 'Subnet Mask', 'Addresses', 'Usable Hosts', 'Common Use'].map(h => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, color: N, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', border: '1px solid var(--border)' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['/8', '255.0.0.0', '16,777,216', '16,777,214', 'Large enterprise, ISP block'],
-              ['/16', '255.255.0.0', '65,536', '65,534', 'Campus, data center'],
-              ['/20', '255.255.240.0', '4,096', '4,094', 'Large office, AWS default VPC subnet'],
-              ['/22', '255.255.252.0', '1,024', '1,022', 'Medium office / floor'],
-              ['/24', '255.255.255.0', '256', '254', 'Typical LAN segment'],
-              ['/25', '255.255.255.128', '128', '126', 'Half /24 — two halves of a floor'],
-              ['/26', '255.255.255.192', '64', '62', 'Department segment'],
-              ['/27', '255.255.255.224', '32', '30', 'Small team / IoT zone'],
-              ['/28', '255.255.255.240', '16', '14', 'Small management segment'],
-              ['/29', '255.255.255.248', '8', '6', 'Very small segment'],
-              ['/30', '255.255.255.252', '4', '2', 'Point-to-point WAN link'],
-              ['/31', '255.255.255.254', '2', '2', 'P2P RFC 3021 (no broadcast)'],
-              ['/32', '255.255.255.255', '1', '1', 'Host route, loopback'],
-            ].map((row, i) => (
-              <tr key={i} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--background)' }}>
-                {row.map((cell, j) => (
-                  <td key={j} style={{ padding: '9px 14px', border: '1px solid var(--border)', fontFamily: j === 0 ? 'var(--font-mono)' : undefined, fontWeight: j === 0 ? 700 : 400, color: j === 0 ? N : 'var(--text)' }}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <HR />
-
-      {/* ── PART 3 ── */}
-      <Part n="03" title="Interactive: IP Address Calculator" />
-
-      <IPCalc />
-
-      <HR />
-
-      {/* ── PART 4 ── */}
-      <Part n="04" title="Special and Reserved IP Address Ranges" />
-
-      <P>
-        Not all IP addresses route to devices on the internet. Large portions of the address space are reserved for specific purposes — using a reserved address range as if it were public routable space causes hard-to-diagnose connectivity failures.
-      </P>
-
-      <div style={{ overflowX: 'auto', margin: '12px 0 24px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 700 }}>
-          <thead>
-            <tr style={{ background: `${N}12` }}>
-              {['Range', 'Name', 'RFC', 'Description'].map(h => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, color: N, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', border: '1px solid var(--border)' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['10.0.0.0/8', 'RFC 1918 Private', '1918', 'Largest private block: 16.7M addresses. Common in large enterprises, cloud provider VPCs, and home/office LANs.'],
-              ['172.16.0.0/12', 'RFC 1918 Private', '1918', '1M addresses (172.16.x.x through 172.31.x.x). Less commonly used but standard in corporate networks and Docker default bridge.'],
-              ['192.168.0.0/16', 'RFC 1918 Private', '1918', '65K addresses. Default in consumer routers (192.168.0.x, 192.168.1.x). The most immediately recognizable private range.'],
-              ['127.0.0.0/8', 'Loopback', '1122', 'localhost — any packet sent to 127.x.x.x is delivered locally without leaving the host. 127.0.0.1 is the canonical loopback address.'],
-              ['169.254.0.0/16', 'Link-Local (APIPA)', '3927', 'Automatic Private IP Addressing — assigned by OS when DHCP fails. A 169.254.x.x address means DHCP is broken.'],
-              ['100.64.0.0/10', 'Shared Address Space', '6598', 'Reserved for ISP NAT infrastructure (Carrier-Grade NAT). Not routable on the public internet or most private networks.'],
-              ['0.0.0.0/8', 'This network', '1122', '0.0.0.0 = &quot;any&quot; or &quot;unspecified&quot;. Used as a default route (0.0.0.0/0) or in DHCP before an address is assigned.'],
-              ['240.0.0.0/4', 'Reserved', '1112', 'Originally &quot;Class E&quot; — reserved for future use, never deployed. Not routable anywhere.'],
-              ['224.0.0.0/4', 'Multicast', '3171', '224.0.0.0–239.255.255.255. Used by routing protocols (224.0.0.5=OSPF, 224.0.0.9=RIP), mDNS (224.0.0.251), and multicast streaming.'],
-              ['255.255.255.255/32', 'Limited Broadcast', '919', 'Broadcast to all devices on the local segment. Routers do not forward this — it cannot cross a router boundary.'],
-            ].map((row, i) => (
-              <tr key={i} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--background)' }}>
-                <td style={{ padding: '9px 14px', border: '1px solid var(--border)', fontFamily: 'var(--font-mono)', fontWeight: 700, color: N, whiteSpace: 'nowrap' }}>{row[0]}</td>
-                <td style={{ padding: '9px 14px', border: '1px solid var(--border)', fontWeight: 600, color: 'var(--text)' }}>{row[1]}</td>
-                <td style={{ padding: '9px 14px', border: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--muted)' }}>RFC {row[2]}</td>
-                <td style={{ padding: '9px 14px', border: '1px solid var(--border)', color: 'var(--text)', lineHeight: 1.5 }} dangerouslySetInnerHTML={{ __html: row[3] }} />
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <Err title="Using public IP ranges internally">
-        Using real public IP addresses (e.g., 8.8.8.8/24) as internal network addresses causes internet connectivity failures: packets destined for Google&apos;s 8.8.8.8 (DNS) will be routed internally and never reach Google. This happened in real enterprise environments where an IT admin &quot;borrowed&quot; a public range that they thought would never appear internally. Always use RFC 1918 private ranges for internal addressing, or the 100.64.0.0/10 shared space for ISP infrastructure.
-      </Err>
-
-      <HR />
-
-      {/* ── PART 5 ── */}
-      <Part n="05" title="Subnetting: Dividing Networks" />
-
-      <P>
-        <Hl>Subnetting</Hl> is the process of dividing a larger IP address block into smaller sub-networks. You start with a network block like 192.168.1.0/24 (256 addresses) and split it to create 192.168.1.0/25 (128 addresses) and 192.168.1.128/25 (128 addresses). Each subnet requires one address for the network identifier and one for the broadcast address — the usable host count is always <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 5px', borderRadius: 3, fontSize: 12 }}>2ⁿ − 2</code> where n is the number of host bits.
-      </P>
-
-      <H>The Subnetting Formula</H>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, margin: '16px 0 24px' }}>
-        {[
-          { formula: '2^n', name: 'Subnets created', desc: 'n = bits borrowed from host portion. Borrowing 2 bits from a /24 creates 2² = 4 subnets.' },
-          { formula: '2^h − 2', name: 'Usable hosts/subnet', desc: 'h = host bits remaining. A /26 has 6 host bits: 2⁶ − 2 = 62 hosts.' },
-          { formula: '256 − mask_octet', name: 'Block size', desc: 'For /26: mask octet = 192, block = 256−192 = 64. Subnets are: .0, .64, .128, .192' },
-        ].map(item => (
-          <div key={item.formula} style={{ background: 'var(--surface)', border: `1px solid ${N}30`, borderRadius: 10, padding: '16px' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 900, color: N, marginBottom: 6 }}>{item.formula}</div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{item.name}</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{item.desc}</div>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
+        {CLASSES.map(c => (
+          <div key={c.cls} onClick={() => setSelected(selected === c.cls ? null : c.cls)}
+            style={{ padding: '10px 18px', background: selected === c.cls ? c.color : `${c.color}15`, border: `2px solid ${selected === c.cls ? c.color : 'transparent'}`, borderRadius: 8, cursor: 'pointer', transition: 'all .15s' }}>
+            <div style={{ fontSize: 16, fontWeight: 900, color: selected === c.cls ? '#fff' : c.color }}>Class {c.cls}</div>
           </div>
         ))}
       </div>
 
-      <H>Worked Example: Subnet 192.168.10.0/24 for 4 departments</H>
-      <P>
-        Requirements: 4 departments needing 50 hosts, 50 hosts, 25 hosts, and 10 hosts respectively. Start with 192.168.10.0/24.
-      </P>
-
-      <div style={{ overflowX: 'auto', margin: '12px 0 24px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 640 }}>
-          <thead>
-            <tr style={{ background: `${N}12` }}>
-              {['Department', 'Hosts needed', 'Min prefix', 'Subnet assigned', 'Usable range', 'Hosts available'].map(h => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, color: N, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', border: '1px solid var(--border)' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
+      {cls && (
+        <div style={{ background: `${cls.color}10`, border: `1px solid ${cls.color}30`, borderRadius: 10, padding: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10, marginBottom: 12 }}>
             {[
-              ['Engineering', '50', '/26 (62 hosts)', '192.168.10.0/26', '192.168.10.1–62', '62'],
-              ['Sales', '50', '/26 (62 hosts)', '192.168.10.64/26', '192.168.10.65–126', '62'],
-              ['HR', '25', '/27 (30 hosts)', '192.168.10.128/27', '192.168.10.129–158', '30'],
-              ['IT Mgmt', '10', '/28 (14 hosts)', '192.168.10.160/28', '192.168.10.161–174', '14'],
-            ].map((row, i) => (
-              <tr key={i} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--background)' }}>
-                {row.map((cell, j) => (
-                  <td key={j} style={{ padding: '9px 14px', border: '1px solid var(--border)', fontFamily: j >= 3 ? 'var(--font-mono)' : undefined, fontWeight: j === 0 ? 700 : 400, color: j === 3 ? N : 'var(--text)' }}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <P>
-        Remaining address space 192.168.10.176/28 through 192.168.10.255 is available for future growth. This is <Hl>VLSM (Variable Length Subnet Masking)</Hl> — different subnets have different prefix lengths based on actual needs, rather than all subnets being the same size (which wastes addresses).
-      </P>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, margin: '16px 0 24px' }}>
-        {CIDR_EXAMPLES.map(ex => (
-          <div key={ex.block} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 14px' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: N, marginBottom: 4 }}>{ex.block}</div>
-            <div style={{ fontSize: 12, color: 'var(--text)', marginBottom: 4 }}>{ex.desc}</div>
-            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Can be split into: {ex.subnets}</div>
-          </div>
-        ))}
-      </div>
-
-      <ProTip>
-        The fastest subnetting mental shortcut: memorize block sizes for common prefixes. /24 = 256 addresses (block 256), /25 = 128 (block 128), /26 = 64 (block 64), /27 = 32 (block 32), /28 = 16 (block 16), /29 = 8 (block 8), /30 = 4 (block 4). Each successive /1 halves the block. Then: subnet boundaries are multiples of the block size. A /26 has blocks at .0, .64, .128, .192. A /27 has blocks at .0, .32, .64, .96, .128, .160, .192, .224.
-      </ProTip>
-
-      <HR />
-
-      {/* ── PART 6 ── */}
-      <Part n="06" title="Public vs Private Addressing and NAT" />
-
-      <P>
-        The internet uses <Hl>public IP addresses</Hl> — globally unique addresses assigned by IANA and regional registries (ARIN, RIPE, APNIC) that are routable on the public internet. <Hl>Private IP addresses</Hl> (RFC 1918) are not routable on the public internet — routers on the internet drop packets with private source or destination addresses. This means private addresses can be reused in thousands of different organizations without conflict.
-      </P>
-      <P>
-        The mechanism that makes private addressing work for internet access is <Hl>NAT (Network Address Translation)</Hl>. A NAT device (typically a router or firewall) translates private source addresses to a public IP address when traffic exits to the internet, and maintains a translation table to reverse the mapping when responses arrive. The most common form is <Hl>PAT (Port Address Translation)</Hl>, also called &quot;NAT overload&quot; — multiple private addresses share a single public IP, distinguished by different source port numbers. Your home router and most enterprise firewalls use PAT: thousands of internal devices share one (or a pool of) public IPs.
-      </P>
-
-      <H>NAT Translation Table Example</H>
-      <div style={{ overflowX: 'auto', margin: '12px 0 24px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 640 }}>
-          <thead>
-            <tr style={{ background: `${N}12` }}>
-              {['Inside Local', 'Inside Global', 'Outside Global', 'Protocol'].map(h => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, color: N, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', border: '1px solid var(--border)' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['192.168.1.10:52431', '203.0.113.5:52431', '93.184.216.34:443', 'TCP (HTTPS)'],
-              ['192.168.1.11:49201', '203.0.113.5:49201', '8.8.8.8:53', 'UDP (DNS)'],
-              ['192.168.1.10:52432', '203.0.113.5:52432', '172.217.22.3:443', 'TCP (HTTPS)'],
-              ['192.168.1.50:61111', '203.0.113.5:61111', '13.107.42.14:443', 'TCP (Teams)'],
-            ].map((row, i) => (
-              <tr key={i} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--background)' }}>
-                {row.map((cell, j) => (
-                  <td key={j} style={{ padding: '9px 14px', border: '1px solid var(--border)', fontFamily: 'var(--font-mono)', fontSize: 12, color: j === 1 ? N : 'var(--text)' }}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <P>
-        The NAT device rewrites the source IP from 192.168.1.10 to 203.0.113.5 (the public IP) in outbound packets and rewrites the destination back to 192.168.1.10 in inbound reply packets, using the port number to identify which internal host the reply belongs to. The outside server (93.184.216.34) only sees the public IP 203.0.113.5 — it has no knowledge of the private address behind it.
-      </P>
-
-      <Err title="NAT providing meaningful security">
-        NAT is not a firewall. PAT&apos;s translation table does prevent unsolicited inbound connections from reaching internal hosts (because there&apos;s no pre-existing translation entry), but this is a side effect of the address translation, not a security mechanism. A stateful firewall provides actual security through explicit allow/deny rules and connection tracking. Devices behind NAT are still fully reachable via established outbound connections, vulnerable to malicious content in HTTP/HTTPS responses, and exposed to any application that sets up a return path (P2P, STUN/ICE for WebRTC). &quot;NAT for security&quot; is security theater; deploy a proper stateful firewall.
-      </Err>
-
-      <HR />
-
-      {/* ── PART 7 ── */}
-      <Part n="07" title="The Address Exhaustion Problem and IPv6" />
-
-      <P>
-        IANA allocated the last IPv4 /8 blocks to regional registries in 2011. APNIC (Asia-Pacific) ran out of free space in 2011, ARIN (Americas) in 2015, RIPE (Europe) in 2019. IPv4 addresses are now only available via purchase on the secondary market at ~$50/address. The long-term solution is <Hl>IPv6</Hl> — a 128-bit address space with 2¹²⁸ = 340 undecillion addresses (3.4 × 10³⁸). That is enough to assign multiple addresses to every atom on the surface of the earth.
-      </P>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, margin: '16px 0 28px' }}>
-        {[
-          {
-            name: 'IPv4',
-            bits: '32 bits',
-            space: '~4.3 billion (4.3 × 10⁹)',
-            notation: '192.168.1.1 (dotted decimal)',
-            header: '20 bytes minimum, variable with options',
-            broadcast: 'Yes — limited and directed broadcast',
-            nat: 'Required at scale',
-            config: 'DHCP or manual',
-            status: 'Exhausted since 2019',
-          },
-          {
-            name: 'IPv6',
-            bits: '128 bits',
-            space: '340 undecillion (3.4 × 10³⁸)',
-            notation: '2001:db8::1 (colon-hex)',
-            header: '40 bytes fixed, no options (extension headers)',
-            broadcast: 'No — replaced by multicast and anycast',
-            nat: 'Not needed — every device gets a global address',
-            config: 'SLAAC (auto) or DHCPv6',
-            status: 'Active deployment (~40% of internet traffic)',
-          },
-        ].map(item => (
-          <div key={item.name} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '18px 20px' }}>
-            <div style={{ fontSize: 15, fontWeight: 900, color: 'var(--text)', marginBottom: 14, paddingBottom: 10, borderBottom: '1px solid var(--border)' }}>{item.name}</div>
-            {[
-              ['Address size', item.bits],
-              ['Address space', item.space],
-              ['Notation', item.notation],
-              ['Header size', item.header],
-              ['Broadcast', item.broadcast],
-              ['NAT', item.nat],
-              ['Status', item.status],
-            ].map(([label, value]) => (
-              <div key={label as string} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid var(--border)', fontSize: 12, gap: 8 }}>
-                <span style={{ color: 'var(--muted)', flexShrink: 0 }}>{label}</span>
-                <span style={{ color: 'var(--text)', fontWeight: 600, textAlign: 'right' }}>{value}</span>
+              { label: 'Range', value: cls.range },
+              { label: 'First Bit(s)', value: cls.firstBit },
+              { label: 'Default Prefix', value: cls.prefix },
+              { label: 'Private Range', value: cls.privateRange },
+              { label: 'Usable Hosts', value: cls.hosts },
+            ].map(item => (
+              <div key={item.label}>
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>{item.label}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: cls.color, fontFamily: 'var(--font-mono)' }}>{item.value}</div>
               </div>
             ))}
           </div>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0 }}>{cls.use}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const SPECIAL_RANGES = [
+  { range: '0.0.0.0/8', name: 'This network', use: 'Source address in DHCP discover (before address assigned). Never routed.' },
+  { range: '10.0.0.0/8', name: 'Private (Class A)', use: '16.7M addresses. Large enterprise networks, cloud VPCs, data centers.' },
+  { range: '100.64.0.0/10', name: 'Shared address space', use: 'RFC 6598. Carrier-Grade NAT (CGNAT) pool. ISPs use for subscriber networks between CPE and BRAS.' },
+  { range: '127.0.0.0/8', name: 'Loopback', use: '127.0.0.1 is localhost. Traffic to this range never leaves the host. Used for IPC and service testing.' },
+  { range: '169.254.0.0/16', name: 'Link-local (APIPA)', use: 'Automatic Private IP Addressing. Assigned when DHCP fails. Not routed beyond local subnet.' },
+  { range: '172.16.0.0/12', name: 'Private (Class B range)', use: '172.16.0.0–172.31.255.255. 1M addresses. Common for enterprise internal networks.' },
+  { range: '192.0.0.0/24', name: 'IETF protocol assignments', use: 'Reserved for IETF protocol use. 192.0.0.0/29 used for DS-Lite.' },
+  { range: '192.168.0.0/16', name: 'Private (Class C range)', use: '65,536 addresses. Home networks, small offices. Most commonly recognized private range.' },
+  { range: '198.18.0.0/15', name: 'Benchmarking', use: 'RFC 2544. Network device benchmarking. Never routed on the public internet.' },
+  { range: '224.0.0.0/4', name: 'Multicast', use: 'Class D. 224.0.0.x = link-local multicast (routing protocols). 239.x.x.x = admin-scoped multicast.' },
+  { range: '255.255.255.255/32', name: 'Limited broadcast', use: 'Broadcast to all hosts on local subnet. Never forwarded by routers.' },
+]
+
+function SpecialRangesReference() {
+  const [selected, setSelected] = useState<string | null>(null)
+  const r = SPECIAL_RANGES.find(x => x.range === selected)
+
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 13, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Interactive — Special IPv4 Address Ranges</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 20px' }}>Click any range to see its purpose and use cases.</p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+        {SPECIAL_RANGES.map((sr, i) => (
+          <div key={sr.range} onClick={() => setSelected(selected === sr.range ? null : sr.range)}
+            style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '10px 14px', background: selected === sr.range ? `${G}12` : i % 2 === 0 ? 'var(--bg)' : 'var(--surface)', border: `1px solid ${selected === sr.range ? G : 'var(--border)'}`, borderTop: i === 0 ? '1px solid var(--border)' : 'none', borderRadius: i === 0 ? '8px 8px 0 0' : i === SPECIAL_RANGES.length - 1 ? '0 0 8px 8px' : 0, cursor: 'pointer', transition: 'all .15s' }}>
+            <code style={{ fontSize: 12, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', minWidth: 140 }}>{sr.range}</code>
+            <span style={{ fontSize: 13, color: selected === sr.range ? G : 'var(--text)', fontWeight: selected === sr.range ? 700 : 400 }}>{sr.name}</span>
+          </div>
         ))}
       </div>
 
-      <ProTip>
-        Dual-stack deployment is the current industry standard for IPv6 migration: every device and network interface has both an IPv4 and IPv6 address. Client devices prefer IPv6 when both are available (RFC 6724 default address selection rules, &quot;Happy Eyeballs&quot; RFC 6555 for browsers). Cloud providers (AWS, GCP, Azure) now default to dual-stack VPCs. Google reports ~45% of its traffic is IPv6 as of 2025.
-      </ProTip>
+      {r && (
+        <div style={{ marginTop: 12, background: `${G}10`, border: `1px solid ${G}30`, borderRadius: 8, padding: 14 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: G, margin: '0 0 4px' }}>{r.range} — {r.name}</p>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0 }}>{r.use}</p>
+        </div>
+      )}
+    </div>
+  )
+}
 
-      <HR />
+/* ── main module ───────────────────────────────────────────────────── */
 
-      {/* ── PART 8 ── */}
-      <Part n="08" title="Day in the Life — Google SRE: IP Address Conflict Causes VM Connectivity Failure" />
+export default function IPAddressingModule() {
+  return (
+    <LearnLayout
+      title="IP Addressing"
+      description="The addressing system that routes billions of packets per second across the global internet. From the 32-bit IPv4 design of 1981 through exhaustion crises to the 128-bit IPv6 future — IP addressing is the foundation of all modern networking."
+      section="Networking Fundamentals — Module 13"
+      readTime="22–30 min"
+      updatedAt="May 2026"
+    >
+      {/* ── Chapter 1 ── */}
+      <Chapter n={1} title="Why Every Device Needs an Address" />
 
-      <P>
-        <strong>Company:</strong> Google Cloud · <strong>Role:</strong> Site Reliability Engineer (Networking) · <strong>Location:</strong> Remote (GCP NOC) · <strong>Date:</strong> Thursday, November 14, 2024
-      </P>
+      <StoryBox>
+        In 1973, Vint Cerf and Bob Kahn were designing the protocol that would become TCP/IP. They needed a universal addressing scheme — a way to uniquely identify any computer on any network, anywhere on Earth. They chose 32 bits. "32 bits gives us 4.3 billion addresses," Cerf said. "That should be more than enough." In 1973, there were fewer than 100 computers on ARPANet. By 2011, the last /8 blocks were allocated. The 4.3 billion addresses had run out. IANA declared IPv4 exhaustion on February 3rd, 2011. The 32-bit choice — made for a network that would eventually connect 8 billion humans and hundreds of billions of devices — had run out.
+      </StoryBox>
 
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '20px 24px', margin: '20px 0 28px' }}>
-        <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: '0 0 12px' }}>INCIDENT: Customer VMs in us-central1 reporting intermittent connection drops to internal services</p>
+      <Para>
+        Every device that participates in IP communication needs an <Accent>IP address</Accent> — a logical identifier that specifies both who the device is and where it is located in the network topology. Unlike MAC addresses (which are permanent hardware identifiers), IP addresses are <Accent>logical and hierarchical</Accent>: they encode location information that routers use to forward packets to the correct destination.
+      </Para>
 
-        <TimeBlock time="14:32 UTC" label="Customer ticket escalated — VM packet loss to database tier">
-          A Google Cloud customer escalates a Severity-1 ticket: their production application in us-central1 VMs intermittently cannot reach their Cloud SQL database. The pattern is unusual — connections succeed for 30–60 seconds then drop, then recover, then drop again. The application tier (VMs in subnet 10.128.0.0/20) needs to reach the database tier (Cloud SQL proxy at 10.128.5.10). Ping shows alternating success and failure, not consistent loss.
-        </TimeBlock>
+      <Para>
+        The hierarchy is the key insight. An IP address is split into two parts: the <Accent>network portion</Accent> (identifying which network) and the <Accent>host portion</Accent> (identifying which device on that network). Routers use the network portion to make routing decisions — they don't need to know about individual hosts, only networks. This hierarchical aggregation is what makes routing the entire internet feasible with finite memory in router forwarding tables.
+      </Para>
 
-        <TimeBlock time="14:41 UTC" label="Initial hypothesis: SRE checks VPC flow logs">
-          The on-call SRE pulls VPC flow logs for the affected VMs. The logs show that TCP flows are being established successfully but then RST (reset) packets appear from the 10.128.5.10 destination. This rules out a routing problem (the packets are reaching the destination) and points toward an identity or connection issue — the remote end is actively resetting the connection, suggesting it is receiving packets it did not expect.
-        </TimeBlock>
+      <H2>Layer 3 vs. Layer 2 Addressing</H2>
 
-        <TimeBlock time="14:47 UTC" label="Root cause discovered — duplicate IP address">
-          The SRE notices that VPC flow logs show two different source MAC addresses for packets arriving at 10.128.5.10 from IP 10.128.5.10 itself — packets are originating from 10.128.5.10 but with a MAC address that does not belong to the Cloud SQL proxy instance. A second VM has been misconfigured with a static IP of 10.128.5.10, conflicting with the Cloud SQL proxy. Google Cloud typically prevents this via DHCP reservation and API enforcement, but this customer was using a manual network configuration script that bypassed the API. The conflicting VM was a new database replica that was assigned the wrong static IP during provisioning.
-        </TimeBlock>
+      <Para>
+        MAC addresses (Layer 2) are flat — every MAC address is globally unique but there is no hierarchy. A router cannot look at a MAC address and determine which direction to forward a packet. It would need an entry for every MAC on Earth in its forwarding table (billions of entries).
+      </Para>
 
-        <TimeBlock time="14:52 UTC" label="ARP conflict dynamics explained">
-          Both VMs are sending ARP replies claiming ownership of 10.128.5.10. Other hosts in the subnet are receiving conflicting ARP entries and flipping between both MACs — whichever sent the most recent gratuitous ARP &quot;wins&quot; for 300 seconds (the ARP cache timeout). When the application server&apos;s ARP cache points to the replica&apos;s MAC, TCP connections hit the wrong VM and get RST. When it points to the Cloud SQL proxy, connections work. The 30–60 second pattern matches the interleaving of gratuitous ARPs from both VMs, which each send them approximately every 60 seconds.
-        </TimeBlock>
+      <Para>
+        IP addresses (Layer 3) are hierarchical. A router with an entry for 10.10.10.0/24 doesn't need individual entries for 10.10.10.1 through 10.10.10.254 — one entry covers all 254 hosts. Furthermore, entries can be aggregated: a route for 10.10.0.0/16 covers all 65,534 hosts in that block. This aggregation is why the global internet's routing table (BGP) has ~900,000 routes, not billions.
+      </Para>
 
-        <TimeBlock time="14:58 UTC" label="Resolution — reconfigure replica to correct IP">
-          The customer is guided to change the replica VM&apos;s static IP to the correct reserved address (10.128.5.11, which was always the intended address — a typo had substituted 10 for 11). After the configuration change, the replica sends a gratuitous ARP for 10.128.5.11 and stops claiming 10.128.5.10. The ARP caches across the subnet converge to the correct mapping within 60 seconds. Connectivity to Cloud SQL is restored. Total customer impact: approximately 20 minutes of intermittent failures. Postmortem action: Cloud&apos;s provisioning API should validate static IPs against existing reservations even in manual configuration workflows; the oversight is that the validation was skipped when the customer used a configuration file rather than the web console.
-        </TimeBlock>
-      </div>
+      <WowBox>
+        The entire internet routing system — connecting 5 billion internet users through hundreds of thousands of networks — is managed by approximately 900,000 BGP route prefixes as of 2024. Each of these prefixes represents not a single host but a range of IP addresses (a block). Without hierarchical IP addressing and prefix aggregation, the internet routing table would need billions of individual host entries and no router on Earth could hold it in memory.
+      </WowBox>
 
-      <Err title="Not understanding how ARP causes IP conflicts">
-        IP address conflicts cause intermittent, mysterious connectivity failures rather than clean failures. When two devices share an IP, both respond to ARP queries with different MACs, and other hosts&apos; ARP caches flip between the two based on whichever ARP reply arrived most recently. The result is random-seeming connectivity — connections to the IP work sometimes and fail other times based on which MAC is currently cached. The diagnostic is: check ARP tables on devices experiencing the issue (<code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 5px', borderRadius: 3, fontSize: 12 }}>arp -a</code>) and look for the same IP with multiple MAC addresses appearing in the output over time.
-      </Err>
+      <Divider />
 
-      <HR />
+      {/* ── Chapter 2 ── */}
+      <Chapter n={2} title="IPv4: The 32-Bit Address" />
 
-      {/* ── PART 9 ── */}
-      <Part n="09" title="Interview Prep — 8 Questions With Complete Answers" />
+      <StoryBox>
+        IPv4 addresses are 32 bits, typically written in dotted-decimal notation: four decimal numbers (0–255) separated by dots. Each decimal number represents one octet (8 bits). The address 192.168.10.50 in binary is: 11000000.10101000.00001010.00110010. This notation was invented purely for human readability — the IP protocol itself uses the 32-bit binary representation.
+      </StoryBox>
 
-      <IQ q="What is the difference between a network address, a host address, and a broadcast address?">
-        <p style={{ margin: '0 0 14px' }}>For any subnet, three addresses have special meaning. The <strong>network address</strong> (also called the subnet address) has all host bits set to 0 — it identifies the subnet itself, not any device. For 192.168.1.0/24: network address = 192.168.1.0. You cannot assign this to a device. The <strong>broadcast address</strong> has all host bits set to 1 — packets sent to this address are delivered to all devices in the subnet. For 192.168.1.0/24: broadcast = 192.168.1.255. Also cannot be assigned to a device. <strong>Host addresses</strong> are everything in between: 192.168.1.1 through 192.168.1.254 for a /24.</p>
-        <p style={{ margin: 0 }}>This is why a /24 provides 254 usable hosts (256 addresses minus 2), a /25 provides 126 (128 minus 2), and so on. For point-to-point links, /31 (RFC 3021) eliminates the broadcast address — both addresses are host addresses — giving 2 usable hosts with no wasted addresses. A /30 wastes 2 addresses (network + broadcast) on a link with only 2 devices. In IPv6, there are no broadcast addresses — multicast and anycast replace broadcast entirely.</p>
-      </IQ>
+      <H2>Dotted-Decimal Notation</H2>
 
-      <IQ q="What is CIDR and why did it replace classful addressing?">
-        <p style={{ margin: '0 0 14px' }}>The original IPv4 addressing used three &quot;classes&quot;: Class A (first octet 0–127, /8 prefix = 16.7M hosts), Class B (128–191, /16 = 65K hosts), and Class C (192–223, /24 = 254 hosts). Every organization was assigned one of these fixed-size blocks. The problem: a company needing 300 hosts was assigned a Class B (65,534 hosts), wasting 65,234 addresses. A company needing 300 hosts could not get a Class C (254 max) but did not need a Class B. This caused catastrophic address waste and contributed directly to IPv4 exhaustion.</p>
-        <p style={{ margin: '0 0 14px' }}>CIDR (RFC 4632, 1993) introduced variable-length prefix notation and classless routing. Instead of fixed /8, /16, or /24 boundaries, any prefix length (/0 through /32) could be used. A company needing 300 hosts gets a /23 (510 hosts) instead of a /16. ISPs could aggregate many small blocks into a single routing table advertisement (route summarization). The internet routing table was consuming 80,000 entries by 1993 and growing; CIDR stopped the growth and reduced the table size.</p>
-        <p style={{ margin: 0 }}>The practical outcome: all modern network addressing uses CIDR notation. Classful addressing is only relevant for understanding RFC 1918 private ranges (which were defined in the classful era and have classful boundaries) and legacy documentation.</p>
-      </IQ>
+      <Para>
+        An IPv4 address contains 32 binary bits. To make it human-readable, the bits are divided into four groups of 8 (octets), and each octet is expressed as a decimal number from 0 to 255. The conversion: take the 8-bit binary number, multiply each bit by its positional value (128, 64, 32, 16, 8, 4, 2, 1), and sum the results.
+      </Para>
 
-      <IQ q="Explain RFC 1918 private addressing. Why can't you use private addresses on the public internet?">
-        <p style={{ margin: '0 0 14px' }}>RFC 1918 defines three address ranges as private (non-routable): 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16. These addresses are not assigned to any organization — any network can use them internally, and thousands of organizations do, reusing the same ranges simultaneously without conflict.</p>
-        <p style={{ margin: '0 0 14px' }}>They cannot be used on the public internet because they are not globally unique. If 50 companies all use 192.168.1.1 internally (they do), routers on the internet would have no way to distinguish which 192.168.1.1 a packet is destined for. Internet routers simply drop packets with private source or destination addresses — they are configured to filter RFC 1918 space at their ingress and egress interfaces.</p>
-        <p style={{ margin: 0 }}>The mechanism that allows private addresses to access the internet is NAT. A firewall at the network boundary translates private source addresses to the organization&apos;s public IP when traffic exits, and reverses the translation for replies. From the internet&apos;s perspective, all traffic comes from the public IP, not the private address. NAT is the reason a home with 20 devices can share one ISP-assigned public IP address.</p>
-      </IQ>
+      <Para>
+        Example: the binary octet <Code>11000000</Code> = 128 + 64 = 192. The binary octet <Code>10101000</Code> = 128 + 32 + 8 = 168. Together: 192.168. The full address 192.168.10.50 in binary is <Code>11000000 10101000 00001010 00110010</Code>.
+      </Para>
 
-      <IQ q="How do you subnet 192.168.5.0/24 into subnets that can each support 30 hosts?">
-        <p style={{ margin: '0 0 14px' }}>To support 30 hosts per subnet, you need at least 32 addresses per subnet (30 hosts + 1 network + 1 broadcast). 2⁵ = 32, so you need 5 host bits. Prefix length = 32 − 5 = /27. A /27 provides 2⁵ − 2 = 30 usable hosts exactly.</p>
-        <p style={{ margin: '0 0 14px' }}>Borrowing 3 bits from the host portion of a /24 creates 2³ = 8 subnets. The block size for a /27 is 256 − 224 = 32. Subnets:</p>
-        <ul style={{ margin: '0 0 14px', paddingLeft: 24, lineHeight: 2 }}>
-          <li>192.168.5.0/27 → .1–.30 (usable), .31 broadcast</li>
-          <li>192.168.5.32/27 → .33–.62, .63 broadcast</li>
-          <li>192.168.5.64/27 → .65–.94, .95 broadcast</li>
-          <li>192.168.5.96/27 → .97–.126, .127 broadcast</li>
-          <li>192.168.5.128/27 → .129–.158, .159 broadcast</li>
-          <li>192.168.5.160/27 → .161–.190, .191 broadcast</li>
-          <li>192.168.5.192/27 → .193–.222, .223 broadcast</li>
-          <li>192.168.5.224/27 → .225–.254, .255 broadcast</li>
+      <IPv4AddressAnalyzer />
+
+      <H2>Classful Addressing (Historical)</H2>
+
+      <Para>
+        The original IPv4 design divided the address space into classes based on the leading bits of the first octet. This <Accent>classful addressing</Accent> system predates CIDR notation and was the only addressing model from 1981 to 1993.
+      </Para>
+
+      <IpClassExplorer />
+
+      <Para>
+        Classful addressing was rigid and wasteful. A company needing 1,000 hosts had to be given a Class B (/16, 65,534 hosts) because a Class C (/24, 254 hosts) was too small. The 64,534 "extra" addresses in the Class B were wasted. This inflexibility was a primary driver of IPv4 exhaustion.
+      </Para>
+
+      <H2>The Classless Revolution: CIDR</H2>
+
+      <Para>
+        <Accent>CIDR (Classless Inter-Domain Routing)</Accent>, introduced in 1993 (RFC 1519), eliminated fixed class boundaries. Instead of "Class A = /8, Class B = /16, Class C = /24," CIDR allows any prefix length from /0 to /32. An organization needing 1,000 hosts gets a /22 (1,022 usable hosts) — not a wasteful /16.
+      </Para>
+
+      <Para>
+        CIDR notation writes the prefix length after a slash: 192.168.1.0<Accent>/24</Accent>. The prefix length indicates how many bits belong to the network portion. A /24 has 24 network bits and 8 host bits (256 addresses, 254 usable). A /22 has 22 network bits and 10 host bits (1,024 addresses, 1,022 usable).
+      </Para>
+
+      <Para>
+        CIDR also enabled <Accent>route aggregation (supernetting)</Accent>: multiple smaller prefixes can be advertised as a single larger prefix, reducing routing table size. If an ISP owns 192.168.0.0/23 and 192.168.2.0/23, it can advertise a single 192.168.0.0/22 to the internet, saving routing table entries.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 3 ── */}
+      <Chapter n={3} title="Subnet Masks and Network/Host Decomposition" />
+
+      <Para>
+        A <Accent>subnet mask</Accent> indicates which bits of an IPv4 address are the network portion and which are the host portion. The subnet mask is a 32-bit value where all network bits are 1 and all host bits are 0. For a /24: the subnet mask is 255.255.255.0 (binary: 11111111.11111111.11111111.00000000).
+      </Para>
+
+      <H2>Calculating Network Address with Bitwise AND</H2>
+
+      <Para>
+        The network address is calculated by performing a bitwise AND between the IP address and the subnet mask. Every bit position where both the IP and mask have a 1 becomes a 1 in the network address; everywhere else is 0.
+      </Para>
+
+      <CodeBlock>
+{`IP Address:   192.168.10.50  =  11000000.10101000.00001010.00110010
+Subnet Mask:  255.255.255.0  =  11111111.11111111.11111111.00000000
+                             AND ─────────────────────────────────
+Network:      192.168.10.0   =  11000000.10101000.00001010.00000000
+Broadcast:    192.168.10.255 =  11000000.10101000.00001010.11111111
+First Host:   192.168.10.1   =  11000000.10101000.00001010.00000001
+Last Host:    192.168.10.254 =  11000000.10101000.00001010.11111110`}
+      </CodeBlock>
+
+      <H2>The Four Addresses Every Subnet Has</H2>
+
+      <Para>
+        <Accent>Network address</Accent>: all host bits = 0. Identifies the subnet itself. Cannot be assigned to a host. In a CIDR context, this is the "prefix" or "subnet identifier."
+      </Para>
+
+      <Para>
+        <Accent>Broadcast address</Accent>: all host bits = 1. A packet sent to the broadcast address is delivered to every host in the subnet. Cannot be assigned to a host.
+      </Para>
+
+      <Para>
+        <Accent>First host</Accent>: network address + 1. The first assignable host address.
+      </Para>
+
+      <Para>
+        <Accent>Last host</Accent>: broadcast address - 1. The last assignable host address.
+      </Para>
+
+      <Para>
+        Therefore, the number of usable host addresses in a /n subnet is 2^(32-n) - 2. A /24 has 2^8 - 2 = 254 usable hosts. A /30 has 2^2 - 2 = 2 usable hosts (commonly used for point-to-point router links).
+      </Para>
+
+      <Warn title="/31 and /32 prefixes">
+        RFC 3021 allows /31 subnets for point-to-point links — they contain exactly 2 addresses, both usable (no network/broadcast overhead). A /32 is a host route — it addresses a single specific IP address with no subnet context. /32 host routes are used for loopback interfaces and very specific routing policies.
+      </Warn>
+
+      <Divider />
+
+      {/* ── Chapter 4 ── */}
+      <Chapter n={4} title="Special and Reserved IPv4 Address Ranges" />
+
+      <Para>
+        Not all IPv4 addresses are available for general assignment. Various RFCs reserve specific ranges for special purposes. Understanding these ranges is critical for network design — using a reserved range for production hosts creates mysterious failures.
+      </Para>
+
+      <SpecialRangesReference />
+
+      <H2>Private Address Space (RFC 1918)</H2>
+
+      <Para>
+        RFC 1918 (1996) defined three private address ranges that are never routed on the public internet: <Accent>10.0.0.0/8</Accent> (Class A private, 16.7M addresses), <Accent>172.16.0.0/12</Accent> (Class B range private, 1.05M addresses), and <Accent>192.168.0.0/16</Accent> (Class C range private, 65,536 addresses). These ranges can be reused by any organization for internal networks without coordination.
+      </Para>
+
+      <Para>
+        The consequence: the same private address can exist in millions of different networks simultaneously (your home network's 192.168.1.100 and your company's 192.168.1.100 are different devices). They can coexist because private addresses are never routed to the public internet — <Accent>NAT (Network Address Translation)</Accent> translates private addresses to public ones at the internet boundary.
+      </Para>
+
+      <H2>Loopback (127.0.0.0/8)</H2>
+
+      <Para>
+        The entire 127.0.0.0/8 range (127.x.x.x) is reserved for loopback. Traffic sent to any address in this range is processed internally by the host's networking stack and never leaves the machine. <Code>127.0.0.1</Code> (localhost) is the conventional loopback address. Servers often bind to 127.0.0.1 to accept only local connections — not accessible from the network.
+      </Para>
+
+      <H2>Link-Local (169.254.0.0/16) — APIPA</H2>
+
+      <Para>
+        When a Windows or macOS host cannot reach a DHCP server, it auto-assigns itself an address in the 169.254.0.0/16 range — this is <Accent>APIPA (Automatic Private IP Addressing)</Accent>. Link-local addresses are not routed beyond the local subnet. Seeing a 169.254.x.x address on a host is a diagnostic signal that DHCP failed. On Linux systems, link-local addresses (also called "zeroconf" addresses) serve the same purpose.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 5 ── */}
+      <Chapter n={5} title="IPv4 Address Allocation and IANA" />
+
+      <StoryBox>
+        IANA (Internet Assigned Numbers Authority) manages the global IP address pool. In January 1992, Vint Cerf warned in an RFC that IPv4 addresses would run out "within 12 years." He was off by one year. IANA exhausted its free pool on February 3, 2011, allocating the final five /8 blocks simultaneously to the five Regional Internet Registries (RIRs) in a ceremony in Miami. APNIC (Asia-Pacific) exhausted its pool in April 2011. RIPE NCC (Europe/Middle East) followed in September 2012. ARIN (North America) entered exhaustion in September 2015. IPv6 was standardized in 1998 — 13 years before exhaustion — but adoption has been slow, driven by NAT extending IPv4's effective lifetime.
+      </StoryBox>
+
+      <H2>The RIR System</H2>
+
+      <Para>
+        IP address allocation is hierarchical. IANA allocates large blocks (/8s historically) to five Regional Internet Registries: <Accent>ARIN</Accent> (North America), <Accent>RIPE NCC</Accent> (Europe/Middle East/Central Asia), <Accent>APNIC</Accent> (Asia-Pacific), <Accent>LACNIC</Accent> (Latin America/Caribbean), and <Accent>AFRINIC</Accent> (Africa). RIRs allocate smaller blocks to ISPs, who allocate sub-blocks to their customers.
+      </Para>
+
+      <Para>
+        Following exhaustion, the RIRs continue to operate secondary markets and "last resort" policies. Organizations return unused address space; the RIRs reallocate it. IPv4 addresses now have significant monetary value — a /24 (256 addresses) sells for approximately $15,000–$25,000 on the secondary market (2024 prices).
+      </Para>
+
+      <H2>Carrier-Grade NAT (CGNAT)</H2>
+
+      <Para>
+        To stretch remaining IPv4 addresses, most ISPs deploy <Accent>CGNAT (Carrier-Grade NAT)</Accent>. Instead of assigning each customer a public IPv4 address, the ISP assigns a private address from the <Code>100.64.0.0/10</Code> range (RFC 6598 shared address space) and performs NAT at the ISP level. Multiple customers share a single public IP address.
+      </Para>
+
+      <Para>
+        CGNAT breaks many internet services: peer-to-peer (BitTorrent, VoIP, gaming), port forwarding, inbound connections, and some VPN protocols. It also complicates abuse tracking — when the ISP receives a subpoena for the owner of IP 203.0.113.100 at 14:35:22, they must check which of potentially hundreds of customers was NAT'd to that IP at that exact second, requiring detailed logging. CGNAT is a stopgap solution, not a long-term one.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 6 ── */}
+      <Chapter n={6} title="IPv4 Packet Header" />
+
+      <Para>
+        Understanding the IP packet header is essential for network engineering, security analysis, and performance optimization. Every IP packet begins with a minimum 20-byte header containing all routing and control information.
+      </Para>
+
+      <CodeBlock>
+{` 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|Version|  IHL  |   DSCP    |ECN|          Total Length         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Identification        |Flags|      Fragment Offset    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Time to Live |    Protocol   |         Header Checksum       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       Source Address                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Destination Address                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Options (if IHL > 5)                       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+`}
+      </CodeBlock>
+
+      <H2>Critical Header Fields</H2>
+
+      <Para>
+        <Accent>TTL (Time to Live)</Accent>: 8-bit hop counter. Each router decrements TTL by 1 when forwarding. When TTL reaches 0, the router drops the packet and sends an ICMP "Time Exceeded" back to the source. This prevents packets from looping forever in routing loops. Starting TTL is typically 64 (Linux/macOS) or 128 (Windows). Traceroute exploits TTL to map network paths.
+      </Para>
+
+      <Para>
+        <Accent>Protocol</Accent>: 8-bit value indicating the Layer 4 protocol. 6 = TCP, 17 = UDP, 1 = ICMP, 89 = OSPF (sent directly over IP), 50 = ESP (IPsec).
+      </Para>
+
+      <Para>
+        <Accent>DSCP (Differentiated Services Code Point)</Accent>: 6 bits in the original ToS (Type of Service) byte. Marks packets for QoS treatment. EF (Expedited Forwarding, DSCP 46) = voice/video priority. AF41 (Assured Forwarding) = video conferencing. CS0 = best effort. Routers use DSCP to prioritize queues.
+      </Para>
+
+      <Para>
+        <Accent>Fragmentation fields</Accent> (Identification, Flags, Fragment Offset): IPv4 routers can fragment packets that exceed the path MTU. Modern networks set the "Don't Fragment" (DF) bit and rely on PMTU Discovery (RFC 1191) to find the minimum MTU along a path. IPv6 eliminates router fragmentation entirely.
+      </Para>
+
+      <Para>
+        <Accent>Header Checksum</Accent>: 16-bit checksum of the IP header only (not the payload). Recomputed at every hop because TTL changes at each router. This is one reason IPv6 eliminated the header checksum — it's redundant work per router hop, and Layer 2 checksums (Ethernet FCS) and Layer 4 checksums (TCP/UDP) already protect data integrity.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 7 ── */}
+      <Chapter n={7} title="Public vs. Private IP Addresses and NAT" />
+
+      <H2>Public IP Addresses</H2>
+
+      <Para>
+        A <Accent>public IP address</Accent> is globally unique and routable on the public internet. Public addresses are allocated by the RIR system to ISPs and organizations. Every packet with a public destination IP can, in principle, be routed to its destination by any internet router.
+      </Para>
+
+      <H2>NAT: Extending IPv4's Lifetime</H2>
+
+      <Para>
+        <Accent>NAT (Network Address Translation)</Accent> allows multiple hosts with private IP addresses to share a single public IP address. When a host with private IP 192.168.1.50 sends a packet to the internet, the NAT device (typically a router/firewall) replaces the source IP with the public IP and records the mapping in a state table. When the response arrives, NAT translates the destination IP back to 192.168.1.50.
+      </Para>
+
+      <Para>
+        This is specifically <Accent>PAT (Port Address Translation)</Accent> or NAPT (Network Address and Port Translation): NAT distinguishes multiple simultaneous sessions from different private hosts by also mapping unique source port numbers. The state table entry: (private IP: private port) ↔ (public IP: translated port).
+      </Para>
+
+      <CodeBlock>
+{`NAT State Table:
+Private IP:Port          Public IP:Port           Protocol  State
+192.168.1.50:54321  <->  203.0.113.1:54321        TCP       ESTABLISHED
+192.168.1.51:12345  <->  203.0.113.1:12346        TCP       ESTABLISHED
+192.168.1.52:8080   <->  203.0.113.1:8081         TCP       TIME_WAIT
+192.168.1.50:5353   <->  203.0.113.1:15000        UDP       -`}
+      </CodeBlock>
+
+      <Para>
+        NAT breaks the internet's end-to-end principle: a host behind NAT cannot receive unsolicited inbound connections because there is no NAT state entry to map the inbound packet to an internal host. This breaks:
+        <ul style={{ margin: '8px 0 0', paddingLeft: 20 }}>
+          <li>Peer-to-peer applications (requiring NAT traversal techniques like STUN/TURN/ICE)</li>
+          <li>Hosting servers (requiring explicit port forwarding rules)</li>
+          <li>Some VPN protocols (requiring NAT-T UDP encapsulation)</li>
         </ul>
-        <p style={{ margin: 0 }}>Result: 8 subnets × 30 usable hosts = 240 hosts maximum from the original /24 (with 16 addresses consumed as network and broadcast identifiers).</p>
-      </IQ>
+      </Para>
 
-      <IQ q="What is the difference between a /30 and a /31 subnet? When would you use each?">
-        <p style={{ margin: '0 0 14px' }}>A /30 has 4 addresses: 1 network, 2 usable hosts, 1 broadcast. Example: 10.0.0.0/30 → network 10.0.0.0, hosts 10.0.0.1 and 10.0.0.2, broadcast 10.0.0.3. This is the traditional choice for point-to-point WAN links (e.g., a serial link between a router and an ISP hand-off). It wastes 2 addresses per link — on a network with thousands of WAN links, that adds up.</p>
-        <p style={{ margin: '0 0 14px' }}>A /31 (RFC 3021) has 2 addresses: both are host addresses, no network or broadcast designator. Example: 10.0.0.0/31 → hosts 10.0.0.0 and 10.0.0.1. This is valid because on a point-to-point link there are exactly two devices; there is no need for a broadcast address (broadcast on a P2P link would reach only one other device, so just unicast to it directly). RFC 3021 was controversial in 1992 but is now universally supported on modern routers and switches.</p>
-        <p style={{ margin: 0 }}>Use /30 for older equipment that may not support /31, or when the extra 2-address waste doesn&apos;t matter. Use /31 for modern P2P links in address-constrained environments. ISPs routinely use /31 for router interconnects to conserve address space.</p>
-      </IQ>
+      <Divider />
 
-      <IQ q="What is ARP and what security risks does it present?">
-        <p style={{ margin: '0 0 14px' }}>ARP (Address Resolution Protocol, RFC 826) maps IPv4 addresses to MAC addresses. When a device wants to send to 192.168.1.1 but only knows the IP, it broadcasts an ARP request: &quot;Who has 192.168.1.1? Tell 192.168.1.50.&quot; The device owning 192.168.1.1 responds with its MAC address. The requesting device caches the mapping for 300 seconds (default ARP timeout).</p>
-        <p style={{ margin: '0 0 14px' }}>ARP has no authentication. Any device can send an ARP reply claiming to own any IP address, and most devices will update their ARP cache with the new mapping. A <strong>gratuitous ARP</strong> is an unsolicited ARP reply — a device can broadcast &quot;I now have IP X with MAC Y&quot; to update all caches in the subnet, used legitimately when a device moves or changes IPs. Attackers exploit this with ARP poisoning (ARP spoofing): continuously send gratuitous ARPs claiming to be the default gateway, poisoning all devices&apos; caches to send traffic to the attacker instead.</p>
-        <p style={{ margin: 0 }}>Defenses: (1) Dynamic ARP Inspection (DAI) on switches — validates ARP packets against the DHCP snooping binding table, dropping ARPs with invalid IP-MAC mappings; (2) Static ARP entries for critical hosts (default gateway) — these don&apos;t expire and can&apos;t be overwritten by gratuitous ARPs (manual management overhead); (3) Private VLANs that prevent devices in the same VLAN from communicating directly at Layer 2 (isolated ports). In IPv6, ARP is replaced by NDP (Neighbor Discovery Protocol), which uses ICMPv6 and has optional cryptographic protection via SEND (Secure Neighbor Discovery).</p>
-      </IQ>
+      {/* ── Chapter 8 ── */}
+      <Chapter n={8} title="Unicast, Broadcast, Multicast, Anycast" />
 
-      <IQ q="What is VLSM and why is it important?">
-        <p style={{ margin: '0 0 14px' }}>VLSM (Variable Length Subnet Masking) allows different subnets within the same address space to have different prefix lengths — rather than requiring all subnets to be the same size. Before VLSM, a network with three segments needing 100 hosts, 50 hosts, and 2 hosts would need three identical /25 subnets (128 addresses each), wasting 76 + 76 + 126 = 278 addresses on the two smaller segments.</p>
-        <p style={{ margin: '0 0 14px' }}>With VLSM: allocate /25 for the 100-host segment (126 hosts), /26 for the 50-host segment (62 hosts), and /30 for the 2-host P2P link. This uses addresses efficiently and leaves the remaining space available for future growth.</p>
-        <p style={{ margin: 0 }}>VLSM requires a routing protocol that carries the prefix length in its routing updates — classless routing protocols (OSPF, EIGRP, RIP v2, BGP) support this. Classful protocols (RIP v1) assumed all subnets of a major network used the same prefix length — they could not support VLSM. This is one reason RIP v1 became obsolete. All modern networks use VLSM as standard practice.</p>
-      </IQ>
+      <Para>
+        IPv4 supports four addressing modes, each with different delivery semantics:
+      </Para>
 
-      <IQ q="You see a device with IP address 169.254.48.22. What does this tell you?">
-        <p style={{ margin: '0 0 14px' }}>169.254.0.0/16 is the APIPA (Automatic Private IP Addressing) range, defined in RFC 3927. A device self-assigns an address in this range when it attempts DHCP and receives no response. The device sends DHCP discover broadcasts for 60–120 seconds (depending on OS implementation); if no DHCP offer arrives, it assigns itself a random 169.254.x.x address using ARP probing to verify uniqueness on the segment.</p>
-        <p style={{ margin: '0 0 14px' }}>Seeing a 169.254.x.x address immediately tells you DHCP has failed. The device cannot communicate with anything outside the local segment (169.254.0.0/16 is not routed), so it effectively has no internet or network access beyond devices also using APIPA addresses on the same segment.</p>
-        <p style={{ margin: 0 }}>Diagnosis: check whether the DHCP server is up and reachable from that port, verify the switch port is in the correct VLAN (wrong VLAN = no path to DHCP server), check for DHCP pool exhaustion (all addresses allocated), and verify the DHCP relay agent is configured correctly if the DHCP server is on a different subnet. APIPA addresses are also used by macOS and Linux in the &quot;link-local&quot; context — valid for device-to-device communication without any infrastructure (e.g., two laptops directly connected).</p>
-      </IQ>
+      <H2>Unicast</H2>
 
-      <HR />
+      <Para>
+        A unicast address identifies a single interface. Packets sent to a unicast address are delivered to exactly one destination. This is the standard addressing mode for all host-to-host communication. Example: a TCP connection between your laptop and a web server — both using unicast addresses.
+      </Para>
 
-      {/* ── PART 10 ── */}
-      <Part n="10" title="Common Misconceptions" />
+      <H2>Broadcast</H2>
 
-      <Err title="Confusing subnet mask and wildcard mask">
-        Subnet masks and wildcard masks are inverses of each other but used in completely different contexts. A subnet mask of 255.255.255.0 (/24) means &quot;the first 24 bits identify the network.&quot; A wildcard mask of 0.0.0.255 is used in Cisco ACLs and OSPF network statements — it means &quot;match any value in these bit positions.&quot; Wildcard mask = bitwise NOT of subnet mask: 255.255.255.0 → wildcard 0.0.0.255. They look similar but work oppositely: in a subnet mask, 1s = network bits; in a wildcard mask, 0s = must-match bits, 1s = don&apos;t-care bits.
+      <Para>
+        IPv4 has two broadcast types. <Accent>Limited broadcast</Accent> (255.255.255.255) is sent to all hosts on the local subnet — routers never forward it. <Accent>Directed broadcast</Accent> (network address with all host bits set to 1) targets all hosts on a specific remote subnet — e.g., 192.168.1.255 is the directed broadcast for 192.168.1.0/24. Routers by default block directed broadcasts (they were historically used in Smurf DDoS amplification attacks).
+      </Para>
+
+      <H2>Multicast</H2>
+
+      <Para>
+        Multicast (224.0.0.0/4) delivers a packet to a group of interested receivers simultaneously — more efficient than multiple unicast copies. Multicast group membership is managed by IGMP (Internet Group Management Protocol) at the host level and by PIM (Protocol Independent Multicast) for router-level multicast routing. Used for streaming media, IPTV, OSPF (224.0.0.5, 224.0.0.6), and RIP (224.0.0.9).
+      </Para>
+
+      <H2>Anycast</H2>
+
+      <Para>
+        Anycast assigns the same IP address to multiple nodes in different locations. Packets are routed to the topologically nearest instance. DNS root servers and CDNs use anycast extensively: Cloudflare's 1.1.1.1 DNS resolver runs on servers in 300+ cities worldwide, all announcing the same IP via BGP. Your DNS query is automatically routed to the closest server, minimizing latency. The internet has no explicit anycast support — it emerges naturally from BGP routing each city announcing the same prefix, and BGP's shortest-path selection naturally delivering packets to the nearest instance.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 9 ── */}
+      <Chapter n={9} title="Static vs. Dynamic IP Assignment" />
+
+      <H2>Static IP Addresses</H2>
+
+      <Para>
+        Statically assigned IP addresses are manually configured on devices and do not change. Used for: servers (consistent address for DNS records), network infrastructure (routers, switches — predictable addresses simplify troubleshooting), printers, and other devices that need to be consistently reachable at a known address. Static IPs require manual management — assigning a duplicate IP to two devices causes an <Accent>IP conflict</Accent> (both devices see each other's ARP replies and behave unpredictably).
+      </Para>
+
+      <H2>DHCP: Dynamic Host Configuration Protocol</H2>
+
+      <Para>
+        <Accent>DHCP</Accent> automates IP address assignment. When a device connects to a network, it broadcasts a DHCP Discover. The DHCP server responds with an Offer containing an available IP address, subnet mask, default gateway, DNS server addresses, and lease duration. The client accepts with a Request; the server confirms with an Acknowledge (ACK). This four-step process (DORA: Discover, Offer, Request, Acknowledge) completes in milliseconds.
+      </Para>
+
+      <Para>
+        DHCP leases expire after the configured duration (commonly 8 hours to 24 hours for corporate networks, 24 hours for home networks). Clients renew leases at 50% of the lease duration (T1) and again at 87.5% (T2) if the first renewal fails. If the lease expires without renewal, the client loses its IP address and must restart the DHCP process.
+      </Para>
+
+      <H2>DHCP Reservations</H2>
+
+      <Para>
+        A <Accent>DHCP reservation</Accent> (also called static DHCP or DHCP static mapping) assigns a specific IP address to a device based on its MAC address. The device still uses DHCP, but always receives the same IP. This gives the administrative benefits of DHCP (centralized management, no manual configuration on the device) with the predictability of a static address. Best practice for printers, network cameras, APs, and other infrastructure that needs consistent addressing but doesn't need to be manually configured.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 10 ── */}
+      <Chapter n={10} title="IP Address Planning in Enterprise Networks" />
+
+      <StoryBox>
+        A startup begins with 192.168.1.0/24. By year three, they have 5 offices, 500 employees, and cloud workloads. The original /24 (254 hosts) is exhausted. They start using 192.168.2.0/24 for the second floor. Then 192.168.3.0/24 for HR. No documentation. Three years later, the network engineer hired to audit the infrastructure finds 47 separate /24 subnets assigned without any coherent scheme — overlapping DHCP scopes, missing route entries, incorrect default gateways. This is IP addressing debt. Good planning at the beginning prevents years of painful cleanup.
+      </StoryBox>
+
+      <H2>IP Address Planning Principles</H2>
+
+      <Para>
+        <Accent>Hierarchical allocation:</Accent> Assign large blocks at the top of the hierarchy and carve subnets from them. Example: allocate 10.0.0.0/8 for the entire organization. Site 1 gets 10.1.0.0/16. Building A in Site 1 gets 10.1.1.0/24. Floor 2 of Building A gets 10.1.2.0/24. This enables route summarization at each level, reducing routing table complexity.
+      </Para>
+
+      <Para>
+        <Accent>Subnet sizing based on function:</Accent> Different network zones need different subnet sizes. Point-to-point router links: /30 or /31 (2 hosts). Management networks (switch/AP management): /24 (254 hosts). Server VLANs: /23 or /22 (510–1022 hosts). User VLANs: /22 (1022 hosts). DMZ segments: /28 or /27 (14–30 hosts). Leave room for growth — a subnet that's 80% full today becomes 100% full when the new project deploys.
+      </Para>
+
+      <Para>
+        <Accent>Consistent numbering:</Accent> Establish conventions that any engineer can follow. Common example: x.x.x.1 = gateway, x.x.x.2 = secondary gateway, x.x.x.10-50 = servers (static), x.x.x.100-200 = DHCP pool, x.x.x.254 = management. Document in an IPAM (IP Address Management) system.
+      </Para>
+
+      <H2>IPAM Tools</H2>
+
+      <Para>
+        Manual IP address management in spreadsheets is error-prone and doesn't scale beyond a few dozen subnets. <Accent>IPAM (IP Address Management)</Accent> tools provide: visual subnet allocation trees, DHCP scope management, DNS integration, conflict detection, and audit trails. Open-source options include phpIPAM and Netbox. Enterprise solutions include Infoblox, SolarWinds IPAM, and BlueCat.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 11 ── */}
+      <Chapter n={11} title="Routing and IP Addressing: The Connection" />
+
+      <Para>
+        IP addressing and routing are inseparable — the hierarchical structure of IP addresses exists specifically to make routing efficient. Understanding how routers use IP addresses to make forwarding decisions is essential for network design.
+      </Para>
+
+      <H2>Longest Prefix Match</H2>
+
+      <Para>
+        When a router receives a packet, it looks up the destination IP in its routing table. Multiple routes may match (e.g., a default route 0.0.0.0/0 matches everything; a specific route 10.10.10.0/24 also matches 10.10.10.50). The router applies <Accent>longest prefix match (LPM)</Accent>: the most specific matching route (longest prefix) is used.
+      </Para>
+
+      <Para>
+        This is why a more specific /32 host route overrides a /24 network route: the /32 is the longest possible match. Internet routing uses this: the default route (0.0.0.0/0) is the last resort, used only when no more specific route matches. A route to 10.10.10.0/24 matches 10.10.10.0/24 more specifically than a 10.0.0.0/8 route — the /24 wins.
+      </Para>
+
+      <H2>Subnet Routing and Summarization</H2>
+
+      <Para>
+        When a network is properly hierarchically allocated, <Accent>route summarization</Accent> reduces routing table size. If Site 1 has subnets 10.1.1.0/24 through 10.1.255.0/24, the distribution router can advertise a single 10.1.0.0/16 summary route to the core — hiding the internal complexity of 255 subnets behind a single route entry.
+      </Para>
+
+      <Para>
+        Summarization breaks if the address space is not contiguous: if Site 1 also uses 10.5.0.0/24 (which falls outside the 10.1.0.0/16 summary), that subnet needs its own routing entry. This is why hierarchical address planning matters — disorganized address allocation prevents effective summarization and bloats routing tables.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 12 ── */}
+      <Chapter n={12} title="Diagnosing IP Addressing Issues" />
+
+      <CodeBlock>
+{`# Linux — show IP address and prefix
+ip addr show
+ip addr show eth0
+
+# Linux — show routing table
+ip route show
+ip route get 8.8.8.8    # which interface/next-hop for specific destination
+
+# macOS — IP configuration
+ifconfig en0
+route get default
+
+# Windows
+ipconfig /all
+route print
+
+# Test connectivity at Layer 3
+ping 192.168.1.1           # ICMP echo to gateway
+ping -c 4 8.8.8.8          # ICMP echo to internet
+
+# Trace routing path (exploits TTL)
+traceroute 8.8.8.8         # Linux/macOS
+tracert 8.8.8.8            # Windows
+
+# DNS resolution
+nslookup google.com
+dig google.com A
+
+# DHCP release and renew
+sudo dhclient -r eth0      # release
+sudo dhclient eth0         # renew`}
+      </CodeBlock>
+
+      <H2>Common IP Addressing Issues</H2>
+
+      <Para>
+        <Accent>IP address conflict:</Accent> Two devices assigned the same IP. Symptoms: intermittent connectivity, ARP storms, both devices showing "duplicate IP address" warnings. Diagnosis: <Code>arp -a</Code> to see which MACs map to the conflicting IP; <Code>arping</Code> to send targeted ARP probes.
+      </Para>
+
+      <Para>
+        <Accent>Wrong subnet mask:</Accent> A device with 192.168.1.50/23 considers both 192.168.0.x and 192.168.1.x as local. If the rest of the network uses /24, the device will try to ARP for hosts that aren't local, failing to reach them. Diagnosis: compare subnet mask with other devices on the segment.
+      </Para>
+
+      <Para>
+        <Accent>Wrong default gateway:</Accent> Device can reach hosts on its own subnet (Layer 2) but cannot reach other subnets or the internet. The gateway IP must be on the same subnet as the host.
+      </Para>
+
+      <Para>
+        <Accent>APIPA (169.254.x.x):</Accent> Device failed to get a DHCP lease. Causes: DHCP server unreachable, DHCP scope exhausted, VLAN misconfiguration (device is in wrong VLAN without DHCP), DHCP relay not configured (device and server are on different subnets).
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 13 ── */}
+      <Chapter n={13} title="Common Misconceptions" />
+
+      <Err title="IP addresses are permanent like MAC addresses">
+        IP addresses are logical and dynamic. A device's IP address can change (DHCP lease renewal, reconfiguration), and the same IP can be assigned to different devices over time. MAC addresses are burned into hardware and permanent (though they can be spoofed in software). Never assume a device's IP address is stable without explicit static assignment or DHCP reservation. DNS names abstract this — a hostname always resolves to the current IP.
       </Err>
 
-      <Err title="Thinking all devices on the same IP network can always communicate">
-        Two devices with IPs in the same subnet can communicate directly at Layer 2 only if they are in the same Layer 2 broadcast domain (VLAN). If they are in different VLANs but have IPs in the same subnet, their traffic must go through a router to cross the VLAN boundary — which may or may not be configured. In cloud environments (AWS VPCs, GCP VPCs), the same-subnet rule applies within a VPC subnet, but security groups and network ACLs can block traffic between hosts in the same subnet at Layer 4 regardless of Layer 3 topology. Never assume &quot;same subnet = reachable.&quot;
+      <Err title="Private IPs cannot be routed at all">
+        Private IPs (RFC 1918) cannot be routed on the public internet — routers on the internet are configured to drop packets with private source/destination addresses. However, private IPs are routinely routed within private networks, VPNs, and cloud provider internal networks. An enterprise WAN using MPLS or SD-WAN can route 10.x.x.x packets between sites. IPsec VPN tunnels carry private-to-private traffic over public infrastructure. The prohibition is specifically on public internet routing, not on routing in general.
       </Err>
 
-      <Err title="The /32 host route is unusual or invalid">
-        A /32 route is perfectly valid and extremely common. It represents exactly one host (&apos;255.255.255.255 mask). Loopback interfaces are always /32. BGP advertises individual server addresses as /32s from anycast nodes. Static host routes (/32) are used to override routing decisions for specific IPs. OSPF and other protocols create /32 routes for router loopback addresses. In cloud networking, VMs are often reached via /32 host routes in the VPC routing fabric. The /32 is not unusual — it is a regular routing construct with well-defined semantics.
+      <Err title="The network address and broadcast address waste two addresses">
+        It's true that a /24 has 256 addresses and only 254 are usable (network and broadcast are reserved). But this "waste" is not caused by an arbitrary rule — it's inherent to the subnet model. The network address identifies the subnet (necessary for routing), and the broadcast address is required for Layer 2 broadcast semantics (DHCP, ARP, etc.). The /31 standard (RFC 3021) eliminates this for point-to-point links where no broadcast is needed.
       </Err>
 
-      <HR />
+      <Err title="NAT provides security by hiding internal addresses">
+        NAT is not a security mechanism — it's an address translation mechanism. NAT does incidentally hide internal addresses from external observation, but it provides no protection against outbound threats (malware on internal hosts can still communicate out), no inspection of packet contents, and no authentication. A firewall provides actual security (stateful packet inspection, ACLs, application-layer inspection). Confusing NAT with a firewall leads to false security assumptions — a "nat router" with all traffic allowed outbound provides no meaningful security, just address translation.
+      </Err>
+
+      <Err title="127.0.0.1 and localhost are the same thing">
+        127.0.0.1 is the conventional loopback IPv4 address. localhost is a hostname that typically resolves to 127.0.0.1 (IPv4) and/or ::1 (IPv6 loopback). They are often equivalent, but not always. If a service is only listening on 127.0.0.1 but your client resolves localhost to ::1 (IPv6) first, the connection will fail even though the service is "running locally." Modern applications often need to explicitly bind to both 127.0.0.1 and ::1 (or use 0.0.0.0 to bind all interfaces) to handle both protocol families.
+      </Err>
+
+      <Err title="A /16 always has 65,534 hosts">
+        A /16 has 2^16 - 2 = 65,534 usable addresses, but only if it is not further subnetted. In practice, a /16 allocation is almost always divided into smaller subnets (/24s, /23s, etc.) for different network segments. The /16 is the allocation — the actual assignment to individual hosts is in the sub-subnets. A flat /16 network with 65,534 hosts on one broadcast domain would have catastrophic broadcast traffic. Real networks always subnet into smaller broadcast domains.
+      </Err>
+
+      <Divider />
+
+      {/* ── Chapter 14 ── */}
+      <Chapter n={14} title="Interview Questions" />
+
+      <IQ q="What is an IP address and how is it different from a MAC address?" level="Beginner">
+        An IP address is a logical, hierarchical identifier assigned to a network interface for Layer 3 (Internet layer) communication. IPv4 addresses are 32 bits, written in dotted-decimal notation (e.g., 192.168.1.1). They encode location information — the network portion tells routers which network a device is on; the host portion identifies the specific device. MAC addresses are 48-bit hardware identifiers burned into network interface hardware, flat (no hierarchy), globally unique, and used for Layer 2 (Ethernet) communication within a local network. A key difference: MAC addresses don't change (permanently assigned to hardware), while IP addresses are logical and can be dynamically assigned (DHCP) or changed. Routers use IP addresses to route across networks; switches use MAC addresses to forward within a network.
+      </IQ>
+
+      <IQ q="Given 192.168.10.50/24, calculate the network address, broadcast address, and usable host range." level="Beginner">
+        The /24 prefix means 24 network bits and 8 host bits. Subnet mask: 255.255.255.0. Network address: perform AND between IP and mask = 192.168.10.50 AND 255.255.255.0 = 192.168.10.0. Broadcast: set all host bits to 1 = 192.168.10.255. First host: 192.168.10.1 (network + 1). Last host: 192.168.10.254 (broadcast - 1). Usable hosts: 2^8 - 2 = 254.
+      </IQ>
+
+      <IQ q="What is CIDR and why was it introduced?" level="Intermediate">
+        CIDR (Classless Inter-Domain Routing, RFC 1519, 1993) eliminated the rigid class boundaries (Class A=/8, B=/16, C=/24) of the original IPv4 design. In classful addressing, an organization needing 1,000 hosts was allocated a /16 (65,534 hosts), wasting 64,534 addresses. CIDR allows any prefix length (/0 to /32), enabling precise allocation — a /22 provides exactly 1,022 usable hosts. CIDR was introduced to: (1) combat IPv4 exhaustion by enabling efficient allocation without wasted addresses; (2) enable route aggregation — multiple smaller prefixes can be summarized as a single larger prefix, reducing internet routing table size. CIDR notation adds the prefix length after a slash: 192.168.1.0/24.
+      </IQ>
+
+      <IQ q="Explain longest prefix match and how it affects routing decisions." level="Intermediate">
+        When a router has multiple routing table entries that all match a destination IP address, it selects the one with the longest (most specific) prefix — Longest Prefix Match (LPM). Example: routing table has 10.0.0.0/8, 10.10.0.0/16, and 10.10.10.0/24. A packet destined for 10.10.10.50 matches all three. LPM selects 10.10.10.0/24 (longest). A packet for 10.10.20.50 matches 10.0.0.0/8 and 10.10.0.0/16 — LPM selects /16. A packet for 10.20.0.1 matches only 10.0.0.0/8. The default route (0.0.0.0/0) matches everything but has the shortest prefix — used only when no more specific route matches. TCAM hardware in modern routers performs this lookup in constant time regardless of table size.
+      </IQ>
+
+      <IQ q="Why is NAT not a security mechanism, and what problems does it create?" level="Senior">
+        NAT is address translation, not security. It incidentally hides internal addresses but provides none of: packet inspection (no examination of payload), authentication (no verification that connections are authorized), or protection against outbound-initiated attacks (malware can use outbound connections NAT passes freely). A firewall's value comes from stateful inspection rules — NAT alone drops inbound unsolicited connections but would pass all outbound traffic, including C&C (command and control) callbacks from compromised hosts. NAT creates functional problems: breaks end-to-end connectivity (hosts behind NAT cannot receive unsolicited inbound connections without port forwarding), complicates peer-to-peer protocols (requiring STUN/TURN/ICE NAT traversal), breaks protocols that embed IP addresses in payloads (FTP active mode, SIP without ALG), creates forensic problems (a single public IP shared by thousands of users via CGNAT requires per-second connection logs to identify a specific user), and violates the internet's original end-to-end principle. IPv6 was designed specifically to eliminate the need for NAT.
+      </IQ>
+
+      <IQ q="Describe the IPv4 exhaustion problem and the technical and policy mechanisms that extended IPv4's lifetime. What ultimately solves it?" level="PhD">
+        IPv4 exhaustion results from a mismatch between the 2^32 = 4.3 billion address space and growth in internet-connected devices beyond that number. Technical mechanisms extending IPv4 lifetime: (1) CIDR (1993): replaced classful allocation with variable-length prefixes, eliminating waste. A network needing 300 hosts gets a /23 instead of a /16, saving 65,234 addresses. (2) RFC 1918 private addresses + NAT: allows unbounded internal networks to share a single public IP. One public IP can serve thousands of private hosts — effectively multiplying IPv4 capacity by orders of magnitude. (3) CGNAT (RFC 6598): ISPs place NAT at the carrier level, assigning multiple subscribers to one public IP — extending capacity but breaking end-to-end connectivity. (4) IPv4 address markets: organizations sell unused IPv4 blocks (a /8 = 16M addresses is worth ~$400M at current market rates), recycling previously idle space. Policy mechanisms: RIR exhaustion policies, IPv4 transfer markets with ARIN/RIPE oversight, increased scrutiny of allocation requests. None of these solve the fundamental problem — they defer it. The actual solution is IPv6 (128-bit addresses, 2^128 = 340 undecillion addresses — more than enough for every atom on Earth). IPv6 deployment has accelerated: as of 2024, ~50% of Google traffic globally is IPv6. The transition is dual-stack (running both IPv4 and IPv6 simultaneously) until IPv4 can eventually be deprecated, a process measured in decades.
+      </IQ>
 
       <KeyTakeaways items={[
-        'IPv4 addresses are 32-bit numbers written as four decimal octets (0–255). The prefix length (/0–/32) defines where the network portion ends and the host portion begins.',
-        'Network address = all host bits 0 (not assignable). Broadcast address = all host bits 1 (not assignable). Usable hosts = 2^(host bits) − 2.',
-        'CIDR replaced classful A/B/C addressing, enabling variable-length subnets and route aggregation that keeps the internet routing table manageable at ~900K prefixes.',
-        'RFC 1918 private ranges (10/8, 172.16/12, 192.168/16) are reusable across organizations and not routable on the public internet. NAT/PAT translates them for internet access.',
-        'Special ranges: 127.0.0.0/8 = loopback, 169.254.0.0/16 = APIPA (DHCP failed), 224.0.0.0/4 = multicast, 100.64.0.0/10 = carrier NAT. Using wrong ranges causes silent failures.',
-        '/30 = 4 addresses, 2 usable hosts (network + broadcast). /31 (RFC 3021) = 2 host addresses, no broadcast — preferred for P2P links on modern equipment.',
-        'VLSM allows different subnets to have different prefix lengths, matching allocation size to actual need. Required by all modern routing protocols (OSPF, EIGRP, BGP).',
-        'ARP maps IPv4 to MAC addresses with no authentication. ARP poisoning is mitigated by Dynamic ARP Inspection (DAI) and DHCP snooping on switches.',
-        'IPv4 exhaustion is real — IANA exhausted the free pool in 2011. IPv6 (128-bit, 3.4×10³⁸ addresses) is the long-term solution; dual-stack deployment is current best practice.',
-        'A 169.254.x.x address always means DHCP failed. Diagnose DHCP server availability, VLAN assignment, DHCP relay configuration, and IP pool exhaustion.',
+        'IPv4 addresses are 32 bits written in dotted-decimal notation (e.g., 192.168.1.1); they are hierarchical — the network portion enables routing, the host portion identifies the device.',
+        'CIDR (Classless Inter-Domain Routing) replaced fixed class boundaries with variable prefix lengths (/0–/32), enabling efficient allocation and route aggregation.',
+        'The subnet mask identifies network vs. host bits; AND of IP with mask gives the network address. All host bits = 1 gives the broadcast address.',
+        'RFC 1918 defines private address ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) that are never routed on the public internet — NAT translates them to public IPs.',
+        'Special ranges include loopback (127.0.0.0/8), link-local/APIPA (169.254.0.0/16), multicast (224.0.0.0/4), and CGNAT shared space (100.64.0.0/10).',
+        'IPv4 was exhausted at IANA level in February 2011; NAT, CIDR, and CGNAT extended its practical lifetime but broke end-to-end connectivity.',
+        'Longest Prefix Match (LPM) selects the most specific routing table entry for a destination — a /32 host route overrides a /24 network route.',
+        'DHCP automates IP assignment using the DORA process (Discover, Offer, Request, Acknowledge); DHCP reservations assign consistent IPs based on MAC address.',
+        'NAT is address translation, not security — it provides no packet inspection, no authentication, and passes all outbound traffic including malware callbacks.',
+        'Hierarchical IP address planning with IPAM tools prevents IP conflicts, enables route summarization, and scales to thousands of subnets without management chaos.',
       ]} />
-
     </LearnLayout>
   )
 }
