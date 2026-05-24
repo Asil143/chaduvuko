@@ -3,725 +3,1088 @@
 import { useState } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
-import Link from 'next/link'
 
-const N = '#10b981'
+const G = '#10b981'
+const FONT_MONO = 'var(--font-mono)'
+const FONT_DISPLAY = 'var(--font-display)'
 
-const Part = ({ n, title }: { n: string; title: string }) => (
-  <div style={{ marginBottom: 28 }}>
-    <p style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 8px', letterSpacing: '.1em' }}>// Part {n}</p>
-    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px,3vw,30px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
+const Chapter = ({ n, title, subtitle }: { n: string; title: string; subtitle?: string }) => (
+  <div style={{ marginBottom: 36 }}>
+    <p style={{ fontSize: 11, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 8px', letterSpacing: '.12em', textTransform: 'uppercase' }}>
+      Chapter {n}
+    </p>
+    <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: '0 0 10px' }}>
+      {title}
+    </h2>
+    {subtitle && (
+      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.7, margin: 0, maxWidth: 620 }}>{subtitle}</p>
+    )}
   </div>
 )
 
-const P = ({ children }: { children: React.ReactNode }) => (
-  <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, margin: '0 0 18px' }}>{children}</p>
+const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin: '56px 0' }} />
+
+const Para = ({ children }: { children: React.ReactNode }) => (
+  <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.95, margin: '0 0 20px' }}>{children}</p>
 )
 
-const H = ({ children }: { children: React.ReactNode }) => (
-  <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: '32px 0 12px' }}>{children}</h3>
+const H2 = ({ children }: { children: React.ReactNode }) => (
+  <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', margin: '40px 0 14px', letterSpacing: '-0.5px' }}>{children}</h3>
 )
 
-const Hl = ({ children }: { children: React.ReactNode }) => (
-  <strong style={{ color: N }}>{children}</strong>
+const H3 = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', margin: '28px 0 10px' }}>{children}</h4>
 )
 
-const HR = () => <div style={{ borderTop: '1px solid var(--border)', margin: '48px 0' }} />
+const Accent = ({ children }: { children: React.ReactNode }) => (
+  <strong style={{ color: G, fontWeight: 700 }}>{children}</strong>
+)
 
-const ProTip = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: `${N}08`, border: `1px solid ${N}20`, borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Pro Tip</p>
-    <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{children}</p>
+const Code = ({ children }: { children: React.ReactNode }) => (
+  <code style={{ fontSize: 13, background: `${G}15`, color: G, padding: '2px 7px', borderRadius: 5, fontFamily: FONT_MONO }}>{children}</code>
+)
+
+const CodeBlock = ({ title, children }: { title?: string; children: React.ReactNode }) => (
+  <div style={{ background: '#0d1117', border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', margin: '24px 0' }}>
+    {title && (
+      <div style={{ padding: '10px 16px', borderBottom: '1px solid var(--border)', fontSize: 12, color: 'var(--muted)', fontFamily: FONT_MONO }}>
+        {title}
+      </div>
+    )}
+    <pre style={{ margin: 0, padding: '18px 20px', fontSize: 13, color: '#e2e8f0', lineHeight: 1.8, overflowX: 'auto', fontFamily: FONT_MONO }}>
+      {children}
+    </pre>
+  </div>
+)
+
+const StoryBox = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)', borderLeft: '4px solid #60a5fa', borderRadius: '0 12px 12px 0', padding: '18px 22px', margin: '28px 0' }}>
+    <p style={{ fontSize: 11, color: '#60a5fa', fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Real-World Scenario</p>
+    <div style={{ fontSize: 14.5, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
+  </div>
+)
+
+const WowBox = ({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) => (
+  <div style={{ background: `${G}08`, border: `1px solid ${G}25`, borderRadius: 12, padding: '18px 22px', margin: '28px 0' }}>
+    <p style={{ fontSize: 13, fontWeight: 700, color: G, margin: '0 0 6px' }}>{emoji} {title}</p>
+    <div style={{ fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
+  </div>
+)
+
+const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.25)', borderRadius: 12, padding: '16px 20px', margin: '24px 0' }}>
+    <p style={{ fontSize: 11, color: '#fbbf24', fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>⚠ {title}</p>
+    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
 const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Common Mistake — {title}</p>
-    <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{children}</p>
+  <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 12, padding: '16px 20px', margin: '24px 0' }}>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Common Mistake — {title}</p>
+    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
-const IQ = ({ q, children }: { q: string; children: React.ReactNode }) => (
-  <div style={{ marginBottom: 40 }}>
-    <div style={{ background: `${N}10`, border: `1px solid ${N}25`, borderRadius: '8px 8px 0 0', padding: '14px 18px', fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>Q: {q}</div>
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
-  </div>
-)
-
-const TimeBlock = ({ time, label, children }: { time: string; label: string; children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 20, marginBottom: 28 }}>
-    <div style={{ flexShrink: 0, textAlign: 'right', width: 100 }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)' }}>{time}</div>
+const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) => {
+  const colors: Record<string, string> = { Beginner: '#34d399', Intermediate: '#60a5fa', Senior: '#a78bfa', PhD: '#f472b6' }
+  const c = colors[level]
+  return (
+    <div style={{ marginBottom: 28 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: `${c}10`, border: `1px solid ${c}25`, borderRadius: '8px 8px 0 0', padding: '13px 18px' }}>
+        <span style={{ fontSize: 10, fontWeight: 800, color: c, fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.1em', background: `${c}20`, padding: '3px 8px', borderRadius: 5 }}>{level}</span>
+        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>Q: {q}</span>
+      </div>
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>
+        {children}
+      </div>
     </div>
-    <div style={{ flex: 1, borderLeft: `2px solid ${N}30`, paddingLeft: 20, paddingBottom: 8 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{label}</div>
-      <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8 }}>{children}</div>
-    </div>
-  </div>
-)
+  )
+}
 
-const Term = ({ word, def }: { word: string; def: string }) => (
-  <div style={{ display: 'flex', gap: 0, marginBottom: 12, border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
-    <div style={{ background: `${N}12`, borderRight: `1px solid ${N}20`, padding: '10px 16px', minWidth: 160, display: 'flex', alignItems: 'center' }}>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: N }}>{word}</span>
-    </div>
-    <div style={{ padding: '10px 16px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{def}</div>
-  </div>
-)
+// ─── Interactive 1: OSI Stack Explorer ───────────────────────────────────────
 
-// ── Interactive OSI Stack ─────────────────────────────────────────────────────
 const OSI_LAYERS = [
   {
-    n: 7, name: 'Application', color: '#10b981',
-    pdu: 'Data',
-    proto: 'HTTP, HTTPS, DNS, SMTP, FTP, SSH, SNMP',
-    devices: 'Web browsers, mail clients, apps',
-    job: 'Provides network services directly to applications. This is where your app talks to the network.',
-    realWorld: 'When Chrome sends an HTTP GET request, that is Layer 7. DNS queries are Layer 7. SMTP sending email is Layer 7.',
-    header: 'Application-specific (HTTP headers, DNS query format, SMTP commands)',
-    attack: 'SQL injection, XSS, HTTP request smuggling, slow loris DoS',
-    tool: 'curl, Postman, Wireshark with HTTP dissector, browser DevTools',
+    n: 7, name: 'Application', color: '#10b981', pdu: 'Data',
+    protocols: 'HTTP, HTTPS, FTP, SSH, SMTP, IMAP, DNS, SNMP, Telnet',
+    devices: 'Hosts, web browsers, email clients, application load balancers (L7 LBs)',
+    job: 'The only layer your application code actually touches. Provides network services — file transfer, web browsing, email — directly to user-facing software. Does NOT mean the app itself lives here; it means the interface between network and app lives here.',
+    security: 'SQL injection, XSS, credential stuffing, HTTP flood DDoS, DNS poisoning',
+    commands: 'curl -v https://example.com   |   nslookup google.com   |   openssl s_client -connect host:443',
+    example: 'Your browser sends: GET /index.html HTTP/1.1 — that text IS the L7 PDU.',
   },
   {
-    n: 6, name: 'Presentation', color: '#3b82f6',
-    pdu: 'Data',
-    proto: 'TLS/SSL, MIME, JPEG, MPEG, ASCII, Unicode',
-    devices: 'Encryption engines (TLS termination), format converters',
-    job: 'Translation, encryption/decryption, and compression. Ensures data from the Application layer of one system can be read by the Application layer of another.',
-    realWorld: 'TLS encrypts your HTTPS traffic at Layer 6. JPEG compression of image data is Layer 6. Converting Unicode to ASCII is Layer 6.',
-    header: 'Encoding flags, encryption record (TLS record layer)',
-    attack: 'POODLE (SSLv3 downgrade), BEAST (TLS 1.0 CBC), certificate spoofing',
-    tool: 'openssl s_client, sslyze, testssl.sh',
+    n: 6, name: 'Presentation', color: '#06b6d4', pdu: 'Data',
+    protocols: 'TLS/SSL, JPEG, PNG, MP3, MP4, ASCII, UTF-8, Base64, gzip, zlib',
+    devices: 'Gateways performing encryption/decryption, media encoders',
+    job: 'Translation, encryption, and compression. Converts data between the network format and the application format. If L7 is "what to say", L6 is "what language to say it in". Responsible for ensuring data sent by one system can be read by another regardless of internal representation differences.',
+    security: 'SSL stripping (downgrade HTTPS to HTTP), weak cipher negotiation, certificate spoofing',
+    commands: 'openssl s_client -connect host:443   |   sslyze --regular host   |   curl -v (shows TLS negotiation)',
+    example: 'Your browser receives gzip-compressed HTML — L6 decompresses it before handing to L7. TLS decryption also happens here.',
   },
   {
-    n: 5, name: 'Session', color: '#8b5cf6',
-    pdu: 'Data',
-    proto: 'NetBIOS, RPC, SQL sessions, NFS, SMB',
-    devices: 'Session management in middleware and databases',
-    job: 'Establishes, manages, and terminates sessions between applications. Handles dialog control (who speaks when) and synchronization (checkpoints for long transfers).',
-    realWorld: 'A database connection pool manages Layer 5 sessions. NFS file system mounts. NetBIOS name resolution on Windows networks.',
-    header: 'Session ID, dialog control tokens, synchronization points',
-    attack: 'Session hijacking, session fixation, cross-site request forgery (CSRF) at the session management layer',
-    tool: 'netstat (shows established sessions), ss, Wireshark SMB/RPC dissectors',
+    n: 5, name: 'Session', color: '#8b5cf6', pdu: 'Data',
+    protocols: 'NetBIOS, RPC (Remote Procedure Call), SQL sessions, NFS, PPTP, SIP (partly)',
+    devices: 'Application servers, API gateways, unified communications systems',
+    job: 'Establishes, manages, and terminates sessions between applications. Provides dialog control (who talks when), synchronisation checkpoints, and session recovery after failure. Think of it as the "conversation manager" — it knows which data belongs to which ongoing conversation.',
+    security: 'Session hijacking, session fixation, CSRF (session token theft)',
+    commands: 'netstat -an | grep ESTABLISHED   |   ss -tp   |   Check application session logs',
+    example: 'A video call synchronises your audio and video streams. If the network glitches, L5 checkpoints let the call resume from the last sync point rather than restarting.',
   },
   {
-    n: 4, name: 'Transport', color: '#f97316',
-    pdu: 'Segment (TCP) / Datagram (UDP)',
-    proto: 'TCP, UDP, SCTP, DCCP',
-    devices: 'Load balancers (Layer 4), firewalls (stateful), NAT',
-    job: 'End-to-end communication between processes. Port numbers identify which application gets the data. TCP provides reliable ordered delivery; UDP provides fast best-effort delivery.',
-    realWorld: 'TCP port 443 for HTTPS, port 22 for SSH. UDP port 53 for DNS, port 443 for QUIC. A TCP 3-way handshake (SYN/SYN-ACK/ACK) establishes the connection before data flows.',
-    header: 'Source port (2B), Destination port (2B), Sequence number (4B), Acknowledgment (4B), Flags (SYN/ACK/FIN/RST), Window size, Checksum',
-    attack: 'SYN flood (half-open connection exhaustion), port scanning, TCP session hijacking, RST injection',
-    tool: 'netstat, ss, nmap -sT/-sS, tcpdump port 443',
+    n: 4, name: 'Transport', color: '#f97316', pdu: 'Segment (TCP) / Datagram (UDP)',
+    protocols: 'TCP, UDP, SCTP, DCCP',
+    devices: 'Load balancers (L4), stateful firewalls, NAT gateways',
+    job: 'End-to-end delivery between processes. Multiplexes connections using port numbers. TCP provides reliability (sequencing, acknowledgement, retransmission, flow control, congestion control). UDP provides speed without guarantees. This is where your app chooses between "guaranteed delivery" and "fast delivery".',
+    security: 'SYN flood, TCP session hijacking, UDP amplification, port scanning',
+    commands: 'netstat -tulpn   |   ss -tulpn   |   nmap -sT host   |   tcpdump port 443',
+    example: 'Downloading a 100MB file: TCP splits it into ~68,000 segments of 1,460 bytes each, numbers every byte, and retransmits anything lost. Your app receives a perfect stream.',
   },
   {
-    n: 3, name: 'Network', color: '#06b6d4',
-    pdu: 'Packet',
-    proto: 'IPv4, IPv6, ICMP, OSPF, BGP, EIGRP',
-    devices: 'Routers, Layer 3 switches, firewalls',
-    job: 'Logical addressing and routing. IP addresses identify source and destination across networks. Routers use routing tables to forward packets hop-by-hop toward the destination.',
-    realWorld: 'Your laptop\'s IP is 192.168.1.100. google.com resolves to 142.250.80.46. Every router between you and Google makes a forwarding decision based on the destination IP in the packet header.',
-    header: 'Version (4b), IHL (4b), DSCP (6b), Total Length (2B), TTL (1B), Protocol (1B), Header Checksum (2B), Source IP (4B), Destination IP (4B)',
-    attack: 'IP spoofing, ICMP redirect attacks, BGP hijacking, TTL expiry DoS, fragmentation attacks',
-    tool: 'ping, traceroute, ip route show, Wireshark IP filter, mtr',
+    n: 3, name: 'Network', color: '#3b82f6', pdu: 'Packet',
+    protocols: 'IPv4, IPv6, ICMP, OSPF, BGP, RIP, EIGRP, IPSec',
+    devices: 'Routers, Layer-3 switches, firewalls (L3 rules), VPN gateways',
+    job: 'Logical addressing (IP addresses) and routing. Determines the path from source to destination across multiple networks. Handles fragmentation when a packet is too large for a link. TTL prevents packets from looping forever. This layer makes the internet possible — it crosses network boundaries.',
+    security: 'IP spoofing, BGP hijacking, ICMP tunneling, route injection, TTL manipulation',
+    commands: 'ping 8.8.8.8   |   traceroute 8.8.8.8   |   ip route show   |   route print (Windows)',
+    example: "Your HTTP request travels from your ISP → 3 transit routers → Google's edge → Google's data center. Each router reads the destination IP and decides the next hop. 13 hops, each a separate routing decision.",
   },
   {
-    n: 2, name: 'Data Link', color: '#f59e0b',
-    pdu: 'Frame',
-    proto: 'Ethernet (802.3), Wi-Fi (802.11), PPP, VLAN (802.1Q), STP (802.1D), ARP',
-    devices: 'Switches, access points, bridges, NICs',
-    job: 'Node-to-node delivery on the same physical network. MAC addresses identify devices. Ethernet switches use MAC tables to forward frames. ARP resolves IP to MAC. Error detection via CRC.',
-    realWorld: 'Your laptop sends an ARP broadcast "who has 192.168.1.1?" — the router responds with its MAC address. Your NIC adds a source MAC and destination MAC to every frame. The switch reads the MAC and forwards to the correct port.',
-    header: 'Destination MAC (6B), Source MAC (6B), EtherType/Length (2B), [VLAN tag 4B optional], Payload, FCS/CRC (4B)',
-    attack: 'ARP poisoning (MITM), MAC flooding (overflow switch CAM table), VLAN hopping, rogue DHCP server',
-    tool: 'arp -n, ip neigh, Wireshark eth filter, macchanger',
+    n: 2, name: 'Data Link', color: '#ef4444', pdu: 'Frame',
+    protocols: 'Ethernet (802.3), Wi-Fi (802.11), ARP, PPP, HDLC, 802.1Q (VLANs), MPLS',
+    devices: 'Switches, access points, bridges, NICs (the hardware part)',
+    job: 'Physical addressing using MAC addresses. Frames data for transmission on a single network segment. Provides error detection via CRC (Cyclic Redundancy Check). Manages access to the physical medium (CSMA/CD for Ethernet, CSMA/CA for Wi-Fi). Delivers frames only to the correct device on the local segment.',
+    security: 'ARP poisoning, MAC flooding, VLAN hopping, rogue access points, MAC spoofing',
+    commands: 'arp -a   |   ip neigh   |   ip link show   |   Wireshark Ethernet frame dissection',
+    example: "Your laptop's NIC builds a frame: Dst MAC = router's MAC (from ARP cache), Src MAC = your NIC's hardware address, EtherType = 0x0800 (IPv4). The switch reads only the dst MAC to forward to the right port.",
   },
   {
-    n: 1, name: 'Physical', color: '#ef4444',
-    pdu: 'Bits',
-    proto: 'Ethernet (electrical), Wi-Fi (radio), fiber (optical), USB, Bluetooth',
-    devices: 'Cables, NICs, hubs, repeaters, modems, fiber transceivers',
-    job: 'Transmits raw bits over a physical medium. Defines voltage levels, frequencies, cable specifications, connector types, and timing. No addressing — just bit streams.',
-    realWorld: 'Cat6A UTP cable carrying 10GBase-T signals at 500MHz. Single-mode fiber at 1310nm wavelength carrying 100G. Wi-Fi 6E radio frames at 6GHz. Your NIC\'s electrical signaling when it drives 0V for bit 0 and +2.5V for bit 1.',
-    header: 'No header — raw bit encoding (Manchester, NRZ, PAM4)',
-    attack: 'Physical wiretapping, fiber tapping with optical splitters, RF jamming, EMI injection',
-    tool: 'Cable testers, optical power meters, spectrum analyzers, Wireshark (reads after NIC decodes)',
+    n: 1, name: 'Physical', color: '#94a3b8', pdu: 'Bit',
+    protocols: 'IEEE 802.3 (Ethernet signalling), IEEE 802.11 (Wi-Fi radio), DSL, SONET/SDH, USB, Bluetooth PHY',
+    devices: 'Cables, hubs, repeaters, modems, NICs (analog/digital interface), fiber transceivers, wireless radios',
+    job: 'Transmission of raw bits over a physical medium. Defines voltage levels, cable specifications, connectors, pin layouts, signal encoding (Manchester, 4B/5B, PAM4), bit timing, and data rates. Has zero awareness of what the bits mean — it just moves them.',
+    security: 'Physical eavesdropping, cable tapping, signal jamming, optical fiber tapping, hardware keyloggers',
+    commands: 'Check link LEDs on NIC/switch   |   ethtool eth0   |   iwconfig   |   cable tester',
+    example: 'A Cat6 cable carries your frame as voltage transitions at 250 MHz. A single-mode fiber carries the same data as pulses of 1,310nm laser light at 10 Gbps. Same bits, completely different physics.',
   },
 ]
 
-function OSIStack() {
+function OSIStackExplorer() {
   const [active, setActive] = useState<number | null>(null)
-  const activeLayer = active !== null ? OSI_LAYERS.find(l => l.n === active) : null
 
   return (
-    <div style={{ margin: '24px 0 32px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' }}>
-        {/* Stack */}
-        <div>
-          <p style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: '0 0 10px', letterSpacing: '.06em' }}>SENDER (encapsulates ↓)</p>
-          {OSI_LAYERS.map(layer => (
-            <div
-              key={layer.n}
-              onClick={() => setActive(active === layer.n ? null : layer.n)}
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 4px' }}>Interactive — OSI Stack Explorer</p>
+      <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 20px' }}>Click any layer to see protocols, devices, security threats, and diagnostic commands.</p>
+
+      {OSI_LAYERS.map((layer, i) => {
+        const isOpen = active === i
+        return (
+          <div key={layer.n} style={{ marginBottom: 6 }}>
+            <button
+              onClick={() => setActive(isOpen ? null : i)}
               style={{
-                display: 'flex', alignItems: 'center', gap: 12,
-                padding: '11px 14px', marginBottom: 3,
-                borderRadius: 8, cursor: 'pointer',
-                border: active === layer.n ? `2px solid ${layer.color}` : '2px solid transparent',
-                background: active === layer.n ? `${layer.color}15` : 'var(--surface)',
-                transition: 'all 0.15s',
+                width: '100%', textAlign: 'left', padding: '12px 16px',
+                background: isOpen ? `${layer.color}20` : `${layer.color}10`,
+                border: `1px solid ${isOpen ? layer.color : layer.color + '40'}`,
+                borderRadius: isOpen ? '10px 10px 0 0' : 10,
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12, transition: 'all 0.15s',
               }}
             >
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 800, color: layer.color, width: 20, textAlign: 'center' }}>L{layer.n}</span>
-              <span style={{ fontSize: 13, fontWeight: active === layer.n ? 700 : 500, color: 'var(--text)', flex: 1 }}>{layer.name}</span>
-              <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{layer.pdu}</span>
-            </div>
-          ))}
-          <p style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: '10px 0 0', letterSpacing: '.06em', textAlign: 'center' }}>← click any layer for details</p>
-        </div>
+              <span style={{ fontSize: 10, fontWeight: 800, color: layer.color, fontFamily: FONT_MONO, background: `${layer.color}25`, padding: '3px 8px', borderRadius: 5, flexShrink: 0 }}>L{layer.n}</span>
+              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', flex: 1 }}>{layer.name}</span>
+              <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>PDU: {layer.pdu}</span>
+              <span style={{ fontSize: 12, color: layer.color }}>{isOpen ? '▲' : '▼'}</span>
+            </button>
 
-        {/* Detail panel */}
-        <div style={{ border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', minHeight: 320 }}>
-          {activeLayer ? (
-            <div>
-              <div style={{ background: `${activeLayer.color}18`, borderBottom: `1px solid ${activeLayer.color}30`, padding: '14px 18px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ background: activeLayer.color, color: '#fff', fontSize: 12, fontWeight: 800, fontFamily: 'var(--font-mono)', padding: '3px 9px', borderRadius: 4 }}>Layer {activeLayer.n}</span>
-                  <span style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>{activeLayer.name}</span>
+            {isOpen && (
+              <div style={{ background: 'var(--bg)', border: `1px solid ${layer.color}40`, borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '18px 20px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14, marginBottom: 14 }}>
+                  {[
+                    { label: 'Protocols', value: layer.protocols, c: '#60a5fa' },
+                    { label: 'Devices', value: layer.devices, c: '#a78bfa' },
+                    { label: 'Security Threats', value: layer.security, c: '#ef4444' },
+                    { label: 'Diagnostic Commands', value: layer.commands, c: G },
+                  ].map(item => (
+                    <div key={item.label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 14px' }}>
+                      <p style={{ fontSize: 10, fontWeight: 700, color: item.c, fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 6px' }}>{item.label}</p>
+                      <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.7, margin: 0, fontFamily: item.label === 'Diagnostic Commands' ? FONT_MONO : 'inherit' }}>{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ background: `${layer.color}08`, border: `1px solid ${layer.color}25`, borderRadius: 8, padding: '12px 16px', marginBottom: 10 }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, color: layer.color, fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 6px' }}>What it does</p>
+                  <p style={{ fontSize: 13.5, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{layer.job}</p>
+                </div>
+                <div style={{ background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: 8, padding: '10px 14px' }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, color: '#fbbf24', fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 4px' }}>Real example</p>
+                  <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>{layer.example}</p>
                 </div>
               </div>
-              <div style={{ padding: '16px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
-                <p style={{ color: 'var(--text)', marginBottom: 12, lineHeight: 1.7 }}>{activeLayer.job}</p>
-                <div style={{ marginBottom: 10 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: activeLayer.color, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Protocols: </span>
-                  <span style={{ fontSize: 12 }}>{activeLayer.proto}</span>
-                </div>
-                <div style={{ marginBottom: 10 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: activeLayer.color, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Devices: </span>
-                  <span style={{ fontSize: 12 }}>{activeLayer.devices}</span>
-                </div>
-                <div style={{ marginBottom: 10 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: activeLayer.color, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Attacks: </span>
-                  <span style={{ fontSize: 12 }}>{activeLayer.attack}</span>
-                </div>
-                <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginTop: 10, padding: '8px 12px', background: 'var(--bg)', borderRadius: 6, lineHeight: 1.6 }}>
-                  <strong style={{ color: activeLayer.color }}>Header: </strong>{activeLayer.header}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 320, color: 'var(--muted)' }}>
-              <div style={{ fontSize: 32, marginBottom: 12, opacity: 0.3 }}>◈</div>
-              <p style={{ fontSize: 13, textAlign: 'center', maxWidth: 180, lineHeight: 1.6 }}>Click any layer on the left to explore its protocols, header fields, attacks, and real-world role.</p>
-            </div>
-          )}
-        </div>
-      </div>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }
 
-// ── Encapsulation Diagram ─────────────────────────────────────────────────────
-function EncapsulationDiagram() {
-  const steps = [
-    { layer: 'L7 Application', add: 'HTTP Request (GET /index.html)', color: '#10b981', pdu: 'Data' },
-    { layer: 'L6 Presentation', add: '+ TLS encryption record', color: '#3b82f6', pdu: 'Data' },
-    { layer: 'L5 Session', add: '+ Session identifier', color: '#8b5cf6', pdu: 'Data' },
-    { layer: 'L4 Transport', add: '+ TCP header (src:52431 → dst:443)', color: '#f97316', pdu: 'Segment' },
-    { layer: 'L3 Network', add: '+ IP header (src:10.0.1.5 → dst:142.250.80.46)', color: '#06b6d4', pdu: 'Packet' },
-    { layer: 'L2 Data Link', add: '+ Ethernet frame (src MAC → dst MAC) + CRC', color: '#f59e0b', pdu: 'Frame' },
-    { layer: 'L1 Physical', add: '→ 01001000 11010101... transmitted as electrical/optical/radio signal', color: '#ef4444', pdu: 'Bits' },
-  ]
+// ─── Interactive 2: Encapsulation Visualizer ─────────────────────────────────
+
+const ENCAP_STEPS = [
+  { layer: 7, name: 'Application', color: '#10b981', header: 'HTTP Request', fields: ['GET /index.html HTTP/1.1', 'Host: google.com', 'User-Agent: Chrome/120', 'Accept: text/html'], label: 'Application data (HTTP)', size: 'variable' },
+  { layer: 6, name: 'Presentation', color: '#06b6d4', header: 'TLS Record', fields: ['Content-Type: 23 (Application Data)', 'Version: TLS 1.3', 'Length: 512 bytes', 'Encrypted payload...'], label: '+ TLS encryption wrapper', size: '+5 bytes header' },
+  { layer: 5, name: 'Session', color: '#8b5cf6', header: 'Session token', fields: ['Session ID: 0xA3F2...', 'Sequence: 1', 'Context: established'], label: '+ Session context (implicit in TLS)', size: 'embedded in TLS' },
+  { layer: 4, name: 'Transport', color: '#f97316', header: 'TCP Segment', fields: ['Src Port: 54321', 'Dst Port: 443', 'Seq: 1001', 'Ack: 0', 'Flags: PSH ACK', 'Window: 65535'], label: '+ TCP header (20 bytes)', size: '+20 bytes' },
+  { layer: 3, name: 'Network', color: '#3b82f6', header: 'IP Packet', fields: ['Src IP: 192.168.1.5', 'Dst IP: 142.250.182.4', 'Protocol: 6 (TCP)', 'TTL: 64', 'Header Checksum'], label: '+ IP header (20 bytes)', size: '+20 bytes' },
+  { layer: 2, name: 'Data Link', color: '#ef4444', header: 'Ethernet Frame', fields: ['Dst MAC: B8:E8:56:44:55:66', 'Src MAC: A4:C3:F0:11:22:33', 'EtherType: 0x0800 (IPv4)', 'FCS: CRC-32 checksum'], label: '+ Ethernet header + trailer (18 bytes)', size: '+18 bytes' },
+  { layer: 1, name: 'Physical', color: '#94a3b8', header: 'Bits on wire', fields: ['10101100 00010001...', '1,500 bytes = 12,000 bits', 'Sent at 1 Gbps = 12 microseconds', 'As voltage transitions / light pulses'], label: '→ Transmitted as electrical/optical signals', size: 'raw bits' },
+]
+
+function EncapsulationVisualizer() {
+  const [step, setStep] = useState(0)
+  const [mode, setMode] = useState<'encap' | 'decap'>('encap')
+
+  const steps = mode === 'encap' ? ENCAP_STEPS : [...ENCAP_STEPS].reverse()
+  const current = steps[step]
+  const visible = steps.slice(0, step + 1)
 
   return (
-    <div style={{ margin: '20px 0 32px', overflowX: 'auto' }}>
-      {steps.map((s, i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 0, marginBottom: 4 }}>
-          <div style={{ width: 160, flexShrink: 0, fontSize: 11, fontFamily: 'var(--font-mono)', fontWeight: 700, color: s.color, textAlign: 'right', paddingRight: 14 }}>{s.layer}</div>
-          <div style={{
-            flex: 1, padding: '9px 14px', borderRadius: 6,
-            background: `${s.color}12`, border: `1px solid ${s.color}30`,
-            fontSize: 12, color: 'var(--text)', lineHeight: 1.5,
-            paddingLeft: 14 + i * 12,
-          }}>
-            {s.add}
-            <span style={{ float: 'right', fontSize: 10, fontFamily: 'var(--font-mono)', color: s.color, fontWeight: 700 }}>{s.pdu}</span>
-          </div>
-        </div>
-      ))}
-      <p style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: '10px 0 0', textAlign: 'center' }}>encapsulation: each layer wraps the previous layer&apos;s data in its own header</p>
-    </div>
-  )
-}
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 4px' }}>Interactive — Encapsulation Visualizer</p>
+      <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 16px' }}>
+        {mode === 'encap' ? 'Watch headers wrap around data as it travels down the sender\'s stack.' : 'Watch headers get stripped as data travels up the receiver\'s stack.'}
+      </p>
 
-export default function OSIModel() {
-  return (
-    <LearnLayout
-      title="The OSI Model — All 7 Layers"
-      description="The universal framework every network engineer uses to reason about where a problem lives and which tool fixes it. Layer by layer, byte by byte."
-      section="Networking Fundamentals — Module 03"
-      readTime="24–30 min"
-      updatedAt="May 2026"
-    >
-
-      {/* ── PART 01 ── */}
-      <Part n="01" title="Why a 7-Layer Framework Changed Everything" />
-
-      <P>In 1970, two computers from different manufacturers could not communicate, even if you connected them with a cable. IBM&apos;s System/360 used one protocol. DEC&apos;s PDP systems used another. UNIVAC had its own. Each vendor&apos;s network was a proprietary silo. This was an engineering crisis at civilizational scale — the world was spending billions on computers that could not work together.</P>
-
-      <P>The ISO (International Organization for Standardization) formed a committee in 1977. Their mandate: define a universal reference model that any vendor could implement, any protocol could map to, and any engineer could use to reason about interoperability problems. In 1984, after seven years of debate, <Hl>ISO 7498 was published — the Open Systems Interconnection (OSI) Reference Model.</Hl></P>
-
-      <P>The model never became a deployment reality. TCP/IP, simpler and already proven by the ARPAnet, won the protocol war decisively by the early 1990s. But the <Hl>framework itself became indispensable</Hl>. Today, thirty years after TCP/IP won, every network engineer still uses OSI layer numbers daily. &quot;That&apos;s a Layer 2 problem&quot; and &quot;we need Layer 7 load balancing&quot; are sentences you will say and hear in every networking job you will ever hold.</P>
-
-      <div style={{ background: `${N}08`, border: `1px solid ${N}25`, borderLeft: `4px solid ${N}`, borderRadius: '0 10px 10px 0', padding: '20px 24px', margin: '4px 0 28px' }}>
-        <p style={{ fontSize: 13, fontWeight: 700, color: N, margin: '0 0 8px', fontFamily: 'var(--font-mono)' }}>THE ENGINEER&apos;S MENTAL MODEL</p>
-        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
-          The OSI model is a <strong>diagnostic and design framework</strong>, not a protocol specification. When something is broken, the OSI layers give you a systematic checklist: is there a physical signal? (L1) Is the frame formed correctly? (L2) Is the IP route present? (L3) Is the port open? (L4) Is TLS negotiating? (L6) Is the application sending valid requests? (L7). Start at Layer 1 and work up — or start at Layer 7 and work down — until you find the layer where things break. The layer where the break lives tells you exactly which tool fixes it.
-        </p>
-      </div>
-
-      <HR />
-
-      {/* ── PART 02 ── */}
-      <Part n="02" title="All 7 Layers — Interactive Reference" />
-
-      <P>The seven layers run from <Hl>Layer 1 (Physical)</Hl> at the bottom — raw bits traveling over wire, fiber, or radio — to <Hl>Layer 7 (Application)</Hl> at the top — the interface your apps use to communicate. Data flows down the stack on the sender (each layer adding its header), across the network, and back up the stack on the receiver (each layer removing its header).</P>
-
-      <P>The mnemonic <em>&quot;Please Do Not Throw Sausage Pizza Away&quot;</em> gives you layers 1→7 bottom-up (Physical, Data Link, Network, Transport, Session, Presentation, Application). Or top-down: <em>&quot;All People Seem To Need Data Processing.&quot;</em> Pick one and use it forever — these are the first seven things you say when you are troubleshooting anything.</P>
-
-      <OSIStack />
-
-      <HR />
-
-      {/* ── PART 03 ── */}
-      <Part n="03" title="Encapsulation — How Data Travels Down the Stack" />
-
-      <P>When your browser requests a webpage, data does not just jump across the network. It travels down the OSI stack on your machine, gets wrapped in progressively more headers at each layer, crosses the network as a series of frames, then travels back up the stack on the server — with each layer removing its header. This process is called <Hl>encapsulation</Hl> on the sender side and <Hl>decapsulation</Hl> on the receiver side.</P>
-
-      <EncapsulationDiagram />
-
-      <H>Why Encapsulation Is Not Just Academic</H>
-      <P>Every performance analysis, every security audit, and every troubleshooting session requires understanding what each layer adds and what it costs. The TCP header alone is 20–60 bytes per segment. On a 1460-byte TCP payload, that is 1.4–4.1% overhead from TCP alone. Add the IP header (20 bytes), Ethernet frame header (14 bytes), and FCS (4 bytes), and you are paying 58–98 bytes of overhead per 1460 bytes of useful data — a 4–6.7% tax on every transmission.</P>
-
-      <P>This matters at Netflix&apos;s scale. Netflix streams roughly 700 Tbps globally. If they save 1% on header overhead through protocol optimization (e.g., HTTP/2 header compression, QUIC&apos;s more efficient framing), that is 7 Tbps of saved bandwidth — several billion dollars annually in CDN and transit costs. The engineers who optimize protocols are directly reasoning about encapsulation overhead at every layer.</P>
-
-      <Term word="PDU" def="Protocol Data Unit — the name for data at each layer. At L7: 'Data'. At L4: 'Segment' (TCP) or 'Datagram' (UDP). At L3: 'Packet'. At L2: 'Frame'. At L1: 'Bits'. Knowing the PDU name tells you which layer you are discussing." />
-      <Term word="Encapsulation" def="The process of wrapping data with a layer's header (and sometimes trailer) as it moves down the OSI stack. Each layer only reads its own header — it treats everything above as opaque payload." />
-      <Term word="Decapsulation" def="The reverse process at the receiver — each layer strips its own header and passes the payload up to the layer above." />
-      <Term word="SAP" def="Service Access Point — the mechanism by which a layer passes data to the layer above it. The IP protocol field in the IP header (e.g., 6 = TCP, 17 = UDP) is how Layer 3 tells Layer 4 which protocol to use." />
-
-      <HR />
-
-      {/* ── PART 04 ── */}
-      <Part n="04" title="Layer 1 — Physical: The Bits That Actually Travel" />
-
-      <P>Layer 1 is where abstraction ends and physics begins. Everything above Layer 1 is software. Layer 1 is hardware, physics, and mathematics. It defines <Hl>how bits are encoded onto a physical medium</Hl> — electrical signals on copper, light pulses on fiber, radio waves in air.</P>
-
-      <H>Signal Encoding: Not Just Voltage High/Low</H>
-      <P>You might assume that a &quot;1&quot; is a high voltage and a &quot;0&quot; is a low voltage. For early RS-232 serial, that was approximately true. But modern networking uses far more sophisticated encoding:</P>
-
-      <ul style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 2, paddingLeft: 24 }}>
-        <li><Hl>Manchester encoding</Hl> (10BASE-T): every bit has a transition. A rising edge mid-bit = 1, falling edge = 0. Self-clocking — the receiver derives its clock from the signal transitions.</li>
-        <li><Hl>NRZ-L</Hl> (Non-Return to Zero Level): high voltage = 1, low voltage = 0. Simple but loses clock sync on long runs of identical bits.</li>
-        <li><Hl>4B/5B + NRZI</Hl> (Fast Ethernet 100BASE-TX): four data bits encoded as 5-bit symbols (guarantees transitions for clock recovery), then NRZI encoding of those symbols.</li>
-        <li><Hl>PAM4</Hl> (Pulse Amplitude Modulation 4-level): used by 400GbE and 800GbE. Four distinct voltage levels encode 2 bits per symbol. Your data center&apos;s 400G links use PAM4 on DAC (Direct Attach Copper) and fiber.</li>
-      </ul>
-
-      <H>The Physical Layer Devices You Will Actually Touch</H>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, margin: '16px 0 24px' }}>
-        {[
-          { name: 'NIC (Network Interface Card)', desc: 'Converts digital data to/from electrical/optical/radio signals. Handles MAC addressing at L2 but physically sends bits at L1. Every device on a network has one.' },
-          { name: 'Fiber Transceiver (SFP/QSFP)', desc: 'Optical module that converts electrical signals to laser light and back. SFP = 1G, SFP+ = 10G, QSFP28 = 100G, QSFP56 = 400G. Every data center switch uses dozens of these.' },
-          { name: 'Repeater / Hub', desc: 'Amplifies and retransmits signals without understanding frames. Extends cable distance but also extends collision domains. Hubs are Layer 1 devices.' },
-          { name: 'Cable (Cat5e/Cat6A/fiber)', desc: 'The medium itself. Cat6A: 10GbE at up to 100m. Single-mode fiber: 100GbE at up to 40km. Multimode fiber: 100GbE at up to 100m. Physical specs define Layer 1 limits.' },
-        ].map((d, i) => (
-          <div key={i} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '14px 16px', background: 'var(--surface)' }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: '#ef4444', margin: '0 0 6px' }}>{d.name}</p>
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{d.desc}</p>
-          </div>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+        {(['encap', 'decap'] as const).map(m => (
+          <button key={m} onClick={() => { setMode(m); setStep(0) }}
+            style={{ padding: '8px 18px', borderRadius: 8, border: `1px solid ${mode === m ? G : 'var(--border)'}`, background: mode === m ? `${G}18` : 'var(--bg)', color: mode === m ? G : 'var(--muted)', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: FONT_MONO }}>
+            {m === 'encap' ? '↓ Sender (Encapsulate)' : '↑ Receiver (Decapsulate)'}
+          </button>
         ))}
       </div>
 
-      <ProTip>Layer 1 problems are diagnosed with physical tools: a cable tester (Fluke Networks CableIQ) measures continuity and wire pair mapping; an optical power meter measures light levels on fiber (measured in dBm — too low means attenuation or dirty connector); a spectrum analyzer finds RF interference for Wi-Fi problems. When Wireshark shows CRC errors or physical errors on a link, start at Layer 1 — software cannot fix a bad cable.</ProTip>
-
-      <HR />
-
-      {/* ── PART 05 ── */}
-      <Part n="05" title="Layer 2 — Data Link: MAC Addresses, Frames, and Switches" />
-
-      <P>Layer 2 is responsible for node-to-node delivery on a <Hl>single network segment</Hl>. It addresses the fundamental question: if Layer 3 knows the destination IP, how does a frame actually get from one physical machine to the next physical machine on the same local network? The answer is MAC addresses, ARP, and the Ethernet frame.</P>
-
-      <H>Anatomy of an Ethernet Frame</H>
-
-      <div style={{ margin: '16px 0 28px', overflowX: 'auto' }}>
-        <div style={{ display: 'flex', borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', minWidth: 700 }}>
-          {[
-            { name: 'Preamble', bytes: '7B', color: '#374151', desc: '10101010 × 7 bytes — synchronizes clock between sender and receiver NIC' },
-            { name: 'SFD', bytes: '1B', color: '#4b5563', desc: 'Start Frame Delimiter (10101011) — marks start of frame' },
-            { name: 'Dst MAC', bytes: '6B', color: '#f59e0b', desc: '48-bit hardware address of destination NIC on local segment' },
-            { name: 'Src MAC', bytes: '6B', color: '#f97316', desc: '48-bit hardware address of sending NIC' },
-            { name: 'Type/Len', bytes: '2B', color: '#8b5cf6', desc: 'EtherType (0x0800=IPv4, 0x86DD=IPv6, 0x0806=ARP) or payload length' },
-            { name: 'Payload', bytes: '46–1500B', color: '#10b981', desc: 'The encapsulated IP packet (or ARP, etc). Min 46B — padded if shorter.' },
-            { name: 'FCS', bytes: '4B', color: '#ef4444', desc: 'CRC-32 checksum. Receiver recalculates and drops frame if mismatch.' },
-          ].map((f, i) => (
-            <div key={i} style={{ flex: i === 5 ? 3 : 1, minWidth: 0 }}>
-              <div style={{ background: f.color, padding: '7px 8px', textAlign: 'center' }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: '#fff', fontFamily: 'var(--font-mono)', letterSpacing: '.04em' }}>{f.name}</div>
-                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.7)', marginTop: 2 }}>{f.bytes}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+        <div>
+          <p style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 12px' }}>Packet being built</p>
+          <div style={{ background: 'var(--bg)', borderRadius: 10, padding: 14, minHeight: 200 }}>
+            {visible.map((s, i) => (
+              <div key={s.layer} style={{ background: `${s.color}15`, border: `1px solid ${s.color}40`, borderRadius: 6, padding: '7px 12px', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 8, opacity: i === visible.length - 1 ? 1 : 0.65 }}>
+                <span style={{ fontSize: 10, fontWeight: 800, color: s.color, fontFamily: FONT_MONO, background: `${s.color}25`, padding: '2px 6px', borderRadius: 4, flexShrink: 0 }}>L{s.layer}</span>
+                <span style={{ fontSize: 12, color: 'var(--text)', fontFamily: FONT_MONO }}>{s.label}</span>
               </div>
-              <div style={{ background: 'var(--surface)', padding: '7px 8px', textAlign: 'center', borderTop: '1px solid var(--border)' }}>
-                <div style={{ fontSize: 10, color: 'var(--muted)', lineHeight: 1.5 }}>{f.desc}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <H>How a Switch Learns: The MAC Address Table</H>
-      <P>A switch starts life with an empty MAC address table. When it first receives a frame, it reads the <Hl>source MAC address</Hl> and records it against the port the frame arrived on. This is called <em>learning</em>. When a frame arrives with an unknown destination MAC, the switch <em>floods</em> it out all ports except the one it arrived on — just like a hub. But once the destination device replies, its source MAC gets learned, and all future frames to it are forwarded only to its specific port.</P>
-
-      <P>The MAC table has a limited size — typically 8,000–128,000 entries on enterprise switches. This is why MAC flooding attacks work: an attacker sends thousands of frames with random fake source MACs, filling the CAM table (Content Addressable Memory). The switch cannot learn new entries and starts flooding all traffic — turning the switch into a hub and making all traffic visible to the attacker.</P>
-
-      <H>ARP: Bridging Layer 3 to Layer 2</H>
-      <P>ARP (Address Resolution Protocol) is the critical glue between IP addressing (Layer 3) and MAC addressing (Layer 2). When your laptop needs to send a packet to the default gateway (say, 192.168.1.1), it knows the IP but not the MAC. ARP sends a broadcast: <em>&quot;Who has 192.168.1.1? Tell 192.168.1.100.&quot;</em> The router responds with its MAC. Your laptop caches this mapping and uses it for all subsequent frames to the router.</P>
-
-      <ProTip>Run <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '1px 5px', borderRadius: 4 }}>arp -n</code> or <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '1px 5px', borderRadius: 4 }}>ip neigh show</code> on any Linux/macOS machine to see the current ARP cache. Every IP that your machine has recently communicated with on the local subnet will be there, with its MAC address. ARP cache poisoning attacks work by sending gratuitous ARP replies that replace legitimate entries with the attacker&apos;s MAC — all traffic intended for the gateway then flows through the attacker&apos;s machine.</ProTip>
-
-      <HR />
-
-      {/* ── PART 06 ── */}
-      <Part n="06" title="Layer 3 — Network: IP Addresses and Routing" />
-
-      <P>Layer 3 solves the problem Layer 2 cannot: delivering data between <Hl>different networks</Hl>. Layer 2 only works within one broadcast domain — your switch can forward frames to any MAC on the local LAN, but it has no way to send frames to a server in another city. Layer 3 introduces IP addressing and routing: a globally unique address space and a hop-by-hop forwarding mechanism that can span arbitrary network boundaries.</P>
-
-      <H>The IP Packet Header</H>
-
-      <div style={{ margin: '16px 0 28px', overflowX: 'auto' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, border: '1px solid var(--border)', borderRadius: 8, padding: 8, background: 'var(--surface)' }}>
-          {[
-            { field: 'Version', size: '4 bits', desc: '4 for IPv4', color: '#06b6d4' },
-            { field: 'IHL', size: '4 bits', desc: 'Header length in 32-bit words (min 5 = 20 bytes)', color: '#06b6d4' },
-            { field: 'DSCP/ECN', size: '8 bits', desc: 'QoS marking + congestion signal', color: '#8b5cf6' },
-            { field: 'Total Length', size: '16 bits', desc: 'Entire packet including header (max 65535B)', color: '#06b6d4' },
-            { field: 'ID', size: '16 bits', desc: 'Identifies fragments of the same packet', color: '#f59e0b' },
-            { field: 'Flags/Offset', size: '16 bits', desc: 'DF (Don\'t Fragment), MF (More Fragments), fragment offset', color: '#f59e0b' },
-            { field: 'TTL', size: '8 bits', desc: 'Decremented by each router. Packet discarded at 0. Traceroute exploits this.', color: '#ef4444' },
-            { field: 'Protocol', size: '8 bits', desc: '6=TCP, 17=UDP, 1=ICMP, 89=OSPF', color: '#10b981' },
-            { field: 'Checksum', size: '16 bits', desc: 'Header-only checksum. Recalculated at each router.', color: '#374151' },
-            { field: 'Source IP', size: '32 bits', desc: 'Sender\'s IP address (4 octets)', color: '#10b981' },
-            { field: 'Dest IP', size: '32 bits', desc: 'Destination\'s IP address', color: '#10b981' },
-            { field: 'Options', size: '0–40 bytes', desc: 'Rarely used. Record Route, Strict Source Route, timestamps.', color: '#4b5563' },
-          ].map((f, i) => (
-            <div key={i} style={{ border: `1px solid ${f.color}30`, borderRadius: 6, padding: '6px 10px', background: `${f.color}08` }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: f.color, fontFamily: 'var(--font-mono)' }}>{f.field}</div>
-              <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>{f.size}</div>
-              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4, lineHeight: 1.4 }}>{f.desc}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <H>How Routing Works: Longest Prefix Match</H>
-      <P>Every router maintains a routing table — a database of network prefixes and their next hops. When a packet arrives, the router looks up the destination IP in its routing table and uses <Hl>longest prefix match</Hl>: the most specific matching route wins.</P>
-
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 16px', margin: '12px 0 24px', lineHeight: 2 }}>
-        <div style={{ color: 'var(--muted)', marginBottom: 6 }}># Example routing table</div>
-        <div><span style={{ color: '#06b6d4' }}>10.0.0.0/8</span>       <span style={{ color: 'var(--muted)' }}>via</span> <span style={{ color: '#10b981' }}>192.168.1.1</span>  <span style={{ color: 'var(--muted)' }}>(prefix length 8)</span></div>
-        <div><span style={{ color: '#06b6d4' }}>10.5.0.0/16</span>      <span style={{ color: 'var(--muted)' }}>via</span> <span style={{ color: '#f97316' }}>10.0.0.5</span>    <span style={{ color: 'var(--muted)' }}>(prefix length 16 — more specific)</span></div>
-        <div><span style={{ color: '#06b6d4' }}>10.5.3.0/24</span>      <span style={{ color: 'var(--muted)' }}>via</span> <span style={{ color: '#8b5cf6' }}>10.5.0.1</span>    <span style={{ color: 'var(--muted)' }}>(prefix length 24 — most specific)</span></div>
-        <div><span style={{ color: '#06b6d4' }}>0.0.0.0/0</span>        <span style={{ color: 'var(--muted)' }}>via</span> <span style={{ color: '#ef4444' }}>203.0.113.1</span>  <span style={{ color: 'var(--muted)' }}>(default route — catches everything)</span></div>
-        <div style={{ color: 'var(--muted)', marginTop: 8 }}># Packet to 10.5.3.44 matches all 4, but uses /24 (most specific)</div>
-        <div style={{ color: 'var(--muted)' }}># Packet to 10.99.1.1 matches /8 only → forwarded via 192.168.1.1</div>
-        <div style={{ color: 'var(--muted)' }}># Packet to 8.8.8.8 matches only default route → forwarded to ISP</div>
-      </div>
-
-      <P>This longest-prefix-match algorithm runs in hardware on modern routers using TCAMs (Ternary Content-Addressable Memory) — specialized chips that can compare a destination IP against all routing table entries simultaneously in a single clock cycle. A Cisco ASR 9000 routes at 400 million packets per second using this mechanism. Without TCAM hardware, a software lookup against a table of 900,000 BGP routes (the current size of the global routing table) would be far too slow.</P>
-
-      <H>TTL: The Expiring Passport</H>
-      <P>The TTL (Time to Live) field in the IP header is set by the sender (typically 64 or 128) and decremented by 1 at every router hop. When it hits 0, the router discards the packet and sends an ICMP &quot;Time Exceeded&quot; message back to the sender. This prevents packets from looping forever on misconfigured networks.</P>
-      <P><Hl>Traceroute exploits TTL deliberately</Hl>: it sends packets with TTL=1, 2, 3, 4... The router at hop 1 decrements to 0 and sends back an ICMP Time Exceeded — revealing its IP. The router at hop 2 does the same when TTL=2 expires there. Repeat until the destination is reached. You just mapped every router on the path to any destination on the internet.</P>
-
-      <HR />
-
-      {/* ── PART 07 ── */}
-      <Part n="07" title="Layer 4 — Transport: TCP vs UDP, Ports and End-to-End Delivery" />
-
-      <P>Layer 3 delivers packets between networks. But it delivers them to machines, not to applications. If your laptop is simultaneously running a browser (port 443), an SSH session (port 22), and a VoIP call (port 5060), Layer 3 alone cannot tell which incoming IP packet belongs to which application. <Hl>Layer 4 solves this with port numbers</Hl> — and adds two radically different delivery guarantees through TCP and UDP.</P>
-
-      <H>The Socket: The Real Unit of Network Communication</H>
-      <P>A socket is the combination of IP address + protocol + port number. The <Hl>4-tuple</Hl> (source IP : source port, destination IP : destination port) uniquely identifies every active network connection on earth. When your browser opens a TCP connection to GitHub at 140.82.114.4:443, the OS assigns an ephemeral source port (say, 54231). The 4-tuple becomes {'{'}10.0.1.5:54231 ↔ 140.82.114.4:443{'}'} and is unique — no other connection in the world has this exact 4-tuple right now.</P>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, margin: '20px 0 28px' }}>
-        <div style={{ border: '1px solid #f97316' + '40', borderRadius: 10, padding: '16px 18px', background: '#f97316' + '08' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: '#f97316', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 10px' }}>TCP — Transmission Control Protocol</p>
-          <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.9, margin: 0, paddingLeft: 18 }}>
-            <li>Connection-oriented (3-way handshake)</li>
-            <li>Guaranteed delivery (ACKs, retransmission)</li>
-            <li>Ordered delivery (sequence numbers)</li>
-            <li>Flow control (window size)</li>
-            <li>Congestion control (CUBIC, BBR)</li>
-            <li>20–60 byte header overhead</li>
-            <li>Use for: HTTP, HTTPS, SSH, SMTP, FTP</li>
-          </ul>
-        </div>
-        <div style={{ border: '1px solid #06b6d4' + '40', borderRadius: 10, padding: '16px 18px', background: '#06b6d4' + '08' }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: '#06b6d4', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 10px' }}>UDP — User Datagram Protocol</p>
-          <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.9, margin: 0, paddingLeft: 18 }}>
-            <li>Connectionless (no handshake)</li>
-            <li>No delivery guarantee (fire and forget)</li>
-            <li>No ordering guarantee</li>
-            <li>No flow control or congestion control</li>
-            <li>8-byte header only</li>
-            <li>Use for: DNS, DHCP, VoIP, gaming, QUIC, NTP</li>
-          </ul>
-        </div>
-      </div>
-
-      <H>The 3-Way Handshake</H>
-      <P>Every TCP connection starts with a 3-way handshake — three packets that establish synchronized sequence numbers before any data flows:</P>
-
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 16px', margin: '12px 0 24px', lineHeight: 2.1 }}>
-        <div><span style={{ color: '#10b981' }}>Client</span> → <span style={{ color: '#3b82f6' }}>Server</span>:  <span style={{ color: '#f97316' }}>SYN</span>  seq=1000, &quot;I want to connect, my sequence starts at 1000&quot;</div>
-        <div><span style={{ color: '#3b82f6' }}>Server</span> → <span style={{ color: '#10b981' }}>Client</span>:  <span style={{ color: '#f97316' }}>SYN-ACK</span>  seq=5000, ack=1001, &quot;OK, my sequence starts at 5000, received your 1000&quot;</div>
-        <div><span style={{ color: '#10b981' }}>Client</span> → <span style={{ color: '#3b82f6' }}>Server</span>:  <span style={{ color: '#f97316' }}>ACK</span>  ack=5001, &quot;Received your 5000. Connection established.&quot;</div>
-        <div style={{ color: 'var(--muted)', marginTop: 8 }}># Now data can flow in both directions</div>
-        <div style={{ color: 'var(--muted)' }}># SYN flood attack: send millions of SYNs, never respond to SYN-ACKs</div>
-        <div style={{ color: 'var(--muted)' }}># Server exhausts its half-open connection table → legitimate connections refused</div>
-      </div>
-
-      <HR />
-
-      {/* ── PART 08 ── */}
-      <Part n="08" title="Layers 5, 6, 7 — Session, Presentation, Application" />
-
-      <P>The upper three OSI layers are often called the &quot;upper layers&quot; and are where most application-level work happens. In the TCP/IP model, they are collapsed into a single &quot;Application layer,&quot; but the OSI distinctions remain conceptually useful — especially for understanding where security mechanisms live.</P>
-
-      <H>Layer 5 — Session: Who Speaks When</H>
-      <P>The Session layer manages the <Hl>dialog</Hl> between two applications — establishing, maintaining, synchronizing, and terminating sessions. In modern applications, session management is handled by the application itself (HTTP sessions via cookies, database connection pools, WebSocket connections), but the OSI model gives us vocabulary to describe these mechanisms.</P>
-      <P>The most visible Layer 5 protocol in the US enterprise is <Hl>SMB (Server Message Block)</Hl> — the Windows file sharing protocol. SMB sessions are established at Layer 5, persist while files are being read/written, and terminate cleanly. When WannaCry ransomware propagated in 2017, it exploited a buffer overflow in the SMB protocol&apos;s session establishment code — a Layer 5 vulnerability with Layer 1–3 propagation speed.</P>
-
-      <H>Layer 6 — Presentation: Speaking the Same Language</H>
-      <P>The Presentation layer handles <Hl>data format translation and encryption</Hl>. Its most important modern role is TLS/SSL — the protocol that encrypts HTTPS connections. When your browser connects to any HTTPS site, TLS operates at Layer 6: negotiating cipher suites, exchanging certificates, deriving session keys, and encrypting/decrypting all application data.</P>
-      <P>Other Layer 6 concerns: character encoding (UTF-8 vs UTF-16), image/video compression (JPEG, H.264), serialization formats (JSON, Protocol Buffers, MessagePack). When a Python server serializes a response as JSON and a JavaScript client deserializes it, that encoding/decoding is Layer 6 functionality.</P>
-
-      <H>Layer 7 — Application: Where Your Code Lives</H>
-      <P>The Application layer is the interface between the network and the application. It does not mean your application itself — it means the network-facing protocols your application uses. HTTP, DNS, SMTP, SSH, FTP, SNMP, NTP — all of these are Layer 7 protocols.</P>
-      <P>Layer 7 is where most modern security work happens. <Hl>Layer 7 firewalls</Hl> (NGFW — Next-Generation Firewalls) can inspect HTTP request bodies, block SQL injection attempts in web traffic, terminate TLS and inspect decrypted content, and apply application-specific policies. A Palo Alto Networks NGFW at a US Fortune 500 company typically processes 5–20 Gbps of Layer 7 inspection traffic continuously.</P>
-
-      <HR />
-
-      {/* ── PART 09 ── */}
-      <Part n="09" title="A Day at Palo Alto Networks TAC — The OSI Troubleshooting Ladder" />
-
-      <P>You are a <Hl>Palo Alto Networks NGFW Support Engineer</Hl>. A customer at a large US investment bank (1,200 employees, 8 Gbps firewall throughput) has opened a critical ticket: traders cannot reach the Bloomberg Terminal over HTTPS for the past 23 minutes. Bloomberg Terminal connectivity is directly tied to trading operations. Every minute of outage has regulatory and financial implications.</P>
-
-      <TimeBlock time="09:03 AM" label="Ticket Opened — Start at Layer 1">
-        Your first action is always the physical layer. Are the firewall&apos;s uplink interfaces showing link? The customer confirms: all interfaces show green. Optical power levels are normal on the fiber uplinks. No physical errors in the interface counters. Layer 1 is healthy.
-
-        Layer 1 ruled out. Move up.
-      </TimeBlock>
-
-      <TimeBlock time="09:06 AM" label="Layer 2 Check — Switch and MAC Table">
-        You ask the customer to check the switch connected to the firewall&apos;s external interface. Are there any MAC address table flaps? Any STP topology changes in the last 30 minutes?
-
-        The customer&apos;s network admin pulls the switch logs: 09:01 AM — STP topology change event on the distribution switch. A spanning tree reconvergence happened 2 minutes before the outage. During STP reconvergence, the switch briefly flushes its MAC table and floods traffic — this can disrupt established connections.
-
-        But wait — Bloomberg Terminal connections are HTTPS (TCP). A brief Layer 2 flap would cause a short interruption, not a persistent 23-minute outage. STP reconvergence takes 30–50 seconds maximum with rapid STP. Something else is broken too.
-
-        Layer 2 partially implicated (caused the initial disruption) but not the root cause of the ongoing outage. Move up.
-      </TimeBlock>
-
-      <TimeBlock time="09:11 AM" label="Layer 3 Check — Routing and Connectivity">
-        You ask the customer to ping Bloomberg&apos;s IP addresses (169.137.0.0/16 — Bloomberg&apos;s public range) from the firewall&apos;s CLI. Pings succeed with normal latency (12ms to NY Bloomberg PoP — the bank is in Manhattan). The routing table shows the correct default route pointing to the ISP.
-
-        Layer 3 is healthy. IP-level connectivity exists. Move up.
-      </TimeBlock>
-
-      <TimeBlock time="09:14 AM" label="Layer 4 Check — TCP Connection State">
-        Now you look at TCP. You ask the customer to run a test TCP connection to Bloomberg Terminal&apos;s port 443 from a trader&apos;s workstation using <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '1px 5px', borderRadius: 4 }}>telnet 169.137.x.x 443</code>. It connects immediately. TCP 3-way handshake succeeds. Layer 4 is healthy.
-
-        Move up to Layer 5/6.
-      </TimeBlock>
-
-      <TimeBlock time="09:17 AM" label="Layer 6 Check — TLS Negotiation">
-        TCP connects but the application fails. The problem is in Layer 5/6 (TLS). You run an SSL test:
-
-        <code style={{ display: 'block', fontFamily: 'var(--font-mono)', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: '10px 14px', margin: '10px 0', fontSize: 12, color: N }}>openssl s_client -connect 169.137.x.x:443 -tls1_2</code>
-
-        Result: TLS negotiation fails with alert code 40 (handshake_failure). The firewall is receiving a TLS ClientHello but sending back a fatal alert instead of a ServerHello. This is a Layer 6 issue.
-
-        You pull the Palo Alto firewall&apos;s SSL inspection configuration. There it is: the decryption policy for HTTPS traffic was updated at 08:58 AM — five minutes before the outage started. The STP flap at 09:01 interrupted existing connections. When traders tried to reconnect, the new decryption policy was in effect.
-
-        The updated decryption profile has a certificate pinning bypass disabled — Bloomberg Terminal uses certificate pinning and expects a specific certificate. The firewall&apos;s SSL inspection replaces the Bloomberg certificate with the firewall&apos;s own CA certificate. Bloomberg&apos;s client-side certificate pinning detects this mismatch and refuses the connection.
-
-        Root cause: SSL inspection policy change broke Bloomberg Terminal&apos;s certificate pinning. The STP flap forced reconnection which exposed the already-broken policy.
-
-        Fix: add Bloomberg Terminal&apos;s IP ranges (169.137.0.0/16) to the SSL inspection exclusion list. All Bloomberg traffic bypasses decryption — the firewall forwards it transparently. Traders have connectivity restored within 90 seconds of the policy change.
-
-        Total diagnosis: 14 minutes. OSI-layer-by-layer elimination was the entire methodology.
-      </TimeBlock>
-
-      <HR />
-
-      {/* ── PART 10 ── */}
-      <Part n="10" title="Interview Questions — OSI Edition" />
-
-      <IQ q="What is the OSI model and why does it matter if TCP/IP won?">
-        <P>The OSI model is a 7-layer framework for understanding and designing network communication, published by ISO in 1984. Its value is not as a protocol specification (TCP/IP protocols don&apos;t implement it precisely) but as a universal diagnostic and design vocabulary.</P>
-        <P>TCP/IP won the protocol war, but OSI terminology won the language war. When an engineer says &quot;that&apos;s a Layer 2 problem&quot; — they mean a MAC addressing or frame-forwarding issue. &quot;Layer 7 load balancer&quot; means it makes routing decisions based on HTTP content. &quot;Layer 3 switch&quot; means a switch that can route IP packets. This vocabulary is consistent across Cisco, Juniper, Palo Alto, AWS, and every other vendor — because they all use OSI layer numbers. You cannot have a networking conversation with senior engineers without this framework.</P>
-      </IQ>
-
-      <IQ q="What happens at each layer when you type google.com in a browser?">
-        <P>Layer 7: Browser generates an HTTP GET request. DNS resolves google.com to 142.250.80.46 (another UDP query at L7, also going through all layers). Browser initiates a TCP connection to 142.250.80.46:443.</P>
-        <P>Layer 6: TLS negotiation establishes an encrypted channel. Certificate chain is validated. Symmetric session keys are derived.</P>
-        <P>Layer 5: The HTTPS session is maintained for the duration of the connection (HTTP/1.1 keep-alive or HTTP/2 multiplexing).</P>
-        <P>Layer 4: TCP SYN/SYN-ACK/ACK handshake. Sequence numbers synchronized. Source port ~52000 (ephemeral), destination port 443.</P>
-        <P>Layer 3: IP packet created with source 192.168.1.100 (your laptop) and destination 142.250.80.46 (Google). TTL set to 64. Routed via default gateway.</P>
-        <P>Layer 2: ARP resolves default gateway IP to its MAC. Ethernet frame created with destination MAC = gateway MAC. Frame sent to the switch.</P>
-        <P>Layer 1: NIC encodes the frame as electrical signals (Cat6A) or light pulses (fiber to ISP) and transmits to the next hop.</P>
-      </IQ>
-
-      <IQ q="What layer does a switch operate at, and what about a router?">
-        <P>A traditional (unmanaged) switch operates at <strong>Layer 2</strong>: it reads Ethernet frame headers (destination MAC), looks up the destination MAC in its MAC address table, and forwards the frame to the appropriate port. It makes no decisions based on IP addresses.</P>
-        <P>A router operates at <strong>Layer 3</strong>: it reads IP packet headers (destination IP), looks up the destination in its routing table using longest-prefix-match, and forwards the packet to the next hop. It strips and replaces the Layer 2 frame at each hop.</P>
-        <P>A <em>Layer 3 switch</em> (also called a multilayer switch) does both: it routes IP traffic between VLANs at wire speed using ASICs, and switches Ethernet frames within each VLAN. A Cisco Catalyst 9300 is a Layer 3 switch — most enterprise core and distribution switches are. They are functionally equivalent to routers for most campus network use cases but faster at hardware-accelerated forwarding.</P>
-      </IQ>
-
-      <IQ q="A user reports 'the website is slow.' Where in the OSI model do you start troubleshooting?">
-        <P>Start at Layer 1 and work up systematically — but check each layer&apos;s specific failure signature first to avoid wasting time.</P>
-        <P>Fast triage: ping the server (L3 connectivity, also gives RTT). If ping fails, you have a Layer 1–3 issue. If ping succeeds but the website fails, you have a Layer 4–7 issue. If ping times are high (say, 200ms when you expect 10ms), you have a Layer 3 routing problem (suboptimal path) or a Layer 1/2 physical issue causing retransmissions.</P>
-        <P>For &quot;slow website&quot; with working ping: use traceroute to find which hop adds latency (L3). Use curl -v to see where in the HTTP conversation time is spent (L7). Check TLS negotiation time separately (L6). Use netstat to see if TCP connections are TIME_WAIT accumulating (L4). Check server logs for slow query times (L7 application). The OSI model is the roadmap — symptoms tell you which layer to examine first.</P>
-      </IQ>
-
-      <IQ q="What is encapsulation and why does it enable protocol independence?">
-        <P>Encapsulation is the process where each OSI layer adds its own header (and sometimes trailer) to the data it receives from the layer above, before passing it to the layer below. Each layer treats the layer above&apos;s output as opaque payload — it adds its header and does not modify the content inside.</P>
-        <P>This enables protocol independence because each layer can be changed without affecting layers above or below. IPv4 can be replaced by IPv6 at Layer 3 without changing the TCP protocol at Layer 4 or HTTP at Layer 7. Ethernet can be replaced by Wi-Fi at Layer 2 without changing IP at Layer 3. This modularity is why you can run HTTP/3 over QUIC/UDP while HTTP/2 runs over TCP/TLS — both HTTP versions work over any Layer 4 protocol because HTTP (Layer 7) does not know or care what is below it. TLS (Layer 6) does not know if it is over TCP or QUIC. This layered abstraction is the foundational design principle of the internet.</P>
-      </IQ>
-
-      <IQ q="What is a socket and what is a 4-tuple? Why does it uniquely identify every active connection on earth?">
-        <P>A socket is an OS abstraction representing one end of a network connection — it is the combination of an IP address, a transport protocol, and a port number. When a process wants to send or receive data over a network, it opens a socket, which the OS binds to a specific (IP, protocol, port) triple.</P>
-        <P>The <strong style={{ color: N }}>4-tuple</strong> — (source IP, source port, destination IP, destination port) — uniquely identifies every active TCP connection in the world. Here is why: your home IP might be 73.45.22.198. Google&apos;s IP is 142.250.80.46. When your browser connects to Google on port 443, the OS assigns an ephemeral source port, say 54712. The 4-tuple is (73.45.22.198 : 54712 ↔ 142.250.80.46 : 443). Your phone simultaneously connected to the same Google server gets a different ephemeral port (e.g., 54713), creating a different 4-tuple. No two active connections share the same 4-tuple globally — this is how multiplexing works at Layer 4.</P>
-        <P>When you open 20 browser tabs all fetching from the same server, you have 20 different 4-tuples (same source IP, 20 different source ports, same destination IP, same destination port 443). The OS kernel uses the 4-tuple to demultiplex incoming packets to the correct socket — and thus to the correct browser tab.</P>
-      </IQ>
-
-      <IQ q="Explain the difference between connection-oriented and connectionless protocols with examples.">
-        <P>A <strong style={{ color: N }}>connection-oriented protocol</strong> establishes a logical connection before data exchange, maintains state throughout the communication, and formally terminates the connection at the end. TCP is the primary example. Before any data flows, the 3-way handshake establishes synchronized sequence numbers and confirms both endpoints are reachable. During data transfer, every packet is acknowledged, lost packets are retransmitted, and flow control prevents buffer overflow. Connection teardown uses a 4-way FIN/ACK sequence. The state machine defines which packets are valid at each stage — an ACK received in CLOSED state is an error.</P>
-        <P>A <strong style={{ color: N }}>connectionless protocol</strong> sends data without prior handshake, without maintained state, and without formal termination. UDP is the primary example. Each UDP datagram is independent — the sender fires it and has no knowledge of whether it arrived. The receiver has no knowledge of the sender&apos;s state. There is no retransmission, no ordering, no flow control. What connectionless buys you: no handshake latency (critical for DNS, which needs a single 20ms query-response, not a 3-way handshake first), no retransmission overhead (real-time audio is better with a gap than with a delayed retransmission that arrives too late to play), and lower CPU cost.</P>
-        <P>Real-world selection guide: use TCP when data integrity matters and latency has headroom (HTTP, SSH, database queries). Use UDP when latency is critical and the application can tolerate or handle loss itself (DNS, DHCP, VoIP/RTP, game state updates, video streaming with FEC).</P>
-      </IQ>
-
-      <IQ q="What is protocol overhead and why does it matter at Netflix scale?">
-        <P>Protocol overhead is the bytes added by protocol headers at each layer, reducing the fraction of each transmission used for actual data (payload efficiency). For a standard Ethernet frame carrying TCP/IP/HTTPS:</P>
-        <ul style={{ margin: '8px 0 12px', paddingLeft: 24, lineHeight: 1.9, fontSize: 14 }}>
-          <li>Ethernet header: 14 bytes (+ 8 bytes preamble/SFD, + 4 bytes FCS = 26 bytes total L2 overhead)</li>
-          <li>IPv4 header: 20 bytes minimum</li>
-          <li>TCP header: 20 bytes minimum (up to 60 bytes with options)</li>
-          <li>TLS record header: 5 bytes</li>
-          <li>Total overhead: ~79 bytes per 1,460 bytes of payload = 5.4% overhead</li>
-        </ul>
-        <P>At Netflix scale (700 Tbps peak egress), 5.4% overhead is 37.8 Tbps of protocol headers. That is bandwidth Netflix is paying CDN transit costs on but cannot bill to customers. This is why Netflix invested in QUIC (HTTP/3): QUIC over UDP has less overhead than TCP + TLS, and its 0-RTT resumption eliminates reconnection overhead for interrupted streams. Each 1% reduction in protocol overhead at Netflix&apos;s scale saves tens of millions in annual bandwidth costs.</P>
-      </IQ>
-
-      <IQ q="What is the difference between Layer 4 load balancing and Layer 7 load balancing?">
-        <P>A <strong style={{ color: N }}>Layer 4 load balancer</strong> makes routing decisions based on transport-layer information — source/destination IP and port. It sees the TCP 4-tuple but cannot inspect the content of the TCP stream. It balances connections at the TCP level: new connection from 10.0.0.5:54321 to port 443 → forward to backend server 192.168.1.10. This is extremely fast (can be done in hardware at line rate) but cannot distinguish between different types of requests in the same TCP connection or route based on URL, cookie, or HTTP header.</P>
-        <P>A <strong style={{ color: N }}>Layer 7 load balancer</strong> terminates the TCP (and TLS) connection, reads the application-layer payload, and makes routing decisions based on content. An HTTP request to /api/users goes to the API farm; /static/images goes to the CDN origin; /checkout goes to the payment-processing backend — all on the same TCP port 443, routed based on URL path. Layer 7 also enables sticky sessions (route by session cookie), blue-green deployments (route 10% of traffic to the new version), canary releases, and A/B testing. The cost: significantly higher CPU per connection because the load balancer must maintain two TCP connections (client↔LB, LB↔backend) and fully parse each HTTP request.</P>
-        <P>AWS Elastic Load Balancer offers both: CLB/NLB (Network Load Balancer) is Layer 4 at millions of requests per second. ALB (Application Load Balancer) is Layer 7 with URL-based routing, header manipulation, and WebSocket support. Nginx and HAProxy are the dominant open-source Layer 7 load balancers.</P>
-      </IQ>
-
-      <IQ q="An application team says 'we can't connect to the database.' Walk me through your OSI-layer diagnosis.">
-        <P>Systematic OSI-layer-by-layer elimination, fastest checks first:</P>
-        <ul style={{ margin: '8px 0 12px', paddingLeft: 24, lineHeight: 1.9, fontSize: 14 }}>
-          <li><strong style={{ color: '#ef4444' }}>L1/L2 (Physical/Data Link)</strong>: Is the application server&apos;s network interface up? (<code style={{ fontFamily: 'var(--font-mono)' }}>ip link show</code> / <code style={{ fontFamily: 'var(--font-mono)' }}>ethtool eth0</code>). Any interface errors? If the NIC shows &ldquo;DOWN&rdquo; or 100% input errors, stop here.</li>
-          <li><strong style={{ color: '#06b6d4' }}>L3 (Network)</strong>: Can we ping the database IP? (<code style={{ fontFamily: 'var(--font-mono)' }}>ping 10.0.0.50</code>). If ping fails but interface is up, it&apos;s a routing issue — check <code style={{ fontFamily: 'var(--font-mono)' }}>ip route show</code> and whether the database subnet has a route. Check security groups (AWS) or firewall rules.</li>
-          <li><strong style={{ color: '#f97316' }}>L4 (Transport)</strong>: Can we establish a TCP connection to the database port? (<code style={{ fontFamily: 'var(--font-mono)' }}>telnet 10.0.0.50 5432</code> or <code style={{ fontFamily: 'var(--font-mono)' }}>nc -zv 10.0.0.50 5432</code>). If this fails but ping works, the port is blocked — firewall/ACL issue or the database process is not listening.</li>
-          <li><strong style={{ color: N }}>L7 (Application)</strong>: If TCP connects but the application still fails, it&apos;s application-layer. Check TLS certificate validity, database credentials, max connection limits, or application-specific error logs. The database might be rejecting the connection due to auth failure, max_connections exceeded, or schema mismatch.</li>
-        </ul>
-        <P>The question to ask at each layer: &ldquo;Does this layer work in isolation?&rdquo; Start with the fastest check (L3 ping, 5 seconds) and work up. Do not start with application logs if you have not confirmed L3 connectivity — you are wasting time reading application errors that may be symptoms of a network issue, not causes.</P>
-      </IQ>
-
-      <HR />
-
-      <Part n="11" title="More Common OSI Mistakes" />
-
-      <Err title="Placing TLS at Layer 7 instead of Layer 6">
-        In conversations about security, engineers sometimes say &ldquo;HTTPS encrypts at the application layer.&rdquo; Precisely, TLS operates at OSI Layer 6 (Presentation) — it encrypts data before it reaches Layer 7 (Application). HTTP is Layer 7. TLS is Layer 6. HTTPS is HTTP (L7) transported over TLS (L6). The distinction matters when you are doing SSL inspection (Layer 6 interception) or debugging TLS handshake failures — you are not debugging the HTTP application, you are debugging the cryptographic presentation layer.
-      </Err>
-
-      <Err title="Thinking 'Layer 3 switch' is just a marketing term">
-        A Layer 3 switch (multilayer switch) genuinely performs IP routing at hardware ASIC speed, not software. A traditional router uses a general-purpose CPU to make routing decisions in software — fast, but not line-rate for high packet-per-second workloads. A Layer 3 switch uses purpose-built TCAM hardware that makes routing decisions in a single clock cycle. A Cisco Catalyst 9500 can route 480 million packets per second at line rate. A software router doing the same at 480 Mpps would require 48+ CPU cores. For distribution and core switching in enterprise networks, L3 switches are the norm — not the exception.
-      </Err>
-
-      <Err title="Confusing 'firewall' with 'Layer 4 firewall'">
-        The word &ldquo;firewall&rdquo; without qualification is ambiguous — it could mean a stateless ACL (filters on IP/port, Layer 3–4), a stateful firewall (tracks TCP connections, Layer 4), or an NGFW/Layer 7 firewall (inspects application content). In an interview, always clarify which type: &ldquo;Are you asking about stateless packet filtering, stateful inspection, or application-layer inspection?&rdquo; A stateful firewall blocking an inbound TCP connection does so by tracking the TCP 3-way handshake — it allows return traffic only on established connections it has seen the SYN for. A stateless ACL blocking port 443 inbound would also block return traffic on port 443 unless explicitly permitted.
-      </Err>
-
-      <HR />
-
-      <Part n="12" title="OSI vs TCP/IP — The Model That Ships vs The Model That Explains" />
-
-      <P>The TCP/IP model (also called the Department of Defense or DoD model) collapses OSI&apos;s 7 layers into 4:</P>
-
-      <div style={{ margin: '16px 0 28px', overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-          <thead>
-            <tr>
-              {['OSI Layers', 'TCP/IP Layer', 'Protocols'].map((h, i) => (
-                <th key={i} style={{ padding: '10px 14px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: N, letterSpacing: '.06em', border: '1px solid var(--border)', background: 'var(--surface)' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['L7 Application + L6 Presentation + L5 Session', 'Application', 'HTTP, DNS, SMTP, SSH, FTP, TLS, RPC'],
-              ['L4 Transport', 'Transport', 'TCP, UDP, SCTP'],
-              ['L3 Network', 'Internet', 'IPv4, IPv6, ICMP, OSPF, BGP'],
-              ['L2 Data Link + L1 Physical', 'Network Access / Link', 'Ethernet, Wi-Fi, PPP, fiber, copper'],
-            ].map((r, i) => (
-              <tr key={i} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
-                {r.map((v, j) => (
-                  <td key={j} style={{ padding: '10px 14px', color: 'var(--muted)', border: '1px solid var(--border)', fontSize: 13 }}>{v}</td>
-                ))}
-              </tr>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
+
+        <div>
+          <p style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 12px' }}>
+            Layer {current.layer} — {current.name} header
+          </p>
+          <div style={{ background: `${current.color}08`, border: `1px solid ${current.color}30`, borderRadius: 10, padding: 14 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: current.color, fontFamily: FONT_MONO, textTransform: 'uppercase', margin: '0 0 10px' }}>{current.header} · {current.size}</p>
+            {current.fields.map((f, i) => (
+              <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
+                <span style={{ color: current.color, flexShrink: 0, fontSize: 12 }}>▸</span>
+                <code style={{ fontSize: 12, color: 'var(--text)', fontFamily: FONT_MONO, lineHeight: 1.6 }}>{f}</code>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <P>For daily networking work, you will use OSI layer numbers (L2, L3, L4, L7) as vocabulary. When you are reading RFCs or writing protocol specifications, you will use TCP/IP model terminology. Both models are describing the same underlying reality from different levels of granularity. Neither is &quot;wrong.&quot;</P>
+      <div style={{ display: 'flex', gap: 10, marginTop: 18, alignItems: 'center' }}>
+        <button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={step === 0}
+          style={{ padding: '9px 20px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: step === 0 ? 'var(--muted)' : 'var(--text)', fontWeight: 700, fontSize: 13, cursor: step === 0 ? 'default' : 'pointer', fontFamily: FONT_MONO }}>
+          ← Back
+        </button>
+        <div style={{ flex: 1, background: 'var(--bg)', borderRadius: 8, height: 6, overflow: 'hidden' }}>
+          <div style={{ width: `${((step + 1) / steps.length) * 100}%`, height: '100%', background: current.color, transition: 'width 0.3s' }} />
+        </div>
+        <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: FONT_MONO, flexShrink: 0 }}>Step {step + 1} / {steps.length}</span>
+        <button onClick={() => setStep(s => Math.min(steps.length - 1, s + 1))} disabled={step === steps.length - 1}
+          style={{ padding: '9px 20px', borderRadius: 8, border: `1px solid ${current.color}`, background: `${current.color}18`, color: current.color, fontWeight: 700, fontSize: 13, cursor: step === steps.length - 1 ? 'default' : 'pointer', fontFamily: FONT_MONO }}>
+          Next →
+        </button>
+      </div>
+    </div>
+  )
+}
 
-      <Err title="Confusing OSI Layers 5 and 6 as separate from 7 in TCP/IP">
-        When someone says &quot;the application layer&quot; in a TCP/IP context, they mean OSI layers 5, 6, AND 7 combined. TLS is &quot;application layer&quot; in TCP/IP terms even though it maps to OSI Layer 6. DNS is &quot;application layer&quot; in TCP/IP terms even though it also involves OSI Layer 7. Do not try to force precise OSI layer mapping onto TCP/IP protocol descriptions — the models are intentionally different abstractions.
+// ─── Interactive 3: OSI Troubleshooting Guide ─────────────────────────────────
+
+const TROUBLE_SCENARIOS = [
+  {
+    problem: "Can't ping anything",
+    layer: 'Layer 1 or 2',
+    color: '#94a3b8',
+    reason: 'No response to any ping points to a physical or data-link issue — no connectivity at all.',
+    steps: [
+      { cmd: 'Check cable / Wi-Fi indicator lights on NIC and switch', what: 'L1: Is there a physical link? No link light = cable fault or wrong port.' },
+      { cmd: 'ip link show   or   ipconfig /all', what: 'L1/L2: Is the NIC up? Does it have a MAC address? "DOWN" state = driver or hardware issue.' },
+      { cmd: 'ping 127.0.0.1 (loopback)', what: 'L3: Can the local IP stack process packets? If this fails, reinstall network drivers.' },
+      { cmd: 'arp -a   or   ip neigh', what: 'L2: Is there an ARP entry for your gateway? No entry = cannot reach the local segment.' },
+    ],
+    cause: 'Unplugged cable, faulty NIC, wrong VLAN, failed switch port, or IP stack corruption.',
+  },
+  {
+    problem: "Can ping IP but not hostname",
+    layer: 'Layer 7 (DNS)',
+    color: '#10b981',
+    reason: 'L1–L3 are working (you can reach IPs). The failure is DNS resolution — an application-layer service.',
+    steps: [
+      { cmd: 'nslookup google.com', what: 'L7: Sends a DNS query. Shows which resolver is used and whether it responds.' },
+      { cmd: 'nslookup google.com 8.8.8.8', what: 'L7: Bypasses your configured resolver. If this works, your DNS server is the problem.' },
+      { cmd: 'cat /etc/resolv.conf   or   ipconfig /all', what: 'L7: What DNS servers are configured? Wrong or unreachable server = no resolution.' },
+      { cmd: 'ping 8.8.8.8', what: 'L3: Confirm external IP reachability. If this works but DNS fails, it is purely a DNS issue.' },
+    ],
+    cause: 'Wrong DNS server configured, DNS server down, firewall blocking UDP/53, split-DNS misconfiguration.',
+  },
+  {
+    problem: "Local network works, no internet",
+    layer: 'Layer 3 (routing)',
+    color: '#3b82f6',
+    reason: 'You can reach local devices (L2 works) but cannot route beyond your local network (L3 default gateway problem).',
+    steps: [
+      { cmd: 'ping 192.168.1.1  (your gateway)', what: 'L3: Can you reach the router itself? If not, L2/L3 local issue.' },
+      { cmd: 'ip route show   or   route print', what: 'L3: Is there a default route (0.0.0.0/0)? Missing default route = no internet.' },
+      { cmd: 'ping 8.8.8.8', what: 'L3: Can you reach a known external IP? Tests routing beyond your gateway.' },
+      { cmd: 'traceroute 8.8.8.8', what: 'L3: Where does the path die? First hop should be your gateway; if packets die there, ISP issue.' },
+    ],
+    cause: 'Missing default gateway, ISP outage, NAT failure on router, gateway IP misconfigured.',
+  },
+  {
+    problem: "Connected but very slow",
+    layer: 'Layer 1, 3, or 4',
+    color: '#f97316',
+    reason: 'Connectivity exists but performance is degraded. Could be physical signal errors, routing congestion, or TCP problems.',
+    steps: [
+      { cmd: 'ping -c 50 8.8.8.8 (check packet loss and jitter)', what: 'L3/L1: High RTT variance or packet loss points to a physical or congestion issue.' },
+      { cmd: 'ethtool eth0  (Linux) or  netsh int tcp show global', what: 'L1: Check for duplex mismatch, speed negotiation errors, or CRC errors on the interface.' },
+      { cmd: 'traceroute 8.8.8.8 or mtr 8.8.8.8', what: 'L3: Find the congested or high-latency hop. Which router is the bottleneck?' },
+      { cmd: 'ss -ti  (show TCP socket internals)', what: 'L4: Check TCP retransmits, window size, RTT. High retransmits = packet loss causing TCP slowdown.' },
+    ],
+    cause: 'Duplex mismatch, ISP congestion, Wi-Fi interference, TCP congestion window collapse, buffer bloat.',
+  },
+  {
+    problem: "App connects but feature broken",
+    layer: 'Layer 7 (Application)',
+    color: '#8b5cf6',
+    reason: 'L1–L4 are fine (basic connectivity works). The failure is in application-layer logic or data format.',
+    steps: [
+      { cmd: 'curl -v https://api.example.com/endpoint', what: 'L7: Full HTTP request/response with headers. Shows status code, redirect chains, response body.' },
+      { cmd: 'openssl s_client -connect host:443', what: 'L6: Is TLS negotiating correctly? Certificate errors, cipher mismatch, or SNI issues.' },
+      { cmd: 'Check browser DevTools → Network tab', what: 'L7: Exact HTTP status codes, request headers sent, response body. Is it a 4xx, 5xx, or a CORS error?' },
+      { cmd: 'Check application logs on the server', what: 'L7: What does the server actually see? Often reveals missing auth tokens, wrong Content-Type, or oversized payloads.' },
+    ],
+    cause: 'API authentication failure, CORS policy, broken JSON payload, TLS certificate mismatch, application bug.',
+  },
+  {
+    problem: "Random disconnections",
+    layer: 'Layer 1, 2, or 4',
+    color: '#ef4444',
+    reason: 'Intermittent loss suggests a physical layer fault, L2 loop or flap, or TCP keepalive/timeout issue.',
+    steps: [
+      { cmd: 'dmesg | grep -i eth  or  journalctl -u NetworkManager', what: 'L1/L2: Kernel logs show "link down" events — cable faults, NIC errors, or power management cycling the NIC.' },
+      { cmd: 'netstat -s | grep retransmit  or  ss -ti', what: 'L4: TCP retransmission counter. Rising fast = regular packet loss causing connections to time out.' },
+      { cmd: 'ping -i 0.2 gateway (sustained ping)', what: 'L3: Watch for intermittent drops. If you see regular timeouts, it is periodic rather than random.' },
+      { cmd: 'ip -s link show eth0', what: 'L2: Check error counters: RX errors, TX errors, dropped frames. Non-zero = hardware or cable fault.' },
+    ],
+    cause: 'Loose cable, failing NIC, spanning tree topology change, DHCP lease expiry, power management on Wi-Fi.',
+  },
+]
+
+function TroubleshootingGuide() {
+  const [selected, setSelected] = useState<number | null>(null)
+  const s = selected !== null ? TROUBLE_SCENARIOS[selected] : null
+
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 4px' }}>Interactive — OSI Troubleshooting Guide</p>
+      <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 18px' }}>Select a symptom to get the OSI-layer diagnosis methodology and exact commands.</p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 8, marginBottom: 20 }}>
+        {TROUBLE_SCENARIOS.map((sc, i) => (
+          <button key={i} onClick={() => setSelected(selected === i ? null : i)}
+            style={{ padding: '10px 14px', borderRadius: 10, textAlign: 'left', border: `1px solid ${selected === i ? sc.color : 'var(--border)'}`, background: selected === i ? `${sc.color}15` : 'var(--bg)', color: selected === i ? sc.color : 'var(--text)', fontWeight: 600, fontSize: 13, cursor: 'pointer', transition: 'all 0.15s', lineHeight: 1.4 }}>
+            {sc.problem}
+          </button>
+        ))}
+      </div>
+
+      {s && (
+        <div style={{ background: 'var(--bg)', border: `1px solid ${s.color}35`, borderRadius: 12, padding: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+            <span style={{ fontSize: 12, fontWeight: 800, color: s.color, fontFamily: FONT_MONO, background: `${s.color}20`, padding: '4px 10px', borderRadius: 6 }}>Start at: {s.layer}</span>
+            <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6 }}>{s.reason}</span>
+          </div>
+
+          <div style={{ marginBottom: 14 }}>
+            {s.steps.map((step, i) => (
+              <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 10, alignItems: 'flex-start' }}>
+                <span style={{ fontSize: 12, fontWeight: 800, color: s.color, background: `${s.color}20`, borderRadius: '50%', width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: FONT_MONO }}>{i + 1}</span>
+                <div>
+                  <code style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, display: 'block', marginBottom: 3 }}>{step.cmd}</code>
+                  <span style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.65 }}>{step.what}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: `${s.color}08`, border: `1px solid ${s.color}25`, borderRadius: 8, padding: '10px 14px' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: s.color, fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.08em' }}>Likely cause: </span>
+            <span style={{ fontSize: 13, color: 'var(--text)' }}>{s.cause}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
+export default function OSIModelPage() {
+  return (
+    <LearnLayout
+      title="The OSI Model — All 7 Layers"
+      description="The universal framework every network engineer uses to reason about problems — from physical cables to application protocols."
+      section="Networking Fundamentals — Module 03"
+      readTime="22–30 min"
+      updatedAt="May 2026"
+    >
+      {/* ── CHAPTER 1 ── */}
+      <Chapter
+        n="01"
+        title="Why Does the OSI Model Exist?"
+        subtitle="Before OSI, networking was a tower of Babel — every vendor's equipment spoke a different language."
+      />
+
+      <StoryBox>
+        It is 1975. IBM mainframes use SNA. DEC minicomputers use DECnet. Xerox uses XNS. A hospital in Delhi buys IBM computers for billing and DEC computers for laboratory equipment. They need the two systems to share patient records. They cannot. IBM and DEC speak completely different networking protocols — different framing, different addressing, different everything. The hospital hires two programmers full-time just to manually re-enter data between the two systems. This was normal. Every organisation with mixed-vendor equipment had the same problem.
+      </StoryBox>
+
+      <Para>
+        The International Organization for Standardization (ISO) started work on a solution in 1977. The goal was radical: define a universal reference model so that <Accent>any vendor's equipment could communicate with any other vendor's equipment</Accent>, as long as both followed the standard. The result, published in 1984 as ISO 7498, was the <Accent>Open Systems Interconnection (OSI) model</Accent>.
+      </Para>
+
+      <Para>
+        The OSI model divides network communication into <Accent>seven distinct layers</Accent>, each with a specific job. A layer only needs to know how to talk to the layers immediately above and below it — not how any other layer works internally. This separation is called <Accent>encapsulation</Accent>, and it is the architectural insight that made the modern internet possible.
+      </Para>
+
+      <WowBox emoji="🧱" title="The Model That Lost the Standards War but Won the Mind War">
+        OSI never actually ran the internet. TCP/IP won the protocol war — it was simpler, already deployed in ARPANET, and free. But OSI won as a <strong>teaching and diagnostic framework</strong>. Every network engineer on earth still uses the 7-layer model to describe problems, design systems, and communicate with colleagues. "Is this a Layer 2 issue or Layer 3?" is a sentence you will say every week of your career.
+      </WowBox>
+
+      <H2>The Core Insight: Layers Talk to Their Peer Layers</H2>
+
+      <Para>
+        When your browser sends an HTTP request to Google, it doesn't think about Ethernet frames or IP packets. It just calls an OS function: "send this data to port 443 at this IP address." The OS handles the rest — wrapping the HTTP data in a TCP segment, wrapping the TCP segment in an IP packet, wrapping the IP packet in an Ethernet frame, and sending the frame down the wire. At Google's server, the process reverses: each layer strips its header and hands the payload up to the next layer, until the HTTP request arrives at Google's web server process — perfectly reconstructed, even though it crossed thousands of miles and dozens of physical links.
+      </Para>
+
+      <Para>
+        This is the OSI model in action. Each layer at the sender communicates <em>logically</em> with the same layer at the receiver. Your HTTP stack talks to Google's HTTP stack. Your TCP stack talks to Google's TCP stack. Your IP stack talks to the internet's routers. But physically, the only layer that actually touches the wire is Layer 1.
+      </Para>
+
+      <Divider />
+
+      {/* ── CHAPTER 2 ── */}
+      <Chapter
+        n="02"
+        title="History — How the 7 Layers Were Decided"
+        subtitle="The committee that took 7 years to agree on 7 layers — and why the number 7 is not arbitrary."
+      />
+
+      <StoryBox>
+        In 1977, ISO formed Study Group 16 — a committee of representatives from IBM, DEC, Honeywell, British Telecom, and national standards bodies from the US, UK, France, Germany, and Japan. Their mandate: define a standard architecture for all computer networking. The first proposal had 6 layers. Then 8. Then 5. Arguments about whether session management deserved its own layer lasted two years. Whether encryption belonged to the presentation layer or the application layer caused international debate. The final 7-layer model was published as ISO/IEC 7498-1 in 1984 — seven years after work began.
+      </StoryBox>
+
+      <Para>
+        The <Accent>7 layers were not derived from first principles</Accent> — they were a negotiated compromise between different vendors' existing systems. IBM's SNA had 7 layers. DEC's DECnet had 5. The OSI committee found 7 to be the minimum that could accommodate everyone's architecture without being so granular as to be impractical.
+      </Para>
+
+      <H2>The Mnemonic — How to Remember All 7 Layers</H2>
+
+      <Para>
+        Network engineers have used mnemonics for 40 years to memorise the layer order. The two most common:
+      </Para>
+
+      <CodeBlock title="OSI layer order mnemonics">
+        {`Top-down (L7 → L1):
+  "All People Seem To Need Data Processing"
+  Application · Presentation · Session · Transport · Network · Data Link · Physical
+
+Bottom-up (L1 → L7):
+  "Please Do Not Throw Sausage Pizza Away"
+  Physical · Data Link · Network · Transport · Session · Presentation · Application`}
+      </CodeBlock>
+
+      <Para>
+        In practice, engineers refer to layers by number far more than by name. "This is a Layer 3 issue" is clearer and faster than "this is a Network layer issue." Learn both the names and numbers — you will use both in different contexts.
+      </Para>
+
+      <WowBox emoji="📅" title="OSI vs TCP/IP — The Protocol That Actually Runs the Internet">
+        TCP/IP was standardised in 1982 and already ran ARPANET. When OSI was finally published in 1984, TCP/IP had a 2-year head start in real deployments. The US Department of Defense mandated TCP/IP for all military networks in 1983. OSI-based protocols (like X.400 email and X.500 directory services) were deployed mainly in European telecommunications — and were almost completely replaced by TCP/IP by 1995. The OSI <em>model</em> survived. The OSI <em>protocols</em> did not.
+      </WowBox>
+
+      <Divider />
+
+      {/* ── CHAPTER 3 ── */}
+      <Chapter
+        n="03"
+        title="All 7 Layers at a Glance"
+        subtitle="One click to understand any layer — protocols, devices, threats, and diagnostic commands."
+      />
+
+      <Para>
+        Before diving deep into each layer, get the full picture. The stack below is fully interactive — click any layer to see exactly what lives there, what can break there, and how to diagnose it.
+      </Para>
+
+      <OSIStackExplorer />
+
+      <CodeBlock title="OSI layers — quick reference">
+        {`Layer  Name           PDU       Protocols              Devices
+─────  ─────────────  ────────  ─────────────────────  ─────────────────────────────
+  7    Application    Data      HTTP, DNS, SSH, SMTP   Hosts, L7 load balancers
+  6    Presentation   Data      TLS, JPEG, gzip, UTF-8 Gateways, proxies
+  5    Session        Data      NetBIOS, RPC, NFS      App servers, API gateways
+  4    Transport      Segment   TCP, UDP, SCTP          Stateful FW, L4 load balancers
+  3    Network        Packet    IPv4, IPv6, ICMP, OSPF Routers, L3 switches
+  2    Data Link      Frame     Ethernet, ARP, 802.1Q  Switches, access points, NICs
+  1    Physical       Bit       IEEE 802.3, 802.11     Cables, hubs, repeaters`}
+      </CodeBlock>
+
+      <Warn title="OSI vs TCP/IP layer count">
+        The TCP/IP model has only 4 layers: Link (≈ L1+L2), Internet (≈ L3), Transport (≈ L4), and Application (≈ L5+L6+L7). When engineers say "Layer 7 firewall" or "Layer 3 switch," they are using OSI numbering — even though TCP/IP is the protocol actually running. Both models coexist in daily usage. OSI gives us the vocabulary; TCP/IP is the implementation.
+      </Warn>
+
+      <Divider />
+
+      {/* ── CHAPTER 4 ── */}
+      <Chapter
+        n="04"
+        title="Layer 7 — Application"
+        subtitle="The only layer your code touches — and the most misunderstood layer in networking."
+      />
+
+      <StoryBox>
+        You open Chrome and type "https://gmail.com". Chrome doesn't know anything about packets, ports, or frames. It calls a socket API: "connect to 142.250.182.46, port 443, using TCP." Everything below that call is handled by the OS network stack — Chrome's job ends at Layer 7. The Layer 7 protocol here is HTTPS (HTTP inside TLS), and Chrome constructs the HTTP request: GET / HTTP/2, Host: gmail.com, Authorization: Bearer ... The entire HTTP message is the Layer 7 PDU: raw application data.
+      </StoryBox>
+
+      <Para>
+        A critical misconception: <Accent>Layer 7 is not the application itself</Accent>. It is the <em>interface</em> between the application and the network. Chrome is a user-space program. The Layer 7 protocols (HTTP, DNS, SMTP) are the language that application speaks over the network. The distinction matters because it explains why a "Layer 7 firewall" or "Layer 7 DDoS attack" refers to application-protocol-aware operations — the firewall understands HTTP requests, not just port numbers.
+      </Para>
+
+      <H2>Key Layer 7 Protocols and What They Actually Do</H2>
+
+      <Para>
+        <Accent>HTTP/HTTPS</Accent> (port 80/443) — the foundation of the web. Every API call, every web page load, every webhook is HTTP. HTTPS is HTTP with a TLS wrapper added by the Presentation layer.
+      </Para>
+
+      <Para>
+        <Accent>DNS</Accent> (port 53, UDP and TCP) — translates domain names to IP addresses. Every network connection starts with DNS. If DNS is broken, nothing works — even though IP connectivity might be fine. This trips up engineers constantly.
+      </Para>
+
+      <Para>
+        <Accent>SSH</Accent> (port 22) — secure remote shell. Uses asymmetric key exchange at L6/L7 boundary to establish an encrypted channel, then provides terminal access. Most server management in the world goes through SSH.
+      </Para>
+
+      <Para>
+        <Accent>SMTP/IMAP/POP3</Accent> (ports 25/587/465/143/993/110) — email. SMTP delivers mail between servers. IMAP and POP3 retrieve mail from a server to a client. SPF, DKIM, DMARC are L7 security mechanisms that fight email spoofing.
+      </Para>
+
+      <Para>
+        <Accent>SNMP</Accent> (port 161 UDP) — Simple Network Management Protocol. Network devices (routers, switches) expose metrics (CPU, interface counters, error rates) via SNMP. Your monitoring system polls these every 60 seconds. SNMPv1 and v2 use community strings (basically plaintext passwords) — a security disaster still deployed everywhere.
+      </Para>
+
+      <WowBox emoji="🌐" title="Layer 7 Load Balancers Are Smarter Than You Think">
+        A Layer 4 load balancer distributes connections based on IP and port — it has no idea what protocol is inside. A Layer 7 load balancer (like an AWS Application Load Balancer or Nginx) reads the HTTP request, inspects the URL path and headers, and routes <code>GET /api/users</code> to the API server cluster while routing <code>GET /static/logo.png</code> to the CDN. It can also terminate TLS, add security headers, rate-limit by user ID, and cache responses. All of that is possible only because it operates at Layer 7.
+      </WowBox>
+
+      <Divider />
+
+      {/* ── CHAPTER 5 ── */}
+      <Chapter
+        n="05"
+        title="Layer 6 — Presentation"
+        subtitle="The translation layer — encoding, compression, and encryption all live here."
+      />
+
+      <StoryBox>
+        You send an email with a JPEG photo attached. Your email client needs to transmit binary image data through a protocol (SMTP) originally designed for plain ASCII text. The solution: Base64 encode the JPEG bytes into ASCII characters. The receiving client Base64 decodes them back to the binary image. That encoding/decoding is Layer 6. Now add TLS: before any SMTP data flows, both sides negotiate a cipher suite, exchange keys, and establish an encrypted channel. All subsequent data — including that Base64-encoded photo — is encrypted. That negotiation and encryption is also Layer 6.
+      </StoryBox>
+
+      <Para>
+        Layer 6 is responsible for three things: <Accent>translation</Accent> (converting between different data representations — ASCII vs Unicode, big-endian vs little-endian), <Accent>compression</Accent> (gzip, zlib, Brotli for HTTP responses), and <Accent>encryption</Accent> (TLS, which secures HTTPS, SMTPS, IMAPS, and most modern protocols).
+      </Para>
+
+      <H2>Where TLS Actually Lives</H2>
+
+      <Para>
+        TLS is officially a Layer 6 function in the OSI model, but this is hotly debated. In the TCP/IP model, TLS sits between the Transport layer and the Application layer — sometimes called "Layer 4.5" or "between 4 and 7." In practice, TLS runs on top of TCP (a Transport-layer protocol) and beneath HTTP (an Application-layer protocol). It uses port numbers (Layer 4 concept) and handles encryption (Layer 6 concept).
+      </Para>
+
+      <Para>
+        The practical answer: TLS is a Layer 6 function that is implemented in a library (OpenSSL, BoringSSL, mbedTLS) that your application calls. It establishes an encrypted channel that Layer 7 protocols use. For exam purposes, TLS = Layer 6. For engineering conversations, understanding that it sits between L4 and L7 is what matters.
+      </Para>
+
+      <CodeBlock title="What Layer 6 actually transforms">
+        {`Encoding conversions (L6):
+  ASCII text → Base64 (binary safe transport)
+  UTF-8 → UTF-16 (Windows ↔ Unix)
+  Big-endian → Little-endian (network byte order)
+
+Compression (L6):
+  HTTP response: Content-Encoding: gzip
+  HTML 100KB → gzip → 22KB (78% smaller)
+
+Encryption (L6 — TLS):
+  Plaintext HTTP request →
+  → TLS Record Layer encrypts with AES-256-GCM
+  → Ciphertext bytes (indistinguishable from random noise)
+  → TCP transports the ciphertext`}
+      </CodeBlock>
+
+      <Warn title="JPEG and PNG are Layer 6">
+        Image formats (JPEG, PNG, WebP), audio formats (MP3, AAC), video formats (H.264, VP9), and document formats (PDF) are all Layer 6 — they define how data is encoded/compressed for representation. When you upload a profile photo, the JPEG encoding is Layer 6. The HTTP multipart/form-data that wraps it is Layer 7.
+      </Warn>
+
+      <Divider />
+
+      {/* ── CHAPTER 6 ── */}
+      <Chapter
+        n="06"
+        title="Layer 5 — Session"
+        subtitle="The forgotten layer — managing conversations so connections can survive interruptions."
+      />
+
+      <StoryBox>
+        You are on a video call with your team in three time zones. Your audio and your video are two separate data streams. Layer 5 keeps them synchronised — if the audio stream gets 200ms ahead of the video stream, the Session layer's synchronisation mechanism detects the drift and adjusts. If your network blips for two seconds and you reconnect, the session resumes rather than starting over from scratch. That state management — tracking which streams belong to which conversation, maintaining sync points, enabling recovery — is what the Session layer does.
+      </StoryBox>
+
+      <Para>
+        Layer 5 establishes, manages, and terminates <Accent>sessions</Accent> — ongoing conversations between applications. A session is more than a TCP connection. It is a logical conversation that may use multiple TCP connections, may survive network interruptions, and may coordinate multiple simultaneous data streams. Layer 5 provides three services: <Accent>dialog control</Accent> (who is allowed to transmit at what moment — half duplex vs full duplex), <Accent>synchronisation</Accent> (checkpoints that allow a transfer to resume after failure), and <Accent>session establishment/teardown</Accent>.
+      </Para>
+
+      <H2>Why Layer 5 Is the "Forgotten Layer"</H2>
+
+      <Para>
+        In the TCP/IP model, Layer 5 does not exist as a separate layer. Its functions are absorbed into the Application layer. Most internet protocols — HTTP, SMTP, SSH — manage their own session state at the application layer without relying on a dedicated session protocol. This means in real TCP/IP networking you rarely deal with a protocol you call "the Session layer protocol."
+      </Para>
+
+      <Para>
+        However, Layer 5 concepts appear constantly: HTTP cookies and session tokens are L5 concepts implemented in L7. TLS session resumption (reusing a previous TLS session to avoid a full handshake) is L5 logic implemented between L4 and L7. NetBIOS (used for Windows file sharing pre-Active Directory) is a genuine L5 protocol. RPC (Remote Procedure Call) manages sessions between services. NFS (Network File System) uses session management to handle reconnection.
+      </Para>
+
+      <WowBox emoji="🔁" title="HTTP Keep-Alive is a Layer 5 Concept">
+        HTTP/1.0 opened a new TCP connection for every single request. A webpage with 40 resources (CSS, JS, images) required 40 TCP handshakes. HTTP Keep-Alive (and later HTTP/1.1 persistent connections) keeps the TCP connection open for multiple requests — reusing the session. HTTP/2 goes further with multiplexing: multiple requests sharing one TCP connection simultaneously. These are all Layer 5 session management optimisations, implemented at Layer 7.
+      </WowBox>
+
+      <Divider />
+
+      {/* ── CHAPTER 7 ── */}
+      <Chapter
+        n="07"
+        title="Layer 4 — Transport"
+        subtitle="TCP vs UDP — the choice that decides whether your app is reliable or fast."
+      />
+
+      <StoryBox>
+        Netflix streams video to 250 million concurrent viewers. WhatsApp handles 100 billion messages per day. Google Maps shows real-time traffic for a billion users. None of these could work with TCP's overhead — the acknowledgement-and-retransmit model would add too much latency. Netflix uses QUIC (which runs over UDP). WhatsApp uses XMPP over TCP for messages but DTLS/SRTP over UDP for voice. Google Maps uses a proprietary protocol over UDP. But your banking app uses TCP exclusively — because losing even one transaction packet is unacceptable. The choice between TCP and UDP happens at Layer 4, and it shapes every performance-critical design decision in networking.
+      </StoryBox>
+
+      <Para>
+        The Transport layer has one fundamental job: <Accent>deliver data between two processes on two different machines</Accent>. It uses <Accent>port numbers</Accent> to identify which process on each machine should receive the data. Port 443 goes to your HTTPS server. Port 22 goes to your SSH daemon. Port 53 goes to your DNS resolver. Multiple applications on one machine can receive data simultaneously because each gets its own port.
+      </Para>
+
+      <H2>TCP — Transmission Control Protocol</H2>
+
+      <Para>
+        TCP provides <Accent>reliable, ordered, error-checked delivery</Accent> of a byte stream. Before any data flows, TCP performs a 3-way handshake: SYN → SYN-ACK → ACK, establishing a connection. Every byte sent gets a sequence number. The receiver sends ACKs. If an ACK doesn't arrive within a timeout, TCP retransmits. If the receiver's buffer fills, TCP uses flow control to slow the sender. If the network becomes congested, TCP's congestion control algorithms (CUBIC, BBR) automatically reduce the send rate to prevent collapse.
+      </Para>
+
+      <CodeBlock title="TCP 3-way handshake">
+        {`Client                          Server
+  │                                 │
+  │──── SYN, Seq=1000 ────────────► │  Client: "I want to connect, my seq starts at 1000"
+  │                                 │
+  │ ◄── SYN-ACK, Seq=5000, Ack=1001 │  Server: "OK, my seq starts at 5000, I got your 1000"
+  │                                 │
+  │──── ACK, Seq=1001, Ack=5001 ──► │  Client: "Got it, connection established"
+  │                                 │
+  │──── DATA (HTTP request) ──────► │  Now data can flow in both directions
+  │ ◄── ACK ──────────────────────  │`}
+      </CodeBlock>
+
+      <H2>UDP — User Datagram Protocol</H2>
+
+      <Para>
+        UDP is the opposite: <Accent>connectionless, unreliable, unordered</Accent>. No handshake. No acknowledgements. No retransmission. No flow control. You send a datagram and it either arrives or it doesn't — UDP doesn't care. This sounds terrible until you realise the benefits: zero connection overhead, no head-of-line blocking, minimal latency, and the ability to broadcast to multiple receivers simultaneously.
+      </Para>
+
+      <Para>
+        DNS uses UDP because a query and response fit in one datagram each — a TCP handshake would triple the latency for every DNS lookup. Video streaming uses UDP because a lost frame is better shown as a brief glitch than pausing the video for 200ms to retransmit. Online games use UDP because a stale position update is worthless anyway — better to send fresh data immediately. DHCP uses UDP because the client has no IP address yet to establish a TCP connection.
+      </Para>
+
+      <H2>Ports — How Multiple Services Share One Machine</H2>
+
+      <Para>
+        A port is a 16-bit number (0–65535) that identifies a specific process or service on a machine. The combination of IP address + protocol + port is called a <Accent>socket</Accent>. A socket pair (client socket + server socket) uniquely identifies every TCP connection on the internet. Ports 0–1023 are <Accent>well-known ports</Accent> assigned by IANA — only root processes can bind them. Ports 1024–49151 are registered ports. Ports 49152–65535 are <Accent>ephemeral ports</Accent> — your OS assigns them dynamically for outgoing connections.
+      </Para>
+
+      <CodeBlock title="Common well-known ports">
+        {`Port   Protocol  Service
+────   ────────  ──────────────────────────────────────
+  20   TCP       FTP data
+  21   TCP       FTP control
+  22   TCP       SSH
+  23   TCP       Telnet (unencrypted — never use)
+  25   TCP       SMTP (server-to-server email)
+  53   UDP/TCP   DNS
+  67   UDP       DHCP server
+  68   UDP       DHCP client
+  80   TCP       HTTP
+ 110   TCP       POP3
+ 143   TCP       IMAP
+ 161   UDP       SNMP
+ 389   TCP       LDAP
+ 443   TCP       HTTPS
+ 445   TCP       SMB (Windows file sharing)
+ 587   TCP       SMTP (client submission)
+3306   TCP       MySQL
+5432   TCP       PostgreSQL
+6379   TCP       Redis
+8080   TCP       HTTP alternate / proxy`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── CHAPTER 8 ── */}
+      <Chapter
+        n="08"
+        title="Layer 3 — Network"
+        subtitle="IP addresses, routing, and how packets cross the internet hop by hop."
+      />
+
+      <StoryBox>
+        You stream a YouTube video from a server in Google's Mumbai data center. Your home router in Hyderabad has a public IP of 103.74.52.18. Google's server has IP 74.125.24.100. Between them, your packet crosses your ISP's router (hop 1), a regional aggregation router (hop 2), a national backbone router (hop 3), a Tata Communications peering point in Mumbai (hop 4), Google's edge router (hop 5), Google's internal router (hop 6), and finally arrives at the server — 6 hops, each making an independent routing decision based solely on the destination IP: 74.125.24.100. Not one of those intermediate routers knows or cares what is inside the packet. They read only the IP header and forward.
+      </StoryBox>
+
+      <Para>
+        The Network layer provides <Accent>logical addressing</Accent> using IP addresses and <Accent>routing</Accent> — determining the path a packet takes from source to destination across multiple networks. Unlike MAC addresses (Layer 2) which only work within a single network segment, IP addresses are globally unique (for public IPs) and routable across the entire internet.
+      </Para>
+
+      <H2>How Routing Actually Works</H2>
+
+      <Para>
+        Every router maintains a <Accent>routing table</Accent> — a list of network prefixes and the next hop to reach them. When a packet arrives, the router looks up the destination IP in its routing table, finds the most specific matching prefix (<Accent>longest prefix match</Accent>), and forwards the packet to that next hop. This decision is made independently at every router — there is no central coordinator.
+      </Para>
+
+      <Para>
+        The <Accent>TTL (Time to Live)</Accent> field in every IP packet prevents routing loops. The sender sets TTL to 64 (Linux) or 128 (Windows). Each router decrements TTL by 1. When TTL hits 0, the router drops the packet and sends an ICMP "Time Exceeded" back to the source. This is exactly how <Code>traceroute</Code> works: it sends packets with TTL=1, 2, 3... each triggering a Time Exceeded from successive routers, mapping the path.
+      </Para>
+
+      <CodeBlock title="IPv4 packet header (simplified)">
+        {`Version: 4 (IPv4)          IHL: 5 (20 bytes header)
+DSCP/ECN: 0x00             Total Length: 1500 bytes
+Identification: 0x1a2b     Flags: DF (Don't Fragment)
+Fragment Offset: 0         TTL: 64
+Protocol: 6 (TCP)          Header Checksum: 0x3e4f
+Source IP:      192.168.1.5     (your device)
+Destination IP: 142.250.182.4   (Google)
+[TCP Segment follows...]`}
+      </CodeBlock>
+
+      <WowBox emoji="🌍" title="BGP — The Protocol That Holds the Internet Together">
+        The internet is not one network — it is ~73,000 separate networks called <strong>Autonomous Systems (AS)</strong>, each owned by an ISP, cloud provider, or large organisation. They connect to each other using <strong>BGP (Border Gateway Protocol)</strong>, the only routing protocol that operates at the internet scale. BGP routes do not automatically find the fastest path — they find the path that each AS operator has agreed to accept through commercial peering agreements. This is why your traffic sometimes takes a surprisingly long path: routing is as much economics as engineering.
+      </WowBox>
+
+      <Divider />
+
+      {/* ── CHAPTER 9 ── */}
+      <Chapter
+        n="09"
+        title="Layer 2 — Data Link"
+        subtitle="MAC addresses, Ethernet frames, and why switches are smarter than hubs."
+      />
+
+      <StoryBox>
+        Your laptop's packet needs to go to your router — but the router's IP address (192.168.1.1) is not enough. The NIC doesn't speak IP at the physical level; it speaks MAC addresses. So your laptop sends an ARP request: "Who has 192.168.1.1? Tell 192.168.1.5." The router replies: "192.168.1.1 is at B8:E8:56:44:55:66." Your laptop stores this in its ARP cache and now builds an Ethernet frame: Dst MAC = B8:E8:56:44:55:66, Src MAC = A4:C3:F0:11:22:33, EtherType = 0x0800. The switch receives the frame, looks up B8:E8:56:44:55:66 in its CAM table, and forwards the frame only to the port where the router lives. No broadcast. No collision. Efficient delivery.
+      </StoryBox>
+
+      <Para>
+        The Data Link layer handles <Accent>physical addressing</Accent> (MAC addresses), <Accent>framing</Accent> (packaging bits into structured frames), <Accent>error detection</Accent> (CRC at the end of every frame), and <Accent>media access control</Accent> (deciding which device can transmit when on a shared medium). It only works within a single network segment — a MAC address cannot be routed across the internet.
+      </Para>
+
+      <H2>Ethernet Frame Structure</H2>
+
+      <CodeBlock title="Ethernet II frame">
+        {`┌──────────────┬────────────┬───────────┬──────────────────┬───────┐
+│ Preamble (8B)│ Dst MAC(6B)│ Src MAC(6B│ EtherType (2B)  │Payload│ FCS(4B)
+└──────────────┴────────────┴───────────┴──────────────────┴───────┘
+  10101010...    B8:E8:56:..   A4:C3:F0:..  0x0800 = IPv4       1–1500B   CRC-32
+                                            0x0806 = ARP
+                                            0x86DD = IPv6
+                                            0x8100 = VLAN tag
+
+FCS = Frame Check Sequence (CRC-32)
+  Sender computes CRC of all fields except preamble and FCS
+  Receiver recomputes CRC — mismatch = frame is silently dropped`}
+      </CodeBlock>
+
+      <H2>Switches vs Hubs — Why It Matters</H2>
+
+      <Para>
+        A <Accent>hub</Accent> is a Layer 1 device — it receives a signal on one port and repeats it to all other ports. Every device hears every frame. One collision domain. Maximum theoretical throughput shared among all devices. Half-duplex only. Hubs are obsolete, but you may still encounter them in embedded systems or legacy hardware.
+      </Para>
+
+      <Para>
+        A <Accent>switch</Accent> is a Layer 2 device — it maintains a <Accent>CAM (Content Addressable Memory) table</Accent> that maps MAC addresses to ports. When a frame arrives, the switch looks up the destination MAC, finds the port, and forwards the frame only to that port. Each port is its own collision domain. Full duplex. Gigabit per port, simultaneously. Modern switches can handle millions of MAC address lookups per second in hardware ASICs.
+      </Para>
+
+      <Divider />
+
+      {/* ── CHAPTER 10 ── */}
+      <Chapter
+        n="10"
+        title="Layer 1 — Physical"
+        subtitle="Bits become voltage transitions, light pulses, or radio waves — the real physics of networking."
+      />
+
+      <StoryBox>
+        A Google datacenter in Singapore connects to a datacenter in Tokyo via a 5,700km submarine fiber optic cable on the ocean floor. Your video call travels as pulses of laser light — specifically, multiple wavelengths of light simultaneously (WDM — Wavelength Division Multiplexing), each wavelength carrying a separate 100 Gbps channel, for a total capacity of 20+ Tbps on a single fiber pair. The cable is thinner than a garden hose. It is buried under 8,000 meters of Pacific Ocean. It took 3 years and $250 million to lay. And yet the bits that travel through it are governed by exactly the same Layer 1 rules as the Cat6 cable in your office — just at a very different scale.
+      </StoryBox>
+
+      <Para>
+        The Physical layer is responsible for transmitting raw bits over a physical medium. It defines everything about the medium: <Accent>signal levels</Accent> (what voltage represents a 1 vs a 0), <Accent>bit timing</Accent> (how long each bit lasts), <Accent>encoding schemes</Accent> (how bits are represented in the signal), <Accent>connector specifications</Accent> (pin layouts, cable categories), and <Accent>data rates</Accent> (how many bits per second).
+      </Para>
+
+      <H2>Signal Encoding — How Bits Become Signals</H2>
+
+      <Para>
+        You cannot simply send a 1 as "high voltage" and a 0 as "low voltage" — long strings of identical bits would cause clock recovery to fail (the receiver loses sync). Real encoding schemes solve this. <Accent>Manchester encoding</Accent> (used in early Ethernet) represents each bit as a voltage transition — always providing a clock signal. <Accent>4B/5B encoding</Accent> (Fast Ethernet) maps every 4 data bits to a 5-bit code that guarantees enough transitions. <Accent>PAM4</Accent> (used in 400GbE) uses 4 signal levels to encode 2 bits per symbol, doubling throughput without doubling frequency.
+      </Para>
+
+      <H2>Physical Media Types</H2>
+
+      <Para>
+        <Accent>Copper (twisted pair)</Accent> — Cat5e (1Gbps/100m), Cat6 (10Gbps/55m), Cat6A (10Gbps/100m), Cat8 (40Gbps/30m). Used for almost all structured cabling in buildings. Susceptible to electromagnetic interference; twisted pairs cancel out EMI. RJ-45 connector.
+      </Para>
+
+      <Para>
+        <Accent>Fiber optic</Accent> — Single-mode fiber (SMF) transmits one light mode over very long distances (up to 100km) using 1,310nm or 1,550nm laser. Multi-mode fiber (MMF) transmits multiple light modes, cheaper but limited to ~2km. Used for building backbone, data center interconnects, and all long-haul transmission. LC and SC connectors.
+      </Para>
+
+      <Para>
+        <Accent>Wireless (802.11)</Accent> — Radio waves at 2.4GHz, 5GHz, or 6GHz. Shared medium — every device in range hears every frame. Uses CSMA/CA (Collision Avoidance) instead of CSMA/CD because collisions cannot be detected on a shared wireless medium. Range and speed trade off against each other and against interference.
+      </Para>
+
+      <Divider />
+
+      {/* ── CHAPTER 11 ── */}
+      <Chapter
+        n="11"
+        title="Encapsulation and Decapsulation"
+        subtitle="How your HTTP request becomes 1,500 bytes of electrical signal — and gets reassembled at the other end."
+      />
+
+      <StoryBox>
+        Imagine sending a letter internationally. You write the letter (your data — L7). You put it in an envelope and write "URGENT: needs to be signed for" on it (L6/L5 information). You address the inner envelope with the recipient's exact name and room number at a company (L4 port). You put that in another envelope addressed to the recipient's city (L3 IP). A delivery truck picks it up and puts it in a bag labelled with the next sorting facility's barcode (L2 frame). That bag physically travels on a conveyor belt (L1 bits). At each step, a layer adds its own addressing and handling instructions — this is encapsulation. At the destination, each layer reads and removes its own envelope, passing the contents upward — this is decapsulation.
+      </StoryBox>
+
+      <Para>
+        As data travels <Accent>down the stack</Accent> on the sender's machine, each layer adds a header (and sometimes a trailer) to the payload from the layer above. This process is called <Accent>encapsulation</Accent>. The data unit at each layer has a specific name: the payload from L7-L5 is just called <Accent>Data</Accent>, at L4 it becomes a <Accent>Segment</Accent> (TCP) or <Accent>Datagram</Accent> (UDP), at L3 it becomes a <Accent>Packet</Accent>, at L2 it becomes a <Accent>Frame</Accent>, at L1 it becomes <Accent>Bits</Accent>.
+      </Para>
+
+      <EncapsulationVisualizer />
+
+      <CodeBlock title="Complete encapsulation — byte sizes">
+        {`Starting with an HTTP GET request: ~200 bytes
+
+After L7 (Application):   HTTP headers + body         = 200 bytes
+After L6 (Presentation):  TLS record header           = +5 bytes  → 205 bytes
+After L4 (Transport):     TCP header (20 bytes)       = +20 bytes → 225 bytes
+After L3 (Network):       IP header (20 bytes)        = +20 bytes → 245 bytes
+After L2 (Data Link):     Ethernet header (14 bytes)
+                          + FCS trailer (4 bytes)     = +18 bytes → 263 bytes
+L1 Physical:              Preamble (8 bytes)          = +8 bytes  → 271 bytes
+
+Total overhead for 200 bytes of actual data: 71 bytes (35% overhead)
+Maximum payload efficiency (1500 byte MTU): 1460 bytes of data, 40 bytes TCP/IP overhead = 97.3%`}
+      </CodeBlock>
+
+      <Warn title="Headers are stripped at each layer — not passed up">
+        A common mistake: thinking the Ethernet header is passed to the IP layer. It is not. At Layer 2, the switch or NIC reads the Ethernet header, verifies the CRC, and <strong>strips the entire Ethernet frame</strong> — passing only the IP packet payload to Layer 3. Each layer handles its own header and discards it. Higher layers never see lower-layer headers.
+      </Warn>
+
+      <Divider />
+
+      {/* ── CHAPTER 12 ── */}
+      <Chapter
+        n="12"
+        title="Troubleshooting with the OSI Model"
+        subtitle="The systematic approach that experienced engineers use to diagnose any network problem in minutes."
+      />
+
+      <StoryBox>
+        A developer messages you: "The app is broken, users can't log in." Where do you start? You could randomly check the database, restart services, or check firewall rules — spending hours on the wrong layer. Or you apply OSI methodology: can you ping the server? (L3 ok) Can you resolve the hostname? (L7 DNS ok) Can you open a TCP connection on port 443? (L4 ok) Can you make an HTTPS request and get a 200? (L6 TLS ok, L7 HTTP ok) Can the app actually authenticate? (L7 application logic). The problem is in the authentication service — not the network. Total diagnosis time: 4 minutes. Without OSI methodology: potentially hours.
+      </StoryBox>
+
+      <Para>
+        The OSI model gives you a <Accent>systematic diagnostic methodology</Accent>: start from the bottom (Layer 1) and work your way up, or start from the symptom and narrow down. Each layer has specific commands that tell you definitively whether that layer is functioning. A confirmed working layer eliminates everything below it — you never go backward.
+      </Para>
+
+      <TroubleshootingGuide />
+
+      <H2>The Golden Rule: Confirm Each Layer Before Moving Up</H2>
+
+      <Para>
+        Never skip a layer during diagnosis. A symptom at Layer 7 (app not working) can be caused by a failure at Layer 1 (intermittent cable). The OSI methodology prevents you from debugging the wrong layer for hours. Once you confirm a layer works — move up. Once you find a layer that fails — stop and fix it there. Do not investigate Layer 7 when Layer 3 is broken.
+      </Para>
+
+      <CodeBlock title="OSI diagnostic commands — complete reference">
+        {`Layer 1 — Physical:
+  Check NIC/switch link LEDs
+  ethtool eth0                      # Link speed, duplex, errors
+  ip -s link show eth0               # Error counters
+  cable tester / loopback test
+
+Layer 2 — Data Link:
+  arp -a                            # ARP cache — can I reach the gateway?
+  ip neigh                          # Linux ARP table
+  ip link show                      # MAC address, MTU, state
+
+Layer 3 — Network:
+  ping 127.0.0.1                    # Local IP stack working?
+  ping 192.168.1.1                  # Gateway reachable?
+  ping 8.8.8.8                      # Internet routing working?
+  ip route show                     # Routing table, default gateway
+  traceroute 8.8.8.8               # Path to destination
+
+Layer 4 — Transport:
+  netstat -tulpn                    # Open ports and listening services
+  ss -tulpn                         # Faster alternative to netstat
+  nmap -sT 192.168.1.1              # Port scan target
+  telnet host 443                   # Test TCP connectivity to a port
+
+Layer 5–7 — Session/Presentation/Application:
+  nslookup google.com               # DNS resolution
+  dig google.com A                  # Detailed DNS query
+  curl -v https://example.com       # Full HTTP request with TLS
+  openssl s_client -connect h:443   # TLS certificate and cipher check`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── CHAPTER 13 ── */}
+      <Chapter
+        n="13"
+        title="Common Misconceptions That Will Get You in Trouble"
+        subtitle="Things engineers confidently say that are wrong — corrected before they cost you an incident."
+      />
+
+      <Err title="'The OSI model is how the internet works'">
+        The OSI model is a <strong>reference model</strong> — a teaching framework and diagnostic vocabulary. The internet runs on TCP/IP, which has 4 layers, not 7. TCP/IP's Application layer covers OSI layers 5, 6, and 7 combined. The OSI model was never widely deployed as a protocol suite. What makes OSI valuable is the conceptual framework for reasoning about networking, not its protocols. When someone says "Layer 3 issue," they mean IP routing — even though the protocol running is TCP/IP, not OSI.
       </Err>
 
-      <HR />
+      <Err title="'Routers only work at Layer 3'">
+        Basic routers forward packets based on IP addresses — a Layer 3 function. But modern network equipment routinely inspects higher layers. A <strong>Next-Generation Firewall (NGFW)</strong> does deep packet inspection at Layer 7 — reading HTTP URLs, identifying applications by signature, and blocking specific content. An <strong>Application Delivery Controller (ADC)</strong> routes HTTP requests based on URL paths. Even a home router doing NAT is performing a Layer 4 operation (tracking port numbers). Saying a router "only works at Layer 3" is decades out of date.
+      </Err>
+
+      <Err title="'TLS belongs to Layer 6, period'">
+        TLS sits awkwardly between layers. It runs on top of TCP (Layer 4) and beneath HTTP (Layer 7). It provides encryption and authentication — classically Layer 6 functions. But it also manages sessions and connection state — Layer 5 functions. And in TLS 1.3, some features overlap with Layer 4. In practice, most engineers say TLS is between Layer 4 and Layer 7. For certification exams (CompTIA, Cisco), answer Layer 6. For real engineering conversations, "TLS is below HTTP and above TCP" is the accurate answer.
+      </Err>
+
+      <Err title="'Switches only work at Layer 2'">
+        An unmanaged switch does operate purely at Layer 2 — forwarding frames based on MAC addresses. But a <strong>Layer 3 switch</strong> (sometimes called a multilayer switch) can also route IP packets between VLANs — a Layer 3 function — at wire speed using ASICs. Enterprise data centers use L3 switches to route between VLANs without needing a dedicated router. Some high-end switches even inspect Layer 4 headers for QoS prioritisation. The layer a device "works at" describes its highest layer of intelligence, not its only layer.
+      </Err>
+
+      <Err title="'OSI layers are sequential — data passes through every layer every time'">
+        The logical model says L7→L6→L5→L4→L3→L2→L1, but real implementations frequently collapse layers. In TCP/IP, L5 and L6 do not exist as separate protocols — their functions are handled by application-layer code (TLS in your app) or the OS. Some protocols skip layers entirely: ARP operates at L2/L3 boundary. ICMP is an L3 protocol that carries data useful to L4 and above. IPSec can operate at L3 (tunnel mode) or between L3 and L4 (transport mode). The model is a map — the territory is messier.
+      </Err>
+
+      <Err title="'Layer 1 is just about cables'">
+        Layer 1 defines everything about the physical transmission medium — and that goes far beyond cables. Wi-Fi's radio encoding (OFDM, 64-QAM, 256-QAM, 1024-QAM), the modulation scheme used, the channel width, and the antenna technology are all Layer 1 specifications. <strong>Power over Ethernet (PoE)</strong> — delivering electrical power through a network cable to power IP cameras, access points, and phones — is a Layer 1 function. <strong>Optical wavelength division multiplexing (WDM)</strong> — running 80+ separate channels simultaneously on one fiber — is Layer 1. <strong>USB</strong> is a Layer 1 specification. The physical layer is the most varied and complex in the entire stack.
+      </Err>
+
+      <Divider />
+
+      {/* ── CHAPTER 14 ── */}
+      <Chapter
+        n="14"
+        title="Interview Questions"
+        subtitle="Questions you will face at every level — from first job to staff engineer."
+      />
+
+      <IQ level="Beginner" q="Name all 7 OSI layers from top to bottom and give one protocol for each.">
+        Top to bottom: <strong>7 — Application</strong> (HTTP, DNS), <strong>6 — Presentation</strong> (TLS, JPEG, gzip), <strong>5 — Session</strong> (NetBIOS, RPC), <strong>4 — Transport</strong> (TCP, UDP), <strong>3 — Network</strong> (IPv4, IPv6, ICMP), <strong>2 — Data Link</strong> (Ethernet, ARP, 802.1Q), <strong>1 — Physical</strong> (IEEE 802.3, 802.11, fiber optics).
+        <br /><br />
+        Mnemonic top-down: <em>"All People Seem To Need Data Processing."</em> In interviews, listing the protocol alongside each layer shows you understand what the layer actually does, not just its name.
+      </IQ>
+
+      <IQ level="Beginner" q="What is the difference between a packet, a frame, and a segment?">
+        These are PDU (Protocol Data Unit) names at specific layers. A <strong>segment</strong> is the Transport layer (L4) PDU — TCP splits data into segments, each with a sequence number, port numbers, and flags. A <strong>packet</strong> is the Network layer (L3) PDU — IP wraps the segment with source/destination IP addresses, TTL, and protocol type. A <strong>frame</strong> is the Data Link layer (L2) PDU — Ethernet wraps the packet with source/destination MAC addresses and a CRC checksum.
+        <br /><br />
+        The key distinction: packets can be routed across networks (they carry IP addresses); frames only work within a single network segment (they carry MAC addresses and are stripped at each router).
+      </IQ>
+
+      <IQ level="Intermediate" q="At which OSI layer does a switch, router, and next-gen firewall operate?">
+        A <strong>basic switch</strong> operates at Layer 2 — it forwards frames based on MAC address tables (CAM tables). An <strong>L3 switch</strong> also performs Layer 3 routing between VLANs. A <strong>router</strong> operates primarily at Layer 3 — it forwards packets based on IP routing tables and longest prefix match. A <strong>next-generation firewall (NGFW)</strong> operates up to Layer 7 — it does deep packet inspection, identifies applications by signature regardless of port, inspects HTTP request content, and can block based on URL categories, user identity, or application behaviour.
+        <br /><br />
+        A device "operates at Layer X" means it can make decisions based on that layer's header. It still processes all lower layers to extract the relevant header.
+      </IQ>
+
+      <IQ level="Intermediate" q="Explain encapsulation — what happens at each OSI layer when your browser sends an HTTPS request?">
+        <strong>L7 (Application):</strong> Browser constructs an HTTP GET request — text with headers like Host, User-Agent, Accept. <br />
+        <strong>L6 (Presentation):</strong> TLS encrypts the HTTP data using the negotiated cipher suite (e.g., AES-256-GCM). Adds a TLS Record header (content type, version, length). <br />
+        <strong>L5 (Session):</strong> Session context is embedded in the TLS session ID / ticket — no separate header. <br />
+        <strong>L4 (Transport):</strong> TCP adds a 20-byte header: source port (ephemeral), destination port (443), sequence number, ACK number, flags (PSH, ACK), window size. <br />
+        <strong>L3 (Network):</strong> IP adds a 20-byte header: source IP, destination IP, protocol (6=TCP), TTL (64). <br />
+        <strong>L2 (Data Link):</strong> Ethernet adds a 14-byte header (dst MAC, src MAC, EtherType) and a 4-byte FCS trailer. <br />
+        <strong>L1 (Physical):</strong> The frame is serialised to bits and sent as voltage transitions (copper) or light pulses (fiber).
+      </IQ>
+
+      <IQ level="Senior" q="A user reports 'the internet is down'. Walk through your OSI troubleshooting methodology.">
+        Start at Layer 1 and work up until you find the broken layer: <br /><br />
+        <strong>L1:</strong> Check physical link — is the NIC link light on? Does <code>ethtool eth0</code> show a link? No link = cable, NIC, or switch port fault. <br />
+        <strong>L2:</strong> <code>ip link show</code> — is the interface UP? <code>arp -a</code> — is there an ARP entry for the gateway? No ARP entry = cannot reach the local segment even though the cable is connected. <br />
+        <strong>L3:</strong> <code>ping 127.0.0.1</code> — local IP stack working? <code>ping 192.168.1.1</code> — can I reach my default gateway? <code>ip route show</code> — is there a default route? <code>ping 8.8.8.8</code> — can I reach an external IP? <br />
+        <strong>L4:</strong> <code>telnet 8.8.8.8 443</code> or <code>nc -zv 8.8.8.8 443</code> — can I establish a TCP connection? Blocked = firewall or missing route. <br />
+        <strong>L7:</strong> <code>nslookup google.com</code> — DNS resolution working? <code>curl -v https://google.com</code> — full HTTP request. <br /><br />
+        At each step: if the test passes, the layer works — move up. If it fails, fix it at that layer before testing higher.
+      </IQ>
+
+      <IQ level="Senior" q="Why doesn't TLS cleanly map to a single OSI layer? What does this tell us about the OSI model's limitations?">
+        TLS provides encryption and authentication — OSI Layer 6 functions. But TLS also manages handshake state and session resumption — Layer 5 functions. TLS runs on top of TCP sockets — it consumes a Layer 4 service. And TLS is invoked by application code (Layer 7) via an API. TLS spans L4 through L7. <br /><br />
+        This reveals a fundamental limitation of the OSI model: it was designed by committee to model specific 1984-era protocols, not the internet protocols that actually emerged. The real-world lesson is that the OSI model is a <em>conceptual framework</em>, not a specification. When a protocol doesn't map cleanly to one layer, it doesn't mean the protocol is wrong — it means the model is an approximation. Engineers should use OSI as a diagnostic vocabulary and mental model, not as a strict architectural constraint.
+      </IQ>
+
+      <IQ level="PhD" q="OSI was the ISO standard, yet TCP/IP won. What does this tell us about protocol design and standardisation?">
+        TCP/IP won for several reasons that are instructive for any protocol designer: <br /><br />
+        <strong>Simplicity:</strong> TCP/IP has 4 layers and was designed by implementation — Vint Cerf and Bob Kahn wrote the first RFC in 1974 and immediately implemented it. OSI was designed by committee over 7 years, producing 200+ standards documents before any real implementation existed. Simple, working implementations beat comprehensive but unimplemented standards. <br /><br />
+        <strong>Open implementation:</strong> TCP/IP was freely available in BSD Unix in 1983. Every university got it for free. OSI protocols were commercial products with licensing fees. Open source wins ecosystems. <br /><br />
+        <strong>US DoD mandate:</strong> The US Department of Defense mandated TCP/IP in 1983 for all government networks. This created an immediate large base of deployed equipment that private vendors had to interoperate with. Standards that get deployed by large customers first often win regardless of technical merit. <br /><br />
+        The lesson: protocol design is not purely technical. Deployment path, license cost, simplicity of first implementation, and institutional support often matter more than architectural elegance. The "best" protocol rarely wins — the most deployed one does.
+      </IQ>
+
+      <IQ level="PhD" q="How does a stateful firewall differ from a NGFW at the OSI layer level, and what new attack surfaces does L7 inspection create?">
+        A <strong>stateful firewall</strong> operates at L3 and L4. It tracks TCP connection state — SYN seen, SYN-ACK seen, established, FIN seen — and uses this to determine whether a packet belongs to a legitimate established session. It can block unsolicited inbound packets even if the port is open, because it knows no outbound SYN was sent. Decision: based on IP (L3) and TCP state (L4). <br /><br />
+        A <strong>NGFW</strong> adds L7 application inspection. It reassembles TCP streams, decrypts TLS (via certificate interception/MitM), and inspects the HTTP URL, DNS query name, certificate SNI, file type, or application signature. This allows blocking "Facebook" regardless of IP or port, or blocking file downloads over HTTP regardless of extension. <br /><br />
+        <strong>New attack surfaces from L7 inspection:</strong> TLS interception (the firewall decrypts all HTTPS traffic) breaks end-to-end encryption and creates a MitM that leaks credentials to the firewall operator. L7 inspection introduces CPU-intensive processing that is a DDoS vector — sending crafted sessions that force deep inspection at line rate. Application identification by signature can be evaded by using unusual protocols, tunnelling traffic inside allowed protocols (DNS tunnelling, HTTP tunnelling), or obfuscation. L7 firewall bugs (parsing vulnerabilities) become exploitable remotely, expanding the attack surface of the security perimeter itself.
+      </IQ>
 
       <KeyTakeaways items={[
-        'The OSI model is a diagnostic and design framework, not a protocol specification. Its value is universal vocabulary — every engineer from Cisco to Google uses L1–L7 terminology.',
-        'Encapsulation adds headers layer by layer on the sender; decapsulation strips them on the receiver. Each layer treats the layer above as opaque payload — this modularity enables protocol independence.',
-        'Layer 1 (Physical): raw bits, voltage/light/radio encoding. Problems diagnosed with cable testers and optical power meters, not software.',
-        'Layer 2 (Data Link): MAC addresses, Ethernet frames, switches. ARP bridges L3 IP to L2 MAC. MAC flooding and ARP poisoning are the primary attacks.',
-        'Layer 3 (Network): IP addresses, routing. Longest-prefix-match decides the next hop. TTL prevents routing loops and enables traceroute.',
-        'Layer 4 (Transport): TCP provides reliable ordered delivery; UDP provides fast best-effort. Port numbers demultiplex traffic to the correct application.',
-        'Layer 6 (Presentation): TLS encrypts HTTPS traffic here. Certificate pinning, cipher suite negotiation, and encryption record handling are all Layer 6.',
-        'Layer 7 (Application): HTTP, DNS, SMTP, SSH — the protocols your applications use. Most modern attacks (SQLi, XSS, CSRF) and security inspection (NGFW) operate here.',
-        'OSI troubleshooting: start at L1 (physical connectivity), work up systematically. The layer where behavior breaks tells you exactly which tool and protocol to investigate.',
-        'TCP/IP collapses OSI L5+L6+L7 into Application, and L1+L2 into Link. Use OSI layer numbers as vocabulary; use TCP/IP model when reading RFCs and protocol specs.',
+        'The OSI model has 7 layers: Application (7), Presentation (6), Session (5), Transport (4), Network (3), Data Link (2), Physical (1). Remember: "All People Seem To Need Data Processing."',
+        'Each layer adds a header during encapsulation (sending) and strips it during decapsulation (receiving). Higher layers never see lower-layer headers.',
+        'PDU names by layer: Data (L7-L5) → Segment/Datagram (L4) → Packet (L3) → Frame (L2) → Bits (L1).',
+        'TCP provides reliable, ordered delivery via 3-way handshake, sequence numbers, and acknowledgements. UDP provides fast, connectionless delivery with no guarantees.',
+        'Switches operate at L2 (MAC addresses). Routers operate at L3 (IP addresses). NGFWs operate at L7 (application inspection).',
+        'The OSI model is a reference framework — the internet runs on TCP/IP (4 layers), not OSI (7 layers). OSI is a diagnostic vocabulary, not a deployed protocol suite.',
+        'TLS sits between L4 and L7 — it provides L6 encryption using L4 TCP transport, invoked by L7 applications. It does not cleanly map to one layer.',
+        'OSI troubleshooting: start at L1 (physical) and work up. Confirm each layer before moving to the next. A working lower layer eliminates all layers below it as the cause.',
+        'ARP bridges L2 (MAC) and L3 (IP) — it resolves IP addresses to MAC addresses so frames can be addressed correctly on the local segment.',
+        'Applying OSI methodology consistently — even for "simple" problems — is the single habit that separates engineers who fix problems in minutes from those who spend hours in the wrong layer.',
       ]} />
-
-      <HR />
-
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px', textAlign: 'center', margin: '16px 0' }}>
-        <p style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '.1em', margin: '0 0 8px' }}>NEXT MODULE</p>
-        <p style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', margin: '0 0 8px', letterSpacing: '-0.5px' }}>The TCP/IP Model — How the Internet Works</p>
-        <p style={{ fontSize: 14, color: 'var(--muted)', margin: '0 0 18px', lineHeight: 1.7 }}>The four-layer model that actually runs the internet. Complete packet walk-through from your browser to a server on the other side of the planet and back.</p>
-        <Link href="/learn/networking/tcp-ip-model" style={{ display: 'inline-block', background: N, color: '#fff', padding: '10px 28px', borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: 'none', letterSpacing: '.02em' }}>
-          Continue to TCP/IP Model →
-        </Link>
-      </div>
-
     </LearnLayout>
   )
 }
