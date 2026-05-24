@@ -4,613 +4,921 @@ import { useState } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
-const N = '#10b981'
+/* ── helper components ─────────────────────────────────────────────── */
+const G = '#10b981'
 
-const Part = ({ n, title }: { n: string; title: string }) => (
-  <div style={{ marginBottom: 28 }}>
-    <p style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 8px', letterSpacing: '.1em' }}>// Part {n}</p>
-    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px,3vw,30px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
+const Chapter = ({ n, title }: { n: number; title: string }) => (
+  <div style={{ marginBottom: 32 }}>
+    <p style={{ fontSize: 11, color: G, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em', textTransform: 'uppercase' }}>
+      Chapter {String(n).padStart(2, '0')}
+    </p>
+    <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
   </div>
 )
 
-const P = ({ children }: { children: React.ReactNode }) => (
-  <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, margin: '0 0 18px' }}>{children}</p>
+const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin: '56px 0' }} />
+
+const Para = ({ children }: { children: React.ReactNode }) => (
+  <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.95, margin: '0 0 20px' }}>{children}</p>
 )
 
-const H = ({ children }: { children: React.ReactNode }) => (
-  <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: '32px 0 12px' }}>{children}</h3>
+const H2 = ({ children }: { children: React.ReactNode }) => (
+  <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', margin: '36px 0 14px', letterSpacing: '-0.5px' }}>{children}</h3>
 )
 
-const Hl = ({ children }: { children: React.ReactNode }) => (
-  <strong style={{ color: N }}>{children}</strong>
+const H3 = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', margin: '28px 0 10px' }}>{children}</h4>
 )
 
-const HR = () => <div style={{ borderTop: '1px solid var(--border)', margin: '48px 0' }} />
+const Accent = ({ children }: { children: React.ReactNode }) => (
+  <strong style={{ color: G, fontWeight: 700 }}>{children}</strong>
+)
 
-const ProTip = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: `${N}08`, border: `1px solid ${N}20`, borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Pro Tip</p>
-    <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{children}</p>
+const Code = ({ children }: { children: React.ReactNode }) => (
+  <code style={{ fontSize: 13, background: `${G}15`, color: G, padding: '2px 7px', borderRadius: 5, fontFamily: 'var(--font-mono)' }}>{children}</code>
+)
+
+const CodeBlock = ({ children }: { children: React.ReactNode }) => (
+  <pre style={{ background: '#0a0a0a', border: '1px solid #1f2937', borderRadius: 10, padding: '18px 20px', overflowX: 'auto', fontSize: 13, lineHeight: 1.75, color: '#e5e7eb', margin: '20px 0', fontFamily: 'var(--font-mono)' }}>
+    {children}
+  </pre>
+)
+
+const StoryBox = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'linear-gradient(135deg,#0f2027,#203a43,#2c5364)', border: `1px solid ${G}30`, borderRadius: 12, padding: '20px 24px', margin: '28px 0', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ position: 'absolute', top: 12, right: 16, fontSize: 22, opacity: 0.18 }}>📖</div>
+    <p style={{ fontSize: 11, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.12em', margin: '0 0 10px' }}>Story</p>
+    <div style={{ fontSize: 14, color: '#d1fae5', lineHeight: 1.9 }}>{children}</div>
+  </div>
+)
+
+const WowBox = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'linear-gradient(135deg,#1c1917,#292524)', border: '1px solid #f59e0b30', borderRadius: 12, padding: '20px 24px', margin: '28px 0', position: 'relative' }}>
+    <div style={{ position: 'absolute', top: 12, right: 16, fontSize: 22, opacity: 0.25 }}>⚡</div>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.12em', margin: '0 0 10px' }}>Wow Factor</p>
+    <div style={{ fontSize: 14, color: '#fef3c7', lineHeight: 1.9 }}>{children}</div>
+  </div>
+)
+
+const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: '#f59e0b08', border: '1px solid #f59e0b35', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Caution — {title}</p>
+    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
 const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Common Mistake — {title}</p>
-    <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>{children}</p>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Misconception — {title}</p>
+    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
-const IQ = ({ q, children }: { q: string; children: React.ReactNode }) => (
-  <div style={{ marginBottom: 40 }}>
-    <div style={{ background: `${N}10`, border: `1px solid ${N}25`, borderRadius: '8px 8px 0 0', padding: '14px 18px', fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>Q: {q}</div>
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
-  </div>
-)
+const LEVEL_COLORS: Record<string, string> = {
+  Beginner: '#10b981',
+  Intermediate: '#3b82f6',
+  Senior: '#8b5cf6',
+  PhD: '#f97316',
+}
 
-const TimeBlock = ({ time, label, children }: { time: string; label: string; children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 20, marginBottom: 28 }}>
-    <div style={{ flexShrink: 0, textAlign: 'right', width: 100 }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: N, fontFamily: 'var(--font-mono)' }}>{time}</div>
+const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) => (
+  <div style={{ marginBottom: 32 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 0 }}>
+      <span style={{ fontSize: 10, fontWeight: 700, color: '#000', background: LEVEL_COLORS[level], padding: '2px 9px', borderRadius: 20, letterSpacing: '.06em', textTransform: 'uppercase', flexShrink: 0 }}>{level}</span>
+      <div style={{ background: `${LEVEL_COLORS[level]}12`, border: `1px solid ${LEVEL_COLORS[level]}30`, borderRadius: '0 8px 0 0', padding: '12px 16px', fontSize: 14, fontWeight: 700, color: 'var(--text)', flex: 1 }}>Q: {q}</div>
     </div>
-    <div style={{ flex: 1, borderLeft: `2px solid ${N}30`, paddingLeft: 20, paddingBottom: 8 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{label}</div>
-      <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8 }}>{children}</div>
-    </div>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '16px 18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
   </div>
 )
 
-// ── Subnet Practice Quiz ──────────────────────────────────────────────────────
+/* ── helper functions ──────────────────────────────────────────────── */
+function cidrToMask(prefix: number): number[] {
+  const mask = ~((1 << (32 - prefix)) - 1) >>> 0
+  return [(mask >>> 24) & 0xFF, (mask >>> 16) & 0xFF, (mask >>> 8) & 0xFF, mask & 0xFF]
+}
+
 function parseIP(ip: string): number[] | null {
-  const parts = ip.trim().split('.')
+  const parts = ip.split('.').map(Number)
   if (parts.length !== 4) return null
-  const nums = parts.map(p => parseInt(p, 10))
-  if (nums.some(n => isNaN(n) || n < 0 || n > 255)) return null
-  return nums
+  if (parts.some(p => isNaN(p) || p < 0 || p > 255)) return null
+  return parts
 }
 
-function octetsToInt(o: number[]): number {
-  return ((o[0] << 24) | (o[1] << 16) | (o[2] << 8) | o[3]) >>> 0
-}
-function intToIP(n: number): string {
-  return [n >>> 24, (n >>> 16) & 0xff, (n >>> 8) & 0xff, n & 0xff].join('.')
-}
-function maskFromPrefix(p: number): number {
-  return p === 0 ? 0 : (0xffffffff << (32 - p)) >>> 0
+function ipToNum(octets: number[]): number {
+  return ((octets[0] << 24) | (octets[1] << 16) | (octets[2] << 8) | octets[3]) >>> 0
 }
 
-const QUIZ_QUESTIONS = [
-  { ip: '172.16.45.200', prefix: 20, ask: 'network' },
-  { ip: '10.200.150.75', prefix: 18, ask: 'broadcast' },
-  { ip: '192.168.100.130', prefix: 25, ask: 'network' },
-  { ip: '172.31.255.10', prefix: 22, ask: 'hosts' },
-  { ip: '10.10.10.250', prefix: 29, ask: 'broadcast' },
-  { ip: '192.168.50.200', prefix: 27, ask: 'network' },
-  { ip: '172.20.100.5', prefix: 16, ask: 'hosts' },
-  { ip: '10.0.0.50', prefix: 30, ask: 'broadcast' },
-]
+function numToIP(n: number): string {
+  return `${(n >>> 24) & 0xFF}.${(n >>> 16) & 0xFF}.${(n >>> 8) & 0xFF}.${n & 0xFF}`
+}
 
-function getAnswer(ip: string, prefix: number, ask: string): string {
-  const octets = parseIP(ip)!
-  const ipInt = octetsToInt(octets)
-  const maskInt = maskFromPrefix(prefix)
-  const networkInt = (ipInt & maskInt) >>> 0
-  const broadcastInt = (networkInt | (~maskInt >>> 0)) >>> 0
-  if (ask === 'network') return intToIP(networkInt)
-  if (ask === 'broadcast') return intToIP(broadcastInt)
-  return String(Math.pow(2, 32 - prefix) - 2)
+/* ── interactive components ────────────────────────────────────────── */
+
+function SubnetCalculator() {
+  const [baseIP, setBaseIP] = useState('10.0.0.0')
+  const [prefix, setPrefix] = useState(16)
+  const [subPrefix, setSubPrefix] = useState(24)
+
+  const octets = parseIP(baseIP)
+  const valid = octets !== null && prefix >= 1 && prefix <= 30 && subPrefix > prefix && subPrefix <= 30
+
+  let subnets: { net: string; broadcast: string; first: string; last: string; hosts: number }[] = []
+  let subnetCount = 0
+  let hostsPerSubnet = 0
+  let subnetMask = ''
+
+  if (valid && octets) {
+    const mask = cidrToMask(prefix)
+    const netNum = (ipToNum(octets) & ipToNum(mask)) >>> 0
+    subnetCount = 1 << (subPrefix - prefix)
+    hostsPerSubnet = (1 << (32 - subPrefix)) - 2
+    subnetMask = cidrToMask(subPrefix).join('.')
+
+    const maxShow = Math.min(subnetCount, 8)
+    const subSize = 1 << (32 - subPrefix)
+    for (let i = 0; i < maxShow; i++) {
+      const subNet = (netNum + i * subSize) >>> 0
+      const broadcast = (subNet + subSize - 1) >>> 0
+      subnets.push({
+        net: numToIP(subNet),
+        broadcast: numToIP(broadcast),
+        first: numToIP(subNet + 1),
+        last: numToIP(broadcast - 1),
+        hosts: hostsPerSubnet,
+      })
+    }
+  }
+
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 13, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Interactive — Subnet Calculator</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 20px' }}>Enter a base network and choose a subnet prefix to see how subnetting divides the address space.</p>
+
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20, alignItems: 'flex-end' }}>
+        <div>
+          <label style={{ fontSize: 12, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>Base Network</label>
+          <input value={baseIP} onChange={e => setBaseIP(e.target.value)}
+            style={{ background: 'var(--bg)', border: `1px solid ${valid ? 'var(--border)' : '#ef4444'}`, borderRadius: 6, padding: '7px 12px', color: G, fontSize: 14, fontFamily: 'var(--font-mono)', width: 150 }} />
+        </div>
+        <div>
+          <label style={{ fontSize: 12, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>Original /{prefix}</label>
+          <input type="range" min={8} max={28} value={prefix} onChange={e => { setPrefix(Number(e.target.value)); if (subPrefix <= Number(e.target.value)) setSubPrefix(Number(e.target.value) + 2) }}
+            style={{ width: 110 }} />
+        </div>
+        <div>
+          <label style={{ fontSize: 12, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>Subnet /{subPrefix}</label>
+          <input type="range" min={prefix + 1} max={30} value={subPrefix} onChange={e => setSubPrefix(Number(e.target.value))}
+            style={{ width: 110 }} />
+        </div>
+      </div>
+
+      {valid && (
+        <>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
+            {[
+              { label: 'Subnet Count', value: subnetCount.toLocaleString(), color: '#3b82f6' },
+              { label: 'Hosts Per Subnet', value: hostsPerSubnet.toLocaleString(), color: G },
+              { label: 'Subnet Mask', value: subnetMask, color: '#8b5cf6' },
+              { label: 'Bits Borrowed', value: String(subPrefix - prefix), color: '#f59e0b' },
+            ].map(item => (
+              <div key={item.label} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 14px' }}>
+                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{item.label}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)' }}>{item.value}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: 'var(--font-mono)' }}>
+              <thead>
+                <tr style={{ background: `${G}15` }}>
+                  {['#', 'Network', 'Broadcast', 'First Host', 'Last Host', 'Hosts'].map(h => (
+                    <th key={h} style={{ padding: '8px 12px', textAlign: 'left', color: G, fontWeight: 700, fontSize: 11, textTransform: 'uppercase' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {subnets.map((s, i) => (
+                  <tr key={i} style={{ background: i % 2 === 0 ? 'var(--bg)' : 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '7px 12px', color: 'var(--muted)' }}>{i + 1}</td>
+                    <td style={{ padding: '7px 12px', color: G, fontWeight: 700 }}>{s.net}/{subPrefix}</td>
+                    <td style={{ padding: '7px 12px', color: '#ef4444' }}>{s.broadcast}</td>
+                    <td style={{ padding: '7px 12px', color: 'var(--text)' }}>{s.first}</td>
+                    <td style={{ padding: '7px 12px', color: 'var(--text)' }}>{s.last}</td>
+                    <td style={{ padding: '7px 12px', color: '#f59e0b' }}>{s.hosts}</td>
+                  </tr>
+                ))}
+                {subnetCount > 8 && (
+                  <tr style={{ background: 'var(--surface)' }}>
+                    <td colSpan={6} style={{ padding: '8px 12px', color: 'var(--muted)', textAlign: 'center', fontStyle: 'italic' }}>
+                      ... {(subnetCount - 8).toLocaleString()} more subnets not shown
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+
+      {!valid && (
+        <div style={{ background: '#ef444410', border: '1px solid #ef444430', borderRadius: 8, padding: 12 }}>
+          <p style={{ fontSize: 13, color: '#ef4444', margin: 0 }}>Invalid input. Ensure subnet prefix is larger than original prefix (max /30).</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function VLSMPlanner() {
+  type Requirement = { name: string; needed: number; prefix: number; allocated: string; hosts: number }
+
+  const BASE = '192.168.0.0'
+  const BASE_PREFIX = 22
+
+  const requirements: Requirement[] = [
+    { name: 'Engineering', needed: 120, prefix: 25, allocated: '192.168.0.0/25', hosts: 126 },
+    { name: 'Sales', needed: 60, prefix: 26, allocated: '192.168.0.128/26', hosts: 62 },
+    { name: 'Servers', needed: 30, prefix: 27, allocated: '192.168.0.192/27', hosts: 30 },
+    { name: 'HR', needed: 14, prefix: 28, allocated: '192.168.0.224/28', hosts: 14 },
+    { name: 'Management', needed: 6, prefix: 29, allocated: '192.168.0.240/29', hosts: 6 },
+    { name: 'Router links', needed: 2, prefix: 30, allocated: '192.168.0.248/30', hosts: 2 },
+  ]
+
+  const [selected, setSelected] = useState<string | null>(null)
+  const sel = requirements.find(r => r.name === selected)
+
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 13, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Interactive — VLSM Planner</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 4px' }}>Base network: {BASE}/{BASE_PREFIX} (1022 addresses). Allocated efficiently using VLSM — largest to smallest.</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 20px' }}>Click a subnet to see allocation details.</p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '100px 80px 80px 160px 60px', padding: '8px 12px', background: `${G}15`, borderRadius: '8px 8px 0 0', fontSize: 11, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', gap: 0 }}>
+          <span>Department</span><span>Needed</span><span>Prefix</span><span>Allocated</span><span>Hosts</span>
+        </div>
+        {requirements.map((r, i) => (
+          <div key={r.name} onClick={() => setSelected(selected === r.name ? null : r.name)}
+            style={{ display: 'grid', gridTemplateColumns: '100px 80px 80px 160px 60px', padding: '10px 12px', background: selected === r.name ? `${G}12` : i % 2 === 0 ? 'var(--bg)' : 'var(--surface)', border: `1px solid ${selected === r.name ? G : 'var(--border)'}`, borderTop: i === 0 ? '1px solid var(--border)' : 'none', borderRadius: i === requirements.length - 1 ? '0 0 8px 8px' : 0, cursor: 'pointer', transition: 'all .15s', alignItems: 'center', gap: 0 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: selected === r.name ? G : 'var(--text)' }}>{r.name}</span>
+            <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{r.needed}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)' }}>/{r.prefix}</span>
+            <code style={{ fontSize: 12, color: G, fontFamily: 'var(--font-mono)' }}>{r.allocated}</code>
+            <span style={{ fontSize: 12, color: '#f59e0b', fontFamily: 'var(--font-mono)' }}>{r.hosts}</span>
+          </div>
+        ))}
+      </div>
+
+      {sel && (
+        <div style={{ marginTop: 12, background: `${G}10`, border: `1px solid ${G}30`, borderRadius: 8, padding: 14 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: G, margin: '0 0 6px' }}>{sel.name} — {sel.allocated}</p>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0 }}>
+            Needed: {sel.needed} hosts. Smallest prefix that fits: /{sel.prefix} (2^{32 - sel.prefix} - 2 = {sel.hosts} usable hosts).
+            Waste: {sel.hosts - sel.needed} addresses. VLSM assigns the largest subnets first, then fits smaller departments into the remaining space.
+          </p>
+        </div>
+      )}
+
+      <div style={{ marginTop: 16, padding: '12px 16px', background: 'var(--bg)', borderRadius: 8, border: '1px solid var(--border)' }}>
+        <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0 }}>
+          Total allocated: {requirements.reduce((s, r) => s + (1 << (32 - r.prefix)), 0)} addresses out of {1 << (32 - BASE_PREFIX)} available. Remaining space: {(1 << (32 - BASE_PREFIX)) - requirements.reduce((s, r) => s + (1 << (32 - r.prefix)), 0)} addresses (192.168.0.252/30 onwards).
+        </p>
+      </div>
+    </div>
+  )
 }
 
 function SubnetQuiz() {
-  const [qIdx, setQIdx] = useState(0)
-  const [answer, setAnswer] = useState('')
-  const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
+  const questions = [
+    { q: '192.168.5.200/26 — what is the network address?', answer: '192.168.5.192', options: ['192.168.5.0', '192.168.5.192', '192.168.5.200', '192.168.5.128'], explain: '/26 = mask 255.255.255.192. 200 in binary = 11001000. AND with 11000000 = 11000000 = 192. Network: 192.168.5.192' },
+    { q: '10.10.10.0/28 — how many usable host addresses?', answer: '14', options: ['14', '16', '30', '32'], explain: '/28 host bits = 32-28 = 4. Total addresses = 2^4 = 16. Usable = 16 - 2 = 14.' },
+    { q: 'Are 172.16.5.10/24 and 172.16.6.10/24 in the same subnet?', answer: 'No', options: ['Yes', 'No'], explain: 'A /24 uses the first 24 bits. 172.16.5 vs 172.16.6 — the third octet differs. They are in different /24 subnets.' },
+    { q: 'What is the broadcast address of 10.0.4.0/22?', answer: '10.0.7.255', options: ['10.0.4.255', '10.0.7.255', '10.0.3.255', '10.0.5.255'], explain: '/22 = host bits = 10. Block size = 2^10 = 1024. Network 10.0.4.0. Broadcast = 10.0.4.0 + 1023 = 10.0.7.255.' },
+  ]
+
+  const [current, setCurrent] = useState(0)
+  const [selected, setSelected] = useState<string | null>(null)
   const [score, setScore] = useState(0)
   const [done, setDone] = useState(false)
 
-  const q = QUIZ_QUESTIONS[qIdx]
-  const correct = getAnswer(q.ip, q.prefix, q.ask)
+  const q = questions[current]
+  const isCorrect = selected === q.answer
 
-  const handleCheck = () => {
-    const isCorrect = answer.trim() === correct
-    setFeedback(isCorrect ? 'correct' : 'wrong')
-    if (isCorrect) setScore(s => s + 1)
+  const handleSelect = (opt: string) => {
+    if (selected !== null) return
+    setSelected(opt)
+    if (opt === q.answer) setScore(s => s + 1)
   }
 
-  const handleNext = () => {
-    if (qIdx + 1 >= QUIZ_QUESTIONS.length) {
-      setDone(true)
+  const next = () => {
+    if (current < questions.length - 1) {
+      setCurrent(c => c + 1)
+      setSelected(null)
     } else {
-      setQIdx(i => i + 1)
-      setAnswer('')
-      setFeedback(null)
+      setDone(true)
     }
   }
 
-  const handleReset = () => {
-    setQIdx(0)
-    setAnswer('')
-    setFeedback(null)
-    setScore(0)
-    setDone(false)
-  }
-
-  const askLabel = q.ask === 'network' ? 'network address' : q.ask === 'broadcast' ? 'broadcast address' : 'number of usable hosts'
+  const reset = () => { setCurrent(0); setSelected(null); setScore(0); setDone(false) }
 
   return (
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', margin: '28px 0' }}>
-      <div style={{ padding: '18px 22px', borderBottom: '1px solid var(--border)', background: `${N}06` }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <p style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '.1em', margin: '0 0 4px' }}>// INTERACTIVE — SUBNET PRACTICE QUIZ</p>
-            <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0 }}>Train mental subnetting speed. No calculator.</p>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 24, margin: '32px 0' }}>
+      <p style={{ fontSize: 13, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Interactive — Subnetting Quiz</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 20px' }}>Test your mental subnetting skills — no calculator needed.</p>
+
+      {!done ? (
+        <>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
+            <span style={{ fontSize: 12, color: 'var(--muted)' }}>Question {current + 1} / {questions.length}</span>
+            <span style={{ fontSize: 12, color: G }}>Score: {score}</span>
           </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 700, color: N }}>{score}/{QUIZ_QUESTIONS.length}</div>
-        </div>
-      </div>
-
-      <div style={{ padding: '24px 22px' }}>
-        {done ? (
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 36, fontWeight: 900, color: score >= 6 ? N : '#f59e0b', fontFamily: 'var(--font-mono)', marginBottom: 12 }}>{score}/{QUIZ_QUESTIONS.length}</div>
-            <div style={{ fontSize: 15, color: 'var(--text)', marginBottom: 8 }}>
-              {score === 8 ? 'Perfect score — you can subnet in your head.' : score >= 6 ? 'Strong — a few more rounds and you\'ll be instant.' : 'Keep practicing — subnetting is a muscle, it takes repetition.'}
-            </div>
-            <button onClick={handleReset} style={{ marginTop: 16, padding: '10px 24px', background: N, color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>Try Again</button>
+          <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', margin: '0 0 16px' }}>{q.q}</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+            {q.options.map(opt => {
+              let bg = 'var(--bg)'
+              let border = 'var(--border)'
+              let color = 'var(--text)'
+              if (selected !== null) {
+                if (opt === q.answer) { bg = `${G}15`; border = G; color = G }
+                else if (opt === selected && opt !== q.answer) { bg = '#ef444412'; border = '#ef4444'; color = '#ef4444' }
+              }
+              return (
+                <div key={opt} onClick={() => handleSelect(opt)}
+                  style={{ padding: '10px 16px', background: bg, border: `2px solid ${border}`, borderRadius: 8, cursor: selected === null ? 'pointer' : 'default', color, fontSize: 14, fontFamily: 'var(--font-mono)', fontWeight: opt === q.answer && selected !== null ? 700 : 400, transition: 'all .1s' }}>
+                  {opt}
+                </div>
+              )
+            })}
           </div>
-        ) : (
-          <>
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>Question {qIdx + 1} of {QUIZ_QUESTIONS.length}</div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>
-                Given the address <span style={{ fontFamily: 'var(--font-mono)', color: N }}>{q.ip}/{q.prefix}</span>, what is the <strong>{askLabel}</strong>?
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-                Subnet mask: {intToIP(maskFromPrefix(q.prefix))} — Block size: {Math.pow(2, 32 - q.prefix)}
-              </div>
+          {selected !== null && (
+            <div style={{ background: isCorrect ? `${G}10` : '#ef444410', border: `1px solid ${isCorrect ? G : '#ef4444'}30`, borderRadius: 8, padding: 12, marginBottom: 14 }}>
+              <p style={{ fontSize: 13, color: isCorrect ? G : '#ef4444', margin: '0 0 4px', fontWeight: 700 }}>
+                {isCorrect ? 'Correct!' : 'Incorrect.'}
+              </p>
+              <p style={{ fontSize: 13, color: 'var(--text)', margin: 0 }}>{q.explain}</p>
             </div>
-
-            <div style={{ display: 'flex', gap: 10 }}>
-              <input
-                value={answer}
-                onChange={e => setAnswer(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter' && !feedback) handleCheck() }}
-                disabled={feedback !== null}
-                style={{ flex: 1, padding: '10px 14px', borderRadius: 8, border: `1px solid ${feedback === 'correct' ? N : feedback === 'wrong' ? '#ef4444' : 'var(--border)'}`, background: 'var(--background)', color: 'var(--text)', fontSize: 14, fontFamily: 'var(--font-mono)' }}
-                placeholder={q.ask === 'hosts' ? 'e.g. 254' : 'e.g. 192.168.1.0'}
-              />
-              {!feedback ? (
-                <button onClick={handleCheck} style={{ padding: '10px 20px', background: N, color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>Check</button>
-              ) : (
-                <button onClick={handleNext} style={{ padding: '10px 20px', background: 'var(--background)', border: `1px solid ${N}`, color: N, borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>Next →</button>
-              )}
-            </div>
-
-            {feedback && (
-              <div style={{ marginTop: 14, padding: '12px 16px', borderRadius: 8, background: feedback === 'correct' ? `${N}10` : '#ef444410', border: `1px solid ${feedback === 'correct' ? N : '#ef4444'}30`, fontSize: 13 }}>
-                {feedback === 'correct' ? (
-                  <span style={{ color: N, fontWeight: 700 }}>✓ Correct! {correct}</span>
-                ) : (
-                  <span>
-                    <span style={{ color: '#ef4444', fontWeight: 700 }}>✗ Incorrect.</span>
-                    {' '}The correct answer is <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: N }}>{correct}</span>.
-                    {q.ask === 'network' && <span style={{ color: 'var(--muted)' }}> (IP AND mask: {q.ip} AND {intToIP(maskFromPrefix(q.prefix))})</span>}
-                    {q.ask === 'broadcast' && <span style={{ color: 'var(--muted)' }}> (network OR inverted mask)</span>}
-                    {q.ask === 'hosts' && <span style={{ color: 'var(--muted)' }}> (2^{32 - q.prefix} − 2)</span>}
-                  </span>
-                )}
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </div>
-  )
-}
-
-// ── Supernet Calculator ───────────────────────────────────────────────────────
-function SupernetCalc() {
-  const [networks, setNetworks] = useState('192.168.0.0/24\n192.168.1.0/24\n192.168.2.0/24\n192.168.3.0/24')
-
-  const lines = networks.split('\n').map(l => l.trim()).filter(Boolean)
-  const parsed = lines.map(line => {
-    const [ipStr, prefStr] = line.split('/')
-    const octets = parseIP(ipStr)
-    const prefix = parseInt(prefStr, 10)
-    if (!octets || isNaN(prefix) || prefix < 0 || prefix > 32) return null
-    const ip = octetsToInt(octets)
-    const mask = maskFromPrefix(prefix)
-    const net = (ip & mask) >>> 0
-    return { original: line, ip, net, prefix }
-  })
-  const valid = parsed.filter(Boolean) as { original: string; ip: number; net: number; prefix: number }[]
-
-  let supernet = null
-  if (valid.length >= 2) {
-    const nets = valid.map(v => v.net)
-    const minNet = Math.min(...nets)
-    const maxNet = Math.max(...nets)
-    const maxPrefix = Math.min(...valid.map(v => v.prefix))
-
-    let summaryPrefix = maxPrefix
-    while (summaryPrefix > 0) {
-      const mask = maskFromPrefix(summaryPrefix)
-      const summaryNet = (minNet & mask) >>> 0
-      const allIn = nets.every(n => (n & mask) >>> 0 === summaryNet)
-      if (allIn) break
-      summaryPrefix--
-    }
-    const mask = maskFromPrefix(summaryPrefix)
-    const summaryNet = (minNet & mask) >>> 0
-    supernet = { net: intToIP(summaryNet), prefix: summaryPrefix, covers: Math.pow(2, 32 - summaryPrefix) }
-  }
-
-  return (
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', margin: '28px 0' }}>
-      <div style={{ padding: '18px 22px', borderBottom: '1px solid var(--border)', background: `${N}06` }}>
-        <p style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '.1em', margin: '0 0 4px' }}>// INTERACTIVE — ROUTE SUMMARIZATION CALCULATOR</p>
-        <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0 }}>Enter a list of networks (one per line) to find the minimum supernet that covers all of them.</p>
-      </div>
-
-      <div style={{ padding: '20px 22px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-        <div>
-          <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em', display: 'block', marginBottom: 8 }}>Networks to summarize</label>
-          <textarea
-            value={networks}
-            onChange={e => setNetworks(e.target.value)}
-            rows={7}
-            style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--background)', color: 'var(--text)', fontSize: 13, fontFamily: 'var(--font-mono)', resize: 'vertical', boxSizing: 'border-box' }}
-          />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Analysis</div>
-          {valid.length === 0 ? (
-            <div style={{ fontSize: 13, color: 'var(--muted)', padding: '16px', border: '1px solid var(--border)', borderRadius: 8 }}>Enter networks above</div>
-          ) : (
-            <>
-              {valid.map((v, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 12px', background: 'var(--background)', border: '1px solid var(--border)', borderRadius: 6, fontSize: 12 }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--muted)' }}>{v.original}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text)' }}>{intToIP(v.net)}</span>
-                </div>
-              ))}
-              {supernet && (
-                <div style={{ padding: '14px 16px', background: `${N}12`, border: `2px solid ${N}40`, borderRadius: 10, marginTop: 8 }}>
-                  <div style={{ fontSize: 11, color: N, fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 6 }}>Summary Route</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 900, color: N }}>{supernet.net}/{supernet.prefix}</div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>Covers {supernet.covers.toLocaleString()} addresses</div>
-                </div>
-              )}
-            </>
           )}
+          {selected !== null && (
+            <button onClick={next} style={{ background: G, color: '#000', border: 'none', borderRadius: 6, padding: '8px 18px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+              {current < questions.length - 1 ? 'Next Question' : 'Finish'}
+            </button>
+          )}
+        </>
+      ) : (
+        <div style={{ textAlign: 'center', padding: '20px 0' }}>
+          <p style={{ fontSize: 32, fontWeight: 900, color: score >= 3 ? G : '#f59e0b', margin: '0 0 8px' }}>{score}/{questions.length}</p>
+          <p style={{ fontSize: 14, color: 'var(--muted)', margin: '0 0 20px' }}>
+            {score === 4 ? 'Perfect! You can subnet in your head.' : score >= 3 ? 'Strong subnetting skills.' : score >= 2 ? 'Good foundation — keep practicing.' : 'Review the binary method and try again.'}
+          </p>
+          <button onClick={reset} style={{ background: G, color: '#000', border: 'none', borderRadius: 6, padding: '8px 20px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>Try Again</button>
         </div>
-      </div>
+      )}
     </div>
   )
 }
 
-export default function Subnetting() {
+/* ── main module ───────────────────────────────────────────────────── */
+
+export default function SubnettingModule() {
   return (
     <LearnLayout
       title="Subnetting"
-      description="Master the mental math of subnetting — network addresses, broadcast addresses, host counts, VLSM design, and route summarization for real network engineering."
-      section="Networking Fundamentals"
-      readTime="30 min"
+      description="The craft of dividing IP address space into precisely sized networks. From exam questions to production network design — subnetting is the single most tested skill in network engineering."
+      section="Networking Fundamentals — Module 14"
+      readTime="28–40 min"
       updatedAt="May 2026"
     >
+      {/* ── Chapter 1 ── */}
+      <Chapter n={1} title="Why Subnetting Exists" />
 
-      {/* ── PART 1 ── */}
-      <Part n="01" title="Why Subnetting Is a Core Engineering Skill" />
+      <StoryBox>
+        Before subnetting, a company received a single Class B address (e.g., 172.16.0.0/16) and all 65,534 hosts were on one flat network — one massive broadcast domain. Every ARP request, every DHCP discover, every NetBIOS broadcast was sent to all 65,534 devices simultaneously. By 1985, networks with more than a few hundred hosts were functionally unusable under broadcast load. Dr. Jeff Mogul at Stanford published RFC 917 in 1984, proposing subnetting: take the single large address block and subdivide it into smaller, manageable networks. One /16 becomes 256 /24 subnets, each a separate broadcast domain. Broadcast traffic stays within the /24. Routers separate the subnets. The network becomes manageable.
+      </StoryBox>
 
-      <P>
-        Subnetting is not just exam material — it is a skill you will use every day as a network engineer, SRE, or infrastructure engineer. When you provision a new application tier in AWS, you choose the VPC subnet CIDR. When you configure OSPF route summarization to reduce routing table size, you calculate the summary prefix. When you debug a routing loop, you need to determine whether an IP is in a specific subnet. When you design a campus network for 800 devices across 6 VLANs, you allocate address space efficiently. All of these require fluent, fast subnetting.
-      </P>
-      <P>
-        The good news: there are only a few formulas, and the entire skill becomes automatic with practice. This module covers the mental shortcuts used by experienced engineers — not the academic algorithm that takes 5 minutes per answer, but the sub-30-second methods used under pressure during an incident.
-      </P>
+      <Para>
+        <Accent>Subnetting</Accent> is the process of dividing a larger IP network into smaller sub-networks (subnets). This is achieved by extending the network portion of the address — borrowing bits from the host portion to create more networks with fewer hosts each.
+      </Para>
 
-      <HR />
+      <Para>
+        The motivations for subnetting are multiple and compounding. <Accent>Broadcast control:</Accent> smaller subnets mean smaller broadcast domains — fewer devices receive each broadcast frame, reducing noise and improving performance. <Accent>Security segmentation:</Accent> routers between subnets create natural enforcement points for access control policies. <Accent>Address conservation:</Accent> instead of allocating a /24 to a 10-device network, use a /28 (14 hosts) and conserve the remaining addresses for other uses. <Accent>Routing efficiency:</Accent> hierarchical subnetting enables route summarization, reducing routing table sizes.
+      </Para>
 
-      {/* ── PART 2 ── */}
-      <Part n="02" title="The Mental Model: Powers of 2 and Block Sizes" />
+      <WowBox>
+        Network engineers who can subnet quickly in their heads — without calculators — are highly valued in interviews and production environments. The skill isn't about memorizing formulas; it's about understanding binary. Once you see that "borrowing 2 bits" creates 4 subnets (2^2), or that a /27 has 32 addresses (2^5) and 30 usable hosts, everything else follows from first principles. The interview question "subnet this network" is testing whether you understand bits, not whether you've memorized tables.
+      </WowBox>
 
-      <P>
-        Everything in subnetting reduces to powers of 2. A /24 has 2⁸ = 256 addresses. A /25 has 2⁷ = 128. A /26 has 2⁶ = 64. Each bit you borrow from the host portion doubles the number of subnets and halves the number of addresses per subnet. Memorize this table and subnetting becomes mechanical:
-      </P>
+      <Divider />
 
-      <div style={{ overflowX: 'auto', margin: '12px 0 28px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>
-          <thead>
-            <tr style={{ background: `${N}12` }}>
-              {['Prefix', 'Host bits', 'Block size', 'Addresses', 'Usable hosts', 'Last octet range', 'Typical use'].map(h => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, color: N, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', border: '1px solid var(--border)' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['/24', '8', '256', '256', '254', '0–255', 'Standard LAN'],
-              ['/25', '7', '128', '128', '126', '0, 128', 'Half floor/VLAN'],
-              ['/26', '6', '64', '64', '62', '0,64,128,192', 'Department'],
-              ['/27', '5', '32', '32', '30', '0,32,64…224', 'Small VLAN'],
-              ['/28', '4', '16', '16', '14', '0,16,32…240', 'Management'],
-              ['/29', '3', '8', '8', '6', '0,8,16…248', 'Very small'],
-              ['/30', '2', '4', '4', '2', '0,4,8…252', 'P2P link'],
-              ['/31', '1', '2', '2', '2*', '0,2,4…254', 'P2P RFC 3021'],
-              ['/32', '0', '1', '1', '1', 'Specific host', 'Host route'],
-            ].map((row, i) => (
-              <tr key={i} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--background)' }}>
-                {row.map((cell, j) => (
-                  <td key={j} style={{ padding: '9px 14px', border: '1px solid var(--border)', fontFamily: j <= 1 ? 'var(--font-mono)' : undefined, fontWeight: j === 0 ? 700 : 400, color: j === 0 ? N : 'var(--text)' }}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: -16, marginBottom: 24, fontStyle: 'italic' }}>* /31 has no network/broadcast — both addresses are usable (RFC 3021)</p>
+      {/* ── Chapter 2 ── */}
+      <Chapter n={2} title="The Subnetting Mechanics" />
 
-      <H>The Block Size Method (Fastest Mental Subnetting)</H>
-      <P>
-        The block size is the interval between subnet boundaries. For a /26, the mask octet is 192 (64 + 128). Block size = 256 − 192 = <Hl>64</Hl>. So /26 subnets in the last octet are: 0, 64, 128, 192. To find which subnet any IP belongs to: divide the host octet by the block size and multiply back. For 192.168.1.100 in a /26: 100 ÷ 64 = 1 (integer division) → 1 × 64 = 64. The network address is 192.168.1.<Hl>64</Hl>. Broadcast = 64 + 64 − 1 = 192.168.1.<Hl>127</Hl>.
-      </P>
+      <H2>Borrowing Bits from the Host Portion</H2>
 
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}25`, borderRadius: 12, padding: '20px 22px', margin: '16px 0 28px', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
-        <div style={{ color: N, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 14 }}>Worked Example: 172.16.45.200/20</div>
+      <Para>
+        Given a /24 network (192.168.1.0/24), the first 24 bits are the network portion and the last 8 bits are the host portion. To create subnets, we "borrow" bits from the left of the host portion. Each borrowed bit doubles the number of subnets:
+      </Para>
 
-        <div style={{ display: 'grid', gap: 10 }}>
-          {[
-            { step: '1. Prefix /20 → 20 bits used. Active octet is third (bits 17–24). 20 − 16 = 4 bits used in third octet.', color: '#3b82f6' },
-            { step: '2. Mask for 4 bits in octet = 256 − 2^(8−4) = 256 − 16 = 240. Full mask: 255.255.240.0', color: '#8b5cf6' },
-            { step: '3. Block size = 256 − 240 = 16 in the third octet.', color: N },
-            { step: '4. Third octet = 45. 45 ÷ 16 = 2 (integer). 2 × 16 = 32. Network = 172.16.32.0/20', color: N },
-            { step: '5. Broadcast = 172.16.(32+16−1).255 = 172.16.47.255', color: '#f59e0b' },
-            { step: '6. Hosts: 172.16.32.1 – 172.16.47.254 (4094 usable)', color: '#f59e0b' },
-          ].map((item, i) => (
-            <div key={i} style={{ display: 'flex', gap: 12 }}>
-              <span style={{ color: item.color, fontWeight: 700, minWidth: 20 }}>{i + 1}.</span>
-              <span style={{ color: 'var(--text)', lineHeight: 1.7 }}>{item.step}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      <CodeBlock>
+{`Original /24:  11000000.10101000.00000001 | 00000000
+                ←────── 24 network bits ─────→ ←8 host→
 
-      <HR />
+Borrow 1 bit:  11000000.10101000.00000001.0 | 0000000  → /25 (2 subnets, 126 hosts each)
+Borrow 2 bits: 11000000.10101000.00000001.00 | 000000  → /26 (4 subnets, 62 hosts each)
+Borrow 3 bits: 11000000.10101000.00000001.000 | 00000  → /27 (8 subnets, 30 hosts each)
+Borrow 4 bits: 11000000.10101000.00000001.0000 | 0000  → /28 (16 subnets, 14 hosts each)
+Borrow 5 bits: 11000000.10101000.00000001.00000 | 000  → /29 (32 subnets, 6 hosts each)
+Borrow 6 bits: 11000000.10101000.00000001.000000 | 00  → /30 (64 subnets, 2 hosts each)
+Borrow 7 bits: 11000000.10101000.00000001.0000000 | 0  → /31 (RFC 3021 point-to-point, 0 hosts)
+Borrow 8 bits: all host bits used for network — no hosts possible`}
+      </CodeBlock>
 
-      {/* ── PART 3 ── */}
-      <Part n="03" title="Interactive: Subnet Practice Quiz" />
+      <H2>The Core Formula</H2>
 
-      <P>
-        The fastest way to build subnetting fluency is repetitive timed practice. The goal is to calculate network, broadcast, and host count in under 15 seconds per question. This requires knowing block sizes by heart: /25=128, /26=64, /27=32, /28=16, /29=8, /30=4.
-      </P>
+      <Para>
+        Given a network with prefix /n that you want to subnet into /{'{'}n+k{'}'} subnets:
+      </Para>
+
+      <Para>
+        <Accent>Number of subnets</Accent> = 2^k (where k is the number of bits borrowed)
+      </Para>
+
+      <Para>
+        <Accent>Hosts per subnet</Accent> = 2^(32 - n - k) - 2 = 2^(remaining host bits) - 2
+      </Para>
+
+      <Para>
+        <Accent>Block size</Accent> (address count per subnet) = 2^(32 - n - k) = hosts per subnet + 2
+      </Para>
+
+      <Para>
+        The "block size" is the most useful mental shortcut. For a /26 subnet (block size = 2^6 = 64), subnets start at multiples of 64: 0, 64, 128, 192. For a /27 (block size 32): 0, 32, 64, 96, 128, 160, 192, 224.
+      </Para>
+
+      <H2>The Subnet Mask Relationship</H2>
+
+      <Para>
+        The subnet mask is always 255 in octets fully covered by the prefix, and in the "interesting octet" (the octet where the prefix boundary falls), it equals 256 minus the block size.
+      </Para>
+
+      <Para>
+        Example: /26 prefix. The first two octets are fully 255 (network portion). The third octet is 255. The fourth octet has 2 network bits: block size = 2^6 = 64. Mask in 4th octet = 256 - 64 = 192. Subnet mask: 255.255.255.192.
+      </Para>
+
+      <Para>
+        /27: block size = 32. Mask = 256 - 32 = 224. Mask: 255.255.255.224.
+        /28: block size = 16. Mask = 256 - 16 = 240. Mask: 255.255.255.240.
+        /29: block size = 8. Mask = 256 - 8 = 248. Mask: 255.255.255.248.
+        /30: block size = 4. Mask = 256 - 4 = 252. Mask: 255.255.255.252.
+      </Para>
+
+      <SubnetCalculator />
+
+      <Divider />
+
+      {/* ── Chapter 3 ── */}
+      <Chapter n={3} title="Mental Subnetting: The Quick Method" />
+
+      <StoryBox>
+        In a CCIE practical exam, you have 8 hours to complete a complex lab. There is no time to set up a spreadsheet. When the examiner says "subnet 172.16.0.0/16 into subnets of at most 60 hosts each," you need the answer in 10 seconds: /26 (62 hosts), subnets start at 0, 64, 128, 192 in the fourth octet. The examiner asks "which subnet is 172.16.5.100 in?" You calculate: 100/64 = 1 remainder 36. Subnet: 172.16.5.64/26. You move on.
+      </StoryBox>
+
+      <H2>The Four-Step Mental Method</H2>
+
+      <Para>
+        <Accent>Step 1: Find the prefix.</Accent> Given a host requirement, find the smallest power of 2 greater than (hosts + 2). For 50 hosts: 2^5=32 (too small), 2^6=64 (sufficient). Prefix = 32 - 6 = /26. For 100 hosts: 2^7=128. Prefix = /25.
+      </Para>
+
+      <Para>
+        <Accent>Step 2: Find the block size.</Accent> Block size = 2^(host bits) = 256 - (interesting octet of mask). For /26: block size = 64. Subnets start at 0, 64, 128, 192.
+      </Para>
+
+      <Para>
+        <Accent>Step 3: Find which subnet an IP is in.</Accent> Divide the interesting octet by the block size (integer division). Multiply back to find the subnet start. For IP x.x.x.100 in a /26 (block size 64): 100 ÷ 64 = 1, remainder 36. Subnet start: 1 × 64 = 64. Network: x.x.x.64.
+      </Para>
+
+      <Para>
+        <Accent>Step 4: Find network, broadcast, first, and last hosts.</Accent> Network = subnet start. Broadcast = subnet start + block size - 1. First host = network + 1. Last host = broadcast - 1.
+      </Para>
+
+      <H2>Quick Reference Table</H2>
+
+      <CodeBlock>
+{`Prefix  Mask               Block  Subnets   Hosts
+/24    255.255.255.0       256     1      254
+/25    255.255.255.128     128     2      126
+/26    255.255.255.192      64     4       62
+/27    255.255.255.224      32     8       30
+/28    255.255.255.240      16    16       14
+/29    255.255.255.248       8    32        6
+/30    255.255.255.252       4    64        2
+/31    255.255.255.254       2   128     0 (RFC 3021: 2 usable P2P)
+/32    255.255.255.255       1   256     0 (host route)`}
+      </CodeBlock>
 
       <SubnetQuiz />
 
-      <HR />
+      <Divider />
 
-      {/* ── PART 4 ── */}
-      <Part n="04" title="Route Summarization (Supernetting)" />
+      {/* ── Chapter 4 ── */}
+      <Chapter n={4} title="VLSM — Variable Length Subnet Masking" />
 
-      <P>
-        <Hl>Route summarization</Hl> (also called supernetting or route aggregation) is the process of combining multiple specific routes into a single summary route with a shorter prefix. A router advertising 192.168.0.0/24, 192.168.1.0/24, 192.168.2.0/24, and 192.168.3.0/24 as four separate routes can instead advertise one summary route: 192.168.0.0/<Hl>22</Hl>. This covers all four /24s (256 × 4 = 1024 addresses = 2¹⁰, so /22) with a single routing table entry.
-      </P>
+      <StoryBox>
+        A company has 192.168.0.0/22 and the following departments: Engineering (120 hosts), Sales (60 hosts), Servers (30 hosts), HR (14 hosts), Management (6 hosts), 3 router point-to-point links (2 hosts each). Fixed-length subnetting with /25 (126 hosts each) would give 8 identical subnets — but the router links only need 2 hosts each and waste 124 addresses per link. VLSM allocates exactly what each department needs, starting with the largest.
+      </StoryBox>
 
-      <H>Why Route Summarization Matters</H>
-      <P>
-        Every route in a router&apos;s routing table consumes TCAM memory and requires processing time during route lookups. The internet&apos;s BGP routing table has ~900,000 entries and consumes significant memory in all edge routers. Without summarization, every /24 network that is broken into smaller blocks would contribute multiple separate entries instead of one. Within an enterprise, a well-summarized network has a distribution layer advertising a single /16 summary for an entire building instead of 256 separate /24s — simpler, more stable, and faster to converge after a topology change. Route summarization is a design constraint: it works best when IP addressing is hierarchical and contiguous.
-      </P>
+      <Para>
+        <Accent>VLSM (Variable Length Subnet Masking)</Accent> uses different prefix lengths for different subnets, allocating address space to fit actual requirements rather than forcing every subnet to the same size. VLSM is the standard approach in all modern networks — "fixed-length subnetting" (every subnet the same size) is now considered wasteful.
+      </Para>
 
-      <H>Finding the Summary Route</H>
-      <P>
-        The algorithm: (1) convert the network addresses to binary; (2) find the longest common prefix (the leftmost bits that are identical across all networks); (3) the summary prefix length equals the number of matching bits. For 192.168.0.0 through 192.168.3.0:
-      </P>
+      <H2>VLSM Design Process</H2>
 
-      <div style={{ background: 'var(--surface)', border: `1px solid ${N}25`, borderRadius: 12, padding: '20px 22px', margin: '16px 0 28px', fontFamily: 'var(--font-mono)', fontSize: 13, overflowX: 'auto' }}>
-        <div style={{ color: 'var(--muted)', marginBottom: 10, fontSize: 11, textTransform: 'uppercase', letterSpacing: '.08em' }}>Binary prefix comparison</div>
-        {[
-          ['192.168.0.0', '11000000.10101000.00000000.00000000'],
-          ['192.168.1.0', '11000000.10101000.00000001.00000000'],
-          ['192.168.2.0', '11000000.10101000.00000010.00000000'],
-          ['192.168.3.0', '11000000.10101000.00000011.00000000'],
-        ].map(([ip, bin]) => (
-          <div key={ip} style={{ marginBottom: 6, color: 'var(--text)' }}>
-            <span style={{ color: 'var(--muted)', minWidth: 120, display: 'inline-block', fontSize: 11 }}>{ip}</span>
-            <span style={{ color: '#3b82f6' }}>11000000.10101000.000000</span>
-            <span style={{ color: '#ef4444' }}>{bin.slice(-10)}</span>
-          </div>
-        ))}
-        <div style={{ borderTop: '1px solid var(--border)', marginTop: 12, paddingTop: 12, color: N }}>
-          Common prefix: 22 bits → Summary route: <strong>192.168.0.0/22</strong>
-        </div>
-      </div>
+      <Para>
+        <Accent>1. List all subnets and their host requirements, sorted largest to smallest.</Accent> This is critical — you must satisfy the largest requirements first to prevent the large subnets from stepping on small ones.
+      </Para>
 
-      <H>Discontiguous Summarization Problem</H>
-      <P>
-        Summarization only works correctly when the networks being summarized are <Hl>contiguous</Hl> — consecutive and aligned on a power-of-2 boundary. Trying to summarize 192.168.1.0/24 and 192.168.3.0/24 (skipping .2.0/24) would require a summary that also &quot;covers&quot; 192.168.0.0/24 and 192.168.2.0/24 in the routing table — the summary would incorrectly attract traffic for those missing subnets and black-hole it. This is why IP addressing design and route summarization must be planned together, not added after the fact.
-      </P>
+      <Para>
+        <Accent>2. For each requirement, find the smallest prefix that fits.</Accent> Hosts needed + 2 (network + broadcast) ≤ 2^(host bits). Choose the smallest host-bits value satisfying this.
+      </Para>
 
-      <HR />
+      <Para>
+        <Accent>3. Allocate the address space sequentially.</Accent> Start from the base network. Assign the first large subnet, then the next subnet starts immediately after the first's broadcast address.
+      </Para>
 
-      {/* ── PART 5 ── */}
-      <Part n="05" title="Interactive: Route Summarization Calculator" />
+      <Para>
+        <Accent>4. Verify no overlap.</Accent> Each subnet must be on a boundary aligned to its block size. A /26 must start at a multiple of 64; a /27 must start at a multiple of 32.
+      </Para>
 
-      <SupernetCalc />
+      <VLSMPlanner />
 
-      <HR />
+      <H2>VLSM Alignment Rule</H2>
 
-      {/* ── PART 6 ── */}
-      <Part n="06" title="VLSM Design: Allocating Address Space Efficiently" />
+      <Para>
+        A subnet of prefix /n must start at an address that is a multiple of its block size (2^(32-n)) in the last octet (or across octets for larger subnets). A /26 (block size 64) must start at 0, 64, 128, or 192. A /27 (block size 32) must start at 0, 32, 64, ..., 224. If you try to put a /27 starting at 70, you've violated alignment — the network boundary must be at a multiple of 32, so the valid choices are 64 or 96.
+      </Para>
 
-      <P>
-        <Hl>VLSM (Variable Length Subnet Masking)</Hl> is the technique of assigning different-sized subnets within the same address space based on actual host count requirements. The process is: (1) sort requirements from largest to smallest; (2) allocate from the start of the address block, fitting each subnet on the next aligned boundary; (3) verify no overlap.
-      </P>
+      <Warn title="VLSM alignment errors">
+        Misaligned subnets (starting at non-boundary addresses) are a common error in both exam questions and production networks. A /26 starting at 192.168.1.100 is invalid — 100 is not a multiple of 64. The router will accept the configuration but calculate incorrect network/broadcast addresses, causing hosts to be unreachable or in the wrong subnet.
+      </Warn>
 
-      <H>VLSM Design Example</H>
-      <P>
-        Task: Design subnets for a new office from 10.50.0.0/22. Departments: Engineering (120 hosts), Sales (60 hosts), HR (25 hosts), Finance (12 hosts), Servers (50 hosts), Management VLAN (8 hosts), two P2P WAN links (2 hosts each).
-      </P>
+      <Divider />
 
-      <div style={{ overflowX: 'auto', margin: '12px 0 28px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 700 }}>
-          <thead>
-            <tr style={{ background: `${N}12` }}>
-              {['Dept', 'Hosts', 'Prefix', 'Subnet', 'Usable Range', 'Available', 'Waste'].map(h => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, color: N, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', border: '1px solid var(--border)' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['Engineering', '120', '/25', '10.50.0.0/25', '10.50.0.1–126', '126', '6'],
-              ['Sales', '60', '/26', '10.50.0.128/26', '10.50.0.129–190', '62', '2'],
-              ['Servers', '50', '/26', '10.50.0.192/26', '10.50.0.193–254', '62', '12'],
-              ['HR', '25', '/27', '10.50.1.0/27', '10.50.1.1–30', '30', '5'],
-              ['Finance', '12', '/28', '10.50.1.32/28', '10.50.1.33–46', '14', '2'],
-              ['Mgmt VLAN', '8', '/28', '10.50.1.48/28', '10.50.1.49–62', '14', '6'],
-              ['WAN Link 1', '2', '/30', '10.50.1.64/30', '10.50.1.65–66', '2', '0'],
-              ['WAN Link 2', '2', '/30', '10.50.1.68/30', '10.50.1.69–70', '2', '0'],
-            ].map((row, i) => (
-              <tr key={i} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--background)' }}>
-                {row.map((cell, j) => (
-                  <td key={j} style={{ padding: '9px 14px', border: '1px solid var(--border)', fontFamily: j >= 2 ? 'var(--font-mono)' : undefined, fontWeight: j === 0 ? 700 : 400, color: j === 3 ? N : 'var(--text)' }}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <P>
-        Total: 8 subnets, 312 hosts allocated, 312 usable slots used, 33 wasted by size rounding. Remaining space in 10.50.0.0/22 (1024 addresses total): 10.50.1.72/29 through 10.50.3.255 — available for future expansion. The key insight: by sorting largest-to-smallest and allocating from the bottom of the address block, subnets align naturally on their boundaries without gaps.
-      </P>
+      {/* ── Chapter 5 ── */}
+      <Chapter n={5} title="Supernetting and Route Summarization" />
 
-      <ProTip>
-        In AWS VPC subnetting: each subnet has 5 reserved addresses (network, router/gateway, DNS, future AWS use, broadcast) rather than 2. A /28 in a VPC provides only 11 usable hosts instead of 14. Plan VPC subnets slightly larger than on-premises to account for this. AWS recommends /24 or larger for application subnets to avoid running out of addresses unexpectedly.
-      </ProTip>
+      <Para>
+        The reverse of subnetting is <Accent>supernetting</Accent> — combining multiple smaller networks into a single larger one for the purposes of routing. This is also called <Accent>route aggregation</Accent> or <Accent>route summarization</Accent>. It reduces the size of routing tables and simplifies routing.
+      </Para>
 
-      <HR />
+      <H2>When Can Networks Be Summarized?</H2>
 
-      {/* ── PART 7 ── */}
-      <Part n="07" title="Day in the Life — AWS Network Engineer: VPC Subnet Exhaustion During Scale Event" />
+      <Para>
+        For networks to be summarizable into a single prefix, they must: (1) be contiguous in address space, (2) form a set that is a power-of-2 multiple starting at an aligned boundary. The summary prefix covers the addresses from the first network to the last network — if any holes exist (non-contiguous), summarization includes address space not in the original set.
+      </Para>
 
-      <P>
-        <strong>Company:</strong> Amazon Web Services (customer success case) · <strong>Role:</strong> Solutions Architect / Network Engineer · <strong>Customer industry:</strong> E-commerce · <strong>Date:</strong> Monday, January 20, 2025 (post-holiday traffic spike)
-      </P>
+      <CodeBlock>
+{`# Example: Can we summarize these four /24s into one prefix?
+10.10.0.0/24
+10.10.1.0/24
+10.10.2.0/24
+10.10.3.0/24
 
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '20px 24px', margin: '20px 0 28px' }}>
-        <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: '0 0 12px' }}>INCIDENT: Auto-scaling group unable to launch new EC2 instances — subnet IP exhaustion</p>
+# In binary, 3rd octet:
+# 10.10.00000000 = 0
+# 10.10.00000001 = 1
+# 10.10.00000010 = 2
+# 10.10.00000011 = 3
+# Common prefix: 10.10.000000xx — 22 common bits
+# Summary: 10.10.0.0/22 covers all four /24s exactly
 
-        <TimeBlock time="09:15 AM" label="Auto-scaling triggered — instances fail to launch">
-          A post-holiday traffic spike hits an e-commerce customer&apos;s web tier. Their Auto Scaling Group (ASG) triggers a scale-out event, attempting to launch 40 additional EC2 instances in their application subnet. 12 instances launch successfully. Then all remaining launch attempts fail with the error: <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12, background: '#0a0a0a', padding: '2px 6px', borderRadius: 3 }}>InsufficientFreeAddressesInSubnet</code>. Customer calls AWS support at Priority 1 severity — site traffic is being dropped.
-        </TimeBlock>
+# Verification: block size for /22 = 2^(32-22) = 1024 addresses
+# 10.10.0.0 to 10.10.3.255 = 1024 addresses
+# ✓ Covers all four /24s with no extra addresses`}
+      </CodeBlock>
 
-        <TimeBlock time="09:23 AM" label="Diagnosis — the /24 subnet was almost full">
-          The AWS solutions architect on the call pulls the subnet details. The application subnet is 10.0.1.0/24, which has 256 − 5 = 251 usable IP addresses (AWS reserves 5). Of these, 238 were already allocated: 210 running EC2 instances, 18 Elastic Load Balancer nodes, 8 RDS replica network interfaces, and 2 NAT gateways. The auto-scaling attempt for 40 instances would need 40 IPs — only 13 remained. The subnet was designed in 2019 for a maximum of 100 instances and was never updated as the fleet grew.
-        </TimeBlock>
+      <H2>Finding the Summary Route</H2>
 
-        <TimeBlock time="09:35 AM" label="Immediate mitigation — add a secondary CIDR">
-          AWS VPCs support secondary CIDR blocks since 2017. The architect adds a secondary VPC CIDR (10.1.0.0/16) and creates a new subnet 10.1.1.0/24 in the same Availability Zone. The Auto Scaling Group is updated to include the new subnet in its launch configuration. New instances begin launching in the new subnet within 3 minutes. The 28 pending scale-out instances all succeed. Traffic stabilizes.
-        </TimeBlock>
+      <Para>
+        To find the summary route for a group of networks: (1) write all network addresses in binary, (2) find the longest common prefix (the rightmost bit where all networks agree), (3) the summary prefix length is the position of that last agreeing bit.
+      </Para>
 
-        <TimeBlock time="10:15 AM" label="Permanent fix design — /20 subnets with growth headroom">
-          The architect reviews the entire VPC design. The original architecture used /24 subnets for all tiers (web, app, db) — each limited to 251 hosts. The new design: (1) Web tier: 10.0.0.0/20 (4096 addresses, 4091 usable) — enough for thousands of instances; (2) App tier: 10.0.16.0/20 (same); (3) DB tier: 10.0.32.0/22 (1024 addresses — DB instances are fewer but larger); (4) Management: 10.0.36.0/24; (5) Future expansion: 10.0.37.0–10.0.63.255 reserved. Migration of the existing fleet to the new subnet layout is scheduled over a two-week maintenance window using blue/green deployment.
-        </TimeBlock>
+      <Para>
+        Example: summarize 192.168.8.0/24 and 192.168.9.0/24.
+        Third octets in binary: 00001000 (8) and 00001001 (9). Common prefix: 0000100x — 7 bits agree. Total prefix for the summary: 16 (first two octets) + 7 = /23. Summary: 192.168.8.0/23.
+      </Para>
 
-        <TimeBlock time="Next sprint — postmortem action items" label="Process improvements">
-          The postmortem identifies that subnet sizing was a one-time decision made in 2019 with no periodic review. Action items: (1) CloudWatch alarms on subnet IP utilization — alert at 75% used, page at 90%; (2) VPC subnet sizing standard updated to require /20 minimum for any auto-scaling fleet; (3) AWS Config rule added to detect /24 or smaller subnets in production VPCs with &gt;100 currently-used IPs; (4) Architecture review checklist updated to ask &quot;What is the maximum fleet size this subnet needs to support in 5 years?&quot; A /24 costs nothing more than a /20 in AWS — there is no reason to underprovision address space in a VPC.
-        </TimeBlock>
-      </div>
+      <Divider />
 
-      <Err title="Using small subnets in cloud environments">
-        In traditional on-premises networking, /24 and /25 subnets are the norm because address space was managed carefully. In cloud environments (AWS VPC, GCP VPC, Azure VNet), address space costs nothing — a /20 is as free as a /24. Using /24 subnets for application tiers in auto-scaling environments leads exactly to the incident above. The correct default for any auto-scaling workload in a VPC: /20 at minimum, /18 or /16 for large workloads. AWS itself recommends /20 as a minimum for production application subnets in their best practices documentation.
+      {/* ── Chapter 6 ── */}
+      <Chapter n={6} title="Subnetting Across Octets" />
+
+      <StoryBox>
+        The exam question shows up: "Subnet 10.0.0.0/8 to create subnets with at least 500 hosts each. How many subnets can you create?" Most students panic when subnetting crosses into the second or third octet. But the method is identical — the only difference is which octet is "interesting." For 500 hosts: 2^9 = 512. Host bits = 9. Prefix = /23. Subnets from /8 to /23 = 2^15 = 32,768 subnets. Simple.
+      </StoryBox>
+
+      <H2>The "Interesting Octet" Changes</H2>
+
+      <Para>
+        Subnetting a /8 to /23: the interesting octet is the third octet (23 bits total = 8 bits in first octet + 8 bits in second + 7 bits into third). Block size in the third octet = 2^(24-23) = 2. Subnets: 10.0.0.0/23, 10.0.2.0/23, 10.0.4.0/23 ... the third octet increments by 2.
+      </Para>
+
+      <Para>
+        Subnetting a /16 to /20: interesting octet is the third. 20 bits = 8+8+4. Block size = 2^(24-20) = 16. Subnets: 172.16.0.0/20, 172.16.16.0/20, 172.16.32.0/20 ... third octet increments by 16.
+      </Para>
+
+      <CodeBlock>
+{`# 10.0.0.0/8 subnetted to /16 — subnets in the second octet
+Block size = 2^(16-16)? No — /16 means prefix=16, so interesting octet is octet 2.
+Block size in octet 2 = 2^(16-16) = 1. Subnets:
+10.0.0.0/16, 10.1.0.0/16, 10.2.0.0/16 ... 10.255.0.0/16
+
+# 172.16.0.0/16 subnetted to /20 — interesting octet = 3
+Block size in octet 3 = 2^(24-20) = 16. Subnets:
+172.16.0.0/20, 172.16.16.0/20, 172.16.32.0/20 ... 172.16.240.0/20
+
+# 10.0.0.0/8 subnetted to /12 — interesting octet = 2
+Block size in octet 2 = 2^(16-12) = 16. Subnets:
+10.0.0.0/12, 10.16.0.0/12, 10.32.0.0/12 ... 10.240.0.0/12`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── Chapter 7 ── */}
+      <Chapter n={7} title="Practical Subnetting: Enterprise Design" />
+
+      <H2>Designing a Campus Network</H2>
+
+      <Para>
+        A company is assigned 10.100.0.0/16 for their campus network. They have: 4 buildings, each with up to 5 floors; each floor has up to 3 access-layer VLANs with up to 200 hosts each; plus infrastructure (management, DMZ, server farm).
+      </Para>
+
+      <Para>
+        Hierarchical design: allocate /24 blocks per floor, /20 blocks per building, /16 for the site. Building 1: 10.100.0.0/20 (10.100.0.0 – 10.100.15.255). Building 2: 10.100.16.0/20. Building 3: 10.100.32.0/20. Building 4: 10.100.48.0/20. Remaining 10.100.64.0/18 for servers/DMZ/growth.
+      </Para>
+
+      <Para>
+        Within Building 1, Floor 1: 10.100.0.0/24. Floor 2: 10.100.1.0/24. Floor 3: 10.100.2.0/24. The router for Building 1 needs only one summary route (10.100.0.0/20) in its advertisements to the rest of the campus — 16 floor subnets are hidden behind one route entry.
+      </Para>
+
+      <H2>Point-to-Point Link Addressing</H2>
+
+      <Para>
+        Every routed link between network devices needs a subnet. A /30 provides exactly 2 usable addresses (perfect for a two-endpoint link with minimal waste). A /31 (RFC 3021) eliminates the network/broadcast overhead entirely, providing 2 addresses both usable — Cisco IOS, Juniper JunOS, and most modern routers support /31 on point-to-point links.
+      </Para>
+
+      <CodeBlock>
+{`# /30 point-to-point link (classic approach)
+interface GigabitEthernet0/0
+ ip address 10.100.255.1 255.255.255.252   ! /30 — next router gets .2
+
+# /31 point-to-point link (RFC 3021 — saves 2 addresses per link)
+interface GigabitEthernet0/0
+ ip address 10.100.255.0 255.255.255.254   ! /31 — next router gets .1
+
+# Verify
+show ip interface brief
+show ip route connected`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── Chapter 8 ── */}
+      <Chapter n={8} title="Subnetting in IPv6" />
+
+      <Para>
+        IPv6 subnetting follows the same binary logic but with 128-bit addresses. Standard IPv6 subnetting assigns /64 to every LAN segment — leaving 64 bits for host addressing (giving 18.4 × 10^18 addresses per subnet). This fixed /64 boundary is not arbitrary: <Accent>SLAAC (Stateless Address Autoconfiguration)</Accent> requires a /64 network prefix for its EUI-64-based address generation algorithm.
+      </Para>
+
+      <H2>IPv6 Prefix Hierarchy</H2>
+
+      <Para>
+        IANA allocates large blocks to RIRs (/12 to /23). RIRs allocate to ISPs (typically /32). ISPs allocate to customers (typically /48). Customers subnet /48 into /64 LANs. A /48 provides 2^16 = 65,536 /64 subnets — enough for any organization.
+      </Para>
+
+      <CodeBlock>
+{`# IPv6 subnetting example
+Customer receives: 2001:db8:abcd::/48
+Available subnets (/64): 2^(64-48) = 2^16 = 65,536
+
+First /64:         2001:db8:abcd:0000::/64  = subnet 0
+Second /64:        2001:db8:abcd:0001::/64  = subnet 1
+...
+Last /64:          2001:db8:abcd:ffff::/64  = subnet 65535
+
+# Infrastructure (/127 for P2P links in IPv6)
+interface GigabitEthernet0/0
+ ipv6 address 2001:db8:abcd:ff00::1/127   ! RFC 6164`}
+      </CodeBlock>
+
+      <WowBox>
+        A /48 IPv6 allocation gives an organization 65,536 /64 subnets. At the rate of one new VLAN per day, it would take 179 years to exhaust those subnets. And if that somehow happened, requesting a second /48 from the ISP costs essentially nothing — the IPv6 address space contains 2^128 addresses, roughly 340 undecillion. Every square meter of Earth's surface could have ~670 quadrillion IPv6 addresses assigned to it simultaneously.
+      </WowBox>
+
+      <Divider />
+
+      {/* ── Chapter 9 ── */}
+      <Chapter n={9} title="Subnetting in Cloud Environments" />
+
+      <Para>
+        Cloud providers have their own conventions that extend traditional subnetting concepts. Understanding these is essential for cloud network engineers.
+      </Para>
+
+      <H2>AWS VPC Subnetting</H2>
+
+      <Para>
+        An AWS VPC (Virtual Private Cloud) is assigned a CIDR block (/16 to /28). The VPC is then divided into subnets, each in a specific Availability Zone. AWS reserves 5 addresses in every subnet: the network address (.0), the VPC router (.1), DNS server (.2), future use (.3), and the broadcast address (.255 or last).
+      </Para>
+
+      <Para>
+        A /24 subnet in AWS has 256 - 5 = 251 usable addresses (vs. 254 in traditional subnetting). When sizing AWS subnets, account for this 5-address overhead. A best practice for AWS: use /24 subnets for AZ-level subnets (private, public, database layers), aggregate under a /16 VPC, use /28 for PrivateLink endpoints where address conservation matters.
+      </Para>
+
+      <H2>Kubernetes Pod CIDR</H2>
+
+      <Para>
+        Kubernetes assigns IP addresses to pods from a dedicated pod CIDR. Each node gets a sub-range (typically a /24) from the pod CIDR. With a /16 pod CIDR and /24 per node: up to 256 nodes, each with 254 pods. Planning the pod CIDR incorrectly (too small) is a common Kubernetes networking mistake that causes pod scheduling failures.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 10 ── */}
+      <Chapter n={10} title="Subnetting Tools and Automation" />
+
+      <H2>Python for Subnetting</H2>
+
+      <CodeBlock>
+{`import ipaddress
+
+# Analyze a subnet
+network = ipaddress.IPv4Network('192.168.10.0/26', strict=True)
+print(f"Network: {network.network_address}")
+print(f"Broadcast: {network.broadcast_address}")
+print(f"First host: {next(network.hosts())}")
+print(f"Usable hosts: {network.num_addresses - 2}")
+
+# Subnet a /24 into /27s
+parent = ipaddress.IPv4Network('10.10.10.0/24')
+subnets = list(parent.subnets(new_prefix=27))
+for s in subnets:
+    print(f"{s} — {s.num_addresses - 2} hosts")
+
+# Check if IP is in subnet
+ip = ipaddress.IPv4Address('192.168.10.50')
+if ip in network:
+    print(f"{ip} is in {network}")
+
+# Supernet
+net1 = ipaddress.IPv4Network('192.168.8.0/24')
+net2 = ipaddress.IPv4Network('192.168.9.0/24')
+supernet = net1.supernet(new_prefix=23)
+print(f"Summary: {supernet}")`}
+      </CodeBlock>
+
+      <H2>CLI Tools</H2>
+
+      <CodeBlock>
+{`# Linux — ipcalc
+ipcalc 192.168.1.0/26
+
+# Linux — sipcalc (detailed)
+sipcalc 10.0.0.0/22 -s 24
+
+# Python one-liner subnet check
+python3 -c "import ipaddress; n=ipaddress.ip_network('10.0.0.0/24'); print(list(n.subnets(new_prefix=27)))"
+
+# macOS/Linux — show routing for an IP
+ip route get 8.8.8.8
+
+# Netmask utility
+netmask 192.168.1.1/255.255.255.192`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── Chapter 11 ── */}
+      <Chapter n={11} title="Real-World Subnetting Decisions" />
+
+      <H2>How Much to Over-Provision?</H2>
+
+      <Para>
+        Network engineers consistently debate how much spare capacity to include in subnet sizing. Too small: you run out of IPs before the next maintenance window. Too large: you waste address space.
+      </Para>
+
+      <Para>
+        A practical rule: size subnets for 2× current requirement, or the next power of 2 above current requirement + 30% growth. A segment with 80 current devices that might grow to 120: use /24 (254 hosts), not /25 (126 hosts — might not fit at 120 + infrastructure devices). The address cost of over-provisioning is low within private address space; the operational cost of re-addressing a subnet that outgrew its allocation is very high.
+      </Para>
+
+      <H2>The Re-Addressing Nightmare</H2>
+
+      <Para>
+        When a subnet outgrows its address space, the only solutions are: (1) migrate all hosts to a larger subnet (requires DHCP scope changes, gateway IP changes, static IP reconfiguration on servers, DNS updates, firewall rule updates) — extremely disruptive; (2) create a secondary subnet and route between them (adds complexity and adds a router hop); or (3) use NAT444 (multiple layers of NAT — avoided in all sane environments). Plan for growth.
+      </Para>
+
+      <Divider />
+
+      {/* ── Chapter 12 ── */}
+      <Chapter n={12} title="Subnetting Practice Problems" />
+
+      <H2>Problem Set</H2>
+
+      <CodeBlock>
+{`Problem 1:
+Given 172.16.0.0/16, create subnets of 500 hosts each.
+Solution: 500+2 = 502 → 2^9=512 ≥ 502. Host bits = 9. Prefix = /23.
+Subnets: 2^(23-16) = 128 subnets.
+Addresses: 172.16.0.0/23, 172.16.2.0/23 (block=512)
+
+Problem 2:
+192.168.100.200 with mask 255.255.255.240 — what subnet?
+/28: block size = 16. 200/16 = 12, remainder 8. Network: 192.168.100.192.
+Broadcast: 192.168.100.207. Hosts: 193-206.
+
+Problem 3:
+Summarize: 10.4.0.0/24, 10.4.1.0/24, 10.4.2.0/24, 10.4.3.0/24
+3rd octet binary: 00, 01, 10, 11 → common: 000000xx → 6 bits agree.
+Total prefix: 16+6=22. Summary: 10.4.0.0/22 ✓
+
+Problem 4:
+You have 10.0.0.0/8. Create subnets for:
+- 4 offices of 1000 hosts each
+- 20 server VLANs of 100 hosts each
+- 50 P2P router links
+Offices: 1000+2 → 2^10=1024 → /22. Servers: 100+2 → 2^7=128 → /25. P2P: /30.
+Offices: 10.0.0.0/22, 10.0.4.0/22, 10.0.8.0/22, 10.0.12.0/22
+Servers: 10.0.16.0/25, 10.0.16.128/25, 10.0.17.0/25 ... ×20
+P2P: 10.0.24.0/30, 10.0.24.4/30 ... ×50`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── Chapter 13 ── */}
+      <Chapter n={13} title="Common Misconceptions" />
+
+      <Err title="Subnets can start at any IP address">
+        Subnets must start at an address that is a multiple of their block size. A /27 (block size 32) must start at 0, 32, 64, 96, 128, 160, 192, or 224 in the last octet. Starting a /27 at x.x.x.50 is invalid — the network address would actually be at x.x.x.32 (the closest multiple of 32 below 50). Routers calculate network address by ANDing IP with mask — if your "network" IP doesn't equal the result, the addressing is wrong.
       </Err>
 
-      <HR />
-
-      {/* ── PART 8 ── */}
-      <Part n="08" title="Interview Prep — 7 Questions With Complete Answers" />
-
-      <IQ q="A company has 10.0.0.0/8 and needs to create subnets for 500 sites, each needing 200 hosts. What prefix should each site use?">
-        <p style={{ margin: '0 0 14px' }}>200 hosts requires at least 202 addresses (200 hosts + 1 network + 1 broadcast). The next power of 2 above 202 is 256 = 2⁸. So each site needs a /24 (256 addresses, 254 usable). This comfortably fits 200 hosts.</p>
-        <p style={{ margin: '0 0 14px' }}>500 sites × 1 /24 each = 500 /24 subnets. A 10.0.0.0/8 has 2²⁴ = 16,777,216 addresses, enough for 65,536 /24 subnets. Allocating 500 /24s is trivial. Structure: 10.site_msb.site_lsb.0/24, e.g., site 1 = 10.0.1.0/24, site 2 = 10.0.2.0/24, through site 500 = 10.1.244.0/24 (500 = 0×256 + 500 → 10.1.244.0).</p>
-        <p style={{ margin: 0 }}>Route summarization: sites 1–255 can be summarized as 10.0.0.0/16, sites 256–511 as 10.1.0.0/16, etc. This reduces regional routing tables from 500 entries to 2 summary routes. For a hub site that needs to reach all 500 branches, a single 10.0.0.0/8 summary covers everything.</p>
-      </IQ>
-
-      <IQ q="Is 10.0.0.200 in the subnet 10.0.0.192/27? Show your work.">
-        <p style={{ margin: '0 0 14px' }}>A /27 has a block size of 32 (256 − 224 = 32). Subnets in the last octet: 0, 32, 64, 96, 128, 160, 192, 224. The subnet 10.0.0.192/27 spans from 10.0.0.192 (network) to 10.0.0.223 (broadcast: 192 + 32 − 1).</p>
-        <p style={{ margin: '0 0 14px' }}>10.0.0.200 has last octet 200. Is 192 ≤ 200 ≤ 223? Yes. So 10.0.0.200 IS in the subnet 10.0.0.192/27.</p>
-        <p style={{ margin: 0 }}>Binary verification: 200 = 11001000, mask /27 = 11111111.11111111.11111111.11100000. AND: 11001000 AND 11100000 = 11000000 = 192. Network = 10.0.0.192. Confirmed: 10.0.0.200 is in 10.0.0.192/27, with host address 10.0.0.200 (200−192=8, so host 8 in the subnet).</p>
-      </IQ>
-
-      <IQ q="What is the difference between summarization and aggregation? Is there a difference?">
-        <p style={{ margin: '0 0 14px' }}>In practice, these terms are used interchangeably and both mean the same thing: combining multiple more-specific routes into a single less-specific route with a shorter prefix. The terms appear in different contexts: &quot;route summarization&quot; is more common in OSPF/EIGRP inter-area configuration, while &quot;route aggregation&quot; is more common in BGP discussions. The underlying operation and math are identical.</p>
-        <p style={{ margin: 0 }}>Technical nuance: summarization implies a controlled operation where an engineer explicitly configures a summary route (e.g., OSPF area border router configured with &quot;area 0 range 10.0.0.0/16&quot; to summarize all /24s in area 0). Aggregation in BGP context often refers to the &quot;aggregate-address&quot; command, which can optionally suppress the more-specific routes (with the &quot;summary-only&quot; keyword) or advertise both the aggregate and the specifics. In BGP, it is common to advertise both — the specific routes allow for traffic engineering, the aggregate prevents black-holing if a specific route disappears.</p>
-      </IQ>
-
-      <IQ q="How do you determine the minimum summary route for 172.16.4.0/24 and 172.16.5.0/24?">
-        <p style={{ margin: '0 0 14px' }}>Find the network addresses in binary:</p>
-        <ul style={{ margin: '0 0 14px', paddingLeft: 24, lineHeight: 2, fontFamily: 'var(--font-mono)', fontSize: 13 }}>
-          <li>172.16.4.0: 10101100.00010000.00000<strong>100</strong>.00000000</li>
-          <li>172.16.5.0: 10101100.00010000.00000<strong>101</strong>.00000000</li>
-        </ul>
-        <p style={{ margin: '0 0 14px' }}>The first 22 bits are identical (172.16.0x0000010). The 23rd bit differs (0 vs 1). The common prefix is 22 bits → summary route: 172.16.4.0/23.</p>
-        <p style={{ margin: 0 }}>Verify: 172.16.4.0/23 spans 172.16.4.0 through 172.16.5.255 (block size 512). Both 172.16.4.0/24 and 172.16.5.0/24 are within this range. Correct summary. Quick shortcut: the two third-octet values differ by 1 and the lower is even (4 is even) — consecutive even+odd pairs always summarize to a /23.</p>
-      </IQ>
-
-      <IQ q="You need to design subnets for a network with the following requirements: 1 subnet for 100 hosts, 2 subnets for 50 hosts each, 4 subnets for 10 hosts each. You have 192.168.20.0/24. Design the allocation.">
-        <p style={{ margin: '0 0 14px' }}>Sort by size (largest first) and allocate sequentially:</p>
-        <ul style={{ margin: '0 0 14px', paddingLeft: 24, lineHeight: 2, fontSize: 13 }}>
-          <li>100 hosts → /25 (126 hosts). 192.168.20.0/25 (range .1–.126, broadcast .127)</li>
-          <li>50 hosts (first) → /26 (62 hosts). 192.168.20.128/26 (.129–.190, broadcast .191)</li>
-          <li>50 hosts (second) → /26. 192.168.20.192/26 (.193–.254, broadcast .255)</li>
-        </ul>
-        <p style={{ margin: '0 0 14px' }}>Wait — 192.168.20.128 + 64 = 192.168.20.192, and 192.168.20.192 + 64 = 192.168.20.256 which would overflow the /24. Let me re-check: 192.168.20.0/24 ends at .255. The second /26 at .192 ends at .255. That works. But now there&apos;s no space for the four /28 subnets needed for 10 hosts each.</p>
-        <p style={{ margin: 0 }}>Fix: use .128 to .255 more carefully. Two /26s (.128/26 and .192/26) consume all 128 addresses of the upper half. The four /28s need 4 × 16 = 64 addresses. Solution: use only one /26 at .128 for 50 hosts, then at .192 use a /27 for the second 50-host group (30 usable, still insufficient — 50 &gt; 30). Correct answer: you cannot fit all these requirements in a /24 without compromises. A /23 would give you 512 addresses and fit all subnets comfortably. If forced to use /24: place the two 50-host subnets as /26 (.128/26 and .192/26), and the four 10-host subnets in the space between: .64/28, .80/28, .96/28, .112/28 — then move the 100-host /25 to another block. This is why VLSM planning starts with the constraint check: will everything fit?</p>
-      </IQ>
-
-      <IQ q="What does it mean when you see a /0 route in a routing table?">
-        <p style={{ margin: '0 0 14px' }}>A /0 route (0.0.0.0/0) is the <strong>default route</strong> — it matches every possible destination address because its prefix length is 0 (no bits required to match). It is the route of last resort: when a router receives a packet and finds no more-specific route in its routing table, it forwards the packet according to the /0 entry. Conceptually, it says &quot;I don&apos;t know how to reach this specific destination, but forward it toward the internet/default gateway and let something else figure it out.&quot;</p>
-        <p style={{ margin: '0 0 14px' }}>Longest prefix match means /0 is always the least preferred route. A /24 is more specific than /0, which is more specific than /0 (it always loses to any other match). So even though /0 matches every address, any more-specific route wins. This is why a router can have a /0 default route pointing toward the internet and still have specific /16 and /24 routes for internal networks — internal traffic uses the specific routes, internet traffic falls through to /0.</p>
-        <p style={{ margin: 0 }}>In BGP, advertising 0.0.0.0/0 from a router means &quot;I will accept traffic for any destination.&quot; ISPs advertise a default route to customers who don&apos;t need to carry the full BGP table. Enterprises advertise default routes to branch offices. Security consideration: a rogue /0 advertisement in BGP is a global black hole attack — it can divert all internet traffic to the attacker. BGP RPKI and route filtering prevent this.</p>
-      </IQ>
-
-      <IQ q="Explain supernet routes and the 'black hole' risk.">
-        <p style={{ margin: '0 0 14px' }}>A supernet route (summary route) covers a range of addresses broader than the networks actually deployed. For example, advertising 10.0.0.0/8 as a summary when only 10.1.0.0/16 through 10.50.0.0/16 are actually configured means the summarizing router attracts traffic for all of 10.0.0.0/8, including 10.51.0.0/16 through 10.255.0.0/16 which do not exist.</p>
-        <p style={{ margin: '0 0 14px' }}>If the router has no more-specific route for those non-existent subnets, it cannot forward the traffic and silently drops it — creating a <strong>black hole</strong>. Packets disappear without any ICMP unreachable being generated (because from the router&apos;s perspective, it &quot;knows&quot; where 10.51.0.0/16 is — it&apos;s covered by the /8 summary, even if there is no reachable next-hop for it specifically).</p>
-        <p style={{ margin: 0 }}>Defense: create a <strong>null route</strong> (also called a discard route) — a static route to 10.0.0.0/8 pointing to Null0 (a discard interface that drops traffic immediately and generates ICMP unreachables). This ensures that traffic for non-existent subnets gets an ICMP host unreachable rather than silently looping. Cisco and Juniper routers create null routes automatically when you configure route summarization — this is called a &quot;discard route&quot; or &quot;aggregate route to Null0.&quot; Always verify that your summarization setup includes a null route to prevent the black hole behavior.</p>
-      </IQ>
-
-      <HR />
-
-      {/* ── PART 9 ── */}
-      <Part n="09" title="Common Misconceptions" />
-
-      <Err title="Subnets don't need to be contiguous within an address block">
-        VLSM subnets must not overlap, but they do not need to be allocated in a specific order — you can have 10.0.0.0/25 and 10.0.2.0/24 coexisting in a 10.0.0.0/22 block with 10.0.1.0/24 unallocated. What matters is that no two subnets overlap in address space. Tools like IP address management (IPAM) software (Infoblox, phpIPAM, NetBox) track allocations and prevent overlaps. Without IPAM, manual tracking in a spreadsheet works for small networks but becomes error-prone above ~50 subnets.
+      <Err title="Larger prefix = larger network">
+        Prefix length and network size have an inverse relationship. A /24 is larger than a /28. The prefix length counts network bits — more network bits = fewer host bits = smaller subnet. A /30 is a tiny 4-address subnet. A /16 is a large 65,536-address network. When someone says "they gave us a bigger subnet," they mean a shorter prefix (e.g., /22 instead of /24) — more addresses, not a larger number.
       </Err>
 
-      <Err title="The block size for /20 is in the last octet">
-        For prefixes /1 through /8, the active octet is the first. For /9 through /16, it is the second. For /17 through /24, the active octet is the third. For /25 through /32, the active octet is the fourth. A /20 has the variable bits in the third octet: bits 17–24. Block size = 2^(8 − (20−16)) = 2^4 = 16. So /20 subnet boundaries are at third-octet multiples of 16: 0, 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240. Most subnetting errors occur with &quot;cross-octet&quot; prefixes (/9–/23) where people incorrectly apply the block size to the wrong octet.
+      <Err title="The network address is usable for hosts">
+        The network address (all host bits = 0) and broadcast address (all host bits = 1) are reserved and cannot be assigned to hosts. The network address is the identifier for the subnet in routing tables. The broadcast address is used for subnet-wide broadcast delivery. Assigning a host the network address causes IP conflicts and connectivity failures — the host's ARP replies will confuse the gateway.
       </Err>
 
-      <Err title="Summarizing routes always reduces routing table size">
-        Summarization reduces the number of routing entries but can create black holes for unallocated space within the summary (as described above). Additionally, if the more-specific routes are still advertised alongside the summary (common in BGP where both aggregate and specific routes are advertised for traffic engineering), the routing table grows rather than shrinks. Summary routes only reduce routing table size when the more-specific routes are suppressed (not advertised separately). In OSPF inter-area summarization, the ABR suppresses the specific routes from other areas, genuinely reducing the routing table in non-local areas.
+      <Err title="VLSM requires special hardware or protocols">
+        VLSM is a design methodology, not a protocol feature. Any modern router and any classless routing protocol (OSPF, EIGRP, BGP, RIPv2) supports VLSM — they include subnet mask information in routing updates, allowing different prefix lengths for different networks. Only classful protocols (RIPv1, IGRP — obsolete) don't carry mask information and assume all networks have the same prefix length. All modern networking uses classless routing.
       </Err>
 
-      <HR />
+      <Err title="A /32 is not a usable subnet">
+        A /32 host route is perfectly valid and widely used. It identifies a single specific IP address — used for: loopback interfaces on routers (routers' management IPs are often on loopback /32s), specific host routes injected to override summary routes, BGP network statements for specific IPs, and VPN endpoint addressing. A /32 has no usable hosts in the traditional sense (no room for network or broadcast), but as a host route it addresses the interface IP directly — the interface itself is the "host."
+      </Err>
+
+      <Err title="Summarization always reduces routing table size">
+        Summarization reduces size only when the summarized networks are truly contiguous and the summary accurately represents the reachable address space. If 10.10.0.0/22 is advertised as a summary but only 10.10.0.0/24 and 10.10.1.0/24 are actually reachable (not 10.10.2.0/24 or 10.10.3.0/24), routers will blackhole traffic destined for the missing subnets. Summary routes must be verified to cover exactly the reachable address space — not more, not less.
+      </Err>
+
+      <Divider />
+
+      {/* ── Chapter 14 ── */}
+      <Chapter n={14} title="Interview Questions" />
+
+      <IQ q="How many subnets and hosts per subnet does /27 provide when applied to a /24?" level="Beginner">
+        A /24 has 8 host bits. Moving to /27 borrows 3 bits (27 - 24 = 3) for subneting. Number of subnets = 2^3 = 8. Remaining host bits = 32 - 27 = 5. Hosts per subnet = 2^5 - 2 = 30. Block size = 32. Subnets start at 0, 32, 64, 96, 128, 160, 192, 224. Subnet mask: 255.255.255.224.
+      </IQ>
+
+      <IQ q="A host has IP 192.168.50.130 with subnet mask 255.255.255.192. What is its network address, broadcast, and usable range?" level="Beginner">
+        Mask 255.255.255.192 = /26, block size 64. 130 / 64 = 2, remainder 2. Network = 2 × 64 = 128. Network address: 192.168.50.128. Broadcast: 192.168.50.128 + 64 - 1 = 192.168.50.191. First host: .129. Last host: .190. Usable hosts: 62.
+      </IQ>
+
+      <IQ q="Explain VLSM and provide a concrete design example." level="Intermediate">
+        VLSM allows different subnets to use different prefix lengths, allocating exactly the address space needed for each subnet rather than forcing a single fixed size. Design approach: sort requirements largest to smallest; find the smallest prefix fitting each requirement; allocate sequentially from the base network. Example: Given 192.168.0.0/24, design subnets for: 100 hosts (→ /25, 126 hosts), 50 hosts (→ /26, 62 hosts), 25 hosts (→ /27, 30 hosts), 2 router links (→ /30, 2 hosts each). Allocation: 192.168.0.0/25 (100-host), 192.168.0.128/26 (50-host), 192.168.0.192/27 (25-host), 192.168.0.224/30 (link 1), 192.168.0.228/30 (link 2). Total used: 128+64+32+4+4 = 232 of 256 addresses, with 24 addresses remaining for future use.
+      </IQ>
+
+      <IQ q="How do you summarize 10.4.0.0/24, 10.4.1.0/24, 10.4.2.0/24, and 10.4.3.0/24 into a single route?" level="Intermediate">
+        Write the third octet of each network in binary: 0=00000000, 1=00000001, 2=00000010, 3=00000011. The common bits are the first 6: 000000xx. The third octet contributes 6 bits to the common prefix. Total common prefix: 16 (first two octets) + 6 = /22. Summary route: 10.4.0.0/22. Verification: a /22 has block size 2^10 = 1024. Starting at 10.4.0.0, the block covers 10.4.0.0 through 10.4.3.255 — exactly the four /24s. This works because the four networks are contiguous and start at an aligned /22 boundary (0 is a multiple of 4).
+      </IQ>
+
+      <IQ q="You're designing a multi-site enterprise network with the allocation 10.0.0.0/8. How would you structure the address plan to enable route summarization at each layer?" level="Senior">
+        Hierarchical approach: (1) Divide by site: each of 16 sites gets a /12 (2^(12-8)=16 allocations from /8). Site 1: 10.0.0.0/12, Site 2: 10.16.0.0/12, ... Site 16: 10.240.0.0/12. Each site can advertise one /12 summary to headquarters. (2) Within each site, divide by building: each of 16 buildings gets a /16. Building 1 in Site 1: 10.0.0.0/16, Building 2: 10.1.0.0/16. Each building summarizes to one /16 toward the site router. (3) Within each building, divide by floor/function: /24 per VLAN/floor. A summary /20 covers 16 /24s. (4) Infrastructure: reserve 10.254.0.0/16 for management, 10.255.0.0/16 for transit links. Result: Headquarters sees ≤16 route prefixes (one per site). Site routers see ≤16 prefixes (one per building). Building routers see ≤256 prefixes (one per floor/VLAN). This is O(n) total entries rather than O(n²) — fundamental to routing table scalability.
+      </IQ>
+
+      <IQ q="Explain how CIDR route aggregation and the BGP routing table interact, and why the internet's routing table has ~900K entries rather than billions." level="PhD">
+        Without aggregation, the internet routing table would need one entry per assigned host IP — billions of entries, impossible to hold in any router's memory or process at line rate. CIDR aggregation works at multiple levels: (1) RIR-level: IANA assigns /8–/12 blocks to RIRs; RIRs advertise summary routes. If ARIN holds 99.0.0.0/8, it can announce one /8 covering 16M addresses rather than 16M /32 host routes. (2) ISP-level: a large ISP holding 203.0.113.0/24 through 203.0.255.0/24 (contiguous) can announce 203.0.0.0/16. (3) Customer-level: multi-homed customers announce their specific prefixes while their ISPs provide default route aggregation. The ~900K entries in the current DFZ (Default-Free Zone — the internet's full BGP table) represent a trade-off: each entry represents a prefix where the ISP responsible for an address block cannot or will not aggregate further (often because the block is announced from multiple providers or contains non-contiguous sub-allocations). The table has grown from ~200K in 2012 because: increasing multi-homing (customers announce specifics to control inbound traffic), legacy fragmented allocations (pre-CIDR era blocks don't aggregate cleanly), and PI (Provider-Independent) space used by small organizations needing multi-homing without portability. RPKI (Resource Public Key Infrastructure) and BGP Origin Validation are being deployed to prevent route origin hijacking, but don't directly reduce table size. The fundamental tension: more specific announcements give operators finer traffic control at the cost of larger global routing tables.
+      </IQ>
 
       <KeyTakeaways items={[
-        'Block size = 256 − mask_octet in the active octet. /26 block = 64, /27 = 32, /28 = 16, /29 = 8, /30 = 4. Subnet boundaries are multiples of the block size.',
-        'To find the subnet of any IP: divide the active octet by block size (integer division) and multiply back. For 100 in a /26 (block 64): 100÷64=1, 1×64=64. Network = .64, broadcast = .127.',
-        'Usable hosts = 2^(host bits) − 2. /25→126, /26→62, /27→30, /28→14, /29→6, /30→2. Exception: /31 has 2 usable (no network/broadcast).',
-        'Route summarization combines contiguous prefixes into a single shorter-prefix route. Find common binary prefix — length of that prefix is the summary prefix length.',
-        'Discontiguous summarization creates black holes — traffic destined for addresses covered by the summary but not actually deployed gets silently dropped. Use null routes to generate ICMP unreachables for non-existent subnets.',
-        'VLSM allocates different prefix lengths per subnet. Sort requirements largest to smallest, allocate from the start of the block, align on power-of-2 boundaries.',
-        'AWS VPC subnets reserve 5 addresses per subnet (network, router, DNS, future, broadcast). A /28 in AWS = 11 usable hosts. Plan /20 minimum for auto-scaling application subnets.',
-        'A /0 (default route) is the catch-all route of last resort. Longest prefix match means any more-specific route wins over /0. A rogue /0 in BGP can black-hole global traffic.',
-        'For prefixes crossing octets (/9–/23), identify the active octet first. /20 block size is 16 in the third octet, not the fourth. Most subnetting errors come from applying block size to the wrong octet.',
+        'Subnetting borrows bits from the host portion of an IP address to create smaller broadcast domains — each borrowed bit doubles the subnet count and halves the host count.',
+        'Block size = 2^(host bits) = 256 - (interesting octet of mask). Subnets always start at multiples of the block size.',
+        'For n borrowed bits: subnets = 2^n, hosts per subnet = 2^(original host bits - n) - 2.',
+        'Mental method: find the smallest power of 2 ≥ needed hosts + 2, prefix = 32 - that power; block size = 2^power; network = (IP octet ÷ block size) × block size.',
+        'VLSM allocates different prefix lengths to different subnets, fitting each to its actual size requirement — always allocate largest to smallest to prevent overlap.',
+        '/30 gives 2 usable hosts (router point-to-point links); /31 (RFC 3021) eliminates network/broadcast overhead for true point-to-point efficiency.',
+        'Route summarization (supernetting) combines contiguous subnets into a single larger prefix — requires contiguous address space aligned to a power-of-2 boundary.',
+        'Subnets must be aligned to their block size — a /27 (block 32) must start at 0, 32, 64... Misaligned subnets cause silent routing failures.',
+        'IPv6 standard LAN subnetting uses /64 (SLAAC requires it); /127 for point-to-point links (RFC 6164); a /48 allocation provides 65,536 /64 subnets per organization.',
+        'AWS reserves 5 addresses per subnet (network, router, DNS, future, broadcast) — a /24 in AWS has 251 usable addresses, not 254.',
       ]} />
-
     </LearnLayout>
   )
 }
