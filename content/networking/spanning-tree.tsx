@@ -9,8 +9,8 @@ const G = '#10b981'
 
 const Chapter = ({ n, title }: { n: number; title: string }) => (
   <div style={{ marginBottom: 32 }}>
-    <p style={{ fontSize: 11, color: G, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em', textTransform: 'uppercase' }}>
-      Chapter {String(n).padStart(2, '0')}
+    <p style={{ fontSize: 11, color: G, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>
+      {`// CHAPTER ${String(n).padStart(2, '0')}`}
     </p>
     <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
   </div>
@@ -45,32 +45,33 @@ const CodeBlock = ({ children }: { children: React.ReactNode }) => (
 )
 
 const StoryBox = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'linear-gradient(135deg,#0f2027,#203a43,#2c5364)', border: `1px solid ${G}30`, borderRadius: 12, padding: '20px 24px', margin: '28px 0', position: 'relative', overflow: 'hidden' }}>
-    <div style={{ position: 'absolute', top: 12, right: 16, fontSize: 22, opacity: 0.18 }}>📖</div>
-    <p style={{ fontSize: 11, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.12em', margin: '0 0 10px' }}>Story</p>
-    <div style={{ fontSize: 14, color: '#d1fae5', lineHeight: 1.9 }}>{children}</div>
+  <div style={{ background: 'rgba(59,130,246,0.07)', border: '1px solid rgba(59,130,246,0.2)', borderLeft: '4px solid #3b82f6', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#3b82f6', fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '.1em', display: 'block', marginBottom: 8 }}>// REAL-WORLD SCENARIO</span>
+    {children}
   </div>
 )
 
-const WowBox = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'linear-gradient(135deg,#1c1917,#292524)', border: '1px solid #f59e0b30', borderRadius: 12, padding: '20px 24px', margin: '28px 0', position: 'relative' }}>
-    <div style={{ position: 'absolute', top: 12, right: 16, fontSize: 22, opacity: 0.25 }}>⚡</div>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.12em', margin: '0 0 10px' }}>Wow Factor</p>
-    <div style={{ fontSize: 14, color: '#fef3c7', lineHeight: 1.9 }}>{children}</div>
+const WowBox = ({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) => (
+  <div style={{ background: `${G}0d`, border: `1px solid ${G}30`, borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+      <span style={{ fontSize: 20 }}>{emoji}</span>
+      <span style={{ fontWeight: 800, color: G, fontSize: 13 }}>{title}</span>
+    </div>
+    {children}
   </div>
 )
 
 const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div style={{ background: '#f59e0b08', border: '1px solid #f59e0b35', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Caution — {title}</p>
-    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
+  <div style={{ background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.25)', borderLeft: '4px solid #f59e0b', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#f59e0b', fontSize: 12, fontFamily: 'var(--font-mono)', display: 'block', marginBottom: 8 }}>⚠ {title}</span>
+    {children}
   </div>
 )
 
 const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Misconception — {title}</p>
-    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
+  <div style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.25)', borderLeft: '4px solid #ef4444', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#ef4444', fontSize: 12, fontFamily: 'var(--font-mono)', display: 'block', marginBottom: 8 }}>✗ Common Mistake — {title}</span>
+    {children}
   </div>
 )
 
@@ -82,12 +83,10 @@ const LEVEL_COLORS: Record<string, string> = {
 }
 
 const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) => (
-  <div style={{ marginBottom: 32 }}>
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 0 }}>
-      <span style={{ fontSize: 10, fontWeight: 700, color: '#000', background: LEVEL_COLORS[level], padding: '2px 9px', borderRadius: 20, letterSpacing: '.06em', textTransform: 'uppercase', flexShrink: 0 }}>{level}</span>
-      <div style={{ background: `${LEVEL_COLORS[level]}12`, border: `1px solid ${LEVEL_COLORS[level]}30`, borderRadius: '0 8px 0 0', padding: '12px 16px', fontSize: 14, fontWeight: 700, color: 'var(--text)', flex: 1 }}>Q: {q}</div>
-    </div>
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '16px 18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
+  <div style={{ background: `${G}08`, border: `1px solid ${G}20`, borderRadius: 12, padding: '20px 24px', margin: '24px 0' }}>
+    <span style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#fff', background: LEVEL_COLORS[level], borderRadius: 20, padding: '3px 12px', marginBottom: 10 }}>{level}</span>
+    <div style={{ fontWeight: 700, color: 'var(--text)', marginBottom: 8, lineHeight: 1.5 }}>{q}</div>
+    <div style={{ fontSize: 14.5, color: 'var(--muted)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
@@ -359,7 +358,7 @@ export default function SpanningTreeModule() {
         Perlman's algorithm works by having switches exchange special frames called <Accent>BPDUs (Bridge Protocol Data Units)</Accent> to collectively elect a root bridge and block the redundant links that would create loops. The result: a loop-free active topology overlaid on the redundant physical topology.
       </Para>
 
-      <WowBox>
+      <WowBox emoji="🌳" title="Radia Perlman's 'Algorhyme' — and Her Regrets">
         Radia Perlman wrote a now-famous poem, "Algorhyme," to explain Spanning Tree: "I think that I shall never see / A graph more lovely than a tree. / A tree whose crucial property / Is loop-free connectivity..." She has since said she considers STP one of her least favorite inventions — it is "one of those things that is probably worse than the disease it was meant to solve" in modern data centers. RSTP and MSTP are significantly better, but STP's legacy persists.
       </WowBox>
 
