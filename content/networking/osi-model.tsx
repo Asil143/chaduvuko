@@ -12,15 +12,13 @@ const FONT_DISPLAY = 'var(--font-display)'
 
 const Chapter = ({ n, title, subtitle }: { n: string; title: string; subtitle?: string }) => (
   <div style={{ marginBottom: 36 }}>
-    <p style={{ fontSize: 11, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 8px', letterSpacing: '.12em', textTransform: 'uppercase' }}>
-      Chapter {n}
+    <p style={{ fontSize: 11, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>
+      {`// CHAPTER ${n}`}
     </p>
-    <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: '0 0 10px' }}>
+    <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: subtitle ? '0 0 8px' : 0 }}>
       {title}
     </h2>
-    {subtitle && (
-      <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.7, margin: 0, maxWidth: 620 }}>{subtitle}</p>
-    )}
+    {subtitle && <p style={{ fontSize: 15, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{subtitle}</p>}
   </div>
 )
 
@@ -60,9 +58,9 @@ const CodeBlock = ({ title, children }: { title?: string; children: React.ReactN
 )
 
 const StoryBox = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.2)', borderLeft: '4px solid #60a5fa', borderRadius: '0 12px 12px 0', padding: '18px 22px', margin: '28px 0' }}>
-    <p style={{ fontSize: 11, color: '#60a5fa', fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Real-World Scenario</p>
-    <div style={{ fontSize: 14.5, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
+  <div style={{ background: 'rgba(59,130,246,0.07)', border: '1px solid rgba(59,130,246,0.25)', borderLeft: '3px solid #3b82f6', borderRadius: 10, padding: '20px 24px', margin: '28px 0' }}>
+    <p style={{ fontSize: 11, fontWeight: 700, color: '#3b82f6', fontFamily: FONT_MONO, letterSpacing: '.12em', margin: '0 0 10px' }}>// REAL-WORLD SCENARIO</p>
+    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
   </div>
 )
 
@@ -74,39 +72,32 @@ const WowBox = ({ emoji, title, children }: { emoji: string; title: string; chil
 )
 
 const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div style={{ background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.25)', borderRadius: 12, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, color: '#fbbf24', fontFamily: FONT_MONO, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>⚠ {title}</p>
+  <div style={{ background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
+    <p style={{ fontSize: 12, fontWeight: 700, color: '#f59e0b', fontFamily: FONT_MONO, letterSpacing: '.1em', margin: '0 0 8px' }}>⚠ {title}</p>
     <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
 const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 12, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Common Mistake — {title}</p>
+  <div style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
+    <p style={{ fontSize: 12, fontWeight: 700, color: '#ef4444', fontFamily: FONT_MONO, letterSpacing: '.1em', margin: '0 0 8px' }}>✗ Common Mistake — {title}</p>
     <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
-const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) => {
-  const colors: Record<string, string> = {
-    Beginner: '#34d399',
-    Intermediate: '#60a5fa',
-    Senior: '#a78bfa',
-    PhD: '#f472b6',
-  }
-  const c = colors[level]
-  return (
-    <div style={{ marginBottom: 28 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: `${c}10`, border: `1px solid ${c}25`, borderRadius: '8px 8px 0 0', padding: '13px 18px' }}>
-        <span style={{ fontSize: 10, fontWeight: 800, color: c, fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.1em', background: `${c}20`, padding: '3px 8px', borderRadius: 5 }}>{level}</span>
-        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>Q: {q}</span>
-      </div>
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>
-        {children}
-      </div>
-    </div>
-  )
+const LEVEL_COLORS: Record<string, string> = {
+  Beginner: '#10b981', Intermediate: '#3b82f6', Senior: '#8b5cf6', PhD: '#f97316',
 }
+
+const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) => (
+  <div style={{ marginBottom: 32 }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 0 }}>
+      <span style={{ fontSize: 10, fontWeight: 700, color: '#fff', background: LEVEL_COLORS[level], padding: '3px 10px', borderRadius: 20, letterSpacing: '.06em', whiteSpace: 'nowrap', marginTop: 3, flexShrink: 0 }}>{level}</span>
+      <div style={{ background: `${LEVEL_COLORS[level]}12`, border: `1px solid ${LEVEL_COLORS[level]}30`, borderRadius: '0 8px 0 0', padding: '12px 16px', fontSize: 14, fontWeight: 700, color: 'var(--text)', flex: 1 }}>{q}</div>
+    </div>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '16px 18px', fontSize: 14, color: 'var(--muted)', lineHeight: 1.9 }}>{children}</div>
+  </div>
+)
 
 // ─── Interactive 1: OSI Stack Explorer ───────────────────────────────────────
 
