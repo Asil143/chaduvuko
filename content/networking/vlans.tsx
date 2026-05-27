@@ -9,8 +9,8 @@ const G = '#10b981'
 
 const Chapter = ({ n, title }: { n: number; title: string }) => (
   <div style={{ marginBottom: 32 }}>
-    <p style={{ fontSize: 11, color: G, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em', textTransform: 'uppercase' }}>
-      Chapter {String(n).padStart(2, '0')}
+    <p style={{ fontSize: 11, color: G, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>
+      {`// CHAPTER ${String(n).padStart(2, '0')}`}
     </p>
     <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
   </div>
@@ -45,32 +45,33 @@ const CodeBlock = ({ children }: { children: React.ReactNode }) => (
 )
 
 const StoryBox = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'linear-gradient(135deg,#0f2027,#203a43,#2c5364)', border: `1px solid ${G}30`, borderRadius: 12, padding: '20px 24px', margin: '28px 0', position: 'relative', overflow: 'hidden' }}>
-    <div style={{ position: 'absolute', top: 12, right: 16, fontSize: 22, opacity: 0.18 }}>📖</div>
-    <p style={{ fontSize: 11, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.12em', margin: '0 0 10px' }}>Story</p>
-    <div style={{ fontSize: 14, color: '#d1fae5', lineHeight: 1.9 }}>{children}</div>
+  <div style={{ background: 'rgba(59,130,246,0.07)', border: '1px solid rgba(59,130,246,0.2)', borderLeft: '4px solid #3b82f6', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#3b82f6', fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '.1em', display: 'block', marginBottom: 8 }}>// REAL-WORLD SCENARIO</span>
+    {children}
   </div>
 )
 
-const WowBox = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'linear-gradient(135deg,#1c1917,#292524)', border: '1px solid #f59e0b30', borderRadius: 12, padding: '20px 24px', margin: '28px 0', position: 'relative' }}>
-    <div style={{ position: 'absolute', top: 12, right: 16, fontSize: 22, opacity: 0.25 }}>⚡</div>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.12em', margin: '0 0 10px' }}>Wow Factor</p>
-    <div style={{ fontSize: 14, color: '#fef3c7', lineHeight: 1.9 }}>{children}</div>
+const WowBox = ({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) => (
+  <div style={{ background: `${G}0d`, border: `1px solid ${G}30`, borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+      <span style={{ fontSize: 20 }}>{emoji}</span>
+      <span style={{ fontWeight: 800, color: G, fontSize: 13 }}>{title}</span>
+    </div>
+    {children}
   </div>
 )
 
 const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div style={{ background: '#f59e0b08', border: '1px solid #f59e0b35', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Caution — {title}</p>
-    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
+  <div style={{ background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.25)', borderLeft: '4px solid #f59e0b', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#f59e0b', fontSize: 12, fontFamily: 'var(--font-mono)', display: 'block', marginBottom: 8 }}>⚠ {title}</span>
+    {children}
   </div>
 )
 
 const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div style={{ background: '#ef444408', border: '1px solid #ef444430', borderRadius: 10, padding: '16px 20px', margin: '24px 0' }}>
-    <p style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '0 0 8px' }}>Misconception — {title}</p>
-    <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>{children}</div>
+  <div style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.25)', borderLeft: '4px solid #ef4444', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#ef4444', fontSize: 12, fontFamily: 'var(--font-mono)', display: 'block', marginBottom: 8 }}>✗ Common Mistake — {title}</span>
+    {children}
   </div>
 )
 
@@ -82,12 +83,10 @@ const LEVEL_COLORS: Record<string, string> = {
 }
 
 const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) => (
-  <div style={{ marginBottom: 32 }}>
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 0 }}>
-      <span style={{ fontSize: 10, fontWeight: 700, color: '#000', background: LEVEL_COLORS[level], padding: '2px 9px', borderRadius: 20, letterSpacing: '.06em', textTransform: 'uppercase', flexShrink: 0 }}>{level}</span>
-      <div style={{ background: `${LEVEL_COLORS[level]}12`, border: `1px solid ${LEVEL_COLORS[level]}30`, borderRadius: '0 8px 0 0', padding: '12px 16px', fontSize: 14, fontWeight: 700, color: 'var(--text)', flex: 1 }}>Q: {q}</div>
-    </div>
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '16px 18px', fontSize: 14, color: 'var(--text)', lineHeight: 1.9 }}>{children}</div>
+  <div style={{ background: `${G}08`, border: `1px solid ${G}20`, borderRadius: 12, padding: '20px 24px', margin: '24px 0' }}>
+    <span style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#fff', background: LEVEL_COLORS[level], borderRadius: 20, padding: '3px 12px', marginBottom: 10 }}>{level}</span>
+    <div style={{ fontWeight: 700, color: 'var(--text)', marginBottom: 8, lineHeight: 1.5 }}>{q}</div>
+    <div style={{ fontSize: 14.5, color: 'var(--muted)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
@@ -375,7 +374,7 @@ export default function VLANsModule() {
         IEEE 802.1Q (1998) defined a standard for <Accent>Virtual LANs</Accent> — logical broadcast domains that are independent of physical topology. A VLAN is software-defined: the switch administrator assigns each port to a VLAN ID, and the switch enforces isolation between VLANs in hardware. One physical switch can simultaneously carry dozens of isolated VLANs. Hosts in the same room can be in different VLANs (isolated from each other), while hosts in different buildings can be in the same VLAN (as if directly connected).
       </Para>
 
-      <WowBox>
+      <WowBox emoji="🏗️" title="From 4,094 VLANs to 16 Million with VXLAN">
         The 12-bit VLAN ID field in 802.1Q theoretically supports 4,096 unique VLANs per physical domain (IDs 0 and 4095 are reserved, leaving 4,094 usable). But modern hyperscale data centers using VXLAN (Virtual Extensible LAN) extend this to 16 million unique segments using 24-bit VNI (VXLAN Network Identifier) — a 4,000× expansion needed to support multi-tenant cloud environments.
       </WowBox>
 
@@ -601,7 +600,7 @@ interface Vlan99
         Each hypervisor runs a VTEP (VXLAN Tunnel Endpoint) that encapsulates/decapsulates VXLAN traffic. From the VM's perspective, it's on a flat Layer 2 network. From the physical network's perspective, it's all just UDP traffic on port 4789. VXLAN enables VM mobility across physical racks, rows, and even data centers while maintaining Layer 2 adjacency.
       </Para>
 
-      <WowBox>
+      <WowBox emoji="☁️" title="AWS VPC Is a Hyperscale VXLAN Fabric">
         AWS's internal network fabric — Nitro — uses a proprietary overlay similar to VXLAN. Every EC2 instance runs in an isolated VPC (Virtual Private Cloud) that is fundamentally a VXLAN-like virtual network. When you create an AWS VPC with subnets, you're provisioning what is essentially a software-defined VLAN spanning the entire AWS region's physical fabric — hundreds of thousands of servers across dozens of availability zones.
       </WowBox>
 
