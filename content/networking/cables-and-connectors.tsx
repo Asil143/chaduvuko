@@ -4,21 +4,32 @@ import { useState } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const G = '#10b981'
+const FONT_MONO = 'var(--font-mono)'
+const FONT_DISPLAY = 'var(--font-display)'
+
 // ─── Helper components ────────────────────────────────────────────────────────
 
-const ACC = '#10b981'
-
-function Chapter({ n, title }: { n: number; title: string }) {
-  const num = String(n).padStart(2, '0')
+function Chapter({ n, title, subtitle }: { n: string; title: string; subtitle?: string }) {
   return (
     <div style={{ marginBottom: 32 }}>
-      <p style={{ fontSize: 11, color: ACC, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>// CHAPTER {num}</p>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
+      <p style={{ fontSize: 11, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>
+        // CHAPTER {n}
+      </p>
+      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>
+        {title}
+      </h2>
+      {subtitle && (
+        <p style={{ fontSize: 15, color: 'var(--muted)', margin: '8px 0 0', fontStyle: 'italic' }}>{subtitle}</p>
+      )}
     </div>
   )
 }
 
-function Divider() { return <div style={{ borderTop: '1px solid var(--border)', margin: '56px 0' }} /> }
+function Divider() {
+  return <div style={{ borderTop: '1px solid var(--border)', margin: '56px 0' }} />
+}
 
 function Para({ children }: { children: React.ReactNode }) {
   return <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, margin: '0 0 18px' }}>{children}</p>
@@ -33,1233 +44,1012 @@ function H3({ children }: { children: React.ReactNode }) {
 }
 
 function Accent({ children }: { children: React.ReactNode }) {
-  return <strong style={{ color: ACC, fontWeight: 700 }}>{children}</strong>
-}
-
-function Code({ children }: { children: React.ReactNode }) {
-  return <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13, background: '#1e293b', color: '#e2e8f0', padding: '2px 7px', borderRadius: 5 }}>{children}</code>
-}
-
-function CodeBlock({ children }: { children: React.ReactNode }) {
-  return (
-    <pre style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, background: '#0d1525', border: '1px solid #1e293b', borderRadius: 10, padding: '18px 20px', overflowX: 'auto', lineHeight: 1.7, color: '#94a3b8', margin: '18px 0 24px' }}>
-      {children}
-    </pre>
-  )
+  return <strong style={{ color: G, fontWeight: 700 }}>{children}</strong>
 }
 
 function StoryBox({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ background: '#0a1628', border: '1px solid #1e3a5f', borderLeft: '4px solid #3b82f6', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#cbd5e1', lineHeight: 1.85 }}>
-      {children}
+    <div style={{ borderLeft: `4px solid #3b82f6`, background: 'rgba(59,130,246,0.07)', borderRadius: '0 10px 10px 0', padding: '18px 22px', margin: '28px 0' }}>
+      <p style={{ fontSize: 11, color: '#60a5fa', fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 8px', letterSpacing: '.1em' }}>// REAL-WORLD SCENARIO</p>
+      <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.8 }}>{children}</div>
     </div>
   )
 }
 
-function WowBox({ children }: { children: React.ReactNode }) {
+function WowBox({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) {
   return (
-    <div style={{ background: '#0a1a12', border: '1px solid #166534', borderLeft: '4px solid #10b981', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#bbf7d0', lineHeight: 1.85 }}>
-      <span style={{ fontWeight: 800, color: '#10b981', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>WOW FACT</span>
-      {children}
+    <div style={{ background: 'rgba(16,185,129,0.08)', border: `1px solid rgba(16,185,129,0.25)`, borderRadius: 12, padding: '18px 22px', margin: '28px 0' }}>
+      <p style={{ fontSize: 13, color: G, fontWeight: 800, margin: '0 0 8px' }}>{emoji} {title}</p>
+      <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.8 }}>{children}</div>
     </div>
   )
 }
 
-function Warn({ children }: { children: React.ReactNode }) {
+function Warn({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div style={{ background: '#1a1400', border: '1px solid #854d0e', borderLeft: '4px solid #f59e0b', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#fef08a', lineHeight: 1.85 }}>
-      <span style={{ fontWeight: 800, color: '#f59e0b', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>CAUTION</span>
-      {children}
+    <div style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.3)', borderRadius: 12, padding: '18px 22px', margin: '28px 0' }}>
+      <p style={{ fontSize: 13, color: '#fbbf24', fontWeight: 800, margin: '0 0 8px' }}>⚠ {title}</p>
+      <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.8 }}>{children}</div>
     </div>
   )
 }
 
-function Err({ children }: { children: React.ReactNode }) {
+function Err({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div style={{ background: '#1a0a0a', border: '1px solid #991b1b', borderLeft: '4px solid #ef4444', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#fecaca', lineHeight: 1.85 }}>
-      <span style={{ fontWeight: 800, color: '#ef4444', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>MISCONCEPTION</span>
-      {children}
+    <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 12, padding: '18px 22px', margin: '28px 0' }}>
+      <p style={{ fontSize: 13, color: '#f87171', fontWeight: 800, margin: '0 0 8px' }}>✗ Common Mistake — {title}</p>
+      <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.8 }}>{children}</div>
     </div>
   )
 }
 
-const LEVEL_COLORS: Record<string, string> = { Beginner: '#10b981', Intermediate: '#3b82f6', Senior: '#8b5cf6', PhD: '#f97316' }
-
-function IQ({ level, children }: { level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) {
-  const c = LEVEL_COLORS[level]
+function IQ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) {
+  const colors: Record<string, string> = {
+    Beginner: '#34d399', Intermediate: '#60a5fa', Senior: '#a78bfa', PhD: '#f472b6',
+  }
+  const c = colors[level]
   return (
-    <div style={{ background: '#080d18', border: `1px solid ${c}40`, borderRadius: 12, padding: '18px 22px', margin: '22px 0' }}>
-      <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 800, color: c, background: `${c}18`, border: `1px solid ${c}40`, borderRadius: 20, padding: '3px 10px', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 10 }}>{level}</span>
-      <div style={{ fontSize: 14.5, color: '#cbd5e1', lineHeight: 1.85 }}>{children}</div>
+    <div style={{ border: `1px solid ${c}33`, borderRadius: 12, padding: '18px 22px', margin: '18px 0' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+        <span style={{ fontSize: 11, fontFamily: FONT_MONO, fontWeight: 700, color: c, background: `${c}18`, padding: '3px 10px', borderRadius: 99 }}>{level}</span>
+        <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', margin: 0 }}>{q}</p>
+      </div>
+      <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8 }}>{children}</div>
     </div>
   )
 }
 
-// ─── Interactive 1: Cable Selector ───────────────────────────────────────────
+function CodeBlock({ title, children }: { title?: string; children: React.ReactNode }) {
+  return (
+    <div style={{ background: '#0d1117', borderRadius: 10, overflow: 'hidden', margin: '20px 0', border: '1px solid #30363d' }}>
+      {title && (
+        <div style={{ background: '#161b22', padding: '8px 16px', borderBottom: '1px solid #30363d', fontSize: 12, color: '#8b949e', fontFamily: FONT_MONO }}>
+          {title}
+        </div>
+      )}
+      <pre style={{ margin: 0, padding: '16px 20px', fontSize: 13, lineHeight: 1.7, color: '#e6edf3', fontFamily: FONT_MONO, overflowX: 'auto', whiteSpace: 'pre' }}>
+        {children}
+      </pre>
+    </div>
+  )
+}
 
-const CABLE_TYPES = [
+// ─── Interactive: Cable Comparison Explorer ───────────────────────────────────
+
+const CABLES = [
   {
-    name: 'Cat5e',
-    category: 'copper',
-    color: '#94a3b8',
+    key: 'cat5e',
+    label: 'Cat5e',
+    color: '#60a5fa',
+    type: 'Twisted Pair (UTP)',
     maxSpeed: '1 Gbps',
-    maxDistance: '100m',
-    frequency: '100 MHz',
+    maxDist: '100 m',
+    freq: '100 MHz',
+    pairs: 4,
     shielded: false,
-    connectors: ['RJ45'],
-    cost: 'Very low ($0.15/ft)',
-    use: 'Gigabit Ethernet in homes and offices. Supports 10/100/1000BASE-T. Replaced Cat5 as the baseline standard.',
-    avoid: 'Do not use for 10GbE — crosstalk at 10G frequencies is too high for Cat5e.',
-    standard: 'TIA-568-C.2',
-    pinout: 'T568A or T568B (must match both ends)',
+    use: 'Home networks, older office wiring',
+    standard: 'TIA/EIA-568-B.2-1',
+    connector: 'RJ-45',
+    notes: 'Most common legacy cable. Sufficient for 1 Gbps to desktops. Crosstalk limits it to 1 Gbps at 100m.',
   },
   {
-    name: 'Cat6',
-    category: 'copper',
-    color: '#3b82f6',
-    maxSpeed: '10 Gbps (55m)',
-    maxDistance: '100m (1G) / 55m (10G)',
-    frequency: '250 MHz',
+    key: 'cat6',
+    label: 'Cat6',
+    color: '#34d399',
+    type: 'Twisted Pair (UTP/STP)',
+    maxSpeed: '10 Gbps (55m) / 1 Gbps (100m)',
+    maxDist: '100 m (1G), 55 m (10G)',
+    freq: '250 MHz',
+    pairs: 4,
     shielded: false,
-    connectors: ['RJ45'],
-    cost: 'Low ($0.25/ft)',
-    use: '10GbE at shorter distances. Higher bandwidth than Cat5e, better crosstalk resistance. Includes a plastic spline separator between pairs.',
-    avoid: 'Cat6 supports 10G only up to 55m. Beyond that, use Cat6A.',
-    standard: 'TIA-568-C.2',
-    pinout: 'T568A or T568B',
+    use: 'Modern office LANs, new installations',
+    standard: 'TIA/EIA-568-B.2-1',
+    connector: 'RJ-45',
+    notes: 'Stricter twist rates and larger conductor diameter vs Cat5e. Internal separator (spline) reduces crosstalk. 10G only to 55m without shielding.',
   },
   {
-    name: 'Cat6A',
-    category: 'copper',
-    color: '#10b981',
-    maxSpeed: '10 Gbps',
-    maxDistance: '100m',
-    frequency: '500 MHz',
-    shielded: true,
-    connectors: ['RJ45'],
-    cost: 'Medium ($0.60/ft)',
-    use: '10GbE at full 100m. Required for data center structured cabling. Augmented Category 6 — thicker, heavier cable.',
-    avoid: 'Larger diameter makes it hard to route through conduit designed for Cat5/6. Heavier, less flexible.',
-    standard: 'TIA-568-C.2, ISO/IEC 11801',
-    pinout: 'T568A or T568B',
-  },
-  {
-    name: 'Cat8',
-    category: 'copper',
-    color: '#8b5cf6',
-    maxSpeed: '25/40 Gbps',
-    maxDistance: '30m',
-    frequency: '2,000 MHz',
-    shielded: true,
-    connectors: ['RJ45 (Class I)', 'TERA/GG45 (Class II)'],
-    cost: 'High ($1.50+/ft)',
-    use: 'Data center Top-of-Rack switch to server connections. Short runs only. 25GBASE-T and 40GBASE-T.',
-    avoid: '30m limit makes it useless for runs longer than within a rack row. Almost exclusively for data centers.',
-    standard: 'ANSI/TIA-568-C.2-1, ISO/IEC 11801 Ed3',
-    pinout: 'T568B (Class I)',
-  },
-  {
-    name: 'Single-Mode Fiber (SMF)',
-    category: 'fiber',
-    color: '#f97316',
-    maxSpeed: '100 Gbps – 400 Gbps+',
-    maxDistance: 'Up to 100+ km',
-    frequency: 'N/A (optical)',
-    shielded: false,
-    connectors: ['LC', 'SC', 'MPO/MTP', 'FC', 'ST'],
-    cost: 'High fiber, Low cable ($0.20/ft) — transceivers expensive ($200–$2000)',
-    use: 'WAN, campus backbone, submarine cables. 8-10 μm core, laser light source (1310nm/1550nm). Long distance.',
-    avoid: 'Requires laser transceivers. More fragile than copper. Specialized termination equipment needed.',
-    standard: 'ITU-T G.652, G.655, G.657',
-    pinout: 'N/A — simplex (one direction per fiber), duplex (pair for TX/RX)',
-  },
-  {
-    name: 'Multi-Mode Fiber (MMF)',
-    category: 'fiber',
-    color: '#06b6d4',
-    maxSpeed: '10–400 Gbps (grade dependent)',
-    maxDistance: 'Up to 400m (OM3), 550m (OM4), 2km (OM5)',
-    frequency: 'N/A (optical)',
-    shielded: false,
-    connectors: ['LC', 'SC', 'MPO/MTP'],
-    cost: 'Medium — cheaper transceivers ($50–$500) than SMF',
-    use: 'Data center inter-switch links, campus building runs. 50 μm core. LED or VCSEL laser (850nm). Cost-effective.',
-    avoid: 'Cannot use for WAN or long runs. Higher dispersion than SMF limits distance.',
-    standard: 'OM1 (62.5μm), OM2/3/4 (50μm), OM5 (wideband MMF)',
-    pinout: 'Duplex (pair), or MPO ribbon (12/24 fibers)',
-  },
-  {
-    name: 'DAC (Direct Attach Copper)',
-    category: 'special',
-    color: '#ef4444',
-    maxSpeed: '10–400 Gbps',
-    maxDistance: 'Up to 7m (passive) / 15m (active)',
-    frequency: 'N/A',
-    shielded: true,
-    connectors: ['SFP+', 'QSFP28', 'QSFP-DD'],
-    cost: 'Low ($15–$150) — no separate transceivers needed',
-    use: 'Data center rack-to-rack and ToR connections. Twinax copper with integrated transceivers. Low latency, low cost.',
-    avoid: 'Very short range only. Vendor lock-in risk — some switches only accept their own branded DAC.',
-    standard: 'SFF-8431, SFF-8436',
-    pinout: 'N/A — plug directly into SFP+/QSFP ports',
-  },
-  {
-    name: 'Coaxial (RG6)',
-    category: 'special',
-    color: '#ec4899',
-    maxSpeed: 'Up to 10 Gbps (DOCSIS 3.1)',
-    maxDistance: 'Up to 300m (cable plant)',
-    frequency: 'Up to 1.2 GHz',
-    shielded: true,
-    connectors: ['F-type', 'BNC'],
-    cost: 'Low ($0.15/ft)',
-    use: 'Cable TV, DOCSIS cable internet, antenna connections. Central conductor + braided shield = excellent EMI resistance.',
-    avoid: 'Not used for Ethernet LAN. F-connector is screw-on (cable modem) — not a data center technology.',
-    standard: 'RG-6, RG-11 (longer runs), ANSI/SCTE',
-    pinout: 'N/A — center conductor (signal), outer shield (ground)',
-  },
-]
-
-function CableSelector() {
-  const [selected, setSelected] = useState(0)
-  const [filter, setFilter] = useState<'all' | 'copper' | 'fiber' | 'special'>('all')
-  const filtered = CABLE_TYPES.filter(c => filter === 'all' || c.category === filter)
-  const cable = CABLE_TYPES[selected] ?? CABLE_TYPES[0]
-
-  return (
-    <div style={{ margin: '28px 0', background: '#080d18', border: '1px solid #1e293b', borderRadius: 14, overflow: 'hidden' }}>
-      {/* Filter */}
-      <div style={{ padding: '12px 18px', borderBottom: '1px solid #1e293b', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-        {(['all', 'copper', 'fiber', 'special'] as const).map(f => (
-          <button key={f} onClick={() => setFilter(f)} style={{ padding: '4px 12px', borderRadius: 14, border: `1px solid ${f === filter ? ACC : '#1e293b'}`, background: f === filter ? `${ACC}18` : 'transparent', color: f === filter ? ACC : '#64748b', fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'monospace' }}>{f}</button>
-        ))}
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', minHeight: 400 }}>
-        {/* Cable list */}
-        <div style={{ borderRight: '1px solid #1e293b', overflowY: 'auto' }}>
-          {filtered.map((c, i) => {
-            const idx = CABLE_TYPES.indexOf(c)
-            return (
-              <div key={c.name} onClick={() => setSelected(idx)} style={{ padding: '10px 14px', cursor: 'pointer', borderBottom: '1px solid #0d1525', background: selected === idx ? `${c.color}12` : 'transparent', borderLeft: `3px solid ${selected === idx ? c.color : 'transparent'}`, transition: 'all .15s' }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: selected === idx ? c.color : '#94a3b8', fontFamily: 'monospace' }}>{c.name}</div>
-                <div style={{ fontSize: 10, color: '#475569', marginTop: 2 }}>{c.maxSpeed}</div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Detail */}
-        <div style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-            <div style={{ width: 12, height: 12, borderRadius: 3, background: cable.color }} />
-            <span style={{ fontSize: 18, fontWeight: 900, color: cable.color, fontFamily: 'monospace' }}>{cable.name}</span>
-            <span style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', background: '#0d1525', borderRadius: 4, padding: '2px 8px' }}>{cable.standard}</span>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
-            {[
-              { label: 'Max Speed', value: cable.maxSpeed, c: cable.color },
-              { label: 'Max Distance', value: cable.maxDistance, c: '#94a3b8' },
-              { label: 'Frequency', value: cable.frequency, c: '#64748b' },
-              { label: 'Cost', value: cable.cost, c: '#94a3b8' },
-            ].map(r => (
-              <div key={r.label} style={{ background: '#0d1525', borderRadius: 8, padding: '8px 12px' }}>
-                <div style={{ fontSize: 10, color: '#475569', fontFamily: 'monospace', marginBottom: 2 }}>{r.label}</div>
-                <div style={{ fontSize: 12, color: r.c, fontWeight: 700, fontFamily: 'monospace' }}>{r.value}</div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ fontSize: 12.5, color: '#94a3b8', lineHeight: 1.75, marginBottom: 12 }}>{cable.use}</div>
-
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
-            <span style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>Connectors:</span>
-            {cable.connectors.map(c => (
-              <span key={c} style={{ fontSize: 11, color: cable.color, background: `${cable.color}15`, border: `1px solid ${cable.color}30`, borderRadius: 8, padding: '2px 8px', fontFamily: 'monospace' }}>{c}</span>
-            ))}
-          </div>
-
-          <div style={{ fontSize: 12, color: '#f59e0b', background: '#1a1400', border: '1px solid #854d0e', borderRadius: 8, padding: '10px 14px', lineHeight: 1.65 }}>
-            <span style={{ fontWeight: 700, display: 'block', marginBottom: 3 }}>Avoid when:</span>
-            {cable.avoid}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── Interactive 2: Connector Identifier ─────────────────────────────────────
-
-const CONNECTORS = [
-  {
-    name: 'RJ45',
-    color: '#3b82f6',
-    aka: '8P8C',
-    usedFor: 'Ethernet (Cat5e, Cat6, Cat6A, Cat8)',
-    description: 'The universal Ethernet connector. 8 pins arranged in two rows. Gold contacts crimp onto 8 conductors (4 twisted pairs). Locking tab (the "click") holds it in the port.',
-    pinout: `T568B (most common):
-1=TX+ (orange-white)  5=TX- pair spare
-2=TX- (orange)        6=RX- (green)
-3=RX+ (green-white)   7=spare+ (brown-white)
-4=spare (blue)        8=spare- (brown)
-
-1000BASE-T uses all 4 pairs bidirectionally.
-10GBASE-T also uses all 4 pairs with advanced DSP.`,
-    tip: 'Locking tab breaks off easily. Use strain relief boots on patch cords. Verify pin 1 orientation before crimping.',
-  },
-  {
-    name: 'LC (Lucent Connector)',
-    color: '#10b981',
-    aka: 'Little Connector / Local Connector',
-    usedFor: 'SFP/SFP+ fiber optic transceivers, MMF and SMF',
-    description: 'The dominant data center fiber connector. Small form factor with a push-pull latch. Typically comes as a duplex pair (TX + RX) for bidirectional connections. 1.25mm ferrule.',
-    pinout: `Duplex LC: Blue boot = SMF (OS2), Aqua/orange = MMF (OM3/OM4)
-TX (transmit) and RX (receive) must not be swapped.
-Some bidirectional (BiDi) SFPs use a single LC fiber —
-one wavelength TX, different wavelength RX on the same fiber.`,
-    tip: 'LC connectors are tiny — use a connector cleaner before mating. Dirty connectors cause high insertion loss.',
-  },
-  {
-    name: 'SC (Subscriber Connector)',
-    color: '#8b5cf6',
-    aka: 'Square Connector / Standard Connector',
-    usedFor: 'Older fiber installations, FTTH, GPON',
-    description: 'Push-pull mechanism, square housing, 2.5mm ferrule. Larger than LC. Common in ISP FTTH deployments and older enterprise fiber plant.',
-    pinout: `SC-APC: Green — angled physical contact (8° angle), minimizes backreflection
-SC-UPC: Blue — ultra physical contact, flat end
-APC connectors used on GPON/FTTH where low reflection is critical.
-Do not mix APC and UPC — different polish angles = high loss.`,
-    tip: 'The APC/UPC distinction matters. Connecting APC to UPC causes ~30dB loss — effectively no signal.',
-  },
-  {
-    name: 'MPO/MTP',
-    color: '#f97316',
-    aka: 'Multi-fiber Push-On / Multi-fiber Termination Push-on',
-    usedFor: '40G/100G/400G parallel optics, pre-terminated trunk cables',
-    description: 'Single connector carrying 12 or 24 fibers in a rectangular ferrule. Used with parallel optics (SR4, CWDM4) and high-density patch panels. Push-on, key-up/key-down polarity matters.',
-    pinout: `12-fiber MPO: Two rows of 6 fibers
-24-fiber MPO: Two rows of 12 fibers
-
-Polarity methods (TIA-568-C.3):
-  Method A: straight-through (1→1, 2→2 ... 12→12)
-  Method B: flip (1→12, 2→11, cross)
-  Method C: pair reversal
-MTP is a registered trademark of US Conec; MPO is the IEC standard name.`,
-    tip: 'Polarity mismatches are the #1 failure in MPO cabling. Always document and test end-to-end polarity before commissioning.',
-  },
-  {
-    name: 'SFP / SFP+',
-    color: '#ef4444',
-    aka: 'Small Form-factor Pluggable',
-    usedFor: '1G (SFP), 10G (SFP+) optical and copper',
-    description: 'Transceiver module that plugs into a switch port to define the interface type and speed. The module contains the laser/photodetector or copper PHY. Hot-swappable.',
-    pinout: `SFP variants:
-  SFP:  1G — LC fiber (SX/LX/LH) or copper (T)
-  SFP+: 10G — LC fiber (SR/LR/ER) or DAC/copper
-  SFP28: 25G — single 25G lane (25GBASE-SR/LR)
-  QSFP+: 40G — 4×10G lanes (40GBASE-SR4/LR4)
-  QSFP28: 100G — 4×25G lanes (100GBASE-SR4/LR4)
-  QSFP-DD: 400G — 8×50G or 4×100G lanes`,
-    tip: 'Third-party SFPs often work perfectly and cost 1/10th of vendor-branded modules. Test before deploying at scale — some vendors (Cisco, Juniper) have compatibility blockers.',
-  },
-  {
-    name: 'F-Type',
-    color: '#06b6d4',
-    aka: 'F connector',
-    usedFor: 'Cable modem, cable TV (DOCSIS), antenna',
-    description: 'Threaded coaxial connector for RG-6 cable. The center pin is the coaxial cable\'s center conductor itself (no separate pin to solder). Screw-on design prevents accidental disconnection.',
-    pinout: `Coaxial: center conductor = signal (inner), outer thread = shield/ground
-Male F-connector threads onto female F-port on:
-  - Cable modem (DOCSIS)
-  - Cable TV splitter
-  - Antenna amplifier
-  - Satellite receiver
-
-Tighten to finger-tight + 1/4 turn. Over-tightening cracks the port.
-Check: the center pin must protrude 1/8" or signal quality degrades.`,
-    tip: 'Corroded F-connectors cause intermittent cable internet issues. Replace outdoor connectors every 5-7 years.',
-  },
-]
-
-function ConnectorIdentifier() {
-  const [selected, setSelected] = useState(0)
-  const conn = CONNECTORS[selected]
-
-  return (
-    <div style={{ margin: '28px 0', background: '#080d18', border: '1px solid #1e293b', borderRadius: 14, overflow: 'hidden' }}>
-      {/* Tabs */}
-      <div style={{ padding: '12px 18px', borderBottom: '1px solid #1e293b', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-        {CONNECTORS.map((c, i) => (
-          <button key={c.name} onClick={() => setSelected(i)} style={{ padding: '5px 12px', borderRadius: 16, border: `1px solid ${i === selected ? c.color : '#1e293b'}`, background: i === selected ? `${c.color}18` : 'transparent', color: i === selected ? c.color : '#64748b', fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'monospace' }}>{c.name}</button>
-        ))}
-      </div>
-
-      <div style={{ padding: '20px 22px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-          <span style={{ fontSize: 18, fontWeight: 900, color: conn.color }}>{conn.name}</span>
-          <span style={{ fontSize: 12, color: '#475569', fontFamily: 'monospace' }}>aka: {conn.aka}</span>
-        </div>
-
-        <div style={{ fontSize: 11, color: conn.color, fontFamily: 'monospace', marginBottom: 10 }}>Used for: {conn.usedFor}</div>
-        <p style={{ fontSize: 13.5, color: '#cbd5e1', lineHeight: 1.8, marginBottom: 16 }}>{conn.description}</p>
-
-        <div style={{ background: '#0d1525', borderRadius: 10, padding: '14px 16px', marginBottom: 14 }}>
-          <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 8 }}>PINOUT / WIRING DETAILS</div>
-          <pre style={{ fontSize: 12, color: '#94a3b8', fontFamily: 'var(--font-mono)', lineHeight: 1.65, margin: 0, whiteSpace: 'pre-wrap' }}>{conn.pinout}</pre>
-        </div>
-
-        <div style={{ background: '#0a1a12', borderLeft: `3px solid ${conn.color}`, borderRadius: 8, padding: '12px 16px', fontSize: 12.5, color: '#bbf7d0', lineHeight: 1.7 }}>
-          <span style={{ fontWeight: 700, color: conn.color }}>Pro tip: </span>{conn.tip}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── Interactive 3: Cable Troubleshooter ─────────────────────────────────────
-
-const CABLE_ISSUES = [
-  {
-    symptom: 'Link light off / no connection',
-    color: '#ef4444',
-    causes: [
-      'Cable unplugged or connector not fully seated',
-      'Broken locking tab causing intermittent seating',
-      'Cable damaged (bend radius exceeded — especially fiber)',
-      'Wrong cable type (crossover vs straight-through on old equipment)',
-      'NIC or switch port failed',
-    ],
-    tests: [
-      'Try a known-good cable from the same run to rule out the cable',
-      'Re-seat both connectors (press until you hear a click)',
-      'Check link LEDs at both ends — if switch port LED is off, try a different port',
-      'Test with a cable tester (continuity + pinout verification)',
-      'ethtool eth0 | grep "Link detected"',
-    ],
-    commands: 'ethtool eth0 | grep -i "link\\|speed\\|duplex"\nip link show eth0 | grep "state"\nmii-tool eth0  # older systems',
-  },
-  {
-    symptom: 'Intermittent disconnections',
-    color: '#f97316',
-    causes: [
-      'Damaged cable — kinked, crushed under furniture, bent too sharply',
-      'Corroded or loose connector',
-      'Cable length exceeds 100m for copper',
-      'Temperature cycling causing connector to expand/contract (outdoor cables)',
-      'EMI from nearby power cables, motors, or fluorescent lighting',
-    ],
-    tests: [
-      'Watch interface error counters: ip -s link show eth0 — look for increasing errors',
-      'Wiggle the cable while watching the interface — if connection drops, bad cable',
-      'Check cable routing for tight bends or crush points',
-      'Measure cable length if suspect > 100m',
-      'Move cable away from power cables (separate by 6+ inches)',
-    ],
-    commands: 'watch -n1 "ip -s link show eth0 | grep -A2 RX:"\nethtool -S eth0 | grep -i "error\\|drop\\|miss"\ndmesg | grep -i "eth0\\|link" | tail -20',
-  },
-  {
-    symptom: 'Slow speeds / low throughput',
+    key: 'cat6a',
+    label: 'Cat6a',
     color: '#f59e0b',
-    causes: [
-      'Speed/duplex mismatch (half-duplex causes collisions → low throughput)',
-      'Category mismatch (Cat5 trying to run 1G on long runs)',
-      'Excessive crosstalk (damaged cable, too many terminations, too-tight cable ties)',
-      'Incorrect cable type for transceiver (SMF transceiver in MMF cable)',
-      'Dirty fiber connectors causing high insertion loss',
-    ],
-    tests: [
-      'ethtool eth0 to check negotiated speed and duplex',
-      'iperf3 test: should achieve >940 Mbps on 1G link, >9 Gbps on 10G',
-      'If fiber: use an optical power meter to measure insertion loss',
-      'Check error counters for FCS errors, runts, giants',
-      'Replace cable — start fresh if all else fails',
-    ],
-    commands: 'ethtool eth0 | grep -E "Speed|Duplex|Auto"\niperf3 -c server_ip -t 30\nethtool -S eth0 | grep -E "error|drop|crc|collision"',
+    type: 'Twisted Pair (UTP/STP/SFTP)',
+    maxSpeed: '10 Gbps',
+    maxDist: '100 m',
+    freq: '500 MHz',
+    pairs: 4,
+    shielded: true,
+    use: 'Datacenter horizontal runs, 10G to desktop',
+    standard: 'TIA/EIA-568-B.2-10',
+    connector: 'RJ-45',
+    notes: 'Augmented Category 6 — eliminates alien crosstalk (AXT) from adjacent cables. Thicker and stiffer. Shielded variants need grounded patch panels.',
   },
   {
-    symptom: 'No SFP / transceiver not recognized',
-    color: '#8b5cf6',
-    causes: [
-      'Vendor compatibility lock — switch only accepts vendor-branded modules',
-      'Incorrect speed/type for port (inserting 1G SFP in 10G SFP+ port without forced 1G mode)',
-      'Dirty SFP contacts',
-      'Unsupported DOM (Digital Optical Monitoring) version',
-      'SFP module failed',
-    ],
-    tests: [
-      'Check switch logs: syslog / show interface to see if module is detected',
-      'Try the SFP in a known-good port on the same switch',
-      'Clean SFP with an air blower and lint-free swab',
-      'Verify the SFP speed matches port type',
-      'On Cisco: "service unsupported-transceiver" to allow third-party modules',
-    ],
-    commands: 'show interface transceiver  # Cisco\nshow interface eth-1/1 transceiver detail  # Arista\nethtool -m eth0  # Linux — reads SFP DOM data\ndmesg | grep -i "sfp\\|transceiver\\|module"',
+    key: 'cat8',
+    label: 'Cat8',
+    color: '#a78bfa',
+    type: 'Twisted Pair (SFTP)',
+    maxSpeed: '25 Gbps (Cat8.1) / 40 Gbps (Cat8.2)',
+    maxDist: '30 m',
+    freq: '2000 MHz',
+    pairs: 4,
+    shielded: true,
+    use: 'Datacenter top-of-rack switch to server',
+    standard: 'TIA/EIA-568-C.2-1',
+    connector: 'RJ-45 (Cat8.1) / TERA/ARJ45 (Cat8.2)',
+    notes: 'Always shielded. 30m limit makes it datacenter-only. 2 GHz bandwidth with PAM4 signaling. Replacing short fiber runs in dense datacenter environments.',
   },
   {
-    symptom: 'High BER / fiber optical errors',
-    color: '#06b6d4',
-    causes: [
-      'Dirty fiber connector (the #1 cause of fiber issues)',
-      'Fiber bend radius exceeded (minimum 30mm for most fiber — less = signal loss)',
-      'Wrong fiber type (SMF transceiver in MMF cable or vice versa)',
-      'APC and UPC connectors mixed (30dB+ loss)',
-      'Connector not fully seated or cracked ferrule',
-    ],
-    tests: [
-      'Clean connectors with IEC 61300-3-35 cleaner tool, then measure loss',
-      'Optical power meter: measure TX power at near end, RX at far end — difference = loss',
-      'Acceptable loss: ~3.5 dB for OM3 MMF 300m, ~1 dB for SMF 1km, verify against budget',
-      'Visual fault locator (red laser): shines red light through fiber — break appears as bright spot',
-      'OTDR trace: maps loss along the fiber length, finds exact location of break/splice',
-    ],
-    commands: 'ethtool -m eth0 | grep -E "Rx power|Tx power|Laser"  # SFP DOM\nshow interface eth1 transceiver detail | grep power  # Arista',
+    key: 'smf',
+    label: 'Single-Mode Fiber',
+    color: '#f472b6',
+    type: 'Optical Fiber',
+    maxSpeed: '100 Gbps+ per lambda',
+    maxDist: '80 km (unamplified), 10,000+ km (amplified)',
+    freq: 'THz (C-band 191–196 THz)',
+    pairs: 1,
+    shielded: false,
+    use: 'WAN, campus backbone, datacenter interconnect',
+    standard: 'ITU-T G.652/G.654/G.655',
+    connector: 'LC, SC, FC, MPO',
+    notes: '9 µm core. Single light path = no modal dispersion. 0.2 dB/km attenuation at 1550nm. Requires laser (not LED) sources. Supports DWDM with 80–160 wavelengths.',
+  },
+  {
+    key: 'mmf',
+    label: 'Multi-Mode Fiber',
+    color: '#fb923c',
+    type: 'Optical Fiber',
+    maxSpeed: '100 Gbps (OM5), 40 Gbps (OM4)',
+    maxDist: '400 m (OM4/100G), 150 m (OM3/100G)',
+    freq: 'THz',
+    pairs: 1,
+    shielded: false,
+    use: 'Datacenter intra-building, campus backbone',
+    standard: 'TIA-492AAAE (OM5), ISO/IEC 11801',
+    connector: 'LC, SC, MPO',
+    notes: '50 µm core (OM3/4/5) or 62.5 µm (OM1/2). Multiple light modes cause modal dispersion limiting distance. Cheaper transceivers (VCSEL vs DFB laser). OM5 supports SWDM4 (4 wavelengths on one fiber).',
+  },
+  {
+    key: 'coax',
+    label: 'Coaxial',
+    color: '#94a3b8',
+    type: 'Coaxial (center conductor + shield)',
+    maxSpeed: '10 Mbps (10BASE-2/5) / GHz for cable TV',
+    maxDist: '185 m (10BASE-2) / 500 m (10BASE-5)',
+    freq: '1 GHz+ (DOCSIS)',
+    pairs: 1,
+    shielded: true,
+    use: 'Cable TV/internet (DOCSIS), legacy Ethernet, CCTV',
+    standard: 'RG-6 (cable), RG-58 (legacy Ethernet)',
+    connector: 'F-type (cable), BNC (legacy), N-type (RF)',
+    notes: 'Center conductor surrounded by dielectric and braid/foil shield. Ground and signal share the same cable. Still dominant for last-mile cable internet and RF applications.',
   },
 ]
 
-function CableTroubleshooter() {
-  const [selected, setSelected] = useState(0)
-  const issue = CABLE_ISSUES[selected]
+function CableExplorer() {
+  const [active, setActive] = useState('cat6')
+  const cable = CABLES.find(c => c.key === active)!
 
   return (
-    <div style={{ margin: '28px 0', background: '#080d18', border: '1px solid #1e293b', borderRadius: 14, overflow: 'hidden' }}>
-      <div style={{ padding: '12px 18px', borderBottom: '1px solid #1e293b', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-        {CABLE_ISSUES.map((iss, i) => (
-          <button key={iss.symptom} onClick={() => setSelected(i)} style={{ padding: '5px 12px', borderRadius: 16, border: `1px solid ${i === selected ? iss.color : '#1e293b'}`, background: i === selected ? `${iss.color}18` : 'transparent', color: i === selected ? iss.color : '#64748b', fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'monospace' }}>
-            {iss.symptom.split('/')[0].trim()}
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 24, margin: '28px 0' }}>
+      <p style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 16px' }}>// CABLE TYPE EXPLORER</p>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
+        {CABLES.map(c => (
+          <button key={c.key} onClick={() => setActive(c.key)}
+            style={{ padding: '6px 14px', borderRadius: 8, fontSize: 12, fontFamily: FONT_MONO, fontWeight: 700, cursor: 'pointer', border: `1px solid ${c.key === active ? c.color : 'var(--border)'}`, background: c.key === active ? `${c.color}18` : 'transparent', color: c.key === active ? c.color : 'var(--muted)' }}>
+            {c.label}
           </button>
         ))}
       </div>
-
-      <div style={{ padding: '20px 22px' }}>
-        <div style={{ fontSize: 16, fontWeight: 800, color: issue.color, marginBottom: 16 }}>{issue.symptom}</div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 16 }}>
-          <div>
-            <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 8, fontWeight: 700 }}>COMMON CAUSES</div>
-            {issue.causes.map((c, i) => (
-              <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
-                <span style={{ color: issue.color, fontWeight: 700, flexShrink: 0, fontSize: 12 }}>{i + 1}.</span>
-                <span style={{ fontSize: 12.5, color: '#94a3b8', lineHeight: 1.6 }}>{c}</span>
-              </div>
-            ))}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginBottom: 16 }}>
+        {[
+          { label: 'Type',      val: cable.type },
+          { label: 'Max Speed', val: cable.maxSpeed },
+          { label: 'Max Distance', val: cable.maxDist },
+          { label: 'Bandwidth', val: cable.freq },
+          { label: 'Shielded',  val: cable.shielded ? 'Yes (STP/SFTP)' : 'No (UTP)' },
+          { label: 'Connector', val: cable.connector },
+          { label: 'Standard',  val: cable.standard },
+          { label: 'Use Case',  val: cable.use },
+        ].map(row => (
+          <div key={row.label} style={{ background: 'var(--bg)', borderRadius: 8, padding: '10px 14px', border: '1px solid var(--border)' }}>
+            <p style={{ fontSize: 11, color: 'var(--muted)', margin: '0 0 3px', fontFamily: FONT_MONO }}>{row.label}</p>
+            <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, margin: 0 }}>{row.val}</p>
           </div>
-          <div>
-            <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 8, fontWeight: 700 }}>DIAGNOSIS STEPS</div>
-            {issue.tests.map((t, i) => (
-              <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
-                <span style={{ color: '#10b981', fontWeight: 700, flexShrink: 0, fontSize: 12 }}>→</span>
-                <span style={{ fontSize: 12.5, color: '#94a3b8', lineHeight: 1.6 }}>{t}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ background: '#0d1525', borderRadius: 10, padding: '14px 16px' }}>
-          <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 8 }}>DIAGNOSTIC COMMANDS</div>
-          <pre style={{ fontSize: 12, color: '#94a3b8', fontFamily: 'var(--font-mono)', lineHeight: 1.65, margin: 0, whiteSpace: 'pre-wrap' }}>{issue.commands}</pre>
-        </div>
+        ))}
+      </div>
+      <div style={{ background: `${cable.color}0d`, border: `1px solid ${cable.color}33`, borderRadius: 10, padding: '12px 16px' }}>
+        <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7, margin: 0 }}>{cable.notes}</p>
       </div>
     </div>
   )
 }
 
-// ─── Module ────────────────────────────────────────────────────────────────────
+// ─── Interactive: Fiber Connector Identifier ─────────────────────────────────
 
-export default function CablesAndConnectorsPage() {
+const CONNECTORS = [
+  {
+    key: 'lc',
+    label: 'LC',
+    color: '#60a5fa',
+    fullName: 'Lucent Connector (Little Connector)',
+    ferrule: '1.25 mm',
+    use: 'Datacenter, enterprise SFP/SFP+ transceivers',
+    duplex: 'Yes (LC duplex = 2 fibers in one housing)',
+    desc: 'The dominant fiber connector in modern datacenters and enterprise networking. Small form factor allows high-density patch panels. Pull-tab or push-pull latch mechanism. Standard on all SFP, SFP+, SFP28, and QSFP transceivers.',
+  },
+  {
+    key: 'sc',
+    label: 'SC',
+    color: '#34d399',
+    fullName: 'Subscriber Connector (Square Connector)',
+    ferrule: '2.5 mm',
+    use: 'Telco/ISP, older enterprise, GPON ONT',
+    duplex: 'SC/APC duplex (two SC side by side)',
+    desc: 'Push-pull mechanism — snap in, pull out. Larger than LC but very reliable. Color coded: SC/PC = blue (physical contact), SC/APC = green (angled physical contact, 8° angle reduces back-reflection). ISPs use SC/APC for GPON fiber-to-home.',
+  },
+  {
+    key: 'st',
+    label: 'ST',
+    color: '#f59e0b',
+    fullName: 'Straight Tip',
+    ferrule: '2.5 mm',
+    use: 'Legacy campus multi-mode fiber',
+    duplex: 'No (separate TX and RX connectors)',
+    desc: 'Bayonet-style twist-lock mechanism. Common in buildings wired in the 1990s–2000s. Largely replaced by SC and LC. Still found in legacy campus networks and some security camera systems. Requires careful alignment — the bayonet can loosen under vibration.',
+  },
+  {
+    key: 'mpo',
+    label: 'MPO/MTP',
+    color: '#a78bfa',
+    fullName: 'Multi-fiber Push On / MTP (brand name)',
+    ferrule: '12 or 24 fibers in one ferrule',
+    use: '40G/100G/400G datacenter parallel optics',
+    duplex: '12-fiber or 24-fiber ribbon',
+    desc: 'Carries 12 or 24 fibers in a single connector. Essential for 40GBASE-SR4 (uses 4 TX + 4 RX fibers), 100GBASE-SR4 (same), and 400G-SR8. MPO polarity (Type A/B/C) must match — wrong polarity = TX→TX, RX→RX (no signal). MTP is a higher-precision brand of MPO from US Conec.',
+  },
+  {
+    key: 'fc',
+    label: 'FC',
+    color: '#f472b6',
+    fullName: 'Fiber Channel / Ferrule Connector',
+    ferrule: '2.5 mm',
+    use: 'Test equipment, telecom, Fibre Channel SAN',
+    duplex: 'No (separate fibers)',
+    desc: 'Screw-on threaded coupling — highest mechanical stability of any fiber connector. Used in environments with vibration (aircraft, industrial). Also used on optical test equipment (OTDR, optical power meters) because screwing in ensures consistent physical contact every time. Slower to connect/disconnect than LC/SC.',
+  },
+  {
+    key: 'sfp',
+    label: 'SFP/SFP+/SFP28',
+    color: '#fb923c',
+    fullName: 'Small Form-factor Pluggable transceiver',
+    ferrule: 'Uses LC or MPO internally',
+    use: '1G/10G/25G switch ports, routers',
+    duplex: 'Duplex LC or BiDi (single fiber, two wavelengths)',
+    desc: 'Not a connector but a hot-pluggable transceiver module. SFP = 1 Gbps (1000BASE-SX/LX/ZX). SFP+ = 10 Gbps (10GBASE-SR/LR/ER). SFP28 = 25 Gbps. BiDi SFP uses one fiber with TX and RX on different wavelengths (1310nm TX / 1490nm RX). Plugs into switch/router SFP cages. DOM (Digital Optical Monitoring) provides TX power, RX power, temperature, voltage via SNMP.',
+  },
+]
+
+function ConnectorExplorer() {
+  const [active, setActive] = useState('lc')
+  const conn = CONNECTORS.find(c => c.key === active)!
+
+  return (
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 24, margin: '28px 0' }}>
+      <p style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 16px' }}>// FIBER CONNECTOR / TRANSCEIVER EXPLORER</p>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
+        {CONNECTORS.map(c => (
+          <button key={c.key} onClick={() => setActive(c.key)}
+            style={{ padding: '6px 14px', borderRadius: 8, fontSize: 12, fontFamily: FONT_MONO, fontWeight: 700, cursor: 'pointer', border: `1px solid ${c.key === active ? c.color : 'var(--border)'}`, background: c.key === active ? `${c.color}18` : 'transparent', color: c.key === active ? c.color : 'var(--muted)' }}>
+            {c.label}
+          </button>
+        ))}
+      </div>
+      <div style={{ marginBottom: 16 }}>
+        <p style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', margin: '0 0 4px' }}>{conn.fullName}</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginTop: 12 }}>
+          {[
+            { label: 'Ferrule / Form',  val: conn.ferrule },
+            { label: 'Primary Use',     val: conn.use },
+            { label: 'Duplex Support',  val: conn.duplex },
+          ].map(r => (
+            <div key={r.label} style={{ background: 'var(--bg)', borderRadius: 8, padding: '10px 14px', border: '1px solid var(--border)' }}>
+              <p style={{ fontSize: 11, color: 'var(--muted)', margin: '0 0 3px', fontFamily: FONT_MONO }}>{r.label}</p>
+              <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, margin: 0 }}>{r.val}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ background: `${conn.color}0d`, border: `1px solid ${conn.color}33`, borderRadius: 10, padding: '14px 16px' }}>
+        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>{conn.desc}</p>
+      </div>
+    </div>
+  )
+}
+
+// ─── Page component ───────────────────────────────────────────────────────────
+
+export default function CablesAndConnectors() {
   return (
     <LearnLayout
-      title="Cables and Connectors"
-      description="The physical layer in practice — every cable type, every connector, and how to diagnose the hardware problems that bring networks to their knees."
-      section="Networking Fundamentals — Module 07"
-      readTime="20–28 min"
-      updatedAt="May 2026"
+      title="Cables & Connectors"
+      description="A complete, gap-free treatment of every physical medium used in networking — twisted-pair copper, fiber optic, coaxial, and wireless — plus connectors, transceivers, PoE, structured cabling, and physical layer troubleshooting."
+      section="Networking Fundamentals"
+      readTime="50 min"
     >
-      {/* ── Chapter 01 ── */}
-      <Chapter n={1} title="Why Cables Still Matter in a Wireless World" />
-
+      {/* ── Ch 01 ── */}
+      <Chapter n="01" title="Why Physical Layer Knowledge Matters" subtitle="Software breaks — but so does hardware, and usually at the worst time" />
+      <Para>
+        Network engineers who understand only protocols will be stumped the moment a physical layer problem appears — and physical layer problems are common. The <Accent>most common cause of network outages</Accent> in enterprise environments is physical layer failures: bad cables, dirty fiber connectors, wrong transceiver types, and wiring mistakes. No amount of BGP expertise helps when the cable is bent too tightly around a corner.
+      </Para>
+      <Para>
+        The physical layer defines: what the medium is (copper, glass, air), how signals propagate through it, what connectors terminate it, how far it can reach, and how fast it can carry data. Understanding these constraints lets you make the right decisions when designing infrastructure, troubleshoot problems without guesswork, and interpret diagnostic output (cable testers, OTDRs, DOM readings) correctly.
+      </Para>
       <StoryBox>
-        It&apos;s 3 AM. Your monitoring system alerts: database cluster unreachable. You log in remotely —
-        that works. You ping the database servers — no response. You drive to the data center. One server
-        shows a solid amber NIC LED instead of green. You find the problem in 30 seconds: someone
-        kicked a patch cable half-out of the switch port during a rack installation earlier that evening.
-        The locking tab had been broken months ago. A $0.15 locking tab clip, and three hours of
-        downtime for a hundred customers.
+        A datacenter migration is complete. Most racks are up. But 8 servers in one rack have no connectivity. You swap the switch, re-seat the cables, check the MAC table — nothing. After 90 minutes of software troubleshooting, someone notices the fiber runs to that rack are OM3 multi-mode, but the new switches use SFP+ transceivers rated for single-mode only. The light is at the wrong wavelength — the transceivers are physically incompatible. 90 minutes wasted because no one checked the physical layer first. Physical layer first is not just a rule — it's how you save your career.
       </StoryBox>
 
-      <Para>
-        Physical layer failures cause roughly <Accent>30% of all network outages</Accent> in enterprise
-        environments. Cables get bent past their minimum radius, connectors corrode, fiber gets dirty,
-        patch cables get pulled halfway out and left there. Every network engineer must know the physical
-        layer cold — not just the theory, but the practical skills of cable selection, connector identification,
-        and systematic physical troubleshooting.
-      </Para>
-
-      <Para>
-        And for all the talk about wireless networks, the world&apos;s critical infrastructure runs on copper
-        and fiber. Every Wi-Fi access point connects to an Ethernet cable. Every 5G base station connects
-        to fiber. Every cloud server in every data center connects to hundreds of cables. The wireless
-        you see is the last 30 meters. The rest is wired.
-      </Para>
-
-      <WowBox>
-        The world&apos;s submarine fiber optic network has a combined length of over 1.3 million kilometers —
-        enough to circle Earth 32 times. About 400 cable systems carry 95% of all international internet
-        traffic. The longest is the SEA-ME-WE 3 cable at 39,000 km, connecting Southeast Asia to Europe
-        via the Middle East. Each cable is about the diameter of a garden hose, contains dozens of glass
-        fibers thinner than a human hair, and transmits many terabits per second.
-      </WowBox>
-
       <Divider />
 
-      {/* ── Chapter 02 ── */}
-      <Chapter n={2} title="Copper Cable Fundamentals" />
-
+      {/* ── Ch 02 ── */}
+      <Chapter n="02" title="Copper Twisted-Pair Cables" subtitle="Cat5e through Cat8 — the complete guide" />
       <Para>
-        Copper cable for networking means twisted pair — two copper conductors twisted together. The twist
-        isn&apos;t decorative: it&apos;s the essential physics that makes high-speed networking possible over copper.
+        Twisted-pair copper cable is the dominant medium for horizontal wiring (from patch panel to desk/server). It consists of four pairs of copper wires, each pair individually twisted. The twisting is the key: it ensures that external noise (EMI) hits both wires in a pair at nearly the same time, and the differential receiver subtracts the common noise. The result is that external interference cancels out.
+      </Para>
+      <Para>
+        Different pairs have different twist rates (turns per meter) — this is how they minimize crosstalk between pairs. If two adjacent pairs had identical twist rates, their interference would add coherently. Different rates cause the interference to average out over the cable's length.
       </Para>
 
-      <H2>Why Twist?</H2>
+      <CableExplorer />
 
+      <H2>UTP vs STP vs FTP vs SFTP</H2>
       <Para>
-        When electromagnetic interference hits a twisted pair, it induces a small current on both wires.
-        Because the wires alternate which is on top (that&apos;s the twist), the induced current alternates
-        direction with each half-twist. At the receiver, the signal is measured as the <Accent>difference</Accent> between
-        the two wires — the noise (which is identical on both wires) cancels out. This is called
-        <Accent> differential signaling</Accent>, and it&apos;s why Cat6 cable can carry 10 Gbps next to a
-        running motor without error.
+        <Accent>UTP (Unshielded Twisted Pair):</Accent> No shielding. Relies entirely on the balanced differential signaling and twist rates to cancel noise. Lighter, cheaper, easier to terminate. Most Cat5e and Cat6 cables are UTP. Works well in typical office environments.
+      </Para>
+      <Para>
+        <Accent>STP (Shielded Twisted Pair):</Accent> Each individual pair has its own foil shield. Reduces crosstalk between pairs and EMI. Heavier, stiffer, more expensive. Must be grounded at one end only (grounding both ends creates a ground loop — a 60 Hz hum that actually degrades SNR).
+      </Para>
+      <Para>
+        <Accent>FTP / ScTP (Foil Twisted Pair / Screened):</Accent> Overall foil shield around all four pairs, but pairs themselves unshielded. Common in Europe. Better EMI resistance than UTP, less complex than STP.
+      </Para>
+      <Para>
+        <Accent>SFTP (Shielded Foil Twisted Pair / S/FTP):</Accent> Each pair has individual foil + an overall braid shield. Maximum noise rejection. Used in Cat6a, Cat7, Cat8. Mandatory for high-EMI industrial environments (factory floors, elevator shafts, near heavy machinery).
       </Para>
 
+      <H2>T568A vs T568B Wiring Standards</H2>
       <Para>
-        The twist rate matters. Cat5e has ~2.5 twists per inch. Cat6 has more. Cat6A has a plastic spline
-        that keeps each pair separated from adjacent pairs, reducing alien crosstalk (interference between
-        pairs) — the limiting factor for 10GbE over copper.
+        RJ-45 connectors have 8 pins. Two wiring standards define which wire color goes in which pin. Both standards work for Ethernet — the standard you choose simply must be consistent at both ends.
+      </Para>
+      <CodeBlock title="T568A and T568B pin assignments">
+{`Pin   T568A                T568B
+─────────────────────────────────────
+1     White/Green          White/Orange
+2     Green                Orange
+3     White/Orange         White/Green
+4     Blue                 Blue
+5     White/Blue           White/Blue
+6     Orange               Green
+7     White/Brown          White/Brown
+8     Brown                Brown
+
+Pairs:
+  Pair 1: Blue/White-Blue   (pins 4,5) — least used, PoE
+  Pair 2: Orange/White-Orange (pins 1,6 in T568B) — 100/1000BASE-T TX
+  Pair 3: Green/White-Green (pins 3,6 in T568A / 1,2 in T568B) — RX
+  Pair 4: Brown/White-Brown (pins 7,8) — 1000BASE-T only
+
+Straight-through cable: same standard at both ends (T568B↔T568B)
+  → used to connect different devices: PC to switch, switch to router
+
+Crossover cable: T568A at one end, T568B at the other
+  → swaps TX and RX pairs
+  → used to connect same-type devices: PC to PC, switch to switch
+  → largely obsolete with Auto-MDI/MDI-X (modern devices detect and swap automatically)`}
+      </CodeBlock>
+
+      <H2>Cable Categories — Technical Details</H2>
+      <CodeBlock title="Ethernet standards by cable category">
+{`Category  Bandwidth  Max Speed   Max Dist  Ethernet Standard
+──────────────────────────────────────────────────────────────
+Cat3      16 MHz     10 Mbps     100 m     10BASE-T (obsolete)
+Cat5      100 MHz    100 Mbps    100 m     100BASE-TX (obsolete)
+Cat5e     100 MHz    1 Gbps      100 m     1000BASE-T
+Cat6      250 MHz    1 Gbps      100 m     1000BASE-T
+                     10 Gbps      55 m     10GBASE-T
+Cat6a     500 MHz    10 Gbps     100 m     10GBASE-T
+Cat7      600 MHz    10 Gbps     100 m     10GBASE-T (non-standard connector)
+Cat7a    1000 MHz    40 Gbps*    100 m     *not widely adopted
+Cat8     2000 MHz    25/40 Gbps   30 m     25GBASE-T / 40GBASE-T
+
+* The "100 m" rule: all categories limited to 100m for horizontal runs per TIA-568.
+  This is a standards mandate, not a physical limitation — some cables work beyond 100m
+  but are not guaranteed and are not supported by equipment warranties.`}
+      </CodeBlock>
+
+      <H2>Bend Radius and Installation Rules</H2>
+      <Para>
+        <Accent>Minimum bend radius:</Accent> Twisting a cable too tightly changes the geometry of the twist rates, increasing crosstalk and altering impedance. Minimum bend radius for installed Cat6 UTP is 4× the cable diameter (~25–30 mm). For Cat6a, it's larger due to the thicker cable. Cable management systems (J-hooks, ladder trays, velcro ties) must respect bend radius — zip ties cranked tight around a bundle crush the cables and degrade performance.
+      </Para>
+      <Para>
+        <Accent>Pair untwisting at termination:</Accent> When punching down to a patch panel or terminating an RJ-45, the pairs must not be untwisted more than 13 mm (0.5 inch) from the point of termination. This is a hard TIA/EIA requirement. Untwisting more than 13 mm introduces crosstalk at the termination point — a very common wiring error that causes intermittent gigabit failures.
+      </Para>
+      <Para>
+        <Accent>Pull tension:</Accent> Do not exceed 25 lbs (110 N) pull tension during installation. Exceeding this stretches the cable, changes conductor diameter, and permanently increases resistance and alters impedance matching.
       </Para>
 
-      <H2>The 100-Meter Rule</H2>
-
-      <Para>
-        All copper Ethernet standards (10BASE-T through 10GBASE-T) specify a maximum cable segment length
-        of 100 meters. This isn&apos;t arbitrary: it&apos;s derived from the need for the collision detection signal
-        to round-trip within the slot time (51.2 μs for 10 Mbps Ethernet). For Gigabit and above, it&apos;s
-        signal attenuation — at 100m, the signal arrives weakened but still distinguishable. At 105m, it
-        may not.
-      </Para>
-
-      <Warn>
-        The 100m limit applies to the <em>cable</em>, not the total distance. A cable run of 90m with
-        10m of patch cords at both ends = 90m + 10m = 100m (just under the limit). In practice,
-        use 90m as your maximum cable run to leave headroom for patch cords. Switch-to-switch distance
-        = cable run + both patch cords. No exceptions: Cat5e and Gigabit at 101m = flaky connection.
+      <Warn title="Never use Cat5e for new installations">
+        <Para>Even if Cat5e costs slightly less, new installations should always use Cat6a minimum. The cost difference over the lifetime of a building's wiring (typically 15–20 years) is negligible, but rewiring for 10G later is enormously expensive. Labor cost is 80–90% of a cabling project — the cable material cost is a small fraction. Always install for the next generation, not the current one.</Para>
       </Warn>
 
       <Divider />
 
-      {/* ── Chapter 03 ── */}
-      <Chapter n={3} title="Copper Cable Categories: Choosing the Right Grade" />
-
-      <CableSelector />
-
-      <H2>The T568A vs T568B Wiring Standards</H2>
-
+      {/* ── Ch 03 ── */}
+      <Chapter n="03" title="Fiber Optic Cables" subtitle="Glass threads that carry terabits on light" />
       <Para>
-        There are two standard ways to terminate an RJ45 connector: T568A and T568B. They differ only in
-        which color pair goes on pins 1/2 vs 3/6. Both are valid — what matters is <Accent>consistency</Accent>:
-        both ends of a patch cable must use the same standard.
+        Fiber optic cable transmits data as pulses of light through a glass or plastic core. It is immune to electromagnetic interference, supports far longer distances than copper, and can carry terabits per second using wavelength division multiplexing. Understanding fiber is essential for any engineer working with datacenter interconnects, campus backbones, or WAN links.
       </Para>
 
-      <CodeBlock>{`T568A (used by US government, some residential):
-Pin: 1          2          3          4     5     6          7        8
-    GW(green)  G(green)   OW(orange)  BL    BLW   O(orange)  BRW     BR
-
-T568B (most common in commercial, data centers):
-Pin: 1          2          3          4     5     6          7        8
-    OW(orange) O(orange)  GW(green)  BL    BLW   G(green)   BRW     BR
-
-Crossover cable: T568A on one end, T568B on the other.
-  Swaps TX and RX pairs — used to directly connect two switches/computers.
-  Modern equipment has Auto-MDI/MDIX — automatically detects and corrects.
-  In practice: you almost never need a crossover cable anymore.
-
-Color abbreviations: W=white stripe, O=orange, G=green, BL=blue, BR=brown`}</CodeBlock>
-
-      <Divider />
-
-      {/* ── Chapter 04 ── */}
-      <Chapter n={4} title="Fiber Optic Cable: Light Through Glass" />
-
+      <H2>How Fiber Works — Total Internal Reflection</H2>
       <Para>
-        Fiber optic cable transmits data as pulses of light through a glass or plastic core. The physics:
-        light undergoes total internal reflection at the core-cladding boundary (the cladding has a lower
-        refractive index than the core), keeping the light trapped inside the fiber as it travels.
+        Light travels through the fiber core by <Accent>total internal reflection</Accent>. The core has a higher refractive index than the surrounding cladding. When light hits the core-cladding boundary at an angle less than the critical angle, it reflects completely back into the core — no light escapes. The critical angle is determined by Snell's Law: sin(θc) = n₂/n₁, where n₁ = core refractive index, n₂ = cladding refractive index.
+      </Para>
+      <Para>
+        In single-mode fiber (9 µm core), the core is so narrow that only one light mode (ray path) can propagate — straight down the center. In multi-mode fiber (50 or 62.5 µm core), the wider core allows multiple light modes at different angles, which arrive at the receiver at slightly different times — <Accent>modal dispersion</Accent>. This limits multi-mode fiber's usable length because at some distance the pulse spreading from modal dispersion causes inter-symbol interference.
       </Para>
 
-      <H2>Single-Mode vs Multi-Mode: The Core Difference</H2>
+      <H2>Fiber Categories — OM1 through OM5, OS1, OS2</H2>
+      <CodeBlock title="Fiber categories — complete specification">
+{`Multi-Mode Fiber (MMF) — 50 µm or 62.5 µm core:
+Category  Core    Bandwidth (850nm)  Max Dist (10G)  Max Dist (100G) Color
+─────────────────────────────────────────────────────────────────────────
+OM1       62.5µm  200 MHz·km         33 m (10GBASE-SR) N/A            Orange
+OM2       50 µm   500 MHz·km         82 m              N/A            Orange
+OM3       50 µm   2000 MHz·km        300 m             70 m (100G)    Aqua
+OM4       50 µm   4700 MHz·km        400 m             150 m          Aqua/Violet
+OM5       50 µm   28000 MHz·km       400 m             400 m (SWDM4)  Lime green
 
+Single-Mode Fiber (SMF) — 9 µm core:
+Category   Attenuation (1310nm)  Max Dist  Application   Color
+──────────────────────────────────────────────────────────────────
+OS1 (ITU G.652)  ≤1.0 dB/km     ~10 km    Indoor, tight buffer  Yellow
+OS2 (ITU G.652D) ≤0.4 dB/km     80+ km    Outdoor loose tube    Yellow
+G.654           ≤0.17 dB/km     400+ km   Ultra-low loss submarine Yellow
+
+Note: OS1/OS2 are installation/cable specifications; G.652/G.654 are fiber specifications.`}
+      </CodeBlock>
+
+      <H2>Single-Mode vs Multi-Mode — When to Use Which</H2>
       <Para>
-        The core diameter determines whether only one optical mode (single-mode) or many modes (multi-mode)
-        can propagate through the fiber:
+        <Accent>Use multi-mode when:</Accent> distance is under 400 m (OM4/OM5), you need many connections in a small space (datacenter within a building), budget is constrained (VCSEL transceivers for MMF are cheaper than DFB lasers for SMF).
+      </Para>
+      <Para>
+        <Accent>Use single-mode when:</Accent> distance exceeds 400 m, you need future-proofing (SMF supports DWDM, terabit-scale upgrades), or you're connecting buildings/campuses. SMF transceivers cost more today but the fiber itself is installed once and lasts 25+ years — always install SMF for inter-building runs even if you only need 1 Gbps today.
       </Para>
 
-      <CodeBlock>{`Parameter        Single-Mode (OS2)      Multi-Mode (OM3/OM4/OM5)
-──────────────────────────────────────────────────────────────────────────────
-Core diameter    8-10 μm                50 μm (OM3/4/5), 62.5 μm (OM1/2)
-Cladding         125 μm                 125 μm
-Light source     DFB laser (coherent)   VCSEL laser or LED (less coherent)
-Wavelength       1310nm / 1550nm        850nm (mainly)
-Max distance     Up to 100+ km          OM3: 300m@10G, OM4: 400m@10G, OM5: 400m@100G
-Bandwidth        Essentially unlimited  OM4: 4700 MHz·km (EMB)
-Jacket color     Yellow                 Orange (OM2), Aqua (OM3/OM4), Lime (OM5)
-Connector color  Blue (UPC), Green(APC) Beige (OM1), various for OM3/4/5
+      <H2>Fiber Connectors and Polish Types</H2>
+      <ConnectorExplorer />
 
-Key tradeoff: SMF requires expensive laser sources ($200+ per transceiver);
-MMF uses cheaper VCSELs ($30-100) but has limited reach.
-Data centers: MMF for in-rack/row, SMF for inter-building and WAN.`}</CodeBlock>
-
-      <H2>Fiber Grades: OM1 through OM5</H2>
-
-      <CodeBlock>{`Grade  Year  Bandwidth     10G dist  25G dist  100G dist  Core   Jacket
-OM1   1983  200 MHz·km    33m       N/A       N/A        62.5μm  Orange
-OM2   1998  500 MHz·km    82m       N/A       N/A        50μm   Orange
-OM3   2003  2000 MHz·km  300m      70m        100m       50μm   Aqua
-OM4   2009  4700 MHz·km  400m     150m        150m       50μm   Aqua
-OM5   2016  28000 MHz·km  400m     400m        400m       50μm   Lime green
-                                              (using SWDM4)
-
-OM1 and OM2: obsolete for new installations. OM3 minimum for new data centers.
-OM4 most common for new enterprise installs. OM5 enables 100G without expensive optics.`}</CodeBlock>
-
-      <WowBox>
-        A single strand of standard single-mode fiber has a theoretical capacity of 100+ Tbps using
-        DWDM. The record for a single fiber is 1.02 Pbps (petabits per second), achieved in 2020 by
-        researchers in Japan. They used 55 wavelengths × 1000 Gbps each = 55 Tbps... wait, let me be
-        precise: the actual record was achieved using a custom 4-core fiber with spatial multiplexing.
-        Regular commercially deployed DWDM systems achieve 96 wavelengths × 200 Gbps = 19.2 Tbps per
-        fiber pair, with multiple fiber pairs per cable. A single modern submarine cable carries 200+ Tbps.
-      </WowBox>
-
-      <Divider />
-
-      {/* ── Chapter 05 ── */}
-      <Chapter n={5} title="Connectors: The Mechanical Interface" />
-
-      <ConnectorIdentifier />
-
-      <H2>Fiber Connector Polish Types</H2>
-
+      <H2>PC vs APC — Why the Polish Type Matters</H2>
       <Para>
-        The quality of the fiber end face (ferrule) determines how much light is lost at each connection.
-        Three polish types exist:
+        <Accent>PC (Physical Contact):</Accent> The fiber end face is polished to a curved (dome) shape so the glass cores touch directly — reducing air gap back-reflections. Return loss: -40 to -50 dB. Used for most data applications.
+      </Para>
+      <Para>
+        <Accent>APC (Angled Physical Contact):</Accent> The end face is polished at an 8° angle. Any reflected light exits at an angle that doesn't return down the fiber — return loss: -60 to -70 dB. Critical for: analog RF over fiber (cable TV), DWDM systems (back-reflections can destabilize lasers), and high-gain amplified links. APC connectors are green; PC connectors are blue.
+      </Para>
+      <Para>
+        <Accent>Never mate APC with PC.</Accent> The 8° angle creates a physical gap between the end faces, causing 10+ dB of insertion loss — your link will fail. APC connectors are physically keyed to prevent accidental mating in some connector types but not all.
       </Para>
 
-      <CodeBlock>{`Polish  Angle  Return Loss   Insertion Loss  Use
-────────────────────────────────────────────────────────────────────────
-PC      flat   ≥30 dB         ≤0.75 dB       Legacy, rarely used
-UPC     flat   ≥50 dB         ≤0.3 dB        Standard data applications
-APC     8°     ≥60 dB         ≤0.3 dB        CATV, FTTH, GPON, DWDM
-
-APC (Angled Physical Contact): the 8° angled end-face reflects backreflection
-away from the fiber core rather than back toward the source. Critical for:
-  - CATV where backreflection causes ghost images
-  - GPON/FTTH where high optical power and precision are needed
-  - Coherent optical transport (100G+ DWDM) where return loss affects performance
-
-NEVER connect APC to UPC — the angle mismatch causes ~30 dB+ loss (signal effectively gone).
-APC connectors are GREEN. UPC are BLUE. Colors prevent misconnection.`}</CodeBlock>
-
-      <Divider />
-
-      {/* ── Chapter 06 ── */}
-      <Chapter n={6} title="Power over Ethernet: Powering Devices Through Cables" />
-
-      <Para>
-        PoE (Power over Ethernet) delivers DC power and data over the same copper cable to devices like
-        IP phones, wireless access points, IP cameras, and IoT sensors — eliminating the need for a
-        separate power outlet at each device.
-      </Para>
-
-      <CodeBlock>{`Standard      Name              Max power   Pairs used  Common devices
-──────────────────────────────────────────────────────────────────────────────────
-IEEE 802.3af  PoE               15.4W       2 pairs     VoIP phones, basic APs
-IEEE 802.3at  PoE+              30W         2 pairs     Video phones, PTZ cameras
-IEEE 802.3bt  PoE++ (Type 3)    60W         4 pairs     MU-MIMO APs, PTZ cameras
-IEEE 802.3bt  PoE++ (Type 4)    100W        4 pairs     Laptops, high-power APs
-
-Power is delivered on unused pairs (mode A/B) or all 4 pairs (802.3bt).
-PSE = Power Sourcing Equipment (the switch). PD = Powered Device (the end device).
-Cat3 cable supports basic PoE. Cat5e/Cat6 required for 30W+. Cat6A for 100W.
-
-Caution: 100W through Cat6A heats the cable. Bundled PoE cables can exceed
-temperature ratings — derate ampacity or use lower power devices in dense bundles.`}</CodeBlock>
-
-      <Warn>
-        Never assume a switch port supports PoE just because the device needs it. Check the switch
-        specifications for total PoE budget (a 48-port switch might have only 370W total PoE budget —
-        less than 8W per port on average). Plugging too many high-draw devices can trigger PoE budget
-        overprotection, randomly de-powering devices.
-      </Warn>
-
-      <Divider />
-
-      {/* ── Chapter 07 ── */}
-      <Chapter n={7} title="Data Center Cabling: Structure and Scale" />
-
-      <Para>
-        Enterprise data centers use structured cabling systems — organized hierarchies of patch panels,
-        trunk cables, and horizontal runs that allow any device to be connected to any other device
-        through a documented, manageable physical plant.
-      </Para>
-
-      <H2>The Three-Layer Cabling Hierarchy</H2>
-
-      <CodeBlock>{`Entrance/Main Cross-Connect (MCC)
-│  WAN circuits, ISP handoffs, inter-building fiber
-│  Typically single-mode fiber
-│
-├── Horizontal Distribution Area (HDA) / Intermediate Distribution Frame
-│   │  Aggregation switches, network infrastructure
-│   │  MMF or SMF trunk cables (12/24/48-fiber MPO)
-│   │
-│   └── Equipment Distribution Area (EDA)
-│       │  Server racks, patch panels
-│       │  Cat6A copper (to servers) or DAC/SFP+ (to ToR switches)
-│       │
-│       └── Top-of-Rack (ToR) switch
-│               → servers via Cat6A or SFP+ DAC (< 5m typical)
-│               → spine via 25G/100G fiber uplinks
-
-Color coding (TIA-606-B):
-  Yellow   SMF fiber
-  Orange   MMF fiber (OM1/OM2)
-  Aqua     MMF fiber (OM3/OM4)
-  Lime     OM5 fiber
-  Blue     Cat6/Cat6A horizontal
-  White    Horizontal cross-connect
-  Gray     LANs and equipment cords`}</CodeBlock>
-
-      <H2>Pre-Terminated MPO Trunks</H2>
-
-      <Para>
-        Modern data centers use pre-terminated MPO/MTP trunk cables — factory-terminated fiber bundles
-        with 12 or 24 fibers per connector. These deploy instantly (no field termination), have known
-        optical performance, and support modular cassette systems. A 40G link uses a 12-fiber MPO
-        (4 TX fibers, 4 RX fibers, 4 unused). A 100G QSFP28 SR4 link uses 8 of the 12 fibers.
-        BiDi optics can achieve 40G or 100G on a single LC duplex fiber pair using two different wavelengths.
-      </Para>
-
-      <Divider />
-
-      {/* ── Chapter 08 ── */}
-      <Chapter n={8} title="Transceivers: The Optics That Live in Your Switches" />
-
-      <Para>
-        Modern switches and routers don&apos;t have fixed port types — they have cages that accept hot-swappable
-        transceiver modules (SFPs, QSFPs). The module determines the speed, distance, and fiber type.
-        This allows one switch to support 1G copper access ports, 10G fiber uplinks, and 100G spine
-        connections, all from the same hardware.
-      </Para>
-
-      <H2>Common Transceiver Types for 10G Fiber</H2>
-
-      <CodeBlock>{`Transceiver   Fiber  Distance  Wavelength  Use case
-──────────────────────────────────────────────────────────────────────
-10GBASE-SR    MMF    300m      850nm       Data center short reach
-10GBASE-LR    SMF    10km      1310nm      Campus/inter-building
-10GBASE-ER    SMF    40km      1550nm      Metropolitan area
-10GBASE-ZR    SMF    80km      1550nm      Regional WAN
-10GBASE-T     Cu     100m      N/A         Copper SFP+ for Cat6A
-BiDi SFP+     SMF    10km      1270/1330nm Single-fiber (TX/RX on same strand)
-DAC SFP+      Cu     7m (pas.) N/A         Rack direct-attach twinax
-
-For 100G (QSFP28):
-100GBASE-SR4  MMF    100m      850nm×4     Short reach parallel MMF
-100GBASE-LR4  SMF    10km      1310nm CWDM Single fiber pair, 4 wavelengths
-100GBASE-DR   SMF    500m      1310nm      Emerging standard, single lambda`}</CodeBlock>
-
-      <H3>Third-Party vs Vendor-Branded Transceivers</H3>
-
-      <Para>
-        Original Equipment Manufacturer (OEM) SFPs from Cisco, Juniper, or Arista cost $500–$5000 each.
-        Compatible third-party SFPs with identical specifications cost $50–$500. Both are produced by
-        the same optical component manufacturers (Finisar, Lumentum, Hisense). The difference: OEM
-        modules have vendor-specific EEPROM data that identifies them as genuine. Some switches (Cisco
-        IOS, Juniper JunOS) display warnings or refuse to operate with unsigned modules.
-      </Para>
-
-      <Para>
-        In practice, third-party SFPs work reliably in most switches when properly tested. The risk is
-        vendor support: if you have a problem, the vendor may blame the third-party optic and refuse
-        assistance. Enterprise policy: use branded for critical paths, third-party for non-critical.
-      </Para>
-
-      <Divider />
-
-      {/* ── Chapter 09 ── */}
-      <Chapter n={9} title="Optical Power Budgets: Can the Signal Survive?" />
-
-      <Para>
-        Before deploying a fiber link, calculate the <Accent>optical loss budget</Accent>: the maximum
-        power loss a link can sustain while still delivering a detectable signal. If actual loss exceeds
-        the budget, the link will have errors or won&apos;t work at all.
-      </Para>
-
-      <CodeBlock>{`Optical Loss Budget Calculation:
-
-Transceiver: 10GBASE-LR SFP+
-  TX power:    -2 dBm (minimum)
-  RX sensitivity: -12 dBm (minimum, aka receiver sensitivity)
-  Loss budget: TX - RX = -2 - (-12) = 10 dB available
-
-Link components and their typical losses:
-  LC connector pair:  0.3 dB each × 4 connectors = 1.2 dB
-  SMF cable (1km):    0.4 dB/km × 1 km = 0.4 dB
-  Fusion splices:     0.1 dB each × 2 = 0.2 dB
-  Safety margin:      3 dB (standard engineering margin)
-  ─────────────────────────────────────────────────────────
-  Total loss budget needed: 1.2 + 0.4 + 0.2 + 3.0 = 4.8 dB
-  Available budget: 10 dB
-  Margin remaining: 10 - 4.8 = 5.2 dB (comfortable)
-
-If actual loss budget was 9.5 dB and you added a patch panel (2 connectors = 0.6 dB),
-you&apos;d be at 9.6 + 3.0 safety = 12.6 dB required > 10 dB budget = FAIL.`}</CodeBlock>
-
-      <H3>Reading SFP DOM (Digital Optical Monitoring)</H3>
-
-      <CodeBlock>{`$ ethtool -m eth0
-        Identifier                                : 0x03 (SFP)
-        Transceiver type                          : 10G Ethernet: 10G Base-LR
-        Laser bias current                        : 40.000 mA
-        Laser output power                        : 0.6310 mW / -2.00 dBm
-        Receiver signal average optical power     : 0.2512 mW / -6.00 dBm
-
-Laser output: -2.00 dBm (at TX power minimum spec — good, not too strong)
-Receiver power: -6.00 dBm (well above -12 dBm minimum — 6 dB margin — good)
-
-Red flags in DOM readings:
-  Rx power below RX sensitivity spec: signal too weak — clean connectors, check cable
-  Rx power above maximum (usually -1 dBm): too much power — may damage receiver, add attenuator
-  Laser bias current too high: laser degrading — replace SFP
-  Temperature out of range: check airflow around switch`}</CodeBlock>
-
-      <Divider />
-
-      {/* ── Chapter 10 ── */}
-      <Chapter n={10} title="Wireless Physical Layer: Antennas and Radio Fundamentals" />
-
-      <Para>
-        Wi-Fi, 5G, and Bluetooth are physical layer technologies — they just use electromagnetic waves
-        instead of copper or glass. The same principles apply: signal strength, noise, bandwidth, distance.
-        The engineering is more complex because radio propagates in three dimensions and through various
-        materials.
-      </Para>
-
-      <H2>Antenna Fundamentals</H2>
-
-      <Para>
-        An antenna converts electrical signals to electromagnetic radiation (transmitting) and vice versa
-        (receiving). Key properties:
-      </Para>
-
-      <CodeBlock>{`Gain: how much the antenna amplifies signal in a specific direction vs an isotropic radiator.
-  0 dBi = isotropic (radiates equally in all directions, theoretical)
-  2.2 dBi = dipole antenna (standard Wi-Fi stick antenna)
-  5-8 dBi = directional patch antenna
-  24 dBi = parabolic dish (point-to-point microwave link)
-
-IMPORTANT: antennas don't add power. They redirect it.
-  A 6 dBi antenna has 4× gain in one direction, but 4× less in other directions.
-  "High-gain" antenna = narrow beam. Use it for directional links, not omnidirectional coverage.
-
-EIRP (Effective Isotropic Radiated Power) = TX power + antenna gain - cable loss
-  US FCC limit for 5 GHz Wi-Fi: 30 dBm EIRP
-  If TX power = 23 dBm, antenna = 6 dBi, cable = 0.5 dB:
-  EIRP = 23 + 6 - 0.5 = 28.5 dBm (within limit)
-
-RSSI (Received Signal Strength Indicator): usually in dBm (negative numbers)
-  -30 to -50 dBm: excellent signal (next to AP)
-  -50 to -70 dBm: good signal (typical usage)
-  -70 to -80 dBm: fair (range of AP, occasional issues)
-  -80 to -90 dBm: poor (connection drops, slow speeds)
-  Below -90 dBm: unusable`}</CodeBlock>
-
-      <Divider />
-
-      {/* ── Chapter 11 ── */}
-      <Chapter n={11} title="Cable Installation Best Practices" />
-
-      <Para>
-        Correct installation is as important as correct cable selection. A Cat6A cable installed poorly
-        performs worse than a Cat5e installed correctly.
-      </Para>
-
-      <H2>Copper Installation Rules</H2>
-
-      <CodeBlock>{`Bend radius:
-  Cat5e/Cat6: minimum bend radius = 4× cable diameter ≈ 1 inch (25mm)
-  Cat6A: 8× cable diameter ≈ 2 inches due to thicker construction
-  Tight bends cause pair untwisting → increased crosstalk → reduced performance
-
-Pulling tension:
-  Maximum pull tension: 25 lbs (11 kg) for Cat5e/6, 40 lbs (18 kg) for Cat6A
-  Exceeded tension permanently deforms the cable geometry → increased insertion loss
-
-Proximity to EMI sources:
-  6 inches (150mm) minimum from power cables (parallel runs)
-  Cross power cables at 90° to minimize induction
-  12+ inches from fluorescent lights, motors, transformers
-  Use STP (shielded) or conduit near severe EMI sources
-
-Pair untwisting at terminations:
-  Maximum 1/2 inch (13mm) untwisting allowed at RJ45 terminations
-  More untwisting → near-end crosstalk (NEXT) → fails Cat6 spec
-
-Temperature rating:
-  CMR (Riser): 75°C rated for vertical runs between floors
-  CMP (Plenum): 50°C self-extinguishing, required in air-handling spaces (HVAC return)
-  PVC (CM): standard, indoor use only, not in walls or ceilings of some jurisdictions`}</CodeBlock>
-
-      <H2>Fiber Installation Rules</H2>
-
-      <CodeBlock>{`Bend radius:
-  Standard single-mode: minimum 30mm (1.2 inch) long-term, 15mm short-term
-  Bend-insensitive SMF (G.657): 7.5mm long-term bend radius (inside walls)
-  Exceeding bend radius → evanescent field leaks out → signal loss
-
-Fiber cleanliness:
-  Clean EVERY connector EVERY time before mating, even new cables
-  Use IEC 61300-3-35 compliant push-type cleaner (one-click cleaner)
-  Inspect with 400× fiber microscope before mating
-  Dirty fiber is #1 cause of fiber link failures
-
-Fiber handling:
-  Minimum pull force: 600N (singlemode), 2700N (armored cable)
-  No kinking — fiber doesn't recover from tight kinks
-  Protect cable ends with dust caps when not connected
-  Label both ends immediately — fiber plant label confusion is a major operational issue`}</CodeBlock>
-
-      <Divider />
-
-      {/* ── Chapter 12 ── */}
-      <Chapter n={12} title="Diagnosing Cable and Physical Layer Issues" />
-
-      <CableTroubleshooter />
-
-      <H2>Cable Testing Tools</H2>
-
-      <CodeBlock>{`Tool                    What it measures              When to use
-────────────────────────────────────────────────────────────────────────────────
-Cable tester (basic)    Continuity + pinout           Before deploying new cable
-Wiremap tester          Pin-to-pin mapping, shorts     Verifying T568B termination
-Certification tester    Loss, NEXT, return loss, etc.  Contract work (TIA certification)
-  (Fluke DSX)           — generates pass/fail report
-Time domain             Measures cable length, finds   Troubleshooting buried runs
-  reflectometer (TDR)   location of breaks/shorts
-Optical power meter     dBm at fiber end               Measuring fiber link loss
-OTDR                    Loss map along fiber length    Finding fiber breaks/splices
-Visual fault locator    Red laser through fiber        Quick break/bend detection
-Wi-Fi spectrum analyzer RF spectrum, channel usage     Wi-Fi interference diagnosis`}</CodeBlock>
-
-      <Divider />
-
-      {/* ── Chapter 13 ── */}
-      <Chapter n={13} title="Common Misconceptions" />
-
-      <Err>
-        <strong>"All Ethernet cables look the same and are interchangeable."</strong><br /><br />
-        Cat5e supports 1G at 100m. Cat6 supports 10G only at 55m. Cat6A supports 10G at 100m. Cat8 supports
-        40G at 30m. Physically they look similar (all use RJ45, all have 4 pairs), but performance is radically
-        different. Using a Cat5e cable for a 10G connection produces intermittent errors or no link at all.
-        In production data centers, all cables are labeled with category, length, and installation date.
-        Never assume — always check the cable markings on the jacket.
+      <Err title="Mixing APC and PC connectors">
+        <Para>Connecting an APC patch cord to a PC adapter (or vice versa) creates a misaligned physical interface with extremely high insertion loss. The connector housings are the same for SC — only the color (green vs blue) and the internal ferrule angle differ. Always verify the polish type matches at both ends. For GPON/FTTH, the ONT uses SC/APC — using SC/PC will cause your fiber internet to fail or have severe packet loss.</Para>
       </Err>
 
-      <Err>
-        <strong>"Single-mode fiber is better than multi-mode — always use SMF."</strong><br /><br />
-        SMF is better for distance, not necessarily better for your application. For data center runs under
-        100m, MMF OM4 with inexpensive VCSEL transceivers ($50–$100) is the right choice. SMF requires laser
-        transceivers ($200–$2000+) and is overkill for short distances. The question is: what distance do
-        you need? Under 400m (most data centers): OM3/OM4 MMF. Campus building-to-building (400m–2km):
-        OM4 or SMF. Anything longer: SMF. Choosing SMF for everything wastes money on transceivers.
-      </Err>
+      <H2>Fiber Construction — Cable Types</H2>
+      <Para>
+        <Accent>Tight-buffered fiber:</Accent> Each fiber is directly coated with a 900 µm plastic buffer. More flexible, easier to handle for short indoor runs and patch cords. Higher attenuation specification (OS1) due to stress from the tight buffer.
+      </Para>
+      <Para>
+        <Accent>Loose-tube fiber:</Accent> Fibers float freely in a gel-filled tube (the gel blocks water migration). Multiple tubes in a single cable jacket. The gel absorbs mechanical stress — fibers are not stressed when the cable bends or expands/contracts with temperature. Standard for outdoor, aerial, and direct-burial applications. Can contain 2–864 fibers in a single cable.
+      </Para>
+      <Para>
+        <Accent>Ribbon fiber:</Accent> 12 fibers arranged side-by-side and bonded into a flat ribbon. Mass fusion splicers can splice all 12 fibers simultaneously (12-fiber mass splice takes the same time as a single fusion splice). Used in ultra-high-density datacenter and campus cabling. 432-fiber ribbon cables are common in modern datacenter trays.
+      </Para>
+      <Para>
+        <Accent>Armored fiber:</Accent> Steel or corrugated aluminum armor layer between inner and outer jacket. Protects against rodent damage (crucial for direct-burial) and crushing. Used for outdoor/underground runs and in some industrial environments.
+      </Para>
 
-      <Err>
-        <strong>"Crossover cables are needed to connect two switches together."</strong><br /><br />
-        This was true for equipment made before 2000. Modern switches, routers, and computers implement
-        Auto-MDI/MDIX (IEEE 802.3ab, 1999) — they automatically detect whether the link is straight-through
-        or crossover and adjust internally. You can connect two modern switches with a standard patch cable.
-        Crossover cables are essentially obsolete except for connecting to legacy equipment that predates
-        Auto-MDI/MDIX.
-      </Err>
+      <H2>Fiber Optic Loss Budget</H2>
+      <Para>
+        Every fiber link has a loss budget — the maximum signal attenuation it can tolerate while still working. To validate a link:
+      </Para>
+      <CodeBlock title="Fiber loss budget calculation">
+{`Loss Budget = (Transmitter output power) - (Receiver sensitivity)
 
-      <Err>
-        <strong>"Fiber is immune to all problems because light doesn&apos;t degrade."</strong><br /><br />
-        Fiber has its own failure modes: dirty connectors (the #1 cause — one fingerprint can cause
-        3+ dB loss), bent below minimum radius (light leaks out at the bend), cracked ferrules, bad splices,
-        moisture ingress in outdoor cables, and connector mismatches (APC/UPC mix). Fiber also doesn&apos;t
-        "carry more data by itself" — the transceiver on each end limits speed. A 1000BASE-SX SFP in a
-        $500 SMF link gives you 1 Gbps, not 100 Gbps just because the fiber can handle it.
-      </Err>
+Example: 10GBASE-LR (10G, 10km single-mode, 1310nm)
+  TX power: -1 dBm (typical)
+  RX sensitivity: -14.4 dBm (minimum)
+  Loss budget: -1 - (-14.4) = 13.4 dB
 
-      <Err>
-        <strong>"PoE provides free power — there&apos;s no real cost."</strong><br /><br />
-        PoE power comes from the switch&apos;s power supply, which costs money and generates heat. A 48-port
-        PoE+ switch delivering 30W to every port consumes 1,440W — comparable to a small electric heater.
-        That&apos;s power (electricity cost) and heat (cooling cost). Data centers carefully calculate PoE loads
-        for power budget and cooling. A switch that delivers less PoE than configured may randomly de-power
-        devices when the total budget is exceeded — a mysterious failure mode that&apos;s hard to diagnose without
-        checking the switch&apos;s PoE budget status.
-      </Err>
+Actual link losses:
+  Fiber run:      2 km × 0.35 dB/km = 0.7 dB
+  2 splices:      2 × 0.1 dB = 0.2 dB
+  4 connectors:   4 × 0.5 dB = 2.0 dB
+  Total loss:     2.9 dB
 
-      <Err>
-        <strong>"The cable tester showed continuity — the cable is fine."</strong><br /><br />
-        A basic continuity tester verifies that each pin connects to the right pin at the other end. It
-        cannot detect subtle problems: damaged pairs that carry signal but with elevated crosstalk or
-        increased insertion loss, pairs with reduced twist rate due to over-pulling, or cables that pass
-        1 Gbps but fail 10G certification. A proper cable certification tester (like Fluke DSX) tests
-        dozens of parameters against the TIA spec. "Passes continuity" means "not an open circuit" —
-        not "certified for 10GbE."
+Safety margin: 13.4 - 2.9 = 10.5 dB remaining margin  ← link will work
+
+Rule of thumb loss allowances:
+  Fusion splice:  0.1 dB (good), 0.3 dB (acceptable), >0.5 dB (redo it)
+  Connector pair: 0.3–0.5 dB (clean), >1.0 dB = dirty/damaged (clean/replace)
+  SMF at 1310nm: 0.35 dB/km
+  SMF at 1550nm: 0.20 dB/km (lower loss — used for long haul)
+  MMF OM3/4 at 850nm: 2.0–3.5 dB/km`}
+      </CodeBlock>
+
+      <H2>Fusion Splicing vs Mechanical Splicing</H2>
+      <Para>
+        <Accent>Fusion splicing:</Accent> An electric arc melts the two fiber ends and fuses them together — permanent, low-loss (0.02–0.1 dB). Requires a fusion splicer (expensive, ~$3,000–$10,000). The dominant method for permanent installations. The splice is protected by a heat-shrink sleeve.
+      </Para>
+      <Para>
+        <Accent>Mechanical splicing:</Accent> Two fibers held in alignment by a mechanical fixture with index-matching gel between the ends — no fusion. Loss: 0.1–0.5 dB. Faster (no heat-shrink wait time), cheaper tooling. Used for temporary repairs, emergency restoration. Not recommended for permanent high-quality links.
+      </Para>
+      <Para>
+        <Accent>Field-terminated connectors (factory-polished):</Accent> A pre-polished stub fiber inside a connector body. The field fiber is cleaved and inserted; index-matching gel at the junction. No fusion splicer needed. Common for terminating in tight spaces (rack-mounted closures). Loss: 0.3–0.5 dB per connector — acceptable for most links.
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 04 ── */}
+      <Chapter n="04" title="Coaxial Cable" subtitle="From 10BASE-5 to DOCSIS 3.1 — still powering cable internet" />
+      <Para>
+        Coaxial cable (coax) has a center conductor surrounded by a dielectric insulator, a braided or foil ground shield, and an outer jacket. The shield is concentric with (coaxial to) the center conductor — hence the name. Because the signal and return path are concentric, the cable is self-shielding: external fields cancel because they affect the center conductor and shield equally.
+      </Para>
+
+      <H2>Coax in Legacy Ethernet</H2>
+      <Para>
+        <Accent>10BASE-5 (Thicknet):</Accent> The original Ethernet (1980) used 10 mm coax (RG-8 / Type N connectors). Nodes tapped into the cable with a "vampire tap" — a connector that pierced the outer sheath without cutting the cable. Maximum segment length: 500 m. Called a "bus topology" — all nodes shared the same cable, used CSMA/CD. Maximum 100 nodes per segment. Still seen in old industrial automation wiring.
+      </Para>
+      <Para>
+        <Accent>10BASE-2 (Thinnet/Cheapernet):</Accent> Thinner RG-58 coax (BNC connectors). Maximum segment: 185 m, 30 nodes. Segments connected with BNC T-connectors at each node — the cable literally plugged into the back of the PC. Both ends required 50-ohm termination resistors. If the terminator was missing or a T-connector failed, the entire segment lost connectivity.
+      </Para>
+      <Para>
+        Both are completely obsolete for Ethernet. However, the bus topology principle and 50-ohm impedance matching are still relevant in RF engineering.
+      </Para>
+
+      <H2>Coax in Modern Cable Internet (DOCSIS)</H2>
+      <Para>
+        Cable TV (CATV) and cable internet use RG-6 coax (75-ohm impedance) from the street-side tap to the subscriber's modem (or directly to the cable box). This last-mile coax is not bus topology — each subscriber has their own dedicated coax run from a tap on the distribution cable.
+      </Para>
+      <Para>
+        <Accent>DOCSIS 3.1</Accent> (Data Over Cable Service Interface Specification) achieves download speeds up to 10 Gbps on existing coax plant using OFDM with up to 4096-QAM on channels up to 192 MHz wide. The cable plant amplifiers (trunk amplifiers) every 500–800 m add noise and intermodulation distortion — this is why cable internet SNR decreases during peak usage (more users = more upstream RF noise).
+      </Para>
+      <Para>
+        <Accent>MoCA (Multimedia over Coax Alliance):</Accent> Uses existing in-home coax (originally installed for cable TV) to create a gigabit home network. MoCA 2.5 achieves 2.5 Gbps using the 1.125–1.675 GHz band — above the DOCSIS upstream and downstream bands, so both can coexist on the same coax.
+      </Para>
+
+      <H2>Coax Connectors</H2>
+      <Para>
+        <Accent>F-type (threaded):</Accent> Standard for cable TV and DOCSIS. Crimped or compression-type. The center conductor is the actual cable center conductor (no pin). 75-ohm. F-type connectors must be properly torqued — a loose F connector is one of the most common causes of cable internet problems (intermittent loss, poor SNR).
+      </Para>
+      <Para>
+        <Accent>BNC (Bayonet Neill-Concelman):</Accent> Quarter-turn bayonet lock. 50-ohm (network use) or 75-ohm (video). Used on legacy Thinnet Ethernet, oscilloscopes, video broadcast equipment (SDI video), and network test equipment.
+      </Para>
+      <Para>
+        <Accent>N-type:</Accent> Large threaded connector for high-power, high-frequency RF applications (cellular base stations, microwave antennas). 50-ohm. Handles up to 11 GHz on some versions.
+      </Para>
+      <Para>
+        <Accent>SMA/SMB:</Accent> Small RF connectors for microwave frequencies (up to 18 GHz for SMA). Used on WiFi antenna pigtails, test equipment, RF modules.
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 05 ── */}
+      <Chapter n="05" title="Transceivers and Form Factors" subtitle="SFP, QSFP, DAC, AOC — the pluggable ecosystem" />
+      <Para>
+        Modern network equipment uses <Accent>pluggable transceivers</Accent> — hot-swappable modules that convert between the electrical signal inside the switch/router and the optical or electrical signal on the cable. This separates the line card from the optical technology, allowing a single switch to support many different speeds, distances, and media types.
+      </Para>
+
+      <H2>SFP Family</H2>
+      <CodeBlock title="SFP transceiver family — speeds and standards">
+{`Form Factor  Speed     Lanes  Application          Connector
+──────────────────────────────────────────────────────────────
+SFP          1 Gbps    1      1000BASE-SX/LX/ZX    LC duplex
+SFP+         10 Gbps   1      10GBASE-SR/LR/ER/ZR  LC duplex
+SFP28        25 Gbps   1      25GBASE-SR/LR         LC duplex
+SFP56        50 Gbps   1      50GBASE-SR/LR (PAM4)  LC duplex
+QSFP+        40 Gbps   4×10G  40GBASE-SR4/LR4       MPO-12 or LC
+QSFP28       100 Gbps  4×25G  100GBASE-SR4/LR4/PSM4 MPO-12 or LC
+QSFP56       200 Gbps  4×50G  200GBASE-SR4           MPO-12
+QSFP-DD      400 Gbps  8×50G  400GBASE-SR8/LR8       MPO-24 or LC
+OSFP         400 Gbps  8×50G  400GBASE (datacenter)  MPO/LC
+CFP2         100 Gbps  10×10G Long-haul coherent      LC duplex
+
+Speed breakdown for QSFP28 100GBASE-SR4:
+  4 transmit lanes × 25 Gbps = 100 Gbps TX
+  4 receive lanes  × 25 Gbps = 100 Gbps RX
+  Uses MPO-12 connector (4 TX fibers + 4 RX fibers + 4 unused)`}
+      </CodeBlock>
+
+      <H2>DAC and AOC Cables</H2>
+      <Para>
+        <Accent>DAC (Direct Attach Copper):</Accent> A twinaxial copper cable with SFP+/QSFP28/QSFP-DD transceivers permanently attached at each end. No optical conversion — purely electrical. DAC cables are: cheaper than fiber + transceivers, extremely low latency (no optical conversion), but limited to short distances (0.5 m to 7 m typically). Used extensively for top-of-rack switch to server connections in datacenters.
+      </Para>
+      <Para>
+        <Accent>AOC (Active Optical Cable):</Accent> Optical fiber cable with active transceiver modules permanently attached. Lighter and more flexible than DAC at the same reach, with better EMI performance. Typical reach: 1–100 m. More expensive than DAC. Used for longer inter-rack connections within a datacenter row.
+      </Para>
+      <CodeBlock title="DAC vs AOC vs Optical transceiver comparison">
+{`Property          DAC           AOC            Optical (SFP+)
+───────────────────────────────────────────────────────────────
+Max reach         7 m           100 m          2–40 km (LR)
+Cost              Lowest        Medium         Medium-High
+Power             Low           Medium         Medium
+Signal type       Electrical    Optical        Optical
+Flexibility       Stiff         Very flexible  Cable+module separate
+Interoperability  Good          Good           Best (any cable)
+Latency           Lowest        Low            Low
+Use case          TOR to server  Inter-rack    Inter-building
+
+DAC active vs passive:
+  Passive DAC: simple copper, no signal conditioning, max 3–5 m
+  Active DAC:  signal equalization and re-driving circuitry, up to 7 m`}
+      </CodeBlock>
+
+      <H2>Transceiver Compatibility and DOM</H2>
+      <Para>
+        <Accent>Vendor lock-in:</Accent> Cisco, Juniper, and Arista switches by default reject third-party transceivers. Cisco shows "transceiver is not supported" in the log. Cisco's override command: <code style={{ fontFamily: FONT_MONO, fontSize: 13 }}>service unsupported-transceiver</code>. Third-party transceivers are programmed with the correct EEPROM data to pass vendor checks — most work fine but may void support contracts.
+      </Para>
+      <Para>
+        <Accent>DOM (Digital Optical Monitoring / DDM):</Accent> SFF-8472 standard allows transceivers to report real-time diagnostics: TX optical power (dBm), RX optical power (dBm), laser bias current (mA), temperature (°C), and supply voltage (V). Reading DOM values is essential for fiber troubleshooting:
+      </Para>
+      <CodeBlock title="Reading DOM values — Cisco, Linux">
+{`# Cisco IOS / IOS-XE
+show interfaces GigabitEthernet0/1 transceiver
+  Transceiver Type:       SFP-1000BASE-LX/LH
+  Tx Power  (dBm):        -4.2  (normal: -3 to -7 dBm for 1000BASE-LX)
+  Rx Power  (dBm):        -8.5  (normal: > -20 dBm = good signal)
+  Temperature (Celsius):  42.3  (normal: 0–70°C)
+  Voltage (Volts):         3.3
+
+# Linux (ethtool)
+ethtool -m eth0
+  Transceiver type: External
+  Laser output power: 0.3850 mW / -4.14 dBm
+  Receiver signal average optical power: 0.1413 mW / -8.50 dBm
+  Module temperature: 42.30 degrees C
+
+Interpreting RX power:
+  > -3 dBm:   Possibly too strong (saturation risk)
+  -3 to -20:  Excellent signal
+  -20 to -25: Acceptable (near sensitivity limit)
+  < -25 dBm:  Weak — check connectors, fiber bends, attenuation
+  No light:   Check TX end, fiber continuity`}
+      </CodeBlock>
+
+      <H2>BiDi Transceivers</H2>
+      <Para>
+        BiDi (Bidirectional) transceivers transmit and receive on <Accent>a single fiber</Accent> using two different wavelengths. One end transmits at 1310 nm and receives at 1490 nm; the other end does the opposite. A wavelength-selective splitter (WDM coupler) inside the transceiver separates TX and RX. Used to double the utilization of existing fiber runs — one fiber pair becomes two independent links. BiDi transceivers must be purchased in matched pairs (the wavelength assignments are reversed at each end).
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 06 ── */}
+      <Chapter n="06" title="Power over Ethernet (PoE)" subtitle="Sending power and data on the same cable" />
+      <Para>
+        Power over Ethernet delivers DC power alongside data over twisted-pair Ethernet cable, eliminating the need for a separate power outlet at every device. PoE is essential for: IP phones, wireless access points, IP cameras, and IoT devices — all devices that need to be mounted away from power outlets.
+      </Para>
+
+      <H2>PoE Standards Evolution</H2>
+      <CodeBlock title="PoE standards — power levels and pin usage">
+{`Standard   IEEE       Power at PSE  Power at PD  Pairs Used  Notes
+───────────────────────────────────────────────────────────────────────
+PoE        802.3af    15.4 W        12.95 W      2 pairs     Mode A or B
+PoE+       802.3at    30 W          25.5 W       2 pairs     Higher current
+PoE++/4PPoE 802.3bt   Type 3: 60 W  51 W         All 4 pairs Cat6a req
+           802.3bt    Type 4: 90 W   71.3 W      All 4 pairs 4-pair only
+
+PSE = Power Sourcing Equipment (the switch/injector providing power)
+PD  = Powered Device (the device receiving power)
+
+Power loss in cable:
+  At 15.4W (PoE):   ~2W lost in cable → PD gets 12.95W
+  At 90W (PoE++):   ~18.7W lost → PD gets 71.3W
+  Loss = I²R. Higher power → higher current → more heat in cable
+
+Temperature rise:
+  Bundled cables dissipate heat less efficiently
+  802.3bt limits bundle size when using Type 3/4 to prevent overheating
+  Cat5e can carry PoE but Cat6a is recommended for Type 3/4 (lower resistance)`}
+      </CodeBlock>
+
+      <H2>PoE Detection and Classification</H2>
+      <Para>
+        A PoE-capable switch (PSE) does not immediately apply power. It first negotiates:
+      </Para>
+      <Para>
+        <Accent>Detection:</Accent> The PSE applies a small probe voltage (2.7–10 V) and measures the current. A valid PD has a 25 kΩ resistor between the data pairs and return — this signature identifies it as PoE-capable. A non-PoE device (standard PC) has no such resistor — the PSE detects this and does not apply power. This prevents frying non-PoE equipment.
+      </Para>
+      <Para>
+        <Accent>Classification:</Accent> The PSE applies 15.5–20.5 V and measures the current drawn by the PD's classification resistor. The PD responds with a current signature indicating its power class (0–8). This tells the PSE how much power to allocate from its power budget.
+      </Para>
+      <Para>
+        <Accent>LLDP-MED power negotiation:</Accent> After link-up, 802.3at/bt devices use LLDP (Link Layer Discovery Protocol) to precisely negotiate power levels — the PD tells the PSE exactly how much power it needs, and the PSE either grants it or reduces the link power.
+      </Para>
+
+      <H2>PoE Injectors and Splitters</H2>
+      <Para>
+        <Accent>PoE injector (midspan):</Accent> A device that adds PoE to an existing non-PoE switch. Data enters on one port, power is injected, and combined data+power exits on another port toward the PD. Useful for retrofitting older switches.
+      </Para>
+      <Para>
+        <Accent>PoE splitter:</Accent> The opposite — takes a PoE-powered cable and separates it into a data-only RJ-45 and a DC power connector. Used for devices that need power but don't have PoE circuits (some older IP cameras, custom devices). The splitter converts the PoE voltage to whatever the device requires (5V, 12V, 19V).
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 07 ── */}
+      <Chapter n="07" title="Structured Cabling and TIA-568" subtitle="The standard that defines how buildings are wired" />
+      <Para>
+        <Accent>Structured cabling</Accent> is a standardized approach to building telecommunications wiring using a hierarchical, star-topology design. TIA-568 (American) and ISO/IEC 11801 (international) define the standards. A properly structured cabling system supports any protocol (voice, data, video) on the same physical infrastructure and makes moves/adds/changes simple.
+      </Para>
+
+      <H2>Structured Cabling Hierarchy</H2>
+      <Para>
+        <Accent>Entrance Facility (EF):</Accent> Where the service provider's infrastructure enters the building. Demarc point (demarcation = boundary between carrier responsibility and building responsibility). Houses the main cross-connect for outside plant fiber.
+      </Para>
+      <Para>
+        <Accent>Main Distribution Frame / Main Cross-Connect (MDF/MC):</Accent> The core of the building's cabling system. Houses the main switches/routers, connections to the EF, and backbone connections to all IDF closets. Typically in the basement or first floor.
+      </Para>
+      <Para>
+        <Accent>Intermediate Distribution Frame / Horizontal Cross-Connect (IDF/HC):</Accent> One per floor or zone. Contains a switch that connects to the MDF via backbone cable (typically fiber) and provides horizontal cable distribution to work areas on that floor.
+      </Para>
+      <Para>
+        <Accent>Horizontal cabling:</Accent> Runs from the IDF patch panel to the work area outlet (wall plate). Maximum 90 m of permanent horizontal cable + 10 m for patch cords = 100 m total. This 90 m + 10 m rule is TIA-568 mandatory.
+      </Para>
+      <Para>
+        <Accent>Work area:</Accent> Wall plate with RJ-45 keystone jack → short patch cord → device. Patch cords count toward the 10 m allowance.
+      </Para>
+
+      <H2>Patch Panels and Cross-Connects</H2>
+      <Para>
+        <Accent>Patch panel:</Accent> A passive panel with RJ-45 ports on the front and punchdown blocks (110-style IDC) on the back. Horizontal cables are punched down to the back; patch cords connect front ports to switch ports. This creates an administration layer — a device can be moved to any switch port by changing one patch cord at the panel, without re-running cable.
+      </Para>
+      <Para>
+        <Accent>Punchdown tool (110-type):</Accent> Used to seat the cable conductor into the IDC (Insulation Displacement Connector) contact. The tool has a high-impact side (cuts excess wire) and low-impact side. Always use the correct category punchdown blade (Cat6a blade vs generic Cat5e blade) — using the wrong blade can damage the contacts.
+      </Para>
+
+      <H2>Cable Labeling and Documentation</H2>
+      <Para>
+        TIA-606 defines cable administration standards. Every cable should be labeled at both ends with a unique identifier. Minimum documentation: cable ID, source location (IDF panel, port number), destination location (wall plate, room, desk number), installation date, and tested performance category. Without documentation, troubleshooting becomes archaeology — never let a cabling installation be undocumented.
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 08 ── */}
+      <Chapter n="08" title="Physical Layer Troubleshooting" subtitle="From cable testers to OTDRs — diagnosing every fault type" />
+      <Para>
+        Physical layer faults are often intermittent and can masquerade as software problems. A disciplined physical-layer-first approach saves hours of frustration.
+      </Para>
+
+      <H2>Copper Cable Faults</H2>
+      <Para>
+        <Accent>Open circuit:</Accent> A conductor is broken — no continuity. The most obvious fault. Caused by: sharp bend that breaks the conductor internally (no visible damage outside), cut, pull damage.
+      </Para>
+      <Para>
+        <Accent>Short circuit:</Accent> Two conductors (in the same or different pairs) touch. Caused by: over-stripped wire during termination, damaged jacket.
+      </Para>
+      <Para>
+        <Accent>Split pair:</Accent> The two wires of a logical pair are wired with wires from different physical pairs — so the pair appears continuous in a simple continuity test but the twist rates don't cancel crosstalk correctly. Causes severe near-end crosstalk (NEXT) that prevents gigabit operation even though the cable "works" for 10/100. Split pairs are invisible to a simple pin-by-pin continuity test — you need a cable certifier that measures NEXT to detect them.
+      </Para>
+      <Para>
+        <Accent>Impedance mismatch:</Accent> A change in cable geometry (tight bend, kink, bad termination, barrel connector) creates a reflection point. Part of the signal reflects back — the NVP (Nominal Velocity of Propagation) test on a time-domain reflectometer (TDR) shows the reflection location.
+      </Para>
+
+      <H2>Copper Testing Tools</H2>
+      <Para>
+        <Accent>Cable tester (continuity/wiremap):</Accent> Verifies pin-to-pin continuity and correct wiring order. Detects opens, shorts, crossed pairs, and wrong wire mapping. Cannot detect split pairs, impedance issues, or marginal performance. Cost: $20–$100.
+      </Para>
+      <Para>
+        <Accent>Cable certifier (Fluke DSX, Ideal SignalTEK):</Accent> Measures all TIA-568 electrical parameters: NEXT, FEXT, attenuation, return loss, propagation delay, delay skew. Provides PASS/FAIL against TIA categories. Shows exactly which pair fails and at what frequency. Required for certifying new installations. Cost: $3,000–$10,000.
+      </Para>
+      <Para>
+        <Accent>TDR (Time-Domain Reflectometer):</Accent> Sends a pulse and measures reflections — allows pinpointing the exact location of a fault in meters. Built into most cable certifiers.
+      </Para>
+
+      <H2>Fiber Faults</H2>
+      <Para>
+        <Accent>Dirty connector:</Accent> The #1 cause of fiber link failures. A single fingerprint, dust particle, or scratch on the end face can add 0.5–3 dB of loss — often enough to drop below the RX sensitivity threshold. <Accent>Always inspect fiber connectors before mating with a fiber inspection scope (FIS).</Accent> Clean with a dry fiber connector cleaner (cassette cleaner or stick cleaner) before first insertion and when troubleshooting.
+      </Para>
+      <Para>
+        <Accent>Physical damage:</Accent> Fiber bent below its minimum bend radius (typically 30 mm for LC/SC patch cords) causes macrobend loss — light escapes where the fiber curves. A cable routed over a sharp cabinet edge, tied with a zip tie too tightly, or pulled at an angle can cause this. The fiber may look fine externally.
+      </Para>
+      <Para>
+        <Accent>Microbend loss:</Accent> Microscopic deformation of the fiber from mechanical stress (crushing, improper installation, freezing). Unlike macrobends, microbends are distributed along the fiber length and show as increased dB/km loss.
+      </Para>
+      <Para>
+        <Accent>Broken fiber:</Accent> A clean break shows zero light at the break point on an OTDR. A fracture (partial crack) shows as a high-loss event. Both are easily located with an OTDR.
+      </Para>
+
+      <H2>Fiber Testing Tools</H2>
+      <Para>
+        <Accent>Visual Fault Locator (VFL):</Accent> Injects visible red laser (~650 nm) into the fiber. Any break, sharp bend, or bad splice glows red/pink where the light escapes. Simple, cheap ($50–$200). Only useful for short runs (under 5 km) and accessible cable sections.
+      </Para>
+      <Para>
+        <Accent>Optical Power Meter (OPM):</Accent> Measures optical power at the receive end in dBm. Combined with an optical light source at the transmit end, measures total insertion loss. Cheap ($100–$500). Essential for commissioning and troubleshooting.
+      </Para>
+      <Para>
+        <Accent>OTDR (Optical Time-Domain Reflectometer):</Accent> The equivalent of TDR for fiber. Sends a laser pulse and measures backscattered light over time (= distance). Shows: fiber length, attenuation per kilometer, location and loss of every splice and connector, and fiber breaks. An OTDR trace looks like a descending staircase — each connector/splice shows as a step or event. Cost: $5,000–$30,000 for professional units.
+      </Para>
+      <CodeBlock title="Systematic physical layer troubleshooting process">
+{`Step 1: Check physical indicators
+  - Interface LED: dark=no signal, amber=error, green=link up
+  - DOM RX power: < -25 dBm = weak/no signal
+  - DOM TX power: < -10 dBm below spec = failing laser
+
+Step 2: Inspect fiber connectors (both ends)
+  - Use fiber inspection scope or video microscope
+  - Check for dust, scratches, chips on end face
+  - Clean with dry cassette cleaner, re-inspect
+  - Never insert an uninspected connector
+
+Step 3: Check polarity / fiber path
+  - Verify TX→RX (not TX→TX)
+  - For MPO: check polarity type (A/B/C)
+  - Trace physical fiber path for sharp bends
+
+Step 4: Measure loss with OPM
+  - Connect known-good light source at far end
+  - Measure received power vs expected
+  - Compare against loss budget
+
+Step 5: OTDR if problem not found
+  - Trace entire fiber length
+  - Locate high-loss events
+  - Measure and record all connector/splice losses
+
+Step 6: Copper specific
+  - Run cable certifier if intermittent 1G failures
+  - Check for split pairs (NEXT failure)
+  - Check both cable ends for proper seating in keystone/RJ-45`}
+      </CodeBlock>
+
+      <H2>Auto-MDI/MDI-X and Autonegotiation</H2>
+      <Para>
+        <Accent>MDI (Medium Dependent Interface):</Accent> Standard pin assignment — pins 1,2 = TX, pins 3,6 = RX. Used on NICs (end devices).
+      </Para>
+      <Para>
+        <Accent>MDI-X (Crossover):</Accent> Crossed pin assignment — pins 1,2 = RX, pins 3,6 = TX. Used on switch ports so straight-through cables work between NIC and switch.
+      </Para>
+      <Para>
+        <Accent>Auto-MDI/MDI-X (IEEE 802.3ab):</Accent> Introduced with 1000BASE-T, required for 10GBASE-T. The interface automatically detects whether a straight or crossover cable is connected and configures its TX/RX accordingly. This is why modern Ethernet equipment doesn't require crossover cables — both straight and crossover cables work. The detection uses low-level pulse signaling during link setup.
+      </Para>
+      <Para>
+        <Accent>Autonegotiation (IEEE 802.3u):</Accent> Devices advertise their capabilities (10/100/1000 Mbps, full/half duplex) during link setup using Fast Link Pulses (FLPs). Both sides agree on the fastest common speed and full duplex if available. Forcing speed/duplex at one end while leaving the other set to autonegotiation creates a duplex mismatch — the autonegotiating side falls back to half duplex while the forced side expects full duplex. This causes massive CRC errors and late collisions under any significant traffic. Always either both auto, or both forced to the same settings.
+      </Para>
+
+      <Err title="Duplex mismatch — silent performance killer">
+        <Para>Duplex mismatch is one of the most common misconfigurations. Symptoms: ping works fine, but file transfer speeds are 2–10 Mbps on a gigabit link. The error output of the interface shows: increasing "late collision" counter (on the half-duplex side). Fix: set both sides to autonegotiation, or force both to 1000/full-duplex with matching configurations. The forced-side never sees FLPs, falls back to 10 Mbps by IEEE spec if the other side is auto — another reason to always use autonegotiation on both sides.</Para>
       </Err>
 
       <Divider />
 
-      {/* ── Chapter 14 ── */}
-      <Chapter n={14} title="Test Your Understanding" />
+      {/* ── Ch 09 ── */}
+      <Chapter n="09" title="Wireless Physical Layer" subtitle="RF fundamentals, antennas, and channel planning" />
+      <Para>
+        Wireless networking is as much a physical layer discipline as copper and fiber. The radio frequency (RF) environment — frequencies, power levels, antenna radiation patterns, propagation characteristics — determines wireless network performance as much as the 802.11 protocol does.
+      </Para>
 
-      <IQ level="Beginner">
-        <strong>Q: You need to run Ethernet to a device 120 meters from the nearest switch. What are your options?</strong>
-        <br /><br />
-        At 120m, you exceed the 100m copper limit. Options: (1) Install an intermediate switch or network
-        wall jack at the 100m mark, then run a second cable to the device. (2) Replace copper with fiber —
-        a single-mode or multi-mode fiber link has no distance issue at this range, though you need SFP
-        transceivers at both ends. (3) Use a media converter — a device that converts Ethernet copper to fiber
-        at each end. (4) For a single device, a fiber-to-copper media converter pair (~$100–$200) is often
-        the most economical solution. You cannot exceed 100m with any copper Cat cable — the limit is physics,
-        not the cable grade.
+      <H2>RF Frequency Bands for WiFi</H2>
+      <CodeBlock title="WiFi frequency bands">
+{`Band    Frequency Range    Channels (non-overlapping)  Range   Notes
+──────────────────────────────────────────────────────────────────────────
+2.4 GHz  2.400–2.500 GHz   3 (1, 6, 11)                Long    Congested (microwaves,
+                                                                  BT, many neighbors)
+5 GHz    5.150–5.850 GHz   25 (20 MHz), up to 9        Medium  Less congested,
+                            (80 MHz bonded)                       faster falloff
+6 GHz    5.925–7.125 GHz   59 (20 MHz)                 Short   WiFi 6E/7 only,
+                            14 (80 MHz), 7 (160 MHz)            clean spectrum
+
+Channel bonding:
+  20 MHz:   oldest standard, each channel 20 MHz wide
+  40 MHz:   802.11n (HT40), 2× 20 MHz bonded
+  80 MHz:   802.11ac (VHT80), 4× 20 MHz bonded  ← default for WiFi 5/6
+  160 MHz:  802.11ax (HE160), 8× bonded         ← highest throughput, rare
+  320 MHz:  802.11be (WiFi 7)                   ← future
+
+Wider channels = higher throughput but more interference/congestion
+Narrower channels = lower throughput but more cells in dense environments`}
+      </CodeBlock>
+
+      <H2>Free Space Path Loss</H2>
+      <Para>
+        RF signals weaken with distance following the inverse square law. The Friis free space path loss formula: FSPL(dB) = 20log₁₀(d) + 20log₁₀(f) + 20log₁₀(4π/c), where d = distance in meters, f = frequency in Hz. Simplified: FSPL(dB) ≈ 20log₁₀(d) + 20log₁₀(f) − 147.55.
+      </Para>
+      <Para>
+        Key implication: every time distance doubles, path loss increases by 6 dB (signal power quarters). Every time frequency doubles, path loss also increases by 6 dB. This is why 5 GHz WiFi has shorter range than 2.4 GHz — the higher frequency itself attenuates more aggressively with distance, beyond the identical inverse-square law loss.
+      </Para>
+
+      <H2>Antenna Types and Gain</H2>
+      <Para>
+        <Accent>Omnidirectional antenna:</Accent> Radiates in all directions in the horizontal plane (like a donut shape in 3D). Used on access points for indoor coverage. Gain: 2–5 dBi. The gain doesn't add power — it concentrates radiation in the horizontal plane by reducing radiation above/below, creating a flatter donut pattern.
+      </Para>
+      <Para>
+        <Accent>Directional / patch antenna:</Accent> Focuses radiation in a specific direction, achieving 8–30+ dBi gain. Used for: point-to-point building-to-building wireless bridges, outdoor AP sectors, long-range client CPE devices. A 20 dBi dish antenna has 10× the effective range of a 10 dBi antenna for the same transmitted power.
+      </Para>
+      <Para>
+        <Accent>MIMO and spatial streams:</Accent> 802.11n/ac/ax use Multiple Input, Multiple Output antennas. Multiple antennas transmit independent data streams simultaneously, multiplying throughput. Notation: 4×4:4 means 4 transmit antennas, 4 receive antennas, 4 simultaneous spatial streams. 802.11ac Wave 2 (MU-MIMO) lets an AP simultaneously serve multiple clients on the downlink. 802.11ax (WiFi 6) adds UL MU-MIMO (uplink multi-user MIMO).
+      </Para>
+
+      <H2>dBm — Power in Wireless</H2>
+      <Para>
+        Wireless power is measured in <Accent>dBm</Accent> (decibels relative to 1 milliwatt). dBm = 10 × log₁₀(P/1mW). Key reference points:
+      </Para>
+      <CodeBlock title="dBm reference values">
+{`dBm     Power          Typical context
+─────────────────────────────────────────────────────
++30      1 W           Max WiFi AP transmit (US legal)
++20      100 mW        Typical indoor AP transmit
++15      32 mW         Typical client device transmit
+ 0       1 mW          Reference point
+-30      1 µW          Very strong received signal (close to AP)
+-65      316 nW        Good WiFi signal (fast connection)
+-70      100 nW        Acceptable signal (-70 to -80 borderline)
+-80       10 nW        Weak — reduced speeds, higher retry rate
+-90        1 nW        Very weak — barely associated
+-95      320 pW        Thermal noise floor ≈ -100 dBm at 20 MHz
+
+Rules of thumb:
+  +3 dB = power doubled
+  -3 dB = power halved
+  +10 dB = 10× power
+  -10 dB = 1/10 power
+  -65 dBm target for voice/video; -70 dBm for data`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── Ch 10 ── */}
+      <Chapter n="10" title="Interview Questions" subtitle="From beginner to PhD" />
+
+      <IQ q="What is the difference between Cat6 and Cat6a? When would you choose each?" level="Beginner">
+        Cat6 supports 10 Gbps only to 55 meters; Cat6a extends 10 Gbps to the full 100-meter standard horizontal run by eliminating alien crosstalk (AXT) from adjacent cables. Cat6a is thicker, heavier, and more expensive. Choose Cat6 only for short 10G runs or when 1 Gbps to the desktop is sufficient. For any new installation, specify Cat6a — labor costs dominate a cabling project, and rewiring for 10G later is far more expensive than upgrading to Cat6a now.
       </IQ>
 
-      <IQ level="Beginner">
-        <strong>Q: Your switch shows a port as "connected" but the device gets no IP address. What physical layer checks do you start with?</strong>
-        <br /><br />
-        "Connected" means the physical link is up (signal at the right level, speed negotiated). So Layer 1
-        is working. However: check (1) Speed/duplex: <Code>ethtool eth0</Code> — duplex mismatch (one end
-        full, other half) causes DHCP to time out due to collisions. (2) VLAN membership: the port may be
-        in the wrong VLAN, so DHCP requests go to the wrong segment. (3) DHCP server: is there a DHCP server
-        on this VLAN? (4) MAC address filtering: port security may be blocking the device. Physical layer
-        is fine — this is a Layer 2 or Layer 3 issue. The physical connectivity check passed; move up.
+      <IQ q="What is the difference between single-mode and multi-mode fiber?" level="Beginner">
+        Single-mode fiber (9 µm core) carries one light mode — no modal dispersion, supports 80+ km without amplification, requires laser sources. Multi-mode (50 µm core, OM3/4/5) allows multiple light modes, has modal dispersion limiting distance to 150–400 m for 10G/100G, but uses cheaper VCSEL transceivers. Use multi-mode within buildings (datacenter intra-rack to intra-building), single-mode for any inter-building or WAN run.
       </IQ>
 
-      <IQ level="Intermediate">
-        <strong>Q: An ethtool output shows "Speed: 100Mb/s, Duplex: Half". The link should be 1Gbps, Full Duplex. What caused this and how do you fix it?</strong>
-        <br /><br />
-        This is auto-negotiation failure. 100Mb/s Half is the fallback mode when auto-negotiation fails —
-        it&apos;s what Fast Ethernet defaults to without successful negotiation. Likely causes: (1) Bad cable
-        (damaged pairs cause negotiation failure — only pairs 1/2 and 3/6 work for 100M, pairs 4/5 and 7/8
-        needed for Gigabit). (2) One side has auto-negotiation disabled with a forced setting. (3) Damaged
-        NIC or switch port. Fix: try a new cable (most likely fix). If persistent, force speed/duplex on
-        both ends: <Code>ethtool -s eth0 speed 1000 duplex full autoneg off</Code> and match on switch.
-        But forcing without auto-negotiation hides underlying problems — fix the root cause instead.
+      <IQ q="A 10G fiber link comes up but has very high packet error rates. What do you check first?" level="Intermediate">
+        DOM (Digital Optical Monitoring) on the transceiver — specifically RX optical power. Below -20 dBm suggests weak signal; below -25 dBm is near sensitivity threshold. Then inspect both fiber connectors with an inspection scope for contamination or damage (dirty connectors are the most common cause). Clean with a dry connector cleaner and reinspect. Then check fiber path for sharp bends below minimum bend radius. Finally, verify transceiver wavelength matches the fiber type (single-mode transceiver on multi-mode fiber = no light received because the wavelengths are mismatched for the fiber's modal bandwidth).
       </IQ>
 
-      <IQ level="Intermediate">
-        <strong>Q: An SFP+ 10G link shows frequent FCS errors but no interface errors. The cable is new. What do you suspect?</strong>
-        <br /><br />
-        FCS (Frame Check Sequence) errors mean frames arrive at the interface but fail the CRC check —
-        bits were corrupted in transit. Possible causes with new cable: (1) Dirty fiber connectors —
-        clean all four LC connectors with a one-click cleaner, then test. (2) Wrong fiber type — if
-        the SFP+ is 10GBASE-SR (850nm, multi-mode) but someone used single-mode fiber, power levels
-        are wrong, causing errors. (3) Cable routed near strong EMI (unlikely for fiber, but possible
-        if the cable jacket was damaged and moisture entered). (4) SFP+ module defective or DOM shows
-        Rx power below sensitivity. Check: <Code>ethtool -m eth0</Code> for optical power levels,
-        then clean connectors as first action.
+      <IQ q="Explain duplex mismatch: how it occurs, what it looks like, and how to fix it." level="Intermediate">
+        Duplex mismatch occurs when one side of a link is forced to full-duplex while the other is set to autonegotiate — the auto side defaults to half-duplex per IEEE 802.3 spec. The full-duplex side transmits freely; the half-duplex side waits for silence but the other side never stops, so it detects constant "collisions." Symptoms: ping works fine (small packets), but file transfer throughput is 2–10 Mbps on a gigabit link; interface shows increasing late collisions and input errors. Fix: set both sides to autonegotiation, or force both to the same speed/duplex. Never force one side and leave the other on auto.
       </IQ>
 
-      <IQ level="Senior">
-        <strong>Q: You&apos;re designing cabling for a 100-server data center with 25G server connections and 100G spine uplinks. Detail your cabling architecture.</strong>
-        <br /><br />
-        Top-of-Rack (ToR) design: each rack has a 48-port 25G switch with 8× 100G uplinks to spine.
-
-        Server-to-ToR (within rack, &lt;2m): use DAC (Direct Attach Copper) SFP28 cables — cheapest, lowest
-        latency, no transceiver needed. For servers in adjacent racks (&lt;7m): active DAC SFP28. Beyond 7m:
-        25GBASE-SR SFP28 with OM4 MMF.
-
-        ToR-to-spine (inter-rack, typically 20-100m): 100GBASE-SR4 QSFP28 using 12-fiber MPO OM4 pre-terminated
-        trunks. SR4 uses 4×25G parallel lanes on 8 fibers (4 TX, 4 RX) at 850nm VCSEL — cheaper transceivers,
-        enough reach for a typical data center footprint (OM4 reaches 150m at 100G SR4).
-
-        Structured cabling: MPO trunk cables between patch panels → LC cassettes break out to individual
-        LC jumpers. Pre-terminated factory cabling ensures known insertion loss. All fiber OM4 (aqua jacket).
-        Document with DCIM (Data Center Infrastructure Management) tool from day one.
-
-        Power: 100 servers × 25G = each server NIC draws ~3-5W (SFP28 transceiver at ToR). Total optical
-        budget: check ToR switch transceiver power budget. 48× SFP28 + 8× QSFP28 ≈ 250W just in optics
-        on one switch.
+      <IQ q="How does PoE 802.3bt Type 4 deliver 90W over Cat6a? Walk through the electrical path including detection, classification, and power delivery." level="Senior">
+        802.3bt Type 4 uses all four wire pairs. Detection: PSE applies 2.7–10 V probe; PD presents 25 kΩ signature resistance, confirming PoE capability. Classification: PSE applies 15.5–20.5 V; PD responds with a multi-event physical layer classification indicating Class 8 (90 W). The PSE allocates power budget. Power delivery: 52–57 V DC is applied across all four pairs simultaneously — both Mode A (pins 1,2,3,6) and Mode B (pins 4,5,7,8) carry power. Current: P = IV → at 57 V, 90 W requires ~1.57 A total (~0.78 A per pair). Power loss: 0.78 A through 26 AWG conductor (0.188 Ω/m × 2 × 100 m = 37.6 Ω per pair) → I²R = 0.78² × 37.6 ≈ 22.9 W per pair / 4 pairs = ~18.7 W total loss → PD receives 71.3 W. Temperature rise in bundled Cat6a must be managed — 802.3bt requires derating in cable bundles.
       </IQ>
 
-      <IQ level="Senior">
-        <strong>Q: How does coherent optical technology enable 400G and 800G transmission over existing single-mode fiber infrastructure?</strong>
-        <br /><br />
-        Traditional intensity-modulated direct-detection (IMDD) optics simply turn a laser on/off (OOK —
-        On-Off Keying) to encode bits. At 100G+, the symbol rate exceeds what IMDD can practically achieve
-        over long distances due to chromatic dispersion.
-
-        Coherent optics uses the full properties of light — amplitude, phase, and polarization — to encode
-        data using complex modulation (DP-QPSK, DP-16QAM, DP-64QAM). A coherent receiver uses a local
-        oscillator laser mixed with the received signal to recover the amplitude and phase information.
-
-        400G coherent (400GBASE-ZR, OIFCFE-ZR+): DP-16QAM at ~64 GBaud → 4 bits/symbol × 2 pol × 2 quadratures
-        = 16 bits per symbol × 64 Gbaud = 400 Gbps on a single wavelength (one DWDM channel).
-
-        The key advantage: coherent systems use DSP (digital signal processing) to compensate for fiber
-        chromatic dispersion and polarization mode dispersion electronically — without dispersion compensation
-        fiber modules. This allows 400G to run over existing SMF fiber plants designed decades ago for
-        10G DWDM. The fiber doesn&apos;t need upgrading — the new coherent transceivers extract far more capacity
-        from the same glass.
-
-        800G moves to DP-64QAM at higher baud rates, requiring better SNR (closer fiber, or Raman amplification).
-        The physical fiber remains the same; optical physics and electronics keep advancing.
-      </IQ>
-
-      <IQ level="PhD">
-        <strong>Q: Analyze the physics of why the minimum bend radius matters for optical fiber, and how bend-insensitive fiber (G.657) achieves its performance improvement.</strong>
-        <br /><br />
-        Standard single-mode fiber (G.652) uses total internal reflection to guide light in the core.
-        The condition for total internal reflection: the angle of incidence at the core-cladding interface
-        must exceed the critical angle θ_c = arcsin(n_cladding/n_core). At a bend, the outer side of the
-        bend experiences a smaller angle of incidence — eventually below θ_c — and light radiates out of
-        the fiber ("bend loss"). This is an evanescent field phenomenon: the mode field extends slightly
-        beyond the core, and at bends, this evanescent field couples to radiation modes.
-
-        Macrobend loss increases exponentially with decreasing bend radius and increases with wavelength
-        (1550nm has higher macrobend loss than 1310nm for standard fiber). For standard G.652 fiber:
-        bend loss becomes significant below 30mm bend radius; below 15mm, loss is catastrophic.
-
-        G.657 bend-insensitive fiber (introduced for FTTH to handle tight bends in homes) uses two strategies:
-        (1) Trench-assisted design: a depressed-index "trench" region in the cladding surrounding the core.
-        When light attempts to radiate at a bend, the trench reflects it back — acting as a secondary
-        waveguide boundary that catches leaking modes. (2) Smaller mode field diameter (MFD): tighter mode
-        confinement means the evanescent field extends less into the cladding, reducing bend sensitivity.
-
-        G.657.A2 specifies maximum attenuation increase of 0.1 dB/turn at 7.5mm bend radius at 1550nm.
-        The tradeoff: G.657 splice compatibility with G.652 is slightly reduced (MFD mismatch causes
-        small splice loss), though modern fusion splicers compensate with TEC (thermally expanded core)
-        technique. G.657 is now deployed in all FTTH installations globally.
+      <IQ q="Design the fiber cabling architecture for a 3-floor office building: 100 users per floor, 10G to every desk, a datacenter on floor 1, and future-proof for 25G. Justify every choice." level="PhD">
+        <Para><strong>Horizontal (floor to desk):</strong> Cat6a UTP from IDF to each desk. 10GBASE-T supports full 100 m. Cat6a is future-proof for 25GBASE-T (with Cat6a rated at 500 MHz, it will support 25G in short runs). Avoid Cat7/Cat8 — non-standard connectors, overkill for desk-side, and labor cost is identical.</Para>
+        <Para><strong>IDF per floor:</strong> One IDF per floor with 48-port PoE+ switch (802.3at 30W per port for AP/phone) and 8-port PoE++ (802.3bt 60W for video conferencing). Each IDF connected to MDF via 2× OM4 MMF (40GBASE-SR4 today, upgradable to 100G by swapping transceivers on the same fiber).</Para>
+        <Para><strong>MDF to datacenter (same building):</strong> 12-fiber OM5 ribbon (supports SWDM4 for 100G on 2 fibers when needed) plus pre-installed OS2 SMF for future DCI or ISP handoff. Never install only what you need today — fiber raceway fill costs more to pull later.</Para>
+        <Para><strong>Datacenter:</strong> TOR (Top-of-Rack) switches with 25G SFP28 to servers (DAC for ≤5m, AOC for cross-rack). 100G QSFP28 uplinks to spine switches. Pre-install MPO-24 trunk cables for direct 400G QSFP-DD when needed — avoid re-cabling the datacenter floor.</Para>
+        <Para><strong>Future-proofing for 25G to desk:</strong> Cat6a supports 25GBASE-T at reduced distance (~30m). If full 100m 25G is needed, a second fiber run to the desk (using SFP28) would be required — conduit capacity must be reserved now. Install empty conduits with pull strings alongside every cable run during construction.</Para>
       </IQ>
 
       <Divider />
 
       <KeyTakeaways items={[
-        'Twisted pair cable uses differential signaling — twisting cancels common-mode noise. More twists per inch = higher frequency support = faster speeds.',
-        '100m is the hard limit for all copper Ethernet standards. Beyond that: add a switch, use fiber, or use a media converter.',
-        'Cat5e: 1G/100m. Cat6: 10G/55m. Cat6A: 10G/100m. Cat8: 40G/30m. Always label your cables.',
-        'Single-mode fiber (yellow jacket, 8-10μm core): long distance (km+), requires expensive lasers. Multi-mode (aqua/orange, 50μm): short distance (<400m), cheap VCSELs.',
-        'LC is the dominant data center fiber connector. MPO/MTP carries 12-24 fibers in one push-on connector for 40G/100G/400G parallel optics.',
-        'SFP form factor modules define port capability — speed, fiber type, distance. Hot-swappable. Third-party modules often work; test first.',
-        'PoE delivers up to 100W (802.3bt Type 4) over copper. Total switch PoE budget limits how many devices you can power simultaneously.',
-        'Dirty fiber connectors are the #1 cause of fiber link failures. Clean every connector before mating, every time.',
-        'Optical power budget: TX power - RX sensitivity = available loss. Add connector, cable, and splice losses + 3 dB safety margin. Must be below budget.',
-        'Cable test with a continuity tester only checks connectivity. Certification testing (Fluke DSX) tests insertion loss, NEXT, return loss — required before accepting any installation.',
+        'Twisted-pair copper works by differential cancellation — twisting ensures external noise hits both wires equally and cancels at the differential receiver. Different twist rates per pair minimize inter-pair crosstalk.',
+        'Cat6a (500 MHz, 10G to 100m) is the minimum for new installations. Cat5e/Cat6 are acceptable for existing infrastructure but should be replaced during renovations.',
+        'Single-mode fiber (9 µm, no modal dispersion) supports 80+ km and DWDM. Multi-mode (50 µm OM3/4/5) supports 150–400 m at 10G/100G with cheaper VCSEL transceivers. Always install SMF for inter-building runs.',
+        'Fiber connector polish type matters: APC (green, 8° angle, -60 dBm return loss) for GPON/analog RF; PC/UPC (blue, domed, -40 dBm) for data. Never mate APC with PC.',
+        'Dirty fiber connectors are the leading cause of fiber link failures. Always inspect with a fiber scope before mating. Clean with a dry cassette cleaner, reinspect, then connect.',
+        'SFP/SFP+/SFP28/QSFP28/QSFP-DD transceivers define speed and reach. DAC cables are cheapest for ≤7m datacenter connections; AOC for 1–100m; optical transceivers for anything longer.',
+        'PoE (802.3af/at/bt) delivers up to 90W over Cat6a. PSE detects (25 kΩ signature) and classifies the PD before applying power. 802.3bt Type 3/4 uses all four pairs and requires Cat6a for full reach.',
+        'TIA-568 horizontal cabling: 90m permanent + 10m patch cords = 100m total. MDF/IDF star topology, patch panels for administration, 13mm max untwist at termination.',
+        'Autonegotiation should be enabled on both sides. Duplex mismatch (one forced full-duplex, one auto → half-duplex) causes 2–10 Mbps throughput on gigabit links with late collision errors.',
+        'DOM (Digital Optical Monitoring) provides real-time TX/RX optical power, temperature, and voltage from SFP transceivers. RX power below -20 dBm requires physical investigation.',
+        'Loss budget = TX power − RX sensitivity. Every connector adds 0.3–0.5 dB, fusion splice adds 0.1 dB, SMF adds 0.35 dB/km at 1310 nm. Calculate the budget before deploying any fiber link.',
+        'Wireless physical layer: 5 GHz has shorter range but less congestion than 2.4 GHz. Path loss increases by 6 dB per doubling of distance or frequency. Target -65 dBm RX signal for voice/video reliability.',
       ]} />
     </LearnLayout>
   )
