@@ -7,16 +7,15 @@ import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 /* ── Helper components ────────────────────────────────────────────────────── */
 
 const G = '#10b981'
-const WARN_BG = '#fefce8'
-const WARN_BORDER = '#fef08a'
-const ERR_BG = '#fff1f2'
-const ERR_BORDER = '#fecdd3'
+const FONT_MONO = 'var(--font-mono)'
+const FONT_DISPLAY = 'var(--font-display)'
 
-const Chapter = ({ n }: { n: number }) => (
-  <div style={{ marginBottom: 28 }}>
-    <p style={{ fontSize: 11, color: G, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 8px', letterSpacing: '.1em' }}>
-      // Chapter {String(n).padStart(2, '0')}
+const Chapter = ({ n, title }: { n: number; title: string }) => (
+  <div style={{ marginBottom: 32 }}>
+    <p style={{ fontSize: 11, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>
+      {`// CHAPTER ${String(n).padStart(2, '0')}`}
     </p>
+    <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
   </div>
 )
 
@@ -47,38 +46,48 @@ const CodeBlock = ({ children }: { children: React.ReactNode }) => (
 )
 
 const StoryBox = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: `3px solid ${G}`, borderRadius: 8, padding: '16px 20px', margin: '0 0 24px', fontSize: 14.5, lineHeight: 1.8, color: 'var(--text)' }}>{children}</div>
-)
-
-const WowBox = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'var(--surface)', border: `1px solid ${G}`, borderRadius: 8, padding: '14px 18px', margin: '0 0 24px', fontSize: 14, lineHeight: 1.8, color: 'var(--text)' }}>
-    <span style={{ color: G, fontWeight: 700, marginRight: 8 }}>◆ Wow:</span>{children}
+  <div style={{ background: 'rgba(59,130,246,0.07)', border: '1px solid rgba(59,130,246,0.2)', borderLeft: '4px solid #3b82f6', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#3b82f6', fontSize: 11, fontFamily: FONT_MONO, letterSpacing: '.1em', display: 'block', marginBottom: 8 }}>// REAL-WORLD SCENARIO</span>
+    {children}
   </div>
 )
 
-const Warn = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: WARN_BG, border: `1px solid ${WARN_BORDER}`, borderRadius: 8, padding: '14px 18px', margin: '0 0 24px', fontSize: 14, lineHeight: 1.8, color: '#713f12' }}>
-    <span style={{ fontWeight: 700, marginRight: 8 }}>⚠ Warning:</span>{children}
+const WowBox = ({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) => (
+  <div style={{ background: `${G}0d`, border: `1px solid ${G}30`, borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+      <span style={{ fontSize: 20 }}>{emoji}</span>
+      <span style={{ fontWeight: 800, color: G, fontSize: 13 }}>{title}</span>
+    </div>
+    {children}
   </div>
 )
 
-const Err = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: ERR_BG, border: `1px solid ${ERR_BORDER}`, borderRadius: 8, padding: '14px 18px', margin: '0 0 24px', fontSize: 14, lineHeight: 1.8, color: '#881337' }}>
-    <span style={{ fontWeight: 700, marginRight: 8 }}>✗ Misconception:</span>{children}
+const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.25)', borderLeft: '4px solid #f59e0b', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#f59e0b', fontSize: 12, fontFamily: FONT_MONO, display: 'block', marginBottom: 8 }}>⚠ {title}</span>
+    {children}
   </div>
 )
 
-const levelColors: Record<string, string> = {
+const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.25)', borderLeft: '4px solid #ef4444', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#ef4444', fontSize: 12, fontFamily: FONT_MONO, display: 'block', marginBottom: 8 }}>✗ Common Mistake — {title}</span>
+    {children}
+  </div>
+)
+
+const LEVEL_COLORS: Record<string, string> = {
   Beginner: '#10b981',
   Intermediate: '#3b82f6',
   Senior: '#8b5cf6',
   PhD: '#f97316',
 }
 
-const IQ = ({ level, children }: { level: string; children: React.ReactNode }) => (
-  <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '16px 20px', margin: '0 0 24px', fontSize: 14, lineHeight: 1.8, color: 'var(--text)' }}>
-    <span style={{ background: levelColors[level] ?? G, color: '#fff', fontSize: 11, fontWeight: 700, borderRadius: 4, padding: '2px 8px', marginRight: 10, letterSpacing: '.05em' }}>{level.toUpperCase()}</span>
-    {children}
+const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) => (
+  <div style={{ background: `${G}08`, border: `1px solid ${G}20`, borderRadius: 12, padding: '20px 24px', margin: '24px 0' }}>
+    <span style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#fff', background: LEVEL_COLORS[level], borderRadius: 20, padding: '3px 12px', marginBottom: 10 }}>{level}</span>
+    <div style={{ fontWeight: 700, color: 'var(--text)', marginBottom: 8, lineHeight: 1.5 }}>{q}</div>
+    <div style={{ fontSize: 14.5, color: 'var(--muted)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
@@ -522,8 +531,7 @@ export default function DynamicRouting() {
       updatedAt="May 2026"
     >
       {/* Chapter 01 */}
-      <Chapter n={1} />
-      <H2>The Routing Arms Race</H2>
+      <Chapter n={1} title="The Routing Arms Race" />
 
       <StoryBox>
         It is 1969. ARPANET has four nodes. A human engineer maintains the routing tables. This works fine — there are exactly six possible paths in the entire network.
@@ -537,7 +545,7 @@ export default function DynamicRouting() {
 
       <Para>Different protocols answer these questions with radically different architectural philosophies. OSPF builds a complete map of the network and runs Dijkstra. BGP is a policy machine that trades path vectors between autonomous systems. EIGRP keeps feasible backups cached for instant failover. IS-IS speaks in TLVs and runs inside the router&apos;s management plane. Understanding these differences is not academic — it determines how you design, troubleshoot, and scale every network you build.</Para>
 
-      <WowBox>
+      <WowBox emoji="🌐" title="BGP Event Storms at Internet Scale">
         The BGP table at a major IXP contains over 900,000 prefixes, each with multiple paths. Every time a BGP update arrives, the router must re-run best-path selection for the affected prefix and potentially propagate changes to hundreds of peers. During a major route leak, this can generate millions of updates per second — a condition called a <strong>BGP event storm</strong>.
       </WowBox>
 
@@ -553,8 +561,7 @@ export default function DynamicRouting() {
       <Divider />
 
       {/* Chapter 02 */}
-      <Chapter n={2} />
-      <H2>OSPF — The Link-State Engine</H2>
+      <Chapter n={2} title="OSPF — The Link-State Engine" />
 
       <StoryBox>
         Imagine you want to know the fastest route from New York to Los Angeles. One approach: ask your neighbor &quot;how far is LA from you?&quot; and add that to your distance. This is distance-vector — you rely on neighbors&apos; reports and have no direct knowledge of the full map.
@@ -598,7 +605,7 @@ LSA Type 7 — NSSA External LSA
   Originated by: ASBRs inside a Not-So-Stubby Area
   Scope: NSSA only (converted to Type 5 by ABR at area boundary)`}</CodeBlock>
 
-      <Warn>
+      <Warn title="LSA Type 3 carries prefix/cost only — not the source area's topology">
         LSA Type 3 does NOT carry the actual topology of the source area — only the prefix and its cost as seen from the ABR. Routers in other areas cannot run SPF against the source area&apos;s topology; they treat inter-area routes as distance-vector information. This is a fundamental limitation of OSPF&apos;s area hierarchy.
       </Warn>
 
@@ -607,7 +614,7 @@ LSA Type 7 — NSSA External LSA
 
       <Para>DR election uses OSPF <Accent>priority</Accent> (0–255, default 1; 0 means ineligible), then <Accent>Router-ID</Accent> as a tiebreaker. The DR uses multicast address <Code>224.0.0.6</Code> (AllDRRouters) while non-DR routers use <Code>224.0.0.5</Code> (AllSPFRouters).</Para>
 
-      <WowBox>
+      <WowBox emoji="🗳️" title="OSPF DR Election is Non-Preemptive">
         Once a DR is elected, it does NOT re-elect when a higher-priority router joins the segment. OSPF is non-preemptive for DR/BDR. A router with priority 255 joining an existing broadcast segment will become BDR (if the current BDR has lower priority), but will only become DR when the current DR fails. This prevents unnecessary reconvergence.
       </WowBox>
 
@@ -639,8 +646,7 @@ router ospf 1
       <Divider />
 
       {/* Chapter 03 */}
-      <Chapter n={3} />
-      <H2>The OSPF Neighbor State Machine</H2>
+      <Chapter n={3} title="The OSPF Neighbor State Machine" />
 
       <StoryBox>
         Two routers meet for the first time on an Ethernet segment. They don&apos;t immediately trust each other with their entire routing tables. Instead, they go through a careful eight-step handshake — each step building more trust and more information sharing than the last.
@@ -667,15 +673,14 @@ interface GigabitEthernet0/0
   ip ospf authentication message-digest
   ip ospf message-digest-key 1 md5 SecretKey123`}</CodeBlock>
 
-      <Warn>
+      <Warn title="Hello/Dead interval mismatch silently prevents OSPF adjacency">
         If an OSPF neighbor relationship flaps between Down and Init repeatedly, check Hello/Dead interval mismatches. Default Hello is 10s (P2P/broadcast) or 30s (NBMA); Dead is 4× Hello. Mismatched intervals prevent adjacency from forming — OSPF will log &quot;Mismatched hello parameters&quot; and discard the Hello packet.
       </Warn>
 
       <Divider />
 
       {/* Chapter 04 */}
-      <Chapter n={4} />
-      <H2>OSPF Convergence and SPF Scheduling</H2>
+      <Chapter n={4} title="OSPF Convergence and SPF Scheduling" />
 
       <StoryBox>
         A fiber cable is cut. The router on one end of the link detects the loss of carrier and immediately sends a Router LSA announcing the link is down. This LSA floods across the area within milliseconds. Every router in the area receives it, updates its LSDB, and schedules an SPF computation. But SPF is expensive — Dijkstra on a large LSDB can take tens of milliseconds. You can&apos;t run it for every single topology change in real time.
@@ -690,7 +695,7 @@ interface GigabitEthernet0/0
       <H3>Incremental SPF (iSPF)</H3>
       <Para>Full SPF recomputes the entire shortest-path tree. <Accent>Incremental SPF (iSPF)</Accent> only recomputes the branches of the tree affected by the topology change, dramatically reducing CPU load in large networks. iSPF is triggered when only leaf nodes change (external routes, stub networks) and the tree structure itself is unchanged.</Para>
 
-      <WowBox>
+      <WowBox emoji="🔄" title="OSPF's Constant LSA Heartbeat">
         OSPF LSAs have a MaxAge of 3600 seconds (one hour). Routers must refresh all self-originated LSAs before they hit MaxAge to prevent topology information from being flushed. In a 1000-router network, each router refreshes ~20 LSAs every hour — this generates a constant background flood of LSAs that never fully stops. It is the &quot;heartbeat&quot; of the OSPF domain.
       </WowBox>
 
@@ -714,8 +719,7 @@ interface GigabitEthernet0/1
       <Divider />
 
       {/* Chapter 05 */}
-      <Chapter n={5} />
-      <H2>BGP — The Internet&apos;s Policy Engine</H2>
+      <Chapter n={5} title="BGP — The Internet's Policy Engine" />
 
       <StoryBox>
         OSPF is designed for a single organization&apos;s network — a place where everyone trusts everyone and the goal is purely performance. BGP is designed for the opposite: the global internet, where thousands of independent organizations connect and each has its own business policies about what traffic it carries, for whom, and at what cost.
@@ -753,15 +757,14 @@ router bgp 65001
   neighbor 10.255.0.3 remote-as 65001
   neighbor 10.255.0.3 route-reflector-client     ! This peer is an RR client`}</CodeBlock>
 
-      <Warn>
+      <Warn title="iBGP next-hop must be reachable via IGP — use next-hop-self">
         iBGP next-hop is not changed by default — the eBGP next-hop (an external IP) is advertised to iBGP peers as-is. If iBGP peers cannot reach that external IP via IGP, routes will be in the BGP table but marked as unreachable (no route to next-hop). Always configure <Code>next-hop-self</Code> on iBGP sessions unless you are running IGP redistribution of external prefixes.
       </Warn>
 
       <Divider />
 
       {/* Chapter 06 */}
-      <Chapter n={6} />
-      <H2>BGP Path Attributes and Best-Path Selection</H2>
+      <Chapter n={6} title="BGP Path Attributes and Best-Path Selection" />
 
       <StoryBox>
         Two internet service providers both offer you a route to 8.8.8.0/24 (Google DNS). One is cheaper and domestic; the other is slower but redundant. Which should be the primary path? Which should be the backup? And what happens if you want to send some traffic via each?
@@ -799,15 +802,14 @@ show bgp ipv4 unicast 192.0.2.0/24
 show bgp ipv4 unicast neighbors 203.0.113.1 routes
 show bgp ipv4 unicast regexp _65002_     ! Regex on AS-PATH`}</CodeBlock>
 
-      <WowBox>
+      <WowBox emoji="🕳️" title="Remote Triggered Black Hole (RTBH) Filtering">
         BGP communities enable a practice called <strong>BLACKHOLE routing</strong>: a DDoS target announces its prefix with community 65535:666 (or operator-specific variants) to upstream providers, who then drop all traffic destined for that prefix at their edge — preventing DDoS traffic from ever reaching the victim&apos;s network. This is called <strong>Remote Triggered Black Hole (RTBH)</strong> filtering and is a standard DDoS mitigation technique used by virtually every major ISP.
       </WowBox>
 
       <Divider />
 
       {/* Chapter 07 */}
-      <Chapter n={7} />
-      <H2>EIGRP and the DUAL Algorithm</H2>
+      <Chapter n={7} title="EIGRP and the DUAL Algorithm" />
 
       <StoryBox>
         Most routing protocols must recompute all paths when the topology changes. After a link failure, OSPF recomputes the entire SPF tree. RIP counts to infinity before finding an alternate route. Both approaches take time during which traffic is dropped.
@@ -831,7 +833,7 @@ show bgp ipv4 unicast regexp _65002_     ! Regex on AS-PATH`}</CodeBlock>
       <H3>EIGRP Active/Passive States</H3>
       <Para>Each route in EIGRP is either <Accent>Passive</Accent> (stable, in the routing table) or <Accent>Active</Accent> (undergoing DUAL diffusing computation after losing all feasible successors). During Active state, the router sends queries to all neighbors. If a query goes unanswered for the <Accent>Active Timer</Accent> (default 3 minutes), the router logs a <strong>Stuck in Active (SIA)</strong> error and resets the neighbor relationship.</Para>
 
-      <Warn>
+      <Warn title="Stuck in Active (SIA) cascades when EIGRP queries propagate too far">
         SIA (Stuck in Active) is one of the most disruptive EIGRP events. It occurs when a query propagates too far into the network — commonly caused by poor EIGRP summarization design. Large, flat EIGRP domains with no route summarization can have SIA propagate across hundreds of routers, causing massive session resets. Always summarize EIGRP routes at distribution/aggregation boundaries to limit query scope.
       </Warn>
 
@@ -857,8 +859,7 @@ router eigrp 100
       <Divider />
 
       {/* Chapter 08 */}
-      <Chapter n={8} />
-      <H2>IS-IS — The Service Provider Favorite</H2>
+      <Chapter n={8} title="IS-IS — The Service Provider Favorite" />
 
       <StoryBox>
         In the 1980s, when OSI protocols were competing with TCP/IP for internet adoption, ISO developed IS-IS (Intermediate System to Intermediate System) as a link-state protocol for OSI networks. TCP/IP won the war, but IS-IS survived in a curious way — it was retrofitted to carry IPv4 routes, and then IPv6. The result is a protocol that operates outside of IP entirely: IS-IS runs at Layer 2, using its own PDU types, and can carry any network layer payload. This independence from IP makes it almost impossible to accidentally break IS-IS by misconfiguring IP.
@@ -902,15 +903,14 @@ show isis neighbors
 show isis database                    ! All LSPs in topology
 show isis topology                    ! SPF computed paths`}</CodeBlock>
 
-      <WowBox>
+      <WowBox emoji="⚡" title="Hyperscalers Run IS-IS, Not OSPF">
         Google, Facebook (Meta), Amazon, and most hyperscalers run IS-IS (not OSPF) as their internal IGP. IS-IS&apos;s TLV extensibility makes it easy to add Segment Routing, traffic engineering, and flexible algorithm extensions. Google&apos;s internal network runs IS-IS with a custom traffic engineering extension that rebalances traffic across their planet-scale data center interconnect every few seconds.
       </WowBox>
 
       <Divider />
 
       {/* Chapter 09 */}
-      <Chapter n={9} />
-      <H2>Redistribution — Connecting Different Routing Domains</H2>
+      <Chapter n={9} title="Redistribution — Connecting Different Routing Domains" />
 
       <StoryBox>
         A company acquires a competitor. The acquirer runs OSPF. The acquired company runs EIGRP. Customers need to reach resources in both networks immediately. The network team has six months before the full migration is complete. The solution: route redistribution — importing routes from one protocol into another.
@@ -945,15 +945,14 @@ route-map EIGRP_TO_OSPF deny 10
 route-map EIGRP_TO_OSPF permit 20
   match ip address prefix-list EIGRP_NATIVE`}</CodeBlock>
 
-      <Warn>
+      <Warn title="OSPF E2 (default) ignores internal path cost — use E1 for multi-ASBR setups">
         OSPF E1 vs E2 metrics matter critically in redistribution. E2 (default) keeps the external metric constant regardless of internal path cost — a closer ASBR is not preferred over a farther one if the external cost is the same. E1 adds the internal path cost to the external metric. Use E1 when multiple ASBRs redistribute the same prefix to ensure traffic takes the shortest total path.
       </Warn>
 
       <Divider />
 
       {/* Chapter 10 */}
-      <Chapter n={10} />
-      <H2>BGP Convergence and Route Dampening</H2>
+      <Chapter n={10} title="BGP Convergence and Route Dampening" />
 
       <StoryBox>
         A router somewhere in AS 7018 has a flaky optical transceiver. Every 30 seconds, its BGP session to a peer drops and re-establishes. Each drop and re-establishment propagates an UPDATE and a WITHDRAW to that peer, who propagates it to their peers, who propagate it further. A single flapping prefix can generate millions of UPDATE messages that cascade across the global BGP table — a BGP event storm.
@@ -984,15 +983,14 @@ router bgp 65001
 router bgp 65001
   neighbor 203.0.113.1 fall-over bfd         ! BGP tears down session on BFD failure`}</CodeBlock>
 
-      <WowBox>
+      <WowBox emoji="🚨" title="The 2010 Telefonica Route Leak">
         During the 2010 Telefonica route leak, approximately 40,000 routes were accidentally re-advertised with AS-path modifications, attracting traffic from multiple continents through a single PoP in Spain. BGP&apos;s path-vector mechanism meant the bad routes spread to hundreds of ASes within minutes before operators could apply filters. The incident highlighted how a single misconfigured router can briefly redirect global internet traffic.
       </WowBox>
 
       <Divider />
 
       {/* Chapter 11 */}
-      <Chapter n={11} />
-      <H2>Modern DC Routing — BGP in the Data Center</H2>
+      <Chapter n={11} title="Modern DC Routing — BGP in the Data Center" />
 
       <StoryBox>
         Hyperscale data centers have tens of thousands of servers, hundreds of top-of-rack switches, and dozens of spine switches — all requiring IP connectivity at sub-millisecond convergence with no single point of failure. Traditional IGPs like OSPF were designed for campus and WAN topologies, not the Clos fabric of a modern data center.
@@ -1041,8 +1039,7 @@ show nve peers`}</CodeBlock>
       <Divider />
 
       {/* Chapter 12 */}
-      <Chapter n={12} />
-      <H2>Troubleshooting Dynamic Routing</H2>
+      <Chapter n={12} title="Troubleshooting Dynamic Routing" />
 
       <StoryBox>
         A network engineer gets paged at 2 AM. Customers cannot reach the company&apos;s web servers. Ping to the server IP fails from the outside. Ping from inside works fine. The firewall team says the rules are unchanged. The server team says the servers are up and responding locally.
@@ -1099,61 +1096,59 @@ debug ip bgp 203.0.113.1 updates         ! Live update debug (careful on busy se
       <Divider />
 
       {/* Chapter 13 */}
-      <Chapter n={13} />
-      <H2>Common Misconceptions</H2>
+      <Chapter n={13} title="Common Misconceptions" />
 
-      <Err>
+      <Err title="OSPF always produces optimal paths">
         <strong>OSPF always produces optimal paths.</strong> OSPF uses the Dijkstra algorithm to compute the shortest path by metric, but the metric itself may not reflect actual bandwidth or latency. Default OSPF cost = 10⁸/bandwidth — a 100 Mbps link and a 1 Gbps link both get cost 1 using this formula (both below the reference bandwidth). Set <Code>auto-cost reference-bandwidth 100000</Code> (100 Gbps) to ensure costs differentiate modern link speeds.
       </Err>
 
-      <Err>
+      <Err title="BGP slow convergence is a bug that can be fixed">
         <strong>BGP slow convergence is a bug that can be fixed.</strong> BGP&apos;s slow convergence (30s MRAI timer) is intentional design, not a bug. It prevents global route oscillation by damping rapid changes before they propagate. While timers can be tuned for specific sessions (e.g., reducing to 1s for iBGP), aggressively reducing eBGP timers on full-table sessions can trigger CPU saturation during route flaps. The right tool for fast convergence is BFD + graceful restart, not aggressive BGP timers.
       </Err>
 
-      <Err>
+      <Err title="EIGRP's composite metric always picks the best path">
         <strong>EIGRP&apos;s composite metric always chooses the best path.</strong> EIGRP&apos;s composite metric weights bandwidth and delay by default (K1=1, K3=1, K2=K4=K5=0). Load and reliability are intentionally disabled because they fluctuate rapidly and cause route instability. The &quot;best&quot; path by EIGRP metric may differ from actual best path by latency. For latency-sensitive applications, use DSCP-based QoS policies rather than relying on EIGRP metric tuning.
       </Err>
 
-      <Err>
+      <Err title="IS-IS is only for service providers">
         <strong>IS-IS is only for service providers.</strong> While IS-IS is dominant in SP networks, it is increasingly used in data center spine-leaf fabrics and enterprise networks that need SR-MPLS or Flexible Algorithm support. IS-IS&apos;s TLV extensibility makes adding new capabilities (SPRING, SRv6, flexible algorithms) much cleaner than OSPF opaque LSAs. The learning curve is steeper, but the operational benefits justify it at scale.
       </Err>
 
-      <Err>
+      <Err title="Route redistribution is safe if done carefully">
         <strong>Route redistribution between protocols is safe if done carefully.</strong> Even &quot;careful&quot; redistribution introduces suboptimal routing, metric translation artifacts, and potential for routing feedback loops. The AD of redistributed routes (OSPF external = 110, EIGRP external = 170) means that if a loop forms, the re-redistributed route may win over the original. Redistribute only when necessary, use strict tagging and filtering, and monitor for route count anomalies after enabling redistribution.
       </Err>
 
-      <Err>
+      <Err title="OSPF Full adjacency guarantees the route is in the routing table">
         <strong>Full OSPF adjacency (state Full) means the route is in the routing table.</strong> A router can be Full with an OSPF neighbor yet the route can still be absent from the routing table. Causes: the route exists in the LSDB but SPF cannot find a valid path (discontiguous area, missing Type 4 LSA for ASBR, OSPF cost overflow), or the route is installed in the RIB but overridden by a higher-AD protocol for the same prefix. Always verify with <Code>show ip route</Code>, not just <Code>show ip ospf neighbor</Code>.
       </Err>
 
       <Divider />
 
       {/* Chapter 14 */}
-      <Chapter n={14} />
-      <H2>Depth Check</H2>
+      <Chapter n={14} title="Depth Check" />
 
-      <IQ level="Beginner">
-        What is the difference between distance-vector and link-state routing protocols? Distance-vector protocols share only their routing table with neighbors (Bellman-Ford). Link-state protocols flood full topology information and each router independently computes paths (Dijkstra). OSPF and IS-IS are link-state; RIP is distance-vector; EIGRP uses DUAL which has characteristics of both.
+      <IQ q="What is the difference between distance-vector and link-state routing protocols?" level="Beginner">
+        Distance-vector protocols share only their routing table with neighbors (Bellman-Ford). Link-state protocols flood full topology information and each router independently computes paths (Dijkstra). OSPF and IS-IS are link-state; RIP is distance-vector; EIGRP uses DUAL which has characteristics of both.
       </IQ>
 
-      <IQ level="Intermediate">
-        Why does OSPF require all areas to connect to Area 0, and what is a virtual link? OSPF Area 0 (backbone) is responsible for inter-area route distribution. Non-backbone areas must connect to it so that inter-area routes are distributed without loops. A virtual link creates a logical adjacency through a transit area when physical connectivity to Area 0 is unavailable — the virtual link traverses the transit area using unicast. It is a workaround, not a design choice — architectural redesign is always preferable.
+      <IQ q="Why does OSPF require all areas to connect to Area 0, and what is a virtual link?" level="Intermediate">
+        OSPF Area 0 (backbone) is responsible for inter-area route distribution. Non-backbone areas must connect to it so that inter-area routes are distributed without loops. A virtual link creates a logical adjacency through a transit area when physical connectivity to Area 0 is unavailable — the virtual link traverses the transit area using unicast. It is a workaround, not a design choice — architectural redesign is always preferable.
       </IQ>
 
-      <IQ level="Intermediate">
-        Explain the iBGP split-horizon rule and why route reflectors solve it. iBGP does not re-advertise routes learned from an iBGP peer to another iBGP peer — this prevents routing loops within an AS. But it requires full mesh (n² sessions) for all routers to see all routes. Route reflectors break this requirement: an RR re-advertises routes between its clients (adding ORIGINATOR_ID and CLUSTER_LIST attributes to detect loops). Multiple RRs can be deployed for redundancy, creating a hierarchical iBGP topology without full mesh.
+      <IQ q="Explain the iBGP split-horizon rule and why route reflectors solve it." level="Intermediate">
+        iBGP does not re-advertise routes learned from an iBGP peer to another iBGP peer — this prevents routing loops within an AS. But it requires full mesh (n² sessions) for all routers to see all routes. Route reflectors break this requirement: an RR re-advertises routes between its clients (adding ORIGINATOR_ID and CLUSTER_LIST attributes to detect loops). Multiple RRs can be deployed for redundancy, creating a hierarchical iBGP topology without full mesh.
       </IQ>
 
-      <IQ level="Senior">
-        What is the DUAL feasibility condition and why does it guarantee loop-free paths? DUAL&apos;s feasibility condition states: a neighbor&apos;s path is a loop-free backup if its Reported Distance (RD) is strictly less than the local router&apos;s current Feasible Distance (FD). The reasoning: if a neighbor&apos;s cost to the destination is less than my own best-known cost, that neighbor cannot be using me in its path (if it were, its cost would be at least as large as mine). Therefore, routing traffic to that neighbor cannot create a loop. This is a mathematical invariant maintained by DUAL across the entire topology.
+      <IQ q="What is the DUAL feasibility condition and why does it guarantee loop-free paths?" level="Senior">
+        DUAL&apos;s feasibility condition states: a neighbor&apos;s path is a loop-free backup if its Reported Distance (RD) is strictly less than the local router&apos;s current Feasible Distance (FD). The reasoning: if a neighbor&apos;s cost to the destination is less than my own best-known cost, that neighbor cannot be using me in its path (if it were, its cost would be at least as large as mine). Therefore, routing traffic to that neighbor cannot create a loop. This is a mathematical invariant maintained by DUAL across the entire topology.
       </IQ>
 
-      <IQ level="Senior">
-        Why do hyperscale data centers use eBGP rather than OSPF as their internal IGP? BGP&apos;s properties align better with hyperscale operational requirements: AS-path provides explicit loop detection without SPF storms, each pod&apos;s failure domain is isolated by AS boundaries, route policy can be applied at every tier independently, and BGP Unnumbered (RFC 5549) eliminates address management on P2P links. OSPF SPF reconvergence on a 10,000-router topology would be prohibitively slow; BGP&apos;s incremental path-vector updates scale far better at that size.
+      <IQ q="Why do hyperscale data centers use eBGP rather than OSPF as their internal IGP?" level="Senior">
+        BGP&apos;s properties align better with hyperscale operational requirements: AS-path provides explicit loop detection without SPF storms, each pod&apos;s failure domain is isolated by AS boundaries, route policy can be applied at every tier independently, and BGP Unnumbered (RFC 5549) eliminates address management on P2P links. OSPF SPF reconvergence on a 10,000-router topology would be prohibitively slow; BGP&apos;s incremental path-vector updates scale far better at that size.
       </IQ>
 
-      <IQ level="PhD">
-        How does BGP Graceful Restart interact with route dampening, and what problems can arise? BGP Graceful Restart (RFC 4724) allows a restarting BGP speaker to retain forwarding state while its control plane recovers. Peers mark routes as &quot;stale&quot; and continue forwarding without withdrawing them for up to the restart-time. The interaction with route dampening is subtle: if a prefix was partially suppressed (penalty above half-suppress) before the graceful restart, the stale routes may be re-advertised after restart with the same dampening penalty still applied. The routes would be immediately re-suppressed even though the peer is now stable — creating a period where the prefix is actively forwarded (stale state) but suppressed in BGP (not installed in RIB). This inconsistency persists until the suppress-limit decays below the reuse threshold. Production mitigation: configure separate dampening policies for iBGP (no dampening) and eBGP (conservative dampening), and set max-suppress-time lower than graceful-restart stalepath-time.
+      <IQ q="How does BGP Graceful Restart interact with route dampening, and what problems can arise?" level="PhD">
+        BGP Graceful Restart (RFC 4724) allows a restarting BGP speaker to retain forwarding state while its control plane recovers. Peers mark routes as &quot;stale&quot; and continue forwarding without withdrawing them for up to the restart-time. The interaction with route dampening is subtle: if a prefix was partially suppressed (penalty above half-suppress) before the graceful restart, the stale routes may be re-advertised after restart with the same dampening penalty still applied. The routes would be immediately re-suppressed even though the peer is now stable — creating a period where the prefix is actively forwarded (stale state) but suppressed in BGP (not installed in RIB). This inconsistency persists until the suppress-limit decays below the reuse threshold. Production mitigation: configure separate dampening policies for iBGP (no dampening) and eBGP (conservative dampening), and set max-suppress-time lower than graceful-restart stalepath-time.
       </IQ>
 
       <Divider />
