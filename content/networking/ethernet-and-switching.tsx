@@ -4,49 +4,112 @@ import { useState } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const G = '#10b981'
+const FONT_MONO = 'var(--font-mono)'
+const FONT_DISPLAY = 'var(--font-display)'
+
 // ─── Helper components ────────────────────────────────────────────────────────
 
-const ACC = '#10b981'
-
-function Chapter({ n, title }: { n: number; title: string }) {
-  const num = String(n).padStart(2, '0')
+function Chapter({ n, title, subtitle }: { n: string; title: string; subtitle?: string }) {
   return (
     <div style={{ marginBottom: 32 }}>
-      <p style={{ fontSize: 11, color: ACC, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>// CHAPTER {num}</p>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
+      <p style={{ fontSize: 11, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>
+        // CHAPTER {n}
+      </p>
+      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>
+        {title}
+      </h2>
+      {subtitle && (
+        <p style={{ fontSize: 15, color: 'var(--muted)', margin: '8px 0 0', fontStyle: 'italic' }}>{subtitle}</p>
+      )}
     </div>
   )
 }
 
-function Divider() { return <div style={{ borderTop: '1px solid var(--border)', margin: '56px 0' }} /> }
-function Para({ children }: { children: React.ReactNode }) { return <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, margin: '0 0 18px' }}>{children}</p> }
-function H2({ children }: { children: React.ReactNode }) { return <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', margin: '36px 0 14px', letterSpacing: '-0.5px' }}>{children}</h3> }
-function H3({ children }: { children: React.ReactNode }) { return <h4 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', margin: '28px 0 10px' }}>{children}</h4> }
-function Accent({ children }: { children: React.ReactNode }) { return <strong style={{ color: ACC, fontWeight: 700 }}>{children}</strong> }
-function Code({ children }: { children: React.ReactNode }) { return <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13, background: '#1e293b', color: '#e2e8f0', padding: '2px 7px', borderRadius: 5 }}>{children}</code> }
-function CodeBlock({ children }: { children: React.ReactNode }) {
-  return <pre style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, background: '#0d1525', border: '1px solid #1e293b', borderRadius: 10, padding: '18px 20px', overflowX: 'auto', lineHeight: 1.7, color: '#94a3b8', margin: '18px 0 24px' }}>{children}</pre>
-}
-function StoryBox({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: '#0a1628', border: '1px solid #1e3a5f', borderLeft: '4px solid #3b82f6', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#cbd5e1', lineHeight: 1.85 }}>{children}</div>
-}
-function WowBox({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: '#0a1a12', border: '1px solid #166534', borderLeft: '4px solid #10b981', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#bbf7d0', lineHeight: 1.85 }}><span style={{ fontWeight: 800, color: '#10b981', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>WOW FACT</span>{children}</div>
-}
-function Warn({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: '#1a1400', border: '1px solid #854d0e', borderLeft: '4px solid #f59e0b', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#fef08a', lineHeight: 1.85 }}><span style={{ fontWeight: 800, color: '#f59e0b', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>CAUTION</span>{children}</div>
-}
-function Err({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: '#1a0a0a', border: '1px solid #991b1b', borderLeft: '4px solid #ef4444', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#fecaca', lineHeight: 1.85 }}><span style={{ fontWeight: 800, color: '#ef4444', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>MISCONCEPTION</span>{children}</div>
+function Divider() {
+  return <div style={{ borderTop: '1px solid var(--border)', margin: '56px 0' }} />
 }
 
-const LEVEL_COLORS: Record<string, string> = { Beginner: '#10b981', Intermediate: '#3b82f6', Senior: '#8b5cf6', PhD: '#f97316' }
-function IQ({ level, children }: { level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) {
-  const c = LEVEL_COLORS[level]
+function Para({ children }: { children: React.ReactNode }) {
+  return <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, margin: '0 0 18px' }}>{children}</p>
+}
+
+function H2({ children }: { children: React.ReactNode }) {
+  return <h3 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', margin: '36px 0 14px', letterSpacing: '-0.5px' }}>{children}</h3>
+}
+
+function H3({ children }: { children: React.ReactNode }) {
+  return <h4 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', margin: '28px 0 10px' }}>{children}</h4>
+}
+
+function Accent({ children }: { children: React.ReactNode }) {
+  return <strong style={{ color: G, fontWeight: 700 }}>{children}</strong>
+}
+
+function StoryBox({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ background: '#080d18', border: `1px solid ${c}40`, borderRadius: 12, padding: '18px 22px', margin: '22px 0' }}>
-      <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 800, color: c, background: `${c}18`, border: `1px solid ${c}40`, borderRadius: 20, padding: '3px 10px', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 10 }}>{level}</span>
-      <div style={{ fontSize: 14.5, color: '#cbd5e1', lineHeight: 1.85 }}>{children}</div>
+    <div style={{ borderLeft: `4px solid #3b82f6`, background: 'rgba(59,130,246,0.07)', borderRadius: '0 10px 10px 0', padding: '18px 22px', margin: '28px 0' }}>
+      <p style={{ fontSize: 11, color: '#60a5fa', fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 8px', letterSpacing: '.1em' }}>// REAL-WORLD SCENARIO</p>
+      <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.8 }}>{children}</div>
+    </div>
+  )
+}
+
+function WowBox({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) {
+  return (
+    <div style={{ background: 'rgba(16,185,129,0.08)', border: `1px solid rgba(16,185,129,0.25)`, borderRadius: 12, padding: '18px 22px', margin: '28px 0' }}>
+      <p style={{ fontSize: 13, color: G, fontWeight: 800, margin: '0 0 8px' }}>{emoji} {title}</p>
+      <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.8 }}>{children}</div>
+    </div>
+  )
+}
+
+function Warn({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.3)', borderRadius: 12, padding: '18px 22px', margin: '28px 0' }}>
+      <p style={{ fontSize: 13, color: '#fbbf24', fontWeight: 800, margin: '0 0 8px' }}>⚠ {title}</p>
+      <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.8 }}>{children}</div>
+    </div>
+  )
+}
+
+function Err({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 12, padding: '18px 22px', margin: '28px 0' }}>
+      <p style={{ fontSize: 13, color: '#f87171', fontWeight: 800, margin: '0 0 8px' }}>✗ Common Mistake — {title}</p>
+      <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.8 }}>{children}</div>
+    </div>
+  )
+}
+
+function IQ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) {
+  const colors: Record<string, string> = {
+    Beginner: '#34d399', Intermediate: '#60a5fa', Senior: '#a78bfa', PhD: '#f472b6',
+  }
+  const c = colors[level]
+  return (
+    <div style={{ border: `1px solid ${c}33`, borderRadius: 12, padding: '18px 22px', margin: '18px 0' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+        <span style={{ fontSize: 11, fontFamily: FONT_MONO, fontWeight: 700, color: c, background: `${c}18`, padding: '3px 10px', borderRadius: 99 }}>{level}</span>
+        <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', margin: 0 }}>{q}</p>
+      </div>
+      <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8 }}>{children}</div>
+    </div>
+  )
+}
+
+function CodeBlock({ title, children }: { title?: string; children: React.ReactNode }) {
+  return (
+    <div style={{ background: '#0d1117', borderRadius: 10, overflow: 'hidden', margin: '20px 0', border: '1px solid #30363d' }}>
+      {title && (
+        <div style={{ background: '#161b22', padding: '8px 16px', borderBottom: '1px solid #30363d', fontSize: 12, color: '#8b949e', fontFamily: FONT_MONO }}>
+          {title}
+        </div>
+      )}
+      <pre style={{ margin: 0, padding: '16px 20px', fontSize: 13, lineHeight: 1.7, color: '#e6edf3', fontFamily: FONT_MONO, overflowX: 'auto', whiteSpace: 'pre' }}>
+        {children}
+      </pre>
     </div>
   )
 }
@@ -57,9 +120,9 @@ type Port = 1 | 2 | 3 | 4
 type MacEntry = { mac: string; port: Port; age: number }
 
 const INITIAL_DEVICES: { name: string; mac: string; port: Port; color: string }[] = [
-  { name: 'PC-A', mac: 'AA:AA:AA:AA:AA:01', port: 1, color: '#10b981' },
-  { name: 'PC-B', mac: 'BB:BB:BB:BB:BB:02', port: 2, color: '#3b82f6' },
-  { name: 'PC-C', mac: 'CC:CC:CC:CC:CC:03', port: 3, color: '#8b5cf6' },
+  { name: 'PC-A',   mac: 'AA:AA:AA:AA:AA:01', port: 1, color: '#10b981' },
+  { name: 'PC-B',   mac: 'BB:BB:BB:BB:BB:02', port: 2, color: '#3b82f6' },
+  { name: 'PC-C',   mac: 'CC:CC:CC:CC:CC:03', port: 3, color: '#8b5cf6' },
   { name: 'Server', mac: 'DD:DD:DD:DD:DD:04', port: 4, color: '#f97316' },
 ]
 
@@ -70,84 +133,75 @@ function CamSimulator() {
   const [dst, setDst] = useState(1)
 
   function sendFrame() {
-    const sender = INITIAL_DEVICES[src]
+    const sender   = INITIAL_DEVICES[src]
     const receiver = INITIAL_DEVICES[dst]
     const newLog: string[] = []
-    let newCam = [...camTable]
+    const newCam = [...camTable]
 
-    // Learn source MAC
     const existing = newCam.find(e => e.mac === sender.mac)
     if (!existing) {
       newCam.push({ mac: sender.mac, port: sender.port, age: 0 })
-      newLog.push(`📖 LEARN: Src MAC ${sender.mac} is on Port ${sender.port} → added to CAM table`)
+      newLog.push(`📖 LEARN: Src ${sender.mac} → Port ${sender.port} added to CAM table`)
     } else {
-      newLog.push(`✓ KNOWN: Src MAC ${sender.mac} already in CAM table on Port ${sender.port}`)
+      newLog.push(`✓ KNOWN: Src ${sender.mac} already on Port ${sender.port}`)
     }
 
-    // Forward decision
     const dstEntry = newCam.find(e => e.mac === receiver.mac)
     if (dstEntry) {
-      newLog.push(`🎯 FORWARD: Dst MAC ${receiver.mac} known on Port ${dstEntry.port} → unicast to Port ${dstEntry.port} only`)
+      newLog.push(`🎯 FORWARD: Dst ${receiver.mac} known → unicast to Port ${dstEntry.port} only`)
     } else {
-      newLog.push(`📢 FLOOD: Dst MAC ${receiver.mac} not in CAM table → flood frame to ALL ports except Port ${sender.port}`)
+      newLog.push(`📢 FLOOD: Dst ${receiver.mac} unknown → flood to ALL ports except Port ${sender.port}`)
     }
 
     setCamTable(newCam)
     setLog(prev => [...newLog, ...prev].slice(0, 20))
   }
 
-  function reset() {
-    setCamTable([])
-    setLog([])
-  }
+  function reset() { setCamTable([]); setLog([]) }
 
   const devColors: Record<Port, string> = { 1: '#10b981', 2: '#3b82f6', 3: '#8b5cf6', 4: '#f97316' }
 
   return (
-    <div style={{ margin: '28px 0', background: '#080d18', border: '1px solid #1e293b', borderRadius: 14, overflow: 'hidden' }}>
-      {/* Controls */}
-      <div style={{ padding: '16px 20px', borderBottom: '1px solid #1e293b', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', margin: '28px 0' }}>
+      <p style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: 0, padding: '14px 18px', borderBottom: '1px solid var(--border)' }}>// SWITCH CAM TABLE SIMULATOR — send frames to watch learning and forwarding</p>
+      <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--border)', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>From (Source)</label>
-          <select value={src} onChange={e => setSrc(Number(e.target.value))} style={{ background: '#0d1525', border: '1px solid #1e293b', borderRadius: 6, color: '#e2e8f0', padding: '6px 10px', fontSize: 12, fontFamily: 'monospace' }}>
+          <label style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>From (Source)</label>
+          <select value={src} onChange={e => setSrc(Number(e.target.value))} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, color: 'var(--text)', padding: '6px 10px', fontSize: 12, fontFamily: FONT_MONO }}>
             {INITIAL_DEVICES.map((d, i) => <option key={d.mac} value={i}>{d.name} ({d.mac.slice(0, 8)}…) Port {d.port}</option>)}
           </select>
         </div>
-        <div style={{ fontSize: 18, color: '#334155', marginTop: 18 }}>→</div>
+        <div style={{ fontSize: 18, color: 'var(--muted)', marginTop: 18 }}>→</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>To (Destination)</label>
-          <select value={dst} onChange={e => setDst(Number(e.target.value))} style={{ background: '#0d1525', border: '1px solid #1e293b', borderRadius: 6, color: '#e2e8f0', padding: '6px 10px', fontSize: 12, fontFamily: 'monospace' }}>
+          <label style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>To (Destination)</label>
+          <select value={dst} onChange={e => setDst(Number(e.target.value))} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, color: 'var(--text)', padding: '6px 10px', fontSize: 12, fontFamily: FONT_MONO }}>
             {INITIAL_DEVICES.map((d, i) => <option key={d.mac} value={i}>{d.name} ({d.mac.slice(0, 8)}…) Port {d.port}</option>)}
           </select>
         </div>
-        <button onClick={sendFrame} disabled={src === dst} style={{ padding: '8px 18px', borderRadius: 8, background: ACC, color: '#000', fontWeight: 800, fontSize: 13, border: 'none', cursor: src === dst ? 'not-allowed' : 'pointer', marginTop: 18, opacity: src === dst ? 0.5 : 1 }}>Send Frame</button>
-        <button onClick={reset} style={{ padding: '8px 14px', borderRadius: 8, background: 'transparent', color: '#64748b', fontWeight: 700, fontSize: 12, border: '1px solid #1e293b', cursor: 'pointer', marginTop: 18 }}>Reset</button>
+        <button onClick={sendFrame} disabled={src === dst} style={{ padding: '8px 18px', borderRadius: 8, background: G, color: '#000', fontWeight: 800, fontSize: 13, border: 'none', cursor: src === dst ? 'not-allowed' : 'pointer', marginTop: 18, opacity: src === dst ? 0.5 : 1 }}>Send Frame</button>
+        <button onClick={reset} style={{ padding: '8px 14px', borderRadius: 8, background: 'transparent', color: 'var(--muted)', fontWeight: 700, fontSize: 12, border: '1px solid var(--border)', cursor: 'pointer', marginTop: 18 }}>Reset</button>
       </div>
-
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
-        {/* CAM Table */}
-        <div style={{ padding: '16px 18px', borderRight: '1px solid #1e293b' }}>
-          <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 10, fontWeight: 700 }}>CAM TABLE (MAC Address Table)</div>
+        <div style={{ padding: '16px 18px', borderRight: '1px solid var(--border)' }}>
+          <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO, marginBottom: 10, fontWeight: 700 }}>CAM TABLE (MAC Address Table)</div>
           {camTable.length === 0 && (
-            <div style={{ fontSize: 12, color: '#334155', fontFamily: 'monospace', textAlign: 'center', padding: '20px 0' }}>empty — send a frame to populate</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', fontFamily: FONT_MONO, textAlign: 'center', padding: '20px 0' }}>empty — send a frame to populate</div>
           )}
           {camTable.map(entry => (
-            <div key={entry.mac} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, padding: '6px 10px', background: '#0d1525', borderRadius: 6 }}>
+            <div key={entry.mac} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, padding: '6px 10px', background: 'var(--bg)', borderRadius: 6 }}>
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: devColors[entry.port], flexShrink: 0 }} />
-              <span style={{ fontSize: 11, fontFamily: 'monospace', color: '#94a3b8', flex: 1 }}>{entry.mac}</span>
-              <span style={{ fontSize: 11, fontFamily: 'monospace', color: devColors[entry.port], fontWeight: 700 }}>Port {entry.port}</span>
+              <span style={{ fontSize: 11, fontFamily: FONT_MONO, color: 'var(--muted)', flex: 1 }}>{entry.mac}</span>
+              <span style={{ fontSize: 11, fontFamily: FONT_MONO, color: devColors[entry.port], fontWeight: 700 }}>Port {entry.port}</span>
             </div>
           ))}
         </div>
-
-        {/* Event log */}
         <div style={{ padding: '16px 18px' }}>
-          <div style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginBottom: 10, fontWeight: 700 }}>SWITCH DECISION LOG</div>
+          <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO, marginBottom: 10, fontWeight: 700 }}>SWITCH DECISION LOG</div>
           {log.length === 0 && (
-            <div style={{ fontSize: 12, color: '#334155', fontFamily: 'monospace', textAlign: 'center', padding: '20px 0' }}>no events yet</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', fontFamily: FONT_MONO, textAlign: 'center', padding: '20px 0' }}>no events yet</div>
           )}
           {log.slice(0, 8).map((entry, i) => (
-            <div key={i} style={{ fontSize: 11.5, color: i === 0 ? '#cbd5e1' : '#475569', fontFamily: 'monospace', marginBottom: 6, lineHeight: 1.5 }}>{entry}</div>
+            <div key={i} style={{ fontSize: 11.5, color: i === 0 ? 'var(--text)' : 'var(--muted)', fontFamily: FONT_MONO, marginBottom: 6, lineHeight: 1.5 }}>{entry}</div>
           ))}
         </div>
       </div>
@@ -174,102 +228,83 @@ function EthernetFrameBuilder() {
   }
 
   const clampedPayload = Math.max(46, Math.min(1500, payloadSize))
-  const totalSize = 14 + clampedPayload + 4  // header + payload + FCS
-  const withPreamble = totalSize + 8  // preamble + SFD
+  const totalSize = 14 + clampedPayload + 4
+  const withPreamble = totalSize + 8
 
   const isVlan = etherType === '0x8100'
   const segments = [
-    { name: 'Preamble + SFD', size: 8, color: '#64748b', desc: '7 bytes preamble (10101010 pattern for clock sync) + 1 byte SFD (10101011, marks start of frame). Part of Ethernet framing, not the actual frame.' },
-    { name: 'Dst MAC', size: 6, color: '#ef4444', desc: `Destination MAC: ${dstMac}. Switch reads this to make forwarding decision. FF:FF:FF:FF:FF:FF = broadcast to all.` },
-    { name: 'Src MAC', size: 6, color: '#f97316', desc: `Source MAC: ${srcMac}. Switch learns this to update CAM table — "this MAC is on the port this frame arrived on."` },
-    ...(isVlan ? [{ name: '802.1Q Tag', size: 4, color: '#ec4899', desc: '4-byte VLAN tag: EtherType 0x8100, then 3-bit PCP (priority), 1-bit DEI (drop eligibility), 12-bit VLAN ID (0-4094).' }] : []),
-    { name: 'EtherType', size: 2, color: '#8b5cf6', desc: `EtherType ${etherType} = ${ETHERTYPES[etherType] ?? 'unknown'}. If value ≤ 1500: IEEE 802.3 length field. If > 1536 (0x0600): EtherType identifying upper-layer protocol.` },
-    { name: 'Payload', size: clampedPayload, color: '#3b82f6', desc: `${clampedPayload} bytes of upper-layer data (${ETHERTYPES[etherType] ?? 'data'}). Minimum 46 bytes (padded if shorter to meet min frame size of 64 bytes). Maximum 1500 bytes (jumbo frames extend to 9000 bytes).` },
-    { name: 'FCS', size: 4, color: '#10b981', desc: 'Frame Check Sequence: CRC-32 computed over Dst+Src+Type+Payload. Receiver recomputes and compares. Mismatch = frame dropped silently.' },
+    { name: 'Preamble + SFD', size: 8,  color: '#64748b', desc: '7 bytes preamble (10101010 repeating for clock sync) + 1 byte SFD (10101011 marks start of frame). Not part of the frame proper — stripped before delivery.' },
+    { name: 'Dst MAC', size: 6, color: '#ef4444', desc: `Destination MAC: ${dstMac}. Switch reads this first to make the forwarding decision. FF:FF:FF:FF:FF:FF = Layer 2 broadcast to all devices on the segment.` },
+    { name: 'Src MAC', size: 6, color: '#f97316', desc: `Source MAC: ${srcMac}. Switch uses this to learn — "this MAC address is on the port this frame arrived on." Updated in CAM table with current timestamp.` },
+    ...(isVlan ? [{ name: '802.1Q Tag', size: 4, color: '#ec4899', desc: '4-byte VLAN tag inserted after Src MAC: TPID 0x8100 (2B) + TCI (2B). TCI contains: 3-bit PCP (priority 0–7), 1-bit DEI (drop eligibility), 12-bit VLAN ID (1–4094).' }] : []),
+    { name: 'EtherType', size: 2, color: '#8b5cf6', desc: `EtherType ${etherType} = ${ETHERTYPES[etherType] ?? 'unknown'}. Values ≥ 0x0600 (1536) identify the Layer 3 protocol. Values ≤ 1500 are the IEEE 802.3 length field (original format). Most modern frames use EtherType.` },
+    { name: 'Payload', size: clampedPayload, color: '#3b82f6', desc: `${clampedPayload} bytes of upper-layer data (${ETHERTYPES[etherType] ?? 'data'}). Minimum 46 bytes — padded with zeros if shorter to ensure minimum 64-byte frame for CSMA/CD slot time. Maximum 1500 bytes (standard MTU). Jumbo frames extend to 9000 bytes.` },
+    { name: 'FCS', size: 4, color: '#10b981', desc: 'Frame Check Sequence: CRC-32 computed over Dst+Src+EtherType+Payload. Receiver recomputes CRC and compares. Mismatch = frame silently dropped at L2. No error notification to upper layers — TCP retransmit handles recovery.' },
   ]
 
-  const totalDisplay = segments.reduce((s, seg) => s + seg.size, 0)
   const [hovered, setHovered] = useState<string | null>(null)
 
   return (
-    <div style={{ margin: '28px 0', background: '#080d18', border: '1px solid #1e293b', borderRadius: 14, overflow: 'hidden' }}>
-      {/* Inputs */}
-      <div style={{ padding: '14px 18px', borderBottom: '1px solid #1e293b', display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', margin: '28px 0' }}>
+      <p style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: 0, padding: '14px 18px', borderBottom: '1px solid var(--border)' }}>// ETHERNET FRAME BUILDER — hover any field for details</p>
+      <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--border)', display: 'flex', flexWrap: 'wrap', gap: 12 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>Src MAC</label>
-          <input value={srcMac} onChange={e => setSrcMac(e.target.value)} style={{ background: '#0d1525', border: '1px solid #1e293b', borderRadius: 6, color: '#e2e8f0', padding: '5px 10px', fontSize: 12, fontFamily: 'monospace', width: 160 }} />
+          <label style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>Src MAC</label>
+          <input value={srcMac} onChange={e => setSrcMac(e.target.value)} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, color: 'var(--text)', padding: '5px 10px', fontSize: 12, fontFamily: FONT_MONO, width: 160 }} />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>Dst MAC</label>
-          <input value={dstMac} onChange={e => setDstMac(e.target.value)} style={{ background: '#0d1525', border: '1px solid #1e293b', borderRadius: 6, color: '#e2e8f0', padding: '5px 10px', fontSize: 12, fontFamily: 'monospace', width: 160 }} />
+          <label style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>Dst MAC</label>
+          <input value={dstMac} onChange={e => setDstMac(e.target.value)} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, color: 'var(--text)', padding: '5px 10px', fontSize: 12, fontFamily: FONT_MONO, width: 160 }} />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>EtherType</label>
-          <select value={etherType} onChange={e => setEtherType(e.target.value)} style={{ background: '#0d1525', border: '1px solid #1e293b', borderRadius: 6, color: '#e2e8f0', padding: '5px 10px', fontSize: 12, fontFamily: 'monospace' }}>
+          <label style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>EtherType</label>
+          <select value={etherType} onChange={e => setEtherType(e.target.value)} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, color: 'var(--text)', padding: '5px 10px', fontSize: 12, fontFamily: FONT_MONO }}>
             {Object.entries(ETHERTYPES).map(([k, v]) => <option key={k} value={k}>{k} ({v})</option>)}
           </select>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>Payload: {clampedPayload}B</label>
-          <input type="range" min={1} max={1500} value={payloadSize} onChange={e => setPayloadSize(Number(e.target.value))} style={{ width: 120, accentColor: ACC }} />
+          <label style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>Payload: {clampedPayload}B</label>
+          <input type="range" min={1} max={1500} value={payloadSize} onChange={e => setPayloadSize(Number(e.target.value))} style={{ width: 120, accentColor: G }} />
         </div>
       </div>
-
       <div style={{ padding: '18px 20px' }}>
-        {/* Frame visual */}
         <div style={{ display: 'flex', height: 36, borderRadius: 8, overflow: 'hidden', marginBottom: 8 }}>
           {segments.map(seg => (
-            <div
-              key={seg.name}
-              onMouseEnter={() => setHovered(seg.name)}
-              onMouseLeave={() => setHovered(null)}
-              style={{
-                flex: seg.name === 'Payload' ? clampedPayload : seg.size,
-                background: hovered === seg.name ? `${seg.color}50` : `${seg.color}25`,
-                borderRight: '1px solid #080d18',
-                cursor: 'pointer',
-                transition: 'background .15s',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}
-            >
+            <div key={seg.name} onMouseEnter={() => setHovered(seg.name)} onMouseLeave={() => setHovered(null)}
+              style={{ flex: seg.name === 'Payload' ? clampedPayload : seg.size, background: hovered === seg.name ? `${seg.color}50` : `${seg.color}25`, borderRight: '1px solid var(--bg)', cursor: 'pointer', transition: 'background .15s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {seg.size > 3 && (
-                <span style={{ fontSize: 9, color: seg.color, fontFamily: 'monospace', fontWeight: 800, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', padding: '0 4px' }}>
+                <span style={{ fontSize: 9, color: seg.color, fontFamily: FONT_MONO, fontWeight: 800, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', padding: '0 4px' }}>
                   {seg.name === 'Payload' ? `PAYLOAD (${clampedPayload}B)` : seg.name}
                 </span>
               )}
             </div>
           ))}
         </div>
-
-        {/* Size summary */}
         <div style={{ display: 'flex', gap: 16, marginBottom: 14, flexWrap: 'wrap' }}>
           {[
-            { label: 'Frame size', value: `${totalDisplay - 8}B` },
-            { label: 'With preamble', value: `${totalDisplay}B` },
-            { label: 'Status', value: clampedPayload < 46 ? 'Padded to 64B min' : payloadSize > 1500 ? 'EXCEEDS MTU!' : 'Valid frame' },
+            { label: 'Frame size',    value: `${totalSize}B` },
+            { label: 'With preamble', value: `${withPreamble}B` },
+            { label: 'Status',        value: clampedPayload < 46 ? 'Padded to 64B min' : payloadSize > 1500 ? 'EXCEEDS MTU!' : 'Valid frame' },
           ].map(r => (
-            <div key={r.label} style={{ fontSize: 12, fontFamily: 'monospace', color: '#64748b' }}>
-              <span>{r.label}: </span><span style={{ color: '#94a3b8', fontWeight: 700 }}>{r.value}</span>
+            <div key={r.label} style={{ fontSize: 12, fontFamily: FONT_MONO, color: 'var(--muted)' }}>
+              <span>{r.label}: </span><span style={{ color: 'var(--text)', fontWeight: 700 }}>{r.value}</span>
             </div>
           ))}
         </div>
-
-        {/* Field detail */}
-        {hovered && (
-          <div style={{ background: '#0d1525', borderRadius: 10, padding: '14px 16px', borderLeft: `3px solid ${segments.find(s => s.name === hovered)?.color}` }}>
-            <div style={{ fontSize: 12, color: segments.find(s => s.name === hovered)?.color, fontWeight: 800, fontFamily: 'monospace', marginBottom: 6 }}>{hovered}</div>
-            <div style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7 }}>{segments.find(s => s.name === hovered)?.desc}</div>
+        {hovered ? (
+          <div style={{ background: 'var(--bg)', borderRadius: 10, padding: '14px 16px', borderLeft: `3px solid ${segments.find(s => s.name === hovered)?.color}` }}>
+            <div style={{ fontSize: 12, color: segments.find(s => s.name === hovered)?.color, fontWeight: 800, fontFamily: FONT_MONO, marginBottom: 6 }}>{hovered}</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{segments.find(s => s.name === hovered)?.desc}</div>
           </div>
-        )}
-        {!hovered && (
-          <div style={{ textAlign: 'center', fontSize: 12, color: '#334155', fontFamily: 'monospace' }}>hover over a field to see its purpose</div>
+        ) : (
+          <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--muted)', fontFamily: FONT_MONO }}>hover over a field to see its purpose</div>
         )}
       </div>
     </div>
   )
 }
 
-// ─── Interactive 3: Hub vs Switch Comparison ─────────────────────────────────
+// ─── Interactive 3: Hub vs Switch Comparison ──────────────────────────────────
 
 function HubVsSwitch() {
   const [device, setDevice] = useState<'hub' | 'switch'>('hub')
@@ -278,84 +313,82 @@ function HubVsSwitch() {
   const SCENARIOS = [
     {
       label: 'Normal unicast',
-      hubBehavior: 'Hub broadcasts to ALL ports. PC-A, PC-B, PC-C all receive the frame even though only the intended recipient needs it.',
-      switchBehavior: 'Switch sends ONLY to the destination port (after learning). PC-A gets nothing unless it\'s the destination.',
+      hubBehavior: 'Hub broadcasts to ALL ports. PC-A, PC-B, PC-C all receive the frame even though only the intended recipient needs it. Every NIC must process and discard it — wasting CPU on every host.',
+      switchBehavior: 'Switch sends ONLY to the destination port after looking up the CAM table. PC-A gets nothing unless it is the destination. Other hosts are unaware the frame was sent.',
       hubCollision: true,
       efficiency: { hub: 25, sw: 100 },
     },
     {
       label: 'Two hosts transmitting',
-      hubBehavior: 'COLLISION! Both signals collide on the shared medium. Both hosts detect the collision (jam signal) and back off using exponential backoff. Both retransmit after random delay. At 10 devices: collision rate can reach 60%.',
-      switchBehavior: 'Each port is a separate collision domain. Both hosts transmit simultaneously without collision. Switch buffers both frames and forwards each independently.',
+      hubBehavior: 'COLLISION. Both signals mix on the shared medium. Both hosts detect the collision (32-bit jam signal), back off using binary exponential backoff (random 0–2^n slot times), and retransmit. At 10 devices: collision rate can reach 60%+.',
+      switchBehavior: 'Each port is a separate collision domain. Both hosts transmit simultaneously without collision. Switch buffers both frames in its output queue and forwards each to its destination independently.',
       hubCollision: true,
       efficiency: { hub: 12, sw: 95 },
     },
     {
       label: 'Broadcast traffic',
-      hubBehavior: 'Broadcast is flood behavior — same as normal hub. Every device receives the broadcast. This is expected behavior for ARP, DHCP, and similar protocols.',
-      switchBehavior: 'Broadcast frames are ALSO flooded to all ports — this is correct behavior. Switch does NOT filter broadcasts (that\'s what VLANs are for). Difference from hub: only broadcasts flood, not unicast.',
+      hubBehavior: 'Broadcast floods to all ports — exactly the same behavior as unicast flooding. Every device receives and processes the broadcast. This is expected for ARP, DHCP, and similar protocols.',
+      switchBehavior: 'Broadcast frames are also flooded to all ports in the same VLAN. The switch cannot filter broadcasts — that requires VLANs. The key difference: only broadcasts flood, never known unicast.',
       hubCollision: false,
       efficiency: { hub: 25, sw: 25 },
     },
     {
       label: '100 devices on network',
-      hubBehavior: 'ONE shared collision domain for all 100 devices. With 100 devices all transmitting, collision rate approaches 99%. Effective throughput per device on a 10Mbps hub: <0.1 Mbps. Network is essentially unusable.',
-      switchBehavior: '100 SEPARATE collision domains (one per port). Each port can simultaneously transmit at full line rate. 100 devices × 1 Gbps = aggregate throughput approaches 100 Gbps. Bandwidth doesn\'t degrade with more devices.',
+      hubBehavior: 'ONE shared collision domain for all 100 devices. Effective throughput per device on a 100 Mbps hub with 100 active devices: ~1 Mbps or less. CSMA/CD exponential backoff means some devices may wait 512+ slot times (26+ ms) before getting access.',
+      switchBehavior: '100 SEPARATE collision domains (one per port). Each port gets dedicated full-duplex bandwidth. 100 × 1 Gbps = 100 Gbps aggregate. Adding more devices does not degrade per-device bandwidth (until the uplink is saturated).',
       hubCollision: true,
       efficiency: { hub: 1, sw: 98 },
     },
   ]
 
-  const sc = SCENARIOS[scenario]
+  const sc  = SCENARIOS[scenario]
   const info = device === 'hub' ? sc.hubBehavior : sc.switchBehavior
 
   return (
-    <div style={{ margin: '28px 0', background: '#080d18', border: '1px solid #1e293b', borderRadius: 14, overflow: 'hidden' }}>
-      {/* Device toggle */}
-      <div style={{ padding: '14px 18px', borderBottom: '1px solid #1e293b', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', margin: '28px 0' }}>
+      <p style={{ fontSize: 12, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: 0, padding: '14px 18px', borderBottom: '1px solid var(--border)' }}>// HUB vs SWITCH — behavior comparison by scenario</p>
+      <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--border)', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: 8 }}>
           {(['hub', 'switch'] as const).map(d => (
-            <button key={d} onClick={() => setDevice(d)} style={{ padding: '6px 16px', borderRadius: 16, border: `1px solid ${device === d ? (d === 'hub' ? '#ef4444' : '#10b981') : '#1e293b'}`, background: device === d ? (d === 'hub' ? '#ef444418' : '#10b98118') : 'transparent', color: device === d ? (d === 'hub' ? '#ef4444' : '#10b981') : '#64748b', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>{d.toUpperCase()}</button>
+            <button key={d} onClick={() => setDevice(d)}
+              style={{ padding: '6px 16px', borderRadius: 16, border: `1px solid ${device === d ? (d === 'hub' ? '#ef4444' : G) : 'var(--border)'}`, background: device === d ? (d === 'hub' ? '#ef444418' : `${G}18`) : 'transparent', color: device === d ? (d === 'hub' ? '#ef4444' : G) : 'var(--muted)', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+              {d.toUpperCase()}
+            </button>
           ))}
         </div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {SCENARIOS.map((s, i) => (
-            <button key={s.label} onClick={() => setScenario(i)} style={{ padding: '4px 10px', borderRadius: 12, border: `1px solid ${i === scenario ? '#64748b' : '#1e293b'}`, background: i === scenario ? '#1e293b' : 'transparent', color: i === scenario ? '#cbd5e1' : '#64748b', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'monospace' }}>{s.label}</button>
+            <button key={s.label} onClick={() => setScenario(i)}
+              style={{ padding: '4px 10px', borderRadius: 12, border: `1px solid ${i === scenario ? 'var(--muted)' : 'var(--border)'}`, background: i === scenario ? 'rgba(255,255,255,0.08)' : 'transparent', color: i === scenario ? 'var(--text)' : 'var(--muted)', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: FONT_MONO }}>
+              {s.label}
+            </button>
           ))}
         </div>
       </div>
-
       <div style={{ padding: '20px 22px' }}>
-        {/* Efficiency bars */}
         <div style={{ marginBottom: 20 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#64748b', fontFamily: 'monospace', marginBottom: 8 }}>
-            <span>Effective bandwidth utilization — {sc.label}</span>
-          </div>
           {[
-            { label: 'Hub', pct: sc.efficiency.hub, color: '#ef4444' },
-            { label: 'Switch', pct: sc.efficiency.sw, color: '#10b981' },
+            { label: 'Hub',    pct: sc.efficiency.hub, color: '#ef4444' },
+            { label: 'Switch', pct: sc.efficiency.sw,  color: G },
           ].map(bar => (
             <div key={bar.label} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-              <span style={{ fontSize: 11, color: bar.color, fontFamily: 'monospace', minWidth: 50, fontWeight: 700 }}>{bar.label}</span>
-              <div style={{ flex: 1, height: 8, background: '#1e293b', borderRadius: 4, overflow: 'hidden' }}>
+              <span style={{ fontSize: 11, color: bar.color, fontFamily: FONT_MONO, minWidth: 50, fontWeight: 700 }}>{bar.label}</span>
+              <div style={{ flex: 1, height: 8, background: 'var(--bg)', borderRadius: 4, overflow: 'hidden' }}>
                 <div style={{ width: `${bar.pct}%`, height: '100%', background: bar.color, borderRadius: 4, transition: 'width .4s ease' }} />
               </div>
-              <span style={{ fontSize: 11, color: bar.color, fontFamily: 'monospace', minWidth: 35 }}>{bar.pct}%</span>
+              <span style={{ fontSize: 11, color: bar.color, fontFamily: FONT_MONO, minWidth: 35 }}>{bar.pct}%</span>
             </div>
           ))}
         </div>
-
-        {/* Behavior description */}
-        <div style={{ background: device === 'hub' ? '#1a0a0a' : '#0a1a12', border: `1px solid ${device === 'hub' ? '#991b1b' : '#166534'}`, borderRadius: 10, padding: '16px 18px', marginBottom: 14 }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: device === 'hub' ? '#ef4444' : '#10b981', fontFamily: 'monospace', marginBottom: 8 }}>
-            {device.toUpperCase()} BEHAVIOR — {sc.label.toUpperCase()}
+        <div style={{ background: 'var(--bg)', border: `1px solid ${device === 'hub' ? '#ef444440' : `${G}40`}`, borderRadius: 10, padding: '16px 18px', marginBottom: 14 }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: device === 'hub' ? '#ef4444' : G, fontFamily: FONT_MONO, marginBottom: 8 }}>
+            {device.toUpperCase()} — {sc.label.toUpperCase()}
           </div>
-          <div style={{ fontSize: 13.5, color: device === 'hub' ? '#fecaca' : '#bbf7d0', lineHeight: 1.8 }}>{info}</div>
+          <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8 }}>{info}</div>
         </div>
-
         {device === 'hub' && sc.hubCollision && (
-          <div style={{ fontSize: 12, color: '#f97316', background: '#1a1400', border: '1px solid #854d0e', borderRadius: 8, padding: '10px 14px', fontFamily: 'monospace' }}>
-            ⚠ CSMA/CD active: hosts detect collision, send 32-bit jam signal, wait random backoff × slot time (51.2 μs for 10Mbps) before retrying
+          <div style={{ fontSize: 12, color: '#f59e0b', background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.3)', borderRadius: 8, padding: '10px 14px', fontFamily: FONT_MONO }}>
+            ⚠ CSMA/CD active: hosts detect collision → send 32-bit jam signal → wait random backoff (0 to 2ⁿ-1 slot times, n = attempt count) → retransmit. Slot time = 51.2 µs for 10 Mbps (512 bit times).
           </div>
         )}
       </div>
@@ -363,760 +396,620 @@ function HubVsSwitch() {
   )
 }
 
-// ─── Module ────────────────────────────────────────────────────────────────────
+// ─── Page component ───────────────────────────────────────────────────────────
 
-export default function EthernetAndSwitchingPage() {
+export default function EthernetAndSwitching() {
   return (
     <LearnLayout
-      title="Ethernet and Switching"
-      description="From a shared wire in 1973 to dedicated 400G ports in 2024 — how Ethernet became the universal LAN standard and how switches make it scale."
-      section="Networking Fundamentals — Module 08"
-      readTime="22–30 min"
-      updatedAt="May 2026"
+      title="Ethernet & Switching"
+      description="From a shared coaxial wire in 1973 to dedicated 800 Gbps ports — how Ethernet became the universal LAN standard and how switches replaced hubs, eliminated collisions, and scale to millions of ports."
+      section="Networking Fundamentals"
+      readTime="55 min"
     >
-      {/* ── Chapter 01 ── */}
-      <Chapter n={1} title="The Wire That Became the World" />
-
+      {/* ── Ch 01 ── */}
+      <Chapter n="01" title="The Wire That Became the World" subtitle="Ethernet's 50-year journey from a shared coax to a global standard" />
+      <Para>
+        In 1973, Robert Metcalfe and David Boggs at Xerox PARC connected computers to a single thick coaxial cable and called the protocol <Accent>Ethernet</Accent> — named after the luminiferous ether that 19th century physicists believed carried light through space. The original speed was 2.94 Mbps. Today, 800 Gbps Ethernet links carry data inside the world's largest datacenters. The frame format defined in those first experiments is still recognizable in every packet on your network right now.
+      </Para>
+      <Para>
+        Ethernet's longevity is the result of a remarkable design philosophy: a minimal, extensible standard that separates the physical layer from the logical framing. When the physics improved (coax → twisted pair → fiber → 400G optical), the frame format stayed the same. When speeds increased by a factor of 270,000, the switching logic stayed the same. This is what a well-designed protocol looks like.
+      </Para>
       <StoryBox>
-        Xerox PARC, 1973. Robert Metcalfe needs to connect the ALTO workstations in his lab to a printer.
-        He stretches a coaxial cable along the hall — "the Ether." Any machine can transmit a signal into
-        this shared wire. If two machines transmit at once, their signals collide into noise. He designs
-        a simple rule: before transmitting, listen. If the wire is busy, wait. If two collide, they both
-        back off for a random time and try again. He calls it CSMA/CD — Carrier Sense Multiple Access
-        with Collision Detection. The first Ethernet runs at 2.94 Mbps.
+        The original 10BASE-5 "Thicknet" cable was 10 mm diameter yellow coaxial cable nicknamed "the frozen yellow garden hose." Computers attached via a "vampire tap" — a connector that literally pierced the cable with a pin. The entire segment was one shared collision domain. If two computers transmitted simultaneously, their signals collided, both were destroyed, both had to retransmit. If a tap pierced the cable at the wrong position, the impedance mismatch caused reflections that corrupted all traffic on the entire segment. Installations required exactly 2.5 meter spacing between taps to prevent standing waves. This is the origin of the 100-meter cable limit still referenced in TIA-568 today — it was the maximum before signal degradation destroyed frame integrity.
       </StoryBox>
 
+      <H2>IEEE 802.3 — The Standard That Formalized Ethernet</H2>
       <Para>
-        Fifty years later, Ethernet runs at 400 Gbps and 800 Gbps in data centers. The name stuck.
-        The coaxial cable became twisted pair, then fiber. The shared Ether became a dedicated, switched
-        full-duplex connection where collisions are essentially impossible. But the fundamental frame format
-        Metcalfe designed in 1973 — source MAC, destination MAC, type field, payload, CRC — is still
-        what your laptop sends when you load a web page.
+        In 1980, Digital Equipment Corporation (DEC), Intel, and Xerox published the "DIX Ethernet" specification (named for their initials). In 1983, IEEE formalized it as <Accent>IEEE 802.3</Accent>. The key difference: IEEE 802.3 replaced the EtherType field with a length field, creating two subtly incompatible frame formats. Modern Ethernet uses values ≥ 0x0600 (1536) as EtherType and values ≤ 1500 as length — a backward-compatible coexistence.
       </Para>
-
-      <WowBox>
-        Metcalfe wrote the original Ethernet spec on May 22, 1973 — a 4-page memo. He co-founded 3Com
-        in 1979 to commercialize Ethernet. When Ethernet was standardized by IEEE as 802.3 in 1983,
-        there were competing alternatives: Token Ring (IBM) and Token Bus. Token Ring had guaranteed
-        deterministic access, no collisions, and better utilization at high load. Ethernet won anyway
-        because it was cheaper, simpler, and "good enough." Engineering is full of this pattern.
-      </WowBox>
+      <Para>
+        Today, IEEE 802.3 is one of the most active standards in IEEE. New amendments are published constantly: 802.3bz (2.5G/5GBASE-T), 802.3cd (50G/100G/200G), 802.3ck (100G/200G/400G), 802.3cu (100G/400G over SMF), 802.3db (100G/400G/800G). Each new generation preserves the same frame format while redefining only the physical layer encoding.
+      </Para>
 
       <Divider />
 
-      {/* ── Chapter 02 ── */}
-      <Chapter n={2} title="The Ethernet Frame: A 50-Year Standard" />
-
+      {/* ── Ch 02 ── */}
+      <Chapter n="02" title="The Ethernet Frame — A 50-Year Standard" subtitle="Every field, every byte, every edge case" />
       <Para>
-        Every bit of data on a LAN is wrapped in an Ethernet frame. The frame structure has remained
-        essentially unchanged since 1980 (IEEE 802.3), though it has been extended for VLAN tags,
-        jumbo frames, and new field definitions.
+        The Ethernet frame is the Protocol Data Unit (PDU) at Layer 2. Every frame has the same structure — from a 64-byte ARP request to a 9000-byte jumbo frame containing a TLS record. Understanding every field is not academic: network engineers read frames in Wireshark, write code that parses them, and configure hardware that processes them at line rate.
       </Para>
 
       <EthernetFrameBuilder />
 
-      <H2>The Minimum Frame Size: Why 64 Bytes?</H2>
-
+      <H2>Preamble and Start Frame Delimiter (SFD)</H2>
       <Para>
-        Ethernet has a minimum frame size of 64 bytes (excluding preamble). The reason is CSMA/CD:
-        for collision detection to work, the transmission must still be in progress when the collision
-        signal travels back from the far end of the network. With a maximum network diameter of 2,500 meters
-        (at 10 Mbps), the round-trip propagation takes 51.2 μs. At 10 Mbps, 51.2 μs = 512 bits = 64 bytes.
-        A frame shorter than 64 bytes would finish transmitting before the collision signal arrived — the
-        sender would think the frame was sent successfully when it had actually collided.
+        Before the actual frame, 8 bytes are prepended by the NIC's hardware: 7 bytes of preamble (alternating 1s and 0s: 10101010 repeated) followed by 1 byte SFD (10101011 — the two consecutive 1s signal "frame starting now"). The preamble's purpose is <Accent>clock synchronization</Accent>: the receiver's clock recovery circuit locks to the alternating pattern, synchronizing its sampling with the transmitter. The SFD is stripped before the frame is passed up the stack — it never appears in Wireshark captures.
       </Para>
 
+      <H2>Destination and Source MAC Addresses (6 bytes each)</H2>
       <Para>
-        Today, with switched full-duplex networks where collisions don&apos;t occur, the 64-byte minimum is
-        maintained for backwards compatibility. Frames shorter than 64 bytes are called <Accent>runts</Accent> —
-        they&apos;re a sign of a problem (truncation, line errors, or half-duplex collision).
+        MAC (Media Access Control) addresses are 48-bit (6-byte) globally unique hardware identifiers assigned to every NIC at manufacture. Format: 6 hex bytes separated by colons or hyphens (AA:BB:CC:DD:EE:FF). The first 3 bytes are the <Accent>OUI (Organizationally Unique Identifier)</Accent> — assigned by IEEE to manufacturers. The last 3 bytes are assigned by the manufacturer to individual devices.
+      </Para>
+      <Para>
+        First byte bit 0 (LSB): <Accent>multicast bit</Accent>. If 1, the address is a multicast/broadcast address. FF:FF:FF:FF:FF:FF is the L2 broadcast (all bits 1). 01:00:5E:xx:xx:xx is IPv4 multicast (first 25 bits fixed). 33:33:xx:xx:xx:xx is IPv6 multicast.
+      </Para>
+      <Para>
+        First byte bit 1: <Accent>locally administered bit</Accent>. If 1, the address was assigned locally (not from IEEE registry). VMs often use locally administered MACs. x2, x6, xA, xE in the second hex digit = locally administered.
       </Para>
 
-      <H2>Jumbo Frames: Breaking the 1500-Byte MTU</H2>
-
+      <H2>EtherType / Length Field (2 bytes)</H2>
       <Para>
-        The 1,500-byte payload limit (IEEE 802.3) was set in 1980 for a 10 Mbps network. At 10 Mbps,
-        a 1500-byte frame takes 1.2ms to transmit — already long enough. At 10 Gbps, a 1500-byte frame
-        takes 0.0012ms. The overhead of per-frame processing (headers, checksums, interrupts) dominates.
-        Jumbo frames (up to 9,000 bytes or more, depending on hardware) dramatically reduce per-frame
-        overhead for bulk transfers.
+        Values ≥ 0x0600 (1536) identify the encapsulated Layer 3 protocol (EtherType). Values ≤ 1500 represent the frame payload length (IEEE 802.3 format). Common EtherType values:
+      </Para>
+      <CodeBlock title="Common EtherType values">
+{`0x0800  IPv4
+0x0806  ARP
+0x86DD  IPv6
+0x8100  802.1Q VLAN tag (frame is tagged)
+0x88A8  802.1ad QinQ (outer VLAN tag)
+0x8847  MPLS unicast
+0x8848  MPLS multicast
+0x88CC  LLDP (Link Layer Discovery Protocol)
+0x88E5  MACsec (IEEE 802.1AE L2 encryption)
+0x88F7  PTP (Precision Time Protocol, IEEE 1588)
+0x9000  Ethernet OAM (loopback)`}
+      </CodeBlock>
+
+      <H2>802.1Q VLAN Tag (optional 4 bytes)</H2>
+      <Para>
+        When a frame is VLAN-tagged, a 4-byte 802.1Q tag is inserted after the Source MAC: 2 bytes TPID (0x8100) + 2 bytes TCI. The TCI contains: 3-bit PCP (Priority Code Point, values 0–7 for QoS), 1-bit DEI (Drop Eligible Indicator, formerly CFI), and 12-bit VLAN ID (0–4095, but 0 and 4095 reserved, so 1–4094 usable). This optionally increases the minimum frame size to 68 bytes and maximum to 1522 bytes for tagged frames.
       </Para>
 
-      <CodeBlock>{`Standard Ethernet: 1,500 byte payload
-Jumbo frame:       9,000 byte payload (most common)
-Super jumbo:       16,000+ bytes (some storage networks)
+      <H2>Payload (46–1500 bytes)</H2>
+      <Para>
+        The payload carries the upper-layer PDU (IPv4 packet, ARP message, IPv6 packet). <Accent>Minimum payload: 46 bytes</Accent>. If the actual data is shorter (e.g., a 28-byte ARP message), the NIC pads with zeros to reach 46 bytes. This ensures minimum frame size of 64 bytes — required for CSMA/CD collision detection (a transmitter must still be transmitting when a collision's jam signal arrives from the far end of a 500m 10BASE-5 segment).
+      </Para>
+      <Para>
+        <Accent>Maximum payload: 1500 bytes</Accent> (standard MTU). This is the <Accent>MTU (Maximum Transmission Unit)</Accent> of Ethernet. IP packets larger than 1500 bytes must be fragmented at Layer 3. Jumbo frames extend the payload to 9000 bytes for datacenter use — requires configuration on all devices end-to-end (switch ports must support jumbo MTU, NIC drivers must be configured).
+      </Para>
 
-Performance improvement at 10 Gbps:
-  1500-byte frames: ~833,333 frames/second × interrupt overhead
-  9000-byte frames: ~138,889 frames/second × interrupt overhead
-  ~6× fewer interrupts → lower CPU utilization → higher sustainable throughput
-
-Requirements: ALL devices in the path must support the same MTU.
-If any device has smaller MTU, jumbo frames are dropped.
-Enable with: ip link set eth0 mtu 9000 (Linux)
-Test: ping -s 8972 host (8972 + 28 IP/ICMP headers = 9000 bytes)`}</CodeBlock>
+      <H2>FCS — Frame Check Sequence (4 bytes)</H2>
+      <Para>
+        The 4-byte CRC-32 computed over the frame content (Destination MAC through end of payload). The transmitter computes it and appends it. The receiver recomputes the CRC and compares. A mismatch means the frame was corrupted and it is silently dropped — no error is returned to the sender. This is a <Accent>silent discard</Accent>. Upper layers (TCP) detect the missing data via retransmission timeout and retransmit. UDP applications must handle loss themselves.
+      </Para>
 
       <Divider />
 
-      {/* ── Chapter 03 ── */}
-      <Chapter n={3} title="Hubs vs Switches: A Paradigm Shift" />
-
+      {/* ── Ch 03 ── */}
+      <Chapter n="03" title="Hubs vs Switches — The Paradigm Shift" subtitle="Why the collision domain was the enemy" />
       <Para>
-        The most important evolution in Ethernet wasn&apos;t speed — it was the transition from hubs to switches.
-        A hub makes all connected devices share a single collision domain. A switch gives each device
-        its own dedicated collision domain.
+        Before switches became affordable (~1995), networks used hubs. A hub is a physical-layer repeater: it receives a signal on one port and repeats it out all other ports. Every device connected to a hub shares a single collision domain — they must take turns, just like the original coaxial Ethernet. Switches changed this completely.
       </Para>
 
       <HubVsSwitch />
 
-      <H2>The Hub: Shared Everything</H2>
-
+      <H2>Why Hubs Were Abandoned</H2>
       <Para>
-        A hub is a Layer 1 device: it receives an electrical signal on one port and electrically repeats
-        it to all other ports simultaneously. It has no intelligence — no MAC learning, no frame buffering,
-        no forwarding decisions. Every device on a hub segment hears every frame. This creates one collision
-        domain for all connected devices and one broadcast domain.
+        The Ethernet CSMA/CD protocol was designed for shared media. It works reasonably well at low utilization (under 40% of link capacity). Above 40%, collision rates grow non-linearly — the probability of collision increases with each additional transmitter. At 70% utilization, collision backoffs dominate, and effective throughput can actually decrease with higher offered load. A 100-device hub network is essentially unusable for any significant traffic.
       </Para>
-
       <Para>
-        Hubs are obsolete. You will not encounter them in modern networks. But understanding why they
-        failed teaches you everything important about why switching works.
-      </Para>
-
-      <H2>The Switch: Intelligence at Layer 2</H2>
-
-      <Para>
-        A switch is a Layer 2 device that makes forwarding decisions based on destination MAC addresses.
-        Each port is a separate collision domain (full-duplex, no CSMA/CD needed). The switch maintains
-        a <Accent>CAM table</Accent> (Content Addressable Memory) — a MAC-to-port mapping that it builds
-        dynamically through frame observation.
+        Switches solve this by giving each device its own dedicated path. Each switch port is its own collision domain — collision detection only applies within that port. A modern full-duplex switch port has <Accent>zero collisions</Accent>: the switch uses separate transmit and receive paths (or virtual full-duplex with CSMA/CD disabled), and each port's buffer absorbs any timing conflicts.
       </Para>
 
       <Divider />
 
-      {/* ── Chapter 04 ── */}
-      <Chapter n={4} title="The CAM Table: How Switches Learn and Forward" />
-
+      {/* ── Ch 04 ── */}
+      <Chapter n="04" title="The CAM Table — How Switches Learn and Forward" subtitle="The data structure that eliminates flooding" />
       <Para>
-        The CAM table (also called MAC address table or forwarding table) is the switch&apos;s brain.
-        It maps MAC addresses to ports. The learning process is elegant in its simplicity:
-        the switch learns by watching where frames come from.
+        A switch's forwarding intelligence lives in the <Accent>CAM table</Accent> (Content Addressable Memory table), also called the MAC address table. The CAM table maps each learned MAC address to the switch port it was last seen on, enabling unicast forwarding — sending frames only to the port where the destination device resides.
       </Para>
 
       <CamSimulator />
 
-      <H2>The Learning Algorithm</H2>
-
-      <CodeBlock>{`When a frame arrives on Port 3 with Src MAC AA:BB:CC:DD:EE:01:
-
-STEP 1 — LEARN SOURCE:
-  Look up AA:BB:CC:DD:EE:01 in CAM table.
-  Not found → add: {MAC: AA:BB:CC:DD:EE:01, Port: 3, Age: 0}
-  Found on Port 3 → reset age timer to 0 (refresh entry)
-  Found on different port → update port (the device moved)
-
-STEP 2 — FORWARD BASED ON DESTINATION:
-  Case 1: Dst MAC found in CAM → UNICAST to that port only
-  Case 2: Dst MAC not in CAM → FLOOD to all ports except Port 3 (unknown unicast)
-  Case 3: Dst MAC is broadcast (FF:FF:FF:FF:FF:FF) → FLOOD to all ports except source
-  Case 4: Dst MAC is multicast → FLOOD to all ports (or to IGMP-managed ports)
-
-AGING:
-  CAM entries age out after 300 seconds (5 minutes, configurable).
-  After aging, that MAC must be relearned on next frame.
-  Prevents stale entries from dead devices filling the table.
-
-CAM TABLE SIZE:
-  Enterprise switches: 16,000 – 256,000 entries
-  Data center switches: 256,000 – 1,000,000+ entries
-  Full table → CAM overflow → all unknown unicast floods (like a hub!)
-  Security attack: MAC flooding deliberately fills the CAM table`}</CodeBlock>
-
-      <H2>Flooding vs Forwarding Performance</H2>
-
+      <H2>The Three Switch Behaviors</H2>
       <Para>
-        When a switch floods a frame (unknown destination), every device on every port receives the frame,
-        even though only one should. In a busy network, this flood traffic (also called <Accent>unknown unicast flood</Accent>)
-        can significantly impact performance. This is why proper network design limits broadcast domain size
-        with VLANs — a smaller broadcast domain means fewer destinations to flood to.
+        Every frame a switch processes triggers exactly one of three actions:
+      </Para>
+      <Para>
+        <Accent>1. Learn:</Accent> When a frame arrives, the switch reads the source MAC and records (source MAC, ingress port, timestamp) in the CAM table. This happens on every frame regardless of what action is taken for forwarding. The switch is always learning.
+      </Para>
+      <Para>
+        <Accent>2. Forward (unicast):</Accent> If the destination MAC is in the CAM table, send the frame only to the associated port. No other ports see the frame.
+      </Para>
+      <Para>
+        <Accent>3. Flood:</Accent> If the destination MAC is NOT in the CAM table (unknown unicast), or if the destination is a broadcast (FF:FF:FF:FF:FF:FF), or if it is a multicast address without multicast snooping configured — the frame is flooded to all ports in the same VLAN except the ingress port. Flooding is the fallback, not the normal case.
+      </Para>
+
+      <H2>CAM Table Aging</H2>
+      <Para>
+        CAM table entries have a timer (default: 300 seconds on most switches). If no frame is received from a MAC address for 300 seconds, the entry is removed. This handles: devices that have been powered off, devices that have moved to a different port, and VMs that have migrated. When an entry ages out, the next frame to that MAC is flooded (unknown unicast) until the device transmits again and is re-learned.
+      </Para>
+      <Para>
+        <Accent>CAM table overflow attack (MAC flooding):</Accent> An attacker sends frames with thousands of random source MACs, filling the CAM table. When full, new entries cannot be added — all traffic (including known unicasts) is flooded to all ports. The attacker's port now receives all traffic on the VLAN — effectively performing a passive wiretap. Defense: port security (maximum MAC addresses per port), 802.1X port authentication.
+      </Para>
+
+      <H2>CAM Table Size Limits</H2>
+      <Para>
+        CAM tables are implemented in TCAM (Ternary Content Addressable Memory) — extremely fast but very expensive silicon. Typical sizes: 8,000–16,000 entries on access layer switches, 64,000–256,000 on core/datacenter switches. Large campus networks can exhaust access switch CAM tables if too many devices are on the same VLAN — another reason to segment with VLANs.
+      </Para>
+      <CodeBlock title="Viewing CAM table on Cisco IOS">
+{`show mac address-table
+show mac address-table count
+show mac address-table address AA:BB:CC:DD:EE:FF
+show mac address-table interface GigabitEthernet1/0/1
+
+Mac Address Table
+──────────────────────────────────────────────
+Vlan    Mac Address         Type     Ports
+──────────────────────────────────────────────
+   1    a4c3.f085.ac2b      DYNAMIC  Gi1/0/1
+   1    ffff.ffff.ffff      STATIC   — (broadcast, hardcoded)
+  10    0050.56ab.1234      DYNAMIC  Gi1/0/2
+
+show mac address-table aging-time   # default: 300 seconds`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── Ch 05 ── */}
+      <Chapter n="05" title="CSMA/CD — The Collision Resolution Protocol" subtitle="The algorithm that made shared Ethernet work" />
+      <Para>
+        CSMA/CD (Carrier Sense Multiple Access with Collision Detection) is the Layer 2 access control protocol that governed all pre-switch Ethernet. Understanding it matters even today because: it explains why minimum frame size is 64 bytes, it is still relevant for half-duplex links (legacy equipment, some DOCSIS upstream channels), and understanding it is required for networking certifications and interviews.
+      </Para>
+
+      <H2>The CSMA/CD Algorithm</H2>
+      <CodeBlock title="CSMA/CD algorithm — step by step">
+{`1. CARRIER SENSE: Before transmitting, listen to the medium.
+   - If medium is idle (no carrier detected): proceed to step 2
+   - If medium is busy: wait until it becomes idle, then wait
+     one IFG (Inter-Frame Gap = 9.6 µs for 10 Mbps, 0.96 µs for 100 Mbps)
+
+2. TRANSMIT: Begin sending the frame bits onto the medium.
+
+3. COLLISION DETECTION: While transmitting, continuously monitor.
+   - If no collision detected: transmission complete → success
+   - If collision detected (received signal ≠ transmitted signal):
+     go to step 4
+
+4. JAM SIGNAL: Transmit a 32-bit jam signal (alternating 1s and 0s).
+   This ensures ALL devices on the segment detect the collision,
+   not just those physically close to the collision point.
+
+5. STOP: Cease transmission of the frame.
+
+6. BACKOFF: Wait a random backoff period:
+   delay = random(0, 2^n - 1) × slot_time
+   where n = min(attempt_count, 10)
+   slot_time = 51.2 µs (10 Mbps), 5.12 µs (100 Mbps)
+   = 512 bit times (needed for collision detection at max segment length)
+
+7. RETRY: Go back to step 1.
+   After 16 failed attempts: abort, report error to upper layer.`}
+      </CodeBlock>
+
+      <H2>Why 64 Bytes? The Slot Time Relationship</H2>
+      <Para>
+        The minimum frame size of 64 bytes directly results from CSMA/CD physics. Consider: a device at one end of a maximum-length 10BASE-5 segment (500 m) starts transmitting. A device at the other end starts transmitting 0.1 µs before the first device's signal arrives (just missed the carrier sense). A collision occurs near the far end. The jam signal must propagate back to the first device — total worst-case round-trip propagation: ~51.2 µs for 10 Mbps. At 10 Mbps, 51.2 µs × 10 Mbps = 512 bits = 64 bytes. If the frame is shorter than 64 bytes, the first device might finish transmitting before the collision signal returns — it would never know the frame was destroyed.
+      </Para>
+      <Para>
+        <Accent>Full-duplex Ethernet</Accent> disables CSMA/CD entirely because there is no shared medium — the switch port and NIC have dedicated TX and RX pairs. The minimum frame size of 64 bytes remains to maintain backward compatibility with legacy frame parsing code, not for collision detection.
+      </Para>
+
+      <H2>IFG — Inter-Frame Gap</H2>
+      <Para>
+        Between consecutive frames, the standard requires a mandatory idle period: <Accent>9.6 µs at 10 Mbps</Accent>, 0.96 µs at 100 Mbps, 0.096 µs at 1 Gbps. The IFG allows receiving NICs to process the previous frame (update CRC check, move data to buffer) before the next frame arrives. At Gigabit speeds and above, hardware pipelining handles frames arriving nearly back-to-back — the IFG is 96 nanoseconds (12 bytes at 1 Gbps).
       </Para>
 
       <Divider />
 
-      {/* ── Chapter 05 ── */}
-      <Chapter n={5} title="CSMA/CD: The Collision Resolution Protocol" />
-
+      {/* ── Ch 06 ── */}
+      <Chapter n="06" title="Ethernet Evolution — 10 Mbps to 800 Gbps" subtitle="Five decades of speed improvements on the same frame format" />
       <Para>
-        CSMA/CD (Carrier Sense Multiple Access with Collision Detection) was Ethernet&apos;s original media
-        access control method for shared (hub) networks. In full-duplex switched networks, CSMA/CD is
-        not used — collisions are impossible. But understanding CSMA/CD is fundamental to understanding
-        why switches were such an improvement.
+        Each generation of Ethernet redefined the physical layer while preserving the same frame structure. The naming convention tells you everything: <Accent>speed + BASE + medium code</Accent>. "BASE" means baseband (the full bandwidth is used for one signal — not divided into frequency bands like cable TV). The medium code indicates the cable type or distance.
       </Para>
 
-      <H2>How CSMA/CD Works</H2>
+      <CodeBlock title="Ethernet generations — complete lineage">
+{`Standard      Year  Speed    Medium               Max Dist  Notes
+──────────────────────────────────────────────────────────────────────────────
+10BASE-5      1980  10 Mbps  Thick coax (RG-8)    500 m     Vampire taps, obsolete
+10BASE-2      1985  10 Mbps  Thin coax (RG-58)    185 m     BNC T-connectors, obsolete
+10BASE-T      1990  10 Mbps  Cat3 UTP (2 pairs)   100 m     First twisted pair Ethernet
+100BASE-TX    1995  100 Mbps Cat5 UTP (2 pairs)   100 m     MLT-3 encoding, 4B/5B
+100BASE-FX    1995  100 Mbps Multi-mode fiber      2 km      Full-duplex, no CSMA/CD
+1000BASE-T    1999  1 Gbps   Cat5e UTP (4 pairs)  100 m     4D-PAM5 all 4 pairs TX+RX
+1000BASE-SX   1998  1 Gbps   MMF (OM2+)           550 m     850nm VCSEL
+1000BASE-LX   1998  1 Gbps   SMF / MMF            5/10 km   1310nm
+10GBASE-T     2006  10 Gbps  Cat6a UTP             100 m    DSQ128 encoding
+10GBASE-SR    2002  10 Gbps  OM3+ MMF             300/400m  850nm VCSEL
+10GBASE-LR    2002  10 Gbps  SMF                  10 km     1310nm DFB laser
+25GBASE-SR    2016  25 Gbps  OM4+ MMF             100 m     SFP28
+40GBASE-SR4   2010  40 Gbps  OM3+ MMF (MPO-12)    150 m     4×10G lanes
+100GBASE-SR4  2014  100 Gbps OM4+ MMF (MPO-12)    100 m     4×25G lanes
+100GBASE-LR4  2010  100 Gbps SMF (LC duplex)       10 km    4λ WDM
+400GBASE-SR8  2018  400 Gbps OM4+ MMF (MPO-24)    100 m     8×50G PAM4 lanes
+400GBASE-LR8  2018  400 Gbps SMF (LC duplex)        2 km    8λ WDM PAM4
+800GBASE-SR8  2023  800 Gbps OM4+ (MPO-16)         50 m     8×100G PAM4
+800GBASE-DR8  2023  800 Gbps SMF (MPO-16)          500 m    8×100G PAM4`}
+      </CodeBlock>
 
-      <CodeBlock>{`1. CARRIER SENSE: Before transmitting, listen to the wire.
-   If carrier detected (someone else is transmitting): WAIT.
-   If idle: proceed to transmit.
-
-2. TRANSMISSION: Begin sending the frame.
-   Continue monitoring the wire while sending.
-
-3. COLLISION DETECTION: While transmitting, compare what you
-   sent vs what you receive on the wire.
-   If they differ: COLLISION detected.
-
-4. JAM SIGNAL: Transmit 32-bit jam signal to ensure all devices
-   on the segment know a collision occurred.
-
-5. BACKOFF: Stop transmitting. Wait a random time determined by
-   binary exponential backoff:
-   - 1st collision: wait random[0, 1] × 51.2 μs
-   - 2nd collision: wait random[0, 3] × 51.2 μs
-   - Nth collision: wait random[0, 2ⁿ-1] × 51.2 μs
-   - After 16 collisions: give up and report error
-
-6. RETRY: Go to step 1 and try again.
-
-Why backoff must be random: if both hosts backed off the same time,
-they&apos;d collide again on the next attempt. Random times break the symmetry.`}</CodeBlock>
-
+      <H2>Auto-Negotiation (IEEE 802.3u)</H2>
       <Para>
-        In practice, modern Ethernet (100Mbps+) runs almost exclusively in full-duplex mode over switched
-        infrastructure. CSMA/CD is technically defined by the standards but never actually executes because
-        there are no shared collision domains. The 64-byte minimum frame size remains as a legacy artifact.
+        Introduced with Fast Ethernet (100BASE-TX), auto-negotiation lets two devices automatically agree on the highest common speed and duplex mode. During link setup, devices exchange Fast Link Pulses (FLPs) — a burst of 33 pulses encoded as a 16-bit data word advertising capabilities: 10HD, 10FD, 100HD, 100FD, 1000FD, pause frames, asymmetric pause. Both sides select the highest common capability.
+      </Para>
+      <Para>
+        <Accent>1000BASE-T requires auto-negotiation</Accent> — there is no forced-gigabit mode. The 4D-PAM5 coding used by 1000BASE-T requires the master/slave relationship negotiated during auto-neg to synchronize the echo cancellation coefficients. Forcing to 1000/full without auto-neg simply doesn't work (the link won't come up).
+      </Para>
+
+      <H2>Jumbo Frames</H2>
+      <Para>
+        Standard Ethernet MTU is 1500 bytes. Jumbo frames extend this to 9000 bytes (sometimes 9216 bytes to accommodate VXLAN/MPLS encapsulation overhead). Benefits: fewer frames per data transfer → less CPU overhead per byte → higher throughput for large transfers (storage, backup, bulk data movement). The 9000-byte size reduces CPU interrupts by 6× compared to standard MTU for the same data. Jumbo frames must be configured consistently: NIC, switch port, router interface, and destination NIC must all support the same MTU, or fragmentation/drops occur.
       </Para>
 
       <Divider />
 
-      {/* ── Chapter 06 ── */}
-      <Chapter n={6} title="Ethernet Evolution: From 10 Mbps to 800 Gbps" />
-
+      {/* ── Ch 07 ── */}
+      <Chapter n="07" title="Switch Architecture — How Hardware Makes It Fast" subtitle="Store-and-forward, cut-through, TCAM, and switching fabric" />
       <Para>
-        Ethernet has scaled 80,000× in speed over 50 years — from 10 Mbps (1980) to 800 Gbps (2023) —
-        while maintaining backward compatibility at the frame level. The same frame format works across all speeds.
+        A modern enterprise switch forwards millions of frames per second while simultaneously learning MACs, enforcing ACLs, applying QoS, and updating counters. This performance is possible only because of dedicated hardware — custom ASICs purpose-built for switching.
       </Para>
 
-      <H2>Speed Milestones and Key Technologies</H2>
+      <H2>Forwarding Modes</H2>
+      <Para>
+        <Accent>Store-and-forward:</Accent> The switch receives the entire frame, verifies the CRC, then forwards it. Latency = frame size / link rate (for a 1500-byte frame on 1 Gbps: 12 µs). Advantage: no error frames propagate (a corrupted frame is discarded before forwarding). This is the standard mode for all production switches and is required when input and output ports run at different speeds (rate matching requires buffering the entire frame anyway).
+      </Para>
+      <Para>
+        <Accent>Cut-through:</Accent> The switch begins forwarding as soon as it reads the destination MAC (after the first 14 bytes). Latency: ~1 µs (just the header read time). Disadvantage: error frames propagate — a frame with a bad CRC is already halfway forwarded before the FCS is even received. Most modern high-end datacenter switches (Broadcom Tomahawk ASICs) support cut-through mode on same-speed port pairs as an optional performance optimization.
+      </Para>
+      <Para>
+        <Accent>Fragment-free (modified cut-through):</Accent> Waits for the first 64 bytes before forwarding. This filters collision fragments (which are always &lt;64 bytes in CSMA/CD networks) while keeping latency lower than store-and-forward. Used in older switches and rarely today.
+      </Para>
 
-      <CodeBlock>{`Standard         Year  Speed      Medium            Key technology
+      <H2>TCAM — Ternary Content Addressable Memory</H2>
+      <Para>
+        The CAM table uses <Accent>TCAM</Accent> hardware. Unlike standard RAM (look up a value by address), TCAM lets you supply a value and find the address in a single clock cycle — a hardware parallel search of all entries simultaneously. Each TCAM cell stores ternary values: 0, 1, or X (don't care). This enables: exact MAC address lookup (used for CAM/forwarding table), prefix matching (for IP routing tables with masks), ACL evaluation (match packets with specific source IP ranges and port ranges).
+      </Para>
+      <Para>
+        TCAM is extremely expensive — each bit of TCAM requires 4 transistors vs 1 for SRAM and 1 for DRAM. This is why switch CAM tables have hard limits (8K–256K entries) and why expanding routing table capacity requires buying a higher-end switch. TCAM can't be upgraded after purchase.
+      </Para>
+
+      <H2>Switching Fabric and Port ASICs</H2>
+      <Para>
+        A switch's switching fabric is the internal high-speed crossbar that connects all port ASICs. Each port ASIC handles reception, transmission, and per-port logic for a group of ports. The switching fabric must have enough bandwidth to allow all ports to transmit simultaneously without blocking — this is a <Accent>non-blocking</Accent> switch. A 48-port 1G switch requires a 96 Gbps switching fabric (48 ports × 2 directions × 1 Gbps). Budget switches may have a fabric that is oversubscribed — if all ports transmit simultaneously, some must wait. Datacenter switches are non-blocking; access closet switches may be 4:1 oversubscribed (acceptable because not all ports are simultaneously saturated).
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 08 ── */}
+      <Chapter n="08" title="Broadcast Domains and the Limits of Layer 2" subtitle="Why Layer 2 alone cannot scale" />
+      <Para>
+        A switch forwards broadcasts to every port in the same VLAN. This defines a <Accent>broadcast domain</Accent> — the set of all devices that receive each other's broadcast frames. Every ARP request, every DHCP discover, every spanning tree BPDU is flooded to every device in the broadcast domain.
+      </Para>
+      <Para>
+        As broadcast domains grow, so does broadcast overhead. Consider a /16 subnet with 65,000 devices: every ARP request reaches every device. Every DHCP discover reaches every device. At a certain scale, broadcast traffic alone consumes significant bandwidth and CPU on every host. The rule of thumb: keep broadcast domains under 500 devices; 250 is safer for networks with chatty protocols. VLANs provide the segmentation — each VLAN is its own broadcast domain.
+      </Para>
+
+      <H2>Unknown Unicast Flooding</H2>
+      <Para>
+        Beyond broadcasts, <Accent>unknown unicast flooding</Accent> is a silent performance problem. Every frame destined for a MAC not in the CAM table is flooded to all ports. In a network with many devices or high turnover (cloud VMs spawning and dying), a significant percentage of traffic can be unknown unicast floods. Symptoms: unexpectedly high traffic on ports that shouldn't be seeing that traffic; CPU spikes on devices caused by processing discarded frames.
+      </Para>
+
+      <H2>Layer 3 as the Solution</H2>
+      <Para>
+        Routers (Layer 3 devices) do not forward Layer 2 broadcasts — they are broadcast domain boundaries. When a router receives a broadcast frame, it processes it locally and never forwards it to other interfaces. This is why large networks use VLANs (each VLAN is a broadcast domain) with a router or Layer 3 switch providing inter-VLAN routing. The design principle: use Layer 2 within a broadcast domain, use Layer 3 to connect broadcast domains.
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 09 ── */}
+      <Chapter n="09" title="Port Security and MAC Address Management" subtitle="Controlling which devices can connect" />
+      <Para>
+        Switches can restrict which MAC addresses are allowed on each port, preventing unauthorized devices from connecting or limiting the impact of MAC flooding attacks.
+      </Para>
+
+      <H2>Port Security</H2>
+      <Para>
+        Cisco's port security feature limits the number of MAC addresses learned on a port. When the limit is reached:
+      </Para>
+      <CodeBlock title="Port security configuration — Cisco IOS">
+{`interface GigabitEthernet1/0/1
+ switchport mode access
+ switchport access vlan 10
+ switchport port-security maximum 2        ! max 2 MAC addresses
+ switchport port-security mac-address sticky  ! learn + save to config
+ switchport port-security violation restrict   ! or: protect | shutdown
+
+! Violation modes:
+!   protect:  drop frames from unknown MACs, no log, no shutdown
+!   restrict: drop frames + increment violation counter + syslog
+!   shutdown: err-disable the port (manual recovery needed)
+
+show port-security interface GigabitEthernet1/0/1
+show port-security address`}
+      </CodeBlock>
+      <Para>
+        <Accent>Sticky MAC:</Accent> The switch dynamically learns the first N MAC addresses and saves them to the running config as static secure MAC addresses. On reboot, these addresses are restored — no need to manually configure each MAC. Useful for locking a port to the device currently plugged in.
+      </Para>
+
+      <H2>802.1X Port-Based Network Access Control</H2>
+      <Para>
+        Port security with MAC addresses is easy to bypass (just spoof the allowed MAC). IEEE 802.1X is the proper solution: authenticate the user/device before granting network access. The switch port acts as an <Accent>Authenticator</Accent> — it blocks all traffic except EAP (Extensible Authentication Protocol) exchanges until the connecting device (Supplicant) authenticates with the RADIUS server (Authentication Server). Once authenticated, the switch places the port in the correct VLAN and grants access.
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 10 ── */}
+      <Chapter n="10" title="Link Aggregation — LACP and EtherChannel" subtitle="Bonding multiple physical links into one logical link" />
+      <Para>
+        A single Ethernet link provides limited bandwidth and no redundancy. <Accent>Link Aggregation (LAG)</Accent> bonds multiple physical links between two devices into a single logical interface, providing both bandwidth multiplication and link redundancy.
+      </Para>
+
+      <H2>LACP — IEEE 802.3ad / 802.1AX</H2>
+      <Para>
+        LACP (Link Aggregation Control Protocol) is the IEEE standard for dynamic LAG negotiation. Both ends exchange LACP PDUs (LACPDUs) advertising their system ID, port priorities, and state. Compatible ports that agree on parameters form an aggregation group automatically. LACP modes:
+      </Para>
+      <CodeBlock title="LACP configuration — Cisco IOS">
+{`! Create port-channel (logical LAG interface)
+interface port-channel 1
+ switchport mode trunk
+
+! Add physical members
+interface range GigabitEthernet1/0/1 - 2
+ channel-group 1 mode active    ! LACP active (initiates negotiation)
+
+! Modes:
+!   active:  LACP active — sends LACPDUs, negotiates
+!   passive: LACP passive — only responds, doesn't initiate
+!   on:      Static LAG (no LACP, both sides must be 'on')
+
+show etherchannel summary
+show lacp neighbor
+
+Flags: S - Device is sending Slow LACPDUs
+       F - Device is sending Fast LACPDUs (1s vs 30s)
+       A - Device is in Active mode   P - Device is in Passive mode`}
+      </CodeBlock>
+
+      <H2>Load Balancing in LAG</H2>
+      <Para>
+        A LAG bundles N links but does not distribute a single flow across all links — a single TCP connection always travels on one physical link. LAG load balances at the <Accent>flow level</Accent>: different flows are hashed to different links. Common hash inputs: source+destination MAC (L2), source+destination IP (L3), source+destination IP+port (L4). This means a single large flow (one TCP connection) can only use one link — for a single iSCSI transfer, LAG provides no speed improvement. Multiple simultaneous flows do distribute.
+      </Para>
+
+      <H2>Compatibility Requirements</H2>
+      <Para>
+        All member links in a LAG must have identical: speed, duplex, VLAN configuration, and spanning tree port settings. A mismatch causes the link to be excluded from the bundle. Common mistake: adding a port with different native VLAN or trunk configuration — LACP rejects the port and it operates as a standalone link without error.
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 11 ── */}
+      <Chapter n="11" title="Flow Control and Storm Control" subtitle="Preventing packet loss and broadcast storms" />
+
+      <H2>IEEE 802.3x Flow Control (PAUSE Frames)</H2>
+      <Para>
+        When a switch's input buffer is near full, it can signal the connected device to pause transmission temporarily. The switch sends an <Accent>Ethernet PAUSE frame</Accent> (EtherType 0x8808) containing a pause timer value (0–65535 × 512 bit-times). The receiving NIC stops transmitting for the specified duration. This prevents buffer overflow at the cost of temporary transmission suspension.
+      </Para>
+      <Para>
+        PAUSE frames are problematic in multi-hop networks: a pause from one congested link can propagate back to all upstream senders, head-of-line blocking traffic that doesn't need to pause. <Accent>Priority Flow Control (PFC, IEEE 802.1Qbb)</Accent> — used in lossless Ethernet for RoCE (RDMA over Converged Ethernet) — operates per-priority class, pausing only the congested priority without affecting other classes.
+      </Para>
+
+      <H2>Storm Control</H2>
+      <Para>
+        A broadcast storm occurs when broadcast traffic regenerates itself in a loop — a switch receives a broadcast, floods it, another switch receives and floods, and so on. Without Spanning Tree Protocol, a single broadcast frame loops forever, doubling with each retransmission until the network is completely saturated. Storm control is a per-port rate limiter for broadcast, multicast, and unknown unicast traffic:
+      </Para>
+      <CodeBlock title="Storm control — Cisco IOS">
+{`interface GigabitEthernet1/0/1
+ storm-control broadcast level 10  ! drop broadcast > 10% of port bandwidth
+ storm-control multicast level 5
+ storm-control unknown-unicast level 5
+ storm-control action shutdown     ! or: trap (SNMP alert only)
+
+show storm-control GigabitEthernet1/0/1`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── Ch 12 ── */}
+      <Chapter n="12" title="LLDP and CDP — Switch Discovery Protocols" subtitle="How network devices map the physical topology" />
+      <Para>
+        Network devices announce themselves to directly connected neighbors using link-layer discovery protocols. This data powers network management systems, automated inventory, and troubleshooting tools.
+      </Para>
+
+      <H2>CDP — Cisco Discovery Protocol</H2>
+      <Para>
+        CDP is Cisco-proprietary, Layer 2, multicast (01:00:0C:CC:CC:CC). Sent every 60 seconds. Advertises: device ID (hostname), platform, capabilities (router/switch/phone), software version, native VLAN, duplex, IP address, and port ID. CDP is enabled by default on all Cisco interfaces. Significant security risk: an attacker on the same segment receives full device inventory. Disable on external-facing ports: <code style={{ fontFamily: FONT_MONO, fontSize: 13 }}>no cdp enable</code>.
+      </Para>
+
+      <H2>LLDP — IEEE 802.1AB</H2>
+      <Para>
+        LLDP (Link Layer Discovery Protocol) is the open standard equivalent of CDP. TLV (Type-Length-Value) based — extensible. Core TLVs: Chassis ID, Port ID, TTL (30–120 seconds). Optional TLVs: system name, description, capabilities, management address. LLDP-MED extends LLDP for IP phones: negotiates VLAN, DSCP, PoE power requirements, emergency location information. Supported by all major vendors (Cisco, Juniper, Arista, HP, etc.).
+      </Para>
+      <CodeBlock title="LLDP commands — Cisco IOS">
+{`lldp run                           ! enable globally
+interface GigabitEthernet1/0/1
+ lldp transmit                     ! enable per-interface
+ lldp receive
+
+show lldp neighbors
+show lldp neighbors detail
+
+Device ID        Local Intf     Hold-time  Capability Port ID
+switch-floor-2   Gi1/0/1        120        B, R        Gi0/1
+
+Capability codes: B - Bridge, R - Router, T - Telephone, W - WLAN`}
+      </CodeBlock>
+
+      <Divider />
+
+      {/* ── Ch 13 ── */}
+      <Chapter n="13" title="Port Mirroring and SPAN" subtitle="Capturing traffic without tapping the wire" />
+      <Para>
+        <Accent>SPAN (Switched Port Analyzer)</Accent> — called "port mirroring" on most non-Cisco vendors — copies traffic from one or more ports (source) to a designated monitor port (destination). Used for: IDS/IPS sensors, packet capture analysis, network performance monitoring, passive wiretapping for forensics.
+      </Para>
+      <CodeBlock title="SPAN configuration — Cisco IOS">
+{`! Local SPAN: source and destination on same switch
+monitor session 1 source interface GigabitEthernet1/0/1 both
+monitor session 1 destination interface GigabitEthernet1/0/48
+
+! Source options:
+!   both: capture ingress + egress
+!   rx:   capture only received (ingress)
+!   tx:   capture only transmitted (egress)
+
+! RSPAN: Remote SPAN — span across switches via VLAN
+monitor session 1 source interface GigabitEthernet1/0/1
+monitor session 1 destination remote vlan 999
+
+! ERSPAN: Encapsulated RSPAN — GRE tunnel to remote IP
+! Used to send captures to a remote collector over IP network
+monitor session 1 type erspan-source
+ source interface GigabitEthernet1/0/1 both
+ destination
+  erspan-id 1
+  ip address 10.0.0.100       ! remote collector IP
+  origin ip address 10.0.0.1  ! local switch IP`}
+      </CodeBlock>
+      <Para>
+        The SPAN destination port receives a copy of all source traffic and must have sufficient bandwidth to handle the aggregate. If 10 × 1 Gbps ports are spanned to a single 1 Gbps destination, only 10% of traffic is captured (the rest is dropped by the SPAN engine). Use a higher-bandwidth destination port, or limit source to a single port, or use a traffic tap instead.
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 14 ── */}
+      <Chapter n="14" title="Modern Ethernet — Datacenter and Beyond" subtitle="Where Ethernet is going at 400G, 800G, and RoCE" />
+      <Para>
+        Modern datacenter networking extends Ethernet far beyond its original LAN purpose. Two key developments: ultra-high-speed Ethernet (400G, 800G for spine-leaf fabric) and lossless Ethernet (for RDMA storage and HPC workloads).
+      </Para>
+
+      <H2>400G and 800G Ethernet in Datacenters</H2>
+      <Para>
+        A modern hyperscale datacenter switch (Broadcom Tomahawk 4: 25.6 Tbps, Broadcom Tomahawk 5: 51.2 Tbps) connects tens or hundreds of servers via high-density QSFP-DD 400G or 800G ports. These switches handle 10+ billion packets per second in hardware with single-digit microsecond latency. The switching ASIC processes every frame through a programmable pipeline: parse headers, look up forwarding table, apply ACL, decrement TTL, recompute CRC, output to correct port — all in hardware, at line rate, simultaneously on every port.
+      </Para>
+
+      <H2>RoCE — RDMA over Converged Ethernet</H2>
+      <Para>
+        RDMA (Remote Direct Memory Access) allows one server to write directly into another server's memory without CPU involvement — bypassing the OS kernel entirely. Originally, RDMA required InfiniBand. RoCEv2 (RDMA over Converged Ethernet v2) runs RDMA over standard 25G/100G Ethernet with UDP/IP encapsulation.
+      </Para>
+      <Para>
+        RoCE requires <Accent>lossless Ethernet</Accent>: RDMA is extremely sensitive to packet loss — a single dropped packet forces retransmission of large amounts of data (the RDMA window). Lossless Ethernet uses Priority Flow Control (PFC) to pause the sending port before buffer overflow occurs, preventing drops. The entire network path must be configured for PFC: NIC, switch, and QoS policies.
+      </Para>
+
+      <H2>TSN — Time-Sensitive Networking</H2>
+      <Para>
+        IEEE 802.1 TSN is a set of standards that make Ethernet deterministic — guaranteed maximum latency for time-critical traffic. Used in: industrial automation (replacing proprietary fieldbuses), automotive in-vehicle networking (replacing CAN bus), audio/video production (AES67, SMPTE ST 2110). TSN standards include: 802.1AS (timing synchronization to 1 µs accuracy), 802.1Qbv (time-aware shaper — scheduled transmission windows), 802.1Qbu (frame preemption — interrupt low-priority frames mid-transmission for time-critical ones).
+      </Para>
+
+      <Divider />
+
+      {/* ── Ch 15 ── */}
+      <Chapter n="15" title="Troubleshooting Ethernet and Switching" subtitle="A systematic approach to Layer 2 problems" />
+
+      <H2>Common Ethernet Problems and Symptoms</H2>
+      <CodeBlock title="Ethernet troubleshooting decision tree">
+{`Symptom                           Likely Cause           Tool/Command
 ─────────────────────────────────────────────────────────────────────────────
-10BASE5          1980  10 Mbps    Thick coax        Shared bus, Manchester encoding
-10BASE2          1985  10 Mbps    Thin coax         Cheaper, still shared
-10BASE-T         1990  10 Mbps    UTP Cat3          Twisted pair, hub-based
-100BASE-TX       1995  100 Mbps   Cat5              4B/5B + NRZI + MLT-3 encoding
-1000BASE-T       1998  1 Gbps     Cat5e             PAM5, 4-pair simultaneous TX/RX
-10GBASE-T        2006  10 Gbps    Cat6A             DSP equalization, PAM16 + LDPC
-10GBASE-SR/LR    2002  10 Gbps    MMF/SMF           Serial optics, direct detection
-25GBASE-R        2014  25 Gbps    SMF/MMF           Single-lane 25G
-40GBASE-SR4      2010  40 Gbps    MMF (MPO)         4×10G parallel lanes, 850nm
-100GBASE-LR4     2010  100 Gbps   SMF               4 wavelengths × 25G, CWDM4
-400GBASE-DR4     2017  400 Gbps   SMF               4×100G lanes, 500m reach
-400GBASE-ZR      2021  400 Gbps   SMF               Coherent, 80km reach, DSP
-800GBASE-DR8     2023  800 Gbps   SMF               8×100G lanes, 500m reach`}</CodeBlock>
+Interface shows "down/down"       Physical cable/SFP     DOM, cable tester, swap
+Interface shows "up/down"         LACP/STP issue         show spanning-tree
+High input errors / CRC errors    Bad cable, EMI, SFP    show interfaces, DOM
+Duplex mismatch (2-10 Mbps on G)  One side forced duplex show interfaces (late col)
+Unknown device getting traffic     MAC flooding attack    show mac addr-table count
+Broadcast storm (CPU 100%)        STP loop               show spanning-tree, debug
+Slow link despite gigabit port    Speed/duplex negotiation show interfaces status
+Device unreachable on same switch  Port security violation show port-security
 
-      <WowBox>
-        The jump from 10Mbps (1980) to 10Gbps (2002) took 22 years. From 10Gbps to 400Gbps took 15 years.
-        Each speed increase required fundamental changes in encoding, signal processing, and manufacturing.
-        10GBASE-T copper (2006) needed DSP chips doing billions of operations per second to equalize the
-        signal from a 100m Cat6A cable — the equivalent of removing an echo from a 100m phone call 200
-        million times per second. The chip was larger and more powerful than the CPUs of the era when
-        10BASE-T was designed.
-      </WowBox>
+Key commands:
+  show interfaces GigabitEthernet1/0/1
+    → Input errors (CRC, frame, giants, runts), output drops, collisions
 
-      <H2>Auto-Negotiation: How Devices Agree on Speed</H2>
+  show interfaces status
+    → Connected/notconnect, speed, duplex, VLAN for all ports
 
-      <CodeBlock>{`Auto-Negotiation (IEEE 802.3u, 1995) lets two devices agree on:
-  - Speed: 10/100/1000 Mbps (copper), fixed for fiber
-  - Duplex: Half or Full
-  - Flow control: Pause frames (802.3x)
+  show mac address-table count
+    → Total entries (near limit = MAC flood risk)
 
-How it works (for copper Ethernet):
-  Both ends transmit Fast Link Pulses (FLPs) before the link comes up.
-  FLPs encode a capability bitfield (what speeds/duplex each side supports).
-  Both sides take the highest capability that both support.
+  show spanning-tree vlan 1
+    → Port states, root bridge ID, check for topology changes
 
-Priority (highest to lowest in 1G auto-negotiate):
-  1. 1000BASE-T Full Duplex
-  2. 1000BASE-T Half Duplex
-  3. 100BASE-TX Full Duplex
-  4. 100BASE-TX Half Duplex
-  5. 10BASE-T Full Duplex
-  6. 10BASE-T Half Duplex
+  debug spanning-tree events
+    → Real-time STP topology change notifications`}
+      </CodeBlock>
 
-Failure modes:
-  - One side has auto-negotiation disabled → other side falls to 10/100 Half Duplex
-  - "Duplex mismatch" (one full, one half) → half-duplex side gets collisions
-  - Collisions → high retransmits → very low throughput despite link being "up"
-  - Appears as "1 Gbps link but only 10 Mbps throughput" — classic symptom`}</CodeBlock>
+      <H2>Interpreting Interface Error Counters</H2>
+      <CodeBlock title="Interface counter interpretation">
+{`show interfaces GigabitEthernet1/0/1
+
+GigabitEthernet1/0/1 is up, line protocol is up
+  5 minute input rate 450000000 bits/sec
+  5 minute output rate 450000000 bits/sec
+  ...
+  0 input errors         ← CRC + frame + overruns + ignored
+  0 CRC                  ← Bad FCS — cable, EMI, bad SFP, dirty fiber connector
+  0 frame                ← Framing errors — duplex mismatch, bad NIC
+  0 giants               ← Frames > 1518B (or >9022B with jumbo) — MTU mismatch
+  0 runts                ← Frames < 64B — collision fragments, bad NIC
+  0 input packets with dribble condition  ← extra bit at end — bad NIC/cable
+  0 output errors
+  0 collisions           ← Should be 0 on full-duplex; >0 = duplex mismatch or hub
+  0 late collision       ← CRITICAL: collision after 64B = duplex mismatch
+  0 output buffer failures ← Congestion dropping — check QoS and uplink bandwidth`}
+      </CodeBlock>
 
       <Divider />
 
-      {/* ── Chapter 07 ── */}
-      <Chapter n={7} title="Switch Architecture: How Hardware Makes it Fast" />
-
-      <Para>
-        A Layer 2 switch must make forwarding decisions in nanoseconds — at 10 Gbps, a minimum-size
-        64-byte frame arrives in just 51 nanoseconds. Software cannot process frames this fast;
-        all the core forwarding logic runs in dedicated hardware (ASICs).
-      </Para>
-
-      <H2>The Forwarding Pipeline</H2>
-
-      <CodeBlock>{`Physical Layer → MACs → Input Buffer → Forwarding ASIC → Output Buffer → Physical Layer
-
-Key components:
-  MAC: serializes/deserializes bits, performs FCS check, handles auto-negotiation
-  Input buffer: queues frames while forwarding decision is made (nanoseconds)
-  Forwarding ASIC: performs parallel CAM lookup using TCAM
-    → TCAM (Ternary CAM): hardware lookup in O(1) time
-    → Can match on 0, 1, or X (don't care) — enables wildcard matching
-    → 1M TCAM entry lookup takes ~20 nanoseconds
-  Output buffer: multiple queues per port for QoS (different priorities)
-  Scheduler: decides which queue to drain next (strict priority, WRR, WFQ)
-
-Switching fabric: connects all ports simultaneously
-  Shared memory: all ports share a large buffer, managed by scheduler
-  Cross-bar: dedicated paths between every port pair (non-blocking)
-  Clos network: multi-stage switching for very high port count
-
-Switch capacity:
-  Total switching capacity: number of ports × port speed × 2 (full duplex)
-  48-port 10G switch: 48 × 10G × 2 = 960 Gbps capacity
-  Non-blocking: if capacity ≥ sum of all port speeds (no congestion under load)`}</CodeBlock>
-
-      <H2>Store-and-Forward vs Cut-Through</H2>
-
-      <CodeBlock>{`Store-and-Forward:
-  Receive ENTIRE frame before forwarding.
-  Verify FCS checksum — drop bad frames before forwarding.
-  Latency: proportional to frame size (for 1500B at 1G: 12μs wait)
-  Benefit: no corrupt frames propagated downstream.
-  Default on most enterprise switches.
-
-Cut-Through:
-  Start forwarding frame BEFORE fully received.
-  Read only the first 6 bytes (destination MAC) then immediately forward.
-  Latency: constant ~1μs regardless of frame size.
-  Risk: corrupt frames ARE forwarded (CRC checked at destination only).
-  Used in: latency-sensitive applications (HFT, HPC cluster interconnects).
-  Available: premium data center switches (Arista, Cisco Nexus).
-
-Fragment-Free (hybrid):
-  Read first 64 bytes (full collision window) then forward.
-  Filters runts/collision fragments while maintaining low latency.
-  Latency: constant ~0.5μs for most frames.`}</CodeBlock>
-
-      <Divider />
-
-      {/* ── Chapter 08 ── */}
-      <Chapter n={8} title="Broadcast Domains and the Limits of Layer 2" />
-
-      <Para>
-        Switches create a flat Layer 2 network — every device on every switch port is in the same broadcast
-        domain. ARP requests, DHCP discovers, and other broadcast protocols reach every device.
-        As the broadcast domain grows, broadcast traffic becomes a significant fraction of total traffic.
-      </Para>
-
-      <H2>Broadcast Storm: When Everything Goes Wrong</H2>
-
-      <Para>
-        A broadcast storm occurs when a frame is broadcast, received by switches, re-broadcast, received again,
-        and re-broadcast in an infinite loop. The most common cause: a network loop in a Layer 2 topology
-        without Spanning Tree Protocol. Within milliseconds, broadcast frames multiply exponentially until
-        the network is 100% saturated with broadcast traffic and all normal communication is impossible.
-      </Para>
-
-      <StoryBox>
-        The classic scenario: someone connects two Ethernet cables between the same two switches "for redundancy."
-        Now there&apos;s a loop. A broadcast frame enters switch A on port 1, gets broadcast to all ports
-        including the two links to switch B. Switch B receives two copies, broadcasts both to all ports
-        including back to switch A. Switch A receives them, broadcasts again. Each iteration doubles the
-        broadcast traffic. Within 100 milliseconds, the switches are forwarding millions of frames per second
-        and have CAM tables full of rapidly changing, contradictory entries. All production traffic stops.
-        Spanning Tree Protocol prevents this — but only if it&apos;s configured and enabled.
-      </StoryBox>
-
-      <H2>Solutions: Routing, VLANs, and STP</H2>
-
-      <Para>
-        Three tools control broadcast domain size: <Accent>routing</Accent> (Layer 3 boundaries stop broadcasts),
-        <Accent>VLANs</Accent> (logical broadcast domain segmentation within a switch), and
-        <Accent>Spanning Tree Protocol</Accent> (prevents loops by logically blocking redundant links).
-        All three are covered in dedicated modules — understanding why they exist starts here.
-      </Para>
-
-      <Divider />
-
-      {/* ── Chapter 09 ── */}
-      <Chapter n={9} title="Flow Control and QoS in Switching" />
-
-      <Para>
-        When a fast sender fills a switch&apos;s output buffer faster than the receiver can drain it,
-        frames are dropped. Layer 2 has two mechanisms to prevent this: <Accent>PAUSE frames</Accent>
-        (flow control) and <Accent>Quality of Service</Accent> (priority queuing).
-      </Para>
-
-      <H2>IEEE 802.3x PAUSE Frames</H2>
-
-      <Para>
-        When a switch&apos;s receive buffer fills, it sends a PAUSE frame to the sender, instructing it to stop
-        transmitting for a specified time (0–65,535 quanta, where 1 quantum = 512 bit times). The sender
-        pauses, the buffer drains, then the sender resumes. This is a binary on/off mechanism — all traffic
-        stops regardless of priority.
-      </Para>
-
-      <H2>PFC: Priority Flow Control (802.1Qbb)</H2>
-
-      <Para>
-        PAUSE frames have a critical flaw: stopping all traffic to prevent loss on one class also stops
-        latency-sensitive traffic. PFC (Priority Flow Control) solves this by applying PAUSE selectively
-        per traffic class. There are 8 traffic classes (defined by 802.1p CoS bits in the VLAN tag).
-        PFC can pause class 4 (bulk data) without pausing class 6 (voice) or class 7 (network control).
-      </Para>
-
-      <Para>
-        PFC is the foundation of <Accent>lossless Ethernet</Accent> — required for RDMA over Converged Ethernet
-        (RoCE) used in high-performance computing and storage (NVMe-oF). Without PFC, any dropped packet
-        in RDMA triggers a connection reset, destroying performance. With PFC, the network admits no drops
-        for the designated RDMA traffic class.
-      </Para>
-
-      <Divider />
-
-      {/* ── Chapter 10 ── */}
-      <Chapter n={10} title="LLDP and CDP: How Switches Discover Each Other" />
-
-      <Para>
-        LLDP (Link Layer Discovery Protocol, IEEE 802.1AB) allows network devices to advertise their
-        identity and capabilities to directly connected neighbors. Unlike routing protocols, LLDP doesn&apos;t
-        traverse Layer 3 boundaries — it only reaches one hop.
-      </Para>
-
-      <CodeBlock>{`LLDP frame content:
-  Chassis ID (MAC address or system name)
-  Port ID (interface name, e.g., "GigabitEthernet0/1")
-  Time-to-Live (hold time before entry expires)
-  Optional TLVs:
-    - System Name ("switch-core-1.datacenter.example.com")
-    - System Description (hardware model, OS version)
-    - Capabilities (bridge, router, telephone, DOCSIS, WLAN AP...)
-    - Management Address (IP for management)
-    - Port VLAN ID (what VLAN the port is on)
-    - Power via MDI (PoE parameters)
-
-$ ip neighbor show      # LLDP neighbors on Linux (requires lldpd)
-$ lldpctl               # Full LLDP neighbor details
-
-CDP (Cisco Discovery Protocol) — Cisco proprietary:
-  Same concept, more Cisco-specific data.
-  Includes IOS version, VTP domain, native VLAN, platform.
-  Note: CDP frames are Cisco proprietary — doesn't work with non-Cisco devices.
-  Best practice: use LLDP for multi-vendor environments.
-
-Use cases:
-  Network mapping: build physical topology without manual documentation
-  Troubleshooting: which switch port is a device connected to?
-  PoE: phone tells switch its power requirements via LLDP-MED
-  Voice VLAN: IP phone receives voice VLAN info via LLDP-MED/CDP`}</CodeBlock>
-
-      <Divider />
-
-      {/* ── Chapter 11 ── */}
-      <Chapter n={11} title="Modern Ethernet: Data Center and Beyond" />
-
-      <Para>
-        Modern data center Ethernet (100G, 400G, 800G) looks fundamentally different from office Ethernet.
-        The speeds are higher, the architectures are leaf-spine, the optics are coherent, and the protocols
-        have been extended for lossless RDMA and automated configuration.
-      </Para>
-
-      <H2>Leaf-Spine Architecture</H2>
-
-      <CodeBlock>{`Traditional 3-tier (collapsed core):
-  Access Layer → Distribution Layer → Core Layer
-  Problem: servers on the same access switch have low latency (1 hop)
-           servers on different access switches have high latency (3 hops)
-           creates "elephant flows" through distribution layer
-
-Leaf-Spine (2-tier, popular in modern data centers):
-  Every Leaf switch connects to EVERY Spine switch.
-  Every server is exactly 2 hops from every other server.
-  Deterministic, uniform latency across all server-to-server traffic.
-  Scale-out: add a leaf for more servers, add a spine for more bandwidth.
-
-Typical sizing (2024):
-  Leaf: 48× 25G server ports + 8× 100G spine uplinks
-  Spine: 32× 100G downlinks to leaves
-  Max servers: 32 leaves × 48 servers = 1,536 servers at uniform latency
-  Bandwidth oversubscription: 48×25G = 1.2Tbps down, 8×100G = 800Gbps up → ~1.5:1
-
-For full bisectional bandwidth (no oversubscription):
-  Use ECMP (Equal-Cost Multi-Path) across all spine uplinks
-  Hash traffic across all spine switches per flow
-  LACP bonding or ECMP for load distribution`}</CodeBlock>
-
-      <H2>RDMA over Converged Ethernet (RoCE)</H2>
-
-      <Para>
-        Traditional RDMA (Remote Direct Memory Access) allowed InfiniBand-connected servers to directly
-        read/write each other&apos;s memory without CPU involvement, at very low latency (1-3 μs). RoCE
-        brings this to Ethernet: RDMA over UDP/IPv4 (RoCEv1) or over IP (RoCEv2). Used in high-performance
-        computing (GPU clusters), distributed storage (NVMe-oF), and cloud hypervisors (AWS ENA, Azure RDMA).
-        Requires lossless Ethernet with PFC — any packet loss in RDMA triggers retransmission storms.
-      </Para>
-
-      <Divider />
-
-      {/* ── Chapter 12 ── */}
-      <Chapter n={12} title="Troubleshooting Ethernet and Switching" />
-
-      <Para>
-        Layer 2 problems are some of the hardest to diagnose because they often cause cascading failures:
-        a loop causes a storm that hides the original problem. A systematic approach is essential.
-      </Para>
-
-      <H2>Common Ethernet Issues and Diagnostics</H2>
-
-      <CodeBlock>{`SYMPTOM: Intermittent connectivity, high CPU on switches
-  → CHECK: Broadcast storm / STP topology change
-  show spanning-tree detail | grep "topology change"  (Cisco)
-  watch -n1 "ip -s link show eth0 | grep -A2 RX:"   (Linux host)
-  Broadcast storm: counters increase rapidly → find the loop
-
-SYMPTOM: All traffic from one host is flooding everywhere
-  → CHECK: CAM table overflow (MAC flooding attack or full table)
-  show mac address-table count  (Cisco) — compare to table size
-  show mac address-table | grep Total
-  If full: investigate MAC flooding source port
-
-SYMPTOM: 1G link shows "connected" but only 10Mbps throughput
-  → CHECK: Duplex mismatch
-  ethtool eth0 | grep -i duplex  (should show Full, not Half)
-  show interface Gi0/1  (Cisco) → should show "Full-duplex, 1 Gb/s"
-  Half duplex → collisions → exponential backoff → ~10% utilization
-
-SYMPTOM: Frames received with FCS errors
-  → CHECK: Physical layer issue (bad cable, bad SFP, connector)
-  show interface Gi0/1 | grep CRC  (Cisco)
-  ip -s link show eth0 | grep errors  (Linux)
-  ethtool -S eth0 | grep -i error
-  → Replace cable, clean SFP, check cable bend radius
-
-SYMPTOM: MAC address keeps moving between ports in switch logs
-  → CHECK: MAC address spoofing or physical loop
-  show mac address-table | grep <flapping-mac>  (Cisco)
-  Port security violation: configure port-security max 1 sticky
-  If loop: check for unauthorized cable connections
-
-SYMPTOM: Switch CPU high, traffic passing but latency very high
-  → CHECK: Control plane overload
-  show processes cpu sorted | head  (Cisco)
-  Common culprits: Spanning Tree TCN storm, OSPF adjacency flap, broadcast storm
-  → Rate-limit broadcast on access ports (storm-control broadcast level 20)`}</CodeBlock>
-
-      <Divider />
-
-      {/* ── Chapter 13 ── */}
-      <Chapter n={13} title="Common Misconceptions" />
-
-      <Err>
-        <strong>"A switch is just a faster hub."</strong><br /><br />
-        A hub operates at Layer 1 — it electrically repeats signals, with no intelligence, creating
-        a shared collision domain. A switch operates at Layer 2 — it makes forwarding decisions per
-        destination MAC, creates separate collision domains per port, buffers frames, and runs sophisticated
-        ASIC logic. The difference isn&apos;t speed — it&apos;s architecture. Two devices connected to the same
-        switch never compete for bandwidth with each other (in a non-blocking switch). Two devices on a hub
-        share every bit of the hub&apos;s bandwidth, competing with CSMA/CD.
-      </Err>
-
-      <Err>
-        <strong>"Switches forward frames to the destination immediately — they don&apos;t store them."</strong><br /><br />
-        Store-and-forward switching (the default) receives the entire frame before forwarding.
-        This allows FCS verification — corrupt frames are dropped before they propagate.
-        Cut-through switching starts forwarding after reading only the destination MAC (6 bytes), but
-        risks forwarding corrupt frames. Most enterprise switches use store-and-forward. In any case,
-        frames ARE buffered: if the output port is busy, the frame waits in the output queue. "No storage"
-        only describes cut-through in specific circumstances.
-      </Err>
-
-      <Err>
-        <strong>"The CAM table stores the full routing table."</strong><br /><br />
-        The CAM table (MAC address table) is a Layer 2 construct mapping MAC addresses to physical ports.
-        It is built dynamically by observing source MAC addresses and has no awareness of IP addresses
-        or subnets. The routing table (FIB — Forwarding Information Base) is a Layer 3 construct used by
-        routers and Layer 3 switches to map IP network prefixes to next-hop routers. A Layer 2 switch
-        has a CAM table but no routing table. A Layer 3 switch has both.
-      </Err>
-
-      <Err>
-        <strong>"Full-duplex Ethernet is twice as fast as half-duplex."</strong><br /><br />
-        Full-duplex allows simultaneous bidirectional transmission — both sides can send and receive at
-        full speed at the same time. A 1 Gbps full-duplex link provides 1 Gbps in each direction = 2 Gbps
-        aggregate. But the 1 Gbps "speed" you see in <Code>ethtool</Code> is the link rate, not the aggregate.
-        In practice, most connections are asymmetric (web browsing sends small requests, receives large
-        responses). The real benefit of full-duplex over half-duplex is eliminating collisions and CSMA/CD
-        overhead — going from 30-50% effective utilization (half-duplex) to 95%+ (full-duplex).
-      </Err>
-
-      <Err>
-        <strong>"MAC addresses are permanent and unique worldwide."</strong><br /><br />
-        Factory-assigned MAC addresses include an OUI (vendor prefix) that is globally unique.
-        The device portion (last 3 bytes) is assigned by the vendor and should be unique within their
-        production. In practice: (1) MACs can be changed in software (<Code>ip link set eth0 address XX:XX:XX:XX:XX:XX</Code>).
-        (2) Virtual machines use locally-administered MACs that are randomly generated. (3) Modern
-        operating systems (iOS, Android, Windows 10+) use MAC address randomization for Wi-Fi scans
-        to prevent tracking — your phone&apos;s MAC changes every time it probes for networks. The "globally
-        unique" assumption fails in multi-tenant environments and for privacy-preserving devices.
-      </Err>
-
-      <Err>
-        <strong>"A network loop always causes an immediate, obvious outage."</strong><br /><br />
-        Some loops start slowly. A single low-rate broadcast in a looped network duplicates and duplicates
-        until it saturates the bandwidth — but this can take seconds to minutes depending on the loop&apos;s
-        characteristics. During that time, you may see intermittent connectivity issues, high latency,
-        and CPU spikes on switches before the full storm hits. By the time it&apos;s obvious, all logs may
-        be full of the storm&apos;s traffic rather than the original cause. Physical loop detection before
-        enabling Spanning Tree is critical, and documented cable management prevents accidental loops.
-      </Err>
-
-      <Divider />
-
-      {/* ── Chapter 14 ── */}
-      <Chapter n={14} title="Test Your Understanding" />
-
-      <IQ level="Beginner">
-        <strong>Q: A switch receives a frame with destination MAC FF:FF:FF:FF:FF:FF. What does it do?</strong>
-        <br /><br />
-        The switch floods the frame to every port except the port it arrived on. FF:FF:FF:FF:FF:FF is the
-        Ethernet broadcast address — by definition, it should reach all devices on the local network segment.
-        The switch cannot do anything else: it cannot look this up in the CAM table (no specific destination
-        to learn or forward to). This is correct behavior — ARP requests, DHCP discover messages, and other
-        broadcast protocols rely on this flooding. It is not an error.
+      {/* ── Ch 16 ── */}
+      <Chapter n="16" title="Interview Questions" subtitle="From beginner to PhD" />
+
+      <IQ q="What happens when a switch receives a frame for a MAC address not in its CAM table?" level="Beginner">
+        The switch floods the frame out all ports in the same VLAN except the ingress port — this is called unknown unicast flooding. The switch simultaneously learns the source MAC and records it in the CAM table. Once the destination device responds with a frame, the switch learns its MAC and port, and subsequent frames are forwarded directly (unicast) without flooding.
       </IQ>
 
-      <IQ level="Beginner">
-        <strong>Q: What is the difference between a collision domain and a broadcast domain?</strong>
-        <br /><br />
-        A collision domain is the set of devices that share a transmission medium — if two transmit simultaneously,
-        they collide. In a hub network, all connected devices are in one collision domain. In a switched network,
-        each port is a separate collision domain (full-duplex).
-        A broadcast domain is the set of devices that receive a broadcast frame (FF:FF:FF:FF:FF:FF). Switches
-        do NOT separate broadcast domains — a broadcast goes to every port on the switch. Routers DO separate
-        broadcast domains — broadcasts do not cross Layer 3 boundaries. VLANs create separate broadcast
-        domains within a switch without needing separate physical switches.
+      <IQ q="Why is the minimum Ethernet frame size 64 bytes? What happens to shorter frames?" level="Beginner">
+        64 bytes is the minimum required for CSMA/CD collision detection. At 10 Mbps, the worst-case round-trip propagation delay on a maximum-length segment is 51.2 µs = 512 bit times = 64 bytes. If a frame were shorter, the sender could finish transmitting before a collision signal from the far end arrived — the sender would never detect the collision. Frames shorter than 64 bytes (runts or collision fragments) are discarded by the receiving switch. NICs pad short payloads to 46 bytes (minimum payload) to ensure frames are never shorter than 64 bytes.
       </IQ>
 
-      <IQ level="Intermediate">
-        <strong>Q: Your iperf3 test on a 1 Gbps link achieves only 100 Mbps. ethtool shows the link is "1000 Mbps, Full Duplex". What is the most likely cause?</strong>
-        <br /><br />
-        Speed and duplex are correct, so CSMA/CD/duplex issues are ruled out. With full duplex at 1Gbps,
-        you should achieve ~940 Mbps. At 100 Mbps (10% of link capacity), the most likely causes:
-        (1) Single-stream TCP limited by window size — try <Code>iperf3 -P 4</Code> (parallel streams).
-        If multiple streams achieve 940 Mbps combined, TCP window is the single-stream bottleneck.
-        (2) CPU bottleneck at either end — check CPU utilization during the test. (3) Firewall or NAT
-        processing in the path at the switch or host. (4) Misconfigured QoS that rate-limits to 100 Mbps.
-        First step: try <Code>iperf3 -P 4</Code> and check if aggregate reaches expected throughput.
+      <IQ q="What is the difference between a collision domain and a broadcast domain? How do switches and routers affect each?" level="Intermediate">
+        A collision domain is a network segment where two devices can cause a collision if they transmit simultaneously. Each switch port is its own collision domain (full-duplex eliminates collisions entirely). A broadcast domain is the set of devices that receive each other's broadcast frames. Switches extend broadcast domains — all ports in the same VLAN share one broadcast domain. Routers terminate both: they create separate collision domains (each interface) AND separate broadcast domains (routers never forward Layer 2 broadcasts). A Layer 3 switch with VLANs provides separate broadcast domains per VLAN with inter-VLAN routing.
       </IQ>
 
-      <IQ level="Intermediate">
-        <strong>Q: How would you identify which physical switch port a device with IP 10.0.0.50 is connected to, starting from a router?</strong>
-        <br /><br />
-        Step 1: On the router, find the MAC address: <Code>show arp | grep 10.0.0.50</Code> → get MAC address XX:XX:XX:XX:XX:XX.
-        Step 2: On the distribution/access switch, find the port: <Code>show mac address-table address XX:XX:XX:XX:XX:XX</Code> → returns port number (e.g., Gi0/24).
-        Step 3: Verify with LLDP/CDP if the port connects to another switch: <Code>show cdp neighbors Gi0/24 detail</Code>.
-        Step 4: If another switch, repeat step 2 on that switch until you reach the access port with no downstream switch.
-        On Linux hosts: <Code>arp -n 10.0.0.50</Code> to get MAC, then trace through switches.
-        This exact process is automated by DCIM tools and network management software.
+      <IQ q="A switch's CAM table is full. What happens to new traffic? How would you detect and prevent this?" level="Intermediate">
+        When the CAM table is full, new MAC addresses cannot be learned. All traffic to unknown MACs is flooded to all ports — this is a MAC flooding attack if intentional. Detection: monitor CAM table utilization (show mac address-table count; alert when near maximum). Prevention: port security with maximum MAC address limit per port (switchport port-security maximum 2) — when the limit is reached, new MACs trigger a violation action (restrict/shutdown). For critical networks, 802.1X authentication prevents any unauthorized device from getting a port on the network at all.
       </IQ>
 
-      <IQ level="Senior">
-        <strong>Q: Explain why MAC flooding attacks work and how port security and dynamic ARP inspection mitigate them.</strong>
-        <br /><br />
-        MAC flooding: an attacker sends thousands of frames with random, fake source MAC addresses.
-        Each frame causes the switch to add a new CAM table entry. When the CAM table is full
-        (16,000–256,000 entries depending on switch), the switch can no longer learn new legitimate MAC addresses.
-        New frames with unknown destination MACs must be flooded to all ports — the switch effectively
-        behaves like a hub. The attacker captures all traffic on the network with a promiscuous NIC.
-        <br /><br />
-        Port security mitigation: limits the number of MAC addresses learned per port (typically max 1 or 2).
-        When the limit is exceeded, the port either (a) restricts access (silently drops), (b) generates
-        a violation log entry, or (c) err-disables the port. This prevents any single port from flooding
-        the CAM table.
-        <br /><br />
-        Dynamic ARP Inspection (DAI): validates ARP packets against a DHCP snooping binding table
-        (MAC-to-IP mappings learned from DHCP). An ARP reply claiming IP X has MAC Y is checked —
-        if the DHCP snooping table shows IP X was assigned to MAC Z, the ARP is dropped. This prevents
-        ARP poisoning (man-in-the-middle) even if the attacker is already on the network.
-        <br /><br />
-        Additional defense: DHCP snooping (rate-limits DHCP, prevents rogue DHCP servers), 802.1X
-        port authentication (blocks all traffic until the user/device authenticates via RADIUS).
+      <IQ q="Explain LACP negotiation in detail: what TLVs are exchanged, what constitutes a compatible LAG pair, and what happens when a member link fails?" level="Senior">
+        LACP PDUs (LACPDUs) are sent as multicast to 01:80:C2:00:00:02. Each LACPDU contains: Actor Information TLV (system priority, system ID/MAC, key, port priority, port number, state flags) and Partner Information TLV (same fields for the remote end). Two ports form a LAG when: system IDs are different (not the same device), keys match (configured channel-group number maps to a key), and port states agree (both active or one active/one passive). When a member link fails: LACP detects the loss of LACPDUs (timeout = 3 × LACP timer, either 3 s fast or 90 s slow), removes the port from the bundle, and redistributes flows to remaining active members via the load-balancing hash. Traffic on flows that were hashed to the failed link is briefly disrupted (~sub-second for fast LACP timers) then resumes on surviving links.
       </IQ>
 
-      <IQ level="Senior">
-        <strong>Q: What is ECMP in the context of leaf-spine switching, and what hashing algorithms are used to distribute traffic?</strong>
-        <br /><br />
-        ECMP (Equal-Cost Multi-Path) allows a switch to load-balance traffic across multiple equal-cost
-        paths to the same destination. In leaf-spine, every leaf switch has multiple equal-cost paths
-        to every other leaf (through each spine switch). Without ECMP, only one path would be used and
-        the others would be blocked by STP. With ECMP, all spine links carry traffic simultaneously.
-        <br /><br />
-        Hashing: per-packet ECMP would reorder packets, breaking TCP. Therefore, ECMP uses per-flow
-        hashing — all packets in the same flow take the same path. A 5-tuple hash is standard:
-        (source IP, destination IP, source port, destination port, protocol). All packets with the same
-        5-tuple hash to the same spine switch → no reordering.
-        <br /><br />
-        Problem: "elephant flows" (large, long-lived TCP flows like database backups) can hash to one spine
-        while "mouse flows" (short, small) hash across all spines — creating imbalance. Solutions:
-        (1) Fine-grained load balancing (hash on more fields including VXLAN VNI for overlays).
-        (2) Adaptive ECMP (measure utilization and re-hash overloaded flows — Cisco Nexus, Arista).
-        (3) Application-layer connection splitting (multiple TCP connections → multiple hash buckets).
-        (4) MLAG (Multi-chassis LAG) to present multiple physical switches as one logical switch — forces
-        per-packet distribution within a bonded port.
-      </IQ>
-
-      <IQ level="PhD">
-        <strong>Q: Analyze the fundamental tradeoffs between store-and-forward, cut-through, and virtual output queuing (VOQ) in high-speed switches, and explain when head-of-line blocking becomes a system-level bottleneck.</strong>
-        <br /><br />
-        Store-and-forward requires receiving the complete frame before forwarding. Latency = frame
-        transmission time = 12 μs for 1500B at 1G, 1.2 μs at 10G, 0.12 μs at 100G. At 100G+,
-        serialization latency is negligible compared to processing time; store-and-forward costs
-        little and provides CRC validation. At 10G, it matters for real-time applications.
-        <br /><br />
-        Cut-through latency is proportional to clock cycles, not frame size — typically 0.5-1 μs
-        regardless of frame size. At 10G+, cut-through saves 1-10 μs per hop × 5 hops = 5-50 μs
-        saved per flow. For HFT (microsecond-sensitive), this matters.
-        <br /><br />
-        Head-of-line (HOL) blocking: in a shared-output-queue architecture, if the output port for
-        flow A is busy, frames for flow A queue behind flow B even if B&apos;s output port is idle.
-        Flow B is blocked by A&apos;s congestion — this is HOL blocking. It reduces throughput to ~58%
-        of line rate in worst-case random traffic (Karol, Hluchyj, Morgan theorem, 1987).
-        <br /><br />
-        Virtual Output Queuing (VOQ) solves HOL blocking: each input port maintains a separate queue
-        for each output port. When output port X is busy, only frames destined for X are queued —
-        frames for idle output ports proceed immediately. VOQ enables throughput approaching 100% of
-        line rate but requires N² queues (N input ports × N output ports) — for a 256-port switch,
-        65,536 queues. Memory and scheduling complexity scale as O(N²).
-        <br /><br />
-        Practical implementation: high-performance switches (Broadcom Tomahawk, Tofino) use combined
-        VOQ + output queuing with iSLIP or SERENA schedulers that achieve near-100% throughput in
-        O(N log N) time. The VOQ approach is also why modern cloud switches use programmable ASICs
-        (P4-based) — the scheduler algorithm can be updated in the field without new silicon.
+      <IQ q="A datacenter switch is showing increasing 'late collision' errors on a port connected to a server. The link shows as 1Gbps/full-duplex on both sides. What are the possible causes and how do you definitively diagnose?" level="PhD">
+        <Para>Late collisions on a full-duplex link are theoretically impossible — collisions require a shared medium and CSMA/CD, which full-duplex disables. If late collisions appear on a reported full-duplex link, the actual link state is inconsistent:</Para>
+        <Para><strong>1. Duplex mismatch despite "showing" full-duplex:</strong> The switch port is forced to 1G/full while the server NIC is set to auto-negotiate. Per IEEE 802.3, when the forced side sends at full-duplex but the auto-negotiating side receives no FLPs, it defaults to half-duplex (parallel detection). The server NIC is in half-duplex, running CSMA/CD, detecting "collisions" when the full-duplex switch keeps transmitting while the NIC tries to backoff. The switch counter shows "late collisions" because the NIC's backoff causes it to start a new transmission mid-frame from the switch's perspective. Diagnosis: <code style={{ fontFamily: FONT_MONO, fontSize: 13 }}>show interfaces</code> on BOTH sides — if server shows half-duplex and switch shows full-duplex, this is the cause. Fix: set both to autonegotiate.</Para>
+        <Para><strong>2. Faulty cable or NIC causing signal corruption:</strong> Severe signal integrity issues (marginal cable, damaged connector, EMI) can cause the NIC's carrier sense circuitry to misfire, misinterpreting received frames as idle. The NIC transmits when the switch is also transmitting, and the resulting noise is interpreted as a late collision. Diagnosis: replace cable, test with known-good SFP, check DOM signal levels.</Para>
+        <Para><strong>3. NIC driver/firmware bug:</strong> Rare, but some NIC firmware incorrectly reports duplex to the OS while operating in half-duplex mode internally. Check NIC vendor firmware version, compare against known-bad firmware list. Workaround: force NIC to 1G/full via ethtool or driver parameters.</Para>
       </IQ>
 
       <Divider />
 
       <KeyTakeaways items={[
-        'Ethernet was invented in 1973 at Xerox PARC and standardized by IEEE as 802.3 in 1983. The frame format has remained the same while speeds scaled 80,000×.',
-        'An Ethernet frame: Preamble(8B) + Dst MAC(6B) + Src MAC(6B) + EtherType(2B) + Payload(46-1500B) + FCS(4B). Minimum frame 64 bytes (CSMA/CD requirement).',
-        'Hubs share one collision domain — all devices compete via CSMA/CD. Switches give each port a dedicated collision domain — no competition, full throughput.',
-        'The CAM table maps MAC addresses to ports. Learn from source MAC, forward by destination MAC. Unknown destination → flood. FF:FF:FF:FF:FF:FF → always flood.',
-        'Full-duplex eliminates collisions and CSMA/CD. Each link can transmit and receive simultaneously at full speed. Required for Gigabit and above.',
-        'Auto-negotiation failure causes duplex mismatch: one end full-duplex, other half-duplex. Result: half-duplex side sees collisions → retransmission storms → 10% effective throughput on a 1G link.',
-        'LLDP (IEEE 802.1AB) provides one-hop device discovery — switch port inventory, PoE negotiation, voice VLAN assignment. CDP is Cisco\'s proprietary equivalent.',
-        'MAC flooding fills the CAM table, forcing the switch to flood all unknown unicast traffic (behaving like a hub). Port security limits MACs per port.',
-        'Leaf-spine architecture: every leaf connects to every spine. All server-to-server traffic is exactly 2 hops. ECMP distributes flows across all spine links via 5-tuple hashing.',
-        'Store-and-forward verifies FCS before forwarding (drops corrupt frames). Cut-through reads 6-byte destination then immediately forwards (lower latency, may forward corrupt frames).',
+        'Ethernet was invented in 1973 at Xerox PARC. IEEE 802.3 (1983) standardized it. The same frame format has survived 50+ years while speeds increased 270,000-fold from 10 Mbps to 2.7 Tbps.',
+        'An Ethernet frame: Preamble(7B)+SFD(1B) | Dst MAC(6B) | Src MAC(6B) | [802.1Q tag(4B)] | EtherType(2B) | Payload(46–1500B) | FCS(4B). Minimum 64 bytes (CSMA/CD), maximum 1522 bytes (standard), 9022 bytes (jumbo).',
+        'The FCS (CRC-32) detects bit errors — a corrupted frame is silently dropped at Layer 2 with no error notification to the sender. Upper layers (TCP retransmit, UDP application) must detect and recover.',
+        'Hubs are shared collision domains — CSMA/CD required. Switches give each port its own collision domain. Full-duplex switch ports have zero collisions and disable CSMA/CD entirely.',
+        'The CAM table maps (MAC address, VLAN, port, timer). On unknown destination: flood. On known: unicast. Source MAC is always learned. Default aging: 300 seconds. TCAM limits entries to 8K–256K.',
+        'CSMA/CD: Carrier Sense → transmit → detect collision → jam → exponential backoff. 64-byte minimum frame guarantees the sender is still transmitting when the collision signal arrives from the furthest point.',
+        'Store-and-forward: full frame buffered, CRC checked, then forwarded (12 µs for 1500B at 1G). Cut-through: forward after reading 14-byte header (~1 µs). Cut-through propagates errors; store-and-forward does not.',
+        'LACP (802.3ad) bonds multiple links into one logical interface. Load balancing hashes flows — a single TCP connection only uses one physical member. All members must match speed/duplex/VLAN config.',
+        'Port security limits MAC addresses per port (maximum + sticky). 802.1X is the proper solution: authenticate the user/device via RADIUS before granting any network access.',
+        'LLDP (IEEE 802.1AB) and CDP (Cisco-proprietary) discover directly connected neighbors — device ID, port ID, capabilities, VLANs, PoE. Disable on external-facing ports (security risk).',
+        'SPAN/port mirroring copies traffic to a monitor port for IDS/packet capture. RSPAN spans across switches via VLAN. ERSPAN encapsulates in GRE for remote IP-based collection.',
+        'Late collisions on a full-duplex port = duplex mismatch. CRC errors = cable/fiber/SFP issues. High unknown unicast flood rate = CAM table near capacity or MAC flood attack.',
       ]} />
     </LearnLayout>
   )
