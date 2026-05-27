@@ -28,25 +28,26 @@ function CodeBlock({ children }: { children: React.ReactNode }) {
   return <pre style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, background: '#0d1525', border: '1px solid #1e293b', borderRadius: 10, padding: '18px 20px', overflowX: 'auto', lineHeight: 1.7, color: '#94a3b8', margin: '18px 0 24px' }}>{children}</pre>
 }
 function StoryBox({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: '#0a1628', border: '1px solid #1e3a5f', borderLeft: '4px solid #3b82f6', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#cbd5e1', lineHeight: 1.85 }}>{children}</div>
+  return <div style={{ background: 'rgba(59,130,246,0.07)', border: '1px solid rgba(59,130,246,0.2)', borderLeft: '4px solid #3b82f6', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}><span style={{ fontWeight: 700, color: '#3b82f6', fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '.1em', display: 'block', marginBottom: 8 }}>// REAL-WORLD SCENARIO</span>{children}</div>
 }
-function WowBox({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: '#0a1a12', border: '1px solid #166534', borderLeft: '4px solid #10b981', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#bbf7d0', lineHeight: 1.85 }}><span style={{ fontWeight: 800, color: '#10b981', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>WOW FACT</span>{children}</div>
+function WowBox({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) {
+  return <div style={{ background: `${ACC}0d`, border: `1px solid ${ACC}30`, borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}><div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}><span style={{ fontSize: 20 }}>{emoji}</span><span style={{ fontWeight: 800, color: ACC, fontSize: 13 }}>{title}</span></div>{children}</div>
 }
-function Warn({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: '#1a1400', border: '1px solid #854d0e', borderLeft: '4px solid #f59e0b', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#fef08a', lineHeight: 1.85 }}><span style={{ fontWeight: 800, color: '#f59e0b', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>CAUTION</span>{children}</div>
+function Warn({ title, children }: { title: string; children: React.ReactNode }) {
+  return <div style={{ background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.25)', borderLeft: '4px solid #f59e0b', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}><span style={{ fontWeight: 700, color: '#f59e0b', fontSize: 12, fontFamily: 'var(--font-mono)', display: 'block', marginBottom: 8 }}>⚠ {title}</span>{children}</div>
 }
-function Err({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: '#1a0a0a', border: '1px solid #991b1b', borderLeft: '4px solid #ef4444', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: '#fecaca', lineHeight: 1.85 }}><span style={{ fontWeight: 800, color: '#ef4444', fontSize: 12, letterSpacing: '.1em', display: 'block', marginBottom: 6 }}>MISCONCEPTION</span>{children}</div>
+function Err({ title, children }: { title: string; children: React.ReactNode }) {
+  return <div style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.25)', borderLeft: '4px solid #ef4444', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}><span style={{ fontWeight: 700, color: '#ef4444', fontSize: 12, fontFamily: 'var(--font-mono)', display: 'block', marginBottom: 8 }}>✗ Common Mistake — {title}</span>{children}</div>
 }
 
 const LEVEL_COLORS: Record<string, string> = { Beginner: '#10b981', Intermediate: '#3b82f6', Senior: '#8b5cf6', PhD: '#f97316' }
-function IQ({ level, children }: { level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) {
+function IQ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) {
   const c = LEVEL_COLORS[level]
   return (
-    <div style={{ background: '#080d18', border: `1px solid ${c}40`, borderRadius: 12, padding: '18px 22px', margin: '22px 0' }}>
-      <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 800, color: c, background: `${c}18`, border: `1px solid ${c}40`, borderRadius: 20, padding: '3px 10px', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 10 }}>{level}</span>
-      <div style={{ fontSize: 14.5, color: '#cbd5e1', lineHeight: 1.85 }}>{children}</div>
+    <div style={{ background: `${ACC}08`, border: `1px solid ${ACC}20`, borderRadius: 12, padding: '20px 24px', margin: '24px 0' }}>
+      <span style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#fff', background: c, borderRadius: 20, padding: '3px 12px', marginBottom: 10 }}>{level}</span>
+      <div style={{ fontWeight: 700, color: 'var(--text)', marginBottom: 8, lineHeight: 1.5 }}>{q}</div>
+      <div style={{ fontSize: 14.5, color: 'var(--muted)', lineHeight: 1.85 }}>{children}</div>
     </div>
   )
 }
@@ -383,7 +384,7 @@ export default function ArpPage() {
         universally compatible) and its primary weakness (trivially exploitable by anyone on the local network).
       </Para>
 
-      <WowBox>
+      <WowBox emoji="⚡" title="40 Years Unchanged">
         ARP was defined in RFC 826 by David Plummer in November 1982 — three pages of specification.
         It has remained essentially unchanged for 40 years. In those 40 years, it has been the target
         of more local network attacks than probably any other protocol. The successor for IPv6 is NDP
@@ -566,7 +567,7 @@ You want to send to 192.168.1.100 (same subnet):
   4. Build Ethernet frame directly to 192.168.1.100's MAC.
   5. Packet delivered directly without going through gateway.`}</CodeBlock>
 
-      <Warn>
+      <Warn title="Wrong default gateway looks like an ARP problem">
         If a host has the wrong default gateway configured, ARP will still work for local subnet
         communication, but traffic to other networks will fail. A common diagnostic mistake: pinging
         a local host works (direct ARP), but pinging 8.8.8.8 fails (can&apos;t reach gateway). Check the
@@ -719,7 +720,7 @@ NDP uses multicast instead of broadcast:
 $ ip -6 neighbor show   # Linux: show IPv6 neighbor cache
 $ ip -6 neigh flush dev eth0  # Flush IPv6 neighbor cache`}</CodeBlock>
 
-      <WowBox>
+      <WowBox emoji="🔐" title="SEcure Neighbor Discovery (SEND)">
         SEcure Neighbor Discovery (SEND, RFC 3971) adds cryptographic signatures to NDP messages using
         Cryptographically Generated Addresses (CGAs). A CGA ties the IPv6 address to a public key —
         only the holder of the private key can claim that address. NDP spoofing becomes computationally
@@ -891,7 +892,7 @@ Solutions for large scale:
       {/* ── Chapter 13 ── */}
       <Chapter n={13} title="Common Misconceptions" />
 
-      <Err>
+      <Err title="ARP is only used at startup">
         <strong>"ARP is only used when a host first joins the network."</strong><br /><br />
         ARP is used continuously. Every time a host sends traffic to a new IP on its subnet, or to its
         gateway for traffic to remote destinations, it checks the ARP cache and sends a new ARP Request
@@ -900,7 +901,7 @@ Solutions for large scale:
         requests regularly throughout its operation.
       </Err>
 
-      <Err>
+      <Err title="ARP works across routers">
         <strong>"ARP works across routers — you can ARP for any IP on the internet."</strong><br /><br />
         ARP is strictly local — it uses Ethernet broadcast, which routers do not forward. ARP can only
         resolve IP-to-MAC mappings for hosts on the <em>same local subnet</em>. When you send traffic
@@ -908,7 +909,7 @@ Solutions for large scale:
         then ARPs for the next hop on its own subnet. Each subnet does its own ARP independently.
       </Err>
 
-      <Err>
+      <Err title="ARP poisoning requires special tools or skill">
         <strong>"ARP poisoning requires special hacking tools and skill."</strong><br /><br />
         ARP poisoning requires sending crafted UDP/Ethernet frames — something any host on the network
         can do with basic tools. Tools like <Code>arpspoof</Code>, <Code>ettercap</Code>, and <Code>scapy</Code>
@@ -917,7 +918,7 @@ Solutions for large scale:
         and why network-level defenses (DAI, 802.1X) are important for protecting such environments.
       </Err>
 
-      <Err>
+      <Err title="MAC addresses are harder to spoof than IP addresses">
         <strong>"MAC addresses are harder to spoof than IP addresses."</strong><br /><br />
         Both are trivially spoofable in software. On Linux: <Code>ip link set eth0 address AA:BB:CC:DD:EE:FF</Code>.
         On macOS: <Code>sudo ifconfig en0 ether AA:BB:CC:DD:EE:FF</Code>. On Windows: change in Device Manager
@@ -926,7 +927,7 @@ Solutions for large scale:
         changeable by any user with system-level access.
       </Err>
 
-      <Err>
+      <Err title="HTTPS fully prevents ARP poisoning attacks">
         <strong>"If you use HTTPS, ARP poisoning can&apos;t hurt you."</strong><br /><br />
         HTTPS protects the <em>content</em> of your communication. ARP poisoning is a network-level attack
         that intercepts all traffic including HTTPS. However, the attacker sees only ciphertext — they
@@ -936,7 +937,7 @@ Solutions for large scale:
         reduces the impact of ARP poisoning, but doesn&apos;t prevent the interception itself.
       </Err>
 
-      <Err>
+      <Err title="ARP is the same as DNS">
         <strong>"ARP is the same as DNS."</strong><br /><br />
         ARP resolves IP addresses to MAC addresses on a local network segment. DNS resolves domain names
         to IP addresses across the internet. They operate at completely different layers, with completely
@@ -950,9 +951,7 @@ Solutions for large scale:
       {/* ── Chapter 14 ── */}
       <Chapter n={14} title="Test Your Understanding" />
 
-      <IQ level="Beginner">
-        <strong>Q: You try to ping 192.168.1.100 but get "no reply." How do you determine whether this is an ARP problem or an IP routing problem?</strong>
-        <br /><br />
+      <IQ q="You try to ping 192.168.1.100 but get 'no reply.' How do you determine whether this is an ARP problem or an IP routing problem?" level="Beginner">
         Use <Code>arping -I eth0 192.168.1.100</Code> to send an ARP request directly. If arping gets a reply,
         ARP works but the host is not responding to ICMP ping (possibly firewall). If arping gets no reply,
         the host is either down, on a different subnet, or not reachable at Layer 2. Check the ARP cache:
@@ -960,9 +959,7 @@ Solutions for large scale:
         no response. Verify the target is on the same subnet as your interface.
       </IQ>
 
-      <IQ level="Beginner">
-        <strong>Q: Why does your browser need to know the gateway&apos;s MAC address to load a webpage from Google?</strong>
-        <br /><br />
+      <IQ q="Why does your browser need to know the gateway's MAC address to load a webpage from Google?" level="Beginner">
         To load a webpage from Google (e.g., 142.250.182.14), your computer creates an IP packet destined
         for 142.250.182.14. To put this packet on the Ethernet cable, it needs an Ethernet frame with a
         destination MAC address. Since Google&apos;s server is not on your local subnet, your computer consults its
@@ -972,9 +969,7 @@ Solutions for large scale:
         it toward Google through the internet.
       </IQ>
 
-      <IQ level="Intermediate">
-        <strong>Q: Explain Gratuitous ARP and give three real production scenarios where it is essential for correct operation.</strong>
-        <br /><br />
+      <IQ q="Explain Gratuitous ARP and give three real production scenarios where it is essential for correct operation." level="Intermediate">
         Gratuitous ARP: a host sends an ARP Reply (or Request) where the sender IP = target IP — announcing
         its own IP-to-MAC mapping without being asked.
         Scenarios: (1) <em>IP conflict detection</em>: before using an IP, a host sends Gratuitous ARP. If another
@@ -987,9 +982,7 @@ Solutions for large scale:
         continue reaching the old physical port until ARP ages out (~5 minutes of downtime).
       </IQ>
 
-      <IQ level="Intermediate">
-        <strong>Q: How does Dynamic ARP Inspection (DAI) prevent ARP poisoning, and what is its dependency on DHCP snooping?</strong>
-        <br /><br />
+      <IQ q="How does Dynamic ARP Inspection (DAI) prevent ARP poisoning, and what is its dependency on DHCP snooping?" level="Intermediate">
         DAI intercepts all ARP packets on untrusted ports and validates them against a DHCP snooping
         binding table before forwarding. The binding table contains {"{IP → MAC → port → VLAN}"} mappings
         for every host that received an IP via DHCP. When an ARP arrives:
@@ -1003,9 +996,7 @@ Solutions for large scale:
         ARP ACL listing the static IP-MAC pairs.
       </IQ>
 
-      <IQ level="Senior">
-        <strong>Q: In a VXLAN overlay network with 50,000 VMs, explain how BGP EVPN + ARP suppression prevents broadcast storms.</strong>
-        <br /><br />
+      <IQ q="In a VXLAN overlay network with 50,000 VMs, explain how BGP EVPN + ARP suppression prevents broadcast storms." level="Senior">
         Without ARP suppression: when any of 50,000 VMs ARPs for another VM, the ARP broadcast is
         encapsulated in VXLAN and flooded to all 200 VTEPs (Virtual Tunnel Endpoints). Each VTEP
         decapsulates and delivers to all local VMs in that VNI. 50,000 VMs × average 100 ARPs/minute =
@@ -1023,9 +1014,7 @@ Solutions for large scale:
         Cisco ACI, VMware NSX, Cumulus, and AWS all use BGP EVPN with ARP suppression.
       </IQ>
 
-      <IQ level="Senior">
-        <strong>Q: Describe how VRRP uses a virtual MAC address to achieve seamless gateway redundancy without requiring ARP updates from hosts.</strong>
-        <br /><br />
+      <IQ q="Describe how VRRP uses a virtual MAC address to achieve seamless gateway redundancy without requiring ARP updates from hosts." level="Senior">
         VRRP (RFC 5798) assigns a virtual IP (VIP) as the default gateway for hosts. Multiple routers
         participate in a VRRP group, one of which is elected Master. VRRP creates a virtual MAC address:
         <Code>00:00:5E:00:01:GG</Code> where GG is the VRRP group number in hex. This virtual MAC is
@@ -1041,9 +1030,7 @@ Solutions for large scale:
         Typical VRRP failover time: 1-3 seconds (one missed advertisement + switch learning).
       </IQ>
 
-      <IQ level="PhD">
-        <strong>Q: Analyze why ARP&apos;s lack of authentication is a fundamental protocol design failure, and evaluate the tradeoffs of the proposed solutions (SEND, DAI, static ARP) from a systems perspective.</strong>
-        <br /><br />
+      <IQ q="Analyze why ARP's lack of authentication is a fundamental protocol design failure, and evaluate the tradeoffs of the proposed solutions (SEND, DAI, static ARP) from a systems perspective." level="PhD">
         ARP was designed in 1982 for a trusted academic network. The design assumption: all hosts on
         the network are cooperative. Gratuitous ARPs and unsolicited replies are accepted and cached
         because in the original context, sending a Gratuitous ARP was a helpful host announcing its
