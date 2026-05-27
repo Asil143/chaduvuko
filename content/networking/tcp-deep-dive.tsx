@@ -7,16 +7,15 @@ import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 /* ── Helper components ────────────────────────────────────────────────────── */
 
 const G = '#10b981'
-const WARN_BG = '#fefce8'
-const WARN_BORDER = '#fef08a'
-const ERR_BG = '#fff1f2'
-const ERR_BORDER = '#fecdd3'
+const FONT_MONO = 'var(--font-mono)'
+const FONT_DISPLAY = 'var(--font-display)'
 
-const Chapter = ({ n }: { n: number }) => (
-  <div style={{ marginBottom: 28 }}>
-    <p style={{ fontSize: 11, color: G, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 8px', letterSpacing: '.1em' }}>
-      // Chapter {String(n).padStart(2, '0')}
+const Chapter = ({ n, title }: { n: number; title: string }) => (
+  <div style={{ marginBottom: 32 }}>
+    <p style={{ fontSize: 11, color: G, fontFamily: FONT_MONO, fontWeight: 700, margin: '0 0 6px', letterSpacing: '.12em' }}>
+      {`// CHAPTER ${String(n).padStart(2, '0')}`}
     </p>
+    <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'clamp(22px,3.5vw,34px)', fontWeight: 900, letterSpacing: '-1.5px', color: 'var(--text)', margin: 0 }}>{title}</h2>
   </div>
 )
 
@@ -47,38 +46,48 @@ const CodeBlock = ({ children }: { children: React.ReactNode }) => (
 )
 
 const StoryBox = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: `3px solid ${G}`, borderRadius: 8, padding: '16px 20px', margin: '0 0 24px', fontSize: 14.5, lineHeight: 1.8, color: 'var(--text)' }}>{children}</div>
-)
-
-const WowBox = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'var(--surface)', border: `1px solid ${G}`, borderRadius: 8, padding: '14px 18px', margin: '0 0 24px', fontSize: 14, lineHeight: 1.8, color: 'var(--text)' }}>
-    <span style={{ color: G, fontWeight: 700, marginRight: 8 }}>◆ Wow:</span>{children}
+  <div style={{ background: 'rgba(59,130,246,0.07)', border: '1px solid rgba(59,130,246,0.2)', borderLeft: '4px solid #3b82f6', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#3b82f6', fontSize: 11, fontFamily: FONT_MONO, letterSpacing: '.1em', display: 'block', marginBottom: 8 }}>// REAL-WORLD SCENARIO</span>
+    {children}
   </div>
 )
 
-const Warn = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: WARN_BG, border: `1px solid ${WARN_BORDER}`, borderRadius: 8, padding: '14px 18px', margin: '0 0 24px', fontSize: 14, lineHeight: 1.8, color: '#713f12' }}>
-    <span style={{ fontWeight: 700, marginRight: 8 }}>⚠ Warning:</span>{children}
+const WowBox = ({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) => (
+  <div style={{ background: `${G}0d`, border: `1px solid ${G}30`, borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+      <span style={{ fontSize: 20 }}>{emoji}</span>
+      <span style={{ fontWeight: 800, color: G, fontSize: 13 }}>{title}</span>
+    </div>
+    {children}
   </div>
 )
 
-const Err = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: ERR_BG, border: `1px solid ${ERR_BORDER}`, borderRadius: 8, padding: '14px 18px', margin: '0 0 24px', fontSize: 14, lineHeight: 1.8, color: '#881337' }}>
-    <span style={{ fontWeight: 700, marginRight: 8 }}>✗ Misconception:</span>{children}
+const Warn = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.25)', borderLeft: '4px solid #f59e0b', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#f59e0b', fontSize: 12, fontFamily: FONT_MONO, display: 'block', marginBottom: 8 }}>⚠ {title}</span>
+    {children}
   </div>
 )
 
-const levelColors: Record<string, string> = {
+const Err = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.25)', borderLeft: '4px solid #ef4444', borderRadius: 10, padding: '18px 22px', margin: '22px 0', fontSize: 14.5, color: 'var(--text)', lineHeight: 1.85 }}>
+    <span style={{ fontWeight: 700, color: '#ef4444', fontSize: 12, fontFamily: FONT_MONO, display: 'block', marginBottom: 8 }}>✗ Common Mistake — {title}</span>
+    {children}
+  </div>
+)
+
+const LEVEL_COLORS: Record<string, string> = {
   Beginner: '#10b981',
   Intermediate: '#3b82f6',
   Senior: '#8b5cf6',
   PhD: '#f97316',
 }
 
-const IQ = ({ level, children }: { level: string; children: React.ReactNode }) => (
-  <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '16px 20px', margin: '0 0 24px', fontSize: 14, lineHeight: 1.8, color: 'var(--text)' }}>
-    <span style={{ background: levelColors[level] ?? G, color: '#fff', fontSize: 11, fontWeight: 700, borderRadius: 4, padding: '2px 8px', marginRight: 10, letterSpacing: '.05em' }}>{level.toUpperCase()}</span>
-    {children}
+const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermediate' | 'Senior' | 'PhD'; children: React.ReactNode }) => (
+  <div style={{ background: `${G}08`, border: `1px solid ${G}20`, borderRadius: 12, padding: '20px 24px', margin: '24px 0' }}>
+    <span style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#fff', background: LEVEL_COLORS[level], borderRadius: 20, padding: '3px 12px', marginBottom: 10 }}>{level}</span>
+    <div style={{ fontWeight: 700, color: 'var(--text)', marginBottom: 8, lineHeight: 1.5 }}>{q}</div>
+    <div style={{ fontSize: 14.5, color: 'var(--muted)', lineHeight: 1.85 }}>{children}</div>
   </div>
 )
 
@@ -481,8 +490,7 @@ export default function TcpDeepDive() {
       updatedAt="May 2026"
     >
       {/* Chapter 01 */}
-      <Chapter n={1} />
-      <H2>The Contract That Makes the Internet Work</H2>
+      <Chapter n={1} title="The Contract That Makes the Internet Work" />
 
       <StoryBox>
         The internet&apos;s physical infrastructure drops packets. Routers get congested and discard frames. Optical links have bit error rates. Switches lose packets during buffer overflow. IP itself is explicitly defined as &quot;best effort&quot; — it makes no delivery guarantees whatsoever.
@@ -494,7 +502,7 @@ export default function TcpDeepDive() {
 
       <Para>TCP (Transmission Control Protocol) is defined in RFC 793 (1981) with significant extensions in RFC 1122, RFC 2581, RFC 5681, and many others. It provides: <Accent>reliability</Accent> (guaranteed delivery via acknowledgment and retransmission), <Accent>ordering</Accent> (sequence numbers ensure bytes are delivered in transmission order), <Accent>flow control</Accent> (receive window prevents sender from overwhelming receiver), <Accent>congestion control</Accent> (adaptive sending rate prevents network saturation), and <Accent>error detection</Accent> (checksum over header and data).</Para>
 
-      <WowBox>
+      <WowBox emoji="⚡" title="50 Years Unchanged — TCP's Enduring Design">
         TCP was designed in 1974 by Vint Cerf and Bob Kahn for a network of perhaps a few hundred nodes. Yet the same core protocol — with only modest extensions — now carries petabytes per second across a global network of billions of devices. No redesign, no replacement, no breaking change in 50 years. The congestion control algorithms added in the 1980s by Van Jacobson still run on every TCP implementation today.
       </WowBox>
 
@@ -507,8 +515,7 @@ export default function TcpDeepDive() {
       <Divider />
 
       {/* Chapter 02 */}
-      <Chapter n={2} />
-      <H2>The Three-Way Handshake</H2>
+      <Chapter n={2} title="The Three-Way Handshake" />
 
       <StoryBox>
         Two processes on different machines want to exchange data. Before a single byte of application data can flow, they need to agree on: starting sequence numbers (so they can detect reordering and track delivery), initial window sizes (so neither side overwhelms the other), and TCP options (MSS, window scaling, SACK). All of this happens in three packets — the three-way handshake.
@@ -540,8 +547,7 @@ sysctl -w net.ipv4.tcp_synack_retries=2         # Reduce SYN-ACK retries (flood 
       <Divider />
 
       {/* Chapter 03 */}
-      <Chapter n={3} />
-      <H2>TCP Header — Every Bit Counts</H2>
+      <Chapter n={3} title="TCP Header — Every Bit Counts" />
 
       <StoryBox>
         The TCP header is 20 bytes minimum — less than one millisecond to transmit on a 1 Gbps link. Yet those 20 bytes contain the entire machinery for reliable delivery: sequence tracking, acknowledgment, flow control, connection state, and checksum. Every field is load-bearing. Understanding each field is the difference between reading a packet capture like a book and seeing random hex.
@@ -562,8 +568,7 @@ sysctl -w net.ipv4.tcp_synack_retries=2         # Reduce SYN-ACK retries (flood 
       <Divider />
 
       {/* Chapter 04 */}
-      <Chapter n={4} />
-      <H2>Sequence Numbers and Reliability</H2>
+      <Chapter n={4} title="Sequence Numbers and Reliability" />
 
       <StoryBox>
         TCP&apos;s reliability mechanism is built on one key insight: every byte in the data stream has a unique number. By numbering bytes, not packets, TCP can handle packet fragmentation, reordering, and loss transparently. A sender can retransmit a lost segment. A receiver can reorder out-of-sequence segments. The application layer sees a clean byte stream — the network messiness is completely hidden.
@@ -591,15 +596,14 @@ sysctl net.ipv4.tcp_sack           # Should be 1
 # Capture SACK options in tcpdump
 tcpdump -i eth0 'tcp[tcpflags] & tcp-ack != 0' -vvv | grep SACK`}</CodeBlock>
 
-      <Warn>
+      <Warn title="Disabling TCP timestamps also disables PAWS sequence number protection">
         The <Accent>PAWS (Protection Against Wrapped Sequence Numbers)</Accent> mechanism uses TCP timestamps (RFC 7323) to prevent old duplicate segments from being accepted when sequence numbers wrap around. At 10 Gbps, a 32-bit sequence number wraps in ~3.4 seconds. Without PAWS, a delayed segment from a previous connection could arrive and corrupt the current stream. PAWS uses the timestamp option to detect and discard these wrapped duplicates. Disabling TCP timestamps (<Code>net.ipv4.tcp_timestamps=0</Code>) disables PAWS — safe only on networks with RTTs &gt; wrap-around period (nearly impossible at high bandwidth).
       </Warn>
 
       <Divider />
 
       {/* Chapter 05 */}
-      <Chapter n={5} />
-      <H2>Flow Control and the Receive Window</H2>
+      <Chapter n={5} title="Flow Control and the Receive Window" />
 
       <StoryBox>
         A 1 Gbps server is sending data to a 10 Mbps client. Without flow control, the server would blast data a hundred times faster than the client can process it. The client&apos;s receive buffer would fill, overflow, and start dropping packets — causing the server to retransmit, making the situation worse.
@@ -635,8 +639,7 @@ ss -ti | grep nodelay   # Shows if TCP_NODELAY is set
       <Divider />
 
       {/* Chapter 06 */}
-      <Chapter n={6} />
-      <H2>Congestion Control — TCP&apos;s Self-Regulation</H2>
+      <Chapter n={6} title="Congestion Control — TCP's Self-Regulation" />
 
       <StoryBox>
         In 1986, the internet experienced its first congestion collapse. TCP at the time had no mechanism to back off when the network was congested. Routers dropped packets. TCP senders retransmitted. More retransmissions created more congestion. Throughput fell by a factor of 1000 on some paths.
@@ -681,8 +684,7 @@ watch -n 0.5 'ss -ti | grep -A1 ESTABLISHED'`}</CodeBlock>
       <Divider />
 
       {/* Chapter 07 */}
-      <Chapter n={7} />
-      <H2>Retransmission and RTO</H2>
+      <Chapter n={7} title="Retransmission and RTO" />
 
       <StoryBox>
         TCP sends a segment and starts a timer. If no ACK arrives before the timer expires, it retransmits. Simple in concept — but setting the timer correctly is one of the hardest problems in distributed systems. Set it too short and you retransmit unnecessarily, wasting bandwidth. Set it too long and you wait too long after a loss, wasting time.
@@ -697,15 +699,14 @@ watch -n 0.5 'ss -ti | grep -A1 ESTABLISHED'`}</CodeBlock>
 
       <Para>On each retransmission, RTO is doubled (exponential back-off) up to a maximum (typically 60–120 seconds). This prevents retransmission storms during severe congestion. The RTO resets when a segment is successfully acknowledged.</Para>
 
-      <WowBox>
+      <WowBox emoji="⏱️" title="Karn's Algorithm and TCP Timestamps">
         TCP Timestamps option (RFC 7323) enables precise per-segment RTT measurement. Without timestamps, TCP can only measure RTT from ACK timing — which is ambiguous for retransmitted segments (Karn&apos;s Algorithm: don&apos;t update RTT estimate for retransmitted segments, since you don&apos;t know if the ACK is for the original or the retransmission). Timestamps uniquely identify each segment, resolving the ambiguity and allowing precise RTT measurement for every segment including retransmits.
       </WowBox>
 
       <Divider />
 
       {/* Chapter 08 */}
-      <Chapter n={8} />
-      <H2>TIME_WAIT — The State Everyone Wants to Fix</H2>
+      <Chapter n={8} title="TIME_WAIT — The State Everyone Wants to Fix" />
 
       <StoryBox>
         A high-traffic load balancer processes 50,000 connections per second. Each connection after close enters TIME_WAIT for 60–120 seconds (2 × MSL, Maximum Segment Lifetime). At steady state, the load balancer has 3–6 million sockets in TIME_WAIT. The OS runs out of ephemeral ports. New connections fail with &quot;Address already in use.&quot; The operations team wants to reduce TIME_WAIT to 5 seconds to fix the problem. This makes things worse.
@@ -722,15 +723,14 @@ watch -n 0.5 'ss -ti | grep -A1 ESTABLISHED'`}</CodeBlock>
       <Para>• <Accent>SO_REUSEADDR</Accent>: allows binding to a port that has sockets in TIME_WAIT. Necessary for server restart without waiting for TIME_WAIT expiry.</Para>
       <Para>• <Accent>Architectural</Accent>: use connection pooling so connections are reused rather than closed and reopened. The best fix is fewer connection close events.</Para>
 
-      <Warn>
+      <Warn title="tcp_tw_recycle is removed from Linux — it breaks NAT'd connections">
         <Code>tcp_tw_recycle</Code> (net.ipv4.tcp_tw_recycle) was removed from Linux kernel 4.12. It caused connection failures for NAT&apos;ed clients (multiple clients behind NAT share the same public IP, so their timestamps appear to go backwards from the server&apos;s perspective). Never use it — the feature was fundamentally broken. Use <Code>tcp_tw_reuse</Code> instead, which is safe because it only reuses TIME_WAIT sockets for NEW connections, not for the same 4-tuple.
       </Warn>
 
       <Divider />
 
       {/* Chapter 09 */}
-      <Chapter n={9} />
-      <H2>TCP Performance Tuning</H2>
+      <Chapter n={9} title="TCP Performance Tuning" />
 
       <StoryBox>
         A cloud storage application is transferring files between two servers 50ms apart (New York to London). The measured throughput is 5 Mbps on a 1 Gbps link — 0.5% utilization. The engineer assumes packet loss. But packet loss is zero. The bottleneck is the receive window: 65,535 bytes / 0.05 seconds = ~10 Mbps theoretical maximum. The application uses default socket buffer sizes. By increasing the socket receive buffer to 4 MB, throughput jumps to 80 Mbps. A single parameter change, a 16× improvement.
@@ -768,8 +768,7 @@ sysctl -w net.ipv4.tcp_window_scaling=1
       <Divider />
 
       {/* Chapter 10 */}
-      <Chapter n={10} />
-      <H2>TCP Options — The Protocol Extension Mechanism</H2>
+      <Chapter n={10} title="TCP Options — The Protocol Extension Mechanism" />
 
       <StoryBox>
         TCP Options are the evolutionary mechanism that has kept TCP relevant for five decades. The base protocol from 1981 has 20 bytes of fixed header. Options in the remaining 40 bytes have enabled window scaling, SACK, timestamps, fast open, multipath, authentication, and dozens of other features — all while remaining backward compatible with implementations from 1981 that ignore options they don&apos;t understand.
@@ -786,8 +785,7 @@ sysctl -w net.ipv4.tcp_window_scaling=1
       <Divider />
 
       {/* Chapter 11 */}
-      <Chapter n={11} />
-      <H2>TCP Connection Failures and Debugging</H2>
+      <Chapter n={11} title="TCP Connection Failures and Debugging" />
 
       <StoryBox>
         An application connects to a database. The connection succeeds. It sends a query. Silence. 30 seconds later: &quot;connection timeout.&quot; The database is running. The network is up. Ping works. Ports are open. What happened?
@@ -827,8 +825,7 @@ echo 1 > /sys/kernel/debug/tracing/events/tcp/enable`}</CodeBlock>
       <Divider />
 
       {/* Chapter 12 */}
-      <Chapter n={12} />
-      <H2>TCP in Modern Applications</H2>
+      <Chapter n={12} title="TCP in Modern Applications" />
 
       <StoryBox>
         HTTP/1.1 reuses connections (keep-alive), but sends one request at a time. HTTP/2 multiplexes streams — dozens of requests in parallel over a single TCP connection. HTTP/3 runs over QUIC (UDP) to eliminate TCP&apos;s head-of-line blocking. Each generation is a response to TCP limitations becoming bottlenecks at larger scale.
@@ -860,61 +857,59 @@ s.listen()`}</CodeBlock>
       <Divider />
 
       {/* Chapter 13 */}
-      <Chapter n={13} />
-      <H2>Common Misconceptions</H2>
+      <Chapter n={13} title="Common Misconceptions" />
 
-      <Err>
+      <Err title="TCP guarantees delivery all the way to the application">
         <strong>TCP guarantees delivery and ordering end-to-end.</strong> TCP guarantees delivery and ordering from the sender&apos;s kernel to the receiver&apos;s kernel (socket buffer). It does NOT guarantee that the application processed the data, that the application acknowledged receipt, or that the data was written to disk. A server can ACK data and then crash before the application reads it. For application-level guarantees, use application-layer acknowledgments (database transactions, message queue ACKs).
       </Err>
 
-      <Err>
+      <Err title="RST immediately and reliably terminates a connection on both sides">
         <strong>RST immediately terminates a connection on both sides.</strong> RST is sent by one side and received by the other. The sender transitions to CLOSED. The receiver, upon receiving RST, aborts the connection. But if RST is lost (UDP drops it, firewall blocks it), the other side remains in its current state until timeout. More importantly, an RST with an out-of-window sequence number is silently discarded — this is by design to prevent RST injection attacks, but means RST can appear to &quot;not work&quot; if sequence numbers are out of sync.
       </Err>
 
-      <Err>
+      <Err title="Larger TCP buffers always improve performance">
         <strong>Increasing TCP buffer sizes always improves performance.</strong> Increasing socket buffers helps when the bottleneck is the bandwidth-delay product. But it cannot help if the bottleneck is actual link capacity, CPU, application processing, or disk I/O. Oversized buffers can increase latency (bufferbloat) — data queues up in large buffers rather than being dropped and retransmitted quickly. On LAN paths (sub-millisecond RTT), default buffers are already more than adequate. Tune buffers only when measurements show the window is the actual bottleneck.
       </Err>
 
-      <Err>
+      <Err title="Nagle + Delayed ACK are always safe and independent optimizations">
         <strong>The Nagle algorithm and delayed ACK are both optimizations that never cause problems.</strong> Nagle + Delayed ACK interaction is a classic performance anti-pattern. Nagle waits to send small writes until the previous data is ACKed. Delayed ACK waits 40ms before sending an ACK for a segment without data to piggyback. When both are active in the same connection with interactive small writes, every exchange incurs a 40ms delay: sender writes small data, Nagle holds it, receiver delays ACK 40ms, Nagle releases data, cycle repeats. Fix: <Code>TCP_NODELAY</Code> on the sender (disable Nagle).
       </Err>
 
-      <Err>
+      <Err title="TIME_WAIT is a bug or inefficiency that should be eliminated">
         <strong>TIME_WAIT is a bug or inefficiency that should be minimized.</strong> TIME_WAIT prevents two real correctness problems: delayed segment acceptance (old segments arriving after connection close) and reliable final ACK delivery. Aggressive reduction causes subtle data corruption on high-traffic servers — corrupted data streams where an old segment arrives and is accepted as belonging to the new connection because TIME_WAIT was skipped. The correct approach: connection pooling (avoid close events) and <Code>tcp_tw_reuse</Code> (safe reuse for outbound connections), not <Code>tcp_fin_timeout</Code> reduction below 30 seconds.
       </Err>
 
-      <Err>
+      <Err title="Three duplicate ACKs signal network-wide congestion">
         <strong>Three duplicate ACKs signal network congestion.</strong> Three duplicate ACKs signal a missing segment — likely packet loss at a specific link, not network-wide congestion. Fast Retransmit/Recovery (not full Slow Start) is appropriate because later segments are still arriving, indicating the path is functional. A timeout (no ACKs at all) better signals severe congestion or link failure, and justifies the more aggressive Slow Start. Misclassifying the signal leads to inappropriate cwnd reduction: too aggressive on 3-dup-ACK, too conservative on timeouts.
       </Err>
 
       <Divider />
 
       {/* Chapter 14 */}
-      <Chapter n={14} />
-      <H2>Depth Check</H2>
+      <Chapter n={14} title="Depth Check" />
 
-      <IQ level="Beginner">
-        What is the TCP three-way handshake and why does it need three messages? SYN: client proposes connection and sends its ISN. SYN-ACK: server acknowledges client&apos;s ISN and sends its own ISN. ACK: client acknowledges server&apos;s ISN. Three messages are the minimum to establish bidirectional agreement: two would leave one side uncertain whether the other received confirmation.
+      <IQ q="What is the TCP three-way handshake and why does it need three messages?" level="Beginner">
+        SYN: client proposes connection and sends its ISN. SYN-ACK: server acknowledges client&apos;s ISN and sends its own ISN. ACK: client acknowledges server&apos;s ISN. Three messages are the minimum to establish bidirectional agreement: two would leave one side uncertain whether the other received confirmation.
       </IQ>
 
-      <IQ level="Intermediate">
-        What is the difference between flow control and congestion control? Flow control prevents the sender from overwhelming the receiver&apos;s buffer — managed via the receive window (rwnd) in the TCP header, set by the receiver. Congestion control prevents the sender from overwhelming the network — managed via the congestion window (cwnd) in the sender&apos;s kernel, adjusted based on loss signals. Actual sending rate is limited by min(cwnd, rwnd). Both are necessary: a fast receiver with a congested network still needs congestion control.
+      <IQ q="What is the difference between flow control and congestion control?" level="Intermediate">
+        Flow control prevents the sender from overwhelming the receiver&apos;s buffer — managed via the receive window (rwnd) in the TCP header, set by the receiver. Congestion control prevents the sender from overwhelming the network — managed via the congestion window (cwnd) in the sender&apos;s kernel, adjusted based on loss signals. Actual sending rate is limited by min(cwnd, rwnd). Both are necessary: a fast receiver with a congested network still needs congestion control.
       </IQ>
 
-      <IQ level="Intermediate">
-        Why does TIME_WAIT exist and what is the risk of reducing it? TIME_WAIT (2 × MSL ≈ 60–120s) serves two purposes: absorbing delayed segments from the closed connection before the 4-tuple can be reused, and ensuring reliable delivery of the final ACK. Reducing it risks two bugs: a delayed segment from an old connection arriving and being accepted by a new connection reusing the same 4-tuple (data corruption), and the passive closer retransmitting its final FIN finding no TIME_WAIT socket to respond — receiving RST instead of ACK.
+      <IQ q="Why does TIME_WAIT exist and what is the risk of reducing it?" level="Intermediate">
+        TIME_WAIT (2 × MSL ≈ 60–120s) serves two purposes: absorbing delayed segments from the closed connection before the 4-tuple can be reused, and ensuring reliable delivery of the final ACK. Reducing it risks two bugs: a delayed segment from an old connection arriving and being accepted by a new connection reusing the same 4-tuple (data corruption), and the passive closer retransmitting its final FIN finding no TIME_WAIT socket to respond — receiving RST instead of ACK.
       </IQ>
 
-      <IQ level="Senior">
-        Explain SACK and how it improves performance over cumulative ACK alone. Selective Acknowledgment allows the receiver to report non-contiguous received segments. Rather than ACKing only the highest contiguous byte (cumulative ACK), SACK blocks encode the edges of received ranges. Example: if bytes 1–1000 and 2001–3000 are received but 1001–2000 is missing, SACK reports {'{'}sack(2001, 3000){'}'} — the sender retransmits only 1001–2000. Without SACK, the sender retransmits from the last cumulative ACK onward (Go-Back-N behavior), wasting bandwidth re-sending already-received data. SACK is critical for performance over lossy links (satellite, Wi-Fi) where multiple segments may be lost in one window.
+      <IQ q="Explain SACK and how it improves performance over cumulative ACK alone." level="Senior">
+        Selective Acknowledgment allows the receiver to report non-contiguous received segments. Rather than ACKing only the highest contiguous byte (cumulative ACK), SACK blocks encode the edges of received ranges. Example: if bytes 1–1000 and 2001–3000 are received but 1001–2000 is missing, SACK reports {'{'}sack(2001, 3000){'}'} — the sender retransmits only 1001–2000. Without SACK, the sender retransmits from the last cumulative ACK onward (Go-Back-N behavior), wasting bandwidth re-sending already-received data. SACK is critical for performance over lossy links (satellite, Wi-Fi) where multiple segments may be lost in one window.
       </IQ>
 
-      <IQ level="Senior">
-        How does TCP Fast Open work and what security concern does it address? TFO allows data to be sent in the SYN packet on repeat connections, saving 1 RTT of setup overhead. The mechanism: on the first connection, the server generates a TFO cookie (HMAC of client IP + secret) and sends it to the client in the TFO option. On subsequent SYNs, the client includes the cookie. The server validates the cookie before accepting SYN data, preventing amplification attacks (an attacker cannot forge valid cookies to send arbitrary data to the server pretending to be a different IP). The limitation: TFO data is not protected against replay on the same connection — the server may process SYN data twice if the SYN is retransmitted. Application-layer idempotency is required for SYN-carried data.
+      <IQ q="How does TCP Fast Open work and what security concern does it address?" level="Senior">
+        TFO allows data to be sent in the SYN packet on repeat connections, saving 1 RTT of setup overhead. The mechanism: on the first connection, the server generates a TFO cookie (HMAC of client IP + secret) and sends it to the client in the TFO option. On subsequent SYNs, the client includes the cookie. The server validates the cookie before accepting SYN data, preventing amplification attacks (an attacker cannot forge valid cookies to send arbitrary data to the server pretending to be a different IP). The limitation: TFO data is not protected against replay on the same connection — the server may process SYN data twice if the SYN is retransmitted. Application-layer idempotency is required for SYN-carried data.
       </IQ>
 
-      <IQ level="PhD">
-        Describe the interaction between CUBIC congestion control, BBR, and fairness when both run simultaneously on the same bottleneck link. CUBIC and BBR use fundamentally different congestion signals. CUBIC is loss-based: it backs off only when it detects loss (cwnd reduction on 3-dup-ACKs or timeout). BBR is model-based: it probes bandwidth and RTT, maintaining a model of network state. When CUBIC and BBR share a bottleneck: CUBIC aggressively fills the buffer (high queuing delay, high throughput for CUBIC). BBR sees increased RTT as congestion and reduces its rate. CUBIC flows get disproportionately high bandwidth because they are willing to inflate queues that BBR backs away from. In practice, BBR flows may get 30–70% less throughput than CUBIC flows on the same path — an unfairness that Google has partially addressed in BBRv2 (which adds loss-based congestion response to complement the model-based mechanism). The fundamental tension: loss-based protocols build queues aggressively; delay-based protocols yield. This remains an active area of research in TCP fairness and AQM (Active Queue Management) algorithm design.
+      <IQ q="Describe the interaction between CUBIC congestion control, BBR, and fairness when both run simultaneously on the same bottleneck link." level="PhD">
+        CUBIC and BBR use fundamentally different congestion signals. CUBIC is loss-based: it backs off only when it detects loss (cwnd reduction on 3-dup-ACKs or timeout). BBR is model-based: it probes bandwidth and RTT, maintaining a model of network state. When CUBIC and BBR share a bottleneck: CUBIC aggressively fills the buffer (high queuing delay, high throughput for CUBIC). BBR sees increased RTT as congestion and reduces its rate. CUBIC flows get disproportionately high bandwidth because they are willing to inflate queues that BBR backs away from. In practice, BBR flows may get 30–70% less throughput than CUBIC flows on the same path — an unfairness that Google has partially addressed in BBRv2 (which adds loss-based congestion response to complement the model-based mechanism). The fundamental tension: loss-based protocols build queues aggressively; delay-based protocols yield. This remains an active area of research in TCP fairness and AQM (Active Queue Management) algorithm design.
       </IQ>
 
       <Divider />
