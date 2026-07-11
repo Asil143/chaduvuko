@@ -205,7 +205,7 @@ export default function DataScienceWorkflow() {
       </div>
 
       <PyPlayground
-        initialCode={`# "What happened, grouped by X?" — a groupby answers this directly, no model required\nmerged = subscriptions.merge(users, on='user_id')\nmerged.groupby('plan')['status'].value_counts(normalize=True).round(3)`}
+        initialCode={`# "What happened, grouped by X?" — a groupby answers this directly, no model required\n# (suffixes=('', '_user') keeps subscriptions' own 'plan' column unrenamed,\n# since both tables happen to carry a 'plan' column)\nmerged = subscriptions.merge(users, on='user_id', suffixes=('', '_user'))\nmerged.groupby('plan')['status'].value_counts(normalize=True).round(3)`}
         height={130}
         showSchema={false}
       />
@@ -416,8 +416,8 @@ merged.groupby('referral_source')['minutes_watched'].mean().round(1).sort_values
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
           <strong>Module 03</strong> draws a sharp, practical line between Data Scientist, Data Analyst, ML Engineer, and Data Engineer — what each role actually owns day to day, where the boundaries blur in practice, and how to talk about your own work in interviews without the titles getting confused.
         </p>
-        <Link href="/learn/data-science" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          See the full Data Science curriculum →
+        <Link href="/learn/data-science/ds-vs-other-roles" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 03 → Data Scientist vs Other Roles
         </Link>
       </div>
 

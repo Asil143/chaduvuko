@@ -6,9 +6,9 @@ import type { Metadata } from 'next';
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   'what-is-data-science': () => import('@/content/data-science/what-is-data-science'),
   'data-science-workflow': () => import('@/content/data-science/data-science-workflow'),
+  'ds-vs-other-roles': () => import('@/content/data-science/ds-vs-other-roles'),
 
   // Add each new module here as you build it:
-  // 'ds-vs-other-roles':           () => import('@/content/data-science/ds-vs-other-roles'),
   // 'python-environment-setup':    () => import('@/content/data-science/python-environment-setup'),
   // ... (add all 53 slugs as they are built)
 };
