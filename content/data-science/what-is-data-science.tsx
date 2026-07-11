@@ -429,8 +429,8 @@ export default function WhatIsDataScience() {
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
           <strong>Module 02</strong> walks through the data science workflow in full depth — how a vague business question becomes a precise, answerable one, and exactly what happens at each of the six lifecycle stages on a real project. More modules are being added to this track regularly.
         </p>
-        <Link href="/learn/data-science" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          See the full Data Science curriculum →
+        <Link href="/learn/data-science/data-science-workflow" style={{ background: C, color: '#fff', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 02 → The Data Science Workflow
         </Link>
       </div>
 
