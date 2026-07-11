@@ -16,6 +16,7 @@ import { getPrevNext, getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navig
 import SQLSectionNav from '@/components/sql/SQLSectionNav'
 import { AIML_SECTIONS } from '@/data/aiml-curriculum'
 import { SQL_CURRICULUM } from '@/data/sql-freshcart'
+import { DS_CURRICULUM } from '@/data/datascience-streampulse'
 
 function getAIMLModuleNum(pathname: string): string | null {
   const topicSlug = pathname.split('/').pop()
@@ -171,6 +172,8 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const pathname = usePathname()
   const sqlMatch = pathname.match(/^\/learn\/sql\/([^/]+)$/)
   const sqlSlug = sqlMatch ? sqlMatch[1] : null
+  const dsMatch = pathname.match(/^\/learn\/data-science\/([^/]+)$/)
+  const dsSlug = dsMatch ? dsMatch[1] : null
   const isAIML = pathname.startsWith('/learn/ai-ml/')
   const aimlModuleNum = isAIML ? getAIMLModuleNum(pathname) : null
   const displaySection = aimlModuleNum ? `AI/ML — Module ${aimlModuleNum}` : section
@@ -182,9 +185,10 @@ export function LearnLayout({ children, title, description, section, readTime, u
 
   // Derive difficulty from curriculum data for SQL and AI/ML pages
   const sqlSection = sqlSlug ? SQL_CURRICULUM.find(s => s.modules.some(m => m.slug === sqlSlug)) : null
+  const dsSection = dsSlug ? DS_CURRICULUM.find(s => s.modules.some(m => m.slug === dsSlug)) : null
   const aimlSectionSlug = isAIML ? pathname.split('/')[3] : null
   const aimlSection = aimlSectionSlug ? AIML_SECTIONS.find(s => s.slug === aimlSectionSlug) : null
-  const curriculumDiff = (sqlSection?.difficulty ?? aimlSection?.difficulty) as 'Beginner' | 'Intermediate' | 'Advanced' | undefined
+  const curriculumDiff = (sqlSection?.difficulty ?? dsSection?.difficulty ?? aimlSection?.difficulty) as 'Beginner' | 'Intermediate' | 'Advanced' | undefined
   const diff = meta?.difficulty ?? curriculumDiff
   const diffStyle = diff ? difficultyColors[diff] : null
 

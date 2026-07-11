@@ -71,6 +71,17 @@ const TRACKS = [
     href: '/learn/sql',
     modules: 60,
   },
+  {
+    cat: 'data' as Cat,
+    icon: '📊', color: '#8b5cf6',
+    name: 'Data Science',
+    desc: 'Python, NumPy, pandas, statistics, and predictive modeling — one live in-browser dataset from Module 01 to your capstone.',
+    pills: ['pandas', 'NumPy', 'Statistics', 'Visualization', 'ML Basics'],
+    jobs: 'Data Scientist · Data Analyst · BI Analyst',
+    status: 'live' as const,
+    href: '/learn/data-science',
+    modules: 53,
+  },
   // ── AI & ML ────────────────────────────────────────────────────────────────
   {
     cat: 'ai' as Cat,
