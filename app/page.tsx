@@ -42,7 +42,7 @@ const tracksAll = [
 
 { cat:'ai', icon:'🧠', name:'Deep Learning',          desc:'Neural networks, CNNs, RNNs, Transformers — part of the AI & ML track', pills:['TensorFlow','PyTorch','Backprop','Transformers'], jobs:'DL Engineer · AI Researcher',     status:'live', href:'/learn/ai-ml' },
 { cat:'ai', icon:'✨', name:'Generative AI / LLMs',   desc:'GANs, Diffusion, LLMs, RAG, Agents — part of the AI & ML track',       pills:['LangChain','OpenAI','RAG','HuggingFace'],     jobs:'GenAI Developer · AI Engineer',   status:'live', href:'/learn/ai-ml' },
-{ cat:'ai', icon:'📈', name:'Data Science',            desc:'Analysis, modelling, storytelling',    pills:['Pandas','Matplotlib','Stats','EDA'],          jobs:'Data Scientist · Analytics Consultant', status:'soon', href:'#' },
+{ cat:'ai', icon:'📈', name:'Data Science',            desc:'Python, pandas, statistics, and predictive modelling — one live in-browser dataset',    pills:['Pandas','NumPy','Stats','EDA'],          jobs:'Data Scientist · Analytics Consultant', status:'live', href:'/learn/data-science' },
 { cat:'ai', icon:'🔍', name:'MLOps',                   desc:'Deploy and monitor ML in production',  pills:['MLflow','Docker','Kubeflow','CI/CD'],         jobs:'MLOps Engineer · ML Platform Eng', status:'soon', href:'/learn/ai-ml' },
   // Programming Languages
   { cat:'prog',  icon:'🐍',  name:'Python',                 desc:'Zero to production Python', pills:['Basics','OOP','FastAPI','Testing','Async'],    jobs:'Backend Dev · ML Engineer · Data Analyst',  status:'soon', href:'#' },

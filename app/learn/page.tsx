@@ -335,9 +335,12 @@ export default function LearnPage() {
       }}>
         {filtered.map(t => {
           const isLive = t.status === 'live'
+          const CardTag = (isLive ? Link : 'div') as React.ElementType
+          const cardTagProps = isLive ? { href: t.href } : {}
           return (
-            <div
+            <CardTag
               key={t.name}
+              {...cardTagProps}
               style={{
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
@@ -347,16 +350,18 @@ export default function LearnPage() {
                 display: 'flex',
                 flexDirection: 'column',
                 transition: 'border-color 0.2s, transform 0.2s',
+                textDecoration: 'none',
+                cursor: isLive ? 'pointer' : 'default',
               }}
-              onMouseEnter={e => {
+              onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
                 if (isLive) {
-                  (e.currentTarget as HTMLDivElement).style.borderColor = t.color + '55'
-                  ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'
+                  (e.currentTarget as HTMLElement).style.borderColor = t.color + '55'
+                  ;(e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'
                 }
               }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border)'
-                ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
+              onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'
+                ;(e.currentTarget as HTMLElement).style.transform = 'translateY(0)'
               }}
             >
               {/* Color bar */}
@@ -414,20 +419,17 @@ export default function LearnPage() {
                   {t.jobs}
                 </div>
 
-                {/* CTA */}
+                {/* CTA — visual only; the whole card above is the actual link */}
                 {isLive ? (
-                  <Link
-                    href={t.href}
-                    style={{
-                      display: 'block', textAlign: 'center',
-                      background: t.color, color: '#000',
-                      fontWeight: 700, fontSize: 13,
-                      borderRadius: 8, padding: '10px 0',
-                      textDecoration: 'none', letterSpacing: '.02em',
-                    }}
-                  >
+                  <div style={{
+                    display: 'block', textAlign: 'center',
+                    background: t.color, color: '#000',
+                    fontWeight: 700, fontSize: 13,
+                    borderRadius: 8, padding: '10px 0',
+                    letterSpacing: '.02em',
+                  }}>
                     Start Learning →
-                  </Link>
+                  </div>
                 ) : (
                   <div style={{
                     display: 'block', textAlign: 'center',
@@ -440,7 +442,7 @@ export default function LearnPage() {
                   </div>
                 )}
               </div>
-            </div>
+            </CardTag>
           )
         })}
       </div>
