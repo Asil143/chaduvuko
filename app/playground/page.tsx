@@ -1,10 +1,32 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import { drawCoderCard, type CoderCardData } from '@/lib/coderCard';
 
 const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/KnPtWB3yzR3HM8CcQlHswD?s=cl&p=i&ilr=0';
 const WHATSAPP_POPUP_SESSION_KEY = 'chaduvuko_whatsapp_popup_shown';
+
+const PG_KEY_RUNS = 'chaduvuko_pg_runs';
+const PG_KEY_LANGUAGES = 'chaduvuko_pg_languages';
+const PG_KEY_STREAK = 'chaduvuko_pg_streak';
+const PG_KEY_BEST_STREAK = 'chaduvuko_pg_best_streak';
+const PG_KEY_LAST_VISIT = 'chaduvuko_pg_last_visit';
+const PG_KEY_FIRST_RUN = 'chaduvuko_pg_first_run_date';
+const PG_KEY_NAME = 'chaduvuko_pg_name';
+const PG_KEY_AI_USES = 'chaduvuko_pg_ai_uses';
+
+const PG_LEVELS: { min: number; label: string; icon: string }[] = [
+  { min: 0,   label: 'Rookie',  icon: '🌱' },
+  { min: 5,   label: 'Builder', icon: '🔧' },
+  { min: 20,  label: 'Grinder', icon: '⚙️' },
+  { min: 50,  label: 'Machine', icon: '🤖' },
+  { min: 100, label: 'Legend',  icon: '🏆' },
+];
+
+function getPgLevel(runs: number) {
+  return [...PG_LEVELS].reverse().find(l => runs >= l.min) ?? PG_LEVELS[0];
+}
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -75,13 +97,181 @@ export default function PlaygroundPage() {
   const [ran, setRan] = useState(false);
   const [showWhatsappPopup, setShowWhatsappPopup] = useState(false);
 
+  const [mounted, setMounted] = useState(false);
+  const [pgRuns, setPgRuns] = useState(0);
+  const [showCardModal, setShowCardModal] = useState(false);
+  const [cardNameInput, setCardNameInput] = useState('');
+  const [hasSavedName, setHasSavedName] = useState(false);
+  const cardCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  const [mentorReply, setMentorReply] = useState('');
+  const [mentorLoading, setMentorLoading] = useState(false);
+  const [mentorError, setMentorError] = useState('');
+
   useEffect(() => {
     if (sessionStorage.getItem(WHATSAPP_POPUP_SESSION_KEY)) return;
     setShowWhatsappPopup(true);
     sessionStorage.setItem(WHATSAPP_POPUP_SESSION_KEY, '1');
   }, []);
 
+  useEffect(() => {
+    setMounted(true);
+    try {
+      setPgRuns(parseInt(localStorage.getItem(PG_KEY_RUNS) || '0'));
+    } catch {}
+  }, []);
+
   const dismissWhatsappPopup = useCallback(() => setShowWhatsappPopup(false), []);
+
+  const recordSuccessfulRun = useCallback((language: string) => {
+    try {
+      const runs = parseInt(localStorage.getItem(PG_KEY_RUNS) || '0') + 1;
+      localStorage.setItem(PG_KEY_RUNS, String(runs));
+      setPgRuns(runs);
+
+      const languages: string[] = JSON.parse(localStorage.getItem(PG_KEY_LANGUAGES) || '[]');
+      if (!languages.includes(language)) {
+        languages.push(language);
+        localStorage.setItem(PG_KEY_LANGUAGES, JSON.stringify(languages));
+      }
+
+      if (!localStorage.getItem(PG_KEY_FIRST_RUN)) {
+        localStorage.setItem(PG_KEY_FIRST_RUN, new Date().toISOString());
+      }
+
+      const lastVisit = localStorage.getItem(PG_KEY_LAST_VISIT);
+      const savedStreak = parseInt(localStorage.getItem(PG_KEY_STREAK) || '0');
+      const today = new Date().toDateString();
+      let newStreak = savedStreak;
+      if (lastVisit === today) {
+        newStreak = savedStreak || 1;
+      } else if (lastVisit === new Date(Date.now() - 86400000).toDateString()) {
+        newStreak = savedStreak + 1;
+      } else {
+        newStreak = 1;
+      }
+      localStorage.setItem(PG_KEY_STREAK, String(newStreak));
+      localStorage.setItem(PG_KEY_LAST_VISIT, today);
+
+      const bestStreak = Math.max(newStreak, parseInt(localStorage.getItem(PG_KEY_BEST_STREAK) || '0'));
+      localStorage.setItem(PG_KEY_BEST_STREAK, String(bestStreak));
+    } catch {}
+  }, []);
+
+  const buildCardData = useCallback((name: string): CoderCardData => {
+    let runs = 0, bestStreak = 0, languages: string[] = [], firstRun = '';
+    try {
+      runs = parseInt(localStorage.getItem(PG_KEY_RUNS) || '0');
+      bestStreak = parseInt(localStorage.getItem(PG_KEY_BEST_STREAK) || '0');
+      languages = JSON.parse(localStorage.getItem(PG_KEY_LANGUAGES) || '[]');
+      firstRun = localStorage.getItem(PG_KEY_FIRST_RUN) || '';
+    } catch {}
+    const codingSince = firstRun
+      ? new Date(firstRun).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      : new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    return {
+      name,
+      level: getPgLevel(runs),
+      runs,
+      bestStreak,
+      languages,
+      codingSince,
+    };
+  }, []);
+
+  const renderCard = useCallback((name: string) => {
+    const canvas = cardCanvasRef.current;
+    if (!canvas) return;
+    canvas.width = 1080;
+    canvas.height = 1080;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    drawCoderCard(ctx, buildCardData(name));
+  }, [buildCardData]);
+
+  const openCardModal = useCallback(() => {
+    setShowCardModal(true);
+    let savedName = '';
+    try { savedName = localStorage.getItem(PG_KEY_NAME) || ''; } catch {}
+    if (savedName) {
+      setCardNameInput(savedName);
+      setHasSavedName(true);
+      requestAnimationFrame(() => renderCard(savedName));
+    } else {
+      setHasSavedName(false);
+    }
+  }, [renderCard]);
+
+  const handleGenerateCard = useCallback(() => {
+    const name = cardNameInput.trim().slice(0, 24);
+    if (!name) return;
+    try { localStorage.setItem(PG_KEY_NAME, name); } catch {}
+    setHasSavedName(true);
+    requestAnimationFrame(() => renderCard(name));
+  }, [cardNameInput, renderCard]);
+
+  const handleDownloadCard = useCallback(() => {
+    const canvas = cardCanvasRef.current;
+    if (!canvas) return;
+    canvas.toBlob(blob => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'chaduvuko-coder-card.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  }, []);
+
+  const handleShareCard = useCallback(() => {
+    const canvas = cardCanvasRef.current;
+    if (!canvas) return;
+    canvas.toBlob(async blob => {
+      if (!blob) return;
+      const file = new File([blob], 'chaduvuko-coder-card.png', { type: 'image/png' });
+      try {
+        if (navigator.canShare?.({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'My Chaduvuko Coder Card',
+            text: 'Check out my coding stats on Chaduvuko!',
+          });
+        }
+      } catch {}
+    }, 'image/png');
+  }, []);
+
+  const handleAskMentor = useCallback(async () => {
+    setMentorLoading(true);
+    setMentorError('');
+    setMentorReply('');
+    try {
+      const res = await fetch('/api/playground-mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code,
+          language: selectedLang.value,
+          stdout: output,
+          stderr,
+        }),
+      });
+      const data = await res.json();
+      const reply: string = data.reply || 'No feedback returned.';
+      setMentorReply(reply);
+      if (!reply.startsWith('DEBUG')) {
+        try {
+          const uses = parseInt(localStorage.getItem(PG_KEY_AI_USES) || '0') + 1;
+          localStorage.setItem(PG_KEY_AI_USES, String(uses));
+        } catch {}
+      }
+    } catch (err: unknown) {
+      setMentorError(err instanceof Error ? err.message : 'Could not reach the AI mentor.');
+    } finally {
+      setMentorLoading(false);
+    }
+  }, [code, selectedLang, output, stderr]);
 
   const handleLangChange = useCallback((value: string) => {
     const lang = LANGUAGES.find(l => l.value === value) ?? LANGUAGES[0];
@@ -90,6 +280,8 @@ export default function PlaygroundPage() {
     setOutput('');
     setStderr('');
     setRan(false);
+    setMentorReply('');
+    setMentorError('');
   }, []);
 
   const handleRun = useCallback(async () => {
@@ -97,6 +289,8 @@ export default function PlaygroundPage() {
     setOutput('');
     setStderr('');
     setRan(false);
+    setMentorReply('');
+    setMentorError('');
 
     if (selectedLang.value === 'sql') {
       setOutput('SQL execution coming soon — we\'re building an in-browser SQL runner.');
@@ -140,13 +334,17 @@ export default function PlaygroundPage() {
         || result.message
         || 'No output returned.';
       setOutput(output);
+
+      if (result.stdout && !result.stderr && !result.compile_output) {
+        recordSuccessfulRun(selectedLang.value);
+      }
     } catch (err: unknown) {
       setStderr(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
       setRan(true);
     }
-  }, [code, selectedLang]);
+  }, [code, selectedLang, recordSuccessfulRun]);
 
   return (
     <>
@@ -252,8 +450,33 @@ export default function PlaygroundPage() {
           border-bottom: 1px solid var(--border);
           display: flex;
           align-items: center;
+          justify-content: space-between;
           gap: 8px;
         }
+        .pg-output-label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .mentor-btn {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          background: transparent;
+          border: 1px solid var(--border);
+          color: var(--muted);
+          padding: 4px 10px;
+          border-radius: 5px;
+          font-size: 0.72rem;
+          font-weight: 600;
+          text-transform: none;
+          letter-spacing: normal;
+          cursor: pointer;
+          font-family: inherit;
+          transition: border-color 0.15s, color 0.15s;
+        }
+        .mentor-btn:not(:disabled):hover { border-color: var(--green); color: var(--text); }
+        .mentor-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .pg-output-body {
           padding: 14px 16px;
           font-family: var(--font-mono, monospace);
@@ -365,6 +588,127 @@ export default function PlaygroundPage() {
           font-family: inherit;
         }
         .wa-later-btn:hover { color: var(--text); }
+        .card-trigger-btn {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          background: transparent;
+          border: 1px solid var(--border);
+          color: var(--text);
+          padding: 7px 14px;
+          border-radius: 6px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          cursor: pointer;
+          font-family: inherit;
+          transition: border-color 0.15s;
+        }
+        .card-trigger-btn:hover { border-color: var(--green); }
+        .card-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          padding: 16px;
+          animation: wa-fade-in 0.2s ease;
+        }
+        .card-modal {
+          position: relative;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          max-width: 460px;
+          width: 100%;
+          padding: 28px 24px 24px;
+          text-align: center;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+          animation: wa-pop-in 0.25s ease;
+        }
+        .card-name-title {
+          font-size: 1.05rem;
+          font-weight: 700;
+          color: var(--text);
+          margin-bottom: 10px;
+          font-family: var(--font-display, sans-serif);
+        }
+        .card-name-body {
+          font-size: 0.85rem;
+          color: var(--muted);
+          margin-bottom: 16px;
+          line-height: 1.5;
+        }
+        .card-name-input {
+          width: 100%;
+          background: var(--bg);
+          border: 1px solid var(--border);
+          color: var(--text);
+          padding: 10px 12px;
+          border-radius: 8px;
+          font-size: 0.9rem;
+          margin-bottom: 14px;
+          font-family: inherit;
+          outline: none;
+        }
+        .card-name-input:focus { border-color: var(--green); }
+        .card-generate-btn {
+          width: 100%;
+          background: var(--green);
+          color: #000;
+          border: none;
+          padding: 11px 18px;
+          border-radius: 8px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          font-family: inherit;
+        }
+        .card-generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .card-canvas-wrap {
+          width: 100%;
+          aspect-ratio: 1 / 1;
+          margin-bottom: 16px;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid var(--border);
+        }
+        .card-canvas-wrap canvas { width: 100%; height: 100%; display: block; }
+        .card-actions {
+          display: flex;
+          gap: 10px;
+        }
+        .card-action-btn {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          padding: 10px 16px;
+          border-radius: 8px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          cursor: pointer;
+          font-family: inherit;
+          border: 1px solid var(--border);
+          background: transparent;
+          color: var(--text);
+        }
+        .card-action-btn.primary {
+          background: var(--green);
+          border-color: var(--green);
+          color: #000;
+        }
+        .card-action-btn:hover { opacity: 0.88; }
+        .mentor-block {
+          margin-top: 12px;
+          padding-left: 12px;
+          border-left: 2px solid var(--green);
+          font-family: var(--font-display, sans-serif);
+          font-size: 0.85rem;
+          line-height: 1.6;
+        }
       `}</style>
       <div className="pg-root">
         {showWhatsappPopup && (
@@ -390,9 +734,61 @@ export default function PlaygroundPage() {
             </div>
           </div>
         )}
+        {showCardModal && (
+          <div className="card-overlay" onClick={() => setShowCardModal(false)}>
+            <div className="card-modal" onClick={e => e.stopPropagation()}>
+              <button className="wa-close" onClick={() => setShowCardModal(false)} aria-label="Close">✕</button>
+              {!hasSavedName ? (
+                <>
+                  <div className="card-name-title">🎴 Generate Your Coder Card</div>
+                  <div className="card-name-body">
+                    What should we call you? This name appears on your shareable card.
+                  </div>
+                  <input
+                    className="card-name-input"
+                    type="text"
+                    placeholder="Your name or handle"
+                    value={cardNameInput}
+                    maxLength={24}
+                    onChange={e => setCardNameInput(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleGenerateCard()}
+                  />
+                  <button
+                    className="card-generate-btn"
+                    onClick={handleGenerateCard}
+                    disabled={!cardNameInput.trim()}
+                  >
+                    Generate Card
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="card-canvas-wrap">
+                    <canvas ref={cardCanvasRef} />
+                  </div>
+                  <div className="card-actions">
+                    <button className="card-action-btn primary" onClick={handleDownloadCard}>
+                      ⬇ Download PNG
+                    </button>
+                    {mounted && typeof navigator !== 'undefined' && typeof navigator.share === 'function' && (
+                      <button className="card-action-btn" onClick={handleShareCard}>
+                        ↗ Share
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
         <header className="pg-header">
           <span className="pg-title">Code <span>Playground</span> — Chaduvuko</span>
           <div className="pg-controls">
+            {mounted && pgRuns > 0 && (
+              <button className="card-trigger-btn" onClick={openCardModal}>
+                🎴 My Card
+              </button>
+            )}
             <select
               className="pg-select"
               value={selectedLang.value}
@@ -433,9 +829,17 @@ export default function PlaygroundPage() {
 
           <div className="pg-output-panel">
             <div className="pg-output-header">
-              {ran && !stderr && <span className="dot-run" />}
-              {ran && stderr && <span className="dot-err" />}
-              Output
+              <span className="pg-output-label">
+                {ran && !stderr && <span className="dot-run" />}
+                {ran && stderr && <span className="dot-err" />}
+                Output
+              </span>
+              {ran && !loading && (
+                <button className="mentor-btn" onClick={handleAskMentor} disabled={mentorLoading}>
+                  {mentorLoading ? <span className="spinner" /> : '🤖'}
+                  {mentorLoading ? 'Thinking…' : 'AI Mentor'}
+                </button>
+              )}
             </div>
             <div className="pg-output-body">
               {!ran && !loading && (
@@ -448,6 +852,18 @@ export default function PlaygroundPage() {
               {ran && stderr && <span className="pg-stderr">{stderr}</span>}
               {ran && !output && !stderr && (
                 <span className="pg-placeholder">No output.</span>
+              )}
+              {mentorReply && (
+                <div className="mentor-block">
+                  {mentorReply.startsWith('DEBUG')
+                    ? <span className="pg-stderr">{mentorReply}</span>
+                    : <span className="pg-stdout">🤖 {mentorReply}</span>}
+                </div>
+              )}
+              {mentorError && (
+                <div className="mentor-block">
+                  <span className="pg-stderr">{mentorError}</span>
+                </div>
               )}
             </div>
           </div>
