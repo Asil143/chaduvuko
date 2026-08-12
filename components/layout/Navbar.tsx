@@ -71,7 +71,7 @@ export function Navbar() {
       <Link href="/" className="flex items-center flex-shrink-0">
         <span
           className="flex items-center rounded-lg"
-          style={{ background: '#ffffff', padding: '4px 10px' }}
+          style={{ background: '#ffffff', padding: '3px 12px' }}
         >
           <Image
             src="/logo.png"
@@ -79,7 +79,7 @@ export function Navbar() {
             width={1536}
             height={1024}
             priority
-            style={{ height: '40px', width: 'auto' }}
+            style={{ height: '54px', width: 'auto' }}
           />
         </span>
       </Link>
