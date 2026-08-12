@@ -1,7 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+
+const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/KnPtWB3yzR3HM8CcQlHswD?s=cl&p=i&ilr=0';
+const WHATSAPP_POPUP_SESSION_KEY = 'chaduvuko_whatsapp_popup_shown';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -70,6 +73,15 @@ export default function PlaygroundPage() {
   const [stderr, setStderr] = useState('');
   const [loading, setLoading] = useState(false);
   const [ran, setRan] = useState(false);
+  const [showWhatsappPopup, setShowWhatsappPopup] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem(WHATSAPP_POPUP_SESSION_KEY)) return;
+    setShowWhatsappPopup(true);
+    sessionStorage.setItem(WHATSAPP_POPUP_SESSION_KEY, '1');
+  }, []);
+
+  const dismissWhatsappPopup = useCallback(() => setShowWhatsappPopup(false), []);
 
   const handleLangChange = useCallback((value: string) => {
     const lang = LANGUAGES.find(l => l.value === value) ?? LANGUAGES[0];
@@ -266,8 +278,118 @@ export default function PlaygroundPage() {
         @keyframes spin { to { transform: rotate(360deg); } }
         .dot-run { width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; }
         .dot-err { width: 7px; height: 7px; border-radius: 50%; background: var(--red); display: inline-block; }
+        .wa-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          padding: 16px;
+          animation: wa-fade-in 0.2s ease;
+        }
+        @keyframes wa-fade-in { from { opacity: 0; } to { opacity: 1; } }
+        .wa-modal {
+          position: relative;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          max-width: 380px;
+          width: 100%;
+          padding: 28px 24px 24px;
+          text-align: center;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+          animation: wa-pop-in 0.25s ease;
+        }
+        @keyframes wa-pop-in {
+          from { opacity: 0; transform: translateY(8px) scale(0.97); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .wa-close {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: transparent;
+          border: none;
+          color: var(--muted);
+          font-size: 1.1rem;
+          line-height: 1;
+          cursor: pointer;
+          padding: 6px;
+          border-radius: 6px;
+        }
+        .wa-close:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+        .wa-icon { font-size: 2.2rem; margin-bottom: 10px; }
+        .wa-title {
+          font-size: 1.05rem;
+          font-weight: 700;
+          color: var(--text);
+          margin-bottom: 10px;
+          font-family: var(--font-display, sans-serif);
+        }
+        .wa-body {
+          font-size: 0.88rem;
+          line-height: 1.6;
+          color: var(--muted);
+          margin-bottom: 20px;
+        }
+        .wa-join-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          background: #25D366;
+          color: #fff;
+          border: none;
+          padding: 11px 18px;
+          border-radius: 8px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          text-decoration: none;
+          font-family: inherit;
+          transition: opacity 0.15s;
+        }
+        .wa-join-btn:hover { opacity: 0.9; }
+        .wa-later-btn {
+          display: block;
+          width: 100%;
+          background: transparent;
+          border: none;
+          color: var(--muted);
+          font-size: 0.8rem;
+          padding: 12px 0 0;
+          cursor: pointer;
+          font-family: inherit;
+        }
+        .wa-later-btn:hover { color: var(--text); }
       `}</style>
       <div className="pg-root">
+        {showWhatsappPopup && (
+          <div className="wa-overlay" onClick={dismissWhatsappPopup}>
+            <div className="wa-modal" onClick={e => e.stopPropagation()}>
+              <button className="wa-close" onClick={dismissWhatsappPopup} aria-label="Close">✕</button>
+              <div className="wa-icon">🎥</div>
+              <div className="wa-title">Want to make YouTube study content with us?</div>
+              <div className="wa-body">
+                I&apos;m looking to work with students on YouTube study content — I&apos;d love to hear your unique
+                ideas and thoughts. Join the WhatsApp group and let&apos;s talk!
+              </div>
+              <a
+                className="wa-join-btn"
+                href={WHATSAPP_GROUP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={dismissWhatsappPopup}
+              >
+                Join WhatsApp Group
+              </a>
+              <button className="wa-later-btn" onClick={dismissWhatsappPopup}>Maybe later</button>
+            </div>
+          </div>
+        )}
         <header className="pg-header">
           <span className="pg-title">Code <span>Playground</span> — Chaduvuko</span>
           <div className="pg-controls">
