@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
@@ -67,17 +68,19 @@ export function Navbar() {
       }}
     >
       {/* Logo */}
-      <Link
-        href="/"
-        className="flex items-center gap-1.5 font-display font-extrabold text-xl tracking-tight flex-shrink-0"
-        style={{ color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'visible' }}
-      >
+      <Link href="/" className="flex items-center flex-shrink-0">
         <span
-          className="w-2 h-2 rounded-full flex-shrink-0"
-          style={{ background: 'var(--accent)', animation: 'pulseDot 2s ease-in-out infinite' }}
-        />
-        <span style={{ letterSpacing: '-0.01em' }}>
-          Chaduv<span style={{ color: 'var(--accent)' }}>uko</span>
+          className="flex items-center rounded-lg"
+          style={{ background: '#ffffff', padding: '4px 10px' }}
+        >
+          <Image
+            src="/logo.png"
+            alt="Chaduvuko — Learn. Build. Grow."
+            width={1536}
+            height={1024}
+            priority
+            style={{ height: '40px', width: 'auto' }}
+          />
         </span>
       </Link>
 
