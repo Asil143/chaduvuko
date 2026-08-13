@@ -25,39 +25,6 @@ export const THEMES = [
       '--shadow': '0 1px 3px rgba(0,0,0,0.4)', '--shadow-lg': '0 8px 30px rgba(0,0,0,0.6)',
     }
   },
-  {
-    id: 'midnight', label: 'Midnight', icon: '🌃',
-    preview: ['#0d1117', '#c9d1d9', '#58a6ff'],
-    vars: {
-      '--bg': '#0d1117', '--bg2': '#161b22', '--bg3': '#1c2128', '--surface': '#21262d',
-      '--text': '#c9d1d9', '--text2': '#b1bac4', '--muted': '#8b949e',
-      '--border': '#30363d', '--border2': '#21262d',
-      '--accent': '#58a6ff', '--accent-glow': 'rgba(88,166,255,0.08)', '--green': '#3fb950',
-      '--shadow': '0 1px 3px rgba(0,0,0,0.4)', '--shadow-lg': '0 8px 30px rgba(0,0,0,0.7)',
-    }
-  },
-  {
-    id: 'sepia', label: 'Sepia', icon: '📜',
-    preview: ['#f5f0e8', '#3d2b1f', '#8b5e3c'],
-    vars: {
-      '--bg': '#f5f0e8', '--bg2': '#ede8df', '--bg3': '#e4ddd3', '--surface': '#faf7f2',
-      '--text': '#3d2b1f', '--text2': '#5c3d2e', '--muted': '#8c7b6b',
-      '--border': '#d6cfc5', '--border2': '#c8bfb4',
-      '--accent': '#8b5e3c', '--accent-glow': 'rgba(139,94,60,0.08)', '--green': '#4a7c59',
-      '--shadow': '0 1px 3px rgba(61,43,31,0.1)', '--shadow-lg': '0 8px 30px rgba(61,43,31,0.15)',
-    }
-  },
-  {
-    id: 'terminal', label: 'Terminal', icon: '💻',
-    preview: ['#0d0d0d', '#00ff41', '#00bb2d'],
-    vars: {
-      '--bg': '#0d0d0d', '--bg2': '#111111', '--bg3': '#161616', '--surface': '#1a1a1a',
-      '--text': '#00ff41', '--text2': '#00cc33', '--muted': '#336622',
-      '--border': '#1a3320', '--border2': '#224428',
-      '--accent': '#00ff41', '--accent-glow': 'rgba(0,255,65,0.06)', '--green': '#00ff41',
-      '--shadow': '0 1px 3px rgba(0,255,65,0.1)', '--shadow-lg': '0 0 30px rgba(0,255,65,0.12)',
-    }
-  },
 ]
 
 const KEY = 'chaduvuko_theme'
