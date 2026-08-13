@@ -46,7 +46,6 @@ const navItems: NavItem[] = [
   { label: 'Projects',       href: '/learn/projects' },
   { label: 'Industry',       href: '/learn/industry' },
   { label: 'Blog',           href: '/blog' },
-  { label: 'Code Playground',      href: '/playground' },
   { label: 'Tutorials',      href: '/learn/tutorials' },
   { label: 'Interview Prep', href: '/learn/interview' },
 ]
