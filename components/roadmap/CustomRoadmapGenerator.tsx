@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import Link from 'next/link'
 import { renderSimpleMarkdown } from '@/lib/simpleMarkdown'
+import { VideoResultCard, type YouTubeVideo } from '@/components/youtube/VideoResultCard'
 
 const EXAMPLE_PROMPTS = [
   'I am new to SQL so I want to deep dive into SQL from scratch to advance',
@@ -16,24 +18,43 @@ export default function CustomRoadmapGenerator() {
   const [guideReply, setGuideReply] = useState('')
   const [guideError, setGuideError] = useState('')
 
+  const [videoLoading, setVideoLoading] = useState(false)
+  const [videoResult, setVideoResult] = useState<YouTubeVideo | null>(null)
+  const [videoDebug, setVideoDebug] = useState('')
+
   const handleGenerate = useCallback(async () => {
     if (!topic.trim() || guideLoading) return
     setGuideLoading(true)
     setGuideError('')
     setGuideReply('')
-    try {
-      const res = await fetch('/api/custom-roadmap', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic }),
+    setVideoLoading(true)
+    setVideoResult(null)
+    setVideoDebug('')
+
+    const guidePromise = fetch('/api/custom-roadmap', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic }),
+    })
+      .then(res => res.json())
+      .then(data => setGuideReply(data.reply || 'No response returned.'))
+      .catch((err: unknown) => setGuideError(err instanceof Error ? err.message : 'Could not reach the guide builder.'))
+      .finally(() => setGuideLoading(false))
+
+    const videoPromise = fetch('/api/youtube-best-video', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        setVideoResult(data.video || null)
+        if (data.debug) setVideoDebug(data.debug)
       })
-      const data = await res.json()
-      setGuideReply(data.reply || 'No response returned.')
-    } catch (err: unknown) {
-      setGuideError(err instanceof Error ? err.message : 'Could not reach the guide builder.')
-    } finally {
-      setGuideLoading(false)
-    }
+      .catch(() => setVideoDebug('DEBUG: could not reach the video finder.'))
+      .finally(() => setVideoLoading(false))
+
+    await Promise.allSettled([guidePromise, videoPromise])
   }, [topic, guideLoading])
 
   return (
@@ -117,8 +138,18 @@ export default function CustomRoadmapGenerator() {
         </p>
       )}
 
+      <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>
+        Just want a video, not a full guide? <Link href="/learn/find-video" style={{ color: 'var(--green)' }}>Find a video →</Link>
+      </p>
+
       {guideError && (
         <p style={{ fontSize: 13, color: '#ff4757', marginTop: 16 }}>{guideError}</p>
+      )}
+
+      {(videoLoading || videoResult || videoDebug) && (
+        <div style={{ marginTop: 24 }}>
+          <VideoResultCard video={videoResult} loading={videoLoading} debug={videoDebug} />
+        </div>
       )}
 
       {guideReply && (
