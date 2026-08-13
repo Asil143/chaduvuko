@@ -12,6 +12,57 @@ const EXAMPLE_PROMPTS = [
   'What is Git and why does every developer use it?',
 ]
 
+type Profile = {
+  currentLevel: string
+  previousKnowledge: string
+  careerGoal: string
+  targetRole: string
+  dailyStudyTime: string
+  learningStyle: string
+  targetTimeline: string
+  difficulty: string
+  language: string
+}
+
+const EMPTY_PROFILE: Profile = {
+  currentLevel: '',
+  previousKnowledge: '',
+  careerGoal: '',
+  targetRole: '',
+  dailyStudyTime: '',
+  learningStyle: '',
+  targetTimeline: '',
+  difficulty: '',
+  language: '',
+}
+
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  background: 'var(--bg)',
+  border: '1px solid var(--border)',
+  borderRadius: 8,
+  padding: '9px 10px',
+  color: 'var(--text)',
+  fontSize: 13,
+  outline: 'none',
+  fontFamily: 'inherit',
+}
+
+function Field({
+  label,
+  children,
+}: {
+  label: string
+  children: React.ReactNode
+}) {
+  return (
+    <div>
+      <label style={{ display: 'block', fontSize: 11, color: 'var(--muted)', marginBottom: 5 }}>{label}</label>
+      {children}
+    </div>
+  )
+}
+
 export default function CustomRoadmapGenerator() {
   const [topic, setTopic] = useState('')
   const [guideLoading, setGuideLoading] = useState(false)
@@ -21,6 +72,11 @@ export default function CustomRoadmapGenerator() {
   const [videoLoading, setVideoLoading] = useState(false)
   const [videoResult, setVideoResult] = useState<YouTubeVideo | null>(null)
   const [videoDebug, setVideoDebug] = useState('')
+
+  const [showPersonalize, setShowPersonalize] = useState(false)
+  const [profile, setProfile] = useState<Profile>(EMPTY_PROFILE)
+
+  const updateProfile = (key: keyof Profile, value: string) => setProfile(prev => ({ ...prev, [key]: value }))
 
   const handleGenerate = useCallback(async () => {
     if (!topic.trim() || guideLoading) return
@@ -34,7 +90,7 @@ export default function CustomRoadmapGenerator() {
     const guidePromise = fetch('/api/custom-roadmap', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ topic }),
+      body: JSON.stringify({ topic, profile }),
     })
       .then(res => res.json())
       .then(data => setGuideReply(data.reply || 'No response returned.'))
@@ -55,7 +111,7 @@ export default function CustomRoadmapGenerator() {
       .finally(() => setVideoLoading(false))
 
     await Promise.allSettled([guidePromise, videoPromise])
-  }, [topic, guideLoading])
+  }, [topic, guideLoading, profile])
 
   return (
     <div
@@ -116,6 +172,95 @@ export default function CustomRoadmapGenerator() {
       />
 
       <button
+        onClick={() => setShowPersonalize(v => !v)}
+        style={{
+          background: 'transparent',
+          border: 'none',
+          color: 'var(--green)',
+          fontSize: 12,
+          fontWeight: 600,
+          cursor: 'pointer',
+          padding: 0,
+          marginBottom: 14,
+        }}
+      >
+        {showPersonalize ? '− Hide personalization' : '+ Personalize your roadmap (optional)'}
+      </button>
+
+      {showPersonalize && (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+            gap: 12,
+            marginBottom: 18,
+            padding: 16,
+            background: 'var(--bg)',
+            border: '1px solid var(--border)',
+            borderRadius: 10,
+          }}
+        >
+          <Field label="Current level">
+            <select style={inputStyle} value={profile.currentLevel} onChange={e => updateProfile('currentLevel', e.target.value)}>
+              <option value="">Not specified</option>
+              <option value="Complete beginner">Complete beginner</option>
+              <option value="Some exposure">Some exposure</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </Field>
+          <Field label="Previous knowledge">
+            <input style={inputStyle} value={profile.previousKnowledge} onChange={e => updateProfile('previousKnowledge', e.target.value)} placeholder="e.g. know Excel, no coding" />
+          </Field>
+          <Field label="Career goal">
+            <input style={inputStyle} value={profile.careerGoal} onChange={e => updateProfile('careerGoal', e.target.value)} placeholder="e.g. switch into tech" />
+          </Field>
+          <Field label="Target role">
+            <input style={inputStyle} value={profile.targetRole} onChange={e => updateProfile('targetRole', e.target.value)} placeholder="e.g. Data Analyst" />
+          </Field>
+          <Field label="Daily study time">
+            <select style={inputStyle} value={profile.dailyStudyTime} onChange={e => updateProfile('dailyStudyTime', e.target.value)}>
+              <option value="">Not specified</option>
+              <option value="30 min/day">30 min/day</option>
+              <option value="1 hr/day">1 hr/day</option>
+              <option value="2 hr/day">2 hr/day</option>
+              <option value="3+ hr/day">3+ hr/day</option>
+            </select>
+          </Field>
+          <Field label="Learning style">
+            <select style={inputStyle} value={profile.learningStyle} onChange={e => updateProfile('learningStyle', e.target.value)}>
+              <option value="">Not specified</option>
+              <option value="Hands-on projects">Hands-on projects</option>
+              <option value="Reading/docs">Reading/docs</option>
+              <option value="Video tutorials">Video tutorials</option>
+              <option value="Mixed">Mixed</option>
+            </select>
+          </Field>
+          <Field label="Target timeline">
+            <select style={inputStyle} value={profile.targetTimeline} onChange={e => updateProfile('targetTimeline', e.target.value)}>
+              <option value="">Not specified</option>
+              <option value="1 month">1 month</option>
+              <option value="3 months">3 months</option>
+              <option value="6 months">6 months</option>
+              <option value="1 year">1 year</option>
+              <option value="No specific deadline">No specific deadline</option>
+            </select>
+          </Field>
+          <Field label="Preferred difficulty">
+            <select style={inputStyle} value={profile.difficulty} onChange={e => updateProfile('difficulty', e.target.value)}>
+              <option value="">Not specified</option>
+              <option value="Relaxed pace">Relaxed pace</option>
+              <option value="Balanced">Balanced</option>
+              <option value="Intensive">Intensive</option>
+            </select>
+          </Field>
+          <Field label="Preferred language">
+            <input style={inputStyle} value={profile.language} onChange={e => updateProfile('language', e.target.value)} placeholder="English" />
+          </Field>
+        </div>
+      )}
+
+      <button
         onClick={handleGenerate}
         disabled={!topic.trim() || guideLoading}
         style={{
@@ -134,7 +279,7 @@ export default function CustomRoadmapGenerator() {
 
       {guideLoading && (
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>
-          This can take 20–30 seconds — we're writing a full guide, not a summary.
+          This can take up to a minute — we're building a full, structured curriculum, not a quick summary.
         </p>
       )}
 
