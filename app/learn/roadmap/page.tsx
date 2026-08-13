@@ -2,6 +2,7 @@
 
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import CustomRoadmapGenerator from '@/components/roadmap/CustomRoadmapGenerator'
 
 export const metadata: Metadata = {
   title: 'Learning Roadmaps — Chaduvuko',
@@ -47,6 +48,8 @@ export default function RoadmapIndex() {
             Interactive skill trees with XP, unlock mechanics, and India salary data. Not just a list — a game you finish with a job.
           </p>
         </div>
+
+        <CustomRoadmapGenerator />
 
         {/* Legend */}
         <div style={{ display: 'flex', gap: 16, marginBottom: 32, flexWrap: 'wrap' }}>
