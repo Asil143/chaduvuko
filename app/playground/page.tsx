@@ -44,6 +44,7 @@ const LANGUAGES: { label: string; value: string; pistonRuntime: string; pistonVe
   { label: 'PHP',        value: 'php',        pistonRuntime: 'php',         pistonVersion: '8.2.3' },
   { label: 'Swift',      value: 'swift',      pistonRuntime: 'swift',       pistonVersion: '5.3.3' },
   { label: 'Kotlin',     value: 'kotlin',     pistonRuntime: 'kotlin',      pistonVersion: '1.8.20' },
+  { label: 'C#',         value: 'csharp',     pistonRuntime: 'csharp',      pistonVersion: '6.6.0.161' },
   { label: 'SQL',        value: 'sql',        pistonRuntime: 'sqlite',      pistonVersion: '3.36.0' },
 ];
 
@@ -84,6 +85,13 @@ echo "Hello, World!\\n";`,
   swift: `print("Hello, World!")`,
   kotlin: `fun main() {
     println("Hello, World!")
+}`,
+  csharp: `using System;
+
+class Program {
+    static void Main() {
+        Console.WriteLine("Hello, World!");
+    }
 }`,
   sql: `SELECT 'Hello, World!' AS greeting;`,
 };
@@ -315,6 +323,7 @@ export default function PlaygroundPage() {
       php:        68,
       swift:      83,
       kotlin:     78,
+      csharp:     51,
     };
 
     try {

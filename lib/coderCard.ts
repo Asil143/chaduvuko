@@ -40,6 +40,7 @@ const LANG_LABELS: Record<string, string> = {
   php: 'PHP',
   swift: 'Swift',
   kotlin: 'Kotlin',
+  csharp: 'C#',
   sql: 'SQL',
 };
 
