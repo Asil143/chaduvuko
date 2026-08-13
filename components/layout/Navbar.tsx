@@ -42,14 +42,13 @@ const navItems: NavItem[] = [
       },
     ],
   },
+  { label: 'Roadmap',        href: '/learn/roadmap' },
   { label: 'Projects',       href: '/learn/projects' },
   { label: 'Industry',       href: '/learn/industry' },
   { label: 'Blog',           href: '/blog' },
   { label: 'Code Playground',      href: '/playground' },
-  { label: 'About',          href: '/about' },
   { label: 'Tutorials',      href: '/learn/tutorials' },
   { label: 'Interview Prep', href: '/learn/interview' },
-  { label: 'Roadmap',        href: '/learn/roadmap' },
 ]
 
 export function Navbar() {
