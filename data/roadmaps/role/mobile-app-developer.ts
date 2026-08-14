@@ -10,10 +10,10 @@ export const mobileAppDeveloperRoadmap: Roadmap = {
   level: 'beginner',
   estimatedTime: '4–5 months',
   salaryData: [
-    { company: 'Agency / Freelance', range: '₹4–8 LPA', note: 'High freelance demand in India' },
-    { company: 'Startup (fintech / health)', range: '₹12–22 LPA', note: 'Venmo, Acorns, HealthifyMe' },
-    { company: 'Product MNC India', range: '₹18–32 LPA', note: 'Platform expertise + performance' },
-    { company: 'FAANG', range: '₹30–55 LPA', note: 'Deep native + system design' },
+    { company: 'Agency / Freelance', range: '$65K–$90K', note: 'High freelance demand' },
+    { company: 'Startup (fintech / health)', range: '$105K–$140K', note: 'Venmo, Acorns, Headspace' },
+    { company: 'Product / Enterprise', range: '$135K–$175K', note: 'Platform expertise + performance' },
+    { company: 'FAANG', range: '$175K–$230K', note: 'Deep native + system design' },
   ],
   nodes: [
     { id: 'root', title: 'Start Here', type: 'required', xp: 5, prerequisites: [], difficulty: 'beginner', description: 'Your mobile development journey starts. Mark complete to unlock foundations.', x: 305, y: 20, width: 150, height: 60 },

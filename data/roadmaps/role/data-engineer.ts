@@ -6,14 +6,14 @@ export const dataEngineerRoadmap: Roadmap = {
   title: 'Data Engineer',
   subtitle: 'From zero to job-ready',
   category: 'role',
-  description: 'The complete path to becoming a Data Engineer in India. Covers Linux, Python, SQL, cloud pipelines, and real ADF projects used at companies like DoorDash, Stripe, and Amazon.',
+  description: 'The complete path to becoming a Data Engineer. Covers Linux, Python, SQL, cloud pipelines, and real ADF projects used at companies like DoorDash, Stripe, and Amazon.',
   level: 'beginner',
   estimatedTime: '3–5 months',
   salaryData: [
-    { company: 'Service (Accenture / Infy)', range: '₹7–11 LPA', note: 'Most common first job' },
-    { company: 'Product startup', range: '₹14–22 LPA', note: 'DoorDash, Brex, Stripe' },
-    { company: 'MNC / GCC', range: '₹18–28 LPA', note: '+ visa & relocation' },
-    { company: 'FAANG', range: '₹35–60 LPA', note: 'Google, Amazon, MS' },
+    { company: 'Consulting (Accenture, Cognizant)', range: '$75K–$100K', note: 'Most common first job' },
+    { company: 'Product Startup', range: '$115K–$150K', note: 'DoorDash, Brex, Stripe' },
+    { company: 'Enterprise / Large Corp', range: '$140K–$180K', note: 'Strong benefits + stock' },
+    { company: 'FAANG', range: '$185K–$260K', note: 'Google, Amazon, Microsoft' },
   ],
   nodes: [
     {
@@ -188,7 +188,7 @@ export const dataEngineerRoadmap: Roadmap = {
       prerequisites: ['p01', 'p02'],
       difficulty: 'intermediate',
       time: '6–8 hrs',
-      description: 'Models, tests, docs, lineage. Now the standard transformation layer at modern data companies across India. Replaces stored procedures.',
+      description: 'Models, tests, docs, lineage. Now the standard transformation layer at modern data companies. Replaces stored procedures.',
       href: '/learn/foundations/dbt',
       x: 30, y: 720, width: 130, height: 60,
     },
