@@ -16,33 +16,7 @@ type NavItem = {
 }
 
 const navItems: NavItem[] = [
-  {
-    label: 'Learn',
-    href: '/learn',
-    groups: [
-      {
-        group: '📚 Foundations',
-        color: '#00c2ff',
-        items: [
-          { label: 'What is Data Engineering?', href: '/learn/what-is-data-engineering' },
-          
-          { label: 'Roadmap 2026',               href: '/learn/roadmap' },
-          { label: 'SQL for Data Engineers',     href: '/learn/foundations/sql' },
-          { label: 'PostgreSQL',                 href: '/learn/foundations/postgresql' },
-          { label: 'Python for Data Engineers',  href: '/learn/foundations/python' },
-        ],
-      },
-      {
-        group: '☁️ Cloud Technologies',
-        color: '#7b61ff',
-        items: [
-          { label: '☁️ Azure Track', href: '/learn/azure/introduction' },
-          { label: '🟠 AWS Track',   href: '/learn/aws/introduction' },
-          { label: '🔵 GCP Track',   href: '/learn/gcp/introduction' },
-        ],
-      },
-    ],
-  },
+  { label: 'Learn',           href: '/learn' },
   { label: 'Roadmap',        href: '/learn/roadmap' },
   { label: 'Projects',       href: '/learn/projects' },
   { label: 'Industry',       href: '/learn/industry' },
