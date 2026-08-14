@@ -154,6 +154,14 @@ export const PAGE_ORDER: PageMeta[] = [
   // SQL Track
   { href: '/learn/sql', title: 'SQL — Zero to Advanced', section: 'SQL', difficulty: 'Beginner', color: '#06b6d4', readTime: 'Self-paced', xp: 0 },
 
+  // Python Track
+  { href: '/learn/python',                          title: 'Python — Foundations to Advanced',            section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: 'Self-paced', xp: 0 },
+  { href: '/learn/python/what-is-python-setup',      title: 'What is Python? Setup & Your First Program',  section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: '35 min', xp: 100 },
+  { href: '/learn/python/variables-data-types',      title: 'Variables, Data Types & Type Conversion',     section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: '40 min', xp: 100 },
+  { href: '/learn/python/operators',                 title: 'Operators — Arithmetic, Comparison, Logical', section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: '30 min', xp: 100 },
+  { href: '/learn/python/strings',                   title: 'Strings — Creation, Indexing, Slicing, Methods', section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: '45 min', xp: 150 },
+  { href: '/learn/python/control-flow',              title: 'Control Flow — if / elif / else',             section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: '30 min', xp: 100 },
+
   // AI & ML
   { href: '/learn/ai-ml',                   title: 'AI & ML — Zero to Production',            section: 'AI & ML', difficulty: 'Beginner',  color: '#4285f4', readTime: 'Self-paced', xp: 0 },
   { href: '/learn/ai-ml/ml-interview-prep', title: 'ML Interview Prep — 50 Complete Answers', section: 'AI & ML', difficulty: 'Advanced',  color: '#4285f4', readTime: '90 min',     xp: 300 },
