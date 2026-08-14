@@ -434,7 +434,7 @@ if (n := random.randint(1, 10)) > 5:
       <Divider />
 
       {/* ── Part 09 — Real World ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 09 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -494,7 +494,7 @@ if (n := random.randint(1, 10)) > 5:
       <Divider />
 
       {/* ── Part 10 — Misconceptions ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
         <SectionTag text="// Part 10 — Misconceptions" />
         <SectionTitle>Four Misconceptions About Operators</SectionTitle>
 
@@ -536,7 +536,7 @@ if (n := random.randint(1, 10)) > 5:
       <Divider />
 
       {/* ── Part 11 — Interview Prep ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 11 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -582,7 +582,7 @@ if (n := random.randint(1, 10)) > 5:
       <Divider />
 
       {/* ── Common Mistakes ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Common Mistakes" />
         <SectionTitle>Operator Mistakes That Produce a Wrong Answer, Not an Error</SectionTitle>
 
@@ -624,7 +624,7 @@ if (n := random.randint(1, 10)) > 5:
       <Divider />
 
       {/* ── Error Library ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit With Operators — And Exactly Why</SectionTitle>
 

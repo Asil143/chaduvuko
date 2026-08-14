@@ -449,7 +449,7 @@ else:
       <Divider />
 
       {/* ── Part 08 — Real World ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 08 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -530,7 +530,7 @@ else:
       <Divider />
 
       {/* ── Part 09 — Misconceptions ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
         <SectionTag text="// Part 09 — Misconceptions" />
         <SectionTitle>Four Misconceptions About Control Flow</SectionTitle>
 
@@ -572,7 +572,7 @@ else:
       <Divider />
 
       {/* ── Part 10 — Interview Prep ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 10 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -618,7 +618,7 @@ else:
       <Divider />
 
       {/* ── Common Mistakes ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Common Mistakes" />
         <SectionTitle>Control Flow Mistakes Beginners Make Constantly</SectionTitle>
 
@@ -664,7 +664,7 @@ else:
       <Divider />
 
       {/* ── Error Library ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit With Control Flow — And Exactly Why</SectionTitle>
 

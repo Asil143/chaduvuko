@@ -526,7 +526,7 @@ print("Hello, World!")`}</CodeBox>
       <Divider />
 
       {/* ── Part 09 — Real World ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 09 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -595,7 +595,7 @@ print("Hello, World!")`}</CodeBox>
       <Divider />
 
       {/* ── Part 10 — Misconceptions ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
         <SectionTag text="// Part 10 — Misconceptions" />
         <SectionTitle>Four Misconceptions That Slow Beginners Down</SectionTitle>
 
@@ -637,7 +637,7 @@ print("Hello, World!")`}</CodeBox>
       <Divider />
 
       {/* ── Part 11 — Interview Prep ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 11 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -689,7 +689,7 @@ print("Hello, World!")`}</CodeBox>
       <Divider />
 
       {/* ── Common Mistakes ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Common Mistakes" />
         <SectionTitle>Setup Mistakes That Cost Beginners Hours</SectionTitle>
 
@@ -735,7 +735,7 @@ print("Hello, World!")`}</CodeBox>
       <Divider />
 
       {/* ── Error Library ── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit While Setting Up — And Exactly Why</SectionTitle>
 
