@@ -23,6 +23,18 @@ import { dbaRoadmap }                   from '@/data/roadmaps/role/database-admi
 import { cybersecurityAnalystRoadmap }  from '@/data/roadmaps/role/cybersecurity-analyst'
 import { cloudSecurityEngineerRoadmap } from '@/data/roadmaps/role/cloud-security-engineer'
 import type { Roadmap } from '@/data/roadmaps/types'
+import { dataEngineerCurriculum } from '@/data/roadmaps/curriculum/data-engineer'
+import { mlEngineerCurriculum } from '@/data/roadmaps/curriculum/ml-engineer'
+import { aiEngineerCurriculum } from '@/data/roadmaps/curriculum/ai-engineer'
+import { genaiDeveloperCurriculum } from '@/data/roadmaps/curriculum/genai-developer'
+import { dataScientistCurriculum } from '@/data/roadmaps/curriculum/data-scientist'
+import { analyticsEngineerCurriculum } from '@/data/roadmaps/curriculum/analytics-engineer'
+import { fullstackCurriculum } from '@/data/roadmaps/curriculum/fullstack'
+import { mobileAppDeveloperCurriculum } from '@/data/roadmaps/curriculum/mobile-app-developer'
+import { siteReliabilityEngineerCurriculum } from '@/data/roadmaps/curriculum/site-reliability-engineer'
+import { cybersecurityAnalystCurriculum } from '@/data/roadmaps/curriculum/cybersecurity-analyst'
+import { cloudSecurityEngineerCurriculum } from '@/data/roadmaps/curriculum/cloud-security-engineer'
+import { renderSimpleMarkdown } from '@/lib/simpleMarkdown'
 
 const ROADMAPS: Record<string, Roadmap> = {
   'data-engineer':             dataEngineerRoadmap,
@@ -45,6 +57,20 @@ const ROADMAPS: Record<string, Roadmap> = {
   'database-administrator':    dbaRoadmap,
   'cybersecurity-analyst':     cybersecurityAnalystRoadmap,
   'cloud-security-engineer':   cloudSecurityEngineerRoadmap,
+}
+
+const CURRICULUM: Record<string, string> = {
+  'data-engineer':             dataEngineerCurriculum,
+  'ml-engineer':               mlEngineerCurriculum,
+  'ai-engineer':               aiEngineerCurriculum,
+  'genai-developer':           genaiDeveloperCurriculum,
+  'data-scientist':            dataScientistCurriculum,
+  'analytics-engineer':        analyticsEngineerCurriculum,
+  'fullstack':                 fullstackCurriculum,
+  'mobile-app-developer':      mobileAppDeveloperCurriculum,
+  'site-reliability-engineer': siteReliabilityEngineerCurriculum,
+  'cybersecurity-analyst':     cybersecurityAnalystCurriculum,
+  'cloud-security-engineer':   cloudSecurityEngineerCurriculum,
 }
 
 interface Props {
@@ -108,6 +134,24 @@ export default function RoadmapPage({ params }: Props) {
 
         {/* Skill tree */}
         <SkillTree roadmap={roadmap} />
+
+        {/* Complete curriculum guide */}
+        {CURRICULUM[params.slug] && (
+          <div
+            style={{
+              marginTop: 40,
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: 14,
+              padding: '28px 26px',
+            }}
+          >
+            <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--green)', marginBottom: 16 }}>
+              📖 Complete Curriculum Guide
+            </div>
+            {renderSimpleMarkdown(CURRICULUM[params.slug])}
+          </div>
+        )}
 
         {/* Footer note */}
         <div style={{ marginTop: 28, fontSize: 12, color: 'rgba(255,255,255,.15)', textAlign: 'center', lineHeight: 1.7 }}>
