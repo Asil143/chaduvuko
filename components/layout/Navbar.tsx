@@ -18,6 +18,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   {
     label: 'Learn',
+    href: '/learn',
     groups: [
       {
         group: '📚 Foundations',
@@ -94,9 +95,10 @@ export function Navbar() {
               <Link
                 href={item.href}
                 className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-colors"
-                style={{ color: pathname === item.href ? 'var(--accent)' : 'var(--muted)' }}
+                style={{ color: pathname === item.href || dropdown === item.label ? 'var(--accent)' : 'var(--muted)' }}
               >
                 {item.label}
+                {item.groups && <ChevronDown size={12} />}
               </Link>
             ) : (
               <button
@@ -199,7 +201,7 @@ export function Navbar() {
         >
           {navItems.map(item => (
             <div key={item.label}>
-              {item.href ? (
+              {item.href && !item.groups && (
                 <Link
                   href={item.href}
                   className="block px-3 py-2.5 text-sm rounded-lg"
@@ -208,26 +210,41 @@ export function Navbar() {
                 >
                   {item.label}
                 </Link>
-              ) : (
+              )}
+              {item.groups && (
                 <>
-                  {/* Expandable group label */}
-                  <button
-                    className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold rounded-lg"
-                    style={{ color: 'var(--text)' }}
-                    onClick={() =>
-                      setMobileExpanded(mobileExpanded === item.label ? null : item.label)
-                    }
-                  >
-                    {item.label}
-                    <ChevronDown
-                      size={14}
-                      style={{
-                        color: 'var(--muted)',
-                        transform: mobileExpanded === item.label ? 'rotate(180deg)' : 'none',
-                        transition: 'transform 0.2s',
-                      }}
-                    />
-                  </button>
+                  <div className="flex items-center">
+                    {item.href ? (
+                      <Link
+                        href={item.href}
+                        className="flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg"
+                        style={{ color: 'var(--text)' }}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <span className="flex-1 px-3 py-2.5 text-sm font-semibold" style={{ color: 'var(--text)' }}>
+                        {item.label}
+                      </span>
+                    )}
+                    <button
+                      className="p-2.5"
+                      aria-label={`Toggle ${item.label} submenu`}
+                      onClick={() =>
+                        setMobileExpanded(mobileExpanded === item.label ? null : item.label)
+                      }
+                    >
+                      <ChevronDown
+                        size={14}
+                        style={{
+                          color: 'var(--muted)',
+                          transform: mobileExpanded === item.label ? 'rotate(180deg)' : 'none',
+                          transition: 'transform 0.2s',
+                        }}
+                      />
+                    </button>
+                  </div>
 
                   {mobileExpanded === item.label && item.groups?.map(group => (
                     <div key={group.group} className="mb-3">
