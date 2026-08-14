@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { drawCoderCard, type CoderCardData } from '@/lib/coderCard';
+import { registerPlaygroundCompletions } from '@/lib/playgroundCompletions';
 
 const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/KnPtWB3yzR3HM8CcQlHswD?s=cl&p=i&ilr=0';
 const WHATSAPP_POPUP_SESSION_KEY = 'chaduvuko_whatsapp_popup_shown';
@@ -822,6 +823,7 @@ export default function PlaygroundPage() {
               value={code}
               theme="vs-dark"
               onChange={v => setCode(v ?? '')}
+              beforeMount={monaco => registerPlaygroundCompletions(monaco)}
               options={{
                 fontSize: 14,
                 minimap: { enabled: false },
@@ -832,6 +834,17 @@ export default function PlaygroundPage() {
                 lineHeight: 1.7,
                 renderLineHighlight: 'gutter',
                 tabSize: 2,
+                quickSuggestions: { other: true, comments: false, strings: true },
+                suggestOnTriggerCharacters: true,
+                acceptSuggestionOnEnter: 'on',
+                tabCompletion: 'on',
+                wordBasedSuggestions: 'matchingDocuments',
+                parameterHints: { enabled: true },
+                snippetSuggestions: 'inline',
+                autoClosingBrackets: 'always',
+                autoClosingQuotes: 'always',
+                bracketPairColorization: { enabled: true },
+                formatOnType: true,
               }}
             />
           </div>

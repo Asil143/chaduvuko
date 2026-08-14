@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import { registerPlaygroundCompletions } from '@/lib/playgroundCompletions';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -132,6 +133,7 @@ export default function CodePlayground({
           value={code}
           theme="vs-dark"
           onChange={v => setCode(v ?? '')}
+          beforeMount={monaco => registerPlaygroundCompletions(monaco)}
           options={{
             fontSize: 13,
             minimap: { enabled: false },
@@ -143,6 +145,17 @@ export default function CodePlayground({
             renderLineHighlight: 'gutter',
             tabSize: 2,
             overviewRulerLanes: 0,
+            quickSuggestions: { other: true, comments: false, strings: true },
+            suggestOnTriggerCharacters: true,
+            acceptSuggestionOnEnter: 'on',
+            tabCompletion: 'on',
+            wordBasedSuggestions: 'matchingDocuments',
+            parameterHints: { enabled: true },
+            snippetSuggestions: 'inline',
+            autoClosingBrackets: 'always',
+            autoClosingQuotes: 'always',
+            bracketPairColorization: { enabled: true },
+            formatOnType: true,
           }}
         />
       </div>
