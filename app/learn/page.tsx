@@ -209,6 +209,69 @@ const TRACKS = [
   },
 ]
 
+// ─── BROWSE BY SKILL — granular, single-topic tutorials not already a Track above ──
+const SKILLS = [
+  // Programming
+  { badge: 'TypeScript', title: 'TypeScript', status: 'soon' as const, href: '#', desc: 'Typed JavaScript for production apps — Types, Interfaces, Generics, Utility Types, strict mode.', pills: ['Types', 'Interfaces', 'Generics', 'Utility Types', 'Strict Mode'] },
+  { badge: 'C / C++', title: 'C / C++', status: 'soon' as const, href: '#', desc: 'Systems programming and DSA foundation — Pointers, memory management, OOP, STL.', pills: ['Pointers', 'Memory Mgmt', 'OOP', 'STL', 'DSA'] },
+  { badge: 'Go', title: 'Go (Golang)', status: 'soon' as const, href: '#', desc: 'High-performance microservices with Go — Goroutines, channels, REST APIs, concurrency patterns.', pills: ['Goroutines', 'Channels', 'REST APIs', 'Concurrency', 'Microservices'] },
+  { badge: 'Kotlin', title: 'Kotlin', status: 'soon' as const, href: '#', desc: 'Android and JVM backend development — Coroutines, Jetpack Compose, Spring Boot with Kotlin.', pills: ['Coroutines', 'Jetpack', 'Spring Boot', 'Null Safety', 'Android'] },
+  { badge: 'Bash', title: 'Bash / Shell Scripting', status: 'soon' as const, href: '#', desc: 'Automate everything on Linux — scripts, cron jobs, file operations, pipelines for DevOps.', pills: ['Scripts', 'Cron Jobs', 'File Ops', 'Pipelines', 'Automation'] },
+  // Web Dev
+  { badge: 'Web Dev', title: 'HTML & CSS', status: 'soon' as const, href: '#', desc: 'Web foundations done right — Semantic HTML, Flexbox, CSS Grid, Responsive Design, animations.', pills: ['Semantic HTML', 'Flexbox', 'CSS Grid', 'Responsive', 'Animations'] },
+  { badge: 'Web Dev', title: 'Angular', status: 'soon' as const, href: '#', desc: 'Enterprise-grade frontend framework — Components, Services, RxJS, NgRx, Dependency Injection.', pills: ['Components', 'Services', 'RxJS', 'NgRx', 'DI'] },
+  { badge: 'Web Dev', title: 'Django', status: 'soon' as const, href: '#', desc: 'Python web framework for production — ORM, REST APIs, Auth, Celery, deployment on AWS.', pills: ['ORM', 'REST APIs', 'Auth', 'Celery', 'Deployment'] },
+  { badge: 'Web Dev', title: 'Spring Boot', status: 'soon' as const, href: '#', desc: 'Java enterprise application framework — REST, JPA, Spring Security, Kafka, Microservices.', pills: ['REST', 'JPA', 'Security', 'Kafka', 'Microservices'] },
+  { badge: 'Web Dev', title: 'GraphQL', status: 'soon' as const, href: '#', desc: 'API query language for modern apps — Schema, Resolvers, Apollo Client, Subscriptions.', pills: ['Schema', 'Resolvers', 'Apollo Client', 'Subscriptions', 'Federation'] },
+  { badge: 'Web Dev', title: 'PHP & Laravel', status: 'soon' as const, href: '#', desc: 'Server-side web with Laravel framework — Eloquent ORM, Blade templates, REST APIs.', pills: ['Laravel', 'Eloquent ORM', 'Blade', 'REST APIs', 'Auth'] },
+  // DevOps
+  { badge: 'DevOps', title: 'Docker', status: 'soon' as const, href: '#', desc: 'Containerise every application — Images, Containers, Docker Compose, Registry, multi-stage builds.', pills: ['Images', 'Containers', 'Compose', 'Registry', 'Multi-stage'] },
+  { badge: 'DevOps', title: 'Kubernetes', status: 'soon' as const, href: '#', desc: 'Container orchestration at scale — Pods, Deployments, Services, Helm, EKS/AKS/GKE.', pills: ['Pods', 'Deployments', 'Helm', 'EKS/AKS/GKE', 'Ingress'] },
+  { badge: 'DevOps', title: 'Terraform', status: 'soon' as const, href: '#', desc: 'Infrastructure as Code — HCL, AWS/GCP/Azure, state management, modules, remote backends.', pills: ['HCL', 'AWS/GCP/Azure', 'State Mgmt', 'Modules', 'Remote Backend'] },
+  { badge: 'DevOps', title: 'CI/CD Pipelines', status: 'soon' as const, href: '#', desc: 'GitHub Actions, Jenkins, ArgoCD, GitOps — automate every step from code to production.', pills: ['GitHub Actions', 'Jenkins', 'ArgoCD', 'GitOps', 'Pipelines'] },
+  { badge: 'DevOps', title: 'Linux', status: 'soon' as const, href: '#', desc: 'Command line and system administration — Bash, file system, networking, permissions, processes.', pills: ['Bash', 'File System', 'Networking', 'Permissions', 'Processes'] },
+  // Databases
+  { badge: 'Database', title: 'PostgreSQL', status: 'soon' as const, href: '#', desc: 'Advanced relational database mastery — JSONB, Full Text Search, Partitioning, Extensions, PL/pgSQL.', pills: ['JSONB', 'Full Text Search', 'Partitioning', 'Extensions', 'PL/pgSQL'] },
+  { badge: 'Database', title: 'MongoDB', status: 'soon' as const, href: '#', desc: 'NoSQL document database at scale — Aggregation Pipeline, Indexes, Atlas, Replication, Sharding.', pills: ['Aggregation', 'Indexes', 'Atlas', 'Replication', 'Sharding'] },
+  { badge: 'Database', title: 'Redis', status: 'soon' as const, href: '#', desc: 'In-memory caching and queuing — Caching Patterns, Pub/Sub, Sessions, Lua Scripting.', pills: ['Caching Patterns', 'Pub/Sub', 'Sessions', 'Lua Scripting', 'Streams'] },
+  { badge: 'Database', title: 'Snowflake', status: 'soon' as const, href: '#', desc: 'Cloud data warehouse platform — Schemas, Time Travel, Streams, Tasks, dbt Integration.', pills: ['Schemas', 'Time Travel', 'Streams', 'Tasks', 'dbt Integration'] },
+  // CS Core
+  { badge: 'CS Core', title: 'System Design', status: 'soon' as const, href: '#', desc: 'Design scalable systems like a senior — HLD, LLD, Scalability, CAP Theorem, Trade-offs, real production systems.', pills: ['HLD', 'LLD', 'Scalability', 'CAP Theorem', 'Trade-offs'] },
+  { badge: 'CS Core', title: 'Operating Systems', status: 'soon' as const, href: '#', desc: 'Processes, memory management, CPU scheduling, concurrency, deadlock — for campus placements and interviews.', pills: ['Processes', 'Memory Mgmt', 'Scheduling', 'IPC', 'Deadlock'] },
+  { badge: 'CS Core', title: 'Computer Networks', status: 'soon' as const, href: '#', desc: 'OSI and TCP/IP model, HTTP, DNS, routing, load balancers — for DevOps, backend, and campus prep.', pills: ['TCP/IP', 'HTTP/HTTPS', 'DNS', 'Load Balancers', 'Routing'] },
+  // Mobile
+  { badge: 'Mobile', title: 'Android Development', status: 'soon' as const, href: '#', desc: 'Native Android with Kotlin — Jetpack Compose, MVVM, Room DB, Navigation, Coroutines.', pills: ['Kotlin', 'Jetpack Compose', 'MVVM', 'Room DB', 'Coroutines'] },
+  { badge: 'Mobile', title: 'Flutter', status: 'soon' as const, href: '#', desc: 'Cross-platform iOS and Android with Dart — Widgets, BLoC, Provider, Firebase, animations.', pills: ['Dart', 'Widgets', 'BLoC', 'Firebase', 'Animations'] },
+  { badge: 'Mobile', title: 'React Native', status: 'soon' as const, href: '#', desc: 'Mobile apps with JavaScript and React — Components, Navigation, Native Modules, Expo, Push Notifications.', pills: ['Components', 'Navigation', 'Native Modules', 'Expo', 'Push Notifications'] },
+  // Testing
+  { badge: 'Testing', title: 'Software Testing', status: 'soon' as const, href: '#', desc: 'Manual testing foundation and SDLC — Test Cases, Bug Reporting, STLC, Agile QA, defect lifecycle.', pills: ['Test Cases', 'Bug Reporting', 'STLC', 'Agile QA', 'Defect Lifecycle'] },
+  { badge: 'Testing', title: 'Selenium', status: 'soon' as const, href: '#', desc: 'Web browser test automation — WebDriver, TestNG, Page Object Model, automation frameworks.', pills: ['WebDriver', 'TestNG', 'Page Object Model', 'Frameworks', 'CI Integration'] },
+  { badge: 'Testing', title: 'API Testing', status: 'soon' as const, href: '#', desc: 'Postman, REST Assured, Newman, API automation — contract testing, performance, CI integration.', pills: ['Postman', 'REST Assured', 'Newman', 'Contract Testing', 'Performance'] },
+  // Interview prep
+  { badge: 'Interview', title: 'Campus Placements', status: 'soon' as const, href: '#', desc: 'Aptitude, Technical Round, HR Round, Group Discussion — the full entry-level interview loop.', pills: ['Aptitude', 'Technical Round', 'HR Round', 'Group Discussion', 'GD Tips'] },
+  { badge: 'Interview', title: 'FAANG Prep', status: 'soon' as const, href: '#', desc: 'Google, Amazon, Microsoft, Meta, Apple — DSA patterns, System Design, Behavioural interviews.', pills: ['DSA Patterns', 'System Design', 'Behavioural', 'Coding Patterns', 'Mock Rounds'] },
+  // Data & BI
+  { badge: 'BI', title: 'Power BI & Tableau', status: 'soon' as const, href: '#', desc: 'Dashboards, DAX, data storytelling, Tableau Desktop — the two tools every data analyst needs.', pills: ['Power BI', 'Tableau', 'DAX', 'Reports', 'Data Storytelling'] },
+  { badge: 'AI & ML', title: 'MLOps', status: 'soon' as const, href: '#', desc: 'Deploy and monitor ML models in production — MLflow, Docker, Kubeflow, CI/CD for ML pipelines.', pills: ['MLflow', 'Docker', 'Kubeflow', 'CI/CD', 'Model Registry'] },
+]
+
+const skillBadgeColor: Record<string, string> = {
+  'TypeScript': '#0078d4',
+  'C / C++': '#888888',
+  'Go': '#06b6d4',
+  'Kotlin': '#8b5cf6',
+  'Bash': '#00e676',
+  'Web Dev': '#06b6d4',
+  'DevOps': '#f97316',
+  'Database': '#00e676',
+  'CS Core': '#f97316',
+  'Mobile': '#ec4899',
+  'Testing': '#84cc16',
+  'Interview': '#00e676',
+  'BI': '#f7c948',
+  'AI & ML': '#7b61ff',
+}
+
 const QUICK_LINKS = [
   { icon: '🗺️', label: 'Career Roadmaps',    href: '/learn/roadmap',   desc: '20+ role-specific roadmaps' },
   { icon: '🏗️', label: 'Real Projects',       href: '/learn/projects',  desc: '6 Azure end-to-end builds'   },
@@ -445,6 +508,82 @@ export default function LearnPage() {
             </CardTag>
           )
         })}
+      </div>
+
+      {/* ── Browse by Skill ────────────────────────────────────────────────── */}
+      <div style={{ marginTop: 64 }}>
+        <div style={{
+          fontSize: 11, fontWeight: 700, letterSpacing: '.12em',
+          textTransform: 'uppercase', color: 'var(--green)',
+          fontFamily: 'var(--font-mono)', marginBottom: 10,
+        }}>
+          // Browse by skill
+        </div>
+        <h2 style={{
+          fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: 900,
+          color: 'var(--text)', fontFamily: 'var(--font-display)',
+          letterSpacing: '-1px', marginBottom: 10,
+        }}>
+          Every individual skill, in one grid.
+        </h2>
+        <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.75, maxWidth: 560, marginBottom: 28 }}>
+          Beyond the structured tracks above — single-language and single-tool tutorials, added week by week.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 10 }}>
+          {SKILLS.map((s, i) => {
+            const color = skillBadgeColor[s.badge] || 'var(--muted)'
+            return (
+              <div
+                key={i}
+                style={{
+                  border: '1px solid var(--border)',
+                  borderRadius: 12,
+                  padding: '18px 16px',
+                  background: 'var(--surface)',
+                  opacity: 0.85,
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+                  <span style={{
+                    fontSize: 9, fontWeight: 700, padding: '2px 8px', borderRadius: 99,
+                    background: `${color}18`, color: color,
+                    textTransform: 'uppercase', letterSpacing: '.06em',
+                  }}>
+                    {s.badge}
+                  </span>
+                  <span style={{
+                    fontSize: 8, fontWeight: 700, padding: '2px 6px', borderRadius: 99,
+                    textTransform: 'uppercase', letterSpacing: '.06em',
+                    background: 'rgba(255,255,255,.06)', color: 'var(--muted)',
+                  }}>
+                    Soon
+                  </span>
+                </div>
+
+                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6, lineHeight: 1.3 }}>
+                  {s.title}
+                </div>
+
+                <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 10 }}>
+                  {s.desc}
+                </div>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                  {s.pills.map(p => (
+                    <span key={p} style={{
+                      fontSize: 9, padding: '2px 7px', borderRadius: 3,
+                      background: 'rgba(255,255,255,.05)', color: 'var(--muted)',
+                      border: '1px solid var(--border)',
+                    }}>
+                      {p}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
 
       {/* ── Bottom CTA ─────────────────────────────────────────────────────── */}
