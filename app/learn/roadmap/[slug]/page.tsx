@@ -34,7 +34,7 @@ import { mobileAppDeveloperCurriculum } from '@/data/roadmaps/curriculum/mobile-
 import { siteReliabilityEngineerCurriculum } from '@/data/roadmaps/curriculum/site-reliability-engineer'
 import { cybersecurityAnalystCurriculum } from '@/data/roadmaps/curriculum/cybersecurity-analyst'
 import { cloudSecurityEngineerCurriculum } from '@/data/roadmaps/curriculum/cloud-security-engineer'
-import { renderSimpleMarkdown } from '@/lib/simpleMarkdown'
+import { CurriculumGuide } from '@/components/roadmap/CurriculumGuide'
 
 const ROADMAPS: Record<string, Roadmap> = {
   'data-engineer':             dataEngineerRoadmap,
@@ -149,7 +149,7 @@ export default function RoadmapPage({ params }: Props) {
             <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--green)', marginBottom: 16 }}>
               📖 Complete Curriculum Guide
             </div>
-            {renderSimpleMarkdown(CURRICULUM[params.slug])}
+            <CurriculumGuide markdown={CURRICULUM[params.slug]} />
           </div>
         )}
 

@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
-import { renderSimpleMarkdown } from '@/lib/simpleMarkdown'
+import { CurriculumGuide } from '@/components/roadmap/CurriculumGuide'
 import { VideoResultCard, type YouTubeVideo } from '@/components/youtube/VideoResultCard'
 
 const EXAMPLE_PROMPTS = [
@@ -308,7 +308,7 @@ export default function CustomRoadmapGenerator() {
               borderTop: '1px solid var(--border)',
             }}
           >
-            {renderSimpleMarkdown(guideReply)}
+            <CurriculumGuide markdown={guideReply} />
           </div>
         )
       )}
