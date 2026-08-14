@@ -144,18 +144,18 @@ export default function ACIDTransactionsModule() {
         <SectionTitle>The Problem ACID Was Invented to Solve</SectionTitle>
 
         <Para>
-          Imagine a bank transfer. Priya sends ₹5,000 to Rahul. Two things must happen:
-          subtract ₹5,000 from Priya's account, add ₹5,000 to Rahul's account. Simple.
+          Imagine a bank transfer. Emily sends $5,000 to Marcus. Two things must happen:
+          subtract $5,000 from Emily's account, add $5,000 to Marcus's account. Simple.
           Now imagine the server crashes after the subtraction but before the addition.
-          Priya's account is ₹5,000 lighter. Rahul's account shows nothing. The money
+          Emily's account is $5,000 lighter. Marcus's account shows nothing. The money
           has vanished.
         </Para>
 
         <Para>
           Or consider a different failure: while the bank transfer is being processed,
           another query reads both account balances at the exact moment between the
-          subtraction and the addition. It sees Priya's balance already reduced but
-          Rahul's not yet increased. It calculates total money in the system as ₹5,000
+          subtraction and the addition. It sees Emily's balance already reduced but
+          Marcus's not yet increased. It calculates total money in the system as $5,000
           less than the actual total. It is seeing a reality that never truly existed.
         </Para>
 
@@ -1105,9 +1105,9 @@ DYNAMODB (AP by default / CP with strongly consistent reads):
           <Para>
             It is the last day of March 2026. The finance team is running the
             month-end reconciliation between the payment gateway's records and
-            your data warehouse. The payment gateway shows ₹4,82,73,841 in
-            settlements for March. Your warehouse shows ₹4,81,98,293. A
-            ₹75,548 discrepancy. You are assigned to find it.
+            your data warehouse. The payment gateway shows $48,273,841 in
+            settlements for March. Your warehouse shows $48,198,293. A
+            $75,548 discrepancy. You are assigned to find it.
           </Para>
 
           <Para>
@@ -1140,7 +1140,7 @@ DYNAMODB (AP by default / CP with strongly consistent reads):
             <strong>The fix:</strong> You deduplicate the affected date's data,
             add a UNIQUE constraint on settlement_id, and rewrite the pipeline
             to wrap each file's worth of inserts in an explicit transaction.
-            The ₹75,548 discrepancy resolves to zero. Total time to find and
+            The $75,548 discrepancy resolves to zero. Total time to find and
             fix: four hours.
           </Para>
 

@@ -138,7 +138,7 @@ export default function SQLForDEModule() {
 
         <Callout type="info">
           <strong>All examples use FreshCart data</strong> — our fictional grocery chain
-          with 10 stores across India. You will see the same tables throughout:
+          with 10 stores across the US. You will see the same tables throughout:
           <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> silver.orders</code>,{' '}
           <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>silver.customers</code>,{' '}
           <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>silver.stores</code>.
@@ -921,14 +921,14 @@ SELECT order_id FROM silver.orders WHERE order_date = '2026-03-17';
 -- Combine payments from multiple payment providers into one table
 
 WITH all_payments AS (
-    SELECT payment_id, merchant_id, amount, 'razorpay' AS provider, created_at
-    FROM silver.razorpay_payments
+    SELECT payment_id, merchant_id, amount, 'stripe'   AS provider, created_at
+    FROM silver.stripe_payments
     UNION ALL
-    SELECT payment_id, merchant_id, amount, 'paytm'    AS provider, created_at
-    FROM silver.paytm_payments
+    SELECT payment_id, merchant_id, amount, 'paypal'   AS provider, created_at
+    FROM silver.paypal_payments
     UNION ALL
-    SELECT payment_id, merchant_id, amount, 'phonepe'  AS provider, created_at
-    FROM silver.phonepe_payments
+    SELECT payment_id, merchant_id, amount, 'square'   AS provider, created_at
+    FROM silver.square_payments
 )
 SELECT
     provider,
@@ -961,7 +961,7 @@ ORDER BY 2, 1;`}</CodeBox>
 
 -- UPSERT pattern (INSERT or UPDATE):
 INSERT INTO silver.customers (customer_id, name, city, updated_at)
-VALUES (4201938, 'Priya Sharma', 'Austin', NOW())
+VALUES (4201938, 'Emily Johnson', 'Austin', NOW())
 ON CONFLICT (customer_id)
 DO UPDATE SET
     city       = EXCLUDED.city,
@@ -970,7 +970,7 @@ DO UPDATE SET
 -- If not: insert as new row
 
 -- PROBLEM: all historical analysis now shows Austin
--- "How much did Priya spend while she lived in Seattle?" → impossible to answer
+-- "How much did Emily spend while she lived in Seattle?" → impossible to answer
 -- Use SCD Type 2 if that question matters to the business`}</CodeBox>
 
         <CodeBox label="SCD Type 2 — add new row (full history preserved)">{`-- SCD TYPE 2: add a new row for each change, expire the old row
@@ -1003,9 +1003,9 @@ WHERE customer_id = 4201938
 INSERT INTO silver.customers_scd2
     (customer_id, name, city, tier, valid_from, valid_to, is_current)
 VALUES
-    (4201938, 'Priya Sharma', 'Austin', 'Gold', CURRENT_DATE, NULL, TRUE);
+    (4201938, 'Emily Johnson', 'Austin', 'Gold', CURRENT_DATE, NULL, TRUE);
 
--- QUERY: "What city was Priya in when she placed order 9284751?"
+-- QUERY: "What city was Emily in when she placed order 9284751?"
 SELECT c.city
 FROM silver.orders o
 JOIN silver.customers_scd2 c
@@ -1128,23 +1128,23 @@ WHERE order_date >= DATE_TRUNC('week', CURRENT_DATE - INTERVAL '7 days')
 
 
 -- ── TIMEZONE HANDLING ─────────────────────────────────────────────────────────
--- Always work in UTC internally, convert to IST (UTC+5:30) only for display
+-- Always work in UTC internally, convert to local time (America/New_York) only for display
 
--- Convert UTC timestamp to IST for reporting:
+-- Convert UTC timestamp to local time for reporting:
 SELECT
     order_id,
-    created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata' AS created_at_ist
+    created_at AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS created_at_local
 FROM silver.orders;
 
 -- Snowflake timezone conversion:
-SELECT CONVERT_TIMEZONE('UTC', 'Asia/Kolkata', created_at) AS ist_time FROM orders;
+SELECT CONVERT_TIMEZONE('UTC', 'America/New_York', created_at) AS local_time FROM orders;
 
 -- BigQuery timezone conversion:
-SELECT DATETIME(created_at, 'Asia/Kolkata') AS ist_time FROM orders;
+SELECT DATETIME(created_at, 'America/New_York') AS local_time FROM orders;
 
--- Safe IST daily grouping (orders placed between midnight and midnight IST):
+-- Safe local-day grouping (orders placed between midnight and midnight local time):
 SELECT
-    DATE(created_at AT TIME ZONE 'Asia/Kolkata') AS order_date_ist,
+    DATE(created_at AT TIME ZONE 'America/New_York') AS order_date_local,
     COUNT(*)                                      AS order_count
 FROM silver.orders
 GROUP BY 1
@@ -1294,11 +1294,11 @@ SELECT order_id, customer_id, amount FROM orders;  -- not SELECT *
 
 -- 3. AVOID FUNCTIONS ON INDEXED COLUMNS IN WHERE — prevents index use
 -- BAD: applying function to indexed column prevents index use
-WHERE LOWER(email) = 'priya@example.com'
+WHERE LOWER(email) = 'emily@example.com'
 WHERE EXTRACT(YEAR FROM order_date) = 2026   -- full scan!
 
 -- GOOD: compute the comparison value instead, leave the column raw
-WHERE email = LOWER('Priya@Example.com')     -- or store email pre-lowercased
+WHERE email = LOWER('Emily@Example.com')     -- or store email pre-lowercased
 WHERE order_date >= '2026-01-01'             -- range on the column directly
   AND order_date <  '2027-01-01'
 
@@ -1485,7 +1485,7 @@ SELECT * FROM orders FETCH FIRST 10 ROWS ONLY;  -- SQL standard`}</CodeBox>
 
           <CodeBox label="gold/daily_store_category_metrics.sql — complete production model">{`-- Gold model: daily revenue metrics by store and category
 -- Powers the FreshCart Revenue Dashboard
--- Refresh: daily at 06:00 AM IST
+-- Refresh: daily at 06:00 AM ET
 
 WITH
 -- Step 1: Base — delivered orders in analysis window
@@ -1496,7 +1496,7 @@ base AS (
         o.store_id,
         p.category,
         o.order_amount,
-        DATE(o.created_at AT TIME ZONE 'Asia/Kolkata') AS order_date
+        DATE(o.created_at AT TIME ZONE 'America/New_York') AS order_date
     FROM silver.orders o
     JOIN silver.order_items oi ON o.order_id = oi.order_id
     JOIN silver.products p    ON oi.product_id = p.product_id
@@ -1636,7 +1636,7 @@ SET valid_to = CURRENT_DATE - 1, is_current = FALSE
 WHERE customer_id = 4201938 AND is_current = TRUE;
 
 INSERT INTO silver.customers_scd2 (customer_id, name, city, valid_from, valid_to, is_current)
-VALUES (4201938, 'Priya Sharma', 'Austin', CURRENT_DATE, NULL, TRUE);
+VALUES (4201938, 'Emily Johnson', 'Austin', CURRENT_DATE, NULL, TRUE);
 
 The value of this pattern becomes clear when you need to answer time-sensitive questions. To find the city a customer lived in when they placed a specific order, join the order to the SCD2 table on both customer_id and the condition that the order date falls within the row's valid_from to valid_to range. This correctly returns Seattle for orders placed before the move and Austin for orders placed after.
 
@@ -1759,7 +1759,7 @@ Use UNION (without ALL) only when you genuinely want to find the set of distinct
         'Deduplication uses ROW_NUMBER() OVER (PARTITION BY business_key ORDER BY timestamp DESC) = 1. This efficiently keeps one row per business key in a single pass. In Snowflake and BigQuery, QUALIFY eliminates the need for a wrapping CTE.',
         'NULL in SQL means unknown — not zero, not empty. NULL != "anything" evaluates to NULL (not TRUE), causing rows to be silently excluded from WHERE clauses. Always handle NULL explicitly: use IS NULL / IS NOT NULL for comparison, COALESCE for defaults, NULLIF for converting values to NULL.',
         'SCD Type 1 overwrites — simple but loses history. SCD Type 2 adds a new row with valid_from/valid_to dates — preserves full history, enables point-in-time queries. SCD Type 3 adds a previous-value column — simple but only one change back. Use SCD2 for dimensions where historical analysis matters.',
-        'DATE_TRUNC is the standard way to group by time period. Always use TIMESTAMPTZ for event timestamps and convert to IST (AT TIME ZONE "Asia/Kolkata") only for display, not for storage. BigQuery reverses the argument order of DATE_TRUNC — a common cross-warehouse bug.',
+        'DATE_TRUNC is the standard way to group by time period. Always use TIMESTAMPTZ for event timestamps and convert to local time (AT TIME ZONE "America/New_York") only for display, not for storage. BigQuery reverses the argument order of DATE_TRUNC — a common cross-warehouse bug.',
         'Query optimisation priorities: filter early in CTEs to reduce rows before joins, avoid SELECT *, never apply functions to indexed columns in WHERE (prevents index use), prefer JOINs over correlated subqueries, always filter on partition columns in cloud warehouses.',
         'UNION ALL is almost always the right choice over UNION. UNION ALL is faster (no deduplication step) and preserves all records from all sources. Use UNION only when you explicitly want distinct values across two sets. When deduplication is needed, do it explicitly with ROW_NUMBER rather than implicitly with UNION.',
       ]} />

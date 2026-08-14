@@ -178,7 +178,7 @@ export default function RandomForestPage() {
         </h2>
 
         <p style={S.p}>
-          You trained a decision tree on HDFC loan data and got 88% accuracy.
+          You trained a decision tree on Capital One loan data and got 88% accuracy.
           You add 50 new training samples — a routine monthly data refresh —
           and retrain. The tree looks completely different. Different root split,
           different branches, different feature importances. The accuracy barely
@@ -343,7 +343,7 @@ n = 15_000
 # ── Instacart product stock-out prediction dataset ─────────────────────────
 categories    = ['Grocery', 'Dairy', 'Beverages', 'Snacks', 'Household',
                   'Personal Care', 'Frozen', 'Bakery']
-warehouses    = ['New York_Central', 'New York_West', 'Delhi_NCR', 'Seattle']
+warehouses    = ['New York_Central', 'New York_West', 'Chicago_Metro', 'Seattle']
 
 current_stock  = np.abs(np.random.normal(200, 120, n)).clip(0, 1000).astype(int)
 avg_daily_sale = np.abs(np.random.normal(45, 30, n)).clip(1, 300).round(1)
@@ -930,7 +930,7 @@ for i in range(5):
             start with Random Forest. It gives you a strong baseline in minutes
             with minimal tuning. If you need every last point of AUC and have
             time to tune properly, switch to XGBoost or LightGBM.
-            At most Indian product companies, a well-tuned Random Forest
+            At most top product companies, a well-tuned Random Forest
             is already good enough for production — and it deploys faster
             and is easier to maintain.
           </p>

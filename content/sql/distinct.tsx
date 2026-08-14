@@ -250,7 +250,7 @@ ORDER BY city;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Distinct payment methods used for high-value orders (above ₹1000)
+        initialQuery={`-- Distinct payment methods used for high-value orders (above $1000)
 SELECT DISTINCT payment_method
 FROM orders
 WHERE total_amount > 1000
@@ -272,7 +272,7 @@ ORDER BY store_id;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Distinct categories of in-stock products under ₹100
+        initialQuery={`-- Distinct categories of in-stock products under $100
 -- What affordable product categories are available?
 SELECT DISTINCT category
 FROM products
@@ -466,11 +466,11 @@ ORDER BY brand;`}
       <H>Reach analysis — which entities touched a segment?</H>
 
       <SQLPlayground
-        initialQuery={`-- Which stores received at least one UPI order?
+        initialQuery={`-- Which stores received at least one Zelle order?
 -- Distinct stores, filtered by payment method
 SELECT DISTINCT store_id
 FROM orders
-WHERE payment_method = 'UPI'
+WHERE payment_method = 'Zelle'
 ORDER BY store_id;`}
         height={110}
         showSchema={false}
@@ -641,7 +641,7 @@ ORDER BY category_count DESC, brand;`}
 
       <Err
         msg="COUNT(DISTINCT column) returns a different number than expected — lower than the manual count"
-        cause="COUNT(DISTINCT column) excludes NULL values from its count. If the column contains NULL values, those rows are not counted. For example, if the brand column is NULL for 3 products and there are 12 non-null distinct brands, COUNT(DISTINCT brand) returns 12, not 15. Additionally, values that appear to be different but are actually the same due to trailing spaces or case differences ('Amul' vs 'amul') may count as two distinct values when you expected one."
+        cause="COUNT(DISTINCT column) excludes NULL values from its count. If the column contains NULL values, those rows are not counted. For example, if the brand column is NULL for 3 products and there are 12 non-null distinct brands, COUNT(DISTINCT brand) returns 12, not 15. Additionally, values that appear to be different but are actually the same due to trailing spaces or case differences ('Horizon' vs 'horizon') may count as two distinct values when you expected one."
         fix="First, check for NULLs: SELECT COUNT(*) FROM products WHERE brand IS NULL — this shows how many NULL brand rows exist. If NULLs should be counted as a distinct value, add a COALESCE: COUNT(DISTINCT COALESCE(brand, 'Unknown')). Second, check for case or whitespace inconsistencies: SELECT DISTINCT LOWER(TRIM(brand)) FROM products — this normalises the values and shows what you actually have. If inconsistencies exist, fix the data at source or use COUNT(DISTINCT LOWER(TRIM(brand))) in your query."
       />
 
@@ -661,7 +661,7 @@ ORDER BY category_count DESC, brand;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart marketing team wants to understand their customer reach across India. Write three queries: (1) All distinct states where FreshCart has customers, sorted alphabetically. (2) The total count of distinct cities across all customers. (3) All distinct store-city combinations — which city each store is in — sorted by city."
+        question="The FreshCart marketing team wants to understand their customer reach across the US. Write three queries: (1) All distinct states where FreshCart has customers, sorted alphabetically. (2) The total count of distinct cities across all customers. (3) All distinct store-city combinations — which city each store is in — sorted by city."
         hint="Query 1: SELECT DISTINCT state FROM customers ORDER BY state. Query 2: SELECT COUNT(DISTINCT city) FROM customers. Query 3: SELECT DISTINCT store_id, city FROM stores ORDER BY city — use the stores table, not customers."
         answer={`-- Query 1: All distinct states
 SELECT DISTINCT state

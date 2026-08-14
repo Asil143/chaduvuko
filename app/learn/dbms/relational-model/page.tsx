@@ -124,23 +124,23 @@ export default function RelationalModel() {
 {`// Domain definitions:
 D_customer_id = { all strings matching pattern 'C' followed by digits }
 D_name        = { all non-empty strings up to 100 characters }
-D_city        = { 'San Francisco', 'Austin', 'New York', 'Boston', 'Chicago', 'Delhi', ... }
+D_city        = { 'San Francisco', 'Austin', 'New York', 'Boston', 'Chicago', 'Seattle', ... }
 D_age         = { integers from 0 to 150 }
 
 // Cartesian product D_customer_id × D_name × D_city × D_age:
 // contains EVERY possible combination:
-// ('C001', 'Rahul Sharma', 'San Francisco', 28)
-// ('C001', 'Rahul Sharma', 'San Francisco', 29)
-// ('C001', 'Rahul Sharma', 'New York', 28)
+// ('C001', 'Michael Turner', 'San Francisco', 28)
+// ('C001', 'Michael Turner', 'San Francisco', 29)
+// ('C001', 'Michael Turner', 'New York', 28)
 // ... (infinite combinations)
 
 // The CUSTOMERS RELATION is a specific SUBSET of this Cartesian product:
 // Only the tuples that represent real customers:
 CUSTOMERS = {
-  ('C001', 'Rahul Sharma',  'San Francisco', 28),
-  ('C002', 'Priya Reddy',   'Austin', 31),
-  ('C003', 'Arjun Nair',    'New York',    24),
-  ('C004', 'Kavya Krishnan','San Francisco', 35),
+  ('C001', 'Michael Turner',  'San Francisco', 28),
+  ('C002', 'Jasmine Rodriguez',   'Austin', 31),
+  ('C003', 'Kevin Park',    'New York',    24),
+  ('C004', 'Emily Johnson','San Francisco', 35),
 }
 // This set of 4 tuples IS the relation.
 // It represents the true facts about customers at this moment in time.
@@ -197,7 +197,7 @@ CUSTOMERS = {
               definition: 'A single ordered list of values — one value per attribute — representing one specific instance of the entity or relationship that the relation models.',
               depth: 'In mathematical set theory, a tuple is an ordered sequence. In the relational model, the order of attributes in a tuple is significant in the formal definition but irrelevant in SQL (SQL accesses attributes by name, not position). This apparent contradiction is resolved by treating each tuple as a mapping from attribute names to values, not as a positional sequence.',
               sqlEquivalent: 'One row in a SELECT result. One inserted record.',
-              example: '(\'C001\', \'Rahul Sharma\', \'San Francisco\', 28) is a tuple in the customers relation.',
+              example: '(\'C001\', \'Michael Turner\', \'San Francisco\', 28) is a tuple in the customers relation.',
             },
             {
               formal: 'Attribute',
@@ -391,13 +391,13 @@ FROM employees;`}
               property: 'Property 1 — No Duplicate Tuples',
               color: '#0078d4',
               formal: 'A relation is a mathematical set. By definition, a set cannot contain duplicate elements. Therefore, no two tuples in a relation can be identical in all their attribute values simultaneously.',
-              why: 'Duplicate tuples represent the same real-world fact stated twice. They add zero information while consuming storage and causing confusion in queries. If you count "how many customers named Rahul in San Francisco?", a duplicate row would give you 2 instead of 1.',
+              why: 'Duplicate tuples represent the same real-world fact stated twice. They add zero information while consuming storage and causing confusion in queries. If you count "how many customers named Michael in San Francisco?", a duplicate row would give you 2 instead of 1.',
               sqlReality: 'SQL does NOT automatically enforce no-duplicate-tuples unless you define a PRIMARY KEY or UNIQUE constraint covering all columns (which is impractical). SQL tables are technically multisets, not sets. This is one of SQL\'s departures from pure relational theory.',
               enforcement: 'Define a PRIMARY KEY on every table. This guarantees no duplicate tuples because the PK is always unique and never NULL.',
               code: `-- Without PK: duplicates are possible (SQL multiset behaviour)
 CREATE TABLE bad_table (name VARCHAR(100), city VARCHAR(100));
-INSERT INTO bad_table VALUES ('Rahul', 'San Francisco');
-INSERT INTO bad_table VALUES ('Rahul', 'San Francisco');  -- allowed! duplicate silently inserted
+INSERT INTO bad_table VALUES ('Michael', 'San Francisco');
+INSERT INTO bad_table VALUES ('Michael', 'San Francisco');  -- allowed! duplicate silently inserted
 SELECT COUNT(*) FROM bad_table;  -- Returns: 2
 
 -- With PK: duplicates impossible on the PK column
@@ -415,9 +415,9 @@ CREATE TABLE good_table (
               sqlReality: 'In SQL, the order of rows returned by SELECT (without ORDER BY) is implementation-defined and can change between queries. This surprises many beginners who expect rows to always come back in insertion order. They don\'t. The DBMS is free to return them in any order based on its physical storage and query plan.',
               enforcement: 'Always use ORDER BY when row order matters for your application. Never assume a particular row order without ORDER BY.',
               code: `-- WRONG ASSUMPTION: rows come back in insertion order
-INSERT INTO customers VALUES ('C003', 'Arjun', 'New York');
-INSERT INTO customers VALUES ('C001', 'Rahul', 'San Francisco');
-INSERT INTO customers VALUES ('C002', 'Priya', 'Austin');
+INSERT INTO customers VALUES ('C003', 'Kevin', 'New York');
+INSERT INTO customers VALUES ('C001', 'Michael', 'San Francisco');
+INSERT INTO customers VALUES ('C002', 'Jasmine', 'Austin');
 
 SELECT * FROM customers;
 -- MIGHT return:  C001, C002, C003 (index order)
@@ -667,10 +667,10 @@ CREATE TABLE products (
               </thead>
               <tbody>
                 {[
-                  ['E001', 'rahul@co.in', '98765-43210', 'Rahul Sharma', 'D01', 'ABCDE1234F', '85000'],
-                  ['E002', 'priya@co.in', '87654-32109', 'Priya Reddy', 'D02', 'FGHIJ5678K', '92000'],
-                  ['E003', 'arjun@co.in', '76543-21098', 'Arjun Nair', 'D01', 'KLMNO9012L', '78000'],
-                  ['E004', 'kavya@co.in', '65432-10987', 'Kavya Krishnan', 'D03', 'PQRST3456M', '95000'],
+                  ['E001', 'michael@co.in', '98765-43210', 'Michael Turner', 'D01', 'ABCDE1234F', '85000'],
+                  ['E002', 'jasmine@co.in', '87654-32109', 'Jasmine Rodriguez', 'D02', 'FGHIJ5678K', '92000'],
+                  ['E003', 'kevin@co.in', '76543-21098', 'Kevin Park', 'D01', 'KLMNO9012L', '78000'],
+                  ['E004', 'emily@co.in', '65432-10987', 'Emily Johnson', 'D03', 'PQRST3456M', '95000'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     {row.map((cell, j) => (
@@ -684,7 +684,7 @@ CREATE TABLE products (
           <Para>
             This EMPLOYEES relation has 4 tuples and 7 attributes. We will use it to illustrate
             every key type. The attributes are: emp_id (auto-assigned), email (work email),
-            phone (mobile), name, dept_id (department), ssn_last4 (Indian tax ID — unique per person),
+            phone (mobile), name, dept_id (department), ssn_last4 (US tax ID — unique per person),
             salary.
           </Para>
         </div>
@@ -725,7 +725,7 @@ CREATE TABLE products (
 {emp_id}          -- emp_id is unique per employee
 {email}           -- each employee has a unique work email
 {phone}           -- each employee has a unique mobile
-{ssn_last4}      -- PAN card is unique per person in India
+{ssn_last4}      -- SSN is unique per person in the US
 
 -- Two-attribute super keys:
 {emp_id, email}   -- still unique (adding email to already-unique emp_id)
@@ -971,9 +971,9 @@ VALUES (NULL, 'Test', 1, 'ABCDE1234F', 50000);
 -- The DBMS rejects NULL in the primary key column.
 
 INSERT INTO employees (emp_id, email, name, dept_id, ssn_last4, salary)
-VALUES (1, 'rahul@co.in', 'Rahul', 1, 'ABCDE1234F', 50000);
+VALUES (1, 'michael@co.in', 'Michael', 1, 'ABCDE1234F', 50000);
 INSERT INTO employees (emp_id, email, name, dept_id, ssn_last4, salary)
-VALUES (1, 'priya@co.in', 'Priya', 2, 'FGHIJ5678K', 60000);
+VALUES (1, 'jasmine@co.in', 'Jasmine', 2, 'FGHIJ5678K', 60000);
 -- ERROR: duplicate key value violates unique constraint "employees_pkey"
 -- The DBMS rejects duplicate primary key values.
 
@@ -1053,7 +1053,7 @@ CREATE TABLE employees (
 -- Login endpoint: "authenticate user with this email"
 SELECT emp_id, name, dept_id, salary
 FROM employees
-WHERE email = 'rahul@co.in';
+WHERE email = 'michael@co.in';
 -- Uses the UNIQUE index on email → O(log n) lookup, extremely fast
 
 -- Password reset: "find account by phone number"
@@ -1162,7 +1162,7 @@ DELETE FROM departments WHERE dept_id = 1;
 -- Test 3: Allowed INSERT (FK value exists)
 INSERT INTO departments (dept_name, location) VALUES ('Engineering', 'San Francisco');
 -- dept_id = 1 is assigned by SERIAL
-INSERT INTO employees (name, dept_id, salary) VALUES ('Rahul', 1, 85000);
+INSERT INTO employees (name, dept_id, salary) VALUES ('Michael', 1, 85000);
 -- OK: dept_id = 1 exists in departments
 
 -- Test 4: Self-referential FK (manager hierarchy)
@@ -1174,7 +1174,7 @@ INSERT INTO employees (name, dept_id, salary, manager_id)
 VALUES ('VP Engineering', 1, 150000, 1);  -- reports to emp_id = 1 (CEO)
 
 INSERT INTO employees (name, dept_id, salary, manager_id)
-VALUES ('Rahul', 1, 85000, 2);  -- reports to emp_id = 2 (VP)
+VALUES ('Michael', 1, 85000, 2);  -- reports to emp_id = 2 (VP)
 
 -- Test 5: Circular FK reference — always causes constraint violation
 -- Cannot insert A with FK pointing to B if B doesn't exist yet
@@ -1268,9 +1268,9 @@ CREATE TABLE enrollments (
 );
 
 -- The composite PK allows:
--- ('S001', 'CS101') -- Rahul in DBMS
--- ('S001', 'CS102') -- Rahul in Algorithms (same student_id, different course_id → OK)
--- ('S002', 'CS101') -- Priya in DBMS (different student_id, same course_id → OK)
+-- ('S001', 'CS101') -- Michael in DBMS
+-- ('S001', 'CS102') -- Michael in Algorithms (same student_id, different course_id → OK)
+-- ('S002', 'CS101') -- Jasmine in DBMS (different student_id, same course_id → OK)
 -- ('S001', 'CS101') -- REJECTED: (S001, CS101) already exists → duplicate composite PK
 
 -- EXAMPLE 2: Natural composite key (no surrogate PK needed)
@@ -1613,8 +1613,8 @@ CREATE TABLE employees (
 );
 
 -- IMPORTANT: UNIQUE with multiple NULLs behaviour
-INSERT INTO employees (email, ssn_last4, name) VALUES ('a@co.in', NULL, 'Rahul');
-INSERT INTO employees (email, ssn_last4, name) VALUES ('b@co.in', NULL, 'Priya');
+INSERT INTO employees (email, ssn_last4, name) VALUES ('a@co.in', NULL, 'Michael');
+INSERT INTO employees (email, ssn_last4, name) VALUES ('b@co.in', NULL, 'Jasmine');
 -- Both inserts succeed! Two rows with NULL ssn_last4 is allowed by UNIQUE.
 -- NULL ≠ NULL → not considered duplicate by the uniqueness check.
 

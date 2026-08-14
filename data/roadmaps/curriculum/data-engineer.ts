@@ -1,5 +1,5 @@
 export const dataEngineerCurriculum = `# Technology Overview
-Data Engineering is the process of designing, building, and maintaining the architecture of large-scale data systems. It's a crucial role in today's data-driven world, as companies rely on data engineers to ensure their data is properly collected, stored, and processed. Data engineers work on building data pipelines, architecting data warehouses, and ensuring data quality. The role requires a strong foundation in computer science, programming, and software engineering. In India, data engineers are in high demand, with companies like Flipkart, Amazon, and Google hiring for this role. As a data engineer, you'll be able to design and implement data systems, work with large datasets, and collaborate with data scientists and analysts to drive business decisions.
+Data Engineering is the process of designing, building, and maintaining the architecture of large-scale data systems. It's a crucial role in today's data-driven world, as companies rely on data engineers to ensure their data is properly collected, stored, and processed. Data engineers work on building data pipelines, architecting data warehouses, and ensuring data quality. The role requires a strong foundation in computer science, programming, and software engineering. In the US, data engineers are in high demand, with companies like Amazon, Google, and Microsoft hiring for this role. As a data engineer, you'll be able to design and implement data systems, work with large datasets, and collaborate with data scientists and analysts to drive business decisions.
 
 # Who This Is For & Prerequisites
 To become a data engineer, you'll need a strong foundation in programming, data structures, and algorithms. Since you're a complete beginner to intermediate, we'll assume you have some basic knowledge of programming concepts, but may not have experience with data engineering specifically. **Prerequisites include**: basic programming skills in languages like Python, Java, or C++, familiarity with databases, and a basic understanding of computer science concepts like data structures and algorithms. If you're completely new to programming, we recommend starting with a **Pre-Roadmap Foundation** that covers the basics of programming, including variables, data types, control structures, functions, and object-oriented programming.
@@ -103,7 +103,7 @@ The project roadmap for data engineering includes:
 
 # Real-World Applications
 Data engineering is used in various industries, including:
-- **Flipkart**: uses data engineering to build data pipelines and architect data warehouses
+- **Netflix**: uses data engineering to build data pipelines and architect data warehouses
 - **Amazon**: uses data engineering to build real-time data processing systems and event-driven architectures
 - **Google**: uses data engineering to build data engineering platforms and design data architectures
 

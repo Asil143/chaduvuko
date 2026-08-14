@@ -648,7 +648,7 @@ print(df_clustered.groupby('cluster')[['order_freq','avg_spend']].agg(['mean','s
 
         <p style={S.p}>
           Customer segmentation is the most common application of K-Means
-          in Indian e-commerce. The output is not just cluster numbers —
+          in e-commerce. The output is not just cluster numbers —
           it is actionable customer groups that the marketing, product,
           and growth teams can use. Budget buyers get different promotions
           than premium buyers. Churning customers get re-engagement campaigns.
@@ -780,7 +780,7 @@ print(df_customers['segment_name'].value_counts().to_string())`} />
             {
               problem: 'Sensitive to outliers',
               color: '#ff4757',
-              desc: 'The centroid is the mean — outliers pull it toward themselves. One transaction worth ₹50 thousand in a dataset of ₹500 average transactions will pull the "high-value" centroid toward it, making the cluster definition unstable and unrepresentative.',
+              desc: 'The centroid is the mean — outliers pull it toward themselves. One transaction worth $6,000 in a dataset of $60 average transactions will pull the "high-value" centroid toward it, making the cluster definition unstable and unrepresentative.',
               fix: 'Use K-Medoids (PAM) which uses actual data points as cluster centres, not means — robust to outliers. Or remove outliers before clustering.',
             },
           ].map((item) => (
@@ -881,15 +881,15 @@ np.random.seed(42)
 n_restaurants = 2000
 
 # ── Seattle restaurant locations (lat/lon) ───────────────────────────
-# Seattle centre: 12.97°N, 77.59°E — spread restaurants realistically
+# Seattle centre: 47.61°N, -122.33°W — spread restaurants realistically
 restaurant_df = pd.DataFrame({
     'restaurant_id': [f'R{i:05d}' for i in range(n_restaurants)],
     'name':          [f'Restaurant_{i}' for i in range(n_restaurants)],
-    'lat':           np.random.normal(12.97, 0.08, n_restaurants),
-    'lon':           np.random.normal(77.59, 0.10, n_restaurants),
+    'lat':           np.random.normal(47.61, 0.08, n_restaurants),
+    'lon':           np.random.normal(-122.33, 0.10, n_restaurants),
     'avg_daily_orders': np.abs(np.random.normal(80, 40, n_restaurants)).clip(5, 300).astype(int),
-    'cuisine':       np.random.choice(['South Indian','North Indian','Chinese',
-                                        'Pizza','Biryani'], n_restaurants),
+    'cuisine':       np.random.choice(['Seafood','Mexican','Chinese',
+                                        'Pizza','BBQ'], n_restaurants),
 })
 
 # ── For geographic clustering, scale lat/lon together ─────────────────
@@ -945,12 +945,12 @@ print(f"MiniBatchKMeans silhouette:     {mb_sil:.4f}")
 print("MiniBatchKMeans is ~10× faster with similar quality — use for 100k+ points")
 
 # ── Save for production ────────────────────────────────────────────────
-joblib.dump(km_zones, '/tmp/swiggy_delivery_zones.pkl')
+joblib.dump(km_zones, '/tmp/doordash_delivery_zones.pkl')
 
 # Assign new restaurant to a zone
-new_restaurant = np.array([[12.94, 77.61]])   # south Seattle
+new_restaurant = np.array([[47.58, -122.31]])   # south Seattle
 zone_id = km_zones.predict(new_restaurant)[0]
-print(f"\nNew restaurant (12.94°N, 77.61°E) → Zone {zone_id}")`} />
+print(f"\nNew restaurant (47.58°N, -122.31°W) → Zone {zone_id}")`} />
       </div>
 
       <Div />
@@ -968,7 +968,7 @@ print(f"\nNew restaurant (12.94°N, 77.61°E) → Zone {zone_id}")`} />
 
         <ErrorBlock
           error="Clusters are dominated by one feature — all customers end up in the same cluster"
-          cause="You did not scale the features. K-Means uses Euclidean distance. A feature with values 0–5000 (like spend in rupees) contributes millions to squared distance. A feature with values 0–1 (like return rate) contributes almost nothing. The clustering is entirely driven by the large-scale feature and ignores everything else."
+          cause="You did not scale the features. K-Means uses Euclidean distance. A feature with values 0–5000 (like spend in dollars) contributes millions to squared distance. A feature with values 0–1 (like return rate) contributes almost nothing. The clustering is entirely driven by the large-scale feature and ignores everything else."
           fix="Always apply StandardScaler before K-Means. Fit on training data only if you plan to assign new points later: sc = StandardScaler(); X_sc = sc.fit_transform(X). For geographic data (lat/lon), both dimensions are on the same scale — scaling is still recommended but less critical."
         />
 

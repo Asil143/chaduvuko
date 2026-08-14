@@ -629,7 +629,7 @@ def compute_metrics(eval_pred):
     return acc_metric.compute(predictions=preds, references=eval_pred.label_ids)
 
 args = TrainingArguments(
-    output_dir='./swiggy-complaints',
+    output_dir='./doordash-complaints',
     num_train_epochs=3,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=32,
@@ -742,13 +742,13 @@ for complaint, prob in zip(new_complaints, probs):
               use: 'State of the art on NLU benchmarks. When accuracy is critical.',
             },
             {
-              model: 'IndicBERT / MuRIL',
-              org: 'AI4Bharat / Google',
+              model: 'BioBERT / SciBERT',
+              org: 'Korea Univ. / AllenAI',
               params: '110M',
               color: '#ff4757',
-              improved: 'Pretrained on Indian languages — Hindi, Tamil, Telugu, Bengali, etc.',
-              weakness: 'Less English-language capability than BERT.',
-              use: 'Any Indian language NLP task. Code-mixed Hindi-English text.',
+              improved: 'Pretrained on biomedical and scientific literature (PubMed, PMC).',
+              weakness: 'Less general-purpose capability than BERT.',
+              use: 'Medical NLP, clinical notes, scientific literature extraction.',
             },
           ].map((item) => (
             <div key={item.model} style={{
@@ -851,9 +851,9 @@ ner_pipeline = pipeline(
 
 # ── Extract entities from Stripe dispute texts ──────────────────────
 dispute_texts = [
-    "I made a payment of Rs 2500 to DoorDash on 15th March 2026.",
+    "I made a payment of $25 to DoorDash on 15th March 2026.",
     "Amazon charged me twice for an order from New York warehouse.",
-    "Amazon India debited Rs 4999 from my HDFC account yesterday.",
+    "Amazon debited $49.99 from my Chase account yesterday.",
 ]
 
 print("Named Entity Recognition on payment disputes:")
@@ -927,14 +927,14 @@ def tokenise_and_align(examples, tokenizer, label2id):
 
         <ErrorBlock
           error="NER labels are misaligned — first token gets wrong label after WordPiece tokenisation"
-          cause="WordPiece splits words into subword tokens. 'Stripe' might become ['Razor', '##pay']. If you assigned one label to 'Stripe' in your annotations but the tokeniser produces two tokens, the label alignment breaks — both subwords need labels but you only have one. Naively aligning labels to tokens produces misaligned training data."
+          cause="WordPiece splits words into subword tokens. 'Stripe' might become ['St', '##ripe']. If you assigned one label to 'Stripe' in your annotations but the tokeniser produces two tokens, the label alignment breaks — both subwords need labels but you only have one. Naively aligning labels to tokens produces misaligned training data."
           fix="Use the word_ids() method from the tokeniser to align labels correctly. For the first subword of each word, assign the real label. For continuation subwords (##tokens), assign -100 so they are ignored in the loss computation. Use the tokenise_and_align pattern shown in Section 6. Never manually align labels by position — always use word_ids()."
         />
 
         <ErrorBlock
           error="Fine-tuned BERT performs worse than a simple logistic regression on your data"
           cause="Dataset is too small (under 200 examples), the text domain is very different from BERT's pretraining data (e.g. code, specialised medical text, ancient languages), or the text is too short for BERT's bidirectional attention to add value (1-3 word inputs). BERT needs enough context to leverage bidirectionality."
-          fix="For very small datasets (under 200 examples), use a simpler model — TF-IDF + logistic regression often beats fine-tuned BERT at this scale. For domain-specific text, use a domain-pretrained model: BioBERT for medical, LegalBERT for legal, IndicBERT for Indian languages. For very short texts, freeze all BERT layers and only train the head — prevents overfitting on limited data."
+          fix="For very small datasets (under 200 examples), use a simpler model — TF-IDF + logistic regression often beats fine-tuned BERT at this scale. For domain-specific text, use a domain-pretrained model: BioBERT for medical, LegalBERT for legal, FinBERT for financial text. For very short texts, freeze all BERT layers and only train the head — prevents overfitting on limited data."
         />
       </div>
 
@@ -1001,7 +1001,7 @@ def tokenise_and_align(examples, tokenizer, label2id):
           'BERT is pretrained with two objectives: Masked Language Modelling (predict 15% of randomly masked tokens using surrounding context) and Next Sentence Prediction (predict whether sentence B follows sentence A). RoBERTa later showed NSP hurts — train MLM only on more data.',
           'BERT input is the sum of three embeddings: token (WordPiece lookup), segment (sentence A vs B), and position (learned, 0–511). Special tokens [CLS] (start) and [SEP] (sentence separator) are always added by the tokeniser automatically.',
           'Fine-tuning pattern: for classification use the [CLS] token final hidden state → Linear(768, n_classes). For NER use every token final hidden state → Linear(768, n_labels). For Q&A predict start and end positions. All use the same pretrained backbone, different task heads.',
-          'The encoder family: RoBERTa (better training recipe, no NSP) is the default when accuracy matters most. DistilBERT (40% smaller, 60% faster, 97% quality) is the default for production serving. DeBERTa achieves state of the art on NLU benchmarks. IndicBERT/MuRIL for Indian language tasks.',
+          'The encoder family: RoBERTa (better training recipe, no NSP) is the default when accuracy matters most. DistilBERT (40% smaller, 60% faster, 97% quality) is the default for production serving. DeBERTa achieves state of the art on NLU benchmarks. BioBERT/SciBERT for domain-specific scientific and medical text.',
           'For NER, use word_ids() to align labels to tokenised subwords. First subword of each word gets the real label. Continuation subwords (## prefix) get label -100 to be ignored in loss. Never align labels by position index — WordPiece splits change the count of tokens per word unpredictably.',
         ]}
       />

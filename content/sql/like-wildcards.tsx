@@ -91,8 +91,8 @@ export default function LikeWildcards() {
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', margin: '20px 0 28px' }}>
         {[
           'Find all customers whose email ends in @gmail.com',
-          'Find all products whose name starts with "Amul"',
-          'Find all stores whose name contains "Koramangala"',
+          'Find all products whose name starts with "Horizon"',
+          'Find all stores whose name contains "Fremont"',
           'Find all brands that are exactly 4 characters long',
           'Find all orders where the payment_method contains "Net"',
         ].map((q, i) => (
@@ -118,8 +118,8 @@ export default function LikeWildcards() {
           <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Percent — matches any sequence</div>
           <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 12 }}>Matches zero, one, or any number of characters. The most common wildcard. Stands in for "anything could be here."</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2 }}>
-            <div style={{ color: C }}>'Amul%'</div>
-            <div style={{ color: 'var(--muted)', marginLeft: 8 }}>→ starts with Amul</div>
+            <div style={{ color: C }}>'Horizon%'</div>
+            <div style={{ color: 'var(--muted)', marginLeft: 8 }}>→ starts with Horizon</div>
             <div style={{ color: C }}>'%gmail.com'</div>
             <div style={{ color: 'var(--muted)', marginLeft: 8 }}>→ ends with gmail.com</div>
             <div style={{ color: C }}>'%Nagar%'</div>
@@ -138,9 +138,9 @@ export default function LikeWildcards() {
             <div style={{ color: '#f97316' }}>'___'</div>
             <div style={{ color: 'var(--muted)', marginLeft: 8 }}>→ exactly 3 characters</div>
             <div style={{ color: '#f97316' }}>'_ata'</div>
-            <div style={{ color: 'var(--muted)', marginLeft: 8 }}>→ Tata, Data, Bata</div>
+            <div style={{ color: 'var(--muted)', marginLeft: 8 }}>→ Kata, Data, Bata</div>
             <div style={{ color: '#f97316' }}>'T_t_'</div>
-            <div style={{ color: 'var(--muted)', marginLeft: 8 }}>→ Tata, Toto, Titi</div>
+            <div style={{ color: 'var(--muted)', marginLeft: 8 }}>→ Tote, Toto, Titi</div>
           </div>
         </div>
       </div>
@@ -155,29 +155,29 @@ export default function LikeWildcards() {
       <H>Starts with — pattern%</H>
 
       <SQLPlayground
-        initialQuery={`-- Products whose name starts with 'Amul'
--- % matches anything after 'Amul'
+        initialQuery={`-- Products whose name starts with 'Horizon'
+-- % matches anything after 'Horizon'
 SELECT product_name, brand, unit_price
 FROM products
-WHERE product_name LIKE 'Amul%';`}
+WHERE product_name LIKE 'Horizon%';`}
         height={120}
         showSchema={true}
       />
 
       <SQLPlayground
-        initialQuery={`-- Products starting with 'Tata'
+        initialQuery={`-- Products starting with 'Morton'
 SELECT product_name, brand, category, unit_price
 FROM products
-WHERE product_name LIKE 'Tata%';`}
+WHERE product_name LIKE 'Morton%';`}
         height={110}
         showSchema={false}
       />
 
       <SQLPlayground
-        initialQuery={`-- Stores whose name starts with 'FreshCart Koram'
+        initialQuery={`-- Stores whose name starts with 'FreshCart Frem'
 SELECT store_id, store_name, city, manager_name
 FROM stores
-WHERE store_name LIKE 'FreshCart Koram%';`}
+WHERE store_name LIKE 'FreshCart Frem%';`}
         height={110}
         showSchema={false}
       />
@@ -349,22 +349,22 @@ ORDER BY last_name;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Products that are NOT from Amul or Tata
+        initialQuery={`-- Products that are NOT from Horizon or Morton
 -- Two NOT LIKE conditions combined with AND
 SELECT product_name, brand, unit_price
 FROM products
-WHERE product_name NOT LIKE 'Amul%'
-  AND product_name NOT LIKE 'Tata%'
+WHERE product_name NOT LIKE 'Horizon%'
+  AND product_name NOT LIKE 'Morton%'
 ORDER BY product_name;`}
         height={130}
         showSchema={false}
       />
 
       <SQLPlayground
-        initialQuery={`-- Stores that are NOT in Seattle (city doesn't contain 'alore')
+        initialQuery={`-- Stores that are NOT in Seattle (city doesn't end with 'ttle')
 SELECT store_id, store_name, city
 FROM stores
-WHERE city NOT LIKE '%alore'
+WHERE city NOT LIKE '%ttle'
 ORDER BY city;`}
         height={110}
         showSchema={false}
@@ -392,9 +392,9 @@ ORDER BY city;`}
           </thead>
           <tbody>
             {[
-              ['MySQL', 'Case-insensitive by default (uses collation)', "LIKE works — 'amul%' matches 'Amul Butter'"],
-              ['PostgreSQL', "Case-sensitive - 'amul%' does NOT match 'Amul Butter'", "Use ILIKE for case-insensitive: WHERE name ILIKE 'amul%'"],
-              ['DuckDB (playground)', 'Case-sensitive like PostgreSQL', "Use ILIKE or LOWER(): WHERE LOWER(name) LIKE 'amul%'"],
+              ['MySQL', 'Case-insensitive by default (uses collation)', "LIKE works — 'horizon%' matches 'Horizon Butter'"],
+              ['PostgreSQL', "Case-sensitive - 'horizon%' does NOT match 'Horizon Butter'", "Use ILIKE for case-insensitive: WHERE name ILIKE 'horizon%'"],
+              ['DuckDB (playground)', 'Case-sensitive like PostgreSQL', "Use ILIKE or LOWER(): WHERE LOWER(name) LIKE 'horizon%'"],
               ['SQLite', 'Case-insensitive for ASCII characters only', "Works for a-z/A-Z but not for non-ASCII (ñ, é, etc.)"],
               ['SQL Server', 'Depends on collation (usually case-insensitive)', "Use COLLATE for explicit control"],
             ].map(([db, behaviour, option], i) => (
@@ -412,10 +412,10 @@ ORDER BY city;`}
 
       <SQLPlayground
         initialQuery={`-- SQLite LIKE is already case-insensitive for ASCII letters
--- 'amul%' matches 'Amul Butter', 'AMUL MILK', 'amul taaza' etc.
+-- 'horizon%' matches 'Horizon Butter', 'HORIZON MILK', 'horizon organic' etc.
 SELECT product_name, brand
 FROM products
-WHERE product_name LIKE 'amul%';`}
+WHERE product_name LIKE 'horizon%';`}
         height={110}
         showSchema={false}
       />
@@ -424,10 +424,10 @@ WHERE product_name LIKE 'amul%';`}
         initialQuery={`-- LIKE vs LOWER()+LIKE — both work in SQLite
 -- SQLite LIKE is case-insensitive for ASCII by default
 SELECT product_name, brand,
-  CASE WHEN product_name LIKE 'amul%' THEN 'matched' ELSE 'missed' END AS like_result,
-  CASE WHEN LOWER(product_name) LIKE 'amul%' THEN 'matched' ELSE 'missed' END AS lower_like_result
+  CASE WHEN product_name LIKE 'horizon%' THEN 'matched' ELSE 'missed' END AS like_result,
+  CASE WHEN LOWER(product_name) LIKE 'horizon%' THEN 'matched' ELSE 'missed' END AS lower_like_result
 FROM products
-WHERE product_name LIKE 'amul%';`}
+WHERE product_name LIKE 'horizon%';`}
         height={140}
         showSchema={false}
       />
@@ -440,7 +440,7 @@ WHERE product_name LIKE 'amul%';`}
 -- Works on PostgreSQL, MySQL, SQLite, DuckDB
 SELECT product_name, brand
 FROM products
-WHERE LOWER(product_name) LIKE 'amul%';`}
+WHERE LOWER(product_name) LIKE 'horizon%';`}
         height={110}
         showSchema={false}
       />
@@ -500,10 +500,10 @@ WHERE product_name LIKE '%Noodles%'
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14, margin: '20px 0 28px' }}>
         {[
           {
-            pattern: "LIKE 'Amul%'",
+            pattern: "LIKE 'Horizon%'",
             label: 'Starts-with — FAST with an index',
             color: '#00e676',
-            desc: 'The database knows the prefix and can use a B-tree index to jump directly to all entries starting with "Amul". Performance is O(log n) — like a dictionary lookup. This is the best case.',
+            desc: 'The database knows the prefix and can use a B-tree index to jump directly to all entries starting with "Horizon". Performance is O(log n) — like a dictionary lookup. This is the best case.',
           },
           {
             pattern: "LIKE '%gmail.com'",
@@ -549,7 +549,7 @@ WHERE product_name LIKE '%Noodles%'
           {
             title: 'Elasticsearch / Typesense',
             color: '#f97316',
-            desc: 'Dedicated search engines built specifically for full-text and fuzzy matching. Used by Amazon, Amazon India, and Sephora for product search. Not SQL but far superior for search workloads.',
+            desc: 'Dedicated search engines built specifically for full-text and fuzzy matching. Used by Amazon and Sephora for product search. Not SQL but far superior for search workloads.',
             when: 'Any production search feature with millions of items',
           },
         ].map(item => (
@@ -584,11 +584,11 @@ ORDER BY last_name;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Amul dairy products only
--- Starts with 'Amul' AND is in the Dairy category
+        initialQuery={`-- Horizon dairy products only
+-- Starts with 'Horizon' AND is in the Dairy category
 SELECT product_name, brand, unit_price, unit
 FROM products
-WHERE product_name LIKE 'Amul%'
+WHERE product_name LIKE 'Horizon%'
   AND category = 'Dairy'
 ORDER BY unit_price;`}
         height={120}
@@ -596,12 +596,12 @@ ORDER BY unit_price;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Products from major Indian brands
+        initialQuery={`-- Products from major grocery brands
 -- Using OR to match multiple brand prefixes
 SELECT product_name, brand, category, unit_price
 FROM products
-WHERE brand LIKE 'Amul%'
-   OR brand LIKE 'Tata%'
+WHERE brand LIKE 'Horizon%'
+   OR brand LIKE 'Morton%'
    OR brand LIKE 'Nestle%'
    OR brand LIKE 'Britannia%'
 ORDER BY brand, unit_price;`}
@@ -663,7 +663,7 @@ WHERE email REGEXP '^[a-z][a-z0-9.]+@(gmail|yahoo|outlook)\\.com$'
 
 -- PostgreSQL: ~ operator (case-sensitive), ~* (case-insensitive)
 WHERE email ~ '^[a-z][a-z0-9.]+@(gmail|yahoo|outlook)\.com$'
-WHERE email ~* 'amul'   -- case-insensitive contains
+WHERE email ~* 'horizon'   -- case-insensitive contains
 
 -- NOT REGEXP / !~
 WHERE product_name !~ '^[0-9]'  -- does not start with a digit
@@ -702,7 +702,7 @@ WHERE email LIKE 'meera%'
 
       <SQLPlayground
         initialQuery={`-- Products where product_name doesn't start with the brand name
--- Brand = 'Amul' → product_name should start with 'Amul'
+-- Brand = 'Horizon' → product_name should start with 'Horizon'
 -- If it doesn't: naming convention violation
 SELECT
   product_name,
@@ -745,20 +745,20 @@ ORDER BY city;`}
 
       <IQ q="What does the LIKE operator do and what are its two wildcards?">
         <p style={{ margin: '0 0 14px' }}>LIKE is a SQL comparison operator used in WHERE clauses to match string values against a pattern rather than an exact value. Instead of finding rows where a column equals a specific string, LIKE finds rows where the column matches a pattern that can include wildcard characters standing in for unknown characters.</p>
-        <p style={{ margin: '0 0 14px' }}>LIKE has two wildcard characters. The percent sign % matches any sequence of zero or more characters — it is the most common wildcard and stands in for "anything could be here." LIKE 'Amul%' matches 'Amul Butter', 'Amul Milk', 'Amul Fresh Paneer', and any string starting with 'Amul'. LIKE '%gmail.com' matches any string ending with 'gmail.com'. LIKE '%Fresh%' matches any string containing 'Fresh' anywhere.</p>
-        <p style={{ margin: 0 }}>The underscore _ matches exactly one character — any character. LIKE 'ST00_' matches 'ST001' through 'ST009' but not 'ST010' (which has two digits after 'ST00'). LIKE '____' matches any string of exactly four characters. LIKE '_ata' matches 'Tata', 'Data', 'Bata' — any four-character string ending in 'ata'. The two wildcards can be combined: LIKE '_a%' matches any string where the second character is 'a', regardless of what comes before or after.</p>
+        <p style={{ margin: '0 0 14px' }}>LIKE has two wildcard characters. The percent sign % matches any sequence of zero or more characters — it is the most common wildcard and stands in for "anything could be here." LIKE 'Horizon%' matches 'Horizon Butter', 'Horizon Milk', 'Horizon Fresh Paneer', and any string starting with 'Horizon'. LIKE '%gmail.com' matches any string ending with 'gmail.com'. LIKE '%Fresh%' matches any string containing 'Fresh' anywhere.</p>
+        <p style={{ margin: 0 }}>The underscore _ matches exactly one character — any character. LIKE 'ST00_' matches 'ST001' through 'ST009' but not 'ST010' (which has two digits after 'ST00'). LIKE '____' matches any string of exactly four characters. LIKE '_ata' matches 'Kata', 'Data', 'Bata' — any four-character string ending in 'ata'. The two wildcards can be combined: LIKE '_a%' matches any string where the second character is 'a', regardless of what comes before or after.</p>
       </IQ>
 
       <IQ q="What is the difference between LIKE and ILIKE?">
-        <p style={{ margin: '0 0 14px' }}>LIKE performs case-sensitive pattern matching in PostgreSQL, DuckDB, and SQLite — the pattern must match the case of the stored value exactly. LIKE 'amul%' does not match 'Amul Butter' in PostgreSQL because 'a' does not equal 'A'. LIKE 'Amul%' matches 'Amul Butter' correctly.</p>
-        <p style={{ margin: '0 0 14px' }}>ILIKE is a PostgreSQL-specific operator that performs case-insensitive pattern matching. ILIKE 'amul%' matches 'Amul Butter', 'AMUL MILK', 'amul ghee', and any other variation of case. ILIKE 'AMUL%' also matches all the same values — the pattern and the data are both treated as if they were lowercase before comparison.</p>
+        <p style={{ margin: '0 0 14px' }}>LIKE performs case-sensitive pattern matching in PostgreSQL, DuckDB, and SQLite — the pattern must match the case of the stored value exactly. LIKE 'horizon%' does not match 'Horizon Butter' in PostgreSQL because 'a' does not equal 'A'. LIKE 'Horizon%' matches 'Horizon Butter' correctly.</p>
+        <p style={{ margin: '0 0 14px' }}>ILIKE is a PostgreSQL-specific operator that performs case-insensitive pattern matching. ILIKE 'horizon%' matches 'Horizon Butter', 'HORIZON MILK', 'horizon ghee', and any other variation of case. ILIKE 'HORIZON%' also matches all the same values — the pattern and the data are both treated as if they were lowercase before comparison.</p>
         <p style={{ margin: 0 }}>MySQL's LIKE is case-insensitive by default (controlled by the collation), so MySQL LIKE behaves like PostgreSQL ILIKE for standard ASCII characters. SQL Server's case sensitivity also depends on the database collation. For cross-database compatible case-insensitive pattern matching, use LOWER() on both the column and pattern: WHERE LOWER(column) LIKE LOWER('pattern%'). This works identically on all databases but prevents index usage on the column. The recommendation: use ILIKE in PostgreSQL for case-insensitive searches, and use LOWER() only when writing SQL that must run on multiple database systems.</p>
       </IQ>
 
       <IQ q="Why is LIKE '%pattern%' slow and what are the alternatives?">
-        <p style={{ margin: '0 0 14px' }}>LIKE '%pattern%' (with a leading %) is slow because the leading percent wildcard prevents the database from using a B-tree index on the column. A B-tree index organises values in sorted order by their prefix — it can efficiently find all values starting with 'Amul' because those values are contiguous in the index. But for '%Fresh%', the database does not know where in the sorted index the matching values are — they could be anywhere. The database must read every row, retrieve the full value, and check whether it contains 'Fresh'. This is a full table scan: O(n) where n is the number of rows. On a table with 10 million products, this takes seconds.</p>
+        <p style={{ margin: '0 0 14px' }}>LIKE '%pattern%' (with a leading %) is slow because the leading percent wildcard prevents the database from using a B-tree index on the column. A B-tree index organises values in sorted order by their prefix — it can efficiently find all values starting with 'Horizon' because those values are contiguous in the index. But for '%Fresh%', the database does not know where in the sorted index the matching values are — they could be anywhere. The database must read every row, retrieve the full value, and check whether it contains 'Fresh'. This is a full table scan: O(n) where n is the number of rows. On a table with 10 million products, this takes seconds.</p>
         <p style={{ margin: '0 0 14px' }}>The production alternatives depend on the scale and the database. For moderate scale (up to a few million rows), PostgreSQL's built-in full-text search using tsvector columns and GIN indexes can make contains-searches fast by pre-computing searchable tokens from text columns. A GIN index on tsvector supports fast text search without reading every row. MySQL supports FULLTEXT indexes with similar capabilities.</p>
-        <p style={{ margin: 0 }}>For large scale — millions of products, user-facing search with sub-100ms latency requirements — dedicated search engines like Elasticsearch, OpenSearch, or Typesense are the production standard. These systems are built specifically for full-text and fuzzy matching and are used by Amazon, Sephora, Amazon India, and every major e-commerce platform for their product search. They run alongside the SQL database: SQL handles transactions and structured queries, the search engine handles text search. LIKE '%pattern%' is acceptable for small tables and ad-hoc queries, but should never be the foundation of a production search feature on large datasets.</p>
+        <p style={{ margin: 0 }}>For large scale — millions of products, user-facing search with sub-100ms latency requirements — dedicated search engines like Elasticsearch, OpenSearch, or Typesense are the production standard. These systems are built specifically for full-text and fuzzy matching and are used by Amazon, Sephora, and every major e-commerce platform for their product search. They run alongside the SQL database: SQL handles transactions and structured queries, the search engine handles text search. LIKE '%pattern%' is acceptable for small tables and ad-hoc queries, but should never be the foundation of a production search feature on large datasets.</p>
       </IQ>
 
       <IQ q="How do you search for a literal percent sign or underscore using LIKE?">
@@ -779,9 +779,9 @@ ORDER BY city;`}
       <Part n="13" title="Errors You Will Hit — And Exactly Why They Happen" />
 
       <Err
-        msg="LIKE returns zero rows — WHERE name LIKE 'amul%' finds nothing"
-        cause="Case sensitivity mismatch. In PostgreSQL and DuckDB (this playground), LIKE is case-sensitive. The pattern 'amul%' does not match 'Amul Butter' because 'a' ≠ 'A'. The stored values use title case (first letter capitalised) but the pattern uses lowercase. No error is thrown — the query simply returns zero rows."
-        fix="Use ILIKE instead of LIKE for case-insensitive matching in PostgreSQL and DuckDB: WHERE name ILIKE 'amul%'. For cross-database compatibility, use LOWER(): WHERE LOWER(name) LIKE 'amul%'. Always run SELECT DISTINCT column FROM table to see the actual stored values before writing a LIKE condition — this immediately reveals case and spacing issues that would cause LIKE to miss rows."
+        msg="LIKE returns zero rows — WHERE name LIKE 'horizon%' finds nothing"
+        cause="Case sensitivity mismatch. In PostgreSQL and DuckDB (this playground), LIKE is case-sensitive. The pattern 'horizon%' does not match 'Horizon Butter' because 'a' ≠ 'A'. The stored values use title case (first letter capitalised) but the pattern uses lowercase. No error is thrown — the query simply returns zero rows."
+        fix="Use ILIKE instead of LIKE for case-insensitive matching in PostgreSQL and DuckDB: WHERE name ILIKE 'horizon%'. For cross-database compatibility, use LOWER(): WHERE LOWER(name) LIKE 'horizon%'. Always run SELECT DISTINCT column FROM table to see the actual stored values before writing a LIKE condition — this immediately reveals case and spacing issues that would cause LIKE to miss rows."
       />
 
       <Err
@@ -793,13 +793,13 @@ ORDER BY city;`}
       <Err
         msg="NOT LIKE returns wrong count — fewer rows than expected"
         cause="NOT LIKE excludes NULL rows silently. If the column being matched can contain NULL, rows where the column IS NULL evaluate NOT LIKE to NULL (not TRUE), and are excluded from results by the WHERE clause. This is the same NULL propagation issue as NOT IN — any NULL in the comparison column causes the row to silently disappear."
-        fix="Add OR column IS NULL to include null rows: WHERE name NOT LIKE 'Amul%' OR name IS NULL. To diagnose: run SELECT COUNT(*) FROM table WHERE column IS NULL — if this returns any rows, your NOT LIKE is excluding them. Decide whether NULL rows should be included in the NOT LIKE result (they represent unknown values, so 'not Amul' includes 'unknown brand') and add the IS NULL check accordingly."
+        fix="Add OR column IS NULL to include null rows: WHERE name NOT LIKE 'Horizon%' OR name IS NULL. To diagnose: run SELECT COUNT(*) FROM table WHERE column IS NULL — if this returns any rows, your NOT LIKE is excluding them. Decide whether NULL rows should be included in the NOT LIKE result (they represent unknown values, so 'not Horizon' includes 'unknown brand') and add the IS NULL check accordingly."
       />
 
       <Err
-        msg="LIKE matches more rows than expected — 'Tata%' matches 'Tata Salt' and 'Tata Sampann' but also 'TataSteel'"
-        cause="The pattern is broader than intended. 'Tata%' matches any string starting with exactly 'Tata' — including 'TataSteel' (no space). If you intended to match products from the Tata brand where the product name starts with 'Tata ' (with a trailing space), the pattern 'Tata%' without the space matches more than expected. This is a pattern design issue, not a SQL bug."
-        fix="Add the space to the pattern to match brand name followed by a product name: WHERE product_name LIKE 'Tata %' (note the space before %). This excludes 'TataSteel' which has no space after 'Tata'. Alternatively, filter on the brand column directly: WHERE brand = 'Tata' — which is more reliable than pattern matching on product_name. Always prefer exact equality on a dedicated column over pattern matching on a combined column when the structure allows it."
+        msg="LIKE matches more rows than expected — 'Morton%' matches 'Morton Salt' and 'Morton Sampann' but also 'MortonSteel'"
+        cause="The pattern is broader than intended. 'Morton%' matches any string starting with exactly 'Morton' — including 'MortonSteel' (no space). If you intended to match products from the Morton brand where the product name starts with 'Morton ' (with a trailing space), the pattern 'Morton%' without the space matches more than expected. This is a pattern design issue, not a SQL bug."
+        fix="Add the space to the pattern to match brand name followed by a product name: WHERE product_name LIKE 'Morton %' (note the space before %). This excludes 'MortonSteel' which has no space after 'Morton'. Alternatively, filter on the brand column directly: WHERE brand = 'Morton' — which is more reliable than pattern matching on product_name. Always prefer exact equality on a dedicated column over pattern matching on a combined column when the structure allows it."
       />
 
       <Err

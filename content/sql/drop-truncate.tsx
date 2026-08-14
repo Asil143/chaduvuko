@@ -585,7 +585,7 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO analyst_user;
       <CodeBlock
         label="Optimised nightly staging reset script"
         code={`-- nightly_staging_reset.sql
--- Runs at 00:00 IST on freshmart_staging only
+-- Runs at 00:00 ET on freshmart_staging only
 
 -- Safety guard: abort if not on staging
 DO $$

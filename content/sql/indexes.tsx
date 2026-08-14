@@ -596,10 +596,10 @@ WHERE order_date >= '2024-01-01'
 
 -- ❌ Leading wildcard LIKE — index cannot be used
 WHERE product_name LIKE '%Milk%'              -- full scan (% at start)
-WHERE product_name LIKE '%Amul'               -- full scan (% at start)
+WHERE product_name LIKE '%Horizon'               -- full scan (% at start)
 
 -- ✅ Trailing wildcard — index CAN be used
-WHERE product_name LIKE 'Amul%'               -- B-tree index used (prefix match)
+WHERE product_name LIKE 'Horizon%'               -- B-tree index used (prefix match)
 
 -- ❌ NOT operators on low-selectivity conditions
 WHERE order_status != 'Delivered'             -- may not use index (returns most rows)
@@ -810,7 +810,7 @@ CREATE INDEX CONCURRENTLY idx_order_items_product_id
 
       <IQ q="What is a composite index and why does column order matter?">
         <p style={{ margin: '0 0 14px' }}>A composite index covers multiple columns, defined in a specific order: CREATE INDEX ON orders(store_id, order_date). The B-tree sorts entries first by store_id, then by order_date within each store_id group. This means the index is useful for queries that filter on store_id (the leading column) — the database can go directly to the store_id section of the index. It is also useful for queries that filter on both store_id and order_date — the index delivers both lookups in one traversal.</p>
-        <p style={{ margin: '0 0 14px' }}>Column order matters because the index can only be entered from the left. A query filtering only on order_date (without store_id) cannot use this composite index — it would have to scan the entire index because order_date values are interleaved across all store_id groups, not sorted globally. The database treats the composite index as a phone book sorted by last name then first name — you can look up "all Sharma entries" or "Sharma, Priya" efficiently, but you cannot look up "all Priya entries across all last names" without scanning the whole book.</p>
+        <p style={{ margin: '0 0 14px' }}>Column order matters because the index can only be entered from the left. A query filtering only on order_date (without store_id) cannot use this composite index — it would have to scan the entire index because order_date values are interleaved across all store_id groups, not sorted globally. The database treats the composite index as a phone book sorted by last name then first name — you can look up "all Johnson entries" or "Johnson, Emily" efficiently, but you cannot look up "all Emily entries across all last names" without scanning the whole book.</p>
         <p style={{ margin: 0 }}>Two practical rules for composite index column order: first, put equality-filter columns before range-filter columns — equality filters use one specific section of the index, while range filters use a contiguous span; combining both in the right order allows the index to navigate to the equality section and then range-scan within it. Second, put the most selective column first when both are equality filters — this reduces the number of rows the database must examine after the initial lookup. For a query with WHERE store_id = 'ST001' AND order_status = 'Delivered': if order_status has only 4 distinct values but store_id has 10 distinct values, store_id is more selective per value and should come first.</p>
       </IQ>
 

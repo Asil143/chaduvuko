@@ -369,7 +369,7 @@ ORDER BY salary DESC;`}
 
       <SQLPlayground
         initialQuery={`-- High-value orders that are still pending (no delivery date)
--- AND above ₹800 total
+-- AND above $800 total
 SELECT order_id, customer_id, order_date,
        order_status, total_amount
 FROM orders
@@ -711,7 +711,7 @@ WHERE col1 IS NOT DISTINCT FROM col2
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a data engineer at HDFC Bank. The compliance team runs monthly reports on loan applications. They discover that some loan application records have NULL values in fields that should always have data — specifically the annual_income field. A NULL income in a loan application is a critical data quality issue that could cause incorrect risk scoring.</P>
+      <P>You are a data engineer at Chase Bank. The compliance team runs monthly reports on loan applications. They discover that some loan application records have NULL values in fields that should always have data — specifically the annual_income field. A NULL income in a loan application is a critical data quality issue that could cause incorrect risk scoring.</P>
 
       <TimeBlock time="9:00 AM" label="Identify the scope of the problem">
         First, understand how many records have NULL income and what percentage of total applications that represents.

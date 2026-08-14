@@ -65,10 +65,10 @@ const TimeBlock = ({ time, label, children }: { time: string; label: string; chi
 );
 
 const DBCard = ({
-  name, color, type, examples, strengths, weaknesses, indiaUse,
+  name, color, type, examples, strengths, weaknesses, usUse,
 }: {
   name: string; color: string; type: string; examples: string;
-  strengths: string[]; weaknesses: string[]; indiaUse: string;
+  strengths: string[]; weaknesses: string[]; usUse: string;
 }) => (
   <div style={{ background: 'var(--surface)', border: `1px solid ${color}30`, borderRadius: 12, overflow: 'hidden', marginBottom: 20 }}>
     <div style={{ padding: '14px 18px', background: `${color}12`, borderBottom: `1px solid ${color}20`, display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -89,8 +89,8 @@ const DBCard = ({
         </div>
       </div>
       <div style={{ borderTop: '1px solid var(--border)', paddingTop: 10 }}>
-        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 4px' }}>Used by in India</p>
-        <p style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.6, margin: 0 }}>{indiaUse}</p>
+        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.08em', margin: '0 0 4px' }}>Used by in the US</p>
+        <p style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.6, margin: 0 }}>{usUse}</p>
       </div>
     </div>
   </div>
@@ -100,7 +100,7 @@ export default function TypesOfDatabases() {
   return (
     <LearnLayout
       title="Types of Databases"
-      description="Relational, Document, Key-Value, Column-Family, Graph, Time-Series — what each one is built for and how Indian companies use them"
+      description="Relational, Document, Key-Value, Column-Family, Graph, Time-Series — what each one is built for and how US companies use them"
       section="SQL — Module 03"
       readTime="8–12 min"
       updatedAt="April 2026"
@@ -117,7 +117,7 @@ export default function TypesOfDatabases() {
         <P>Relational databases guarantee consistency and correctness. But guaranteeing consistency in a distributed system — where data is spread across hundreds of servers across multiple data centres — requires coordination between those servers. That coordination takes time. At extreme scale, the time spent coordinating becomes the bottleneck. Some systems need speed so badly that they are willing to trade a degree of consistency for it. That trade-off is what every NoSQL database is fundamentally about.</P>
       </div>
 
-      <P>This module maps every major type of database — what it is built for, where it breaks down, and which Indian companies actually use it. By the end, you will be able to answer the question "which database should we use?" for any system you are ever asked to design.</P>
+      <P>This module maps every major type of database — what it is built for, where it breaks down, and which US companies actually use it. By the end, you will be able to answer the question "which database should we use?" for any system you are ever asked to design.</P>
 
       <HR />
 
@@ -165,7 +165,7 @@ export default function TypesOfDatabases() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
             <tr>
-              {['Database', 'Who uses it in India', 'Why'].map(h => (
+              {['Database', 'Who uses it in the US', 'Why'].map(h => (
                 <th key={h} style={{ padding: '10px 14px', background: 'var(--surface)', color: 'var(--muted)', fontWeight: 700, textAlign: 'left', borderBottom: '1px solid var(--border)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '.08em' }}>{h}</th>
               ))}
             </tr>
@@ -173,10 +173,10 @@ export default function TypesOfDatabases() {
           <tbody>
             {[
               ['PostgreSQL', 'Stripe, Brex, Robinhood, Acorns, Venmo', 'Open source, ACID compliant, excellent for fintech — handles complex financial queries and JSON payment metadata with JSONB.'],
-              ['MySQL', 'DoorDash, Sephora, OYO, BookMyShow', 'Mature, battle-tested at high traffic, excellent read-replica support for consumer apps with millions of concurrent users.'],
-              ['MS SQL Server', 'HDFC Bank, ICICI Bank, Deloitte enterprise clients', 'Enterprise support, Windows ecosystem, deep compliance tooling for RBI-regulated financial institutions.'],
-              ['Oracle', 'Accenture, KPMG clients, IRCTC, LIC, government', 'Legacy enterprise and government. IRCTC runs one of Asia\'s highest-volume Oracle installations. Expensive but deeply entrenched.'],
-              ['SQLite', 'Every Android and iOS app (device-local storage)', 'Serverless, zero-config, runs on the device itself. DoorDash, Venmo, Cred — all store local user data in SQLite on your phone.'],
+              ['MySQL', 'DoorDash, Sephora, Airbnb, Eventbrite', 'Mature, battle-tested at high traffic, excellent read-replica support for consumer apps with millions of concurrent users.'],
+              ['MS SQL Server', 'Wells Fargo, Bank of America, Deloitte enterprise clients', 'Enterprise support, Windows ecosystem, deep compliance tooling for federally regulated financial institutions.'],
+              ['Oracle', 'Accenture, KPMG clients, the IRS, state DMV systems, government', 'Legacy enterprise and government. The IRS runs one of the highest-volume Oracle installations in the US. Expensive but deeply entrenched.'],
+              ['SQLite', 'Every Android and iOS app (device-local storage)', 'Serverless, zero-config, runs on the device itself. DoorDash, Venmo, Robinhood — all store local user data in SQLite on your phone.'],
             ].map(([db, who, why], i) => (
               <tr key={db} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
                 <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', fontSize: 12, color: C, borderBottom: '1px solid var(--border)', whiteSpace: 'nowrap' }}>{db}</td>
@@ -204,12 +204,12 @@ export default function TypesOfDatabases() {
         <pre style={{ margin: 0, padding: '16px', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 1.8, color: 'var(--text)', overflowX: 'auto' }}>
 {`{
   "_id": "cust_001",
-  "first_name": "Aisha",
-  "last_name": "Khan",
+  "first_name": "Sofia",
+  "last_name": "Ramirez",
   "city": "Seattle",
   "loyalty_tier": "Gold",
   "contact": {
-    "email": "aisha.khan@gmail.com",
+    "email": "sofia.ramirez@gmail.com",
     "phone": "9876543210"
   },
   "recent_orders": [
@@ -229,7 +229,7 @@ export default function TypesOfDatabases() {
       <H>The core weakness — no JOINs, limited cross-document consistency</H>
       <P>Document databases do not support JOINs. If you need to find all customers who ordered a specific product, you either embed so much data that the document becomes enormous and stale, or you do multiple queries and join them in application code — which is slower and more complex than a SQL JOIN. Transactions across multiple documents in different collections are also either not supported or limited — atomicity within a single document is guaranteed, but cross-document atomicity is not always available.</P>
 
-      <H>MongoDB — the dominant document database in India</H>
+      <H>MongoDB — the dominant document database</H>
       <P>MongoDB is used by Uber Eats for restaurant and menu data (menus change constantly — no fixed schema), by Lyft for driver and ride metadata, and by many early-stage startups that move fast and cannot afford to define a rigid schema before the product has found its shape. It is also extremely popular for storing event logs, user activity data, and any data where the structure varies per record.</P>
 
       <Callout type="tip">
@@ -253,7 +253,7 @@ export default function TypesOfDatabases() {
           { use: 'Caching', desc: 'Store the result of expensive database queries. Key = query fingerprint, Value = result. Serve from Redis instead of hitting PostgreSQL.', company: 'DoorDash, Uber Eats' },
           { use: 'Rate limiting', desc: 'Count how many API requests a user has made in the last minute. Increment a counter in Redis — atomic, fast, automatic expiry.', company: 'Venmo, Stripe' },
           { use: 'OTP storage', desc: 'Store a one-time password with a 5-minute expiry. Key = phone number, Value = OTP, TTL = 300 seconds. Automatic deletion when expired.', company: 'Every app with SMS login' },
-          { use: 'Leaderboards', desc: 'Redis sorted sets let you maintain a ranked leaderboard with O(log n) insert and rank queries. Used in gaming apps and referral programs.', company: 'MPL, DraftKings' },
+          { use: 'Leaderboards', desc: 'Redis sorted sets let you maintain a ranked leaderboard with O(log n) insert and rank queries. Used in gaming apps and referral programs.', company: 'DraftKings, FanDuel' },
           { use: 'Pub/Sub messaging', desc: 'Redis supports publish/subscribe — one service publishes an event, multiple services receive it. Lightweight alternative to Kafka for simple messaging.', company: 'Shopify, Amazon' },
         ].map(item => (
           <div key={item.use} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px' }}>
@@ -264,10 +264,10 @@ export default function TypesOfDatabases() {
         ))}
       </div>
 
-      <H>Redis — the key-value database every Indian startup uses</H>
+      <H>Redis — the key-value database every US startup uses</H>
       <P>Redis (Remote Dictionary Server) stores everything in memory, which is what makes it fast. It also supports persistence — writing snapshots to disk so data survives restarts. Redis is not just a simple key-value store — it supports rich data structures: strings, lists, sets, sorted sets, hashes, streams, and geospatial indexes. This makes it useful for a surprisingly wide range of use cases beyond simple caching.</P>
 
-      <P>Almost every Indian tech company of any size runs Redis. DoorDash uses Redis to cache restaurant menus — a menu does not change every second, so serving it from Redis instead of PostgreSQL handles the 50× traffic spike at 7 PM without the database breaking a sweat. Stripe uses Redis for rate limiting API keys. Venmo uses it for session management across hundreds of millions of users.</P>
+      <P>Almost every US tech company of any size runs Redis. DoorDash uses Redis to cache restaurant menus — a menu does not change every second, so serving it from Redis instead of PostgreSQL handles the 50× traffic spike at 7 PM without the database breaking a sweat. Stripe uses Redis for rate limiting API keys. Venmo uses it for session management across hundreds of millions of users.</P>
 
       <Callout type="warning">
         Redis stores data in memory. Memory is expensive and limited. Do not use Redis as your primary database — use it as a cache in front of your primary database. Always set TTL (Time To Live) on cached keys so stale data automatically expires. And always assume Redis data can be lost — design your system so it can rebuild the cache from the primary database if Redis restarts.
@@ -313,8 +313,8 @@ export default function TypesOfDatabases() {
         </table>
       </div>
 
-      <H>Who uses Cassandra in India</H>
-      <P>Amazon uses Cassandra for their product catalogue and recommendation engine — hundreds of millions of products, billions of user interaction events, all written at a rate no relational database could absorb. Lyft uses Cassandra for ride event data — every GPS ping from every driver, every second, across millions of active rides. Hotstar (now JioCinema) used Cassandra for user watch history and playback state. The pattern is consistent: Cassandra is chosen when write volume is the primary constraint and the data does not need complex relational queries.</P>
+      <H>Who uses Cassandra</H>
+      <P>Amazon uses Cassandra for their product catalogue and recommendation engine — hundreds of millions of products, billions of user interaction events, all written at a rate no relational database could absorb. Lyft uses Cassandra for ride event data — every GPS ping from every driver, every second, across millions of active rides. Netflix uses Cassandra for user watch history and playback state. The pattern is consistent: Cassandra is chosen when write volume is the primary constraint and the data does not need complex relational queries.</P>
 
       <HR />
 
@@ -327,10 +327,10 @@ export default function TypesOfDatabases() {
       <P>A graph database stores data as <Hl>nodes</Hl> (entities — a person, a product, a location) and <Hl>edges</Hl> (relationships between entities — FOLLOWS, PURCHASED, LOCATED_IN). Both nodes and edges can have properties. The database is physically designed for traversal — following edges from node to node — which is what makes multi-hop relationship queries fast.</P>
 
       <H>Where relational databases fail at graph queries</H>
-      <P>Consider this question: "Find all users who might know Aisha Khan — specifically people who are followed by at least 3 of Aisha's direct followers, but who Aisha does not already follow." In SQL this requires multiple levels of self-joins on a users and follows table. On a social network with 100 million users, this query takes minutes — the JOIN fan-out is exponential. In Neo4j (the dominant graph database), the same query is expressed as a simple graph traversal and executes in milliseconds because the edges are physically stored next to their nodes.</P>
+      <P>Consider this question: "Find all users who might know Sofia Ramirez — specifically people who are followed by at least 3 of Sofia's direct followers, but who Sofia does not already follow." In SQL this requires multiple levels of self-joins on a users and follows table. On a social network with 100 million users, this query takes minutes — the JOIN fan-out is exponential. In Neo4j (the dominant graph database), the same query is expressed as a simple graph traversal and executes in milliseconds because the edges are physically stored next to their nodes.</P>
 
-      <H>Where graph databases are used in India</H>
-      <P>LinkedIn India's connection graph, fraud detection at fintech companies (Stripe uses graph analysis to detect fraud rings — accounts that share phones, addresses, or devices form a graph, and suspicious clusters become visible), recommendation engines at e-commerce companies (customers who bought this also bought that — a product graph), and knowledge graphs at content platforms. Neo4j and Amazon Neptune are the most common graph database choices in production.</P>
+      <H>Where graph databases are used</H>
+      <P>LinkedIn's connection graph, fraud detection at fintech companies (Stripe uses graph analysis to detect fraud rings — accounts that share phones, addresses, or devices form a graph, and suspicious clusters become visible), recommendation engines at e-commerce companies (customers who bought this also bought that — a product graph), and knowledge graphs at content platforms. Neo4j and Amazon Neptune are the most common graph database choices in production.</P>
 
       <HR />
 
@@ -345,24 +345,24 @@ export default function TypesOfDatabases() {
       <P>Relational databases can store this data, but they are not optimised for the write rate (millions of inserts per second across thousands of metric series) or the range-aggregation query pattern. Time-series databases use specialised storage formats — columnar compression, time-partitioned storage — that make them 10–100× more efficient for this specific access pattern.</P>
 
       <H>Popular time-series databases</H>
-      <P><Hl>InfluxDB</Hl> is the most popular open-source time-series database — used for application metrics, server monitoring, and IoT sensor data. <Hl>TimescaleDB</Hl> is PostgreSQL with time-series extensions — you get full SQL plus time-series optimisations, which makes it popular at companies that already run PostgreSQL and want one less database to operate. <Hl>Prometheus</Hl> is the standard for infrastructure metrics in Kubernetes environments — almost every Indian startup running on k8s uses Prometheus with Grafana dashboards.</P>
+      <P><Hl>InfluxDB</Hl> is the most popular open-source time-series database — used for application metrics, server monitoring, and IoT sensor data. <Hl>TimescaleDB</Hl> is PostgreSQL with time-series extensions — you get full SQL plus time-series optimisations, which makes it popular at companies that already run PostgreSQL and want one less database to operate. <Hl>Prometheus</Hl> is the standard for infrastructure metrics in Kubernetes environments — almost every US startup running on k8s uses Prometheus with Grafana dashboards.</P>
 
-      <H>Who uses time-series databases in India</H>
-      <P>Every company running cloud infrastructure uses time-series databases for monitoring — CPU, memory, latency, error rates, request volume. DoorDash monitors millions of time-series metrics across thousands of microservices. Venmo tracks transaction success rates per second across payment rails. Lyft tracks GPS pings and driver location updates. Any IoT application — smart meters, factory sensors, connected vehicles — is a natural time-series use case. Tata Motors uses time-series databases for vehicle telemetry from their connected car fleet.</P>
+      <H>Who uses time-series databases</H>
+      <P>Every company running cloud infrastructure uses time-series databases for monitoring — CPU, memory, latency, error rates, request volume. DoorDash monitors millions of time-series metrics across thousands of microservices. Venmo tracks transaction success rates per second across payment rails. Lyft tracks GPS pings and driver location updates. Any IoT application — smart meters, factory sensors, connected vehicles — is a natural time-series use case. Tesla uses time-series databases for vehicle telemetry from their connected car fleet.</P>
 
       <HR />
 
       {/* ── PART 09 ── */}
       <Part n="09" title="How Real Companies Use Multiple Database Types Together" />
 
-      <P>No production company uses just one type of database. Every system of meaningful complexity uses two, three, or four database types simultaneously — each handling the part of the problem it is best suited for. Here is how two well-known Indian companies actually structure their data infrastructure.</P>
+      <P>No production company uses just one type of database. Every system of meaningful complexity uses two, three, or four database types simultaneously — each handling the part of the problem it is best suited for. Here is how two well-known US companies actually structure their data infrastructure.</P>
 
       <H>DoorDash — food delivery at scale</H>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px', margin: '16px 0 28px' }}>
         {[
-          { db: 'MySQL', color: '#4479A1', role: 'Core transactional data', detail: 'Orders, payments, customer accounts, restaurant accounts. Every rupee transaction runs through MySQL. ACID compliance is non-negotiable here.' },
-          { db: 'MongoDB', color: '#10b981', role: 'Restaurant menus and item data', detail: 'Menus are deeply nested, change constantly, and have no fixed schema — a burger has different options than a thali. MongoDB\'s document model handles this naturally.' },
+          { db: 'MySQL', color: '#4479A1', role: 'Core transactional data', detail: 'Orders, payments, customer accounts, restaurant accounts. Every dollar transaction runs through MySQL. ACID compliance is non-negotiable here.' },
+          { db: 'MongoDB', color: '#10b981', role: 'Restaurant menus and item data', detail: 'Menus are deeply nested, change constantly, and have no fixed schema — a burger has different options than a pizza. MongoDB\'s document model handles this naturally.' },
           { db: 'Redis', color: '#ff4757', role: 'Caching and session management', detail: 'Restaurant lists, user sessions, OTP storage, rate limiting. Every time you open DoorDash, the first screen is served from Redis — not MySQL — to handle the dinner-time spike.' },
           { db: 'Cassandra', color: '#8b5cf6', role: 'Order event log and delivery tracking', detail: 'Every GPS update from every delivery partner, every status change on every order. Millions of writes per hour at peak — only Cassandra handles this write rate.' },
           { db: 'Prometheus + InfluxDB', color: C, role: 'Infrastructure and application metrics', detail: 'CPU, latency, error rates across 500+ microservices. Alerts fire when delivery success rate drops below threshold.' },
@@ -387,7 +387,7 @@ export default function TypesOfDatabases() {
           { db: 'PostgreSQL', color: '#336791', role: 'Payment transactions, merchant accounts', detail: 'Every payment, refund, and settlement. ACID compliance and DECIMAL money types are mandatory. Horizontal sharding by merchant_id for scale.' },
           { db: 'Redis', color: '#ff4757', role: 'API rate limiting, idempotency keys, sessions', detail: 'A merchant making 1000 API calls per second gets rate-limited in Redis — one atomic increment per call, no database hit needed.' },
           { db: 'Elasticsearch', color: '#f59e0b', role: 'Payment search and dispute management', detail: 'Merchants search their transactions by amount, date, customer, status. Full-text search across billions of transactions — SQL LIKE queries at this scale would take minutes.' },
-          { db: 'InfluxDB / Prometheus', color: C, role: 'Payment success rate monitoring', detail: 'Real-time dashboards showing success rate per payment instrument, per bank, per second. When SBI\'s payment gateway degrades, an alert fires in under 30 seconds.' },
+          { db: 'InfluxDB / Prometheus', color: C, role: 'Payment success rate monitoring', detail: 'Real-time dashboards showing success rate per payment instrument, per bank, per second. When a partner bank\'s payment gateway degrades, an alert fires in under 30 seconds.' },
         ].map(item => (
           <div key={item.db} style={{ display: 'flex', gap: 14, marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid var(--border)' }}>
             <div style={{ flexShrink: 0, width: 10, height: 10, borderRadius: 3, background: item.color, marginTop: 5 }} />
@@ -461,7 +461,7 @@ LIMIT 8;`}
       {/* ── PART 11 — Day in the Life ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at a Series B fintech startup in Austin. The company processes UPI payments for small merchants. The CTO calls a system design meeting — you have hit 50,000 transactions per day and need to plan for 5 million. You are asked to review the current architecture and recommend database changes.</P>
+      <P>You are a backend engineer at a Series B fintech startup in Austin. The company processes card payments for small merchants. The CTO calls a system design meeting — you have hit 50,000 transactions per day and need to plan for 5 million. You are asked to review the current architecture and recommend database changes.</P>
 
       <TimeBlock time="2:00 PM" label="Current state — everything in MySQL">
         Right now, the company runs everything in a single MySQL instance: transactions, merchant profiles, session data, API rate limit counters, and audit logs. It works at 50k transactions/day but the CTO is worried. You pull up the MySQL slow query log and find three problems: session lookups are hitting the database on every API request (10,000 requests/second at peak), rate limit counters are doing read-modify-write cycles that create lock contention, and the audit log table has 500 million rows and is slowing down every backup.

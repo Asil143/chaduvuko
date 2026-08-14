@@ -125,10 +125,10 @@ export default function HowDatabasesWork() {
 
       <H>Rule 1: One table, one thing</H>
       <P>The single most important rule in database design: each table stores exactly one type of entity. FreshCart has a customers table that stores only customers. A products table that stores only products. An orders table that stores only orders. You would never put customer data and product data in the same table, even though both are used when a customer buys a product.</P>
-      <P>When beginners design databases for the first time they often try to put everything in one table — one row per order, with the customer's name, address, and loyalty tier repeated in every single row. This is called data redundancy and it causes serious problems: if Aisha Khan moves from Seattle to Austin, you have to update her address in every single order row. Miss one row and your data is inconsistent. In a properly designed database you update her address in exactly one place — the customers table — and every order automatically reflects it through the foreign key relationship.</P>
+      <P>When beginners design databases for the first time they often try to put everything in one table — one row per order, with the customer's name, address, and loyalty tier repeated in every single row. This is called data redundancy and it causes serious problems: if Sofia Ramirez moves from Seattle to Austin, you have to update her address in every single order row. Miss one row and your data is inconsistent. In a properly designed database you update her address in exactly one place — the customers table — and every order automatically reflects it through the foreign key relationship.</P>
 
       <H>Rule 2: Every column stores exactly one piece of information</H>
-      <P>Each column must represent one atomic, indivisible piece of data. A column called address that stores "12 Koramangala, Seattle, 560034" is a bad design — city, street, and zip_code are three different pieces of information crammed into one column. When you later want to find all customers in Seattle, you would have to use string pattern matching on the whole address, which is slow and error-prone. Correct design separates them: street, city, state, zip_code — four columns, four clean pieces of data.</P>
+      <P>Each column must represent one atomic, indivisible piece of data. A column called address that stores "1200 Denny Way, Seattle, 98109" is a bad design — city, street, and zip_code are three different pieces of information crammed into one column. When you later want to find all customers in Seattle, you would have to use string pattern matching on the whole address, which is slow and error-prone. Correct design separates them: street, city, state, zip_code — four columns, four clean pieces of data.</P>
 
       <H>Rule 3: Table and column names must be clear, lowercase, and use underscores</H>
       <P>The universal convention for SQL tables and columns: all lowercase letters, words separated by underscores, no spaces, no special characters. <Hl>customers</Hl> not Customers. <Hl>order_date</Hl> not OrderDate or orderDate. <Hl>unit_price</Hl> not UnitPrice or unitprice. This matters because SQL is case-sensitive in some databases for table names, and mixed-case names require quoting everywhere — adding noise to every query you write.</P>
@@ -185,7 +185,7 @@ export default function HowDatabasesWork() {
             <TypeRow type="INTEGER" size="4 bytes" example="1, 42, 1001" use="customer_id, product_id, order_id — any whole number ID or count" />
             <TypeRow type="BIGINT" size="8 bytes" example="9876543210" use="phone numbers, large counters — when INTEGER's max of ~2 billion is not enough" />
             <TypeRow type="DECIMAL(10,2)" size="variable" example="340.00, 28.50" use="unit_price, total_amount — money. NEVER use FLOAT for money — floating point arithmetic introduces rounding errors" />
-            <TypeRow type="VARCHAR(n)" size="up to n chars" example="'Aisha', 'Seattle'" use="first_name, city, product_name — variable-length text up to n characters" />
+            <TypeRow type="VARCHAR(n)" size="up to n chars" example="'Sofia', 'Seattle'" use="first_name, city, product_name — variable-length text up to n characters" />
             <TypeRow type="CHAR(n)" size="exactly n chars" example="'ST001'" use="store_id — fixed-length codes where every value is always the same length" />
             <TypeRow type="TEXT" size="unlimited" example="long descriptions" use="product descriptions, notes — when you cannot predict maximum length. Slower to index than VARCHAR" />
             <TypeRow type="DATE" size="3 bytes" example="2024-01-05" use="order_date, joined_date, hire_date — date without time, stored as YYYY-MM-DD" />
@@ -196,10 +196,10 @@ export default function HowDatabasesWork() {
       </div>
 
       <H>The money mistake — why FLOAT is wrong for prices</H>
-      <P>This is one of the most common beginner mistakes. If you define a price column as FLOAT or DOUBLE, you will eventually get values like 28.499999999998 instead of 28.5. This happens because floating-point numbers are stored in binary and cannot represent most decimal fractions exactly — the same way 1/3 cannot be written as a finite decimal. For currency you must always use <Hl>DECIMAL(precision, scale)</Hl>. In FreshCart, DECIMAL(10,2) means up to 10 total digits with exactly 2 decimal places — sufficient for prices up to ₹99,999,999.99.</P>
+      <P>This is one of the most common beginner mistakes. If you define a price column as FLOAT or DOUBLE, you will eventually get values like 28.499999999998 instead of 28.5. This happens because floating-point numbers are stored in binary and cannot represent most decimal fractions exactly — the same way 1/3 cannot be written as a finite decimal. For currency you must always use <Hl>DECIMAL(precision, scale)</Hl>. In FreshCart, DECIMAL(10,2) means up to 10 total digits with exactly 2 decimal places — sufficient for prices up to $99,999,999.99.</P>
 
       <H>VARCHAR vs CHAR — when to use which</H>
-      <P>VARCHAR(n) stores variable-length strings — it only uses as much space as the actual string needs, plus 1–2 bytes to record the length. A VARCHAR(100) column storing the word "Amul" uses 5 bytes, not 100. CHAR(n) stores fixed-length strings — it always uses exactly n bytes, padding shorter values with spaces. Use CHAR for values that are always the same length: country codes (IN, US), store IDs (ST001), status codes. Use VARCHAR for everything else.</P>
+      <P>VARCHAR(n) stores variable-length strings — it only uses as much space as the actual string needs, plus 1–2 bytes to record the length. A VARCHAR(100) column storing the word "Horizon" uses 8 bytes, not 100. CHAR(n) stores fixed-length strings — it always uses exactly n bytes, padding shorter values with spaces. Use CHAR for values that are always the same length: country codes (IN, US), store IDs (ST001), status codes. Use VARCHAR for everything else.</P>
 
       <Callout type="warning">
         In MySQL, TEXT columns cannot be indexed directly (only the first n characters can be indexed). If you need to search or sort on a column, use VARCHAR with an appropriate limit, not TEXT. PostgreSQL does not have this limitation, but the convention of using VARCHAR for indexable columns is still good practice across all databases.
@@ -342,7 +342,7 @@ FOREIGN KEY (manager_id) REFERENCES employees(employee_id)`}
         </pre>
       </div>
 
-      <P>Notice the last one: employees.manager_id references employees.employee_id — a table referencing itself. This is called a <Hl>self-referencing foreign key</Hl> and it is how org charts and hierarchy data are stored. Priya Sharma (employee_id = 1) is the Store Manager with no manager above her (manager_id = NULL). Rahul Verma (employee_id = 2) reports to Priya, so his manager_id = 1. You will learn to query this hierarchy using SELF JOINs in Module 34.</P>
+      <P>Notice the last one: employees.manager_id references employees.employee_id — a table referencing itself. This is called a <Hl>self-referencing foreign key</Hl> and it is how org charts and hierarchy data are stored. Emily Johnson (employee_id = 1) is the Store Manager with no manager above her (manager_id = NULL). Marcus Bennett (employee_id = 2) reports to Emily, so his manager_id = 1. You will learn to query this hierarchy using SELF JOINs in Module 34.</P>
 
       <HR />
 
@@ -488,13 +488,13 @@ LIMIT 10;`}
 
       <IQ q="Why should you never use FLOAT for storing money values in a database?">
         <p style={{ margin: '0 0 14px' }}>FLOAT and DOUBLE are floating-point types that store numbers in binary representation. Most decimal fractions cannot be represented exactly in binary — the same way 1/3 cannot be written as a finite decimal. This means a value you insert as 199.99 might be stored and retrieved as 199.98999999999999. For arbitrary calculations this imprecision is acceptable. For financial data, it is catastrophic.</p>
-        <p style={{ margin: '0 0 14px' }}>The consequences compound. If you sum 10,000 transactions each worth ₹199.99, the result might be ₹1,999,899.98 instead of ₹1,999,900. The discrepancy is small on each row but accumulates across millions of transactions. Accounting reconciliation fails. Regulatory audits find inconsistencies. Customers are charged or refunded wrong amounts.</p>
+        <p style={{ margin: '0 0 14px' }}>The consequences compound. If you sum 10,000 transactions each worth $199.99, the result might be $1,999,899.98 instead of $1,999,900. The discrepancy is small on each row but accumulates across millions of transactions. Accounting reconciliation fails. Regulatory audits find inconsistencies. Customers are charged or refunded wrong amounts.</p>
         <p style={{ margin: 0 }}>The correct type for money is DECIMAL(precision, scale) — also called NUMERIC. DECIMAL stores values as exact decimal digits, with no binary conversion. DECIMAL(10,2) stores values from -99,999,999.99 to 99,999,999.99 with perfect precision. This is the universal standard for financial data across every production database. MySQL, PostgreSQL, Oracle, and SQL Server all support it identically.</p>
       </IQ>
 
       <IQ q="What is a self-referencing foreign key? Give a real example.">
         <p style={{ margin: '0 0 14px' }}>A self-referencing foreign key is a foreign key in a table that references the primary key of the same table. It is used to represent hierarchical relationships where entities of the same type relate to each other — most commonly parent-child or manager-employee relationships.</p>
-        <p style={{ margin: '0 0 14px' }}>In FreshCart's employees table, each employee has an employee_id (primary key) and a manager_id (foreign key). The manager_id column references employees.employee_id — a manager is also an employee. Priya Sharma is the Store Manager with employee_id = 1 and manager_id = NULL (she reports to nobody in this dataset). Rahul Verma is her Assistant Manager with employee_id = 2 and manager_id = 1 — he reports to Priya. This single foreign key declaration captures the entire org chart with no additional tables.</p>
+        <p style={{ margin: '0 0 14px' }}>In FreshCart's employees table, each employee has an employee_id (primary key) and a manager_id (foreign key). The manager_id column references employees.employee_id — a manager is also an employee. Emily Johnson is the Store Manager with employee_id = 1 and manager_id = NULL (she reports to nobody in this dataset). Marcus Bennett is her Assistant Manager with employee_id = 2 and manager_id = 1 — he reports to Emily. This single foreign key declaration captures the entire org chart with no additional tables.</p>
         <p style={{ margin: 0 }}>Self-referencing foreign keys appear in: organisational hierarchies (employees and managers), geographic hierarchies (countries containing states containing cities), category trees (a category that has a parent_category_id pointing to another category), and comment threads (a comment with a parent_comment_id pointing to the comment it replies to). You query this structure using a SELF JOIN or, for arbitrary depth, a recursive CTE — covered in Module 34 and Module 56 respectively.</p>
       </IQ>
 
@@ -537,8 +537,8 @@ LIMIT 10;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Look at the FreshCart employees table. Employee ID 1 (Priya Sharma) has manager_id = NULL. Employee ID 2 (Rahul Verma) has manager_id = 1. Employee ID 3 (Sunita Kapoor) has manager_id = 2. Write a query that shows each employee's name alongside their manager's name. What happens to Priya's row since she has no manager?"
-        hint="You need to join the employees table to itself. Use two aliases — one for the employee, one for the manager. Use a LEFT JOIN so Priya's row is not excluded just because her manager_id is NULL."
+        question="Look at the FreshCart employees table. Employee ID 1 (Emily Johnson) has manager_id = NULL. Employee ID 2 (Marcus Bennett) has manager_id = 1. Employee ID 3 (Rachel Foster) has manager_id = 2. Write a query that shows each employee's name alongside their manager's name. What happens to Emily's row since she has no manager?"
+        hint="You need to join the employees table to itself. Use two aliases — one for the employee, one for the manager. Use a LEFT JOIN so Emily's row is not excluded just because her manager_id is NULL."
         answer={`SELECT
   e.first_name || ' ' || e.last_name  AS employee,
   e.role,
@@ -547,7 +547,7 @@ FROM employees e
 LEFT JOIN employees m ON e.manager_id = m.employee_id
 ORDER BY e.employee_id
 LIMIT 5;`}
-        explanation="This is a SELF JOIN — the employees table is joined to itself using two different aliases (e for employee, m for manager). The JOIN condition matches each employee's manager_id to the employee_id of another row in the same table. Using LEFT JOIN ensures Priya Sharma appears in the results even though her manager_id is NULL — her manager column will show NULL (or 'No manager' if you use COALESCE). An INNER JOIN would exclude her row entirely because there is no matching manager row for NULL. You will learn SELF JOINs in full depth in Module 34."
+        explanation="This is a SELF JOIN — the employees table is joined to itself using two different aliases (e for employee, m for manager). The JOIN condition matches each employee's manager_id to the employee_id of another row in the same table. Using LEFT JOIN ensures Emily Johnson appears in the results even though her manager_id is NULL — her manager column will show NULL (or 'No manager' if you use COALESCE). An INNER JOIN would exclude her row entirely because there is no matching manager row for NULL. You will learn SELF JOINs in full depth in Module 34."
       />
 
       <HR />
@@ -557,7 +557,7 @@ LIMIT 5;`}
         items={[
           'When you run a query, six components work in sequence: Parser (validates syntax), Query Planner (chooses the best execution plan), Executor (runs the plan), Buffer Pool (serves from memory), Storage Engine (reads disk), Transaction Manager (enforces ACID).',
           'The single most important table design rule: one table stores exactly one type of entity. Mixing customer and order data in one table causes redundancy that leads to inconsistency when data changes.',
-          'Every column must store one atomic piece of data. An address column storing "12 Koramangala, Seattle, 560034" is bad design — split into street, city, state, zip_code.',
+          'Every column must store one atomic piece of data. An address column storing "1200 Denny Way, Seattle, 98109" is bad design — split into street, city, state, zip_code.',
           'Use DECIMAL(precision, scale) for all money columns. FLOAT and DOUBLE introduce binary rounding errors that accumulate into accounting discrepancies on financial data.',
           'PRIMARY KEY automatically enforces uniqueness and NOT NULL, and creates a B-tree index. Every table needs one. Use auto-increment integers in almost all cases.',
           'UNIQUE allows NULL values (multiple NULLs permitted). PRIMARY KEY does not allow NULL. A table can have one PRIMARY KEY and multiple UNIQUE constraints.',

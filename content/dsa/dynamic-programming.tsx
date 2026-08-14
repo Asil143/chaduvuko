@@ -440,16 +440,16 @@ int main() {
               <tr key={item}>
                 <td style={{ padding: '8px 16px', borderBottom: '1px solid var(--border)', color: 'var(--green)', fontWeight: 700 }}>Item {item}</td>
                 <td style={{ padding: '8px 16px', borderBottom: '1px solid var(--border)', color: 'var(--text)' }}>{w} kg</td>
-                <td style={{ padding: '8px 16px', borderBottom: '1px solid var(--border)', color: '#facc15', fontWeight: 700 }}>₹{v}</td>
+                <td style={{ padding: '8px 16px', borderBottom: '1px solid var(--border)', color: '#facc15', fontWeight: 700 }}>${v}</td>
                 <td style={{ padding: '8px 16px', borderBottom: '1px solid var(--border)', color: 'var(--muted)' }}>{r}</td>
               </tr>
             ))}
           </tbody>
         </table>
         <div style={{ marginTop: 12, fontSize: 12, color: 'var(--green)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-          Best choice: Item 2 (3kg, ₹4) + Item 3 (4kg... wait, 3+4=7 {'>'} 5).<br />
-          Actually: Item 1 (1kg) + Item 2 (3kg) = 4kg, ₹5. Or Item 2 + Item 1 is same.<br />
-          Or Item 4 alone = 5kg, ₹7. Best = ₹7 (just Item 4).
+          Best choice: Item 2 (3kg, $4) + Item 3 (4kg... wait, 3+4=7 {'>'} 5).<br />
+          Actually: Item 1 (1kg) + Item 2 (3kg) = 4kg, $5. Or Item 2 + Item 1 is same.<br />
+          Or Item 4 alone = 5kg, $7. Best = $7 (just Item 4).
         </div>
       </div>
 
@@ -532,7 +532,7 @@ int main() {
           </tbody>
         </table>
         <div style={{ fontSize: 12, color: 'var(--green)', marginTop: 10, fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-          dp[4][5] = 8 — wait, that is with 4 items at capacity 5. Let me recheck: item4(w=5,v=7) fits exactly → 7. Or item1+item2 = 1+3=4kg, 1+4=₹5. Or item2+item1 same. dp[4][5] = max(7, 8?) → 8 means item1+item2+... Actually dp tracks correctly via the recurrence ✓
+          dp[4][5] = 8 — wait, that is with 4 items at capacity 5. Let me recheck: item4(w=5,v=7) fits exactly → 7. Or item1+item2 = 1+3=4kg, 1+4=$5. Or item2+item1 same. dp[4][5] = max(7, 8?) → 8 means item1+item2+... Actually dp tracks correctly via the recurrence ✓
         </div>
       </div>
 

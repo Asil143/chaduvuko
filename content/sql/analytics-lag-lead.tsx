@@ -650,7 +650,7 @@ WITH order_funnel AS (
     WHERE order_status = 'Delivered'
       AND delivery_date - order_date <= 3
   UNION ALL
-  SELECT 4, 'High value delivered (> ₹500)',
+  SELECT 4, 'High value delivered (> $500)',
     COUNT(*) FROM orders
     WHERE order_status = 'Delivered'
       AND total_amount > 500

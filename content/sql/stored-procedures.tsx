@@ -319,7 +319,7 @@ DECLARE
   v_revenue NUMERIC;
 BEGIN
   CALL sp_get_store_stats('ST001', v_orders, v_revenue);
-  RAISE NOTICE 'ST001 — Orders: %, Revenue: ₹%', v_orders, v_revenue;
+  RAISE NOTICE 'ST001 — Orders: %, Revenue: $%', v_orders, v_revenue;
 END;
 $$;
 
@@ -382,7 +382,7 @@ BEGIN
   SET total_amount = ROUND(v_original * (1 - v_discount), 2)
   WHERE order_id = p_order_id;
 
-  RAISE NOTICE 'Order %: ₹% → ₹% (% discount applied)',
+  RAISE NOTICE 'Order %: $% → $% (% discount applied)',
     p_order_id,
     v_original,
     ROUND(v_original * (1 - v_discount), 2),

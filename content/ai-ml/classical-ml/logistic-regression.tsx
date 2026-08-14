@@ -290,7 +290,7 @@ export default function LogisticRegressionPage() {
           Despite being over 60 years old, logistic regression is still
           the first algorithm deployed at many companies for binary classification.
           At Stripe it predicts fraud. At DoorDash it predicts late deliveries.
-          At every bank in India it predicts loan defaults. It is fast, interpretable,
+          At every major bank it predicts loan defaults. It is fast, interpretable,
           probabilistically calibrated, and works well with good features.
           Every ML engineer should understand it completely.
         </p>
@@ -1330,7 +1330,7 @@ np.random.seed(42)
 n = 8000
 restaurants = ['Pizza Hut','Biryani Blues',"McDonald's","Haldiram's",
                'Dominos','KFC','Subway','Burger King']
-cities = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
+cities = ['Seattle','New York','Denver','Austin','Boston','Chicago']
 slots  = ['breakfast','lunch','evening','dinner']
 
 distance = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
@@ -1506,7 +1506,7 @@ print(f"\nNew order prediction: {pred} (P(late)={p_late:.3f})")`} />
           from your data. Trees are the conceptual foundation of Random Forests
           and Gradient Boosting (XGBoost, LightGBM) — the algorithms that win
           most tabular ML competitions and power most production ML systems
-          at Indian tech companies today.
+          at tech companies today.
         </p>
 
         <div style={{

@@ -200,10 +200,10 @@ export default function AzureMLPage() {
         </p>
 
         <p style={S.p}>
-          Azure ML is the dominant cloud ML platform in Indian enterprise.
-          HDFC Bank, ICICI, Deloitte, KPMG, Accenture, and most large Indian
-          corporates run on Azure. If you join an enterprise ML team at an
-          Indian bank, insurance company, or IT services firm, you will
+          Azure ML is the dominant cloud ML platform in enterprise settings.
+          JPMorgan Chase, Capital One, Deloitte, KPMG, Accenture, and most large
+          corporates run on Azure. If you join an enterprise ML team at a
+          bank, insurance company, or IT services firm, you will
           almost certainly work with Azure ML. The skills map directly:
           the concepts are identical to what you have built, the platform
           just manages the infrastructure for you.
@@ -263,7 +263,7 @@ export default function AzureMLPage() {
                 color: '#1D9E75',
                 what: 'Auto-scaling VM pool for training. Scales to 0 when idle — no cost when not running jobs.',
                 contains: 'cpu-cluster (Standard_DS3_v2 × 0-4), gpu-cluster (Standard_NC6s_v3 × 0-2)',
-                cost: 'Pay per VM-hour. Standard_DS3_v2 ≈ ₹8/hr. Standard_NC6s_v3 (GPU) ≈ ₹250/hr',
+                cost: 'Pay per VM-hour. Standard_DS3_v2 ≈ $0.19/hr. Standard_NC6s_v3 (GPU) ≈ $3.06/hr',
               },
               {
                 resource: 'Datastore',
@@ -271,7 +271,7 @@ export default function AzureMLPage() {
                 color: '#7b61ff',
                 what: 'Connection to Azure storage. AML registers a datastore pointing to your storage account.',
                 contains: 'Linked to Azure Blob containers or ADLS Gen2 filesystems',
-                cost: 'Storage cost only — ₹1.5/GB/month for Blob LRS',
+                cost: 'Storage cost only — $0.02/GB/month for Blob LRS',
               },
               {
                 resource: 'Environment',
@@ -329,7 +329,7 @@ credential = DefaultAzureCredential()
 ml_client = MLClient(
     credential=credential,
     subscription_id=os.environ.get('AZURE_SUBSCRIPTION_ID', 'your-sub-id'),
-    resource_group_name='rg-ml-india',
+    resource_group_name='rg-ml-us',
     workspace_name='ws-freshmart-ml',
 )
 print(f"Connected to workspace: {ml_client.workspace_name}")
@@ -670,12 +670,12 @@ schedule = JobSchedule(
         frequency='day',
         interval=1,
         schedule=RecurrencePattern(hours=2, minutes=0),   # 2 AM daily
-        time_zone=TimeZone.INDIA_STANDARD_TIME,
+        time_zone=TimeZone.PACIFIC_STANDARD_TIME,
     ),
     create_job=pipeline_job,
 )
 # ml_client.schedules.begin_create_or_update(schedule).result()
-print("Pipeline schedule: daily at 2:00 AM IST")`} />
+print("Pipeline schedule: daily at 2:00 AM PT")`} />
       </div>
 
       <Div />
@@ -1069,7 +1069,7 @@ print("""
           'Azure ML is a managed platform that provides everything from Modules 69–74 as a service: compute cluster (auto-scales to 0), experiment tracking (MLflow-compatible), model registry, pipelines (DAG scheduler), and online endpoints (managed Kubernetes). Your training scripts are unchanged — the SDK wraps them in job definitions.',
           'Four core resources: Workspace (top-level container, free), Compute Cluster (AmlCompute, auto-scales to 0 when idle — zero cost between jobs), Environment (versioned Docker image + conda spec, cached after first build), Model Registry (versioned model artifacts with lineage to the training run that produced them).',
           'Command jobs submit a Python script to AML compute with one SDK call. Specify the script, compute, environment, and inputs/outputs. AML provisions the VM, installs the environment, runs the script, captures MLflow logs and metrics, uploads outputs/ to blob storage, and scales down. Your training script needs zero Azure-specific code — just standard argparse and mlflow.',
-          'AML Pipelines chain multiple command jobs as a DAG using the @pipeline decorator. Output of one step becomes input of the next via AML-managed data passing. Steps with unchanged inputs are cached and skipped automatically. Schedule daily retraining with RecurrenceTrigger at 2 AM IST — the AML equivalent of the Airflow DAG from Module 69.',
+          'AML Pipelines chain multiple command jobs as a DAG using the @pipeline decorator. Output of one step becomes input of the next via AML-managed data passing. Steps with unchanged inputs are cached and skipped automatically. Schedule daily retraining with RecurrenceTrigger at 2 AM ET — the AML equivalent of the Airflow DAG from Module 69.',
           'AutoML tries 20-50 model and hyperparameter combinations automatically. Specify the task (regression/classification), data, target column, primary metric, and time budget. Returns the best model ready to register. Useful for establishing a strong baseline quickly — but understanding your data (Module 25-38) remains essential for interpreting results and knowing when AutoML is finding a spurious pattern.',
           'Managed Online Endpoints are the Module 71 FastAPI + Docker + Kubernetes stack as a managed service. Deploy with instance_type and instance_count. Built-in autoscaling, TLS, and health checks. Blue-green deployments use traffic splitting: deploy new version as green, shift 10% → 90% → 100% traffic, then delete blue. Zero-downtime updates in three SDK calls.',
         ]}

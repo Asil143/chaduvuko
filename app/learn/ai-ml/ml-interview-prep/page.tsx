@@ -8,7 +8,7 @@ import MLPageHeader from '@/components/content/MLPageHeader'
 export const metadata: Metadata = {
   title: 'ML Interview Prep — 50 Complete Answers — Chaduvuko',
   description:
-    'The 50 most-asked ML engineering questions across DoorDash, Stripe, Amazon, Brex, and Indian tech — with complete, ready-to-deliver answers for every level.',
+    'The 50 most-asked ML engineering questions across DoorDash, Stripe, Amazon, Brex, and Meta — with complete, ready-to-deliver answers for every level.',
 }
 
 const S = {
@@ -133,7 +133,7 @@ function QBlock({
         </div>
       )}
 
-      {/* Indian company example */}
+      {/* Real-world company example */}
       {example && (
         <div style={{
           background: 'rgba(55,138,221,0.05)',
@@ -145,7 +145,7 @@ function QBlock({
             fontFamily: 'var(--font-mono)', letterSpacing: '0.08em',
             textTransform: 'uppercase' as const, marginBottom: 6,
           }}>
-            🇮🇳 Real example — India
+            Real example
           </div>
           <p style={{ ...S.ps, marginBottom: 0, fontSize: 12 }}>{example}</p>
         </div>
@@ -189,7 +189,7 @@ export default function MLInterviewPrepPage() {
   return (
     <LearnLayout
       title="ML Interview Prep — 50 Complete Answers"
-      description="The 50 most-asked ML engineering questions across DoorDash, Stripe, Amazon, Brex, and Indian tech — with complete, ready-to-deliver answers for every level."
+      description="The 50 most-asked ML engineering questions across DoorDash, Stripe, Amazon, Brex, and Meta — with complete, ready-to-deliver answers for every level."
       section="Cloud ML Platforms"
       readTime="120–180 min"
       updatedAt="March 2026"
@@ -216,7 +216,7 @@ export default function MLInterviewPrepPage() {
         <p style={S.p}>
           The questions are drawn from interview reports at DoorDash, Stripe,
           Amazon, Shopify, Brex, Venmo, Instacart, TaskRabbit, and FAANG
-          India offices collected between 2024 and 2026. They are ordered
+          offices collected between 2024 and 2026. They are ordered
           from foundational to advanced — read sequentially or jump to any
           section using the category headers.
         </p>
@@ -323,7 +323,7 @@ print(f"Regularised — val MAE:   {mae(y_val,   good.predict(X_val)):.2f}")    
           <p style={{ ...S.ps, marginBottom: 8 }}>Tradeoff: increasing model complexity (more layers, deeper trees, lower regularisation) decreases bias but increases variance. Decreasing complexity has the opposite effect. The optimal point is where total error is minimised — this is what cross-validation finds.</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Practical heuristics: high training error + high validation error → high bias (underfitting) → more complexity or better features. Low training error + high validation error → high variance (overfitting) → regularise, reduce complexity, more data.</p>
         </>}
-        example="HDFC's credit risk model initially used a simple logistic regression (low variance, high bias — missed non-linear income patterns). Replacing with GradientBoosting reduced bias (captured non-linearities) but required careful regularisation via min_child_weight and subsample to control variance, since credit data is noisy and the model was sensitive to which months were in the training window."
+        example="Capital One's credit risk model initially used a simple logistic regression (low variance, high bias — missed non-linear income patterns). Replacing with GradientBoosting reduced bias (captured non-linearities) but required careful regularisation via min_child_weight and subsample to control variance, since credit data is noisy and the model was sensitive to which months were in the training window."
       />
 
       <QBlock
@@ -497,7 +497,7 @@ ap     = average_precision_score(y_test, probs)
 print(f"Average Precision (AUC-PR): {ap:.4f}")
 
 # Set threshold based on business cost, not 0.5
-# cost_FN = Rs 5000 (fraud loss), cost_FP = Rs 20 (inconvenience)
+# cost_FN = $5000 (fraud loss), cost_FP = $20 (inconvenience)
 # threshold where cost_FN × FNR = cost_FP × FPR
 precision, recall, thresholds = precision_recall_curve(y_test, probs)
 business_threshold = thresholds[np.argmax(precision * 5000 / (recall * 20))]
@@ -546,7 +546,7 @@ vif = pd.DataFrame({
     'VIF':     [variance_inflation_factor(X_train, i) for i in range(X_train.shape[1])]
 })
 print(vif[vif['VIF'] > 10])   # VIF > 10 indicates harmful multicollinearity`}
-        example="HDFC Bank uses linear regression for quick credit limit estimation — the model's coefficients (income × 0.35, tenure × 0.12) are explainable to RBI auditors. For complex credit scoring where explainability is not required, they use GradientBoosting. The linear model is kept as a regulatory fallback."
+        example="Capital One uses linear regression for quick credit limit estimation — the model's coefficients (income × 0.35, tenure × 0.12) are explainable to CFPB auditors. For complex credit scoring where explainability is not required, they use GradientBoosting. The linear model is kept as a regulatory fallback."
       />
 
       <QBlock
@@ -701,7 +701,7 @@ print(fi.head(10))`}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, paddingLeft: 12, marginBottom: 8 }}>
             {[
               ['XGBoost (2016)', 'Level-wise tree growth. Exact split finding with pre-sorted features. Regularised objective (L1+L2). Slower on large datasets. More tuning options.'],
-              ['LightGBM (2017)', 'Leaf-wise tree growth (not level-wise). Histogram-based split finding (groups features into bins — 20× faster). GOSS (gradient-based sampling: keep high-gradient samples). EFB (bundle sparse features). The default choice for tabular data in India.'],
+              ['LightGBM (2017)', 'Leaf-wise tree growth (not level-wise). Histogram-based split finding (groups features into bins — 20× faster). GOSS (gradient-based sampling: keep high-gradient samples). EFB (bundle sparse features). The default choice for tabular data in production.'],
               ['CatBoost (2018)', 'Ordered boosting (prevents target leakage in training). Native categorical feature support. Best for datasets with many high-cardinality categoricals. Default at Yandex and used at Brex for category-heavy features.'],
             ].map(([name, desc]) => (
               <div key={name} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>
@@ -1042,7 +1042,7 @@ optimiser = torch.optim.Adam([
           <p style={{ ...S.ps, marginBottom: 8 }}>Skip-gram objective: P(context | target) = softmax(v_context · v_target). Training with negative sampling (for efficiency): for each positive context-target pair, sample k random negative words and update weights to increase P(positive) and decrease P(negatives).</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Modern embeddings: Word2Vec produces one vector per word (context-independent — "bank" has same embedding in "bank account" and "river bank"). BERT produces contextual embeddings — every occurrence of "bank" gets a different vector depending on surrounding context. Sentence embeddings (sentence-transformers) produce one vector per sentence — used for semantic search, deduplication, RAG retrieval. OpenAI/Cohere embeddings: 1536-3072 dimensional vectors from large transformer models — state-of-the-art for semantic similarity.</p>
         </>}
-        example="Sephora's product search previously used keyword matching — 'matte lipstick' found only products with those exact words. After adding sentence-transformer embeddings, the search understands that 'non-shiny lip colour' and 'matte lipstick' are semantically equivalent. Searches for 'pink shade for Indian skin tone' now retrieve relevant products even if they use different terminology."
+        example="Sephora's product search previously used keyword matching — 'matte lipstick' found only products with those exact words. After adding sentence-transformer embeddings, the search understands that 'non-shiny lip colour' and 'matte lipstick' are semantically equivalent. Searches for 'lip color for deep skin tone' now retrieve relevant products even if they use different terminology."
       />
 
       <QBlock
@@ -1126,8 +1126,8 @@ Category:"""
 
 # Chain-of-thought for complex reasoning
 COT_PROMPT = """
-A customer paid Rs 4999 at 11:45 PM on March 15.
-The settlement report shows Rs 4850.
+A customer paid $4999 at 11:45 PM on March 15.
+The settlement report shows $4850.
 
 Think through this step by step:
 1. What is the difference?
@@ -1183,7 +1183,7 @@ Think through this step by step:
             ))}
           </div>
         </>}
-        example="HDFC's wealth management AI assistant was initially producing hallucinated financial figures — it would confidently state that 'HDFC Balanced Advantage Fund returned 18.3% in FY2025' when the actual figure was 12.1%. Fix: switched to RAG with explicit document grounding. Prompt now says: 'Answer only from the mutual fund factsheets provided. If the figure is not in the factsheets, say the data is unavailable.' Hallucinated financial figures dropped from 8% to &lt;0.3% of responses."
+        example="Fidelity's wealth management AI assistant was initially producing hallucinated financial figures — it would confidently state that 'the Fidelity Freedom 2050 Fund returned 18.3% in FY2025' when the actual figure was 12.1%. Fix: switched to RAG with explicit document grounding. Prompt now says: 'Answer only from the mutual fund factsheets provided. If the figure is not in the factsheets, say the data is unavailable.' Hallucinated financial figures dropped from 8% to &lt;0.3% of responses."
       />
 
       <QBlock
@@ -1207,7 +1207,7 @@ Think through this step by step:
           <p style={{ ...S.ps, marginBottom: 8 }}>Self-attention computes attention weights between all pairs of positions in a sequence. For each token, three vectors are computed: Query Q (what information am I looking for?), Key K (what information do I have?), Value V (what information do I provide?). Attention(Q,K,V) = softmax(QKᵀ/√d_k)V. The scaled dot product QKᵀ/√d_k gives an n×n matrix of raw attention logits — after softmax, each row sums to 1 and represents a weighted average over all positions.</p>
           <p style={{ ...S.ps, marginBottom: 0 }}>Computational complexity: O(n²·d) in time and O(n²) in memory — quadratic in sequence length n. This is the Transformer's bottleneck for long sequences. Solutions: Sparse attention (Longformer — attend to local window + global tokens), Flash Attention (hardware-efficient exact attention — same output, 4× less memory via recomputation trick), linear attention (approximations to reduce to O(n)), sliding window attention (Mistral). Multi-head attention: run h parallel attention functions with learned projections, concatenate outputs — each head can attend to different aspects of the sequence (one head might track syntax, another semantics).</p>
         </>}
-        example="Sahamati (India's account aggregator network) uses a BERT model to extract financial entities from bank statements. The attention heads in the model learned to focus on amounts (digits and currency symbols), dates (DD/MM patterns), and merchant names simultaneously. Visualising attention maps showed that the head responsible for amount extraction attends strongly to 'Rs', '₹', and digit patterns — behaviour that emerged from training, not design."
+        example="Plaid (the US financial data aggregation network) uses a BERT model to extract financial entities from bank statements. The attention heads in the model learned to focus on amounts (digits and currency symbols), dates (MM/DD patterns), and merchant names simultaneously. Visualising attention maps showed that the head responsible for amount extraction attends strongly to '$' and digit patterns — behaviour that emerged from training, not design."
       />
 
       <Div />
@@ -1490,7 +1490,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
             ))}
           </div>
         </>}
-        example="When Square launched UPI credit (a new payment type), Stripe's fraud model had never seen this transaction type. Fraud rates for UPI credit were 3× higher than the model expected — it was scoring them as low-risk. Immediate fix (same day): added a hard rule 'if payment_type == upi_credit AND amount > 5000, multiply fraud score by 1.8'. This stopped the losses within hours. Proper fix (2 weeks later): 10,000 labelled UPI credit transactions were added to the training set and the model was retrained — the hard rule was removed."
+        example="When Square launched RTP credit (a new instant payment type), Stripe's fraud model had never seen this transaction type. Fraud rates for RTP credit were 3× higher than the model expected — it was scoring them as low-risk. Immediate fix (same day): added a hard rule 'if payment_type == rtp_credit AND amount > 5000, multiply fraud score by 1.8'. This stopped the losses within hours. Proper fix (2 weeks later): 10,000 labelled RTP credit transactions were added to the training set and the model was retrained — the hard rule was removed."
       />
 
       <Div />
@@ -1540,7 +1540,7 @@ print(f"Promote:          {p_one_sided < 0.05 and improvement > 1.0}")`}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, paddingLeft: 12, marginBottom: 8 }}>
             {[
               ['Latency budget: 50ms total', 'Payment gateway SLA. Model gets 10ms. Feature store lookup 3ms. Network + other 37ms. Forces: pre-compute slow features, use fast model (LightGBM not deep learning).'],
-              ['Score not binary output', 'Output a fraud probability (0-1). Different thresholds for different transaction types and merchant categories. Rs 100 UPI needs different threshold than Rs 1L NEFT.'],
+              ['Score not binary output', 'Output a fraud probability (0-1). Different thresholds for different transaction types and merchant categories. A $100 debit card payment needs a different threshold than a $10,000 wire transfer.'],
               ['Three-tier feature architecture', 'Tier 1: request features (0ms — amount, method, merchant). Tier 2: feature store lookup (3ms — user velocity, merchant fraud rate). Tier 3: computed on-the-fly (5ms — ratio features, round number flags).'],
               ['LightGBM + rule engine', 'LightGBM for learned patterns. Hard rules for known fraud signatures (specific card BINs, IP ranges, device fingerprints). Rules for new patterns detected before model is retrained.'],
               ['Adversarial retraining', 'Weekly retraining is not enough — add new fraud patterns as hard rules immediately, integrate into model next weekly retrain.'],
@@ -1712,7 +1712,7 @@ print(f"Cohen's d:   {cohens_d:.4f}   (0.2=small, 0.5=medium, 0.8=large)")
 print(f"Lift:        {lift_pct:+.2f}%")
 print(f"Conclusion:  {'Reject H₀' if p_value < 0.05 else 'Fail to reject H₀'}")
 print(f"Practical:   {'Meaningful improvement' if lift_pct > 1.0 else 'Too small to matter'}")`}
-        example="Stripe ran an A/B test of a new fraud model on 100,000 transactions per arm (a 2-week test). Result: p-value = 0.0002 (highly significant). Fraud capture rate improvement: 0.3 percentage points (from 91.0% to 91.3%). The team correctly noted that while statistically significant, 0.3pp at current transaction volume saves approximately ₹2 million/month in fraud losses — large enough to justify the deployment complexity. Both the statistical test and the business impact calculation were required to make the decision."
+        example="Stripe ran an A/B test of a new fraud model on 100,000 transactions per arm (a 2-week test). Result: p-value = 0.0002 (highly significant). Fraud capture rate improvement: 0.3 percentage points (from 91.0% to 91.3%). The team correctly noted that while statistically significant, 0.3pp at current transaction volume saves approximately $250,000/month in fraud losses — large enough to justify the deployment complexity. Both the statistical test and the business impact calculation were required to make the decision."
       />
 
       <Div />
@@ -1727,7 +1727,7 @@ print(f"Practical:   {'Meaningful improvement' if lift_pct > 1.0 else 'Too small
         <p style={S.p}>
           This module completes the Chaduvuko AI/ML track. Every concept in these
           50 questions links back to a module where it was taught from scratch with
-          code, analogies, and Indian company examples. If any answer here felt
+          code, analogies, and real company examples. If any answer here felt
           unfamiliar, the module number that covers it in depth is linked in the
           track curriculum. Go back, read it, build the code, then return here.
           Knowing an answer is not the same as being able to teach it — and

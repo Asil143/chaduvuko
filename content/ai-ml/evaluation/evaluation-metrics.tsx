@@ -393,18 +393,18 @@ print(f"  Specificity: {specificity:.4f}   ← {specificity*100:.1f}% of legit t
 print(f"  FPR:         {fpr:.4f}   ← {fpr*100:.1f}% of legit flagged as fraud")
 
 # Business impact translation
-fraud_value_per_tx = 2500  # avg ₹2500 per fraudulent transaction
-false_alarm_cost   = 50    # ₹50 cost per false alarm (support call, friction)
+fraud_value_per_tx = 2500  # avg $2500 per fraudulent transaction
+false_alarm_cost   = 50    # $50 cost per false alarm (support call, friction)
 
 fraud_caught    = tp * fraud_value_per_tx
 fraud_missed    = fn * fraud_value_per_tx
 false_alarm_cost_total = fp * false_alarm_cost
 
 print(f"\nBusiness impact:")
-print(f"  Fraud caught:         ₹{fraud_caught:,.0f} protected")
-print(f"  Fraud missed (FN):    ₹{fraud_missed:,.0f} lost")
-print(f"  False alarm cost:     ₹{false_alarm_cost_total:,.0f} in friction")
-print(f"  Net value of model:   ₹{fraud_caught - fraud_missed - false_alarm_cost_total:,.0f}")
+print(f"  Fraud caught:         \${fraud_caught:,.0f} protected")
+print(f"  Fraud missed (FN):    \${fraud_missed:,.0f} lost")
+print(f"  False alarm cost:     \${false_alarm_cost_total:,.0f} in friction")
+print(f"  Net value of model:   \${fraud_caught - fraud_missed - false_alarm_cost_total:,.0f}")
 
 # sklearn classification_report gives everything at once
 print("\nsklearn classification_report:")
@@ -429,8 +429,8 @@ print(classification_report(y_true, y_pred, target_names=['Legit', 'Fraud']))`} 
 
         <p style={S.p}>
           The right balance depends entirely on the business cost of each error type.
-          Missing a fraud transaction at Stripe costs ₹2,500 on average.
-          A false alarm costs ₹50 in support friction. The cost ratio is 50:1.
+          Missing a fraud transaction at Stripe costs $2,500 on average.
+          A false alarm costs $50 in support friction. The cost ratio is 50:1.
           You should therefore accept 50 false alarms for every fraud case caught —
           meaning you should optimise heavily toward recall at the expense of precision.
         </p>
@@ -915,8 +915,8 @@ best_t_fb    = thresholds[np.argmax(fb_scores)]
 print(f"Best threshold by F2:     {best_t_fb:.2f}  (F2={max(fb_scores):.4f})")
 
 # ── Method 3: Business cost optimisation ─────────────────────────────
-# Cost of false negative (missed fraud):  ₹2,500 avg transaction
-# Cost of false positive (blocked legit): ₹50 friction
+# Cost of false negative (missed fraud):  $2,500 avg transaction
+# Cost of false positive (blocked legit): $50 friction
 fn_cost = 2500
 fp_cost = 50
 
@@ -928,7 +928,7 @@ for t in thresholds:
     costs.append(fn * fn_cost + fp * fp_cost)
 
 best_t_biz = thresholds[np.argmin(costs)]
-print(f"Best threshold by cost:   {best_t_biz:.2f}  (cost=₹{min(costs):,.0f})")
+print(f"Best threshold by cost:   {best_t_biz:.2f}  (cost=\${min(costs):,.0f})")
 
 # ── Compare all thresholds on test set ────────────────────────────────
 test_proba = model.predict_proba(X_te_sc)[:, 1]
@@ -1120,7 +1120,7 @@ for name, f1, count in zip(class_names, per_class_f1, class_counts):
           'Precision = TP/(TP+FP): of all flagged transactions, what fraction were genuinely fraud? Recall = TP/(TP+FN): of all actual fraud, what fraction did we catch? They trade off — raising the threshold increases precision but decreases recall.',
           'ROC-AUC is threshold-independent — it measures how well the model ranks fraud above legitimate across all possible thresholds. AUC = 0.95 means a random fraud transaction scores higher than a random legit transaction 95% of the time.',
           'For severely imbalanced problems (fraud rate < 5%), PR-AUC (area under the precision-recall curve) is more informative than ROC-AUC. ROC-AUC can look excellent even when precision on the minority class is terrible.',
-          'The optimal threshold is almost never 0.5. Derive it from the relative business cost of false negatives vs false positives. At Stripe, missing fraud (FN) costs ₹2,500 while a false alarm (FP) costs ₹50 — optimise heavily toward recall by lowering the threshold well below 0.5.',
+          'The optimal threshold is almost never 0.5. Derive it from the relative business cost of false negatives vs false positives. At Stripe, missing fraud (FN) costs $2,500 while a false alarm (FP) costs $50 — optimise heavily toward recall by lowering the threshold well below 0.5.',
         ]}
       />
     </LearnLayout>

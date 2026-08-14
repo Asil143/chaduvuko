@@ -6,7 +6,7 @@ import CustomRoadmapGenerator from '@/components/roadmap/CustomRoadmapGenerator'
 
 export const metadata: Metadata = {
   title: 'Learning Roadmaps — Chaduvuko',
-  description: 'Interactive skill-tree roadmaps for every tech role. Track your progress, earn XP, and unlock India salary data as you learn.',
+  description: 'Interactive skill-tree roadmaps for every tech role. Track your progress, earn XP, and unlock US salary data as you learn.',
 }
 
 const roadmaps = [
@@ -45,7 +45,7 @@ export default function RoadmapIndex() {
             <span style={{ color: 'var(--green)' }}>Track every step.</span>
           </h1>
           <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520 }}>
-            Interactive skill trees with XP, unlock mechanics, and India salary data. Not just a list — a game you finish with a job.
+            Interactive skill trees with XP, unlock mechanics, and US salary data. Not just a list — a game you finish with a job.
           </p>
         </div>
 

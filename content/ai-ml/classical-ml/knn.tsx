@@ -189,7 +189,7 @@ export default function KNNPage() {
 
         <p style={S.p}>
           A new customer joins Amazon. They are 24 years old, live in Seattle,
-          buy mostly electronics, and spend ₹3,000 per order on average.
+          buy mostly electronics, and spend $3,000 per order on average.
           What products should you recommend to them?
         </p>
 

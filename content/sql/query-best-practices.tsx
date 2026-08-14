@@ -182,7 +182,7 @@ WHERE total_amount > 847.46  -- pre-compute: 1000 / 1.18`}
 WHERE product_name LIKE '%milk%'
 WHERE email LIKE '%@gmail.com'`}
         good={`-- Index usable: trailing wildcard only
-WHERE product_name LIKE 'Amul%'
+WHERE product_name LIKE 'Horizon%'
 WHERE email LIKE 'rahul%'
 -- For contains-search: use full-text indexes`}
       />
@@ -403,7 +403,7 @@ SELECT
   first_name,
   COALESCE(discount_pct, 0) * total_amount AS discount_amount
 -- COALESCE returns first non-NULL argument
--- NULL discount_pct treated as 0 → correct ₹0 discount`}
+-- NULL discount_pct treated as 0 → correct $0 discount`}
       />
 
       <SQLPlayground
@@ -666,7 +666,7 @@ ORDER BY o.order_date DESC, o.total_amount DESC;`}
         items={[
           'Never use SELECT * in production queries — name every column. Explicit columns prevent silent breaks when schema changes and eliminate unnecessary I/O.',
           'SARGable WHERE clauses allow index use. Never apply functions to indexed columns: WHERE YEAR(col) = 2024 kills the index; WHERE col >= \'2024-01-01\' uses it.',
-          'Trailing LIKE wildcards (\'Amul%\') are SARGable and use indexes. Leading wildcards (\'%milk%\') force full scans. Use full-text search for contains-matching.',
+          'Trailing LIKE wildcards (\'Horizon%\') are SARGable and use indexes. Leading wildcards (\'%milk%\') force full scans. Use full-text search for contains-matching.',
           'Use EXISTS instead of COUNT(*) > 0 for existence checks. EXISTS stops at the first match; COUNT(*) scans all matching rows.',
           'NULL is not a value — it is unknown. Use IS NULL / IS NOT NULL (not = NULL). Aggregates silently skip NULLs. Use COALESCE to provide defaults.',
           'Filter with WHERE before grouping; filter groups with HAVING after grouping. Move conditions to WHERE whenever they do not require aggregate values.',

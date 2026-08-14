@@ -143,13 +143,13 @@ FROM customers;`}
             'Used by Stripe, Brex, Robinhood, Acorns',
             'Best JSON support (JSONB) for mixed data',
             'Window functions, CTEs, full-text search all work',
-            'Standard in modern Indian tech hiring',
+            'Standard in modern US tech hiring',
           ]}
           cons={[
             'Slightly more complex setup than MySQL',
             'psql command line is less beginner-friendly',
           ]}
-          best="First choice if you are learning for a tech career in India. Most startups, most fintech companies, most product companies use PostgreSQL."
+          best="First choice if you are learning for a tech career in the US. Most startups, most fintech companies, most product companies use PostgreSQL."
         />
         <OptionCard
           title="MySQL"
@@ -158,7 +158,7 @@ FROM customers;`}
           pros={[
             'Easier to install and get started',
             'Massive community, huge amount of tutorials',
-            'Used by DoorDash, Sephora, BookMyShow',
+            'Used by DoorDash, Sephora, Eventbrite',
             'MySQL Workbench is a polished GUI',
           ]}
           cons={[
@@ -365,7 +365,7 @@ SHOW DATABASES;
       {/* ── PART 06 ── */}
       <Part n="06" title="SQL Clients — The Tools You Will Actually Use Day to Day" />
 
-      <P>The command-line clients (psql, mysql) work, but most professional SQL work is done in a <Hl>GUI client</Hl> — a visual application where you write queries, see results in a table, browse your schema, and manage connections without memorising command-line flags. Here are the four most-used SQL clients in Indian tech companies.</P>
+      <P>The command-line clients (psql, mysql) work, but most professional SQL work is done in a <Hl>GUI client</Hl> — a visual application where you write queries, see results in a table, browse your schema, and manage connections without memorising command-line flags. Here are the four most-used SQL clients in US tech companies.</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12, margin: '16px 0 32px' }}>
         {[
@@ -374,14 +374,14 @@ SHOW DATABASES;
             color: '#8b5cf6',
             price: 'Free & open source',
             supports: 'PostgreSQL, MySQL, SQLite, Oracle, SQL Server, 50+ more',
-            desc: 'The most popular SQL client in the world. Connects to any database. Built-in ER diagram generator, data export, schema comparison. The tool used by most data engineers and analysts at Indian startups.',
+            desc: 'The most popular SQL client in the world. Connects to any database. Built-in ER diagram generator, data export, schema comparison. The tool used by most data engineers and analysts at US startups.',
             download: 'dbeaver.io',
             recommended: true,
           },
           {
             name: 'TablePlus',
             color: '#f97316',
-            price: 'Free (limited) / ₹3,500 one-time',
+            price: 'Free (limited) / $89 one-time',
             supports: 'PostgreSQL, MySQL, SQLite, Redis, and more',
             desc: 'Beautiful, fast, native app for macOS and Windows. Excellent tab management, query history, and safe mode (prevents accidental writes in production). Popular at product companies and startups.',
             download: 'tableplus.com',
@@ -425,7 +425,7 @@ SHOW DATABASES;
       </div>
 
       <ProTip>
-        Download DBeaver. It is free, works with every database you will ever use (PostgreSQL, MySQL, SQLite, Oracle, Snowflake, BigQuery — all from one client), and is the tool used by most data engineers and analysts at Indian companies. Learning one client well is more valuable than switching between multiple specialised ones.
+        Download DBeaver. It is free, works with every database you will ever use (PostgreSQL, MySQL, SQLite, Oracle, Snowflake, BigQuery — all from one client), and is the tool used by most data engineers and analysts at US companies. Learning one client well is more valuable than switching between multiple specialised ones.
       </ProTip>
 
       <HR />
@@ -510,7 +510,7 @@ CREATE TABLE orders (
                   CHECK (order_status IN
                     ('Delivered','Processing','Cancelled','Returned')),
   payment_method  VARCHAR(20)   NOT NULL
-                  CHECK (payment_method IN ('UPI','Card','COD','NetBanking')),
+                  CHECK (payment_method IN ('Zelle','Card','COD','NetBanking')),
   total_amount    DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0)
 );
 
@@ -664,7 +664,7 @@ CREATE TABLE order_items (
       {/* ── PART 09 ── */}
       <Part n="09" title="VS Code as a SQL Editor — The Professional Setup" />
 
-      <P>Most professional SQL work at Indian tech companies does not happen in pgAdmin or MySQL Workbench. It happens in <Hl>VS Code</Hl> with database extensions. This gives you SQL editing with autocomplete, syntax highlighting, query history, and schema browsing — all inside the same editor you use for everything else.</P>
+      <P>Most professional SQL work at US tech companies does not happen in pgAdmin or MySQL Workbench. It happens in <Hl>VS Code</Hl> with database extensions. This gives you SQL editing with autocomplete, syntax highlighting, query history, and schema browsing — all inside the same editor you use for everything else.</P>
 
       <H>Setup: VS Code + SQLTools</H>
 
@@ -748,7 +748,7 @@ ORDER BY ordinal_position;`}
 
       <IQ q="What is the difference between PostgreSQL and MySQL? Which would you recommend for a new project?">
         <p style={{ margin: '0 0 14px' }}>PostgreSQL and MySQL are both mature, production-grade open-source relational databases. The practical differences: PostgreSQL is more standards-compliant — it follows the SQL standard more closely and supports more advanced features natively, including better window functions, more flexible JSONB storage and indexing, more powerful full-text search, and a broader set of data types. MySQL has a simpler setup experience and historically had better replication tooling, which made it dominant in high-read consumer web applications.</p>
-        <p style={{ margin: '0 0 14px' }}>The Indian tech industry has largely converged on PostgreSQL for new projects. Stripe, Brex, Robinhood, Acorns, and most high-growth startups choose PostgreSQL. MySQL remains strong in companies that built their stack before 2015 (DoorDash, Sephora) and are maintaining existing infrastructure.</p>
+        <p style={{ margin: '0 0 14px' }}>The US tech industry has largely converged on PostgreSQL for new projects. Stripe, Brex, Robinhood, Acorns, and most high-growth startups choose PostgreSQL. MySQL remains strong in companies that built their stack before 2015 (DoorDash, Sephora) and are maintaining existing infrastructure.</p>
         <p style={{ margin: 0 }}>For a new project in 2026, I would recommend PostgreSQL. It handles every workload MySQL handles, plus more advanced analytical queries, better JSON support, and stronger compliance with the SQL standard — meaning less surprising behaviour when writing complex queries.</p>
       </IQ>
 
@@ -833,7 +833,7 @@ FROM pragma_table_info('orders');`}
       <KeyTakeaways
         items={[
           'The browser playground on every module page is a full SQL environment using DuckDB-WASM. It is sufficient to complete every module in this course without any local installation.',
-          'PostgreSQL is the recommended local database for Indian tech careers in 2026 — used by Stripe, Brex, Robinhood, Acorns, and most high-growth startups.',
+          'PostgreSQL is the recommended local database for US tech careers in 2026 — used by Stripe, Brex, Robinhood, Acorns, and most high-growth startups.',
           'MySQL is the alternative with easier initial setup — used by DoorDash, Sephora, and many consumer web companies.',
           'SQLite is the simplest option with zero server setup — runs from a single file. Not used in production web backends but excellent for learning and mobile development.',
           'DBeaver is the recommended SQL client — free, open source, works with PostgreSQL, MySQL, SQLite, Oracle, Snowflake, BigQuery, and 50+ more from one application.',

@@ -595,7 +595,7 @@ ORDER BY o.total_amount DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Platinum customers' large orders from UPI payment
+        initialQuery={`-- Platinum customers' large orders from Zelle payment
 SELECT
   o.order_id,
   o.order_date,
@@ -606,7 +606,7 @@ SELECT
 FROM orders AS o
 JOIN customers AS c ON o.customer_id = c.customer_id
 WHERE c.loyalty_tier = 'Platinum'
-  AND o.payment_method = 'UPI'
+  AND o.payment_method = 'Zelle'
   AND o.total_amount > 500
 ORDER BY o.total_amount DESC;`}
         height={205}

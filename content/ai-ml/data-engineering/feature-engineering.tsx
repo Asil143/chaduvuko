@@ -257,7 +257,7 @@ n = 10_000
 # Generate clean DoorDash dataset (Module 16 output)
 restaurants = ['Pizza Hut','Biryani Blues',"McDonald's","Haldiram's",
                'Dominos','KFC','Subway','Burger King']
-cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
+cities      = ['Seattle','New York','Denver','Austin','Boston','Chicago']
 time_slots  = ['breakfast','lunch','evening','dinner']
 
 distance   = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15).round(2)

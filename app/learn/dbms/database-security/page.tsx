@@ -814,8 +814,8 @@ CREATE EXTENSION pgcrypto;
 -- Encrypt on insert (using symmetric encryption with application-managed key):
 INSERT INTO customers (name, email, ssn_last4, bank_account)
 VALUES (
-    'Rahul Sharma',
-    'rahul@email.com',
+    'Michael Turner',
+    'michael@email.com',
     pgp_sym_encrypt('ABCDE1234F', 'encryption_key_from_vault'),
     pgp_sym_encrypt('1234567890123456', 'encryption_key_from_vault')
 );
@@ -1052,8 +1052,8 @@ ORDER BY reads_in_last_hour DESC;
 -- 2. ACCESS OUTSIDE BUSINESS HOURS: production DB access at 3am
 SELECT changed_by_app, changed_by_db, table_name, operation, changed_at
 FROM audit_log
-WHERE EXTRACT(HOUR FROM changed_at AT TIME ZONE 'Asia/Kolkata')
-      NOT BETWEEN 8 AND 20  -- outside 8am-8pm IST
+WHERE EXTRACT(HOUR FROM changed_at AT TIME ZONE 'America/New_York')
+      NOT BETWEEN 8 AND 20  -- outside 8am-8pm ET
   AND changed_at >= NOW() - INTERVAL '24 hours'
   AND table_name IN ('payments', 'customers', 'pan_details')
 ORDER BY changed_at DESC;

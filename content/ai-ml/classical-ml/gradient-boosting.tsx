@@ -981,8 +981,8 @@ warnings.filterwarnings('ignore')
 np.random.seed(42)
 n = 8_000
 
-restaurants = ['Pizza Hut','KFC','Dominos','Biryani Blues',"McDonald's",'Subway']
-cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
+restaurants = ['Pizza Hut','KFC','Dominos','Chipotle',"McDonald's",'Subway']
+cities      = ['Seattle','New York','Denver','Austin','Boston','Chicago']
 time_slots  = ['breakfast','lunch','evening','dinner']
 
 df = pd.DataFrame({
@@ -1125,7 +1125,7 @@ for i, (_, row) in enumerate(new_orders.iterrows()):
         <p style={S.p}>
           Gradient boosting is the concept. XGBoost is the implementation that
           won every Kaggle competition from 2016–2019 and is still deployed
-          at most Indian fintech companies today.
+          at most fintech companies today.
           Module 30 covers XGBoost in practice — regularisation parameters,
           early stopping with a validation set, SHAP values for explaining
           individual predictions, and a complete end-to-end workflow.

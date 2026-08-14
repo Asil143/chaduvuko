@@ -204,7 +204,7 @@ export default function ExperimentTrackingPage() {
           the hyperparameters, metrics at every epoch, code version, data version,
           environment, and output artifacts. Two runs can be compared side by side.
           The best model can be registered and promoted to production with a full
-          audit trail. Every Indian ML team of more than two people needs this.
+          audit trail. Every ML team of more than two people needs this.
         </p>
 
         <AnalogyBox>
@@ -272,7 +272,7 @@ export default function ExperimentTrackingPage() {
                 category: 'Tags',
                 color: '#378ADD',
                 what: 'Free-form labels for filtering and grouping experiments in the UI',
-                examples: 'team="fraud-ml", model_type="gradient_boosting", status="baseline", dataset="swiggy_orders_q1"',
+                examples: 'team="fraud-ml", model_type="gradient_boosting", status="baseline", dataset="doordash_orders_q1"',
                 when: 'Log anytime — set_tag() for key-value labels',
                 why: 'Filter the experiment table. Group related experiments. Mark production candidates.',
               },
@@ -339,7 +339,7 @@ import time, json, os
 mlflow.set_tracking_uri('file:///tmp/mlruns')
 
 # ── Create or set experiment ──────────────────────────────────────────
-mlflow.set_experiment('swiggy-delivery-time-prediction')
+mlflow.set_experiment('doordash-delivery-time-prediction')
 
 # ── Synthetic dataset ─────────────────────────────────────────────────
 np.random.seed(42)
@@ -464,7 +464,7 @@ with mlflow.start_run(run_name='Ridge-baseline') as run:
 
 # ── Compare runs programmatically ─────────────────────────────────────
 client = mlflow.tracking.MlflowClient()
-experiment = mlflow.get_experiment_by_name('swiggy-delivery-time-prediction')
+experiment = mlflow.get_experiment_by_name('doordash-delivery-time-prediction')
 runs = client.search_runs(
     experiment_ids=[experiment.experiment_id],
     order_by=['metrics.test_mae ASC'],
@@ -655,7 +655,7 @@ def train_with_wandb(config: dict = None):
     Pass config dict or use wandb.config for hyperparameter sweeps.
     """
     run = wandb.init(
-        project='swiggy-delivery-prediction',
+        project='doordash-delivery-prediction',
         name=f"mlp-lr{config.get('lr', 0.001):.0e}",
         config=config or {},
         tags=['neural-network', 'delivery-time'],
@@ -764,7 +764,7 @@ print(f"  LR range:   1e-4 to 1e-2 (log scale)")
 print(f"  Epochs:     30, 50, or 100")
 print("""
 # Start sweep:
-# sweep_id = wandb.sweep(SWEEP_CONFIG, project='swiggy-delivery-prediction')
+# sweep_id = wandb.sweep(SWEEP_CONFIG, project='doordash-delivery-prediction')
 # wandb.agent(sweep_id, function=train_with_wandb, count=20)
 # → Runs 20 experiments, bayesian-optimises hyperparameters
 # → Best config highlighted automatically in W&B dashboard

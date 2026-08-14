@@ -168,14 +168,14 @@ export default function WhatIsGenerativeAIPage() {
         <p style={S.p}>
           Generative models learn P(data) — the probability distribution
           of the data itself. A model that has learned P(data) for fashion images
-          can answer: "what does a typical kurta look like?" and then generate one.
-          It can synthesise new kurta images that are statistically indistinguishable
+          can answer: "what does a typical denim jacket look like?" and then generate one.
+          It can synthesise new jacket images that are statistically indistinguishable
           from real ones — because it has learned the underlying distribution,
           not just the boundary between categories.
         </p>
 
         <p style={S.p}>
-          Why does this matter for Indian tech? Myntra uses generative models
+          Why does this matter in practice? Shopify uses generative models
           to create product variations — same design, different colours —
           without photographing each one. DoorDash uses them to generate
           synthetic training data for rare dish categories with few real photos.

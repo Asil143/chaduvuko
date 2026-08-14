@@ -401,10 +401,10 @@ ORDER BY day_of_week;`}
         initialQuery={`-- Group orders into value tiers
 SELECT
   CASE
-    WHEN total_amount >= 2000 THEN 'Premium (₹2000+)'
-    WHEN total_amount >= 800  THEN 'Standard (₹800-1999)'
-    WHEN total_amount >= 300  THEN 'Basic (₹300-799)'
-    ELSE 'Micro (<₹300)'
+    WHEN total_amount >= 2000 THEN 'Premium ($2000+)'
+    WHEN total_amount >= 800  THEN 'Standard ($800-1999)'
+    WHEN total_amount >= 300  THEN 'Basic ($300-799)'
+    ELSE 'Micro (<$300)'
   END                             AS order_tier,
   COUNT(*)                        AS order_count,
   ROUND(SUM(total_amount), 2)     AS tier_revenue,
@@ -412,10 +412,10 @@ SELECT
 FROM orders
 GROUP BY
   CASE
-    WHEN total_amount >= 2000 THEN 'Premium (₹2000+)'
-    WHEN total_amount >= 800  THEN 'Standard (₹800-1999)'
-    WHEN total_amount >= 300  THEN 'Basic (₹300-799)'
-    ELSE 'Micro (<₹300)'
+    WHEN total_amount >= 2000 THEN 'Premium ($2000+)'
+    WHEN total_amount >= 800  THEN 'Standard ($800-1999)'
+    WHEN total_amount >= 300  THEN 'Basic ($300-799)'
+    ELSE 'Micro (<$300)'
   END
 ORDER BY avg_in_tier DESC;`}
         height={240}
@@ -426,10 +426,10 @@ ORDER BY avg_in_tier DESC;`}
         initialQuery={`-- Group employees by salary band
 SELECT
   CASE
-    WHEN salary >= 70000 THEN 'Senior (₹70k+)'
-    WHEN salary >= 50000 THEN 'Mid (₹50k-70k)'
-    WHEN salary >= 35000 THEN 'Junior (₹35k-50k)'
-    ELSE 'Entry (<₹35k)'
+    WHEN salary >= 70000 THEN 'Senior ($70k+)'
+    WHEN salary >= 50000 THEN 'Mid ($50k-70k)'
+    WHEN salary >= 35000 THEN 'Junior ($35k-50k)'
+    ELSE 'Entry (<$35k)'
   END                             AS salary_band,
   COUNT(*)                        AS headcount,
   ROUND(AVG(salary), 0)           AS avg_salary,
@@ -437,10 +437,10 @@ SELECT
 FROM employees
 GROUP BY
   CASE
-    WHEN salary >= 70000 THEN 'Senior (₹70k+)'
-    WHEN salary >= 50000 THEN 'Mid (₹50k-70k)'
-    WHEN salary >= 35000 THEN 'Junior (₹35k-50k)'
-    ELSE 'Entry (<₹35k)'
+    WHEN salary >= 70000 THEN 'Senior ($70k+)'
+    WHEN salary >= 50000 THEN 'Mid ($50k-70k)'
+    WHEN salary >= 35000 THEN 'Junior ($35k-50k)'
+    ELSE 'Entry (<$35k)'
   END
 ORDER BY avg_salary DESC;`}
         height={235}
@@ -795,7 +795,7 @@ ORDER BY p.category, order_count DESC;`}
 
       <IQ q="What is the rule about non-aggregate columns in GROUP BY queries?">
         <p style={{ margin: '0 0 14px' }}>Every column in the SELECT list of a GROUP BY query must be either (1) listed in the GROUP BY clause, or (2) wrapped in an aggregate function. This is the fundamental rule of grouped queries and it follows directly from what GROUP BY does.</p>
-        <p style={{ margin: '0 0 14px' }}>The reason: after GROUP BY, each group is collapsed into one output row. A non-aggregate column like first_name might have different values within a group — if you group by city, one Seattle group might contain customers named Aisha, Rahul, and Priya. The database cannot return a single first_name for this group because there is no single value. It can only return values that are the same for every row in the group (the GROUP BY columns themselves) or computed aggregate values that reduce the group to one number.</p>
+        <p style={{ margin: '0 0 14px' }}>The reason: after GROUP BY, each group is collapsed into one output row. A non-aggregate column like first_name might have different values within a group — if you group by city, one Seattle group might contain customers named Sofia, Marcus, and Emily. The database cannot return a single first_name for this group because there is no single value. It can only return values that are the same for every row in the group (the GROUP BY columns themselves) or computed aggregate values that reduce the group to one number.</p>
         <p style={{ margin: 0 }}>PostgreSQL and most standard SQL databases enforce this strictly — a non-aggregate, non-GROUP BY column in SELECT throws an error. MySQL with sql_mode not including ONLY_FULL_GROUP_BY was historically more permissive — it would pick an arbitrary value from the group for non-aggregate columns, which is usually wrong and unpredictable. This is why MySQL queries sometimes appear to "work" without proper GROUP BY usage, but return unreliable results. Always follow the rule: every SELECT column is either in GROUP BY or in an aggregate function.</p>
       </IQ>
 
@@ -856,7 +856,7 @@ ORDER BY p.category, order_count DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart management team needs a store performance summary for their Q1 2024 review (January through March 2024). Write a GROUP BY query that shows for each store: store_id, city, total delivered orders, unique customers served, total delivered revenue (rounded to 2 decimal places), average order value (rounded to 2 decimal places), fastest delivery in days, and a performance_band column using CASE: 'Star' if revenue above ₹3,000, 'Good' if above ₹1,500, 'Needs Support' otherwise. Only include stores that had at least 1 delivered order. Sort by total revenue descending."
+        question="The FreshCart management team needs a store performance summary for their Q1 2024 review (January through March 2024). Write a GROUP BY query that shows for each store: store_id, city, total delivered orders, unique customers served, total delivered revenue (rounded to 2 decimal places), average order value (rounded to 2 decimal places), fastest delivery in days, and a performance_band column using CASE: 'Star' if revenue above $3,000, 'Good' if above $1,500, 'Needs Support' otherwise. Only include stores that had at least 1 delivered order. Sort by total revenue descending."
         hint="JOIN stores to orders. WHERE for Q1 2024 date range AND order_status = 'Delivered'. GROUP BY store_id and city. HAVING COUNT(*) >= 1 (or just let the join naturally exclude stores with no orders). CASE on SUM(total_amount) for the band."
         answer={`SELECT
   s.store_id,

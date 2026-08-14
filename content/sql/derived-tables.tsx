@@ -306,7 +306,7 @@ ORDER BY o.total_amount DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Only join high-value orders (above ₹800)
+        initialQuery={`-- Only join high-value orders (above $800)
 -- Filter in derived table before joining to customer details
 SELECT
   c.first_name || ' ' || c.last_name  AS customer,

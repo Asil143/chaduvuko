@@ -401,9 +401,9 @@ export default function DSAIntroductionPage() {
       </div>
 
       <Callout type="example">
-        <strong>Analogy:</strong> Your name is "Rahul." That is your label. Your SSN number
+        <strong>Analogy:</strong> Your name is "Michael." That is your label. Your SSN number
         is your actual address in the government system. The government does not think of you
-        as "Rahul" — it thinks of you as a 12-digit number. Variables work the same way.
+        as "Michael" — it thinks of you as a 9-digit number. Variables work the same way.
         The name is for you. The address is for the computer.
       </Callout>
 

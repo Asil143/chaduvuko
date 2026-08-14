@@ -331,7 +331,7 @@ FOR EACH ROW EXECUTE FUNCTION update_order_with_customer();
 
 -- Now this works:
 UPDATE order_with_customer
-SET status = 'delivered', customer_name = 'Rahul S.'
+SET status = 'delivered', customer_name = 'Michael T.'
 WHERE order_id = 1001;
 -- Trigger fires: updates orders.status AND customers.name correctly`}
         </CodeBox>
@@ -831,8 +831,8 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     -- Trim whitespace and normalise case
-    NEW.name  := TRIM(INITCAP(NEW.name));   -- "  rahul sharma  " → "Rahul Sharma"
-    NEW.email := LOWER(TRIM(NEW.email));    -- "  RAHUL@EMAIL.COM  " → "rahul@email.com"
+    NEW.name  := TRIM(INITCAP(NEW.name));   -- "  michael turner  " → "Michael Turner"
+    NEW.email := LOWER(TRIM(NEW.email));    -- "  MICHAEL@EMAIL.COM  " → "michael@email.com"
 
     -- Set default city if not provided
     IF NEW.city IS NULL OR NEW.city = '' THEN
@@ -860,8 +860,8 @@ EXECUTE FUNCTION normalise_customer_before_insert();
 
 -- TEST:
 INSERT INTO customers (name, email, phone, city)
-VALUES ('  rahul sharma  ', '  RAHUL@EMAIL.COM  ', '9876543210', NULL);
--- Stored as: ('Rahul Sharma', 'rahul@email.com', '9876543210', 'Unknown')`}
+VALUES ('  michael turner  ', '  MICHAEL@EMAIL.COM  ', '9876543210', NULL);
+-- Stored as: ('Michael Turner', 'michael@email.com', '9876543210', 'Unknown')`}
         </CodeBox>
 
         <CodeBox label="AFTER INSERT/UPDATE/DELETE trigger — audit log">
@@ -1225,7 +1225,7 @@ GRANT EXECUTE ON FUNCTION get_my_salary(INT) TO authenticated_role;
         <SectionTitle>Building a Complete Reporting Layer — Views, Materialised Views, and Procedures</SectionTitle>
 
         <Para>
-          This is the exact architecture used by analytics teams at Indian tech companies
+          This is the exact architecture used by analytics teams at top tech companies
           to build fast, accurate, and secure reporting on top of live transactional data.
         </Para>
 

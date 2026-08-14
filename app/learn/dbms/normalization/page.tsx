@@ -175,20 +175,20 @@ export default function Normalization() {
           title="STUDENT_COURSE_TEACHER — The Unnormalised Mess We Start With"
           headers={['student_id', 'student_name', 'student_email', 'course_id', 'course_name', 'teacher_id', 'teacher_name', 'teacher_phone', 'teacher_dept', 'grade']}
           rows={[
-            ['S001', 'Rahul Sharma', 'rahul@uni.in', 'CS301', 'Database Systems', 'T01', 'Prof. Kumar', '98765-43210', 'Computer Science', 'A'],
-            ['S001', 'Rahul Sharma', 'rahul@uni.in', 'CS302', 'Algorithms', 'T02', 'Prof. Singh', '87654-32109', 'Computer Science', 'B+'],
-            ['S002', 'Priya Reddy', 'priya@uni.in', 'CS301', 'Database Systems', 'T01', 'Prof. Kumar', '98765-43210', 'Computer Science', 'A+'],
-            ['S002', 'Priya Reddy', 'priya@uni.in', 'CS401', 'Machine Learning', 'T03', 'Prof. Rao', '76543-21098', 'AI Department', 'B'],
-            ['S003', 'Arjun Nair', 'arjun@uni.in', 'CS301', 'Database Systems', 'T01', 'Prof. Kumar', '98765-43210', 'Computer Science', 'B+'],
-            ['S003', 'Arjun Nair', 'arjun@uni.in', 'CS302', 'Algorithms', 'T02', 'Prof. Singh', '87654-32109', 'Computer Science', 'A'],
-            ['S004', 'Kavya Krishnan', 'kavya@uni.in', 'CS401', 'Machine Learning', 'T03', 'Prof. Rao', '76543-21098', 'AI Department', 'A+'],
+            ['S001', 'Michael Turner', 'michael@uni.in', 'CS301', 'Database Systems', 'T01', 'Prof. Bennett', '98765-43210', 'Computer Science', 'A'],
+            ['S001', 'Michael Turner', 'michael@uni.in', 'CS302', 'Algorithms', 'T02', 'Prof. Foster', '87654-32109', 'Computer Science', 'B+'],
+            ['S002', 'Jasmine Rodriguez', 'jasmine@uni.in', 'CS301', 'Database Systems', 'T01', 'Prof. Bennett', '98765-43210', 'Computer Science', 'A+'],
+            ['S002', 'Jasmine Rodriguez', 'jasmine@uni.in', 'CS401', 'Machine Learning', 'T03', 'Prof. Ramirez', '76543-21098', 'AI Department', 'B'],
+            ['S003', 'Kevin Park', 'kevin@uni.in', 'CS301', 'Database Systems', 'T01', 'Prof. Bennett', '98765-43210', 'Computer Science', 'B+'],
+            ['S003', 'Kevin Park', 'kevin@uni.in', 'CS302', 'Algorithms', 'T02', 'Prof. Foster', '87654-32109', 'Computer Science', 'A'],
+            ['S004', 'Emily Johnson', 'emily@uni.in', 'CS401', 'Machine Learning', 'T03', 'Prof. Ramirez', '76543-21098', 'AI Department', 'A+'],
           ]}
           note="Primary key (as intended): (student_id, course_id). 7 rows, 10 columns. Problems lurk everywhere."
         />
 
         <Para>
-          Look at this table carefully. Prof. Kumar's phone number appears in THREE rows.
-          Rahul Sharma's email appears in TWO rows. The course name "Database Systems"
+          Look at this table carefully. Prof. Bennett's phone number appears in THREE rows.
+          Michael Turner's email appears in TWO rows. The course name "Database Systems"
           appears in THREE rows. All of this repeated data is redundancy — and redundancy
           is the breeding ground for anomalies.
         </Para>
@@ -214,22 +214,22 @@ export default function Normalization() {
               <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', marginBottom: 16 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: '#ff4757', marginBottom: 10, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Concrete Insert Anomaly on STUDENT_COURSE_TEACHER</div>
                 <Para>
-                  The university hires a new teacher: Prof. Mehta (T04) from the Mathematics
+                  The university hires a new teacher: Prof. Chen (T04) from the Mathematics
                   department, phone 65432-10987. She has not yet been assigned to teach any
                   course. Can we add her to the database?
                 </Para>
                 <Para>
                   <strong style={{ color: '#ff4757' }}>No.</strong> The primary key is
                   (student_id, course_id). To insert a row, we must provide both a student_id
-                  and a course_id. Prof. Mehta has no students and no course yet.
+                  and a course_id. Prof. Chen has no students and no course yet.
                   We would be forced to use NULL values for student_id and course_id —
                   but student_id is part of the primary key, and primary key values cannot
                   be NULL. The insert is physically impossible without fabricating fake
                   enrollment data.
                 </Para>
                 <Para>
-                  Similarly: a new student, Deepak (S005), has been admitted but not yet
-                  enrolled in any courses. We cannot add Deepak to this database. His
+                  Similarly: a new student, David (S005), has been admitted but not yet
+                  enrolled in any courses. We cannot add David to this database. His
                   existence depends on him being enrolled in at least one course. The student
                   is trapped — he cannot exist in the system until he is enrolled.
                 </Para>
@@ -257,17 +257,17 @@ export default function Normalization() {
               <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', marginBottom: 16 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: '#f97316', marginBottom: 10, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Concrete Update Anomaly on STUDENT_COURSE_TEACHER</div>
                 <Para>
-                  Prof. Kumar changes his phone number from 98765-43210 to 98765-99999.
-                  In our table, Prof. Kumar's phone number appears in THREE rows
+                  Prof. Bennett changes his phone number from 98765-43210 to 98765-99999.
+                  In our table, Prof. Bennett's phone number appears in THREE rows
                   (rows 1, 3, and 5 — one for each student enrolled in CS301).
                   A developer must know to update all three rows.
                 </Para>
                 <Para>
                   What if the developer runs <code style={{ fontFamily: 'var(--font-mono)', color: '#f97316', fontSize: 13 }}>UPDATE ... WHERE student_id = 'S001'</code> —
                   correctly updating row 1 — but forgets rows 3 and 5? Now the database
-                  has contradictory data: one row says Prof. Kumar's phone is 98765-99999,
+                  has contradictory data: one row says Prof. Bennett's phone is 98765-99999,
                   two rows say it's 98765-43210. Which is correct? The database cannot tell.
-                  A query asking for Prof. Kumar's phone might return different results
+                  A query asking for Prof. Bennett's phone might return different results
                   depending on which row it finds first.
                 </Para>
                 <Para>
@@ -276,7 +276,7 @@ export default function Normalization() {
                   extremely difficult to detect and fix after the fact.
                 </Para>
                 <div style={{ fontSize: 13, color: '#f97316',  fontWeight: 700 }}>
-                  Root cause: One real-world fact (Prof. Kumar's phone) is stored in multiple rows, each of which can be independently updated.
+                  Root cause: One real-world fact (Prof. Bennett's phone) is stored in multiple rows, each of which can be independently updated.
                 </div>
               </div>
             </div>
@@ -298,15 +298,15 @@ export default function Normalization() {
               <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', marginBottom: 16 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: '#facc15', marginBottom: 10, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Concrete Delete Anomaly on STUDENT_COURSE_TEACHER</div>
                 <Para>
-                  Kavya Krishnan (S004) drops the Machine Learning course (CS401) and withdraws
+                  Emily Johnson (S004) drops the Machine Learning course (CS401) and withdraws
                   from the university. We must delete her enrollment record. Her row is:
-                  (S004, Kavya Krishnan, kavya@uni.in, CS401, Machine Learning, T03, Prof. Rao, 76543-21098, AI Department, A+).
+                  (S004, Emily Johnson, emily@uni.in, CS401, Machine Learning, T03, Prof. Ramirez, 76543-21098, AI Department, A+).
                 </Para>
                 <Para>
-                  After we delete this row, what happens to information about Prof. Rao?
-                  Look at the table — Kavya is the ONLY student enrolled in CS401.
-                  When her row is deleted, <strong style={{ color: '#facc15' }}>all information about Prof. Rao is permanently lost</strong>.
-                  We no longer know that Prof. Rao exists, what his phone number is, or that he belongs to the AI Department.
+                  After we delete this row, what happens to information about Prof. Ramirez?
+                  Look at the table — Emily is the ONLY student enrolled in CS401.
+                  When her row is deleted, <strong style={{ color: '#facc15' }}>all information about Prof. Ramirez is permanently lost</strong>.
+                  We no longer know that Prof. Ramirez exists, what his phone number is, or that he belongs to the AI Department.
                   A faculty member's existence in the system depended entirely on at least one student being enrolled in his course.
                 </Para>
                 <Para>
@@ -377,9 +377,9 @@ export default function Normalization() {
               title="STUDENTS — 1NF Violated (multi-valued phone_numbers)"
               headers={['student_id', 'name', 'phone_numbers', 'courses_enrolled']}
               rows={[
-                ['S001', 'Rahul Sharma', '98765-43210, 87654-32109', 'CS301, CS302'],
-                ['S002', 'Priya Reddy', '76543-21098', 'CS301, CS401'],
-                ['S003', 'Arjun Nair', '65432-10987, 54321-09876, 43210-98765', 'CS302'],
+                ['S001', 'Michael Turner', '98765-43210, 87654-32109', 'CS301, CS302'],
+                ['S002', 'Jasmine Rodriguez', '76543-21098', 'CS301, CS401'],
+                ['S003', 'Kevin Park', '65432-10987, 54321-09876, 43210-98765', 'CS302'],
               ]}
               highlightCols={[2, 3]}
               note="Highlighted columns contain multiple values — 1NF violation"
@@ -433,9 +433,9 @@ CREATE TABLE student_phones (
               title="STUDENT_SKILLS — 1NF Violated (repeating group columns)"
               headers={['student_id', 'name', 'skill1', 'level1', 'skill2', 'level2', 'skill3', 'level3']}
               rows={[
-                ['S001', 'Rahul', 'Python', 'Expert', 'SQL', 'Intermediate', 'Java', 'Beginner'],
-                ['S002', 'Priya', 'Machine Learning', 'Expert', 'Python', 'Expert', '', ''],
-                ['S003', 'Arjun', 'React', 'Intermediate', '', '', '', ''],
+                ['S001', 'Michael', 'Python', 'Expert', 'SQL', 'Intermediate', 'Java', 'Beginner'],
+                ['S002', 'Jasmine', 'Machine Learning', 'Expert', 'Python', 'Expert', '', ''],
+                ['S003', 'Kevin', 'React', 'Intermediate', '', '', '', ''],
               ]}
               highlightCols={[2, 3, 4, 5, 6, 7]}
               note="skill1/level1/skill2/level2... — repeating groups — 1NF violation"
@@ -492,7 +492,7 @@ CREATE TABLE customers (
 -- VIOLATION: full_name stored when first/last are used independently
 CREATE TABLE employees (
     employee_id  INT PRIMARY KEY,
-    full_name    VARCHAR(200)  -- "Rahul Kumar Sharma"
+    full_name    VARCHAR(200)  -- "Michael James Turner"
 );
 -- App does: full_name.split(' ')[0] to get first name for salutations
 -- Cannot sort by last name, cannot search by first name efficiently
@@ -608,7 +608,7 @@ CREATE TABLE products (
 
 // student_name:
 //   Does student_name depend on student_id alone? YES
-//   (Knowing student_id = 'S001' tells us name = 'Rahul Sharma' — we don't need course_id)
+//   (Knowing student_id = 'S001' tells us name = 'Michael Turner' — we don't need course_id)
 //   → PARTIAL DEPENDENCY: student_name → student_id (only part of PK)
 
 // student_email:
@@ -673,10 +673,10 @@ CREATE TABLE products (
               title="STUDENTS"
               headers={['student_id (PK)', 'student_name', 'student_email']}
               rows={[
-                ['S001', 'Rahul Sharma', 'rahul@uni.in'],
-                ['S002', 'Priya Reddy', 'priya@uni.in'],
-                ['S003', 'Arjun Nair', 'arjun@uni.in'],
-                ['S004', 'Kavya Krishnan', 'kavya@uni.in'],
+                ['S001', 'Michael Turner', 'michael@uni.in'],
+                ['S002', 'Jasmine Rodriguez', 'jasmine@uni.in'],
+                ['S003', 'Kevin Park', 'kevin@uni.in'],
+                ['S004', 'Emily Johnson', 'emily@uni.in'],
               ]}
               note="All student attributes fully depend on student_id alone"
             />
@@ -688,9 +688,9 @@ CREATE TABLE products (
               title="COURSES"
               headers={['course_id (PK)', 'course_name', 'teacher_id', 'teacher_name', 'teacher_phone', 'teacher_dept']}
               rows={[
-                ['CS301', 'Database Systems', 'T01', 'Prof. Kumar', '98765-43210', 'Computer Science'],
-                ['CS302', 'Algorithms', 'T02', 'Prof. Singh', '87654-32109', 'Computer Science'],
-                ['CS401', 'Machine Learning', 'T03', 'Prof. Rao', '76543-21098', 'AI Department'],
+                ['CS301', 'Database Systems', 'T01', 'Prof. Bennett', '98765-43210', 'Computer Science'],
+                ['CS302', 'Algorithms', 'T02', 'Prof. Foster', '87654-32109', 'Computer Science'],
+                ['CS401', 'Machine Learning', 'T03', 'Prof. Ramirez', '76543-21098', 'AI Department'],
               ]}
               note="All course + teacher attributes fully depend on course_id alone"
             />
@@ -749,17 +749,17 @@ CREATE TABLE enrollments (
             {
               anomaly: 'Insert Anomaly — Fixed',
               color: 'var(--accent)',
-              desc: 'Prof. Mehta can now be inserted into the COURSES table (or a TEACHERS table in 3NF) independently, without any student enrollment existing. A new student can be added to STUDENTS without any course enrollment.',
+              desc: 'Prof. Chen can now be inserted into the COURSES table (or a TEACHERS table in 3NF) independently, without any student enrollment existing. A new student can be added to STUDENTS without any course enrollment.',
             },
             {
               anomaly: 'Update Anomaly — Partially Fixed',
               color: 'var(--accent)',
-              desc: "Prof. Kumar's phone number now appears in exactly ONE row in the COURSES table. Update one row → done. No partial update risk.",
+              desc: "Prof. Bennett's phone number now appears in exactly ONE row in the COURSES table. Update one row → done. No partial update risk.",
             },
             {
               anomaly: 'Delete Anomaly — Fixed',
               color: 'var(--accent)',
-              desc: "Deleting Kavya's enrollment from ENROLLMENTS no longer affects COURSES. Prof. Rao's course (CS401) still exists in the COURSES table. Teacher data is independent.",
+              desc: "Deleting Emily's enrollment from ENROLLMENTS no longer affects COURSES. Prof. Ramirez's course (CS401) still exists in the COURSES table. Teacher data is independent.",
             },
             {
               anomaly: 'Still remaining in COURSES',
@@ -821,8 +821,8 @@ CREATE TABLE enrollments (
         <Para>
           The problem: B and A now have a separate relationship that is being stored inside
           the table whose primary purpose is something else. When B's value changes in the
-          real world (Prof. Kumar changes departments), we face the same update anomaly problem —
-          we must find every row where B = "Prof. Kumar" and update A = department in each one.
+          real world (Prof. Bennett changes departments), we face the same update anomaly problem —
+          we must find every row where B = "Prof. Bennett" and update A = department in each one.
         </Para>
 
         <CodeBox label="Transitive dependency identification in the 2NF COURSES table">
@@ -851,9 +851,9 @@ CREATE TABLE enrollments (
 // They have no business being in the COURSES table.
 
 // EVIDENCE OF THE PROBLEM:
-// Prof. Kumar teaches CS301. Prof. Kumar changes departments from CS to AI.
+// Prof. Bennett teaches CS301. Prof. Bennett changes departments from CS to AI.
 // We must update the COURSES table: UPDATE courses SET teacher_dept = 'AI' WHERE teacher_id = 'T01'
-// If Prof. Kumar also teaches CS303 (another course), we must update that row too.
+// If Prof. Bennett also teaches CS303 (another course), we must update that row too.
 // If we miss any row → update anomaly. Same problem as before 2NF.`}
         </CodeBox>
 
@@ -873,9 +873,9 @@ CREATE TABLE enrollments (
               title="TEACHERS"
               headers={['teacher_id (PK)', 'teacher_name', 'teacher_phone', 'teacher_dept']}
               rows={[
-                ['T01', 'Prof. Kumar', '98765-43210', 'Computer Science'],
-                ['T02', 'Prof. Singh', '87654-32109', 'Computer Science'],
-                ['T03', 'Prof. Rao', '76543-21098', 'AI Department'],
+                ['T01', 'Prof. Bennett', '98765-43210', 'Computer Science'],
+                ['T02', 'Prof. Foster', '87654-32109', 'Computer Science'],
+                ['T03', 'Prof. Ramirez', '76543-21098', 'AI Department'],
               ]}
               note="Teacher facts now stored independently — no duplication, no transitive dependency"
             />
@@ -938,9 +938,9 @@ CREATE TABLE enrollments (
 );
 
 -- VERIFICATION: All anomalies eliminated?
--- Insert anomaly: YES — Prof. Mehta can be added to TEACHERS without any course
--- Update anomaly: YES — Prof. Kumar's phone is in ONE row in TEACHERS
--- Delete anomaly: YES — Deleting Kavya's enrollment doesn't touch TEACHERS or COURSES`}
+-- Insert anomaly: YES — Prof. Chen can be added to TEACHERS without any course
+-- Update anomaly: YES — Prof. Bennett's phone is in ONE row in TEACHERS
+-- Delete anomaly: YES — Deleting Emily's enrollment doesn't touch TEACHERS or COURSES`}
         </CodeBox>
 
         <SubTitle>Transitive Dependencies in Single-PK Tables — The Hidden Case</SubTitle>
@@ -970,8 +970,8 @@ CREATE TABLE orders_bad (
 -- So: order_id → customer_id → customer_name (transitive → 3NF VIOLATION)
 
 -- EVIDENCE OF PROBLEM:
--- Customer Rahul changes email: must update EVERY ORDER row for Rahul
--- Rahul has placed 100 orders → 100 rows must be updated → update anomaly
+-- Customer Michael changes email: must update EVERY ORDER row for Michael
+-- Michael has placed 100 orders → 100 rows must be updated → update anomaly
 
 -- 3NF SOLUTION: extract customer data to separate table
 CREATE TABLE customers (
@@ -1890,7 +1890,7 @@ CREATE TABLE training_assignments (
               {
                 comment: '3NF Violation — employee_name, employee_department, employee_location',
                 color: '#ff4757',
-                detail: 'These depend on employee_id, not on assignment_id. They are facts about the employee, not about the assignment. If Rahul changes departments, we must update every assignment row. Move them to the employees table (they may already be there). This table should only have employee_id as FK.',
+                detail: 'These depend on employee_id, not on assignment_id. They are facts about the employee, not about the assignment. If Michael changes departments, we must update every assignment row. Move them to the employees table (they may already be there). This table should only have employee_id as FK.',
               },
               {
                 comment: '3NF Violation — course_name, course_duration_hrs',

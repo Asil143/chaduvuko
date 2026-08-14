@@ -1034,16 +1034,16 @@ WHERE status = 'pending';
         <CodeBox label="Practical optimisation — the patterns that matter most">
 {`-- PATTERN 1: Leading wildcard LIKE cannot use B+ tree index
 -- SLOW: leading % forces full scan
-SELECT * FROM customers WHERE name LIKE '%Sharma%';
--- The B+ tree is sorted by name — we don't know where names containing "Sharma" start
+SELECT * FROM customers WHERE name LIKE '%Turner%';
+-- The B+ tree is sorted by name — we don't know where names containing "Turner" start
 
 -- BETTER: trailing wildcard CAN use index (scans from prefix)
-SELECT * FROM customers WHERE name LIKE 'Sharma%';
--- Uses index: starts at "Sharma" in sorted order, reads forward
+SELECT * FROM customers WHERE name LIKE 'Turner%';
+-- Uses index: starts at "Turner" in sorted order, reads forward
 
 -- BEST for arbitrary substring search: Full-Text Search
 CREATE INDEX idx_customers_name_fts ON customers USING GIN(to_tsvector('english', name));
-SELECT * FROM customers WHERE to_tsvector('english', name) @@ to_tsquery('Sharma');
+SELECT * FROM customers WHERE to_tsvector('english', name) @@ to_tsquery('Turner');
 
 -- PATTERN 2: Function on indexed column disables the index
 -- SLOW: applying function to column prevents index use

@@ -150,15 +150,15 @@ export default function GreedyPage() {
           💰 The coin change analogy — where greedy works perfectly
         </h3>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.8, marginBottom: 16 }}>
-          You need to give someone ₹41 change using Indian coins (₹25, ₹10, ₹5, ₹1).
+          You need to give someone 41¢ change using US coins (25¢, 10¢, 5¢, 1¢).
           A greedy cashier always picks the largest coin that fits:
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {[
-            { step: '41 remaining', coin: '₹25', left: '16 remaining', color: 'var(--green)' },
-            { step: '16 remaining', coin: '₹10', left: '6 remaining', color: '#4285f4' },
-            { step: '6 remaining', coin: '₹5', left: '1 remaining', color: '#7b61ff' },
-            { step: '1 remaining', coin: '₹1', left: '0 remaining ✓', color: '#facc15' },
+            { step: '41¢ remaining', coin: '25¢', left: '16¢ remaining', color: 'var(--green)' },
+            { step: '16¢ remaining', coin: '10¢', left: '6¢ remaining', color: '#4285f4' },
+            { step: '6¢ remaining', coin: '5¢', left: '1¢ remaining', color: '#7b61ff' },
+            { step: '1¢ remaining', coin: '1¢', left: '0¢ remaining ✓', color: '#facc15' },
           ].map((row, i) => (
             <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'center', background: 'var(--bg2)', border: `1px solid ${row.color}22`, borderRadius: 8, padding: '10px 14px' }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)', minWidth: 120 }}>{row.step}</span>
@@ -168,7 +168,7 @@ export default function GreedyPage() {
           ))}
         </div>
         <div style={{ marginTop: 14, fontSize: 13, color: 'var(--green)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-          4 coins total — this IS the optimal answer for Indian denominations ✓
+          4 coins total — this IS the optimal answer for US denominations ✓
         </div>
       </div>
 
@@ -393,10 +393,10 @@ int main() {
           </thead>
           <tbody>
             {[
-              ['Item 2', '10 kg', '₹60', '6.0 ← highest', 'All 10 kg', '₹60'],
-              ['Item 4', '20 kg', '₹100', '5.0', 'All 20 kg', '₹100'],
-              ['Item 1', '20 kg', '₹80', '4.0', '20 kg (full)', '₹80'],
-              ['Item 3', '30 kg', '₹120', '4.0', '0 kg (bag full)', '₹0'],
+              ['Item 2', '10 kg', '$60', '6.0 ← highest', 'All 10 kg', '$60'],
+              ['Item 4', '20 kg', '$100', '5.0', 'All 20 kg', '$100'],
+              ['Item 1', '20 kg', '$80', '4.0', '20 kg (full)', '$80'],
+              ['Item 3', '30 kg', '$120', '4.0', '0 kg (bag full)', '$0'],
             ].map((row, ri) => (
               <tr key={ri}>
                 <td style={{ padding: '8px 14px', borderBottom: '1px solid var(--border)', color: 'var(--green)', fontWeight: 700 }}>{row[0]}</td>
@@ -410,7 +410,7 @@ int main() {
           </tbody>
         </table>
         <div style={{ marginTop: 12, fontSize: 12, color: 'var(--green)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-          Total value: ₹60 + ₹100 + ₹80 = ₹240 with exactly 50 kg used
+          Total value: $60 + $100 + $80 = $240 with exactly 50 kg used
         </div>
       </div>
 
@@ -780,14 +780,14 @@ int main() {
             </div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)', lineHeight: 1.9 }}>
               Ratio: A=3.0, B=2.5, C=2.4<br />
-              Greedy picks A(3kg, ₹9), then B doesn't fit (3+4=7 ✓ wait it does)... B fits → A+B = 7kg, ₹19<br />
+              Greedy picks A(3kg, $9), then B doesn't fit (3+4=7 ✓ wait it does)... B fits → A+B = 7kg, $19<br />
               But C+B = 4+5=9 {'>'} 7 ✗. A+C = 3+5=8 {'>'} 7 ✗.<br />
-              Actually here greedy gets ₹19 and optimal is also ₹19. Better counter-example:<br />
+              Actually here greedy gets $19 and optimal is also $19. Better counter-example:<br />
               Items: A(w=10,v=10), B(w=6,v=7), C(w=6,v=7). Cap=12.<br />
-              Greedy: ratio A=1.0, B=C=1.17 → pick B(₹7), C(₹7) = ₹14 but 6+6=12 fits ✓ greedy works here too.<br />
+              Greedy: ratio A=1.0, B=C=1.17 → pick B($7), C($7) = $14 but 6+6=12 fits ✓ greedy works here too.<br />
               Real failure: Items X(w=1,v=1), Y(w=10,v=9). Cap=10.<br />
-              <span style={{ color: '#ff4757' }}>Greedy: ratio X=1.0{'>'} Y=0.9 → pick X(1kg,₹1), then Y won't fit = ₹1</span><br />
-              <span style={{ color: 'var(--green)' }}>Optimal: pick Y alone = ₹9</span>
+              <span style={{ color: '#ff4757' }}>Greedy: ratio X=1.0{'>'} Y=0.9 → pick X(1kg,$1), then Y won't fit = $1</span><br />
+              <span style={{ color: 'var(--green)' }}>Optimal: pick Y alone = $9</span>
             </div>
           </div>
         </div>

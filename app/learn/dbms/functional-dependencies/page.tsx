@@ -201,7 +201,7 @@ export default function FunctionalDependencies() {
               fds: [
                 { lhs: 'employee_id', rhs: 'name, email, dept_id, salary, ssn_last4', why: 'Each employee has a unique ID assigned exactly once. Knowing the ID tells you everything about that employee. This is the primary key dependency.' },
                 { lhs: 'email', rhs: 'employee_id, name, dept_id', why: 'Work email addresses are unique per employee — each email belongs to exactly one person. Knowing the email tells you which employee it is, and therefore all their details.' },
-                { lhs: 'ssn_last4', rhs: 'employee_id, name', why: 'PAN (Permanent Account Number) is issued uniquely per person by the Indian government. Knowing the PAN tells you which person it is.' },
+                { lhs: 'ssn_last4', rhs: 'employee_id, name', why: 'SSN (Social Security Number) is issued uniquely per person by the US government. Knowing the SSN tells you which person it is.' },
                 { lhs: 'dept_id', rhs: 'name', color: '#ff4757', why: 'Does NOT hold. Multiple employees belong to the same department — knowing the dept_id does NOT tell you which specific employee you are referring to. Many people share the same dept_id.' },
               ],
               color: '#0078d4',
@@ -220,8 +220,8 @@ export default function FunctionalDependencies() {
               relation: 'FLIGHTS(flight_num, airline, departure_date, origin, destination, departure_time)',
               fds: [
                 { lhs: '(flight_num, departure_date)', rhs: 'origin, destination, departure_time', why: 'A specific flight on a specific date has exactly one origin, one destination, and one departure time. The combination (flight + date) uniquely identifies a flight instance.' },
-                { lhs: 'flight_num', rhs: 'origin, destination, airline', why: 'Flight numbers are stable route identifiers — AI-101 always flies Delhi to London, always operated by Air India. The date does not affect the route or airline.' },
-                { lhs: 'flight_num', rhs: 'departure_date', color: '#ff4757', why: 'Does NOT hold. Flight AI-101 operates on many different dates — knowing the flight number does NOT uniquely determine the departure date.' },
+                { lhs: 'flight_num', rhs: 'origin, destination, airline', why: 'Flight numbers are stable route identifiers — DL-101 always flies Atlanta to London, always operated by Delta. The date does not affect the route or airline.' },
+                { lhs: 'flight_num', rhs: 'departure_date', color: '#ff4757', why: 'Does NOT hold. Flight DL-101 operates on many different dates — knowing the flight number does NOT uniquely determine the departure date.' },
               ],
               color: '#f97316',
             },
@@ -1443,7 +1443,7 @@ F = {A→B, A→C, A→D, AB→C, B→D}
               misconception: 'Confusing FD direction (X→Y means X determines Y, NOT Y→X)',
               color: '#f97316',
               wrong: 'Given employee_id → name, concluding that name → employee_id also holds.',
-              correct: 'employee_id → name means: knowing the employee ID tells you the name. This does NOT imply name → employee_id. Multiple employees can share the same name (Rahul Sharma might be common). The FD employee_id → name does NOT mean names are unique. Only if you separately established that names ARE unique (perhaps email is unique, not names) does name → employee_id hold. Arrow direction matters completely.',
+              correct: 'employee_id → name means: knowing the employee ID tells you the name. This does NOT imply name → employee_id. Multiple employees can share the same name (Michael Turner might be common). The FD employee_id → name does NOT mean names are unique. Only if you separately established that names ARE unique (perhaps email is unique, not names) does name → employee_id hold. Arrow direction matters completely.',
             },
             {
               misconception: 'Thinking that FD X→Y requires all of X to be used',
@@ -1512,7 +1512,7 @@ F = {A→B, A→C, A→D, AB→C, B→D}
 
           <Para>
             The sales team reports that the same product shows different prices in different reports.
-            Product "Chicken Biryani" shows ₹280 in the order history report and ₹300 in the
+            Product "Chicken Biryani" shows $12.99 in the order history report and $13.99 in the
             product catalogue report. An engineer investigates.
           </Para>
 

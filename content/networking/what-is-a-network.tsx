@@ -326,7 +326,7 @@ const packetSteps = [
     title: 'Step 3 — Hopping across the internet',
     emoji: '🌐',
     description: "Your packets don't go directly to Google. They hop through 15–25 routers across the globe — each one reads only the destination IP, decides the best next hop, and forwards the packet. Packets 1, 2, 3, 4 might take completely different routes! They may even arrive out of order. This is called packet switching and it's what makes the internet resilient — if one path fails, packets reroute.",
-    visual: ['Your ISP → Tier-1 Router (Mumbai)', '→ Tier-1 Router (Singapore) → Google Edge', '→ Google\'s Server', '(traceroute shows every hop)'],
+    visual: ['Your ISP → Tier-1 Router (Ashburn)', '→ Tier-1 Router (Singapore) → Google Edge', '→ Google\'s Server', '(traceroute shows every hop)'],
     color: '#fbbf24',
   },
   {
@@ -898,7 +898,7 @@ export default function WhatIsANetworkModule() {
           { icon: '🛡️', title: 'Fault Tolerant', desc: 'If one router fails, packets reroute around it automatically. The internet was originally designed to survive nuclear strikes by the US military (ARPANET, 1969).' },
           { icon: '⚡', title: 'Efficient', desc: "Multiple packets from different users share the same physical wire simultaneously. One slow download doesn't block someone else's video call." },
           { icon: '📈', title: 'Scalable', desc: 'Billions of devices can join the internet without reserving circuits in advance. Capacity is shared dynamically.' },
-          { icon: '🔄', title: 'Resilient', desc: 'Packets can take different paths. One packet might go Mumbai → Singapore → Google, the next might go Mumbai → London → Google.' },
+          { icon: '🔄', title: 'Resilient', desc: 'Packets can take different paths. One packet might go Ashburn → Singapore → Google, the next might go Ashburn → London → Google.' },
         ].map(item => (
           <div key={item.title} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
             <div style={{ fontSize: 22, marginBottom: 8 }}>{item.icon}</div>
@@ -1004,7 +1004,7 @@ export default function WhatIsANetworkModule() {
       />
 
       <StoryBox>
-        Think about your home. It has a postal address — say, "42 MG Road, Hyderabad 500016." That address gets a letter from anywhere in the world to your building. But inside your building, you also have an apartment number — "Flat 3B." The postal system uses the building address. Once the letter arrives, your building's internal system uses the apartment number. IP addresses work the same way: public IPs route traffic across the internet, private IPs route traffic within your home network.
+        Think about your home. It has a postal address — say, "42 Main Street, Austin, TX 78701." That address gets a letter from anywhere in the world to your building. But inside your building, you also have an apartment number — "Flat 3B." The postal system uses the building address. Once the letter arrives, your building's internal system uses the apartment number. IP addresses work the same way: public IPs route traffic across the internet, private IPs route traffic within your home network.
       </StoryBox>
 
       <H2>IP Addresses — Your Device's Mailing Address</H2>
@@ -1129,7 +1129,7 @@ Total: 48-bit = ~281 trillion possible addresses`}
       <div style={{ margin: '24px 0' }}>
         {[
           { metric: 'Bandwidth', unit: 'Mbps / Gbps', analogy: 'The width of a pipe — how much data can flow through per second.', detail: 'A 1 Gbps connection can transfer 1,000 Megabits (125 Megabytes) per second. Relevant for large file transfers and streaming — not for interactive apps.', color: '#60a5fa' },
-          { metric: 'Latency', unit: 'milliseconds (ms)', analogy: 'How long it takes for one bit to travel from A to B and back (round-trip time / RTT).', detail: 'Governed by the speed of light (~200,000 km/s in fiber) and the number of router hops. Mumbai to New York is ~200ms minimum — physics, not technology.', color: '#f472b6' },
+          { metric: 'Latency', unit: 'milliseconds (ms)', analogy: 'How long it takes for one bit to travel from A to B and back (round-trip time / RTT).', detail: 'Governed by the speed of light (~200,000 km/s in fiber) and the number of router hops. New York to Singapore is ~200ms minimum — physics, not technology.', color: '#f472b6' },
           { metric: 'Throughput', unit: 'Mbps (actual)', analogy: 'What you actually get — bandwidth minus overhead, congestion, and retransmissions.', detail: 'Bandwidth is the ceiling. Throughput is what reaches your application after TCP overhead, packet loss, and congestion control. Often 60–80% of bandwidth.', color: '#fbbf24' },
           { metric: 'Jitter', unit: 'ms (variation)', analogy: 'Inconsistency in latency — packets arriving with varying delays.', detail: 'Video calls hate jitter. If packet 1 arrives in 30ms and packet 2 arrives in 90ms, you get audio/video stuttering. High jitter = poor call quality even with low average latency.', color: '#34d399' },
         ].map(item => (
@@ -1200,7 +1200,7 @@ instead of sending more data — wasting your bandwidth.`}
       </Para>
 
       <Para>
-        The cable from India to the UK (the FLAG cable) is 28,000 km long. A photon travels through glass at about 2/3 the speed of light (200,000 km/s), so the theoretical minimum latency Mumbai to London is about 70ms one way. Real-world latency is ~130-170ms round-trip due to router processing, signal amplification at repeaters, and routing overhead.
+        The cable connecting Virginia Beach, USA to Bilbao, Spain (the MAREA cable) is about 6,600 km long. A photon travels through glass at about 2/3 the speed of light (200,000 km/s), so the theoretical minimum latency Virginia to Bilbao is about 33ms one way. Real-world latency is ~60-70ms round-trip due to router processing, signal amplification at repeaters, and routing overhead.
       </Para>
 
       <WowBox emoji="🔦" title="How fiber optic cables work">
@@ -1214,7 +1214,7 @@ instead of sending more data — wasting your bandwidth.`}
       </Para>
 
       <Para>
-        Google has 35+ data center campuses worldwide. A request from India to google.com typically hits a data center in Singapore, Mumbai, or Taiwan — rarely one in the US. This is by design: keeping servers close to users reduces latency.
+        Google has 35+ data center campuses worldwide. A request from Seattle to google.com typically hits a data center in The Dalles, Oregon; a request from New York typically hits one in Berkeley County, South Carolina — rarely one on the opposite coast. This is by design: keeping servers close to users reduces latency.
       </Para>
 
       <H2>CDNs — The Internet's Distributed Cache</H2>

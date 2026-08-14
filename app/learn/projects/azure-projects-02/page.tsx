@@ -63,23 +63,23 @@ const storeFiles = [
   { file: 'store_ST004_sales.csv', store: 'ST004', city: 'Chicago' },
   { file: 'store_ST005_sales.csv', store: 'ST005', city: 'Austin' },
   { file: 'store_ST006_sales.csv', store: 'ST006', city: 'Boston' },
-  { file: 'store_ST007_sales.csv', store: 'ST007', city: 'Kolkata' },
-  { file: 'store_ST008_sales.csv', store: 'ST008', city: 'Ahmedabad' },
-  { file: 'store_ST009_sales.csv', store: 'ST009', city: 'Jaipur' },
-  { file: 'store_ST010_sales.csv', store: 'ST010', city: 'Chandigarh' },
+  { file: 'store_ST007_sales.csv', store: 'ST007', city: 'Denver' },
+  { file: 'store_ST008_sales.csv', store: 'ST008', city: 'Miami' },
+  { file: 'store_ST009_sales.csv', store: 'ST009', city: 'Atlanta' },
+  { file: 'store_ST010_sales.csv', store: 'ST010', city: 'Portland' },
 ]
 
 const csvFiles: Record<string, string> = {
   'store_ST001_sales.csv': `order_id,store_id,product_name,category,quantity,unit_price,order_date
 ORD1001,ST001,Basmati Rice 5kg,Grocery,12,299.00,2024-01-15
 ORD1002,ST001,Samsung TV 43inch,Electronics,2,32000.00,2024-01-15
-ORD1003,ST001,Amul Butter 500g,Dairy,25,240.00,2024-01-15
+ORD1003,ST001,Horizon Butter 500g,Dairy,25,240.00,2024-01-15
 ORD1004,ST001,Colgate Toothpaste,Personal Care,30,89.00,2024-01-15
 ORD1005,ST001,Nike Running Shoes,Apparel,5,4500.00,2024-01-15`,
   'store_ST002_sales.csv': `order_id,store_id,product_name,category,quantity,unit_price,order_date
 ORD2001,ST002,Sunflower Oil 1L,Grocery,18,145.00,2024-01-15
 ORD2002,ST002,iPhone 14,Electronics,1,75000.00,2024-01-15
-ORD2003,ST002,Amul Milk 1L,Dairy,40,62.00,2024-01-15
+ORD2003,ST002,Horizon Organic Milk 1L,Dairy,40,62.00,2024-01-15
 ORD2004,ST002,Dove Soap 100g,Personal Care,50,65.00,2024-01-15
 ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15`,
 }

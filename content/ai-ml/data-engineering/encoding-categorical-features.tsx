@@ -165,7 +165,7 @@ export default function EncodingCategoricalFeaturesPage() {
           The DoorDash orders dataset has a <span style={S.code as React.CSSProperties}>restaurant</span> column
           containing "Pizza Hut", "Biryani Blues", "McDonald's".
           The <span style={S.code as React.CSSProperties}>city</span> column has
-          "Seattle", "New York", "Delhi". The{' '}
+          "Seattle", "New York", "Denver". The{' '}
           <span style={S.code as React.CSSProperties}>time_slot</span> column has
           "breakfast", "lunch", "evening", "dinner".
           Not a single number in sight — and every ML algorithm from linear
@@ -245,7 +245,7 @@ n = 8_000
 
 restaurants = ['Pizza Hut', 'Biryani Blues', "McDonald's", "Haldiram's",
                'Dominos', 'KFC', 'Subway', 'Burger King']
-cities      = ['Seattle', 'New York', 'Delhi', 'Austin', 'Boston', 'Chicago']
+cities      = ['Seattle', 'New York', 'Denver', 'Austin', 'Boston', 'Chicago']
 time_slots  = ['breakfast', 'lunch', 'evening', 'dinner']
 ratings_cat = ['poor', 'average', 'good', 'excellent']   # ordinal
 

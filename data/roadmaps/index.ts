@@ -2,7 +2,7 @@ import type { RoadmapMeta } from './types'
 
 export const roadmapRegistry: RoadmapMeta[] = [
   // Role-based
-  { slug: 'data-engineer', title: 'Data Engineer', category: 'role', description: 'Build, maintain and optimise data pipelines at scale. The most in-demand data role in India.', totalTime: '6–9 months', nodeCount: 57, hasLiveContent: true },
+  { slug: 'data-engineer', title: 'Data Engineer', category: 'role', description: 'Build, maintain and optimise data pipelines at scale. One of the most in-demand data roles in the US.', totalTime: '6–9 months', nodeCount: 57, hasLiveContent: true },
   { slug: 'devops', title: 'DevOps Engineer', category: 'role', description: 'CI/CD, containers, cloud infrastructure, monitoring. The engineering backbone of every tech company.', totalTime: '5–7 months', nodeCount: 44, hasLiveContent: false },
   { slug: 'full-stack', title: 'Full Stack Developer', category: 'role', description: 'Build complete web applications — frontend, backend, database, and deployment.', totalTime: '6–9 months', nodeCount: 48, hasLiveContent: false },
   { slug: 'backend', title: 'Backend Developer', category: 'role', description: 'APIs, databases, authentication, and server-side architecture.', totalTime: '4–6 months', nodeCount: 40, hasLiveContent: false },
@@ -30,8 +30,8 @@ export const roadmapRegistry: RoadmapMeta[] = [
   { slug: 'terraform', title: 'Terraform', category: 'skill', description: 'Infrastructure as code. Provision and manage cloud resources declaratively.', totalTime: '3–4 weeks', nodeCount: 26, hasLiveContent: false },
   { slug: 'postgresql', title: 'PostgreSQL', category: 'skill', description: 'The best open-source relational database. Deep dive beyond basic SQL.', totalTime: '4–6 weeks', nodeCount: 30, hasLiveContent: true },
   { slug: 'mongodb', title: 'MongoDB', category: 'skill', description: 'Document databases, aggregation pipelines, and schema design patterns.', totalTime: '3–4 weeks', nodeCount: 26, hasLiveContent: false },
-  { slug: 'powerbi', title: 'Power BI', category: 'skill', description: 'Build dashboards, write DAX, connect to data sources. Top BI tool in India.', totalTime: '4–6 weeks', nodeCount: 28, hasLiveContent: false },
-  { slug: 'dsa', title: 'DSA', category: 'skill', description: 'Data structures and algorithms for campus placements and FAANG interviews.', totalTime: '3–6 months', nodeCount: 50, hasLiveContent: false },
+  { slug: 'powerbi', title: 'Power BI', category: 'skill', description: 'Build dashboards, write DAX, connect to data sources. A top BI tool in the US.', totalTime: '4–6 weeks', nodeCount: 28, hasLiveContent: false },
+  { slug: 'dsa', title: 'DSA', category: 'skill', description: 'Data structures and algorithms for new-grad and FAANG interviews.', totalTime: '3–6 months', nodeCount: 50, hasLiveContent: false },
 
   // Project-based
   { slug: 'azure-data-pipeline', title: 'Azure Data Pipeline', category: 'project', description: 'Six end-to-end ADF projects — from copying a single CSV to pulling live REST API data.', totalTime: '6–8 weeks', nodeCount: 6, hasLiveContent: true },

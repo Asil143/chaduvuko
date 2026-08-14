@@ -190,7 +190,7 @@ export default function LLMFineTuningPage() {
         </h2>
 
         <p style={S.p}>
-          This is the question every ML engineer at an Indian startup faces
+          This is the question every ML engineer at a startup faces
           when building an LLM-powered feature: should we fine-tune a model
           or can we get there with prompting and retrieval? Fine-tuning is
           expensive — data collection, training compute, evaluation, deployment —
@@ -229,7 +229,7 @@ export default function LLMFineTuningPage() {
 
         <Callout type="tip">
           All code in this module uses HuggingFace Transformers, PEFT, and TRL —
-          the standard open-source stack used by ML teams across India.
+          the standard open-source stack used by ML teams everywhere.
           Install: <span style={S.code as React.CSSProperties}>pip install transformers peft trl accelerate bitsandbytes datasets</span>.
           A free Google Colab T4 GPU (16GB) is enough to fine-tune a 7B model with QLoRA.
         </Callout>
@@ -275,9 +275,9 @@ export default function LLMFineTuningPage() {
               {
                 approach: 'Full Fine-Tuning',
                 color: '#D85A30',
-                when: 'Fundamental capability change needed. Domain so specialised base model is nearly random (medical, legal, vernacular Indian languages). Building a foundation model.',
+                when: 'Fundamental capability change needed. Domain so specialised base model is nearly random (medical, legal, low-resource languages). Building a foundation model.',
                 when_not: 'Almost always — LoRA achieves 95% of full fine-tuning quality at 10% of cost. Only justified for foundational models.',
-                example: 'AI4Bharat: fine-tuning LLaMA on 100B tokens of Hindi/Tamil/Telugu text to build IndicLLM — a genuine foundation model for Indian languages.',
+                example: 'Bloomberg: fine-tuning a base LLM on decades of financial documents and market data to build BloombergGPT — a genuine foundation model for financial language.',
                 cost: 'Very high — multi-GPU cluster, weeks of training.',
                 time: '2–6 months including infrastructure, training, and evaluation.',
               },
@@ -333,15 +333,15 @@ export default function LLMFineTuningPage() {
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 1.9 }}>
             <div style={{ color: '#888', marginBottom: 8, fontSize: 11 }}>LLaMA-3 / Meta format:</div>
             <div style={{ color: '#1D9E75', paddingLeft: 12, marginBottom: 12 }}>
-              {`<|begin_of_text|><|start_header_id|>system<|end_header_id|>\nYou are a helpful assistant.<|eot_id|>\n<|start_header_id|>user<|end_header_id|>\nHow does UPI work?<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n[response]<|eot_id|>`}
+              {`<|begin_of_text|><|start_header_id|>system<|end_header_id|>\nYou are a helpful assistant.<|eot_id|>\n<|start_header_id|>user<|end_header_id|>\nHow does ACH work?<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n[response]<|eot_id|>`}
             </div>
             <div style={{ color: '#888', marginBottom: 8, fontSize: 11 }}>Mistral / Alpaca format:</div>
             <div style={{ color: '#7b61ff', paddingLeft: 12, marginBottom: 12 }}>
-              {`[INST] <<SYS>>\nYou are a helpful assistant.\n<</SYS>>\nHow does UPI work? [/INST] [response] </s>`}
+              {`[INST] <<SYS>>\nYou are a helpful assistant.\n<</SYS>>\nHow does ACH work? [/INST] [response] </s>`}
             </div>
             <div style={{ color: '#888', marginBottom: 8, fontSize: 11 }}>Phi-3 / ChatML format:</div>
             <div style={{ color: '#D85A30', paddingLeft: 12 }}>
-              {`<|system|>\nYou are a helpful assistant.<|end|>\n<|user|>\nHow does UPI work?<|end|>\n<|assistant|>\n[response]<|end|>`}
+              {`<|system|>\nYou are a helpful assistant.<|end|>\n<|user|>\nHow does ACH work?<|end|>\n<|assistant|>\n[response]<|end|>`}
             </div>
           </div>
         </ConceptBox>
@@ -384,19 +384,19 @@ def make_example(complaint: str, category: str) -> dict:
 
 # Sample training data
 raw_examples = [
-    ("My payment of Rs 2500 failed but money was deducted from account",
+    ("My payment of $2500 failed but money was deducted from account",
      'payment_failed_technical'),
     ("I was charged twice for the same order on DoorDash",
      'duplicate_charge'),
     ("Cancelled my subscription but still got charged this month",
      'subscription_cancelled_still_charged'),
-    ("UPI payment failed three times, showing insufficient funds but I have balance",
+    ("ACH payment failed three times, showing insufficient funds but I have balance",
      'payment_failed_insufficient_funds'),
     ("Refund was supposed to arrive 7 days ago, still not credited",
      'refund_delayed'),
     ("Someone made a payment from my account without my knowledge",
      'fraud_unauthorised'),
-    ("Merchant charged Rs 4999 but my order was only Rs 2499",
+    ("Merchant charged $4999 but my order was only $2499",
      'wrong_amount_charged'),
     ("Payment shows successful but seller says not received",
      'merchant_dispute'),
@@ -521,7 +521,7 @@ print(train_formatted[0]['text'][:300])
 
 # ── Step 5: TrainingArguments ─────────────────────────────────────────
 training_args = TrainingArguments(
-    output_dir='./razorpay-dispute-classifier',
+    output_dir='./stripe-dispute-classifier',
     num_train_epochs=3,
     per_device_train_batch_size=4,
     per_device_eval_batch_size=4,
@@ -567,8 +567,8 @@ print("\nStarting QLoRA fine-tuning...")
 # trainer.train()   # uncomment to actually train
 
 # ── Step 7: Save adapter ──────────────────────────────────────────────
-# trainer.model.save_pretrained('./razorpay-adapter')
-# tokenizer.save_pretrained('./razorpay-adapter')
+# trainer.model.save_pretrained('./stripe-adapter')
+# tokenizer.save_pretrained('./stripe-adapter')
 # Adapter is ~80MB — the base model stays frozen at 4GB`} />
       </div>
 
@@ -743,18 +743,18 @@ from peft import PeftModel
 from transformers import AutoModelForCausalLM
 
 base  = AutoModelForCausalLM.from_pretrained('meta-llama/Meta-Llama-3-8B-Instruct')
-model = PeftModel.from_pretrained(base, './razorpay-adapter')
+model = PeftModel.from_pretrained(base, './stripe-adapter')
 model = model.merge_and_unload()
-model.save_pretrained('./razorpay-merged')
+model.save_pretrained('./stripe-merged')
 
 # Serve with vLLM (OpenAI-compatible API)
-# vllm serve ./razorpay-merged --port 8000 --dtype float16
+# vllm serve ./stripe-merged --port 8000 --dtype float16
 
 # Then call like OpenAI API:
 from openai import OpenAI
 client = OpenAI(base_url='http://localhost:8000/v1', api_key='unused')
 response = client.chat.completions.create(
-    model='./razorpay-merged',
+    model='./stripe-merged',
     messages=[
         {'role': 'system', 'content': SYSTEM_PROMPT},
         {'role': 'user',   'content': 'Complaint: charged twice for DoorDash order'},

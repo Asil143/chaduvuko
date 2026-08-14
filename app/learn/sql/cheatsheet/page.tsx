@@ -104,7 +104,7 @@ export default function SQLCheatSheet() {
               <Entry label="AND / OR / NOT" code={`SELECT * FROM customers\nWHERE city = 'Seattle'\n  AND loyalty_tier = 'Gold';`} />
               <Entry label="Comparison operators" code={`WHERE salary > 50000\nWHERE salary BETWEEN 40000 AND 70000\nWHERE joined_date >= '2023-01-01'`} />
               <Entry label="IN operator" code={`WHERE city IN ('Seattle', 'Austin', 'New York')`} />
-              <Entry label="LIKE / wildcards" code={`WHERE email LIKE '%@gmail.com'\nWHERE product_name LIKE 'Amul%'`} />
+              <Entry label="LIKE / wildcards" code={`WHERE email LIKE '%@gmail.com'\nWHERE product_name LIKE 'Horizon%'`} />
               <Entry label="NULL checks" code={`WHERE delivery_date IS NULL\nWHERE delivery_date IS NOT NULL`} />
             </Section>
 

@@ -206,7 +206,7 @@ ORDER BY order_date;`}
       <H>Greater than and less than</H>
 
       <SQLPlayground
-        initialQuery={`-- Products priced above ₹200
+        initialQuery={`-- Products priced above $200
 SELECT product_name, category, brand, unit_price
 FROM products
 WHERE unit_price > 200
@@ -216,7 +216,7 @@ ORDER BY unit_price DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Employees earning at or above ₹60,000
+        initialQuery={`-- Employees earning at or above $60,000
 SELECT first_name, last_name, role, salary
 FROM employees
 WHERE salary >= 60000
@@ -267,7 +267,7 @@ WHERE total_amount > '1000' -- string comparison, not numeric`}
 WHERE city = 'Seattle'
 WHERE order_status = 'Delivered'
 WHERE loyalty_tier = 'Platinum'
-WHERE payment_method = 'UPI'
+WHERE payment_method = 'Zelle'
 
 -- Wrong — double quotes are for identifiers, not values
 WHERE city = "Seattle"     -- error in PostgreSQL, might work in MySQL
@@ -479,7 +479,7 @@ ORDER BY joined_date;`}
       <H>Products — filtering by price, category, and stock</H>
 
       <SQLPlayground
-        initialQuery={`-- Budget products under ₹50 that are in stock
+        initialQuery={`-- Budget products under $50 that are in stock
 -- Used for discount campaign eligibility
 SELECT product_name, brand, unit_price, unit, category
 FROM products
@@ -504,7 +504,7 @@ ORDER BY unit_price;`}
       <H>Orders — operational filtering</H>
 
       <SQLPlayground
-        initialQuery={`-- High-value orders above ₹2,000 — flagged for review
+        initialQuery={`-- High-value orders above $2,000 — flagged for review
 -- Finance team monitors these for fraud screening
 SELECT order_id, customer_id, store_id,
        order_date, payment_method, total_amount
@@ -779,7 +779,7 @@ ORDER BY delivery_date DESC;`}
 
       <IQ q="What is the difference between WHERE and HAVING?">
         <p style={{ margin: '0 0 14px' }}>WHERE and HAVING both filter data, but they operate at different stages of query execution and on different things. WHERE filters individual rows before any grouping or aggregation. It operates on raw column values and runs early in the execution pipeline — immediately after FROM. HAVING filters groups after GROUP BY has aggregated rows, and it operates on aggregate values like COUNT(), SUM(), AVG(). HAVING runs after SELECT in the execution order.</p>
-        <p style={{ margin: '0 0 14px' }}>A concrete example: to find the total revenue per city, but only for cities with more than ₹5,000 in delivered orders, you need both. WHERE order_status = 'Delivered' filters individual rows before the city grouping. HAVING SUM(total_amount) {'>'} 5000 filters the city groups after their revenue has been computed. You cannot use WHERE SUM(total_amount) {'>'} 5000 because SUM() does not exist yet when WHERE runs.</p>
+        <p style={{ margin: '0 0 14px' }}>A concrete example: to find the total revenue per city, but only for cities with more than $5,000 in delivered orders, you need both. WHERE order_status = 'Delivered' filters individual rows before the city grouping. HAVING SUM(total_amount) {'>'} 5000 filters the city groups after their revenue has been computed. You cannot use WHERE SUM(total_amount) {'>'} 5000 because SUM() does not exist yet when WHERE runs.</p>
         <p style={{ margin: 0 }}>Performance difference: WHERE filters early and reduces the number of rows that GROUP BY must process. HAVING filters late after all aggregation is done. For performance, always move filtering to WHERE when possible and use HAVING only for conditions that genuinely require aggregate values. If you can express a filter in WHERE instead of HAVING, always do — it reduces the work done by GROUP BY.</p>
       </IQ>
 
@@ -834,7 +834,7 @@ ORDER BY delivery_date DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart operations team needs a report of all high-value delivered orders placed in February 2024 — specifically orders with a total_amount above ₹800 that were successfully delivered. Show the order_id, order_date, delivery_date, payment_method, and total_amount. Sort by total_amount descending."
+        question="The FreshCart operations team needs a report of all high-value delivered orders placed in February 2024 — specifically orders with a total_amount above $800 that were successfully delivered. Show the order_id, order_date, delivery_date, payment_method, and total_amount. Sort by total_amount descending."
         hint="You need three conditions in WHERE: order_status = 'Delivered', order_date range for February 2024 (>= '2024-02-01' AND < '2024-03-01'), and total_amount > 800. All three must be true — combine them with AND (covered in Module 07)."
         answer={`SELECT
   order_id,

@@ -453,7 +453,7 @@ WHERE product_name LIKE '%Milk'               -- Seq Scan (% at start)
 WHERE product_name LIKE '%milk%'              -- Seq Scan
 
 -- ✅ Fast: trailing wildcard only
-WHERE product_name LIKE 'Amul%'              -- Index Scan (prefix match)`}
+WHERE product_name LIKE 'Horizon%'              -- Index Scan (prefix match)`}
       />
 
       <SQLPlayground

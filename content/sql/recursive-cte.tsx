@@ -559,7 +559,7 @@ WITH routes(from_city, to_city, km) AS (
     ('Chicago',   'Austin', 630),
     ('Boston',      'New York',    150),
     ('New York',    'Boston',      150),
-    ('New York',    'Delhi',    1400)
+    ('New York',    'Miami',    1400)
 ),
 RECURSIVE all_paths AS (
   -- Anchor: start at Seattle
@@ -664,7 +664,7 @@ FROM bom_explosion;`}
 WITH bom(parent_id, child_id, component_name, quantity, unit_cost) AS (
   VALUES
     -- Gift basket (ID 0) contains:
-    (0, 1, 'Amul Butter 500g',   2, 55.00),
+    (0, 1, 'Horizon Butter 500g',   2, 55.00),
     (0, 2, 'Britannia Bread',    1, 35.00),
     (0, 3, 'Juice Pack',         3, 40.00),
     (0, 4, 'Packaging',          1, 25.00),
@@ -720,7 +720,7 @@ ORDER BY path;`}
         initialQuery={`-- Total cost rollup from the BOM explosion above
 WITH bom(parent_id, child_id, component_name, quantity, unit_cost) AS (
   VALUES
-    (0, 1, 'Amul Butter 500g',   2, 55.00),
+    (0, 1, 'Horizon Butter 500g',   2, 55.00),
     (0, 2, 'Britannia Bread',    1, 35.00),
     (0, 3, 'Juice Pack',         3, 40.00),
     (0, 4, 'Packaging',          1, 25.00),
@@ -933,7 +933,7 @@ basket_id(id) AS (VALUES (0)),   -- change this to any product
 
 bom(parent_id, child_id, component_name, qty_per_parent, unit_cost) AS (
   VALUES
-    (0, 1, 'Amul Butter 500g',     2, 55.00),
+    (0, 1, 'Horizon Butter 500g',     2, 55.00),
     (0, 2, 'Britannia Bread',      1, 35.00),
     (0, 3, 'Juice Pack x3',        1, 40.00),
     (0, 4, 'Gift Packaging',       1, 25.00),
@@ -996,7 +996,7 @@ ORDER BY sort_key;`}
 WITH
 bom(parent_id, child_id, component_name, qty_per_parent, unit_cost) AS (
   VALUES
-    (0, 1, 'Amul Butter 500g',     2, 55.00),
+    (0, 1, 'Horizon Butter 500g',     2, 55.00),
     (0, 2, 'Britannia Bread',      1, 35.00),
     (0, 3, 'Juice Pack x3',        1, 40.00),
     (0, 4, 'Gift Packaging',       1, 25.00),

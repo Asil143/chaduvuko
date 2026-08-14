@@ -338,12 +338,12 @@ def create_payment_idempotency_key(payment_id: str, amount: float, ts: str) -> s
 idempotency_key = create_payment_idempotency_key('pay_xxx', 380.00, '2026-03-17T20:14:32Z')
 
 response = requests.post(
-    'https://api.razorpay.com/v1/payments',
+    'https://api.stripe.com/v1/payments',
     headers={
         'X-Idempotency-Key': idempotency_key,
         'Authorization':     f'Bearer \${api_key}',
     },
-    json={'amount': 38000, 'currency': 'INR'},
+    json={'amount': 38000, 'currency': 'USD'},
 )
 # If this request is retried with the same idempotency key:
 # Stripe returns the SAME response as the first successful call.
@@ -1155,7 +1155,7 @@ class TestIdempotency:
 
           <Para>
             At 07:15 AM, the finance team reports that yesterday's revenue figure
-            in the dashboard shows ₹84,23,000 — exactly double the ₹42,11,500
+            in the dashboard shows $8,423,000 — exactly double the $4,211,500
             expected from manual bank reconciliation. The data engineering team
             begins investigating.
           </Para>
@@ -1168,8 +1168,8 @@ GROUP BY 1
 ORDER BY 1;
 
 # Output:
-# 2026-03-17  →  48,234 rows  →  ₹42,11,500  (morning load — correct)
-# 2026-03-17  →  96,468 rows  →  ₹84,23,000  (evening — doubled!)
+# 2026-03-17  →  48,234 rows  →  $4,211,500  (morning load — correct)
+# 2026-03-17  →  96,468 rows  →  $8,423,000  (evening — doubled!)
 
 # Step 2: Check for duplicate order IDs
 SELECT order_id, COUNT(*) AS copies
@@ -1215,7 +1215,7 @@ ALTER TABLE silver.orders_deduped RENAME TO orders;
 # VERIFY:
 SELECT COUNT(*), SUM(order_amount) FROM silver.orders
 WHERE order_date = '2026-03-17';
-# Returns: 48,234 rows, ₹42,11,500 ← correct
+# Returns: 48,234 rows, $4,211,500 ← correct
 
 # PERMANENT FIX: make the pipeline idempotent
 # 1. Change INSERT to INSERT ... ON CONFLICT DO UPDATE

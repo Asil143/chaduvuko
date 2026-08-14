@@ -449,7 +449,7 @@ CREATE TABLE orders (
     CHECK (order_status IN ('Processing','Delivered','Cancelled','Returned')),
   payment_method VARCHAR(20)   NOT NULL
     CONSTRAINT chk_payment_method
-    CHECK (payment_method IN ('UPI','Card','COD','NetBanking')),
+    CHECK (payment_method IN ('Zelle','Card','COD','NetBanking')),
   loyalty_tier   VARCHAR(20)   NOT NULL DEFAULT 'Bronze'
     CONSTRAINT chk_loyalty_tier
     CHECK (loyalty_tier IN ('Bronze','Silver','Gold','Platinum'))
@@ -516,11 +516,11 @@ updated_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 -- Using defaults on INSERT:
 -- Without specifying loyalty_tier — gets 'Bronze' automatically
 INSERT INTO customers (first_name, last_name, email, joined_date)
-VALUES ('Aisha', 'Khan', 'aisha@gmail.com', '2024-01-15');
+VALUES ('Sofia', 'Ramirez', 'sofia@gmail.com', '2024-01-15');
 
 -- With explicit value — overrides the default
 INSERT INTO customers (first_name, last_name, email, joined_date, loyalty_tier)
-VALUES ('Rahul', 'Sharma', 'rahul@gmail.com', '2024-01-15', 'Gold');`}
+VALUES ('Marcus', 'Bennett', 'marcus@gmail.com', '2024-01-15', 'Gold');`}
       />
 
       <SQLPlayground
@@ -664,7 +664,7 @@ CREATE TABLE IF NOT EXISTS customers (...);
                   CHECK (order_status IN
                     ('Delivered','Processing','Cancelled','Returned')),
   payment_method  VARCHAR(20)    NOT NULL
-                  CHECK (payment_method IN ('UPI','Card','COD','NetBanking')),
+                  CHECK (payment_method IN ('Zelle','Card','COD','NetBanking')),
   total_amount    DECIMAL(10, 2) NOT NULL
                   CHECK (total_amount >= 0),
   CONSTRAINT chk_delivery_after_order
@@ -890,7 +890,7 @@ CREATE TABLE prescriptions (
       <IQ q="What is referential integrity and how do foreign keys enforce it?">
         <p style={{ margin: '0 0 14px' }}>Referential integrity is the guarantee that relationships between tables are consistent — that a value in a foreign key column always corresponds to an existing primary key in the referenced table. Without referential integrity, you can have "orphan" records: order_items that reference orders that do not exist, or orders that reference customers who have been deleted. These orphan records cause queries to miss data or return wrong results.</p>
         <p style={{ margin: '0 0 14px' }}>Foreign key constraints enforce referential integrity at the database level in two directions. On INSERT or UPDATE: the database checks that the FK value exists as a PK in the referenced table — if not, the operation is rejected. An attempt to insert an order with customer_id = 9999 fails immediately if no customer with that ID exists. On DELETE or UPDATE of the referenced row: the database checks whether any FK values reference the row being deleted. The behaviour depends on the ON DELETE option specified: RESTRICT (default) prevents the deletion, CASCADE automatically deletes referencing rows, SET NULL sets the FK to NULL.</p>
-        <p style={{ margin: 0 }}>The value of database-level FK enforcement over application-level validation is that it cannot be bypassed. Application code has bugs, edge cases, and direct database access tools that bypass application logic. A FK constraint enforced by the database is absolute — no application bug, no raw SQL INSERT, and no bulk import can create an inconsistent state. At Indian fintech companies where data integrity is a regulatory requirement, FK constraints are mandatory for financial tables.</p>
+        <p style={{ margin: 0 }}>The value of database-level FK enforcement over application-level validation is that it cannot be bypassed. Application code has bugs, edge cases, and direct database access tools that bypass application logic. A FK constraint enforced by the database is absolute — no application bug, no raw SQL INSERT, and no bulk import can create an inconsistent state. At fintech companies where data integrity is a regulatory requirement, FK constraints are mandatory for financial tables.</p>
       </IQ>
 
       <IQ q="When should you use ON DELETE CASCADE vs ON DELETE RESTRICT?">

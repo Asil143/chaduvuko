@@ -993,12 +993,12 @@ else:
         <CodeBox label="MVCC internals — row versions and visibility rules">
 {`-- PostgreSQL MVCC internals (using system columns)
 
--- Initial state: account balance = ₹5000
+-- Initial state: account balance = $5000
 -- Row version 1: (account_id='A', balance=5000, xmin=100, xmax=0)
 --   xmin=100: created by transaction 100
 --   xmax=0: not yet deleted or updated
 
--- T1 (transaction ID 200) starts: "Transfer ₹500 from A"
+-- T1 (transaction ID 200) starts: "Transfer $500 from A"
 BEGIN;  -- T1 takes a snapshot: sees all committed tx up to ~199
 UPDATE accounts SET balance = 4500 WHERE account_id = 'A';
 
@@ -1019,7 +1019,7 @@ SELECT balance FROM accounts WHERE account_id = 'A';
 --   → Version 2 is INVISIBLE to T2
 -- Row version 1: xmin=100, xmax=200. Is tx 100 committed? YES. Is tx 200 committed? NO
 --   → The deletion (xmax=200) hasn't committed yet → Version 1 is VISIBLE to T2
--- T2 reads: balance = ₹5000  ← the pre-update value! T2 sees a consistent snapshot.
+-- T2 reads: balance = $5000  ← the pre-update value! T2 sees a consistent snapshot.
 
 -- T1 commits:
 COMMIT;
@@ -1030,7 +1030,7 @@ BEGIN;  -- T3 snapshot: sees tx 200 as committed
 SELECT balance FROM accounts WHERE account_id = 'A';
 -- Row version 1: xmax=200, tx 200 is committed → Version 1 is DELETED from T3's view
 -- Row version 2: xmin=200, tx 200 is committed → Version 2 IS VISIBLE to T3
--- T3 reads: balance = ₹4500  ← sees T1's committed update
+-- T3 reads: balance = $4500  ← sees T1's committed update
 
 -- KEY OBSERVATION:
 -- T2 and T1 ran concurrently. T2 never waited for T1.
@@ -1073,7 +1073,7 @@ COMMIT;
 -- T2 creates new version: (balance=4100, xmin=201, xmax=0)
 -- The row previously written by T1 (xmax=0) gets xmax=201
 COMMIT;
--- Final balance: ₹4100
+-- Final balance: $4100
 
 -- SUMMARY OF MVCC BLOCKING BEHAVIOUR:
 -- Read vs Read: NO BLOCKING (each reads their snapshot)
@@ -1238,7 +1238,7 @@ ORDER BY pid, relation;`}
         <SectionTitle>The Flash Sale — Preventing Overselling With Concurrency Control</SectionTitle>
 
         <Para>
-          Every major Indian e-commerce company faces this problem during sales events.
+          Every major e-commerce company faces this problem during sales events.
           Understanding it completely requires every concept from this module.
         </Para>
 

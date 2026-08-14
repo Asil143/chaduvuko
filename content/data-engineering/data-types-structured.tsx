@@ -367,19 +367,19 @@ Never assume a CSV is well-formed because it came from a "reliable" source.`}</C
 
 {
   "order_id": 9284751,
-  "created_at": "2026-03-17T20:14:32+05:30",
+  "created_at": "2026-03-17T20:14:32-07:00",
   "customer": {
     "id": 4201938,
-    "name": "Priya Sharma",
-    "phone": "+91-9876543210",
+    "name": "Sarah Chen",
+    "phone": "+1-206-555-0142",
     "address": {
-      "flat": "4B",
-      "building": "Prestige Meridian",
-      "area": "Koramangala",
+      "unit": "4B",
+      "building": "Skyline Lofts",
+      "area": "Capitol Hill",
       "city": "Seattle",
-      "zip_code": "560034",
-      "lat": 12.9352,
-      "lng": 77.6245
+      "zip_code": "98122",
+      "lat": 47.6231,
+      "lng": -122.3141
     }
   },
   "restaurant": {
@@ -392,21 +392,21 @@ Never assume a CSV is well-formed because it came from a "reliable" source.`}</C
       "id": "MI-001",
       "name": "Butter Chicken",
       "quantity": 1,
-      "unit_price": 320.00,
+      "unit_price": 18.99,
       "customisations": ["extra gravy"]
     },
     {
       "id": "MI-002",
       "name": "Garlic Naan",
       "quantity": 2,
-      "unit_price": 30.00,
+      "unit_price": 4.50,
       "customisations": []
     }
   ],
   "payment": {
-    "method": "UPI",
-    "upi_id": "priya@ybl",
-    "amount": 380.00,
+    "method": "card",
+    "card_last4": "4242",
+    "amount": 27.99,
     "status": "captured"
   },
   "delivery": {
@@ -436,7 +436,7 @@ Engineering challenges this single JSON creates:
    for orders still in progress. Your pipeline must handle
    both integer and null for the same field.
 
-5. TIMESTAMP FORMAT — "2026-03-17T20:14:32+05:30"
+5. TIMESTAMP FORMAT — "2026-03-17T20:14:32-07:00"
    is ISO 8601 with timezone. Some records might have
    "2026-03-17 20:14:32" (no timezone). Parse explicitly.`}</CodeBox>
 
@@ -456,16 +456,16 @@ Output: multiple flat table rows
 
 Table: orders (one row per order)
   order_id | created_at          | customer_id | restaurant_id | total_amount | payment_method | promo_code
-  9284751  | 2026-03-17 20:14:32 | 4201938     | 7823          | 380.00       | UPI            | NULL
+  9284751  | 2026-03-17 20:14:32 | 4201938     | 7823          | 27.99        | card           | NULL
 
 Table: order_items (one row per item — EXPLODED from items array)
   order_id | item_id | item_name      | quantity | unit_price | customisations
-  9284751  | MI-001  | Butter Chicken | 1        | 320.00     | extra gravy
-  9284751  | MI-002  | Garlic Naan    | 2        | 30.00      | (empty)
+  9284751  | MI-001  | Butter Chicken | 1        | 18.99      | extra gravy
+  9284751  | MI-002  | Garlic Naan    | 2        | 4.50       | (empty)
 
 Table: customers (one row per customer — EXTRACTED from nested customer object)
-  customer_id | name          | phone           | city      | zip_code | lat     | lng
-  4201938     | Priya Sharma  | +91-9876543210  | Seattle | 560034  | 12.9352 | 77.6245
+  customer_id | name        | phone            | city      | zip_code | lat      | lng
+  4201938     | Sarah Chen  | +1-206-555-0142  | Seattle | 98122   | 47.6231  | -122.3141
 
 Table: deliveries (one row per delivery)
   order_id | agent_id | estimated_mins | actual_mins
@@ -492,27 +492,27 @@ keep rarely-needed deep nesting as a JSON column for flexibility.`}</CodeBox>
 
         <CodeBox label="The same order data in XML — more verbose, same engineering challenges">{`<?xml version="1.0" encoding="UTF-8"?>
 <order id="9284751">
-  <created_at>2026-03-17T20:14:32+05:30</created_at>
+  <created_at>2026-03-17T20:14:32-07:00</created_at>
   <customer id="4201938">
-    <name>Priya Sharma</name>
+    <name>Sarah Chen</name>
     <address>
       <city>Seattle</city>
-      <zip_code>560034</zip_code>
+      <zip_code>98122</zip_code>
     </address>
   </customer>
   <items>
     <item id="MI-001">
       <name>Butter Chicken</name>
       <quantity>1</quantity>
-      <unit_price>320.00</unit_price>
+      <unit_price>18.99</unit_price>
     </item>
     <item id="MI-002">
       <name>Garlic Naan</name>
       <quantity>2</quantity>
-      <unit_price>30.00</unit_price>
+      <unit_price>4.50</unit_price>
     </item>
   </items>
-  <payment method="UPI" amount="380.00" status="captured"/>
+  <payment method="card" amount="27.99" status="captured"/>
 </order>
 
 XML-specific engineering challenges:
@@ -542,7 +542,7 @@ XML-specific engineering challenges:
 
         <CodeBox label="Log file — semi-structured but requiring careful parsing">{`Raw application log (what you receive):
 2026-03-17 20:14:32.847 INFO  [OrderService] Order 9284751 placed by customer 4201938
-2026-03-17 20:14:33.012 INFO  [PaymentService] Payment captured: ₹380.00 via UPI
+2026-03-17 20:14:33.012 INFO  [PaymentService] Payment captured: $27.99 via card
 2026-03-17 20:14:33.241 DEBUG [RestaurantService] Notifying restaurant 7823
 2026-03-17 20:15:02.119 WARN  [OrderService] Delivery estimate exceeding threshold: order 9284751
 2026-03-17 20:16:41.003 ERROR [PaymentService] Refund failed for order 9284754: timeout after 3s
@@ -551,7 +551,7 @@ Parsing this requires:
   1. Regex to extract timestamp, level, service, message
   2. Further parsing of message field to extract IDs and values
   3. Handling log lines that span multiple lines (stack traces)
-  4. Handling encoding variations (₹ symbol)
+  4. Handling encoding variations (currency symbols, accented characters)
   5. Dealing with log rotation and multiple log files per hour
 
 Pattern:
@@ -632,7 +632,7 @@ always push for structured JSON logging. It eliminates regex.`}</CodeBox>
         <Para>
           For most of data engineering history, unstructured data was stored but largely
           ignored — too difficult to process at scale without the ML tools to interpret it.
-          That has changed dramatically in the past three years. Every major Indian tech
+          That has changed dramatically in the past three years. Every major tech
           company now has projects that extract structured signals from unstructured data:
           sentiment from customer reviews, fraud signals from transaction descriptions,
           product categories from listing images, insights from call recordings.
@@ -655,7 +655,7 @@ always push for structured JSON logging. It eliminates regex.`}</CodeBox>
             {
               type: 'Free Text',
               examples: 'Customer reviews, support tickets, social media comments, email content, chatbot conversations',
-              pipeline: 'Store raw text. NLP models extract sentiment, topic, intent, named entities. Output is structured (sentiment: positive, topic: delivery, entity: [Koramangala]).',
+              pipeline: 'Store raw text. NLP models extract sentiment, topic, intent, named entities. Output is structured (sentiment: positive, topic: delivery, entity: [Capitol Hill]).',
             },
             {
               type: 'PDFs and Documents',
@@ -995,10 +995,10 @@ RESPONSIBILITY 3: Build Processing Pipelines
       {/* ── Part 07 — Real Company Examples ─────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 07 — Real World Examples" />
-        <SectionTitle>How Indian Companies Handle All Three Types</SectionTitle>
+        <SectionTitle>How Real Companies Handle All Three Types</SectionTitle>
 
         <Para>
-          Every major Indian tech company deals with all three data categories
+          Every major tech company deals with all three data categories
           simultaneously. Here is what that looks like in practice at three
           different types of organisations.
         </Para>
@@ -1022,7 +1022,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
             unstructured: [
               'Product images: 100M+ SKU images stored in S3, classified by ML models for search ranking',
               'Customer review text: free-text reviews, NLP models extract sentiment and topic',
-              'Seller onboarding documents: PDFs of GST certificates, PAN cards — OCR extracts structured fields',
+              'Seller onboarding documents: PDFs of business licenses, tax ID (EIN) forms — OCR extracts structured fields',
             ],
           },
           {
@@ -1030,7 +1030,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
             color: '#7b61ff',
             structured: [
               'Transaction table: txn_id, sender_id, receiver_id, amount, type, status, timestamp',
-              'UPI mandate table: mandate_id, customer_id, merchant_id, amount_limit, frequency',
+              'Recurring payment mandate table: mandate_id, customer_id, merchant_id, amount_limit, frequency',
               'Settlement table: settlement_id, bank_id, amount, settlement_time, status',
               'Fraud labels: txn_id, is_fraud, fraud_type, reviewed_by, review_timestamp',
             ],
@@ -1047,7 +1047,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
             ],
           },
           {
-            company: 'Apollo Hospitals — Healthcare',
+            company: 'Providence Health — Healthcare',
             color: '#00e676',
             structured: [
               'Patient table: patient_id, name, DOB, blood_group, allergies, primary_doctor_id',
@@ -1204,7 +1204,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
 
 Semi-structured data is self-describing — the structure is carried within the data itself rather than enforced externally. Fields can be added, removed, or changed without a schema migration. The data is organised but not uniformly so. A JSON event payload from a mobile app is a clear example: the app might include a promo_code field when a promo was applied and omit it entirely when there was none. The JSON still parses correctly in both cases.
 
-From a Stripe context: the transaction table in their operational database is structured — txn_id, sender_id, amount, status, timestamp are fixed columns enforced by the database. The transaction_metadata field stored alongside it is semi-structured — a JSON blob containing the payment rail details, device fingerprint, and UPI reference that varies by transaction type and changes as new payment methods are added. Both coexist in the same system serving different needs.`,
+From a Stripe context: the transaction table in their operational database is structured — txn_id, sender_id, amount, status, timestamp are fixed columns enforced by the database. The transaction_metadata field stored alongside it is semi-structured — a JSON blob containing the payment rail details, device fingerprint, and ACH trace reference that varies by transaction type and changes as new payment methods are added. Both coexist in the same system serving different needs.`,
           },
           {
             q: 'Q2. You receive a JSON file from a vendor where some records have a nested address object and some records have the address fields at the top level. How do you handle this?',

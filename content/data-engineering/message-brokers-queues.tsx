@@ -306,7 +306,7 @@ export default function MessageBrokersQueuesModule() {
             { '0': 'State', '1': 'Queue empties as messages are consumed', '2': 'Log grows until retention period expires' },
             { '0': 'Ordering', '1': 'FIFO within the queue; across competing consumers, no global order', '2': 'Strict order within a partition' },
             { '0': 'Use for', '1': 'Task distribution — email jobs, resize jobs, payment processing workers', '2': 'Event broadcasting — notify many systems of the same event' },
-            { '0': 'Indian example', '1': 'Sephora image resize queue — 1 image, 1 worker, processed once', '2': 'DoorDash order topic — 1 event, consumed by 8 different services' },
+            { '0': 'Real-world example', '1': 'Sephora image resize queue — 1 image, 1 worker, processed once', '2': 'DoorDash order topic — 1 event, consumed by 8 different services' },
           ]}
         />
 
@@ -562,17 +562,17 @@ export default function MessageBrokersQueuesModule() {
 # Tracks current product price. Key = product_id. Value = current price.
 
 # Log BEFORE compaction (chronological, by offset):
-# offset 0:  key=P1001  value={"name":"Toor Dal 1kg",  "price_paise": 18900}
-# offset 1:  key=P1002  value={"name":"Basmati 5kg",   "price_paise": 67500}
-# offset 2:  key=P1001  value={"name":"Toor Dal 1kg",  "price_paise": 19500}  ← price updated
-# offset 3:  key=P1003  value={"name":"Sunflower Oil", "price_paise": 23400}
-# offset 4:  key=P1002  value={"name":"Basmati 5kg",   "price_paise": 69000}  ← price updated
-# offset 5:  key=P1001  value={"name":"Toor Dal 1kg",  "price_paise": 21000}  ← price updated again
+# offset 0:  key=P1001  value={"name":"Black Beans 1lb", "price_cents": 18900}
+# offset 1:  key=P1002  value={"name":"Jasmine Rice 5lb","price_cents": 67500}
+# offset 2:  key=P1001  value={"name":"Black Beans 1lb", "price_cents": 19500}  ← price updated
+# offset 3:  key=P1003  value={"name":"Olive Oil",       "price_cents": 23400}
+# offset 4:  key=P1002  value={"name":"Jasmine Rice 5lb","price_cents": 69000}  ← price updated
+# offset 5:  key=P1001  value={"name":"Black Beans 1lb", "price_cents": 21000}  ← price updated again
 
 # Log AFTER compaction:
-# offset 3:  key=P1003  value={"name":"Sunflower Oil", "price_paise": 23400}   ← only version
-# offset 4:  key=P1002  value={"name":"Basmati 5kg",   "price_paise": 69000}   ← latest
-# offset 5:  key=P1001  value={"name":"Toor Dal 1kg",  "price_paise": 21000}   ← latest
+# offset 3:  key=P1003  value={"name":"Olive Oil",       "price_cents": 23400}   ← only version
+# offset 4:  key=P1002  value={"name":"Jasmine Rice 5lb","price_cents": 69000}   ← latest
+# offset 5:  key=P1001  value={"name":"Black Beans 1lb", "price_cents": 21000}   ← latest
 
 # offsets 0, 1, 2 were deleted because P1001 and P1002 have newer versions
 

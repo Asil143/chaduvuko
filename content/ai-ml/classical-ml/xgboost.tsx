@@ -184,7 +184,7 @@ export default function XGBoostPage() {
         <span style={S.tag}>Before any code — what makes XGBoost special?</span>
         <h2 style={S.h2}>
           XGBoost won every Kaggle competition from 2016–2019.
-          It is still the most deployed ML algorithm in Indian fintech today.
+          It is still the most deployed ML algorithm in fintech today.
           Here is why.
         </h2>
 
@@ -203,7 +203,7 @@ export default function XGBoostPage() {
           The result was an algorithm that was simultaneously faster,
           more accurate, and less prone to overfitting than the original
           gradient boosting. Within a year it dominated every tabular ML benchmark.
-          In 2026 it is still what most Indian fintech companies —
+          In 2026 it is still what most fintech companies —
           Stripe, Brex, Instacart, Venmo — use for credit scoring,
           fraud detection, and churn prediction in production.
         </p>
@@ -701,7 +701,7 @@ print(f"Test AUC:    {test_auc:.4f}")`} />
           Fraud detection at Stripe faces a hard business requirement:
           when a transaction is flagged, the system must be able to explain why.
           "The model said fraud" is not acceptable — not to the compliance team,
-          not to the customer disputing the block, not to the RBI audit.
+          not to the customer disputing the block, not to the compliance audit.
           SHAP (SHapley Additive exPlanations) solves this.
         </p>
 
@@ -717,10 +717,10 @@ print(f"Test AUC:    {test_auc:.4f}")`} />
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
             A bank decides to reject a loan application. Without SHAP:
-            "The model rejected it." With SHAP: "Low credit score contributed ₹−8 LPA
-            to the effective income estimate. High existing EMI burden contributed
-            ₹−5 LPA. Short employment history contributed ₹−3 LPA.
-            High income partially offset these: +₹12 LPA."
+            "The model rejected it." With SHAP: "Low credit score contributed −$65K
+            to the effective income estimate. High existing debt burden contributed
+            −$40K. Short employment history contributed −$25K.
+            High income partially offset these: +$95K."
           </p>
           <p style={{ ...S.ps, marginBottom: 0, color: '#00e676' }}>
             SHAP gives each feature a "blame or credit" score for each individual prediction.
@@ -934,11 +934,11 @@ production_bundle = {
     'feature_names': NUM_COLS + CAT_COLS,
     'version':      'v1.0',
 }
-joblib.dump(production_bundle, '/tmp/razorpay_fraud_xgb.pkl')
-print("Production bundle saved: /tmp/razorpay_fraud_xgb.pkl")
+joblib.dump(production_bundle, '/tmp/stripe_fraud_xgb.pkl')
+print("Production bundle saved: /tmp/stripe_fraud_xgb.pkl")
 
 # ── Production inference ───────────────────────────────────────────────
-bundle = joblib.load('/tmp/razorpay_fraud_xgb.pkl')
+bundle = joblib.load('/tmp/stripe_fraud_xgb.pkl')
 new_tx = pd.DataFrame([{
     'amount': 15000, 'hour_of_day': 2, 'day_of_week': 6,
     'merchant_risk': 0.85, 'device_age_days': 3, 'n_tx_last_hour': 12,

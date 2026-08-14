@@ -161,8 +161,8 @@ SLO: SERVICE LEVEL OBJECTIVE
 SLA: SERVICE LEVEL AGREEMENT
   The contractual commitment to a consumer — what you promise.
   For data pipelines:
-    "Finance dashboards will have yesterday's data by 08:00 IST"
-    "ML feature store updates daily by 06:00 IST"
+    "Finance dashboards will have yesterday's data by 08:00 ET"
+    "ML feature store updates daily by 06:00 ET"
     "Any data correction will be available within 4 hours of detection"
   SLAs are external commitments — what the business depends on.
   Breaching an SLA has consequences (business impact, escalation).
@@ -178,8 +178,8 @@ FRESHMART SLO EXAMPLES:
   Pipeline                SLI                  SLO             SLA
   ──────────────────────────────────────────────────────────────────────
   silver_orders_daily     completion_time      < 60 min        —
-  gold_daily_revenue      data_freshness       < 2h            data by 08:00 IST
-  ml_feature_store        completion_time      < 30 min        complete by 06:00 IST
+  gold_daily_revenue      data_freshness       < 2h            data by 08:00 ET
+  ml_feature_store        completion_time      < 30 min        complete by 06:00 ET
   bronze_ingestion        error_rate           < 0.1%          —
   dlq_reprocessing        completion_time      < 4h            correction within 4h`}</CodeBox>
 
@@ -463,7 +463,7 @@ def run_silver_transform(**context):
     Which step failed? How much data is affected? Is there a runbook?
 
 GOOD ALERT (actionable, context-rich):
-  Title:   [P2] silver_orders — FAILED — 2026-03-17 06:14 IST
+  Title:   [P2] silver_orders — FAILED — 2026-03-17 06:14 ET
   Body:
     Pipeline: silver_orders
     Run date:  2026-03-17
@@ -472,7 +472,7 @@ GOOD ALERT (actionable, context-rich):
                (new value added by orders team, not in allowed list)
     Impact:    Silver orders not updated. Gold daily_revenue build blocked.
                Finance dashboard will show stale data.
-    SLA:       Gold must be ready by 08:00 IST (1h 45m remaining)
+    SLA:       Gold must be ready by 08:00 ET (1h 45m remaining)
     DLQ:       48,234 rows in DLQ → pipeline/dlq_reprocess.py
     Run ID:    d7c7a7b8-3e1a-4a2c-9b4d-...
     Runbook:   https://runbooks.freshmart.internal/silver-orders-failure
@@ -898,7 +898,7 @@ def emit_to_cloudwatch(pipeline_name: str, rows_rejected: int, run_date: str):
 
   ### What does this pipeline do?
   Reads Bronze orders from S3, validates and transforms to Silver.
-  Runs daily at 06:00 IST. SLA: complete by 07:30 IST.
+  Runs daily at 06:00 ET. SLA: complete by 07:30 ET.
   Owned by: data-platform@freshmart.com
 
   ### Common failure modes and how to fix them:
@@ -916,7 +916,7 @@ def emit_to_cloudwatch(pipeline_name: str, rows_rejected: int, run_date: str):
   **Failure 2: source freshness check fails (Bronze > 6 hours old)**
   Cause: Bronze ingestion pipeline failed.
   Fix: Check silver_ingestion Airflow DAG. Trigger manual run.
-  Escalate to: Rahul if ingestion issue persists > 2 hours.
+  Escalate to: Marcus if ingestion issue persists > 2 hours.
   Time to fix: depends on upstream.
 
   **Failure 3: Memory error in Spark transformation**
@@ -952,7 +952,7 @@ COMPONENT 3: INCIDENT POST-MORTEMS
 
   ## Incident: silver_orders missed SLA — 2026-03-17
 
-  **Duration:** 2026-03-17 07:42 IST to 09:15 IST (1h 33m)
+  **Duration:** 2026-03-17 07:42 ET to 09:15 ET (1h 33m)
   **Impact:** Finance dashboard stale from 07:30 to 09:15 (1h 45m)
   **Severity:** P1 (SLA breach)
 
@@ -974,7 +974,7 @@ COMPONENT 3: INCIDENT POST-MORTEMS
     2. P2 alert fired but nobody acted for 1h 16min → should have been P1
 
   **Action items:**
-    [ ] Add data contract CI check for enum changes (owner: Priya, by 2026-03-31)
+    [ ] Add data contract CI check for enum changes (owner: Emily, by 2026-03-31)
     [ ] Escalate silver_orders failures to P1 if SLA is within 1 hour
     [ ] Add 'scheduled' and future status additions to accepted_values test
 
@@ -1019,11 +1019,11 @@ For data pipelines: monitoring answers "is this pipeline running on time?" Obser
 
 An SLO (Service Level Objective) is the target value for that metric — what the team aims to achieve internally. "The Silver orders pipeline completes within 60 minutes of its scheduled start time" is an SLO. SLOs are internal commitments that the engineering team sets based on their technical capabilities and the business's needs. They are typically measured as a percentage of successful periods — "99% of pipeline runs complete within 60 minutes over any 30-day rolling window." The remaining 1% is the error budget.
 
-An SLA (Service Level Agreement) is the contractual commitment to an external consumer — what the business promises. "Finance dashboards will have yesterday's data available by 08:00 IST" is an SLA. SLAs are external commitments with business consequences if breached — an unhappy finance team, escalation to leadership, trust damage.
+An SLA (Service Level Agreement) is the contractual commitment to an external consumer — what the business promises. "Finance dashboards will have yesterday's data available by 08:00 ET" is an SLA. SLAs are external commitments with business consequences if breached — an unhappy finance team, escalation to leadership, trust damage.
 
 The distinction matters because SLOs and SLAs serve different purposes. The SLO is an engineering target with an error budget — when the error budget is exhausted, the team stops feature work and focuses on reliability. The SLA is a business contract — breaching it has external consequences that are not within the team's direct control to manage by adjusting thresholds.
 
-A good practice: set SLOs stricter than SLAs. If the SLA is "data available by 08:00 IST," set the SLO as "pipeline completes within 90 minutes of 06:00 start" — completing by 07:30. This creates a buffer so that a normal pipeline delay still meets the SLA even if the SLO is missed. Monitoring and alerting are calibrated to the SLO, not the SLA — you alert when the SLO is at risk, giving time to respond before the SLA is breached.`,
+A good practice: set SLOs stricter than SLAs. If the SLA is "data available by 08:00 ET," set the SLO as "pipeline completes within 90 minutes of 06:00 start" — completing by 07:30. This creates a buffer so that a normal pipeline delay still meets the SLA even if the SLO is missed. Monitoring and alerting are calibrated to the SLO, not the SLA — you alert when the SLO is at risk, giving time to respond before the SLA is breached.`,
           },
           {
             q: 'Q3. How do you structure alerting for a data platform to avoid alert fatigue?',
@@ -1122,7 +1122,7 @@ The practical implementation is a PipelineLogger class that wraps Python's loggi
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
       <KeyTakeaways items={[
         'Monitoring catches fires you anticipated. Observability helps you understand fires you did not. The three signals: metrics (numeric time-series — row counts, durations, error rates), logs (structured JSON events with context — every run, every rejection with its reason), traces (end-to-end paths of specific events through the system). All three together make a pipeline diagnosable.',
-        'SLI is the measured metric (pipeline duration). SLO is the internal target (complete within 60 minutes). SLA is the external promise to the business (data available by 08:00 IST). Set SLOs stricter than SLAs to create a buffer. Alert on SLO breach risk, not SLA breach — this gives response time before the business is affected.',
+        'SLI is the measured metric (pipeline duration). SLO is the internal target (complete within 60 minutes). SLA is the external promise to the business (data available by 08:00 ET). Set SLOs stricter than SLAs to create a buffer. Alert on SLO breach risk, not SLA breach — this gives response time before the business is affected.',
         'Tiered alerting prevents alert fatigue. P1 (SLA breach imminent) → PagerDuty page, any hour. P2 (pipeline degraded, SLA at risk) → Slack #data-alerts, 1-hour response. P3 (slow but will complete, quality warning) → Slack #data-warnings. P4 (informational) → weekly digest. Target: 1-2 P1/P2 pages per on-call week.',
         'Good alert messages are actionable. Include: what failed, why (the actual error), what the impact is, how long until SLA breach, the run ID, and a link to the runbook. An alert that says "pipeline FAILED" is not actionable. An alert with specific error context and resolution steps reduces MTTR from hours to minutes.',
         'Structured logging means emitting JSON with consistent field names, not free-text strings. Every log entry includes: timestamp, level, event name, pipeline, run_id, stage, and relevant context. This makes logs queryable in CloudWatch Insights, Datadog, or Elasticsearch. Average extraction duration over 30 days becomes a single SQL-like query, not manual regex parsing.',

@@ -86,7 +86,7 @@ export default function CaseWhen() {
       {/* ── PART 01 ── */}
       <Part n="01" title="Why SQL Needs Conditional Logic" />
 
-      <P>Every real business question involves conditional branching. A product is "High Margin" if its margin is above 40%, "Medium" if it is 25–40%, and "Low" otherwise. An order is "Fast" if delivered within 2 days, "Standard" if 3–5 days, "Slow" if more than 5 days. An employee is in the "Senior" band if their salary is above ₹60,000, otherwise "Junior."</P>
+      <P>Every real business question involves conditional branching. A product is "High Margin" if its margin is above 40%, "Medium" if it is 25–40%, and "Low" otherwise. An order is "Fast" if delivered within 2 days, "Standard" if 3–5 days, "Slow" if more than 5 days. An employee is in the "Senior" band if their salary is above $60,000, otherwise "Junior."</P>
 
       <P>None of these categories exist as columns in the database. They are <Hl>derived</Hl> from existing values using conditional logic. In every programming language this is an if-else statement. In SQL, it is the <Hl>CASE WHEN</Hl> expression.</P>
 
@@ -131,7 +131,7 @@ END
 
 -- Real example:
 CASE payment_method
-  WHEN 'UPI'        THEN 'Digital Wallet'
+  WHEN 'Zelle'      THEN 'Digital Wallet'
   WHEN 'Card'       THEN 'Card Payment'
   WHEN 'NetBanking' THEN 'Bank Transfer'
   WHEN 'COD'        THEN 'Cash on Delivery'
@@ -139,7 +139,7 @@ CASE payment_method
 END  AS payment_category`}
       />
 
-      <P>The simple CASE is syntactic sugar for the searched CASE — CASE payment_method WHEN 'UPI' THEN ... is identical to CASE WHEN payment_method = 'UPI' THEN .... Use whichever reads more clearly for the specific situation. The searched CASE handles everything the simple CASE can, plus complex conditions that go beyond simple equality.</P>
+      <P>The simple CASE is syntactic sugar for the searched CASE — CASE payment_method WHEN 'Zelle' THEN ... is identical to CASE WHEN payment_method = 'Zelle' THEN .... Use whichever reads more clearly for the specific situation. The searched CASE handles everything the simple CASE can, plus complex conditions that go beyond simple equality.</P>
 
       <HR />
 
@@ -272,7 +272,7 @@ SELECT
   order_id,
   payment_method,
   CASE payment_method
-    WHEN 'UPI'  THEN 'Digital'
+    WHEN 'Zelle' THEN 'Digital'
     WHEN 'Card' THEN 'Digital'
     -- No ELSE: 'COD' and 'NetBanking' return NULL
   END   AS payment_type
@@ -288,7 +288,7 @@ SELECT
   order_id,
   payment_method,
   CASE payment_method
-    WHEN 'UPI'        THEN 'Digital'
+    WHEN 'Zelle'      THEN 'Digital'
     WHEN 'Card'       THEN 'Digital'
     WHEN 'NetBanking' THEN 'Digital'
     ELSE                   'Non-Digital'   -- catches COD and anything else
@@ -313,8 +313,8 @@ ORDER BY payment_type;`}
       <SQLPlayground
         initialQuery={`-- Different rules for different customer tiers:
 -- Platinum: any amount qualifies
--- Gold: must be above ₹500
--- Silver/Bronze: must be above ₹1000
+-- Gold: must be above $500
+-- Silver/Bronze: must be above $1000
 SELECT
   c.first_name || ' ' || c.last_name  AS customer,
   c.loyalty_tier,
@@ -450,7 +450,7 @@ FROM customers;`}
 SELECT
   store_id,
   SUM(total_amount)                                                  AS total_revenue,
-  SUM(CASE WHEN payment_method = 'UPI'        THEN total_amount ELSE 0 END) AS upi_revenue,
+  SUM(CASE WHEN payment_method = 'Zelle'      THEN total_amount ELSE 0 END) AS zelle_revenue,
   SUM(CASE WHEN payment_method = 'Card'       THEN total_amount ELSE 0 END) AS card_revenue,
   SUM(CASE WHEN payment_method = 'COD'        THEN total_amount ELSE 0 END) AS cod_revenue,
   SUM(CASE WHEN payment_method = 'NetBanking' THEN total_amount ELSE 0 END) AS netbanking_revenue
@@ -522,7 +522,7 @@ SELECT
   order_id,
   payment_method,
   CASE payment_method
-    WHEN 'UPI'  THEN 'Digital — Instant'
+    WHEN 'Zelle' THEN 'Digital — Instant'
     WHEN 'Card' THEN 'Digital — T+1'
     -- No ELSE: COD and NetBanking return NULL
   END   AS settlement_type
@@ -540,7 +540,7 @@ ORDER BY settlement_type NULLS LAST;`}
         code={`-- Instead of relying on ELSE, use COALESCE as a safety net
 COALESCE(
   CASE payment_method
-    WHEN 'UPI'  THEN 'Digital — Instant'
+    WHEN 'Zelle' THEN 'Digital — Instant'
     WHEN 'Card' THEN 'Digital — T+1'
   END,
   'Other'     -- COALESCE replaces NULL with 'Other'
@@ -655,7 +655,7 @@ SELECT
     WHEN 'Chicago'   THEN 'South'
     WHEN 'New York'    THEN 'West'
     WHEN 'Boston'      THEN 'West'
-    WHEN 'Delhi'     THEN 'North'
+    WHEN 'Denver'    THEN 'North'
     ELSE 'Other'
   END                                 AS region
 FROM customers AS c
@@ -678,7 +678,7 @@ ORDER BY
       <P>You are a senior analyst at Shopify. The finance team needs a weekly GMV (Gross Merchandise Value) report that breaks down revenue by order tier, payment method category, and delivery performance — all in a single table, one row per store. Previously this took three separate queries and manual Excel work. You build it as one CASE-driven query.</P>
 
       <TimeBlock time="3:00 PM" label="Requirements briefing">
-        Finance wants: total GMV per store, GMV split by order tier (Premium above ₹1,500, Standard ₹500–1,500, Basic below ₹500), digital vs non-digital payment split, and percentage of orders delivered within 3 days. All in one row per store, one query.
+        Finance wants: total GMV per store, GMV split by order tier (Premium above $1,500, Standard $500–1,500, Basic below $500), digital vs non-digital payment split, and percentage of orders delivered within 3 days. All in one row per store, one query.
       </TimeBlock>
 
       <TimeBlock time="3:20 PM" label="You build the conditional aggregation query">
@@ -701,7 +701,7 @@ SELECT
   ROUND(SUM(CASE WHEN o.total_amount < 500   THEN o.total_amount ELSE 0 END), 2)
                                                                    AS basic_gmv,
   -- Payment split
-  ROUND(SUM(CASE WHEN o.payment_method IN ('UPI','Card','NetBanking')
+  ROUND(SUM(CASE WHEN o.payment_method IN ('Zelle','Card','NetBanking')
                  THEN o.total_amount ELSE 0 END), 2)               AS digital_gmv,
   ROUND(SUM(CASE WHEN o.payment_method = 'COD'
                  THEN o.total_amount ELSE 0 END), 2)               AS cod_gmv,
@@ -724,7 +724,7 @@ ORDER BY total_gmv DESC;`}
       </TimeBlock>
 
       <ProTip>
-        Conditional aggregation — SUM(CASE WHEN ... END) inside GROUP BY — is what separates SQL analysts from SQL beginners. Once you internalise this pattern, you stop running three queries and combining them in Excel. You ask: "What conditions define each metric?" and write one CASE per metric inside one GROUP BY query. This is the single highest-leverage SQL skill for analytics work at Indian tech companies.
+        Conditional aggregation — SUM(CASE WHEN ... END) inside GROUP BY — is what separates SQL analysts from SQL beginners. Once you internalise this pattern, you stop running three queries and combining them in Excel. You ask: "What conditions define each metric?" and write one CASE per metric inside one GROUP BY query. This is the single highest-leverage SQL skill for analytics work at tech companies.
       </ProTip>
 
       <HR />
@@ -735,7 +735,7 @@ ORDER BY total_gmv DESC;`}
       <IQ q="What is CASE WHEN and what are its two forms?">
         <p style={{ margin: '0 0 14px' }}>CASE WHEN is SQL's conditional expression — equivalent to an if-else statement in programming languages. It evaluates a series of conditions in order and returns the result for the first condition that evaluates to TRUE. If no condition matches and there is an ELSE clause, the ELSE result is returned. If no condition matches and there is no ELSE, the expression returns NULL.</p>
         <p style={{ margin: '0 0 14px' }}>The searched CASE form evaluates arbitrary conditions for each WHEN: CASE WHEN condition1 THEN result1 WHEN condition2 THEN result2 ELSE default END. Each condition can be any Boolean expression — comparisons, range checks, IS NULL, BETWEEN, IN, even subqueries. This is the most flexible and commonly used form.</p>
-        <p style={{ margin: 0 }}>The simple CASE form compares one expression against multiple equality values: CASE expression WHEN value1 THEN result1 WHEN value2 THEN result2 ELSE default END. CASE payment_method WHEN 'UPI' THEN 'Digital' WHEN 'COD' THEN 'Cash' END is cleaner than CASE WHEN payment_method = 'UPI' THEN 'Digital' WHEN payment_method = 'COD' THEN 'Cash' END. The simple form is syntactic sugar — it is always equivalent to the searched form with equality conditions, but reads more cleanly when all conditions are simple equality checks on the same column.</p>
+        <p style={{ margin: 0 }}>The simple CASE form compares one expression against multiple equality values: CASE expression WHEN value1 THEN result1 WHEN value2 THEN result2 ELSE default END. CASE payment_method WHEN 'Zelle' THEN 'Digital' WHEN 'COD' THEN 'Cash' END is cleaner than CASE WHEN payment_method = 'Zelle' THEN 'Digital' WHEN payment_method = 'COD' THEN 'Cash' END. The simple form is syntactic sugar — it is always equivalent to the searched form with equality conditions, but reads more cleanly when all conditions are simple equality checks on the same column.</p>
       </IQ>
 
       <IQ q="In what order does CASE WHEN evaluate its conditions and why does this matter?">
@@ -747,7 +747,7 @@ ORDER BY total_gmv DESC;`}
       <IQ q="What is conditional aggregation and how do you implement it?">
         <p style={{ margin: '0 0 14px' }}>Conditional aggregation is the technique of computing multiple different aggregate values in a single query pass by using CASE WHEN inside aggregate functions like SUM, COUNT, and AVG. Instead of running three separate queries with different WHERE conditions and combining the results, you compute all three metrics simultaneously in one GROUP BY query.</p>
         <p style={{ margin: '0 0 14px' }}>The pattern for conditional SUM: SUM(CASE WHEN condition THEN value ELSE 0 END). For each row, if the condition is true the actual value contributes to the sum; if false, 0 contributes (adding nothing). The result is the sum of values only for rows where the condition was true. For conditional COUNT: SUM(CASE WHEN condition THEN 1 ELSE 0 END) — or equivalently COUNT(CASE WHEN condition THEN 1 END) which implicitly skips NULL (the no-ELSE form returns NULL which COUNT ignores).</p>
-        <p style={{ margin: 0 }}>A concrete example: to get total revenue, delivered revenue, and cancelled revenue in one query — SELECT SUM(total_amount) AS total, SUM(CASE WHEN status = 'Delivered' THEN total_amount ELSE 0 END) AS delivered, SUM(CASE WHEN status = 'Cancelled' THEN total_amount ELSE 0 END) AS cancelled FROM orders GROUP BY store_id. This single query replaces three queries. In data warehousing, this pattern is how pivot tables are built in SQL — each pivot column is one conditional aggregate. At Indian tech companies, conditional aggregation is used constantly for daily business reports, A/B test result analysis, funnel metrics, and any dashboard that shows data split by multiple categories simultaneously.</p>
+        <p style={{ margin: 0 }}>A concrete example: to get total revenue, delivered revenue, and cancelled revenue in one query — SELECT SUM(total_amount) AS total, SUM(CASE WHEN status = 'Delivered' THEN total_amount ELSE 0 END) AS delivered, SUM(CASE WHEN status = 'Cancelled' THEN total_amount ELSE 0 END) AS cancelled FROM orders GROUP BY store_id. This single query replaces three queries. In data warehousing, this pattern is how pivot tables are built in SQL — each pivot column is one conditional aggregate. At tech companies, conditional aggregation is used constantly for daily business reports, A/B test result analysis, funnel metrics, and any dashboard that shows data split by multiple categories simultaneously.</p>
       </IQ>
 
       <IQ q="What happens when no WHEN condition matches in a CASE expression?">
@@ -801,7 +801,7 @@ ORDER BY total_gmv DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a single query that produces a store performance summary for FreshCart management. For each store show: store_id, city, total delivered orders, total delivered revenue (rounded to 2 decimal places), the revenue from high-value orders (above ₹1,000) as high_value_revenue, a performance_band column using CASE: 'Star' if total delivered revenue above ₹3,000, 'Good' if above ₹1,500, 'Needs Support' otherwise. Sort by total delivered revenue descending."
+        question="Write a single query that produces a store performance summary for FreshCart management. For each store show: store_id, city, total delivered orders, total delivered revenue (rounded to 2 decimal places), the revenue from high-value orders (above $1,000) as high_value_revenue, a performance_band column using CASE: 'Star' if total delivered revenue above $3,000, 'Good' if above $1,500, 'Needs Support' otherwise. Sort by total delivered revenue descending."
         hint="JOIN stores to orders. WHERE order_status = 'Delivered'. SUM(total_amount) for revenue. SUM(CASE WHEN total_amount > 1000 THEN total_amount ELSE 0 END) for high_value_revenue. CASE on the SUM result for performance_band — but you cannot use the alias in CASE, so repeat the expression."
         answer={`SELECT
   s.store_id,
@@ -821,7 +821,7 @@ JOIN orders AS o ON s.store_id = o.store_id
 WHERE o.order_status = 'Delivered'
 GROUP BY s.store_id, s.city
 ORDER BY delivered_revenue DESC;`}
-        explanation="Three CASE-related techniques appear in this query. Conditional SUM for high_value_revenue — CASE inside SUM returns the amount only for orders above ₹1,000, zero otherwise. CASE on an aggregate for performance_band — CASE WHEN SUM(total_amount) > 3000 THEN 'Star' uses the aggregate function directly inside the CASE expression in SELECT (valid because GROUP BY has already produced the groups). ORDER BY delivered_revenue — this correctly uses the SELECT alias because ORDER BY runs after SELECT. Note that performance_band uses SUM(o.total_amount) again rather than the delivered_revenue alias — SELECT aliases cannot be referenced inside the same SELECT list, only in ORDER BY."
+        explanation="Three CASE-related techniques appear in this query. Conditional SUM for high_value_revenue — CASE inside SUM returns the amount only for orders above $1,000, zero otherwise. CASE on an aggregate for performance_band — CASE WHEN SUM(total_amount) > 3000 THEN 'Star' uses the aggregate function directly inside the CASE expression in SELECT (valid because GROUP BY has already produced the groups). ORDER BY delivered_revenue — this correctly uses the SELECT alias because ORDER BY runs after SELECT. Note that performance_band uses SUM(o.total_amount) again rather than the delivered_revenue alias — SELECT aliases cannot be referenced inside the same SELECT list, only in ORDER BY."
       />
 
       <HR />

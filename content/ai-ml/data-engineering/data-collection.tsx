@@ -280,10 +280,10 @@ from typing import Optional
 response = requests.get(
     'https://api.open-meteo.com/v1/forecast',
     params={
-        'latitude':  12.9716,     # Seattle
-        'longitude': 77.5946,
+        'latitude':  47.6062,     # Seattle
+        'longitude': -122.3321,
         'daily':     'temperature_2m_max,temperature_2m_min,precipitation_sum',
-        'timezone':  'Asia/Kolkata',
+        'timezone':  'America/Los_Angeles',
         'forecast_days': 7,
     },
     timeout=10,   # ALWAYS set a timeout — never block forever
@@ -502,9 +502,9 @@ def fetch_with_retry(
 # Usage
 data = fetch_with_retry(
     'https://api.open-meteo.com/v1/forecast',
-    params={'latitude': 12.9716, 'longitude': 77.5946,
+    params={'latitude': 47.6062, 'longitude': -122.3321,
             'daily': 'temperature_2m_max', 'forecast_days': 7,
-            'timezone': 'Asia/Kolkata'},
+            'timezone': 'America/Los_Angeles'},
 )
 print(f"Fetched {len(data['daily']['time'])} days of weather data")`} />
 
@@ -744,10 +744,10 @@ CREATE TABLE restaurants (
 
 INSERT INTO restaurants VALUES
     (1, 'Pizza Hut',   'Italian', 18.0, 1),
-    (2, 'Biryani Blues','Indian', 22.0, 0),
+    (2, 'Chipotle',    'Mexican', 22.0, 0),
     (3, 'McDonald\\'s', 'American', 10.0, 1),
     (4, 'KFC',         'American', 10.0, 1),
-    (5, 'Haldiram\\'s', 'Indian',  15.0, 1);
+    (5, 'Taco Bell',   'Mexican', 15.0, 1);
 """)
 
 import numpy as np
@@ -762,7 +762,7 @@ for i in range(n):
     delivery = 8.6 + 7.3*dist + 0.8*prep + 1.5*traffic + np.random.randn()*4
     rows.append((
         f'SW{i:06d}', rest_id, np.random.randint(1, 1001),
-        np.random.choice(['Seattle','New York','Delhi','Austin']),
+        np.random.choice(['Seattle','New York','Denver','Austin']),
         round(dist, 2), round(abs(np.random.normal(350, 150)), 0),
         round(delivery, 1), int(delivery > 45),
         f'2024-{np.random.randint(1,13):02d}-{np.random.randint(1,29):02d}',
@@ -882,9 +882,9 @@ with engine.connect() as conn:
         text("SELECT * FROM orders_enriched WHERE city = :city AND is_late = :late"),
         {'city': 'Seattle', 'late': 1}
     )
-    late_bangalore = pd.DataFrame(result.fetchall(), columns=result.keys())
+    late_seattle = pd.DataFrame(result.fetchall(), columns=result.keys())
 
-print(f"Late orders in Seattle: {len(late_bangalore):,}")
+print(f"Late orders in Seattle: {len(late_seattle):,}")
 
 # ── Connection pooling — reuse connections efficiently ─────────────────
 # For applications making many queries, pooling prevents connection overhead
@@ -1060,10 +1060,10 @@ s3 = boto3.client(
     's3',
     aws_access_key_id     = os.environ['AWS_ACCESS_KEY_ID'],
     aws_secret_access_key = os.environ['AWS_SECRET_ACCESS_KEY'],
-    region_name           = 'ap-south-1',   # New York region
+    region_name           = 'us-east-1',   # N. Virginia region
 )
 
-bucket = 'swiggy-ml-data'
+bucket = 'doordash-ml-data'
 
 # Read a CSV directly from S3 into DataFrame
 obj = s3.get_object(Bucket=bucket, Key='features/orders_2024.csv')
@@ -1098,7 +1098,7 @@ df_all_s3 = pd.concat(dfs, ignore_index=True)
 from google.cloud import storage
 
 gcs = storage.Client()
-bucket_gcs = gcs.bucket('swiggy-ml-bucket')
+bucket_gcs = gcs.bucket('doordash-ml-bucket')
 
 # Download to temp file and read
 blob = bucket_gcs.blob('features/orders_2024.parquet')
@@ -1167,9 +1167,9 @@ def scrape_wikipedia_table(url: str, table_index: int = 0) -> pd.DataFrame:
     df = pd.read_html(str(tables[table_index]))[0]
     return df
 
-# Scrape list of Indian cities by population
+# Scrape list of US cities by population
 df_cities = scrape_wikipedia_table(
-    'https://en.wikipedia.org/wiki/List_of_cities_in_India_by_population',
+    'https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population',
 )
 print(df_cities.head(5))
 
@@ -1281,7 +1281,7 @@ def scrape_salary_data() -> pd.DataFrame:
         browser = p.chromium.launch(headless=True)
         page    = browser.new_page()
 
-        page.goto('https://www.example-salaries.com/data-engineer/india',
+        page.goto('https://www.example-salaries.com/data-engineer/usa',
                   wait_until='networkidle')
 
         # Extract data using page.evaluate() — runs JavaScript in the browser
@@ -1294,7 +1294,7 @@ def scrape_salary_data() -> pd.DataFrame:
                     company:    row.querySelector('.company')?.textContent?.trim(),
                     city:       row.querySelector('.city')?.textContent?.trim(),
                     experience: row.querySelector('.experience')?.textContent?.trim(),
-                    salary_lpa: row.querySelector('.salary')?.textContent?.trim(),
+                    salary_usd: row.querySelector('.salary')?.textContent?.trim(),
                 }));
             }
         """)
@@ -1368,7 +1368,7 @@ from datetime import datetime
 
 # ── Basic Kafka consumer ──────────────────────────────────────────────
 consumer = KafkaConsumer(
-    'swiggy.orders.placed',      # topic name
+    'doordash.orders.placed',      # topic name
     bootstrap_servers=['kafka.internal:9092'],
     group_id='ml-feature-pipeline',     # consumer group for load balancing
     auto_offset_reset='latest',          # 'latest' = only new messages, 'earliest' = all history
@@ -1442,7 +1442,7 @@ test_event = {
     'payment':     {'total_amount': 450.0},
     'items':       [{'id': 1}, {'id': 2}],
 }
-producer.send('swiggy.orders.placed', value=test_event)
+producer.send('doordash.orders.placed', value=test_event)
 producer.flush()   # ensure message is sent before exiting`} />
       </div>
 
@@ -1551,14 +1551,14 @@ class DataCollector:
 
 
 class WeatherAPICollector(DataCollector):
-    """Collects weather data from Open-Meteo for Indian cities."""
+    """Collects weather data from Open-Meteo for US cities."""
 
     CITIES = {
-        'Seattle': (12.9716, 77.5946),
-        'New York':    (19.0760, 72.8777),
-        'Delhi':     (28.6139, 77.2090),
-        'Austin': (17.3850, 78.4867),
-        'Chicago':   (13.0827, 80.2707),
+        'Seattle': (47.6062, -122.3321),
+        'New York':    (40.7128, -74.0060),
+        'Denver':     (39.7392, -104.9903),
+        'Austin': (30.2672, -97.7431),
+        'Chicago':   (41.8781, -87.6298),
     }
 
     def collect(self) -> pd.DataFrame:
@@ -1580,7 +1580,7 @@ class WeatherAPICollector(DataCollector):
                                              'windspeed_10m_max'],
                             'start_date':   self.config.date_from.strftime('%Y-%m-%d'),
                             'end_date':     self.config.date_to.strftime('%Y-%m-%d'),
-                            'timezone':     'Asia/Kolkata',
+                            'timezone':     'auto',
                         },
                         timeout=15,
                     )
@@ -1612,7 +1612,7 @@ class WeatherAPICollector(DataCollector):
 
 # ── Run the pipeline ──────────────────────────────────────────────────
 config = CollectionConfig(
-    source_name   = 'weather_india',
+    source_name   = 'weather_us',
     output_dir    = Path('/tmp/data/weather'),
     date_from     = datetime.now() - timedelta(days=30),
     date_to       = datetime.now(),

@@ -50,9 +50,9 @@ function ExprBox({ expr, result, label }: { expr: string; result?: string; label
 }
 
 const expressionsTable = [
-  { expr: '@{item().name}',     result: '"delhi", "mumbai", or "bangalore"',   desc: 'Read the "name" property from the current ForEach item' },
-  { expr: '@{item().lat}',      result: '"28.6139", "19.0760", or "12.9716"',  desc: 'Read the "lat" property from the current ForEach item' },
-  { expr: '@{item().lon}',      result: '"77.2090", "72.8777", or "77.5946"',  desc: 'Read the "lon" property from the current ForEach item' },
+  { expr: '@{item().name}',     result: '"newyork", "chicago", or "seattle"',   desc: 'Read the "name" property from the current ForEach item' },
+  { expr: '@{item().lat}',      result: '"40.7128", "41.8781", or "47.6062"',  desc: 'Read the "lat" property from the current ForEach item' },
+  { expr: '@{item().lon}',      result: '"-74.0060", "-87.6298", or "-122.3321"',  desc: 'Read the "lon" property from the current ForEach item' },
   { expr: "@formatDateTime(pipeline().parameters.run_date,'yyyyMMdd')", result: '"20240115"',  desc: 'Format run_date for use in the file name' },
   { expr: "@formatDateTime(trigger().scheduledTime,'yyyy-MM-dd')",      result: '"2024-01-15"', desc: 'Pass today\'s date from the trigger' },
 ]
@@ -61,7 +61,7 @@ const conceptsTable = [
   { concept: 'REST API',              what: 'A service you query with HTTP to get structured data',          why: 'Most real-world data sources are APIs, not files' },
   { concept: 'JSON',                  what: 'The format APIs use to return data',                            why: 'You need to read and store JSON in data engineering' },
   { concept: 'Query parameters',      what: 'Values after ? in a URL that customize the API response',      why: 'Control what data the API returns per city' },
-  { concept: 'Object in array',       what: '{"name":"delhi","lat":"28.61"} — an item with properties',     why: 'Group related values together in ForEach items' },
+  { concept: 'Object in array',       what: '{"name":"newyork","lat":"40.71"} — an item with properties',     why: 'Group related values together in ForEach items' },
   { concept: '@{item().property}',    what: 'Read one property from the current ForEach object',            why: 'Access name, lat, lon separately from one item' },
   { concept: 'Dot notation',          what: 'item().name reads the "name" field of the object',             why: 'Standard way to navigate JSON/objects in ADF' },
   { concept: 'JSON dataset format',   what: 'ADF dataset type for JSON files',                              why: 'Use this instead of DelimitedText for API responses' },
@@ -70,9 +70,9 @@ const conceptsTable = [
 
 const mistakesTable = [
   { mistake: 'Putting query parameters in the base URL', fix: 'Base URL must be only the domain: https://api.open-meteo.com — everything after including /v1/forecast?... goes in the relative URL dataset property.' },
-  { mistake: 'Using @{item()} instead of @{item().lat} for object arrays', fix: '@{item()} gives the whole object: {"name":"delhi","lat":"28.61","lon":"77.20"}. Use @{item().lat} to get just the lat value. Symptom: URL becomes malformed.' },
-  { mistake: 'Wrong format for cities array in parameter', fix: 'Must be valid JSON — property names in double quotes, no trailing commas. Wrong: [{name:\'delhi\'}]. Right: [{"name":"delhi","lat":"28.6139","lon":"77.2090"}].' },
-  { mistake: 'Forgetting %2F in timezone URL parameter', fix: 'Asia/Kolkata has a slash that must be URL-encoded as %2F. Wrong: &timezone=Asia/Kolkata. Right: &timezone=Asia%2FKolkata. Symptom: API returns an error about invalid timezone.' },
+  { mistake: 'Using @{item()} instead of @{item().lat} for object arrays', fix: '@{item()} gives the whole object: {"name":"newyork","lat":"40.71","lon":"-74.01"}. Use @{item().lat} to get just the lat value. Symptom: URL becomes malformed.' },
+  { mistake: 'Wrong format for cities array in parameter', fix: 'Must be valid JSON — property names in double quotes, no trailing commas. Wrong: [{name:\'newyork\'}]. Right: [{"name":"newyork","lat":"40.7128","lon":"-74.0060"}].' },
+  { mistake: 'Forgetting %2F in timezone URL parameter', fix: 'America/New_York has a slash that must be URL-encoded as %2F. Wrong: &timezone=America/New_York. Right: &timezone=America%2FNew_York. Symptom: API returns an error about invalid timezone.' },
   { mistake: 'Selecting wrong format (DelimitedText instead of JSON) for dataset', fix: 'ADF tries to parse the JSON response as CSV — output is empty or garbled. Delete the dataset, recreate it, and select JSON format.' },
 ]
 
@@ -84,7 +84,7 @@ const newItems = [
   { item: 'Parameter',      name: 'run_date (String)',           desc: 'Date to process — controls folder and file names' },
   { item: 'Parameter',      name: 'cities (Array)',              desc: 'Array of objects with name, lat, lon for each city' },
   { item: 'Variable',       name: 'run_date_folder (String)',    desc: 'Computed folder name like date=2024-01-15' },
-  { item: 'Trigger',        name: 'trigger_weather_6am',        desc: 'Fires every morning at 6 AM IST — passes today as run_date' },
+  { item: 'Trigger',        name: 'trigger_weather_6am',        desc: 'Fires every morning at 6 AM EST — passes today as run_date' },
 ]
 
 export default function Project06Page() {
@@ -131,7 +131,7 @@ export default function Project06Page() {
       </p>
       <p>
         The data team wants to <strong>combine sales data with weather data</strong> to help stores plan inventory
-        better. If heavy rain is forecast for Delhi tomorrow, ST001 should stock more umbrellas tonight.
+        better. If heavy rain is forecast for New York tomorrow, ST001 should stock more umbrellas tonight.
       </p>
       <p>But FreshCart has no weather data. They need to pull it from somewhere.</p>
 
@@ -143,9 +143,9 @@ export default function Project06Page() {
         </p>
       </div>
 
-      <CodeBlock label="FreshCart's 3 store cities">{`New York    → lat=28.6139, lon=77.2090
-New York       → lat=19.0760, lon=72.8777
-Seattle    → lat=12.9716, lon=77.5946`}</CodeBlock>
+      <CodeBlock label="FreshCart's 3 store cities">{`New York    → lat=40.7128, lon=-74.0060
+Chicago        → lat=41.8781, lon=-87.6298
+Seattle    → lat=47.6062, lon=-122.3321`}</CodeBlock>
 
       <p>We will build a pipeline that:</p>
       <ol>
@@ -161,17 +161,17 @@ Seattle    → lat=12.9716, lon=77.5946`}</CodeBlock>
         <div className="font-mono text-xs space-y-1" style={{ color: 'var(--text2)', lineHeight: 1.9 }}>
           <p style={{ color: '#00c2ff' }}>Open-Meteo API → https://api.open-meteo.com</p>
           <p className="pl-2">ADF calls API 3 times (one per city):</p>
-          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 1: ?latitude=28.6139&amp;longitude=77.2090  → Delhi weather JSON</p>
-          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 2: ?latitude=19.0760&amp;longitude=72.8777  → New York weather JSON</p>
-          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 3: ?latitude=12.9716&amp;longitude=77.5946  → Seattle weather JSON</p>
+          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 1: ?latitude=40.7128&amp;longitude=-74.0060  → New York weather JSON</p>
+          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 2: ?latitude=41.8781&amp;longitude=-87.6298  → Chicago weather JSON</p>
+          <p className="pl-4" style={{ color: 'var(--muted)' }}>Call 3: ?latitude=47.6062&amp;longitude=-122.3321  → Seattle weather JSON</p>
           <p className="mt-3">Each JSON saved to ADLS:</p>
           <p className="pl-2" style={{ color: '#00e676' }}>raw/weather/date=2024-01-15/</p>
-          <p className="pl-4" style={{ color: 'var(--text2)' }}>├── weather_delhi_20240115.json</p>
-          <p className="pl-4" style={{ color: 'var(--text2)' }}>├── weather_mumbai_20240115.json</p>
-          <p className="pl-4" style={{ color: 'var(--text2)' }}>└── weather_bangalore_20240115.json</p>
+          <p className="pl-4" style={{ color: 'var(--text2)' }}>├── weather_newyork_20240115.json</p>
+          <p className="pl-4" style={{ color: 'var(--text2)' }}>├── weather_chicago_20240115.json</p>
+          <p className="pl-4" style={{ color: 'var(--text2)' }}>└── weather_seattle_20240115.json</p>
         </div>
         <div className="mt-4 pt-4 text-xs" style={{ borderTop: '1px solid var(--border)', color: 'var(--muted)' }}>
-          Pipeline: pl_ingest_weather_api · Trigger: every morning at 6 AM IST · 3 cities, 3 API calls, 3 JSON files
+          Pipeline: pl_ingest_weather_api · Trigger: every morning at 6 AM EST · 3 cities, 3 API calls, 3 JSON files
         </div>
       </div>
 
@@ -228,8 +228,8 @@ Seattle    → lat=12.9716, lon=77.5946`}</CodeBlock>
             <li>Response is structured data</li>
             <li>Like asking Google a question</li>
             <li>Response changes based on what you ask</li>
-            <li className="font-mono pt-1" style={{ color: 'var(--muted)' }}>GET /v1/forecast?latitude=28.61</li>
-            <li className="font-mono" style={{ color: 'var(--muted)' }}>← returns Delhi&apos;s temperature data</li>
+            <li className="font-mono pt-1" style={{ color: 'var(--muted)' }}>GET /v1/forecast?latitude=40.71</li>
+            <li className="font-mono" style={{ color: 'var(--muted)' }}>← returns New York&apos;s temperature data</li>
           </ul>
         </div>
       </div>
@@ -246,8 +246,8 @@ Seattle    → lat=12.9716, lon=77.5946`}</CodeBlock>
 
       <CodeBlock label="Example JSON response from Open-Meteo">{`{
   "city": "New York",
-  "latitude": 28.6139,
-  "longitude": 77.2090,
+  "latitude": 40.7128,
+  "longitude": -74.0060,
   "daily": {
     "time": ["2024-01-15", "2024-01-16"],
     "temperature_2m_max": [22.5, 24.1],
@@ -265,27 +265,27 @@ true/false   → boolean value
 
 In the example above:
   "city"      → text property    → "New York"
-  "latitude"  → number property  → 28.6139
+  "latitude"  → number property  → 40.7128
   "daily"     → object           → contains arrays of values
   "time"      → array of dates   → ["2024-01-15", "2024-01-16", ...]`}</CodeBlock>
 
       <h3>What URL Do We Call?</h3>
-      <p>The Open-Meteo API URL for Delhi looks like this:</p>
+      <p>The Open-Meteo API URL for New York looks like this:</p>
 
-      <CodeBlock label="Delhi API URL — broken down">{`https://api.open-meteo.com/v1/forecast
-  ?latitude=28.6139
-  &longitude=77.2090
+      <CodeBlock label="New York API URL — broken down">{`https://api.open-meteo.com/v1/forecast
+  ?latitude=40.7128
+  &longitude=-74.0060
   &daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode
-  &timezone=Asia/Kolkata
+  &timezone=America/New_York
   &forecast_days=1
 
 https://api.open-meteo.com   → base URL (goes in the Linked Service)
 /v1/forecast                  → the specific API endpoint
 ?                             → starts the query parameters
-latitude=28.6139              → first parameter (Delhi's latitude)
-&longitude=77.2090            → second parameter (Delhi's longitude)
+latitude=40.7128              → first parameter (New York's latitude)
+&longitude=-74.0060            → second parameter (New York's longitude)
 &daily=temperature_2m_max,... → which weather fields we want
-&timezone=Asia/Kolkata        → time zone for the dates
+&timezone=America/New_York        → time zone for the dates
 &forecast_days=1              → only give me today's forecast`}</CodeBlock>
 
       <Callout type="info" label="💡 Base URL vs Relative URL">
@@ -298,7 +298,7 @@ latitude=28.6139              → first parameter (Delhi's latitude)
       <p>In Projects 02 and 03, the array contained simple strings:</p>
       <ExprBox expr='["ST001", "ST002", "ST003"]' label="Projects 02–03 — simple string array" />
       <p>This time each item is an <strong>object</strong> with three properties — name, lat, and lon:</p>
-      <ExprBox expr='[{"name":"delhi","lat":"28.6139","lon":"77.2090"}, ...]' label="Project 06 — array of objects" />
+      <ExprBox expr='[{"name":"newyork","lat":"40.7128","lon":"-74.0060"}, ...]' label="Project 06 — array of objects" />
       <p>
         This is because for each city we need three pieces of information — not just one. We pack all three into
         one object so the ForEach loop gets everything in one shot.
@@ -306,10 +306,10 @@ latitude=28.6139              → first parameter (Delhi's latitude)
       <p>Inside the ForEach you use <strong>dot notation</strong> to read individual properties:</p>
       <div className="my-4 space-y-2">
         {[
-          { expr: '@{item()}',        result: '{"name":"delhi","lat":"28.6139","lon":"77.2090"}  — the whole object' },
-          { expr: '@{item().name}',   result: '"delhi"  — just the city name' },
-          { expr: '@{item().lat}',    result: '"28.6139"  — just the latitude' },
-          { expr: '@{item().lon}',    result: '"77.2090"  — just the longitude' },
+          { expr: '@{item()}',        result: '{"name":"newyork","lat":"40.7128","lon":"-74.0060"}  — the whole object' },
+          { expr: '@{item().name}',   result: '"newyork"  — just the city name' },
+          { expr: '@{item().lat}',    result: '"40.7128"  — just the latitude' },
+          { expr: '@{item().lon}',    result: '"-74.0060"  — just the longitude' },
         ].map(e => (
           <div key={e.expr} className="p-3 rounded-xl" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
             <code className="text-xs" style={{ color: '#7b61ff' }}>{e.expr}</code>
@@ -327,15 +327,15 @@ latitude=28.6139              → first parameter (Delhi's latitude)
       <p>Before building anything, always test your API in the browser first.</p>
       <p>Open your browser and paste this URL exactly:</p>
 
-      <CodeBlock>{`https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=Asia%2FKolkata&forecast_days=1`}</CodeBlock>
+      <CodeBlock>{`https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=America%2FNew_York&forecast_days=1`}</CodeBlock>
 
       <p>Your browser will show a JSON response similar to this:</p>
 
-      <CodeBlock label="Expected response — Delhi weather">{`{
-  "latitude": 28.625,
-  "longitude": 77.1875,
-  "timezone": "Asia/Kolkata",
-  "timezone_abbreviation": "IST",
+      <CodeBlock label="Expected response — New York weather">{`{
+  "latitude": 40.71,
+  "longitude": -74.02,
+  "timezone": "America/New_York",
+  "timezone_abbreviation": "EST",
   "elevation": 216.0,
   "daily_units": {
     "time": "iso8601",
@@ -359,10 +359,10 @@ latitude=28.6139              → first parameter (Delhi's latitude)
         The browser is doing the same thing ADF will do: sending an HTTP GET request to the URL and receiving a JSON response.
       </Callout>
 
-      <p>Now test for New York:</p>
-      <CodeBlock>{`https://api.open-meteo.com/v1/forecast?latitude=19.0760&longitude=72.8777&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=Asia%2FKolkata&forecast_days=1`}</CodeBlock>
+      <p>Now test for Chicago:</p>
+      <CodeBlock>{`https://api.open-meteo.com/v1/forecast?latitude=41.8781&longitude=-87.6298&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=America%2FNew_York&forecast_days=1`}</CodeBlock>
 
-      <Screenshot caption="Browser showing New York weather JSON response — different temperature values than Delhi, confirming the API returns different data per location" />
+      <Screenshot caption="Browser showing Chicago weather JSON response — different temperature values than New York, confirming the API returns different data per location" />
 
       <p><strong>What does <code>weathercode</code> mean?</strong> Open-Meteo uses standard WMO weather codes:</p>
       <CodeBlock>{`0   → Clear sky
@@ -504,16 +504,16 @@ Parameter 2:
   Name:    cities
   Type:    Array
   Default: [
-    {"name":"delhi","lat":"28.6139","lon":"77.2090"},
-    {"name":"mumbai","lat":"19.0760","lon":"72.8777"},
-    {"name":"bangalore","lat":"12.9716","lon":"77.5946"}
+    {"name":"newyork","lat":"40.7128","lon":"-74.0060"},
+    {"name":"chicago","lat":"41.8781","lon":"-87.6298"},
+    {"name":"seattle","lat":"47.6062","lon":"-122.3321"}
   ]`}</CodeBlock>
 
       <Screenshot caption="Pipeline Parameters tab — run_date and cities parameters visible" />
 
       <Callout type="info" label="💡 Why is each city an object instead of a plain string?">
         In Projects 02 and 03 we only needed one value per item (the store ID). Here we need three values per city —
-        name, lat, and lon. Packing them into an object <code>{`{"name":"delhi","lat":"28.6139","lon":"77.2090"}`}</code> means
+        name, lat, and lon. Packing them into an object <code>{`{"name":"newyork","lat":"40.7128","lon":"-74.0060"}`}</code> means
         the ForEach gets everything it needs in a single item, and we read each value with dot notation:
         <code>item().name</code>, <code>item().lat</code>, <code>item().lon</code>.
       </Callout>
@@ -579,7 +579,7 @@ Settings tab:
 
       <ExprBox
         label="relative_url — builds a different URL for each city"
-        expr="/v1/forecast?latitude=@{item().lat}&longitude=@{item().lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=Asia%2FKolkata&forecast_days=1"
+        expr="/v1/forecast?latitude=@{item().lat}&longitude=@{item().lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=America%2FNew_York&forecast_days=1"
       />
 
       <Screenshot caption="Dynamic content editor — the full API query URL expression with @{item().lat} and @{item().lon}" />
@@ -587,20 +587,20 @@ Settings tab:
       <p>Click <strong>&quot;OK&quot;</strong></p>
 
       <p>What does this build for each city?</p>
-      <CodeBlock label="When item() = {name:'delhi', lat:'28.6139', lon:'77.2090'}">{`/v1/forecast
-  ?latitude=28.6139
-  &longitude=77.2090
+      <CodeBlock label="When item() = {name:'newyork', lat:'40.7128', lon:'-74.0060'}">{`/v1/forecast
+  ?latitude=40.7128
+  &longitude=-74.0060
   &daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode
-  &timezone=Asia%2FKolkata
+  &timezone=America%2FNew_York
   &forecast_days=1
 
 ADF joins this with the base URL from the linked service:
-→ https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090...
+→ https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060...
 
-That is exactly the Delhi weather URL we tested in the browser! ✅
+That is exactly the New York weather URL we tested in the browser! ✅
 
-Next iteration (New York): @{item().lat} → 19.0760, @{item().lon} → 72.8777
-→ https://api.open-meteo.com/v1/forecast?latitude=19.0760&longitude=72.8777...`}</CodeBlock>
+Next iteration (Chicago): @{item().lat} → 41.8781, @{item().lon} → -87.6298
+→ https://api.open-meteo.com/v1/forecast?latitude=41.8781&longitude=-87.6298...`}</CodeBlock>
 
       <Screenshot caption="Source tab complete — relative_url dataset property showing the full API query expression" />
 
@@ -619,14 +619,14 @@ Next iteration (New York): @{item().lat} → 19.0760, @{item().lon} → 72.8777
 
       <p>What file name does this build?</p>
       <CodeBlock>{`weather_          → literal "weather_"
-@{item().name}    → city name → "delhi"
+@{item().name}    → city name → "newyork"
 _                 → literal "_"
 @{formatDateTime(...,'yyyyMMdd')} → "20240115"
 .json             → literal ".json"
 
-Delhi:     weather_delhi_20240115.json     ✅
-New York:    weather_mumbai_20240115.json    ✅
-Seattle: weather_bangalore_20240115.json ✅`}</CodeBlock>
+New York:     weather_newyork_20240115.json     ✅
+Chicago:   weather_chicago_20240115.json    ✅
+Seattle: weather_seattle_20240115.json ✅`}</CodeBlock>
 
       <Screenshot caption="Sink tab — date_folder showing @variables('run_date_folder'), file_name showing weather_@{item().name}_ expression" />
 
@@ -641,7 +641,7 @@ Seattle: weather_bangalore_20240115.json ✅`}</CodeBlock>
       <p>Click <strong>&quot;Debug&quot;</strong></p>
       <p>Parameters dialog:</p>
       <CodeBlock>{`run_date:  2024-01-15
-cities:    [{"name":"delhi","lat":"28.6139","lon":"77.2090"},{"name":"mumbai","lat":"19.0760","lon":"72.8777"},{"name":"bangalore","lat":"12.9716","lon":"77.5946"}]`}</CodeBlock>
+cities:    [{"name":"newyork","lat":"40.7128","lon":"-74.0060"},{"name":"chicago","lat":"41.8781","lon":"-87.6298"},{"name":"seattle","lat":"47.6062","lon":"-122.3321"}]`}</CodeBlock>
 
       <Screenshot caption="Debug dialog — run_date and cities array pre-filled with defaults from the pipeline parameters" />
 
@@ -656,7 +656,7 @@ cities:    [{"name":"delhi","lat":"28.6139","lon":"77.2090"},{"name":"mumbai","l
       <Screenshot caption="Pipeline complete — both activities showing green checkmarks" />
 
       <p>Click the <strong>👓 glasses icon</strong> on the ForEach run:</p>
-      <Screenshot caption="ForEach iteration details — 3 rows for delhi, mumbai, bangalore — all Succeeded" />
+      <Screenshot caption="ForEach iteration details — 3 rows for newyork, chicago, seattle — all Succeeded" />
 
       <h2>Step 13 — Verify JSON Files in ADLS</h2>
       <p>Azure Portal → Storage → <code>stfreshmartdev</code> → Containers → <strong>raw</strong></p>
@@ -667,19 +667,19 @@ cities:    [{"name":"delhi","lat":"28.6139","lon":"77.2090"},{"name":"mumbai","l
 ├── external/   ← Project 04
 └── weather/    ← NEW — Project 06
     └── date=2024-01-15/
-        ├── weather_delhi_20240115.json
-        ├── weather_mumbai_20240115.json
-        └── weather_bangalore_20240115.json`}</CodeBlock>
+        ├── weather_newyork_20240115.json
+        ├── weather_chicago_20240115.json
+        └── weather_seattle_20240115.json`}</CodeBlock>
 
       <Screenshot caption="raw container — three folders visible: sales, external, weather" />
-      <Screenshot caption="raw/weather/date=2024-01-15/ — three JSON files for Delhi, New York, Seattle" />
+      <Screenshot caption="raw/weather/date=2024-01-15/ — three JSON files for New York, Chicago, Seattle" />
 
-      <p>Click on <strong>weather_delhi_20240115.json</strong> → click <strong>&quot;Edit&quot;</strong></p>
+      <p>Click on <strong>weather_newyork_20240115.json</strong> → click <strong>&quot;Edit&quot;</strong></p>
       <p>You should see the raw JSON from the API saved exactly as-is:</p>
 
-      <CodeBlock label="weather_delhi_20240115.json — content saved in ADLS">{`{
-  "latitude": 28.625,
-  "longitude": 77.1875,
+      <CodeBlock label="weather_newyork_20240115.json — content saved in ADLS">{`{
+  "latitude": 40.71,
+  "longitude": -74.02,
   "daily": {
     "time": ["2024-01-15"],
     "temperature_2m_max": [22.3],
@@ -689,8 +689,8 @@ cities:    [{"name":"delhi","lat":"28.6139","lon":"77.2090"},{"name":"mumbai","l
   }
 }`}</CodeBlock>
 
-      <Screenshot caption="weather_delhi_20240115.json file open in Azure Portal — raw JSON content visible" />
-      <Screenshot caption="weather_mumbai_20240115.json — different temperature values confirming it's a separate API call" />
+      <Screenshot caption="weather_newyork_20240115.json file open in Azure Portal — raw JSON content visible" />
+      <Screenshot caption="weather_chicago_20240115.json — different temperature values confirming it's a separate API call" />
 
       <Callout type="tip" label="✅ 3 API calls, 3 JSON responses, 3 separate files">
         The pipeline called the Open-Meteo API three times with different lat/lon values and saved three separate JSON files to ADLS — one per city.
@@ -705,14 +705,14 @@ cities:    [{"name":"delhi","lat":"28.6139","lon":"77.2090"},{"name":"mumbai","l
       <p>On the pipeline canvas → <strong>&quot;Add trigger&quot;</strong> → <strong>&quot;New/Edit&quot;</strong> → <strong>&quot;+ New&quot;</strong></p>
 
       <CodeBlock>{`Name:        trigger_weather_6am
-Description: Pulls weather data every morning at 6 AM IST before store opening
+Description: Pulls weather data every morning at 6 AM EST before store opening
 Type:        Schedule
 Start date:  today
-Time zone:   India Standard Time
+Time zone:   Eastern Standard Time
 Repeat:      Every 1 Day
 At time:     06:00`}</CodeBlock>
 
-      <Screenshot caption="New trigger form — trigger_weather_6am, Schedule type, 06:00 IST, daily repeat" />
+      <Screenshot caption="New trigger form — trigger_weather_6am, Schedule type, 06:00 EST, daily repeat" />
 
       <p>Click <strong>&quot;OK&quot;</strong></p>
       <p><strong>Trigger Run Parameters dialog:</strong></p>
@@ -720,7 +720,7 @@ At time:     06:00`}</CodeBlock>
       <ExprBox expr="@formatDateTime(trigger().scheduledTime,'yyyy-MM-dd')" result="The date the trigger fires — e.g. 2024-01-15" />
 
       <p>For <code>cities</code>:</p>
-      <ExprBox expr='[{"name":"delhi","lat":"28.6139","lon":"77.2090"},{"name":"mumbai","lat":"19.0760","lon":"72.8777"},{"name":"bangalore","lat":"12.9716","lon":"77.5946"}]' />
+      <ExprBox expr='[{"name":"newyork","lat":"40.7128","lon":"-74.0060"},{"name":"chicago","lat":"41.8781","lon":"-87.6298"},{"name":"seattle","lat":"47.6062","lon":"-122.3321"}]' />
 
       <Screenshot caption="Trigger Run Parameters — run_date showing formatDateTime expression, cities showing the JSON array" />
 
@@ -784,9 +784,9 @@ trigger_weather_6am`}</CodeBlock>
 │
 └── weather/                        ← REST API data (Project 06)
     └── date=YYYY-MM-DD/
-        ├── weather_delhi_YYYYMMDD.json
-        ├── weather_mumbai_YYYYMMDD.json
-        └── weather_bangalore_YYYYMMDD.json`}</CodeBlock>
+        ├── weather_newyork_YYYYMMDD.json
+        ├── weather_chicago_YYYYMMDD.json
+        └── weather_seattle_YYYYMMDD.json`}</CodeBlock>
 
       {/* What was built */}
       <h2>Everything You Created</h2>
@@ -877,7 +877,7 @@ trigger_weather_6am`}</CodeBlock>
 
       <KeyTakeaways items={[
         'REST APIs return structured JSON data — you query them with a URL instead of downloading a file',
-        'The cities array uses objects {"name":"delhi","lat":"28.61","lon":"77.20"} so one ForEach item carries all three values',
+        'The cities array uses objects {"name":"newyork","lat":"40.71","lon":"-74.01"} so one ForEach item carries all three values',
         'Use @{item().property} to read individual fields from an object — dot notation works the same as in JavaScript',
         'Base URL lives in the Linked Service, the relative URL and query parameters go in the dataset',
         'Always test your API in the browser before building the ADF pipeline',

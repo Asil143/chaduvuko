@@ -213,12 +213,12 @@ export default function FilesAtScaleModule() {
 
 # ── LANDING ZONE: preserve origin context ────────────────────────────────────
 # Pattern: {source}_{entity}_{start_ts}_{end_ts}_{batch_id}.{ext}
-razorpay_payments_20260317T000000Z_20260317T235959Z_f8a3b2c4.json
+stripe_payments_20260317T000000Z_20260317T235959Z_f8a3b2c4.json
 shopify_orders_20260317T060000Z_20260317T120000Z_9e1d7c3f.csv
 shipfast_deliveries_20260317T000000Z_20260317T235959Z_2b4a8d6e.parquet
 
 # What each component gives you:
-# razorpay     → which source system (filter by prefix)
+# stripe       → which source system (filter by prefix)
 # payments     → which entity/table
 # 20260317T... → ISO 8601 UTC timestamps (sort = chronological order)
 # f8a3b2c4     → unique batch ID (trace back to pipeline run logs)

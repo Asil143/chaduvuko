@@ -226,7 +226,7 @@ export default function ObjectDetectionPage() {
         <Callout type="tip">
           This module covers the concepts and key algorithms from scratch
           (IoU, NMS, anchor boxes) then shows production usage with
-          Ultralytics YOLOv8 — the standard library used in Indian
+          Ultralytics YOLOv8 — the standard library used in most
           ML teams for real-time detection.
           Install: <span style={S.code as React.CSSProperties}>pip install ultralytics</span>.
         </Callout>

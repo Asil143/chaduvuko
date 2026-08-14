@@ -115,13 +115,13 @@ INSERT INTO customers (
   loyalty_tier
 )
 VALUES (
-  'Priya',
-  'Nair',
-  'priya.nair@gmail.com',
+  'Sofia',
+  'Ramirez',
+  'sofia.ramirez@gmail.com',
   '9876543210',
-  'Kochi',
-  'Kerala',
-  '682001',
+  'Seattle',
+  'Washington',
+  '98101',
   '2024-04-10',
   'Bronze'
 );`}
@@ -134,14 +134,14 @@ VALUES (
         label="Named vs positional insert — always use named"
         code={`-- WRONG: positional — breaks if schema changes, unreadable
 INSERT INTO customers VALUES (
-  DEFAULT, 'Priya', 'Nair', 'priya@gmail.com',
-  '9876543210', 'Kochi', 'Kerala', '682001',
+  DEFAULT, 'Sofia', 'Ramirez', 'sofia.ramirez@gmail.com',
+  '9876543210', 'Seattle', 'Washington', '98101',
   '2024-04-10', 'Bronze'
 );
 
 -- RIGHT: named — self-documenting, schema-change resistant
 INSERT INTO customers (first_name, last_name, email, city, loyalty_tier)
-VALUES ('Priya', 'Nair', 'priya@gmail.com', 'Kochi', 'Bronze');
+VALUES ('Sofia', 'Ramirez', 'sofia.ramirez@gmail.com', 'Seattle', 'Bronze');
 -- Omitted columns get their DEFAULT values or NULL`}
       />
 
@@ -163,12 +163,12 @@ LIMIT 5;`}
         initialQuery={`-- Simulate: insert then immediately query the new row
 -- DuckDB playground: INSERT affects the in-memory FreshCart data
 INSERT INTO customers (first_name, last_name, email, city, state, joined_date)
-VALUES ('Priya', 'Nair', 'priya.nair@gmail.com', 'Kochi', 'Kerala', '2024-04-10');
+VALUES ('Sofia', 'Ramirez', 'sofia.ramirez@gmail.com', 'Seattle', 'Washington', '2024-04-10');
 
 -- Verify the new row was added
 SELECT customer_id, first_name, last_name, city, loyalty_tier, joined_date
 FROM customers
-WHERE email = 'priya.nair@gmail.com';`}
+WHERE email = 'sofia.ramirez@gmail.com';`}
         height={155}
         showSchema={false}
       />
@@ -192,27 +192,27 @@ VALUES
 -- Real example: add multiple products at once
 INSERT INTO products (product_name, category, brand, unit_price, cost_price, unit, in_stock)
 VALUES
-  ('Amul Taaza Milk 1L',  'Dairy',   'Amul',  62.00, 52.00, '1L',  true),
-  ('Tata Salt 1kg',       'Staples', 'Tata',  22.00, 16.00, '1kg', true),
-  ('Maggi Noodles 70g',   'Staples', 'Nestle',15.00, 10.00, '70g', true),
-  ('Fortune Sunflower Oil','Cooking', 'Fortune',145.00,118.00,'1L', false);`}
+  ('Horizon Organic Milk 1L', 'Dairy',   'Horizon',  6.20, 5.20, '1L',  true),
+  ('Morton Salt 1kg',         'Staples', 'Morton',   2.20, 1.60, '1kg', true),
+  ('Kraft Mac & Cheese 70g',  'Staples', 'Kraft',    1.50, 1.00, '70g', true),
+  ('Crisco Sunflower Oil',    'Cooking', 'Crisco',  14.50,11.80,'1L', false);`}
       />
 
       <SQLPlayground
         initialQuery={`-- Multi-row insert: add three new customers at once
 INSERT INTO customers (first_name, last_name, email, city, state, joined_date, loyalty_tier)
 VALUES
-  ('Arjun',  'Mehta',  'arjun.mehta@gmail.com',  'Boston',      'Maharashtra', '2024-03-01', 'Silver'),
-  ('Sneha',  'Pillai', 'sneha.pillai@yahoo.com',  'Trivandrum','Kerala',      '2024-03-15', 'Bronze'),
-  ('Vikram', 'Bose',   'vikram.bose@outlook.com', 'Kolkata',   'West Bengal', '2024-04-01', 'Gold');
+  ('Marcus', 'Bennett', 'marcus.bennett@gmail.com', 'Boston',   'Massachusetts', '2024-03-01', 'Silver'),
+  ('Jasmine','Rodriguez','jasmine.rodriguez@yahoo.com', 'Portland','Oregon',      '2024-03-15', 'Bronze'),
+  ('David',  'Chen',   'david.chen@outlook.com', 'Denver',    'Colorado',    '2024-04-01', 'Gold');
 
 -- Verify all three were added
 SELECT customer_id, first_name, last_name, city, loyalty_tier
 FROM customers
 WHERE email IN (
-  'arjun.mehta@gmail.com',
-  'sneha.pillai@yahoo.com',
-  'vikram.bose@outlook.com'
+  'marcus.bennett@gmail.com',
+  'jasmine.rodriguez@yahoo.com',
+  'david.chen@outlook.com'
 );`}
         height={205}
         showSchema={false}
@@ -334,12 +334,12 @@ LIMIT 10;`}
         label="RETURNING clause — PostgreSQL and DuckDB"
         code={`-- Insert and get back the generated customer_id
 INSERT INTO customers (first_name, last_name, email, city, joined_date)
-VALUES ('Kavya', 'Reddy', 'kavya@gmail.com', 'Austin', '2024-04-10')
+VALUES ('Rachel', 'Foster', 'rachel@gmail.com', 'Austin', '2024-04-10')
 RETURNING customer_id, first_name, joined_date;
 
 -- Returns:
 -- customer_id | first_name | joined_date
--- 21          | Kavya      | 2024-04-10
+-- 21          | Rachel     | 2024-04-10
 
 -- RETURNING * returns all columns of the inserted row
 INSERT INTO products (product_name, category, unit_price, cost_price, in_stock)
@@ -383,7 +383,7 @@ RETURNING
         code={`-- If a customer with this email already exists, do nothing
 -- Without this, a duplicate email INSERT would throw an error
 INSERT INTO customers (first_name, last_name, email, city, joined_date)
-VALUES ('Aisha', 'Khan', 'aisha.khan@gmail.com', 'Seattle', '2024-01-05')
+VALUES ('Emily', 'Carter', 'emily.carter@gmail.com', 'Seattle', '2024-01-05')
 ON CONFLICT (email) DO NOTHING;
 
 -- The (email) specifies WHICH unique constraint to check
@@ -404,7 +404,7 @@ ON CONFLICT (product_name, brand) DO NOTHING;`}
         code={`-- If product already exists (by name+brand), update its price and stock
 -- If product is new, insert it
 INSERT INTO products (product_name, brand, unit_price, cost_price, in_stock)
-VALUES ('Amul Butter 500g', 'Amul', 285.00, 245.00, true)
+VALUES ('Horizon Butter 500g', 'Horizon', 285.00, 245.00, true)
 ON CONFLICT (product_name, brand)
 DO UPDATE SET
   unit_price = EXCLUDED.unit_price,
@@ -428,7 +428,7 @@ DO UPDATE SET
         label="MySQL upsert syntax"
         code={`-- MySQL equivalent of PostgreSQL's ON CONFLICT DO UPDATE
 INSERT INTO products (product_name, brand, unit_price, in_stock)
-VALUES ('Amul Butter 500g', 'Amul', 285.00, true)
+VALUES ('Horizon Butter 500g', 'Horizon', 285.00, true)
 ON DUPLICATE KEY UPDATE
   unit_price = VALUES(unit_price),
   in_stock   = VALUES(in_stock);
@@ -439,17 +439,17 @@ ON DUPLICATE KEY UPDATE
 
       <SQLPlayground
         initialQuery={`-- Demonstrate upsert: try to insert an existing customer
--- The customer with email 'aisha.khan@gmail.com' already exists
+-- The customer with email 'emily.carter@gmail.com' already exists
 -- ON CONFLICT DO NOTHING skips the insert silently
 
 INSERT INTO customers (first_name, last_name, email, city, joined_date)
-VALUES ('Aisha', 'Khan', 'aisha.khan@gmail.com', 'New York', '2024-04-10')
+VALUES ('Emily', 'Carter', 'emily.carter@gmail.com', 'New York', '2024-04-10')
 ON CONFLICT (email) DO NOTHING;
 
 -- Verify original record is unchanged
 SELECT customer_id, first_name, last_name, city, joined_date
 FROM customers
-WHERE email = 'aisha.khan@gmail.com';`}
+WHERE email = 'emily.carter@gmail.com';`}
         height={185}
         showSchema={false}
       />
@@ -468,7 +468,7 @@ WHERE email = 'aisha.khan@gmail.com';`}
         label="Transaction wrapping related INSERTs"
         code={`-- WRONG: two separate inserts — if the second fails, the first stays
 INSERT INTO orders (customer_id, store_id, order_date, payment_method, total_amount)
-VALUES (5, 'ST001', '2024-04-10', 'UPI', 856.00);
+VALUES (5, 'ST001', '2024-04-10', 'Zelle', 856.00);
 
 INSERT INTO order_items (order_id, product_id, quantity, unit_price, line_total)
 VALUES (31, 3, 2, 428.00, 856.00);
@@ -477,7 +477,7 @@ VALUES (31, 3, 2, 428.00, 856.00);
 -- RIGHT: wrap in a transaction
 BEGIN;
   INSERT INTO orders (customer_id, store_id, order_date, payment_method, total_amount)
-  VALUES (5, 'ST001', '2024-04-10', 'UPI', 856.00)
+  VALUES (5, 'ST001', '2024-04-10', 'Zelle', 856.00)
   RETURNING order_id;  -- capture the generated order_id
 
   INSERT INTO order_items (order_id, product_id, quantity, unit_price, line_total)
@@ -554,12 +554,12 @@ WHERE import_batch = '2024-04-10';`}
         label="INSERT with functions and expressions"
         code={`-- CURRENT_DATE and NOW() as values
 INSERT INTO orders (customer_id, store_id, order_date, payment_method, total_amount)
-VALUES (5, 'ST001', CURRENT_DATE, 'UPI', 856.00);
+VALUES (5, 'ST001', CURRENT_DATE, 'Zelle', 856.00);
 -- order_date gets today's date automatically
 
 -- DEFAULT keyword — use the column's DEFAULT value explicitly
 INSERT INTO customers (first_name, last_name, email, joined_date, loyalty_tier)
-VALUES ('Rahul', 'Sharma', 'rahul@gmail.com', DEFAULT, DEFAULT);
+VALUES ('Kevin', 'Park', 'kevin@gmail.com', DEFAULT, DEFAULT);
 -- joined_date gets CURRENT_DATE (its default)
 -- loyalty_tier gets 'Bronze' (its default)
 
@@ -574,7 +574,7 @@ VALUES (
   (SELECT customer_id FROM customers WHERE email = 'rahul@gmail.com'),
   'ST001',
   CURRENT_DATE,
-  'UPI',
+  'Zelle',
   1200.00
 );`}
       />
@@ -591,7 +591,7 @@ VALUES (
   'ST003',     -- existing store
   CURRENT_DATE,
   'Processing',
-  'UPI',
+  'Zelle',
   1456.50
 )
 RETURNING order_id, customer_id, order_date, order_status, total_amount;`}
@@ -783,7 +783,7 @@ COMMIT;`}
       <IQ q="What is SQL injection and how do parameterised queries prevent it?">
         <p style={{ margin: '0 0 14px' }}>SQL injection is an attack where malicious input data is interpreted as SQL commands rather than as data values. It occurs when application code builds SQL statements by concatenating user input directly into the SQL string. If a user enters '; DROP TABLE customers; -- as their name, and the application builds the query as INSERT INTO customers (name) VALUES ('' + name + ''), the resulting SQL is INSERT INTO customers (name) VALUES (''); DROP TABLE customers; -- '), which executes two statements: the INSERT and a DROP TABLE that deletes the entire customers table.</p>
         <p style={{ margin: '0 0 14px' }}>SQL injection is consistently ranked as a top web security vulnerability and has caused some of the largest data breaches in history. It requires no special tools — just crafted input in a web form, an API parameter, or a URL query string. The vulnerability is not in the database — it is in the application code that builds queries with string concatenation.</p>
-        <p style={{ margin: 0 }}>Parameterised queries (also called prepared statements) prevent SQL injection by separating SQL structure from data values. The SQL template is sent to the database first: INSERT INTO customers (name) VALUES ($1). Then the value is sent separately: ['Priya']. The database driver handles all escaping and quoting — user input is always treated as a data value, never as SQL syntax. The malicious '; DROP TABLE customers; -- input would be stored as a literal string in the name column, doing no harm. Parameterised queries are mandatory for any application that accepts user input and are supported by every major database driver in every language.</p>
+        <p style={{ margin: 0 }}>Parameterised queries (also called prepared statements) prevent SQL injection by separating SQL structure from data values. The SQL template is sent to the database first: INSERT INTO customers (name) VALUES ($1). Then the value is sent separately: ['Sofia']. The database driver handles all escaping and quoting — user input is always treated as a data value, never as SQL syntax. The malicious '; DROP TABLE customers; -- input would be stored as a literal string in the name column, doing no harm. Parameterised queries are mandatory for any application that accepts user input and are supported by every major database driver in every language.</p>
       </IQ>
 
       <IQ q="What is the RETURNING clause and when do you need it?">
@@ -831,14 +831,14 @@ COMMIT;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshCart is opening three new stores in Tier 2 cities. Write a single INSERT statement that adds all three stores at once. The stores are: (1) 'FreshCart Nagpur Central' in Nagpur, Maharashtra, managed by 'Suresh Rao', with a monthly target of ₹8,50,000. (2) 'FreshCart Indore Main' in Indore, Madhya Pradesh, managed by 'Anjali Singh', monthly target ₹7,20,000. (3) 'FreshCart Bhopal Square' in Bhopal, Madhya Pradesh, managed by 'Ramesh Tiwari', monthly target ₹6,80,000. Use store IDs ST011, ST012, ST013. Set opened_date to today. Then write a SELECT to verify all three were inserted."
+        question="FreshCart is opening three new stores in secondary markets. Write a single INSERT statement that adds all three stores at once. The stores are: (1) 'FreshCart Riverside Central' in Riverside, California, managed by 'Marcus Reed', with a monthly target of $850,000. (2) 'FreshCart Plano Main' in Plano, Texas, managed by 'Angela Kim', monthly target $720,000. (3) 'FreshCart Tempe Square' in Tempe, Arizona, managed by 'Robert Chen', monthly target $680,000. Use store IDs ST011, ST012, ST013. Set opened_date to today. Then write a SELECT to verify all three were inserted."
         hint="Multi-row INSERT with three VALUES tuples. Use CURRENT_DATE for opened_date. Then SELECT WHERE store_id IN ('ST011','ST012','ST013')."
         answer={`-- Insert three new stores
 INSERT INTO stores (store_id, store_name, city, state, manager_name, opened_date, monthly_target)
 VALUES
-  ('ST011', 'FreshCart Nagpur Central', 'Nagpur', 'Maharashtra',    'Suresh Rao',    CURRENT_DATE, 850000.00),
-  ('ST012', 'FreshCart Indore Main',    'Indore', 'Madhya Pradesh', 'Anjali Singh',  CURRENT_DATE, 720000.00),
-  ('ST013', 'FreshCart Bhopal Square',  'Bhopal', 'Madhya Pradesh', 'Ramesh Tiwari', CURRENT_DATE, 680000.00);
+  ('ST011', 'FreshCart Riverside Central', 'Riverside', 'California', 'Marcus Reed', CURRENT_DATE, 850000.00),
+  ('ST012', 'FreshCart Plano Main',        'Plano',     'Texas',      'Angela Kim',  CURRENT_DATE, 720000.00),
+  ('ST013', 'FreshCart Tempe Square',      'Tempe',     'Arizona',    'Robert Chen', CURRENT_DATE, 680000.00);
 
 -- Verify all three were inserted
 SELECT
@@ -852,7 +852,7 @@ SELECT
 FROM stores
 WHERE store_id IN ('ST011', 'ST012', 'ST013')
 ORDER BY store_id;`}
-        explanation="The multi-row INSERT adds all three stores in a single statement — one round-trip to the database, one transaction, one constraint check pass. Each tuple in VALUES maps to the column list in order: store_id → 'ST011', store_name → 'FreshCart Nagpur Central', etc. CURRENT_DATE is a SQL function that evaluates to today's date at execution time — the database fills it in, not the application. The verification SELECT uses IN with the three store IDs to confirm all three rows exist with correct values. In production you would wrap the INSERT in a transaction and check the affected row count equals 3 before committing."
+        explanation="The multi-row INSERT adds all three stores in a single statement — one round-trip to the database, one transaction, one constraint check pass. Each tuple in VALUES maps to the column list in order: store_id → 'ST011', store_name → 'FreshCart Riverside Central', etc. CURRENT_DATE is a SQL function that evaluates to today's date at execution time — the database fills it in, not the application. The verification SELECT uses IN with the three store IDs to confirm all three rows exist with correct values. In production you would wrap the INSERT in a transaction and check the affected row count equals 3 before committing."
       />
 
       <HR />

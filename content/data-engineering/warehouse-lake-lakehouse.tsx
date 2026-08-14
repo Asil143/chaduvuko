@@ -789,7 +789,7 @@ WHAT THE TRANSACTION LOG ENABLES:
         <SectionTitle>How All Three Coexist in a Modern Data Platform</SectionTitle>
 
         <Para>
-          The choice is not "pick one." Most mature data platforms at Indian tech
+          The choice is not "pick one." Most mature data platforms at top tech
           companies use all three architectural patterns simultaneously, each serving
           a different purpose. Understanding how they fit together is more useful
           than treating them as alternatives.

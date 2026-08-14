@@ -822,20 +822,20 @@ int main() {
     for (i = 0; i < TABLE_SIZE; i++) hashTable[i] = NULL;
 
     /* store student marks */
-    htInsert("Aisha",  92);
-    htInsert("Rohan",  85);
-    htInsert("Priya",  78);
-    htInsert("Kiran",  95);
+    htInsert("Sofia",  92);
+    htInsert("Marcus",  85);
+    htInsert("Jasmine",  78);
+    htInsert("Derek",  95);
     htInsert("Dev",    88);
 
     int found;
-    printf("Aisha:  %d\\n", htSearch("Aisha",  &found));  /* 92 */
-    printf("Priya:  %d\\n", htSearch("Priya",  &found));  /* 78 */
-    printf("Kiran:  %d\\n", htSearch("Kiran",  &found));  /* 95 */
+    printf("Sofia:  %d\\n", htSearch("Sofia",  &found));  /* 92 */
+    printf("Jasmine:  %d\\n", htSearch("Jasmine",  &found));  /* 78 */
+    printf("Derek:  %d\\n", htSearch("Derek",  &found));  /* 95 */
 
     /* update */
-    htInsert("Rohan", 90);
-    printf("Rohan updated: %d\\n", htSearch("Rohan", &found)); /* 90 */
+    htInsert("Marcus", 90);
+    printf("Marcus updated: %d\\n", htSearch("Marcus", &found)); /* 90 */
 
     /* delete */
     htDelete("Dev");

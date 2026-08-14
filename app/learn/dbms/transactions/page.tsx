@@ -87,7 +87,7 @@ export default function Transactions() {
 
         <Para>
           Consider the most classic scenario in all of database theory.
-          You open Square and transfer ₹500 to a friend.
+          You open Square and transfer $500 to a friend.
           From the database's perspective, this involves two separate operations:
         </Para>
 
@@ -99,7 +99,7 @@ export default function Transactions() {
         <Para>
           Now imagine the database server crashes — power failure, OS panic, hardware fault —
           after Operation 1 completes but before Operation 2 executes.
-          Your ₹500 has been deducted. Your friend received nothing.
+          Your $500 has been deducted. Your friend received nothing.
           The money has vanished from the financial system.
           This is not a theoretical edge case — it is a real failure mode that happens
           in every system that operates long enough. Without a mechanism to handle it,
@@ -437,17 +437,17 @@ SET autocommit = 0;
             </Para>
 
             <CodeBox label="Atomicity — the bank transfer with every failure scenario">
-{`-- SCENARIO: Transfer ₹500 from Account A (balance: ₹5000) to Account B (balance: ₹2000)
+{`-- SCENARIO: Transfer $500 from Account A (balance: $5000) to Account B (balance: $2000)
 -- WITHOUT atomicity guarantee — three possible failure points:
 
 -- Step 1 executes:
 UPDATE accounts SET balance = 4500 WHERE account_id = 'A';
--- ← CRASH HERE: A has ₹4500, B has ₹2000. ₹500 has vanished from the system.
--- ← APP ERROR HERE: same result. ₹500 is gone.
+-- ← CRASH HERE: A has $4500, B has $2000. $500 has vanished from the system.
+-- ← APP ERROR HERE: same result. $500 is gone.
 
 -- Step 2 executes:
 UPDATE accounts SET balance = 2500 WHERE account_id = 'B';
--- ← CRASH HERE: A has ₹4500, B has ₹2500. Transfer succeeded — but crash means
+-- ← CRASH HERE: A has $4500, B has $2500. Transfer succeeded — but crash means
 --   the commit may not have been written to disk. On restart: depends on log.
 
 -- WITH atomicity (transaction):
@@ -459,20 +459,20 @@ COMMIT;
 -- Failure scenarios WITH atomicity:
 -- CRASH after Step 1, before Step 2:
 --   On restart: recovery system reads WAL log, sees incomplete transaction → ROLLBACK
---   A = ₹5000, B = ₹2000. Exactly as before. ₹500 never left A.
+--   A = $5000, B = $2000. Exactly as before. $500 never left A.
 
 -- CRASH after Step 2, before COMMIT:
 --   On restart: recovery sees transaction not committed → ROLLBACK both steps
---   A = ₹5000, B = ₹2000. Both updates are undone.
+--   A = $5000, B = $2000. Both updates are undone.
 
 -- CRASH after COMMIT is written to log, before data pages updated:
 --   On restart: recovery sees committed transaction → REDO both steps
---   A = ₹4500, B = ₹2500. Transfer completes correctly.
+--   A = $4500, B = $2500. Transfer completes correctly.
 
 -- RESULT: The only possible outcomes are:
--- (A=₹4500, B=₹2500) — transfer completed, OR
--- (A=₹5000, B=₹2000) — transfer never happened
--- NEVER: (A=₹4500, B=₹2000) — money vanished`}
+-- (A=$4500, B=$2500) — transfer completed, OR
+-- (A=$5000, B=$2000) — transfer never happened
+-- NEVER: (A=$4500, B=$2000) — money vanished`}
             </CodeBox>
 
             <SubTitle>How Atomicity Is Implemented — Write-Ahead Logging</SubTitle>
@@ -540,7 +540,7 @@ BEGIN;
     -- This sets balance = -9500 → violates CHECK constraint
 COMMIT;
 -- ERROR: new row for relation "accounts" violates check constraint "chk_balance_positive"
--- Transaction is automatically aborted. Balance remains ₹500.
+-- Transaction is automatically aborted. Balance remains $500.
 
 -- REFERENTIAL INTEGRITY: foreign key must reference existing row
 BEGIN;
@@ -593,9 +593,9 @@ COMMIT;
 -- (The DB could enforce this with a trigger, but often done in application)
 BEGIN;
     INSERT INTO orders (order_id, customer_id, total_amount) VALUES (5001, 1, 420.00);
-    INSERT INTO order_items VALUES (5001, 12, 2, 140.00);  -- ₹280
-    INSERT INTO order_items VALUES (5001, 8,  1, 140.00);  -- ₹140
-    -- Sum = ₹420 = total_amount → consistent ✓
+    INSERT INTO order_items VALUES (5001, 12, 2, 140.00);  -- $280
+    INSERT INTO order_items VALUES (5001, 8,  1, 140.00);  -- $140
+    -- Sum = $420 = total_amount → consistent ✓
 COMMIT;
 
 -- BUSINESS RULE: Stock cannot go negative (even without DB constraint)
@@ -652,44 +652,44 @@ COMMIT;`}
             <SubTitle>Why Isolation Is Necessary — The Seat Booking Problem</SubTitle>
 
             <Para>
-              Consider an airline seat booking system. Seat 14A on flight AI-101 has
+              Consider an airline seat booking system. Seat 14A on flight DL-204 has
               one remaining seat. Two passengers attempt to book it simultaneously.
             </Para>
 
             <CodeBox label="The concurrent booking problem — what happens without proper isolation">
-{`-- TRANSACTION T1 (Passenger Rahul — booking agent 1):
+{`-- TRANSACTION T1 (Passenger Michael — booking agent 1):
 -- T2 starts at almost exactly the same time
 
 -- T1: Check if seat 14A is available
-SELECT count FROM seats WHERE flight = 'AI-101' AND seat = '14A';
+SELECT count FROM seats WHERE flight = 'DL-204' AND seat = '14A';
 -- Result: count = 1 (available)
 
 -- T2: Check if seat 14A is available (executing at same moment)
-SELECT count FROM seats WHERE flight = 'AI-101' AND seat = '14A';
+SELECT count FROM seats WHERE flight = 'DL-204' AND seat = '14A';
 -- Result: count = 1 (available) ← T1's reservation hasn't committed yet!
 
 -- T1: Reserve the seat (decrement count)
-UPDATE seats SET count = 0, passenger = 'Rahul' WHERE flight = 'AI-101' AND seat = '14A';
-COMMIT;  -- Rahul has the seat. count = 0.
+UPDATE seats SET count = 0, passenger = 'Michael' WHERE flight = 'DL-204' AND seat = '14A';
+COMMIT;  -- Michael has the seat. count = 0.
 
 -- T2: Reserve the seat (also decrements — READING STALE DATA)
-UPDATE seats SET count = 0, passenger = 'Priya' WHERE flight = 'AI-101' AND seat = '14A';
-COMMIT;  -- Priya also "has" the seat. count = 0. Passenger = 'Priya' (overwrites Rahul).
+UPDATE seats SET count = 0, passenger = 'Jasmine' WHERE flight = 'DL-204' AND seat = '14A';
+COMMIT;  -- Jasmine also "has" the seat. count = 0. Passenger = 'Jasmine' (overwrites Michael).
 
 -- RESULT: Both passengers have confirmation emails. Same physical seat. Conflict at boarding.
 -- The airline is legally liable.
 
 -- WITH PROPER ISOLATION (SELECT FOR UPDATE — serialises the reservation):
 BEGIN;
-SELECT count FROM seats WHERE flight = 'AI-101' AND seat = '14A' FOR UPDATE;
+SELECT count FROM seats WHERE flight = 'DL-204' AND seat = '14A' FOR UPDATE;
 -- FOR UPDATE: acquires an exclusive lock on this row.
 -- T2's SELECT FOR UPDATE on the same row now BLOCKS until T1 commits or rolls back.
-UPDATE seats SET count = 0, passenger = 'Rahul' WHERE ...;
+UPDATE seats SET count = 0, passenger = 'Michael' WHERE ...;
 COMMIT;
 -- T1 commits. Lock released. T2's SELECT FOR UPDATE now proceeds.
 -- T2 reads: count = 0 (seat is gone).
--- T2 application sees count = 0, returns "seat not available" to Priya.
--- Only Rahul gets the seat. Correct.`}
+-- T2 application sees count = 0, returns "seat not available" to Jasmine.
+-- Only Michael gets the seat. Correct.`}
             </CodeBox>
 
             <SubTitle>The Four Concurrency Problems Isolation Prevents</SubTitle>
@@ -708,21 +708,21 @@ COMMIT;
                   problem: 'Dirty Read',
                   color: '#ff4757',
                   desc: 'Transaction T2 reads data that T1 has modified but not yet committed. If T1 then rolls back, T2 has acted on data that never officially existed. The "dirty" data (uncommitted changes) has contaminated T2\'s results.',
-                  example: 'T1 sets salary to ₹80,000 (not committed). T2 reads ₹80,000 and uses it in a calculation. T1 rolls back. T2\'s calculation is based on data that never existed.',
+                  example: 'T1 sets salary to $80,000 (not committed). T2 reads $80,000 and uses it in a calculation. T1 rolls back. T2\'s calculation is based on data that never existed.',
                   preventedBy: 'READ COMMITTED and above',
                 },
                 {
                   problem: 'Non-Repeatable Read',
                   color: '#f97316',
                   desc: 'T1 reads a row. T2 updates and commits that row. T1 reads the same row again and gets a different value. The same query returns different results within the same transaction.',
-                  example: 'T1 reads account balance = ₹5,000 for a report. T2 debits ₹1,000 and commits. T1 reads balance again = ₹4,000. The report is internally inconsistent.',
+                  example: 'T1 reads account balance = $5,000 for a report. T2 debits $1,000 and commits. T1 reads balance again = $4,000. The report is internally inconsistent.',
                   preventedBy: 'REPEATABLE READ and above',
                 },
                 {
                   problem: 'Phantom Read',
                   color: '#facc15',
                   desc: 'T1 executes a query returning a set of rows. T2 inserts new rows that match T1\'s query and commits. T1 re-executes the same query and finds new "phantom" rows that appeared.',
-                  example: 'T1 counts orders where amount > 500: gets 47. T2 inserts an order for ₹800 and commits. T1 counts again: gets 48. New phantom row appeared.',
+                  example: 'T1 counts orders where amount > 500: gets 47. T2 inserts an order for $800 and commits. T1 counts again: gets 48. New phantom row appeared.',
                   preventedBy: 'SERIALIZABLE',
                 },
                 {
@@ -936,7 +936,7 @@ SHOW synchronous_commit;`}
         <Para>
           ACID properties are not abstract theory — they are engineering constraints that
           directly shape how production systems are built. Here is how each property
-          manifests in real systems at Indian tech companies.
+          manifests in real systems at top tech companies.
         </Para>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 28 }}>
@@ -985,7 +985,7 @@ SHOW synchronous_commit;`}
         </Para>
 
         <CodeBox label="Production checkout transaction — ACID considerations at every step">
-{`-- FLIPKART CHECKOUT TRANSACTION
+{`-- AMAZON CHECKOUT TRANSACTION
 -- Placing an order for 2 units of product P001 by customer C001
 
 BEGIN;
@@ -1164,7 +1164,7 @@ COMMIT;
           <Para>
             Customer support escalates: "Customers report that after a failed payment,
             their order appears in the system with status 'payment_failed' but the
-            order_items are missing. The order total shows ₹0."
+            order_items are missing. The order total shows $0."
           </Para>
 
           <CodeBox label="The buggy code — missing transaction boundary">

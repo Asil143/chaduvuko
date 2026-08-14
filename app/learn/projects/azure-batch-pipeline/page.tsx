@@ -62,12 +62,12 @@ const csvData = `order_id,store_id,product_name,category,quantity,unit_price,ord
 ORD001,ST001,Basmati Rice 5kg,Grocery,3,299.00,2024-01-15
 ORD002,ST001,Sunflower Oil 1L,Grocery,5,145.00,2024-01-15
 ORD003,ST001,Samsung TV 43inch,Electronics,1,32000.00,2024-01-15
-ORD004,ST002,Amul Butter 500g,Dairy,8,240.00,2024-01-15
+ORD004,ST002,Horizon Butter 500g,Dairy,8,240.00,2024-01-15
 ORD005,ST002,Basmati Rice 5kg,Grocery,2,299.00,2024-01-15
 ORD006,ST002,Colgate Toothpaste,Personal Care,10,89.00,2024-01-15
 ORD007,ST003,Lays Chips Family Pack,Snacks,15,99.00,2024-01-15
 ORD008,ST003,Sony Headphones,Electronics,2,4500.00,2024-01-15
-ORD009,ST003,Amul Milk 1L,Dairy,20,62.00,2024-01-15
+ORD009,ST003,Horizon Organic Milk 1L,Dairy,20,62.00,2024-01-15
 ORD010,ST001,Dove Soap 100g,Personal Care,6,65.00,2024-01-15`
 
 const resourcesCreated = [
@@ -161,7 +161,7 @@ export default function Project01Page() {
       {/* Real World Problem */}
       <h2>Real World Problem</h2>
       <p>
-        <strong>The Company: FreshCart</strong> — a grocery chain with 10 stores across India.
+        <strong>The Company: FreshCart</strong> — a grocery chain with 10 stores across the US.
       </p>
       <p>
         Every day, each store manager exports a file called <code>daily_sales.csv</code> from their billing software and saves it on their computer. That file just sits there. The data team at FreshCart HQ has zero visibility into what is happening across stores. They cannot answer basic questions like:

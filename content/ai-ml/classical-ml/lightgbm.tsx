@@ -466,8 +466,8 @@ n = 50_000   # large dataset — where LightGBM shines
 # ── Amazon daily product demand dataset ─────────────────────────────
 categories    = ['Electronics','Fashion','Home','Books','Sports',
                   'Beauty','Grocery','Toys']
-warehouses    = ['New York','Delhi','Seattle','Austin','Chicago',
-                  'Boston','Kolkata','Ahmedabad']
+warehouses    = ['New York','Denver','Seattle','Austin','Chicago',
+                  'Boston','Miami','Atlanta']
 
 df = pd.DataFrame({
     'category':          np.random.choice(categories, n),
@@ -597,7 +597,7 @@ n = 20_000
 df_cat = pd.DataFrame({
     'category':    np.random.choice(['Electronics','Fashion','Home',
                                       'Books','Sports'], n),
-    'warehouse':   np.random.choice(['New York','Delhi','Seattle','Austin'], n),
+    'warehouse':   np.random.choice(['New York','Denver','Seattle','Austin'], n),
     'day_of_week': np.random.randint(0, 7, n).astype(float),
     'price':       np.abs(np.random.normal(800, 600, n)).clip(50, 10_000),
     'discount':    np.random.uniform(0, 0.6, n),
@@ -877,7 +877,7 @@ np.random.seed(42)
 n = 30_000
 
 categories = ['Electronics','Fashion','Home','Books','Sports','Beauty']
-warehouses = ['New York','Delhi','Seattle','Austin','Chicago','Boston']
+warehouses = ['New York','Denver','Seattle','Austin','Chicago','Boston']
 
 df_prod = pd.DataFrame({
     'category':          np.random.choice(categories, n),

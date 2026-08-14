@@ -129,7 +129,7 @@ export default function DEInterviewQuestionsModule() {
         <Para>
           Questions are grouped by topic. Difficulty increases within each
           section. Questions marked with ★ are the ones most commonly asked
-          in actual Indian DE interviews based on reported patterns.
+          in actual US DE interviews based on reported patterns.
         </Para>
       </HighlightBox>
 
@@ -175,7 +175,7 @@ for order in stream_orders('orders_2026_03.csv'):
 # Generator pipeline: chain multiple generators for a memory-efficient pipeline
 def filter_valid(orders):
     for o in orders:
-        if o['status'] == 'completed' and o['total_paise'] > 0:
+        if o['status'] == 'completed' and o['total_cents'] > 0:
             yield o
 
 def enrich(orders, store_map):
@@ -208,15 +208,15 @@ for record in pipeline:
 {`from functools import reduce
 
 orders = [
-    {'order_id': 'O1', 'total_paise': 34900, 'status': 'completed', 'city': 'Austin'},
-    {'order_id': 'O2', 'total_paise': 0,     'status': 'cancelled', 'city': 'San Francisco'},
-    {'order_id': 'O3', 'total_paise': 12500, 'status': 'completed', 'city': 'Austin'},
-    {'order_id': 'O4', 'total_paise': 67000, 'status': 'completed', 'city': 'New York'},
+    {'order_id': 'O1', 'total_cents': 34900, 'status': 'completed', 'city': 'Austin'},
+    {'order_id': 'O2', 'total_cents': 0,     'status': 'cancelled', 'city': 'San Francisco'},
+    {'order_id': 'O3', 'total_cents': 12500, 'status': 'completed', 'city': 'Austin'},
+    {'order_id': 'O4', 'total_cents': 67000, 'status': 'completed', 'city': 'New York'},
 ]
 
 # MAP: transform every element — 1-in, 1-out
 # Use when: you want to apply a function to every element
-totals_inr = list(map(lambda o: o['total_paise'] / 100, orders))
+totals_usd = list(map(lambda o: o['total_cents'] / 100, orders))
 # [349.0, 0.0, 125.0, 670.0]
 
 # FILTER: keep elements that pass a predicate — 1-in, 0-or-1-out
@@ -227,17 +227,17 @@ completed = list(filter(lambda o: o['status'] == 'completed', orders))
 # REDUCE: collapse a collection to a single value — N-in, 1-out
 # Use when: you need a cumulative aggregation
 total_revenue = reduce(
-    lambda acc, o: acc + o['total_paise'],
+    lambda acc, o: acc + o['total_cents'],
     filter(lambda o: o['status'] == 'completed', orders),
     0  # initial value
 )
-# 34900 + 12500 + 67000 = 114400 paise = ₹1,144
+# 34900 + 12500 + 67000 = 114400 cents = $1,144
 
 # In practice: prefer list comprehensions over map/filter for readability
-completed_totals = [o['total_paise'] / 100 for o in orders if o['status'] == 'completed']
+completed_totals = [o['total_cents'] / 100 for o in orders if o['status'] == 'completed']
 
 # And sum() over reduce() for simple aggregations
-total_revenue_inr = sum(o['total_paise'] for o in orders if o['status'] == 'completed') / 100`}
+total_revenue_usd = sum(o['total_cents'] for o in orders if o['status'] == 'completed') / 100`}
         </CodeBox>
         <Para>
           In a Spark context, <code>map</code>, <code>filter</code>, and
@@ -317,7 +317,7 @@ logger = logging.getLogger(__name__)
 class OrderEvent:
     order_id: str
     customer_id: str
-    total_paise: int
+    total_cents: int
     store_id: str
     status: str
     city: Optional[str] = None   # nullable — not always present
@@ -336,7 +336,7 @@ def parse_order_event(raw: dict) -> ParseResult:
     """
     try:
         # Validate required fields exist
-        required = ['order_id', 'customer_id', 'total_paise', 'store_id', 'status']
+        required = ['order_id', 'customer_id', 'total_cents', 'store_id', 'status']
         missing = [f for f in required if f not in raw or raw[f] is None]
         if missing:
             return ParseResult(
@@ -346,16 +346,16 @@ def parse_order_event(raw: dict) -> ParseResult:
 
         # Type coercion with explicit error capture
         try:
-            total_paise = int(raw['total_paise'])
+            total_cents = int(raw['total_cents'])
         except (ValueError, TypeError):
             return ParseResult(
-                error=f"total_paise is not an integer: {raw['total_paise']!r}",
+                error=f"total_cents is not an integer: {raw['total_cents']!r}",
                 raw=raw
             )
 
-        if total_paise < 0:
+        if total_cents < 0:
             return ParseResult(
-                error=f"total_paise is negative: {total_paise}",
+                error=f"total_cents is negative: {total_cents}",
                 raw=raw
             )
 
@@ -370,7 +370,7 @@ def parse_order_event(raw: dict) -> ParseResult:
         return ParseResult(record=OrderEvent(
             order_id=str(raw['order_id']).strip(),
             customer_id=str(raw['customer_id']).strip(),
-            total_paise=total_paise,
+            total_cents=total_cents,
             store_id=str(raw['store_id']).strip(),
             status=status,
             city=raw.get('city'),   # Optional — None is fine
@@ -475,7 +475,7 @@ def process_large_csv(input_path: str, output_path: str):
 
     for i, chunk in enumerate(pd.read_csv(input_path, chunksize=CHUNK_SIZE)):
         # Apply transformations to each chunk
-        chunk['total_inr'] = chunk['total_paise'] / 100
+        chunk['total_usd'] = chunk['total_cents'] / 100
         chunk['order_date'] = pd.to_datetime(chunk['created_at']).dt.date
         chunk = chunk[chunk['status'] == 'completed']   # filter
 
@@ -535,8 +535,8 @@ def stream_csv_to_parquet(input_path: str, output_path: str):
 original = {
     'order_id': 'O1234',
     'items': [
-        {'product_id': 'P001', 'qty': 2, 'price_paise': 34900},
-        {'product_id': 'P002', 'qty': 1, 'price_paise': 12500},
+        {'product_id': 'P001', 'qty': 2, 'price_cents': 34900},
+        {'product_id': 'P002', 'qty': 1, 'price_cents': 12500},
     ]
 }
 
@@ -579,7 +579,7 @@ def normalise_order(raw: dict) -> dict:
     """
     return {
         'order_id':    str(raw['order_id']).strip().upper(),
-        'total_paise': int(float(raw.get('total_paise', 0))),
+        'total_cents': int(float(raw.get('total_cents', 0))),
         'status':      raw.get('status', 'unknown').lower().strip(),
         'city':        raw.get('city', '').strip() or None,
         'order_date':  raw['created_at'][:10],   # extract YYYY-MM-DD
@@ -594,45 +594,45 @@ class TestNormaliseOrder:
     def test_happy_path(self):
         raw = {
             'order_id': ' o1234 ',
-            'total_paise': '34900',
+            'total_cents': '34900',
             'status': 'COMPLETED',
             'city': 'Austin',
             'created_at': '2026-03-20T14:23:11Z',
         }
         result = normalise_order(raw)
         assert result['order_id'] == 'O1234'       # stripped and uppercased
-        assert result['total_paise'] == 34900       # coerced to int
+        assert result['total_cents'] == 34900       # coerced to int
         assert result['status'] == 'completed'      # lowercased
         assert result['city'] == 'Austin'
         assert result['order_date'] == '2026-03-20' # extracted from ISO timestamp
 
     def test_missing_city_becomes_none(self):
-        raw = {'order_id': 'O1', 'total_paise': 100, 'status': 'placed',
+        raw = {'order_id': 'O1', 'total_cents': 100, 'status': 'placed',
                'created_at': '2026-03-20T00:00:00Z'}
         result = normalise_order(raw)
         assert result['city'] is None
 
     def test_empty_city_string_becomes_none(self):
-        raw = {'order_id': 'O1', 'total_paise': 100, 'status': 'placed',
+        raw = {'order_id': 'O1', 'total_cents': 100, 'status': 'placed',
                'city': '   ', 'created_at': '2026-03-20T00:00:00Z'}
         result = normalise_order(raw)
         assert result['city'] is None
 
-    def test_float_total_paise_coerced_to_int(self):
+    def test_float_total_cents_coerced_to_int(self):
         # Source system sometimes sends "349.00" as a float string
-        raw = {'order_id': 'O1', 'total_paise': '349.00', 'status': 'placed',
+        raw = {'order_id': 'O1', 'total_cents': '349.00', 'status': 'placed',
                'created_at': '2026-03-20T00:00:00Z'}
         result = normalise_order(raw)
-        assert result['total_paise'] == 349
-        assert isinstance(result['total_paise'], int)
+        assert result['total_cents'] == 349
+        assert isinstance(result['total_cents'], int)
 
-    def test_missing_total_paise_defaults_to_zero(self):
+    def test_missing_total_cents_defaults_to_zero(self):
         raw = {'order_id': 'O1', 'status': 'placed', 'created_at': '2026-03-20T00:00:00Z'}
         result = normalise_order(raw)
-        assert result['total_paise'] == 0
+        assert result['total_cents'] == 0
 
     def test_missing_order_id_raises(self):
-        raw = {'total_paise': 100, 'status': 'placed', 'created_at': '2026-03-20T00:00:00Z'}
+        raw = {'total_cents': 100, 'status': 'placed', 'created_at': '2026-03-20T00:00:00Z'}
         with pytest.raises(KeyError):
             normalise_order(raw)
 
@@ -662,7 +662,7 @@ def process_store_file(filepath: str) -> dict:
     records = read_parquet(filepath)
     return {
         'store_id':    extract_store_id(filepath),
-        'total_sales': sum(r['total_paise'] for r in records),
+        'total_sales': sum(r['total_cents'] for r in records),
         'order_count': len(records),
         'filepath':    filepath,
     }
@@ -769,7 +769,7 @@ store_map = asyncio.run(enrich_all_stores(['ST001', 'ST002', ..., 'ST010']))
           partitioning, ordering, and frame boundaries.
         </Para>
         <CodeBox label="window function — top product per city">
-{`-- Table: order_items(order_id, product_id, product_name, city, quantity, total_paise)
+{`-- Table: order_items(order_id, product_id, product_name, city, quantity, total_cents)
 
 -- Step 1: aggregate revenue per product per city
 WITH product_city_revenue AS (
@@ -777,7 +777,7 @@ WITH product_city_revenue AS (
         city,
         product_id,
         product_name,
-        SUM(total_paise)  AS total_revenue_paise,
+        SUM(total_cents)  AS total_revenue_cents,
         SUM(quantity)     AS total_units_sold
     FROM order_items
     WHERE order_date = CURRENT_DATE - INTERVAL '30 days'
@@ -790,20 +790,20 @@ ranked AS (
         city,
         product_id,
         product_name,
-        total_revenue_paise,
+        total_revenue_cents,
         total_units_sold,
         RANK() OVER (
             PARTITION BY city          -- restart ranking for each city
-            ORDER BY total_revenue_paise DESC
+            ORDER BY total_revenue_cents DESC
         ) AS revenue_rank
     FROM product_city_revenue
 )
 
 -- Step 3: keep only the top product per city
-SELECT city, product_id, product_name, total_revenue_paise, total_units_sold
+SELECT city, product_id, product_name, total_revenue_cents, total_units_sold
 FROM ranked
 WHERE revenue_rank = 1
-ORDER BY total_revenue_paise DESC;
+ORDER BY total_revenue_cents DESC;
 
 -- RANK vs DENSE_RANK vs ROW_NUMBER:
 -- RANK():       ties get the same rank, next rank skips (1, 1, 3)
@@ -819,11 +819,11 @@ ORDER BY total_revenue_paise DESC;
         <CodeBox label="rank vs dense_rank vs row_number — concrete example">
 {`-- Scores for 5 students — two students tied at 85
 WITH scores AS (
-    SELECT 'Priya'   AS name, 92 AS score UNION ALL
-    SELECT 'Arjun',              85 UNION ALL
-    SELECT 'Sneha',              85 UNION ALL   -- tied with Arjun
-    SELECT 'Rahul',              78 UNION ALL
-    SELECT 'Divya',              71
+    SELECT 'Emily'   AS name, 92 AS score UNION ALL
+    SELECT 'Marcus',              85 UNION ALL
+    SELECT 'Sofia',              85 UNION ALL   -- tied with Marcus
+    SELECT 'Kevin',              78 UNION ALL
+    SELECT 'Rachel',              71
 )
 SELECT
     name,
@@ -834,16 +834,16 @@ SELECT
 FROM scores;
 
 /*  name    score  rnk  dense_rnk  row_num
-    Priya   92     1    1          1
-    Arjun   85     2    2          2       ← Arjun and Sneha tied
-    Sneha   85     2    2          3       ← same RANK and DENSE_RANK
-    Rahul   78     4    3          4       ← RANK skips 3, DENSE_RANK does not
-    Divya   71     5    4          5
+    Emily   92     1    1          1
+    Marcus  85     2    2          2       ← Marcus and Sofia tied
+    Sofia   85     2    2          3       ← same RANK and DENSE_RANK
+    Kevin   78     4    3          4       ← RANK skips 3, DENSE_RANK does not
+    Rachel  71     5    4          5
 */
 
--- RANK:       Arjun=2, Sneha=2, Rahul=4 (3 is skipped — "2 people ranked above Rahul")
--- DENSE_RANK: Arjun=2, Sneha=2, Rahul=3 (no gap — just the distinct rank position)
--- ROW_NUMBER: Arjun=2, Sneha=3, Rahul=4 (arbitrary tie-breaking — no true guarantee which)
+-- RANK:       Marcus=2, Sofia=2, Kevin=4 (3 is skipped — "2 people ranked above Kevin")
+-- DENSE_RANK: Marcus=2, Sofia=2, Kevin=3 (no gap — just the distinct rank position)
+-- ROW_NUMBER: Marcus=2, Sofia=3, Kevin=4 (arbitrary tie-breaking — no true guarantee which)
 
 -- Use RANK when: you need to know "how many rows ranked above this one"
 -- Use DENSE_RANK when: you need contiguous rank numbers (leaderboards)
@@ -853,22 +853,22 @@ FROM scores;
 
       <QA n={13} q="★ Write a query to calculate 7-day rolling average order value per store.">
         <CodeBox label="rolling average — window frame specification">
-{`-- Table: daily_store_sales(store_id, order_date, order_count, total_paise)
--- Goal: for each store, for each date, average of total_paise over the last 7 days
+{`-- Table: daily_store_sales(store_id, order_date, order_count, total_cents)
+-- Goal: for each store, for each date, average of total_cents over the last 7 days
 
 SELECT
     store_id,
     order_date,
-    total_paise,
+    total_cents,
     ROUND(
-        AVG(total_paise) OVER (
+        AVG(total_cents) OVER (
             PARTITION BY store_id
             ORDER BY order_date
             ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
             -- "the current row and the 6 rows before it = 7 rows total"
         ) / 100.0,
         2
-    ) AS rolling_7d_avg_inr
+    ) AS rolling_7d_avg_usd
 FROM daily_store_sales
 ORDER BY store_id, order_date;
 
@@ -989,7 +989,7 @@ WHERE DATE_TRUNC('month', order_date) = '2026-02-01' AND status = 'completed';
         </Para>
         <CodeBox label="EXPLAIN ANALYZE — reading a query plan">
 {`EXPLAIN ANALYZE
-SELECT o.order_id, c.customer_name, o.total_paise
+SELECT o.order_id, c.customer_name, o.total_cents
 FROM orders o
 JOIN customers c ON o.customer_id = c.customer_id
 WHERE o.order_date >= '2026-01-01' AND o.status = 'completed';
@@ -1166,7 +1166,7 @@ df.explain()
     SELECT
         city,
         DATE_TRUNC('month', order_date)  AS month,
-        SUM(total_paise) / 100.0         AS revenue_inr
+        SUM(total_cents) / 100.0         AS revenue_usd
     FROM orders
     WHERE status = 'completed'
     GROUP BY city, DATE_TRUNC('month', order_date)
@@ -1175,11 +1175,11 @@ with_previous AS (
     SELECT
         city,
         month,
-        revenue_inr,
-        LAG(revenue_inr, 1) OVER (
+        revenue_usd,
+        LAG(revenue_usd, 1) OVER (
             PARTITION BY city
             ORDER BY month
-        ) AS prev_month_revenue_inr
+        ) AS prev_month_revenue_usd
         -- LAG(col, 1) = value from the previous row within the partition
         -- LAG(col, 3) would give 3 months ago
     FROM monthly_revenue
@@ -1187,13 +1187,13 @@ with_previous AS (
 SELECT
     city,
     TO_CHAR(month, 'YYYY-MM')     AS month,
-    ROUND(revenue_inr, 2)         AS revenue_inr,
-    ROUND(prev_month_revenue_inr, 2) AS prev_revenue_inr,
+    ROUND(revenue_usd, 2)         AS revenue_usd,
+    ROUND(prev_month_revenue_usd, 2) AS prev_revenue_usd,
     CASE
-        WHEN prev_month_revenue_inr IS NULL THEN NULL   -- first month has no prior
-        WHEN prev_month_revenue_inr = 0     THEN NULL   -- avoid division by zero
+        WHEN prev_month_revenue_usd IS NULL THEN NULL   -- first month has no prior
+        WHEN prev_month_revenue_usd = 0     THEN NULL   -- avoid division by zero
         ELSE ROUND(
-            (revenue_inr - prev_month_revenue_inr) / prev_month_revenue_inr * 100,
+            (revenue_usd - prev_month_revenue_usd) / prev_month_revenue_usd * 100,
             2
         )
     END AS mom_growth_pct
@@ -1201,7 +1201,7 @@ FROM with_previous
 ORDER BY city, month;
 
 -- Companion: LEAD() looks forward instead of backward
--- LEAD(revenue_inr, 1) OVER (...) = next month's revenue
+-- LEAD(revenue_usd, 1) OVER (...) = next month's revenue
 -- Useful for: "how much will the customer spend in the next period?" (prediction labels)`}
         </CodeBox>
       </QA>
@@ -1226,11 +1226,11 @@ ORDER BY city, month;
 {`# Pattern 1: UPSERT on natural key (most common)
 # If the row exists, update it. If not, insert it. Running twice = same result.
 execute_sql("""
-    INSERT INTO daily_store_stats (store_id, order_date, revenue_paise, order_count)
+    INSERT INTO daily_store_stats (store_id, order_date, revenue_cents, order_count)
     VALUES (%s, %s, %s, %s)
     ON CONFLICT (store_id, order_date)
     DO UPDATE SET
-        revenue_paise = EXCLUDED.revenue_paise,
+        revenue_cents = EXCLUDED.revenue_cents,
         order_count   = EXCLUDED.order_count,
         updated_at    = NOW()
 """, [store_id, order_date, revenue, count])
@@ -1294,7 +1294,7 @@ with transaction():
 raw_df = spark.read.parquet(source_path)
 clean_df = (raw_df
     .filter("status = 'completed'")
-    .withColumn('total_inr', col('total_paise') / 100)
+    .withColumn('total_usd', col('total_cents') / 100)
     .drop('raw_payload', 'internal_flags')   # strip PII before loading
     .dropDuplicates(['order_id']))
 clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')
@@ -1314,7 +1314,7 @@ clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')
 #   SELECT
 #     order_id,
 #     TRIM(UPPER(customer_id)) AS customer_id,
-#     total_paise::INT AS total_paise,
+#     total_cents::INT AS total_cents,
 #     LOWER(status) AS status
 #   FROM raw.orders
 #   WHERE status != 'test'
@@ -1354,7 +1354,7 @@ clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')
     "after": {
         "order_id": "ORD-2026-887432",
         "customer_id": "C98765",
-        "total_paise": 34900,
+        "total_cents": 34900,
         "status": "placed",
         "updated_at": "2026-03-20T14:23:11Z"
     },
@@ -1403,7 +1403,7 @@ schema_v1 = {
     "fields": [
         {"name": "order_id",    "type": "string"},
         {"name": "customer_id", "type": "string"},
-        {"name": "total_paise", "type": "int"},
+        {"name": "total_cents", "type": "int"},
         {"name": "status",      "type": "string"}
     ]
 }
@@ -1415,7 +1415,7 @@ schema_v2 = {
     "fields": [
         {"name": "order_id",       "type": "string"},
         {"name": "customer_id",    "type": "string"},
-        {"name": "total_paise",    "type": "int"},
+        {"name": "total_cents",    "type": "int"},
         {"name": "status",         "type": "string"},
         {"name": "payment_method", "type": ["null", "string"], "default": None}
         # ["null", "string"] = union type = nullable
@@ -1454,14 +1454,14 @@ schema_v2 = {
           Data lineage is the documented record of where data came from, how
           it was transformed at each step, and where it ended up. Column-level
           lineage traces a specific field — for example, the
-          <code>revenue_inr</code> column in the gold reporting table traces
+          <code>revenue_usd</code> column in the gold reporting table traces
           back through dbt model <code>mart_daily_revenue</code> →
           <code>stg_orders</code> → raw CDC table → source PostgreSQL column
-          <code>total_paise</code> divided by 100.
+          <code>total_cents</code> divided by 100.
         </Para>
         <Para>
           Operationally it matters in three concrete ways. First, impact
-          analysis — if the source column <code>total_paise</code> changes
+          analysis — if the source column <code>total_cents</code> changes
           its semantics (now includes taxes), lineage tells you every downstream
           report and model that will be affected. Without lineage, you discover
           these impacts one by one as consumers complain. Second, incident
@@ -1573,7 +1573,7 @@ def run_daily_pipeline(processing_date: date):
     df = (spark.read.parquet(source_path)
           .filter(f"order_date = '{processing_date}'")
           .groupBy('store_id')
-          .agg(sum('total_paise').alias('revenue_paise'), count('*').alias('orders')))
+          .agg(sum('total_cents').alias('revenue_cents'), count('*').alias('orders')))
     (df.write.format('delta')
        .mode('overwrite')
        .option('replaceWhere', f"order_date = '{processing_date}'")
@@ -1632,7 +1632,7 @@ default_args = {
 with DAG(
     dag_id='freshmart_daily_pipeline',
     default_args=default_args,
-    schedule_interval='0 3 * * *',      # 3 AM IST daily
+    schedule_interval='0 3 * * *',      # 3 AM ET daily
     start_date=datetime(2026, 1, 1),
     catchup=False,                       # don't backfill missed runs on startup
     max_active_runs=1,                   # don't allow parallel runs of this DAG
@@ -1701,7 +1701,7 @@ volume_query = """
     SELECT
         order_date,
         COUNT(*)                                      AS row_count,
-        SUM(total_paise) / 1e7                        AS total_revenue_million
+        SUM(total_cents) / 1e7                        AS total_revenue_million
     FROM gold.daily_store_stats
     WHERE order_date = CURRENT_DATE - 1
 """
@@ -1756,7 +1756,7 @@ volume_query = """
 df = spark.read.parquet('s3://freshmart/orders/')   # no read yet
 filtered = df.filter("order_date = '2026-03-20'")  # no filter yet
 joined = filtered.join(stores, 'store_id')          # no join yet
-aggregated = joined.groupBy('city').agg(sum('total_paise'))  # no aggregation yet
+aggregated = joined.groupBy('city').agg(sum('total_cents'))  # no aggregation yet
 
 # Spark has built up a logical plan in memory. No data movement has occurred.
 
@@ -1801,7 +1801,7 @@ df.filter(...).cache()   # forces materialisation — breaks lazy optimisation
 # Common causes:
 # 1. JOIN key with dominant value (Brex: one large enterprise customer)
 # 2. NULL join key (all NULLs hash to the same partition)
-# 3. Partition key = low-cardinality column (payment_method: UPI = 80%)
+# 3. Partition key = low-cardinality column (payment_method: card = 80%)
 
 # FIX 1: Broadcast join (when one side is small, < 10 MB)
 from pyspark.sql.functions import broadcast
@@ -1937,7 +1937,7 @@ df.repartition(200, 'store_id')   # shuffle on store_id — equal per store, sor
 #   Result: the join operates on 1 day of data, not 3 years
 
 # → Column pruning: remove columns not needed in the final output
-#   If you only SELECT order_id, total_paise, Catalyst removes all other columns
+#   If you only SELECT order_id, total_cents, Catalyst removes all other columns
 #   from the scan — Parquet only reads the needed columns (columnar advantage)
 
 # → Constant folding: evaluate constant expressions at plan time
@@ -2267,7 +2267,7 @@ CREATE TABLE customers_dim (
           reflects what actually happened or what the world looks like today.
         </Para>
         <CodeBox label="SCD types 1, 2, 3 — comparison">
-{`-- Scenario: customer Priya moves from Austin to San Francisco
+{`-- Scenario: customer Emily moves from Austin to San Francisco
 -- We have historical orders from when she was in Austin
 
 -- SCD TYPE 1: Overwrite — no history preserved
@@ -2307,13 +2307,13 @@ CREATE TABLE customers_dim (
           can be aggregated across dimensions.
         </Para>
         <CodeBox label="additive vs semi-additive vs non-additive">
-{`-- Fact table: order_fact(date_sk, store_sk, customer_sk, order_count, revenue_paise, stock_level)
+{`-- Fact table: order_fact(date_sk, store_sk, customer_sk, order_count, revenue_cents, stock_level)
 
 -- ADDITIVE FACTS: can be summed across ALL dimensions
--- revenue_paise: sum across stores, dates, customers — always meaningful
-SELECT SUM(revenue_paise) FROM order_fact WHERE date_sk = 20260320   -- by day ✓
-SELECT SUM(revenue_paise) FROM order_fact WHERE store_sk = 7          -- by store ✓
-SELECT SUM(revenue_paise) FROM order_fact                             -- total ever ✓
+-- revenue_cents: sum across stores, dates, customers — always meaningful
+SELECT SUM(revenue_cents) FROM order_fact WHERE date_sk = 20260320   -- by day ✓
+SELECT SUM(revenue_cents) FROM order_fact WHERE store_sk = 7          -- by store ✓
+SELECT SUM(revenue_cents) FROM order_fact                             -- total ever ✓
 -- order_count is also additive
 
 -- SEMI-ADDITIVE FACTS: can be summed across SOME dimensions, not all
@@ -2325,10 +2325,10 @@ SELECT SUM(stock_level) FROM order_fact WHERE store_sk = 7          -- across ti
 -- Correct aggregation across time: use AVG or pick a specific snapshot date
 
 -- NON-ADDITIVE FACTS: cannot be summed across ANY dimension
--- unit_price_paise: summing prices is meaningless
+-- unit_price_cents: summing prices is meaningless
 -- profit_margin_pct: summing percentages is meaningless
 -- These should be COMPUTED on the fly from additive components:
-SELECT SUM(revenue_paise) / NULLIF(SUM(order_count), 0) AS avg_order_value
+SELECT SUM(revenue_cents) / NULLIF(SUM(order_count), 0) AS avg_order_value
 FROM order_fact   -- average order value: derived from two additive facts ✓
 
 -- Best practice: store only additive atomic facts in the fact table.
@@ -2364,37 +2364,37 @@ FROM order_fact   -- average order value: derived from two additive facts ✓
         <CodeBox label="row vs columnar storage — the analytics advantage">
 {`# ROW-ORIENTED STORAGE (PostgreSQL, MySQL — OLTP optimised):
 # Each row is stored contiguously on disk
-# Row 1: [order_id=O1, customer_id=C1, total_paise=34900, status=completed, city=Austin, ...]
-# Row 2: [order_id=O2, customer_id=C2, total_paise=12500, status=cancelled, city=San Francisco, ...]
+# Row 1: [order_id=O1, customer_id=C1, total_cents=34900, status=completed, city=Austin, ...]
+# Row 2: [order_id=O2, customer_id=C2, total_cents=12500, status=cancelled, city=San Francisco, ...]
 # 
 # Fast for: fetching ONE complete row (point lookup: "give me order O1 with all its columns")
 # Slow for: reading ONE column across MANY rows (scan 1B rows × 10 columns to read 1 column)
 
 # COLUMNAR STORAGE (Parquet, Snowflake, BigQuery, Redshift — OLAP optimised):
 # Each column is stored contiguously on disk
-# total_paise column: [34900, 12500, 67000, 0, 82300, ...]   (1B integers, back-to-back)
+# total_cents column: [34900, 12500, 67000, 0, 82300, ...]   (1B integers, back-to-back)
 # status column:      ['completed', 'cancelled', 'completed', ...] (1B strings)
 # 
 # Fast for: analytical queries that read FEW columns across MANY rows
-# "SELECT SUM(total_paise), COUNT(*) FROM orders WHERE status = 'completed'"
-# → Reads ONLY total_paise and status columns — skips all others
+# "SELECT SUM(total_cents), COUNT(*) FROM orders WHERE status = 'completed'"
+# → Reads ONLY total_cents and status columns — skips all others
 # → For 10-column table: reads 20% of the data vs 100% for row storage
 
 # THREE advantages of columnar storage for analytics:
 
 # 1. Column pruning: read only needed columns
-SELECT SUM(total_paise) FROM orders   -- reads 1 column out of 15
-# Row storage: reads all 15 columns, extracts total_paise from each row (93% wasted I/O)
-# Columnar: reads only total_paise column (0% wasted I/O)
+SELECT SUM(total_cents) FROM orders   -- reads 1 column out of 15
+# Row storage: reads all 15 columns, extracts total_cents from each row (93% wasted I/O)
+# Columnar: reads only total_cents column (0% wasted I/O)
 
 # 2. Better compression: same-type values compress much better together
-# total_paise column: all integers → dictionary encoding, delta encoding, bit packing
+# total_cents column: all integers → dictionary encoding, delta encoding, bit packing
 # status column: low cardinality string → dictionary encoding: 'completed'=1, 'cancelled'=2
 # Parquet compression ratio: 5-10x vs row-oriented storage for typical analytics data
 
 # 3. Vectorised execution: process a batch of column values as a single CPU instruction
 # Modern CPUs have SIMD instructions that apply one operation to 8-32 values simultaneously
-# SUM(total_paise): load 32 integers into AVX-512 register, add them in 1 CPU instruction
+# SUM(total_cents): load 32 integers into AVX-512 register, add them in 1 CPU instruction
 # Row-based: load 1 row, extract 1 integer, add it — repeat 1B times`}
         </CodeBox>
       </QA>
@@ -2431,8 +2431,8 @@ SELECT SUM(total_paise) FROM orders   -- reads 1 column out of 15
 SELECT
     order_id,
     TRIM(UPPER(customer_id))          AS customer_id,
-    total_paise::INT                  AS total_paise,
-    total_paise / 100.0               AS total_inr,
+    total_cents::INT                  AS total_cents,
+    total_cents / 100.0               AS total_usd,
     LOWER(TRIM(status))               AS status,
     order_date::DATE                  AS order_date,
     CURRENT_TIMESTAMP                 AS dbt_updated_at
@@ -2451,7 +2451,7 @@ WHERE order_date > (SELECT MAX(order_date) FROM {{ this }})
 --         tests: [not_null, unique]
 --       - name: status
 --         tests: [accepted_values: {values: ['placed','confirmed','shipped','delivered','cancelled']}]
---       - name: total_paise
+--       - name: total_cents
 --         tests: [not_null, dbt_utils.expression_is_true: {expression: ">= 0"}]
 
 -- Run: dbt run --select stg_orders          (runs just this model)
@@ -2583,17 +2583,17 @@ validation_query = """
     SELECT
         o.order_date,
         o.store_id,
-        o.revenue_paise          AS old_revenue,
-        n.revenue_paise          AS new_revenue,
-        ABS(o.revenue_paise - n.revenue_paise) AS abs_diff,
+        o.revenue_cents          AS old_revenue,
+        n.revenue_cents          AS new_revenue,
+        ABS(o.revenue_cents - n.revenue_cents) AS abs_diff,
         ROUND(
-            100.0 * ABS(o.revenue_paise - n.revenue_paise) / NULLIF(o.revenue_paise, 0),
+            100.0 * ABS(o.revenue_cents - n.revenue_cents) / NULLIF(o.revenue_cents, 0),
             4
         )                        AS pct_diff
     FROM gold.daily_store_stats o
     FULL OUTER JOIN new_gold.daily_store_stats n
         ON o.order_date = n.order_date AND o.store_id = n.store_id
-    WHERE ABS(o.revenue_paise - n.revenue_paise) > 100   -- flag > ₹1 difference
+    WHERE ABS(o.revenue_cents - n.revenue_cents) > 100   -- flag > $1 difference
     ORDER BY abs_diff DESC
     LIMIT 100
 """

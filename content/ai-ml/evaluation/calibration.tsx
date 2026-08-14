@@ -863,12 +863,12 @@ for i, (_, row) in enumerate(new_applications.iterrows()):
     p      = probas[i]
     risk   = 'HIGH' if p > 0.4 else 'MEDIUM' if p > 0.2 else 'LOW'
     action = 'REJECT' if p > 0.4 else 'REVIEW' if p > 0.2 else 'APPROVE'
-    print(f"\nApplicant {i+1}: income=₹{row['annual_income']:,.0f}  "
-          f"credit={row['credit_score']}  loan=₹{row['loan_amount']:,.0f}")
+    print(f"\nApplicant {i+1}: income=\${row['annual_income']:,.0f}  "
+          f"credit={row['credit_score']}  loan=\${row['loan_amount']:,.0f}")
     print(f"  P(default) = {p:.3f}  →  {risk} risk  →  {action}")
 
 # ── Save ─────────────────────────────────────────────────────────────
-joblib.dump(pipeline, '/tmp/razorpay_credit_calibrated.pkl')
+joblib.dump(pipeline, '/tmp/stripe_credit_calibrated.pkl')
 print("\nCalibrated pipeline saved.")`} />
       </div>
 

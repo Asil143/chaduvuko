@@ -742,7 +742,7 @@ JOIN customers AS c ON o.customer_id = c.customer_id
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a senior analyst at Shopify, India's social commerce platform. The growth team needs a weekly seller performance report — for each seller, show total orders handled, revenue generated, unique products listed, average order value, and the top product category. This is a multi-table INNER JOIN with aggregation — the most common production analytics pattern.</P>
+      <P>You are a senior analyst at Shopify, a leading US commerce platform. The growth team needs a weekly seller performance report — for each seller, show total orders handled, revenue generated, unique products listed, average order value, and the top product category. This is a multi-table INNER JOIN with aggregation — the most common production analytics pattern.</P>
 
       <TimeBlock time="9:00 AM" label="Requirements received">
         Weekly seller performance: seller_id, seller_name, total orders, total revenue, unique products, avg order value, top category. Adapted for FreshCart: store performance with product category breakdown.
@@ -873,7 +873,7 @@ ORDER BY ss.total_revenue DESC;`}
 
       <IQ q="When you join orders to order_items, why does SUM(orders.total_amount) give wrong results?">
         <p style={{ margin: '0 0 14px' }}>This is the fan-out bug. The orders-to-order_items relationship is one-to-many: one order can have many items. When you JOIN orders to order_items, each order row is duplicated once per item — an order with 3 items appears 3 times in the joined result. When you then SUM(orders.total_amount), you are adding the same total_amount three times for that order.</p>
-        <p style={{ margin: '0 0 14px' }}>Example: order 1001 has total_amount = ₹500 and 3 items. After the JOIN, the result has 3 rows all with total_amount = ₹500. SUM(total_amount) for this order contributes ₹1,500 instead of ₹500 — triple-counted. The final sum across all orders is inflated by the average number of items per order.</p>
+        <p style={{ margin: '0 0 14px' }}>Example: order 1001 has total_amount = $500 and 3 items. After the JOIN, the result has 3 rows all with total_amount = $500. SUM(total_amount) for this order contributes $1,500 instead of $500 — triple-counted. The final sum across all orders is inflated by the average number of items per order.</p>
         <p style={{ margin: 0 }}>The three fixes: (1) SUM the item-level column instead — SUM(order_items.line_total) is correct because each line_total is unique to each item row, not duplicated. (2) Use COUNT(DISTINCT order_id) instead of COUNT(*) to count orders, not item rows. (3) Pre-aggregate order_items in a subquery or CTE first (SELECT order_id, SUM(line_total) AS total FROM order_items GROUP BY order_id), then join that aggregated result to orders — one row per order in the joined result, no fan-out. The fan-out bug is especially dangerous because the query runs without errors and returns plausible-looking numbers. Always cross-check JOIN aggregates against simpler single-table queries.</p>
       </IQ>
 

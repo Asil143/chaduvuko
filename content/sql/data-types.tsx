@@ -125,12 +125,12 @@ export default function DataTypes() {
           {
             title: 'Financial rounding errors',
             color: '#ff4757',
-            desc: 'Storing money as FLOAT instead of DECIMAL causes floating-point rounding errors. ₹10.50 stored as a FLOAT might be retrieved as ₹10.499999999. Multiplied across millions of transactions, these fractions cause accounting discrepancies that compliance teams spend days tracking down.',
+            desc: 'Storing money as FLOAT instead of DECIMAL causes floating-point rounding errors. $10.50 stored as a FLOAT might be retrieved as $10.499999999. Multiplied across millions of transactions, these fractions cause accounting discrepancies that compliance teams spend days tracking down.',
           },
           {
             title: 'Silent comparison failures',
             color: '#f59e0b',
-            desc: 'Storing a phone number as INTEGER drops leading zeros — 09876543210 becomes 9876543210. Storing order IDs as VARCHAR when they should be INTEGER makes WHERE order_id = 1007 compare a number to a string, which sometimes works (MySQL coerces) and sometimes fails (PostgreSQL errors).',
+            desc: 'Storing a zip code as INTEGER drops leading zeros — 02134 becomes 2134. Storing order IDs as VARCHAR when they should be INTEGER makes WHERE order_id = 1007 compare a number to a string, which sometimes works (MySQL coerces) and sometimes fails (PostgreSQL errors).',
           },
           {
             title: 'Index inefficiency',
@@ -234,7 +234,7 @@ FROM pragma_table_info('orders');`}
         avoid="Scientific measurements needing huge range (use FLOAT)"
       />
 
-      <P>DECIMAL(p, s) takes two parameters: <Hl>p</Hl> (precision) is the total number of significant digits, and <Hl>s</Hl> (scale) is the number of digits after the decimal point. DECIMAL(10, 2) stores up to 10 total digits with exactly 2 after the decimal — perfect for prices up to ₹99,999,999.99.</P>
+      <P>DECIMAL(p, s) takes two parameters: <Hl>p</Hl> (precision) is the total number of significant digits, and <Hl>s</Hl> (scale) is the number of digits after the decimal point. DECIMAL(10, 2) stores up to 10 total digits with exactly 2 after the decimal — perfect for prices up to $99,999,999.99.</P>
 
       <CodeBlock
         label="DECIMAL precision and scale examples"
@@ -244,7 +244,7 @@ DECIMAL(15, 4)   -- max: 99,999,999,999.9999 — high-precision financial
 DECIMAL(3, 0)    -- max: 999             — integer stored as decimal
 
 -- FreshCart uses:
-unit_price  DECIMAL(10, 2)  -- up to ₹99,999,999.99
+unit_price  DECIMAL(10, 2)  -- up to $99,999,999.99
 cost_price  DECIMAL(10, 2)  -- same
 salary      DECIMAL(10, 2)  -- monthly salary
 line_total  DECIMAL(10, 2)  -- order item total`}
@@ -258,8 +258,8 @@ SELECT
   + CAST(0.2 AS DECIMAL(5,1))       AS decimal_result,
   -- In most databases: float gives 0.30000000000000004
   -- DECIMAL gives exactly 0.3
-  unit_price * 1.18                 AS gst_price,
-  ROUND(unit_price * 1.18, 2)       AS gst_rounded
+  unit_price * 1.08                 AS tax_price,
+  ROUND(unit_price * 1.08, 2)       AS tax_rounded
 FROM products
 LIMIT 5;`}
         height={165}
@@ -283,12 +283,12 @@ LIMIT 5;`}
       <CodeBlock
         label="Why FLOAT is wrong for money — always"
         code={`-- FLOAT rounding error demonstration
--- Store ₹10.50 as FLOAT and multiply:
+-- Store $10.50 as FLOAT and multiply:
 SELECT 10.50::FLOAT * 1000000  -- might give 10499999.999... instead of 10500000
 
--- In a payment system processing 1 million ₹10.50 transactions:
--- FLOAT total: ₹10,499,999.99 (₹0.01 short — regulatory violation)
--- DECIMAL total: ₹10,500,000.00 (exactly correct)
+-- In a payment system processing 1 million $10.50 transactions:
+-- FLOAT total: $10,499,999.99 ($0.01 short — regulatory violation)
+-- DECIMAL total: $10,500,000.00 (exactly correct)
 
 -- The rule is absolute: NEVER store money as FLOAT.
 -- Always use DECIMAL(precision, 2) for any monetary value.`}
@@ -354,12 +354,12 @@ ORDER BY table_name;`}
       <CodeBlock
         label="Choosing VARCHAR length — FreshCart column design rationale"
         code={`-- Why each column has the length it has:
-first_name  VARCHAR(100)  -- longest Indian name + margin
+first_name  VARCHAR(100)  -- longest reasonable name + margin
 last_name   VARCHAR(100)  -- same
 email       VARCHAR(255)  -- RFC 5321 maximum email length
 phone       VARCHAR(20)   -- country code + number + separators
 city        VARCHAR(100)  -- longest city name with margin
-zip_code     VARCHAR(10)   -- 6-digit Indian zip_code + future
+zip_code     VARCHAR(10)   -- 5-digit US zip_code + ZIP+4 extension
 product_name VARCHAR(200) -- long descriptive product names
 store_name  VARCHAR(200)  -- full store name with location
 
@@ -589,7 +589,7 @@ SELECT
   total_amount,
   -- Concatenate mixed types — must CAST to text first
   'Order #' || CAST(order_id AS VARCHAR)
-  || ' — ₹' || CAST(total_amount AS VARCHAR)   AS order_summary,
+  || ' — $' || CAST(total_amount AS VARCHAR)   AS order_summary,
   -- Format date as string (DuckDB syntax)
   strftime(order_date, '%d/%m/%Y')              AS formatted_date
 FROM orders
@@ -676,7 +676,7 @@ WHERE attributes->>'resolution' = '4K';
 CREATE INDEX idx_products_attributes ON products USING GIN (attributes);`}
       />
 
-      <P>Stripe uses JSONB to store payment metadata — each payment instrument (UPI, card, netbanking) has a completely different structure of additional fields. JSONB lets them store all of it in one column without creating dozens of nullable columns. Uber Eats uses JSONB for restaurant menu data — each item has different option structures.</P>
+      <P>Stripe uses JSONB to store payment metadata — each payment instrument (card, ACH, digital wallet) has a completely different structure of additional fields. JSONB lets them store all of it in one column without creating dozens of nullable columns. Uber Eats uses JSONB for restaurant menu data — each item has different option structures.</P>
 
       <H>UUID — universally unique identifiers</H>
 
@@ -736,7 +736,7 @@ SELECT * FROM products WHERE tags @> ARRAY['organic', 'vegan'];
           { n: '01', q: 'Is it a number?', a: 'Is it always a whole number? → INTEGER or BIGINT. Does it have decimal places? Is it money? → DECIMAL(p,s). Is it a scientific measurement? → FLOAT. Is it a boolean flag? → BOOLEAN.' },
           { n: '02', q: 'Is it text?', a: 'Do you know the maximum length? → VARCHAR(n). Is the length truly unbounded (descriptions, articles)? → TEXT. Is it always exactly the same length (country code, currency code)? → CHAR(n).' },
           { n: '03', q: 'Is it a date or time?', a: 'Date only, no time? → DATE. Exact moment in time, single timezone? → TIMESTAMP. Exact moment, multiple timezones? → TIMESTAMPTZ. Duration/interval? → INTERVAL.' },
-          { n: '04', q: 'Is it an identifier?', a: 'Internal ID, single database? → INTEGER with AUTO_INCREMENT or SERIAL. Distributed system or external-facing? → UUID. Fixed-format code (PAN, GST)? → CHAR(n) or VARCHAR(n) with CHECK constraint.' },
+          { n: '04', q: 'Is it an identifier?', a: 'Internal ID, single database? → INTEGER with AUTO_INCREMENT or SERIAL. Distributed system or external-facing? → UUID. Fixed-format code (SSN, EIN)? → CHAR(n) or VARCHAR(n) with CHECK constraint.' },
           { n: '05', q: 'Is it structured data with variable schema?', a: 'Attributes that differ per row? → JSONB (PostgreSQL) or JSON (MySQL). Small fixed list? → ARRAY (PostgreSQL) or separate table. Always separate table when elements need their own attributes or are queried independently.' },
         ].map((step, i, arr) => (
           <div key={step.n} style={{ display: 'flex', gap: 20, marginBottom: i === arr.length - 1 ? 0 : 20 }}>
@@ -770,12 +770,12 @@ SELECT * FROM products WHERE tags @> ARRAY['organic', 'vegan'];
               ['phone', 'VARCHAR(20)', 'Must store leading zeros and country codes — NOT an integer'],
               ['joined_date', 'DATE', 'Only the calendar day matters — no time component needed'],
               ['loyalty_tier', 'VARCHAR(20)', 'Short text with a finite set of values — CHECK constraint enforces allowed values'],
-              ['unit_price', 'DECIMAL(10,2)', 'Money — must be exact. 10 total digits, 2 decimal places (paise precision)'],
+              ['unit_price', 'DECIMAL(10,2)', 'Money — must be exact. 10 total digits, 2 decimal places (cent precision)'],
               ['in_stock', 'BOOLEAN', 'Binary flag — either in stock or not. No other states needed'],
               ['order_date', 'DATE', 'Calendar day of the order — no time needed'],
               ['delivery_date', 'DATE', 'Calendar day of delivery — nullable (NULL = not yet delivered)'],
               ['total_amount', 'DECIMAL(10,2)', 'Money — same reasoning as unit_price'],
-              ['salary', 'DECIMAL(10,2)', 'Money — monthly salary in rupees with paise precision'],
+              ['salary', 'DECIMAL(10,2)', 'Money — monthly salary in dollars with cent precision'],
               ['monthly_target', 'DECIMAL(12,2)', 'Larger amounts (store targets) — wider precision than individual prices'],
             ].map(([col, type, why], i) => (
               <tr key={col} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
@@ -795,21 +795,21 @@ SELECT * FROM products WHERE tags @> ARRAY['organic', 'vegan'];
 
       <P>Type mismatches between columns and values in WHERE conditions, JOINs, and calculations are a major source of production bugs. They often do not cause errors — they cause silent wrong results or performance issues.</P>
 
-      <H>Phone number stored as INTEGER — leading zero lost</H>
+      <H>Zip code stored as INTEGER — leading zero lost</H>
 
       <CodeBlock
-        label="The phone number type mistake"
-        code={`-- WRONG: phone stored as INTEGER
-CREATE TABLE customers (phone BIGINT);
-INSERT INTO customers VALUES (09876543210);  -- stored as 9876543210
+        label="The zip code type mistake"
+        code={`-- WRONG: zip code stored as INTEGER
+CREATE TABLE customers (zip_code INTEGER);
+INSERT INTO customers VALUES (02134);  -- stored as 2134
 -- Leading zero is gone. Can never be recovered.
 
--- RIGHT: phone stored as VARCHAR
-CREATE TABLE customers (phone VARCHAR(20));
-INSERT INTO customers VALUES ('09876543210');  -- stored correctly
-INSERT INTO customers VALUES ('+91-9876543210');  -- also works
+-- RIGHT: zip code stored as VARCHAR
+CREATE TABLE customers (zip_code VARCHAR(10));
+INSERT INTO customers VALUES ('02134');  -- stored correctly
+INSERT INTO customers VALUES ('02134-1234');  -- ZIP+4 also works
 
--- The rule: store phone numbers, account numbers, PAN, SSN,
+-- The rule: store zip codes, phone numbers, account numbers, SSNs,
 -- and any "number" that has leading zeros or non-numeric characters
 -- as VARCHAR, never as INTEGER`}
       />
@@ -882,7 +882,7 @@ WHERE c.name = 'customer_id';`}
 CREATE TABLE loan_applications (
   application_id  VARCHAR(20),      -- Issue 1
   applicant_name  VARCHAR(50),
-  ssn_last4      CHAR(10),
+  ssn            CHAR(11),
   annual_income   FLOAT,            -- Issue 2
   application_date VARCHAR(10),     -- Issue 3
   phone_number    BIGINT,           -- Issue 4
@@ -903,21 +903,21 @@ CREATE TABLE loan_applications (
   -- VARCHAR(20) requires manual ID generation and risks duplicates
   application_id   SERIAL PRIMARY KEY,
 
-  -- applicant_name: VARCHAR(50) too short for some Indian names with titles
+  -- applicant_name: VARCHAR(50) too short for some names with titles
   applicant_name   VARCHAR(200) NOT NULL,
 
-  -- PAN: CHAR(10) is correct — PAN is always exactly 10 chars (ABCDE1234F)
-  ssn_last4       CHAR(10) UNIQUE NOT NULL,
+  -- SSN: CHAR(11) is correct — SSN is always exactly 11 chars (123-45-6789)
+  ssn              CHAR(11) UNIQUE NOT NULL,
 
   -- Issue 2: annual_income as FLOAT causes rounding errors in loan calculations
-  -- ₹5,00,000 stored as FLOAT might compute to ₹4,99,999.999...
+  -- $500,000 stored as FLOAT might compute to $499,999.999...
   annual_income    DECIMAL(12, 2) NOT NULL,
 
   -- Issue 3: application_date as VARCHAR loses date arithmetic and sorting
   -- '15/01/2024' cannot be subtracted from CURRENT_DATE
   application_date DATE NOT NULL DEFAULT CURRENT_DATE,
 
-  -- Issue 4: phone_number as BIGINT loses leading zeros and +91 prefix
+  -- Issue 4: phone_number as BIGINT loses leading zeros and +1 prefix
   phone_number     VARCHAR(20) NOT NULL,
 
   credit_score     SMALLINT NOT NULL CHECK (credit_score BETWEEN 300 AND 900),
@@ -935,7 +935,7 @@ CREATE TABLE loan_applications (
       />
 
       <TimeBlock time="11:00 AM" label="Review approved, schema fixed before production">
-        The senior engineer reviews your comments and approves all six changes. The FLOAT-to-DECIMAL change alone prevents a potential regulatory issue — RBI audit reports require exact loan amounts, and FLOAT rounding in amortisation calculations would have caused discrepancies in compliance reports.
+        The senior engineer reviews your comments and approves all six changes. The FLOAT-to-DECIMAL change alone prevents a potential regulatory issue — federal audit reports require exact loan amounts, and FLOAT rounding in amortisation calculations would have caused discrepancies in compliance reports.
       </TimeBlock>
 
       <ProTip>
@@ -949,8 +949,8 @@ CREATE TABLE loan_applications (
 
       <IQ q="What is the difference between DECIMAL and FLOAT and which should you use for money?">
         <p style={{ margin: '0 0 14px' }}>DECIMAL (also called NUMERIC) stores numbers as exact decimal digits — DECIMAL(10,2) stores exactly 10 significant digits with exactly 2 after the decimal point. Arithmetic on DECIMAL values produces exact results. 0.1 + 0.2 in DECIMAL is exactly 0.3. FLOAT stores numbers in binary floating-point format — the IEEE 754 standard used by all modern CPUs. Binary floating-point cannot represent most decimal fractions exactly. 0.1 stored as FLOAT is actually 0.1000000000000000055511151231... — a tiny error that compounds through arithmetic.</p>
-        <p style={{ margin: '0 0 14px' }}>For money, FLOAT is never acceptable. Financial calculations require exact decimal arithmetic — ₹10.50 × 1,000,000 must be exactly ₹10,500,000.00, not ₹10,499,999.99 due to floating-point approximation. In a payment system processing millions of transactions, FLOAT errors accumulate into accounting discrepancies that violate regulatory requirements. The RBI and SEBI require exact financial records. FLOAT violates this requirement at scale.</p>
-        <p style={{ margin: 0 }}>Always use DECIMAL for monetary values, prices, tax rates, and any financial calculation. The typical choices: DECIMAL(10,2) for amounts in rupees (up to ₹99,999,999.99), DECIMAL(5,4) for tax rates and percentages stored as decimals (0.1800 for 18% GST), DECIMAL(15,2) for very large institutional amounts. Use FLOAT only for scientific measurements, machine learning weights, and statistical values where exact decimal representation is neither possible nor required — the measurement itself has inherent imprecision that exceeds the floating-point error.</p>
+        <p style={{ margin: '0 0 14px' }}>For money, FLOAT is never acceptable. Financial calculations require exact decimal arithmetic — $10.50 × 1,000,000 must be exactly $10,500,000.00, not $10,499,999.99 due to floating-point approximation. In a payment system processing millions of transactions, FLOAT errors accumulate into accounting discrepancies that violate regulatory requirements. The SEC and IRS require exact financial records. FLOAT violates this requirement at scale.</p>
+        <p style={{ margin: 0 }}>Always use DECIMAL for monetary values, prices, tax rates, and any financial calculation. The typical choices: DECIMAL(10,2) for amounts in dollars (up to $99,999,999.99), DECIMAL(5,4) for tax rates and percentages stored as decimals (0.0800 for 8% sales tax), DECIMAL(15,2) for very large institutional amounts. Use FLOAT only for scientific measurements, machine learning weights, and statistical values where exact decimal representation is neither possible nor required — the measurement itself has inherent imprecision that exceeds the floating-point error.</p>
       </IQ>
 
       <IQ q="When should you use VARCHAR vs TEXT for a text column?">
@@ -960,20 +960,20 @@ CREATE TABLE loan_applications (
       </IQ>
 
       <IQ q="Why should phone numbers be stored as VARCHAR rather than INTEGER?">
-        <p style={{ margin: '0 0 14px' }}>Phone numbers are not numeric values in the mathematical sense — they are identifiers that happen to use digits. Storing them as INTEGER or BIGINT causes three problems. First, leading zeros are lost. Indian mobile numbers start with 0 (when dialled as local calls) or with a country code — 09876543210 stored as BIGINT becomes 9876543210, irreversibly losing the leading zero. Stored data can never be recovered to the original format.</p>
-        <p style={{ margin: '0 0 14px' }}>Second, non-numeric characters cannot be stored. International format phone numbers include country codes (+91), separators (-), and sometimes extensions (x204). BIGINT accepts none of these — any format beyond pure digits requires VARCHAR. Third, no arithmetic is ever performed on phone numbers — you never add two phone numbers together or calculate the average phone number. The entire reason to choose a numeric type is to enable arithmetic and range operations. Phone numbers need neither.</p>
-        <p style={{ margin: 0 }}>The correct type is VARCHAR(20) — long enough for any international format (+1-800-555-0199 is 15 chars, with headroom). This applies to any "number" that is really an identifier: PAN card (ABCDE1234F — mixed alphanumeric), SSN number (12 digits, no arithmetic), GST number, IFSC code, postal codes (some have letters — UK postcodes SW1A 1AA). The rule: if you would never multiply it, average it, or compare it with greater-than, store it as VARCHAR.</p>
+        <p style={{ margin: '0 0 14px' }}>Phone numbers are not numeric values in the mathematical sense — they are identifiers that happen to use digits. Storing them as INTEGER or BIGINT causes three problems. First, leading zeros are lost. Many countries' local numbers start with a 0 dialling prefix — 020 7946 0958 in the UK stored as BIGINT becomes 2079460958, irreversibly losing the leading zero. Stored data can never be recovered to the original format.</p>
+        <p style={{ margin: '0 0 14px' }}>Second, non-numeric characters cannot be stored. International format phone numbers include country codes (+1, +44), separators (-), and sometimes extensions (x204). BIGINT accepts none of these — any format beyond pure digits requires VARCHAR. Third, no arithmetic is ever performed on phone numbers — you never add two phone numbers together or calculate the average phone number. The entire reason to choose a numeric type is to enable arithmetic and range operations. Phone numbers need neither.</p>
+        <p style={{ margin: 0 }}>The correct type is VARCHAR(20) — long enough for any international format (+1-800-555-0199 is 15 chars, with headroom). This applies to any "number" that is really an identifier: EIN (12-3456789 — dash-formatted, no arithmetic), SSN (11 chars with dashes, no arithmetic), bank routing numbers, postal codes (some have letters — Canadian postal codes like K1A 0B1). The rule: if you would never multiply it, average it, or compare it with greater-than, store it as VARCHAR.</p>
       </IQ>
 
       <IQ q="What is the difference between TIMESTAMP and TIMESTAMPTZ and which should you use?">
-        <p style={{ margin: '0 0 14px' }}>TIMESTAMP (TIMESTAMP WITHOUT TIME ZONE) stores a date and time value with no timezone information attached. The value is stored and retrieved exactly as entered — 2024-01-15 14:30:00 is stored and returned as-is. The database makes no attempt to convert it. If two users in different timezones insert the "same" timestamp, they might both insert 14:30:00 but mean completely different moments in absolute time (IST vs UTC vs PST).</p>
-        <p style={{ margin: '0 0 14px' }}>TIMESTAMPTZ (TIMESTAMP WITH TIME ZONE) stores a specific moment in absolute time. The value is always stored internally as UTC. When you insert a timestamp with a timezone (or the database's configured timezone is used), it converts to UTC for storage. When you retrieve it, PostgreSQL converts from UTC to the current session's timezone. 2024-01-15 14:30:00+05:30 (IST) and 2024-01-15 09:00:00+00:00 (UTC) refer to the same moment and store identically.</p>
-        <p style={{ margin: 0 }}>Use TIMESTAMPTZ for all production application timestamps — created_at, updated_at, logged_at, processed_at. Any event that "happened at a specific moment" needs TIMESTAMPTZ to be unambiguous across timezones. Use TIMESTAMP only when the time has no timezone meaning — a scheduled broadcast at 20:00 every evening regardless of timezone, a business hours definition, a recurring calendar event. Most Indian startups operate in a single timezone (IST) but use TIMESTAMPTZ anyway because it is the safer default and costs nothing extra. If you later add international users or move servers between regions, TIMESTAMP values become ambiguous while TIMESTAMPTZ remains correct.</p>
+        <p style={{ margin: '0 0 14px' }}>TIMESTAMP (TIMESTAMP WITHOUT TIME ZONE) stores a date and time value with no timezone information attached. The value is stored and retrieved exactly as entered — 2024-01-15 14:30:00 is stored and returned as-is. The database makes no attempt to convert it. If two users in different timezones insert the "same" timestamp, they might both insert 14:30:00 but mean completely different moments in absolute time (PST vs EST vs UTC).</p>
+        <p style={{ margin: '0 0 14px' }}>TIMESTAMPTZ (TIMESTAMP WITH TIME ZONE) stores a specific moment in absolute time. The value is always stored internally as UTC. When you insert a timestamp with a timezone (or the database's configured timezone is used), it converts to UTC for storage. When you retrieve it, PostgreSQL converts from UTC to the current session's timezone. 2024-01-15 06:30:00-08:00 (PST) and 2024-01-15 14:30:00+00:00 (UTC) refer to the same moment and store identically.</p>
+        <p style={{ margin: 0 }}>Use TIMESTAMPTZ for all production application timestamps — created_at, updated_at, logged_at, processed_at. Any event that "happened at a specific moment" needs TIMESTAMPTZ to be unambiguous across timezones. Use TIMESTAMP only when the time has no timezone meaning — a scheduled broadcast at 20:00 every evening regardless of timezone, a business hours definition, a recurring calendar event. Most single-region startups operate in a single timezone (PST or EST) but use TIMESTAMPTZ anyway because it is the safer default and costs nothing extra. If you later add international users or move servers between regions, TIMESTAMP values become ambiguous while TIMESTAMPTZ remains correct.</p>
       </IQ>
 
       <IQ q="What is CAST and when do you need it?">
         <p style={{ margin: '0 0 14px' }}>CAST converts a value from one data type to another. The standard SQL syntax is CAST(expression AS target_type). PostgreSQL also supports the :: shorthand: expression::target_type. The conversion is explicit — you are telling the database exactly what type conversion you want, rather than relying on implicit conversion behaviour that may differ between databases.</p>
-        <p style={{ margin: '0 0 14px' }}>The most important use cases for CAST: forcing decimal division when columns are integers — CAST(numerator AS DECIMAL) / denominator prevents integer truncation where 7/2 would return 3 instead of 3.5. Converting dates to strings for display — TO_CHAR or CAST(date_col AS VARCHAR) for concatenation with strings. Converting strings to dates when inserting or comparing with user input. Narrowing a type for a specific calculation — CAST(total_amount AS INTEGER) to drop paise precision when only rupees matter.</p>
+        <p style={{ margin: '0 0 14px' }}>The most important use cases for CAST: forcing decimal division when columns are integers — CAST(numerator AS DECIMAL) / denominator prevents integer truncation where 7/2 would return 3 instead of 3.5. Converting dates to strings for display — TO_CHAR or CAST(date_col AS VARCHAR) for concatenation with strings. Converting strings to dates when inserting or comparing with user input. Narrowing a type for a specific calculation — CAST(total_amount AS INTEGER) to drop cent precision when only whole dollars matter.</p>
         <p style={{ margin: 0 }}>When not to use CAST: do not use CAST to work around a schema design error. If you are constantly casting a phone_number column from BIGINT to VARCHAR, fix the schema — change the column to VARCHAR. CAST is for legitimate temporary type coercion in calculations and output formatting, not a permanent workaround for wrong column types. Also avoid CAST on the column side of WHERE conditions because it prevents index usage — CAST(order_id AS VARCHAR) = '1007' disables the index on order_id. Rewrite the value side instead: order_id = CAST('1007' AS INTEGER) or simply order_id = 1007.</p>
       </IQ>
 
@@ -990,7 +990,7 @@ CREATE TABLE loan_applications (
 
       <Err
         msg="Financial totals are consistently off by small fractions — SUM returns 10499999.99 instead of 10500000.00"
-        cause="Money is stored as FLOAT or DOUBLE instead of DECIMAL. Floating-point arithmetic cannot represent most decimal fractions exactly. Small errors (like 10.50 being stored as 10.499999...) compound across millions of rows. The SUM of one million ₹10.50 values stored as FLOAT may be ₹10,499,999.99 instead of ₹10,500,000.00 — a ₹0.01 discrepancy that causes compliance failures."
+        cause="Money is stored as FLOAT or DOUBLE instead of DECIMAL. Floating-point arithmetic cannot represent most decimal fractions exactly. Small errors (like 10.50 being stored as 10.499999...) compound across millions of rows. The SUM of one million $10.50 values stored as FLOAT may be $10,499,999.99 instead of $10,500,000.00 — a $0.01 discrepancy that causes compliance failures."
         fix="Change the column type from FLOAT to DECIMAL(precision, 2): ALTER TABLE payments ALTER COLUMN amount TYPE DECIMAL(12,2). Migrate existing data: UPDATE payments SET amount = ROUND(amount::DECIMAL, 2). Audit all financial columns across the schema and convert every FLOAT used for money. Going forward, make DECIMAL mandatory in code review for any column that stores a monetary value — reject any schema change that uses FLOAT for money."
       />
 
@@ -1001,22 +1001,22 @@ CREATE TABLE loan_applications (
       />
 
       <Err
-        msg="VARCHAR column truncates long values silently — 'Rajasthani Papad Masala Fryums Mixed' becomes 'Rajasthani Papad Masala F'"
+        msg="VARCHAR column truncates long values silently — 'Organic Sourdough Multigrain Bread Loaf' becomes 'Organic Sourdough Multig'"
         cause="The VARCHAR(n) limit is too short for some values being inserted. The database is truncating values to fit the declared length — or in strict mode, rejecting the insert entirely. VARCHAR(20) for a product name column that needs to hold 35-character names will silently truncate in MySQL's non-strict mode, causing data loss that is invisible until a product search returns wrong names."
         fix="Increase the VARCHAR length: ALTER TABLE products ALTER COLUMN product_name TYPE VARCHAR(500). Review all VARCHAR lengths in your schema against the actual data: SELECT MAX(LENGTH(product_name)) FROM products — this shows the current maximum and helps you set a correct limit with headroom. Enable MySQL strict mode (STRICT_TRANS_TABLES) to turn silent truncation into an error so data loss is immediately visible."
       />
 
       <Err
         msg="Timezone confusion — timestamps show wrong time after server migration"
-        cause="Timestamps are stored as TIMESTAMP WITHOUT TIME ZONE. When the database server was in one timezone (Asia/Kolkata), values inserted at 14:30 IST were stored as 14:30 with no timezone. After migrating the server to UTC, the same values are displayed as 14:30 UTC — 5.5 hours ahead of the original time. All historical timestamps are now wrong relative to their actual creation time."
-        fix="Going forward, use TIMESTAMPTZ for all event timestamps: ALTER TABLE events ALTER COLUMN created_at TYPE TIMESTAMPTZ USING created_at AT TIME ZONE 'Asia/Kolkata'. This converts the stored 14:30 to 09:00 UTC (the actual UTC equivalent of 14:30 IST), which displays as 14:30 when the session timezone is set to IST and as 09:00 when set to UTC — always representing the correct moment. For existing data, determine what timezone the values were originally entered in and migrate accordingly."
+        cause="Timestamps are stored as TIMESTAMP WITHOUT TIME ZONE. When the database server was in one timezone (America/Los_Angeles), values inserted at 14:30 PST were stored as 14:30 with no timezone. After migrating the server to UTC, the same values are displayed as 14:30 UTC — 8 hours ahead of the original time. All historical timestamps are now wrong relative to their actual creation time."
+        fix="Going forward, use TIMESTAMPTZ for all event timestamps: ALTER TABLE events ALTER COLUMN created_at TYPE TIMESTAMPTZ USING created_at AT TIME ZONE 'America/Los_Angeles'. This converts the stored 14:30 to 22:00 UTC (the actual UTC equivalent of 14:30 PST), which displays as 14:30 when the session timezone is set to PST and as 22:00 when set to UTC — always representing the correct moment. For existing data, determine what timezone the values were originally entered in and migrate accordingly."
       />
 
       <HR />
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write a query that shows all columns in the FreshCart 'products' table — their name, data type, whether they allow NULL, and their default value. Then write a second query that finds any product where unit_price cast to INTEGER differs from unit_price, indicating sub-rupee pricing."
+        question="Write a query that shows all columns in the FreshCart 'products' table — their name, data type, whether they allow NULL, and their default value. Then write a second query that finds any product where unit_price cast to INTEGER differs from unit_price, indicating sub-dollar (cent) pricing."
         hint="Query 1: use pragma_table_info('products') — returns name, type, notnull, dflt_value, pk. Query 2: SELECT product_name, unit_price FROM products WHERE CAST(unit_price AS INTEGER) != unit_price."
         answer={`-- Query 1: Products table schema inspection
 SELECT
@@ -1027,16 +1027,16 @@ SELECT
   pk         AS primary_key
 FROM pragma_table_info('products');
 
--- Query 2: Products with sub-rupee pricing (paise component)
+-- Query 2: Products with sub-dollar pricing (cent component)
 SELECT
   product_name,
   unit_price,
-  CAST(unit_price AS INTEGER)              AS rupees_only,
-  unit_price - CAST(unit_price AS INTEGER) AS paise_component
+  CAST(unit_price AS INTEGER)              AS dollars_only,
+  unit_price - CAST(unit_price AS INTEGER) AS cent_component
 FROM products
 WHERE CAST(unit_price AS INTEGER) != unit_price
-ORDER BY paise_component DESC;`}
-        explanation="Query 1 uses pragma_table_info() — SQLite's built-in schema inspector. It returns one row per column: name (column name), type (declared type), notnull (1 = NOT NULL), dflt_value (DEFAULT expression), pk (1 = primary key). Query 2 uses CAST to find products with fractional rupee pricing — comparing the original DECIMAL to its INTEGER cast reveals any paise component that would be lost if the column type were changed to INTEGER."
+ORDER BY cent_component DESC;`}
+        explanation="Query 1 uses pragma_table_info() — SQLite's built-in schema inspector. It returns one row per column: name (column name), type (declared type), notnull (1 = NOT NULL), dflt_value (DEFAULT expression), pk (1 = primary key). Query 2 uses CAST to find products with fractional dollar pricing — comparing the original DECIMAL to its INTEGER cast reveals any cent component that would be lost if the column type were changed to INTEGER."
       />
 
       <HR />
@@ -1047,8 +1047,8 @@ ORDER BY paise_component DESC;`}
           'Data types are not just technical details — wrong choices cause silent bugs (FLOAT money rounding), data loss (INTEGER phone numbers), and schema migrations that lock production tables for hours.',
           'Never store money as FLOAT or DOUBLE. Always use DECIMAL(p,2). Floating-point cannot represent decimal fractions exactly, and errors compound across millions of transactions into regulatory violations.',
           'INTEGER for whole-number counts and IDs. BIGINT when values might exceed 2.1 billion. DECIMAL for any number with decimal precision. FLOAT only for scientific measurements with inherent imprecision.',
-          'VARCHAR(n) for variable-length text with a known maximum. CHAR(n) for fixed-length codes (country codes, currency codes, PAN). TEXT for unbounded content (descriptions, articles).',
-          'Phone numbers, PAN, SSN, IFSC, postal codes — store as VARCHAR, never INTEGER. They have leading zeros, non-numeric characters, and require no arithmetic.',
+          'VARCHAR(n) for variable-length text with a known maximum. CHAR(n) for fixed-length codes (country codes, currency codes, SSN). TEXT for unbounded content (descriptions, articles).',
+          'Phone numbers, SSN, EIN, routing numbers, postal codes — store as VARCHAR, never INTEGER. They have leading zeros, non-numeric characters, and require no arithmetic.',
           'DATE for calendar days with no time component. TIMESTAMP for specific moments in a single timezone. TIMESTAMPTZ for specific moments across multiple timezones — use this for all production created_at and updated_at columns.',
           'CAST(expression AS type) or expression::type (PostgreSQL) converts between types. Put CAST on the literal side of WHERE conditions, not the column side — CAST on a column prevents index usage.',
           'BOOLEAN for binary flags (is_active, in_stock). For multi-state columns (order_status, approval_status), use VARCHAR with a CHECK constraint — not BOOLEAN.',

@@ -233,7 +233,7 @@ export default function MLPipelinesFeatureStoresPage() {
         <Callout type="tip">
           Install: <span style={S.code as React.CSSProperties}>pip install feast apache-airflow prefect scikit-learn pandas</span>.
           Feast is the most widely deployed open-source feature store —
-          used at Twitter, Shopify, and multiple Indian unicorns.
+          used at Twitter, Shopify, and many other tech companies.
           Prefect is simpler than Airflow for getting started.
         </Callout>
       </div>
@@ -693,8 +693,8 @@ print(f"\nPipeline result: {result}")`} />
         <h2 style={S.h2}>Airflow DAGs — the pattern used at DoorDash, Amazon, and Stripe</h2>
 
         <p style={S.p}>
-          Apache Airflow is the most widely deployed ML orchestrator in India.
-          Every major Indian tech company runs Airflow for data and ML pipelines.
+          Apache Airflow is the most widely deployed ML orchestrator in the industry.
+          Every major tech company runs Airflow for data and ML pipelines.
           An Airflow DAG (Directed Acyclic Graph) defines the tasks and their
           dependencies as Python code. Airflow schedules DAG runs, retries failures,
           sends email alerts, and provides a rich UI showing every run's status.
@@ -1069,7 +1069,7 @@ print("""
           'A feature store has two layers: the offline store (full history in S3/BigQuery/Parquet, used for training with point-in-time queries) and the online store (latest values in Redis, used for inference at ~1ms latency). Materialisation jobs sync the offline store to the online store, typically daily via an Airflow DAG.',
           'Point-in-time correct feature retrieval is mandatory for training. For each training event at time T, only use feature values computed from data with timestamp ≤ T. Fetching the latest features regardless of event time causes data leakage — the model appears excellent in evaluation but fails in production because future data is not available at inference time.',
           'Prefect turns Python functions into pipeline tasks with @task and @flow decorators. Tasks get retries, caching, and logging automatically. Flows define the DAG structure. Run locally for development, deploy to Prefect Cloud or self-hosted server for production scheduling.',
-          'Airflow DAGs define ML pipelines as Python — tasks are PythonOperator/BranchPythonOperator/EmailOperator nodes connected by >> dependencies. BranchPythonOperator enables conditional logic (pass data validation → train, fail → alert). XCom passes data between tasks. schedule_interval sets the cron schedule. Used by DoorDash, Amazon, Stripe, and most Indian unicorns.',
+          'Airflow DAGs define ML pipelines as Python — tasks are PythonOperator/BranchPythonOperator/EmailOperator nodes connected by >> dependencies. BranchPythonOperator enables conditional logic (pass data validation → train, fail → alert). XCom passes data between tasks. schedule_interval sets the cron schedule. Used by DoorDash, Amazon, Stripe, and most unicorns.',
           'The most dangerous ML pipeline failure is silent: feature extraction succeeds but returns 0 or wrong rows, training proceeds on bad data, a degraded model is promoted. Always add explicit data quality gate tasks that check row counts, null rates, and value distributions before training. Make quality checks raise exceptions on failure — Airflow marks tasks as failed only on unhandled exceptions.',
         ]}
       />

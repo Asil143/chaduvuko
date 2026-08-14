@@ -633,7 +633,7 @@ print(f"  Soft label sample: {labels_cm[0].tolist()}")`} />
                 color: '#D85A30',
                 strategy: 'Strong augmentation',
                 transforms: 'RandomResizedCrop + HorizontalFlip + ColorJitter(0.4) + RandomErasing + MixUp or CutMix',
-                note: 'Standard regime for most fine-tuning tasks in Indian startup ML teams.',
+                note: 'Standard regime for most fine-tuning tasks in startup ML teams.',
               },
               {
                 size: '10,000 – 100,000',

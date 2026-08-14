@@ -398,7 +398,7 @@ GENERATION 3: OPEN TABLE FORMATS + LAKEHOUSE (2020-present)
 
 s3://freshmart-data-lake/
 ├── landing/              ← ZONE 1: Landing / Raw Ingestion
-│   ├── razorpay/
+│   ├── stripe/
 │   │   └── payments_20260317.json       (as received from API)
 │   ├── shipfast/
 │   │   └── deliveries_week_20260317.csv (as received from vendor SFTP)

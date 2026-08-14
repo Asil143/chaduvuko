@@ -223,7 +223,7 @@ export default function ERModel() {
               an entity instance becomes a row in a table.
             </Para>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--accent)' }}>
-              "Rahul Sharma", "Chicken Biryani", "ORD-4521"
+              "Michael Turner", "Chicken Biryani", "ORD-4521"
             </div>
           </div>
         </div>
@@ -290,7 +290,7 @@ export default function ERModel() {
               owner: 'EMPLOYEE',
               partialKey: 'dependent_name',
               color: '#f97316',
-              explanation: 'Employee dependents (family members enrolled in company benefits) exist only in the context of the employee. An employee\'s dependent named "Priya" is identified by the combination of employee ID + dependent name. If the employee leaves the company and is deleted, their dependents are also removed.',
+              explanation: 'Employee dependents (family members enrolled in company benefits) exist only in the context of the employee. An employee\'s dependent named "Sofia" is identified by the combination of employee ID + dependent name. If the employee leaves the company and is deleted, their dependents are also removed.',
               fullKey: '(employee_id, dependent_name)',
             },
             {
@@ -432,8 +432,8 @@ CREATE TABLE customers (
     street        VARCHAR(200),
     city          VARCHAR(100),  -- searched: WHERE city = 'San Francisco'
     state         VARCHAR(50),
-    zip_code       CHAR(6),        -- searched: WHERE zip_code = '560001'
-    country       VARCHAR(50)    DEFAULT 'India'
+    zip_code       CHAR(5),        -- searched: WHERE zip_code = '94103'
+    country       VARCHAR(50)    DEFAULT 'USA'
 );
 -- Queries on individual components are efficient (indexable).
 -- More columns, but full query flexibility.
@@ -736,7 +736,7 @@ FLIGHT entity:
         <Para>
           Like entity types, relationship types have
           <strong style={{ color: 'var(--text)' }}> relationship instances</strong> — specific
-          associations between specific entity instances. "Rahul Sharma placed Order ORD-4521"
+          associations between specific entity instances. "Michael Turner placed Order ORD-4521"
           is a relationship instance. "Prof. Kumar teaches CS301" is a relationship instance.
           In ER diagrams, relationship types are drawn as
           <strong style={{ color: 'var(--text)' }}> diamonds</strong>.
@@ -1897,11 +1897,11 @@ LEFT JOIN patients p ON w.ward_id = p.current_ward_id
 GROUP BY w.ward_id, w.ward_name, w.wing, w.capacity
 ORDER BY current_patients DESC;
 
--- R2: "What are Dr. Sharma's qualifications?"
+-- R2: "What are Dr. Bennett's qualifications?"
 SELECT d.full_name, dq.degree, dq.institution, dq.year_awarded
 FROM doctors d
 JOIN doctor_qualifications dq ON d.doctor_id = dq.doctor_id
-WHERE d.full_name = 'Dr. Sharma';
+WHERE d.full_name = 'Dr. Bennett';
 
 -- R4: "Which patients are currently admitted to Ward 3A?"
 SELECT p.full_name, p.blood_group, p.admission_date, p.expected_discharge
@@ -2157,7 +2157,7 @@ CREATE TABLE orders (
     delivery_fee      DECIMAL(8,2)   DEFAULT 30,
     discount          DECIMAL(8,2)   DEFAULT 0,
     total             DECIMAL(10,2)  NOT NULL,
-    payment_method    VARCHAR(30),   -- 'UPI', 'card', 'cash', 'wallet'
+    payment_method    VARCHAR(30),   -- 'venmo', 'card', 'cash', 'wallet'
     payment_status    VARCHAR(20)    DEFAULT 'pending',
     
     FOREIGN KEY (user_id)             REFERENCES users(user_id),

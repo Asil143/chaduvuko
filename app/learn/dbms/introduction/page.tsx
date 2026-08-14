@@ -102,7 +102,7 @@ export default function DBMSIntroduction() {
               word: 'Information',
               color: 'var(--accent)',
               definition: 'Data that has been processed, organized, and given context so it becomes meaningful to a human being.',
-              example: '"Rahul Sharma, age 28, from San Francisco, phone 98765-43210, joined on 2024-03-15"',
+              example: '"Michael Turner, age 28, from San Francisco, phone 98765-43210, joined on 2024-03-15"',
               realWorld: 'When you query a database and see a customer record with a name, city, and phone — that\'s information. Context transforms data.',
             },
             {
@@ -161,7 +161,7 @@ export default function DBMSIntroduction() {
           In the context of databases, data is any known fact that can be recorded and has implicit meaning.
           The word "implicit" is important — the meaning exists, but it needs context to surface.
           The number <code style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', fontSize: 13 }}>500</code> by
-          itself is data. In the context of a salary column, it means ₹500. In the context of a distance column,
+          itself is data. In the context of a salary column, it means $500. In the context of a distance column,
           it means 500 kilometres. The column name, the table, the schema — these provide the context
           that transforms raw data into meaningful information.
         </Para>
@@ -241,18 +241,18 @@ export default function DBMSIntroduction() {
               </Para>
               <Para>
                 This redundancy wastes storage — but storage is cheap. The real problem is what happens
-                next. Rahul Sharma moves from San Francisco to Austin. Someone updates the HR file.
+                next. Michael Turner moves from San Francisco to Austin. Someone updates the HR file.
                 Nobody tells Payroll. Nobody tells IT Assets. Now three files have three different
-                versions of Rahul's city. The data is not just redundant — it has become contradictory.
+                versions of Michael's city. The data is not just redundant — it has become contradictory.
                 Which version is correct? Nobody knows.
               </Para>
             </div>
             <div style={{ padding: '14px 24px', background: 'rgba(255,71,87,0.04)' }}>
               <div style={{ fontSize: 12, color: '#ff4757', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 6 }}>REAL EXAMPLE AT WORK</div>
               <div style={{ fontSize: 13, color: 'var(--text2)',  lineHeight: 1.75 }}>
-                A major Indian bank discovered in 2019 that a customer's KYC address existed in
+                A major US bank discovered in 2019 that a customer's KYC address existed in
                 11 different systems with 4 different values. When regulators asked for the customer's
-                correct address, the bank couldn't answer confidently. Audit failure. ₹2 million fine.
+                correct address, the bank couldn't answer confidently. Audit failure. $2 million fine.
               </div>
             </div>
           </div>
@@ -297,13 +297,13 @@ export default function DBMSIntroduction() {
               <div style={{ fontSize: 12, color: '#f97316', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 6 }}>INCONSISTENCY IN PRACTICE</div>
               <CodeBox>
 {`HR_System.csv:
-  employee_id: E001, name: Rahul Sharma, salary: 85000, city: San Francisco
+  employee_id: E001, name: Michael Turner, salary: 85000, city: San Francisco
 
 Payroll_System.csv:
-  employee_id: E001, name: Rahul Sharma, salary: 75000, city: Austin
+  employee_id: E001, name: Michael Turner, salary: 75000, city: Austin
 
 IT_Assets.csv:
-  employee_id: E001, name: Rahul S.,    salary: 85000, city: San Francisco
+  employee_id: E001, name: Michael T.,    salary: 85000, city: San Francisco
 
 // Three files. Three different salaries/cities. Which is truth?
 // A database would have ONE source and prevent this entirely.`}
@@ -330,7 +330,7 @@ IT_Assets.csv:
               </div>
               <Para>
                 In a file-based system, accessing data requires writing a program. If the finance
-                manager needs "all employees who joined after January 2023 and earn more than ₹80,000
+                manager needs "all employees who joined after January 2023 and earn more than $80,000
                 and are based in San Francisco," a developer must write a custom program to read the file,
                 parse each line, apply the three conditions, and output the results. This takes hours
                 or days of development effort for a question that should take seconds.
@@ -1014,7 +1014,7 @@ CREATE POLICY team_access ON employees
               era: '2003 – present',
               tag: 'Speed Above All',
               examples: 'Redis · Memcached · DynamoDB (also document) · Etcd',
-              usedAt: 'Every large application for caching — Square, Brex, DoorDash, Netflix India',
+              usedAt: 'Every large application for caching — Square, Brex, DoorDash, Netflix',
               structure: 'The simplest possible structure: a key maps to a value. The key is a string. The value can be a string, number, list, set, hash, or sorted set (in Redis).',
               queryLanguage: 'GET key, SET key value, DEL key — and type-specific commands.',
               bestFor: 'Caching (database query results, session data, computed values). Real-time counters (page views, likes, inventory counts). Session storage. Rate limiting. Leaderboards. OTP storage.',
@@ -1045,7 +1045,7 @@ CREATE POLICY team_access ON employees
               queryLanguage: 'Cypher (Neo4j), Gremlin, SPARQL.',
               bestFor: 'Highly connected data where the relationships themselves are as important as the entities. Social networks, knowledge graphs, fraud detection (unusual transaction chains), recommendation systems, supply chain analysis.',
               limitations: 'Significantly slower for bulk data operations. Steeper learning curve. Not suitable for simple tabular data. Limited ecosystem compared to RDBMS.',
-              deepDive: 'In a relational database, finding all friends-of-friends-of-friends of Rahul requires 3 JOIN operations that grow exponentially with depth. In a graph database, this is a simple graph traversal — the relationship "pointer" is stored directly on the node. As social network depth increases, graph databases maintain constant-time traversal while relational joins become impossibly slow.',
+              deepDive: 'In a relational database, finding all friends-of-friends-of-friends of Michael requires 3 JOIN operations that grow exponentially with depth. In a graph database, this is a simple graph traversal — the relationship "pointer" is stored directly on the node. As social network depth increases, graph databases maintain constant-time traversal while relational joins become impossibly slow.',
             },
             {
               type: 'In-Memory Databases',

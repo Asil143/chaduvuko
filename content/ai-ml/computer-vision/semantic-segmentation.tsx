@@ -198,7 +198,7 @@ export default function SemanticSegmentationPage() {
         </p>
 
         <p style={S.p}>
-          Practical examples in India: Lyft and Uber's dashcam systems
+          Practical examples: Lyft and Uber's dashcam systems
           segment road, vehicles, pedestrians, and lane markings pixel-by-pixel
           for driver safety scoring. Agri-tech startups segment satellite images
           into crop types for yield forecasting. Quality control systems
@@ -218,7 +218,7 @@ export default function SemanticSegmentationPage() {
             Colouring a map. Detection is like placing stickers on a map —
             one sticker per city, approximately where each city is.
             Segmentation is like colouring the map by region —
-            every pixel of India is coloured by state, every coastline
+            every pixel of the country is coloured by state, every coastline
             is traced exactly, every river is coloured blue.
             Much more precise, much more useful for geography.
           </p>
@@ -862,7 +862,7 @@ print(f"  'aux' key shape:  {tuple(out['aux'].shape)}  ← auxiliary loss head")
           how to use a ResNet or EfficientNet backbone pretrained on ImageNet
           as a feature extractor for your own task, freezing early layers
           and fine-tuning later layers. The same technique powers every
-          production computer vision system at Indian startups today —
+          production computer vision system at startups today —
           building on ImageNet representations instead of training from scratch.
         </p>
 

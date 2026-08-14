@@ -209,7 +209,7 @@ export default function WorkingWithAPIsModule() {
         <CodeBox label="HTTP request and response — every component explained">{`HTTP REQUEST (what your code sends):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 GET /v1/payments?from=1710633000&to=1710719400&count=100 HTTP/1.1
-Host: api.razorpay.com
+Host: api.stripe.com
 Authorization: Basic cnpwX2xpdmVfeHh4Ong=      ← base64(key_id:key_secret)
 Content-Type: application/json
 Accept: application/json
@@ -357,7 +357,7 @@ PIPELINE DECISION:
 import os
 import requests
 
-API_KEY = os.environ['RAZORPAY_API_KEY']   # NEVER hardcode
+API_KEY = os.environ['STRIPE_API_KEY']   # NEVER hardcode
 
 # Method A: Authorization header (most secure, most common)
 response = requests.get(
@@ -384,10 +384,10 @@ response = requests.get(
 from requests.auth import HTTPBasicAuth
 
 response = requests.get(
-    'https://api.razorpay.com/v1/payments',
+    'https://api.stripe.com/v1/payments',
     auth=HTTPBasicAuth(
-        os.environ['RAZORPAY_KEY_ID'],
-        os.environ['RAZORPAY_KEY_SECRET'],
+        os.environ['STRIPE_KEY_ID'],
+        os.environ['STRIPE_KEY_SECRET'],
     ),
 )
 
@@ -1058,7 +1058,7 @@ limiter = APIRateLimiter(
 
 response = limiter.call(
     requests.get,
-    'https://api.razorpay.com/v1/payments',
+    'https://api.stripe.com/v1/payments',
     auth=HTTPBasicAuth(KEY_ID, KEY_SECRET),
     params={'from': from_ts, 'to': to_ts, 'count': 100},
     timeout=30,
@@ -1144,8 +1144,8 @@ def process_event(event: dict) -> None:
         print(f'Unhandled event type: \${event_type}')
 
 
-@app.post('/webhooks/razorpay')
-async def razorpay_webhook(
+@app.post('/webhooks/stripe')
+async def stripe_webhook(
     request: Request,
     background_tasks: BackgroundTasks,
 ):
@@ -1153,7 +1153,7 @@ async def razorpay_webhook(
 
     # ── 1. VERIFY SIGNATURE ────────────────────────────────────────────────────
     signature = request.headers.get('X-Stripe-Signature', '')
-    if not verify_signature(body, signature, RAZORPAY_WEBHOOK_SECRET):
+    if not verify_signature(body, signature, STRIPE_WEBHOOK_SECRET):
         raise HTTPException(status_code=401, detail='Invalid signature')
 
     event = json.loads(body)
@@ -1209,7 +1209,7 @@ def reconcile_missed_payments(lookback_hours: int = 2) -> int:
     fetched = upserted = 0
 
     for payment in fetch_all_cursor(
-        url     = 'https://api.razorpay.com/v1/payments',
+        url     = 'https://api.stripe.com/v1/payments',
         headers = auth_header(),
         params  = {'from': from_ts, 'to': to_ts, 'count': 100},
     ):
@@ -1288,8 +1288,8 @@ def safe_get(obj: dict, *keys: str, default=None) -> Any:
 def parse_amount(raw: Any) -> Decimal | None:
     """
     Parse monetary amount from various formats APIs use:
-    - Integer paise: 38000 (Stripe)
-    - Float rupees:  380.00
+    - Integer cents:  38000 (Stripe)
+    - Float dollars:  380.00
     - String:        "380.00" or "380,00" (European comma)
     - None/missing:  return None
     """
@@ -1297,7 +1297,7 @@ def parse_amount(raw: Any) -> Decimal | None:
         return None
     try:
         if isinstance(raw, int):
-            return Decimal(raw) / 100    # paise to rupees
+            return Decimal(raw) / 100    # cents to dollars
         raw_str = str(raw).replace(',', '.')  # normalise European comma
         return Decimal(raw_str)
     except InvalidOperation:
@@ -1309,7 +1309,7 @@ def parse_timestamp(raw: Any) -> datetime | None:
     Parse timestamp from various formats:
     - Unix seconds: 1710633047
     - Unix milliseconds: 1710633047000
-    - ISO 8601: "2026-03-17T20:14:32+05:30"
+    - ISO 8601: "2026-03-17T20:14:32-04:00"
     - Date only: "2026-03-17"
     """
     if raw is None:
@@ -1338,11 +1338,11 @@ def parse_payment(raw: dict) -> dict:
         # Primary field with fallback to old field name:
         'payment_id':   raw.get('id') or raw.get('payment_id'),
 
-        # Amount: handle int (paise) or float (rupees) or string:
+        # Amount: handle int (cents) or float (dollars) or string:
         'amount':       parse_amount(raw.get('amount')),
 
-        # Currency: default to INR if missing:
-        'currency':     raw.get('currency', 'INR'),
+        # Currency: default to USD if missing:
+        'currency':     raw.get('currency', 'USD'),
 
         # Status: normalise to lowercase:
         'status':       (raw.get('status') or '').lower() or None,
@@ -1549,7 +1549,7 @@ def parse_payment(raw: dict) -> dict | None:
         return {
             'payment_id': raw['id'],
             'amount':     amount,
-            'currency':   raw.get('currency', 'INR'),
+            'currency':   raw.get('currency', 'USD'),
             'status':     (raw.get('status') or '').lower(),
             'method':     raw.get('method'),
             'created_at': created_at,
@@ -1693,7 +1693,7 @@ curl -s -I -H "X-API-Key: \${SHIPFAST_API_KEY}" \
           <Para>
             <strong>Step 3 — Identify the data quality risks.</strong> The delivery
             records have an <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>amount</code> field
-            that is sometimes an integer (paise) and sometimes a float (rupees) depending
+            that is sometimes an integer (cents) and sometimes a float (dollars) depending
             on whether the delivery had COD. There is a{' '}
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>delivered_at</code> field
             that is null for undelivered orders. The{' '}
@@ -1882,7 +1882,7 @@ The practical difference in implementation: API key pipelines send the same stat
         'Cursor pagination is almost always better than offset pagination for production pipelines. Cursors are stable — new insertions during pagination do not shift positions and cause skipped or duplicated records. Offsets are position-based and break on live changing datasets. Always prefer cursor pagination when the API offers it.',
         'Rate limiting requires two layers: proactive (a token bucket limiter that stays below the limit) and reactive (detecting 429 responses, reading Retry-After headers, and backing off with jitter). Jitter — random variation in backoff times — prevents thundering herds where multiple retrying clients all resume simultaneously.',
         'Webhooks deliver events in near-real-time but are not guaranteed. Always verify the HMAC signature before processing (use hmac.compare_digest to prevent timing attacks). Return 200 immediately and process asynchronously to avoid retry storms. Implement idempotency checks using the event ID. Schedule hourly reconciliation polling to catch any missed webhook deliveries.',
-        'Write defensive API parsers. Use .get() with defaults for every field access. Handle multiple formats for amounts (integer paise vs float rupees vs string), timestamps (Unix seconds vs milliseconds vs ISO 8601), and status values (lowercase normalisation). Log schema changes when unexpected new fields appear.',
+        'Write defensive API parsers. Use .get() with defaults for every field access. Handle multiple formats for amounts (integer cents vs float dollars vs string), timestamps (Unix seconds vs milliseconds vs ISO 8601), and status values (lowercase normalisation). Log schema changes when unexpected new fields appear.',
         'The production pipeline design has five properties: idempotent (upserts not inserts, unique constraints on business keys), resumable (cursor checkpointing that survives failures), observable (structured logging with run_id), defensive (safe field parsing that never crashes on unexpected data), and respectful (proactive rate limiting that stays within API quotas).',
         'Use fixed time windows for incremental extraction — not relative windows. "date=2026-03-17 means from midnight to midnight UTC" produces the same result regardless of when the pipeline runs. Relative windows ("last 24 hours") produce different results on reruns, making the pipeline non-idempotent.',
         'The hybrid pattern — webhooks for real-time plus periodic polling for reconciliation — is the production-grade solution for event-driven ingestion. Neither alone is sufficient: webhooks alone miss events during downtime, polling alone adds latency and wastes API quota.',

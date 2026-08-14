@@ -578,9 +578,9 @@ Parquet file has 10 row groups (1M rows each = 10M total rows)
 
 Footer statistics for "city" column per row group:
   Row Group 1:  Min=Seattle, Max=Boston      → MAY contain Seattle ✓ read
-  Row Group 2:  Min=Chicago,   Max=Delhi     → CANNOT contain Seattle ✗ skip
-  Row Group 3:  Min=Ahmedabad, Max=Seattle → MAY contain Seattle ✓ read
-  Row Group 4:  Min=Delhi,     Max=Austin → CANNOT contain Seattle ✗ skip
+  Row Group 2:  Min=Chicago,   Max=Miami     → CANNOT contain Seattle ✗ skip
+  Row Group 3:  Min=Baltimore, Max=Seattle → MAY contain Seattle ✓ read
+  Row Group 4:  Min=Miami,     Max=Austin → CANNOT contain Seattle ✗ skip
   ...
 
 Result: 6 of 10 row groups are skipped entirely.
@@ -1106,7 +1106,7 @@ The first thing I check is the row count and column count. A row with more or fe
 
 The second is null representation. The vendor may use different null indicators on different days or in different fields — empty string, N/A, NULL, -1, 0, or the literal word "null". My parser's null value configuration must cover all of them. I scan the file for any non-numeric values in numeric columns.
 
-The third is encoding. If the vendor changes their export system, the encoding can silently change from UTF-8 to latin-1. Files with accented characters, special currency symbols like ₹, or regional language content will parse incorrectly or crash with UnicodeDecodeError. I read the first 100 bytes with chardet to detect the encoding before passing to the parser.
+The third is encoding. If the vendor changes their export system, the encoding can silently change from UTF-8 to latin-1. Files with accented characters, special currency symbols like €, or regional language content will parse incorrectly or crash with UnicodeDecodeError. I read the first 100 bytes with chardet to detect the encoding before passing to the parser.
 
 The fourth is line endings. Windows systems produce \r\n; Unix produces \n. Some CSV parsers handle both; others do not. A vendor who changes their export system from Windows to Linux (or vice versa) silently changes the line ending. I add universal newline mode to my reader.
 

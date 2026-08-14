@@ -189,10 +189,10 @@ export default function MultimodalModelsPage() {
         </h2>
 
         <p style={S.p}>
-          A vision model can tell you "this image contains a saree."
-          A language model can tell you "sarees are traditional Indian garments."
+          A vision model can tell you "this image contains a leather jacket."
+          A language model can tell you "leather jackets are a classic American wardrobe staple."
           Neither can answer: "does this product photo match this description —
-          A red Banarasi silk saree with gold zari border?" That requires
+          A brown leather bomber jacket with a shearling collar?" That requires
           understanding both modalities and the relationship between them.
           Multimodal models do exactly this.
         </p>
@@ -208,7 +208,7 @@ export default function MultimodalModelsPage() {
         </p>
 
         <p style={S.p}>
-          Real production uses at Indian companies: Shopify uses CLIP-based retrieval
+          Real production uses: Shopify uses CLIP-based retrieval
           to match user search queries to product images without pre-defined categories.
           Amazon uses multimodal models to verify that product photos match
           product descriptions. DoorDash uses them to check that restaurant dish photos
@@ -218,10 +218,10 @@ export default function MultimodalModelsPage() {
 
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
-            Think of a bilingual dictionary — it maps words from English to Hindi
+            Think of a bilingual dictionary — it maps words from English to Spanish
             and back. CLIP is a bilingual dictionary between visual language and
-            text language. Show it an image of a saree and it gives you a vector.
-            Show it the text "traditional Indian silk garment" and it gives you
+            text language. Show it an image of a leather jacket and it gives you a vector.
+            Show it the text "classic leather bomber jacket" and it gives you
             a similar vector. They are translations of the same concept into
             a shared numeric language. Similarity in this shared space means
             semantic similarity across modalities.
@@ -259,7 +259,7 @@ export default function MultimodalModelsPage() {
             <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 16 }}>
               <div>
                 <div style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>IMAGES</div>
-                {['🥻 saree photo', '👟 sneaker photo', '⌚ watch photo', '👗 kurta photo'].map((img, i) => (
+                {['🧥 jacket photo', '👟 sneaker photo', '⌚ watch photo', '👗 dress photo'].map((img, i) => (
                   <div key={i} style={{
                     background: 'var(--surface)', border: '1px solid var(--border)',
                     borderRadius: 4, padding: '5px 8px', marginBottom: 4,
@@ -293,7 +293,7 @@ export default function MultimodalModelsPage() {
                   )}
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 3, marginTop: 4 }}>
-                  {['"silk saree"', '"white sneaker"', '"smartwatch"', '"cotton kurta"'].map((t, i) => (
+                  {['"leather jacket"', '"white sneaker"', '"smartwatch"', '"cotton dress"'].map((t, i) => (
                     <div key={i} style={{ fontSize: 9, color: 'var(--muted)', textAlign: 'center' as const }}>{t}</div>
                   ))}
                 </div>
@@ -399,8 +399,8 @@ processor = CLIPProcessor.from_pretrained('openai/clip-vit-base-patch32')
 
 # Zero-shot image classification — NO training on these categories needed
 image  = Image.open('product.jpg')
-labels = ['a red silk saree', 'blue denim jeans', 'leather sneakers',
-           'gold wristwatch', 'cotton kurta']
+labels = ['a red leather jacket', 'blue denim jeans', 'leather sneakers',
+           'gold wristwatch', 'cotton dress']
 
 inputs = processor(text=labels, images=image, return_tensors='pt', padding=True)
 with torch.no_grad():
@@ -439,8 +439,8 @@ model.eval()
 
 # Shopify: classify product photos into catalogue categories
 CATEGORIES = [
-    'a photo of a kurta or kurti',
-    'a photo of a saree',
+    'a photo of a jacket or coat',
+    'a photo of a dress',
     'a photo of jeans or trousers',
     'a photo of sneakers or sports shoes',
     'a photo of a wristwatch',
@@ -500,7 +500,7 @@ def search_by_text(query: str, image_index: torch.Tensor,
     ]
 
 # Example queries:
-# 'red silk saree with gold border'        → retrieves matching products
+# 'red leather jacket with gold zipper'     → retrieves matching products
 # 'casual blue jeans for men'              → retrieves casual jeans
 # 'party wear dress for wedding ceremony'  → understands context
 # 'same as the image' (not possible)      → need image query instead
@@ -760,7 +760,7 @@ class MultimodalProductSearch:
 
 # Example queries that CLIP handles without category training:
 queries = [
-    'wedding saree under 2000 rupees',           # price + occasion + category
+    'wedding guest dress under 200 dollars',      # price + occasion + category
     'office formal shirt for men light colour',   # style + context + colour
     'kids birthday party dress pink frilly',      # demographics + occasion
     'gym wear breathable fabric moisture wicking', # technical attributes
@@ -780,10 +780,10 @@ Extract these fields from the receipt image as JSON:
 {
   "merchant_name": string,
   "amount": number,
-  "currency": "INR" or other,
+  "currency": "USD" or other,
   "transaction_id": string,
   "date": "YYYY-MM-DD",
-  "payment_method": "UPI" or "card" or "netbanking" or other,
+  "payment_method": "ACH" or "card" or "wire" or other,
   "status": "success" or "failed" or "pending"
 }
 If a field is not visible, use null.
@@ -945,8 +945,8 @@ def check_photo_quality(image_path, model, processor) -> dict:
 
         <ErrorBlock
           error="CLIP zero-shot classification gives wrong results — all images score similar probabilities"
-          cause="Text labels are not descriptive enough to distinguish categories. CLIP was trained on natural image captions, not short category names. Labels like 'kurta', 'saree', 'jeans' are too ambiguous — the model cannot distinguish them reliably because these single words appear in many different image contexts during pretraining. Also caused by mismatched preprocessing — if the processor is not applied correctly, image pixels are in the wrong range."
-          fix="Write descriptive text templates: 'a photo of a kurta or kurti on a white background' instead of just 'kurta'. Use multiple text variants per category and average their embeddings — this reduces sensitivity to exact wording. Apply the CLIP processor correctly: always use CLIPProcessor.from_pretrained() which handles both image resizing (224×224 for ViT-B/32) and normalisation with CLIP-specific statistics (not ImageNet statistics). Test with clip_model.get_image_features() and clip_model.get_text_features() separately to verify both produce non-zero, normalised embeddings."
+          cause="Text labels are not descriptive enough to distinguish categories. CLIP was trained on natural image captions, not short category names. Labels like 'jacket', 'dress', 'jeans' are too ambiguous — the model cannot distinguish them reliably because these single words appear in many different image contexts during pretraining. Also caused by mismatched preprocessing — if the processor is not applied correctly, image pixels are in the wrong range."
+          fix="Write descriptive text templates: 'a photo of a leather jacket on a white background' instead of just 'jacket'. Use multiple text variants per category and average their embeddings — this reduces sensitivity to exact wording. Apply the CLIP processor correctly: always use CLIPProcessor.from_pretrained() which handles both image resizing (224×224 for ViT-B/32) and normalisation with CLIP-specific statistics (not ImageNet statistics). Test with clip_model.get_image_features() and clip_model.get_text_features() separately to verify both produce non-zero, normalised embeddings."
         />
 
         <ErrorBlock
@@ -957,7 +957,7 @@ def check_photo_quality(image_path, model, processor) -> dict:
 
         <ErrorBlock
           error="CLIP image embeddings are not similar for visually similar products — retrieval returns wrong results"
-          cause="CLIP's ViT-B/32 was not trained on fashion or product images specifically — its representations are optimised for general natural image understanding, not fine-grained product similarity. Two similar kurtas in different colours may have more distant embeddings than a kurta and a completely different garment if they share visual texture patterns. Also caused by not L2-normalising embeddings before computing cosine similarity — dot product without normalisation measures magnitude not direction."
+          cause="CLIP's ViT-B/32 was not trained on fashion or product images specifically — its representations are optimised for general natural image understanding, not fine-grained product similarity. Two similar jackets in different colours may have more distant embeddings than a jacket and a completely different garment if they share visual texture patterns. Also caused by not L2-normalising embeddings before computing cosine similarity — dot product without normalisation measures magnitude not direction."
           fix="Always L2-normalise CLIP embeddings: emb = F.normalize(emb, dim=-1). Use ViT-L/14 instead of ViT-B/32 — the larger model has significantly better fine-grained representations. Fine-tune CLIP on your domain data with a small set of (positive, negative) product pairs using contrastive loss — even 1,000 annotated pairs dramatically improves fashion retrieval. Or use a fashion-specific model: FACAD or FashionCLIP trained specifically on product images."
         />
 
@@ -1029,7 +1029,7 @@ def check_photo_quality(image_path, model, processor) -> dict:
         items={[
           'CLIP trains two encoders — image (ViT) and text (Transformer) — to produce embeddings in a shared 512/768-dim space using contrastive loss on 400M (image, text) pairs. After training, cosine similarity between any image and text embedding measures their semantic relatedness. No task-specific training required — this is what enables zero-shot classification.',
           'CLIP contrastive (InfoNCE) loss: for a batch of N pairs, maximise similarity for the N correct (image, text) pairs and minimise similarity for the N²−N incorrect pairs. The loss is symmetric cross-entropy along both rows (image→text) and columns (text→image) of the N×N similarity matrix. Larger batches = more negatives = stronger learning signal.',
-          'Always write descriptive text labels for CLIP, not just category names: "a photo of a red silk saree" outperforms "saree" significantly. Always L2-normalise embeddings before computing cosine similarity. Use ViT-L/14 over ViT-B/32 for better fine-grained product representations.',
+          'Always write descriptive text labels for CLIP, not just category names: "a photo of a red leather jacket" outperforms "jacket" significantly. Always L2-normalise embeddings before computing cosine similarity. Use ViT-L/14 over ViT-B/32 for better fine-grained product representations.',
           'LLaVA connects a CLIP vision encoder → 2-layer projection MLP → LLM backbone. The projection MLP is the only new component — it maps 256 patch tokens from CLIP (1024-dim) into the LLM embedding space (4096-dim). The LLM then generates text attending to both visual tokens and text tokens simultaneously.',
           'Production decision: CLIP for high-volume retrieval and classification (5ms, free, self-hosted), LLaVA-7B for text generation about images (1-5s, free, needs GPU), GPT-4o Vision for complex reasoning (3-10s, $0.01-0.03/image), Gemini Flash for cost-effective high-quality VQA. Never use a generative VQA model for pure retrieval — embeddings are orders of magnitude faster.',
           'Three key production patterns: multimodal search (CLIP embeddings + FAISS index, text or image queries against indexed product catalogue), document understanding (LLaVA extracts structured data from receipts, invoices, screenshots without OCR), quality control (CLIP zero-shot scores photos against quality criteria descriptions — no labelled examples needed).',

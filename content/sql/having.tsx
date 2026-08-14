@@ -91,8 +91,8 @@ export default function Having() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, margin: '20px 0 28px' }}>
         {[
           'Which stores have processed more than 5 delivered orders?',
-          'Which product categories have average price above ₹100?',
-          'Which customers have spent more than ₹2,000 in total?',
+          'Which product categories have average price above $100?',
+          'Which customers have spent more than $2,000 in total?',
           'Which payment methods account for more than 20% of revenue?',
         ].map((q, i) => (
           <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 14px' }}>
@@ -167,10 +167,10 @@ ORDER BY delivered_orders DESC;`}
         showSchema={false}
       />
 
-      <H>Categories with average price above ₹100</H>
+      <H>Categories with average price above $100</H>
 
       <SQLPlayground
-        initialQuery={`-- Product categories where the average price is above ₹100
+        initialQuery={`-- Product categories where the average price is above $100
 SELECT
   category,
   COUNT(*)                       AS product_count,
@@ -185,10 +185,10 @@ ORDER BY avg_price DESC;`}
         showSchema={false}
       />
 
-      <H>Customers who have spent more than ₹1,000</H>
+      <H>Customers who have spent more than $1,000</H>
 
       <SQLPlayground
-        initialQuery={`-- High-value customers: total spend above ₹1,000
+        initialQuery={`-- High-value customers: total spend above $1,000
 SELECT
   c.customer_id,
   c.first_name || ' ' || c.last_name    AS customer,
@@ -269,7 +269,7 @@ ORDER BY headcount DESC;`}
       <Part n="04" title="HAVING with SUM and AVG — Value Thresholds" />
 
       <SQLPlayground
-        initialQuery={`-- Stores where total delivered revenue exceeds ₹2,000
+        initialQuery={`-- Stores where total delivered revenue exceeds $2,000
 SELECT
   o.store_id,
   s.city,
@@ -301,7 +301,7 @@ ORDER BY avg_margin_pct DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Payment methods with average order value above ₹500
+        initialQuery={`-- Payment methods with average order value above $500
 SELECT
   payment_method,
   COUNT(*)                       AS order_count,
@@ -324,7 +324,7 @@ ORDER BY avg_order_value DESC;`}
       <P>HAVING supports the same AND, OR, and NOT logic as WHERE. You can combine multiple aggregate conditions to define complex group-level filters.</P>
 
       <SQLPlayground
-        initialQuery={`-- Stores that are both high-volume (5+ orders) AND high-value (revenue > ₹2,000)
+        initialQuery={`-- Stores that are both high-volume (5+ orders) AND high-value (revenue > $2,000)
 SELECT
   o.store_id,
   s.city,
@@ -343,7 +343,7 @@ ORDER BY revenue DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Categories where EITHER avg price > ₹150 OR product count > 5
+        initialQuery={`-- Categories where EITHER avg price > $150 OR product count > 5
 SELECT
   category,
   COUNT(*)                       AS product_count,
@@ -359,7 +359,7 @@ ORDER BY avg_price DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Customers with multiple orders but average order below ₹500
+        initialQuery={`-- Customers with multiple orders but average order below $500
 -- (frequent low-value shoppers — coupon hunters, potential churn risk)
 SELECT
   c.customer_id,
@@ -402,7 +402,7 @@ ORDER BY SUM(total_amount) DESC;       -- (6) sort by revenue`}
         initialQuery={`-- Complete three-clause query:
 -- WHERE: filter to delivered orders placed in 2024
 -- GROUP BY: one row per store
--- HAVING: only stores with 3+ orders AND revenue > ₹1,500
+-- HAVING: only stores with 3+ orders AND revenue > $1,500
 SELECT
   o.store_id,
   s.city,
@@ -425,7 +425,7 @@ ORDER BY revenue DESC;`}
         initialQuery={`-- Another full pattern:
 -- WHERE: only in-stock products
 -- GROUP BY: by category and brand
--- HAVING: categories where the brand has multiple products AND avg price > ₹50
+-- HAVING: categories where the brand has multiple products AND avg price > $50
 SELECT
   category,
   brand,
@@ -629,7 +629,7 @@ ORDER BY orders_per_customer DESC;`}
 
       <SQLPlayground
         initialQuery={`-- Get full customer details for high-value customers
--- (customers who spent more than ₹1,000 in delivered orders)
+-- (customers who spent more than $1,000 in delivered orders)
 SELECT
   c.customer_id,
   c.first_name,
@@ -692,10 +692,10 @@ ORDER BY a.revenue DESC;`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at Stripe, India's largest payment gateway. The risk team has asked you to identify merchant accounts showing unusual activity patterns that may indicate fraud or policy violations. They have given you three criteria that define "flagged" merchants.</P>
+      <P>You are a data analyst at Stripe, a leading US payment gateway. The risk team has asked you to identify merchant accounts showing unusual activity patterns that may indicate fraud or policy violations. They have given you three criteria that define "flagged" merchants.</P>
 
       <TimeBlock time="3:00 PM" label="Risk team criteria arrive">
-        Flag any merchant where: (1) average transaction value exceeds ₹5,000 AND total transaction count is below 10 (low volume, high value — unusual), (2) OR cancellation rate exceeds 30% of all transactions, (3) OR they have only 1 distinct payment method used (legitimate merchants typically use multiple methods). Adapted for FreshCart: flag stores matching analogous patterns.
+        Flag any merchant where: (1) average transaction value exceeds $5,000 AND total transaction count is below 10 (low volume, high value — unusual), (2) OR cancellation rate exceeds 30% of all transactions, (3) OR they have only 1 distinct payment method used (legitimate merchants typically use multiple methods). Adapted for FreshCart: flag stores matching analogous patterns.
       </TimeBlock>
 
       <TimeBlock time="3:20 PM" label="You build the query">
@@ -761,10 +761,10 @@ ORDER BY cancellation_rate_pct DESC;`}
         <p style={{ margin: 0 }}>In practice, HAVING without GROUP BY is rarely used or recommended. The same result can almost always be expressed more clearly with a subquery or WHERE clause. SELECT COUNT(*), SUM(total_amount) FROM orders WHERE (SELECT COUNT(*) FROM orders) {'>'} 100 or putting the condition in application code after checking the count. HAVING without GROUP BY exists in the SQL standard and databases support it, but you will rarely see it in production code and it can confuse readers who expect HAVING to accompany GROUP BY.</p>
       </IQ>
 
-      <IQ q="Write a query to find customers who have placed more than 2 orders with an average order value above ₹500.">
+      <IQ q="Write a query to find customers who have placed more than 2 orders with an average order value above $500.">
         <p style={{ margin: '0 0 14px' }}>This requires two aggregate conditions on the same group — COUNT of orders and AVG of order values — so both belong in HAVING. The WHERE clause filters to only delivered orders (a row-level condition that should happen before grouping for efficiency).</p>
         <p style={{ margin: '0 0 14px' }}>The query: SELECT c.customer_id, c.first_name || ' ' || c.last_name AS customer, COUNT(o.order_id) AS order_count, ROUND(AVG(o.total_amount), 2) AS avg_order_value FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id WHERE o.order_status = 'Delivered' GROUP BY c.customer_id, c.first_name, c.last_name HAVING COUNT(o.order_id) {'>'} 2 AND AVG(o.total_amount) {'>'} 500 ORDER BY avg_order_value DESC.</p>
-        <p style={{ margin: 0 }}>The reasoning for each clause: JOIN brings orders alongside customer data. WHERE filters to delivered orders before grouping — this is a row-level condition. GROUP BY customer_id (plus name columns per the non-aggregate rule) creates one group per customer. HAVING COUNT {'>'} 2 filters to customers with more than two orders. HAVING AVG {'>'} 500 filters to customers whose average order exceeds ₹500. Both HAVING conditions must be satisfied simultaneously (AND). ORDER BY sorts by average order value descending — highest-value customers first. This query pattern — filter by count AND filter by aggregate value — is one of the most common HAVING patterns in customer analytics.</p>
+        <p style={{ margin: 0 }}>The reasoning for each clause: JOIN brings orders alongside customer data. WHERE filters to delivered orders before grouping — this is a row-level condition. GROUP BY customer_id (plus name columns per the non-aggregate rule) creates one group per customer. HAVING COUNT {'>'} 2 filters to customers with more than two orders. HAVING AVG {'>'} 500 filters to customers whose average order exceeds $500. Both HAVING conditions must be satisfied simultaneously (AND). ORDER BY sorts by average order value descending — highest-value customers first. This query pattern — filter by count AND filter by aggregate value — is one of the most common HAVING patterns in customer analytics.</p>
       </IQ>
 
       <IQ q="What is the performance implication of using HAVING instead of WHERE for non-aggregate conditions?">
@@ -818,7 +818,7 @@ ORDER BY cancellation_rate_pct DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart loyalty team needs to identify customers for a targeted re-engagement campaign. Write a query that finds customers who meet ALL of these criteria: placed at least 2 delivered orders, have an average delivered order value between ₹300 and ₹800 (not too cheap, not already high-value), and their most recent delivered order was before '2024-03-01' (lapsed customers). Show customer_id, full name, city, loyalty_tier, order_count, avg_order_value (rounded to 2 decimal places), and last_order_date. Sort by last_order_date ascending (longest lapsed first)."
+        question="The FreshCart loyalty team needs to identify customers for a targeted re-engagement campaign. Write a query that finds customers who meet ALL of these criteria: placed at least 2 delivered orders, have an average delivered order value between $300 and $800 (not too cheap, not already high-value), and their most recent delivered order was before '2024-03-01' (lapsed customers). Show customer_id, full name, city, loyalty_tier, order_count, avg_order_value (rounded to 2 decimal places), and last_order_date. Sort by last_order_date ascending (longest lapsed first)."
         hint="JOIN customers to orders. WHERE for delivered status. GROUP BY customer details. HAVING for the three aggregate conditions: COUNT >= 2, AVG BETWEEN 300 AND 800, MAX(order_date) < '2024-03-01'."
         answer={`SELECT
   c.customer_id,

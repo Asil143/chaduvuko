@@ -158,13 +158,13 @@ export default function FeatureScalingPage() {
       <div style={S.sec}>
         <span style={S.tag}>The problem most tutorials skip</span>
         <h2 style={S.h2}>
-          Your model thinks ₹500 and 5km are the same magnitude. They are not.
+          Your model thinks $500 and 5km are the same magnitude. They are not.
         </h2>
 
         <p style={S.p}>
           A DoorDash delivery prediction model has two features: distance in kilometres
-          (range 0.5–15) and order value in rupees (range 50–1200).
-          To gradient descent, ₹1200 looks 80 times more important than 15km
+          (range 0.5–15) and order value in dollars (range 50–1200).
+          To gradient descent, $1200 looks 80 times more important than 15km
           simply because the number is bigger — not because it actually is.
           The optimiser takes tiny steps in the distance direction and massive steps
           in the order-value direction, oscillating and converging slowly
@@ -301,7 +301,7 @@ n = 5000
 distance    = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)    # 0.5–15 km
 traffic     = np.random.randint(1, 11, n).astype(float)               # 1–10
 prep_time   = np.abs(np.random.normal(15, 5, n)).clip(5, 35)         # 5–35 min
-order_value = np.abs(np.random.normal(350, 150, n)).clip(50, 1200)   # 50–1200 ₹
+order_value = np.abs(np.random.normal(350, 150, n)).clip(50, 1200)   # 50–1200 $
 
 delivery = (8.6 + 7.3*distance + 0.8*prep_time + 1.5*traffic
             + np.random.normal(0, 4, n)).clip(10, 120)
@@ -982,7 +982,7 @@ np.random.seed(42)
 n = 5000
 
 restaurants = ['Pizza Hut','Biryani Blues',"McDonald's","Haldiram's",'Dominos','KFC']
-cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
+cities      = ['Seattle','New York','Denver','Austin','Boston','Chicago']
 
 distance    = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
 traffic     = np.random.randint(1, 11, n).astype(float)

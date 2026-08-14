@@ -153,7 +153,7 @@ export default function SqlProjects() {
       />
 
       <Step n="1" label="Establish the North Star: Baseline KPIs">
-        <p style={{ margin: '0 0 12px' }}>Before any breakdown, you need one row that anchors everything else. Every percentage in the rest of the report is relative to these totals. If you skip this step, numbers in later slides have no context — is ₹85,000 good or bad? You cannot know without the total.</p>
+        <p style={{ margin: '0 0 12px' }}>Before any breakdown, you need one row that anchors everything else. Every percentage in the rest of the report is relative to these totals. If you skip this step, numbers in later slides have no context — is $85,000 good or bad? You cannot know without the total.</p>
         <p style={{ margin: 0 }}>Write a single query returning: total delivered orders, total revenue, average order value, count of unique customers who ordered, total items sold, and revenue per customer. These are your KPIs.</p>
       </Step>
 
@@ -235,7 +235,7 @@ ORDER BY ss.revenue DESC;`}
       />
 
       <Interpret>
-        The aov_vs_mean column is the most actionable number on this slide. A store that is -₹150 below the mean AOV is not serving high-value customers — its growth lever is increasing basket size (bundle promotions, minimum order discounts) rather than acquiring more customers. A store that is +₹200 above mean AOV already has high-value customers — its lever is increasing visit frequency. The revenue_share_pct column immediately surfaces concentration risk: if two stores account for 60%+ of revenue, a logistics disruption at either location is a business-level risk.
+        The aov_vs_mean column is the most actionable number on this slide. A store that is -$150 below the mean AOV is not serving high-value customers — its growth lever is increasing basket size (bundle promotions, minimum order discounts) rather than acquiring more customers. A store that is +$200 above mean AOV already has high-value customers — its lever is increasing visit frequency. The revenue_share_pct column immediately surfaces concentration risk: if two stores account for 60%+ of revenue, a logistics disruption at either location is a business-level risk.
       </Interpret>
 
       <Step n="3" label="Customer Segment Analysis — Where Revenue Actually Comes From">
@@ -286,15 +286,15 @@ ORDER BY revenue_per_customer DESC;`}
       />
 
       <Interpret>
-        The revenue_concentration_delta is the key insight column. A positive delta means that tier generates a disproportionately large share of revenue relative to its size — these are your most valuable customers per head. A negative delta means the tier has many customers but each generates relatively little revenue. In most datasets, Platinum and Gold tiers show positive deltas (10–30+ points above their customer share), while Bronze shows a large negative delta. This quantifies exactly how much revenue concentration exists. The upgrade value calculation: if a Silver customer generates ₹X per period and a Gold customer generates ₹Y, each successful tier upgrade is worth ₹(Y−X) per period to the business.
+        The revenue_concentration_delta is the key insight column. A positive delta means that tier generates a disproportionately large share of revenue relative to its size — these are your most valuable customers per head. A negative delta means the tier has many customers but each generates relatively little revenue. In most datasets, Platinum and Gold tiers show positive deltas (10–30+ points above their customer share), while Bronze shows a large negative delta. This quantifies exactly how much revenue concentration exists. The upgrade value calculation: if a Silver customer generates $X per period and a Gold customer generates $Y, each successful tier upgrade is worth $(Y−X) per period to the business.
       </Interpret>
 
       <Pitfall>
-        A common mistake here is to look only at total_revenue per tier and conclude that Bronze generates the least value. Bronze often has the most customers — total revenue can be misleading. Always look at revenue_per_customer. A tier with 5 Platinum customers each spending ₹5,000 (₹25,000 total) is more valuable per customer than 100 Bronze customers spending ₹400 each (₹40,000 total), even though Platinum has lower total revenue.
+        A common mistake here is to look only at total_revenue per tier and conclude that Bronze generates the least value. Bronze often has the most customers — total revenue can be misleading. Always look at revenue_per_customer. A tier with 5 Platinum customers each spending $5,000 ($25,000 total) is more valuable per customer than 100 Bronze customers spending $400 each ($40,000 total), even though Platinum has lower total revenue.
       </Pitfall>
 
       <Step n="4" label="Time Trend — Is the Business Growing or Contracting?">
-        <p style={{ margin: '0 0 12px' }}>Raw revenue numbers without a time axis are nearly useless for decision-making. ₹85,000 this month is good if last month was ₹70,000. It is alarming if last month was ₹120,000. Month-over-month change is the minimum viable trend analysis. Adding a 3-month rolling average smooths seasonal noise so you can distinguish genuine trend from one-off spikes.</p>
+        <p style={{ margin: '0 0 12px' }}>Raw revenue numbers without a time axis are nearly useless for decision-making. $85,000 this month is good if last month was $70,000. It is alarming if last month was $120,000. Month-over-month change is the minimum viable trend analysis. Adding a 3-month rolling average smooths seasonal noise so you can distinguish genuine trend from one-off spikes.</p>
         <p style={{ margin: 0 }}>The output you want is: monthly revenue, MoM absolute change, MoM percentage change, and a trailing 3-month average. This is the exact format used in weekly business reviews at every data-driven company.</p>
       </Step>
 
@@ -537,7 +537,7 @@ LIMIT 15;`}
       </Interpret>
 
       <Step n="3" label="RFM Scoring — Classify Every Customer on Three Dimensions">
-        <p style={{ margin: '0 0 12px' }}>RFM (Recency, Frequency, Monetary) is the industry-standard framework for segmenting customers by economic behavior. The key insight is that all three dimensions together are much more predictive than any one alone. A customer who ordered yesterday (high recency) but has only ever ordered once (low frequency) for ₹50 (low monetary) is very different from a customer who ordered yesterday, orders every week, and spends ₹1,000 each time.</p>
+        <p style={{ margin: '0 0 12px' }}>RFM (Recency, Frequency, Monetary) is the industry-standard framework for segmenting customers by economic behavior. The key insight is that all three dimensions together are much more predictive than any one alone. A customer who ordered yesterday (high recency) but has only ever ordered once (low frequency) for $50 (low monetary) is very different from a customer who ordered yesterday, orders every week, and spends $1,000 each time.</p>
         <p style={{ margin: 0 }}>Score each dimension 1–5 (not 1–3 as in the intro module) for finer segmentation. A total score of 13–15 is a Champion. A customer with R=1, F=4, M=4 is "Used to be great, now gone" — a high-priority win-back target. A customer with R=4, F=1, M=4 placed one large order recently — a promising Prospect who needs a second purchase incentive.</p>
       </Step>
 
@@ -762,7 +762,7 @@ ORDER BY lifetime_value DESC;`}
         title="Schema Design: Delivery SLA Tracking System"
         role="Database Engineer"
         company="FreshCart Infrastructure Team"
-        problem="FreshCart is launching a delivery SLA guarantee: orders within city limits will be delivered within 2 hours of placement, or the customer receives a ₹100 store credit. The current orders table has a delivery_date column but no delivery timestamps, no SLA tracking, no credit issuance records, and no delivery partner assignment. You need to design a complete schema extension that supports: sub-minute delivery tracking, SLA compliance reporting, automatic credit calculation, and performance analytics by delivery partner, store, and time-of-day."
+        problem="FreshCart is launching a delivery SLA guarantee: orders within city limits will be delivered within 2 hours of placement, or the customer receives a $100 store credit. The current orders table has a delivery_date column but no delivery timestamps, no SLA tracking, no credit issuance records, and no delivery partner assignment. You need to design a complete schema extension that supports: sub-minute delivery tracking, SLA compliance reporting, automatic credit calculation, and performance analytics by delivery partner, store, and time-of-day."
         deliverable="A fully normalized schema design with DDL, constraint rationale, index strategy, and five analytical queries that answer the SLA monitoring questions the operations team will ask daily."
         skills={['DDL', 'CREATE TABLE', 'Normalization (1NF–3NF)', 'CHECK Constraints', 'FOREIGN KEY Design', 'Index Strategy', 'Analytical Queries', 'Temporal Data Design']}
         time="30 min"
@@ -977,7 +977,7 @@ CREATE TABLE IF NOT EXISTS customer_credits (
 -- Seed data
 INSERT OR IGNORE INTO delivery_partners VALUES
   (1,'Emma Johnson',  '9900000001','New York Central','bike',   1),
-  (2,'Priya Singh', '9900000002','New York South',  'scooter',1);
+  (2,'Jasmine Rodriguez', '9900000002','New York South',  'scooter',1);
 
 INSERT OR IGNORE INTO sla_policies VALUES
   (1,'ST001','New York Central',120,100.00);
@@ -1041,7 +1041,7 @@ ORDER BY breach_rate_pct DESC;`}
       />
 
       <Interpret>
-        Partner 2 (Priya Singh) shows a 100% breach rate in the seed data — one delivery, one breach. In a real dataset with hundreds of deliveries, this query surfaces exactly which partners consistently underperform SLA. The avg_delivery_minutes column enables a complementary analysis: a partner with 0% breaches but avg_delivery_minutes close to the SLA limit (110 out of 120 minutes) is a latent risk — one traffic incident makes them a breacher. The truly reliable partners show low avg with low breach rate.
+        Partner 2 (Jasmine Rodriguez) shows a 100% breach rate in the seed data — one delivery, one breach. In a real dataset with hundreds of deliveries, this query surfaces exactly which partners consistently underperform SLA. The avg_delivery_minutes column enables a complementary analysis: a partner with 0% breaches but avg_delivery_minutes close to the SLA limit (110 out of 120 minutes) is a latent risk — one traffic incident makes them a breacher. The truly reliable partners show low avg with low breach rate.
       </Interpret>
 
       <Step n="6" label="Schema Retrospective — What Would Break at Scale?">

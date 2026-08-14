@@ -659,7 +659,7 @@ aws s3 rm s3://my-bucket/tmp/ --recursive         # remove all files in prefix`}
 # Every day at 6:00 AM:
 0 6 * * * /path/to/script.sh
 
-# Every day at 6:30 AM IST (= 1:00 AM UTC):
+# Every day at 9:00 PM ET, previous day (= 1:00 AM UTC):
 0 1 * * * /path/to/script.sh
 
 # Every weekday (Mon–Fri) at 8 AM:
@@ -733,7 +733,7 @@ journalctl -u cron --since "1 hour ago"   # systemd
 #    - Wrong PATH: add PATH=/usr/local/bin:/usr/bin:/bin at top of crontab
 #    - Missing environment variables: source env file at start of script
 #    - Script not executable: chmod +x script.sh
-#    - Wrong timezone: cron uses UTC; add TZ=Asia/Kolkata to crontab if needed
+#    - Wrong timezone: cron uses UTC; add TZ=America/New_York to crontab if needed
 #    - Output not captured: add >> /log/file.log 2>&1 to capture all output`}</CodeBox>
       </section>
 
@@ -757,7 +757,7 @@ journalctl -u cron --since "1 hour ago"   # systemd
         <CodeBox label="Production bash script template — the correct starting point">{`#!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
 # orders_pipeline.sh — Daily orders ingestion
-# Runs: 06:00 AM IST daily via cron
+# Runs: 06:00 AM ET daily via cron
 # Owner: data-team@company.com
 # ─────────────────────────────────────────────────────────────────────────────
 

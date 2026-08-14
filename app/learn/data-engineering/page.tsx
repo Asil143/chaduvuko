@@ -319,8 +319,8 @@ const modules: Module[] = [
     num: '39', phase: 6, color: phaseColors[6], status: 'live', xp: 150, readTime: '50 min',
     title: 'Security and Compliance for Data Engineers',
     slug: 'security-compliance',
-    description: 'GDPR and the India DPDP Act — what they mean for your pipelines and how to build systems that are compliant by design.',
-    topics: ['Encryption at rest & transit', 'PII handling', 'GDPR basics', 'India DPDP Act', 'Compliance by design'],
+    description: 'GDPR and the CCPA — what they mean for your pipelines and how to build systems that are compliant by design.',
+    topics: ['Encryption at rest & transit', 'PII handling', 'GDPR basics', 'CCPA', 'Compliance by design'],
   },
   {
     num: '40', phase: 6, color: phaseColors[6], status: 'live', xp: 150, readTime: '55 min',
@@ -409,7 +409,7 @@ export default function DataEngineeringTrack() {
         marginBottom: 40,
       }}>
         {[
-          { icon: '🎓', label: 'Complete freshers — zero knowledge required' },
+          { icon: '🎓', label: 'Complete beginners — zero knowledge required' },
           { icon: '🔄', label: 'Non-IT background switching to tech' },
           { icon: '💼', label: 'Anyone preparing for DE interviews' },
           { icon: '📱', label: 'Students who want real depth, not just definitions' },

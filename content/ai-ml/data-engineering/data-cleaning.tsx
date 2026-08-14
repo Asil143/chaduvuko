@@ -173,7 +173,7 @@ export default function DataCleaningPage() {
           Consider what happens at DoorDash. The orders table has negative distances
           from data entry errors. Delivery times of 0 minutes from cancelled orders
           never removed. Duplicate records from a retry bug in the mobile app.
-          City names spelled three different ways — "Seattle", "San Francisco", "bangalore".
+          City names spelled three different ways — "Seattle", "seattle", "SEATTLE".
           Star ratings of 6 from a frontend validation bug that was fixed three months ago.
           None of these cause your training script to crash. They all silently degrade
           your model.
@@ -245,9 +245,9 @@ np.random.seed(42)
 n = 12_000
 
 # ── Base clean data ───────────────────────────────────────────────────
-restaurants = ['Pizza Hut','Biryani Blues',"McDonald's",'Haldiram\\'s',
+restaurants = ['Pizza Hut','Chipotle',"McDonald's",'Taco Bell',
                'Dominos','KFC','Subway','Burger King']
-cities_clean = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
+cities_clean = ['Seattle','New York','Denver','Austin','Boston','Chicago']
 slots = ['breakfast','lunch','evening','dinner']
 
 distance = np.abs(np.random.normal(4.0, 2.0, n)).round(2)
@@ -289,9 +289,9 @@ df.loc[bad_rating, 'star_rating'] = np.random.choice([0.0, 6.0, 7.5], 25)
 
 # 4. City name inconsistencies
 city_typos = {
-    'Seattle':  ['bangalore','San Francisco','BANGALORE','Banglore','bangalore '],
-    'New York':     ['mumbai','Bombay','MUMBAI','mumbai '],
-    'Delhi':      ['delhi','New York','DELHI','delhi '],
+    'Seattle':  ['seattle','Seatle','SEATTLE','Seattle, WA','seattle '],
+    'New York':     ['new york','NYC','NEW YORK','new york '],
+    'Denver':      ['denver','Chicago','DENVER','denver '],
 }
 for correct, variants in city_typos.items():
     mask = df['city'] == correct
@@ -326,7 +326,7 @@ outlier_idx = np.random.choice(df.index, 15, replace=False)
 df.loc[outlier_idx, 'delivery_time'] = np.random.uniform(200, 500, 15)
 
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
-df.to_csv('/tmp/swiggy_messy.csv', index=False)
+df.to_csv('/tmp/doordash_messy.csv', index=False)
 print(f"Messy dataset: {df.shape[0]:,} rows × {df.shape[1]} columns")
 print(f"Known problems injected: negative distances, zero delivery times, ")
 print(f"  bad ratings, city typos, nulls, duplicates, wrong dtypes, outliers")`} />
@@ -350,7 +350,7 @@ print(f"  bad ratings, city typos, nulls, duplicates, wrong dtypes, outliers")`}
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_messy.csv')
+df = pd.read_csv('/tmp/doordash_messy.csv')
 
 def data_quality_report(df: pd.DataFrame, name: str = 'dataset') -> pd.DataFrame:
     """
@@ -473,7 +473,7 @@ print(f"  Values: {sorted(df['city'].dropna().unique())}")`} />
             {[
               ['order_id',       'str',   'No',  'Unique, matches SW\\d{6}'],
               ['restaurant',     'str',   'No',  'In allowed restaurant list'],
-              ['city',           'str',   'No',  'In [Seattle, New York, Delhi, ...]'],
+              ['city',           'str',   'No',  'In [Seattle, New York, Denver, ...]'],
               ['distance_km',    'float', 'No',  '> 0 and ≤ 50'],
               ['delivery_time',  'float', 'No',  '> 0 and ≤ 180'],
               ['star_rating',    'float', 'Yes', '1.0 ≤ x ≤ 5.0'],
@@ -637,9 +637,8 @@ class SchemaValidator:
             print(f"  {r}")
 
 # ── Define the schema ─────────────────────────────────────────────────
-ALLOWED_CITIES = ['bangalore','bengaluru','mumbai','bombay','delhi',
-                  'new delhi','hyderabad','pune','chennai']
-ALLOWED_RESTAURANTS = ['pizza hut','biryani blues',"mcdonald's",'haldiram\\'s',
+ALLOWED_CITIES = ['seattle','new york','denver','austin','boston','chicago']
+ALLOWED_RESTAURANTS = ['pizza hut','chipotle',"mcdonald's",'taco bell',
                        'dominos','kfc','subway','burger king']
 ALLOWED_SLOTS = ['breakfast','lunch','evening','dinner']
 
@@ -656,7 +655,7 @@ schema = [
 ]
 
 validator = SchemaValidator(schema)
-df = pd.read_csv('/tmp/swiggy_messy.csv')
+df = pd.read_csv('/tmp/doordash_messy.csv')
 is_valid = validator.validate(df)
 validator.report()
 print(f"\nOverall: {'PASSED' if is_valid else 'FAILED'}")`} />
@@ -681,7 +680,7 @@ print(f"\nOverall: {'PASSED' if is_valid else 'FAILED'}")`} />
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_messy.csv')
+df = pd.read_csv('/tmp/doordash_messy.csv')
 
 # ── Exact duplicate detection ─────────────────────────────────────────
 
@@ -794,7 +793,7 @@ print(f"Rows after near-dedup:      {len(df_clean):,}")`} />
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_messy.csv')
+df = pd.read_csv('/tmp/doordash_messy.csv')
 
 # ── Detect type problems before fixing ────────────────────────────────
 print("Column dtypes (as loaded from CSV):")
@@ -898,7 +897,7 @@ print(df_typed.dtypes)`} />
 
         <p style={S.p}>
           String columns are the messiest part of any real dataset.
-          "Seattle", "bangalore", "San Francisco", "BANGALORE", "bangalore " —
+          "Seattle", "seattle", "Seatle", "SEATTLE", "seattle " —
           these are five representations of the same city, and they will be
           treated as five separate categories by any ML model.
           String cleaning must be systematic, not case-by-case.
@@ -908,7 +907,7 @@ print(df_typed.dtypes)`} />
 import numpy as np
 import re
 
-df = pd.read_csv('/tmp/swiggy_messy.csv')
+df = pd.read_csv('/tmp/doordash_messy.csv')
 
 # ── Basic string normalisation pipeline ───────────────────────────────
 def normalise_string(s: str) -> str:
@@ -930,16 +929,14 @@ print(sorted(df['city_norm'].dropna().unique()))
 
 # ── Canonical value mapping — map variants to standard form ────────────
 CITY_CANONICAL = {
-    'bangalore':  'Seattle',
-    'bengaluru':  'Seattle',
-    'banglore':   'Seattle',
-    'mumbai':     'New York',
-    'bombay':     'New York',
-    'delhi':      'Delhi',
-    'new delhi':  'Delhi',
-    'hyderabad':  'Austin',
-    'pune':       'Boston',
-    'chennai':    'Chicago',
+    'seattle':     'Seattle',
+    'seatle':      'Seattle',
+    'new york':    'New York',
+    'nyc':         'New York',
+    'denver':      'Denver',
+    'austin':      'Austin',
+    'boston':      'Boston',
+    'chicago':     'Chicago',
 }
 
 df['city_clean'] = df['city_norm'].map(CITY_CANONICAL)
@@ -952,7 +949,7 @@ if n_unmapped > 0:
 # pip install rapidfuzz
 from rapidfuzz import process, fuzz
 
-CANONICAL_CITIES = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
+CANONICAL_CITIES = ['Seattle','New York','Denver','Austin','Boston','Chicago']
 
 def fuzzy_match_city(city: str, threshold: int = 80) -> str:
     """Match a city string to the canonical list using fuzzy matching."""
@@ -1071,7 +1068,7 @@ print(f"  time_slot:  {df['time_slot_clean'].nunique()} unique values")`} />
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_messy.csv')
+df = pd.read_csv('/tmp/doordash_messy.csv')
 for col in ['distance_km','restaurant_prep','order_value','delivery_time','star_rating']:
     df[col] = pd.to_numeric(df[col], errors='coerce')
 
@@ -1186,7 +1183,7 @@ print(f"  Capped deliveries: {df_clean['delivery_time_capped'].sum():,}")`} />
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_messy.csv')
+df = pd.read_csv('/tmp/doordash_messy.csv')
 for col in ['distance_km','restaurant_prep','order_value','delivery_time','star_rating']:
     df[col] = pd.to_numeric(df[col], errors='coerce')
 
@@ -1404,7 +1401,7 @@ def detect_drift(
     return sorted(alerts, key=lambda x: {'critical':0,'high':1,'warning':2,'info':3}[x['severity']])
 
 # ── Run drift detection ────────────────────────────────────────────────
-df_reference = pd.read_csv('/tmp/swiggy_messy.csv').head(5000)
+df_reference = pd.read_csv('/tmp/doordash_messy.csv').head(5000)
 reference_schema = capture_schema(df_reference)
 
 # Save schema to disk — use as reference for future runs
@@ -1413,7 +1410,7 @@ schema_path.write_text(json.dumps(reference_schema, indent=2, default=str))
 print(f"Reference schema saved: {len(reference_schema['columns'])} columns")
 
 # Simulate a new batch with some drift
-df_new_batch = pd.read_csv('/tmp/swiggy_messy.csv').tail(3000).copy()
+df_new_batch = pd.read_csv('/tmp/doordash_messy.csv').tail(3000).copy()
 df_new_batch['delivery_time'] = df_new_batch['delivery_time'] * 1.35  # 35% increase
 df_new_batch['star_rating']   = np.nan                                 # suddenly all null
 df_new_batch['new_feature']   = 'some_value'                           # new column appeared
@@ -1450,21 +1447,21 @@ import great_expectations as gx
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_messy.csv')
+df = pd.read_csv('/tmp/doordash_messy.csv')
 for col in ['distance_km','restaurant_prep','order_value','delivery_time','star_rating']:
     df[col] = pd.to_numeric(df[col], errors='coerce')
 
 # ── Create a GX context and data source ───────────────────────────────
 context = gx.get_context(mode='ephemeral')   # in-memory context (no filesystem setup)
 
-data_source = context.data_sources.add_pandas(name='swiggy')
+data_source = context.data_sources.add_pandas(name='doordash')
 data_asset  = data_source.add_dataframe_asset(name='orders')
 batch_def   = data_asset.add_batch_definition_whole_dataframe('full_batch')
 batch       = batch_def.get_batch(batch_parameters={'dataframe': df})
 
 # ── Define an Expectation Suite ───────────────────────────────────────
 suite = context.suites.add(
-    gx.ExpectationSuite(name='swiggy_orders_suite')
+    gx.ExpectationSuite(name='doordash_orders_suite')
 )
 
 # Column existence
@@ -1522,7 +1519,7 @@ suite.add_expectation(gx.expectations.ExpectTableRowCountToBeBetween(
 # ── Run validation ─────────────────────────────────────────────────────
 validation_def = context.validation_definitions.add(
     gx.ValidationDefinition(
-        name='swiggy_validation',
+        name='doordash_validation',
         data=batch_def,
         suite=suite,
     )
@@ -1560,16 +1557,16 @@ from datetime import datetime
 logger = logging.getLogger('data_cleaner')
 
 CITY_CANONICAL = {
-    'bangalore': 'Seattle','bengaluru': 'Seattle','banglore': 'Seattle',
-    'mumbai': 'New York','bombay': 'New York',
-    'delhi': 'Delhi','new delhi': 'Delhi',
-    'hyderabad': 'Austin','pune': 'Boston','chennai': 'Chicago',
+    'seattle': 'Seattle','seatle': 'Seattle',
+    'new york': 'New York','nyc': 'New York',
+    'denver': 'Denver',
+    'austin': 'Austin','boston': 'Boston','chicago': 'Chicago',
 }
 
 RESTAURANT_CANONICAL = {
     "mcdonald's": "McDonald's", 'mcdonalds': "McDonald's",
-    'pizza hut': 'Pizza Hut', 'biryani blues': 'Biryani Blues',
-    "haldiram's": "Haldiram's", 'haldirams': "Haldiram's",
+    'pizza hut': 'Pizza Hut', 'chipotle': 'Chipotle',
+    'taco bell': 'Taco Bell',
     'kfc': 'KFC', 'dominos': 'Dominos', "domino's": 'Dominos',
     'subway': 'Subway', 'burger king': 'Burger King',
 }
@@ -1708,14 +1705,14 @@ class DoorDashDataCleaner:
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s  %(levelname)s  %(message)s')
 
-df_raw   = pd.read_csv('/tmp/swiggy_messy.csv')
+df_raw   = pd.read_csv('/tmp/doordash_messy.csv')
 cleaner  = DoorDashDataCleaner(log_path=Path('/tmp/cleaning_audit.json'))
 df_clean = cleaner.run(df_raw)
 
 print(f"\nFinal dataset: {len(df_clean):,} rows × {len(df_clean.columns)} columns")
 print(f"NaN in core columns: {df_clean[['distance_km','delivery_time','order_value']].isnull().sum().to_dict()}")
-df_clean.to_parquet('/tmp/swiggy_clean.parquet', index=False, compression='snappy')
-print("Saved to /tmp/swiggy_clean.parquet")`} />
+df_clean.to_parquet('/tmp/doordash_clean.parquet', index=False, compression='snappy')
+print("Saved to /tmp/doordash_clean.parquet")`} />
       </div>
 
       <Div />
@@ -1745,7 +1742,7 @@ print("Saved to /tmp/swiggy_clean.parquet")`} />
 
         <ErrorBlock
           error="UnicodeDecodeError: 'utf-8' codec can't decode byte 0x... when reading CSV"
-          cause="The CSV file was saved with a non-UTF-8 encoding — common with files exported from Windows Excel (often CP1252 or Latin-1) or files from legacy Indian government databases (sometimes UTF-16 or ISO-8859-1)."
+          cause="The CSV file was saved with a non-UTF-8 encoding — common with files exported from Windows Excel (often CP1252 or Latin-1) or files from legacy government databases (sometimes UTF-16 or ISO-8859-1)."
           fix="Try pd.read_csv(file, encoding='latin-1') or pd.read_csv(file, encoding='cp1252'). To detect encoding automatically: pip install chardet, then import chardet; chardet.detect(open(file,'rb').read(10000)) tells you the encoding. Always save cleaned files as UTF-8: df.to_csv(path, encoding='utf-8-sig', index=False)."
         />
 

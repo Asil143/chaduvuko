@@ -940,9 +940,9 @@ LIMIT 30;
 orders_ingestion_pipeline.py
 
 Daily orders ingestion: PostgreSQL source → S3 Bronze Parquet
-Schedule: 06:00 AM IST daily (00:30 UTC)
+Schedule: 8:30 PM ET daily, previous day (00:30 UTC)
 Owner: data-team@freshmart.com
-SLA: complete by 07:00 AM IST
+SLA: complete by 9:30 PM ET (previous day)
 Dependencies: none (first pipeline in daily DAG)
 
 Idempotent: yes (upserts on order_id)

@@ -332,11 +332,11 @@ export default function PostgreSQLPage() {
         </div>
         <pre className="p-4 text-xs overflow-x-auto" style={{ background: 'var(--bg2)', color: 'var(--text2)', lineHeight: 1.8 }}>{`INSERT INTO stores (store_id, store_name, city, state, opened_date)
 VALUES
-  ('ST001', 'FreshCart New York',   'New York',  'Delhi',     '2020-01-15'),
-  ('ST002', 'FreshCart New York',      'New York',     'Maharashtra','2020-03-10'),
-  ('ST003', 'FreshCart Seattle',   'Seattle',  'Karnataka', '2020-06-01'),
-  ('ST004', 'FreshCart Chicago',     'Chicago',    'Tamil Nadu','2021-01-20'),
-  ('ST005', 'FreshCart Austin',   'Austin',  'Telangana', '2021-04-05');`}</pre>
+  ('ST001', 'FreshCart New York',   'New York',  'New York',     '2020-01-15'),
+  ('ST002', 'FreshCart New York',      'New York',     'New York','2020-03-10'),
+  ('ST003', 'FreshCart Seattle',   'Seattle',  'Washington', '2020-06-01'),
+  ('ST004', 'FreshCart Chicago',     'Chicago',    'Illinois','2021-01-20'),
+  ('ST005', 'FreshCart Austin',   'Austin',  'Texas', '2021-04-05');`}</pre>
       </div>
 
       <div className="my-4 rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
@@ -347,10 +347,10 @@ VALUES
 VALUES
   ('ORD1001', 'ST001', 'Basmati Rice 5kg',    'Grocery',      12,  299.00, '2024-01-15'),
   ('ORD1002', 'ST001', 'Samsung TV 43inch',   'Electronics',   2, 32000.00,'2024-01-15'),
-  ('ORD1003', 'ST001', 'Amul Butter 500g',    'Dairy',        25,  240.00, '2024-01-15'),
+  ('ORD1003', 'ST001', 'Horizon Butter 500g',    'Dairy',        25,  240.00, '2024-01-15'),
   ('ORD1004', 'ST002', 'Sunflower Oil 1L',    'Grocery',      18,  145.00, '2024-01-15'),
   ('ORD1005', 'ST002', 'iPhone 14',           'Electronics',   1, 75000.00,'2024-01-15'),
-  ('ORD1006', 'ST002', 'Amul Milk 1L',        'Dairy',        40,   62.00, '2024-01-15'),
+  ('ORD1006', 'ST002', 'Horizon Organic Milk 1L',        'Dairy',        40,   62.00, '2024-01-15'),
   ('ORD1007', 'ST003', 'Nike Running Shoes',  'Apparel',       5,  4500.00,'2024-01-16'),
   ('ORD1008', 'ST003', 'Colgate Toothpaste',  'Personal Care',30,   89.00, '2024-01-16'),
   ('ORD1009', 'ST004', 'Levis Jeans',         'Apparel',       8,  2999.00,'2024-01-16'),
@@ -572,7 +572,7 @@ DELETE FROM sales WHERE order_date < '2023-01-01';`}</pre>
           <span className="text-xs font-mono" style={{ color: 'var(--accent)' }}>UPSERT with ON CONFLICT</span>
         </div>
         <pre className="p-4 text-xs overflow-x-auto" style={{ background: 'var(--bg2)', color: 'var(--text2)', lineHeight: 2 }}>{`INSERT INTO stores (store_id, store_name, city, state)
-VALUES ('ST001', 'FreshCart New York Updated', 'New York', 'Delhi')
+VALUES ('ST001', 'FreshCart New York Updated', 'New York', 'New York')
 ON CONFLICT (store_id)
 DO UPDATE SET
   store_name = EXCLUDED.store_name,

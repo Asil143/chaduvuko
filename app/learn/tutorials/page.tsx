@@ -58,7 +58,7 @@ const subjects = [
     title: 'Data Structures & Algorithms',
     status: 'live',
     href: '/learn/dsa',
-    desc: 'Arrays, linked lists, stacks, queues, trees, graphs, sorting, DP — crack every technical coding round in India.',
+    desc: 'Arrays, linked lists, stacks, queues, trees, graphs, sorting, DP — crack every technical coding round.',
     pills: ['Arrays', 'Trees', 'Graphs', 'Dynamic Programming', 'Sorting'],
   },
   {
@@ -135,7 +135,7 @@ const subjects = [
     title: 'Python',
     status: 'soon',
     href: '#',
-    desc: 'Zero to production Python — basics, OOP, FastAPI, testing, async programming. The most in-demand language in India.',
+    desc: 'Zero to production Python — basics, OOP, FastAPI, testing, async programming. One of the most in-demand languages in the US.',
     pills: ['Basics', 'OOP', 'FastAPI', 'Testing', 'Async'],
   },
   {
@@ -391,7 +391,7 @@ const subjects = [
     title: 'System Design',
     status: 'soon',
     href: '#',
-    desc: 'Design scalable systems like a senior — HLD, LLD, Scalability, CAP Theorem, Trade-offs, real Indian company systems.',
+    desc: 'Design scalable systems like a senior — HLD, LLD, Scalability, CAP Theorem, Trade-offs, real production systems.',
     pills: ['HLD', 'LLD', 'Scalability', 'CAP Theorem', 'Trade-offs'],
   },
   {
@@ -484,40 +484,9 @@ const subjects = [
     title: 'FAANG Prep',
     status: 'soon',
     href: '#',
-    desc: 'Google, Amazon, Microsoft, Meta, Apple India — DSA patterns, System Design, Behavioural interviews.',
+    desc: 'Google, Amazon, Microsoft, Meta, Apple — DSA patterns, System Design, Behavioural interviews.',
     pills: ['DSA Patterns', 'System Design', 'Behavioural', 'Coding Patterns', 'Mock Rounds'],
   },
-
-  // ── SCHOOL — CLASS 5–10 ────────────────────────────────────────────────────
-  { cat: 'school-basic', badge: 'Class 10', title: 'Mathematics', status: 'soon', href: '#', desc: 'Real numbers, polynomials, quadratic equations, arithmetic progressions, triangles, coordinate geometry, circles, statistics and probability.', pills: ['Real Numbers', 'Quadratic Equations', 'Triangles', 'Statistics'] },
-  { cat: 'school-basic', badge: 'Class 10', title: 'Science', status: 'soon', href: '#', desc: 'Chemical reactions, acids bases and salts, metals and non-metals, life processes, control and coordination, light, electricity, magnetic effects.', pills: ['Chemistry', 'Biology', 'Physics', 'Life Processes'] },
-  { cat: 'school-basic', badge: 'Class 9', title: 'Mathematics', status: 'soon', href: '#', desc: 'Number systems, polynomials, coordinate geometry, Euclid\'s geometry, lines and angles, triangles, quadrilaterals, circles, statistics.', pills: ['Number Systems', 'Polynomials', 'Triangles', 'Statistics'] },
-  { cat: 'school-basic', badge: 'Class 8', title: 'Mathematics', status: 'soon', href: '#', desc: 'Rational numbers, linear equations, quadrilaterals, data handling, squares and square roots, cubes, algebraic expressions.', pills: ['Rational Numbers', 'Linear Equations', 'Quadrilaterals', 'Data Handling'] },
-  { cat: 'school-basic', badge: 'Class 9', title: 'Science', status: 'soon', href: '#', desc: 'Matter, atoms and molecules, structure of the atom, the fundamental unit of life, tissues, motion, force and laws of motion.', pills: ['Matter', 'Atoms', 'Tissues', 'Motion'] },
-  { cat: 'school-basic', badge: 'Class 10', title: 'History', status: 'soon', href: '#', desc: 'The rise of nationalism in Europe, nationalism in India, the making of a global world, the age of industrialisation, print culture.', pills: ['Nationalism', 'Industrialisation', 'Print Culture', 'Globalisation'] },
-  { cat: 'school-basic', badge: 'Class 10', title: 'Geography', status: 'soon', href: '#', desc: 'Resources and development, forest and wildlife, water resources, agriculture, minerals and energy, manufacturing industries, transport.', pills: ['Resources', 'Agriculture', 'Manufacturing', 'Transport'] },
-
-  // ── SCHOOL — CLASS 11–12 ──────────────────────────────────────────────────
-  { cat: 'school-senior', badge: 'Class 11', title: 'Physics', status: 'soon', href: '#', desc: 'Physical world and measurement, kinematics, laws of motion, work energy and power, gravitation, thermodynamics, waves, oscillations.', pills: ['Kinematics', 'Laws of Motion', 'Thermodynamics', 'Waves'] },
-  { cat: 'school-senior', badge: 'Class 12', title: 'Physics', status: 'soon', href: '#', desc: 'Electrostatics, current electricity, magnetic effects of current, EMI, alternating current, optics, dual nature, atoms, semiconductors.', pills: ['Electrostatics', 'Optics', 'Semiconductors', 'Atoms'] },
-  { cat: 'school-senior', badge: 'Class 12', title: 'Chemistry', status: 'soon', href: '#', desc: 'Solid state, solutions, electrochemistry, chemical kinetics, surface chemistry, p-block, d-block, coordination compounds, biomolecules.', pills: ['Solid State', 'Electrochemistry', 'Kinetics', 'Biomolecules'] },
-  { cat: 'school-senior', badge: 'Class 12', title: 'Mathematics', status: 'soon', href: '#', desc: 'Relations and functions, inverse trigonometry, matrices, determinants, continuity, applications of derivatives, integrals, differential equations, vectors, 3D geometry, probability.', pills: ['Matrices', 'Integrals', 'Differential Equations', 'Probability'] },
-  { cat: 'school-senior', badge: 'Class 12', title: 'Biology', status: 'soon', href: '#', desc: 'Reproduction in organisms, genetics and evolution, biology in human welfare, biotechnology, ecology and environment.', pills: ['Genetics', 'Evolution', 'Biotechnology', 'Ecology'] },
-  { cat: 'school-senior', badge: 'Class 12', title: 'Accountancy', status: 'soon', href: '#', desc: 'Partnership accounts, goodwill, admission and retirement of partners, dissolution, company accounts, financial statements analysis, cash flow.', pills: ['Partnership', 'Goodwill', 'Company Accounts', 'Cash Flow'] },
-
-  // ── COMPETITIVE EXAMS ─────────────────────────────────────────────────────
-  { cat: 'competitive', badge: 'JEE Mains', title: 'JEE Mains — Mathematics', status: 'soon', href: '#', desc: 'Complete JEE Mains Maths — sets, functions, complex numbers, matrices, sequences, limits, integrals, differential equations, vectors, probability.', pills: ['Complex Numbers', 'Matrices', 'Integrals', 'Vectors', 'Probability'] },
-  { cat: 'competitive', badge: 'JEE Mains', title: 'JEE Mains — Physics', status: 'soon', href: '#', desc: 'JEE Mains Physics — all high-weightage chapters with concept clarity, formulae sheets, and previous year questions.', pills: ['Mechanics', 'Electrostatics', 'Optics', 'Modern Physics', 'Thermodynamics'] },
-  { cat: 'competitive', badge: 'NEET', title: 'NEET — Biology', status: 'soon', href: '#', desc: 'NEET Biology — Class 11 and 12 complete syllabus. Botany and zoology with NCERT alignment and PYQs.', pills: ['Cell Biology', 'Genetics', 'Plant Physiology', 'Human Physiology', 'Ecology'] },
-  { cat: 'competitive', badge: 'UPSC', title: 'UPSC — General Studies', status: 'soon', href: '#', desc: 'UPSC CSE Prelims and Mains GS — History, Geography, Polity, Economy, Environment, Science and Tech, Current Affairs.', pills: ['History', 'Polity', 'Economy', 'Environment', 'Current Affairs'] },
-  { cat: 'competitive', badge: 'CAT', title: 'CAT — Quantitative Aptitude', status: 'soon', href: '#', desc: 'CAT Quant — Number theory, arithmetic, algebra, geometry, modern maths. Shortcut techniques and mock tests.', pills: ['Number Theory', 'Arithmetic', 'Algebra', 'Geometry', 'Mock Tests'] },
-
-  // ── B.TECH / ENGINEERING ──────────────────────────────────────────────────
-  { cat: 'btech', badge: 'Semester 3–4', title: 'Data Structures & Algorithms', status: 'soon', href: '/learn/dsa', desc: 'Arrays, linked lists, stacks, queues, trees, graphs, sorting, searching, dynamic programming — the complete B.Tech DSA syllabus.', pills: ['Arrays', 'Trees', 'Graphs', 'Dynamic Programming', 'Sorting'] },
-  { cat: 'btech', badge: 'Semester 3', title: 'DBMS', status: 'soon', href: '/learn/dbms', desc: 'ER diagrams, relational model, SQL, normalisation, transactions, concurrency control, recovery — complete university syllabus.', pills: ['ER Diagrams', 'Normalisation', 'ACID', 'Transactions', 'SQL'] },
-  { cat: 'btech', badge: 'Semester 4', title: 'Operating Systems', status: 'soon', href: '#', desc: 'Processes, threads, CPU scheduling, process synchronisation, deadlock, memory management, file systems.', pills: ['Processes', 'Threads', 'Scheduling', 'Memory Mgmt', 'File Systems'] },
-  { cat: 'btech', badge: 'Semester 5', title: 'Computer Networks', status: 'soon', href: '#', desc: 'OSI and TCP/IP model, data link layer, MAC, IP addressing, routing, TCP, UDP, application layer protocols.', pills: ['OSI Model', 'TCP/IP', 'IP Addressing', 'Routing', 'Application Layer'] },
-  { cat: 'btech', badge: 'Semester 1–2', title: 'Engineering Mathematics', status: 'soon', href: '#', desc: 'Linear algebra, calculus, differential equations, probability and statistics, complex analysis — complete B.Tech Maths.', pills: ['Linear Algebra', 'Calculus', 'Differential Equations', 'Probability', 'Statistics'] },
 ]
 
 // ─── BADGE COLORS ─────────────────────────────────────────────────────────────
@@ -543,30 +512,12 @@ const badgeColor: Record<string, string> = {
   'Database': '#00e676',
   'Mobile': '#ec4899',
   'Testing': '#84cc16',
-  'Class 10': '#0078d4',
-  'Class 9': '#0078d4',
-  'Class 8': '#0078d4',
-  'Class 11': '#7b61ff',
-  'Class 12': '#7b61ff',
-  'JEE Mains': '#ff4757',
-  'NEET': '#00e676',
-  'UPSC': '#f97316',
-  'CAT': '#8b5cf6',
-  'Semester 3–4': '#0078d4',
-  'Semester 3': '#0078d4',
-  'Semester 4': '#0078d4',
-  'Semester 5': '#0078d4',
-  'Semester 1–2': '#0078d4',
 }
 
 // ─── FILTER TABS ──────────────────────────────────────────────────────────────
 const filterTabs = [
-  { key: 'all',          label: 'Everything' },
-  { key: 'school-basic', label: 'Class 5–10' },
-  { key: 'school-senior',label: 'Class 11–12' },
-  { key: 'competitive',  label: 'Competitive Exams' },
-  { key: 'btech',        label: 'B.Tech / Engineering' },
-  { key: 'tech',         label: 'Technology & IT' },
+  { key: 'all',  label: 'Everything' },
+  { key: 'tech', label: 'Technology & IT' },
 ]
 
 export default function TutorialsPage() {
@@ -587,10 +538,10 @@ export default function TutorialsPage() {
           // All tutorials
         </p>
         <h1 style={{ fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1.1, marginBottom: 10 }}>
-          One platform. Every subject.
+          One platform. Every track.
         </h1>
         <p style={{ fontSize: 14, color: 'var(--muted)', maxWidth: 520, lineHeight: 1.75 }}>
-          School curricula, competitive exams, B.Tech semesters, and every IT track — all in one place, structured from zero.
+          Every IT track — data engineering, cloud, AI/ML, and core CS — all in one place, structured from zero.
         </p>
       </div>
 

@@ -356,7 +356,7 @@ BashOperator(
 
         <CodeBox label="dags/freshmart_morning_pipeline.py — complete production DAG">{`"""
 FreshCart Morning Pipeline DAG
-Runs daily at 02:00 UTC (07:30 IST)
+Runs daily at 02:00 UTC (10:00 PM ET, previous day)
 Processes previous day's data across all layers
 
 Task dependency graph:
@@ -396,7 +396,7 @@ with DAG(
     dag_id          = 'freshmart_morning_pipeline',
     default_args    = default_args,
     description     = 'FreshCart daily data platform — Bronze → Silver → Gold',
-    schedule        = '0 2 * * *',    # 02:00 UTC daily = 07:30 IST
+    schedule        = '0 2 * * *',    # 02:00 UTC daily = 10:00 PM ET (previous day)
     start_date      = datetime(2026, 1, 1),
     catchup         = False,          # do not backfill on deploy
     max_active_runs = 1,              # no concurrent runs
@@ -407,7 +407,7 @@ with DAG(
         Processes the previous day's data through all layers.
 
         **Layers:** Bronze (raw) → Silver (cleaned) → Gold (aggregated)
-        **SLA:** All Gold tables complete by 08:00 IST
+        **SLA:** All Gold tables complete by 10:30 PM ET (previous day)
         **Owner:** data-team@freshmart.com
 
         See: https://docs.freshmart.internal/data-platform/morning-pipeline
@@ -579,13 +579,13 @@ from pendulum import timezone as tz
 with DAG(
     dag_id   = 'orders_daily',
     schedule = '0 2 * * *',    # this is always UTC in Airflow
-    # To specify IST: use pendulum timezone
-    start_date = datetime(2026, 1, 1, tzinfo=tz('Asia/Kolkata')),
-    # Schedule is still UTC — but start_date is IST-aware
+    # To specify a local timezone: use pendulum timezone
+    start_date = datetime(2026, 1, 1, tzinfo=tz('America/New_York')),
+    # Schedule is still UTC — but start_date is local-timezone-aware
 ) as dag: ...
 
 # BEST PRACTICE: always use UTC for schedules.
-# Convert to IST only in display or notification formatting.
+# Convert to local time only in display or notification formatting.
 # A pipeline that changes schedule by 30 minutes when DST changes
 # in another country (which affects UTC offsets in some regions)
 # is very hard to debug.
@@ -1104,9 +1104,9 @@ def load_data(**context):
           </div>
 
           <Para>
-            The SLA for the morning pipeline is 08:00 IST. It used to complete
-            by 07:40 IST. Over the last four weeks it has been completing later:
-            07:44, 07:51, 07:58, and this week it missed the SLA at 08:04.
+            The SLA for the morning pipeline is 10:30 PM ET (previous day). It used to complete
+            by 10:10 PM ET. Over the last four weeks it has been completing later:
+            10:14, 10:21, 10:28, and this week it missed the SLA at 10:34 PM ET.
             No code was changed. You are asked to investigate.
           </Para>
 

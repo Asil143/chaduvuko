@@ -211,7 +211,7 @@ export default function AdvancedRAGPage() {
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
             A good research librarian does two things a bad one does not.
-            First: when you ask "find me information about UPI payment limits,"
+            First: when you ask "find me information about ACH payment limits,"
             they search both the subject index (semantic) and the keyword catalogue
             (exact match) — not just one. Second: after gathering candidates,
             they skim each one to pick the three most directly relevant —
@@ -280,10 +280,10 @@ KB_CHUNKS = [
     {'id': '3', 'text': 'Error code BAD_REQUEST_ERROR occurs when mandatory payment parameters are missing or invalid in the API call.'},
     {'id': '4', 'text': 'Error code GATEWAY_ERROR indicates the bank gateway timed out. Retry the payment after 5 minutes.'},
     {'id': '5', 'text': 'Error code BAD_REQUEST_ERROR with description invalid_api_key means the API key is incorrect or expired.'},
-    {'id': '6', 'text': 'Refunds for UPI payments take 2-3 business days. Credit card refunds take 5-7 business days.'},
+    {'id': '6', 'text': 'Refunds for ACH payments take 2-3 business days. Credit card refunds take 5-7 business days.'},
     {'id': '7', 'text': 'Webhook signature verification uses HMAC SHA256. Compute the signature using the webhook secret from dashboard.'},
     {'id': '8', 'text': 'The Stripe payment link expires after 15 minutes by default. Custom expiry can be set via the API.'},
-    {'id': '9', 'text': 'Stripe supports UPI, credit cards, debit cards, net banking, and wallets as payment methods.'},
+    {'id': '9', 'text': 'Stripe supports ACH transfers, credit cards, debit cards, and digital wallets as payment methods.'},
     {'id': '10', 'text': 'To enable international payments on Stripe, submit KYC documents and business registration proof.'},
 ]
 
@@ -559,15 +559,15 @@ PARENT_CHUNKS = [
             "Stripe Settlement Overview. "
             "Domestic payments settle within T+2 business days. "
             "International payments settle within T+7 business days. "
-            "Settlement is initiated at 5 PM IST each business day. "
-            "Minimum settlement amount is Rs 100. "
+            "Settlement is initiated at 5 PM ET each business day. "
+            "Minimum settlement amount is $100. "
             "Smaller amounts are carried forward to the next cycle."
         ),
         'children': [
             {'id': 'C1a', 'text': 'Domestic payments settle within T+2 business days.'},
             {'id': 'C1b', 'text': 'International payments settle within T+7 business days.'},
-            {'id': 'C1c', 'text': 'Settlement is initiated at 5 PM IST each business day.'},
-            {'id': 'C1d', 'text': 'Minimum settlement amount is Rs 100.'},
+            {'id': 'C1c', 'text': 'Settlement is initiated at 5 PM ET each business day.'},
+            {'id': 'C1d', 'text': 'Minimum settlement amount is $100.'},
         ],
     },
     {
@@ -807,7 +807,7 @@ rag_examples = [
     {
         'question':   "What does GATEWAY_ERROR mean on Stripe?",
         'retrieved':  ["Error code GATEWAY_ERROR indicates the bank gateway timed out. Retry the payment after 5 minutes."],
-        'answer':     "GATEWAY_ERROR typically means server overload. This is common during peak hours in India around 8-10 PM. Try switching payment methods or using a VPN.",
+        'answer':     "GATEWAY_ERROR typically means server overload. This is common during peak hours around 8-10 PM. Try switching payment methods or using a VPN.",
         'reference':  "GATEWAY_ERROR indicates the bank gateway timed out. Retry after 5 minutes.",
         'type':       'bad — hallucinated, unfaithful',
     },
@@ -959,7 +959,7 @@ for q in test_questions:
 
         <ErrorBlock
           error="Reranker makes results worse — faithfulness drops after adding reranking"
-          cause="The cross-encoder reranker was trained on a different domain (typically MS MARCO web search queries) and its relevance judgements do not transfer to your domain. Technical documentation queries, legal text, or Indian-language content may be scored incorrectly by a reranker trained on general English web queries. The reranker demotes highly relevant technical chunks because they look different from MS MARCO passages."
+          cause="The cross-encoder reranker was trained on a different domain (typically MS MARCO web search queries) and its relevance judgements do not transfer to your domain. Technical documentation queries, legal text, or non-English content may be scored incorrectly by a reranker trained on general English web queries. The reranker demotes highly relevant technical chunks because they look different from MS MARCO passages."
           fix="Evaluate reranker quality independently: for 50 queries, compare top-3 before and after reranking and have a human judge which is better. If the reranker hurts, use a domain-adapted reranker — fine-tune the cross-encoder on your own (query, relevant_chunk, irrelevant_chunk) triplets using the sentence-transformers library. Alternatively use a larger reranker: ms-marco-electra-base significantly outperforms ms-marco-MiniLM-L-6-v2 for technical content."
         />
 

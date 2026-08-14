@@ -1074,7 +1074,7 @@ N1,N2,N3 → C: "ACK"
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Design: Order Database — 10M orders/day, 99.99% availability, India-wide
+            Design: Order Database — 10M orders/day, 99.99% availability, US-wide
           </div>
 
           <CodeBox label="Architecture decisions mapped to distributed database concepts">

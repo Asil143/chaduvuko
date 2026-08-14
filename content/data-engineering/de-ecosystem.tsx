@@ -520,8 +520,8 @@ WITH KAFKA:
 
             <Para>
               <strong>Apache Kafka</strong> is the dominant message broker in data engineering —
-              used at DoorDash, Amazon, Stripe, and virtually every Indian unicorn for real-time
-              data pipelines. AWS Kinesis, Azure Event Hubs, and Google Pub/Sub are the
+              used at DoorDash, Amazon, Stripe, and virtually every high-growth tech company for
+              real-time data pipelines. AWS Kinesis, Azure Event Hubs, and Google Pub/Sub are the
               cloud-managed equivalents — same conceptual model, managed infrastructure.
             </Para>
           </div>
@@ -880,7 +880,7 @@ Airflow key concepts:
             <Para>
               <strong>Apache Airflow</strong> is the most widely deployed orchestrator in
               the industry. It has a large community, extensive operator library, and is
-              the standard at most Indian product companies. Prefect and Dagster are
+              the standard at most product companies. Prefect and Dagster are
               modern alternatives with better developer experience but smaller ecosystems.
               AWS Step Functions and Azure Data Factory serve as both ingestion and
               orchestration tools in their respective cloud ecosystems.
@@ -929,7 +929,7 @@ Airflow key concepts:
 LEVEL 2 — Statistical validation (catches data drift)
   ✓ Is the row count within expected range? (±20% of yesterday)
   ✓ Are numeric columns within expected bounds?
-     (order_amount between ₹0 and ₹50,000 — flag outliers)
+     (order_amount between $0 and $500 — flag outliers)
   ✓ Are categorical columns limited to expected values?
      (order_status IN ('placed', 'confirmed', 'delivered', 'cancelled'))
   ✓ Is null rate below threshold? (customer_id null rate < 0.1%)
@@ -967,12 +967,12 @@ Tools:
         <Para>
           The same ten categories appear in every data platform. What changes between
           companies is which specific tool they chose for each category. Here are three
-          real representative stacks you will encounter in India in 2026.
+          real representative stacks you will encounter in 2026.
         </Para>
 
         {[
           {
-            type: 'Mid-size Indian Startup (Series B, ~200 employees)',
+            type: 'Mid-size US Startup (Series B, ~200 employees)',
             color: '#00e676',
             stack: [
               { cat: 'Languages', tool: 'Python + SQL', why: 'Small team, productivity over performance' },
@@ -1063,7 +1063,7 @@ Tools:
 
         <Para>
           Now apply the map to a real job posting. Here is a representative JD for a
-          mid-level data engineer role at an Indian fintech startup. Every technology
+          mid-level data engineer role at a US fintech startup. Every technology
           listed maps to one of the ten categories.
         </Para>
 

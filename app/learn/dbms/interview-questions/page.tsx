@@ -5,7 +5,7 @@ import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 export const metadata: Metadata = {
   title: 'DBMS Interview Questions — 60 Complete Answers | Chaduvuko',
   description:
-    'The 60 most important DBMS interview questions with complete answers — covering normalization, transactions, indexing, SQL, query processing, concurrency, recovery, distributed databases, NoSQL, and security. For freshers and experienced engineers.',
+    'The 60 most important DBMS interview questions with complete answers — covering normalization, transactions, indexing, SQL, query processing, concurrency, recovery, distributed databases, NoSQL, and security. For new grads and experienced engineers.',
 }
 
 const SectionTag = ({ text }: { text: string }) => (
@@ -64,12 +64,12 @@ interface QAProps {
   n: number
   q: string
   color: string
-  level: 'Fresher' | 'Mid' | 'Senior'
+  level: 'Entry' | 'Mid' | 'Senior'
   children: React.ReactNode
 }
 
 const QA = ({ n, q, color, level, children }: QAProps) => {
-  const levelColor = level === 'Fresher' ? 'var(--accent)' : level === 'Mid' ? '#f97316' : '#8b5cf6'
+  const levelColor = level === 'Entry' ? 'var(--accent)' : level === 'Mid' ? '#f97316' : '#8b5cf6'
   return (
     <div style={{ background: 'var(--surface)', border: `1px solid ${color}25`, borderLeft: `4px solid ${color}`, borderRadius: 12, padding: '22px 26px', marginBottom: 14 }}>
       <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 12, flexWrap: 'wrap' }}>
@@ -97,14 +97,14 @@ export default function InterviewQuestions() {
       {/* INTRO */}
       <section style={{ marginBottom: 48 }}>
         <Para>
-          These are the 60 questions that appear most frequently across campus placements,
-          product company interviews, and GATE examinations. Each answer is written as a
+          These are the 60 questions that appear most frequently across new-grad interviews,
+          product company interviews, and technical screens. Each answer is written as a
           senior engineer would give it — precise, with the right technical depth, and
           connected to real systems. Work through each question yourself before reading
           the answer. The questions are grouped by topic and labelled by level:
-          <strong style={{ color: 'var(--accent)' }}> Fresher</strong> (0–1 year),
+          <strong style={{ color: 'var(--accent)' }}> Entry</strong> (0–1 year),
           <strong style={{ color: '#f97316' }}> Mid</strong> (1–3 years),
-          <strong style={{ color: '#8b5cf6' }}> Senior</strong> (3+ years / GATE deep).
+          <strong style={{ color: '#8b5cf6' }}> Senior</strong> (3+ years / deep technical).
         </Para>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px,1fr))', gap: 10, marginBottom: 8 }}>
@@ -133,32 +133,32 @@ export default function InterviewQuestions() {
         <SectionTag text="// Section 01 — Fundamentals & ER Model" />
         <SectionTitle>Fundamentals and ER Model</SectionTitle>
 
-        <QA n={1} q="What is a DBMS and how is it different from a file system?" color="#0078d4" level="Fresher">
+        <QA n={1} q="What is a DBMS and how is it different from a file system?" color="#0078d4" level="Entry">
           <Para>A Database Management System is software that stores, organises, and retrieves structured data while enforcing consistency, integrity, and concurrent access. A file system stores raw files but provides no understanding of the data inside them. The DBMS adds five things a file system lacks: a data model (structured representation of data and relationships), query language (SQL — retrieve data without knowing physical storage), transaction management (ACID guarantees across multi-step operations), concurrency control (multiple users can access and modify data simultaneously without corrupting it), and recovery (the database restores itself to a consistent state after crashes).</Para>
           <Para>A file system stores payroll.csv. The DBMS stores the same data but can enforce that salary is always positive, ensure two HR managers editing different employees never conflict, rollback a failed salary update, and answer "who earns more than the department average" without reading the entire file.</Para>
         </QA>
 
-        <QA n={2} q="Explain the three-schema architecture of a DBMS." color="#0078d4" level="Fresher">
+        <QA n={2} q="Explain the three-schema architecture of a DBMS." color="#0078d4" level="Entry">
           <Para>The three-schema architecture separates the database into three levels of abstraction, allowing changes at one level without affecting others. The external schema (view level) is what each user or application sees — a customised view of the data. A payroll app sees salary data; an HR reporting tool sees headcount data; neither sees what the other sees. The conceptual schema (logical level) is the complete logical description of the entire database — all entities, attributes, relationships, and constraints. This is what the DBA works with. The internal schema (physical level) describes how data is actually stored on disk — file formats, indexes, partition strategies, storage engine details.</Para>
           <Para>The architecture provides two kinds of independence. Logical data independence: changing the conceptual schema (adding a column, changing a table name) does not break external views. Physical data independence: changing storage structures (adding an index, changing file format) does not change the conceptual schema. This is why adding an index to a PostgreSQL table does not require changing any application SQL.</Para>
         </QA>
 
-        <QA n={3} q="What are the different types of attributes in the ER model?" color="#0078d4" level="Fresher">
-          <Para>Six attribute types exist in the ER model. Simple (atomic) attributes cannot be divided further — employee_id, age, salary. Composite attributes are made up of sub-attributes — full_name is composite (first_name, middle_name, last_name); address is composite (street, city, state, pin). Single-valued attributes have exactly one value per entity — a person has one date_of_birth. Multi-valued attributes can have multiple values — a person can have multiple phone_numbers, multiple email_addresses. Derived attributes can be computed from other attributes — age is derived from date_of_birth; total_price is derived from unit_price × quantity. Null attributes have no applicable or known value — middle_name may be null for many people.</Para>
+        <QA n={3} q="What are the different types of attributes in the ER model?" color="#0078d4" level="Entry">
+          <Para>Six attribute types exist in the ER model. Simple (atomic) attributes cannot be divided further — employee_id, age, salary. Composite attributes are made up of sub-attributes — full_name is composite (first_name, middle_name, last_name); address is composite (street, city, state, zip). Single-valued attributes have exactly one value per entity — a person has one date_of_birth. Multi-valued attributes can have multiple values — a person can have multiple phone_numbers, multiple email_addresses. Derived attributes can be computed from other attributes — age is derived from date_of_birth; total_price is derived from unit_price × quantity. Null attributes have no applicable or known value — middle_name may be null for many people.</Para>
           <Para>In ER diagrams: simple attributes are ovals, composite attributes are ovals with sub-ovals attached, multi-valued attributes are double ovals, and derived attributes are dashed ovals.</Para>
         </QA>
 
-        <QA n={4} q="What is the difference between total and partial participation in the ER model?" color="#0078d4" level="Fresher">
+        <QA n={4} q="What is the difference between total and partial participation in the ER model?" color="#0078d4" level="Entry">
           <Para>Participation describes whether every instance of an entity must participate in a relationship. Total participation means every entity instance must be involved in at least one instance of the relationship — it is represented by a double line in ER diagrams. Partial participation means some entity instances may not participate in any relationship instance — represented by a single line.</Para>
           <Para>Example: every employee must work in exactly one department (total participation of Employee in Works_In). But not every department must have a manager right now — a newly created department might temporarily have no manager (partial participation of Department in Manages). Total participation enforces a constraint: you cannot have an employee with no department. In SQL, this maps to a NOT NULL foreign key constraint on the employee table's department_id.</Para>
         </QA>
 
-        <QA n={5} q="What is a weak entity and when do you use one?" color="#0078d4" level="Fresher">
+        <QA n={5} q="What is a weak entity and when do you use one?" color="#0078d4" level="Entry">
           <Para>A weak entity is an entity that cannot be uniquely identified by its own attributes alone — it depends on a strong (owner) entity for its identity. A weak entity has a partial key (discriminator) that, combined with the primary key of its owner entity, forms the complete identifier. In ER diagrams, weak entities use double rectangles and their identifying relationship uses a double diamond.</Para>
           <Para>Classic example: an order item in an e-commerce system. The item number (1, 2, 3) within an order is the partial key, but item number 1 exists in every order — it only becomes unique when combined with the order_id. Order_item is a weak entity owned by Order. In SQL, the primary key of the order_items table is (order_id, item_number) — the combination is unique even though item_number alone is not. The order_id is a mandatory foreign key — an order item cannot exist without its parent order (total participation, cascade delete).</Para>
         </QA>
 
-        <QA n={6} q="Explain cardinality ratios in ER modelling with examples." color="#0078d4" level="Fresher">
+        <QA n={6} q="Explain cardinality ratios in ER modelling with examples." color="#0078d4" level="Entry">
           <Para>Cardinality ratios describe how many instances of one entity relate to how many instances of another through a relationship. Four ratios exist. One-to-one (1:1): each entity on both sides participates at most once — a country has one capital city, a capital city belongs to one country. One-to-many (1:N): one entity on the left relates to many on the right, but each right-side entity relates to at most one left-side entity — one department has many employees, but each employee belongs to one department. Many-to-one (N:1): the inverse of 1:N. Many-to-many (M:N): entities on both sides can relate to multiple entities on the other side — students enrol in many courses, and each course has many students enrolled.</Para>
           <Para>In SQL, 1:N is implemented with a foreign key on the "many" side (employees.department_id). M:N requires a junction table (enrollments with student_id and course_id as a composite primary key). 1:1 uses a foreign key with a UNIQUE constraint on either side.</Para>
         </QA>
@@ -181,21 +181,21 @@ export default function InterviewQuestions() {
         <SectionTag text="// Section 02 — Relational Model & Normalisation" />
         <SectionTitle>Relational Model and Normalisation</SectionTitle>
 
-        <QA n={9} q="What is the difference between a superkey, candidate key, and primary key?" color="var(--accent)" level="Fresher">
+        <QA n={9} q="What is the difference between a superkey, candidate key, and primary key?" color="var(--accent)" level="Entry">
           <Para>A superkey is any set of attributes that uniquely identifies every tuple in a relation — it has no duplicate combinations. A relation can have many superkeys; every superset of a unique-identifying set is also a superkey. A candidate key is a minimal superkey — a superkey from which no attribute can be removed while maintaining uniqueness. If {'{A, B}'} uniquely identifies tuples but neither A nor B alone does, then {'{A, B}'} is a candidate key. A primary key is the candidate key chosen by the database designer to be the principal identifier. There is exactly one primary key per table; it cannot contain NULL values; it is used as the target of foreign key references from other tables.</Para>
           <Para>Example: in an employees table, {'{employee_id}'}, {'{email}'}, and {'{ssn_last4}'} might all be candidate keys (each uniquely identifies an employee). {'{employee_id, name}'} is a superkey but not a candidate key (employee_id alone is sufficient). The DBA chooses employee_id as the primary key for simplicity and efficiency.</Para>
         </QA>
 
-        <QA n={10} q="Explain the four integrity constraints of the relational model." color="var(--accent)" level="Fresher">
+        <QA n={10} q="Explain the four integrity constraints of the relational model." color="var(--accent)" level="Entry">
           <Para>Domain constraint: every attribute value must belong to the defined domain of that attribute — salary must be a positive decimal, status must be one of {'{"active", "inactive"}'}, age must be an integer between 0 and 150. Enforced by data types and CHECK constraints. Entity integrity constraint: no attribute of a primary key can be NULL. The primary key's purpose is to uniquely identify every tuple — a NULL value would mean "unknown identity", making identification impossible. Enforced automatically by PRIMARY KEY constraint. Referential integrity constraint: every foreign key value must either match a primary key value in the referenced table or be NULL. An order cannot reference a customer_id that does not exist in the customers table. Enforced by FOREIGN KEY constraints with ON DELETE and ON UPDATE actions. Semantic/business integrity: additional application-specific rules — an employee's start date cannot be before the company's founding date, a manager must be a senior employee. Enforced with CHECK constraints, triggers, or application code.</Para>
         </QA>
 
-        <QA n={11} q="What are the three types of anomalies that normalisation addresses?" color="var(--accent)" level="Fresher">
+        <QA n={11} q="What are the three types of anomalies that normalisation addresses?" color="var(--accent)" level="Entry">
           <Para>Anomalies arise when a table contains redundant data — the same fact stored in multiple rows. Three types: Insertion anomaly: you cannot insert certain data without also inserting other unrelated data. In an un-normalised student-course table storing (student_id, student_name, course_id, instructor), you cannot add a new course until at least one student enrols — the course data has nowhere to go without a student_id. Update anomaly: changing one fact requires updating multiple rows. If instructor "Prof. Kumar" changes their name, you must update every row where they appear — miss one and the database is inconsistent. Deletion anomaly: deleting one piece of data unintentionally deletes another. If the last student in a course withdraws, deleting that row deletes the course and instructor information entirely.</Para>
           <Para>Normalisation eliminates these by decomposing the table into smaller tables, each storing one fact — student names in a students table, courses in a courses table, instructors in an instructors table, and enrolments in an enrolments table. Updates happen in one place, insertions are independent, and deletions don't cascade to unrelated data.</Para>
         </QA>
 
-        <QA n={12} q="Explain 1NF, 2NF, and 3NF with examples." color="var(--accent)" level="Fresher">
+        <QA n={12} q="Explain 1NF, 2NF, and 3NF with examples." color="var(--accent)" level="Entry">
           <Para>First Normal Form (1NF): every attribute must have atomic (indivisible) values, and there must be no repeating groups. A cell cannot contain a list or a set. A column phone_numbers containing "9876543210, 8765432109" violates 1NF. Fix: move multi-valued attributes to a separate table or add a row per phone number. Second Normal Form (2NF): must be in 1NF, and every non-key attribute must be fully functionally dependent on the entire primary key — not just a part of it. Only relevant for composite primary keys. In an enrolments table with PK (student_id, course_id) and attributes (student_name, course_name, grade): student_name depends only on student_id (partial dependency) and course_name depends only on course_id (partial dependency). Fix: move student_name to a students table and course_name to a courses table. Third Normal Form (3NF): must be in 2NF, and no non-key attribute should transitively depend on the primary key through another non-key attribute. In an employees table: employee_id → department_id → department_name. department_name depends on department_id, not directly on employee_id (transitive dependency). Fix: create a departments table with department_id and department_name.</Para>
         </QA>
 
@@ -215,7 +215,7 @@ export default function InterviewQuestions() {
         </QA>
 
         <QA n={16} q="What is the difference between 4NF and 5NF?" color="var(--accent)" level="Senior">
-          <Para>Fourth Normal Form addresses multi-valued dependencies (MVDs). A multi-valued dependency X →→ Y exists when for each value of X, a set of Y values exists independently of the other attributes. In a relation EMPLOYEE(emp_id, skill, hobby), an employee can have multiple skills and multiple hobbies, and skills and hobbies are independent of each other. This creates unnecessary combinations — if Rahul has 3 skills and 2 hobbies, the table needs 6 rows. A relation is in 4NF if for every non-trivial MVD X →→ Y, X is a superkey. Fix: decompose into EMP_SKILLS(emp_id, skill) and EMP_HOBBIES(emp_id, hobby).</Para>
+          <Para>Fourth Normal Form addresses multi-valued dependencies (MVDs). A multi-valued dependency X →→ Y exists when for each value of X, a set of Y values exists independently of the other attributes. In a relation EMPLOYEE(emp_id, skill, hobby), an employee can have multiple skills and multiple hobbies, and skills and hobbies are independent of each other. This creates unnecessary combinations — if Marcus has 3 skills and 2 hobbies, the table needs 6 rows. A relation is in 4NF if for every non-trivial MVD X →→ Y, X is a superkey. Fix: decompose into EMP_SKILLS(emp_id, skill) and EMP_HOBBIES(emp_id, hobby).</Para>
           <Para>Fifth Normal Form (Project-Join Normal Form) addresses join dependencies. A relation has a join dependency when it can be losslessly decomposed into three or more projections, but no pair of those projections alone constitutes a lossless decomposition. This is the rarest normal form and arises in complex three-way relationships. A relation is in 5NF when every join dependency is implied by its candidate keys. 4NF is concerned with two-way independence (MVDs); 5NF is concerned with multi-way independence. In practice, 3NF or BCNF is the target for production schemas; 4NF and 5NF are primarily studied in theory and GATE examinations.</Para>
         </QA>
       </section>
@@ -227,17 +227,17 @@ export default function InterviewQuestions() {
         <SectionTag text="// Section 03 — SQL & Query Processing" />
         <SectionTitle>SQL and Query Processing</SectionTitle>
 
-        <QA n={17} q="What is the logical execution order of a SQL SELECT statement?" color="#f97316" level="Fresher">
+        <QA n={17} q="What is the logical execution order of a SQL SELECT statement?" color="#f97316" level="Entry">
           <Para>SQL is declarative — you write what you want, not how to get it. But internally, SQL has a defined logical execution order that differs from the writing order. The order is: FROM (identify source tables and build the initial rowset), JOIN (combine tables based on join conditions), WHERE (filter rows based on conditions — runs before grouping, so aggregate functions cannot appear here), GROUP BY (group remaining rows by specified columns), HAVING (filter groups based on aggregate conditions — runs after grouping, so aggregates are valid here), SELECT (compute the output columns, apply expressions, assign aliases — aliases defined here are NOT available in WHERE or GROUP BY), DISTINCT (remove duplicate rows from the result), ORDER BY (sort the result — aliases defined in SELECT ARE available here because it runs after SELECT), LIMIT/OFFSET (return only a subset of rows).</Para>
           <Para>This explains several common confusions. Why can't you use a column alias in WHERE? Because WHERE runs before SELECT. Why can you use a column alias in ORDER BY? Because ORDER BY runs after SELECT. Why can't you use aggregate functions in WHERE? Because WHERE runs before GROUP BY — the groups don't exist yet. Use HAVING instead.</Para>
         </QA>
 
-        <QA n={18} q="What is the difference between WHERE and HAVING?" color="#f97316" level="Fresher">
+        <QA n={18} q="What is the difference between WHERE and HAVING?" color="#f97316" level="Entry">
           <Para>WHERE filters individual rows before grouping occurs. It cannot reference aggregate functions because the groups do not yet exist when WHERE is evaluated. HAVING filters groups after GROUP BY has been applied. It can reference aggregate functions because the groups exist at that point.</Para>
           <Para>Example: find departments with more than 5 employees who each earn over 50,000. WHERE salary &gt; 50000 first filters individual employee rows to those earning over 50K. GROUP BY department_id then groups the filtered rows. HAVING COUNT(*) &gt; 5 then filters to groups (departments) that have more than 5 such employees. A common mistake is using WHERE COUNT(*) &gt; 5 — this fails because COUNT(*) is an aggregate and WHERE cannot evaluate it. Another common mistake is using HAVING salary &gt; 50000 — HAVING processes groups, not individual rows, so this would apply the salary filter incorrectly to aggregate values.</Para>
         </QA>
 
-        <QA n={19} q="Explain the different types of JOINs in SQL." color="#f97316" level="Fresher">
+        <QA n={19} q="Explain the different types of JOINs in SQL." color="#f97316" level="Entry">
           <Para>INNER JOIN returns only rows where the join condition is satisfied in both tables — non-matching rows from either table are excluded. The most common join type. LEFT OUTER JOIN returns all rows from the left table; for rows with no match in the right table, right-side columns are NULL. Used to find records in the left table regardless of whether a matching right-side record exists. RIGHT OUTER JOIN is the mirror: all rows from the right table, NULLs for unmatched left-side columns. FULL OUTER JOIN returns all rows from both tables; unmatched rows on either side get NULLs for the other side's columns. CROSS JOIN returns the Cartesian product — every combination of every row from both tables. N×M rows. No join condition. Used rarely (e.g., generating all possible combinations). SELF JOIN is a regular join of a table with itself using table aliases — used for hierarchical data (find manager-employee pairs where both are in the same table).</Para>
           <CodeBox>{`-- Find customers with no orders (LEFT JOIN + NULL check):
 SELECT c.customer_id, c.name
@@ -246,7 +246,7 @@ LEFT JOIN orders o ON c.customer_id = o.customer_id
 WHERE o.order_id IS NULL;`}</CodeBox>
         </QA>
 
-        <QA n={20} q="What is the difference between UNION and UNION ALL?" color="#f97316" level="Fresher">
+        <QA n={20} q="What is the difference between UNION and UNION ALL?" color="#f97316" level="Entry">
           <Para>UNION combines the results of two SELECT statements and removes duplicate rows from the combined result. It implicitly applies DISTINCT to the entire result set. This requires sorting or hashing to identify and eliminate duplicates, which adds computational overhead — O(n log n) or O(n). UNION ALL combines the results without removing duplicates. All rows from both queries appear in the result, including duplicates. It is always faster than UNION because no deduplication step is needed.</Para>
           <Para>Use UNION ALL when: you know there are no duplicates between the two result sets (the sets are disjoint), or you want to keep duplicates intentionally. Use UNION when: the result sets may overlap and you want each distinct combination to appear once. Common mistake: using UNION when UNION ALL would suffice, paying an unnecessary deduplication cost. Another common mistake: both SELECT statements must have the same number of columns with compatible data types (union compatibility) — violating this produces an error.</Para>
         </QA>
@@ -279,12 +279,12 @@ WHERE o.order_id IS NULL;`}</CodeBox>
         <SectionTag text="// Section 04 — Indexing & Storage" />
         <SectionTitle>Indexing and Storage</SectionTitle>
 
-        <QA n={25} q="What is a B+ tree index and why do databases use it?" color="#8b5cf6" level="Fresher">
+        <QA n={25} q="What is a B+ tree index and why do databases use it?" color="#8b5cf6" level="Entry">
           <Para>A B+ tree is a self-balancing multi-way search tree where all data pointers reside in the leaf nodes (internal nodes contain only keys for navigation), and leaf nodes are linked in a doubly-linked list sorted by key. This structure gives O(log n) lookup, insertion, and deletion with worst-case guarantees, and O(log n + k) for range scans where k is the number of matching rows.</Para>
           <Para>Databases use B+ trees over alternatives because: the leaf linked list makes range scans efficient — find the first matching leaf via tree traversal, then follow the linked list sequentially through all matching entries without returning to internal nodes. Higher fan-out than binary trees (each node holds hundreds of keys, not 2) means fewer levels — a B+ tree on a 50-million-row table is typically 3-4 levels deep, requiring only 3-4 disk reads to reach any leaf. Internal nodes store only keys (no data pointers), maximising fan-out per page. Compared to hash indexes: B+ trees support range queries, ORDER BY without sorting, and prefix queries. Hash indexes support only equality lookups but are theoretically O(1).</Para>
         </QA>
 
-        <QA n={26} q="What is the difference between a clustered and a non-clustered index?" color="#8b5cf6" level="Fresher">
+        <QA n={26} q="What is the difference between a clustered and a non-clustered index?" color="#8b5cf6" level="Entry">
           <Para>A clustered index determines the physical storage order of rows in the table — the data rows are sorted and stored in the same order as the index key. There can be only one clustered index per table (there is only one physical ordering possible). In MySQL InnoDB, the primary key is always the clustered index; the data rows are stored at the B+ tree leaf nodes. In PostgreSQL, tables are heap-organised by default and CLUSTER reorganises the physical file order to match an index, but this is not maintained on subsequent writes.</Para>
           <Para>A non-clustered index is a separate structure from the actual data. Its leaf nodes contain the index key value and a pointer (row ID — page number + slot number) to the actual data row in the heap file. A table can have many non-clustered indexes. Querying via a non-clustered index requires two lookups: find the row ID in the index, then fetch the actual row from the heap (the "heap fetch" or "bookmark lookup"). Clustered indexes are faster for range scans because matching rows are physically adjacent on disk — sequential reads. Non-clustered indexes on selective equality queries are also fast but require the extra heap fetch for each match.</Para>
         </QA>
@@ -327,8 +327,8 @@ WHERE o.order_id IS NULL;`}</CodeBox>
         <SectionTag text="// Section 05 — Transactions & Concurrency" />
         <SectionTitle>Transactions and Concurrency Control</SectionTitle>
 
-        <QA n={33} q="Explain ACID properties with a bank transfer example." color="#facc15" level="Fresher">
-          <Para>A bank transfer of ₹500 from Account A to Account B illustrates all four properties. Atomicity: the transfer is all-or-nothing. Either both the debit from A and the credit to B complete, or neither does. If the system crashes after debiting A but before crediting B, the partial debit is rolled back. There is no state where A is debited but B is not credited. Consistency: the database moves from one valid state to another valid state. Before: A=5000, B=3000, total=8000. After: A=4500, B=3500, total=8000. Constraints are satisfied — balances are non-negative (assuming 500 ≤ A's balance). No constraint is violated during or after the transaction. Isolation: if two transfers happen simultaneously, they do not interfere with each other. T1 transferring from A to B and T2 transferring from A to C behave as if they ran serially — T2 either sees A's value before T1's debit or after, but never a partially-applied T1. Durability: once the bank confirms the transfer succeeded, the new balances survive system crashes. Even if the server crashes one millisecond after the commit confirmation, the transaction is permanently recorded in the WAL and will be recovered on restart.</Para>
+        <QA n={33} q="Explain ACID properties with a bank transfer example." color="#facc15" level="Entry">
+          <Para>A bank transfer of $500 from Account A to Account B illustrates all four properties. Atomicity: the transfer is all-or-nothing. Either both the debit from A and the credit to B complete, or neither does. If the system crashes after debiting A but before crediting B, the partial debit is rolled back. There is no state where A is debited but B is not credited. Consistency: the database moves from one valid state to another valid state. Before: A=5000, B=3000, total=8000. After: A=4500, B=3500, total=8000. Constraints are satisfied — balances are non-negative (assuming 500 ≤ A's balance). No constraint is violated during or after the transaction. Isolation: if two transfers happen simultaneously, they do not interfere with each other. T1 transferring from A to B and T2 transferring from A to C behave as if they ran serially — T2 either sees A's value before T1's debit or after, but never a partially-applied T1. Durability: once the bank confirms the transfer succeeded, the new balances survive system crashes. Even if the server crashes one millisecond after the commit confirmation, the transaction is permanently recorded in the WAL and will be recovered on restart.</Para>
         </QA>
 
         <QA n={34} q="What are the four concurrency anomalies and which isolation levels prevent each?" color="#facc15" level="Mid">
@@ -424,7 +424,7 @@ WHERE o.order_id IS NULL;`}</CodeBox>
 
         <QA n={49} q="Explain the Redis sorted set and give a real-world use case." color="#0078d4" level="Mid">
           <Para>A Redis sorted set (ZSET) is a collection of unique string members, each associated with a float score. Members are stored in order by score (ascending). All operations that access members by rank or score range are O(log N). Key commands: ZADD (add member with score), ZRANGE/ZREVRANGE (members by rank range), ZRANGEBYSCORE (members within score range), ZRANK/ZREVRANK (rank of a specific member), ZINCRBY (atomically increment a member's score), ZCARD (count members), ZRANGEBYSCORE with LIMIT (pagination within score range).</Para>
-          <Para>Real-world use case: real-time game leaderboard. On every score event: ZINCRBY leaderboard:game:42 150 "player:rahul" — atomically adds 150 to Rahul's score. To show top 10: ZREVRANGE leaderboard:game:42 0 9 WITHSCORES — returns top 10 players with scores in O(log N + 10). To show a specific player's rank: ZREVRANK leaderboard:game:42 "player:rahul" — O(log N). Redis handles millions of score updates per second and returns leaderboard results in microseconds. The entire leaderboard for 1 million players fits in under 100MB of RAM. This is a use case where a relational database (requiring an ORDER BY query with a full sort on millions of rows) cannot match Redis's performance.</Para>
+          <Para>Real-world use case: real-time game leaderboard. On every score event: ZINCRBY leaderboard:game:42 150 "player:kevin" — atomically adds 150 to Kevin's score. To show top 10: ZREVRANGE leaderboard:game:42 0 9 WITHSCORES — returns top 10 players with scores in O(log N + 10). To show a specific player's rank: ZREVRANK leaderboard:game:42 "player:kevin" — O(log N). Redis handles millions of score updates per second and returns leaderboard results in microseconds. The entire leaderboard for 1 million players fits in under 100MB of RAM. This is a use case where a relational database (requiring an ORDER BY query with a full sort on millions of rows) cannot match Redis's performance.</Para>
         </QA>
 
         <QA n={50} q="What is eventual consistency and how do you handle conflicts in an eventually consistent system?" color="#0078d4" level="Mid">
@@ -439,7 +439,7 @@ WHERE o.order_id IS NULL;`}</CodeBox>
 
         <QA n={52} q="What is polyglot persistence and why do production systems use it?" color="#0078d4" level="Senior">
           <Para>Polyglot persistence is the practice of using multiple, different database technologies within the same system — each chosen for the specific data it manages best. The term acknowledges that no single database is optimal for all use cases: just as polyglot programming uses different languages for different tasks, polyglot persistence uses different databases for different data domains.</Para>
-          <Para>A typical Indian tech company at scale: PostgreSQL for transactional data (orders, payments, users) — needs ACID, joins, complex queries. Redis for sessions, rate limiting, and leaderboards — needs microsecond latency, atomic operations, TTL. Cassandra for delivery GPS tracking — needs 500K writes/second with no single point of failure. Elasticsearch for restaurant and menu search — needs full-text search with relevance scoring. Kafka for event streaming between all these systems — needs durable, replayable, high-throughput pub-sub. Snowflake or BigQuery for analytics — needs columnar storage, distributed SQL over petabytes. Each database does what it is designed for. The complexity cost: more systems to operate, monitor, and keep in sync. The data consistency model between systems is eventually consistent (stream processing via Kafka or CDC tools like Debezium) rather than ACID-transactional. PostgreSQL is typically the source of truth; all other databases are derived views of that truth, updated asynchronously.</Para>
+          <Para>A typical tech company at scale: PostgreSQL for transactional data (orders, payments, users) — needs ACID, joins, complex queries. Redis for sessions, rate limiting, and leaderboards — needs microsecond latency, atomic operations, TTL. Cassandra for delivery GPS tracking — needs 500K writes/second with no single point of failure. Elasticsearch for restaurant and menu search — needs full-text search with relevance scoring. Kafka for event streaming between all these systems — needs durable, replayable, high-throughput pub-sub. Snowflake or BigQuery for analytics — needs columnar storage, distributed SQL over petabytes. Each database does what it is designed for. The complexity cost: more systems to operate, monitor, and keep in sync. The data consistency model between systems is eventually consistent (stream processing via Kafka or CDC tools like Debezium) rather than ACID-transactional. PostgreSQL is typically the source of truth; all other databases are derived views of that truth, updated asynchronously.</Para>
         </QA>
       </section>
 
@@ -450,7 +450,7 @@ WHERE o.order_id IS NULL;`}</CodeBox>
         <SectionTag text="// Section 08 — Security & System Design" />
         <SectionTitle>Security and System Design</SectionTitle>
 
-        <QA n={53} q="What is SQL injection and write a vulnerable vs secure example." color="var(--accent)" level="Fresher">
+        <QA n={53} q="What is SQL injection and write a vulnerable vs secure example." color="var(--accent)" level="Entry">
           <Para>SQL injection occurs when user-supplied input is concatenated into a SQL query string, allowing the attacker to inject SQL code that changes the query's semantics. It can bypass authentication, read any table, modify data, and in some configurations execute OS commands.</Para>
           <CodeBox label="Vulnerable vs secure — Python">
 {`# VULNERABLE: string concatenation

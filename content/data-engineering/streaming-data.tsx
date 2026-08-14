@@ -192,7 +192,7 @@ export default function StreamingDataModule() {
             { '0': 'State', '1': 'Stateless by default — each run is independent', '2': 'Stateful — must track what happened before' },
             { '0': 'Failure recovery', '1': 'Re-run the entire job from the last checkpoint', '2': 'Resume from the last committed offset' },
             { '0': 'Data model', '1': 'Tables — rows and columns, point-in-time snapshot', '2': 'Events — facts that something happened, immutable' },
-            { '0': 'Indian company example', '1': 'Uber Eats generating daily revenue reports at 2 AM', '2': 'DoorDash tracking live delivery location every 3 seconds' },
+            { '0': 'Real-world example', '1': 'Uber Eats generating daily revenue reports at 2 AM', '2': 'DoorDash tracking live delivery location every 3 seconds' },
           ]}
         />
       </section>
@@ -215,7 +215,7 @@ export default function StreamingDataModule() {
         <Para>
           Stripe processes a payment. That payment happened. The event record of
           it cannot be changed — you can't go back and say "actually, the amount
-          was ₹500 not ₹499." If there was an error, a new corrective event is
+          was $500 not $499." If there was an error, a new corrective event is
           produced. The original event stays.
         </Para>
 
@@ -246,11 +246,11 @@ export default function StreamingDataModule() {
     "customer_id": "C98765",
     "store_id":    "ST007",
     "items": [
-      { "product_id": "P1123", "qty": 2, "price_paise": 34900 },
-      { "product_id": "P0034", "qty": 1, "price_paise": 12500 }
+      { "product_id": "P1123", "qty": 2, "price_cents": 34900 },
+      { "product_id": "P0034", "qty": 1, "price_cents": 12500 }
     ],
-    "total_paise":    82300,
-    "payment_method": "upi",
+    "total_cents":    82300,
+    "payment_method": "card",
     "delivery_address": {
       "city": "Austin",
       "zip_code": "500032"
@@ -383,7 +383,7 @@ export default function StreamingDataModule() {
 
         <Callout type="info">
           Neither model is always correct. Real systems use both. DoorDash's payment
-          service makes a synchronous API call to verify UPI — it needs to know
+          service makes a synchronous API call to verify the card charge — it needs to know
           immediately whether payment succeeded before confirming the order.
           But once payment succeeds, it produces an event, and everything
           downstream is asynchronous. The boundary between synchronous and
@@ -812,16 +812,16 @@ export default function StreamingDataModule() {
 def process_order(event):
     # If this runs twice for the same order, revenue is double-counted
     execute_sql("UPDATE daily_revenue SET total = total + %s WHERE date = %s",
-                [event['total_paise'], event['date']])
+                [event['total_cents'], event['date']])
 
 # Idempotent approach 1: upsert with event_id as unique key
 def process_order(event):
     # If this runs twice with the same event_id, the second UPSERT is a no-op
     execute_sql("""
-        INSERT INTO processed_orders (event_id, order_id, total_paise, processed_at)
+        INSERT INTO processed_orders (event_id, order_id, total_cents, processed_at)
         VALUES (%s, %s, %s, NOW())
         ON CONFLICT (event_id) DO NOTHING
-    """, [event['event_id'], event['order_id'], event['total_paise']])
+    """, [event['event_id'], event['order_id'], event['total_cents']])
 
 # Idempotent approach 2: check-then-act
 def process_order(event):
@@ -967,7 +967,7 @@ def process_order(event):
 
         <Callout type="tip">
           For business analytics (revenue, orders, GMV), always aggregate on
-          event time, not processing time. A report saying "₹1.2 million in
+          event time, not processing time. A report saying "$1.2 million in
           orders between 11 PM and midnight" must use the time the order was
           placed, not the time your pipeline processed it. Using processing
           time for business metrics is one of the most common and least
@@ -1114,21 +1114,21 @@ event = {
     "data": {
         "order_id":        "ORD-2026-887432",
         "customer_id":     "C98765",
-        "customer_name":   "Priya Sharma",
-        "customer_email":  "priya@example.com",   # included for notification service
+        "customer_name":   "Emily Johnson",
+        "customer_email":  "emily@example.com",   # included for notification service
         "customer_phone":  "+91 9876543210",       # included for SMS service
         "store_id":        "ST007",
         "store_city":      "Austin",             # included for analytics
         "items":           [...],
-        "total_paise":     82300,
-        "payment_method":  "upi",
+        "total_cents":     82300,
+        "payment_method":  "card",
         "delivery_eta_minutes": 28
     }
 }
 
 # Notification service: uses customer_email and customer_phone — no callback needed
-# Analytics service: uses store_city and total_paise — no callback needed
-# Fraud service: uses customer_id, total_paise, payment_method — no callback needed
+# Analytics service: uses store_city and total_cents — no callback needed
+# Fraud service: uses customer_id, total_cents, payment_method — no callback needed
 
 # Advantage: complete decoupling — consumers work even if source is down
 # Advantage: consumers are fast — no network round-trips
@@ -1182,8 +1182,8 @@ event = {
             showing high lag. You check the consumer group lag metric — one
             partition has 2 million events of backlog while the rest are at
             near-zero. You look at the partition key: it is set to
-            <code>payment_method</code>. UPI handles 80% of all transactions
-            in India, so the UPI partition is overwhelmed while the others
+            <code>payment_method</code>. Card payments handle 80% of all
+            transactions, so the card partition is overwhelmed while the others
             are idle. The fix is changing the partition key to
             <code>payment_id</code> for even distribution. You can't change
             partition count without downtime, so this goes into the next

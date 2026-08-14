@@ -86,7 +86,7 @@ export default function ArithmeticExpressions() {
       {/* ── PART 01 ── */}
       <Part n="01" title="Why SQL Needs to Do Math" />
 
-      <P>Databases store raw numbers — unit prices, quantities, salaries, order totals. But the numbers that drive business decisions are almost always <Hl>derived</Hl> — profit margin, GST-inclusive price, discount amount, days since order, salary as a percentage of the highest salary in the team. These are not stored anywhere. They are calculated on demand from the raw values.</P>
+      <P>Databases store raw numbers — unit prices, quantities, salaries, order totals. But the numbers that drive business decisions are almost always <Hl>derived</Hl> — profit margin, tax-inclusive price, discount amount, days since order, salary as a percentage of the highest salary in the team. These are not stored anywhere. They are calculated on demand from the raw values.</P>
 
       <P>SQL lets you perform these calculations directly in your SELECT statement. The result is a computed column that exists only in the query output — the underlying table is never changed. This is one of SQL's most powerful features: the database handles all the math, and you get clean, calculated results without exporting data to Excel and doing it manually.</P>
 
@@ -109,7 +109,7 @@ SELECT
   cost_price,
   unit_price - cost_price                              AS profit,
   ROUND((unit_price - cost_price) / unit_price * 100, 1) AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                          AS price_with_gst
+  ROUND(unit_price * 1.18, 2)                          AS price_with_tax
 FROM products
 LIMIT 5;`}
         height={170}
@@ -168,12 +168,12 @@ ORDER BY profit_per_unit DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- GST-inclusive price: add 18% to the base price
+        initialQuery={`-- Tax-inclusive price: add 18% sales tax to the base price
 SELECT
   product_name,
   unit_price                          AS base_price,
-  ROUND(unit_price * 0.18, 2)         AS gst_amount,
-  ROUND(unit_price + unit_price * 0.18, 2)  AS price_with_gst
+  ROUND(unit_price * 0.18, 2)         AS tax_amount,
+  ROUND(unit_price + unit_price * 0.18, 2)  AS price_with_tax
 FROM products
 ORDER BY unit_price DESC
 LIMIT 8;`}
@@ -382,12 +382,12 @@ ROUND(1234.567, -2) -- 1200 (negative rounds to left of decimal)`}
 
       <SQLPlayground
         initialQuery={`-- Round margins to 1 decimal place
--- Round GST-inclusive price to 2 decimal places (paise)
+-- Round tax-inclusive price to 2 decimal places (cents)
 SELECT
   product_name,
   unit_price,
   ROUND((unit_price - cost_price) / unit_price * 100, 1)  AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                             AS gst_price
+  ROUND(unit_price * 1.18, 2)                             AS tax_price
 FROM products
 ORDER BY margin_pct DESC
 LIMIT 8;`}
@@ -431,7 +431,7 @@ FLOOR(-4.1)  -- -5 (rounds away from zero for negatives)
       />
 
       <SQLPlayground
-        initialQuery={`-- FLOOR for salary bands — which ₹10,000 band is each employee in?
+        initialQuery={`-- FLOOR for salary bands — which $10,000 band is each employee in?
 SELECT
   first_name || ' ' || last_name   AS employee,
   salary,
@@ -492,7 +492,7 @@ ORDER BY margin_pct DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Orders where the line total per item is above ₹200 on average
+        initialQuery={`-- Orders where the line total per item is above $200 on average
 -- (total_amount divided by estimated item count)
 SELECT
   order_id,
@@ -618,7 +618,7 @@ SELECT
   cost_price,
   unit_price - cost_price                                       AS profit_per_unit,
   ROUND((unit_price - cost_price) / unit_price * 100, 1)        AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                                   AS mrp_with_gst,
+  ROUND(unit_price * 1.18, 2)                                   AS price_with_tax,
   CASE
     WHEN (unit_price - cost_price) / unit_price >= 0.40 THEN 'High Margin'
     WHEN (unit_price - cost_price) / unit_price >= 0.25 THEN 'Medium Margin'
@@ -640,8 +640,8 @@ SELECT
   order_date,
   total_amount,
   ROUND(total_amount * 0.02, 2)                        AS platform_fee_2pct,
-  ROUND(total_amount * 0.18, 2)                        AS gst_18pct,
-  ROUND(total_amount + total_amount * 0.18, 2)         AS total_with_gst,
+  ROUND(total_amount * 0.18, 2)                        AS tax_18pct,
+  ROUND(total_amount + total_amount * 0.18, 2)         AS total_with_tax,
   CASE
     WHEN total_amount >= 2000 THEN 'Premium'
     WHEN total_amount >= 800  THEN 'Standard'
@@ -708,14 +708,14 @@ ORDER BY gross_profit DESC;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a business analyst at Sephora. The category management team wants a weekly SKU-level profitability report that their buyers use to make restocking decisions. The report needs to show each product's margin, GST-inclusive price, a margin band category, and a restock recommendation based on stock status and margin.</P>
+      <P>You are a business analyst at Sephora. The category management team wants a weekly SKU-level profitability report that their buyers use to make restocking decisions. The report needs to show each product's margin, tax-inclusive price, a margin band category, and a restock recommendation based on stock status and margin.</P>
 
       <TimeBlock time="2:00 PM" label="Requirements briefing">
-        The buyer explains: show all products with their margin percentage, GST price (18% added), a margin band (Premium above 40%, Standard 25–40%, Review below 25%), and a restocking flag — restock immediately if margin is above 30% and item is out of stock, otherwise normal replenishment.
+        The buyer explains: show all products with their margin percentage, tax-inclusive price (18% added), a margin band (Premium above 40%, Standard 25–40%, Review below 25%), and a restocking flag — restock immediately if margin is above 30% and item is out of stock, otherwise normal replenishment.
       </TimeBlock>
 
       <TimeBlock time="2:20 PM" label="You build the query">
-        Every piece of this report is arithmetic. No data exists in the database for margin_pct, gst_price, margin_band, or restock_flag — all four are computed columns.
+        Every piece of this report is arithmetic. No data exists in the database for margin_pct, tax_price, margin_band, or restock_flag — all four are computed columns.
       </TimeBlock>
 
       <SQLPlayground
@@ -729,7 +729,7 @@ SELECT
   in_stock,
   -- Calculated columns
   ROUND((unit_price - cost_price) / unit_price * 100, 1)   AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                              AS gst_price,
+  ROUND(unit_price * 1.18, 2)                              AS tax_price,
   CASE
     WHEN (unit_price - cost_price) / unit_price >= 0.40 THEN 'Premium'
     WHEN (unit_price - cost_price) / unit_price >= 0.25 THEN 'Standard'
@@ -748,7 +748,7 @@ ORDER BY margin_pct DESC;`}
       />
 
       <TimeBlock time="2:45 PM" label="Delivered and verified">
-        The query runs in under 1 second and produces 25 rows — one per product. The buyer immediately spots that Parle-G Biscuits have a 30% margin and are out of stock — restock flag fires correctly. Head & Shoulders Shampoo has a 23% margin and is in stock — margin_band shows "Review" for the buyer to investigate cost reduction. The entire report that used to take 30 minutes of Excel work now takes 3 seconds to run and is always accurate.
+        The query runs in under 1 second and produces 25 rows — one per product. The buyer immediately spots that Oreo Cookies have a 30% margin and are out of stock — restock flag fires correctly. Head & Shoulders Shampoo has a 23% margin and is in stock — margin_band shows "Review" for the buyer to investigate cost reduction. The entire report that used to take 30 minutes of Excel work now takes 3 seconds to run and is always accurate.
       </TimeBlock>
 
       <ProTip>
@@ -775,7 +775,7 @@ ORDER BY margin_pct DESC;`}
       <IQ q="What is the difference between ROUND, CEIL, and FLOOR?">
         <p style={{ margin: '0 0 14px' }}>All three convert a decimal number to a controlled precision, but they round in different directions. ROUND(number, places) rounds to the specified number of decimal places using standard rounding — values ending in .5 or higher round up, below .5 round down. ROUND(3.45, 1) returns 3.5. ROUND(3.44, 1) returns 3.4. ROUND with a negative places argument rounds to the left of the decimal: ROUND(1234, -2) returns 1200.</p>
         <p style={{ margin: '0 0 14px' }}>CEIL (or CEILING) always rounds up to the nearest integer — away from zero for positive numbers. CEIL(4.1) returns 5. CEIL(4.9) returns 5. CEIL(4.0) returns 4. CEIL is used for "how many containers do I need?" problems — if you have 22 items and containers hold 10, you need CEIL(22/10) = 3 containers, not 2.2.</p>
-        <p style={{ margin: 0 }}>FLOOR always rounds down to the nearest integer — towards zero for positive numbers. FLOOR(4.9) returns 4. FLOOR(4.1) returns 4. FLOOR(4.0) returns 4. FLOOR is used for bucketing and banding — FLOOR(salary / 10000) * 10000 gives the bottom of each ₹10,000 salary band. The trio covers three essential rounding patterns: nearest value (ROUND), always up (CEIL), always down (FLOOR).</p>
+        <p style={{ margin: 0 }}>FLOOR always rounds down to the nearest integer — towards zero for positive numbers. FLOOR(4.9) returns 4. FLOOR(4.1) returns 4. FLOOR(4.0) returns 4. FLOOR is used for bucketing and banding — FLOOR(salary / 10000) * 10000 gives the bottom of each $10,000 salary band. The trio covers three essential rounding patterns: nearest value (ROUND), always up (CEIL), always down (FLOOR).</p>
       </IQ>
 
       <IQ q="Why is it more efficient to put arithmetic on the literal side of a WHERE comparison rather than the column side?">
@@ -810,7 +810,7 @@ ORDER BY margin_pct DESC;`}
       <Err
         msg="Calculation gives unexpected result — wrong number but no error"
         cause="Operator precedence bug. The calculation runs without error but evaluates in a different order than intended. For example, unit_price - cost_price / unit_price * 100 is evaluated as unit_price - ((cost_price / unit_price) * 100) — not (unit_price - cost_price) / unit_price * 100. The result looks plausible but is mathematically wrong. This is the hardest type of error to catch because the query succeeds and returns numbers."
-        fix="Add parentheses around every sub-expression to make the evaluation order explicit: (unit_price - cost_price) / unit_price * 100. Then verify against a known reference value: for Amul Butter with unit_price=56 and cost_price=44, the correct margin is (56-44)/56*100 = 21.4%. Run the query for that specific product and confirm the output matches. Any time a calculated number looks wrong but the query succeeded, check precedence first."
+        fix="Add parentheses around every sub-expression to make the evaluation order explicit: (unit_price - cost_price) / unit_price * 100. Then verify against a known reference value: for Horizon Butter with unit_price=56 and cost_price=44, the correct margin is (56-44)/56*100 = 21.4%. Run the query for that specific product and confirm the output matches. Any time a calculated number looks wrong but the query succeeded, check precedence first."
       />
 
       <Err
@@ -829,7 +829,7 @@ ORDER BY margin_pct DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart procurement team needs a reorder priority report. Write a query on the products table that returns: product_name, category, unit_price, cost_price, a profit column (unit_price minus cost_price), a margin_pct column (profit as a percentage of unit_price, rounded to 1 decimal), a gst_price column (unit_price multiplied by 1.18, rounded to 2 decimal places), and a priority column using CASE: 'Urgent Restock' if out of stock and margin above 25%, 'Restock' if out of stock and margin 25% or below, 'OK' if in stock. Sort by margin_pct descending."
+        question="The FreshCart procurement team needs a reorder priority report. Write a query on the products table that returns: product_name, category, unit_price, cost_price, a profit column (unit_price minus cost_price), a margin_pct column (profit as a percentage of unit_price, rounded to 1 decimal), a tax_price column (unit_price multiplied by 1.18, rounded to 2 decimal places), and a priority column using CASE: 'Urgent Restock' if out of stock and margin above 25%, 'Restock' if out of stock and margin 25% or below, 'OK' if in stock. Sort by margin_pct descending."
         hint="Use (unit_price - cost_price) for profit. Use ROUND((unit_price - cost_price) / unit_price * 100, 1) for margin_pct. The CASE needs to check in_stock = false first, then branch on the margin condition."
         answer={`SELECT
   product_name,
@@ -838,7 +838,7 @@ ORDER BY margin_pct DESC;`}
   cost_price,
   unit_price - cost_price                                    AS profit,
   ROUND((unit_price - cost_price) / unit_price * 100, 1)    AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                               AS gst_price,
+  ROUND(unit_price * 1.18, 2)                               AS tax_price,
   CASE
     WHEN in_stock = false
      AND (unit_price - cost_price) / unit_price > 0.25
@@ -849,7 +849,7 @@ ORDER BY margin_pct DESC;`}
   END                                                        AS priority
 FROM products
 ORDER BY margin_pct DESC;`}
-        explanation="This query combines four arithmetic patterns: simple subtraction for profit, the percentage formula with parentheses for correct precedence for margin_pct, multiplication by a constant for gst_price, and the margin percentage threshold reused inside the CASE expression for priority. Notice that the margin calculation appears twice — once in the SELECT as margin_pct and once inside CASE. You cannot reference the margin_pct alias inside the CASE because SELECT aliases are not available within the same SELECT list (they are resolved left to right, and CASE comes after margin_pct in the list but before the alias is available for reuse). Repeating the expression is correct."
+        explanation="This query combines four arithmetic patterns: simple subtraction for profit, the percentage formula with parentheses for correct precedence for margin_pct, multiplication by a constant for tax_price, and the margin percentage threshold reused inside the CASE expression for priority. Notice that the margin calculation appears twice — once in the SELECT as margin_pct and once inside CASE. You cannot reference the margin_pct alias inside the CASE because SELECT aliases are not available within the same SELECT list (they are resolved left to right, and CASE comes after margin_pct in the list but before the alias is available for reuse). Repeating the expression is correct."
       />
 
       <HR />

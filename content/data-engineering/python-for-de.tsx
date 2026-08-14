@@ -383,7 +383,7 @@ from requests.auth import HTTPBasicAuth
 # ── PATTERN 1: API Key (most common) ─────────────────────────────────────────
 # Never hardcode API keys in source code. Always read from environment.
 
-API_KEY = os.environ['RAZORPAY_API_KEY']  # set in deployment environment
+API_KEY = os.environ['STRIPE_API_KEY']  # set in deployment environment
 
 # As query parameter:
 response = requests.get(
@@ -967,7 +967,7 @@ logger.debug("Row data: %s", row)  # never log PII in production
 
 # INFO — confirmation that things are working as expected
 #        logged in production, should be meaningful and not too frequent
-logger.info("Pipeline started", extra={'source': 'razorpay', 'date': '2026-03-17'})
+logger.info("Pipeline started", extra={'source': 'stripe', 'date': '2026-03-17'})
 logger.info("Chunk %d complete", chunk_num, extra={'rows': len(chunk), 'elapsed_s': elapsed})
 logger.info("Pipeline finished", extra={'total_rows': total, 'duration_s': duration})
 
@@ -1564,7 +1564,7 @@ class Order(BaseModel):
     def coerce_amount(cls, v):
         """Accept string amounts and convert to Decimal."""
         if isinstance(v, str):
-            v = v.replace('₹', '').replace(',', '').strip()
+            v = v.replace('$', '').replace(',', '').strip()
         return Decimal(str(v))
 
     @validator('created_at', pre=True)
@@ -1583,9 +1583,9 @@ try:
     order = Order(
         order_id=9284751,
         customer_id=4201938,
-        amount='₹3,80.00',          # messy real-world format — coerced by validator
+        amount='$380.00',            # messy real-world format — coerced by validator
         status='delivered',
-        created_at='2026-03-17T20:14:32+05:30',
+        created_at='2026-03-17T20:14:32-04:00',
     )
     # order.amount == Decimal('380.00')
     # order.status == OrderStatus.DELIVERED
@@ -1666,8 +1666,8 @@ from pydantic_settings import BaseSettings
 
 # ── Configuration ──────────────────────────────────────────────────────────────
 class Config(BaseSettings):
-    razorpay_key_id:     str
-    razorpay_key_secret: str
+    stripe_key_id:       str
+    stripe_key_secret:   str
     db_url:              str
     batch_size:          int = 5_000
     max_retries:         int = 5
@@ -1685,7 +1685,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='{"ts":"%(asctime)s","level":"%(levelname)s","run_id":"' + RUN_ID + '","msg":"%(message)s"}',
 )
-logger = logging.getLogger('razorpay_ingestion')
+logger = logging.getLogger('stripe_ingestion')
 
 
 # ── Data Model ─────────────────────────────────────────────────────────────────
@@ -1693,14 +1693,14 @@ class Payment(BaseModel):
     payment_id:   str
     merchant_id:  str
     amount:       Decimal = Field(..., gt=0)
-    currency:     str     = 'INR'
+    currency:     str     = 'USD'
     status:       str
     method:       str
     captured_at:  datetime | None = None
 
     @validator('amount', pre=True)
-    def coerce_paise_to_rupees(cls, v):
-        return Decimal(str(v)) / 100   # Stripe sends amounts in paise
+    def coerce_cents_to_dollars(cls, v):
+        return Decimal(str(v)) / 100   # Stripe sends amounts in cents
 
 
 # ── Dead Letter Queue ─────────────────────────────────────────────────────────
@@ -1731,8 +1731,8 @@ def fetch_payments(
         for attempt in range(1, config.max_retries + 1):
             try:
                 resp = requests.get(
-                    'https://api.razorpay.com/v1/payments',
-                    auth=(config.razorpay_key_id, config.razorpay_key_secret),
+                    'https://api.stripe.com/v1/payments',
+                    auth=(config.stripe_key_id, config.stripe_key_secret),
                     params=params,
                     timeout=30,
                 )

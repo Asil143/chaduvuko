@@ -208,7 +208,7 @@ TYPE 1 IMPLEMENTATION:
   INSERT INTO dim_store
       (store_sk, store_id, store_name, manager_name, is_active, updated_at)
   VALUES
-      (1, 'ST001', 'FreshCart Koramangala', 'Rahul Sharma', TRUE, NOW())
+      (1, 'ST001', 'FreshMart Midtown', 'Marcus Bennett', TRUE, NOW())
   ON CONFLICT (store_id)
   DO UPDATE SET
       manager_name = EXCLUDED.manager_name,   -- Type 1: always overwrite
@@ -218,10 +218,10 @@ TYPE 1 IMPLEMENTATION:
 
   EFFECT ON HISTORICAL FACT ROWS:
     Before update: manager = 'Olivia Brown'
-    After update:  manager = 'Rahul Sharma' (overwritten)
+    After update:  manager = 'Marcus Bennett' (overwritten)
 
     fct_orders joined to dim_store WHERE store_id = 'ST001':
-    ALL historical orders now show manager_name = 'Rahul Sharma'
+    ALL historical orders now show manager_name = 'Marcus Bennett'
     — even orders placed when Olivia Brown was the manager.
 
     This is the correct behaviour for Type 1.
@@ -520,11 +520,11 @@ SELECT
     email_hashed,
     city,
     CASE
-        WHEN state IN ('Karnataka','Tamil Nadu','Kerala','Andhra Pradesh','Telangana')
+        WHEN state IN ('Texas','Georgia','Florida','Alabama','Tennessee')
         THEN 'South'
-        WHEN state IN ('Maharashtra','Gujarat','Goa') THEN 'West'
-        WHEN state IN ('Delhi','Uttar Pradesh','Haryana','Punjab','Rajasthan') THEN 'North'
-        ELSE 'East'
+        WHEN state IN ('California','Oregon','Washington') THEN 'West'
+        WHEN state IN ('New York','New Jersey','Massachusetts','Pennsylvania','Connecticut') THEN 'Northeast'
+        ELSE 'Midwest'
     END                                    AS region,
     tier,
     acquisition_channel,
@@ -985,7 +985,7 @@ WHERE c.city = 'Austin'           -- currently attributed to Austin
   AND cdc.city = 'Seattle'         -- but were actually in Seattle
   AND cdc._change_type = 'insert'    -- initial registration city
 GROUP BY 1, 2;
--- Shows: 18,234 orders, ₹1.47 million misattributed from Seattle to Austin
+-- Shows: 18,234 orders, $1.47 million misattributed from Seattle to Austin
 
 -- MIGRATION PLAN:
 -- 1. Build SCD Type 2 snapshot from Bronze CDC history

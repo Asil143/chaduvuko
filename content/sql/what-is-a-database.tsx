@@ -81,7 +81,7 @@ export default function WhatIsADatabase() {
   return (
     <LearnLayout
       title="What is a Database?"
-      description="The definition, the internals, the Indian companies using them, and why SQL is the most valuable skill you can learn in tech"
+      description="The definition, the internals, the US companies using them, and why SQL is the most valuable skill you can learn in tech"
       section="SQL — Module 01"
       readTime="8–12 min"
       updatedAt="April 2026"
@@ -102,7 +102,7 @@ export default function WhatIsADatabase() {
 
       <P><Hl>"Every read gets the correct data"</Hl> — when your Stripe app shows your account balance, it must show the real current balance — not a stale version from 3 seconds ago when another transaction was still in progress. Databases use a property called isolation to ensure you never see partial or in-progress data from another user's session.</P>
 
-      <P><Hl>"Every write either fully succeeds or fully fails"</Hl> — if you transfer ₹1000 from your savings to your current account, two things must happen: ₹1000 leaves savings AND ₹1000 enters current. If the server crashes between those two steps, the database must undo the first step automatically. No half-executed operations. This is called atomicity.</P>
+      <P><Hl>"Every write either fully succeeds or fully fails"</Hl> — if you transfer $1,000 from your savings to your checking account, two things must happen: $1,000 leaves savings AND $1,000 enters checking. If the server crashes between those two steps, the database must undo the first step automatically. No half-executed operations. This is called atomicity.</P>
 
       <P><Hl>"Multiple users never corrupt each other's changes"</Hl> — right now, thousands of people are placing DoorDash orders simultaneously. Two customers might order the last item in a restaurant's inventory at the exact same moment. The database ensures exactly one of them gets it and the other sees "out of stock." Without this guarantee, both orders would go through and the restaurant would be in chaos.</P>
 
@@ -195,7 +195,7 @@ export default function WhatIsADatabase() {
       <P>Primary keys are almost always integers that auto-increment — the database generates 1, 2, 3, 4... automatically every time a new row is inserted. You never type a primary key value manually. The database does it for you. This means every customer, every order, every product always has a unique identifier you can refer to precisely — no ambiguity, no duplicates.</P>
 
       <H>Foreign Keys — How Tables Connect to Each Other</H>
-      <P>The power of a relational database comes from linking tables. The orders table has a column called customer_id. This is a <Hl>Foreign Key</Hl> — it stores the primary key value of a row in another table, creating an enforced link between them. Order 1001 has customer_id = 1. That 1 means Aisha Khan placed this order. The database enforces this link: you cannot insert an order with customer_id = 999 if no customer with id 999 exists. This prevents orphaned records — orders that point to nobody.</P>
+      <P>The power of a relational database comes from linking tables. The orders table has a column called customer_id. This is a <Hl>Foreign Key</Hl> — it stores the primary key value of a row in another table, creating an enforced link between them. Order 1001 has customer_id = 1. That 1 means Sofia Ramirez placed this order. The database enforces this link: you cannot insert an order with customer_id = 999 if no customer with id 999 exists. This prevents orphaned records — orders that point to nobody.</P>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 20px', margin: '20px 0 32px', fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2 }}>
         <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 12 }}>How FreshCart's 6 tables are linked</div>
@@ -254,19 +254,19 @@ export default function WhatIsADatabase() {
       <HR />
 
       {/* ── PART 05 ── */}
-      <Part n="05" title="What 'Relational' Actually Means — And the Databases Indian Companies Use" />
+      <Part n="05" title="What 'Relational' Actually Means — And the Databases US Companies Use" />
 
       <P>The databases you will use SQL on are called <Hl>Relational Database Management Systems (RDBMS)</Hl>. The word "relational" confuses beginners because it sounds like it means the tables are related to each other. That is true, but it is not the origin.</P>
       <P>In 1970, an IBM researcher named Edgar Codd published a landmark paper proposing that data should be stored as mathematical <em>relations</em> — a formal term for a table with rows and columns, with specific mathematical properties that guaranteed consistency. The word stuck. A relational database means: data in tables with rows and columns, tables linked through keys, queried using SQL. MySQL, PostgreSQL, Oracle, SQL Server, and SQLite all qualify.</P>
 
-      <H>What the leading Indian tech companies actually run</H>
+      <H>What the leading US tech companies actually run</H>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12, margin: '20px 0 32px' }}>
         {[
           { db: 'PostgreSQL', color: '#336791', companies: 'Stripe, Brex, Robinhood, Acorns, Shopify', why: 'Open source with zero licensing cost. Handles complex queries, concurrent writes, and JSONB for semi-structured data. Default choice for high-growth fintech and e-commerce startups.' },
-          { db: 'MySQL',      color: '#4479A1', companies: 'DoorDash, Sephora, OYO, Expedia',         why: 'Extremely mature, massive community, dominates high-traffic consumer apps. DoorDash uses MySQL for core order management because of its proven replication and read-scaling.' },
-          { db: 'MS SQL Server', color: '#0078d4', companies: 'HDFC Bank, ICICI, Deloitte clients',   why: 'Enterprise support contracts, Windows Server integration, strong compliance tooling. Standard in Indian banking where RBI-regulated downtime has legal consequences.' },
-          { db: 'Oracle',    color: '#F80000', companies: 'Accenture, KPMG clients, IRCTC, LIC',          why: 'Dominant in legacy enterprise and government. IRCTC runs one of the highest-transaction-volume Oracle databases in Asia. Expensive but deeply entrenched.' },
+          { db: 'MySQL',      color: '#4479A1', companies: 'DoorDash, Sephora, Airbnb, Expedia',         why: 'Extremely mature, massive community, dominates high-traffic consumer apps. DoorDash uses MySQL for core order management because of its proven replication and read-scaling.' },
+          { db: 'MS SQL Server', color: '#0078d4', companies: 'Wells Fargo, Bank of America, Deloitte clients',   why: 'Enterprise support contracts, Windows Server integration, strong compliance tooling. Standard in US banking where federally regulated downtime has legal consequences.' },
+          { db: 'Oracle',    color: '#F80000', companies: 'Accenture, KPMG clients, the IRS, state governments',          why: 'Dominant in legacy enterprise and government. The IRS runs one of the highest-transaction-volume Oracle databases in the US. Expensive but deeply entrenched.' },
           { db: 'SQLite',    color: '#003B57', companies: 'Inside every mobile app',                 why: 'Serverless, zero-configuration, runs on the device itself. Every Android and iOS app — including DoorDash, Venmo, Brex — has an SQLite database storing local data.' },
         ].map(item => (
           <div key={item.db} style={{ background: 'var(--surface)', border: `1px solid ${item.color}25`, borderRadius: 10, padding: '16px' }}>
@@ -415,10 +415,10 @@ ORDER BY revenue DESC;`}
         <p style={{ margin: 0 }}>MongoDB is not relational — it stores JSON documents rather than rows in tables, making it a "NoSQL" database. It trades ACID guarantees and the relational model for flexible schema and horizontal scaling. The relational model dominates structured business data because of its consistency guarantees and the expressive power of SQL for ad-hoc analysis. Knowing SQL means you can work with any RDBMS, because the core language is 95% identical across all of them.</p>
       </IQ>
 
-      <IQ q="Name three databases used by well-known Indian tech companies and explain why they chose them.">
-        <p style={{ margin: '0 0 14px' }}>Stripe uses PostgreSQL as its primary transactional database. PostgreSQL is the dominant choice at Indian fintech startups because it is open source with no licensing cost, handles complex query patterns that payment processing requires, provides JSONB columns for storing semi-structured payment metadata alongside structured transaction records, and has a strong track record of ACID compliance at high concurrency. Every rupee transferred through Stripe touches a PostgreSQL transaction.</p>
+      <IQ q="Name three databases used by well-known US tech companies and explain why they chose them.">
+        <p style={{ margin: '0 0 14px' }}>Stripe uses PostgreSQL as its primary transactional database. PostgreSQL is the dominant choice at US fintech startups because it is open source with no licensing cost, handles complex query patterns that payment processing requires, provides JSONB columns for storing semi-structured payment metadata alongside structured transaction records, and has a strong track record of ACID compliance at high concurrency. Every dollar transferred through Stripe touches a PostgreSQL transaction.</p>
         <p style={{ margin: '0 0 14px' }}>DoorDash uses MySQL for its core order management and logistics systems. MySQL has been proven at extreme transaction volumes in food delivery. Its read-replica architecture lets DoorDash route millions of "check my order status" queries to read replicas while reserving the primary database for writes — ensuring that peak dinner-time load does not overwhelm a single server. MySQL's maturity and the size of its ecosystem also mean DoorDash can hire engineers who already know it.</p>
-        <p style={{ margin: 0 }}>HDFC Bank runs Microsoft SQL Server across much of its core banking infrastructure. SQL Server's enterprise support contracts, deep integration with Windows Server, and long track record with the kind of compliance and audit tooling that RBI-regulated institutions require make it the standard choice in Indian banking. The licensing cost is significant but acceptable when database downtime has direct regulatory and reputational consequences. HDFC also uses Oracle for certain legacy systems — Oracle remains dominant in Indian banking, insurance, and government despite its cost.</p>
+        <p style={{ margin: 0 }}>Wells Fargo runs Microsoft SQL Server across much of its core banking infrastructure. SQL Server's enterprise support contracts, deep integration with Windows Server, and long track record with the kind of compliance and audit tooling that federally regulated institutions require make it the standard choice in US banking. The licensing cost is significant but acceptable when database downtime has direct regulatory and reputational consequences. Wells Fargo also uses Oracle for certain legacy systems — Oracle remains dominant in US banking, insurance, and government despite its cost.</p>
       </IQ>
 
       <HR />
@@ -485,10 +485,10 @@ The employees table is not directly involved in recording the transaction, thoug
           'Every table needs a Primary Key — a column whose value uniquely identifies each row. The database enforces uniqueness and non-nullability automatically. Almost always an auto-incrementing integer.',
           'Foreign Keys create enforced links between tables. You cannot insert a row that references a parent that does not exist. This prevents orphaned records and is the foundation of every JOIN query you will write.',
           'RDBMS (Relational Database Management System) is the category that MySQL, PostgreSQL, Oracle, SQL Server, and SQLite belong to. SQL is the standardised query language for this model — 95% identical across all of them.',
-          'In Indian tech: PostgreSQL is default at fintech startups (Stripe, Brex, Robinhood). MySQL dominates high-traffic consumer apps (DoorDash, Sephora). MS SQL Server is standard in banking (HDFC, ICICI). SQLite runs inside every mobile app.',
+          'In US tech: PostgreSQL is default at fintech startups (Stripe, Brex, Robinhood). MySQL dominates high-traffic consumer apps (DoorDash, Sephora). MS SQL Server is standard in banking (Wells Fargo, Bank of America). SQLite runs inside every mobile app.',
           'FreshCart — 6 tables, 218 total rows, realistic US data — is the dataset for all 62 modules. Learn it once and use it for every single query in the course.',
           'A live SQL playground powered by DuckDB-WASM runs on every module page. Zero install, zero account, zero server — the FreshCart database is pre-loaded and ready the moment the page opens.',
-          'SQL is not just a "data" skill. Every product manager, growth analyst, operations lead, and finance analyst at every Indian tech company uses SQL daily. It is the highest-return technical skill learnable in under 3 months.',
+          'SQL is not just a "data" skill. Every product manager, growth analyst, operations lead, and finance analyst at every US tech company uses SQL daily. It is the highest-return technical skill learnable in under 3 months.',
         ]}
       />
 

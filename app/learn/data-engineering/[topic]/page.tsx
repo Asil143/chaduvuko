@@ -90,7 +90,7 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
   'data-quality':                 { title: 'Data Quality — Dimensions, Testing and Validation',   description: 'The six quality dimensions, how to test for each, what breaks when you skip this.'            },
   'monitoring-observability':     { title: 'Data Observability — Metrics, Logging, Anomaly Detection', description: 'How to know something is wrong before your users do.'                                   },
   'data-governance':              { title: 'Data Governance — Catalogues, Lineage, Access Control', description: 'Who owns the data, who can access it, where did it come from.'                              },
-  'security-compliance':          { title: 'Security and Compliance for Data Engineers',          description: 'GDPR, India DPDP Act, and how to build compliant systems by design.'                          },
+  'security-compliance':          { title: 'Security and Compliance for Data Engineers',          description: 'GDPR, CCPA, and how to build compliant systems by design.'                          },
   'streaming-data':               { title: 'Streaming Data — What It Is and How It Works',        description: 'Events, producers, consumers, offsets, consumer groups — the concepts.'                       },
   'message-brokers-queues':       { title: 'Message Brokers and Queues — Internal Mechanics',     description: 'Durability, ordering, replayability — the inside story.'                                      },
   'distributed-systems':          { title: 'Distributed Systems for Data Engineers',              description: 'CAP theorem, partitioning, replication, fault tolerance.'                                      },

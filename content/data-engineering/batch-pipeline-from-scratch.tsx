@@ -477,7 +477,7 @@ VALID_STATUSES = frozenset({
 })
 
 VALID_PAYMENT_METHODS = frozenset({
-    'upi', 'card', 'netbanking', 'wallet', 'cod', 'emi',
+    'debit_card', 'card', 'netbanking', 'wallet', 'cod', 'emi',
 })
 
 
@@ -517,7 +517,7 @@ def validate_row(raw: dict) -> ValidationResult:
         return ValidationResult(False, None,
             f'negative_order_amount: \${amount} for order \${raw["order_id"]}')
 
-    if amount > Decimal('500000'):   # ₹5 thousand — suspiciously large
+    if amount > Decimal('500000'):   # $5 thousand — suspiciously large
         return ValidationResult(False, None,
             f'suspiciously_large_amount: \${amount} for order \${raw["order_id"]}')
 
@@ -1199,7 +1199,7 @@ def valid_order(**overrides) -> dict:
         'delivery_fee':   40.00,
         'discount_amount': 0.00,
         'status':         'delivered',
-        'payment_method': 'upi',
+        'payment_method': 'debit_card',
         'payment_status': 'captured',
         'created_at':     datetime(2026, 3, 17, 14, 0, 0, tzinfo=timezone.utc),
         'updated_at':     datetime(2026, 3, 17, 14, 32, 0, tzinfo=timezone.utc),
@@ -1346,7 +1346,7 @@ def base_row(**overrides) -> dict:
         'delivery_fee':   40.00,
         'discount_amount': 20.00,
         'status':         'delivered',
-        'payment_method': 'upi',
+        'payment_method': 'debit_card',
         'payment_status': 'captured',
         'created_at':     datetime(2026, 3, 17, 14, 0, 0, tzinfo=timezone.utc),
         'updated_at':     datetime(2026, 3, 17, 14, 32, 0, tzinfo=timezone.utc),

@@ -243,7 +243,7 @@ SKILLS PROFILE:
             { label: 'Core tools', value: 'Airflow, dbt, Spark, Kafka, cloud storage' },
             { label: 'Output', value: 'Reliable data pipelines and clean data tables' },
             { label: 'Collaborates most with', value: 'Data analysts, data scientists, platform/infra teams' },
-            { label: 'India salary (mid, Seattle)', value: '₹18–30 LPA (product company)' },
+            { label: 'US salary (mid, Seattle)', value: '$110K–$150K (product company)' },
           ].map((item) => (
             <div key={item.label} style={{
               background: 'var(--surface)', border: '1px solid rgba(0,230,118,0.2)',
@@ -355,7 +355,7 @@ SKILLS PROFILE:
             { label: 'Core tools', value: 'BI tools (Power BI/Tableau/Looker/Metabase), SQL IDE' },
             { label: 'Output', value: 'Dashboards, reports, ad-hoc analysis, metric definitions' },
             { label: 'Collaborates most with', value: 'Product managers, business teams, data engineers' },
-            { label: 'India salary (mid, Seattle)', value: '₹8–18 LPA (product company)' },
+            { label: 'US salary (mid, Seattle)', value: '$85K–$115K (product company)' },
           ].map((item) => (
             <div key={item.label} style={{
               background: 'var(--surface)', border: '1px solid rgba(123,97,255,0.2)',
@@ -475,7 +475,7 @@ SKILLS PROFILE:
             { label: 'Core tools', value: 'Jupyter notebooks, MLflow, feature stores, experiment trackers' },
             { label: 'Output', value: 'Trained models, experiment results, predictions, research findings' },
             { label: 'Collaborates most with', value: 'Data engineers (features), ML engineers (deployment), product (requirements)' },
-            { label: 'India salary (mid, Seattle)', value: '₹15–28 LPA (product company)' },
+            { label: 'US salary (mid, Seattle)', value: '$115K–$155K (product company)' },
           ].map((item) => (
             <div key={item.label} style={{
               background: 'var(--surface)', border: '1px solid rgba(249,115,22,0.2)',
@@ -590,7 +590,7 @@ SKILLS PROFILE:
             { label: 'Output', value: 'Production model APIs, feature stores, retraining pipelines, model monitoring' },
             { label: 'Collaborates most with', value: 'Data scientists (models), data engineers (features), platform/infra (deployment)' },
             { label: 'Background', value: 'Often software engineers who moved into ML, or data scientists who went deep on engineering' },
-            { label: 'India salary (mid, Seattle)', value: '₹20–35 LPA (product company)' },
+            { label: 'US salary (mid, Seattle)', value: '$130K–$175K (product company)' },
           ].map((item) => (
             <div key={item.label} style={{
               background: 'var(--surface)', border: '1px solid rgba(66,133,244,0.2)',
@@ -1161,7 +1161,7 @@ The broader principle: data engineering success is measured by whether downstrea
             fix: 'Feature computation logic must be the single source of truth — defined once, used in both batch training and real-time serving. Use a feature store (like Feast or Tecton) that maintains one definition of each feature and serves it to both training pipelines and production inference. If a feature store is not available, at minimum the feature computation logic should be in a shared library that both pipelines import from, not duplicated.',
           },
           {
-            error: `Analyst receives a Power BI report from the data team showing ₹4.2 million daily revenue. The finance team's report shows ₹3.9 million for the same day. Stakeholders are arguing about which number is correct.`,
+            error: `Analyst receives a Power BI report from the data team showing $4.2 million daily revenue. The finance team's report shows $3.9 million for the same day. Stakeholders are arguing about which number is correct.`,
             cause: 'Two independent calculations of "revenue" exist with no agreed single source of truth. The data team\'s number likely includes a category of transactions that finance excludes (or vice versa) — perhaps refunds, pending settlements, or tax amounts are treated differently in each system.',
             fix: 'This is a governance problem, not a pipeline problem. Convene a meeting with data engineering, analytics, and finance to define "revenue" unambiguously: which transaction statuses are included, whether refunds are netted, whether tax is included, and which timestamp determines which day a transaction belongs to. Write the agreed definition into the dbt model description. Create a single authoritative revenue table. Both the data dashboard and the finance report must read from the same source. Eliminate the second calculation.',
           },

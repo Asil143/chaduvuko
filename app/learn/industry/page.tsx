@@ -79,7 +79,7 @@ const companies = [
     sponsorsH1B: true, openRoles: '500+',
     problem: 'Modernizes data infrastructure for healthcare, insurance, and banking clients — migrating petabytes from on-premises Oracle and Teradata systems to cloud-native platforms.',
     tools: ['Azure Data Factory', 'Azure Databricks', 'Synapse', 'SQL', 'Python', 'Spark'],
-    why: 'One of the top H1B sponsors in the United States consistently. Strong hiring from Indian universities. Azure data engineering roles make up a large portion of their data practice.',
+    why: 'One of the top H1B sponsors in the United States consistently. Extensive global campus hiring pipelines. Azure data engineering roles make up a large portion of their data practice.',
   },
   {
     name: 'JPMorgan Chase', logo: '🏦', tier: 'Finance', color: '#003DA5', hq: 'New York, NY',

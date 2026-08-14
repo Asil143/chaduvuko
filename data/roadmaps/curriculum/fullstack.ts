@@ -116,7 +116,7 @@ The practice progression would be:
 
 # Real-World Applications
 Full Stack Developers with expertise in React, Node.js, databases, and cloud computing are in high demand in various industries, including:
-- **E-commerce**: companies like Amazon, Flipkart, and Paytm use React and Node.js for their web applications
+- **E-commerce**: companies like Amazon, eBay, and Shopify use React and Node.js for their web applications
 - **Healthcare**: companies like Practo and Medlife use React and Node.js for their web applications
 - **Finance**: companies like PayPal and Stripe use React and Node.js for their web applications
 

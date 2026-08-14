@@ -143,7 +143,7 @@ export default function AgentsToolUsePage() {
           Module 54 built a toy ReAct agent with text parsing.
           This module builds production agents — structured tool calling,
           persistent memory, failure recovery, and the architectural patterns
-          Indian tech teams actually ship.
+          top tech teams actually ship.
         </h2>
 
         <p style={S.p}>
@@ -316,7 +316,7 @@ RAZORPAY_TOOLS = [
                 'type': 'object',
                 'properties': {
                     'transaction_id': {'type': 'string'},
-                    'amount':         {'type': 'number', 'description': 'Refund amount in INR'},
+                    'amount':         {'type': 'number', 'description': 'Refund amount in USD'},
                     'reason':         {'type': 'string'},
                 },
                 'required': ['transaction_id', 'amount', 'reason'],
@@ -329,14 +329,14 @@ RAZORPAY_TOOLS = [
 MOCK_DB = {
     'pay_ABC123': {
         'id': 'pay_ABC123', 'status': 'captured', 'amount': 4999,
-        'currency': 'INR', 'merchant_id': 'MID001',
-        'customer': 'Priya Sharma', 'method': 'upi',
+        'currency': 'USD', 'merchant_id': 'MID001',
+        'customer': 'Sarah Chen', 'method': 'ach',
         'created_at': '2026-03-28T14:23:00Z',
     },
     'pay_XYZ789': {
         'id': 'pay_XYZ789', 'status': 'failed', 'amount': 12500,
-        'currency': 'INR', 'merchant_id': 'MID002',
-        'customer': 'Rahul Kumar', 'method': 'card',
+        'currency': 'USD', 'merchant_id': 'MID002',
+        'customer': 'Michael Brown', 'method': 'card',
         'error_code': 'GATEWAY_ERROR',
         'created_at': '2026-03-29T09:11:00Z',
     },
@@ -352,21 +352,21 @@ def get_merchant_account(merchant_id: str) -> dict:
     return {
         'id': merchant_id, 'name': 'Demo Merchant',
         'settlement_cycle': 'T+2', 'kyc_status': 'verified',
-        'enabled_methods': ['upi', 'card', 'netbanking'],
-        'monthly_limit_inr': 500000,
+        'enabled_methods': ['ach', 'card', 'wire'],
+        'monthly_limit_usd': 500000,
     }
 
 def search_knowledge_base(query: str) -> dict:
     kb = {
         'gateway error': 'GATEWAY_ERROR means the bank gateway timed out. The payment can be retried after 5 minutes.',
-        'settlement': 'Domestic payments settle T+2 business days. Minimum settlement amount Rs 100.',
-        'refund': 'Refunds take 2-3 days for UPI, 5-7 days for credit cards. No fee charged.',
-        'upi': 'UPI payments are instant. UPI transaction limit is Rs 1 thousand per transaction.',
+        'settlement': 'Domestic payments settle T+2 business days. Minimum settlement amount $100.',
+        'refund': 'Refunds take 2-3 days for ACH, 5-7 days for credit cards. No fee charged.',
+        'instant transfer': 'Instant transfers are processed immediately. Instant transfer limit is $1,000 per transaction.',
     }
     query_lower = query.lower()
     for key, answer in kb.items():
         if key in query_lower:
-            return {'result': answer, 'source': 'razorpay-docs'}
+            return {'result': answer, 'source': 'stripe-docs'}
     return {'result': 'No specific information found. Please contact support.', 'source': 'none'}
 
 def create_support_ticket(merchant_id, issue_type, description, priority) -> dict:

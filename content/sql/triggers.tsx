@@ -530,16 +530,16 @@ CREATE TRIGGER trg_orders_protect_created_at
 -- Shows what the trigger would store after normalisation
 SELECT
   -- Raw inputs (as an app might submit them)
-  '  priya  '            AS raw_first_name,
-  '  SHARMA '            AS raw_last_name,
-  'Priya.Sharma@GMAIL.COM' AS raw_email,
+  '  sofia  '            AS raw_first_name,
+  '  RAMIREZ '            AS raw_last_name,
+  'Sofia.Ramirez@GMAIL.COM' AS raw_email,
   'BANGALORE'            AS raw_city,
   NULL                   AS raw_loyalty_tier,
 
   -- What BEFORE INSERT trigger would store:
-  INITCAP(LOWER(TRIM('  priya  ')))              AS stored_first_name,
-  INITCAP(LOWER(TRIM('  SHARMA ')))              AS stored_last_name,
-  LOWER(TRIM('Priya.Sharma@GMAIL.COM'))          AS stored_email,
+  INITCAP(LOWER(TRIM('  sofia  ')))              AS stored_first_name,
+  INITCAP(LOWER(TRIM('  RAMIREZ ')))              AS stored_last_name,
+  LOWER(TRIM('Sofia.Ramirez@GMAIL.COM'))          AS stored_email,
   INITCAP(LOWER(TRIM('BANGALORE')))              AS stored_city,
   COALESCE(NULL, 'Bronze')                       AS stored_loyalty_tier;`}
         height={215}
@@ -959,7 +959,7 @@ ORDER BY event_object_table, trigger_name, event;`}
       {/* ── PART 12 ── */}
       <Part n="12" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at HDFC Bank. The compliance team requires a complete audit trail for every change to customer account data — who changed what, from what value, to what value, and exactly when. No application code should be trusted to implement this consistently — any developer who forgets the audit call creates a compliance gap. A trigger is the correct solution: it fires for every write, from every client, without exception.</P>
+      <P>You are a backend engineer at Chase Bank. The compliance team requires a complete audit trail for every change to customer account data — who changed what, from what value, to what value, and exactly when. No application code should be trusted to implement this consistently — any developer who forgets the audit call creates a compliance gap. A trigger is the correct solution: it fires for every write, from every client, without exception.</P>
 
       <TimeBlock time="10:00 AM" label="Compliance requirement received">
         Every INSERT, UPDATE, and DELETE on the customers table must be logged — old values, new values, changed columns, session user, timestamp. Cannot rely on application code.
@@ -1171,9 +1171,9 @@ CREATE TRIGGER trg_customers_normalise
 
 -- Verify: what would be stored for raw input
 SELECT
-  INITCAP(LOWER(TRIM('  PRIYA  ')))          AS stored_first,
-  INITCAP(LOWER(TRIM('sharma')))             AS stored_last,
-  LOWER(TRIM('Priya@GMAIL.COM'))             AS stored_email,
+  INITCAP(LOWER(TRIM('  EMILY  ')))          AS stored_first,
+  INITCAP(LOWER(TRIM('johnson')))             AS stored_last,
+  LOWER(TRIM('Emily@GMAIL.COM'))             AS stored_email,
   COALESCE(NULL, CURRENT_DATE)               AS stored_joined,
   COALESCE(NULL, 'Bronze')                   AS stored_tier;
 

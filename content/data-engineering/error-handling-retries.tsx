@@ -409,7 +409,7 @@ def retry_with_backoff(
 )
 def fetch_payments(from_ts: int, to_ts: int) -> dict:
     response = requests.get(
-        'https://api.razorpay.com/v1/payments',
+        'https://api.stripe.com/v1/payments',
         params={'from': from_ts, 'to': to_ts},
         auth=HTTPBasicAuth(KEY_ID, KEY_SECRET),
         timeout=30,
@@ -727,8 +727,8 @@ class CircuitOpenError(Exception):
 # ── USAGE IN A DATA PIPELINE ──────────────────────────────────────────────────
 
 # Create one circuit breaker per downstream service:
-razorpay_circuit = CircuitBreaker(
-    name              = 'razorpay_api',
+stripe_circuit = CircuitBreaker(
+    name              = 'stripe_api',
     failure_threshold = 5,    # trip after 5 failures in 60 seconds
     cooldown_s        = 30.0, # test recovery after 30 seconds
 )
@@ -736,9 +736,9 @@ razorpay_circuit = CircuitBreaker(
 def fetch_payments_safe(params: dict) -> dict:
     """Fetch payments, respecting the circuit breaker."""
     try:
-        return razorpay_circuit.call(
+        return stripe_circuit.call(
             requests.get,
-            'https://api.razorpay.com/v1/payments',
+            'https://api.stripe.com/v1/payments',
             params=params,
             auth=HTTPBasicAuth(KEY_ID, KEY_SECRET),
             timeout=30,

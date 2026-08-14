@@ -715,7 +715,7 @@ WHERE customer_id = 5;
 
 -- INSERT through the view (inserts into base table):
 INSERT INTO vw_active_customers (first_name, last_name, email, city, loyalty_tier)
-VALUES ('Ananya', 'Reddy', 'ananya@test.com', 'Boston', 'Gold');
+VALUES ('Jasmine', 'Rodriguez', 'jasmine@test.com', 'Boston', 'Gold');
 
 -- PROBLEM: a user could INSERT a Bronze customer through the view
 -- even though the view filters out Bronze customers

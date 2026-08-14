@@ -121,9 +121,9 @@ export default function AndOrNot() {
         <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '.08em' }}>Real questions from real teams</div>
         {[
           { team: 'Growth', q: '"Show me Gold and Platinum customers from Seattle who joined after January 2022."' },
-          { team: 'Finance', q: '"Find all UPI orders above ₹1,000 that are either Cancelled or Returned."' },
-          { team: 'Ops', q: '"Which products are out of stock AND priced above ₹200?"' },
-          { team: 'HR', q: '"Employees in the Management department earning above ₹50,000 OR any Store Manager regardless of salary."' },
+          { team: 'Finance', q: '"Find all Zelle orders above $1,000 that are either Cancelled or Returned."' },
+          { team: 'Ops', q: '"Which products are out of stock AND priced above $200?"' },
+          { team: 'HR', q: '"Employees in the Management department earning above $50,000 OR any Store Manager regardless of salary."' },
         ].map(item => (
           <div key={item.team} style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
             <span style={{ fontSize: 10, fontWeight: 700, color: C, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '.08em', paddingTop: 3, flexShrink: 0, width: 60 }}>{item.team}</span>
@@ -172,13 +172,13 @@ WHERE loyalty_tier = 'Gold'
       />
 
       <SQLPlayground
-        initialQuery={`-- Delivered orders paid by UPI above ₹500
+        initialQuery={`-- Delivered orders paid by Zelle above $500
 -- Three conditions — all must be true
 SELECT order_id, customer_id, order_date,
        payment_method, total_amount, order_status
 FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'UPI'
+  AND payment_method = 'Zelle'
   AND total_amount > 500
 ORDER BY total_amount DESC;`}
         height={160}
@@ -197,7 +197,7 @@ WHERE unit_price > 200
       />
 
       <SQLPlayground
-        initialQuery={`-- Employees hired between 2020 and 2021 earning above ₹40,000
+        initialQuery={`-- Employees hired between 2020 and 2021 earning above $40,000
 SELECT first_name, last_name, role, salary, hire_date
 FROM employees
 WHERE hire_date >= '2020-01-01'
@@ -331,12 +331,12 @@ ORDER BY category;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Delivered orders that did NOT use UPI
+        initialQuery={`-- Delivered orders that did NOT use Zelle
 -- Finding orders paid by Card, COD, or NetBanking
 SELECT order_id, order_date, payment_method, total_amount
 FROM orders
 WHERE order_status = 'Delivered'
-  AND NOT payment_method = 'UPI'
+  AND NOT payment_method = 'Zelle'
 ORDER BY total_amount DESC;`}
         height={130}
         showSchema={false}
@@ -433,7 +433,7 @@ ORDER BY loyalty_tier;`}
 
       <SQLPlayground
         initialQuery={`-- High-value problem orders:
--- (Cancelled OR Returned) AND total above ₹500
+-- (Cancelled OR Returned) AND total above $500
 -- These are the ones finance needs to investigate for refunds
 SELECT order_id, customer_id, store_id,
        order_date, order_status, payment_method, total_amount
@@ -447,7 +447,7 @@ ORDER BY total_amount DESC;`}
 
       <SQLPlayground
         initialQuery={`-- Premium products in a specific price range
--- NOT a staple AND priced between ₹100 and ₹350
+-- NOT a staple AND priced between $100 and $350
 SELECT product_name, category, brand, unit_price, in_stock
 FROM products
 WHERE NOT category = 'Staples'
@@ -459,7 +459,7 @@ ORDER BY unit_price;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Store managers OR employees with salary above ₹60,000
+        initialQuery={`-- Store managers OR employees with salary above $60,000
 -- Either condition qualifies for the leadership report
 SELECT first_name, last_name, role, salary, store_id
 FROM employees
@@ -552,7 +552,7 @@ ORDER BY role;`}
 SELECT *
 FROM orders
 WHERE order_status = 'Delivered'    -- primary filter
-  AND payment_method = 'UPI'        -- secondary filter
+  AND payment_method = 'Zelle'      -- secondary filter
   AND total_amount > 1000           -- threshold filter
   AND order_date >= '2024-01-01';   -- date filter
 
@@ -603,16 +603,16 @@ ORDER BY loyalty_tier, joined_date DESC;`}
         showSchema={true}
       />
 
-      <H>Finance team — UPI orders that failed</H>
+      <H>Finance team — Zelle orders that failed</H>
 
       <SQLPlayground
-        initialQuery={`-- "All UPI orders above ₹1,000 that are Cancelled or Returned"
+        initialQuery={`-- "All Zelle orders above $1,000 that are Cancelled or Returned"
 SELECT
   order_id, customer_id,
   order_date, order_status,
   payment_method, total_amount
 FROM orders
-WHERE payment_method = 'UPI'
+WHERE payment_method = 'Zelle'
   AND total_amount > 1000
   AND (order_status = 'Cancelled' OR order_status = 'Returned')
 ORDER BY total_amount DESC;`}
@@ -623,7 +623,7 @@ ORDER BY total_amount DESC;`}
       <H>Operations team — stock and price analysis</H>
 
       <SQLPlayground
-        initialQuery={`-- "Products out of stock AND priced above ₹200"
+        initialQuery={`-- "Products out of stock AND priced above $200"
 -- Procurement needs to know what expensive items to reorder
 SELECT
   product_name, category, brand,
@@ -639,7 +639,7 @@ ORDER BY unit_price DESC;`}
       <H>HR team — leadership compensation review</H>
 
       <SQLPlayground
-        initialQuery={`-- "Management dept above ₹50,000 OR any Store Manager"
+        initialQuery={`-- "Management dept above $50,000 OR any Store Manager"
 SELECT
   first_name, last_name, role,
   department, salary, store_id
@@ -659,11 +659,11 @@ ORDER BY salary DESC;`}
       <P>You are a data analyst at Brex, a Seattle-based fintech that rewards credit card users. The growth team calls an urgent meeting — they are preparing a targeted cashback campaign and need a segmented customer list by end of day.</P>
 
       <TimeBlock time="3:00 PM" label="Campaign brief arrives">
-        The growth manager explains three segments for the cashback campaign. Segment A: high-spending users in metro cities (Delhi, Seattle, New York) who have been active in the last 60 days. Segment B: users in Tier 2 cities who have a credit score above 750 but have been inactive for more than 30 days — the reactivation target. Segment C: new users (joined in the last 90 days) who have already completed at least one high-value transaction. Each segment needs a separate list with user IDs, cities, and relevant metrics.
+        The growth manager explains three segments for the cashback campaign. Segment A: high-spending users in major metro cities (Seattle, New York, Chicago) who have been active in the last 60 days. Segment B: users in smaller secondary markets who have a credit score above 750 but have been inactive for more than 30 days — the reactivation target. Segment C: new users (joined in the last 90 days) who have already completed at least one high-value transaction. Each segment needs a separate list with user IDs, cities, and relevant metrics.
       </TimeBlock>
 
       <TimeBlock time="3:15 PM" label="You translate the brief into WHERE conditions">
-        Segment A requires: city IN metro list AND last_active_date within 60 days. Segment B requires: city NOT IN metro list AND credit_score greater than 750 AND last_active_date more than 30 days ago. Segment C requires: joined_date within 90 days AND at least one transaction above ₹5,000. Each segment becomes a separate WHERE clause. You build them one at a time, verifying row counts before sharing.
+        Segment A requires: city IN metro list AND last_active_date within 60 days. Segment B requires: city NOT IN metro list AND credit_score greater than 750 AND last_active_date more than 30 days ago. Segment C requires: joined_date within 90 days AND at least one transaction above $5,000. Each segment becomes a separate WHERE clause. You build them one at a time, verifying row counts before sharing.
       </TimeBlock>
 
       <CodeBlock
@@ -677,7 +677,7 @@ SELECT
   c.loyalty_tier
 FROM customers c
 WHERE (c.city = 'Seattle'
-    OR c.city = 'Delhi'
+    OR c.city = 'Chicago'
     OR c.city = 'New York')
   AND (c.loyalty_tier = 'Gold'
     OR c.loyalty_tier = 'Platinum')
@@ -705,7 +705,7 @@ ORDER BY c.city;`}
 
       <IQ q="What is the difference between AND and OR? When would you use each?">
         <p style={{ margin: '0 0 14px' }}>AND returns TRUE only when both conditions are true — it narrows results by requiring all conditions to be satisfied simultaneously. Every additional AND condition makes the filter more restrictive. OR returns TRUE when at least one condition is true — it broadens results by accepting rows that satisfy any of the conditions. Every additional OR condition makes the filter more permissive.</p>
-        <p style={{ margin: '0 0 14px' }}>Use AND when you need rows that satisfy multiple criteria simultaneously: orders that are both delivered AND paid by UPI AND above ₹1,000. All three characteristics must be present in the same row. Use OR when you need rows that match any of several alternative criteria: customers from Seattle OR Austin OR New York. A customer matching any one city qualifies.</p>
+        <p style={{ margin: '0 0 14px' }}>Use AND when you need rows that satisfy multiple criteria simultaneously: orders that are both delivered AND paid by Zelle AND above $1,000. All three characteristics must be present in the same row. Use OR when you need rows that match any of several alternative criteria: customers from Seattle OR Austin OR New York. A customer matching any one city qualifies.</p>
         <p style={{ margin: 0 }}>A practical test: if you read the question with "AND" and "OR" literally, the answer is usually correct. "Give me customers from Seattle AND with Gold tier" — AND. "Give me customers from Seattle OR Austin" — OR. "Give me Gold or Platinum customers from Seattle" — the "or" applies to tier, so OR for tier, then AND for the city: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Seattle'.</p>
       </IQ>
 
@@ -716,7 +716,7 @@ ORDER BY c.city;`}
       </IQ>
 
       <IQ q="Given the query: WHERE status = 'Delivered' OR status = 'Returned' AND amount > 1000 — what does it actually return?">
-        <p style={{ margin: '0 0 14px' }}>Due to operator precedence (AND before OR), this query is evaluated as: WHERE status = 'Delivered' OR (status = 'Returned' AND amount &gt; 1000). It returns two groups of rows: all rows where status is 'Delivered' regardless of amount (every delivered order, whether ₹10 or ₹100,000), plus rows where status is 'Returned' AND amount is greater than 1,000.</p>
+        <p style={{ margin: '0 0 14px' }}>Due to operator precedence (AND before OR), this query is evaluated as: WHERE status = 'Delivered' OR (status = 'Returned' AND amount &gt; 1000). It returns two groups of rows: all rows where status is 'Delivered' regardless of amount (every delivered order, whether $10 or $100,000), plus rows where status is 'Returned' AND amount is greater than 1,000.</p>
         <p style={{ margin: '0 0 14px' }}>This is almost certainly not what was intended. The author likely wanted all Delivered or Returned orders with amount above 1,000. The correct query uses parentheses: WHERE (status = 'Delivered' OR status = 'Returned') AND amount &gt; 1000. The parentheses force the OR to be evaluated first, grouping the two status values, and then AND applies the amount threshold to the combined group.</p>
         <p style={{ margin: 0 }}>This type of bug is particularly insidious because the query runs without error and returns results — just wrong results. The only way to catch it is to understand precedence rules and verify results against expected counts. Always run a SELECT COUNT(*) to verify the row count makes sense before using the results for any decision. If Delivered orders are 18 of your 30 orders, a query returning 22 rows for "delivered or returned above 1000" should immediately prompt a precedence check.</p>
       </IQ>
@@ -766,7 +766,7 @@ ORDER BY c.city;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart finance team needs two separate reports. Report 1: All orders from store ST001 OR ST008 that were delivered AND paid by either Card or NetBanking — sorted by total_amount descending. Report 2: All orders that are NOT delivered (any other status) AND have a total_amount above ₹400. Write both queries."
+        question="The FreshCart finance team needs two separate reports. Report 1: All orders from store ST001 OR ST008 that were delivered AND paid by either Card or NetBanking — sorted by total_amount descending. Report 2: All orders that are NOT delivered (any other status) AND have a total_amount above $400. Write both queries."
         hint="Report 1 needs parentheses for the store OR and the payment method OR, then AND for the status and connecting the groups. Report 2 uses order_status <> 'Delivered' (or NOT order_status = 'Delivered') AND total_amount > 400."
         answer={`-- Report 1: Specific stores, delivered, card/netbanking
 SELECT order_id, store_id, order_date,
@@ -777,7 +777,7 @@ WHERE (store_id = 'ST001' OR store_id = 'ST008')
   AND (payment_method = 'Card' OR payment_method = 'NetBanking')
 ORDER BY total_amount DESC;
 
--- Report 2: Non-delivered orders above ₹400
+-- Report 2: Non-delivered orders above $400
 SELECT order_id, store_id, order_date,
        order_status, total_amount
 FROM orders

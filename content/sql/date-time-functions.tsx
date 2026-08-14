@@ -523,7 +523,7 @@ strftime(order_date, '%H:%M:%S')        -- '14:30:00'
 SELECT
   order_id,
   order_date,
-  strftime('%d/%m/%Y', order_date)          AS indian_format,
+  strftime('%d/%m/%Y', order_date)          AS dd_mm_format,
   strftime('%Y-%m-%d', order_date)          AS iso_format,
   'Week ' || strftime('%W', order_date) || ', ' || strftime('%Y', order_date) AS week_label,
   CASE CAST(strftime('%w', order_date) AS INTEGER)
@@ -725,20 +725,20 @@ ORDER BY order_date;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="Timezone Handling" />
 
-      <P>Timezones matter for any platform with users or stores in multiple regions. India uses IST (UTC+5:30) — a single timezone, which simplifies things. Global platforms need to store timestamps in UTC and convert for display.</P>
+      <P>Timezones matter for any platform with users or stores in multiple regions. The US alone spans six timezones — a platform with stores in Seattle and Boston already handles a 3-hour offset within one country. Global platforms need to store timestamps in UTC and convert for display.</P>
 
       <CodeBlock
         label="Timezone functions"
         code={`-- AT TIME ZONE: convert between timezones
--- Convert UTC timestamp to IST for display:
-NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata'
+-- Convert UTC timestamp to ET for display:
+NOW() AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York'
 -- Or with the offset directly:
-NOW() AT TIME ZONE 'Asia/Kolkata'
+NOW() AT TIME ZONE 'America/New_York'
 
--- Common Indian timezone: 'Asia/Kolkata' (IST = UTC+5:30)
+-- Common US timezone: 'America/New_York' (ET = UTC-5/-4 depending on DST)
 
 -- TIMEZONE() in DuckDB:
-timezone('Asia/Kolkata', NOW())
+timezone('America/New_York', NOW())
 
 -- Best practices for multi-region platforms:
 -- 1. Store all timestamps as TIMESTAMPTZ (with timezone) in UTC
@@ -747,19 +747,19 @@ timezone('Asia/Kolkata', NOW())
 --    (applying timezone conversion to a column prevents index usage)
 
 -- Correct pattern for filtering by local time:
-WHERE created_at >= '2024-01-15 00:00:00+05:30'
-  AND created_at <  '2024-01-16 00:00:00+05:30'
+WHERE created_at >= '2024-01-15 00:00:00-08:00'
+  AND created_at <  '2024-01-16 00:00:00-08:00'
 -- Database converts the literals to UTC internally — index can be used`}
       />
 
       <SQLPlayground
         initialQuery={`-- SQLite has no timezone support — datetime() operates in UTC
--- Manually add IST offset (+5:30) for display
+-- Manually subtract the PST offset (-8:00) for display
 SELECT
   datetime('now')                              AS utc_now,
-  datetime('now', '+5 hours', '+30 minutes')   AS ist_approx,
-  date('now', '+5 hours', '+30 minutes')       AS ist_date,
-  time('now', '+5 hours', '+30 minutes')       AS ist_time;`}
+  datetime('now', '-8 hours')                  AS pst_approx,
+  date('now', '-8 hours')                      AS pst_date,
+  time('now', '-8 hours')                      AS pst_time;`}
         height={145}
         showSchema={false}
       />
@@ -927,8 +927,8 @@ ORDER BY week_start;`}
 
       <IQ q="How do you handle timezones in SQL for a multi-region application?">
         <p style={{ margin: '0 0 14px' }}>The foundational rule: store all timestamps in UTC. Use the TIMESTAMPTZ (timestamp with time zone) column type in PostgreSQL. When data is inserted, the database converts the local time to UTC for storage. When data is read, it can be converted back to any local timezone for display. Storing in UTC means the stored values are unambiguous — there is no confusion about which timezone an event occurred in, and daylight saving time transitions do not create duplicates or gaps.</p>
-        <p style={{ margin: '0 0 14px' }}>To convert for display: SELECT created_at AT TIME ZONE 'Asia/Kolkata' AS ist_time FROM events. This converts the UTC-stored timestamp to IST for display without modifying the stored value. In DuckDB: timezone('Asia/Kolkata', created_at). The AT TIME ZONE expression handles DST transitions automatically when using named timezone identifiers ('Asia/Kolkata') rather than fixed offsets ('+05:30') — named identifiers know about DST rules, fixed offsets do not.</p>
-        <p style={{ margin: 0 }}>For filtering: never apply timezone conversion to the stored column in WHERE — this prevents index usage. Instead, convert the filter boundary values to UTC: WHERE created_at {'>'}= '2024-01-15 00:00:00+05:30' AND created_at {'<'} '2024-01-16 00:00:00+05:30'. The database converts the literal values to UTC internally and compares against the UTC-stored timestamps — the index can be used for a range scan. For reports aggregated by local day: convert to local timezone first (in a CTE or derived table), then truncate and group. India has a single timezone (IST, UTC+5:30) which simplifies timezone handling significantly — the real complexity arises in platforms serving users in multiple countries with different timezones and DST rules.</p>
+        <p style={{ margin: '0 0 14px' }}>To convert for display: SELECT created_at AT TIME ZONE 'America/Los_Angeles' AS pst_time FROM events. This converts the UTC-stored timestamp to Pacific time for display without modifying the stored value. In DuckDB: timezone('America/Los_Angeles', created_at). The AT TIME ZONE expression handles DST transitions automatically when using named timezone identifiers ('America/Los_Angeles') rather than fixed offsets ('-08:00') — named identifiers know about DST rules, fixed offsets do not.</p>
+        <p style={{ margin: 0 }}>For filtering: never apply timezone conversion to the stored column in WHERE — this prevents index usage. Instead, convert the filter boundary values to UTC: WHERE created_at {'>'}= '2024-01-15 00:00:00-08:00' AND created_at {'<'} '2024-01-16 00:00:00-08:00'. The database converts the literal values to UTC internally and compares against the UTC-stored timestamps — the index can be used for a range scan. For reports aggregated by local day: convert to local timezone first (in a CTE or derived table), then truncate and group. A platform operating out of a single US timezone can simplify this handling somewhat — the real complexity arises in platforms serving users across multiple timezones and DST rules, which is the norm for any US-wide platform.</p>
       </IQ>
 
       <HR />
@@ -1016,7 +1016,7 @@ ORDER BY s.store_id, month_start;`}
           'AGE(end_date, start_date) returns a human-readable interval in years, months, days. Always put the later date first to get a positive result.',
           'strftime(date, format) in DuckDB and TO_CHAR(date, format) in PostgreSQL format dates as strings for display. ISO format codes (%Y-%m-%d) are locale-independent.',
           'Never apply functions to indexed date columns in WHERE — WHERE EXTRACT(YEAR FROM date) = 2024 prevents index use. Use range comparisons: WHERE date >= \'2024-01-01\' AND date < \'2025-01-01\'.',
-          'Store timestamps in UTC using TIMESTAMPTZ. Convert to local timezone at display time only (AT TIME ZONE \'Asia/Kolkata\'). Convert filter boundaries to UTC rather than applying timezone functions to stored columns.',
+          'Store timestamps in UTC using TIMESTAMPTZ. Convert to local timezone at display time only (AT TIME ZONE \'America/Los_Angeles\'). Convert filter boundaries to UTC rather than applying timezone functions to stored columns.',
           'For rolling windows: combine DATE_TRUNC for period grouping with LAG() window function for period-over-period comparisons. The date arithmetic gives the offset; the window function gives the prior period value.',
         ]}
       />

@@ -441,7 +441,7 @@ n = 5_000
 
 restaurants = ['Pizza Hut','Biryani Blues','McDonald\\'s','Haldiram\\'s',
                'Dominos','KFC','Subway','Burger King']
-cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
+cities      = ['Seattle','New York','Denver','Austin','Boston','Chicago']
 time_slots  = ['breakfast','lunch','evening','dinner']
 
 distance   = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
@@ -948,7 +948,7 @@ axs[4].fill_between(
     alpha=0.15, color=GREEN,
 )
 axs[4].set_title('Order value density')
-axs[4].set_xlabel('Order value (₹)')
+axs[4].set_xlabel('Order value ($)')
 axs[4].set_xlim(0, 1000)
 
 # Plot 6: Correlation with target

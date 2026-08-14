@@ -247,7 +247,7 @@ ORDER BY order_date DESC;`}
 -- Local and niche brands only
 SELECT product_name, brand, category, unit_price
 FROM products
-WHERE brand NOT IN ('Amul', 'Tata', 'Nestle', 'Britannia', 'P&G', 'HUL', 'Parle')
+WHERE brand NOT IN ('Horizon', 'Morton', 'Nestle', 'Britannia', 'P&G', 'HUL', 'Parle')
 ORDER BY brand, unit_price;`}
         height={140}
         showSchema={false}
@@ -348,7 +348,7 @@ WHERE salary BETWEEN 30000 AND 60000`}
       <H>BETWEEN with numbers</H>
 
       <SQLPlayground
-        initialQuery={`-- Products priced between ₹50 and ₹200 (inclusive)
+        initialQuery={`-- Products priced between $50 and $200 (inclusive)
 -- Same as: WHERE unit_price >= 50 AND unit_price <= 200
 SELECT product_name, brand, category, unit_price
 FROM products
@@ -359,7 +359,7 @@ ORDER BY unit_price;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Mid-range orders — between ₹300 and ₹1000
+        initialQuery={`-- Mid-range orders — between $300 and $1000
 SELECT order_id, customer_id, order_date,
        order_status, total_amount
 FROM orders
@@ -370,7 +370,7 @@ ORDER BY total_amount DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Employees with salary between ₹30,000 and ₹60,000
+        initialQuery={`-- Employees with salary between $30,000 and $60,000
 SELECT first_name, last_name, role, salary, department
 FROM employees
 WHERE salary BETWEEN 30000 AND 60000
@@ -438,7 +438,7 @@ column < lower_bound OR column > upper_bound
 
       <SQLPlayground
         initialQuery={`-- Products NOT in the mid-range price band
--- Either very cheap (under ₹50) or very expensive (over ₹200)
+-- Either very cheap (under $50) or very expensive (over $200)
 SELECT product_name, brand, category, unit_price
 FROM products
 WHERE unit_price NOT BETWEEN 50 AND 200
@@ -449,7 +449,7 @@ ORDER BY unit_price;`}
 
       <SQLPlayground
         initialQuery={`-- Orders outside the standard value range
--- Either very small (under ₹200) or very large (over ₹1500)
+-- Either very small (under $200) or very large (over $1500)
 SELECT order_id, order_date, order_status,
        payment_method, total_amount
 FROM orders
@@ -539,7 +539,7 @@ SELECT
   joined_date
 FROM customers
 WHERE loyalty_tier IN ('Gold', 'Platinum')
-  AND city NOT IN ('Seattle', 'New York', 'Delhi')
+  AND city NOT IN ('Seattle', 'New York', 'Denver')
   AND joined_date BETWEEN '2021-01-01' AND '2022-12-31'
 ORDER BY loyalty_tier, joined_date;`}
         height={170}
@@ -643,16 +643,16 @@ WHERE unit_price BETWEEN NULL AND 200
       <P>You are an analyst at Stripe's merchant analytics team. The merchant success team needs three different reports for their quarterly business review. All three need to be ready within an hour.</P>
 
       <TimeBlock time="2:00 PM" label="Report 1 — Merchant tier segmentation">
-        The growth team wants to see merchants segmented by monthly transaction volume into three bands: small (under ₹1 thousand), medium (₹1 thousand to ₹10 thousand), and large (above ₹10 thousand). They want the count per tier. Adapted for FreshCart: orders segmented by amount bands.
+        The growth team wants to see merchants segmented by monthly transaction volume into three bands: small (under $1 thousand), medium ($1 thousand to $10 thousand), and large (above $10 thousand). They want the count per tier. Adapted for FreshCart: orders segmented by amount bands.
       </TimeBlock>
 
       <SQLPlayground
         initialQuery={`-- Order value segmentation
 SELECT
   CASE
-    WHEN total_amount BETWEEN 0    AND 499   THEN 'Small (< ₹500)'
-    WHEN total_amount BETWEEN 500  AND 1499  THEN 'Medium (₹500-1499)'
-    WHEN total_amount >= 1500               THEN 'Large (₹1500+)'
+    WHEN total_amount BETWEEN 0    AND 499   THEN 'Small (< $500)'
+    WHEN total_amount BETWEEN 500  AND 1499  THEN 'Medium ($500-1499)'
+    WHEN total_amount >= 1500               THEN 'Large ($1500+)'
   END                             AS order_tier,
   COUNT(*)                        AS order_count,
   ROUND(SUM(total_amount), 2)     AS total_revenue
@@ -665,7 +665,7 @@ ORDER BY total_revenue DESC;`}
       />
 
       <TimeBlock time="2:20 PM" label="Report 2 — Active payment methods excluding cash">
-        The product team wants to know which digital payment methods are used for high-value orders — specifically UPI, Card, and NetBanking (not COD) for orders above ₹800.
+        The product team wants to know which digital payment methods are used for high-value orders — specifically Zelle, Card, and NetBanking (not COD) for orders above $800.
       </TimeBlock>
 
       <SQLPlayground
@@ -676,7 +676,7 @@ SELECT
   ROUND(AVG(total_amount), 2) AS avg_order_value,
   SUM(total_amount)          AS total_revenue
 FROM orders
-WHERE payment_method IN ('UPI', 'Card', 'NetBanking')
+WHERE payment_method IN ('Zelle', 'Card', 'NetBanking')
   AND total_amount > 800
   AND order_status = 'Delivered'
 GROUP BY payment_method
@@ -785,7 +785,7 @@ ORDER BY q1_revenue DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart weekly operations report needs three things from one combined query: Show all orders where (1) the store is one of the Seattle or Austin stores (ST001, ST002, ST003, ST004), AND (2) the total_amount is between ₹400 and ₹1,500, AND (3) the order_status is NOT one of 'Cancelled' or 'Returned'. Show order_id, store_id, order_date, order_status, payment_method, and total_amount. Sort by total_amount descending."
+        question="The FreshCart weekly operations report needs three things from one combined query: Show all orders where (1) the store is one of the Seattle or Austin stores (ST001, ST002, ST003, ST004), AND (2) the total_amount is between $400 and $1,500, AND (3) the order_status is NOT one of 'Cancelled' or 'Returned'. Show order_id, store_id, order_date, order_status, payment_method, and total_amount. Sort by total_amount descending."
         hint="Three conditions: store_id IN (...), total_amount BETWEEN 400 AND 1500, order_status NOT IN ('Cancelled', 'Returned'). All three connected with AND."
         answer={`SELECT
   order_id,
@@ -799,7 +799,7 @@ WHERE store_id IN ('ST001', 'ST002', 'ST003', 'ST004')
   AND total_amount BETWEEN 400 AND 1500
   AND order_status NOT IN ('Cancelled', 'Returned')
 ORDER BY total_amount DESC;`}
-        explanation="This query uses all three filter operators from this module together. IN for the store list — cleaner than four OR conditions. BETWEEN for the amount range — inclusive on both ends (₹400 and ₹1,500 are included). NOT IN for the status exclusion — works safely here because the order_status column is NOT NULL (it has a NOT NULL constraint and a CHECK constraint limiting it to specific values), so the NOT IN null trap does not apply. All three are connected with AND — all conditions must be true for a row to appear. This is the standard multi-criteria operational filter pattern used in every business dashboard."
+        explanation="This query uses all three filter operators from this module together. IN for the store list — cleaner than four OR conditions. BETWEEN for the amount range — inclusive on both ends ($400 and $1,500 are included). NOT IN for the status exclusion — works safely here because the order_status column is NOT NULL (it has a NOT NULL constraint and a CHECK constraint limiting it to specific values), so the NOT IN null trap does not apply. All three are connected with AND — all conditions must be true for a row to appear. This is the standard multi-criteria operational filter pattern used in every business dashboard."
       />
 
       <HR />

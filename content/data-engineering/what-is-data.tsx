@@ -146,7 +146,7 @@ export default function WhatIsDataModule() {
         <SubTitle>Data is meaningless without context</SubTitle>
 
         <Para>
-          The number 42 is not data. It is just a number. But "₹42 — delivery charge — DoorDash order
+          The number 42 is not data. It is just a number. But "$42 — delivery charge — DoorDash order
           #8734621 — 14 March 2026 — New York" is data. It is a fact about something specific that
           happened. Context is what turns numbers and text into information.
         </Para>
@@ -287,10 +287,10 @@ Examples of what fits in 1 byte:
                          ≈ Google processes ~20 PB per day
                          ≈ Amazon's data warehouse: multi-PB scale`}</CodeBox>
 
-        <SubTitle>Real scale of Indian tech companies</SubTitle>
+        <SubTitle>Real scale of top tech companies</SubTitle>
 
         <Para>
-          When you join a data engineering team at a mid-size Indian startup, you will typically
+          When you join a data engineering team at a mid-size US startup, you will typically
           work with data in the gigabytes to low terabytes range. At a large platform like Uber Eats,
           Shopify, or Venmo, the scale is multi-terabyte to low petabyte. At FAANG
           operations, it is petabyte scale.
@@ -301,7 +301,7 @@ Examples of what fits in 1 byte:
             {[
               { company: 'DoorDash', stat: '~3M+ orders/day', data: 'Each order creates ~50 data fields. That is 150M+ data points generated every single day.' },
               { company: 'Venmo', stat: '~14B transactions/year', data: 'Each transaction generates audit logs, fraud signals, and settlement records. Multi-TB per day.' },
-              { company: 'Amazon', stat: 'Big Billion Days', data: 'Single-day traffic spikes require pipelines that can handle 10× normal volume without failing.' },
+              { company: 'Amazon', stat: 'Prime Day', data: 'Single-day traffic spikes require pipelines that can handle 10× normal volume without failing.' },
               { company: 'Uber Eats', stat: '~2M daily orders', data: 'Real-time location tracking of delivery partners generates GPS pings every few seconds per agent.' },
             ].map((item) => (
               <div key={item.company}>
@@ -368,10 +368,10 @@ Examples of what fits in 1 byte:
                                      large financial transaction IDs`}</CodeBox>
 
         <Para>
-          Decimal numbers (like ₹349.99) are stored as <strong>floating point</strong> numbers.
+          Decimal numbers (like $349.99) are stored as <strong>floating point</strong> numbers.
           Floating point is a way of storing a number with a decimal point by recording a
           mantissa (the significant digits) and an exponent (how far to shift the decimal point).
-          This is how your computer stores ₹349.99 — not as the exact value, but as the closest
+          This is how your computer stores $349.99 — not as the exact value, but as the closest
           representable binary fraction.
         </Para>
 
@@ -380,8 +380,8 @@ Examples of what fits in 1 byte:
           numbers cannot represent all decimal values exactly. Try this mental exercise: 0.1 + 0.2
           in binary floating point does not equal exactly 0.3. It equals 0.30000000000000004.
           This is why you should <strong>never store money as a floating point number</strong>.
-          Store money as integers in the smallest currency unit (paise, cents) and divide when
-          displaying. Many data pipelines have silently lost or gained fractions of rupees because
+          Store money as integers in the smallest currency unit (cents) and divide when
+          displaying. Many data pipelines have silently lost or gained fractions of a dollar because
           of this exact mistake.
         </Callout>
 
@@ -422,7 +422,7 @@ a = 97 = 01100001
         <Callout type="warning">
           <strong>The encoding mismatch error — one of the most common bugs in data engineering:</strong>{' '}
           A file was saved in one encoding (say, latin-1) and read assuming another (UTF-8).
-          Result: Indian language characters, emojis, or special currency symbols like ₹ appear
+          Result: accented characters, emojis, or special currency symbols like € or ¥ appear
           as garbled nonsense — or cause your pipeline to crash with a UnicodeDecodeError.
           Always declare the encoding explicitly when reading any file. Never assume.
         </Callout>
@@ -842,7 +842,7 @@ Best for:                           Best for:
 
           <Para>
             You join a Series B fintech startup as their first dedicated data engineer. The
-            company has 800,000 active users, processes ₹50 million in transactions per month,
+            company has 800,000 active users, processes $5 million in transactions per month,
             and has a team of four analysts who are all using Excel.
           </Para>
 
@@ -911,7 +911,7 @@ Best for:                           Best for:
         {[
           {
             wrong: '"More data is always better"',
-            right: 'Storing data you never use is not just wasteful — it is expensive and creates compliance risk. Good data engineering is as much about what you choose not to store as what you do store. The India DPDP Act (Digital Personal Data Protection Act) has strict rules about storing personal data. Collecting everything with no plan is a liability, not an asset.',
+            right: 'Storing data you never use is not just wasteful — it is expensive and creates compliance risk. Good data engineering is as much about what you choose not to store as what you do store. The CCPA (California Consumer Privacy Act) has strict rules about storing personal data. Collecting everything with no plan is a liability, not an asset.',
           },
           {
             wrong: '"The database is the source of truth"',
@@ -964,9 +964,9 @@ Best for:                           Best for:
         {[
           {
             q: 'Q1. Why should you never store monetary values as floating point numbers?',
-            a: `Floating point numbers use binary fractions to approximate decimal values, and most decimal fractions cannot be represented exactly in binary. For example, the decimal value 0.1 is stored as an infinitely repeating binary fraction — the closest representable value is approximately 0.1000000000000000055511151231257827021181583404541015625. When you perform arithmetic on floating point money values, these tiny errors accumulate. Two floating point additions that should both equal ₹100.00 might return ₹99.99999999999998 and ₹100.00000000000001 respectively.
+            a: `Floating point numbers use binary fractions to approximate decimal values, and most decimal fractions cannot be represented exactly in binary. For example, the decimal value 0.1 is stored as an infinitely repeating binary fraction — the closest representable value is approximately 0.1000000000000000055511151231257827021181583404541015625. When you perform arithmetic on floating point money values, these tiny errors accumulate. Two floating point additions that should both equal $100.00 might return $99.99999999999998 and $100.00000000000001 respectively.
 
-In financial systems, this causes reconciliation failures, incorrect balance calculations, and in regulated environments, compliance violations. The correct approach is to store money as integers in the smallest currency unit (paise for INR, cents for USD) and convert to decimal only for display. ₹349.75 is stored as the integer 34975. All arithmetic is integer arithmetic, which is exact. This is how Stripe, Venmo, and every serious payment system stores monetary values.`,
+In financial systems, this causes reconciliation failures, incorrect balance calculations, and in regulated environments, compliance violations. The correct approach is to store money as integers in the smallest currency unit (cents for USD) and convert to decimal only for display. $349.75 is stored as the integer 34975. All arithmetic is integer arithmetic, which is exact. This is how Stripe, Venmo, and every serious payment system stores monetary values.`,
           },
           {
             q: 'Q2. What is the difference between a bit, a byte, and a character, and why does a data engineer need to understand this distinction?',
@@ -1052,9 +1052,9 @@ Practically, this means: preserving source timestamps so analysts know when even
             fix: 'Use pd.to_datetime(df["date"], infer_datetime_format=True) for flexible parsing, or explicitly handle each format: pd.to_datetime(df["date"], format="%d-%m-%Y"). The best long-term fix is to standardise all dates to ISO 8601 (YYYY-MM-DD) at the point of ingestion.',
           },
           {
-            error: `Database column "amount" type is FLOAT but financial reconciliation shows ₹0.02 discrepancy`,
+            error: `Database column "amount" type is FLOAT but financial reconciliation shows $0.02 discrepancy`,
             cause: 'This is the floating point precision problem. The "amount" column was defined as FLOAT (or DOUBLE) instead of DECIMAL or an integer type. Accumulated floating point arithmetic errors have produced values that are fractionally wrong — not visible in the data but caught during reconciliation against bank records.',
-            fix: 'Change the column type to DECIMAL(15, 2) for currency values (15 total digits, 2 after decimal point), or store as BIGINT in paise. Migrate existing data: UPDATE transactions SET amount_paise = ROUND(amount_float * 100). This is a schema migration — always test on a staging environment first.',
+            fix: 'Change the column type to DECIMAL(15, 2) for currency values (15 total digits, 2 after decimal point), or store as BIGINT in cents. Migrate existing data: UPDATE transactions SET amount_cents = ROUND(amount_float * 100). This is a schema migration — always test on a staging environment first.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1095,7 +1095,7 @@ Practically, this means: preserving source timestamps so analysts know when even
         'Data is a recorded observation — a fact about the world captured by a system. If it is not recorded, it is not data.',
         'Every computer stores everything as binary — patterns of 0s and 1s. Understanding this explains every storage decision you will ever make.',
         'A byte is 8 bits and can hold 256 values. Choosing the right data type (int32 vs int64, float vs decimal) directly affects storage cost and correctness.',
-        'Never store monetary values as floating point. Use integers (paise/cents) or DECIMAL types. Floating point arithmetic accumulates errors that cause financial reconciliation failures.',
+        'Never store monetary values as floating point. Use integers (cents) or DECIMAL types. Floating point arithmetic accumulates errors that cause financial reconciliation failures.',
         'RAM is fast but volatile and expensive. Disk is slow but persistent and cheap. Everything in data engineering architecture is shaped by managing this trade-off.',
         'A file is just bytes — the extension is only a convention. File formats are agreements about byte structure. A mis-named or corrupt file causes a data pipeline to fail in confusing ways.',
         'Text encoding determines how characters map to bytes. Always use UTF-8. Always declare the encoding explicitly. Never assume.',

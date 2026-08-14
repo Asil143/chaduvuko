@@ -295,7 +295,7 @@ DEGENERATE DIMENSIONS:
         <SectionTitle>Dimension Tables — The Context That Makes Facts Meaningful</SectionTitle>
 
         <Para>
-          A fact without context is just a number. ₹380 has no analytical value
+          A fact without context is just a number. $38 has no analytical value
           until you know it was an order from a premium customer in Seattle at
           a FreshCart store on a weekday evening. Dimension tables provide that
           context. Understanding what belongs in dimensions, how to structure them,
@@ -478,7 +478,7 @@ JOIN gold.dim_customer       c  ON f.customer_sk       = c.customer_sk
 JOIN gold.dim_payment_method p  ON f.payment_method_sk = p.payment_sk
 WHERE d.year     = 2026
   AND d.quarter  = 1
-  AND s.region   = 'South India'
+  AND s.region   = 'Pacific Northwest'
   AND c.is_current = TRUE
 GROUP BY 1, 2, 3, 4, 5
 ORDER BY 1, 2;
@@ -487,7 +487,7 @@ WHY STAR SCHEMA QUERIES ARE FAST:
   1. Fact table has only integer FKs and numeric facts — narrow, fast to scan.
   2. Dimension joins use integer equality — fastest join type.
   3. Filter on dim attributes prunes dimensions first:
-     WHERE s.region = 'South India' → 2 store rows → only their fact rows scanned.
+     WHERE s.region = 'Pacific Northwest' → 2 store rows → only their fact rows scanned.
   4. Aggregations operate on pre-filtered fact subsets — small, fast.
   5. Columnar storage: only joined FK columns + aggregate columns read from disk.
 
@@ -674,10 +674,10 @@ SELECT
     LOWER(TRIM(city))                   AS city,
     LOWER(TRIM(state))                  AS state,
     CASE
-        WHEN state IN ('Karnataka','Tamil Nadu','Kerala','Andhra Pradesh','Telangana') THEN 'South'
-        WHEN state IN ('Maharashtra','Gujarat','Goa') THEN 'West'
-        WHEN state IN ('Delhi','Uttar Pradesh','Haryana','Punjab','Rajasthan') THEN 'North'
-        ELSE 'East'
+        WHEN state IN ('Texas','Georgia','Florida','Alabama','Tennessee') THEN 'South'
+        WHEN state IN ('California','Oregon','Washington') THEN 'West'
+        WHEN state IN ('New York','New Jersey','Massachusetts','Pennsylvania','Connecticut') THEN 'Northeast'
+        ELSE 'Midwest'
     END                                 AS region,
     tier,
     acquisition_channel,
@@ -750,8 +750,8 @@ LEFT JOIN {{ ref('dim_payment_method') }} p ON o.payment_method = p.payment_meth
           </div>
 
           <Para>
-            Finance reports March revenue as ₹4.21 million. Operations reports ₹3.87 million.
-            Same company, same month — ₹34 thousand difference. The CEO asks for an explanation.
+            Finance reports March revenue as $4.21 million. Operations reports $3.87 million.
+            Same company, same month — $340 thousand difference. The CEO asks for an explanation.
           </Para>
 
           <CodeBox label="Diagnosing the metrics disagreement">{`-- Finance dashboard SQL (Metabase auto-generated):
@@ -901,7 +901,7 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
             fix: 'The fact table must store the customer_sk (surrogate key) at load time, not the customer_id. The surrogate key lookup at load time uses the date-range join to find the active version: the customer_sk stored in the fact table for a 2021 order is the surrogate that was valid in 2021. At query time, join simply on customer_sk — no date range, no is_current filter — and you get the historically correct customer version automatically.',
           },
           {
-            error: `Finance and Operations both query "revenue" but return different numbers for the same month — one shows ₹4.21 million, the other ₹3.87 million`,
+            error: `Finance and Operations both query "revenue" but return different numbers for the same month — one shows $4.21 million, the other $3.87 million`,
             cause: 'There is no single canonical definition of "revenue" in the data model. Finance queries SUM(order_amount) with no status filter, including placed, cancelled, and in-progress orders. Operations queries only delivered orders. Both are using fct_orders but applying different business rules — neither is technically wrong, but the metric name "revenue" has two different definitions across two teams.',
             fix: 'Create a canonical dbt metrics layer that defines each business metric exactly once. A Gold dbt model mrt_monthly_revenue defines delivered_revenue (status=\'delivered\'), gross_order_value (all non-cancelled), and cancelled_value explicitly. Both Finance and Operations query the canonical model — they choose the appropriate column for their use case but can no longer accidentally define the metric differently. This is a modelling fix, not a pipeline fix.',
           },
@@ -941,7 +941,7 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
         'Conformed dimensions are shared across multiple fact tables with identical structure and meaning. dim_date is always conformed. Conformed dimensions enable cross-process analysis — comparing orders to payments for the same customer correctly. Non-conformed dimensions make cross-mart queries produce wrong results silently.',
         'Wide tables (OBT) embed all dimension attributes into a single table — zero joins at query time. Best for self-service analysts, BI tools, and columnar engines. Star schemas are better for SCD Type 2, multiple fact tables at different grains, and very large fact tables. The hybrid approach: star schema for canonical model + derived wide table for BI consumption.',
         'In dbt: use dbt_utils.generate_surrogate_key() for deterministic hash-based surrogate keys, dbt snapshots with strategy="check" for SCD Type 2 dimension tables, incremental materialisation with merge strategy for large fact tables, and the date-range join for point-in-time fact-to-dimension lookups.',
-        'Centralise business logic in dbt Gold models. A "revenue" metric disagreement between Finance and Operations (₹4.21 million vs ₹3.87 million) is always a missing canonical definition problem, not a data quality problem. One dbt model defines delivered_revenue, gross_order_value, and cancelled_value — both teams query the canonical model and can no longer accidentally apply different filters to the same metric name.',
+        'Centralise business logic in dbt Gold models. A "revenue" metric disagreement between Finance and Operations ($4.21 million vs $3.87 million) is always a missing canonical definition problem, not a data quality problem. One dbt model defines delivered_revenue, gross_order_value, and cancelled_value — both teams query the canonical model and can no longer accidentally apply different filters to the same metric name.',
       ]} />
 
     

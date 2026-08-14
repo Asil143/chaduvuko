@@ -157,7 +157,7 @@ export default function SQLvsNoSQLModule() {
           <strong> what are the access patterns of this data, and which storage
           model serves those patterns best?</strong> SQL databases and NoSQL
           databases are not competitors — they solve different problems. Many
-          production systems at Indian tech companies use both simultaneously,
+          production systems at top tech companies use both simultaneously,
           each handling the workload it is suited for.
         </Para>
 
@@ -380,7 +380,7 @@ Document database solution (MongoDB):
             </Para>
 
             <CodeBox label="Key-value store — operations and real use cases">{`Redis operations:
-  SET session:user_4201938 '{"user_id":4201938,"name":"Priya","cart":[...]}' EX 3600
+  SET session:user_4201938 '{"user_id":4201938,"name":"Emily","cart":[...]}' EX 3600
   GET session:user_4201938  → returns the JSON string (or nil if expired)
   DEL session:user_4201938
 
@@ -392,8 +392,8 @@ Document database solution (MongoDB):
   GET cache:product_SKU-00283741  → returns cached product JSON (or miss)
 
 Redis data structures (beyond plain strings):
-  Hash:   HSET user:4201938 name "Priya" email "priya@example.com"
-          HGET user:4201938 email         → "priya@example.com"
+  Hash:   HSET user:4201938 name "Emily" email "emily@example.com"
+          HGET user:4201938 email         → "emily@example.com"
   List:   LPUSH order_queue 9284751      → add to queue
           RPOP order_queue               → take from queue (FIFO)
   Set:    SADD active_users 4201938      → track unique active users
@@ -712,29 +712,29 @@ CASSANDRA RULE: design one table per query pattern.
             <CodeBox label="Graph database — nodes, edges, and traversal queries">{`Neo4j graph model for a social commerce network:
 
 NODES (entities):
-  (:User {id: 4201938, name: "Priya"})
-  (:User {id: 1092847, name: "Rahul"})
+  (:User {id: 4201938, name: "Emily"})
+  (:User {id: 1092847, name: "Marcus"})
   (:Product {id: "SKU-001", name: "Kurta", category: "Clothing"})
   (:Product {id: "SKU-002", name: "Shoes",  category: "Footwear"})
 
 EDGES (relationships — stored directly, not derived):
-  (Priya)-[:FRIENDS_WITH]->(Rahul)
-  (Priya)-[:PURCHASED {date: "2026-03-01"}]->(SKU-001)
-  (Rahul)-[:PURCHASED {date: "2026-03-10"}]->(SKU-001)
-  (Rahul)-[:PURCHASED {date: "2026-02-28"}]->(SKU-002)
+  (Emily)-[:FRIENDS_WITH]->(Marcus)
+  (Emily)-[:PURCHASED {date: "2026-03-01"}]->(SKU-001)
+  (Marcus)-[:PURCHASED {date: "2026-03-10"}]->(SKU-001)
+  (Marcus)-[:PURCHASED {date: "2026-02-28"}]->(SKU-002)
   (SKU-001)-[:FREQUENTLY_BOUGHT_WITH]->(SKU-002)
 
-CYPHER QUERY — "Recommend products to Priya":
-  MATCH (priya:User {id: 4201938})
+CYPHER QUERY — "Recommend products to Emily":
+  MATCH (emily:User {id: 4201938})
         -[:FRIENDS_WITH]->(:User)
         -[:PURCHASED]->(product:Product)
-  WHERE NOT (priya)-[:PURCHASED]->(product)
+  WHERE NOT (emily)-[:PURCHASED]->(product)
   RETURN product.name, count(*) AS purchase_count
   ORDER BY purchase_count DESC
   LIMIT 5
 
-This query: finds Priya's friends, finds what they bought,
-            filters out what Priya already bought,
+This query: finds Emily's friends, finds what they bought,
+            filters out what Emily already bought,
             ranks by friend purchase frequency.
 
 In PostgreSQL this is 4 JOINs with self-referencing tables.
@@ -953,13 +953,13 @@ QUESTION 3: What scale is genuinely needed?
         <SubTitle>The polyglot persistence pattern — using multiple databases together</SubTitle>
 
         <Para>
-          At a mature Indian tech company, the right answer is almost never "one
+          At a mature tech company, the right answer is almost never "one
           database for everything." Different parts of the application have different
           access patterns and consistency requirements. The polyglot persistence
           pattern uses the best database for each specific need.
         </Para>
 
-        <CodeBox label="Polyglot persistence — Shopify-style data architecture">{`MEESHO (e-commerce platform) — representative polyglot architecture:
+        <CodeBox label="Polyglot persistence — Etsy-style data architecture">{`ETSY (e-commerce marketplace) — representative polyglot architecture:
 
   PostgreSQL (relational, CP):
     → Orders, payments, settlements, user accounts
@@ -982,7 +982,7 @@ QUESTION 3: What scale is genuinely needed?
     → Write-heavy, partition-key access only needed
 
   Elasticsearch (search index — a fifth type!):
-    → Full-text product search ("cotton kurta under 500")
+    → Full-text product search ("vintage leather jacket under 200")
     → Inverted index — not relational, not a traditional NoSQL type
     → Synced from MongoDB product catalogue via pipeline
 

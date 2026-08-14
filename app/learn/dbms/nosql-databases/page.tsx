@@ -194,8 +194,8 @@ export default function NoSQLDatabases() {
 {`// ─────────────────────────────────────────────────────────────────
 // STRING — simple key-value pairs
 // ─────────────────────────────────────────────────────────────────
-SET user:1001:name "Rahul Sharma"
-GET user:1001:name           -- returns "Rahul Sharma"
+SET user:1001:name "Michael Turner"
+GET user:1001:name           -- returns "Michael Turner"
 SET user:1001:session "tok_abc123xyz" EX 3600   -- expires in 3600 seconds
 TTL user:1001:session        -- returns remaining TTL in seconds
 INCR page:homepage:visits    -- atomic increment (great for counters)
@@ -205,8 +205,8 @@ SETNX config:maintenance "1" -- SET if Not eXists (atomic, for distributed locks
 // ─────────────────────────────────────────────────────────────────
 // HASH — nested key-value (object/struct)
 // ─────────────────────────────────────────────────────────────────
-HSET user:1001 name "Rahul Sharma" email "rahul@email.com" city "San Francisco" tier "Gold"
-HGET  user:1001 name              -- "Rahul Sharma"
+HSET user:1001 name "Michael Turner" email "michael@email.com" city "San Francisco" tier "Gold"
+HGET  user:1001 name              -- "Michael Turner"
 HGETALL user:1001                 -- all fields and values
 HMGET user:1001 name email        -- multiple fields at once
 HINCRBY user:1001 order_count 1   -- increment a hash field atomically
@@ -377,7 +377,7 @@ BITCOUNT user:1001:daily_login           -- total days logged in
   "order_id": "O5001",
   "customer": {
     "customer_id": "C001",
-    "name": "Rahul Sharma",
+    "name": "Michael Turner",
     "city": "San Francisco"
   },
   "restaurant": {
@@ -775,7 +775,7 @@ scan.withStopRow(Bytes.toBytes("customer:C001:2024-03-31\xFF"));
 // Properties: key-value attributes on both nodes and relationships
 
 // CREATE nodes:
-CREATE (rahul:Customer {id: 'C001', name: 'Rahul Sharma', city: 'San Francisco'})
+CREATE (michael:Customer {id: 'C001', name: 'Michael Turner', city: 'San Francisco'})
 CREATE (biryani_house:Restaurant {id: 'R01', name: 'Biryani House', rating: 4.5})
 CREATE (chicken_biryani:MenuItem {id: 'M001', name: 'Chicken Biryani', price: 280})
 
@@ -790,12 +790,12 @@ CREATE (r)-[:SERVES]->(m)
 // TRAVERSAL QUERIES — where graph databases shine
 // ─────────────────────────────────────────────────────────────────
 
-// "What has Rahul ordered?" (one hop)
-MATCH (c:Customer {name: 'Rahul Sharma'})-[:PLACED_ORDER]->(r:Restaurant)
+// "What has Michael ordered?" (one hop)
+MATCH (c:Customer {name: 'Michael Turner'})-[:PLACED_ORDER]->(r:Restaurant)
 -[:SERVES]->(m:MenuItem)
 RETURN m.name, r.name
 
-// "Who does Rahul follow?" (social graph, one hop)
+// "Who does Michael follow?" (social graph, one hop)
 MATCH (c:Customer {id: 'C001'})-[:FOLLOWS]->(followed:Customer)
 RETURN followed.name, followed.city
 
@@ -833,7 +833,7 @@ WHERE NOT (target)-[:PLACED_ORDER]->(rec_rest)
 RETURN rec_rest.name, COUNT(*) AS popularity
 ORDER BY popularity DESC
 LIMIT 5
-// "Restaurants ordered by similar customers that Rahul hasn't tried yet"`}
+// "Restaurants ordered by similar customers that Michael hasn't tried yet"`}
         </CodeBox>
 
         <SubTitle>When to Choose a Graph Database</SubTitle>
@@ -1121,7 +1121,7 @@ GET /products/_search
         </Para>
 
         <CodeBox label="DoorDash's polyglot persistence architecture">
-{`// SWIGGY PRODUCTION DATABASE ARCHITECTURE (typical for Indian unicorns):
+{`// DOORDASH PRODUCTION DATABASE ARCHITECTURE (typical for US unicorns):
 
 // POSTGRESQL (primary transactional data):
 // - Orders, customers, payments, restaurants, menu items

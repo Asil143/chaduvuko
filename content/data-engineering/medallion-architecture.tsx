@@ -330,7 +330,7 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 BRONZE_PATH = "s3://freshmart-data-lake-prod/bronze/payments"
-LANDING_PATH = "s3://freshmart-data-lake-prod/landing/razorpay"
+LANDING_PATH = "s3://freshmart-data-lake-prod/landing/stripe"
 
 def load_to_bronze(run_date: date) -> dict:
     """
@@ -345,7 +345,7 @@ def load_to_bronze(run_date: date) -> dict:
     # Only transformations allowed at Bronze:
     bronze = raw \
         .withColumn("_ingested_at",    F.current_timestamp()) \
-        .withColumn("_source_system",  F.lit("razorpay")) \
+        .withColumn("_source_system",  F.lit("stripe")) \
         .withColumn("_pipeline_run_id", F.lit(run_id)) \
         .withColumn("_source_date",    F.lit(str(run_date))) \
         .withColumn("_bronze_date",    F.to_date(F.current_timestamp()))
@@ -610,7 +610,7 @@ Purpose: Replace expensive on-the-fly aggregations with pre-computed results.
 Example — daily store revenue:
 -- models/gold/daily_store_revenue.sql
 SELECT
-    DATE(o.created_at AT TIME ZONE 'Asia/Kolkata')  AS order_date,
+    DATE(o.created_at AT TIME ZONE 'America/New_York')  AS order_date,
     o.store_id,
     s.store_name,
     s.city,
@@ -907,8 +907,8 @@ LAYER 3 — GOLD: correction depends on Gold model type
     of the 2026-03-17 partition includes it correctly.
 
   CASE C: Gold aggregate has ALREADY been used in finance report
-    Finance saw ₹42,11,500 for 2026-03-17 in Monday's report.
-    After the late arrival, the correct total is ₹42,12,380.
+    Finance saw $4,211,500 for 2026-03-17 in Monday's report.
+    After the late arrival, the correct total is $4,212,380.
     Decision: does the business want the correction to appear?
     If yes: rebuild 2026-03-17 Gold partition, send correction notice.
     If no:  accept the lag as a known data characteristic.
@@ -1003,7 +1003,7 @@ GOLD LAYER — Point-in-time joins using SCD2
                          AND COALESCE(c.valid_to, '9999-12-31')
 
   This gives historically accurate customer city for every order.
-  If Priya moved from Seattle to Austin on 2026-02-01:
+  If Emily moved from Seattle to Austin on 2026-02-01:
     Orders before 2026-02-01: city = 'Seattle'
     Orders from 2026-02-01:   city = 'Austin'
 
@@ -1047,39 +1047,39 @@ IMPLEMENTATION DECISION TREE:
 
           <Para>
             The finance team reports that March 15th revenue in the dashboard
-            shows ₹41,83,000 but the bank statement shows ₹42,15,400. The
-            difference is ₹32,400 — 12 orders worth. You are asked to trace it.
+            shows $4,183,000 but the bank statement shows $4,215,400. The
+            difference is $32,400 — 12 orders worth. You are asked to trace it.
           </Para>
 
           <CodeBox label="Layer-by-layer trace — finding the root cause">{`STEP 1: Check Gold — is the dashboard reading the right table?
 SELECT SUM(net_revenue) FROM gold.daily_store_revenue
 WHERE order_date = '2026-03-15';
--- Returns: ₹41,83,000  (confirms dashboard is reading correct Gold table)
+-- Returns: $4,183,000  (confirms dashboard is reading correct Gold table)
 
 STEP 2: Check Silver — does Silver match Gold?
 SELECT SUM(order_amount - discount_amount) AS silver_net
 FROM silver.orders
-WHERE DATE(created_at AT TIME ZONE 'Asia/Kolkata') = '2026-03-15'
+WHERE DATE(created_at AT TIME ZONE 'America/New_York') = '2026-03-15'
   AND status IN ('delivered', 'cancelled');
--- Returns: ₹41,83,000  (Gold and Silver agree)
+-- Returns: $4,183,000  (Gold and Silver agree)
 -- Root cause is upstream of Gold — it is in Silver or Bronze.
 
 STEP 3: Compare Silver row count to expected
 SELECT COUNT(*) FROM silver.orders
-WHERE DATE(created_at AT TIME ZONE 'Asia/Kolkata') = '2026-03-15';
+WHERE DATE(created_at AT TIME ZONE 'America/New_York') = '2026-03-15';
 -- Returns: 9,847 orders
 
 SELECT COUNT(DISTINCT order_id) FROM source.orders
-WHERE DATE(created_at AT TIME ZONE 'Asia/Kolkata') = '2026-03-15';
+WHERE DATE(created_at AT TIME ZONE 'America/New_York') = '2026-03-15';
 -- Returns: 9,859 orders  ← 12 orders missing in Silver!
 
--- The 12 missing orders × avg ₹2,700 = ₹32,400 — matches the gap exactly.
+-- The 12 missing orders × avg $2,700 = $32,400 — matches the gap exactly.
 
 STEP 4: Identify the missing orders
 SELECT s.order_id
 FROM source.orders s
 LEFT JOIN silver.orders sv USING (order_id)
-WHERE DATE(s.created_at AT TIME ZONE 'Asia/Kolkata') = '2026-03-15'
+WHERE DATE(s.created_at AT TIME ZONE 'America/New_York') = '2026-03-15'
   AND sv.order_id IS NULL;
 -- Returns 12 order_ids. All have status='refunded'.
 
@@ -1109,7 +1109,7 @@ STEP 6: Fix
 python dlq_reprocess.py --pipeline orders_incremental --run-date 2026-03-15
 -- 3. Silver is updated via MERGE — 12 new rows inserted.
 -- 4. dbt run --select gold.daily_store_revenue --full-refresh (2026-03-15 partition)
--- 5. Dashboard now shows ₹42,15,400
+-- 5. Dashboard now shows $4,215,400
 
 TOTAL TIME: 24 minutes from investigation to resolved.
 KEY ENABLER: The DLQ preserved the rejected records with their error reason.

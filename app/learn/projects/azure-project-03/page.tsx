@@ -330,13 +330,13 @@ export default function Project03Page() {
         { file: 'store_ST001_sales_20240115.csv', content: `order_id,store_id,product_name,category,quantity,unit_price,order_date
 ORD1001,ST001,Basmati Rice 5kg,Grocery,12,299.00,2024-01-15
 ORD1002,ST001,Samsung TV 43inch,Electronics,2,32000.00,2024-01-15
-ORD1003,ST001,Amul Butter 500g,Dairy,25,240.00,2024-01-15
+ORD1003,ST001,Horizon Butter 500g,Dairy,25,240.00,2024-01-15
 ORD1004,ST001,Colgate Toothpaste,Personal Care,30,89.00,2024-01-15
 ORD1005,ST001,Nike Running Shoes,Apparel,5,4500.00,2024-01-15` },
         { file: 'store_ST002_sales_20240115.csv', content: `order_id,store_id,product_name,category,quantity,unit_price,order_date
 ORD2001,ST002,Sunflower Oil 1L,Grocery,18,145.00,2024-01-15
 ORD2002,ST002,iPhone 14,Electronics,1,75000.00,2024-01-15
-ORD2003,ST002,Amul Milk 1L,Dairy,40,62.00,2024-01-15
+ORD2003,ST002,Horizon Organic Milk 1L,Dairy,40,62.00,2024-01-15
 ORD2004,ST002,Dove Soap 100g,Personal Care,50,65.00,2024-01-15
 ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
       ].map(f => (
@@ -599,12 +599,12 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 140, flexShrink: 0 }}>Name</span><span style={{ color: '#00e676' }}>trigger_daily_midnight</span></div>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 140, flexShrink: 0 }}>Type</span><span style={{ color: '#00e676' }}>Schedule</span></div>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 140, flexShrink: 0 }}>Start date</span><span style={{ color: '#00e676' }}>today's date</span></div>
-        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 140, flexShrink: 0 }}>Time zone</span><span style={{ color: '#00e676' }}>India Standard Time</span></div>
+        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 140, flexShrink: 0 }}>Time zone</span><span style={{ color: '#00e676' }}>Eastern Standard Time</span></div>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 140, flexShrink: 0 }}>Repeat every</span><span style={{ color: '#00e676' }}>1 Day</span></div>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 140, flexShrink: 0 }}>At</span><span style={{ color: '#00e676' }}>00:00  (midnight)</span></div>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 140, flexShrink: 0 }}>Activated</span><span style={{ color: '#00e676' }}>✅ Yes</span></div>
       </div>
-      <Screenshot caption="New trigger panel — name, type Schedule, recurrence set to daily at 00:00 IST filled in" />
+      <Screenshot caption="New trigger panel — name, type Schedule, recurrence set to daily at 00:00 EST filled in" />
       <p>Click <strong>"OK"</strong>.</p>
 
       <h2>Step 17 — Set What the Trigger Passes to the Pipeline</h2>
@@ -621,7 +621,7 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
         <p className="font-semibold mb-2" style={{ color: 'var(--text)' }}>Why trigger().scheduledTime and not utcNow()?</p>
         <p style={{ color: 'var(--text2)' }}><code>trigger().scheduledTime</code> is the time ADF scheduled this trigger to fire — always exactly midnight on the right date. <code>utcNow()</code> is the actual clock time when the pipeline runs, which could be 12:00:03 AM — and in UTC that might be a different date than your local time. Always use <code>trigger().scheduledTime</code> in trigger parameters.</p>
         <p className="mt-2 font-mono text-xs" style={{ color: 'var(--muted)' }}>
-          Trigger scheduled for 2024-01-16 00:00 IST<br />
+          Trigger scheduled for 2024-01-16 00:00 ET<br />
           → trigger().scheduledTime = 2024-01-16T00:00:00<br />
           → formatDateTime result = "2024-01-16"  ✅ always correct
         </p>
@@ -656,7 +656,7 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
       <h2>Step 20 — View the Trigger in Monitor</h2>
       <p>Click <strong>Monitor</strong> → <strong>Trigger runs</strong> in the left submenu.</p>
       <Screenshot caption="Monitor → Trigger runs — trigger_daily_midnight listed with its next scheduled run time and Active status" />
-      <p>The trigger is now live. Every night at midnight IST it fires automatically, passes today's date as <code>run_date</code>, copies all 10 store files into <code>raw/sales/date=YYYY-MM-DD/</code>, and nobody needs to press anything.</p>
+      <p>The trigger is now live. Every night at midnight ET it fires automatically, passes today's date as <code>run_date</code>, copies all 10 store files into <code>raw/sales/date=YYYY-MM-DD/</code>, and nobody needs to press anything.</p>
 
       {/* Summary */}
       <h2>Before and After</h2>

@@ -256,11 +256,11 @@ LANGUAGE sql IMMUTABLE AS $$
   END
 $$;
 
--- Display-formatted rupee amount
-CREATE OR REPLACE FUNCTION fn_format_inr(p_amount NUMERIC)
+-- Display-formatted dollar amount
+CREATE OR REPLACE FUNCTION fn_format_usd(p_amount NUMERIC)
 RETURNS TEXT
 LANGUAGE sql IMMUTABLE AS $$
-  SELECT '₹' || TO_CHAR(p_amount, 'FM999,999,990.00')
+  SELECT '$' || TO_CHAR(p_amount, 'FM999,999,990.00')
 $$;
 
 -- Safe percentage (handles zero denominator)
@@ -288,8 +288,8 @@ SELECT
     WHEN unit_price < 300 THEN 'Premium'
     ELSE 'Luxury'
   END                                                                  AS price_band,
-  -- fn_format_inr inline:
-  '₹' || TO_CHAR(unit_price, 'FM999,999,990.00')                      AS display_price
+  -- fn_format_usd inline:
+  '$' || TO_CHAR(unit_price, 'FM999,999,990.00')                      AS display_price
 FROM products
 ORDER BY margin_pct DESC
 LIMIT 10;`}
@@ -301,11 +301,11 @@ LIMIT 10;`}
 
       <CodeBlock
         label="Validation functions — reusable data quality checks"
-        code={`-- Valid Indian mobile number: 10 digits starting with 6-9
+        code={`-- Valid US mobile number: 10 digits starting with 2-9
 CREATE OR REPLACE FUNCTION fn_is_valid_mobile(p_phone TEXT)
 RETURNS BOOLEAN
 LANGUAGE sql IMMUTABLE AS $$
-  SELECT REGEXP_REPLACE(COALESCE(p_phone, ''), '[^0-9]', '', 'g') ~ '^[6-9][0-9]{9}$'
+  SELECT REGEXP_REPLACE(COALESCE(p_phone, ''), '[^0-9]', '', 'g') ~ '^[2-9][0-9]{9}$'
 $$;
 
 -- Valid email: has exactly one @ and at least one dot in domain
@@ -345,7 +345,7 @@ SELECT
        THEN '✓ Valid' ELSE '✗ Invalid' END           AS email_status,
   phone,
   -- fn_is_valid_mobile equivalent (strip non-digits first):
-  CASE WHEN REGEXP_REPLACE(COALESCE(phone,''),'[^0-9]','','g') ~ '^[6-9][0-9]{9}$'
+  CASE WHEN REGEXP_REPLACE(COALESCE(phone,''),'[^0-9]','','g') ~ '^[2-9][0-9]{9}$'
        THEN '✓ Valid' ELSE '✗ Check' END              AS phone_status
 FROM customers
 ORDER BY customer_id
@@ -641,7 +641,7 @@ $$;
 CREATE OR REPLACE FUNCTION fn_format_display(p_amount NUMERIC)
 RETURNS TEXT
 LANGUAGE sql IMMUTABLE AS $$
-  SELECT '₹' || TO_CHAR(p_amount, 'FM999,999,990.00')
+  SELECT '$' || TO_CHAR(p_amount, 'FM999,999,990.00')
 $$;
 
 -- Overload 4: format_display with currency code (two args)
@@ -670,7 +670,7 @@ SELECT
 UNION ALL
 
 SELECT
-  'Overload 3 (amount → ₹ format)',
+  'Overload 3 (amount → $ format)',
   NULL  -- text result not numeric
 UNION ALL
 
@@ -821,7 +821,7 @@ WHERE customer_id = 1;   -- fn_get_loyalty_tier(1) equivalent`}
 -- fn_product_margin_pct   — product domain
 -- fn_customer_ltv_tier    — customer domain
 -- fn_order_delivery_label — order domain
--- fn_format_inr           — formatting utilities
+-- fn_format_usd           — formatting utilities
 
 -- ── PRODUCT DOMAIN ──────────────────────────────────────────────
 -- Gross margin percentage
@@ -884,11 +884,11 @@ AS $$ SELECT CASE
 END $$;
 
 -- ── FORMATTING UTILITIES ─────────────────────────────────────────
--- INR display format
-CREATE OR REPLACE FUNCTION fn_format_inr(p_amount NUMERIC)
+-- USD display format
+CREATE OR REPLACE FUNCTION fn_format_usd(p_amount NUMERIC)
 RETURNS TEXT
 LANGUAGE sql IMMUTABLE
-AS $$ SELECT '₹' || TO_CHAR(COALESCE(p_amount, 0), 'FM999,999,990.00') $$;
+AS $$ SELECT '$' || TO_CHAR(COALESCE(p_amount, 0), 'FM999,999,990.00') $$;
 
 -- Safe percentage
 CREATE OR REPLACE FUNCTION fn_safe_pct(p_part NUMERIC, p_total NUMERIC)
@@ -913,8 +913,8 @@ SELECT
     WHEN p.unit_price < 300 THEN 'Premium'
     ELSE 'Luxury'
   END                                                                        AS price_band,
-  -- fn_format_inr:
-  '₹' || TO_CHAR(p.unit_price, 'FM999,999,990.00')                          AS display_price,
+  -- fn_format_usd:
+  '$' || TO_CHAR(p.unit_price, 'FM999,999,990.00')                          AS display_price,
   -- fn_safe_pct (% of category):
   ROUND(p.unit_price / NULLIF(
     SUM(p.unit_price) OVER (PARTITION BY p.category)
@@ -984,8 +984,8 @@ SELECT
     WHEN days_since_last_order <= 180  THEN 'Lapsing'
     ELSE 'Churned'
   END                                        AS recency_segment,
-  -- fn_format_inr inline:
-  '₹' || TO_CHAR(lifetime_value, 'FM999,999,990.00') AS formatted_ltv
+  -- fn_format_usd inline:
+  '$' || TO_CHAR(lifetime_value, 'FM999,999,990.00') AS formatted_ltv
 FROM customer_metrics
 ORDER BY lifetime_value DESC NULLS LAST
 LIMIT 12;`}

@@ -644,7 +644,7 @@ export default function NetworkTypesTopologies() {
       </Para>
 
       <Para>
-        Similarly, when you use <Accent>SD-WAN (Software-Defined WAN)</Accent>, you are abstracting the physical WAN links (MPLS, broadband, LTE) into a single logical network managed by software. A branch office in Chennai and a headquarters in Hyderabad appear to be on the same "flat" network — but the physical connection might be switching between MPLS and LTE depending on cost and latency. The topology is virtual, not physical.
+        Similarly, when you use <Accent>SD-WAN (Software-Defined WAN)</Accent>, you are abstracting the physical WAN links (MPLS, broadband, LTE) into a single logical network managed by software. A branch office in Denver and a headquarters in Chicago appear to be on the same "flat" network — but the physical connection might be switching between MPLS and LTE depending on cost and latency. The topology is virtual, not physical.
       </Para>
 
       <StoryBox>
@@ -1038,7 +1038,7 @@ Storage (SAN):
       </Para>
 
       <Para>
-        A branch office in Vijayawada might send Zoom video directly to a branch in Pune via broadband (low cost, acceptable latency), while SAP traffic goes via MPLS (guaranteed QoS, predictable latency), and backup data goes via LTE (expensive per MB, but available when MPLS is down). The topology is virtual, dynamic, and policy-driven. Cisco Viptela, VMware VeloCloud, and Fortinet Secure SD-WAN are the major vendors.
+        A branch office in Tulsa might send Zoom video directly to a branch in Charlotte via broadband (low cost, acceptable latency), while SAP traffic goes via MPLS (guaranteed QoS, predictable latency), and backup data goes via LTE (expensive per MB, but available when MPLS is down). The topology is virtual, dynamic, and policy-driven. Cisco Viptela, VMware VeloCloud, and Fortinet Secure SD-WAN are the major vendors.
       </Para>
 
       <H2>Leaf-Spine Goes Mainstream</H2>

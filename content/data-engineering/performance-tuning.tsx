@@ -860,13 +860,13 @@ OPTIMISATION 4: Coalesce vs repartition — know the difference
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Scenario — FreshCart · Silver orders pipeline misses its 08:00 IST SLA daily
+            Scenario — FreshCart · Silver orders pipeline misses its 08:00 ET SLA daily
           </div>
 
           <Para>
-            The Silver orders pipeline runs from 06:00 IST and is supposed to
-            complete by 07:30 IST, giving Gold 30 minutes before analysts arrive.
-            It has been completing at around 10:00 IST. The data team is asked
+            The Silver orders pipeline runs from 06:00 ET and is supposed to
+            complete by 07:30 ET, giving Gold 30 minutes before analysts arrive.
+            It has been completing at around 10:00 ET. The data team is asked
             to fix it. The pipeline processes 180 million orders in Bronze,
             transforming them to Silver via a Spark job on a 10-node cluster.
           </Para>
@@ -965,7 +965,7 @@ STEP 6: Check overall pipeline for redundant reads.
     Stage 4 (second model):   4 min  (cache hit — was 12 min)
   Total: 22 min (was 4 hours)
   Improvement: 11× faster.
-  SLA: now completes at 06:22 IST. Analysts have data by 06:30.
+  SLA: now completes at 06:22 ET. Analysts have data by 06:30.
 
 SUMMARY OF FIXES APPLIED:
   1. AQE skew join:          2.5 hr → 38 min (data skew resolved)

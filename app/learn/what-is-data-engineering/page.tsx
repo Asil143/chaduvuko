@@ -116,7 +116,7 @@ export default function WhatIsDataEngineeringPage() {
         Data engineers keep the lights on. That is why the pay is high and the job market is strong — the work is critical and there are not enough people who know how to do it well.
       </p>
       <p>
-        For someone coming from India targeting H1B roles in the US, data engineering is one of the best paths. Consulting firms like Deloitte, Accenture, and Cognizant hire hundreds of data engineers annually and sponsor H1B visas consistently.
+        Data engineering is one of the best paths into the US tech job market. Consulting firms like Deloitte, Accenture, and Cognizant hire hundreds of data engineers annually and sponsor H1B visas consistently for international candidates.
       </p>
 
       <h2>What you need to learn — in order</h2>

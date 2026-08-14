@@ -229,8 +229,8 @@ export default function GitForDataModule() {
         <SubTitle>The commands used every day</SubTitle>
 
         <CodeBox label="Daily git workflow — the commands and what each actually does">{`# ── SETUP (once per machine) ──────────────────────────────────────────────────
-git config --global user.name "Priya Sharma"
-git config --global user.email "priya@company.com"
+git config --global user.name "Sarah Mitchell"
+git config --global user.email "sarah@company.com"
 git config --global core.editor "vim"       # or nano, code --wait, etc.
 git config --global init.defaultBranch main
 
@@ -445,7 +445,7 @@ git stash drop stash@{0}          # remove a stash without applying`}</CodeBox>
           <strong>For most data engineering teams:</strong> start with GitHub Flow.
           It is simple enough to teach a junior engineer in 30 minutes, provides
           enough structure to protect production, and is what the majority of
-          Indian tech companies use for their data teams. Add trunk-based
+          tech companies use for their data teams. Add trunk-based
           development only when the team has strong automated testing and
           experienced engineers comfortable with continuous deployment.
         </Callout>

@@ -324,7 +324,7 @@ documents = [
         'title': 'Refund Policy',
         'text': (
             "Refunds are processed within 5-7 business days for credit cards and "
-            "2-3 business days for UPI and net banking. Stripe does not charge "
+            "2-3 business days for ACH and debit cards. Stripe does not charge "
             "any fee for processing refunds. Partial refunds are supported."
         ),
     },
@@ -483,7 +483,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 # ── Three chunking strategies on the same document ────────────────────
-razorpay_doc = """
+stripe_doc = """
 # Stripe Settlement Guide
 
 ## Domestic Settlements
@@ -492,7 +492,7 @@ the payment is captured. Weekends and public holidays are excluded from
 the settlement cycle. For example, a payment captured on Friday will be
 settled by the following Tuesday.
 
-The minimum settlement amount is Rs 100. Settlements below this threshold
+The minimum settlement amount is $100. Settlements below this threshold
 are carried forward to the next settlement cycle. You can view all pending
 settlements in the Stripe Dashboard under Settlements > Pending.
 
@@ -500,7 +500,7 @@ settlements in the Stripe Dashboard under Settlements > Pending.
 International payments are settled within T+7 business days. Currency
 conversion is done at the prevailing forex rate on the day of settlement.
 SWIFT charges of USD 15-25 may apply per transaction depending on your
-bank. Contact support@razorpay.com for bulk international settlement rates.
+bank. Contact support@stripe.com for bulk international settlement rates.
 
 ## Settlement Disputes
 If you believe a settlement amount is incorrect, raise a dispute within
@@ -520,7 +520,7 @@ def fixed_size_chunks(text, chunk_size=200, overlap=40):
         i += chunk_size - overlap
     return chunks
 
-fixed_chunks = fixed_size_chunks(razorpay_doc)
+fixed_chunks = fixed_size_chunks(stripe_doc)
 print(f"Fixed-size chunking: {len(fixed_chunks)} chunks")
 for i, c in enumerate(fixed_chunks[:2]):
     print(f"  Chunk {i+1} ({len(c.split())} words): '{c[:80]}...'")
@@ -547,7 +547,7 @@ def recursive_split(text, max_tokens=150, separators=['\n\n', '\n', '. ', ' ']):
             return [c for c in chunks if c]
     return [text.strip()]
 
-recursive_chunks = recursive_split(razorpay_doc)
+recursive_chunks = recursive_split(stripe_doc)
 print(f"\nRecursive splitting: {len(recursive_chunks)} chunks")
 for i, c in enumerate(recursive_chunks[:2]):
     print(f"  Chunk {i+1} ({len(c.split())} words): '{c[:80]}...'")
@@ -576,7 +576,7 @@ def semantic_chunks(text, embedder, threshold=0.3):
     return chunks
 
 embedder       = SentenceTransformer('all-MiniLM-L6-v2')
-semantic       = semantic_chunks(razorpay_doc, embedder, threshold=0.4)
+semantic       = semantic_chunks(stripe_doc, embedder, threshold=0.4)
 print(f"\nSemantic chunking: {len(semantic)} chunks")
 for i, c in enumerate(semantic[:2]):
     print(f"  Chunk {i+1} ({len(c.split())} words): '{c[:80]}...'")
@@ -676,10 +676,10 @@ embedder = SentenceTransformer('all-MiniLM-L6-v2')
 chunks = [
     {'id': '1', 'text': 'Domestic settlement takes T+2 business days.', 'source': 'settlement-guide'},
     {'id': '2', 'text': 'International settlement takes T+7 business days.', 'source': 'settlement-guide'},
-    {'id': '3', 'text': 'Refunds for UPI take 2-3 business days.', 'source': 'refund-policy'},
+    {'id': '3', 'text': 'Refunds for ACH take 2-3 business days.', 'source': 'refund-policy'},
     {'id': '4', 'text': 'Webhooks retry up to 3 times on failure.', 'source': 'webhook-docs'},
     {'id': '5', 'text': 'Disputes must be responded to within 7 days.', 'source': 'dispute-guide'},
-    {'id': '6', 'text': 'Minimum settlement amount is Rs 100.', 'source': 'settlement-guide'},
+    {'id': '6', 'text': 'Minimum settlement amount is $100.', 'source': 'settlement-guide'},
 ]
 
 texts = [c['text'] for c in chunks]
@@ -690,14 +690,14 @@ index = faiss.IndexFlatIP(dim)
 index.add(embs)
 
 # Save index and metadata
-faiss.write_index(index, '/tmp/razorpay.index')
-with open('/tmp/razorpay_meta.pkl', 'wb') as f:
+faiss.write_index(index, '/tmp/stripe.index')
+with open('/tmp/stripe_meta.pkl', 'wb') as f:
     pickle.dump(chunks, f)
 print(f"FAISS index saved: {index.ntotal} vectors")
 
 # Load and search
-loaded_index = faiss.read_index('/tmp/razorpay.index')
-with open('/tmp/razorpay_meta.pkl', 'rb') as f:
+loaded_index = faiss.read_index('/tmp/stripe.index')
+with open('/tmp/stripe_meta.pkl', 'rb') as f:
     loaded_chunks = pickle.load(f)
 
 def faiss_search(query, k=3):
@@ -709,9 +709,9 @@ def faiss_search(query, k=3):
 try:
     import chromadb
 
-    client     = chromadb.PerforceClient(path='/tmp/razorpay_chroma')
+    client     = chromadb.PerforceClient(path='/tmp/stripe_chroma')
     collection = client.get_or_create_collection(
-        name='razorpay_kb',
+        name='stripe_kb',
         metadata={'hnsw:space': 'cosine'},
     )
 
@@ -870,7 +870,7 @@ knowledge_base = [
             "Stripe settles domestic payments within T+2 business days. "
             "T is the day the payment is captured. Weekends and public holidays "
             "are excluded. International payments settle within T+7 business days. "
-            "Minimum settlement amount is Rs 100. Amounts below this carry forward. "
+            "Minimum settlement amount is $100. Amounts below this carry forward. "
             "Currency conversion uses prevailing forex rate on settlement day. "
             "SWIFT charges of USD 15-25 may apply to international settlements."
         ),
@@ -880,7 +880,7 @@ knowledge_base = [
         'source': 'refund-policy',
         'text': (
             "Refunds are processed within 5-7 business days for credit cards. "
-            "UPI and net banking refunds take 2-3 business days. "
+            "ACH and debit card refunds take 2-3 business days. "
             "Stripe charges no fee for processing refunds. "
             "Partial refunds are supported for all payment methods. "
             "Refund status can be tracked in the Stripe Dashboard."

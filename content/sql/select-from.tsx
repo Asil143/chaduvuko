@@ -403,7 +403,7 @@ LIMIT 10;`}
       <P>When to write comments in SQL: when a calculation is non-obvious (explain the formula), when a column name is ambiguous (clarify what it means in this context), when a query has a non-obvious filter or business rule (explain why), and when you are sharing a query with teammates who will need to understand it without asking you.</P>
 
       <ProTip>
-        The best SQL queries at Indian tech companies read like a story. The table name tells you what you are looking at, the column names tell you what you are measuring, and comments explain the why — the business rule or decision behind each non-obvious choice. A query you write today needs to be understandable by your colleague six months from now without your explanation.
+        The best SQL queries at US tech companies read like a story. The table name tells you what you are looking at, the column names tell you what you are measuring, and comments explain the why — the business rule or decision behind each non-obvious choice. A query you write today needs to be understandable by your colleague six months from now without your explanation.
       </ProTip>
 
       <HR />
@@ -469,7 +469,7 @@ FROM products
 LIMIT 5;`}
       />
 
-      <P>The formatted version takes more lines but is dramatically easier to read, modify, debug, and review. The professional SQL formatting conventions used throughout this course — and at most Indian tech companies:</P>
+      <P>The formatted version takes more lines but is dramatically easier to read, modify, debug, and review. The professional SQL formatting conventions used throughout this course — and at most US tech companies:</P>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12, margin: '16px 0 28px' }}>
         {[
@@ -631,13 +631,13 @@ ORDER BY onboarded_date DESC;`}
 
       <IQ q="Can you perform calculations in a SELECT statement? Give examples.">
         <p style={{ margin: '0 0 14px' }}>Yes. SELECT can perform arithmetic, string operations, date calculations, and function calls on column values, and return the computed result as a new column in the output. The original table is never modified — calculations happen during query execution and exist only in the result set.</p>
-        <p style={{ margin: '0 0 14px' }}>Arithmetic examples: unit_price - cost_price computes the profit margin per product. total_amount * 1.18 applies 18% GST to an order total. quantity * unit_price recalculates the line total. These use the standard arithmetic operators: + (add), - (subtract), * (multiply), / (divide), % (modulo). Division between integers produces an integer in some databases — use CAST or decimal literals if you need decimal division.</p>
-        <p style={{ margin: 0 }}>String operation example: first_name || ' ' || last_name concatenates first and last name with a space (PostgreSQL/DuckDB syntax). MySQL uses CONCAT(first_name, ' ', last_name). Date example: delivery_date - order_date returns the number of days between two dates in PostgreSQL. Built-in function example: ROUND(price * 0.18, 2) rounds a calculated tax value to 2 decimal places. All computed columns can be given a readable name using AS: unit_price - cost_price AS profit. Without AS, the column header in the result shows the raw expression.</p>
+        <p style={{ margin: '0 0 14px' }}>Arithmetic examples: unit_price - cost_price computes the profit margin per product. total_amount * 1.08 applies 8% sales tax to an order total. quantity * unit_price recalculates the line total. These use the standard arithmetic operators: + (add), - (subtract), * (multiply), / (divide), % (modulo). Division between integers produces an integer in some databases — use CAST or decimal literals if you need decimal division.</p>
+        <p style={{ margin: 0 }}>String operation example: first_name || ' ' || last_name concatenates first and last name with a space (PostgreSQL/DuckDB syntax). MySQL uses CONCAT(first_name, ' ', last_name). Date example: delivery_date - order_date returns the number of days between two dates in PostgreSQL. Built-in function example: ROUND(price * 0.08, 2) rounds a calculated tax value to 2 decimal places. All computed columns can be given a readable name using AS: unit_price - cost_price AS profit. Without AS, the column header in the result shows the raw expression.</p>
       </IQ>
 
       <IQ q="What is a SQL comment and why should you write them?">
         <p style={{ margin: '0 0 14px' }}>SQL comments are text in a query that the database engine ignores completely — they exist only for humans reading the query. There are two comment syntaxes. Single-line comments start with two hyphens (--) and everything after them on that line is ignored. Multi-line comments start with /* and end with */ and can span any number of lines.</p>
-        <p style={{ margin: '0 0 14px' }}>Comments serve four practical purposes in professional SQL work. First, explanation: a non-obvious calculation or filter needs an explanation of the business rule behind it — WHY you are multiplying by 1.18, not just WHAT the multiplication does. Second, attribution: who wrote the query and when, especially in shared query libraries. Third, toggling: commenting out individual SELECT columns or WHERE conditions is easier than deleting and retyping them when debugging. Fourth, documentation: queries in a data pipeline or scheduled job should have a comment explaining what business question they answer and which team owns them.</p>
+        <p style={{ margin: '0 0 14px' }}>Comments serve four practical purposes in professional SQL work. First, explanation: a non-obvious calculation or filter needs an explanation of the business rule behind it — WHY you are multiplying by 1.08, not just WHAT the multiplication does. Second, attribution: who wrote the query and when, especially in shared query libraries. Third, toggling: commenting out individual SELECT columns or WHERE conditions is easier than deleting and retyping them when debugging. Fourth, documentation: queries in a data pipeline or scheduled job should have a comment explaining what business question they answer and which team owns them.</p>
         <p style={{ margin: 0 }}>The mark of a professional SQL writer is queries that read like documentation — the structure tells you what, the comments tell you why. A query you write today at 10 AM should be fully understandable to a colleague at 3 PM without your explanation. This becomes increasingly important as companies grow and queries are shared across teams and maintained over years.</p>
       </IQ>
 
@@ -680,18 +680,18 @@ ORDER BY onboarded_date DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="FreshCart wants a product listing for their website. Write a SELECT query that returns: the product name, category, brand, price (formatted as unit_price with an alias 'price'), and a calculated column called 'gst_price' which is the unit_price multiplied by 1.18 (adding 18% GST), rounded to 2 decimal places. Only return products that are in stock. Order by price ascending."
-        hint="You need SELECT with column names and a calculated column using ROUND(unit_price * 1.18, 2). For filtering in-stock products use WHERE in_stock = true. For ordering use ORDER BY unit_price ASC."
+        question="FreshCart wants a product listing for their website. Write a SELECT query that returns: the product name, category, brand, price (formatted as unit_price with an alias 'price'), and a calculated column called 'tax_price' which is the unit_price multiplied by 1.08 (adding 8% sales tax), rounded to 2 decimal places. Only return products that are in stock. Order by price ascending."
+        hint="You need SELECT with column names and a calculated column using ROUND(unit_price * 1.08, 2). For filtering in-stock products use WHERE in_stock = true. For ordering use ORDER BY unit_price ASC."
         answer={`SELECT
   product_name,
   category,
   brand,
   unit_price                            AS price,
-  ROUND(unit_price * 1.18, 2)           AS gst_price
+  ROUND(unit_price * 1.08, 2)           AS tax_price
 FROM products
 WHERE in_stock = true
 ORDER BY unit_price ASC;`}
-        explanation="This query combines everything from Module 05: selecting specific columns by name, giving them readable aliases with AS, performing arithmetic inside SELECT (multiplying by 1.18 for GST), using ROUND() to control decimal places, filtering with WHERE (you will learn this fully in Module 06), and sorting with ORDER BY. The result is a clean product listing with both the base price and the GST-inclusive price — exactly what a real e-commerce product listing query would look like."
+        explanation="This query combines everything from Module 05: selecting specific columns by name, giving them readable aliases with AS, performing arithmetic inside SELECT (multiplying by 1.08 for sales tax), using ROUND() to control decimal places, filtering with WHERE (you will learn this fully in Module 06), and sorting with ORDER BY. The result is a clean product listing with both the base price and the tax-inclusive price — exactly what a real e-commerce product listing query would look like."
       />
 
       <HR />

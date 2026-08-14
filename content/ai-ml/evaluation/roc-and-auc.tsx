@@ -377,7 +377,7 @@ print(f"sklearn AUC:                 {auc_sk:.4f}  ← matches")`} />
           one fraud transaction and one legitimate transaction, what is the
           probability it will rank the fraud higher?" For Stripe's fraud model
           with AUC = 0.94, the answer is 94%. This is the number you put
-          in the model card, the slide deck, and the RBI audit report.
+          in the model card, the slide deck, and the compliance audit report.
         </p>
 
         <ConceptBox title="Proving the probabilistic interpretation — counting concordant pairs">
@@ -618,7 +618,7 @@ print(f"  Both:    always report both — they capture different aspects")`} />
               method: 'Cost-minimising threshold',
               formula: 'Cost = FN × cost_FN + FP × cost_FP  →  find min cost',
               color: '#378ADD',
-              when: 'When you know the relative cost of each error type. Stripe: cost_FN=₹2500 (missed fraud), cost_FP=₹50 (friction). Most situations.',
+              when: 'When you know the relative cost of each error type. Stripe: cost_FN=$2500 (missed fraud), cost_FP=$50 (friction). Most situations.',
               limit: 'Requires knowing business costs explicitly. Cost estimates may themselves be uncertain.',
             },
             {
@@ -707,8 +707,8 @@ print(f"  Best threshold: {t_youden:.3f}")
 print(f"  TPR={tpr[best_idx_j]:.3f}  FPR={fpr[best_idx_j]:.3f}  J={youden[best_idx_j]:.3f}")
 
 # ── Method 2: Cost minimisation ────────────────────────────────────────
-cost_fn = 2500   # ₹ cost of missing one fraud
-cost_fp = 50     # ₹ cost of one false alarm
+cost_fn = 2500   # $ cost of missing one fraud
+cost_fp = 50     # $ cost of one false alarm
 
 n_pos = y_val.sum()
 n_neg = (1 - y_val).sum()
@@ -721,9 +721,9 @@ for t, tp_rate, fp_rate in zip(thresholds, tpr, fpr):
 
 best_idx_cost = np.argmin(costs)
 t_cost        = thresholds[best_idx_cost]
-print(f"\nMethod 2 — Cost minimisation (FN=₹{cost_fn}, FP=₹{cost_fp}):")
+print(f"\nMethod 2 — Cost minimisation (FN=\${cost_fn}, FP=\${cost_fp}):")
 print(f"  Best threshold: {t_cost:.3f}")
-print(f"  TPR={tpr[best_idx_cost]:.3f}  FPR={fpr[best_idx_cost]:.3f}  Cost=₹{min(costs):,.0f}")
+print(f"  TPR={tpr[best_idx_cost]:.3f}  FPR={fpr[best_idx_cost]:.3f}  Cost=\${min(costs):,.0f}")
 
 # ── Method 3: Fixed recall constraint ─────────────────────────────────
 target_recall  = 0.90
@@ -737,7 +737,7 @@ print(f"  TPR={tpr[recall_thresh_idx]:.3f}  FPR={fpr[recall_thresh_idx]:.3f}")
 test_prob = model.predict_proba(X_te_sc)[:, 1]
 print(f"\nTest set AUC: {roc_auc_score(y_te, test_prob):.4f}")
 print(f"\nComparison at each threshold on test set:")
-print(f"{'Method':<28} {'Threshold':>10} {'TPR':>7} {'FPR':>7} {'Cost ₹':>10}")
+print(f"{'Method':<28} {'Threshold':>10} {'TPR':>7} {'FPR':>7} {'Cost $':>10}")
 print("─" * 67)
 
 for name, t in [('Youden Index',    t_youden),

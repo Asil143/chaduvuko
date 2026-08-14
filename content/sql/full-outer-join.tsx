@@ -572,7 +572,7 @@ ORDER BY customer_id NULLS LAST, order_id NULLS LAST;`}
       {/* ── PART 09 ── */}
       <Part n="09" title="What This Looks Like at Work" />
 
-      <P>You are a data engineer at HDFC Bank's digital banking division. Every night, the transaction processing system writes payment records to two databases: the primary OLTP database and an independent audit database. The compliance team runs a daily reconciliation to ensure both databases agree. Any transaction present in one but absent in the other — or present in both but with different amounts — must be flagged for investigation.</P>
+      <P>You are a data engineer at Chase Bank's digital banking division. Every night, the transaction processing system writes payment records to two databases: the primary OLTP database and an independent audit database. The compliance team runs a daily reconciliation to ensure both databases agree. Any transaction present in one but absent in the other — or present in both but with different amounts — must be flagged for investigation.</P>
 
       <TimeBlock time="6:00 AM" label="Nightly reconciliation job starts">
         The reconciliation query runs against both databases. Adapted here using FreshCart's two monthly snapshots as the two systems being compared.

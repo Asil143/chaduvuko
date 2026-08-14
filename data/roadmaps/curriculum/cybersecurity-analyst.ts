@@ -107,7 +107,7 @@ Practice progression:
 Cybersecurity Analysts are in high demand across various industries, including:
 - **IBM**: Cybersecurity Analysts work on threat intelligence, incident response, and security consulting
 - **Deloitte**: Cybersecurity Analysts work on security assessment, vulnerability testing, and penetration testing
-- **Indian Government**: Cybersecurity Analysts work on national cybersecurity initiatives, threat intelligence, and incident response
+- **US Federal Government**: Cybersecurity Analysts work on national cybersecurity initiatives, threat intelligence, and incident response
 
 # Common Mistakes & Debugging
 Common beginner mistakes include:

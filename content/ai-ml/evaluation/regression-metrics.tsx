@@ -217,11 +217,11 @@ export default function RegressionMetricsPage() {
 
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
-            A cricket commentator says "India needs 12 runs per over."
+            A basketball commentator says "this team needs 12 points a quarter to win."
             The team scores 10, 11, 13, 9, 12, 8 — never exactly 12.
-            MAE asks: how far off was each over on average? Answer: about 1.5 runs.
-            RMSE asks the same but doubles down on the 8-run over (4 under) —
-            that 16-run miss from target hurts the team more than two 2-run misses.
+            MAE asks: how far off was each quarter on average? Answer: about 1.5 points.
+            RMSE asks the same but doubles down on the 8-point quarter (4 under) —
+            that squared miss from target hurts more than two smaller misses.
             MAPE asks: what percentage of the target was each miss?
           </p>
           <p style={{ ...S.ps, marginBottom: 0, color: '#00e676' }}>

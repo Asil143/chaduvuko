@@ -101,7 +101,7 @@ export default function StringFunctions() {
 
       <P>In an ideal world, every string column is clean, consistently formatted, and ready to query. In production, data arrives from mobile apps, web forms, CSV imports, partner APIs, and legacy systems — each with its own formatting quirks. Customer names with extra spaces, email addresses in mixed case, phone numbers formatted a dozen different ways, product codes with inconsistent separators.</P>
 
-      <P>String functions are the tools that standardise, clean, extract, and transform text data at query time — without modifying the underlying rows. They are essential for data quality checks, display formatting, join key normalisation (so 'bangalore' matches 'Seattle'), and extracting structured information from unstructured text fields.</P>
+      <P>String functions are the tools that standardise, clean, extract, and transform text data at query time — without modifying the underlying rows. They are essential for data quality checks, display formatting, join key normalisation (so 'seattle' matches 'Seattle'), and extracting structured information from unstructured text fields.</P>
 
       <HR />
 
@@ -177,7 +177,7 @@ LIMIT 10;`}
 
       <SQLPlayground
         initialQuery={`-- Case-insensitive join using LOWER()
--- Without LOWER: 'Seattle' != 'bangalore' — join misses rows
+-- Without LOWER: 'Seattle' != 'seattle' — join misses rows
 -- With LOWER: both normalised, join works correctly
 SELECT
   c.customer_id,
@@ -186,7 +186,7 @@ SELECT
   COUNT(o.order_id)  AS order_count
 FROM customers AS c
 JOIN orders AS o ON c.customer_id = o.customer_id
-WHERE LOWER(c.city) IN ('bangalore', 'hyderabad', 'mumbai')
+WHERE LOWER(c.city) IN ('seattle', 'austin', 'boston')
 GROUP BY c.customer_id, c.first_name, c.city
 ORDER BY order_count DESC;`}
         height={200}
@@ -194,7 +194,7 @@ ORDER BY order_count DESC;`}
       />
 
       <Callout type="tip">
-        Always normalise case before comparing or joining on string columns. WHERE LOWER(city) = 'bangalore' correctly matches 'Seattle', 'BANGALORE', and 'bangalore'. Without normalisation, a single inconsistency in the data breaks the match silently — no error, just missing rows.
+        Always normalise case before comparing or joining on string columns. WHERE LOWER(city) = 'seattle' correctly matches 'Seattle', 'SEATTLE', and 'seattle'. Without normalisation, a single inconsistency in the data breaks the match silently — no error, just missing rows.
       </Callout>
 
       <HR />
@@ -259,16 +259,16 @@ TRIM(BOTH '0' FROM '00042000')    -- '42'   (removes leading/trailing zeros)
 TRIM(LEADING '0' FROM '00042000') -- '42000' (removes only leading zeros)
 
 -- Practical: normalise before joining
-WHERE LOWER(TRIM(city)) = 'bangalore'`}
+WHERE LOWER(TRIM(city)) = 'seattle'`}
       />
 
       <SQLPlayground
         initialQuery={`-- Demonstrate TRIM in action
 SELECT
-  '  Amul Butter  '                       AS raw_value,
-  TRIM('  Amul Butter  ')                 AS trimmed,
-  LENGTH('  Amul Butter  ')              AS raw_length,
-  LENGTH(TRIM('  Amul Butter  '))         AS trimmed_length,
+  '  Horizon Butter  '                       AS raw_value,
+  TRIM('  Horizon Butter  ')                 AS trimmed,
+  LENGTH('  Horizon Butter  ')              AS raw_length,
+  LENGTH(TRIM('  Horizon Butter  '))         AS trimmed_length,
   -- Practical: trim and normalise product names
   INITCAP(LOWER(TRIM(product_name)))      AS clean_name,
   LENGTH(product_name) - LENGTH(TRIM(product_name)) AS whitespace_count
@@ -384,7 +384,7 @@ POSITION('xyz' IN 'user@gmail.com')        -- 0 (not found)
 STRPOS('user@gmail.com', '@')              -- 5
 
 -- CONTAINS (DuckDB): returns TRUE/FALSE
-CONTAINS('Seattle India', 'India')       -- true
+CONTAINS('Seattle Washington', 'Seattle')  -- true
 
 -- Practical: extract everything before a delimiter
 SUBSTRING(email, 1, POSITION('@' IN email) - 1)  -- username before @
@@ -529,7 +529,7 @@ ORDER BY store_id;`}
         code={`-- % = zero or more characters
 -- _ = exactly one character
 
-'Amul%'        -- starts with 'Amul'
+'Horizon%'        -- starts with 'Horizon'
 '%Butter'      -- ends with 'Butter'
 '%Milk%'       -- contains 'Milk' anywhere
 '_mail.com'    -- any single char then 'mail.com'
@@ -537,8 +537,8 @@ ORDER BY store_id;`}
 
 -- Case sensitivity: LIKE is case-sensitive in PostgreSQL
 -- Use ILIKE for case-insensitive matching (PostgreSQL/DuckDB)
-WHERE product_name ILIKE '%amul%'      -- matches 'Amul', 'AMUL', 'amul'
-WHERE product_name LIKE '%Amul%'       -- matches only 'Amul' (case-sensitive)
+WHERE product_name ILIKE '%horizon%'      -- matches 'Horizon', 'HORIZON', 'horizon'
+WHERE product_name LIKE '%Horizon%'       -- matches only 'Horizon' (case-sensitive)
 
 -- Escape literal % or _: use ESCAPE clause
 WHERE notes LIKE '%50\%%' ESCAPE '\'   -- contains literal '50%'`}
@@ -553,8 +553,8 @@ SELECT
   unit_price
 FROM products
 WHERE product_name LIKE '%Milk%'          -- contains 'Milk'
-   OR product_name LIKE 'Amul%'           -- starts with 'Amul'
-   OR brand        LIKE '%ata%'           -- brand contains 'ata' (Tata)
+   OR product_name LIKE 'Horizon%'           -- starts with 'Horizon'
+   OR brand        LIKE '%ort%'           -- brand contains 'ort' (Morton)
 ORDER BY brand, product_name;`}
         height={185}
         showSchema={true}
@@ -607,11 +607,11 @@ ORDER BY city;`}
 -- Validate email format (simplified)
 WHERE email ~ '^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'
 
--- Validate Indian mobile number: starts with 6-9, 10 digits total
-WHERE phone ~ '^[6-9][0-9]{9}$'
+-- Validate US mobile number: starts with 2-9 (area codes never start 0/1), 10 digits total
+WHERE phone ~ '^[2-9][0-9]{9}$'
 
--- Validate 6-digit zip_code
-WHERE zip_code ~ '^[0-9]{6}$'
+-- Validate 5-digit zip_code
+WHERE zip_code ~ '^[0-9]{5}$'
 
 -- Extract with REGEXP_EXTRACT (DuckDB)
 REGEXP_EXTRACT(text, pattern, group)
@@ -631,9 +631,9 @@ SELECT
   CASE WHEN email ~ '^[^@]+@[^@]+\.[^@]+$'
        THEN '✓ Valid' ELSE '✗ Invalid' END AS email_status,
   phone,
-  -- Valid Indian mobile: 10 digits starting with 6-9
+  -- Valid US mobile: 10 digits starting with 2-9
   CASE WHEN REPLACE(REPLACE(phone, ' ', ''), '-', '')
-            ~ '^[6-9][0-9]{9}$'
+            ~ '^[2-9][0-9]{9}$'
        THEN '✓ Valid' ELSE '✗ Check' END   AS phone_status
 FROM customers
 ORDER BY customer_id
@@ -816,7 +816,7 @@ SELECT
   'SELL-' || LPAD(employee_id::TEXT, 5, '0')         AS display_id,
 
   -- Salary formatted with currency symbol
-  '₹' || TO_CHAR(salary, 'FM999,999')                AS formatted_salary
+  '$' || TO_CHAR(salary, 'FM999,999')                AS formatted_salary
 
 FROM employees
 ORDER BY department, last_name
@@ -839,9 +839,9 @@ LIMIT 10;`}
       <Part n="15" title="Interview Prep — 5 Questions With Complete Answers" />
 
       <IQ q="How do you perform a case-insensitive string comparison in SQL?">
-        <p style={{ margin: '0 0 14px' }}>Three approaches. First, normalise both sides using LOWER() or UPPER() before comparing: WHERE LOWER(city) = LOWER('bangalore'). This converts both values to the same case before the comparison, making it case-insensitive. Second, in PostgreSQL and DuckDB, use ILIKE instead of LIKE: WHERE city ILIKE 'bangalore' — ILIKE is the case-insensitive version of LIKE and supports wildcards. Third, for joins on string columns, normalise the join key: JOIN stores ON LOWER(TRIM(o.city)) = LOWER(TRIM(s.city)).</p>
-        <p style={{ margin: '0 0 14px' }}>The most important practical application is join key normalisation. Two tables may store the same city as 'Seattle' and 'bangalore' — an INNER JOIN without normalisation would miss the match entirely. Using LOWER(TRIM(city)) on both sides ensures the join finds matches regardless of case or whitespace differences.</p>
-        <p style={{ margin: 0 }}>Performance consideration: applying LOWER() or TRIM() to a column in WHERE prevents the database from using an index on that column — because the index stores the original values, not the lowercased versions. For high-frequency case-insensitive searches on large tables, create a functional index: CREATE INDEX idx_customers_city_lower ON customers (LOWER(city)). Then WHERE LOWER(city) = 'bangalore' can use this index efficiently. Alternatively, enforce case normalisation at write time (store all city values in title case) so queries never need to apply LOWER().</p>
+        <p style={{ margin: '0 0 14px' }}>Three approaches. First, normalise both sides using LOWER() or UPPER() before comparing: WHERE LOWER(city) = LOWER('seattle'). This converts both values to the same case before the comparison, making it case-insensitive. Second, in PostgreSQL and DuckDB, use ILIKE instead of LIKE: WHERE city ILIKE 'seattle' — ILIKE is the case-insensitive version of LIKE and supports wildcards. Third, for joins on string columns, normalise the join key: JOIN stores ON LOWER(TRIM(o.city)) = LOWER(TRIM(s.city)).</p>
+        <p style={{ margin: '0 0 14px' }}>The most important practical application is join key normalisation. Two tables may store the same city as 'Seattle' and 'seattle' — an INNER JOIN without normalisation would miss the match entirely. Using LOWER(TRIM(city)) on both sides ensures the join finds matches regardless of case or whitespace differences.</p>
+        <p style={{ margin: 0 }}>Performance consideration: applying LOWER() or TRIM() to a column in WHERE prevents the database from using an index on that column — because the index stores the original values, not the lowercased versions. For high-frequency case-insensitive searches on large tables, create a functional index: CREATE INDEX idx_customers_city_lower ON customers (LOWER(city)). Then WHERE LOWER(city) = 'seattle' can use this index efficiently. Alternatively, enforce case normalisation at write time (store all city values in title case) so queries never need to apply LOWER().</p>
       </IQ>
 
       <IQ q="What is the difference between REPLACE and TRANSLATE?">
@@ -874,9 +874,9 @@ LIMIT 10;`}
       <Part n="16" title="Errors You Will Hit — And Exactly Why They Happen" />
 
       <Err
-        msg="String comparison fails to match — 'Seattle' != 'bangalore' — joins miss rows"
-        cause="SQL string comparisons are case-sensitive in PostgreSQL and most databases. 'Seattle' and 'bangalore' are different values. A JOIN or WHERE using direct equality will miss rows where the case differs between the two columns being compared. This is especially common after bulk imports where different sources used different conventions."
-        fix="Normalise both sides with LOWER() before comparing: WHERE LOWER(city) = 'bangalore' or JOIN ON LOWER(a.city) = LOWER(b.city). For PostgreSQL, ILIKE is the case-insensitive alternative to LIKE. Long-term fix: enforce consistent case at write time using CHECK constraints or triggers, so all city values are always title case. For frequent queries, create a functional index on LOWER(city) to maintain performance while using case-insensitive comparisons."
+        msg="String comparison fails to match — 'Seattle' != 'seattle' — joins miss rows"
+        cause="SQL string comparisons are case-sensitive in PostgreSQL and most databases. 'Seattle' and 'seattle' are different values. A JOIN or WHERE using direct equality will miss rows where the case differs between the two columns being compared. This is especially common after bulk imports where different sources used different conventions."
+        fix="Normalise both sides with LOWER() before comparing: WHERE LOWER(city) = 'seattle' or JOIN ON LOWER(a.city) = LOWER(b.city). For PostgreSQL, ILIKE is the case-insensitive alternative to LIKE. Long-term fix: enforce consistent case at write time using CHECK constraints or triggers, so all city values are always title case. For frequent queries, create a functional index on LOWER(city) to maintain performance while using case-insensitive comparisons."
       />
 
       <Err
@@ -887,8 +887,8 @@ LIMIT 10;`}
 
       <Err
         msg="LIKE pattern not matching as expected — wildcard seems to be ignored"
-        cause="Three common causes: (1) Case sensitivity — LIKE 'bangalore%' does not match 'Seattle%' in PostgreSQL. (2) Whitespace — the value has leading/trailing spaces that the pattern does not account for. (3) Incorrect wildcard placement — LIKE 'Seattle' without any % or _ is an exact match, not a pattern. The value must exactly equal 'Seattle' for it to match."
-        fix="Use ILIKE instead of LIKE for case-insensitive matching. Wrap the column with TRIM() before LIKE: WHERE TRIM(city) LIKE 'Seattle%'. Verify wildcards are in the right position: LIKE '%Seattle%' matches the string anywhere; LIKE 'Seattle%' only matches strings starting with 'Seattle'. Test the pattern in isolation: SELECT 'Seattle' LIKE 'bangalore%' — this returns FALSE without ILIKE, confirming the case-sensitivity issue."
+        cause="Three common causes: (1) Case sensitivity — LIKE 'seattle%' does not match 'Seattle%' in PostgreSQL. (2) Whitespace — the value has leading/trailing spaces that the pattern does not account for. (3) Incorrect wildcard placement — LIKE 'Seattle' without any % or _ is an exact match, not a pattern. The value must exactly equal 'Seattle' for it to match."
+        fix="Use ILIKE instead of LIKE for case-insensitive matching. Wrap the column with TRIM() before LIKE: WHERE TRIM(city) LIKE 'Seattle%'. Verify wildcards are in the right position: LIKE '%Seattle%' matches the string anywhere; LIKE 'Seattle%' only matches strings starting with 'Seattle'. Test the pattern in isolation: SELECT 'Seattle' LIKE 'seattle%' — this returns FALSE without ILIKE, confirming the case-sensitivity issue."
       />
 
       <Err

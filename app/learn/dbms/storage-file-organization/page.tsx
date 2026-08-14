@@ -395,7 +395,7 @@ export default function StorageFileOrganization() {
               { label: 'Page Header', color: '#0078d4', content: 'page_id | lsn (log sequence number) | free_space_start | free_space_end | slot_count', side: 'fixed, at start of page' },
               { label: 'Slot Array', color: 'var(--accent)', content: '[slot_0: offset=200, len=45] [slot_1: offset=150, len=50] [slot_2: offset=100, len=50] ...', side: 'grows forward →' },
               { label: 'Free Space', color: 'var(--muted)', content: '(empty space in the middle)', side: 'shrinks from both sides' },
-              { label: 'Record Data', color: '#f97316', content: '← ... [row_2: Arjun|New York|24] [row_1: Priya|Hyd|31] [row_0: Rahul|Blr|28]', side: '← grows backward' },
+              { label: 'Record Data', color: '#f97316', content: '← ... [row_2: Marcus|SEA|24] [row_1: Jasmine|LAX|31] [row_0: Kevin|NYC|28]', side: '← grows backward' },
             ].map((item, i) => (
               <div key={i} style={{ display: 'flex', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
                 <div style={{ background: `${item.color}10`, borderRight: '1px solid var(--border)', padding: '10px 14px', minWidth: 110, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -424,8 +424,8 @@ export default function StorageFileOrganization() {
 //   slot[2] → (offset=0, length=0):    slot 2 is DELETED (marked with null offset)
 
 // Record data (grows backward from end of page):
-//   Row 0: [customer_id=1 | name=Rahul | city=San Francisco | age=28]  at offset 7900
-//   Row 1: [customer_id=2 | name=Priya | city=Austin | age=31]  at offset 7848
+//   Row 0: [customer_id=1 | name=Kevin | city=San Francisco | age=28]  at offset 7900
+//   Row 1: [customer_id=2 | name=Jasmine | city=Austin | age=31]  at offset 7848
 
 // ROW ID (RID): (page_id, slot_number)
 //   RID = (page_47, slot_0) → always identifies the same row
@@ -681,8 +681,8 @@ export default function StorageFileOrganization() {
               <div style={{ color: 'var(--muted)' }}>// Variable-length record layout</div>
               <div><span style={{ color: 'var(--accent)' }}>Header: </span><span style={{ color: 'var(--text2)' }}>[null_bitmap][field_offsets]</span></div>
               <div><span style={{ color: 'var(--accent)' }}>Fixed:  </span><span style={{ color: 'var(--text2)' }}>customer_id=1, age=28</span></div>
-              <div><span style={{ color: 'var(--accent)' }}>Var:    </span><span style={{ color: 'var(--text2)' }}>name="Rahul" (5 bytes)</span></div>
-              <div><span style={{ color: 'var(--accent)' }}>Var:    </span><span style={{ color: 'var(--text2)' }}>email="rahul@x.com" (11 bytes)</span></div>
+              <div><span style={{ color: 'var(--accent)' }}>Var:    </span><span style={{ color: 'var(--text2)' }}>name="Kevin" (5 bytes)</span></div>
+              <div><span style={{ color: 'var(--accent)' }}>Var:    </span><span style={{ color: 'var(--text2)' }}>email="kevin@x.com" (11 bytes)</span></div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {[
@@ -1017,9 +1017,9 @@ SHOW checkpoint_timeout;            -- default: 5min (checkpoint at least every 
             <div style={{ fontSize: 15, fontWeight: 700, color: '#0078d4', marginBottom: 14 }}>Row Store (NSM)</div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 7, padding: '12px', marginBottom: 12, fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 1.9 }}>
               <div style={{ color: 'var(--muted)' }}>// Page layout:</div>
-              <div><span style={{ color: '#0078d4' }}>Row 1:</span> <span style={{ color: 'var(--text2)' }}>[id=1][name=Rahul][city=Blr][amt=280][date=Jan]</span></div>
-              <div><span style={{ color: '#0078d4' }}>Row 2:</span> <span style={{ color: 'var(--text2)' }}>[id=2][name=Priya][city=Hyd][amt=450][date=Jan]</span></div>
-              <div><span style={{ color: '#0078d4' }}>Row 3:</span> <span style={{ color: 'var(--text2)' }}>[id=3][name=Arjun][city=Blr][amt=180][date=Feb]</span></div>
+              <div><span style={{ color: '#0078d4' }}>Row 1:</span> <span style={{ color: 'var(--text2)' }}>[id=1][name=Kevin][city=NYC][amt=280][date=Jan]</span></div>
+              <div><span style={{ color: '#0078d4' }}>Row 2:</span> <span style={{ color: 'var(--text2)' }}>[id=2][name=Jasmine][city=LAX][amt=450][date=Jan]</span></div>
+              <div><span style={{ color: '#0078d4' }}>Row 3:</span> <span style={{ color: 'var(--text2)' }}>[id=3][name=Marcus][city=NYC][amt=180][date=Feb]</span></div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {[
@@ -1041,7 +1041,7 @@ SHOW checkpoint_timeout;            -- default: 5min (checkpoint at least every 
             <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--accent)', marginBottom: 14 }}>Column Store (DSM)</div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 7, padding: '12px', marginBottom: 12, fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 1.9 }}>
               <div style={{ color: 'var(--muted)' }}>// Separate file per column:</div>
-              <div><span style={{ color: 'var(--accent)' }}>city_col:</span>  <span style={{ color: 'var(--text2)' }}>[Blr][Hyd][Blr][Mum][Blr]...</span></div>
+              <div><span style={{ color: 'var(--accent)' }}>city_col:</span>  <span style={{ color: 'var(--text2)' }}>[NYC][LAX][NYC][SEA][NYC]...</span></div>
               <div><span style={{ color: 'var(--accent)' }}>amount_col:</span><span style={{ color: 'var(--text2)' }}>[280][450][180][320][280]...</span></div>
               <div><span style={{ color: 'var(--accent)' }}>date_col:</span>  <span style={{ color: 'var(--text2)' }}>[Jan][Jan][Feb][Jan][Mar]...</span></div>
             </div>

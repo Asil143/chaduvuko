@@ -192,8 +192,8 @@ export default function VertexAIPage() {
         <p style={S.p}>
           Vertex AI is Google's unified ML platform — launched in 2021 by
           merging AI Platform, AutoML, and several other GCP ML services
-          into a single product. It is the platform of choice at Indian companies
-          that run on GCP: Ola, Braintree, Reddit, Gopuff, and many analytics-heavy
+          into a single product. It is the platform of choice at companies
+          that run on GCP: Uber, Braintree, Reddit, Gopuff, and many analytics-heavy
           companies. Its distinguishing strengths over Azure ML and SageMaker:
           BigQuery integration is native and seamless (query data directly
           from training scripts without copying to object storage), the
@@ -237,8 +237,8 @@ export default function VertexAIPage() {
           Free tier: GCP gives US$300 credit for 90 days.
           All examples use Vertex AI SDK v1 (google-cloud-aiplatform&gt;=1.50).
           Set your project and region once:
-          <span style={S.code as React.CSSProperties}> aiplatform.init(project='your-project', location='asia-south1')</span>.
-          asia-south1 is New York — lowest latency for India.
+          <span style={S.code as React.CSSProperties}> aiplatform.init(project='your-project', location='us-central1')</span>.
+          us-central1 is Iowa — lowest latency for most of the US.
         </Callout>
       </div>
 
@@ -314,7 +314,7 @@ import os
 
 # ── Initialise Vertex AI — do this once at the top of every script ────
 PROJECT  = os.environ.get('GOOGLE_CLOUD_PROJECT', 'freshmart-ml-project')
-REGION   = 'asia-south1'       # New York — lowest latency for India
+REGION   = 'us-central1'       # Iowa — lowest latency for most of the US
 BUCKET   = f'gs://{PROJECT}-vertex'
 STAGING  = f'{BUCKET}/staging'
 
@@ -488,8 +488,8 @@ job = CustomTrainingJob(
 #         '--project', PROJECT,
 #     ],
 #     replica_count=1,
-#     machine_type='n1-standard-4',     # 4 vCPU, 15 GB RAM ≈ ₹6/hr
-#     # machine_type='n1-standard-8',   # 8 vCPU, 30 GB RAM ≈ ₹12/hr
+#     machine_type='n1-standard-4',     # 4 vCPU, 15 GB RAM ≈ $0.19/hr
+#     # machine_type='n1-standard-8',   # 8 vCPU, 30 GB RAM ≈ $0.38/hr
 #     # machine_type='n1-highmem-16',   # 16 vCPU, 104 GB RAM for large datasets
 #     accelerator_type=None,            # or 'NVIDIA_TESLA_T4' for GPU
 #     accelerator_count=0,
@@ -505,13 +505,13 @@ print(f"  Output:     {BUCKET}/model-output/")
 # ── Machine type cheat sheet ──────────────────────────────────────────
 print("\nVertex AI machine type comparison:")
 machines = [
-    ('n1-standard-4',   4,   15,    6,   'Standard training, small datasets'),
-    ('n1-standard-8',   8,   30,   12,   'Medium datasets, parallelisable prep'),
-    ('n1-highmem-16',  16,  104,   30,   'Large in-memory datasets > 30GB'),
-    ('n1-standard-4 + T4 GPU', 4, 15, 40, 'PyTorch/TF training, fine-tuning LLMs'),
-    ('a2-highgpu-1g + A100', 12, 85, 300, 'Large model training, serious deep learning'),
+    ('n1-standard-4',   4,   15,    0.19,   'Standard training, small datasets'),
+    ('n1-standard-8',   8,   30,   0.38,   'Medium datasets, parallelisable prep'),
+    ('n1-highmem-16',  16,  104,   1.20,   'Large in-memory datasets > 30GB'),
+    ('n1-standard-4 + T4 GPU', 4, 15, 0.55, 'PyTorch/TF training, fine-tuning LLMs'),
+    ('a2-highgpu-1g + A100', 12, 85, 3.67, 'Large model training, serious deep learning'),
 ]
-print(f"  {'Machine':<32} {'vCPU':>5} {'RAM':>6} {'₹/hr':>6}  Notes")
+print(f"  {'Machine':<32} {'vCPU':>5} {'RAM':>6} {'$/hr':>6}  Notes")
 print("  " + "─" * 65)
 for name, cpu, ram, cost, note in machines:
     print(f"  {name:<32} {cpu:>5} {ram:>5}G {cost:>6}  {note}")`} />
@@ -527,7 +527,7 @@ for name, cpu, ram, cost, note in machines:
         <p style={S.p}>
           Vertex AI Pipelines is built on Kubeflow Pipelines (KFP) v2 —
           the same open-source pipeline framework used at Airbnb, Twitter,
-          and many Indian companies running on-premise Kubernetes.
+          and many companies running on-premise Kubernetes.
           Each step is a KFP component decorated with
           <span style={S.code as React.CSSProperties}> @component</span>.
           Components are pure Python functions that declare typed inputs and outputs.
@@ -1108,7 +1108,7 @@ print("""
 
         <p style={S.p}>
           You have now covered Azure ML, SageMaker, and Vertex AI — the three
-          platforms that run production ML at Indian enterprises and startups.
+          platforms that run production ML at enterprises and startups.
           Module 79 ties them together: MLOps on Cloud — how to build CI/CD
           pipelines for ML that work regardless of which cloud you are on.
           GitHub Actions triggering retraining, model quality gates in CI,
@@ -1154,7 +1154,7 @@ print("""
 
       <KeyTakeaways
         items={[
-          'Vertex AI is built on the same GCP infrastructure that runs Google Search and Gmail. Its differentiators over Azure ML and SageMaker: native BigQuery integration (query training data directly without copying to object storage), the most production-ready managed Feature Store, and first-class TPU access. Used at Ola, Braintree, Reddit, and analytics-heavy Indian companies.',
+          'Vertex AI is built on the same GCP infrastructure that runs Google Search and Gmail. Its differentiators over Azure ML and SageMaker: native BigQuery integration (query training data directly without copying to object storage), the most production-ready managed Feature Store, and first-class TPU access. Used at Uber, Braintree, Reddit, and many analytics-heavy companies.',
           'Every Vertex AI resource follows the naming pattern projects/{project}/locations/{region}/{resourceType}/{id}. All four supporting services work together: Cloud Storage for data and artifacts, IAM service accounts for permissions, Artifact Registry for Docker images, Cloud Logging for all job logs. When a job fails, check Cloud Logging first — the Python traceback is always there.',
           'Vertex AI Pipelines uses KFP v2 components and pipelines. Lightweight @component decorators are convenient for simple steps but install packages at runtime — slow for large dependency sets. Container components (custom Docker images) are faster and should be used for any step that runs more than once. Pre-built Google components from google_cloud_pipeline_components handle AutoML, BigQuery export, and model upload.',
           'Vertex AI Feature Store is the most complete managed feature store across all three clouds. BigQuery is the offline store (petabyte scale, point-in-time correct serving). Bigtable or Vertex-managed online store serves features at <1ms latency. batch_serve_to_bq() generates training datasets with point-in-time correct features. materialize() syncs offline to online on a schedule.',

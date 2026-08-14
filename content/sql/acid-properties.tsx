@@ -138,7 +138,7 @@ UNION ALL SELECT 'stores',      COUNT(*) FROM stores;`}
         tagline="A transaction is indivisible — it either fully completes or fully does not happen"
         what="Every SQL statement inside a BEGIN...COMMIT block is treated as a single unit. Either ALL statements execute and their changes are committed, or NONE of them take effect. There is no state where some statements committed and others did not — partial transactions are impossible."
         how="Transaction log (WAL — Write-Ahead Log). Before any change is applied to data files, the intended change is written to the log. If the transaction commits, the log records the commit. If the server crashes mid-transaction, on restart the database reads the log: uncommitted transactions are rolled back, committed transactions are replayed. The log is the ground truth."
-        breaks="Without atomicity, a payment that deducts ₹500 from a customer's wallet but crashes before crediting the merchant leaves ₹500 permanently lost — deducted from one account, never arrived at another. The money exists in neither place. Any multi-step operation that must either fully succeed or fully fail needs atomicity."
+        breaks="Without atomicity, a payment that deducts $500 from a customer's wallet but crashes before crediting the merchant leaves $500 permanently lost — deducted from one account, never arrived at another. The money exists in neither place. Any multi-step operation that must either fully succeed or fully fail needs atomicity."
         example="A FreshCart order involves: INSERT into orders, INSERT into order_items (one per product), UPDATE products to reduce stock, INSERT into payment_log. Atomicity means if the payment_log INSERT fails (duplicate key, constraint violation), the order INSERT, order_items INSERT, and stock UPDATE are all rolled back. The customer's order either fully exists or does not exist — never half-created."
       />
 
@@ -270,7 +270,7 @@ SELECT
         what="Isolation means each transaction executes as if it were the only transaction running, even when hundreds of transactions run simultaneously. Changes made by an in-progress transaction are not visible to other transactions until the first transaction commits. This prevents one transaction from reading or depending on the intermediate, possibly-to-be-rolled-back work of another."
         how="MVCC (Multi-Version Concurrency Control) in PostgreSQL: instead of one version of each row, the database maintains multiple versions. Each transaction sees the version that was current when the transaction started (or when the statement started, depending on the isolation level). Readers never block writers. Writers never block readers. Only write-write conflicts require locking."
         breaks="Without isolation, two sessions simultaneously reading inventory could both see stock = 1, both decide to sell the last item, both decrement the stock, and leave it at -1 (an impossible state). Reports could read a row mid-update and see an inconsistent intermediate value. Financial aggregations could include partial payments."
-        example="Two FreshCart customers simultaneously try to buy the last Amul Butter (stock = 1). Without isolation: both read stock = 1, both decrement by 1, stock = -1. With isolation at SERIALIZABLE: the first transaction commits stock = 0, the second tries to decrement but the database detects the conflict and forces it to retry — it reads stock = 0 and fails with 'out of stock'. The impossible state never exists."
+        example="Two FreshCart customers simultaneously try to buy the last Horizon Butter (stock = 1). Without isolation: both read stock = 1, both decrement by 1, stock = -1. With isolation at SERIALIZABLE: the first transaction commits stock = 0, the second tries to decrement but the database detects the conflict and forces it to retry — it reads stock = 0 and fails with 'out of stock'. The impossible state never exists."
       />
 
       <H>The four isolation levels</H>
@@ -462,7 +462,7 @@ COMMIT;`}
       </div>
 
       <Callout type="info">
-        The choice between ACID and BASE is not about which is better — it is about which fits the workload. FreshCart orders, wallet balances, and inventory require ACID: no eventual consistency is acceptable when ₹1,000 is at stake. FreshCart's product recommendation engine or user activity log can tolerate BASE: a slightly stale recommendation or a 500ms lag in logging a page view is fine.
+        The choice between ACID and BASE is not about which is better — it is about which fits the workload. FreshCart orders, wallet balances, and inventory require ACID: no eventual consistency is acceptable when $1,000 is at stake. FreshCart's product recommendation engine or user activity log can tolerate BASE: a slightly stale recommendation or a 500ms lag in logging a page view is fine.
       </Callout>
 
       <HR />
@@ -478,7 +478,7 @@ COMMIT;`}
             failure: 'Double-spend / partial payment',
             property: 'Atomicity',
             color: C,
-            scenario: 'A payment service deducts ₹500 from the customer\'s wallet (committed) but the server crashes before crediting the merchant. ₹500 is permanently lost.',
+            scenario: 'A payment service deducts $500 from the customer\'s wallet (committed) but the server crashes before crediting the merchant. $500 is permanently lost.',
             acid_fix: 'Wrap both the debit and credit in a single transaction. Either both commit or both roll back. The crash cannot leave one committed and one not.',
           },
           {

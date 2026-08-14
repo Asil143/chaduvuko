@@ -166,11 +166,11 @@ export default function RelationalAlgebra() {
 {`// STUDENTS(student_id, name, city, gpa, dept_id)
 // student_id | name           | city       | gpa  | dept_id
 // -----------+----------------+------------+------+--------
-// S001       | Rahul Sharma   | San Francisco  | 8.5  | D01
-// S002       | Priya Reddy    | Austin  | 9.1  | D02
-// S003       | Arjun Nair     | New York     | 7.8  | D01
-// S004       | Kavya Krishnan | San Francisco  | 9.4  | D03
-// S005       | Deepak Mehta   | Boston       | 8.2  | D02
+// S001       | Michael Turner   | San Francisco  | 8.5  | D01
+// S002       | Jasmine Rodriguez    | Austin  | 9.1  | D02
+// S003       | Kevin Park     | New York     | 7.8  | D01
+// S004       | Emily Johnson | San Francisco  | 9.4  | D03
+// S005       | David Chen   | Boston       | 8.2  | D02
 
 // COURSES(course_id, course_name, dept_id, credits)
 // course_id | course_name        | dept_id | credits
@@ -194,9 +194,9 @@ export default function RelationalAlgebra() {
 // DEPARTMENTS(dept_id, dept_name, hod)
 // dept_id | dept_name          | hod
 // --------+--------------------+-----------
-// D01     | Computer Science   | Prof. Kumar
-// D02     | AI & Data Science  | Prof. Rao
-// D03     | Mathematics        | Prof. Mehta`}
+// D01     | Computer Science   | Prof. Bennett
+// D02     | AI & Data Science  | Prof. Ramirez
+// D03     | Mathematics        | Prof. Chen`}
         </CodeBox>
       </section>
 
@@ -231,25 +231,25 @@ export default function RelationalAlgebra() {
         <CodeBox label="Selection — examples with every condition type">
 {`// SIMPLE EQUALITY:
 σ_{city='San Francisco'}(STUDENTS)
-// Returns: {(S001, Rahul, San Francisco, 8.5, D01), (S004, Kavya, San Francisco, 9.4, D03)}
+// Returns: {(S001, Michael, San Francisco, 8.5, D01), (S004, Emily, San Francisco, 9.4, D03)}
 // SQL: SELECT * FROM students WHERE city = 'San Francisco'
 
 // COMPARISON:
 σ_{gpa > 9.0}(STUDENTS)
-// Returns: {(S002, Priya, Austin, 9.1, D02), (S004, Kavya, San Francisco, 9.4, D03)}
+// Returns: {(S002, Jasmine, Austin, 9.1, D02), (S004, Emily, San Francisco, 9.4, D03)}
 
 // CONJUNCTION (AND — ∧):
 σ_{city='San Francisco' ∧ gpa > 8.0}(STUDENTS)
-// Returns: {(S001, Rahul, San Francisco, 8.5, D01), (S004, Kavya, San Francisco, 9.4, D03)}
+// Returns: {(S001, Michael, San Francisco, 8.5, D01), (S004, Emily, San Francisco, 9.4, D03)}
 // SQL: WHERE city = 'San Francisco' AND gpa > 8.0
 
 // DISJUNCTION (OR — ∨):
 σ_{city='San Francisco' ∨ city='New York'}(STUDENTS)
-// Returns: Rahul, Kavya (San Francisco), Arjun (New York)
+// Returns: Michael, Emily (San Francisco), Kevin (New York)
 
 // NEGATION (NOT — ¬):
 σ_{¬(dept_id='D01')}(STUDENTS)
-// Returns: Priya (D02), Kavya (D03), Deepak (D02)
+// Returns: Jasmine (D02), Emily (D03), David (D02)
 
 // INTER-ATTRIBUTE COMPARISON:
 σ_{credits > 3}(COURSES)
@@ -279,7 +279,7 @@ export default function RelationalAlgebra() {
         <CodeBox label="Projection — duplicate elimination and composition with selection">
 {`// SIMPLE PROJECTION:
 π_{name, city}(STUDENTS)
-// Returns: {(Rahul, San Francisco), (Priya, Austin), (Arjun, New York), (Kavya, San Francisco), (Deepak, Boston)}
+// Returns: {(Michael, San Francisco), (Jasmine, Austin), (Kevin, New York), (Emily, San Francisco), (David, Boston)}
 // Note: no duplicates in this case (all names are unique)
 
 // PROJECTION WITH DUPLICATES:
@@ -291,8 +291,8 @@ export default function RelationalAlgebra() {
 
 // COMPOSITION — selection then projection (the standard pattern):
 π_{name, gpa}(σ_{dept_id='D01'}(STUDENTS))
-// Step 1: σ selects CS department students: Rahul (8.5), Arjun (7.8)
-// Step 2: π projects to name and gpa: {(Rahul, 8.5), (Arjun, 7.8)}
+// Step 1: σ selects CS department students: Michael (8.5), Kevin (7.8)
+// Step 2: π projects to name and gpa: {(Michael, 8.5), (Kevin, 7.8)}
 // SQL: SELECT name, gpa FROM students WHERE dept_id = 'D01'
 
 // CRITICAL: Projection MUST include all columns needed by outer operations
@@ -375,11 +375,11 @@ STUDENTS × DEPARTMENTS produces:
 ∪
 π_{student_id, name}(σ_{gpa>9.0}(STUDENTS))
 // Result schema: (student_id, name)
-// S001 Rahul appears in both (CS dept AND... wait, gpa=8.5 < 9.0, only in first)
-// S003 Arjun: CS dept, gpa=7.8 < 9.0 → only in first
-// S002 Priya: not CS dept (D02), gpa=9.1 > 9.0 → only in second
-// S004 Kavya: not CS dept (D03), gpa=9.4 > 9.0 → only in second
-// Union result: {(S001,Rahul), (S003,Arjun), (S002,Priya), (S004,Kavya)}
+// S001 Michael appears in both (CS dept AND... wait, gpa=8.5 < 9.0, only in first)
+// S003 Kevin: CS dept, gpa=7.8 < 9.0 → only in first
+// S002 Jasmine: not CS dept (D02), gpa=9.1 > 9.0 → only in second
+// S004 Emily: not CS dept (D03), gpa=9.4 > 9.0 → only in second
+// Union result: {(S001,Michael), (S003,Kevin), (S002,Jasmine), (S004,Emily)}
 // SQL: SELECT student_id, name FROM students WHERE dept_id='D01'
 //      UNION
 //      SELECT student_id, name FROM students WHERE gpa > 9.0
@@ -467,8 +467,8 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
 π_{S1.name, S2.name, S1.city}(
   σ_{S1.city = S2.city ∧ S1.student_id < S2.student_id}(ρ_{S1}(STUDENTS) × ρ_{S2}(STUDENTS))
 )
-// S1.student_id < S2.student_id: avoids duplicates (Rahul-Kavya and Kavya-Rahul)
-// Result: {(Rahul, Kavya, San Francisco)} — both are in San Francisco
+// S1.student_id < S2.student_id: avoids duplicates (Michael-Emily and Emily-Michael)
+// Result: {(Michael, Emily, San Francisco)} — both are in San Francisco
 
 // SQL equivalent:
 // SELECT s1.name, s2.name, s1.city
@@ -511,7 +511,7 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
 
 // Step 1: students in CS301: {S001, S002, S005}
 // Step 2: students in CS302: {S001, S003}
-// Intersection: {S001} — only Rahul takes both
+// Intersection: {S001} — only Michael takes both
 
 // SQL: SELECT student_id FROM enrollments WHERE course_id = 'CS301'
 //      INTERSECT
@@ -545,8 +545,8 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
 // Result: each student row joined with their department row
 // dept_id appears once (duplicate eliminated)
 // student_id | name  | city      | gpa | dept_id | dept_name        | hod
-// S001       | Rahul | San Francisco | 8.5 | D01     | Computer Science | Prof. Kumar
-// S002       | Priya | Austin | 9.1 | D02     | AI & Data Science| Prof. Rao
+// S001       | Michael | San Francisco | 8.5 | D01     | Computer Science | Prof. Bennett
+// S002       | Jasmine | Austin | 9.1 | D02     | AI & Data Science| Prof. Ramirez
 // ... (5 rows — one per student)
 
 // STUDENTS ⋈ ENROLLMENTS ⋈ COURSES (chain natural joins)
@@ -627,7 +627,7 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
 // Step 4: π_{student_id}(disqualified) = {S002, S003, S004, S005}
 // Step 5: {S001,S002,S003,S004,S005} − {S002,S003,S004,S005} = {S001}
 
-// ANSWER: S001 (Rahul) — the only student enrolled in both CS301 AND CS302 ✓
+// ANSWER: S001 (Michael) — the only student enrolled in both CS301 AND CS302 ✓
 
 // ─────────────────────────────────────────────────────────────────
 // EXAMPLE 2: "Find departments that offer ALL 3-credit courses"
@@ -682,7 +682,7 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
 // EXAMPLES:
 π_{name, gpa × 10}(STUDENTS)
 // Computes gpa × 10 for each student
-// Result: (Rahul, 85), (Priya, 91), (Arjun, 78), (Kavya, 94), (Deepak, 82)
+// Result: (Michael, 85), (Jasmine, 91), (Kevin, 78), (Emily, 94), (David, 82)
 
 π_{course_id, credits × 15 AS hours}(COURSES)
 // credits × 15 renamed to 'hours'
@@ -691,7 +691,7 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
 // COMBINING WITH SELECTION:
 π_{name, gpa, gpa * 10 AS score}(σ_{gpa > 8.5}(STUDENTS))
 // Only students with GPA > 8.5, showing name, GPA, and computed score
-// Result: (Priya, 9.1, 91), (Kavya, 9.4, 94)
+// Result: (Jasmine, 9.1, 91), (Emily, 9.4, 94)
 
 // SQL equivalent:
 // SELECT name, gpa, gpa * 10 AS score FROM students WHERE gpa > 8.5`}
@@ -717,9 +717,9 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
 // Groups STUDENTS by dept_id, counts student_ids in each group
 // Result:
 // dept_id | cnt
-// D01     | 2   (Rahul, Arjun)
-// D02     | 2   (Priya, Deepak)
-// D03     | 1   (Kavya)
+// D01     | 2   (Michael, Kevin)
+// D02     | 2   (Jasmine, David)
+// D03     | 1   (Emily)
 // SQL: SELECT dept_id, COUNT(student_id) AS cnt FROM students GROUP BY dept_id
 
 // EXAMPLE 2: Average GPA per department
@@ -741,17 +741,17 @@ STUDENTS ∪ COURSES  // ERROR: different attributes, different domains
 // )
 // Counts how many courses each student takes
 // name   | courses_taken
-// Rahul  | 2
-// Priya  | 2
-// Arjun  | 1
-// Kavya  | 1
-// Deepak | 1
+// Michael  | 2
+// Jasmine  | 2
+// Kevin  | 1
+// Emily  | 1
+// David | 1
 
 // HAVING clause = σ applied AFTER ℊ:
 // σ_{courses_taken >= 2}(
 //   _{name} ℊ _{COUNT(course_id) AS courses_taken}(STUDENTS ⋈ ENROLLMENTS)
 // )
-// Students enrolled in 2 or more courses: Rahul, Priya`}
+// Students enrolled in 2 or more courses: Michael, Jasmine`}
         </CodeBox>
 
         <SubTitle>Outer Joins — Preserving Non-Matching Tuples</SubTitle>
@@ -877,18 +877,18 @@ WHERE s.city = 'San Francisco'
 //    STUDENTS
 //
 // Now:
-// σ_{city='San Francisco'}(STUDENTS): 5 → 2 rows (Rahul, Kavya)
+// σ_{city='San Francisco'}(STUDENTS): 5 → 2 rows (Michael, Emily)
 // σ_{course_name='DB'}(COURSES): 4 → 1 row (CS301)
 // First join (students ⋈ enrollments): 2 students × their enrollments
-//   Rahul: enrolled in CS301, CS302 → 2 rows
-//   Kavya: enrolled in CS401 → 1 row
+//   Michael: enrolled in CS301, CS302 → 2 rows
+//   Emily: enrolled in CS401 → 1 row
 //   Result: 3 rows
 // Second join (3 rows ⋈ CS301): only rows matching CS301
-//   (Rahul, CS301, A) ⋈ CS301 → 1 row
-//   (Rahul, CS302, B+) — CS302 ≠ CS301, dropped
-//   (Kavya, CS401) — CS401 ≠ CS301, dropped
+//   (Michael, CS301, A) ⋈ CS301 → 1 row
+//   (Michael, CS302, B+) — CS302 ≠ CS301, dropped
+//   (Emily, CS401) — CS401 ≠ CS301, dropped
 //   Result: 1 row
-// Final π_{name}: {Rahul}
+// Final π_{name}: {Michael}
 //
 // Optimised tree processes much less data at every step.`}
         </CodeBox>
@@ -1029,7 +1029,7 @@ WHERE student_id NOT IN (
 −
 π_{student_id}(σ_{course_id='CS301'}(ENROLLMENTS))
 // Students who have NO enrollment in CS301
-// Result: {S003, S004} (Arjun and Kavya are not in CS301)
+// Result: {S003, S004} (Kevin and Emily are not in CS301)
 
 // ─────────────────────────────────────────────────────────────────
 // TRANSLATION EXAMPLE 4 — EXISTS using semijoin
@@ -1046,8 +1046,8 @@ WHERE EXISTS (
 π_{name}(STUDENTS ⋈ π_{student_id}(σ_{course_id='CS401'}(ENROLLMENTS)))
 // Join STUDENTS with student_ids enrolled in CS401
 // π_{student_id}(σ_{course_id='CS401'}(ENROLLMENTS)) = {S002, S004}
-// STUDENTS ⋈ {S002, S004} = Priya and Kavya
-// π_{name}: {Priya, Kavya}`}
+// STUDENTS ⋈ {S002, S004} = Jasmine and Emily
+// π_{name}: {Jasmine, Emily}`}
         </CodeBox>
 
         <SubTitle>Relational Algebra to SQL — Expressing Complex Algebra in SQL</SubTitle>
@@ -1238,7 +1238,7 @@ DB_students = π_{student_id}(ENROLLMENTS ⋈ DB_course)
 // RESULT: AI students who are NOT in DB Systems
 AI_students − DB_students
 = {S002, S004} − {S001, S002, S005}
-= {S004}  ← Kavya: enrolled in CS401 (AI), not in CS301 (DB Systems)
+= {S004}  ← Emily: enrolled in CS401 (AI), not in CS301 (DB Systems)
 
 // FULL EXPRESSION:
 π_{name}(STUDENTS ⋈
@@ -1249,7 +1249,7 @@ AI_students − DB_students
   )
 )
 // Join STUDENTS with the S004 result to get name
-// ANSWER: {Kavya}
+// ANSWER: {Emily}
 
 // SQL equivalent:
 SELECT DISTINCT s.name
@@ -1386,7 +1386,7 @@ WHERE s.student_id NOT IN (
 
           <Para>
             A data analyst reports: "My query to find students enrolled in all mandatory courses
-            is returning zero rows, but I know at least Rahul satisfies the condition."
+            is returning zero rows, but I know at least Michael satisfies the condition."
           </Para>
 
           <CodeBox label="The buggy SQL query">
@@ -1400,7 +1400,7 @@ GROUP BY s.student_id, s.name
 HAVING COUNT(DISTINCT e.course_id) = COUNT(DISTINCT c.course_id);
 -- Returns: 0 rows
 
--- The analyst expects: Rahul (enrolled in CS301 and CS302, both D01 courses)`}
+-- The analyst expects: Michael (enrolled in CS301 and CS302, both D01 courses)`}
           </CodeBox>
 
           <CodeBox label="Diagnosis using relational algebra">
@@ -1439,7 +1439,7 @@ GROUP BY s.student_id, s.name
 HAVING COUNT(DISTINCT e.course_id) = (
     SELECT COUNT(*) FROM courses WHERE dept_id = 'D01'
 );
--- Returns: S001 Rahul (enrolled in CS301 AND CS302 — both D01 courses ✓)
+-- Returns: S001 Michael (enrolled in CS301 AND CS302 — both D01 courses ✓)
 
 -- ALTERNATIVE using NOT EXISTS (directly from division algebra):
 SELECT student_id, name FROM students s

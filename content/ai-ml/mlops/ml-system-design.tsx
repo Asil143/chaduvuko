@@ -229,8 +229,8 @@ export default function MLSystemDesignPage() {
         <h2 style={S.h2}>Design DoorDash's delivery time prediction system — full walkthrough</h2>
 
         <p style={S.p}>
-          This is the most commonly asked ML design question in Indian interviews.
-          Delivery time estimation appears at DoorDash, Uber Eats, Gopuff, Blinkit,
+          This is the most commonly asked ML design question in interviews.
+          Delivery time estimation appears at DoorDash, Uber Eats, Gopuff, Instacart,
           and every quick-commerce startup. Walk through all eight questions.
         </p>
 
@@ -409,8 +409,8 @@ Business metric:
 
 Why score not binary:
   Different thresholds for different transaction types:
-  - Low value UPI (< Rs 500): high threshold (0.95) — FP very costly
-  - High value bank transfer (> Rs 1L): low threshold (0.30) — FN very costly
+  - Low value card (< $500): high threshold (0.95) — FP very costly
+  - High value bank transfer (> $10K): low threshold (0.30) — FN very costly
   - International: medium threshold (0.60)
 """)
 
@@ -451,7 +451,7 @@ feature_tiers = {
     ],
     'Tier 3 — Computed (5ms, parallel)': [
         'transaction_vs_user_avg_ratio',   # txn / user 30d avg
-        'amount_round_number_flag',         # Rs 10000.00 exact
+        'amount_round_number_flag',         # $10000.00 exact
         'time_since_last_transaction_s',
         'distance_from_last_merchant_km',
     ],
@@ -467,7 +467,7 @@ print("=" * 55)
 print("""
 Primary:  LightGBM score (tabular features, fast, interpretable)
           Trained on 6-month rolling window
-          Feature importance for regulatory compliance (RBI audit)
+          Feature importance for regulatory compliance (CFPB audit)
 
 Secondary: Rule engine running in parallel (100% recall for known patterns)
            Hard rules: velocity limits, blacklisted IPs, blocked BINs
@@ -476,7 +476,7 @@ Secondary: Rule engine running in parallel (100% recall for known patterns)
 Output: max(lgbm_score, rule_score) → final risk score
 
 Why not deep learning:
-  - Regulatory: RBI requires explainability for declined transactions
+  - Regulatory: CFPB requires explainability for declined transactions
   - Latency: transformer inference > 50ms for tabular data
   - Data: 0.1% fraud rate with 10M daily → only 10k fraud labels/day
     LightGBM is far more data-efficient than deep learning for this
@@ -691,7 +691,7 @@ for metric, where, desc in metrics:
               tradeoff: 'Human-in-the-loop vs full automation',
               color: '#ff4757',
               online: 'Full automation: fast, scalable, no human cost. Risk: wrong automated decision at scale (e.g. fraud model blocks all transactions during a bug).',
-              batch: 'Human review for high-stakes decisions: slower, expensive, required for regulatory compliance. Fraud above Rs 1L, medical diagnosis, loan decisions.',
+              batch: 'Human review for high-stakes decisions: slower, expensive, required for regulatory compliance. Fraud above $10K, medical diagnosis, loan decisions.',
               rule: 'Automate when: low cost of errors, high volume, reversible actions. Human review when: high cost of errors, regulatory requirement, irreversible actions (account ban).',
             },
           ].map((item) => (
@@ -830,7 +830,7 @@ for mistake, why in mistakes:
           ML pipelines and feature stores, experiment tracking, model deployment,
           monitoring, retraining pipelines, DVC, and ML system design.
           Section 12 shows how all of this maps onto the managed cloud platforms —
-          Azure ML, AWS SageMaker, and GCP Vertex AI — that most Indian enterprise
+          Azure ML, AWS SageMaker, and GCP Vertex AI — that most enterprise
           ML teams use. The concepts are identical; the platforms automate the
           infrastructure so you can focus on the ML.
         </p>

@@ -118,10 +118,10 @@ export default function Normalization() {
           </thead>
           <tbody>
             {[
-              ['1001', 'Aisha Khan', 'aisha@gmail.com', 'Seattle', 'Amul Butter', 'Dairy', 'Amul', '2', '56.00', 'Seattle', 'Suresh Rao'],
-              ['1001', 'Aisha Khan', 'aisha@gmail.com', 'Seattle', 'Tata Salt', 'Staples', 'Tata', '1', '22.00', 'Seattle', 'Suresh Rao'],
-              ['1002', 'Rahul Sharma', 'rahul@gmail.com', 'New York', 'Amul Butter', 'Dairy', 'Amul', '3', '56.00', 'New York', 'Olivia Brown'],
-              ['1003', 'Aisha Khan', 'aisha@gmail.com', 'Seattle', 'Maggi Noodles', 'Staples', 'Nestle', '5', '15.00', 'Seattle', 'Suresh Rao'],
+              ['1001', 'Sofia Ramirez', 'sofia@gmail.com', 'Seattle', 'Horizon Butter', 'Dairy', 'Horizon', '2', '56.00', 'Seattle', 'David Chen'],
+              ['1001', 'Sofia Ramirez', 'sofia@gmail.com', 'Seattle', 'Morton Salt', 'Staples', 'Morton', '1', '22.00', 'Seattle', 'David Chen'],
+              ['1002', 'Marcus Bennett', 'marcus@gmail.com', 'New York', 'Horizon Butter', 'Dairy', 'Horizon', '3', '56.00', 'New York', 'Olivia Brown'],
+              ['1003', 'Sofia Ramirez', 'sofia@gmail.com', 'Seattle', 'Maggi Noodles', 'Staples', 'Nestle', '5', '15.00', 'Seattle', 'David Chen'],
             ].map((row, i) => (
               <tr key={i} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
                 {row.map((cell, j) => (
@@ -137,10 +137,10 @@ export default function Normalization() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, margin: '20px 0 32px' }}>
         {[
-          { name: 'Update anomaly', color: '#ff4757', desc: 'Aisha Khan\'s email appears in three rows. If she changes her email, you must update all three rows. Miss one and your database has inconsistent data — two different "correct" emails for the same customer.' },
+          { name: 'Update anomaly', color: '#ff4757', desc: 'Sofia Ramirez\'s email appears in three rows. If she changes her email, you must update all three rows. Miss one and your database has inconsistent data — two different "correct" emails for the same customer.' },
           { name: 'Insertion anomaly', color: '#f59e0b', desc: 'You cannot add a new product to the catalogue without also having an order for it. The product row requires an order_id because the table is built around orders.' },
           { name: 'Deletion anomaly', color: '#f97316', desc: 'If order 1002 is deleted, you lose all information about the New York store and Olivia Brown — because that was the only row containing those store details.' },
-          { name: 'Redundancy', color: '#8b5cf6', desc: 'Amul Butter\'s name, category, and brand are repeated in every order that contains it. With millions of orders, this is millions of repeated values wasting storage and causing inconsistency risk.' },
+          { name: 'Redundancy', color: '#8b5cf6', desc: 'Horizon Butter\'s name, category, and brand are repeated in every order that contains it. With millions of orders, this is millions of repeated values wasting storage and causing inconsistency risk.' },
         ].map(item => (
           <div key={item.name} style={{ display: 'flex', gap: 14, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
             <div style={{ width: 4, borderRadius: 2, background: item.color, flexShrink: 0 }} />
@@ -206,20 +206,20 @@ export default function Normalization() {
         code={`-- Violation 1: Multiple values in one cell (comma-separated list)
 -- products table with a 'tags' column
 product_id | product_name   | tags
-1          | Amul Butter    | 'dairy, refrigerated, fat'
+1          | Horizon Butter    | 'dairy, refrigerated, fat'
 -- PROBLEM: 'dairy, refrigerated, fat' is three values in one cell
 -- Cannot query: WHERE tags = 'dairy' -- this won't work
 
 -- Violation 2: Repeating column groups
 -- orders table with multiple product columns
 order_id | product_1   | qty_1 | product_2  | qty_2 | product_3 | qty_3
-1001     | Amul Butter | 2     | Tata Salt  | 1     | NULL      | NULL
+1001     | Horizon Butter | 2     | Morton Salt  | 1     | NULL      | NULL
 -- PROBLEM: How do you handle an order with 10 products?
 -- Must add more columns. Queries are complex. NULLs everywhere.
 
 -- Violation 3: Non-atomic composite value
 customer_id | full_address
-1           | '204 MG Road, Koramangala, Seattle 560001'
+1           | '1200 Denny Way, Seattle, 98109'
 -- PROBLEM: Cannot query by city alone without string parsing`}
       />
 
@@ -313,7 +313,7 @@ CREATE TABLE order_items_bad (
 --   brand       → depends only on product_id ✗ PARTIAL DEPENDENCY
 
 -- Problems this causes:
--- If Amul Butter's name changes: must update EVERY order_item row
+-- If Horizon Butter's name changes: must update EVERY order_item row
 -- If a product is ordered 50,000 times: product_name stored 50,000 times`}
       />
 
@@ -690,7 +690,7 @@ store_id → manager_name (would violate 3NF if stored in orders)`}
 -- 3NF test: Does any non-key column determine another non-key column?
 --   In customers(customer_id, email, city, state):
 --   If city → state (a city is always in one state) → CHECK 3NF
---   Actually: in India, a city can span state borders (rare)
+--   Actually: some cities span state borders (e.g. Kansas City spans KS and MO)
 --   And a customer might be in a different state than their city suggests
 --   So city does NOT reliably determine state → PASS 3NF (in this context)
 
@@ -810,7 +810,7 @@ LIMIT 8;`}
       />
 
       <TimeBlock time="9:30 AM" label="You identify the anomalies">
-        Update anomaly: if Dr. Priya Sharma changes her phone, every appointment row must be updated. Deletion anomaly: if all appointments with a clinic are cancelled, the clinic's data is lost. Insertion anomaly: cannot add a doctor to the system without scheduling an appointment.
+        Update anomaly: if Dr. Rachel Foster changes her phone, every appointment row must be updated. Deletion anomaly: if all appointments with a clinic are cancelled, the clinic's data is lost. Insertion anomaly: cannot add a doctor to the system without scheduling an appointment.
       </TimeBlock>
 
       <TimeBlock time="10:00 AM" label="You apply normalisation">

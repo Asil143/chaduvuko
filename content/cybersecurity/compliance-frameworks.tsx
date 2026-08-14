@@ -708,7 +708,7 @@ Commercial platforms (common in enterprise):
   Vanta:    Similar automation focus; strong for fast-growing startups
             Guided SOC 2 and ISO 27001 pathways; auditor network built-in
 
-  Sprinto:  India-based, competitive pricing for international orgs
+  Sprinto:  Budget-friendly automation, popular with startups
             Multi-framework support with automated evidence collection
 
   Tugboat Logic / OneTrust:

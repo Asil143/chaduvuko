@@ -370,7 +370,7 @@ export default function DistributedSystemsModule() {
 {`# Scenario: Venmo user tops up wallet. You read the balance immediately after.
 
 # With STRONG CONSISTENCY (linearisable):
-write_wallet_balance(user_id='U1234', new_balance=500_00)  # ₹500 in paise
+write_wallet_balance(user_id='U1234', new_balance=500_00)  # $500 in cents
 balance = read_wallet_balance(user_id='U1234')
 # balance is GUARANTEED to be 500_00
 # The read was routed to any node — all nodes agree because write was fully replicated
@@ -632,10 +632,10 @@ balance = read_wallet_balance(user_id='U1234')
 # consistent_hash('user_U12345') % 32 = 3  → goes to node 3
 # Distribution: roughly equal across all 32 nodes ✓
 
-# Bad partition key: payment_method (4 distinct values: upi, card, netbanking, wallet)
-# In India, UPI = 80% of all transactions
-# consistent_hash('upi') % 32 = 9 → node 9 receives 80% of all traffic
-# consistent_hash('card') % 32 = 22 → node 22 receives 15%
+# Bad partition key: payment_method (4 distinct values: card, ach, paypal, wallet)
+# In the US, card payments = 80% of all transactions
+# consistent_hash('card') % 32 = 9 → node 9 receives 80% of all traffic
+# consistent_hash('ach') % 32 = 22 → node 22 receives 15%
 # Nodes 9 is a HOT SHARD — slower, more likely to fail, capacity bottleneck
 
 # Bad partition key: timestamp (or anything that increases monotonically)

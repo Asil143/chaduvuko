@@ -404,10 +404,10 @@ IF email contains "invoice" AND sender matches company_domain
         </div>
       </div>
 
-      {/* ── SECTION 8: India examples ──────────────────────────────────────── */}
+      {/* ── SECTION 8: Real-world examples ──────────────────────────────────── */}
       <div style={sec}>
-        <span style={tag}>Real world — India</span>
-        <h2 style={h2}>Indian companies using each layer — right now</h2>
+        <span style={tag}>Real world</span>
+        <h2 style={h2}>Real companies using each layer — right now</h2>
         <p style={p}>
           This is not theoretical. Every layer of the AI hierarchy is running in production at companies whose apps
           are on your phone right now.
@@ -444,11 +444,11 @@ IF email contains "invoice" AND sender matches company_domain
               approach: 'Time series forecasting using gradient boosting on historical order data, local weather, local events, and day-of-week patterns. Getting this wrong costs money every hour.',
             },
             {
-              company: 'HDFC Bank',
+              company: 'Klarna',
               color: '#D4A017',
               type: 'Generative AI',
-              problem: 'How do you handle 10 million customer service queries per month in multiple Indian languages without proportional headcount growth?',
-              approach: 'An LLM fine-tuned on banking knowledge with RAG (Retrieval Augmented Generation) pulling from live policy documents. The model cites sources. Humans review edge cases.',
+              problem: 'How do you handle millions of customer service queries a month without proportional headcount growth?',
+              approach: 'An LLM fine-tuned on support knowledge with RAG (Retrieval Augmented Generation) pulling from live policy documents. The model cites sources. Humans review edge cases.',
             },
             {
               company: 'Shopify',

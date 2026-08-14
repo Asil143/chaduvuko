@@ -1034,14 +1034,14 @@ resource "snowflake_database" "freshmart_prod" {
           </div>
 
           <Para>
-            Rahul Sharma joins FreshCart as a data engineer. Before IaC, onboarding
+            Marcus Bennett joins FreshCart as a data engineer. Before IaC, onboarding
             took 3-5 days: manually creating an S3 prefix, requesting Snowflake access
             from IT, waiting for IAM role creation, configuring dbt profiles with
             manual credential lookup. With IaC, the entire environment is ready in
             30 minutes with one PR.
           </Para>
 
-          <CodeBox label="IaC-driven onboarding — one PR to provision a complete developer environment">{`# PR TITLE: feat(infra): add dev environment for rahul.sharma
+          <CodeBox label="IaC-driven onboarding — one PR to provision a complete developer environment">{`# PR TITLE: feat(infra): add dev environment for marcus.bennett
 
 # Step 1: Add new analyst to Snowflake users list
 # terraform/environments/dev/main.tf — update analysts variable:
@@ -1049,8 +1049,8 @@ module "snowflake_dev" {
   source  = "../../modules/snowflake_env"
   environment = "dev"
   analysts = [
-    "priya@freshmart.com",
-    "rahul.sharma@freshmart.com",   # ← ADD THIS LINE
+    "jenna@freshmart.com",
+    "marcus.bennett@freshmart.com",   # ← ADD THIS LINE
   ]
 }
 
@@ -1073,23 +1073,23 @@ resource "aws_iam_policy" "dev_s3_access" {
 }
 
 # Step 3: Open PR → CI runs terraform plan → plan shows:
-# + snowflake_user.analysts["rahul.sharma@freshmart.com"] will be created
-# + snowflake_role_grants.analysts["rahul.sharma@freshmart.com"] will be created
-# + aws_iam_policy.dev_s3_access["rahul.sharma@freshmart.com"] will be created
+# + snowflake_user.analysts["marcus.bennett@freshmart.com"] will be created
+# + snowflake_role_grants.analysts["marcus.bennett@freshmart.com"] will be created
+# + aws_iam_policy.dev_s3_access["marcus.bennett@freshmart.com"] will be created
 # Plan: 3 to add, 0 to change, 0 to destroy.
 
 # Step 4: PR reviewed and merged → terraform apply runs
 # → Snowflake user created with analyst role, temp password, MUST_CHANGE_PASSWORD=true
-# → IAM policy created and attached to Rahul's AWS identity
+# → IAM policy created and attached to Marcus's AWS identity
 
-# RAHUL'S ONBOARDING CHECKLIST (30 minutes total):
-# [x] Data engineering lead opens PR with Rahul's email
+# MARCUS'S ONBOARDING CHECKLIST (30 minutes total):
+# [x] Data engineering lead opens PR with Marcus's email
 # [x] PR reviewed, merged — Snowflake access provisioned automatically
-# [x] Rahul receives email with temp Snowflake password (changes on first login)
-# [x] Rahul clones the dbt repository
-# [x] Rahul runs: export DBT_DEV_SCHEMA=dev_rahul_first_task
-# [x] Rahul runs: dbt run --target dev --select +silver.orders (first dbt run)
-# [x] Rahul queries his dev schema in Snowflake — data there immediately
+# [x] Marcus receives email with temp Snowflake password (changes on first login)
+# [x] Marcus clones the dbt repository
+# [x] Marcus runs: export DBT_DEV_SCHEMA=dev_marcus_first_task
+# [x] Marcus runs: dbt run --target dev --select +silver.orders (first dbt run)
+# [x] Marcus queries his dev schema in Snowflake — data there immediately
 
 # CONTRAST WITH MANUAL ONBOARDING (before IaC):
 # Day 1:  Submit Jira ticket for Snowflake access to IT helpdesk
@@ -1104,7 +1104,7 @@ resource "aws_iam_policy" "dev_s3_access" {
 # WITH IaC: 30 minutes, 1 PR, zero tickets, zero Slack messages.`}</CodeBox>
 
           <Para>
-            The IaC approach also means Rahul's offboarding is equally simple:
+            The IaC approach also means Marcus's offboarding is equally simple:
             a PR removing his email from the analysts list. Terraform applies,
             the Snowflake user is destroyed, the IAM policy is deleted, and all
             access is revoked in one automated step. No forgotten accounts,

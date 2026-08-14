@@ -252,11 +252,11 @@ export default function LLMsPretrainingRLHFPage() {
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2.2 }}>
             <div style={{ color: '#888', marginBottom: 6, fontSize: 11 }}>Input sequence:</div>
             <div style={{ color: '#378ADD', paddingLeft: 12, marginBottom: 8 }}>
-              ["Stripe", "processes", "payments", "for", "Indian"]
+              ["Stripe", "processes", "payments", "for", "US"]
             </div>
             <div style={{ color: '#888', marginBottom: 6, fontSize: 11 }}>Targets (shift by 1):</div>
             <div style={{ color: '#1D9E75', paddingLeft: 12, marginBottom: 8 }}>
-              ["processes", "payments", "for", "Indian", "merchants"]
+              ["processes", "payments", "for", "US", "merchants"]
             </div>
             <div style={{ color: '#888', marginBottom: 6, fontSize: 11 }}>Loss at each position:</div>
             <div style={{ color: '#7b61ff', paddingLeft: 12, marginBottom: 4 }}>
@@ -266,7 +266,7 @@ export default function LLMsPretrainingRLHFPage() {
               −log P("payments" | "Stripe processes")
             </div>
             <div style={{ color: '#7b61ff', paddingLeft: 12, marginBottom: 8 }}>
-              −log P("merchants" | "Stripe processes payments for Indian")
+              −log P("merchants" | "Stripe processes payments for US")
             </div>
             <div style={{ fontSize: 11, color: 'var(--muted)' }}>
               Total loss = mean of all position losses.

@@ -998,7 +998,7 @@ arp -d 192.168.1.1                  # macOS/Windows
       />
 
       <StoryBox>
-        <p>You send a message from your apartment in Mumbai to a server in São Paulo. The packet crosses your home router, your ISP's network, a submarine cable under the Atlantic, several Brazilian ISPs, and finally the destination datacenter. At least 15 different organisations' routers handle it. None of them know each other. None of them were pre-configured for your specific packet.</p>
+        <p>You send a message from your apartment in Chicago to a server in São Paulo. The packet crosses your home router, your ISP's network, a submarine cable under the Atlantic, several Brazilian ISPs, and finally the destination datacenter. At least 15 different organisations' routers handle it. None of them know each other. None of them were pre-configured for your specific packet.</p>
         <p style={{ margin: '12px 0 0' }}>How? Every router along the path reads the destination IP from the packet, looks it up in a routing table with potentially 900,000 entries, picks the best next hop, and forwards the packet. Fifteen independent decisions, each made in microseconds. This is Layer 3.</p>
       </StoryBox>
 

@@ -519,7 +519,7 @@ COMMIT;`}
       <P>After UPDATE, check how many rows were changed. Most SQL clients show "N rows affected" — verify this number matches your expectation. 0 rows affected means your WHERE matched nothing (check for typos). 1000 rows affected when you expected 10 means something is very wrong.</P>
 
       <ProTip>
-        In production databases at Indian tech companies, senior engineers run UPDATE statements with a DBA (database administrator) watching the screen, or they write the UPDATE in a migration script that is peer-reviewed before execution. For updates affecting more than 10,000 rows, many teams require a JIRA ticket, a backup confirmation, and a rollback plan before the command is run. This is not excessive caution — it is professional discipline.
+        In production databases at US tech companies, senior engineers run UPDATE statements with a DBA (database administrator) watching the screen, or they write the UPDATE in a migration script that is peer-reviewed before execution. For updates affecting more than 10,000 rows, many teams require a JIRA ticket, a backup confirmation, and a rollback plan before the command is run. This is not excessive caution — it is professional discipline.
       </ProTip>
 
       <HR />
@@ -641,7 +641,7 @@ LIMIT 5000;
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a data engineer at HDFC Bank's digital payments team. A compliance audit has identified that 47 merchant accounts were incorrectly tagged with the wrong risk tier during a bulk import last month. The correct risk tiers have been verified against the original source data and are in a correction table. You need to apply the corrections safely in production.</P>
+      <P>You are a data engineer at Wells Fargo's digital payments team. A compliance audit has identified that 47 merchant accounts were incorrectly tagged with the wrong risk tier during a bulk import last month. The correct risk tiers have been verified against the original source data and are in a correction table. You need to apply the corrections safely in production.</P>
 
       <TimeBlock time="2:00 PM" label="Scope the problem">
         Before touching anything, understand exactly what needs to change.
@@ -701,7 +701,7 @@ COMMIT;`}
       />
 
       <TimeBlock time="2:35 PM" label="Verification and audit log">
-        The UPDATE affected exactly 47 rows. You verify 5 randomly selected merchants against the source documents — all correct. You write the audit record: "47 merchant risk tier corrections applied at 14:32 IST, approved by [manager name], ticket COMP-2847." The entire operation took 35 minutes — 30 of which were verification and documentation, 5 of which were actually executing SQL.
+        The UPDATE affected exactly 47 rows. You verify 5 randomly selected merchants against the source documents — all correct. You write the audit record: "47 merchant risk tier corrections applied at 14:32 PST, approved by [manager name], ticket COMP-2847." The entire operation took 35 minutes — 30 of which were verification and documentation, 5 of which were actually executing SQL.
       </TimeBlock>
 
       <ProTip>

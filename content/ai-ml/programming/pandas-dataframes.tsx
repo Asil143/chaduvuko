@@ -395,7 +395,7 @@ n = 10_000
 
 restaurants = ['Pizza Hut','Biryani Blues','McDonald\\'s','Haldiram\\'s',
                'Dominos','KFC','Subway','Burger King','Barbeque Nation','Uber Eats Café']
-cities      = ['Seattle','New York','Delhi','Austin','Boston','Chicago']
+cities      = ['Seattle','New York','Denver','Austin','Boston','Chicago']
 time_slots  = ['breakfast','lunch','evening','dinner']
 
 df_raw = pd.DataFrame({
@@ -847,7 +847,7 @@ df['is_weekend'] = df['time_slot'].map(
 )
 
 # Map using another Series (like a dict from another table)
-city_tier = pd.Series({'Seattle': 'T1', 'New York': 'T1', 'Delhi': 'T1',
+city_tier = pd.Series({'Seattle': 'T1', 'New York': 'T1', 'Denver': 'T1',
                         'Austin': 'T1', 'Boston': 'T2', 'Chicago': 'T2'})
 df['city_tier'] = df['city'].map(city_tier)
 print(f"\\nCity tier distribution:\\n{df['city_tier'].value_counts()}")
@@ -1028,9 +1028,9 @@ restaurant_meta = pd.DataFrame({
 
 # City metadata table
 city_meta = pd.DataFrame({
-    'city':          ['Seattle','New York','Delhi','Austin','Boston','Chicago'],
+    'city':          ['Seattle','New York','Denver','Austin','Boston','Chicago'],
     'city_tier':     [1, 1, 1, 1, 2, 2],
-    'avg_income_lpa': [14.2, 16.8, 12.4, 13.1, 11.8, 10.9],
+    'avg_income_usd_k': [92.4, 98.8, 78.4, 82.1, 76.8, 71.9],
     'traffic_index': [8.2, 8.8, 7.9, 7.1, 6.4, 6.8],
 })
 

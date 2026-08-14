@@ -209,7 +209,7 @@ if restaurant == "popular_restaurant":
                 'DoorDash delivery time prediction — input: order details, label: actual delivery time (regression)',
                 'Stripe fraud detection — input: transaction features, label: fraud / not fraud (classification)',
                 'Gmail spam filter — input: email text + metadata, label: spam / not spam (classification)',
-                'HDFC loan approval — input: applicant financials, label: approved / rejected (classification)',
+                'Capital One loan approval — input: applicant financials, label: approved / rejected (classification)',
               ],
             },
             {
@@ -294,37 +294,37 @@ if restaurant == "popular_restaurant":
             {
               num: '01', color: '#7F77DD', title: 'Define the problem',
               desc: 'Before touching data, be precise: what are you predicting? What inputs will you have at prediction time? What does "good enough" look like in numbers?',
-              swiggy: 'Predicting: delivery_time_min. Inputs available at order time: distance, restaurant_id, time_of_day, day_of_week, weather_code, rider_count_nearby. Good enough: mean absolute error ≤ 5 minutes on 85% of orders.',
+              doordash: 'Predicting: delivery_time_min. Inputs available at order time: distance, restaurant_id, time_of_day, day_of_week, weather_code, rider_count_nearby. Good enough: mean absolute error ≤ 5 minutes on 85% of orders.',
             },
             {
               num: '02', color: '#378ADD', title: 'Collect and understand your data',
               desc: 'Pull your historical data and look at it. What are the distributions? Are there missing values? Outliers? Surprising correlations? You cannot build a good model on data you do not understand.',
-              swiggy: 'Pull 12 months of completed orders: 500,000 rows. Find: 2% have missing restaurant_prep_time. Outliers: 0.3% with delivery_time > 120 min (likely cancelled/reordered). Correlation check: distance is strong but not dominant — prep time is equally predictive.',
+              doordash: 'Pull 12 months of completed orders: 500,000 rows. Find: 2% have missing restaurant_prep_time. Outliers: 0.3% with delivery_time > 120 min (likely cancelled/reordered). Correlation check: distance is strong but not dominant — prep time is equally predictive.',
             },
             {
               num: '03', color: '#D85A30', title: 'Prepare the data',
               desc: 'Handle missing values. Encode categorical variables. Scale numerical features. Split into training and test sets. The model will only be as good as the data you feed it.',
-              swiggy: 'Fill missing prep times with restaurant median. Encode time_of_day as 4 buckets (morning/lunch/afternoon/evening). Scale distance to 0–1 range. Split: 80% training (400K orders), 20% test (100K orders, never touched during training).',
+              doordash: 'Fill missing prep times with restaurant median. Encode time_of_day as 4 buckets (morning/lunch/afternoon/evening). Scale distance to 0–1 range. Split: 80% training (400K orders), 20% test (100K orders, never touched during training).',
             },
             {
               num: '04', color: '#BA7517', title: 'Choose and train a model',
               desc: 'Pick an algorithm appropriate for your problem type and data. Feed it your training data. The algorithm adjusts its internal parameters until it fits the training patterns.',
-              swiggy: 'Start simple: Linear Regression. Feed 400K training orders. Training takes under 1 second. The model learns coefficients for each feature — distance contributes +8.3 min/km, rush hour adds 9.7 min, and so on.',
+              doordash: 'Start simple: Linear Regression. Feed 400K training orders. Training takes under 1 second. The model learns coefficients for each feature — distance contributes +8.3 min/km, rush hour adds 9.7 min, and so on.',
             },
             {
               num: '05', color: '#1D9E75', title: 'Evaluate on the test set',
               desc: 'Run your trained model on the 20% of data it has never seen. Measure performance metrics. This is your honest estimate of how it will behave in production.',
-              swiggy: 'Run on 100K test orders. Mean Absolute Error: 4.2 minutes. 79% of predictions within ±5 minutes. Not quite the 85% target. Time to improve.',
+              doordash: 'Run on 100K test orders. Mean Absolute Error: 4.2 minutes. 79% of predictions within ±5 minutes. Not quite the 85% target. Time to improve.',
             },
             {
               num: '06', color: '#7F77DD', title: 'Improve and iterate',
               desc: 'Add more or better features. Try a more powerful algorithm. Tune hyperparameters. Each iteration goes back to the training data — the test set must stay untouched until you think you are done.',
-              swiggy: 'Switch to XGBoost. Add 3 new features: restaurant_avg_prep_last_7d, rider_avg_speed_last_hour, order_item_count. MAE drops to 2.8 minutes. 91% within ±5 minutes. Target exceeded.',
+              doordash: 'Switch to XGBoost. Add 3 new features: restaurant_avg_prep_last_7d, rider_avg_speed_last_hour, order_item_count. MAE drops to 2.8 minutes. 91% within ±5 minutes. Target exceeded.',
             },
             {
               num: '07', color: '#378ADD', title: 'Deploy and monitor',
               desc: 'Wrap your model in an API. Serve predictions in production. Monitor performance over time — data distributions shift, and a model that was accurate in January may degrade by July.',
-              swiggy: '3 million predictions per day. Real-time MAE monitoring dashboard. Alert triggers if 1-hour rolling MAE exceeds 5 minutes. Automated weekly retraining on the latest 30 days of data.',
+              doordash: '3 million predictions per day. Real-time MAE monitoring dashboard. Alert triggers if 1-hour rolling MAE exceeds 5 minutes. Automated weekly retraining on the latest 30 days of data.',
             },
           ].map((step, i, arr) => (
             <div key={step.num} style={{ display: 'flex', gap: 20, alignItems: 'flex-start', paddingBottom: i < arr.length - 1 ? 32 : 0, position: 'relative' as const }}>
@@ -348,8 +348,8 @@ if restaurant == "popular_restaurant":
                   borderRadius: 6, borderLeft: `2px solid ${step.color}50`,
                   fontFamily: 'var(--font-mono)',
                 }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, color: step.color, display: 'block', marginBottom: 3 }}>SWIGGY</span>
-                  {step.swiggy}
+                  <span style={{ fontSize: 10, fontWeight: 700, color: step.color, display: 'block', marginBottom: 3 }}>DOORDASH</span>
+                  {step.doordash}
                 </div>
               </div>
             </div>
@@ -468,7 +468,7 @@ if restaurant == "popular_restaurant":
       {/* ── SECTION 6: What this looks like at work ───────────────────────── */}
       <div style={sec}>
         <span style={tag}>What this looks like at work</span>
-        <h2 style={h2}>What ML engineers actually do at Indian companies</h2>
+        <h2 style={h2}>What ML engineers actually do day to day</h2>
 
         <p style={p}>
           Machine Learning is not a single job title. Three roles work with ML in different ways.
@@ -481,7 +481,7 @@ if restaurant == "popular_restaurant":
               color: '#378ADD',
               title: 'ML Engineer',
               focus: 'Build and ship models into production',
-              salary: '₹18–28 LPA',
+              salary: '$135K–$185K',
               bullets: [
                 'Write training pipelines that run on a schedule',
                 'Build and maintain the feature engineering code',
@@ -494,7 +494,7 @@ if restaurant == "popular_restaurant":
               color: '#1D9E75',
               title: 'Data Scientist',
               focus: 'Find insights and answer business questions with data',
-              salary: '₹16–24 LPA',
+              salary: '$120K–$155K',
               bullets: [
                 'Explore data to find patterns and test hypotheses',
                 'Build models to answer specific business questions',
@@ -507,7 +507,7 @@ if restaurant == "popular_restaurant":
               color: '#7F77DD',
               title: 'Applied Scientist',
               focus: 'Research and apply advanced techniques at scale',
-              salary: '₹22–35 LPA',
+              salary: '$170K–$215K',
               bullets: [
                 'Read and implement current ML research papers',
                 'Design novel model architectures for company-specific problems',

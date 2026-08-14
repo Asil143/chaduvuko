@@ -582,14 +582,14 @@ FROM orders;`}
       <SQLPlayground
         initialQuery={`-- Order counts by payment method and status
 SELECT
-  SUM(CASE WHEN payment_method = 'UPI'        THEN 1 ELSE 0 END) AS upi_orders,
+  SUM(CASE WHEN payment_method = 'Zelle'      THEN 1 ELSE 0 END) AS zelle_orders,
   SUM(CASE WHEN payment_method = 'Card'       THEN 1 ELSE 0 END) AS card_orders,
   SUM(CASE WHEN payment_method = 'COD'        THEN 1 ELSE 0 END) AS cod_orders,
   SUM(CASE WHEN payment_method = 'NetBanking' THEN 1 ELSE 0 END) AS netbanking_orders,
   COUNT(*)                                                        AS total_orders,
-  -- Percentage UPI adoption
-  ROUND(SUM(CASE WHEN payment_method = 'UPI' THEN 1.0 ELSE 0 END)
-        / COUNT(*) * 100, 1)                                     AS upi_pct
+  -- Percentage Zelle adoption
+  ROUND(SUM(CASE WHEN payment_method = 'Zelle' THEN 1.0 ELSE 0 END)
+        / COUNT(*) * 100, 1)                                     AS zelle_pct
 FROM orders
 WHERE order_status = 'Delivered';`}
         height={215}

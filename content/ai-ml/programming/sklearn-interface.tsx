@@ -724,7 +724,7 @@ from sklearn.metrics import mean_absolute_error
 np.random.seed(42)
 n = 2000
 restaurants = ['Pizza Hut','KFC','Dominos','Biryani Blues',"McDonald's",'Subway']
-cities      = ['Seattle','New York','Delhi','Austin','Boston']
+cities      = ['Seattle','New York','Denver','Austin','Boston']
 
 df = pd.DataFrame({
     'distance_km':    np.abs(np.random.normal(4, 2, n)).clip(0.5, 15),
@@ -882,7 +882,7 @@ df = pd.DataFrame({
     # Ordinal categorical — has a natural order
     'traffic_level':  np.random.choice(['low','medium','high'], n),
     # Nominal categorical — no order
-    'city':           np.random.choice(['Seattle','New York','Delhi'], n),
+    'city':           np.random.choice(['Seattle','New York','Denver'], n),
     'restaurant':     np.random.choice(['KFC','Dominos','Pizza Hut'], n),
     # Binary
     'is_weekend':     np.random.randint(0, 2, n).astype(float),
@@ -977,7 +977,7 @@ df = pd.DataFrame({
     'traffic_score':  np.random.randint(1, 11, n).astype(float),
     'restaurant_prep': np.abs(np.random.normal(15, 5, n)).clip(5, 35),
     'order_value':    np.abs(np.random.normal(350, 150, n)).clip(50, 1200),
-    'city':           np.random.choice(['Seattle','New York','Delhi','Austin'], n),
+    'city':           np.random.choice(['Seattle','New York','Denver','Austin'], n),
     'restaurant':     np.random.choice(['KFC','Dominos','Pizza Hut','Subway'], n),
 })
 y = (8.6 + 7.3*df['distance_km'] + 0.8*df['restaurant_prep']

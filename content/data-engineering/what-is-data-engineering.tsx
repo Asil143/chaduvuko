@@ -646,7 +646,7 @@ Friday
 
         <Para>
           This is what the first year of a data engineering job actually looks like. Not the
-          glamorised version. The real one. Based on what data engineers at Indian startups
+          glamorised version. The real one. Based on what data engineers at US startups
           actually report their days looking like in 2026.
         </Para>
 
@@ -732,39 +732,38 @@ Friday
       {/* ── Part 07 — Career and Salary ─────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 07 — Career Growth and Salaries" />
-        <SectionTitle>The Data Engineering Career Path in India (2026)</SectionTitle>
+        <SectionTitle>The Data Engineering Career Path (2026)</SectionTitle>
 
         <Para>
-          Data engineering is one of the highest-paying technology disciplines in India right
+          Data engineering is one of the highest-paying technology disciplines in the US right
           now. The demand for data engineers significantly outstrips supply — particularly for
           engineers who understand both the engineering and the data sides of the role. Here
           is the honest picture of what the career looks like.
         </Para>
 
-        <CodeBox label="DE career levels — India 2026 (Seattle, Product Company)">{`Level              Experience     Salary Range          What Changes
+        <CodeBox label="DE career levels — US 2026 (Product Company)">{`Level              Experience     Salary Range          What Changes
 ───────────────────────────────────────────────────────────────────────
-Junior DE          0–2 years      ₹6–12 LPA             Learning tools,
+Junior DE          0–2 years      $65K–$100K            Learning tools,
                                                          building under guidance
 
-Data Engineer      2–4 years      ₹12–22 LPA            Owns pipelines end-to-end,
+Data Engineer      2–4 years      $100K–$155K           Owns pipelines end-to-end,
                                                          handles production incidents
 
-Senior DE          4–7 years      ₹22–40 LPA            Designs systems,
+Senior DE          4–7 years      $135K–$210K           Designs systems,
                                                          mentors juniors,
                                                          cross-team influence
 
-Staff DE /         7–10 years     ₹40–70 LPA            Technical strategy,
+Staff DE /         7–10 years     $185K–$260K           Technical strategy,
 Lead DE                                                   architectural decisions,
                                                          org-wide standards
 
-Principal /        10+ years      ₹70–120+ LPA          Company-level data platform
+Principal /        10+ years      $260K–$400K+          Company-level data platform
 Staff+                                                    vision, external influence
 
 Notes:
-  Seattle multiplier: 1.3× base
-  FAANG multiplier: ~2× product company rates
-  GCC (Global Capability Centre): 1.4× product company rates
-  Service companies (Accenture/Deloitte): 0.72× product company rates`}</CodeBox>
+  Bay Area / Seattle / NYC multiplier: 1.2–1.4× national base
+  FAANG multiplier: ~1.5–2× product company rates
+  Consulting firms (Accenture, Cognizant, Deloitte): ~0.7× product company rates`}</CodeBox>
 
         <SubTitle>What actually drives salary growth</SubTitle>
 
@@ -835,7 +834,7 @@ Notes:
 
           <Para>
             You join a direct-to-consumer fashion startup as their second data engineer.
-            They have 400,000 customers, ₹80 million in annual GMV, and a data team of one
+            They have 400,000 customers, $8 million in annual GMV, and a data team of one
             analyst who currently does everything manually.
           </Para>
 
@@ -1050,7 +1049,7 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
         'The key difference between a data engineer and a software engineer is not the languages used but the systems built for: operational applications vs analytical data infrastructure.',
         'Reliable means four things: completes successfully, produces correct output, completes within SLA, and recovers from failures without human intervention.',
         'Non-IT backgrounds are an advantage in data engineering, not a disadvantage. Domain knowledge of what the data means is genuinely rare and valuable.',
-        'In India in 2026, data engineering salaries range from ₹6–12 LPA at entry level to ₹70–120+ LPA at principal level, with FAANG and GCC roles paying significantly above product company rates.',
+        'In the US in 2026, data engineering salaries range from $65K–$100K at entry level to $260K–$400K+ at principal level, with FAANG roles paying significantly above typical product company rates.',
         'The fastest path to a first DE job from a non-IT background: Python + SQL + 3 real projects on cloud free tiers + one cloud certification + GitHub portfolio. Achievable in 6–9 months of focused work.',
       ]} />
 

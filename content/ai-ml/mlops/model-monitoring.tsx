@@ -233,7 +233,7 @@ export default function ModelMonitoringPage() {
         <Callout type="tip">
           Install: <span style={S.code as React.CSSProperties}>pip install evidently scipy numpy pandas scikit-learn</span>.
           Evidently is the most widely used open-source ML monitoring library
-          in India — generates drift reports from reference and current data.
+          in the industry — generates drift reports from reference and current data.
           All statistical tests in this module are also implemented from scratch
           so you understand what the library is doing.
         </Callout>
@@ -324,7 +324,7 @@ export default function ModelMonitoringPage() {
           The Kolmogorov-Smirnov test measures the maximum difference between
           two empirical CDFs — works for continuous features, no binning required.
           Population Stability Index (PSI) measures how much a distribution
-          has shifted — widely used in credit risk and fraud at Indian banks.
+          has shifted — widely used in credit risk and fraud at major banks.
           Chi-squared test compares observed vs expected frequencies — works
           for categorical features.
         </p>
@@ -353,7 +353,7 @@ np.random.seed(42)
 # ── Simulate training reference data (January) ────────────────────────
 N_REF = 10000
 ref_distance  = np.random.exponential(3.2, N_REF)                 # avg 3.2 km
-ref_order_val = np.random.exponential(400, N_REF)                  # avg Rs 400
+ref_order_val = np.random.exponential(400, N_REF)                  # avg $400
 ref_peak_hour = np.random.binomial(1, 0.35, N_REF)                # 35% peak
 ref_category  = np.random.choice(['bike', 'cycle', 'walk'], N_REF,
                                    p=[0.6, 0.3, 0.1])
@@ -475,7 +475,7 @@ for feat, (ref, cur, ftype) in features.items():
           It runs all relevant statistical tests automatically per feature type,
           generates visual distributions, and produces a JSON summary
           that can be parsed to trigger retraining alerts.
-          It is the standard open-source monitoring tool used at Indian startups.
+          It is the standard open-source monitoring tool used at startups everywhere.
         </p>
 
         <CodeBlock code={`# pip install evidently
@@ -597,7 +597,7 @@ def daily_monitoring_job(
     }
 
 result = daily_monitoring_job(
-    'swiggy-delivery-time',
+    'doordash-delivery-time',
     reference_data, current_data,
 )
 print(f"\nDaily monitoring result: {result}")`} />
@@ -1037,7 +1037,7 @@ for scenario in test_scenarios:
       <KeyTakeaways
         items={[
           'Two types of drift cause model degradation. Data drift: input feature distributions shift (P(X) changes) — detectable immediately without labels using statistical tests. Concept drift: the relationship between features and target changes (P(Y|X) changes) — requires ground truth labels and is invisible until labels arrive. Both need separate monitoring strategies.',
-          'Three statistical tests cover all feature types: KS test for continuous features (compares empirical CDFs, p-value + statistic threshold), PSI for continuous features (industry standard in Indian finance: PSI < 0.10 safe, 0.10-0.20 investigate, > 0.20 retrain), chi-squared for categorical features (compares observed vs expected frequencies).',
+          'Three statistical tests cover all feature types: KS test for continuous features (compares empirical CDFs, p-value + statistic threshold), PSI for continuous features (industry standard in finance: PSI < 0.10 safe, 0.10-0.20 investigate, > 0.20 retrain), chi-squared for categorical features (compares observed vs expected frequencies).',
           'Evidently AI automates drift reporting: run Report(metrics=[DataDriftPreset()]) with reference and current DataFrames. It selects the right test per feature type, generates HTML dashboards, and produces JSON results for programmatic alerting. Schedule as an Airflow task daily, parse JSON results to trigger retraining.',
           'Performance monitoring requires delayed ground truth labels. Log every prediction with a prediction_id. When labels arrive (actual delivery time, fraud confirmation), join them back to predictions. Compute rolling metrics (MAE, within-N-minutes rate, bias) over daily/weekly windows. A 25%+ MAE increase is a critical retraining trigger.',
           'Automated retraining trigger hierarchy: critical (performance drop > 25% → retrain immediately), high (> 40% features drifted or prediction distribution shifted 2σ+ → retrain if 2+ high triggers), medium (> 10,000 new samples accumulated → scheduled retrain). Add 24-hour cooldown to prevent retrain loops.',

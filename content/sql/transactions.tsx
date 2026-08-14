@@ -128,7 +128,7 @@ export default function Transactions() {
 
       <P>A transaction is a group of SQL statements that the database treats as a <Hl>single indivisible unit of work</Hl>. Either all statements in the transaction succeed and are permanently saved, or none of them take effect. There is no in-between state visible to other users or sessions.</P>
 
-      <P>The classic example: a customer pays ₹500 for a FreshCart order. Two things must happen — the customer's wallet balance decreases by ₹500 AND FreshCart's account increases by ₹500. If the first statement succeeds but the database crashes before the second, the customer has lost ₹500 with nothing to show for it. A transaction prevents this: both updates are wrapped in a single unit. If the crash happens mid-transaction, the database rolls back the first update on restart. Either both succeed or neither does.</P>
+      <P>The classic example: a customer pays $500 for a FreshCart order. Two things must happen — the customer's wallet balance decreases by $500 AND FreshCart's account increases by $500. If the first statement succeeds but the database crashes before the second, the customer has lost $500 with nothing to show for it. A transaction prevents this: both updates are wrapped in a single unit. If the crash happens mid-transaction, the database rolls back the first update on restart. Either both succeed or neither does.</P>
 
       <CodeBlock
         label="Transaction anatomy — BEGIN, COMMIT, ROLLBACK"
@@ -207,7 +207,7 @@ ROLLBACK;   -- clean up the read-only transaction`}
         color="#8b5cf6"
         plain="Concurrent transactions don't interfere with each other"
         technical="Each transaction executes as if it were the only transaction running, even when hundreds of transactions run simultaneously. Changes made by an in-progress transaction are not visible to other transactions until the first transaction commits (at the default isolation level). This prevents one transaction from reading dirty, inconsistent intermediate states written by another in-flight transaction."
-        example="Two FreshCart customers simultaneously try to buy the last unit of Amul Butter (stock = 1). Without isolation, both transactions could read stock = 1, both deduct 1, and both succeed — leaving stock at -1 (an impossible state). Isolation ensures one transaction wins and the other sees stock = 0 and fails, maintaining the invariant that stock >= 0."
+        example="Two FreshCart customers simultaneously try to buy the last unit of Horizon Butter (stock = 1). Without isolation, both transactions could read stock = 1, both deduct 1, and both succeed — leaving stock at -1 (an impossible state). Isolation ensures one transaction wins and the other sees stock = 0 and fails, maintaining the invariant that stock >= 0."
       />
 
       <AcidCard
@@ -438,13 +438,13 @@ SHOW autocommit;        -- shows current setting
             name: 'Dirty Read',
             color: '#ff4757',
             desc: 'Transaction A reads data written by Transaction B that has not yet committed. If B rolls back, A read data that never officially existed.',
-            example: 'Customer A reads their wallet balance. Customer B is mid-transaction adding a refund — their UPDATE is not yet committed. A reads the inflated balance, sees ₹1,200 instead of the real ₹800. B rolls back. The ₹1,200 A read was a ghost.',
+            example: 'Customer A reads their wallet balance. Customer B is mid-transaction adding a refund — their UPDATE is not yet committed. A reads the inflated balance, sees $1,200 instead of the real $800. B rolls back. The $1,200 A read was a ghost.',
           },
           {
             name: 'Non-Repeatable Read',
             color: '#f97316',
             desc: 'Transaction A reads a row, then reads it again and gets a different value because Transaction B committed a change between A\'s two reads.',
-            example: 'A settlement report reads FreshCart order #1001 total_amount = ₹850 at the start of the report. Midway through the report, a refund transaction commits and changes #1001 to ₹750. The report re-reads #1001 and gets ₹750. The same row returned two different values in the same report run.',
+            example: 'A settlement report reads FreshCart order #1001 total_amount = $850 at the start of the report. Midway through the report, a refund transaction commits and changes #1001 to $750. The report re-reads #1001 and gets $750. The same row returned two different values in the same report run.',
           },
           {
             name: 'Phantom Read',
@@ -724,7 +724,7 @@ async function processPayment(userId, merchantId, amount) {
       {/* ── PART 09 ── */}
       <Part n="09" title="What This Looks Like at Work" />
 
-      <P>You are a backend engineer at Venmo. A critical bug is reported: occasionally, a customer's UPI payment succeeds (money deducted from their account) but the merchant never receives the credit. This is a classic atomicity failure — two statements that must succeed together are not wrapped in a transaction.</P>
+      <P>You are a backend engineer at Venmo. A critical bug is reported: occasionally, a customer's P2P transfer succeeds (money deducted from their account) but the merchant never receives the credit. This is a classic atomicity failure — two statements that must succeed together are not wrapped in a transaction.</P>
 
       <TimeBlock time="9:00 AM" label="Bug reported — customer deducted, merchant not credited">
         Investigation reveals the payment service runs two separate UPDATE statements — one for the customer deduction, one for the merchant credit — without a transaction. The database crashes between the two statements 1 in 50,000 times. Adapted for FreshCart: order placed (INSERT) but payment not logged (INSERT fails).
@@ -930,7 +930,7 @@ SELECT
   CURRENT_DATE,               -- order_date
   'Processing',               -- order_status
   2 * unit_price,             -- total_amount: qty × price
-  'UPI'                       -- payment_method
+  'Zelle'                     -- payment_method
 FROM products
 WHERE product_id = 1;
 

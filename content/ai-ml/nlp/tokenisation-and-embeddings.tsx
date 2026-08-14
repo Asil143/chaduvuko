@@ -244,28 +244,28 @@ export default function TokenisationAndEmbeddingsPage() {
               {
                 strategy: 'Word-level',
                 color: '#D85A30',
-                tokens: ['Stripe', 'declined', 'my', 'payment', 'of', '₹2500'],
+                tokens: ['Stripe', 'declined', 'my', 'payment', 'of', '$2500'],
                 ids: [4821, 892, 45, 3301, 12, 8823],
-                note: 'OOV problem: "₹2500" unseen at train time → [UNK]. 500k+ vocab needed for Hindi+English.',
+                note: 'OOV problem: "$2500" unseen at train time → [UNK]. 500k+ vocab needed for Spanish+English.',
               },
               {
                 strategy: 'Character-level',
                 color: '#BA7517',
-                tokens: ['R','a','z','o','r','p','a','y',' ','d','e','c','l','i','n','e','d',' ','m','y'],
-                ids: [52,1,90,15,52,16,1,25,0,4,5,3,12,9,14,5,4,0,13,25],
+                tokens: ['S','t','r','i','p','e',' ','d','e','c','l','i','n','e','d',' ','m','y'],
+                ids: [52,1,90,15,52,16,0,4,5,3,12,9,14,5,4,0,13,25],
                 note: 'Very long sequences. Hard to learn word-level patterns. No OOV but slow.',
               },
               {
                 strategy: 'BPE (subword)',
                 color: '#1D9E75',
-                tokens: ['Razor', 'pay', 'Ġdeclined', 'Ġmy', 'Ġpayment', 'Ġof', 'Ġ₹', '2500'],
+                tokens: ['Str', 'ipe', 'Ġdeclined', 'Ġmy', 'Ġpayment', 'Ġof', 'Ġ$', '2500'],
                 ids: [19432, 7692, 11843, 452, 8821, 12, 43291, 12450],
                 note: 'Used by GPT. Ġ prefix = space before token. Rare words split into known subwords.',
               },
               {
                 strategy: 'WordPiece (subword)',
                 color: '#7b61ff',
-                tokens: ['razor', '##pay', 'declined', 'my', 'payment', 'of', '[UNK]', '2500'],
+                tokens: ['str', '##ipe', 'declined', 'my', 'payment', 'of', '[UNK]', '2500'],
                 ids: [22341, 3521, 7823, 201, 4521, 12, 100, 9823],
                 note: 'Used by BERT. ## prefix = continuation of previous token. Lowercase by default.',
               },
@@ -311,13 +311,13 @@ import re
 # ── Build a BPE tokeniser from scratch ────────────────────────────────
 # Corpus: Stripe support tickets (simulated)
 corpus = [
-    "razorpay payment declined please retry",
+    "stripe payment declined please retry",
     "payment gateway timeout error occurred",
-    "upi transaction failed debit reversal",
-    "razorpay dashboard settlement report",
+    "card transaction failed debit reversal",
+    "stripe dashboard settlement report",
     "payment link expired please regenerate",
-    "emi option not available for this card",
-    "razorpay payment successful confirmation",
+    "installment option not available for this card",
+    "stripe payment successful confirmation",
     "refund initiated within 5 to 7 days",
     "subscription plan payment failed retry",
     "bank declined transaction contact bank",
@@ -339,7 +339,7 @@ tokenizer.train(['/tmp/corpus.txt'], trainer)
 
 # ── Tokenise sample text ───────────────────────────────────────────────
 samples = [
-    "razorpay payment declined",
+    "stripe payment declined",
     "transaction failed retry",
     "unknownword xyz123",   # OOV handling
 ]
@@ -359,7 +359,7 @@ try:
 
     # GPT-2 tokeniser (BPE)
     gpt2_tok = AutoTokenizer.from_pretrained('gpt2')
-    text     = "Stripe declined my payment of ₹2500"
+    text     = "Stripe declined my payment of $2500"
     gpt2_enc = gpt2_tok(text)
     print(f"\nGPT-2 BPE tokeniser:")
     print(f"  Input:  '{text}'")
@@ -451,10 +451,10 @@ def merge_pair(pair, vocab):
     return new_vocab
 
 # ── Train BPE on Stripe corpus ──────────────────────────────────────
-corpus = ("razorpay payment declined retry payment gateway "
-          "timeout payment failed upi transaction payment "
-          "successful razorpay dashboard payment link payment "
-          "refund payment subscription payment emi payment")
+corpus = ("stripe payment declined retry payment gateway "
+          "timeout payment failed card transaction payment "
+          "successful stripe dashboard payment link payment "
+          "refund payment subscription payment installment payment")
 
 vocab       = get_vocab(corpus)
 n_merges    = 15
@@ -499,7 +499,7 @@ def tokenise_bpe(text, merge_rules):
 
 test_texts = [
     "payment declined",
-    "razorpay gateway",
+    "stripe gateway",
     "unknownword",
 ]
 print("\nTokenisation with learned BPE rules:")
@@ -567,13 +567,13 @@ class SkipGram(nn.Module):
 
 # ── Build vocabulary from Stripe support corpus ─────────────────────
 corpus = """
-razorpay payment declined please retry payment gateway timeout
-upi transaction failed reversal initiated payment link expired
-razorpay dashboard settlement report payment successful confirmation
+stripe payment declined please retry payment gateway timeout
+card transaction failed reversal initiated payment link expired
+stripe dashboard settlement report payment successful confirmation
 refund initiated five to seven days subscription payment failed
-emi option not available card payment declined bank contact
+installment option not available card payment declined bank contact
 payment processing please wait transaction pending authorization
-razorpay integration guide payment api documentation
+stripe integration guide payment api documentation
 """.lower().split()
 
 # Build vocabulary
@@ -629,7 +629,7 @@ def most_similar(word, top_n=4):
     return sorted(sims, key=lambda x: x[1], reverse=True)[:top_n]
 
 print("\nMost similar words (after minimal training):")
-for word in ['payment', 'razorpay', 'failed']:
+for word in ['payment', 'stripe', 'failed']:
     if word in word2idx:
         similar = most_similar(word)
         print(f"  {word}: {[(w, f'{s:.3f}') for w, s in similar]}")`} />
@@ -870,8 +870,8 @@ for i in range(len(labels)):
 
         <ErrorBlock
           error="OOV words are all mapped to [UNK] and the model performs poorly on domain text"
-          cause="The tokeniser was trained on general text (Wikipedia, books) but the model is applied to domain-specific text (medical reports, legal documents, code, Hindi-English code-mixed text). Domain terms like 'thrombocytopenia' or 'UPI' or 'aadhaar' get mapped to [UNK] because they never appeared in the training corpus. A high [UNK] rate destroys model performance."
-          fix="Use a subword tokeniser (BPE or SentencePiece) instead of word-level tokenisation — subword tokenisers never produce [UNK] because they fall back to character-level pieces. Alternatively fine-tune the tokeniser on domain data: run BPE training on your domain corpus and use the resulting vocabulary. For Hindi-English text, use a multilingual tokeniser like mBERT or XLM-RoBERTa."
+          cause="The tokeniser was trained on general text (Wikipedia, books) but the model is applied to domain-specific text (medical reports, legal documents, code, Spanish-English code-mixed text). Domain terms like 'thrombocytopenia' or 'ACH' or 'SSN' get mapped to [UNK] because they never appeared in the training corpus. A high [UNK] rate destroys model performance."
+          fix="Use a subword tokeniser (BPE or SentencePiece) instead of word-level tokenisation — subword tokenisers never produce [UNK] because they fall back to character-level pieces. Alternatively fine-tune the tokeniser on domain data: run BPE training on your domain corpus and use the resulting vocabulary. For Spanish-English text, use a multilingual tokeniser like mBERT or XLM-RoBERTa."
         />
 
         <ErrorBlock

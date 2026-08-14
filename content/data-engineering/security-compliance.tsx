@@ -9,7 +9,7 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Security and Compliance for Data Engineers | Chaduvuko',
   description:
-    'GDPR and the India DPDP Act — what they mean for your pipelines and how to build systems that are compliant by design.',
+    'GDPR and the CCPA — what they mean for your pipelines and how to build systems that are compliant by design.',
 }
 
 /* ─── Local components ───────────────────────────────────────────────────── */
@@ -188,7 +188,7 @@ export default function SecurityCompliancePage() {
   return (
     <LearnLayout
       title="Security and Compliance for Data Engineers"
-      description="GDPR and the India DPDP Act — what they mean for your pipelines and how to build systems that are compliant by design."
+      description="GDPR and the CCPA — what they mean for your pipelines and how to build systems that are compliant by design."
       section="Data Engineering — Module 39"
       readTime="50 min"
       updatedAt="March 2026"
@@ -209,7 +209,7 @@ export default function SecurityCompliancePage() {
         marginBottom: 36,
       }}>
         <span style={{ fontSize: 9, opacity: 0.9 }}>✦</span>
-        Last verified March 2026 — GDPR (2018), India DPDP Act (2023)
+        Last verified March 2026 — GDPR (2018), CCPA/CPRA (2023)
       </div>
 
       {/* ── Why This Matters ───────────────────────────────────────────── */}
@@ -222,8 +222,8 @@ export default function SecurityCompliancePage() {
       </Para>
       <Para>
         This module covers what you actually need to know as a data engineer: encryption,
-        PII handling, access control, GDPR, and India's new Digital Personal Data
-        Protection Act. Not legal theory — practical decisions your pipelines must make.
+        PII handling, access control, GDPR, and the CCPA (California Consumer Privacy
+        Act). Not legal theory — practical decisions your pipelines must make.
       </Para>
 
       <Callout type="tip">
@@ -362,10 +362,10 @@ def decrypt_field(encrypted_value: str) -> str:
 # In your pipeline:
 row = {
     'user_id': 'U1234',
-    'name': 'Priya Sharma',          # Not sensitive — store as is
-    'email': encrypt_field('priya@example.com'),   # Sensitive — encrypt
-    'phone': encrypt_field('+91 9876543210'),       # Sensitive — encrypt
-    'aadhaar_last4': encrypt_field('5678'),         # Sensitive — encrypt
+    'name': 'Jordan Lee',             # Not sensitive — store as is
+    'email': encrypt_field('jordan@example.com'),   # Sensitive — encrypt
+    'phone': encrypt_field('+1 512-555-0142'),       # Sensitive — encrypt
+    'ssn_last4': encrypt_field('5678'),             # Sensitive — encrypt
     'city': 'Austin',             # Not sensitive — store as is
 }
 
@@ -395,7 +395,7 @@ row = {
         rows={[
           ['Direct identifiers', 'Full name, SSN number, PAN, passport, phone, email', 'High — identifies person directly'],
           ['Quasi-identifiers', 'Zip Code + birthdate + gender (can re-identify when combined)', 'Medium — risky in combination'],
-          ['Sensitive personal data (DPDP / GDPR)', 'Health data, financial data, biometrics, caste, religion, sexual orientation', 'Very high — stricter rules apply'],
+          ['Sensitive personal data (CCPA / GDPR)', 'Health data, financial data, biometrics, precise geolocation, race, religion, sexual orientation', 'Very high — stricter rules apply'],
           ['Derived data', 'Credit score, location history, behaviour profile built from raw data', 'High — still personal data even if derived'],
           ['Pseudonymous data', 'user_id replacing email (mapping table exists separately)', 'Medium — still PII if re-identification is possible'],
           ['Anonymous data', 'Aggregated stats with no re-identification path', 'Not PII — regulations do not apply'],
@@ -427,7 +427,7 @@ models:
           pii: true
           pii_type: direct_identifier
           gdpr_relevant: true
-          dpdp_relevant: true
+          ccpa_relevant: true
       - name: customer_phone
         meta:
           pii: true
@@ -456,10 +456,10 @@ def mask_phone(phone: str) -> str:
     digits = re.sub(r'\D', '', phone)
     return 'XXXXXX' + digits[-4:] if len(digits) >= 4 else 'XXXXXXXXXX'
 
-def mask_aadhaar(aadhaar: str) -> str:
+def mask_ssn(ssn: str) -> str:
     """Standard SSN masking — show only last 4."""
-    digits = re.sub(r'\D', '', aadhaar)
-    return 'XXXX XXXX ' + digits[-4:] if len(digits) >= 4 else 'XXXX XXXX XXXX'
+    digits = re.sub(r'\D', '', ssn)
+    return 'XXX-XX-' + digits[-4:] if len(digits) >= 4 else 'XXX-XX-XXXX'
 
 # Apply during the staging → dev copy process, not in production pipelines`} />
       </Card>
@@ -484,8 +484,8 @@ ALTER TABLE customers
   MODIFY COLUMN email
   SET MASKING POLICY email_mask;
 
--- Analyst sees: pr****@****.com
--- Engineer sees: priya@freshmart.in`} />
+-- Analyst sees: jo****@****.com
+-- Engineer sees: jordan@freshmart.com`} />
       </Card>
 
       {/* ── 4. Access control ──────────────────────────────────────────── */}
@@ -534,8 +534,8 @@ CREATE POLICY region_isolation ON customers
 ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 
 -- In your application / pipeline connection:
--- SET app.user_region = 'south_india';
--- Now queries on customers only return south_india rows`} />
+-- SET app.user_region = 'northeast';
+-- Now queries on customers only return northeast rows`} />
 
       {/* ── 5. GDPR ────────────────────────────────────────────────────── */}
       <H2>5. GDPR — What Data Engineers Need to Know</H2>
@@ -543,7 +543,7 @@ ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
       <Para>
         GDPR (General Data Protection Regulation) is a European Union law that came into
         force in 2018. It applies to any company that processes personal data of EU
-        residents — including Indian companies that have EU customers. Fines go up to 4%
+        residents — including US companies that have EU customers. Fines go up to 4%
         of global annual revenue. Meta was fined €1.2 billion in 2023.
       </Para>
       <Para>
@@ -616,7 +616,7 @@ ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 # Deletion = deleting the key from KMS
 
 import boto3
-kms = boto3.client('kms', region_name='ap-south-1')
+kms = boto3.client('kms', region_name='us-east-1')
 
 def get_or_create_user_key(user_id: str) -> str:
     """Return KMS key ARN for this user, creating if needed."""
@@ -641,59 +641,63 @@ def erase_user(user_id: str, key_id: str):
     # Log this action to your audit trail
     log_audit_event('ERASURE_REQUESTED', user_id=user_id, key_id=key_id)`} />
 
-      {/* ── 6. India DPDP ──────────────────────────────────────────────── */}
-      <H2>6. India Digital Personal Data Protection Act (DPDP) 2023</H2>
+      {/* ── 6. CCPA ──────────────────────────────────────────────── */}
+      <H2>6. California Consumer Privacy Act (CCPA/CPRA)</H2>
 
       <Para>
-        India's Digital Personal Data Protection Act was passed in August 2023. It is the
-        first comprehensive personal data protection law in India, replacing a patchwork
-        of older IT Act provisions. The rules (secondary legislation) were expected in
-        2024–2025 and are being finalized as of March 2026. The core obligations, however,
-        are already clear.
+        The California Consumer Privacy Act took effect January 1, 2020, and was
+        substantially expanded by the California Privacy Rights Act (CPRA), effective
+        January 1, 2023, with enforcement beginning July 1, 2023. It is the most
+        comprehensive US state privacy law and the de facto standard most companies build
+        to, since a growing list of other states — Virginia, Colorado, Connecticut, Utah,
+        and more — have passed similar laws largely modeled on it.
       </Para>
 
       <Callout type="info">
-        The DPDP Act applies to digital personal data of Indian residents, processed in
-        India or outside India if connected to offering goods/services to Indian residents.
-        If your company has Indian users, this law applies to you.
+        CCPA applies to any for-profit business that does business in California and meets
+        at least one threshold: more than $25 million in annual gross revenue, buys/sells/
+        shares personal information of 100,000+ California consumers or households
+        annually, or derives 50%+ of annual revenue from selling or sharing personal
+        information. If your company has California users and meets these thresholds,
+        this law applies to you.
       </Callout>
 
-      <H3>Key concepts in DPDP for data engineers</H3>
+      <H3>Key concepts in CCPA for data engineers</H3>
 
       <Table
-        headers={['DPDP Term', 'Plain meaning', 'Your pipeline implication']}
+        headers={['CCPA Term', 'Plain meaning', 'Your pipeline implication']}
         rows={[
-          ['Data Principal', 'The individual whose data is being processed (your user)', 'You must be able to identify all data for a given user_id across your systems'],
-          ['Data Fiduciary', 'The company that decides what data to collect and how to use it (your employer)', 'Your company must appoint a Data Protection Officer for significant fiduciaries'],
-          ['Consent', 'Must be free, specific, informed, and unambiguous. No pre-checked boxes.', 'Tag data with consent purpose. Don\'t use data beyond consented purpose.'],
-          ['Purpose limitation', 'Data used only for the specific purpose for which consent was given', 'Same as GDPR — documented business purpose required per field'],
-          ['Data erasure', 'User can request deletion. Company must delete when purpose is fulfilled.', 'Same deletion capability as GDPR. Deletion when retention period expires, not just on request.'],
-          ['Data localisation', 'Certain "significant" data fiduciaries may be required to store data in India', 'Watch for storage region requirements — may affect your cloud region choice'],
-          ['Children\'s data', 'Parental consent required for users under 18. No behavioural tracking of children.', 'If your platform has minors, age verification and restricted processing required'],
+          ['Consumer', 'The California resident whose data is being processed (your user)', 'You must be able to identify all data for a given user_id across your systems'],
+          ['Business', 'The company that decides what data to collect and how to use it (your employer)', 'Your company must maintain a privacy policy and a process for honouring consumer rights requests'],
+          ['Right to opt-out of sale/share', 'Consumers can opt out of having their data sold or shared for cross-context advertising', 'Pipelines must respect opt-out signals (e.g. Global Privacy Control) and stop sharing that user\'s data downstream'],
+          ['Purpose limitation', 'Data used only for the disclosed purpose at collection', 'Same as GDPR — documented business purpose required per field'],
+          ['Right to delete', 'Consumer can request deletion. Business must delete, with some exceptions.', 'Same deletion capability as GDPR — locate and delete/anonymise across every table and layer'],
+          ['Sensitive personal information', 'SSN, precise geolocation, health data, biometric data, and more get stricter handling rules', 'Extra access controls, plus a consumer right to limit use of this category'],
+          ['Right to correct', 'Consumer can request correction of inaccurate personal information', 'Pipeline must support upserts/corrections that propagate to all downstream tables, not just appends'],
         ]}
       />
 
-      <H3>GDPR vs DPDP — similarities and differences</H3>
+      <H3>GDPR vs CCPA — similarities and differences</H3>
 
       <Table
-        headers={['Area', 'GDPR', 'India DPDP']}
+        headers={['Area', 'GDPR', 'CCPA/CPRA']}
         rows={[
-          ['Scope', 'EU residents\' data', 'Indian residents\' digital data'],
-          ['Legal basis', 'Consent, legitimate interest, contract, legal obligation, vital interest, public task', 'Consent and "legitimate uses" (state functions, employment, emergencies, research)'],
-          ['Right to erasure', 'Yes — 30 days', 'Yes — timeline per rules (expected similar)'],
-          ['Right to access', 'Yes — detailed Subject Access Request', 'Yes — right to access information about data processed'],
-          ['Data breach notification', '72 hours to regulator', 'Without delay to Data Protection Board (timeline per rules)'],
-          ['Fines', 'Up to €20M or 4% global revenue', 'Up to ₹250 million per instance (rules may revise)'],
-          ['DPO requirement', 'Required for certain organisations', 'Required for "Significant Data Fiduciaries" (defined by rules)'],
-          ['Cross-border transfer', 'Adequacy decisions or standard clauses', 'Allowed except to countries notified as restricted'],
+          ['Scope', 'EU residents\' data', 'California residents\' data (for qualifying businesses)'],
+          ['Legal basis', 'Consent, legitimate interest, contract, legal obligation, vital interest, public task', 'Notice-and-opt-out model — collection generally does not require consent, but sale/sharing requires an opt-out'],
+          ['Right to erasure', 'Yes — 30 days', 'Yes — 45 days (extendable to 90)'],
+          ['Right to access', 'Yes — detailed Subject Access Request', 'Yes — right to know what categories and specific pieces of data are collected'],
+          ['Data breach notification', '72 hours to regulator', 'No fixed statutory deadline under CCPA itself; state breach-notification statutes apply separately'],
+          ['Fines', 'Up to €20M or 4% global revenue', 'Up to $2,500 per violation, $7,500 per intentional violation (enforced by the CPPA)'],
+          ['DPO requirement', 'Required for certain organisations', 'No formal DPO requirement, but CPRA requires a cybersecurity audit and risk assessment for high-risk processing'],
+          ['Cross-border transfer', 'Adequacy decisions or standard clauses', 'No CCPA-specific cross-border transfer restrictions'],
         ]}
       />
 
       <Callout type="tip">
-        The practical pipeline architecture that satisfies GDPR also satisfies DPDP for
-        most requirements. Build for GDPR-level rigour and you will be compliant with
-        both. The differences are mainly in legal terminology and the specific thresholds
-        in secondary legislation.
+        The practical pipeline architecture that satisfies GDPR also satisfies CCPA/CPRA
+        for most requirements. Build for GDPR-level rigour and you will be compliant with
+        both — plus most of the other US state privacy laws, which are largely modeled on
+        CCPA. The differences are mainly in legal terminology and specific thresholds.
       </Callout>
 
       {/* ── 7. Compliance by design ────────────────────────────────────── */}
@@ -806,9 +810,9 @@ def log_audit_event(
     print(json.dumps(event))  # Replace with your log sink
 
 # Examples
-log_audit_event('READ_PII', 'analyst_ravi', 'customers', metadata={'purpose': 'support_ticket_123'})
+log_audit_event('READ_PII', 'analyst_jordan', 'customers', metadata={'purpose': 'support_ticket_123'})
 log_audit_event('DELETE_RECORD', 'privacy_admin', 'customers', record_id='U98765', metadata={'reason': 'GDPR_erasure_request'})
-log_audit_event('EXPORT_DATA', 'data_engineer', 'orders', record_id='U12345', metadata={'reason': 'DPDP_access_request'})`} />
+log_audit_event('EXPORT_DATA', 'data_engineer', 'orders', record_id='U12345', metadata={'reason': 'CCPA_access_request'})`} />
 
       <Callout type="warning">
         Audit logs must be stored in a separate, append-only location that pipeline
@@ -841,7 +845,7 @@ log_audit_event('EXPORT_DATA', 'data_engineer', 'orders', record_id='U12345', me
 import boto3
 import json
 
-def get_secret(secret_name: str, region: str = 'ap-south-1') -> dict:
+def get_secret(secret_name: str, region: str = 'us-east-1') -> dict:
     """Fetch a secret by name. Returns dict of key-value pairs."""
     client = boto3.client('secretsmanager', region_name=region)
     response = client.get_secret_value(SecretId=secret_name)
@@ -865,7 +869,7 @@ connection_string = (
 
       <Card title="Day 1 at a fintech (Stripe / Venmo / Brex)" accent="#00e676">
         <Para>
-          Your first task might be: "We have a new DPDP compliance requirement — audit the
+          Your first task might be: "We have a new CCPA compliance requirement — audit the
           raw layer and flag every column that contains personal data." You open the data
           catalogue, run a query across column names and sample values, and produce a
           spreadsheet with every PII field, its table, and its current protection status.
@@ -873,13 +877,14 @@ connection_string = (
         </Para>
       </Card>
 
-      <Card title="At a healthcare company (Practo / Apollo)" accent="#0078d4">
+      <Card title="At a healthcare company (Oscar Health / Teladoc)" accent="#0078d4">
         <Para>
-          Health data is "sensitive personal data" under DPDP. Your pipeline that ingests
-          patient records into the data warehouse must use customer-managed encryption
-          keys, full audit logging on every SELECT, and row-level security so only the
-          assigned doctor's team can see their patients' records. A senior engineer will
-          review your pipeline and specifically check these controls before approving.
+          Health data is "sensitive personal information" under CCPA and protected health
+          information under HIPAA. Your pipeline that ingests patient records into the data
+          warehouse must use customer-managed encryption keys, full audit logging on every
+          SELECT, and row-level security so only the assigned doctor's team can see their
+          patients' records. A senior engineer will review your pipeline and specifically
+          check these controls before approving.
         </Para>
       </Card>
 
@@ -930,7 +935,7 @@ connection_string = (
       <KeyTakeaways items={[
         'Encryption in transit (TLS) and at rest are separate problems — you need both.',
         'PII is any data that can identify a person, directly or in combination. Tag it, minimise it, mask it in dev, and control access to it in prod.',
-        'GDPR and India DPDP both require: consent, purpose limitation, right to erasure, right to access, and breach notification. Build deletion and access-export capability into every pipeline that touches personal data.',
+        'GDPR and CCPA both require: purpose limitation, right to erasure, right to access, and breach-relevant audit trails. Build deletion and access-export capability into every pipeline that touches personal data.',
         'Crypto-erasure is the practical solution for GDPR deletion in immutable data lakes — encrypt per user with a unique key, then delete the key.',
         'Audit logs must be immutable, append-only, and stored separately from the systems being audited.',
         'Never hardcode credentials. Use environment variables in dev, secrets managers in production, and managed identities where the cloud supports them.',

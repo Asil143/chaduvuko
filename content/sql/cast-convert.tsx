@@ -167,7 +167,7 @@ SELECT
         from="TEXT"
         to="NUMERIC"
         syntax="'42.50'::NUMERIC  or  CAST('42.50' AS NUMERIC)"
-        note="Accepts integers and decimals as strings. Fails on non-numeric strings like 'abc' or '₹42'."
+        note="Accepts integers and decimals as strings. Fails on non-numeric strings like 'abc' or '$42'."
         safe={false}
       />
       <CastCard
@@ -388,17 +388,17 @@ ORDER BY pct_in_stock DESC;`}
       {/* ── PART 06 ── */}
       <Part n="06" title="TRY_CAST — Safe Conversion Without Crashes" />
 
-      <P>Standard CAST fails with an error if the value cannot be converted — '₹120' cannot be cast to INTEGER and the entire query fails. <Hl>TRY_CAST</Hl> returns NULL instead of raising an error when conversion fails. This is essential for data quality checks and cleaning imports where not every value is guaranteed to be convertible.</P>
+      <P>Standard CAST fails with an error if the value cannot be converted — '$120' cannot be cast to INTEGER and the entire query fails. <Hl>TRY_CAST</Hl> returns NULL instead of raising an error when conversion fails. This is essential for data quality checks and cleaning imports where not every value is guaranteed to be convertible.</P>
 
       <CodeBlock
         label="TRY_CAST — DuckDB and SQL Server"
         code={`-- Standard CAST: fails hard on bad input
-CAST('₹120' AS INTEGER)           -- ERROR: invalid input syntax for integer
+CAST('$120' AS INTEGER)           -- ERROR: invalid input syntax for integer
 CAST('abc' AS DATE)               -- ERROR: invalid input syntax for date
 CAST('12-30-2024' AS DATE)        -- ERROR: US date format not recognised
 
 -- TRY_CAST: returns NULL on failure (DuckDB, SQL Server)
-TRY_CAST('₹120' AS INTEGER)       -- returns NULL (no error)
+TRY_CAST('$120' AS INTEGER)       -- returns NULL (no error)
 TRY_CAST('abc' AS DATE)           -- returns NULL (no error)
 TRY_CAST('42' AS INTEGER)         -- returns 42 (success)
 
@@ -483,8 +483,8 @@ SELECT 0.1::NUMERIC + 0.2::NUMERIC = 0.3::NUMERIC;  -- returns TRUE
 
 -- NUMERIC(precision, scale):
 -- precision = total digits, scale = digits after decimal point
-NUMERIC(10, 2)     -- up to 10 digits total, 2 after decimal → ₹99,999,999.99
-NUMERIC(15, 4)     -- 15 digits, 4 decimal → ₹99,999,999,999.9999
+NUMERIC(10, 2)     -- up to 10 digits total, 2 after decimal → $99,999,999.99
+NUMERIC(15, 4)     -- 15 digits, 4 decimal → $99,999,999,999.9999
 
 -- For financial columns:
 -- ALWAYS use NUMERIC or DECIMAL, never FLOAT or DOUBLE
@@ -627,7 +627,7 @@ LIMIT 5;`}
       <P>You are a data engineer at Amazon. A partner has delivered a seller performance CSV. Every column is stored as TEXT — amounts have currency symbols, dates are in DD/MM/YYYY format, booleans are stored as 'Y'/'N', and some numeric fields have commas as thousand separators. You must write a cleaning and casting query before inserting into the target table.</P>
 
       <TimeBlock time="9:00 AM" label="Raw import preview">
-        Sample row: seller_id='S001', revenue='₹1,25,000.50', is_active='Y', last_sale_date='15/01/2024', refund_rate='3.5%'. Everything is TEXT.
+        Sample row: seller_id='S001', revenue='$125,000.50', is_active='Y', last_sale_date='15/01/2024', refund_rate='3.5%'. Everything is TEXT.
       </TimeBlock>
 
       <TimeBlock time="9:20 AM" label="Build the type conversion pipeline">
@@ -749,9 +749,9 @@ FROM (VALUES
       <Part n="12" title="Errors You Will Hit — And Exactly Why They Happen" />
 
       <Err
-        msg="ERROR: invalid input syntax for type integer: '₹1,250'"
-        cause="CAST or implicit cast is attempting to convert a string that contains non-numeric characters (currency symbols, commas, spaces) to an INTEGER or NUMERIC. The string '₹1,250' is not a valid integer literal — it must be cleaned first before casting."
-        fix="Clean the string before casting: REPLACE(REPLACE(value, '₹', ''), ',', '')::NUMERIC. Strip all non-numeric characters using REGEXP_REPLACE: REGEXP_REPLACE(value, '[^0-9.]', '', 'g')::NUMERIC. For unknown formatting, use TRY_CAST first to identify which rows have problematic values before applying the full CAST. Build a cleaning pipeline: TRIM → REPLACE currency symbol → REPLACE thousand separator → CAST to NUMERIC."
+        msg="ERROR: invalid input syntax for type integer: '$1,250'"
+        cause="CAST or implicit cast is attempting to convert a string that contains non-numeric characters (currency symbols, commas, spaces) to an INTEGER or NUMERIC. The string '$1,250' is not a valid integer literal — it must be cleaned first before casting."
+        fix="Clean the string before casting: REPLACE(REPLACE(value, '$', ''), ',', '')::NUMERIC. Strip all non-numeric characters using REGEXP_REPLACE: REGEXP_REPLACE(value, '[^0-9.]', '', 'g')::NUMERIC. For unknown formatting, use TRY_CAST first to identify which rows have problematic values before applying the full CAST. Build a cleaning pipeline: TRIM → REPLACE currency symbol → REPLACE thousand separator → CAST to NUMERIC."
       />
 
       <Err

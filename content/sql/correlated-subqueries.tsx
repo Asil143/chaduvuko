@@ -372,7 +372,7 @@ ORDER BY e.department, e.salary DESC;`}
       <H>Customers with at least one high-value order</H>
 
       <SQLPlayground
-        initialQuery={`-- Customers who have at least one delivered order above ₹800
+        initialQuery={`-- Customers who have at least one delivered order above $800
 SELECT
   c.customer_id,
   c.first_name || ' ' || c.last_name  AS customer,

@@ -205,9 +205,9 @@ export default function DiffusionModelsPage() {
           that are sharper, more diverse, and more faithful to text prompts
           than any previous approach. Stable Diffusion, DALL-E 3, Midjourney,
           and Google Imagen are all diffusion models.
-          At Indian startups: Shopify uses Stable Diffusion fine-tuned on
-          Indian fashion to generate product variations. Adobe's Firefly
-          (used by Indian creative agencies) is diffusion-based.
+          At e-commerce companies: Shopify uses Stable Diffusion fine-tuned on
+          product catalogs to generate product variations. Adobe's Firefly
+          (widely used by creative agencies) is diffusion-based.
           Every modern text-to-image system is built on this foundation.
         </p>
 
@@ -758,7 +758,7 @@ pipe = load_sd_pipeline()
 
 image = pipe(
     prompt=(
-        "A beautiful red silk kurta with golden embroidery, "
+        "A beautiful red silk dress with golden embroidery, "
         "product photography, white background, studio lighting, "
         "high quality, detailed fabric texture"
     ),
@@ -771,7 +771,7 @@ image = pipe(
     height=512, width=512,
     generator=torch.Generator().manual_seed(42),  # reproducible
 ).images[0]
-image.save('kurta_generated.png')
+image.save('dress_generated.png')
 """)
 
 # ── Classifier-free guidance — the key to text conditioning ──────────
@@ -831,7 +831,7 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
 
         <p style={S.p}>
           Pretrained Stable Diffusion generates generic content.
-          For Indian fashion product images, architectural styles, or
+          For specific fashion product images, architectural styles, or
           brand-specific visual language, you need to fine-tune.
           Two efficient methods: DreamBooth fine-tunes the entire U-Net
           on 3–30 images of a specific concept and teaches the model a
@@ -846,8 +846,8 @@ DreamBooth: teach Stable Diffusion a new concept in 3-30 images.
 
 # 1. Pick a rare token as the concept identifier
 CONCEPT_TOKEN = 'sks'    # rare token unlikely in training data
-INSTANCE_PROMPT = f'a photo of {CONCEPT_TOKEN} kurta'
-CLASS_PROMPT    = 'a photo of a kurta'
+INSTANCE_PROMPT = f'a photo of {CONCEPT_TOKEN} denim jacket'
+CLASS_PROMPT    = 'a photo of a denim jacket'
 
 # 2. Prepare dataset
 #    instance/: 5-10 photos of your specific product
@@ -860,20 +860,20 @@ CLASS_PROMPT    = 'a photo of a kurta'
 #    class_loss:    model retains knowledge of the general class
 
 # 4. After training:
-#    'a photo of sks kurta' → generates YOUR specific kurta
-#    'a photo of sks kurta on a runway' → your kurta in new context
+#    'a photo of sks denim jacket' → generates YOUR specific jacket
+#    'a photo of sks denim jacket on a runway' → your jacket in new context
 
 # Training command (HuggingFace diffusers):
 # accelerate launch train_dreambooth.py
 #   --pretrained_model_name_or_path='runwayml/stable-diffusion-v1-5'
 #   --instance_data_dir='./instance'
 #   --class_data_dir='./class'
-#   --instance_prompt='a photo of sks kurta'
-#   --class_prompt='a photo of a kurta'
+#   --instance_prompt='a photo of sks denim jacket'
+#   --class_prompt='a photo of a denim jacket'
 #   --resolution=512 --train_batch_size=1
 #   --gradient_accumulation_steps=1
 #   --learning_rate=5e-6 --max_train_steps=800
-#   --output_dir='./dreambooth-kurta'
+#   --output_dir='./dreambooth-denim-jacket'
 """)
 
 # ── LoRA fine-tuning for Stable Diffusion ─────────────────────────────
@@ -898,8 +898,8 @@ unet.print_trainable_parameters()
 # trainable params: 797,696 || all params: 859,520,964 || trainable: 0.09%
 
 # Load community LoRA weights (civitai.com, HuggingFace Hub)
-pipe.load_lora_weights('path/to/indian-fashion.safetensors')
-# Now generates Indian fashion aesthetic without retraining
+pipe.load_lora_weights('path/to/streetwear-fashion.safetensors')
+# Now generates streetwear fashion aesthetic without retraining
 
 # Production pattern: load multiple LoRAs with different weights
 # pipe.load_lora_weights(lora1, adapter_name='style1')
@@ -913,8 +913,8 @@ Textual Inversion: learn a new text token embedding (not U-Net weights).
 Only 5-10 images needed. Resulting file is 100KB.
 Weakest but fastest — good for simple style transfer.
 
-# After training: '<indian-wedding-style>' becomes a usable token
-# pipe('a photo in <indian-wedding-style> aesthetic')
+# After training: '<vintage-wedding-style>' becomes a usable token
+# pipe('a photo in <vintage-wedding-style> aesthetic')
 """)`} />
       </div>
 
@@ -928,7 +928,7 @@ Weakest but fastest — good for simple style transfer.
         <ErrorBlock
           error="Generated images are blurry or washed out — guidance_scale too low"
           cause="Low classifier-free guidance scale means the model gives too little weight to the text prompt and too much weight to the unconditional branch. At guidance_scale=1.0 the model completely ignores the prompt and generates generic images. At guidance_scale=3.0 the text influence is weak. The result is blurry, prompt-agnostic outputs that look like random noise-reduction outputs."
-          fix="Use guidance_scale=7.0–7.5 for general prompts — this is the standard well-tested value. For highly detailed prompts or complex compositions, try 8.0–12.0. Values above 15 tend to oversaturate colours and distort proportions. The sweet spot for photorealistic Indian fashion is 7.0–9.0. Also check that your negative prompt includes 'blurry, low quality' — this explicitly pushes the model away from low-quality outputs."
+          fix="Use guidance_scale=7.0–7.5 for general prompts — this is the standard well-tested value. For highly detailed prompts or complex compositions, try 8.0–12.0. Values above 15 tend to oversaturate colours and distort proportions. The sweet spot for photorealistic fashion photography is 7.0–9.0. Also check that your negative prompt includes 'blurry, low quality' — this explicitly pushes the model away from low-quality outputs."
         />
 
         <ErrorBlock
@@ -945,7 +945,7 @@ Weakest but fastest — good for simple style transfer.
 
         <ErrorBlock
           error="DreamBooth fine-tuning produces results but the model forgets how to generate general images"
-          cause="Language drift and catastrophic forgetting — the model overfits to the instance images and overwrites its general knowledge. Without prior preservation, the model learns 'kurta = this specific red kurta' and loses the ability to generate any other kurta. Training too long (more than 1000 steps for 5-10 images) or using too high a learning rate amplifies this."
+          cause="Language drift and catastrophic forgetting — the model overfits to the instance images and overwrites its general knowledge. Without prior preservation, the model learns 'denim jacket = this specific blue jacket' and loses the ability to generate any other denim jacket. Training too long (more than 1000 steps for 5-10 images) or using too high a learning rate amplifies this."
           fix="Always use prior preservation loss: generate 100–200 images of the general class using the unmodified model before training, and include them as class images. Use lambda_prior=1.0. Cap training steps at 400–800 for 5-10 instance images. Use learning rate 5e-6 (lower than standard fine-tuning). Alternatively use LoRA for DreamBooth — it is less prone to catastrophic forgetting because backbone weights are frozen."
         />
       </div>

@@ -238,7 +238,7 @@ ORDER BY margin_pct DESC;`}
 -- Double quotes allow spaces and special characters
 SELECT
   product_name                                              AS "Product Name",
-  unit_price                                                AS "Price (₹)",
+  unit_price                                                AS "Price ($)",
   ROUND((unit_price - cost_price) / unit_price * 100, 1)   AS "Margin %",
   CASE WHEN in_stock THEN 'Yes' ELSE 'No' END              AS "In Stock?"
 FROM products
@@ -464,7 +464,7 @@ ORDER BY co.order_count DESC;`}
       {/* ── PART 07 ── */}
       <Part n="07" title="Alias Conventions — How Professional Teams Name Things" />
 
-      <P>Consistent alias naming conventions make queries readable across a team. Here are the conventions used at most Indian tech companies and data teams.</P>
+      <P>Consistent alias naming conventions make queries readable across a team. Here are the conventions used at most US tech companies and data teams.</P>
 
       <H>Column alias conventions</H>
 

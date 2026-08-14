@@ -152,8 +152,8 @@ export default function Project04Page() {
       {/* Real World Problem */}
       <h2>🏢 Real World Problem</h2>
       <p>
-        FreshCart&apos;s data team now works with an external supplier — <strong>AgriPrice India</strong> — a government-backed
-        organization that publishes daily wholesale vegetable and fruit prices across Indian cities.
+        FreshCart&apos;s data team now works with an external supplier — <strong>AgriPrice US</strong> — a government-backed
+        organization that publishes daily wholesale vegetable and fruit prices across US cities.
       </p>
       <p>FreshCart&apos;s category managers need this data to:</p>
       <ul>
@@ -162,7 +162,7 @@ export default function Project04Page() {
         <li>Adjust store pricing based on commodity fluctuations</li>
       </ul>
       <p>
-        AgriPrice India publishes their data every morning as a CSV file on their public website. Right now,
+        AgriPrice US publishes their data every morning as a CSV file on their public website. Right now,
         FreshCart&apos;s analyst manually opens the browser every morning, downloads the file, and uploads it to Azure.
         <strong> 20 minutes every single day. If the analyst is on leave, it doesn&apos;t happen at all.</strong>
       </p>
@@ -234,7 +234,7 @@ LatD,LatM,LatS,NS,LonD,LonM,LonS,EW,City,State
       <CodeBlock label="Secondary dataset">{`URL: https://people.sc.fsu.edu/~jburkardt/data/csv/grades.csv`}</CodeBlock>
 
       <Callout type="info">
-        Government URLs change. A university dataset URL is stable. We treat this as AgriPrice India&apos;s data
+        Government URLs change. A university dataset URL is stable. We treat this as AgriPrice US&apos;s data
         for the scenario — the pipeline pattern is identical regardless of URL.
       </Callout>
 

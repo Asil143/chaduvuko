@@ -589,15 +589,15 @@ DROP INDEX CONCURRENTLY IF EXISTS idx_customers_loyalty_points;
 ALTER TABLE customers DROP COLUMN IF EXISTS loyalty_points;`}
       />
 
-      <H>Migration tools used at Indian tech companies</H>
+      <H>Migration tools used at US tech companies</H>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12, margin: '16px 0 28px' }}>
         {[
           { tool: 'Flyway', lang: 'Java / any', desc: 'SQL-based migrations. Each migration is a numbered .sql file. Tracks which migrations have run in a schema_version table. Used by many enterprise teams.' },
           { tool: 'Liquibase', lang: 'Java / any', desc: 'Supports SQL, XML, YAML, JSON migration formats. More flexible than Flyway for complex rollback scenarios. Common in enterprise banking systems.' },
-          { tool: 'Alembic', lang: 'Python', desc: 'SQLAlchemy migration tool. Generates migration files from model changes. Standard for Python/FastAPI backends at Indian startups.' },
+          { tool: 'Alembic', lang: 'Python', desc: 'SQLAlchemy migration tool. Generates migration files from model changes. Standard for Python/FastAPI backends at startups.' },
           { tool: 'Django Migrations', lang: 'Python', desc: 'Built into Django. Automatically generates migrations from model changes. Widely used at Python-based product companies.' },
-          { tool: 'Prisma Migrate', lang: 'Node.js', desc: 'Generates migrations from Prisma schema changes. Standard for Node.js + TypeScript backends. Used by many modern Indian startups.' },
+          { tool: 'Prisma Migrate', lang: 'Node.js', desc: 'Generates migrations from Prisma schema changes. Standard for Node.js + TypeScript backends. Used by many modern startups.' },
           { tool: 'golang-migrate', lang: 'Go', desc: 'Simple SQL-based migration tool for Go services. Used by companies with Go microservices architectures.' },
         ].map(item => (
           <div key={item.tool} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>

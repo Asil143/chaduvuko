@@ -2,35 +2,35 @@
 // StreamPulse Dataset — Data Science Track
 // A fictional video streaming service used across every Data Science module.
 // Loaded into pandas DataFrames inside the live in-browser Python playground
-// (Pyodide). Currency: INR for prices, dates run 2021–2026.
+// (Pyodide). Currency: USD for prices, dates run 2021–2026.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const CSV_USERS = `user_id,first_name,last_name,email,country,age,gender,signup_date,plan,referral_source
-1,Aditi,Sharma,aditi.sharma@mailbox.com,Australia,40,Non-binary,2024-10-20,Standard,Organic Search
-2,Rohan,Verma,rohan.verma@mailbox.com,India,26,Female,2025-09-19,Standard,Social Media
-3,Meera,Iyer,meera.iyer@mailbox.com,India,58,Non-binary,2025-06-08,Premium,Organic Search
-4,Kabir,Kapoor,kabir.kapoor@mailbox.com,Singapore,61,Non-binary,2021-05-19,Basic,Social Media
-5,Ananya,Reddy,ananya.reddy@mailbox.com,Australia,52,Female,2023-01-17,Standard,App Store
-6,Vikram,Nair,vikram.nair@mailbox.com,Germany,56,Non-binary,2022-11-12,Premium,Organic Search
-7,Priya,Gupta,priya.gupta@mailbox.com,Singapore,29,Female,2023-01-05,Premium,Social Media
-8,Arjun,Menon,arjun.menon@mailbox.com,UK,44,Non-binary,2023-10-18,Standard,Organic Search
-9,Sneha,Chopra,sneha.chopra@mailbox.com,UK,19,Non-binary,2025-03-23,Basic,Friend Referral
-10,Rahul,Rao,rahul.rao@mailbox.com,India,17,Female,2022-07-28,Standard,Social Media
-11,Isha,Malhotra,isha.malhotra@mailbox.com,UK,45,Male,2021-10-13,Premium,Organic Search
-12,Karan,Bose,karan.bose@mailbox.com,Germany,40,Non-binary,2024-06-12,Basic,Organic Search
-13,Divya,Pillai,divya.pillai@mailbox.com,UK,41,Female,2025-10-17,Basic,Paid Ad
-14,Nikhil,Joshi,nikhil.joshi@mailbox.com,Australia,43,Female,2021-10-19,Standard,App Store
-15,Pooja,Desai,pooja.desai@mailbox.com,Germany,56,Male,2021-06-02,Premium,Social Media
-16,Sameer,Khanna,sameer.khanna@mailbox.com,Germany,39,Female,2021-07-13,Premium,Organic Search
-17,Tanya,Bhatt,tanya.bhatt@mailbox.com,UAE,59,Male,2024-07-13,Standard,Social Media
-18,Aryan,Agarwal,aryan.agarwal@mailbox.com,USA,20,Female,2025-08-07,Premium,Social Media
-19,Neha,Shetty,neha.shetty@mailbox.com,Germany,57,Female,2021-07-22,Standard,Social Media
-20,Varun,Bansal,varun.bansal@mailbox.com,Singapore,60,Female,2021-03-06,Standard,Social Media
-21,Riya,Mehta,riya.mehta@mailbox.com,Singapore,28,Female,2021-05-02,Premium,Organic Search
-22,Amit,Kaur,amit.kaur@mailbox.com,Singapore,19,Non-binary,2021-10-09,Standard,Friend Referral
-23,Kavya,Chatterjee,kavya.chatterjee@mailbox.com,Canada,48,Non-binary,2024-05-09,Standard,App Store
-24,Dev,Naidu,dev.naidu@mailbox.com,UAE,34,Female,2021-11-16,Standard,Paid Ad
-25,Simran,Sinha,simran.sinha@mailbox.com,Singapore,55,Non-binary,2021-05-12,Basic,Friend Referral`;
+1,Emma,Wilson,emma.wilson@mailbox.com,Australia,40,Non-binary,2024-10-20,Standard,Organic Search
+2,Marcus,Bennett,marcus.bennett@mailbox.com,India,26,Female,2025-09-19,Standard,Social Media
+3,Sofia,Ramirez,sofia.ramirez@mailbox.com,India,58,Non-binary,2025-06-08,Premium,Organic Search
+4,David,Chen,david.chen@mailbox.com,Singapore,61,Non-binary,2021-05-19,Basic,Social Media
+5,Rachel,Foster,rachel.foster@mailbox.com,Australia,52,Female,2023-01-17,Standard,App Store
+6,Kevin,Park,kevin.park@mailbox.com,Germany,56,Non-binary,2022-11-12,Premium,Organic Search
+7,Jasmine,Rodriguez,jasmine.rodriguez@mailbox.com,Singapore,29,Female,2023-01-05,Premium,Social Media
+8,Michael,Turner,michael.turner@mailbox.com,UK,44,Non-binary,2023-10-18,Standard,Organic Search
+9,Amanda,Clark,amanda.clark@mailbox.com,UK,19,Non-binary,2025-03-23,Basic,Friend Referral
+10,Brian,Coleman,brian.coleman@mailbox.com,India,17,Female,2022-07-28,Standard,Social Media
+11,Grace,Kim,grace.kim@mailbox.com,UK,45,Male,2021-10-13,Premium,Organic Search
+12,Jordan,Mitchell,jordan.mitchell@mailbox.com,Germany,40,Non-binary,2024-06-12,Basic,Organic Search
+13,Olivia,Reyes,olivia.reyes@mailbox.com,UK,41,Female,2025-10-17,Basic,Paid Ad
+14,Ethan,Brooks,ethan.brooks@mailbox.com,Australia,43,Female,2021-10-19,Standard,App Store
+15,Natalie,Sanders,natalie.sanders@mailbox.com,Germany,56,Male,2021-06-02,Premium,Social Media
+16,Tyler,Brooks,tyler.brooks@mailbox.com,Germany,39,Female,2021-07-13,Premium,Organic Search
+17,Chloe,Martinez,chloe.martinez@mailbox.com,UAE,59,Male,2024-07-13,Standard,Social Media
+18,Tyler,Johnson,tyler.johnson@mailbox.com,USA,20,Female,2025-08-07,Premium,Social Media
+19,Hannah,Price,hannah.price@mailbox.com,Germany,57,Female,2021-07-22,Standard,Social Media
+20,Nathan,Cooper,nathan.cooper@mailbox.com,Singapore,60,Female,2021-03-06,Standard,Social Media
+21,Zoe,Hughes,zoe.hughes@mailbox.com,Singapore,28,Female,2021-05-02,Premium,Organic Search
+22,Derek,Long,derek.long@mailbox.com,Singapore,19,Non-binary,2021-10-09,Standard,Friend Referral
+23,Isabella,Reed,isabella.reed@mailbox.com,Canada,48,Non-binary,2024-05-09,Standard,App Store
+24,Aaron,Diaz,aaron.diaz@mailbox.com,UAE,34,Female,2021-11-16,Standard,Paid Ad
+25,Grace,Coleman,grace.coleman@mailbox.com,Singapore,55,Non-binary,2021-05-12,Basic,Friend Referral`;
 
 export const CSV_TITLES = `title_id,title_name,type,genre,release_year,runtime_minutes,imdb_rating,language,is_original
 1,Crimson Tide Rising,Series,Drama,2023,46,7.9,English,True
@@ -55,31 +55,31 @@ export const CSV_TITLES = `title_id,title_name,type,genre,release_year,runtime_m
 20,The Last Wicket,Movie,Sports,2023,143,7.1,Hindi,False`;
 
 export const CSV_SUBSCRIPTIONS = `subscription_id,user_id,plan,start_date,end_date,monthly_price,status,cancel_reason
-1,1,Standard,2024-10-20,2024-12-08,399,cancelled,Switched to competitor
-2,2,Standard,2025-09-19,,399,active,
-3,3,Premium,2025-06-08,,649,active,
-4,4,Basic,2021-05-19,,199,active,
-5,5,Standard,2023-01-17,,399,active,
-6,6,Premium,2022-11-12,2022-12-05,649,cancelled,Technical issues
-7,7,Premium,2023-01-05,,649,active,
-8,8,Standard,2023-10-18,,399,active,
-9,9,Basic,2025-03-23,,199,active,
-10,10,Standard,2022-07-28,,399,active,
-11,11,Premium,2021-10-13,2021-12-13,649,cancelled,No longer needed
-12,12,Basic,2024-06-12,,199,active,
-13,13,Basic,2025-10-17,,199,active,
-14,14,Standard,2021-10-19,,399,active,
-15,15,Premium,2021-06-02,,649,active,
-16,16,Premium,2021-07-13,2021-09-20,649,cancelled,Too expensive
-17,17,Standard,2024-07-13,,399,active,
-18,18,Premium,2025-08-07,,649,active,
-19,19,Standard,2021-07-22,,399,active,
-20,20,Standard,2021-03-06,,399,active,
-21,21,Premium,2021-05-02,2021-12-15,649,cancelled,Technical issues
-22,22,Standard,2021-10-09,,399,active,
-23,23,Standard,2024-05-09,,399,active,
-24,24,Standard,2021-11-16,,399,active,
-25,25,Basic,2021-05-12,,199,active,`;
+1,1,Standard,2024-10-20,2024-12-08,15,cancelled,Switched to competitor
+2,2,Standard,2025-09-19,,15,active,
+3,3,Premium,2025-06-08,,22,active,
+4,4,Basic,2021-05-19,,9,active,
+5,5,Standard,2023-01-17,,15,active,
+6,6,Premium,2022-11-12,2022-12-05,22,cancelled,Technical issues
+7,7,Premium,2023-01-05,,22,active,
+8,8,Standard,2023-10-18,,15,active,
+9,9,Basic,2025-03-23,,9,active,
+10,10,Standard,2022-07-28,,15,active,
+11,11,Premium,2021-10-13,2021-12-13,22,cancelled,No longer needed
+12,12,Basic,2024-06-12,,9,active,
+13,13,Basic,2025-10-17,,9,active,
+14,14,Standard,2021-10-19,,15,active,
+15,15,Premium,2021-06-02,,22,active,
+16,16,Premium,2021-07-13,2021-09-20,22,cancelled,Too expensive
+17,17,Standard,2024-07-13,,15,active,
+18,18,Premium,2025-08-07,,22,active,
+19,19,Standard,2021-07-22,,15,active,
+20,20,Standard,2021-03-06,,15,active,
+21,21,Premium,2021-05-02,2021-12-15,22,cancelled,Technical issues
+22,22,Standard,2021-10-09,,15,active,
+23,23,Standard,2024-05-09,,15,active,
+24,24,Standard,2021-11-16,,15,active,
+25,25,Basic,2021-05-12,,9,active,`;
 
 export const CSV_WATCH_HISTORY = `watch_id,user_id,title_id,watch_date,minutes_watched,device,completed
 1,8,12,2026-07-02,9,Laptop,False

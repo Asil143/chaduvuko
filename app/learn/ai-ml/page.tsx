@@ -247,7 +247,7 @@ const modules: Module[] = [
     num: '24', section: 5, color: sectionColors[5], status: 'live', xp: 100,
     readTime: '26–34 min',
     href: '/learn/ai-ml/classical-ml/decision-trees',
-    title: 'Decision Trees — Loan Approval at HDFC',
+    title: 'Decision Trees — Loan Approval at Capital One',
     description: 'The algorithm that thinks in if-then questions. Gini impurity, information gain, pruning, and why decision trees are the foundation of every ensemble method.',
     topics: ['Trees', 'Gini', 'Info gain', 'Pruning'],
   },

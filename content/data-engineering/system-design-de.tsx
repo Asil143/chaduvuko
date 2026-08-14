@@ -217,7 +217,7 @@ export default function SystemDesignDEModule() {
           This module gives you a repeatable framework — a set of steps you run
           through for any system design question — and then walks through five
           complete designs that cover the most common patterns you will encounter
-          in interviews at Indian tech companies and globally.
+          in interviews at top tech companies.
         </Para>
       </section>
 
@@ -366,7 +366,7 @@ export default function SystemDesignDEModule() {
         <SubTitle>A complete capacity estimation walkthrough</SubTitle>
 
         <CodeBox label="capacity estimation — e-commerce order events">
-{`# Problem: Design a data pipeline for an Indian e-commerce company
+{`# Problem: Design a data pipeline for a US e-commerce company
 # Input: "We process about 5 million orders per day"
 
 # ── Step 1: Convert to per-second rate ──────────────────────────────────────
@@ -375,7 +375,7 @@ seconds_per_day = 86_400
 avg_rate = daily_orders / seconds_per_day          # ≈ 58 orders/second
 
 # But load is not flat. Dinner rush / sale events create spikes.
-# Assume peak is 10x average (common for Indian e-commerce during Big Billion Days)
+# Assume peak is 10x average (common for US e-commerce during Black Friday / Cyber Monday)
 peak_rate = avg_rate * 10                          # ≈ 580 orders/second
 
 # Design for peak, not average. A system that handles 58/s but fails at 580/s
@@ -620,10 +620,10 @@ daily_raw_storage = daily_orders * raw_event_size_json  # 5M × 350B = 1.75 GB/d
         </Para>
 
         <SubTitle>Capacity estimation</SubTitle>
-        <CodeBox label="razorpay payments — capacity numbers">
+        <CodeBox label="stripe payments — capacity numbers">
 {`daily_transactions    = 5_000_000
 peak_tps              = 2_000          # transactions per second at peak
-event_size_json       = 400            # bytes (payment_id, amounts, merchant, UPI IDs, etc.)
+event_size_json       = 400            # bytes (payment_id, amounts, merchant, card details, etc.)
 event_size_compressed = 180            # bytes after snappy in Kafka
 
 # Kafka throughput at peak:
@@ -650,12 +650,12 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
         </CodeBox>
 
         <SubTitle>Architecture</SubTitle>
-        <CodeBox label="razorpay ingestion — full architecture">
+        <CodeBox label="stripe ingestion — full architecture">
 {`# ── Layer 1: Source ──────────────────────────────────────────────────────────
 # Payment Gateway → produces payment.completed events to Kafka
 # Producer config: acks=all, enable.idempotence=true, retries=10
 # Partition key: payment_id (high cardinality, even distribution)
-# Topic: razorpay.payments.v2 (versioned topic name — schema version in name)
+# Topic: stripe.payments.v2 (versioned topic name — schema version in name)
 
 # ── Layer 2: Transport (Kafka) ────────────────────────────────────────────────
 # 3-broker MSK cluster (AWS managed Kafka)
@@ -666,20 +666,20 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
 
 # ── Layer 3A: Streaming consumer (fraud path) ─────────────────────────────────
 # Consumer group: fraud-detection, 2 instances × 4 threads
-# Reads from razorpay.payments.v2
+# Reads from stripe.payments.v2
 # Enriches each event:
 #   → Redis: customer_velocity (transactions in last 1min, 5min, 1hr)
 #   → Redis: merchant_risk_score (pre-computed, refreshed every 5 minutes)
 # Runs rule engine + ML model (scikit-learn, loaded at startup)
 # Writes decision to DynamoDB: {payment_id, decision, risk_score, latency_ms}
-# Writes to Kafka: razorpay.fraud.decisions.v1 (for downstream alerting)
+# Writes to Kafka: stripe.fraud.decisions.v1 (for downstream alerting)
 # SLA: p99 latency < 2 seconds from event production to decision written
 # Monitoring: emit latency histogram per event, alert if p95 > 1.5s
 
 # ── Layer 3B: Batch consumer (compliance + analytics path) ───────────────────
 # Kafka Connect S3 Sink connector
 # Flushes Kafka topic to S3 every 5 minutes as Parquet files
-# Path: s3://razorpay-compliance/raw/payments/year=2026/month=03/day=20/hour=14/
+# Path: s3://stripe-compliance/raw/payments/year=2026/month=03/day=20/hour=14/
 # → Hive-compatible partitioning for Athena queries
 # S3 Lifecycle rule: Standard (0–90 days) → IA (90–365 days) → Glacier (1–7 years)
 
@@ -688,8 +688,8 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
 # Spark on EMR Serverless (no cluster management)
 # Reads from S3 raw Parquet → applies business logic → writes to S3 gold Parquet
 # Gold tables:
-#   daily_revenue_by_merchant (merchant_id, date, txn_count, total_paise, success_rate)
-#   daily_volume_by_city (city, date, txn_count, total_paise, top_payment_method)
+#   daily_revenue_by_merchant (merchant_id, date, txn_count, total_cents, success_rate)
+#   daily_volume_by_city (city, date, txn_count, total_cents, top_payment_method)
 #   daily_payment_method_mix (payment_method, date, txn_count, percentage_of_total)
 
 # ── Layer 5: Serving ──────────────────────────────────────────────────────────
@@ -699,7 +699,7 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
 
 # ── Hard problems addressed ───────────────────────────────────────────────────
 # 1. Schema evolution: Avro + schema registry. Backward-compatible changes allowed.
-#    Breaking changes require new topic version (razorpay.payments.v3).
+#    Breaking changes require new topic version (stripe.payments.v3).
 
 # 2. Deduplication: payment_id is globally unique. Fraud consumer uses DynamoDB
 #    conditional write (put_item with condition: attribute_not_exists(payment_id))
@@ -711,7 +711,7 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
 
 # 4. Upstream outage: Kafka buffers up to 7 days. If fraud detection service is
 #    down for 4 hours, it replays from committed offset on recovery. DLQ topic
-#    (razorpay.fraud.dlq) catches events that fail after 3 retries.`}
+#    (stripe.fraud.dlq) catches events that fail after 3 retries.`}
         </CodeBox>
       </section>
 
@@ -731,7 +731,7 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
         </Para>
 
         <SubTitle>Capacity estimation</SubTitle>
-        <CodeBox label="meesho warehouse — sizing">
+        <CodeBox label="shopify warehouse — sizing">
 {`# Source volumes:
 orders_per_day          = 800_000
 avg_order_row_size_bytes = 500
@@ -756,7 +756,7 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
         </CodeBox>
 
         <SubTitle>Architecture — the classic lakehouse pattern</SubTitle>
-        <CodeBox label="meesho warehouse — architecture">
+        <CodeBox label="shopify warehouse — architecture">
 {`# ── Ingestion ─────────────────────────────────────────────────────────────────
 
 # Source 1: PostgreSQL → Fivetran CDC connector (change data capture)
@@ -798,7 +798,7 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
 #     DATE_TRUNC('day', event_time) AS order_date,
 #     city, category, payment_method,
 #     COUNT(*) AS order_count,
-#     SUM(gmv_paise) / 100.0 AS gmv_inr,
+#     SUM(gmv_cents) / 100.0 AS gmv_usd,
 #     COUNT(DISTINCT user_id) AS unique_buyers
 #   FROM stg_orders
 #   GROUP BY 1,2,3,4
@@ -1020,7 +1020,7 @@ from datetime import date, timedelta
 def extract_month_chunk(year: int, month: int, conn_string: str) -> list[dict]:
     """Extract one month of orders using a date-bounded query with a read replica."""
     query = """
-        SELECT order_id, customer_id, store_id, total_paise,
+        SELECT order_id, customer_id, store_id, total_cents,
                payment_method, status, created_at, updated_at
         FROM orders
         WHERE created_at >= %s AND created_at < %s
@@ -1059,7 +1059,7 @@ s3 = boto3.client('s3')
 
 def chunk_already_extracted(year: int, month: int) -> bool:
     prefix = f"backfill/orders/year={year}/month={month:02d}/"
-    response = s3.list_objects_v2(Bucket='flipkart-datalake', Prefix=prefix, MaxKeys=1)
+    response = s3.list_objects_v2(Bucket='amazon-datalake', Prefix=prefix, MaxKeys=1)
     return response.get('KeyCount', 0) > 0
 
 # ── Phase 4: Load into warehouse ────────────────────────────────────────────
@@ -1084,7 +1084,7 @@ spark.sql("""
 
 # Also validate business metrics (sanity check, not just row counts):
 # Monthly GMV from warehouse should match known reported figures
-# If a month shows ₹0 GMV, something went wrong`}
+# If a month shows $0 GMV, something went wrong`}
         </CodeBox>
       </section>
 
@@ -1109,7 +1109,7 @@ spark.sql("""
 # Read pattern: 200 concurrent users, each refreshing every 10 seconds
 #               → 200 / 10 = 20 queries per second against the serving layer
 # Aggregation windows: 1-minute rolling, 30-minute rolling, current-hour
-# Dimensionality: by city (50 Indian cities)
+# Dimensionality: by city (50 US cities)
 
 # ── Approach: pre-computed aggregations, NOT ad-hoc queries ──────────────────
 # DO NOT: route each dashboard refresh to a Snowflake query
@@ -1120,7 +1120,7 @@ spark.sql("""
 #     Dashboard reads pre-computed values — reads are sub-millisecond
 
 # ── Streaming aggregation job (Kafka Streams or Flink) ──────────────────────
-# Reads from: swiggy.orders.v2, swiggy.deliveries.v2
+# Reads from: doordash.orders.v2, doordash.deliveries.v2
 # Output: Redis hash with pre-computed aggregation values
 
 # Every 10 seconds, the streaming job emits:
@@ -1131,7 +1131,7 @@ spark.sql("""
             "orders_last_1min":       342,
             "active_partners":        1847,
             "avg_delivery_time_30min": 28.4,    # minutes
-            "revenue_current_hour":    8432500,  # paise
+            "revenue_current_hour":    8432500,  # cents
         },
         "Austin": {
             "orders_last_1min":       218,
@@ -1148,7 +1148,7 @@ spark.sql("""
 
 # ── Streaming job internals ──────────────────────────────────────────────────
 # Kafka Streams topology:
-# Stream<order_id, OrderEvent> orders = builder.stream("swiggy.orders.v2")
+# Stream<order_id, OrderEvent> orders = builder.stream("doordash.orders.v2")
 # KTable<city, Long> orders_1min = orders
 #     .filter((k,v) -> v.status == "placed")
 #     .groupBy((k,v) -> v.city)

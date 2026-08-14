@@ -436,7 +436,7 @@ TIMESTAMP     Date + time without timezone: 2026-03-17 20:14:32
                        A London user at 8:14 PM is 20:14 UTC
                        Stored without timezone, these are indistinguishable
 
-TIMESTAMPTZ   Date + time WITH timezone: 2026-03-17T20:14:32+05:30
+TIMESTAMPTZ   Date + time WITH timezone: 2026-03-17T20:14:32-04:00
 (TIMESTAMP    Storage: 8 bytes (PostgreSQL stores internally as UTC)
 WITH TIME     Use: ALWAYS use for event timestamps in production
 ZONE)         Why: unambiguous, converts to local time at query time,
@@ -450,10 +450,10 @@ INTERVAL      Duration: '3 days', '2 hours 30 minutes', '1 year'
               Use: date arithmetic, scheduling intervals
 
 Common bugs from TIMESTAMP without timezone:
-  - Orders from Indian users at 11:30 PM appear to be from "the next day"
+  - Orders from West Coast US users at 11:30 PM appear to be from "the next day"
     when analysed by a European team in UTC
   - Partition pruning fails: WHERE created_at >= '2026-03-17'
-    evaluates differently in IST vs UTC context
+    evaluates differently in PST vs UTC context
   - Daylight saving time transitions produce duplicate or missing hours`}</CodeBox>
 
         <SubTitle>Special types worth knowing</SubTitle>
@@ -841,12 +841,12 @@ UNIQUE in data engineering pipelines:
         <CodeBox label="Normalisation — from a messy table to clean relational design">{`UNNORMALISED TABLE (everything in one table):
   order_id | customer_name | customer_email       | restaurant_name | items
   ─────────────────────────────────────────────────────────────────────────
-  9284751  | Priya Sharma  | priya@example.com    | Punjabi Dhaba   | Butter Chicken, Naan
-  9284752  | Priya Sharma  | priya@example.com    | Spice Garden    | Masala Dosa
-  9284753  | Rahul Verma   | rahul@example.com    | Punjabi Dhaba   | Dal Makhani, Rice
+  9284751  | Emily Johnson | emily@example.com    | Punjabi Dhaba   | Butter Chicken, Naan
+  9284752  | Emily Johnson | emily@example.com    | Spice Garden    | Masala Dosa
+  9284753  | Marcus Bennett| marcus@example.com   | Punjabi Dhaba   | Dal Makhani, Rice
 
   Problems:
-  → "Priya Sharma" and "priya@example.com" stored 2 times
+  → "Emily Johnson" and "emily@example.com" stored 2 times
     If her email changes, must update 2 rows (or more if she orders again)
     If one update is missed → inconsistency
   → "Punjabi Dhaba" stored 2 times — same duplication problem
@@ -857,8 +857,8 @@ FIRST NORMAL FORM (1NF):
   
   Fix the "items" column by creating one row per item:
   order_id | customer_name | restaurant_name | item_name
-  9284751  | Priya Sharma  | Punjabi Dhaba   | Butter Chicken
-  9284751  | Priya Sharma  | Punjabi Dhaba   | Naan
+  9284751  | Emily Johnson | Punjabi Dhaba   | Butter Chicken
+  9284751  | Emily Johnson | Punjabi Dhaba   | Naan
   
   Better but still has customer/restaurant duplication.
 
@@ -877,8 +877,8 @@ THIRD NORMAL FORM (3NF) — the target for OLTP:
   FULLY NORMALISED DESIGN (3NF):
   
   customers:    customer_id | name         | email
-                4201938     | Priya Sharma | priya@example.com
-                1092847     | Rahul Verma  | rahul@example.com
+                4201938     | Emily Johnson | emily@example.com
+                1092847     | Marcus Bennett | marcus@example.com
 
   restaurants:  restaurant_id | name
                 7823           | Punjabi Dhaba
@@ -893,7 +893,7 @@ THIRD NORMAL FORM (3NF) — the target for OLTP:
                 9284751  | Butter Chicken | 1        | 320.00
                 9284751  | Naan           | 2        | 30.00
 
-  Now: Priya's email is stored exactly ONCE → update in one place
+  Now: Emily's email is stored exactly ONCE → update in one place
        "Punjabi Dhaba" is stored exactly ONCE → update in one place
        Each table represents one entity, each column depends on its PK`}</CodeBox>
 
@@ -1121,7 +1121,7 @@ Benefits:
           <Para>
             <strong>Problem 2 — FLOAT for money:</strong> <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>amount FLOAT</code> will
             silently accumulate floating point precision errors in financial calculations.
-            ₹349.99 stored as FLOAT may be retrieved as 349.99000000000001.
+            $349.99 stored as FLOAT may be retrieved as 349.99000000000001.
             Aggregation of thousands of such values will produce reconciliation failures
             against the payment processor's exact totals. Must be DECIMAL(10,2).
           </Para>
@@ -1129,11 +1129,11 @@ Benefits:
           <Para>
             <strong>Problem 3 — TIMESTAMP without timezone:</strong> Both <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>created</code> and{' '}
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>updated</code> are TIMESTAMP (no timezone).
-            This company serves customers across India, and the Seattle office is in
-            IST (+5:30). When a report counts "orders placed today" using{' '}
+            This company serves customers across every US timezone, and the headquarters
+            is on the West Coast in PST (UTC-8). When a report counts "orders placed today" using{' '}
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>WHERE DATE(created) = CURRENT_DATE</code>,
-            the result changes depending on whether the query runs in IST or UTC context.
-            Late-night orders (10 PM–12 AM IST) appear on the wrong date in UTC analysis.
+            the result changes depending on whether the query runs in PST or UTC context.
+            Late-night orders (10 PM–12 AM PST) appear on the wrong date in UTC analysis.
             Must be TIMESTAMPTZ.
           </Para>
 
@@ -1204,11 +1204,11 @@ In data warehouses like Snowflake and BigQuery, FK constraints are defined but n
             q: 'Q2. Why should you never use FLOAT for monetary values in a database?',
             a: `Floating point numbers (FLOAT, REAL, DOUBLE PRECISION) use binary fractions to approximate decimal values. The IEEE 754 floating point standard stores numbers as a binary mantissa and exponent — and most decimal fractions cannot be represented exactly in binary. The decimal value 0.1 is stored as an infinite repeating binary fraction, approximated to the nearest representable value.
 
-When you store monetary amounts as FLOAT and then perform arithmetic, these small approximation errors accumulate. A single ₹349.99 stored as FLOAT might be retrieved as 349.99000000000000426... Aggregating thousands of such values produces a total that differs from the true total by fractions of rupees. This difference grows as transaction volume grows.
+When you store monetary amounts as FLOAT and then perform arithmetic, these small approximation errors accumulate. A single $349.99 stored as FLOAT might be retrieved as 349.99000000000000426... Aggregating thousands of such values produces a total that differs from the true total by fractions of a cent. This difference grows as transaction volume grows.
 
-In regulated financial contexts — payment reconciliation, tax calculations, settlement reports — even a one-paisa discrepancy can trigger a compliance investigation. The reconciliation system compares the database total against the payment gateway's exact total, they do not match, and hours are spent investigating a problem that was caused by a type choice made on day one.
+In regulated financial contexts — payment reconciliation, tax calculations, settlement reports — even a one-cent discrepancy can trigger a compliance investigation. The reconciliation system compares the database total against the payment gateway's exact total, they do not match, and hours are spent investigating a problem that was caused by a type choice made on day one.
 
-The correct type for all monetary values is DECIMAL(p, s) — also called NUMERIC — where p is the total number of digits and s is the number of digits after the decimal point. DECIMAL stores values as exact decimal numbers. 0.1 + 0.2 = exactly 0.3 in DECIMAL arithmetic. For Indian rupees, DECIMAL(12, 2) handles amounts up to ₹9,999,999,999.99. For values stored in paise (the most robust approach), use BIGINT.`,
+The correct type for all monetary values is DECIMAL(p, s) — also called NUMERIC — where p is the total number of digits and s is the number of digits after the decimal point. DECIMAL stores values as exact decimal numbers. 0.1 + 0.2 = exactly 0.3 in DECIMAL arithmetic. For US dollars, DECIMAL(12, 2) handles amounts up to $9,999,999,999.99. For values stored in cents (the most robust approach), use BIGINT.`,
           },
           {
             q: 'Q3. What is the difference between a primary key and a unique key?',
@@ -1287,8 +1287,8 @@ Third, DECIMAL type correction if financial amounts are stored as FLOAT. The flo
           },
           {
             error: `Wrong date grouping — "orders placed today" report shows different totals depending on which analyst runs it`,
-            cause: 'The created_at column is TIMESTAMP (without timezone), and different analysts\' SQL clients or BI tools are configured with different timezone settings. A query like WHERE DATE(created_at) = CURRENT_DATE evaluates CURRENT_DATE in the session\'s local timezone. An analyst in IST sees different results from one in UTC because midnight IST is 18:30 UTC the previous day — orders placed between 18:30 and 23:59 UTC appear on different dates depending on the timezone context.',
-            fix: 'Migrate the column to TIMESTAMPTZ: ALTER TABLE orders ALTER COLUMN created_at TYPE TIMESTAMPTZ USING created_at AT TIME ZONE \'Asia/Kolkata\'. This stores all timestamps as UTC internally and converts to local time at query time based on the session timezone. Set a standard session timezone for all BI tool connections. For all new tables, always define event timestamps as TIMESTAMPTZ from the start — retrofitting timezone information into an existing TIMESTAMP column is possible but requires knowing the original timezone of each record.',
+            cause: 'The created_at column is TIMESTAMP (without timezone), and different analysts\' SQL clients or BI tools are configured with different timezone settings. A query like WHERE DATE(created_at) = CURRENT_DATE evaluates CURRENT_DATE in the session\'s local timezone. An analyst in PST sees different results from one in UTC because PST is 8 hours behind UTC — orders placed after 4 PM PST already fall on the next calendar day in UTC, so the two teams can disagree about which day an order belongs to.',
+            fix: 'Migrate the column to TIMESTAMPTZ: ALTER TABLE orders ALTER COLUMN created_at TYPE TIMESTAMPTZ USING created_at AT TIME ZONE \'America/New_York\'. This stores all timestamps as UTC internally and converts to local time at query time based on the session timezone. Set a standard session timezone for all BI tool connections. For all new tables, always define event timestamps as TIMESTAMPTZ from the start — retrofitting timezone information into an existing TIMESTAMP column is possible but requires knowing the original timezone of each record.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1324,7 +1324,7 @@ Third, DECIMAL type correction if financial amounts are stored as FLOAT. The flo
         'A schema at the database level is a namespace that groups related tables. Data platforms use schemas to organise layers: landing, bronze, silver, gold. Schema-level access control (GRANT ON SCHEMA) is how you control who can access each layer.',
         'Every column\'s data type is a real decision. BIGINT for all IDs (INTEGER overflows at 2.1 billion). DECIMAL(10,2) for all money (FLOAT accumulates precision errors in financial calculations). TIMESTAMPTZ for all event timestamps (TIMESTAMP without timezone produces wrong results across timezones). VARCHAR(n) with a limit for bounded text.',
         'NEVER use FLOAT for monetary values. Floating point arithmetic cannot represent most decimal fractions exactly. 0.1 + 0.2 = 0.30000000000000004 in IEEE 754. Use DECIMAL(p,s) — it performs exact decimal arithmetic. This is not a style preference, it is a correctness requirement for financial data.',
-        'ALWAYS use TIMESTAMPTZ (TIMESTAMP WITH TIME ZONE) for event timestamps. TIMESTAMP without timezone is ambiguous — "20:14:32" means different things in IST and UTC. TIMESTAMPTZ stores as UTC internally and converts to local time at query time, producing correct results regardless of session timezone.',
+        'ALWAYS use TIMESTAMPTZ (TIMESTAMP WITH TIME ZONE) for event timestamps. TIMESTAMP without timezone is ambiguous — "20:14:32" means different things in PST and UTC. TIMESTAMPTZ stores as UTC internally and converts to local time at query time, producing correct results regardless of session timezone.',
         'Every table must have a primary key. No exceptions. Without a primary key, rows cannot be uniquely identified, updates may affect the wrong rows, JOINs produce fan-out on duplicates, and CDC updates have no reliable target.',
         'Foreign key constraints enforce referential integrity — preventing orphaned records. In OLTP databases they are enforced at runtime. In data warehouses (Snowflake, BigQuery) they are defined but NOT enforced — use dbt relationship tests instead.',
         'The five constraint types and what each protects: NOT NULL (prevents missing required values), UNIQUE (prevents duplicates), CHECK (enforces valid values and ranges), FOREIGN KEY (prevents orphaned references), PRIMARY KEY (combines NOT NULL and UNIQUE for the row identifier).',

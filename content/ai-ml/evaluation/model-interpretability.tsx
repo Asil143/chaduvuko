@@ -185,13 +185,13 @@ export default function ModelInterpretabilityPage() {
         <h2 style={S.h2}>
           Your loan rejection model has AUC = 0.94.
           The customer calls asking why their loan was rejected.
-          "The model said so" is not a legal answer in India.
+          "The model said so" is not a legal answer.
         </h2>
 
         <p style={S.p}>
-          RBI's guidelines on algorithmic lending require that credit decisions
-          be explainable to applicants. SEBI requires explanation of algorithmic
-          trading decisions. Healthcare regulations require that diagnostic AI
+          The Equal Credit Opportunity Act requires lenders to give applicants
+          specific, explainable reasons when a credit decision is adverse. The SEC
+          requires explanation of algorithmic trading decisions. Healthcare regulations require that diagnostic AI
           justify its conclusions. The EU AI Act mandates explanations for
           high-risk AI systems. Interpretability is not optional in regulated industries —
           it is a legal requirement.
@@ -834,7 +834,7 @@ for feat, sv in sorted(zip(feat_names, shap_vals),
 
         <p style={S.p}>
           At Brex, when a loan application is rejected the system must
-          generate a plain-English explanation that satisfies RBI guidelines.
+          generate a plain-English explanation that satisfies ECOA guidelines.
           The explanation must name the specific factors that led to rejection,
           not just say "algorithmic decision." Here is the complete pipeline.
         </p>
@@ -889,7 +889,7 @@ explainer = shap.TreeExplainer(model)
 # ── Human-readable feature descriptions ───────────────────────────────
 feature_display = {
     'annual_income':    'Annual income',
-    'existing_emis':   'Existing EMI obligations',
+    'existing_emis':   'Existing monthly debt obligations',
     'credit_score':    'Credit score',
     'employment_yrs':  'Employment history',
     'loan_amount':     'Requested loan amount',
@@ -899,7 +899,7 @@ feature_display = {
 def generate_rejection_explanation(applicant_df: pd.DataFrame,
                                     threshold: float = 0.40) -> dict:
     """
-    Generate a structured loan decision with RBI-compliant explanation.
+    Generate a structured loan decision with ECOA-compliant explanation.
     Returns dict with decision, probability, and top reasons.
     """
     X_enc    = sc.transform(applicant_df)
@@ -932,12 +932,12 @@ def generate_rejection_explanation(applicant_df: pd.DataFrame,
 def _generate_reason(feat, val, shap_val, df):
     """Generate plain-English reason for each risk factor."""
     reasons = {
-        'existing_emis':   f"Existing EMI of ₹{val:,.0f}/month is high relative to income",
+        'existing_emis':   f"Existing monthly debt payments of \${val:,.0f} are high relative to income",
         'credit_score':    f"Credit score of {val:.0f} is below our minimum threshold",
         'n_existing_loans':f"You currently have {val:.0f} active loans",
-        'loan_amount':     f"Requested amount of ₹{val:,.0f} exceeds your repayment capacity",
+        'loan_amount':     f"Requested amount of \${val:,.0f} exceeds your repayment capacity",
         'employment_yrs':  f"Employment history of {val:.1f} years is insufficient",
-        'annual_income':   f"Annual income of ₹{val:,.0f} is insufficient for this loan",
+        'annual_income':   f"Annual income of \${val:,.0f} is insufficient for this loan",
     }
     return reasons.get(feat, f"{feat} contributed to higher risk assessment")
 
@@ -1067,7 +1067,7 @@ for i, applicant in enumerate(new_applications):
 
       <KeyTakeaways
         items={[
-          'Interpretability is a legal requirement in regulated industries — RBI, SEBI, and EU AI Act all mandate that algorithmic decisions be explainable. "The model said so" is not acceptable. SHAP and LIME provide the explanation infrastructure.',
+          'Interpretability is a legal requirement in regulated industries — ECOA, the Fed, and EU AI Act all mandate that algorithmic decisions be explainable. "The model said so" is not acceptable. SHAP and LIME provide the explanation infrastructure.',
           'Three types of feature importance, in order of reliability: built-in split-based (biased toward high-cardinality features), permutation importance (misleads on correlated features), and SHAP (mathematically proven correct — the only attribution satisfying all four fairness axioms). Always prefer SHAP for production reporting.',
           'SHAP computes two levels simultaneously: global importance (mean |SHAP| across all predictions — reliable feature ranking) and local importance (individual SHAP values per prediction — which features drove this specific outcome and by how much).',
           'Choose the right SHAP explainer: TreeExplainer for XGBoost/LightGBM/RF (fast, exact), LinearExplainer for logistic/linear regression (fastest, exact), KernelExplainer for any model including SVM and neural nets (slow, approximate). Always pass the underlying model, not a Pipeline wrapper.',

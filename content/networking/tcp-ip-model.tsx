@@ -134,7 +134,7 @@ const TCPIP_LAYERS = [
     emoji: '🗺️',
     protocols: 'IPv4 (RFC 791), IPv6 (RFC 8200), ICMPv4 (RFC 792), ICMPv6 (RFC 4443), ARP (RFC 826), OSPF (RFC 2328), BGP-4 (RFC 4271)',
     job: 'Logical addressing and routing across multiple networks. IP gives every device a globally unique address and routes packets hop-by-hop from source to destination. ICMP handles errors and diagnostics (ping, traceroute). ARP maps IP addresses to MAC addresses on the local segment. This layer makes the global internet possible.',
-    example: 'A packet from Mumbai hops across 18 routers to reach São Paulo — each router reads the destination IP and independently decides the next hop.',
+    example: 'A packet from Chicago hops across 18 routers to reach São Paulo — each router reads the destination IP and independently decides the next hop.',
     commands: 'ping 8.8.8.8  |  traceroute 8.8.8.8  |  ip route show  |  ip addr show',
     analogy: 'The global GPS — figures out the route between any two points on Earth, regardless of what roads exist in between.',
   },

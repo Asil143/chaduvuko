@@ -110,7 +110,7 @@ const roles = [
   {
     title: 'Machine Learning Engineer',
     color: '#378ADD',
-    salary: '₹18–28 LPA',
+    salary: '$135K–$185K',
     focus: 'Build, train, and deploy ML models to production',
     skills: ['Python', 'sklearn / XGBoost', 'Docker', 'FastAPI', 'SQL'],
     dayToDay: [
@@ -124,7 +124,7 @@ const roles = [
   {
     title: 'Data Scientist',
     color: '#1D9E75',
-    salary: '₹14–24 LPA',
+    salary: '$115K–$155K',
     focus: 'Answer business questions with data and models',
     skills: ['Python', 'Statistics', 'SQL', 'Pandas', 'Storytelling'],
     dayToDay: [
@@ -133,12 +133,12 @@ const roles = [
       'Run A/B tests and measure statistical significance',
       'Present findings with charts and plain-English explanations',
     ],
-    companies: 'Amazon, Ola, Sephora, Uber Eats, Expedia',
+    companies: 'Amazon, Uber, Sephora, Uber Eats, Expedia',
   },
   {
     title: 'Applied Scientist / Research Scientist',
     color: '#7F77DD',
-    salary: '₹22–40 LPA',
+    salary: '$170K–$230K',
     focus: 'Apply cutting-edge research to hard product problems',
     skills: ['Deep Learning', 'PyTorch', 'Research papers', 'Maths', 'Python'],
     dayToDay: [
@@ -147,12 +147,12 @@ const roles = [
       'Collaborate with product teams to define ML problem framing',
       'Mentor ML Engineers on advanced implementation',
     ],
-    companies: 'Google, Microsoft, Amazon, Samsung R&D, Qualcomm India',
+    companies: 'Google, Microsoft, Amazon, Samsung R&D, Qualcomm',
   },
   {
     title: 'MLOps / ML Platform Engineer',
     color: '#639922',
-    salary: '₹16–28 LPA',
+    salary: '$120K–$175K',
     focus: 'Build the infrastructure that keeps ML systems running',
     skills: ['Docker', 'Kubernetes', 'MLflow', 'Python', 'CI/CD'],
     dayToDay: [
@@ -166,7 +166,7 @@ const roles = [
   {
     title: 'GenAI / LLM Engineer',
     color: '#D85A30',
-    salary: '₹20–35 LPA',
+    salary: '$150K–$210K',
     focus: 'Build products powered by large language models',
     skills: ['LangChain', 'RAG', 'Prompt Engineering', 'FastAPI', 'Vector DBs'],
     dayToDay: [
@@ -175,12 +175,12 @@ const roles = [
       'Fine-tune open-source models on domain-specific data',
       'Build and test multi-step AI agents with tool use',
     ],
-    companies: 'Every Indian startup building AI features right now',
+    companies: 'Every startup building AI features right now',
   },
   {
     title: 'Data Analyst (ML-adjacent)',
     color: '#BA7517',
-    salary: '₹8–16 LPA',
+    salary: '$80K–$120K',
     focus: 'Surface insights from data using SQL and basic ML',
     skills: ['SQL', 'Excel / Google Sheets', 'Power BI / Tableau', 'Python basics'],
     dayToDay: [
@@ -189,7 +189,7 @@ const roles = [
       'Identify anomalies and trends in user behaviour data',
       'Support ML Engineers with labelling and data validation',
     ],
-    companies: 'Any Indian company with data — literally all of them',
+    companies: 'Any company with data — literally all of them',
   },
 ]
 
@@ -396,7 +396,7 @@ export default function AIMLLandscapePage() {
         <p style={S.p}>
           Job titles in ML are inconsistent. One company's "Data Scientist" is another
           company's "ML Engineer." Here's what each role actually means in terms of
-          daily work — based on real Indian job descriptions, not generic definitions.
+          daily work — based on real job descriptions, not generic definitions.
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -490,7 +490,7 @@ export default function AIMLLandscapePage() {
                     textTransform: 'uppercase' as const, color: 'var(--muted)',
                     fontFamily: 'var(--font-mono)', marginBottom: 5,
                   }}>
-                    Hires in India
+                    Hires for this role
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
                     {role.companies}
@@ -704,7 +704,7 @@ export default function AIMLLandscapePage() {
           'ML tools are organised by workflow stage — data, classical ML, deep learning, NLP/LLMs, MLOps, cloud. Learn them in that order.',
           'The learning path that works: NumPy → Pandas → sklearn → XGBoost → PyTorch → HuggingFace → FastAPI + Docker.',
           'ML Engineer = build and ship systems. Data Scientist = answer business questions. Applied Scientist = research. GenAI Engineer = LLM products.',
-          'Salary ranges (mid-level Seattle): ML Engineer ₹18–28 LPA, Data Scientist ₹14–24 LPA, Applied Scientist ₹22–40 LPA, GenAI Engineer ₹20–35 LPA.',
+          'Salary ranges (mid-level Seattle): ML Engineer $135K–$185K, Data Scientist $115K–$155K, Applied Scientist $170K–$230K, GenAI Engineer $150K–$210K.',
           'If you cannot decide which role — target ML Engineer. It is the most versatile entry point and has the clearest preparation path.',
           'Realistic timelines: fresher 4–5 months, career switcher 5–6 months, SWE to ML 2–3 months, data professional to ML 2 months.',
         ]}

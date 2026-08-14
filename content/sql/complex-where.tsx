@@ -192,12 +192,12 @@ ORDER BY loyalty_tier;`}
       <SQLPlayground
         initialQuery={`-- Two groups connected by AND:
 -- Group 1: store is ST001 OR ST005
--- Group 2: payment method is UPI OR Card
+-- Group 2: payment method is Zelle OR Card
 -- Both groups must be satisfied
 SELECT order_id, store_id, payment_method, total_amount
 FROM orders
 WHERE (store_id = 'ST001' OR store_id = 'ST005')
-  AND (payment_method = 'UPI' OR payment_method = 'Card')
+  AND (payment_method = 'Zelle' OR payment_method = 'Card')
 ORDER BY store_id, total_amount DESC;`}
         height={145}
         showSchema={true}
@@ -206,7 +206,7 @@ ORDER BY store_id, total_amount DESC;`}
       <SQLPlayground
         initialQuery={`-- Problem order + high value:
 -- Status is Cancelled or Returned
--- AND total above ₹500
+-- AND total above $500
 SELECT order_id, order_date, order_status, total_amount
 FROM orders
 WHERE (order_status = 'Cancelled' OR order_status = 'Returned')
@@ -240,12 +240,12 @@ ORDER BY city;`}
 
       <SQLPlayground
         initialQuery={`-- Three-group complex filter:
--- (High-value delivered) OR (any cancelled above ₹300) OR (UPI orders from ST001)
+-- (High-value delivered) OR (any cancelled above $300) OR (Zelle orders from ST001)
 SELECT order_id, store_id, order_status, payment_method, total_amount
 FROM orders
 WHERE (order_status = 'Delivered' AND total_amount > 1000)
    OR (order_status = 'Cancelled' AND total_amount > 300)
-   OR (store_id = 'ST001' AND payment_method = 'UPI')
+   OR (store_id = 'ST001' AND payment_method = 'Zelle')
 ORDER BY total_amount DESC;`}
         height={155}
         showSchema={false}
@@ -282,17 +282,17 @@ WHERE order_status = 'Delivered';`}
       />
 
       <SQLPlayground
-        initialQuery={`SELECT COUNT(*) AS delivered_upi FROM orders
+        initialQuery={`SELECT COUNT(*) AS delivered_zelle FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'UPI';`}
+  AND payment_method = 'Zelle';`}
         height={90}
         showSchema={false}
       />
 
       <SQLPlayground
-        initialQuery={`SELECT COUNT(*) AS delivered_upi_high FROM orders
+        initialQuery={`SELECT COUNT(*) AS delivered_zelle_high FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'UPI'
+  AND payment_method = 'Zelle'
   AND total_amount > 500;
 -- Each AND reduces the count further`}
         height={100}
@@ -405,9 +405,9 @@ WHERE city NOT IN ('Seattle', 'New York');
 
       <div style={{ background: 'var(--surface)', border: `1px solid ${C}20`, borderRadius: 10, padding: '20px 24px', margin: '20px 0 24px' }}>
         <p style={{ fontSize: 11, color: C, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Business Rule 01</p>
-        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find all delivered orders paid by UPI OR Card, where the total is above ₹500, placed in January or February 2024."</p>
+        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find all delivered orders paid by Zelle OR Card, where the total is above $500, placed in January or February 2024."</p>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
-          Groups: (UPI OR Card) AND total &gt; 500 AND (Jan OR Feb 2024)
+          Groups: (Zelle OR Card) AND total &gt; 500 AND (Jan OR Feb 2024)
         </p>
       </div>
 
@@ -415,7 +415,7 @@ WHERE city NOT IN ('Seattle', 'New York');
         initialQuery={`SELECT order_id, order_date, payment_method, total_amount
 FROM orders
 WHERE order_status = 'Delivered'
-  AND (payment_method = 'UPI' OR payment_method = 'Card')
+  AND (payment_method = 'Zelle' OR payment_method = 'Card')
   AND total_amount > 500
   AND (
     (order_date >= '2024-01-01' AND order_date < '2024-02-01')
@@ -429,7 +429,7 @@ ORDER BY total_amount DESC;`}
 
       <div style={{ background: 'var(--surface)', border: `1px solid ${C}20`, borderRadius: 10, padding: '20px 24px', margin: '28px 0 24px' }}>
         <p style={{ fontSize: 11, color: C, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Business Rule 02</p>
-        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find products that either: (a) are out of stock AND have a margin above 25%, OR (b) are in stock AND priced below ₹30."</p>
+        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find products that either: (a) are out of stock AND have a margin above 25%, OR (b) are in stock AND priced below $30."</p>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
           Groups: (out-of-stock AND high-margin) OR (in-stock AND cheap)
         </p>
@@ -458,7 +458,7 @@ ORDER BY in_stock, margin_pct DESC;`}
 
       <div style={{ background: 'var(--surface)', border: `1px solid ${C}20`, borderRadius: 10, padding: '20px 24px', margin: '28px 0 24px' }}>
         <p style={{ fontSize: 11, color: C, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Business Rule 03</p>
-        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find employees who are either Store Managers with salary above ₹50,000, OR Cashiers in Seattle stores, OR any employee hired before 2020 earning more than ₹60,000."</p>
+        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find employees who are either Store Managers with salary above $50,000, OR Cashiers in Seattle stores, OR any employee hired before 2020 earning more than $60,000."</p>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
           Three OR groups, each group has internal AND conditions
         </p>
@@ -495,7 +495,7 @@ ORDER BY e.salary DESC;`}
         code={`-- Convention 1: AND/OR at the START of each line
 -- Makes it easy to comment out individual conditions
 WHERE order_status = 'Delivered'
-  AND payment_method = 'UPI'
+  AND payment_method = 'Zelle'
   AND total_amount > 500
 
 -- Convention 2: Indent grouped conditions
@@ -526,18 +526,18 @@ WHERE order_status = 'Delivered'
 
       <CodeBlock
         label="Before — correct but unreadable"
-        code={`SELECT * FROM orders WHERE order_status='Delivered' AND payment_method IN ('UPI','Card') AND total_amount>500 AND store_id IN ('ST001','ST005','ST008') OR order_status='Processing' AND total_amount>200 ORDER BY total_amount DESC;`}
+        code={`SELECT * FROM orders WHERE order_status='Delivered' AND payment_method IN ('Zelle','Card') AND total_amount>500 AND store_id IN ('ST001','ST005','ST008') OR order_status='Processing' AND total_amount>200 ORDER BY total_amount DESC;`}
       />
 
       <CodeBlock
         label="After — same logic, professional formatting"
         code={`-- Delivered high-value digital orders from key stores,
--- OR any processing order above ₹200
+-- OR any processing order above $200
 SELECT *
 FROM orders
 WHERE (
     order_status = 'Delivered'
-    AND payment_method IN ('UPI', 'Card')
+    AND payment_method IN ('Zelle', 'Card')
     AND total_amount > 500
     AND store_id IN ('ST001', 'ST005', 'ST008')
   )
@@ -566,17 +566,17 @@ ORDER BY total_amount DESC;`}
       <SQLPlayground
         initialQuery={`-- Debugging technique: test each group separately
 
--- Group 1 alone: how many delivered UPI orders?
+-- Group 1 alone: how many delivered Zelle orders?
 SELECT COUNT(*) AS group1
 FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'UPI';`}
+  AND payment_method = 'Zelle';`}
         height={110}
         showSchema={true}
       />
 
       <SQLPlayground
-        initialQuery={`-- Group 2 alone: how many cancelled orders above ₹500?
+        initialQuery={`-- Group 2 alone: how many cancelled orders above $500?
 SELECT COUNT(*) AS group2
 FROM orders
 WHERE order_status = 'Cancelled'
@@ -590,7 +590,7 @@ WHERE order_status = 'Cancelled'
 -- But might differ if rows satisfy BOTH conditions
 SELECT COUNT(*) AS combined
 FROM orders
-WHERE (order_status = 'Delivered' AND payment_method = 'UPI')
+WHERE (order_status = 'Delivered' AND payment_method = 'Zelle')
    OR (order_status = 'Cancelled' AND total_amount > 500);`}
         height={110}
         showSchema={false}
@@ -615,7 +615,7 @@ WHERE order_status = 'Delivered';`}
         initialQuery={`-- Step 2: add AND (count should decrease or stay same)
 SELECT COUNT(*) AS step2 FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'UPI';`}
+  AND payment_method = 'Zelle';`}
         height={90}
         showSchema={false}
       />
@@ -624,7 +624,7 @@ WHERE order_status = 'Delivered'
         initialQuery={`-- Step 3: add AND (count should decrease or stay same)
 SELECT COUNT(*) AS step3 FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'UPI'
+  AND payment_method = 'Zelle'
   AND total_amount > 800;
 -- If count goes UP between steps, you accidentally wrote OR instead of AND`}
         height={100}
@@ -632,7 +632,7 @@ WHERE order_status = 'Delivered'
       />
 
       <ProTip>
-        The fastest debugging technique for a complex WHERE: temporarily replace the SELECT columns with SELECT *, remove LIMIT, and scan the results for any row that should obviously not be there. A Gold customer from Delhi appearing in a "Platinum Seattle customers" query tells you immediately that the loyalty_tier condition or the city condition has a precedence bug. One wrong row is usually enough to identify the broken condition.
+        The fastest debugging technique for a complex WHERE: temporarily replace the SELECT columns with SELECT *, remove LIMIT, and scan the results for any row that should obviously not be there. A Gold customer from Denver appearing in a "Platinum Seattle customers" query tells you immediately that the loyalty_tier condition or the city condition has a precedence bug. One wrong row is usually enough to identify the broken condition.
       </ProTip>
 
       <HR />
@@ -727,14 +727,14 @@ SELECT
   CASE
     WHEN c.loyalty_tier = 'Platinum' THEN 'Segment A'
     WHEN c.loyalty_tier = 'Gold'
-     AND c.city IN ('Seattle','New York','Delhi','Austin') THEN 'Segment B'
+     AND c.city IN ('Seattle','New York','Boston','Austin') THEN 'Segment B'
     ELSE 'Segment C'
   END  AS campaign_segment
 FROM customers AS c
 WHERE c.loyalty_tier = 'Platinum'
    OR (
     c.loyalty_tier = 'Gold'
-    AND c.city IN ('Seattle', 'New York', 'Delhi', 'Austin')
+    AND c.city IN ('Seattle', 'New York', 'Boston', 'Austin')
     AND c.joined_date >= '2022-01-01'
   )
    OR (
@@ -785,10 +785,10 @@ ORDER BY in_stock, margin_pct;`}
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are an analyst at Venmo, India's largest UPI payments platform. The risk team sends a request: they need a list of transactions matching a specific suspicious pattern for manual review. The pattern has multiple conditions across three dimensions — amount, timing, and transaction type.</P>
+      <P>You are an analyst at Venmo, a leading US peer-to-peer payments platform. The risk team sends a request: they need a list of transactions matching a specific suspicious pattern for manual review. The pattern has multiple conditions across three dimensions — amount, timing, and transaction type.</P>
 
       <TimeBlock time="2:00 PM" label="Risk team requirement arrives">
-        The risk manager describes the pattern in plain English: "We want transactions that are either: (1) UPI transactions above ₹50,000 at any merchant, (2) transactions between ₹10,000 and ₹50,000 where the same user made more than 3 transactions in a single day, or (3) any wallet transfer to a new account where the receiver joined in the last 30 days AND the amount is above ₹5,000."
+        The risk manager describes the pattern in plain English: "We want transactions that are either: (1) Zelle transactions above $50,000 at any merchant, (2) transactions between $10,000 and $50,000 where the same user made more than 3 transactions in a single day, or (3) any wallet transfer to a new account where the receiver joined in the last 30 days AND the amount is above $5,000."
       </TimeBlock>
 
       <TimeBlock time="2:20 PM" label="You translate the requirement">
@@ -864,9 +864,9 @@ ORDER BY o.total_amount DESC;`}
       </IQ>
 
       <IQ q="How do you debug a WHERE clause that returns the wrong number of rows?">
-        <p style={{ margin: '0 0 14px' }}>The systematic debugging process starts with establishing the expected count. Before declaring the result wrong, calculate what you expect: "This table has 30 orders. About 18 are delivered. Of those, maybe 8 were paid by UPI. Of those, maybe 4 were above ₹500." If the query returns 12 instead of 4, the filter is too broad.</p>
+        <p style={{ margin: '0 0 14px' }}>The systematic debugging process starts with establishing the expected count. Before declaring the result wrong, calculate what you expect: "This table has 30 orders. About 18 are delivered. Of those, maybe 8 were paid by Zelle. Of those, maybe 4 were above $500." If the query returns 12 instead of 4, the filter is too broad.</p>
         <p style={{ margin: '0 0 14px' }}>Next, test each condition group in isolation. Replace the full WHERE with just the first group and run COUNT(*). Then test the second group alone. Then combine them. For AND chains, each added condition should reduce or maintain the count. If adding a condition increases the count, you accidentally wrote OR. For OR chains, each added alternative should increase or maintain the count. If adding an OR alternative reduces the count, you have a precedence issue where AND is stealing from your OR group.</p>
-        <p style={{ margin: 0 }}>The most effective visual debugging technique: SELECT * from the full query (remove LIMIT) and scan the results for any row that obviously should not be there. A Gold customer from Delhi in a "Platinum Seattle customers" result immediately identifies a missing parenthesis around the loyalty tier OR condition. One wrong row tells you more than a count discrepancy because you can see exactly which condition failed for that specific row. Once identified, fix the condition, rerun, and verify the count matches the expectation before closing the debug session.</p>
+        <p style={{ margin: 0 }}>The most effective visual debugging technique: SELECT * from the full query (remove LIMIT) and scan the results for any row that obviously should not be there. A Gold customer from Denver in a "Platinum Seattle customers" result immediately identifies a missing parenthesis around the loyalty tier OR condition. One wrong row tells you more than a count discrepancy because you can see exactly which condition failed for that specific row. Once identified, fix the condition, rerun, and verify the count matches the expectation before closing the debug session.</p>
       </IQ>
 
       <IQ q="When should you split a complex WHERE into a subquery or CTE instead of keeping it in one WHERE clause?">
@@ -906,15 +906,15 @@ ORDER BY o.total_amount DESC;`}
 
       <Err
         msg="Query is slow after adding multiple OR conditions — execution time jumps from 0.1s to 45s"
-        cause="OR conditions prevent index optimisation across the full condition. With a single condition WHERE status = 'Delivered', the database uses an index on status. With multiple OR conditions across different columns — WHERE status = 'Delivered' OR payment_method = 'UPI' OR store_id = 'ST001' — the database cannot use a single index to satisfy all three alternatives and may resort to a full table scan for each OR branch or the entire condition."
-        fix="Several approaches depending on the data size: (1) UNION ALL: run each OR branch as a separate query and combine results — each sub-query can use its own index. SELECT * FROM orders WHERE status = 'Delivered' UNION ALL SELECT * FROM orders WHERE payment_method = 'UPI' UNION ALL SELECT * FROM orders WHERE store_id = 'ST001'. (2) Add a composite index that covers the most common combination. (3) Analyse with EXPLAIN ANALYZE to confirm which conditions are causing the scan and whether indexes exist on those columns. OR-based queries are inherently harder to optimise than AND-based queries — the query optimiser has fewer options."
+        cause="OR conditions prevent index optimisation across the full condition. With a single condition WHERE status = 'Delivered', the database uses an index on status. With multiple OR conditions across different columns — WHERE status = 'Delivered' OR payment_method = 'Zelle' OR store_id = 'ST001' — the database cannot use a single index to satisfy all three alternatives and may resort to a full table scan for each OR branch or the entire condition."
+        fix="Several approaches depending on the data size: (1) UNION ALL: run each OR branch as a separate query and combine results — each sub-query can use its own index. SELECT * FROM orders WHERE status = 'Delivered' UNION ALL SELECT * FROM orders WHERE payment_method = 'Zelle' UNION ALL SELECT * FROM orders WHERE store_id = 'ST001'. (2) Add a composite index that covers the most common combination. (3) Analyse with EXPLAIN ANALYZE to confirm which conditions are causing the scan and whether indexes exist on those columns. OR-based queries are inherently harder to optimise than AND-based queries — the query optimiser has fewer options."
       />
 
       <HR />
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart operations director needs a priority order list with three tiers. Write a single query that returns orders matching ANY of these three conditions: (1) High-priority: Cancelled or Returned orders above ₹800 from stores ST001, ST005, or ST009. (2) Medium-priority: Processing orders older than order_id 1010 with UPI payment. (3) Low-priority: Delivered orders in January 2024 with total above ₹1,200. Show order_id, store_id, order_date, order_status, payment_method, total_amount, and a priority column using CASE WHEN. Sort by priority ascending then total_amount descending."
+        question="The FreshCart operations director needs a priority order list with three tiers. Write a single query that returns orders matching ANY of these three conditions: (1) High-priority: Cancelled or Returned orders above $800 from stores ST001, ST005, or ST009. (2) Medium-priority: Processing orders older than order_id 1010 with Zelle payment. (3) Low-priority: Delivered orders in January 2024 with total above $1,200. Show order_id, store_id, order_date, order_status, payment_method, total_amount, and a priority column using CASE WHEN. Sort by priority ascending then total_amount descending."
         hint="Three OR groups each with internal AND conditions. CASE WHEN for priority labelling. The CASE for priority should mirror the three OR groups. Order by CASE WHEN priority THEN 1/2/3 END for the sort."
         answer={`SELECT
   order_id,
@@ -929,7 +929,7 @@ ORDER BY o.total_amount DESC;`}
      AND store_id IN ('ST001','ST005','ST009')    THEN 'High'
     WHEN order_status = 'Processing'
      AND order_id > 1010
-     AND payment_method = 'UPI'                   THEN 'Medium'
+     AND payment_method = 'Zelle'                   THEN 'Medium'
     ELSE                                               'Low'
   END  AS priority
 FROM orders
@@ -941,7 +941,7 @@ WHERE (
   OR (
     order_status = 'Processing'
     AND order_id > 1010
-    AND payment_method = 'UPI'
+    AND payment_method = 'Zelle'
   )
   OR (
     order_status = 'Delivered'

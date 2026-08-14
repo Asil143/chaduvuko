@@ -255,7 +255,7 @@ export default function LLMAgentsPage() {
             <div style={{ color: '#7b61ff', marginBottom: 2 }}>1. user message      → "What is the settlement status for TXN123?"</div>
             <div style={{ color: '#D85A30', marginBottom: 2 }}>2. assistant message → tool_call: get_transaction(id="TXN123")</div>
             <div style={{ color: '#1D9E75', marginBottom: 2 }}>3. tool message      → {`{"status": "settled", "amount": 5000, "date": "2026-03-28"}`}</div>
-            <div style={{ color: '#378ADD', marginBottom: 8 }}>4. assistant message → "Transaction TXN123 was settled on March 28 for Rs 5,000."</div>
+            <div style={{ color: '#378ADD', marginBottom: 8 }}>4. assistant message → "Transaction TXN123 was settled on March 28 for $5,000."</div>
             <div style={{ fontSize: 11, color: 'var(--muted)' }}>
               No text parsing. No regex. The LLM returns structured JSON for the tool call.
               You execute the real function. The result goes back as a tool message.
@@ -317,7 +317,7 @@ TOOLS = [
             'parameters': {
                 'type': 'object',
                 'properties': {
-                    'amount': {'type': 'number', 'description': 'Amount in INR'},
+                    'amount': {'type': 'number', 'description': 'Amount in USD'},
                     'payment_type': {
                         'type': 'string',
                         'enum': ['domestic', 'international'],
@@ -407,7 +407,7 @@ def run_agent(user_message: str, max_turns: int = 5) -> str:
 # ── Test the agent ────────────────────────────────────────────────────
 run_agent("What is the status of transaction TXN456?")
 print("=" * 60)
-run_agent("I'm merchant MID789. How much will I pay in fees for a Rs 50,000 international payment, and what's my settlement status?")`} />
+run_agent("I'm merchant MID789. How much will I pay in fees for a $50,000 international payment, and what's my settlement status?")`} />
       </div>
 
       <Div />
@@ -562,8 +562,8 @@ conv = ConversationMemory(
 # Simulate session 1
 user_id = 'merchant_MID001'
 turns = [
-    "Hi, I'm Priya. I run an online saree store on my website.",
-    "I process about 50 orders a day averaging Rs 2000 each.",
+    "Hi, I'm Sarah. I run an online boutique clothing store on my website.",
+    "I process about 50 orders a day averaging $200 each.",
     "My biggest problem is international payment failures.",
 ]
 
@@ -706,7 +706,7 @@ transaction_agent = SpecialistAgent(
     tool_fns={
         'get_transaction': lambda txn_id: {
             'id': txn_id, 'amount': 5000, 'status': 'disputed',
-            'merchant': 'DoorDash', 'customer': 'Rahul Kumar',
+            'merchant': 'DoorDash', 'customer': 'James Miller',
             'dispute_deadline': '2026-04-01',
         },
     },

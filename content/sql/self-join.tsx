@@ -280,7 +280,7 @@ ORDER BY a.city, a.customer_id;`}
 
       <SQLPlayground
         initialQuery={`-- Pairs of products in the same category with similar prices
--- (within ₹20 of each other)
+-- (within $20 of each other)
 SELECT
   a.product_name                            AS product_a,
   b.product_name                            AS product_b,
@@ -701,7 +701,7 @@ ORDER BY h.department, h.mgr_salary DESC NULLS LAST, h.emp_salary DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write two queries using SELF JOIN: (1) A hierarchy query showing each employee's name, role, salary, their direct manager's name and salary, and a 'salary_relationship' column showing 'Higher than manager', 'Lower than manager', 'Same as manager', or 'No manager' as appropriate. Include all employees. Sort by department then salary descending. (2) A pair comparison query finding all pairs of products in the same category where both products are in stock and their price difference is less than ₹50. Show product_a name, product_b name, category, price_a, price_b, and price_difference. Sort by category and price_difference ascending."
+        question="Write two queries using SELF JOIN: (1) A hierarchy query showing each employee's name, role, salary, their direct manager's name and salary, and a 'salary_relationship' column showing 'Higher than manager', 'Lower than manager', 'Same as manager', or 'No manager' as appropriate. Include all employees. Sort by department then salary descending. (2) A pair comparison query finding all pairs of products in the same category where both products are in stock and their price difference is less than $50. Show product_a name, product_b name, category, price_a, price_b, and price_difference. Sort by category and price_difference ascending."
         hint="Query 1: LEFT JOIN employees AS emp to employees AS mgr. CASE on salary comparison — check mgr IS NULL first. Query 2: JOIN products AS a to products AS b on category match AND both in_stock AND a.id < b.id AND ABS(price diff) < 50."
         answer={`-- Query 1: Employee hierarchy with salary comparison
 SELECT
@@ -741,7 +741,7 @@ JOIN products AS b
   AND a.product_id < b.product_id
   AND ABS(a.unit_price - b.unit_price) < 50
 ORDER BY a.category, price_difference;`}
-        explanation="Query 1 uses LEFT JOIN so all employees appear including those with no manager (top-level). The CASE checks mgr.employee_id IS NULL first — if NULL, no manager exists regardless of salary values. Salary comparisons come after. The mgr.salary column may be NULL for top-level employees — CASE handles this correctly because NULL comparisons evaluate to NULL (not TRUE), so they fall through to no matching WHEN and 'No manager' is caught by the first condition. Query 2 uses three ON conditions: category match for same-category pairs, a.product_id < b.product_id for deduplication (prevents (A,B) and (B,A) duplicates and self-matches), and ABS price difference under ₹50. The in_stock filters could go in WHERE (they are on the same table) — but putting them in ON is also correct for INNER JOIN and slightly more explicit about which rows participate. ROUND(ABS(...), 2) ensures clean decimal display of the difference."
+        explanation="Query 1 uses LEFT JOIN so all employees appear including those with no manager (top-level). The CASE checks mgr.employee_id IS NULL first — if NULL, no manager exists regardless of salary values. Salary comparisons come after. The mgr.salary column may be NULL for top-level employees — CASE handles this correctly because NULL comparisons evaluate to NULL (not TRUE), so they fall through to no matching WHEN and 'No manager' is caught by the first condition. Query 2 uses three ON conditions: category match for same-category pairs, a.product_id < b.product_id for deduplication (prevents (A,B) and (B,A) duplicates and self-matches), and ABS price difference under $50. The in_stock filters could go in WHERE (they are on the same table) — but putting them in ON is also correct for INNER JOIN and slightly more explicit about which rows participate. ROUND(ABS(...), 2) ensures clean decimal display of the difference."
       />
 
       <HR />

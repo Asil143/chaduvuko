@@ -370,7 +370,7 @@ VALUES ('Test Product', 'Dairy', 'TestBrand', -50.00, 30.00, true);
       <SQLPlayground
         initialQuery={`-- Try to insert a customer with an invalid loyalty_tier
 INSERT INTO customers (first_name, last_name, email, city, joined_date, loyalty_tier)
-VALUES ('Test', 'Customer', 'test.check@gmail.com', 'Delhi', '2024-04-10', 'Diamond');
+VALUES ('Test', 'Customer', 'test.check@gmail.com', 'Denver', '2024-04-10', 'Diamond');
 -- Expected: ERROR — 'Diamond' is not in the allowed values`}
         height={120}
         showSchema={false}
@@ -496,7 +496,7 @@ COMMIT;  -- FK checked here — both rows now exist, no violation`}
         initialQuery={`-- Demonstrate FK enforcement
 -- Try to insert an order for a non-existent customer
 INSERT INTO orders (customer_id, store_id, order_date, order_status, payment_method, total_amount)
-VALUES (9999, 'ST001', '2024-04-10', 'Processing', 'UPI', 500.00);
+VALUES (9999, 'ST001', '2024-04-10', 'Processing', 'Zelle', 500.00);
 -- Expected: ERROR — customer_id 9999 does not exist in customers`}
         height={120}
         showSchema={false}
@@ -505,7 +505,7 @@ VALUES (9999, 'ST001', '2024-04-10', 'Processing', 'UPI', 500.00);
       <SQLPlayground
         initialQuery={`-- Try to use a non-existent store
 INSERT INTO orders (customer_id, store_id, order_date, order_status, payment_method, total_amount)
-VALUES (1, 'ST999', '2024-04-10', 'Processing', 'UPI', 500.00);
+VALUES (1, 'ST999', '2024-04-10', 'Processing', 'Zelle', 500.00);
 -- Expected: ERROR — store_id 'ST999' does not exist in stores`}
         height={110}
         showSchema={false}
@@ -682,7 +682,7 @@ CREATE TABLE orders (
   CONSTRAINT chk_orders_status      CHECK (order_status IN
     ('Delivered','Processing','Cancelled','Returned')),
   CONSTRAINT chk_orders_payment     CHECK (payment_method IN
-    ('UPI','Card','COD','NetBanking')),
+    ('Zelle','Card','COD','NetBanking')),
   CONSTRAINT chk_orders_amount      CHECK (total_amount >= 0),
   CONSTRAINT chk_delivery_after_order CHECK
     (delivery_date IS NULL OR delivery_date >= order_date)
@@ -697,7 +697,7 @@ CREATE TABLE orders (
       <P>You are reviewing a pull request at a Seattle fintech startup. A junior engineer has written a migration that adds a new payments table. You are doing the schema review before it goes to production.</P>
 
       <TimeBlock time="10:00 AM" label="Schema arrives for review">
-        The migration creates a payments table for tracking UPI and card transactions.
+        The migration creates a payments table for tracking Zelle and card transactions.
       </TimeBlock>
 
       <CodeBlock
@@ -729,7 +729,7 @@ CREATE TABLE payments (
                CONSTRAINT chk_payments_amount_positive CHECK (amount > 0),
   method       VARCHAR(20)    NOT NULL
                CONSTRAINT chk_payments_method CHECK
-                 (method IN ('UPI','Card','NetBanking','Wallet')),
+                 (method IN ('Zelle','Card','NetBanking','Wallet')),
   status       VARCHAR(20)    NOT NULL DEFAULT 'Pending'
                CONSTRAINT chk_payments_status CHECK
                  (status IN ('Pending','Success','Failed','Refunded')),
@@ -778,7 +778,7 @@ CREATE TABLE payments (
       <IQ q="What is referential integrity and how do FOREIGN KEY constraints enforce it?">
         <p style={{ margin: '0 0 14px' }}>Referential integrity is the guarantee that relationships between tables are consistent — every foreign key value in a child table exists as a primary key value in the referenced parent table. Without referential integrity, you can have orphaned records: order_items that reference orders which have been deleted, or employees whose store_id references a store that no longer exists. Orphaned records cause queries to silently miss data, calculations to be wrong, and joins to produce incomplete results.</p>
         <p style={{ margin: '0 0 14px' }}>Foreign key constraints enforce referential integrity in two directions. On INSERT or UPDATE of the child table: the database checks that the FK value exists in the parent table. Attempting to insert an order with customer_id = 9999 when no customer with that ID exists causes an immediate error. On DELETE or UPDATE of the parent table: the database checks for existing FK references. What happens next depends on the ON DELETE option: RESTRICT (default) prevents the deletion if any child rows reference it, CASCADE automatically deletes child rows, SET NULL nullifies the FK in child rows, SET DEFAULT sets the FK to its default value.</p>
-        <p style={{ margin: 0 }}>The value of database-level FK enforcement over application-level validation is that it is absolute. Application validation can be bypassed: a developer runs a direct SQL statement, a bulk import script skips the application layer, a new service is written without the validation logic, or a race condition in concurrent inserts allows an inconsistent state. A FK constraint enforced by the database cannot be bypassed by any of these. At Indian fintech companies where data integrity is a regulatory requirement (SEBI, RBI compliance), FK constraints on financial tables are mandatory and are audited during compliance reviews.</p>
+        <p style={{ margin: 0 }}>The value of database-level FK enforcement over application-level validation is that it is absolute. Application validation can be bypassed: a developer runs a direct SQL statement, a bulk import script skips the application layer, a new service is written without the validation logic, or a race condition in concurrent inserts allows an inconsistent state. A FK constraint enforced by the database cannot be bypassed by any of these. At fintech companies where data integrity is a regulatory requirement (SEC, FINRA compliance), FK constraints on financial tables are mandatory and are audited during compliance reviews.</p>
       </IQ>
 
       <IQ q="When should you name constraints and what naming convention do you recommend?">
@@ -874,7 +874,7 @@ ADD CONSTRAINT uq_promotions_store_code UNIQUE (store_id, promo_code);`}
           'Adding a constraint to an existing table validates against all current rows. Fix violations first — find them with SELECT, clean them with UPDATE or DELETE, then add the constraint.',
           'ALTER TABLE ADD CONSTRAINT adds constraints to existing tables. ALTER TABLE DROP CONSTRAINT removes them. In PostgreSQL, use NOT VALID + VALIDATE CONSTRAINT for large tables to minimise locking.',
           'CHECK constraints in MySQL before 8.0.16 are parsed but not enforced — they silently accept invalid values. Always verify CHECK enforcement in your specific database version.',
-          'Referential integrity via FK constraints is non-negotiable for financial and compliance data at Indian regulated companies. Database-level FK enforcement cannot be bypassed by any application path.',
+          'Referential integrity via FK constraints is non-negotiable for financial and compliance data at regulated companies. Database-level FK enforcement cannot be bypassed by any application path.',
         ]}
       />
 

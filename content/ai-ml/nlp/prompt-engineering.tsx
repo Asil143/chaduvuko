@@ -215,7 +215,7 @@ export default function PromptEngineeringPage() {
           to perform well: role context, task clarity, examples of desired
           output, constraints on format, and explicit reasoning instructions
           for complex tasks. Every pattern in this module has been tested
-          in production NLP systems across Indian tech companies.
+          in production NLP systems across top tech companies.
         </p>
 
         <AnalogyBox>
@@ -345,15 +345,15 @@ extraction_prompt = """Extract payment details from support tickets.
 Return as JSON only. No explanation.
 
 Example 1:
-Ticket: "I paid Rs 2500 to DoorDash on March 15 but got no confirmation"
-JSON: {"amount": 2500, "merchant": "DoorDash", "date": "March 15", "issue": "no confirmation"}
+Ticket: "I paid $25 to DoorDash on March 15 but got no confirmation"
+JSON: {"amount": 25, "merchant": "DoorDash", "date": "March 15", "issue": "no confirmation"}
 
 Example 2:
-Ticket: "Stripe charged my card twice for Rs 899 yesterday"
-JSON: {"amount": 899, "merchant": "Stripe", "date": "yesterday", "issue": "duplicate charge"}
+Ticket: "Stripe charged my card twice for $8.99 yesterday"
+JSON: {"amount": 8.99, "merchant": "Stripe", "date": "yesterday", "issue": "duplicate charge"}
 
 Now extract:
-Ticket: "I made a payment of Rs 4999 to Amazon on Sunday but the order shows pending"
+Ticket: "I made a payment of $49.99 to Amazon on Sunday but the order shows pending"
 JSON:"""
 
 import json
@@ -384,17 +384,17 @@ except:
         </p>
 
         <BeforeAfter
-          before={`A Stripe merchant processes 
-Rs 50,000 in payments. 
-International rate is 3%, 
+          before={`A Stripe merchant processes
+$50,000 in payments.
+International rate is 3%,
 domestic rate is 2%.
 60% are domestic payments.
 What are total fees?
 
 Answer:`}
-          after={`A Stripe merchant processes 
-Rs 50,000. International rate 
-is 3%, domestic is 2%. 
+          after={`A Stripe merchant processes
+$50,000. International rate
+is 3%, domestic is 2%.
 60% are domestic.
 What are total fees?
 
@@ -405,7 +405,7 @@ Let's think step by step:
 4. Sum both fees
 
 Answer:`}
-          improvement="Step-by-step reasoning → correct Rs 1,600 instead of wrong answer"
+          improvement="Step-by-step reasoning → correct $1,600 instead of wrong answer"
         />
 
         <CodeBlock code={`import os
@@ -424,12 +424,12 @@ def call_llm(prompt, system='', temperature=0):
     return r.choices[0].message.content.strip()
 
 # ── CoT for fee calculation ───────────────────────────────────────────
-without_cot = """A Stripe merchant processes Rs 50,000 in total payments.
+without_cot = """A Stripe merchant processes $50,000 in total payments.
 International payments: 3% fee. Domestic payments: 2% fee.
 60% of payments are domestic. What are total fees?
-Answer with just the number in rupees:"""
+Answer with just the number in dollars:"""
 
-with_cot = """A Stripe merchant processes Rs 50,000 in total payments.
+with_cot = """A Stripe merchant processes $50,000 in total payments.
 International payments: 3% fee. Domestic payments: 2% fee.
 60% of payments are domestic. What are total fees?
 
@@ -442,13 +442,13 @@ print(call_llm(with_cot))
 # ── CoT for policy interpretation ─────────────────────────────────────
 policy_cot = """You are a Stripe compliance officer.
 
-Policy: Transactions above Rs 50,000 require KYC verification.
+Policy: Transactions above $50,000 require KYC verification.
 Transactions from new merchants (< 30 days old) require manual review
 regardless of amount. Repeat customers with good history get auto-approval
-for amounts up to Rs 1,00,000.
+for amounts up to $100,000.
 
 Case: A merchant registered 45 days ago with 50 successful transactions
-wants to process Rs 75,000 from a returning customer.
+wants to process $75,000 from a returning customer.
 
 Reason through this step by step, then give APPROVE or MANUAL REVIEW:"""
 
@@ -523,9 +523,9 @@ Dispute: {text}"""
     return json.loads(raw)
 
 disputes = [
-    "I was charged Rs 4999 twice by Amazon for the same order on Monday",
-    "Instacart debited Rs 850 but my order never arrived",
-    "Amazon India charged Rs 12,500 but I returned the item last week",
+    "I was charged $49.99 twice by Amazon for the same order on Monday",
+    "Instacart debited $85 but my order never arrived",
+    "Amazon charged $125 but I returned the item last week",
 ]
 
 print("Structured extraction:")
@@ -595,11 +595,11 @@ def structured_with_system(text: str) -> dict:
             <div style={{ color: '#7b61ff' }}>Thought: I need to check Stripe's current settlement rate for international payments.</div>
             <div style={{ color: '#D85A30' }}>Action: search_knowledge_base("international settlement rate")</div>
             <div style={{ color: '#1D9E75' }}>Observation: "International payments settle within T+7 business days at prevailing forex rate."</div>
-            <div style={{ color: '#7b61ff' }}>Thought: I have the settlement time. Now I need to calculate the fee for Rs 10,000.</div>
+            <div style={{ color: '#7b61ff' }}>Thought: I have the settlement time. Now I need to calculate the fee for $10,000.</div>
             <div style={{ color: '#D85A30' }}>Action: calculate_fee(amount=10000, payment_type="international")</div>
-            <div style={{ color: '#1D9E75' }}>Observation: Fee = Rs 300 (3% international rate)</div>
+            <div style={{ color: '#1D9E75' }}>Observation: Fee = $300 (3% international rate)</div>
             <div style={{ color: '#7b61ff' }}>Thought: I now have both pieces of information needed to answer the question.</div>
-            <div style={{ color: '#378ADD' }}>Final Answer: Your Rs 10,000 international payment will settle in T+7 days with a fee of Rs 300.</div>
+            <div style={{ color: '#378ADD' }}>Final Answer: Your $10,000 international payment will settle in T+7 days with a fee of $300.</div>
           </div>
         </VisualBox>
 
@@ -612,7 +612,7 @@ client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
 KNOWLEDGE_BASE = {
     'settlement_domestic':      'Domestic payments settle in T+2 business days. Fee: 2%.',
     'settlement_international': 'International payments settle in T+7 business days. Fee: 3%.',
-    'refund_policy':            'Refunds take 2-3 days for UPI, 5-7 days for credit cards.',
+    'refund_policy':            'Refunds take 2-3 days for debit cards, 5-7 days for credit cards.',
     'dispute_deadline':         'Disputes must be responded to within 7 days.',
 }
 
@@ -628,7 +628,7 @@ def calculate_fee(amount: float, payment_type: str) -> str:
     """Calculate Stripe processing fee."""
     rate = 0.03 if payment_type == 'international' else 0.02
     fee  = amount * rate
-    return f"Fee for Rs {amount:,.0f} {payment_type} payment: Rs {fee:,.0f} ({rate*100:.0f}%)"
+    return f"Fee for \${amount:,.0f} {payment_type} payment: \${fee:,.0f} ({rate*100:.0f}%)"
 
 TOOLS = {
     'search_knowledge_base': search_kb,
@@ -708,7 +708,7 @@ def react_agent(question: str, max_steps: int = 5) -> str:
 
 # Test the ReAct agent
 answer = react_agent(
-    "I need to process a Rs 25,000 international payment. "
+    "I need to process a $25,000 international payment. "
     "What fee will I pay and when will it settle?"
 )`} />
       </div>
@@ -735,7 +735,7 @@ from groq import Groq
 client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
 
 # ── Production system prompt for Stripe support bot ─────────────────
-RAZORPAY_SYSTEM_PROMPT = """You are Stripe's intelligent support assistant.
+STRIPE_SYSTEM_PROMPT = """You are Stripe's intelligent support assistant.
 
 ROLE: Help merchants and customers resolve payment, settlement, and integration issues.
 
@@ -749,7 +749,7 @@ CONSTRAINTS:
 - Only discuss Stripe products and payment-related topics
 - Never quote specific fee percentages (policies change — refer to docs)
 - Never ask for card numbers, CVV, or full bank account numbers
-- If a question requires account-specific data, direct to dashboard or support@razorpay.com
+- If a question requires account-specific data, direct to dashboard or support@stripe.com
 
 OUTPUT FORMAT:
 - For factual questions: direct answer in 1-2 sentences
@@ -758,9 +758,9 @@ OUTPUT FORMAT:
 - Always end with: "Is there anything else I can help you with?"
 
 ESCALATION TRIGGERS:
-If user mentions: fraud, legal, RBI complaint, large transaction failure (>Rs 1L)
+If user mentions: fraud, legal, regulatory complaint, large transaction failure (>$10,000)
 → Respond: "This requires urgent attention from our specialist team.
-   Please email priority@razorpay.com with your merchant ID and transaction details."
+   Please email priority@stripe.com with your merchant ID and transaction details."
 """
 
 def support_bot(user_message: str) -> str:
@@ -779,7 +779,7 @@ def support_bot(user_message: str) -> str:
 test_messages = [
     "My payment failed but money was deducted",
     "How do I integrate Stripe with my React app?",
-    "I think someone made a fraudulent transaction of Rs 2 thousand on my account",
+    "I think someone made a fraudulent transaction of $200 on my account",
     "What is the settlement cycle?",
 ]
 

@@ -347,11 +347,11 @@ MAKING dbt DESCRIPTIONS FLOW INTO DATAHUB:
     - name: daily_revenue
       description: >
         Pre-aggregated daily revenue by store and date.
-        Updated daily at 06:30 IST. SLA: complete by 08:00 IST.
+        Updated daily at 06:30 ET. SLA: complete by 08:00 ET.
         Source of truth for Finance dashboard.
       meta:
         owner: data-team@freshmart.com
-        sla: "08:00 IST daily"
+        sla: "08:00 ET daily"
         consumers: [finance-dashboard, cfo-report]
       columns:
         - name: net_revenue
@@ -567,8 +567,8 @@ lf.create_data_cells_filter(
         'TableCatalogId': '123456789',
         'DatabaseName':   'freshmart_gold',
         'TableName':      'store_performance',
-        'Name':           'south_india_filter',
-        # Row filter — only South India stores:
+        'Name':           'south_region_filter',
+        # Row filter — only South region stores:
         'RowFilter': {
             'FilterExpression': "store_region = 'South'"
         },
@@ -597,8 +597,8 @@ lf.create_data_cells_filter(
         <SectionTitle>PII Classification, GDPR, and Right-to-Erasure</SectionTitle>
 
         <Para>
-          GDPR (EU) and PDPB (India's Personal Data Protection Bill, enacted 2023)
-          require that organisations: know where personal data is stored, protect
+          GDPR (EU) and CCPA (California's Consumer Privacy Act, expanded by the CPRA
+          in 2023) require that organisations: know where personal data is stored, protect
           it with appropriate controls, and honour erasure requests within 30 days.
           For a data platform, this means: classifying which columns contain PII,
           masking or removing PII at the Silver layer boundary, and implementing
@@ -630,16 +630,15 @@ class PIIDetectionResult:
 
 PATTERNS = {
     'email':    (1, re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')),
-    'phone_in': (1, re.compile(r'\b(?:\+91|0)?[6-9]\d{9}\b')),
-    'aadhaar':  (1, re.compile(r'\b\d{4}\s?\d{4}\s?\d{4}\b')),
-    'pan':      (1, re.compile(r'\b[A-Z]{5}[0-9]{4}[A-Z]\b')),
+    'phone_us': (1, re.compile(r'\b(?:\+1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b')),
+    'ssn':      (1, re.compile(r'\b\d{3}-?\d{2}-?\d{4}\b')),
     'name':     (2, None),   # requires ML classifier — name detection is hard with regex
     'ip_addr':  (2, re.compile(r'\b(?:\d{1,3}\.){3}\d{1,3}\b')),
 }
 
 def detect_pii_in_column(sample_values: list[str], column_name: str) -> PIIDetectionResult:
     """Scan a sample of column values for PII patterns."""
-    hits = {'email': 0, 'phone_in': 0, 'aadhaar': 0, 'pan': 0, 'ip_addr': 0}
+    hits = {'email': 0, 'phone_us': 0, 'ssn': 0, 'ip_addr': 0}
     total = len(sample_values)
 
     for val in sample_values:
@@ -791,7 +790,7 @@ def process_erasure_request(
 # ✓ Audit log: all accesses to PII-containing tables logged
 # ✓ Erasure pipeline: tested, runs within 30 days of request
 # ✓ Data retention: Bronze PII tables have lifecycle policies (max 2 years)
-# ✓ Data residency: customer data stays in Indian region (PDPB requirement)
+# ✓ Data residency: customer data stays in approved US region (state law requirement)
 # ✓ Consent log: when consent was given/revoked, stored in governance schema`}</CodeBox>
       </section>
 
@@ -1181,7 +1180,7 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 39 covers security and compliance — encryption at rest and in transit, PII handling, GDPR, and the India DPDP Act — with practical patterns for building pipelines that are compliant by design.
+          Module 39 covers security and compliance — encryption at rest and in transit, PII handling, GDPR, and the CCPA — with practical patterns for building pipelines that are compliant by design.
         </p>
         <Link href="/learn/data-engineering/security-compliance" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
           Module 39 → Security and Compliance for Data Engineers

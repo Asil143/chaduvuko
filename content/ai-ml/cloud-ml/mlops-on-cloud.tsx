@@ -262,7 +262,7 @@ export default function MLOpsOnCloudPage() {
                 {
                   trigger: 'Trigger B — Data/schedule (weekly cron or drift alert)',
                   color: '#D85A30',
-                  when: 'Every Monday 2 AM IST — or — drift monitoring alert',
+                  when: 'Every Monday 2 AM ET — or — drift monitoring alert',
                   goal: 'Produce and validate a new production model',
                 },
               ].map((item) => (
@@ -487,7 +487,7 @@ name: ML Retraining Pipeline
 
 on:
   schedule:
-    - cron: '30 20 * * 0'   # Every Sunday 20:30 UTC = Monday 02:00 IST
+    - cron: '30 20 * * 0'   # Every Sunday 20:30 UTC = 4:30 PM ET
   workflow_dispatch:          # Manual trigger from GitHub UI
     inputs:
       reason:
@@ -1127,7 +1127,7 @@ if __name__ == '__main__':
 
         <ErrorBlock
           error="Retraining CI runs on every commit — team drowns in training jobs and cloud costs spike"
-          cause="The workflow trigger is too broad — on: push: branches: [main] triggers a full retraining job on every code change, including documentation edits, README updates, and minor refactors. Each full retraining job runs for 30-90 minutes on cloud compute costing ₹50-500 per run. With 10 commits per day, this adds up to ₹500-5000/day in unnecessary training compute."
+          cause="The workflow trigger is too broad — on: push: branches: [main] triggers a full retraining job on every code change, including documentation edits, README updates, and minor refactors. Each full retraining job runs for 30-90 minutes on cloud compute costing $5-50 per run. With 10 commits per day, this adds up to $50-500/day in unnecessary training compute."
           fix="Separate training triggers from code change triggers. Code changes: use on: pull_request: paths: ['src/**', 'params.yaml'] and run only unit tests + a smoke test on 500-row sample (Stage 1 only — no cloud training). Full retraining: use on: schedule: + on: workflow_dispatch: + on: repository_dispatch: types: [drift-detected]. Add a cost guard: check that the last full training run was more than 12 hours ago before submitting a new cloud job."
         />
       </div>
@@ -1146,10 +1146,10 @@ if __name__ == '__main__':
           You have covered 79 modules across ten sections: Math and Statistics,
           Python for ML, Classical ML, Deep Learning, NLP, Computer Vision,
           Generative AI, MLOps, and Cloud ML Platforms. Every concept connects
-          to the next. Every module includes working code and real Indian company
+          to the next. Every module includes working code and real company
           examples. Module 80 is the capstone — 50 complete answers to the most
           common ML engineering interview questions asked at DoorDash, Stripe,
-          Amazon, Brex, and every other major Indian tech company.
+          Amazon, Brex, and every other major tech company.
         </p>
 
         <div style={{
@@ -1174,7 +1174,7 @@ if __name__ == '__main__':
             </div>
             <p style={{ ...S.ps, marginBottom: 0, marginTop: 4 }}>
               The 50 most-asked ML engineering questions across DoorDash, Stripe,
-              Amazon, Brex, and Indian tech — with complete, ready-to-deliver answers.
+              Amazon, Brex, and top tech companies — with complete, ready-to-deliver answers.
             </p>
           </div>
           <div style={{

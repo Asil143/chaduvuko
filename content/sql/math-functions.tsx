@@ -139,9 +139,9 @@ SELECT
   store_id,
   COUNT(*)                              AS orders,
   SUM(total_amount)                     AS raw_total,         -- many decimals
-  ROUND(SUM(total_amount), 2)           AS revenue_2dp,       -- ₹ precision
+  ROUND(SUM(total_amount), 2)           AS revenue_2dp,       -- $ precision
   ROUND(AVG(total_amount), 2)           AS avg_order,
-  -- Round to nearest ₹50 for display
+  -- Round to nearest $50 for display
   ROUND(SUM(total_amount) / 50) * 50   AS revenue_to_50
 FROM orders
 WHERE order_status = 'Delivered'
@@ -370,7 +370,7 @@ LOG2(1024)      = 10
 
 -- Common uses:
 -- Log-scale buckets: FLOOR(LOG10(amount)) puts amounts into order-of-magnitude buckets
--- Revenue distribution: amounts in ₹10s, ₹100s, ₹1000s in separate buckets
+-- Revenue distribution: amounts in $10s, $100s, $1000s in separate buckets
 -- Growth rates: continuous compounding uses LN
 -- Normalising skewed distributions for analysis`}
       />
@@ -380,10 +380,10 @@ LOG2(1024)      = 10
 -- Groups orders into order-of-magnitude ranges
 SELECT
   CASE
-    WHEN total_amount < 100   THEN '₹10-99'
-    WHEN total_amount < 1000  THEN '₹100-999'
-    WHEN total_amount < 10000 THEN '₹1,000-9,999'
-    ELSE                           '₹10,000+'
+    WHEN total_amount < 100   THEN '$10-99'
+    WHEN total_amount < 1000  THEN '$100-999'
+    WHEN total_amount < 10000 THEN '$1,000-9,999'
+    ELSE                           '$10,000+'
   END                                       AS value_bucket,
   -- Floor of log10 gives the order of magnitude
   FLOOR(LOG10(total_amount))::INT           AS magnitude,
@@ -395,10 +395,10 @@ WHERE order_status = 'Delivered'
   AND total_amount > 0
 GROUP BY
   CASE
-    WHEN total_amount < 100   THEN '₹10-99'
-    WHEN total_amount < 1000  THEN '₹100-999'
-    WHEN total_amount < 10000 THEN '₹1,000-9,999'
-    ELSE                           '₹10,000+'
+    WHEN total_amount < 100   THEN '$10-99'
+    WHEN total_amount < 1000  THEN '$100-999'
+    WHEN total_amount < 10000 THEN '$1,000-9,999'
+    ELSE                           '$10,000+'
   END,
   FLOOR(LOG10(total_amount))::INT
 ORDER BY magnitude;`}
@@ -602,7 +602,7 @@ LIMIT 10;`}
 -- Returns bucket number 1 through num_buckets
 SELECT
   WIDTH_BUCKET(total_amount, 0, 2000, 10)   AS bucket_num,
-  -- Bucket label (each bucket covers ₹200)
+  -- Bucket label (each bucket covers $200)
   (WIDTH_BUCKET(total_amount, 0, 2000, 10) - 1) * 200 AS bucket_min,
   WIDTH_BUCKET(total_amount, 0, 2000, 10) * 200       AS bucket_max,
   COUNT(*)                                            AS order_count,
@@ -620,11 +620,11 @@ ORDER BY bucket_num;`}
         initialQuery={`-- Custom CASE bucketing: business-meaningful price tiers
 SELECT
   CASE
-    WHEN unit_price < 50   THEN '₹0–49 (Budget)'
-    WHEN unit_price < 150  THEN '₹50–149 (Standard)'
-    WHEN unit_price < 300  THEN '₹150–299 (Premium)'
-    WHEN unit_price < 500  THEN '₹300–499 (Luxury)'
-    ELSE                        '₹500+ (Ultra)'
+    WHEN unit_price < 50   THEN '$0–49 (Budget)'
+    WHEN unit_price < 150  THEN '$50–149 (Standard)'
+    WHEN unit_price < 300  THEN '$150–299 (Premium)'
+    WHEN unit_price < 500  THEN '$300–499 (Luxury)'
+    ELSE                        '$500+ (Ultra)'
   END                            AS price_tier,
   COUNT(*)                       AS product_count,
   ROUND(AVG(unit_price), 2)      AS avg_price,
@@ -633,11 +633,11 @@ SELECT
 FROM products
 GROUP BY
   CASE
-    WHEN unit_price < 50   THEN '₹0–49 (Budget)'
-    WHEN unit_price < 150  THEN '₹50–149 (Standard)'
-    WHEN unit_price < 300  THEN '₹150–299 (Premium)'
-    WHEN unit_price < 500  THEN '₹300–499 (Luxury)'
-    ELSE                        '₹500+ (Ultra)'
+    WHEN unit_price < 50   THEN '$0–49 (Budget)'
+    WHEN unit_price < 150  THEN '$50–149 (Standard)'
+    WHEN unit_price < 300  THEN '$150–299 (Premium)'
+    WHEN unit_price < 500  THEN '$300–499 (Luxury)'
+    ELSE                        '$500+ (Ultra)'
   END
 ORDER BY min_price;`}
         height={265}
@@ -867,7 +867,7 @@ LIMIT 8;`}
       <IQ q="What is the difference between ROUND, FLOOR, CEIL, and TRUNC?">
         <p style={{ margin: '0 0 14px' }}>All four reduce a decimal number to fewer decimal places but with different rounding behaviour. ROUND(n, dp) rounds to the nearest value at dp decimal places — values at exactly .5 round up in standard SQL. ROUND(3.456, 2) = 3.46 (rounds up). ROUND(3.454, 2) = 3.45 (rounds down). ROUND accepts negative dp to round to tens, hundreds: ROUND(1234, -2) = 1200.</p>
         <p style={{ margin: '0 0 14px' }}>FLOOR(n) always rounds down to the largest integer not greater than n. FLOOR(3.9) = 3. FLOOR(-3.1) = -4 (more negative, not -3). CEIL(n) always rounds up to the smallest integer not less than n. CEIL(3.1) = 4. CEIL(-3.9) = -3 (less negative, not -4). TRUNC(n, dp) cuts off at dp decimal places without rounding — TRUNC(3.99, 1) = 3.9 (not 4.0). TRUNC always truncates toward zero for both positive and negative numbers.</p>
-        <p style={{ margin: 0 }}>When to use each: ROUND for financial display where standard rounding is expected (₹ amounts, percentages). FLOOR for conservative estimates, bin lower-bounds, and page-down calculations (how many complete pages?). CEIL for coverage calculations, minimum quantities, and page-up calculations (how many pages needed to fit N items?). TRUNC when you need to cut precision without any rounding — for example, extracting the integer part of a number without rounding it up: TRUNC(salary / 1000, 0) gives the thousands-level band (₹45,678 → 45).</p>
+        <p style={{ margin: 0 }}>When to use each: ROUND for financial display where standard rounding is expected ($ amounts, percentages). FLOOR for conservative estimates, bin lower-bounds, and page-down calculations (how many complete pages?). CEIL for coverage calculations, minimum quantities, and page-up calculations (how many pages needed to fit N items?). TRUNC when you need to cut precision without any rounding — for example, extracting the integer part of a number without rounding it up: TRUNC(salary / 1000, 0) gives the thousands-level band ($45,678 → 45).</p>
       </IQ>
 
       <IQ q="How do you calculate percentage of total in SQL?">
@@ -885,7 +885,7 @@ LIMIT 8;`}
       <IQ q="How do you detect outliers in SQL using standard deviation?">
         <p style={{ margin: '0 0 14px' }}>The standard z-score approach: a value is an outlier if it is more than N standard deviations from the mean (commonly N=2 or N=3). The z-score formula is z = (value - mean) / stddev. Values with |z| {'>'} 2 are outside 95% of the distribution (assuming normal distribution); |z| {'>'} 3 are outside 99.7%.</p>
         <p style={{ margin: '0 0 14px' }}>SQL implementation: compute mean and stddev in a CTE or derived table, then JOIN to the original table and compute z-scores per row: WITH stats AS (SELECT AVG(total_amount) AS mean_val, STDDEV(total_amount) AS std_val FROM orders WHERE order_status = 'Delivered') SELECT order_id, total_amount, ROUND(ABS(total_amount - s.mean_val) / NULLIF(s.std_val, 0), 2) AS z_score FROM orders, stats AS s WHERE ABS(total_amount - s.mean_val) {'>'} 2 * s.std_val. NULLIF protects against the case where all values are identical (stddev = 0).</p>
-        <p style={{ margin: 0 }}>An alternative to z-score is the IQR (interquartile range) method — more robust to extreme outliers: outliers are values below Q1 - 1.5 × IQR or above Q3 + 1.5 × IQR. IQR = Q3 - Q1 computed with PERCENTILE_CONT. The IQR method does not assume a normal distribution and is preferred for skewed data (like revenue or order values which are typically right-skewed). For time-series data, per-period outlier detection (z-score within each month) is more meaningful than a global z-score across all periods — a ₹5,000 order might be normal in December but an outlier in January.</p>
+        <p style={{ margin: 0 }}>An alternative to z-score is the IQR (interquartile range) method — more robust to extreme outliers: outliers are values below Q1 - 1.5 × IQR or above Q3 + 1.5 × IQR. IQR = Q3 - Q1 computed with PERCENTILE_CONT. The IQR method does not assume a normal distribution and is preferred for skewed data (like revenue or order values which are typically right-skewed). For time-series data, per-period outlier detection (z-score within each month) is more meaningful than a global z-score across all periods — a $5,000 order might be normal in December but an outlier in January.</p>
       </IQ>
 
       <HR />

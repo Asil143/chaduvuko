@@ -278,7 +278,7 @@ FROM orders AS o
 WHERE o.customer_id IN (
   SELECT customer_id
   FROM customers
-  WHERE city IN ('Seattle', 'New York', 'Delhi', 'Austin', 'Chicago')
+  WHERE city IN ('Seattle', 'New York', 'Denver', 'Austin', 'Chicago')
 )
 ORDER BY o.total_amount DESC
 LIMIT 10;`}
@@ -576,7 +576,7 @@ ORDER BY p.category, p.unit_price DESC;`}
       <H>Correlated subquery in WHERE — the EXISTS pattern</H>
 
       <SQLPlayground
-        initialQuery={`-- Customers who have at least one order above ₹1,000
+        initialQuery={`-- Customers who have at least one order above $1,000
 -- EXISTS: stops as soon as the first matching row is found (efficient)
 SELECT
   c.customer_id,

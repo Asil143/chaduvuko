@@ -104,7 +104,7 @@ export default function HowDataMovesModule() {
         <Para>
           The data point we will follow: a customer places an order on Uber Eats at 8:14 PM
           on a Tuesday evening. They order one Butter Chicken and two Garlic Naan from a
-          restaurant in Koramangala, Seattle. The order total is ₹380.
+          restaurant in Capitol Hill, Seattle. The order total is $38.
         </Para>
 
         <Para>
@@ -159,11 +159,11 @@ export default function HowDataMovesModule() {
 6:00 AM     → Power BI dashboard refreshes
                Reads from gold layer
                Dashboard now shows last night's order data
-               including our ₹380 Koramangala order
+               including our $38 Capitol Hill order
 
 9:00 AM     → Uber Eats growth manager opens the dashboard
-               Sees: Seattle GMV last night: ₹4.2 million
-               Our order contributed ₹380 to that number`}</CodeBox>
+               Sees: Seattle GMV last night: $420,000
+               Our order contributed $38 to that number`}</CodeBox>
 
         <Para>
           That is the journey. One tap on a phone, eight systems, fourteen hours, one number
@@ -273,7 +273,7 @@ export default function HowDataMovesModule() {
         ))}
 
         <Callout type="info">
-          <strong>A company rarely has just one source system.</strong> A typical mid-size Indian
+          <strong>A company rarely has just one source system.</strong> A typical mid-size US
           startup has 5–15 source systems simultaneously: a PostgreSQL production database,
           a Kafka cluster for events, a Salesforce CRM, a Google Analytics account, a
           Stripe payment API, vendor CSV files, and application logs at minimum. The data
@@ -460,7 +460,7 @@ Container: raw-landing
 
 /payments/
   2026/03/17/
-    razorpay_export_20260317.csv
+    stripe_export_20260317.csv
 
 /user_events/
   2026/03/17/09/15/  ← minute-partitioned (high volume)
@@ -666,16 +666,16 @@ Gold tables are what Power BI dashboards, data science notebooks, and business r
             column of every row — most of the data read is immediately discarded.
           </Para>
           <CodeBox label="Row storage vs columnar storage — how data is laid out on disk">{`ROW-ORIENTED STORAGE (PostgreSQL, MySQL):
-  Disk block 1: [order_id=1, customer="Priya", city="New York", amount=380, status="delivered"]
-  Disk block 2: [order_id=2, customer="Rahul", city="Seattle", amount=220, status="cancelled"]
-  Disk block 3: [order_id=3, customer="Aisha", city="Austin", amount=540, status="delivered"]
+  Disk block 1: [order_id=1, customer="Emily", city="New York", amount=380, status="delivered"]
+  Disk block 2: [order_id=2, customer="Marcus", city="Seattle", amount=220, status="cancelled"]
+  Disk block 3: [order_id=3, customer="Sofia", city="Austin", amount=540, status="delivered"]
 
   Query: SELECT SUM(amount) FROM orders
   Must read: ALL columns for ALL rows → massive I/O for one column
 
 COLUMNAR STORAGE (Snowflake, BigQuery, Redshift):
   Column "order_id":  [1, 2, 3, 4, 5, 6, 7, 8 ...]
-  Column "customer":  ["Priya", "Rahul", "Aisha" ...]
+  Column "customer":  ["Emily", "Marcus", "Sofia" ...]
   Column "city":      ["New York", "Seattle", "Austin" ...]
   Column "amount":    [380, 220, 540, 180, 760, 320, 450, 290 ...]
   Column "status":    ["delivered", "cancelled", "delivered" ...]
@@ -832,7 +832,7 @@ Most companies need streaming for: fraud detection, live inventory,
         <Para>
           Now that you understand each individual layer, here is the complete picture —
           every layer of a modern data platform, from source to consumer, in one view.
-          This is the architecture you will encounter at most well-engineered Indian
+          This is the architecture you will encounter at most well-engineered
           tech companies in 2026.
         </Para>
 
@@ -928,7 +928,7 @@ CROSS-CUTTING:
           <SubSubTitle>Step 1 — Check the Gold layer</SubSubTitle>
           <Para>
             You query the Gold <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>daily_order_metrics</code> table.
-            Saturday shows ₹3.8 million. Last Saturday showed ₹4.6 million. The drop is there. But
+            Saturday shows $380,000. Last Saturday showed $460,000. The drop is there. But
             is it real business data or a pipeline problem?
           </Para>
 

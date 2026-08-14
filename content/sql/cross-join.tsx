@@ -365,12 +365,12 @@ SELECT
   c.customer_id,
   s.store_id,
   pm.method,
-  ROUND(100 + RANDOM() * 900, 2),  -- random amount ₹100–₹1000
+  ROUND(100 + RANDOM() * 900, 2),  -- random amount $100–$1000
   CURRENT_DATE - (RANDOM() * 30)::INTEGER  -- random date in last 30 days
 FROM (SELECT customer_id FROM customers LIMIT 5) AS c
 CROSS JOIN (SELECT store_id FROM stores LIMIT 3) AS s
 CROSS JOIN (
-  VALUES ('UPI'), ('Card'), ('COD'), ('NetBanking')
+  VALUES ('Zelle'), ('Card'), ('COD'), ('NetBanking')
 ) AS pm(method);`}
       />
 
@@ -383,7 +383,7 @@ SELECT
   pm.method                     AS payment_method
 FROM stores AS s
 CROSS JOIN (
-  VALUES ('UPI'), ('Card'), ('COD'), ('NetBanking')
+  VALUES ('Zelle'), ('Card'), ('COD'), ('NetBanking')
 ) AS pm(method)
 ORDER BY s.store_id, pm.method;`}
         height={195}
@@ -554,7 +554,7 @@ JOIN customers AS c ON o.customer_id = c.customer_id;
       {/* ── PART 09 ── */}
       <Part n="09" title="What This Looks Like at Work" />
 
-      <P>You are a data analyst at BigBasket, India's largest online grocery platform. The growth team is building a monthly performance dashboard. The requirement: show revenue and order count for every (store, category, month) combination — including combinations with zero activity. Without a reference grid, the GROUP BY query simply omits zero combinations, making it impossible to spot which stores stopped selling which categories in which months.</P>
+      <P>You are a data analyst at Instacart, a leading US online grocery platform. The growth team is building a monthly performance dashboard. The requirement: show revenue and order count for every (store, category, month) combination — including combinations with zero activity. Without a reference grid, the GROUP BY query simply omits zero combinations, making it impossible to spot which stores stopped selling which categories in which months.</P>
 
       <TimeBlock time="11:00 AM" label="The problem with plain GROUP BY">
         Plain GROUP BY only returns groups that have data — zero combinations are invisible. You need to show all combinations explicitly.
@@ -712,7 +712,7 @@ ORDER BY g.store_id, g.category, g.order_month;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart business team wants a complete payment method performance report. Write a query using CROSS JOIN that shows for every (store, payment_method) combination: store_id, city, payment_method, order_count (0 if none), total_revenue (0 if none), avg_order_value (NULL is acceptable for zero combinations), and a 'performance' column: 'Strong' if revenue > ₹1500, 'Moderate' if revenue > ₹500, 'Weak' if revenue > 0, 'No activity' if zero. Use the four payment methods: UPI, Card, COD, NetBanking. Only include delivered orders. Sort by store_id then total_revenue descending."
+        question="The FreshCart business team wants a complete payment method performance report. Write a query using CROSS JOIN that shows for every (store, payment_method) combination: store_id, city, payment_method, order_count (0 if none), total_revenue (0 if none), avg_order_value (NULL is acceptable for zero combinations), and a 'performance' column: 'Strong' if revenue > $1500, 'Moderate' if revenue > $500, 'Weak' if revenue > 0, 'No activity' if zero. Use the four payment methods: Zelle, Card, COD, NetBanking. Only include delivered orders. Sort by store_id then total_revenue descending."
         hint="CROSS JOIN stores × VALUES payment methods. LEFT JOIN actual delivered order data aggregated by (store_id, payment_method). COALESCE for zeros. CASE on revenue for performance band."
         answer={`WITH grid AS (
   SELECT
@@ -721,7 +721,7 @@ ORDER BY g.store_id, g.category, g.order_month;`}
     pm.payment_method
   FROM stores AS s
   CROSS JOIN (
-    VALUES ('UPI'), ('Card'), ('COD'), ('NetBanking')
+    VALUES ('Zelle'), ('Card'), ('COD'), ('NetBanking')
   ) AS pm(payment_method)
 ),
 actuals AS (
@@ -764,7 +764,7 @@ ORDER BY g.store_id, total_revenue DESC;`}
           'CROSS JOIN produces the Cartesian product — every row from the left table paired with every row from the right. M rows × N rows = M×N result rows. No join condition required or allowed.',
           'The primary legitimate use: building a complete reference grid for reports. CROSS JOIN stores × months generates all combinations; LEFT JOIN actual data fills in zeros for missing combinations.',
           'Without a reference grid, GROUP BY silently omits zero combinations — making gaps invisible. CROSS JOIN + LEFT JOIN + COALESCE makes every gap explicit with a 0.',
-          'VALUES creates an inline table from literal values: (VALUES (\'UPI\'),(\'Card\'),(\'COD\')) AS pm(method). Combined with CROSS JOIN, it generates combination matrices without needing a physical reference table.',
+          'VALUES creates an inline table from literal values: (VALUES (\'Zelle\'),(\'Card\'),(\'COD\')) AS pm(method). Combined with CROSS JOIN, it generates combination matrices without needing a physical reference table.',
           'Accidental CROSS JOIN is the most dangerous SQL mistake — a missing ON condition creates M×N rows. Always run SELECT COUNT(*) before fetching data from any new JOIN query.',
           'The row count sanity check: for a JOIN on a one-to-one or many-to-one relationship, the result should have approximately the same number of rows as the left table. Significantly more rows signals a fan-out or accidental CROSS JOIN.',
           'CROSS JOIN is for multiplication (all combinations). UNION ALL is for addition (all rows). They solve different problems and are not interchangeable.',

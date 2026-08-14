@@ -228,26 +228,26 @@ export default function DataModels() {
 │
 ├── Department: Computer Science
 │   ├── Course: DBMS (CS301)
-│   │   ├── Student: Rahul Sharma  (enrolled)
-│   │   ├── Student: Priya Reddy   (enrolled)
-│   │   └── Student: Arjun Nair   (enrolled)
+│   │   ├── Student: Michael Turner  (enrolled)
+│   │   ├── Student: Jasmine Rodriguez   (enrolled)
+│   │   └── Student: Kevin Park   (enrolled)
 │   │
 │   └── Course: Algorithms (CS302)
-│       ├── Student: Rahul Sharma  (enrolled)
-│       └── Student: Kiran Patel   (enrolled)
+│       ├── Student: Michael Turner  (enrolled)
+│       └── Student: Emily Johnson   (enrolled)
 │
 └── Department: Mathematics
     └── Course: Linear Algebra (MA201)
-        └── Student: Priya Reddy  (enrolled)
+        └── Student: Jasmine Rodriguez  (enrolled)
 
-// Notice: Rahul appears TWICE — once under CS301, once under CS302
-// Priya appears TWICE — once under CS301, once under MA201
+// Notice: Michael appears TWICE — once under CS301, once under CS302
+// Jasmine appears TWICE — once under CS301, once under MA201
 // This duplication is not a bug — it is a fundamental limitation of the model`}
         </CodeBox>
 
         <Para>
-          The critical observation in that diagram: <strong style={{ color: 'var(--text)' }}>Rahul
-          Sharma appears twice</strong> because he is enrolled in two courses. In the hierarchical
+          The critical observation in that diagram: <strong style={{ color: 'var(--text)' }}>Michael
+          Turner appears twice</strong> because he is enrolled in two courses. In the hierarchical
           model, a child can only have one parent — but a student in reality can be enrolled in many
           courses. The model cannot represent this naturally. The solution was to duplicate the
           student record under each course they attend. This duplication is not accidental —
@@ -289,8 +289,8 @@ WHILE status = ok:
 
         <Para>
           Every DML operation in a hierarchical database required the programmer to know the exact
-          path through the tree. There was no way to say "give me all students named Rahul" without
-          knowing which branches of the tree might contain students named Rahul and navigating to
+          path through the tree. There was no way to say "give me all students named Michael" without
+          knowing which branches of the tree might contain students named Michael and navigating to
           each one explicitly. The lack of a declarative query language was a profound limitation.
         </Para>
 
@@ -433,7 +433,7 @@ WHILE status = ok:
         <CodeBox label="Network model — visualised for a university system">
 {`// The many-to-many problem is now solvable:
 
-STUDENT record: Rahul Sharma (S001)
+STUDENT record: Michael Turner (S001)
     │
     ├── ENROLLED_IN set ──────▶  COURSE: DBMS (CS301)
     │                                 │
@@ -443,7 +443,7 @@ STUDENT record: Rahul Sharma (S001)
                                       │
                                       └── TAUGHT_BY set ──▶ TEACHER: Prof. Singh
 
-// Rahul appears ONCE. He is a member of ENROLLED_IN set twice — once per course.
+// Michael appears ONCE. He is a member of ENROLLED_IN set twice — once per course.
 // No duplication. The student record has two logical parents through the same set.
 
 // Cross-structure query: "find all students taught by Prof. Kumar"
@@ -467,7 +467,7 @@ STUDENT record: Rahul Sharma (S001)
 
 MOVE 'S001' TO STUDENT-ID
 FIND ANY STUDENT USING STUDENT-ID
-// Currency: current STUDENT = Rahul Sharma
+// Currency: current STUDENT = Michael Turner
 
 FIND FIRST COURSE WITHIN ENROLLED_IN
 // Currency: current COURSE = DBMS (CS301)
@@ -594,7 +594,7 @@ WHILE DB-STATUS = 0:
               pillar: 'Pillar 1 — Relations (Tables)',
               color: '#0078d4',
               content: `A relation is a mathematical set of tuples — each tuple being an ordered list of domain values. In practical terms, a relation is a table: rows are tuples, columns are attributes, and each column has a domain (the set of valid values). The critical mathematical property: a relation is a SET — which means no two tuples can be identical (no duplicate rows), and tuples have no inherent order (the order of rows in a table is meaningless). These constraints come from set theory, not from engineering convenience.`,
-              example: `relation R = {(C001, Rahul, San Francisco), (C002, Priya, Austin), (C003, Arjun, New York)}
+              example: `relation R = {(C001, Michael, San Francisco), (C002, Jasmine, Austin), (C003, Kevin, New York)}
 // This is a mathematical set of 3-tuples.
 // No duplicate tuples (set property).
 // Unordered (set property — sequences are not sets).
@@ -604,7 +604,7 @@ WHILE DB-STATUS = 0:
               pillar: 'Pillar 2 — Relational Algebra (Operations)',
               color: 'var(--accent)',
               content: `Codd defined eight fundamental operations over relations — Selection (σ), Projection (π), Cartesian Product (×), Union (∪), Difference (−), Rename (ρ), Join (⋈), and Division (÷). These operations are closed — every operation takes one or more relations as input and produces a relation as output. This closure property means operations can be composed arbitrarily: the output of one operation can be the input of another. SQL is a declarative language that translates user queries into sequences of these algebraic operations.`,
-              example: `// "Find names of customers from San Francisco with orders above ₹500"
+              example: `// "Find names of customers from San Francisco with orders above $500"
 // In relational algebra:
 π_name(σ_city='San Francisco' AND amount>500 (customers ⋈ orders))
 
@@ -888,7 +888,7 @@ WHERE c.course_name = 'DBMS'
             {
               concept: 'Object Identity (OID)',
               desc: 'Every object in an OODBMS has a unique, system-generated object identifier (OID) — similar to a primary key in a relational database, but managed entirely by the DBMS. The OID is immutable — it never changes regardless of how the object\'s attribute values change. Relationships between objects are represented by storing the OID of referenced objects (like pointers, but persistent).',
-              example: 'Customer object with OID=0x4A2F has attributes (name="Rahul", city="San Francisco") and a reference to Order OID=0x8B3C. The link is the OID, not a foreign key.',
+              example: 'Customer object with OID=0x4A2F has attributes (name="Michael", city="San Francisco") and a reference to Order OID=0x8B3C. The link is the OID, not a foreign key.',
             },
             {
               concept: 'Complex Attributes and Nested Objects',
@@ -1002,7 +1002,7 @@ CREATE TABLE customers (
 -- Insert with composite type
 INSERT INTO customers (name, address, phone_numbers)
 VALUES (
-    'Rahul Sharma',
+    'Michael Turner',
     ROW('123 MG Road', 'San Francisco', 'Karnataka', '560001'),
     ARRAY['98765-43210', '87654-32109']
 );
@@ -1174,7 +1174,7 @@ WHERE r.restaurant_id = 'R001';
         </Para>
 
         <CodeBox label="Cross-document query problem — document model's Achilles heel">
-{`// Relational: "Find all restaurants in San Francisco that serve veg biryani under ₹200"
+{`// Relational: "Find all restaurants in San Francisco that serve veg biryani under $200"
 // Clean single SQL query
 SELECT DISTINCT r.name, r.rating
 FROM restaurants r
@@ -1295,19 +1295,19 @@ INCRBY api:rate_limit:user:1001 1        # Rate limiting — incr per request
 GET api:rate_limit:user:1001             # Check current request count
 
 # ─── HASH ─── Object storage without serialisation
-HSET user:1001 name "Rahul Sharma" city "San Francisco" tier "gold"
-HGET user:1001 name        # Returns: "Rahul Sharma"
+HSET user:1001 name "Michael Turner" city "San Francisco" tier "gold"
+HGET user:1001 name        # Returns: "Michael Turner"
 HGETALL user:1001          # Returns all fields
 HINCRBY user:1001 order_count 1  # Atomic field increment
 
 # Use case: user profiles, product metadata, any object with many fields
 
 # ─── SORTED SET ─── Leaderboard
-ZADD game:leaderboard 9842 "player:Rahul"
-ZADD game:leaderboard 8731 "player:Priya"
-ZADD game:leaderboard 9156 "player:Arjun"
+ZADD game:leaderboard 9842 "player:Michael"
+ZADD game:leaderboard 8731 "player:Jasmine"
+ZADD game:leaderboard 9156 "player:Kevin"
 ZREVRANGE game:leaderboard 0 9 WITHSCORES  # Top 10 players, sorted by score
-ZRANK game:leaderboard "player:Priya"       # Priya's rank
+ZRANK game:leaderboard "player:Jasmine"       # Jasmine's rank
 
 # ─── LIST ─── Message queue / Recent activity
 LPUSH notifications:user:1001 "Your order #ORD-4521 was delivered"
@@ -1426,7 +1426,7 @@ Row for user 1001, date 2024-03-15:
     event_time: 09:16:44 | event_type: "search"     | query: "biryani" | results: 47
     event_time: 09:17:12 | event_type: "view"       | page: "restaurant/R001"
     event_time: 09:18:55 | event_type: "order_start"| cart_id: "C341"
-    event_time: 09:21:03 | event_type: "payment"    | amount: 280      | method: "UPI"
+    event_time: 09:21:03 | event_type: "payment"    | amount: 280      | method: "card"
 
 // Notice: different events have different columns (extra fields).
 // "login" has "device". "search" has "query" and "results".
@@ -1579,7 +1579,7 @@ RETURN path;
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
           {[
-            { useCase: 'LinkedIn — People You May Know', desc: 'Every recommendation ("Rahul knows Priya, who knows Arjun, who knows you") is a graph traversal. LinkedIn\'s entire connection network — 900+ million members, billions of connections — is stored in a graph database. A relational JOIN at this scale for 2-hop recommendations would be unusably slow.' },
+            { useCase: 'LinkedIn — People You May Know', desc: 'Every recommendation ("Michael knows Jasmine, who knows Kevin, who knows you") is a graph traversal. LinkedIn\'s entire connection network — 900+ million members, billions of connections — is stored in a graph database. A relational JOIN at this scale for 2-hop recommendations would be unusably slow.' },
             { useCase: 'PayTM / Stripe — Fraud Detection', desc: 'Fraudulent behaviour often creates unusual graph patterns — a single entity connected to many accounts, circular fund transfers, unusually dense connection clusters. These patterns are trivial to detect with graph queries and practically impossible to detect with relational queries at transaction volume.' },
             { useCase: 'Amazon / Amazon — Recommendation Engine', desc: '"Customers who bought X also bought Y and Z" is a graph problem: find products that are connected via shared-purchase edges to the products the user has purchased, weighted by frequency. Graph databases store these purchase-connection graphs and traverse them in real time.' },
             { useCase: 'Uber / Lyft — Route Optimisation', desc: 'A city\'s road network is literally a graph — intersections are nodes, roads are edges, distances and traffic data are edge properties. Graph databases with specialised shortest-path algorithms (Dijkstra, A*) are the natural tool for routing and ETA calculation.' },

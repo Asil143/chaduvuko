@@ -608,7 +608,7 @@ ORDER BY last_name ASC, first_name ASC;`}
 
       <IQ q="What happens when you ORDER BY multiple columns? Give a practical example.">
         <p style={{ margin: '0 0 14px' }}>When you ORDER BY multiple columns separated by commas, the database sorts by the first column. Among rows that have identical values in the first column — ties — it sorts by the second column. Among remaining ties, it sorts by the third column, and so on. Each column independently can be ASC or DESC.</p>
-        <p style={{ margin: '0 0 14px' }}>A practical example: ORDER BY category ASC, unit_price DESC on a products table. The database first sorts all products alphabetically by category — Beverages, Dairy, Fruits, Household, Packaged Food, Personal Care, Staples, Vegetables. Within each category, products are sorted from most expensive to cheapest. A Beverages product at ₹270 appears before a Beverages product at ₹115, but both appear before any Dairy product.</p>
+        <p style={{ margin: '0 0 14px' }}>A practical example: ORDER BY category ASC, unit_price DESC on a products table. The database first sorts all products alphabetically by category — Beverages, Dairy, Fruits, Household, Packaged Food, Personal Care, Staples, Vegetables. Within each category, products are sorted from most expensive to cheapest. A Beverages product at $270 appears before a Beverages product at $115, but both appear before any Dairy product.</p>
         <p style={{ margin: 0 }}>Multi-column ORDER BY is essential for any report where items are grouped by one dimension and ranked within those groups. Common real-world uses: ORDER BY store_id ASC, revenue DESC (each store's top products), ORDER BY department ASC, salary DESC (highest earner in each department), ORDER BY order_date DESC, order_id DESC (most recent orders, ties broken by ID). The second column only ever affects the relative order of rows that tied on the first column — if no ties exist on the first column, the second column has no effect.</p>
       </IQ>
 
@@ -657,7 +657,7 @@ ORDER BY last_name ASC, first_name ASC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart procurement team wants a product report for their weekly review. Write a query that returns all in-stock products sorted first by category alphabetically, then within each category by unit_price from highest to lowest. Show product_name, category, brand, unit_price, and a calculated column called margin that is unit_price minus cost_price. The report should only include products where the margin is greater than ₹30."
+        question="The FreshCart procurement team wants a product report for their weekly review. Write a query that returns all in-stock products sorted first by category alphabetically, then within each category by unit_price from highest to lowest. Show product_name, category, brand, unit_price, and a calculated column called margin that is unit_price minus cost_price. The report should only include products where the margin is greater than $30."
         hint="You need WHERE in_stock = true AND (unit_price - cost_price) > 30, then ORDER BY category ASC, unit_price DESC. The margin calculation goes in SELECT."
         answer={`SELECT
   product_name,
@@ -669,7 +669,7 @@ FROM products
 WHERE in_stock = true
   AND (unit_price - cost_price) > 30
 ORDER BY category ASC, unit_price DESC;`}
-        explanation="This query combines WHERE filtering (in stock AND margin above ₹30), a SELECT calculation (unit_price - cost_price AS margin), and a two-column ORDER BY (category alphabetically, then price descending within each category). Notice that the WHERE condition repeats the margin expression — you cannot use the alias 'margin' in WHERE because WHERE runs before SELECT. The ORDER BY sorts by category first, and only when two products share the same category does unit_price determine their relative order."
+        explanation="This query combines WHERE filtering (in stock AND margin above $30), a SELECT calculation (unit_price - cost_price AS margin), and a two-column ORDER BY (category alphabetically, then price descending within each category). Notice that the WHERE condition repeats the margin expression — you cannot use the alias 'margin' in WHERE because WHERE runs before SELECT. The ORDER BY sorts by category first, and only when two products share the same category does unit_price determine their relative order."
       />
 
       <HR />

@@ -190,7 +190,7 @@ export default function ModelDeploymentPage() {
         </h2>
 
         <p style={S.p}>
-          The standard production ML deployment stack at Indian startups
+          The standard production ML deployment stack at most startups
           is three layers. FastAPI wraps the model in an HTTP endpoint —
           it receives a JSON request, extracts features, runs the model,
           and returns a JSON prediction. Docker packages the API and all
@@ -223,7 +223,7 @@ export default function ModelDeploymentPage() {
           <p style={{ ...S.ps, marginBottom: 0, color: '#00e676' }}>
             Docker solves "works on my machine." Kubernetes solves "stays running
             at scale." FastAPI solves "speaks HTTP." Together they are how
-            every production ML model at Indian tech companies is served.
+            every production ML model at top tech companies is served.
           </p>
         </AnalogyBox>
 
@@ -568,12 +568,12 @@ pandas==2.2.1`} label="requirements.txt" />
         <CodeBlock code={`# ── Docker build and run commands ─────────────────────────────────────
 
 # Build the image
-# docker build -t swiggy-delivery-model:v1.0.0 .
+# docker build -t doordash-delivery-model:v1.0.0 .
 
 # Run locally to test
 # docker run -p 8000:8000 \\
 #   -e MODEL_PATH=/app/model/model.pkl \\
-#   swiggy-delivery-model:v1.0.0
+#   doordash-delivery-model:v1.0.0
 
 # Test the running container
 # curl -X POST http://localhost:8000/v1/predict \\
@@ -582,9 +582,9 @@ pandas==2.2.1`} label="requirements.txt" />
 #         "distance_km":3.5,"is_peak_hour":1,"order_value":450}'
 
 # Push to container registry (AWS ECR / GCP Artifact Registry / Docker Hub)
-# docker tag swiggy-delivery-model:v1.0.0 \\
-#   123456789.dkr.ecr.ap-south-1.amazonaws.com/swiggy-delivery-model:v1.0.0
-# docker push 123456789.dkr.ecr.ap-south-1.amazonaws.com/swiggy-delivery-model:v1.0.0
+# docker tag doordash-delivery-model:v1.0.0 \\
+#   123456789.dkr.ecr.us-east-1.amazonaws.com/doordash-delivery-model:v1.0.0
+# docker push 123456789.dkr.ecr.us-east-1.amazonaws.com/doordash-delivery-model:v1.0.0
 
 # ── Image size optimisation ────────────────────────────────────────────
 print("""
@@ -634,7 +634,7 @@ Image size reduction techniques:
               {
                 object: 'Deployment',
                 color: '#7b61ff',
-                desc: 'Declares: 3 replicas of swiggy-delivery-model:v1.0.0. Handles rolling updates and rollbacks.',
+                desc: 'Declares: 3 replicas of doordash-delivery-model:v1.0.0. Handles rolling updates and rollbacks.',
                 yaml: 'kind: Deployment → replicas: 3, image: .../model:v1.0.0',
               },
               {
@@ -678,7 +678,7 @@ DEPLOYMENT_YAML = """
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: swiggy-delivery-model
+  name: doordash-delivery-model
   namespace: ml-serving
   labels:
     app: delivery-model
@@ -702,7 +702,7 @@ spec:
     spec:
       containers:
         - name: model-server
-          image: 123456789.dkr.ecr.ap-south-1.amazonaws.com/swiggy-delivery-model:v1.0.0
+          image: 123456789.dkr.ecr.us-east-1.amazonaws.com/doordash-delivery-model:v1.0.0
           ports:
             - containerPort: 8000
           env:
@@ -759,7 +759,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: swiggy-delivery-model
+    name: doordash-delivery-model
   minReplicas: 3    # always run at least 3 for availability
   maxReplicas: 20   # cap at 20 to control cost
   metrics:
@@ -783,13 +783,13 @@ commands = [
      'Deploy or update the model serving deployment'),
     ('kubectl get pods -n ml-serving',
      'List all pods and their status'),
-    ('kubectl logs -f deployment/swiggy-delivery-model -n ml-serving',
+    ('kubectl logs -f deployment/doordash-delivery-model -n ml-serving',
      'Stream logs from the deployment'),
-    ('kubectl rollout status deployment/swiggy-delivery-model',
+    ('kubectl rollout status deployment/doordash-delivery-model',
      'Watch rollout progress during update'),
-    ('kubectl rollout undo deployment/swiggy-delivery-model',
+    ('kubectl rollout undo deployment/doordash-delivery-model',
      'Rollback to previous version instantly'),
-    ('kubectl scale deployment/swiggy-delivery-model --replicas=10',
+    ('kubectl scale deployment/doordash-delivery-model --replicas=10',
      'Manual scale up during peak'),
     ('kubectl top pods -n ml-serving',
      'CPU and memory usage per pod'),
@@ -823,17 +823,17 @@ for cmd, desc in commands:
 
 ROLLING_UPDATE = """
 # Update the image — Kubernetes handles the rest
-kubectl set image deployment/swiggy-delivery-model \\
-  model-server=.../swiggy-delivery-model:v2.0.0
+kubectl set image deployment/doordash-delivery-model \\
+  model-server=.../doordash-delivery-model:v2.0.0
 
 # Watch the rollout
-kubectl rollout status deployment/swiggy-delivery-model
+kubectl rollout status deployment/doordash-delivery-model
 # Waiting for deployment to finish: 1 out of 3 new replicas updated...
 # Waiting for deployment to finish: 2 out of 3 new replicas updated...
-# deployment "swiggy-delivery-model" successfully rolled out
+# deployment "doordash-delivery-model" successfully rolled out
 
 # Rollback if something goes wrong
-kubectl rollout undo deployment/swiggy-delivery-model
+kubectl rollout undo deployment/doordash-delivery-model
 """
 
 # ── Strategy 2: Canary Release (safest for ML models) ─────────────────
@@ -851,7 +851,7 @@ CANARY_CONFIG = """
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: swiggy-delivery-model-canary
+  name: doordash-delivery-model-canary
 spec:
   replicas: 1    # 1 of 20 total = 5% of traffic
   selector:
@@ -865,7 +865,7 @@ spec:
     spec:
       containers:
         - name: model-server
-          image: .../swiggy-delivery-model:v2.0.0   # new version
+          image: .../doordash-delivery-model:v2.0.0   # new version
           # same ports, probes, resources as main deployment
 """
 
@@ -892,7 +892,7 @@ kubectl patch service delivery-model-service \\
   -p '{"spec":{"selector":{"track":"blue"}}}'
 
 # After validating green: delete blue deployment
-kubectl delete deployment swiggy-delivery-model-blue
+kubectl delete deployment doordash-delivery-model-blue
 """
 
 print("Deployment strategy comparison:")
@@ -1110,7 +1110,7 @@ for metric, target, desc in slos:
 
       <KeyTakeaways
         items={[
-          'The production ML deployment stack is three layers: FastAPI (wrap model in HTTP endpoint with validation, health checks, and versioning), Docker (package everything into a reproducible container), Kubernetes (run, scale, and update containers without downtime). This is the standard at DoorDash, Amazon, Stripe, and every Indian unicorn.',
+          'The production ML deployment stack is three layers: FastAPI (wrap model in HTTP endpoint with validation, health checks, and versioning), Docker (package everything into a reproducible container), Kubernetes (run, scale, and update containers without downtime). This is the standard at DoorDash, Amazon, Stripe, and every fast-growing unicorn.',
           'A production FastAPI model API needs four endpoints beyond /predict: /health (liveness probe — is the container alive), /ready (readiness probe — is the model loaded), /v1/predict (versioned, never break old clients), and /v1/predict/batch (batch endpoint for throughput). Always validate inputs with Pydantic before they reach the model.',
           'Use multi-stage Docker builds to keep images small: build stage installs gcc and dependencies, runtime stage copies only the installed packages. python:3.11-slim not python:3.11. Never bake model artifacts into the image — load from S3/GCS at startup via MODEL_PATH env var. Target: under 200MB for scikit-learn models.',
           'Kubernetes Deployment + Service + HPA is the standard serving setup. Key settings: maxUnavailable: 0 (never drop below desired replicas during update), livenessProbe initialDelaySeconds = model load time (60-120s), readinessProbe removes pod from load balancer if model is not ready, resource requests and limits prevent one pod from starving others.',

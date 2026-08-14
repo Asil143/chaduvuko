@@ -5,7 +5,7 @@ import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
-  title: 'Decision Trees — Loan Approval at HDFC — Chaduvuko',
+  title: 'Decision Trees — Loan Approval at Capital One — Chaduvuko',
   description:
     'The algorithm that thinks in if-then questions. Gini impurity, information gain, pruning, and why decision trees are the foundation of every ensemble method.',
 }
@@ -162,7 +162,7 @@ const PROGRESS_TOPICS = [
 export default function DecisionTreesPage() {
   return (
     <LearnLayout
-      title="Decision Trees — Loan Approval at HDFC"
+      title="Decision Trees — Loan Approval at Capital One"
       description="The algorithm that thinks in if-then questions. Gini impurity, information gain, pruning, and why decision trees are the foundation of every ensemble method."
       section="Classical ML"
       readTime="26–34 min"
@@ -174,7 +174,7 @@ export default function DecisionTreesPage() {
       <div style={S.sec}>
         <span style={S.tag}>The problem that started everything</span>
         <h2 style={S.h2}>
-          It's 2024. You're a new ML engineer at HDFC Bank.
+          It's 2024. You're a new ML engineer at Capital One.
         </h2>
 
         <p style={S.p}>
@@ -191,8 +191,8 @@ export default function DecisionTreesPage() {
           "When the model rejects someone, can you explain exactly why?"
           Logistic regression gives you a probability — not an explanation a customer
           or a regulator can follow. You need something interpretable.
-          Something that says: <em>"rejected because monthly income &lt; ₹35,000
-          AND credit score &lt; 650 AND existing EMI &gt; ₹12,000."</em>
+          Something that says: <em>"rejected because monthly income &lt; $3,500
+          AND credit score &lt; 650 AND existing monthly debt payments &gt; $1,200."</em>
         </p>
 
         <p style={S.p}>
@@ -235,7 +235,7 @@ export default function DecisionTreesPage() {
         </HBox>
 
         <Callout type="tip">
-          The running example throughout this module is HDFC loan approval —
+          The running example throughout this module is Capital One loan approval —
           a binary classification problem: approve or reject.
           Every concept is explained on this real business scenario before
           the code appears. By the end you will have a fully interpretable
@@ -266,7 +266,7 @@ export default function DecisionTreesPage() {
           is mostly rejections. An impure group is a mix of both.
         </p>
 
-        <VisualBox label="A decision tree for HDFC loan approval — simplified">
+        <VisualBox label="A decision tree for Capital One loan approval — simplified">
           <div style={{ overflowX: 'auto' as const }}>
             <svg width="600" height="280" viewBox="0 0 600 280">
               {/* Root node */}
@@ -355,7 +355,7 @@ from sklearn.model_selection import train_test_split
 np.random.seed(42)
 n = 10_000
 
-# ── HDFC loan applicant dataset ────────────────────────────────────────
+# ── Capital One loan applicant dataset ────────────────────────────────────────
 credit_score    = np.random.randint(300, 900, n)
 monthly_income  = np.abs(np.random.normal(55_000, 25_000, n)).clip(8_000, 300_000)
 existing_emi    = np.abs(np.random.normal(8_000, 6_000, n)).clip(0, 80_000)
@@ -469,7 +469,7 @@ def gini_impurity(y: np.ndarray) -> float:
     probs   = counts / n
     return 1.0 - np.sum(probs ** 2)
 
-# Verify on HDFC loan scenarios
+# Verify on Capital One loan scenarios
 print("Gini impurity examples:")
 scenarios = [
     ("All rejected (pure)",      np.array([0]*100)),
@@ -925,8 +925,8 @@ pred_class = dt.predict(sample)[0]
 
 print(f"\nTrace for applicant {sample_idx}:")
 print(f"  credit_score:   {sample['credit_score'].values[0]}")
-print(f"  monthly_income: ₹{sample['monthly_income'].values[0]:,.0f}")
-print(f"  existing_emi:   ₹{sample['existing_emi'].values[0]:,.0f}")
+print(f"  monthly_income: \${sample['monthly_income'].values[0]:,.0f}")
+print(f"  existing_emi:   \${sample['existing_emi'].values[0]:,.0f}")
 print(f"  Actual:         {'APPROVE' if actual == 1 else 'REJECT'}")
 print(f"  Predicted:      {'APPROVE' if pred_class == 1 else 'REJECT'} "
       f"(confidence: {pred_proba:.2%})")
@@ -1064,7 +1064,7 @@ print(f"Actual interest rate:                    {interest_rate_test.iloc[0]:.2f
               Train shallow trees sequentially, each one correcting the errors
               of the previous. The final prediction is the sum of all trees.
               Gradient boosting consistently wins tabular ML benchmarks
-              and is the most widely deployed ML algorithm in Indian fintech.
+              and is the most widely deployed ML algorithm in fintech.
             </p>
             <div style={{ fontSize: 11, color: '#D85A30', fontFamily: 'var(--font-mono)' }}>
               Technique: Boosting + gradient descent<br />
@@ -1084,11 +1084,11 @@ print(f"Actual interest rate:                    {interest_rate_test.iloc[0]:.2f
             become straightforward — they are just collections of trees
             combined in different ways. The algorithm you built from scratch
             in this module IS the algorithm inside every XGBoost model at
-            Stripe, Instacart, and every Indian unicorn running tabular ML.
+            Stripe, Instacart, and every unicorn running tabular ML.
           </p>
         </HBox>
 
-        <h3 style={S.h3}>What this looks like at work — day one at HDFC</h3>
+        <h3 style={S.h3}>What this looks like at work — day one at Capital One</h3>
 
         <CodeBlock code={`from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline
@@ -1147,10 +1147,10 @@ print(importance_df.to_string(index=False))
 # ── Save model + decision rules for compliance ─────────────────────────
 from sklearn.tree import export_text
 rules = export_text(tree_model, feature_names=X_train.columns.tolist())
-with open('/tmp/hdfc_loan_rules.txt', 'w') as f:
+with open('/tmp/capitalone_loan_rules.txt', 'w') as f:
     f.write(rules)
 
-joblib.dump(best_model, '/tmp/hdfc_loan_tree.pkl')
+joblib.dump(best_model, '/tmp/capitalone_loan_tree.pkl')
 print("\nModel and decision rules saved for compliance audit.")`} />
       </div>
 

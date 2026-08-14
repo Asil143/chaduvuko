@@ -254,7 +254,7 @@ ORDER BY e.department, e.salary DESC;`}
       <H>Customers with at least one large delivered order</H>
 
       <SQLPlayground
-        initialQuery={`-- Customers who have at least one delivered order above ₹1,000
+        initialQuery={`-- Customers who have at least one delivered order above $1,000
 SELECT
   c.customer_id,
   c.first_name || ' ' || c.last_name  AS customer,
@@ -779,14 +779,14 @@ ORDER BY c.customer_id;`}
       <P>You are a backend engineer at DoorDash. The marketing team is planning three campaign segments and needs the customer lists. Each segment uses a different existence condition — perfect for EXISTS and NOT EXISTS queries. The lists must be mutually exclusive and exhaustive.</P>
 
       <TimeBlock time="3:00 PM" label="Three segment definitions">
-        Segment A: customers who have placed at least one order above ₹1,500 (high-value ever). Segment B: customers who have placed orders but never one above ₹500 (consistent low-value). Segment C: customers who have never placed any delivered order (dormant). Adapted for FreshCart data.
+        Segment A: customers who have placed at least one order above $1,500 (high-value ever). Segment B: customers who have placed orders but never one above $500 (consistent low-value). Segment C: customers who have never placed any delivered order (dormant). Adapted for FreshCart data.
       </TimeBlock>
 
       <TimeBlock time="3:20 PM" label="Segment A — high value customers">
       </TimeBlock>
 
       <SQLPlayground
-        initialQuery={`-- Segment A: customers with at least one delivered order above ₹1,000
+        initialQuery={`-- Segment A: customers with at least one delivered order above $1,000
 SELECT
   c.customer_id,
   c.first_name || ' ' || c.last_name  AS customer,
@@ -809,7 +809,7 @@ ORDER BY c.loyalty_tier, c.customer_id;`}
       </TimeBlock>
 
       <SQLPlayground
-        initialQuery={`-- Segment B: customers who have ordered but NEVER above ₹500
+        initialQuery={`-- Segment B: customers who have ordered but NEVER above $500
 -- Has orders (EXISTS) BUT has no large order (NOT EXISTS)
 SELECT
   c.customer_id,
@@ -825,7 +825,7 @@ WHERE EXISTS (
     AND o.order_status = 'Delivered'
 )
 AND NOT EXISTS (
-  -- But never had one above ₹500
+  -- But never had one above $500
   SELECT 1 FROM orders AS o
   WHERE o.customer_id  = c.customer_id
     AND o.order_status = 'Delivered'
@@ -860,7 +860,7 @@ ORDER BY c.joined_date DESC;`}
       />
 
       <TimeBlock time="4:05 PM" label="All three segments delivered in 45 minutes">
-        Three EXISTS/NOT EXISTS queries — each clean, readable, and correct. The marketing team gets three mutually exclusive lists. Combining EXISTS and NOT EXISTS in Segment B (ordered at least once but never above ₹500) is the clearest way to express that exact business logic — no JOIN or GROUP BY alternative would be as direct.
+        Three EXISTS/NOT EXISTS queries — each clean, readable, and correct. The marketing team gets three mutually exclusive lists. Combining EXISTS and NOT EXISTS in Segment B (ordered at least once but never above $500) is the clearest way to express that exact business logic — no JOIN or GROUP BY alternative would be as direct.
       </TimeBlock>
 
       <ProTip>
@@ -941,7 +941,7 @@ ORDER BY c.joined_date DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write three queries using EXISTS and NOT EXISTS: (1) Find all stores that have at least one employee AND at least one delivered order worth more than ₹800. Show store_id, city, and store_name. (2) Find all customers who have placed at least one delivered order but have NEVER used COD (Cash on Delivery) as a payment method. Show customer_id, full name, city, and loyalty_tier. (3) Find all products that exist in the products table but have never appeared in any delivered order. Then also find products that appear in delivered orders but have a unit_price below ₹30 AND have been ordered more than once. Combine both using UNION ALL with a 'reason' column labelling each set."
+        question="Write three queries using EXISTS and NOT EXISTS: (1) Find all stores that have at least one employee AND at least one delivered order worth more than $800. Show store_id, city, and store_name. (2) Find all customers who have placed at least one delivered order but have NEVER used COD (Cash on Delivery) as a payment method. Show customer_id, full name, city, and loyalty_tier. (3) Find all products that exist in the products table but have never appeared in any delivered order. Then also find products that appear in delivered orders but have a unit_price below $30 AND have been ordered more than once. Combine both using UNION ALL with a 'reason' column labelling each set."
         hint="Query 1: EXISTS for employees AND EXISTS for large orders — two separate EXISTS. Query 2: EXISTS for any delivered order AND NOT EXISTS for COD delivered orders. Query 3: NOT EXISTS for no delivered orders; EXISTS with HAVING for low-price frequent products. UNION ALL with literal reason strings."
         answer={`-- Query 1: Stores with employees AND large orders
 SELECT

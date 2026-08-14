@@ -129,7 +129,7 @@ export default function SQLComplete() {
   return (
     <LearnLayout
       title="SQL — Complete Guide"
-      description="From your very first SELECT to recursive CTEs and window functions — every SQL concept explained from first principles with production-realistic examples from real Indian tech companies."
+      description="From your very first SELECT to recursive CTEs and window functions — every SQL concept explained from first principles with production-realistic examples from real US tech companies."
       section="DBMS"
       readTime="120–150 min"
       updatedAt="March 2026"
@@ -297,7 +297,7 @@ CREATE TABLE reviews (
         </CodeBox>
 
         <Para>
-          Sample data mental model: 4 customers (Rahul, Priya, Arjun, Kavya), 3 restaurants
+          Sample data mental model: 4 customers (Michael, Jasmine, Kevin, Emily), 3 restaurants
           (Biryani House, Dosa Corner, Pizza Stop), multiple menu items per restaurant,
           7 orders in various states, and a handful of reviews. All examples will work
           on this structure.
@@ -382,7 +382,7 @@ ALTER TABLE employees
 
 -- ADD COLUMN with NOT NULL requires a DEFAULT (otherwise existing rows have no value)
 ALTER TABLE employees
-    ADD COLUMN region VARCHAR(50) NOT NULL DEFAULT 'South India';
+    ADD COLUMN region VARCHAR(50) NOT NULL DEFAULT 'West Coast';
 -- PostgreSQL: this is a metadata-only operation for NOT NULL + DEFAULT — no table rewrite!
 -- The DEFAULT is stored in catalog and applied to existing rows on access.
 
@@ -610,15 +610,15 @@ SELECT * FROM orders WHERE order_date BETWEEN '2024-01-01' AND '2024-03-31';
 SELECT * FROM customers WHERE city IN ('San Francisco', 'Austin', 'New York');
 SELECT * FROM orders WHERE status IN ('delivered', 'out_for_delivery');
 -- NOT IN:
-SELECT * FROM customers WHERE city NOT IN ('Delhi', 'Chicago');
+SELECT * FROM customers WHERE city NOT IN ('Boston', 'Chicago');
 -- ⚠ WARNING: NOT IN with NULL in the list returns ZERO rows!
 -- If ANY value in the list is NULL: NOT IN fails for every row.
 -- See the NULL trap section for details.
 
 -- LIKE: pattern matching (case-sensitive in PostgreSQL, case-insensitive in MySQL)
 SELECT * FROM customers WHERE name LIKE 'R%';      -- starts with R
-SELECT * FROM customers WHERE name LIKE '%Sharma'; -- ends with Sharma
-SELECT * FROM customers WHERE name LIKE '%Kumar%'; -- contains Kumar
+SELECT * FROM customers WHERE name LIKE '%Turner'; -- ends with Turner
+SELECT * FROM customers WHERE name LIKE '%Bennett%'; -- contains Bennett
 SELECT * FROM customers WHERE phone LIKE '98___-_____'; -- specific pattern
 -- % = zero or more any characters
 -- _ = exactly one any character
@@ -639,8 +639,8 @@ WHERE is_veg = true
    OR price < 100;
 
 SELECT * FROM customers
-WHERE NOT (city = 'Delhi' OR city = 'Chicago');
--- Equivalent to: WHERE city NOT IN ('Delhi', 'Chicago')
+WHERE NOT (city = 'Boston' OR city = 'Chicago');
+-- Equivalent to: WHERE city NOT IN ('Boston', 'Chicago')
 
 -- OPERATOR PRECEDENCE: NOT > AND > OR
 -- Use parentheses to be explicit:
@@ -821,7 +821,7 @@ JOIN restaurants r ON o.restaurant_id = r.restaurant_id
 WHERE o.status = 'delivered'             -- WHERE: filter individual rows (no aggregation)
   AND o.order_date >= '2024-01-01'       -- WHERE: only 2024 orders
 GROUP BY r.city                          -- GROUP BY city
-HAVING SUM(o.total_amount) > 50000       -- HAVING: only cities with >₹50K revenue
+HAVING SUM(o.total_amount) > 50000       -- HAVING: only cities with >$50K revenue
    AND COUNT(o.order_id) >= 10;          -- HAVING: only cities with >=10 orders
 ORDER BY total_revenue DESC;
 
@@ -862,10 +862,10 @@ SELECT city, COUNT(*) FROM customers WHERE city = 'San Francisco' GROUP BY city;
             title="customers (left table)"
             headers={['customer_id', 'name', 'city']}
             rows={[
-              [1, 'Rahul', 'San Francisco'],
-              [2, 'Priya', 'Austin'],
-              [3, 'Arjun', 'New York'],
-              [4, 'Kavya', 'San Francisco'],
+              [1, 'Michael', 'San Francisco'],
+              [2, 'Jasmine', 'Austin'],
+              [3, 'Kevin', 'New York'],
+              [4, 'Emily', 'San Francisco'],
             ]}
             note="4 customers"
           />
@@ -873,11 +873,11 @@ SELECT city, COUNT(*) FROM customers WHERE city = 'San Francisco' GROUP BY city;
             title="orders (right table)"
             headers={['order_id', 'customer_id', 'total_amount']}
             rows={[
-              ['O001', 1, '₹280'],
-              ['O002', 1, '₹450'],
-              ['O003', 2, '₹180'],
-              ['O004', 3, '₹320'],
-              ['O005', 5, '₹150'],
+              ['O001', 1, '$280'],
+              ['O002', 1, '$450'],
+              ['O003', 2, '$180'],
+              ['O004', 3, '$320'],
+              ['O005', 5, '$150'],
             ]}
             note="5 orders — customer_id 4 has no orders, customer_id 5 doesn't exist in customers"
           />
@@ -902,12 +902,12 @@ INNER JOIN orders o ON c.customer_id = o.customer_id;
 
 -- RESULT:
 -- customer_id | name  | order_id | total_amount
--- 1           | Rahul | O001     | ₹280
--- 1           | Rahul | O002     | ₹450
--- 2           | Priya | O003     | ₹180
--- 3           | Arjun | O004     | ₹320
+-- 1           | Michael | O001     | $280
+-- 1           | Michael | O002     | $450
+-- 2           | Jasmine | O003     | $180
+-- 3           | Kevin | O004     | $320
 
--- Kavya (customer_id=4) has NO orders → EXCLUDED from result
+-- Emily (customer_id=4) has NO orders → EXCLUDED from result
 -- order O005 has customer_id=5 which doesn't exist → EXCLUDED from result
 -- Only the 4 rows where a match exists in BOTH tables are returned
 
@@ -935,18 +935,18 @@ LEFT JOIN orders o ON c.customer_id = o.customer_id;
 
 -- RESULT:
 -- customer_id | name  | order_id | total_amount
--- 1           | Rahul | O001     | ₹280
--- 1           | Rahul | O002     | ₹450
--- 2           | Priya | O003     | ₹180
--- 3           | Arjun | O004     | ₹320
--- 4           | Kavya | NULL     | NULL       ← Kavya kept, NULLs for no-match right side
+-- 1           | Michael | O001     | $280
+-- 1           | Michael | O002     | $450
+-- 2           | Jasmine | O003     | $180
+-- 3           | Kevin | O004     | $320
+-- 4           | Emily | NULL     | NULL       ← Emily kept, NULLs for no-match right side
 
 -- LEFT JOIN ANTI-PATTERN: Find customers with NO orders
 SELECT c.customer_id, c.name
 FROM customers c
 LEFT JOIN orders o ON c.customer_id = o.customer_id
 WHERE o.order_id IS NULL;
--- Returns: customer_id=4, Kavya (the NULL row)
+-- Returns: customer_id=4, Emily (the NULL row)
 -- Pattern: LEFT JOIN + WHERE right_side_column IS NULL = find LEFT with no match in RIGHT
 
 -- Practical use: get all customers with their order count (including 0):
@@ -955,7 +955,7 @@ FROM customers c
 LEFT JOIN orders o ON c.customer_id = o.customer_id
 GROUP BY c.customer_id, c.name
 ORDER BY order_count DESC;
--- Kavya appears with order_count = 0 (COUNT(NULL) = 0, not skipped)`}
+-- Emily appears with order_count = 0 (COUNT(NULL) = 0, not skipped)`}
               </CodeBox>
             </div>
           </div>
@@ -977,11 +977,11 @@ RIGHT JOIN orders o ON c.customer_id = o.customer_id;
 
 -- RESULT:
 -- customer_id | name  | order_id | total_amount
--- 1           | Rahul | O001     | ₹280
--- 1           | Rahul | O002     | ₹450
--- 2           | Priya | O003     | ₹180
--- 3           | Arjun | O004     | ₹320
--- NULL        | NULL  | O005     | ₹150   ← O005 kept (customer_id=5 doesn't exist)
+-- 1           | Michael | O001     | $280
+-- 1           | Michael | O002     | $450
+-- 2           | Jasmine | O003     | $180
+-- 3           | Kevin | O004     | $320
+-- NULL        | NULL  | O005     | $150   ← O005 kept (customer_id=5 doesn't exist)
 
 -- Equivalent rewrite using LEFT JOIN (preferred style):
 SELECT c.customer_id, c.name, o.order_id, o.total_amount
@@ -1010,12 +1010,12 @@ FULL OUTER JOIN orders o ON c.customer_id = o.customer_id;
 
 -- RESULT:
 -- customer_id | name  | order_id | total_amount
--- 1           | Rahul | O001     | ₹280
--- 1           | Rahul | O002     | ₹450
--- 2           | Priya | O003     | ₹180
--- 3           | Arjun | O004     | ₹320
--- 4           | Kavya | NULL     | NULL    ← customer with no orders (from LEFT side)
--- NULL        | NULL  | O005     | ₹150   ← orphaned order (from RIGHT side)
+-- 1           | Michael | O001     | $280
+-- 1           | Michael | O002     | $450
+-- 2           | Jasmine | O003     | $180
+-- 3           | Kevin | O004     | $320
+-- 4           | Emily | NULL     | NULL    ← customer with no orders (from LEFT side)
+-- NULL        | NULL  | O005     | $150   ← orphaned order (from RIGHT side)
 
 -- Note: MySQL does NOT support FULL OUTER JOIN directly. Workaround:
 SELECT c.customer_id, c.name, o.order_id FROM customers c LEFT  JOIN orders o ON c.customer_id = o.customer_id
@@ -1494,7 +1494,7 @@ ORDER BY level, name;
 -- level=2: VPs reporting to CEO
 -- level=3: Managers reporting to VPs
 -- level=4: Individual contributors
--- path = "CEO → VP Engineering → Engineering Manager → Rahul"
+-- path = "CEO → VP Engineering → Engineering Manager → Michael"
 
 -- EXAMPLE 2: Generate a date series (no base table needed)
 WITH RECURSIVE date_series AS (
@@ -1794,7 +1794,7 @@ FROM orders;`}
         <CodeBox label="INSERT — every form">
 {`-- BASIC INSERT: explicit column list (always use this — never rely on column order)
 INSERT INTO customers (name, email, city, phone)
-VALUES ('Deepak Mehta', 'deepak@email.com', 'Boston', '99887-76655');
+VALUES ('David Chen', 'david@email.com', 'Boston', '99887-76655');
 
 -- INSERT multiple rows in one statement (more efficient than separate INSERTs)
 INSERT INTO menu_items (restaurant_id, name, category, price, is_veg)
@@ -2262,7 +2262,7 @@ ORDER BY s.streak_length DESC;`}
       <section style={{ marginBottom: 72 }}>
         <SectionTag text="// Part 14 — Real World" />
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12, fontFamily: 'var(--font-mono)' }}>💼 What This Looks Like at Work</div>
-        <SectionTitle>Real Queries From Real Job Descriptions at Indian Tech Companies</SectionTitle>
+        <SectionTitle>Real Queries From Real Job Descriptions at US Tech Companies</SectionTitle>
 
         <Para>
           These are the exact types of SQL tasks that appear in DoorDash, Amazon, Stripe,

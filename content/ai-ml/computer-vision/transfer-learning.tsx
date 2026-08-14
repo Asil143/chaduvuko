@@ -186,7 +186,7 @@ export default function TransferLearningPage() {
           Training ResNet50 from scratch on ImageNet took 29 hours on
           8 V100 GPUs. Transfer learning uses those weights as a starting
           point and fine-tunes to your task in 20 minutes on one GPU.
-          This is how every production vision system at Indian startups is built.
+          This is how every production vision system at startups is built.
         </h2>
 
         <p style={S.p}>
@@ -209,7 +209,7 @@ export default function TransferLearningPage() {
 
         <AnalogyBox>
           <p style={{ ...S.p, marginBottom: 8 }}>
-            A civil engineer who has spent 10 years building roads in India
+            A civil engineer who has spent 10 years building roads
             knows structural principles, material properties, load calculations —
             universal engineering knowledge. To now build bridges, they do not
             retrain their entire education. They learn bridge-specific design
