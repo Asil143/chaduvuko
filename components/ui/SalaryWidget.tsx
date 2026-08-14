@@ -2,19 +2,13 @@
 import { useState } from 'react'
 import { TrendingUp } from 'lucide-react'
 
-// ─── Salary data: role → country → { min, max, median, currency, unit }
+// ─── Salary data: role → country → { min, max, median }
 // Sources: LinkedIn Salary Insights, Glassdoor, Levels.fyi, BLS OES 2025,
-//          HESA / ONS (UK), SEEK (AU), Randstad / Statistics Canada, IITK Placements
+//          HESA / ONS (UK), SEEK (AU), Randstad / Statistics Canada
 // Last updated: April 2026
-// All figures in local currency. Non-India = K/year, India = LPA.
+// All figures in local currency, K/year.
 
 type SalaryRange = { min: number; max: number; median: number }
-
-type CountryData = {
-  currency: string
-  unit: string        // e.g. "K/yr" or "LPA"
-  salaries: SalaryRange
-}
 
 const ROLES = [
   'Data Engineer',
@@ -41,7 +35,6 @@ const COUNTRIES = [
   'Singapore',
   'UAE',
   'Brazil',
-  'India',
 ] as const
 
 type Country = typeof COUNTRIES[number]
@@ -57,23 +50,9 @@ const SYMBOL: Record<Country, string> = {
   'Singapore':      'S$',
   'UAE':            'AED',
   'Brazil':         'R$',
-  'India':          '₹',
 }
 
-const UNIT: Record<Country, string> = {
-  'United States': 'K/yr',
-  'United Kingdom': 'K/yr',
-  'Canada':         'K/yr',
-  'Australia':      'K/yr',
-  'Germany':        'K/yr',
-  'Netherlands':    'K/yr',
-  'Singapore':      'K/yr',
-  'UAE':            'K/yr',
-  'Brazil':         'K/yr',
-  'India':          'LPA',
-}
-
-// [min, median, max] — US/UK/CA/AU/DE/NL in K local currency; SG/UAE/BR/IN in K local currency or LPA
+// [min, median, max] in K local currency
 const RAW: Record<Role, Record<Country, [number, number, number]>> = {
   'Data Engineer': {
     'United States':  [90,  130, 175],
@@ -85,7 +64,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [70,   95, 125],
     'UAE':            [180, 250, 330],
     'Brazil':         [80,  130, 200],
-    'India':          [8,    16,  38],
   },
   'Analytics Engineer': {
     'United States':  [85,  120, 160],
@@ -97,7 +75,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [65,   88, 115],
     'UAE':            [160, 220, 300],
     'Brazil':         [70,  115, 175],
-    'India':          [7,    13,  28],
   },
   'Data Scientist': {
     'United States':  [95,  140, 190],
@@ -109,7 +86,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [72,  100, 135],
     'UAE':            [190, 260, 345],
     'Brazil':         [85,  140, 210],
-    'India':          [8,    18,  42],
   },
   'ML Engineer': {
     'United States':  [105, 155, 215],
@@ -121,7 +97,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [78,  110, 148],
     'UAE':            [200, 285, 380],
     'Brazil':         [90,  150, 230],
-    'India':          [10,   22,  52],
   },
   'GenAI / LLM Engineer': {
     'United States':  [120, 175, 250],
@@ -133,7 +108,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [88,  125, 168],
     'UAE':            [220, 310, 420],
     'Brazil':         [100, 165, 255],
-    'India':          [12,   28,  65],
   },
   'Backend Engineer': {
     'United States':  [85,  130, 185],
@@ -145,7 +119,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [65,   92, 125],
     'UAE':            [170, 240, 320],
     'Brazil':         [75,  125, 190],
-    'India':          [7,    14,  35],
   },
   'Frontend Engineer': {
     'United States':  [80,  120, 170],
@@ -157,7 +130,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [60,   85, 115],
     'UAE':            [160, 225, 300],
     'Brazil':         [68,  112, 172],
-    'India':          [6,    12,  30],
   },
   'Full-Stack Engineer': {
     'United States':  [82,  125, 175],
@@ -169,7 +141,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [62,   88, 120],
     'UAE':            [165, 232, 310],
     'Brazil':         [72,  118, 182],
-    'India':          [6,    13,  32],
   },
   'DevOps / Platform Engineer': {
     'United States':  [90,  135, 185],
@@ -181,7 +152,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [68,   96, 130],
     'UAE':            [180, 255, 340],
     'Brazil':         [80,  132, 200],
-    'India':          [7,    15,  38],
   },
   'Cloud Architect': {
     'United States':  [120, 170, 235],
@@ -193,7 +163,6 @@ const RAW: Record<Role, Record<Country, [number, number, number]>> = {
     'Singapore':      [88,  122, 165],
     'UAE':            [220, 310, 415],
     'Brazil':         [95,  158, 242],
-    'India':          [12,   24,  58],
   },
 }
 
@@ -203,7 +172,6 @@ export function SalaryWidget() {
 
   const [min, median, max] = RAW[role][country]
   const symbol = SYMBOL[country]
-  const unit = UNIT[country]
 
   // bar is relative to max salary for this role × country pairing
   const allMedians = COUNTRIES.map(c => RAW[role][c][1])
@@ -254,11 +222,11 @@ export function SalaryWidget() {
         <div>
           <div className="text-xs font-mono mb-1" style={{ color: 'var(--muted)' }}>Median</div>
           <div className="font-display font-black" style={{ fontSize: 'clamp(2rem,5vw,3rem)', color: 'var(--accent)', lineHeight: 1 }}>
-            {symbol}{median}{unit === 'LPA' ? ' LPA' : 'K'}
+            {symbol}{median}K
           </div>
         </div>
         <div className="text-sm mb-2" style={{ color: 'var(--muted)' }}>
-          {symbol}{min}–{symbol}{max}{unit === 'LPA' ? ' LPA' : 'K'}
+          {symbol}{min}–{symbol}{max}K
         </div>
       </div>
 
@@ -277,7 +245,6 @@ export function SalaryWidget() {
           {COUNTRIES.map(c => {
             const [, med] = RAW[role][c]
             const sym = SYMBOL[c]
-            const u = UNIT[c]
             const active = c === country
             return (
               <button
@@ -291,7 +258,7 @@ export function SalaryWidget() {
                 }}
               >
                 <span className="font-mono truncate">{c}</span>
-                <span className="font-bold ml-2 shrink-0">{sym}{med}{u === 'LPA' ? 'L' : 'K'}</span>
+                <span className="font-bold ml-2 shrink-0">{sym}{med}K</span>
               </button>
             )
           })}
@@ -300,7 +267,7 @@ export function SalaryWidget() {
 
       <p className="text-xs mt-4 text-center" style={{ color: 'var(--muted)', fontFamily: 'Lora, serif', fontStyle: 'italic' }}>
         Sourced from LinkedIn, Glassdoor, Levels.fyi, BLS OES &amp; regional surveys · April 2026.
-        Figures in local currency (K/yr or LPA). Actual salaries vary by experience &amp; company.
+        Figures in local currency (K/yr). Actual salaries vary by experience &amp; company.
       </p>
     </div>
   )

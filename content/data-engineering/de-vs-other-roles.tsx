@@ -1222,10 +1222,10 @@ The broader principle: data engineering success is measured by whether downstrea
           What comes next
         </p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          Module 06 covers the Indian data engineering job market — real salary data by city and company type, the companies hiring most aggressively, and how to break in from a non-IT background.
+          Module 06 covers the US data engineering job market — real salary data by city and company type, the companies hiring most aggressively, and how to break in from a non-CS background.
         </p>
-        <Link href="/learn/data-engineering/de-india-job-market" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 06 → Data Engineering in the Indian Job Market (2026)
+        <Link href="/learn/data-engineering/de-usa-job-market" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 06 → Data Engineering in the US Job Market (2026)
         </Link>
       </div>
     </LearnLayout>

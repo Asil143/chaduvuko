@@ -76,10 +76,10 @@ const modules: Module[] = [
   },
   {
     num: '06', phase: 1, color: phaseColors[1], status: 'live', xp: 150, readTime: '35 min',
-    title: 'Data Engineering in the Indian Job Market (2026)',
-    slug: 'de-india-job-market',
-    description: 'Real salary data by city and company type, top hiring companies, skills in demand, and how to break into DE from a non-IT background.',
-    topics: ['Salary by city', 'Company multipliers', 'Top hiring companies', 'Skills in JDs', 'Breaking in from non-IT'],
+    title: 'Data Engineering in the US Job Market (2026)',
+    slug: 'de-usa-job-market',
+    description: 'Real salary data by city and company type, top hiring companies, skills in demand, and how to break into DE from a non-CS background.',
+    topics: ['Salary by city', 'Company multipliers', 'Top hiring companies', 'Skills in JDs', 'Breaking in from non-CS'],
   },
 
   // ── Phase 2 — purple ─────────────────────────────────────────────────────

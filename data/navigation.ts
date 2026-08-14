@@ -62,7 +62,7 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/data-engineering/security-compliance',        title: 'Security & Compliance',             section: 'Data Engineering', difficulty: 'Advanced',     color: '#00c2ff', readTime: '14 min', xp: 200 },
   { href: '/learn/data-engineering/data-governance',            title: 'Data Governance',                   section: 'Data Engineering', difficulty: 'Advanced',     color: '#00c2ff', readTime: '14 min', xp: 200 },
   { href: '/learn/data-engineering/system-design-de',           title: 'System Design for DE',              section: 'Data Engineering', difficulty: 'Advanced',     color: '#00c2ff', readTime: '20 min', xp: 200 },
-  { href: '/learn/data-engineering/de-india-job-market',        title: 'DE India Job Market',               section: 'Data Engineering', difficulty: 'Beginner',     color: '#00c2ff', readTime: '10 min', xp: 100 },
+  { href: '/learn/data-engineering/de-usa-job-market',          title: 'DE USA Job Market',                 section: 'Data Engineering', difficulty: 'Beginner',     color: '#00c2ff', readTime: '10 min', xp: 100 },
   { href: '/learn/data-engineering/de-interview-questions',     title: 'DE Interview Questions',            section: 'Data Engineering', difficulty: 'Intermediate', color: '#00c2ff', readTime: '20 min', xp: 200 },
 
   // Azure Track
