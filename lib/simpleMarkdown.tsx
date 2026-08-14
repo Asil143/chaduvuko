@@ -11,6 +11,42 @@ function matchLabel(line: string): { label: string; rest: string } | null {
   return null
 }
 
+const INLINE_LABEL_PATTERN = /\*{0,2}([A-Z][A-Za-z][A-Za-z /&-]{1,25})\*{0,2}:\s+/g
+const STAGE_PREFIX_PATTERN = /^(.*?)(?:\.\s*)?For the \*{0,2}(.+?)\*{0,2}(?:\s+stage)?,?\s*$/i
+const LEAD_STAGE_PATTERN = /^For the \*{0,2}(.+?)\*{0,2}(?:\s+stage)?,?\s*$/i
+
+type InlineGroup = { stage: string | null; label: string; rest: string }
+
+function splitInlineLabels(line: string): { lead: string; groups: InlineGroup[] } | null {
+  const matches = Array.from(line.matchAll(INLINE_LABEL_PATTERN))
+  if (matches.length < 2) return null
+
+  let lead = line.slice(0, matches[0].index).trim()
+  const leadStage = lead.match(LEAD_STAGE_PATTERN)
+  let pendingStage = leadStage ? leadStage[1].trim() : null
+  if (leadStage) lead = ''
+
+  const groups: InlineGroup[] = []
+  for (let i = 0; i < matches.length; i++) {
+    const label = matches[i][1].trim()
+    const start = matches[i].index! + matches[i][0].length
+    const end = i + 1 < matches.length ? matches[i + 1].index! : line.length
+    let rest = line.slice(start, end).trim().replace(/\.\s*$/, '')
+
+    const stageMatch = rest.match(STAGE_PREFIX_PATTERN)
+    let nextStage: string | null = null
+    if (stageMatch) {
+      rest = stageMatch[1].trim().replace(/\.\s*$/, '')
+      nextStage = stageMatch[2].trim()
+    }
+
+    groups.push({ stage: pendingStage, label, rest })
+    pendingStage = nextStage
+  }
+
+  return { lead, groups }
+}
+
 function renderInline(line: string): ReactNode[] {
   const parts = line.split(/(\*\*.+?\*\*)/g)
   return parts.map((part, i) => {
@@ -141,11 +177,30 @@ export function renderSimpleMarkdown(text: string): JSX.Element[] {
     } else {
       flushList()
       const match = matchLabel(line)
+      const inlineGroups = match ? null : splitInlineLabels(line)
       const isLead = blockCount === 0
       if (match) {
         blocks.push(
           <div key={`p-${key++}`} style={{ marginBottom: 14 }}>
             <LabelRow label={match.label} rest={match.rest} />
+          </div>
+        )
+      } else if (inlineGroups) {
+        blocks.push(
+          <div key={`p-${key++}`} style={{ marginBottom: 14 }}>
+            {inlineGroups.lead && (
+              <p style={{ color: 'var(--muted)', lineHeight: 1.7, marginBottom: 8 }}>{renderInline(inlineGroups.lead)}</p>
+            )}
+            {inlineGroups.groups.map((g, i) => (
+              <div key={i}>
+                {g.stage && (
+                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--text)', marginTop: i === 0 ? 0 : 16, marginBottom: 8 }}>
+                    {g.stage}
+                  </div>
+                )}
+                <LabelRow label={g.label} rest={g.rest} />
+              </div>
+            ))}
           </div>
         )
       } else {
