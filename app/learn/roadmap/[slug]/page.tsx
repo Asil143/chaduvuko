@@ -34,6 +34,15 @@ import { mobileAppDeveloperCurriculum } from '@/data/roadmaps/curriculum/mobile-
 import { siteReliabilityEngineerCurriculum } from '@/data/roadmaps/curriculum/site-reliability-engineer'
 import { cybersecurityAnalystCurriculum } from '@/data/roadmaps/curriculum/cybersecurity-analyst'
 import { cloudSecurityEngineerCurriculum } from '@/data/roadmaps/curriculum/cloud-security-engineer'
+import { backendDevCurriculum } from '@/data/roadmaps/curriculum/backend-dev'
+import { cloudArchitectCurriculum } from '@/data/roadmaps/curriculum/cloud-architect'
+import { databaseAdministratorCurriculum } from '@/data/roadmaps/curriculum/database-administrator'
+import { devopsCurriculum } from '@/data/roadmaps/curriculum/devops'
+import { frontendCurriculum } from '@/data/roadmaps/curriculum/frontend'
+import { javaDeveloperCurriculum } from '@/data/roadmaps/curriculum/java-developer'
+import { platformEngineerCurriculum } from '@/data/roadmaps/curriculum/platform-engineer'
+import { pythonDeveloperCurriculum } from '@/data/roadmaps/curriculum/python-developer'
+import { softwareArchitectCurriculum } from '@/data/roadmaps/curriculum/software-architect'
 import { CurriculumGuide } from '@/components/roadmap/CurriculumGuide'
 
 const ROADMAPS: Record<string, Roadmap> = {
@@ -71,6 +80,15 @@ const CURRICULUM: Record<string, string> = {
   'site-reliability-engineer': siteReliabilityEngineerCurriculum,
   'cybersecurity-analyst':     cybersecurityAnalystCurriculum,
   'cloud-security-engineer':   cloudSecurityEngineerCurriculum,
+  'backend-dev':               backendDevCurriculum,
+  'cloud-architect':           cloudArchitectCurriculum,
+  'database-administrator':    databaseAdministratorCurriculum,
+  'devops':                    devopsCurriculum,
+  'frontend':                  frontendCurriculum,
+  'java-developer':            javaDeveloperCurriculum,
+  'platform-engineer':         platformEngineerCurriculum,
+  'python-developer':          pythonDeveloperCurriculum,
+  'software-architect':        softwareArchitectCurriculum,
 }
 
 interface Props {
