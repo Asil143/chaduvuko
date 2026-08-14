@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { drawCoderCard, type CoderCardData } from '@/lib/coderCard';
 import { registerPlaygroundCompletions } from '@/lib/playgroundCompletions';
+import { PLAYGROUND_CHALLENGES, type PlaygroundChallenge } from '@/data/playgroundChallenges';
 
 const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/KnPtWB3yzR3HM8CcQlHswD?s=cl&p=i&ilr=0';
 const WHATSAPP_POPUP_SESSION_KEY = 'chaduvuko_whatsapp_popup_shown';
@@ -16,6 +17,8 @@ const PG_KEY_LAST_VISIT = 'chaduvuko_pg_last_visit';
 const PG_KEY_FIRST_RUN = 'chaduvuko_pg_first_run_date';
 const PG_KEY_NAME = 'chaduvuko_pg_name';
 const PG_KEY_AI_USES = 'chaduvuko_pg_ai_uses';
+const PG_KEY_CODE_PREFIX = 'chaduvuko_pg_code_';
+const PG_KEY_CHALLENGES_SOLVED = 'chaduvuko_pg_challenges_solved';
 
 const PG_LEVELS: { min: number; label: string; icon: string }[] = [
   { min: 0,   label: 'Rookie',  icon: '🌱' },
@@ -117,6 +120,15 @@ export default function PlaygroundPage() {
   const [mentorLoading, setMentorLoading] = useState(false);
   const [mentorError, setMentorError] = useState('');
 
+  const [stdin, setStdin] = useState('');
+  const [showStdinPanel, setShowStdinPanel] = useState(false);
+
+  const [activeChallenge, setActiveChallenge] = useState<PlaygroundChallenge | null>(null);
+  const [showChallengeModal, setShowChallengeModal] = useState(false);
+  const [challengeResult, setChallengeResult] = useState<'pass' | 'fail' | null>(null);
+  const [solvedChallenges, setSolvedChallenges] = useState<string[]>([]);
+  const [shareCopied, setShareCopied] = useState(false);
+
   useEffect(() => {
     if (sessionStorage.getItem(WHATSAPP_POPUP_SESSION_KEY)) return;
     setShowWhatsappPopup(true);
@@ -127,8 +139,41 @@ export default function PlaygroundPage() {
     setMounted(true);
     try {
       setPgRuns(parseInt(localStorage.getItem(PG_KEY_RUNS) || '0'));
+      setSolvedChallenges(JSON.parse(localStorage.getItem(PG_KEY_CHALLENGES_SOLVED) || '[]'));
+    } catch {}
+
+    // Shared-link takes priority over anything saved locally.
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const shared = params.get('share');
+      if (shared) {
+        const decoded = JSON.parse(atob(decodeURIComponent(shared)));
+        const lang = LANGUAGES.find(l => l.value === decoded.lang);
+        if (lang && typeof decoded.code === 'string') {
+          setSelectedLang(lang);
+          setCode(decoded.code);
+        }
+        params.delete('share');
+        const newUrl = window.location.pathname + (params.toString() ? `?${params}` : '');
+        window.history.replaceState({}, '', newUrl);
+        return;
+      }
+    } catch {}
+
+    // Otherwise restore any previously saved code for the default language.
+    try {
+      const saved = localStorage.getItem(PG_KEY_CODE_PREFIX + LANGUAGES[0].value);
+      if (saved) setCode(saved);
     } catch {}
   }, []);
+
+  // Debounced auto-save of the current code, per language.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      try { localStorage.setItem(PG_KEY_CODE_PREFIX + selectedLang.value, code); } catch {}
+    }, 500);
+    return () => clearTimeout(t);
+  }, [code, selectedLang.value]);
 
   const dismissWhatsappPopup = useCallback(() => setShowWhatsappPopup(false), []);
 
@@ -282,15 +327,44 @@ export default function PlaygroundPage() {
     }
   }, [code, selectedLang, output, stderr]);
 
+  const handleCopyShareLink = useCallback(async () => {
+    try {
+      const payload = btoa(JSON.stringify({ lang: selectedLang.value, code }));
+      const url = `${window.location.origin}${window.location.pathname}?share=${encodeURIComponent(payload)}`;
+      await navigator.clipboard.writeText(url);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2000);
+    } catch {}
+  }, [selectedLang, code]);
+
+  const openChallengeModal = useCallback(() => setShowChallengeModal(true), []);
+
+  const selectChallenge = useCallback((challenge: PlaygroundChallenge) => {
+    setActiveChallenge(challenge);
+    setChallengeResult(null);
+    setShowChallengeModal(false);
+  }, []);
+
+  const clearChallenge = useCallback(() => {
+    setActiveChallenge(null);
+    setChallengeResult(null);
+  }, []);
+
   const handleLangChange = useCallback((value: string) => {
     const lang = LANGUAGES.find(l => l.value === value) ?? LANGUAGES[0];
     setSelectedLang(lang);
-    setCode(STARTER_CODE[value] ?? '');
+    let nextCode = STARTER_CODE[value] ?? '';
+    try {
+      const saved = localStorage.getItem(PG_KEY_CODE_PREFIX + value);
+      if (saved) nextCode = saved;
+    } catch {}
+    setCode(nextCode);
     setOutput('');
     setStderr('');
     setRan(false);
     setMentorReply('');
     setMentorError('');
+    setChallengeResult(null);
   }, []);
 
   const handleRun = useCallback(async () => {
@@ -300,6 +374,7 @@ export default function PlaygroundPage() {
     setRan(false);
     setMentorReply('');
     setMentorError('');
+    setChallengeResult(null);
 
     if (selectedLang.value === 'sql') {
       setOutput('SQL execution coming soon — we\'re building an in-browser SQL runner.');
@@ -334,6 +409,7 @@ export default function PlaygroundPage() {
         body: JSON.stringify({
           language_id: languageIdMap[pistonLanguage],
           source_code: code,
+          stdin,
         })
       });
 
@@ -345,8 +421,22 @@ export default function PlaygroundPage() {
         || 'No output returned.';
       setOutput(output);
 
-      if (result.stdout && !result.stderr && !result.compile_output) {
+      const cleanRun = result.stdout && !result.stderr && !result.compile_output;
+      if (cleanRun) {
         recordSuccessfulRun(selectedLang.value);
+      }
+
+      if (activeChallenge) {
+        const passed = cleanRun && String(result.stdout).trim() === activeChallenge.expectedOutput.trim();
+        setChallengeResult(passed ? 'pass' : 'fail');
+        if (passed) {
+          setSolvedChallenges(prev => {
+            if (prev.includes(activeChallenge.id)) return prev;
+            const next = [...prev, activeChallenge.id];
+            try { localStorage.setItem(PG_KEY_CHALLENGES_SOLVED, JSON.stringify(next)); } catch {}
+            return next;
+          });
+        }
       }
     } catch (err: unknown) {
       setStderr(err instanceof Error ? err.message : 'Unknown error');
@@ -354,7 +444,7 @@ export default function PlaygroundPage() {
       setLoading(false);
       setRan(true);
     }
-  }, [code, selectedLang, recordSuccessfulRun]);
+  }, [code, selectedLang, recordSuccessfulRun, stdin, activeChallenge]);
 
   return (
     <>
@@ -719,6 +809,139 @@ export default function PlaygroundPage() {
           font-size: 0.85rem;
           line-height: 1.6;
         }
+        .challenge-banner {
+          border-bottom: 1px solid var(--border);
+          background: var(--surface);
+          padding: 14px 24px;
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 16px;
+          flex-shrink: 0;
+        }
+        .challenge-banner-main { flex: 1; min-width: 0; }
+        .challenge-banner-title-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 4px;
+          flex-wrap: wrap;
+        }
+        .challenge-banner-title { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+        .challenge-diff {
+          font-size: 0.65rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+          padding: 2px 8px;
+          border-radius: 20px;
+        }
+        .challenge-diff-Easy { background: rgba(0,230,118,0.12); color: var(--green); }
+        .challenge-diff-Medium { background: rgba(255,193,7,0.14); color: #ffc107; }
+        .challenge-diff-Hard { background: rgba(255,71,87,0.12); color: var(--red); }
+        .challenge-result-badge {
+          font-size: 0.7rem;
+          font-weight: 700;
+          padding: 2px 9px;
+          border-radius: 20px;
+        }
+        .challenge-result-pass { background: rgba(0,230,118,0.14); color: var(--green); }
+        .challenge-result-fail { background: rgba(255,71,87,0.12); color: var(--red); }
+        .challenge-banner-prompt { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+        .challenge-clear-btn {
+          flex-shrink: 0;
+          background: transparent;
+          border: 1px solid var(--border);
+          color: var(--muted);
+          padding: 5px 12px;
+          border-radius: 6px;
+          font-size: 0.75rem;
+          cursor: pointer;
+          font-family: inherit;
+        }
+        .challenge-clear-btn:hover { border-color: var(--red); color: var(--red); }
+        .stdin-panel {
+          border: 1px solid var(--border);
+          border-top: none;
+          background: var(--surface);
+          flex-shrink: 0;
+        }
+        .stdin-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 6px 16px;
+          cursor: pointer;
+          user-select: none;
+        }
+        .stdin-label {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--muted);
+        }
+        .stdin-chevron { font-size: 0.7rem; color: var(--muted); }
+        .stdin-textarea {
+          width: 100%;
+          background: var(--bg);
+          border: none;
+          border-top: 1px solid var(--border);
+          color: var(--text);
+          padding: 10px 16px;
+          font-family: var(--font-mono, monospace);
+          font-size: 0.82rem;
+          line-height: 1.6;
+          resize: vertical;
+          min-height: 60px;
+          outline: none;
+        }
+        .share-copied-toast {
+          font-size: 0.7rem;
+          color: var(--green);
+          font-weight: 600;
+        }
+        .challenge-modal {
+          max-width: 520px;
+          text-align: left;
+        }
+        .challenge-modal-title {
+          font-size: 1.05rem;
+          font-weight: 700;
+          color: var(--text);
+          margin-bottom: 16px;
+          font-family: var(--font-display, sans-serif);
+          text-align: center;
+        }
+        .challenge-modal-list {
+          max-height: 60vh;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .challenge-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          background: var(--bg);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 10px 14px;
+          cursor: pointer;
+          text-align: left;
+          font-family: inherit;
+          transition: border-color 0.15s;
+        }
+        .challenge-item:hover { border-color: var(--green); }
+        .challenge-item-title {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: var(--text);
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
       `}</style>
       <div className="pg-root">
         {showWhatsappPopup && (
@@ -791,6 +1014,24 @@ export default function PlaygroundPage() {
             </div>
           </div>
         )}
+        {showChallengeModal && (
+          <div className="card-overlay" onClick={() => setShowChallengeModal(false)}>
+            <div className="card-modal challenge-modal" onClick={e => e.stopPropagation()}>
+              <button className="wa-close" onClick={() => setShowChallengeModal(false)} aria-label="Close">✕</button>
+              <div className="challenge-modal-title">🎯 Pick a Challenge</div>
+              <div className="challenge-modal-list">
+                {PLAYGROUND_CHALLENGES.map(ch => (
+                  <button key={ch.id} className="challenge-item" onClick={() => selectChallenge(ch)}>
+                    <span className="challenge-item-title">
+                      {solvedChallenges.includes(ch.id) && '✅'} {ch.title}
+                    </span>
+                    <span className={`challenge-diff challenge-diff-${ch.difficulty}`}>{ch.difficulty}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
         <header className="pg-header">
           <span className="pg-title">Code <span>Playground</span> — Chaduvuko</span>
           <div className="pg-controls">
@@ -799,6 +1040,12 @@ export default function PlaygroundPage() {
                 🎴 My Card
               </button>
             )}
+            <button className="card-trigger-btn" onClick={openChallengeModal}>
+              🎯 Challenges
+            </button>
+            <button className="card-trigger-btn" onClick={handleCopyShareLink}>
+              {shareCopied ? <span className="share-copied-toast">Copied!</span> : '🔗 Share'}
+            </button>
             <select
               className="pg-select"
               value={selectedLang.value}
@@ -814,6 +1061,27 @@ export default function PlaygroundPage() {
             </button>
           </div>
         </header>
+
+        {activeChallenge && (
+          <div className="challenge-banner">
+            <div className="challenge-banner-main">
+              <div className="challenge-banner-title-row">
+                <span className="challenge-banner-title">🎯 {activeChallenge.title}</span>
+                <span className={`challenge-diff challenge-diff-${activeChallenge.difficulty}`}>
+                  {activeChallenge.difficulty}
+                </span>
+                {challengeResult === 'pass' && (
+                  <span className="challenge-result-badge challenge-result-pass">✓ Solved</span>
+                )}
+                {challengeResult === 'fail' && (
+                  <span className="challenge-result-badge challenge-result-fail">Not quite — check output</span>
+                )}
+              </div>
+              <div className="challenge-banner-prompt">{activeChallenge.prompt}</div>
+            </div>
+            <button className="challenge-clear-btn" onClick={clearChallenge}>Clear</button>
+          </div>
+        )}
 
         <div className="pg-editor-wrap">
           <div className="pg-editor">
@@ -847,6 +1115,21 @@ export default function PlaygroundPage() {
                 formatOnType: true,
               }}
             />
+          </div>
+
+          <div className="stdin-panel">
+            <div className="stdin-header" onClick={() => setShowStdinPanel(v => !v)}>
+              <span className="stdin-label">⌨ Input (stdin){stdin && ' · has input'}</span>
+              <span className="stdin-chevron">{showStdinPanel ? '▲' : '▼'}</span>
+            </div>
+            {showStdinPanel && (
+              <textarea
+                className="stdin-textarea"
+                placeholder="Values your program reads via stdin, one per line…"
+                value={stdin}
+                onChange={e => setStdin(e.target.value)}
+              />
+            )}
           </div>
 
           <div className="pg-output-panel">
