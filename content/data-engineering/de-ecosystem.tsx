@@ -1105,7 +1105,7 @@ What this JD is really asking:
       <Divider />
 
       {/* ── Part 06 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 06 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -1189,7 +1189,7 @@ What this JD is really asking:
       <Divider />
 
       {/* ── Part 07 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 07 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -1272,7 +1272,7 @@ I would not implement a table format (Delta Lake, Iceberg) or a formal data qual
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
 

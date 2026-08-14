@@ -851,7 +851,7 @@ OPTIMISATION 4: Coalesce vs repartition — know the difference
       <Divider />
 
       {/* ── Part 08 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 08 — Real World" />
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12, fontFamily: 'var(--font-mono)' }}>
           💼 What This Looks Like at Work
@@ -978,7 +978,7 @@ SUMMARY OF FIXES APPLIED:
       <Divider />
 
       {/* ── Part 09 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 09 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -1058,7 +1058,7 @@ Fifth, check for architectural issues: is the same source data read multiple tim
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
 

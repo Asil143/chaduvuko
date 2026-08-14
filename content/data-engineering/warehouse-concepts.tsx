@@ -885,7 +885,7 @@ WHERE o.order_date = '2026-03-17';
       <Divider />
 
       {/* ── Part 08 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 08 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -994,7 +994,7 @@ ALTER USER analyst_priya SET DEFAULT_WAREHOUSE = 'ANALYST_WH';
       <Divider />
 
       {/* ── Part 09 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 09 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -1077,7 +1077,7 @@ Fifth, check if the result cache was invalidated more frequently. If the pipelin
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
 

@@ -675,7 +675,7 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
       <Divider />
 
       {/* ── Part 09 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 09 — Real World" />
         <SectionTitle>From Retail Manager to Data Engineer — A Real Career Story</SectionTitle>
 
@@ -732,7 +732,7 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
       <Divider />
 
       {/* ── Part 10 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 10 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 

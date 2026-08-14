@@ -1335,7 +1335,7 @@ git merge --abort                   # abandon the merge, go back to pre-merge st
       <Divider />
 
       {/* ── Part 10 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 10 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -1439,7 +1439,7 @@ git push origin main
       <Divider />
 
       {/* ── Part 11 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 11 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -1518,7 +1518,7 @@ Step four: prevent recurrence. Add .env and any other credential-containing file
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
 

@@ -1620,7 +1620,7 @@ if __name__ == '__main__':
       <Divider />
 
       {/* ── Part 09 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 09 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -1735,7 +1735,7 @@ curl -s -I -H "X-API-Key: \${SHIPFAST_API_KEY}" \
       <Divider />
 
       {/* ── Part 10 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 10 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -1816,7 +1816,7 @@ The practical difference in implementation: API key pipelines send the same stat
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
 

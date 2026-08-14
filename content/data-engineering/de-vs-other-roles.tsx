@@ -934,7 +934,7 @@ Consistent daily practice beats intensive weekend sprints.`}</CodeBox>
       <Divider />
 
       {/* ── Part 09 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 09 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -1061,7 +1061,7 @@ Consistent daily practice beats intensive weekend sprints.`}</CodeBox>
       <Divider />
 
       {/* ── Part 10 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 10 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -1140,7 +1140,7 @@ The broader principle: data engineering success is measured by whether downstrea
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
 

@@ -815,7 +815,7 @@ Best for:                           Best for:
       <Divider />
 
       {/* ── Part 09 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 09 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -899,7 +899,7 @@ Best for:                           Best for:
       <Divider />
 
       {/* ── Part 10 — Misconceptions ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
         <SectionTag text="// Part 10 — Misconceptions That Will Slow You Down" />
         <SectionTitle>Five Misconceptions That Hurt Data Engineers</SectionTitle>
 
@@ -950,7 +950,7 @@ Best for:                           Best for:
       <Divider />
 
       {/* ── Part 11 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 11 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -1021,7 +1021,7 @@ Practically, this means: preserving source timestamps so analysts know when even
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
 

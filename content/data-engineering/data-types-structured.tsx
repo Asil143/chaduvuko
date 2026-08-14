@@ -993,7 +993,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
       <Divider />
 
       {/* ── Part 07 — Real Company Examples ─────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 07 — Real World Examples" />
         <SectionTitle>How Real Companies Handle All Three Types</SectionTitle>
 
@@ -1107,7 +1107,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
       <Divider />
 
       {/* ── Part 08 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 08 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -1193,7 +1193,7 @@ RESPONSIBILITY 3: Build Processing Pipelines
       <Divider />
 
       {/* ── Part 09 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 09 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -1284,7 +1284,7 @@ Fourth, when storage cost of the repeated keys is a concern. JSON stores keys wi
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
 

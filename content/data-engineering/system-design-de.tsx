@@ -1305,7 +1305,7 @@ spark.sql("""
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Design Mistakes You Will Make — And Exactly Why They Happen</SectionTitle>
 

@@ -1450,7 +1450,7 @@ SELECT * FROM orders FETCH FIRST 10 ROWS ONLY;  -- SQL standard`}</CodeBox>
       <Divider />
 
       {/* ── Part 11 — Real World ─────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 11 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
@@ -1586,7 +1586,7 @@ ORDER BY order_date DESC, category, store_rank_in_category;`}</CodeBox>
       <Divider />
 
       {/* ── Part 12 — Interview Prep ─────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
         <SectionTag text="// Part 12 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
@@ -1691,7 +1691,7 @@ Use UNION (without ALL) only when you genuinely want to find the set of distinct
       <Divider />
 
       {/* ── Error Library ────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
         <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
 
