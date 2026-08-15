@@ -25,6 +25,22 @@ const CHIP_COLOR: Record<Exclude<Kind, 'part' | 'plain'>, string> = {
   prep: 'var(--accent2)',
 }
 
+// Fallback classifier for tracks without a data-toc-kind attribute (SQL, AI/ML, etc.) —
+// keys off the heading text itself, matching the recurring title conventions those
+// tracks already use for their "real world" / "interview prep" / "mistakes" sections.
+function classifyByText(text: string): Kind {
+  const t = text.trim()
+  if (/^What This Looks Like at Work/i.test(t)) return 'story'
+  if (/^Interview Prep/i.test(t)) return 'prep'
+  if (
+    /^Errors You Will Hit/i.test(t) ||
+    /^Every common .*(mistake|error)/i.test(t) ||
+    /^(Common|Design) .*Mistakes/i.test(t) ||
+    /Mistakes?\s*—/i.test(t)
+  ) return 'plain'
+  return 'part'
+}
+
 export function TableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([])
   const [active, setActive]     = useState<string>('')
@@ -41,10 +57,11 @@ export function TableOfContents() {
 
       if (isH2) {
         mainIndex++
+        const text = el.textContent || ''
         const kindAttr = el.closest('section')?.getAttribute('data-toc-kind') as Kind | null
-        const kind: Kind = kindAttr ?? 'part'
+        const kind: Kind = kindAttr ?? classifyByText(text)
         const partNum = kind === 'part' ? ++partCount : null
-        return { id: el.id, text: el.textContent || '', level: 2, kind, partNum, mainIndex }
+        return { id: el.id, text, level: 2, kind, partNum, mainIndex }
       }
 
       // h3 — inherits the current mainIndex/kind context, never numbered itself
