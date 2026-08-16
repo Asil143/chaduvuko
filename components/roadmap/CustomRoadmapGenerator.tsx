@@ -288,7 +288,9 @@ export default function CustomRoadmapGenerator() {
       </p>
 
       {guideError && (
-        <p style={{ fontSize: 13, color: '#ff4757', marginTop: 16 }}>{guideError}</p>
+        <p style={{ fontSize: 13, color: '#ff4757', marginTop: 16 }}>
+          {process.env.NODE_ENV === 'development' ? guideError : "Something went wrong building your guide — please try again."}
+        </p>
       )}
 
       {(videoLoading || videoResult || (videoDebug && process.env.NODE_ENV === 'development')) && (
@@ -299,7 +301,13 @@ export default function CustomRoadmapGenerator() {
 
       {guideReply && (
         guideReply.startsWith('DEBUG') ? (
-          <p style={{ fontSize: 13, color: '#ff4757', marginTop: 16 }}>{guideReply}</p>
+          process.env.NODE_ENV === 'development' ? (
+            <p style={{ fontSize: 13, color: '#ff4757', marginTop: 16 }}>{guideReply}</p>
+          ) : (
+            <p style={{ fontSize: 13, color: '#ff4757', marginTop: 16 }}>
+              Something went wrong building your guide — please try again in a moment.
+            </p>
+          )
         ) : (
           <div
             style={{

@@ -90,6 +90,37 @@ function buildProfileBlock(profile: Record<string, string> | undefined): string 
   return `\n\nStudent profile (fill in reasonable assumptions for anything not listed here):\n${lines.join('\n')}`
 }
 
+const PRIMARY_MODEL = 'llama-3.3-70b-versatile'
+const FALLBACK_MODEL = 'llama-3.1-8b-instant'
+
+function isRateLimited(status: number, data: unknown): boolean {
+  if (status === 429) return true
+  const code = (data as { error?: { code?: string; type?: string } })?.error?.code
+  const type = (data as { error?: { code?: string; type?: string } })?.error?.type
+  return code === 'rate_limit_exceeded' || type === 'rate_limit_exceeded'
+}
+
+async function callGroq(apiKey: string, model: string, userMessage: string) {
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      max_tokens: 8000,
+      temperature: 0.5,
+      messages: [
+        { role: 'system', content: SYSTEM },
+        { role: 'user', content: userMessage },
+      ],
+    }),
+  })
+  const data = await response.json()
+  return { response, data }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { topic, profile } = await req.json()
@@ -105,31 +136,20 @@ export async function POST(req: NextRequest) {
 
     const userMessage = `Technology/topic: ${topic}${buildProfileBlock(profile)}`
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        max_tokens: 8000,
-        temperature: 0.5,
-        messages: [
-          { role: 'system', content: SYSTEM },
-          { role: 'user', content: userMessage },
-        ],
-      }),
-    })
+    let { response, data } = await callGroq(apiKey, PRIMARY_MODEL, userMessage)
+    let usedFallback = false
 
-    const data = await response.json()
+    if (!response.ok && isRateLimited(response.status, data)) {
+      usedFallback = true
+      ;({ response, data } = await callGroq(apiKey, FALLBACK_MODEL, userMessage))
+    }
 
     if (!response.ok) {
       return NextResponse.json({ reply: `DEBUG Groq error ${response.status}: ${JSON.stringify(data?.error?.message || data)}` })
     }
 
     const reply = data.choices?.[0]?.message?.content || 'No reply from Groq.'
-    return NextResponse.json({ reply })
+    return NextResponse.json({ reply, ...(usedFallback ? { usedFallback: true } : {}) })
 
   } catch (error) {
     return NextResponse.json({ reply: `DEBUG exception: ${String(error)}` })
