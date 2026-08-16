@@ -291,7 +291,7 @@ export default function CustomRoadmapGenerator() {
         <p style={{ fontSize: 13, color: '#ff4757', marginTop: 16 }}>{guideError}</p>
       )}
 
-      {(videoLoading || videoResult || videoDebug) && (
+      {(videoLoading || videoResult || (videoDebug && process.env.NODE_ENV === 'development')) && (
         <div style={{ marginTop: 24 }}>
           <VideoResultCard video={videoResult} loading={videoLoading} debug={videoDebug} />
         </div>

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { YouTube } from 'youtube-sr'
 
 const QUERY_SYSTEM = `Convert the student's learning goal into a concise, effective YouTube search query (3-8 words) that would surface the best tutorial video on the topic. Reply with ONLY the search query, nothing else — no quotes, no explanation.`
 
-const DAY = 60 * 60 * 24
-const REVALIDATE = DAY * 30
+const REVALIDATE = 60 * 60 * 24 * 30
 
 type YouTubeVideo = {
   id: string
@@ -11,7 +11,6 @@ type YouTubeVideo = {
   channelTitle: string
   thumbnailUrl: string
   viewCount: number
-  likeCount: number
   url: string
 }
 
@@ -45,13 +44,21 @@ async function deriveSearchQuery(topic: string): Promise<string> {
   }
 }
 
-function parseDurationSeconds(iso: string): number {
-  const match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/)
-  if (!match) return 0
-  const hours = parseInt(match[1] || '0')
-  const minutes = parseInt(match[2] || '0')
-  const seconds = parseInt(match[3] || '0')
-  return hours * 3600 + minutes * 60 + seconds
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+async function searchWithRetry(query: string, attempts = 3) {
+  let lastError: unknown
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await YouTube.search(query, { limit: 15, type: 'video', safeSearch: true })
+    } catch (err) {
+      lastError = err
+      if (i < attempts - 1) await sleep(600 * (i + 1))
+    }
+  }
+  throw lastError
 }
 
 export async function POST(req: NextRequest) {
@@ -62,67 +69,28 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ video: null, debug: 'DEBUG: no topic provided.' })
     }
 
-    const apiKey = process.env.YOUTUBE_API_KEY
-    if (!apiKey) {
-      return NextResponse.json({ video: null, debug: 'DEBUG: YOUTUBE_API_KEY is missing from environment variables.' })
-    }
-
     const query = await deriveSearchQuery(topic)
 
-    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&order=relevance&safeSearch=strict&maxResults=15&q=${encodeURIComponent(query)}&key=${apiKey}`
-    const searchRes = await fetch(searchUrl, { next: { revalidate: REVALIDATE } })
-    const searchData = await searchRes.json()
+    const results = await searchWithRetry(query)
 
-    if (!searchRes.ok) {
-      return NextResponse.json({ video: null, debug: `DEBUG YouTube search error ${searchRes.status}: ${JSON.stringify(searchData?.error?.message || searchData)}` })
-    }
+    let best: { video: YouTubeVideo; views: number } | null = null
 
-    const videoIds: string[] = (searchData.items || [])
-      .map((item: { id?: { videoId?: string } }) => item.id?.videoId)
-      .filter(Boolean)
-
-    if (videoIds.length === 0) {
-      return NextResponse.json({ video: null, debug: 'DEBUG: no candidate videos found for this topic.' })
-    }
-
-    const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&id=${videoIds.join(',')}&key=${apiKey}`
-    const detailsRes = await fetch(detailsUrl, { next: { revalidate: REVALIDATE } })
-    const detailsData = await detailsRes.json()
-
-    if (!detailsRes.ok) {
-      return NextResponse.json({ video: null, debug: `DEBUG YouTube videos error ${detailsRes.status}: ${JSON.stringify(detailsData?.error?.message || detailsData)}` })
-    }
-
-    type RawItem = {
-      id: string
-      snippet: { title: string; channelTitle: string; thumbnails?: { high?: { url: string }; medium?: { url: string }; default?: { url: string } } }
-      statistics: { viewCount?: string; likeCount?: string }
-      contentDetails: { duration: string }
-    }
-
-    const candidates = (detailsData.items || []) as RawItem[]
-
-    let best: { video: YouTubeVideo; score: number } | null = null
-
-    for (const item of candidates) {
-      const durationSeconds = parseDurationSeconds(item.contentDetails.duration)
+    for (const item of results) {
+      if (item.type !== 'video' || item.live) continue
+      const durationSeconds = (item.duration || 0) / 1000
       if (durationSeconds < 120) continue
 
-      const viewCount = Number(item.statistics.viewCount || 0)
-      const likeCount = Number(item.statistics.likeCount || 0)
-      const score = Math.log10(viewCount + 10) * (1 + (likeCount / Math.max(viewCount, 1)) * 20)
-
-      if (!best || score > best.score) {
+      const views = item.views || 0
+      if (!best || views > best.views) {
         best = {
-          score,
+          views,
           video: {
-            id: item.id,
-            title: item.snippet.title,
-            channelTitle: item.snippet.channelTitle,
-            thumbnailUrl: item.snippet.thumbnails?.high?.url || item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || '',
-            viewCount,
-            likeCount,
-            url: `https://www.youtube.com/watch?v=${item.id}`,
+            id: item.id || '',
+            title: item.title || '',
+            channelTitle: item.channel?.name || 'Unknown channel',
+            thumbnailUrl: item.thumbnail?.url || '',
+            viewCount: views,
+            url: item.url || `https://www.youtube.com/watch?v=${item.id}`,
           },
         }
       }

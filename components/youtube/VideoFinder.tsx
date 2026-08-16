@@ -108,7 +108,7 @@ export function VideoFinder() {
       {searched && (
         <div style={{ marginTop: 20 }}>
           <VideoResultCard video={video} loading={loading} debug={debug} />
-          {!loading && !video && !debug && (
+          {!loading && !video && (process.env.NODE_ENV !== 'development' || !debug) && (
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>No strong video match found — try rephrasing your topic.</p>
           )}
         </div>

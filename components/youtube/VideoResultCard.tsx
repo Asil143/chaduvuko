@@ -4,7 +4,6 @@ export type YouTubeVideo = {
   channelTitle: string
   thumbnailUrl: string
   viewCount: number
-  likeCount: number
   url: string
 }
 
@@ -31,7 +30,7 @@ export function VideoResultCard({
     )
   }
 
-  if (debug) {
+  if (debug && process.env.NODE_ENV === 'development') {
     return (
       <div style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 10, padding: '16px 18px', marginBottom: 16 }}>
         <p style={{ fontSize: 13, color: '#ff4757' }}>{debug}</p>
@@ -74,7 +73,7 @@ export function VideoResultCard({
           {video.title}
         </div>
         <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-          {video.channelTitle} · {formatCount(video.viewCount)} views · {formatCount(video.likeCount)} likes
+          {video.channelTitle} · {formatCount(video.viewCount)} views
         </div>
       </div>
     </a>
