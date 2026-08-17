@@ -16,6 +16,7 @@ import { getPrevNext, getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navig
 import SQLSectionNav from '@/components/sql/SQLSectionNav'
 import DESectionNav from '@/components/data-engineering/DESectionNav'
 import PythonSectionNav from '@/components/python/PythonSectionNav'
+import HtmlCssSectionNav from '@/components/html-css/HtmlCssSectionNav'
 import { AIML_SECTIONS } from '@/data/aiml-curriculum'
 import { SQL_CURRICULUM } from '@/data/sql-freshcart'
 import { DS_CURRICULUM } from '@/data/datascience-streampulse'
@@ -178,6 +179,8 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const deSlug = deMatch ? deMatch[1] : null
   const pyMatch = pathname.match(/^\/learn\/python\/([^/]+)$/)
   const pySlug = pyMatch ? pyMatch[1] : null
+  const htmlCssMatch = pathname.match(/^\/learn\/html-css\/([^/]+)$/)
+  const htmlCssSlug = htmlCssMatch ? htmlCssMatch[1] : null
   const dsMatch = pathname.match(/^\/learn\/data-science\/([^/]+)$/)
   const dsSlug = dsMatch ? dsMatch[1] : null
   const isAIML = pathname.startsWith('/learn/ai-ml/')
@@ -302,6 +305,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
                 {sqlSlug && <SQLSectionNav slug={sqlSlug} />}
                 {deSlug && <DESectionNav slug={deSlug} />}
                 {pySlug && <PythonSectionNav slug={pySlug} />}
+                {htmlCssSlug && <HtmlCssSectionNav slug={htmlCssSlug} />}
                 {children}
               </div>
 
