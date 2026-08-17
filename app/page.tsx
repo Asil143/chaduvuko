@@ -45,7 +45,7 @@ const tracksAll = [
 { cat:'ai', icon:'📈', name:'Data Science',            desc:'Python, pandas, statistics, and predictive modelling — one live in-browser dataset',    pills:['Pandas','NumPy','Stats','EDA'],          jobs:'Data Scientist · Analytics Consultant', status:'live', href:'/learn/data-science' },
 { cat:'ai', icon:'🔍', name:'MLOps',                   desc:'Deploy and monitor ML in production',  pills:['MLflow','Docker','Kubeflow','CI/CD'],         jobs:'MLOps Engineer · ML Platform Eng', status:'soon', href:'/learn/ai-ml' },
   // Programming Languages
-  { cat:'prog',  icon:'🐍',  name:'Python',                 desc:'Zero to production Python', pills:['Basics','OOP','FastAPI','Testing','Async'],    jobs:'Backend Dev · ML Engineer · Data Analyst',  status:'soon', href:'#' },
+  { cat:'prog',  icon:'🐍',  name:'Python',                 desc:'Zero to production Python', pills:['Basics','OOP','FastAPI','Testing','Async'],    jobs:'Backend Dev · ML Engineer · Data Analyst',  status:'live', href:'/learn/python' },
   { cat:'prog',  icon:'☕',  name:'Java',                   desc:'Core Java to Spring Boot microservices', pills:['OOP','Collections','Spring Boot','JPA'], jobs:'Java Dev · Backend Engineer',             status:'soon', href:'#' },
   { cat:'prog',  icon:'💛',  name:'JavaScript',             desc:'Modern JS from fundamentals to advanced', pills:['ES6+','Async/Await','DOM','APIs'], jobs:'Frontend Dev · Full Stack Dev',             status:'soon', href:'#' },
   { cat:'prog',  icon:'🔷',  name:'TypeScript',             desc:'Typed JS for production applications', pills:['Types','Interfaces','Generics','Utility Types'], jobs:'Frontend Dev · Backend Dev',         status:'soon', href:'#' },
@@ -54,7 +54,7 @@ const tracksAll = [
   { cat:'prog',  icon:'🔥',  name:'Kotlin',                 desc:'Android and JVM backend development', pills:['Coroutines','Jetpack','Spring Boot'],  jobs:'Android Dev · Backend Dev',                 status:'soon', href:'#' },
   { cat:'prog',  icon:'📜',  name:'Bash / Shell Scripting', desc:'Automate everything on Linux', pills:['Scripts','Cron Jobs','File Ops','Pipelines'], jobs:'DevOps Eng · SysAdmin',                    status:'soon', href:'#' },
   // Web Dev
-  { cat:'web',   icon:'🌐',  name:'HTML & CSS',             desc:'Web foundations done right', pills:['Semantic HTML','Flexbox','CSS Grid','Responsive'], jobs:'Frontend Dev · Web Designer',            status:'soon', href:'#' },
+  { cat:'web',   icon:'🌐',  name:'HTML & CSS',             desc:'Web foundations done right', pills:['Semantic HTML','Flexbox','CSS Grid','Responsive'], jobs:'Frontend Dev · Web Designer',            status:'live', href:'/learn/html-css' },
   { cat:'web',   icon:'⚛️', name:'React.js',               desc:'Component-based UI at production scale', pills:['Hooks','Context','Redux','Testing'], jobs:'Frontend Dev · React Developer',            status:'soon', href:'#' },
   { cat:'web',   icon:'🟢',  name:'Node.js',                desc:'JavaScript on the server side', pills:['Express','REST APIs','JWT Auth','WebSockets'], jobs:'Backend Dev · Full Stack Dev',             status:'soon', href:'#' },
   { cat:'web',   icon:'▲',  name:'Next.js',                desc:'Full-stack React with SSR and App Router', pills:['SSR','SSG','App Router','API Routes'], jobs:'Full Stack Dev · Frontend Dev',          status:'soon', href:'#' },
@@ -210,8 +210,12 @@ export default function HomePage() {
   const salMin = r(band.min), salMax = r(band.max), salMed = r(band.med)
   const barPct = Math.min(95, Math.round((salMed / 400) * 100))
 
-  // Filtered tracks
-  const filteredTracks = trackCat === 'all' ? tracksAll : tracksAll.filter(t => t.cat === trackCat)
+  // Filtered tracks — live tracks always sort before "soon" placeholders, so a newly
+  // shipped track is immediately visible in the default (non-expanded) view instead of
+  // depending on its accidental position in the source array.
+  const filteredTracks = (trackCat === 'all' ? tracksAll : tracksAll.filter(t => t.cat === trackCat))
+    .slice()
+    .sort((a, b) => (a.status === 'live' ? 0 : 1) - (b.status === 'live' ? 0 : 1))
   const visibleTracks = showAllTracks ? filteredTracks : filteredTracks.slice(0, 16)
 
   const trackCategories = [
