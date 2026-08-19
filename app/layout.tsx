@@ -118,30 +118,28 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: 'Asil — Free Data Engineering & Cloud Learning',
+    title: 'Chaduvuko — Free IT Learning Platform',
     description:
-      'Master Data Engineering for free. Azure, AWS, GCP tutorials, real-world projects, and interview prep. Built by Asil — no paywall, ever.',
+      'Free structured learning for every branch of IT — Data Engineering, Python, SQL, Web Dev, AI/ML and more. Built for the US job market. No paywall, ever.',
     type: 'website',
     url: 'https://chaduvuko.com',
-    siteName: 'Asil — Free Data Engineering Learning',
+    siteName: 'Chaduvuko',
     locale: 'en_US',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Asil — Free Data Engineering & Cloud Learning',
-      },
-    ],
+    // No explicit `images` here — app/opengraph-image.tsx (the Next.js file
+    // convention) generates and injects og:image automatically, and always
+    // takes precedence over anything listed here, so keeping a stale/redundant
+    // entry here in the future would just silently be ignored again.
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: 'Asil — Free Data Engineering & Cloud Learning',
+    title: 'Chaduvuko — Free IT Learning Platform',
     description:
-      'Free Azure, AWS, GCP tutorials + real projects + interview prep. Built by Asil — no paywall.',
+      'Free Data Engineering, Python, SQL, Web Dev, and AI/ML tutorials, real projects, and interview prep. Built by Asil — no paywall.',
     creator: '@Asil143',
-    images: ['/og-image.png'],
+    // No explicit `images` here either — see the openGraph comment above;
+    // app/opengraph-image.tsx covers twitter:image too since no separate
+    // twitter-image.tsx file exists.
   },
 
   verification: {
