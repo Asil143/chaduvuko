@@ -35,7 +35,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'beginner',
       time: '2–3 hrs',
       description: 'File system, grep, tail, awk, ssh. You will debug live cloud pipelines in a terminal daily. No GUI can save you at 2am during an incident.',
-      href: '/learn/foundations/linux',
+      href: '/learn/data-engineering/linux-shell',
       x: 30, y: 120, width: 130, height: 60,
     },
     {
@@ -47,7 +47,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'beginner',
       time: '2–3 hrs',
       description: 'Commits, branches, pull requests, merge conflicts. Every professional data job uses Git from day one. Interviewers check your GitHub.',
-      href: '/learn/foundations/git',
+      href: '/learn/data-engineering/git-for-data',
       x: 225, y: 120, width: 130, height: 60,
     },
     {
@@ -59,6 +59,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'beginner',
       time: '3 hrs',
       description: 'TCP/IP, DNS, HTTP, ports. Enough to understand why cloud resources need VNets, NSGs, and private endpoints.',
+      href: '/learn/networking/what-is-a-network',
       x: 450, y: 120, width: 130, height: 60,
     },
     {
@@ -70,7 +71,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'beginner',
       time: '5–6 hrs',
       description: 'Functions, file I/O, REST API calls, error handling. Aim to write working scripts without Googling syntax. Pandas comes right after.',
-      href: '/learn/foundations/python',
+      href: '/learn/python',
       x: 110, y: 220, width: 130, height: 60,
     },
     {
@@ -82,7 +83,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'beginner',
       time: '4–5 hrs',
       description: 'SELECT, JOINs, GROUP BY, subqueries. The language used in every data role, every single day. You cannot skip this.',
-      href: '/learn/foundations/sql',
+      href: '/learn/sql',
       x: 395, y: 220, width: 130, height: 60,
     },
     {
@@ -94,7 +95,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'beginner',
       time: '6–8 hrs',
       description: 'DataFrames, groupby, merge, reshape, apply. The standard Python manipulation layer before data reaches a warehouse or Spark cluster.',
-      href: '/learn/foundations/pandas',
+      href: '/learn/python/numpy-pandas-intro',
       x: 30, y: 320, width: 145, height: 60,
     },
     {
@@ -106,7 +107,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'intermediate',
       time: '5–6 hrs',
       description: 'Window functions, CTEs, EXPLAIN plans, query optimisation, indexing. This is what separates junior from senior in every interview.',
-      href: '/learn/foundations/sql-advanced',
+      href: '/learn/data-engineering/sql-for-de',
       x: 395, y: 320, width: 145, height: 60,
     },
     {
@@ -118,7 +119,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'beginner',
       time: '3–4 hrs',
       description: 'IaaS vs PaaS vs SaaS, regions, resource groups, IAM roles, storage accounts. Required before touching any Azure, AWS, or GCP service.',
-      href: '/learn/azure',
+      href: '/learn/azure/introduction',
       x: 225, y: 420, width: 155, height: 60,
     },
     {
@@ -130,7 +131,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'intermediate',
       time: '8–10 hrs',
       description: 'Linked Services, Datasets, Pipelines, ForEach, Parameters, Triggers, Monitoring. The backbone of all six Chaduvuko real-world projects.',
-      href: '/learn/azure',
+      href: '/learn/azure/adf',
       x: 150, y: 520, width: 160, height: 60,
     },
     {
@@ -142,6 +143,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'intermediate',
       time: '6–8 hrs',
       description: 'Apache Airflow, ADF triggers, scheduling patterns. How production pipelines run automatically at scale without anyone pressing a button.',
+      href: '/learn/data-engineering/pipeline-orchestration',
       x: 390, y: 520, width: 160, height: 60,
     },
     {
@@ -189,7 +191,6 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'intermediate',
       time: '6–8 hrs',
       description: 'Models, tests, docs, lineage. Now the standard transformation layer at modern data companies. Replaces stored procedures.',
-      href: '/learn/foundations/dbt',
       x: 30, y: 720, width: 130, height: 60,
     },
     {
@@ -201,6 +202,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'intermediate',
       time: '5–6 hrs',
       description: 'Star schema, medallion architecture (bronze/silver/gold), slowly changing dimensions. The foundation behind every warehouse you will build.',
+      href: '/learn/data-engineering/data-modelling',
       x: 223, y: 720, width: 155, height: 60,
     },
     {
@@ -212,6 +214,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'intermediate',
       time: '3–4 hrs',
       description: 'ADF pipeline monitoring, alert rules, Azure Monitor. Day one at work: your manager will ask why last night\'s pipeline failed.',
+      href: '/learn/data-engineering/monitoring-observability',
       x: 445, y: 720, width: 145, height: 60,
     },
     {
@@ -223,6 +226,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'advanced',
       time: '8–10 hrs',
       description: 'Design a data lake, a streaming pipeline, a warehouse schema under load. Asked at every senior interview. Amazon, Stripe, Shopify all ask this.',
+      href: '/learn/data-engineering/system-design-de',
       x: 175, y: 820, width: 170, height: 60,
     },
     {
@@ -234,7 +238,7 @@ export const dataEngineerRoadmap: Roadmap = {
       difficulty: 'advanced',
       time: '10–12 hrs',
       description: 'Role-specific Q&A bank curated for US job market. Real questions from DoorDash, Instacart, and GCC companies — with model answers.',
-      href: '/learn/interview',
+      href: '/learn/data-engineering/de-interview-questions',
       x: 405, y: 820, width: 170, height: 60,
     },
   ],
