@@ -26,7 +26,7 @@ async function deriveSearchQuery(topic: string): Promise<string> {
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'openai/gpt-oss-120b',
         max_tokens: 20,
         temperature: 0.3,
         messages: [
