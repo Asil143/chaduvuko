@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -51,6 +55,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
       background: 'var(--bg2)', border: '1px solid var(--border)',
       borderRadius: 10, padding: '18px 22px', overflowX: 'auto',
       fontSize: 13, lineHeight: 1.9, color: 'var(--text)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
       fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
     }}>
       <code>{children}</code>
@@ -71,6 +96,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   </div>
 )
 
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
+)
+
 export default function SQLForDEModule() {
   return (
     <LearnLayout
@@ -78,7 +121,7 @@ export default function SQLForDEModule() {
       description="Window functions, CTEs, deduplication, NULL handling, and the queries every interview tests."
       section="Data Engineering — Module 15"
       readTime="80 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — This Is Not Basic SQL ──────────────────────────── */}
@@ -94,7 +137,7 @@ export default function SQLForDEModule() {
         </Para>
 
         <Para>
-          A data engineer's SQL calculates running totals and moving averages without
+          A data engineer&rsquo;s SQL calculates running totals and moving averages without
           self-joins. It deduplicates millions of rows in a single pass using ranking
           functions. It tracks slowly changing dimensions across historical snapshots.
           It handles NULL in ways that prevent silent aggregation errors. It is written
@@ -144,6 +187,13 @@ export default function SQLForDEModule() {
           <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>silver.stores</code>.
           SQL dialect is standard PostgreSQL / Snowflake compatible unless noted.
         </Callout>
+
+        <TryThis>
+          Take any GROUP BY query you&rsquo;ve written and ask: could I get the same
+          aggregated number on every individual row instead of collapsing to one
+          row per group? If yes, that&rsquo;s a window function — Part 02 is built
+          entirely around that one shift in thinking.
+        </TryThis>
       </section>
 
       <Divider />
@@ -166,24 +216,18 @@ export default function SQLForDEModule() {
           <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>
             function() OVER (PARTITION BY ... ORDER BY ... ROWS/RANGE BETWEEN ...)
           </code>. The OVER clause is what makes it a window function rather than a
-          regular aggregation. Breaking down each part:
+          regular aggregation.
         </Para>
 
         <CodeBox label="Window function anatomy — every clause explained">{`SELECT
-    order_id,
-    store_id,
-    order_amount,
-
-    -- The window function:
+    order_id, store_id, order_amount,
     SUM(order_amount) OVER (
         PARTITION BY store_id          -- divide rows into groups by store
-                                       -- calculations are independent per partition
         ORDER BY order_date            -- within each partition, sort by date
-        ROWS BETWEEN                   -- define the "window" of rows to include
+        ROWS BETWEEN
             UNBOUNDED PRECEDING        -- from the first row of the partition
             AND CURRENT ROW            -- to the current row
     ) AS running_total_by_store
-
 FROM silver.orders;
 
 -- PARTITION BY is optional — omit it to treat all rows as one partition:
@@ -191,53 +235,32 @@ SUM(order_amount) OVER (ORDER BY order_date) AS running_total_all_stores
 
 -- ORDER BY inside OVER is optional — omit it for unordered aggregations:
 SUM(order_amount) OVER (PARTITION BY store_id) AS store_total
--- this gives every row the store's total — same as a correlated subquery but much faster
+-- gives every row the store's total — same as a correlated subquery but much faster
 
--- The frame clause (ROWS/RANGE BETWEEN) is optional:
--- Default with ORDER BY: RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
--- Default without ORDER BY: ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING`}</CodeBox>
+-- Frame clause defaults: with ORDER BY → RANGE UNBOUNDED PRECEDING TO CURRENT ROW
+--                         without ORDER BY → ROWS UNBOUNDED PRECEDING TO UNBOUNDED FOLLOWING`}</CodeBox>
 
-        <SubTitle>Ranking functions — ROW_NUMBER, RANK, DENSE_RANK</SubTitle>
+        <SubSubTitle>Ranking functions — ROW_NUMBER, RANK, DENSE_RANK</SubSubTitle>
 
-        <CodeBox label="Ranking functions — differences and when to use each">{`SELECT
-    order_id,
-    store_id,
-    order_amount,
+        <CodeBox label="The three ranking functions, and how they differ on ties">{`SELECT order_id, store_id, order_amount,
 
-    -- ROW_NUMBER: sequential unique number within partition
-    -- No ties — every row gets a unique number
-    ROW_NUMBER() OVER (
-        PARTITION BY store_id
-        ORDER BY order_amount DESC
-    ) AS row_num,
+    -- ROW_NUMBER: sequential unique number within partition, no ties
+    ROW_NUMBER() OVER (PARTITION BY store_id ORDER BY order_amount DESC) AS row_num,
 
     -- RANK: tied rows get the same rank, then skips numbers
     -- Scores: 100, 100, 80 → ranks: 1, 1, 3
-    RANK() OVER (
-        PARTITION BY store_id
-        ORDER BY order_amount DESC
-    ) AS rank_with_gaps,
+    RANK() OVER (PARTITION BY store_id ORDER BY order_amount DESC) AS rank_with_gaps,
 
     -- DENSE_RANK: tied rows get the same rank, no skipping
     -- Scores: 100, 100, 80 → ranks: 1, 1, 2
-    DENSE_RANK() OVER (
-        PARTITION BY store_id
-        ORDER BY order_amount DESC
-    ) AS rank_no_gaps
+    DENSE_RANK() OVER (PARTITION BY store_id ORDER BY order_amount DESC) AS rank_no_gaps
 
 FROM silver.orders
-WHERE order_date = '2026-03-17';
+WHERE order_date = '2026-03-17';`}</CodeBox>
 
--- REAL USE CASE: get the top 3 orders per store
-WITH ranked AS (
-    SELECT
-        order_id,
-        store_id,
-        order_amount,
-        ROW_NUMBER() OVER (
-            PARTITION BY store_id
-            ORDER BY order_amount DESC
-        ) AS rn
+        <CodeBox label="Real use case — top 3 orders per store, and why ROW_NUMBER for dedup">{`WITH ranked AS (
+    SELECT order_id, store_id, order_amount,
+        ROW_NUMBER() OVER (PARTITION BY store_id ORDER BY order_amount DESC) AS rn
     FROM silver.orders
     WHERE order_date = '2026-03-17'
 )
@@ -246,99 +269,71 @@ FROM ranked
 WHERE rn <= 3;   -- keep only top 3 per store
 
 -- WHY ROW_NUMBER FOR DEDUP vs RANK:
--- ROW_NUMBER guarantees one row per group even when values tie
--- RANK may return 2 rows when two rows tie for position 1
--- For deduplication, always use ROW_NUMBER`}</CodeBox>
+-- ROW_NUMBER guarantees one row per group even when values tie.
+-- RANK may return 2 rows when two rows tie for position 1.
+-- For deduplication, always use ROW_NUMBER.`}</CodeBox>
 
-        <SubTitle>LAG and LEAD — comparing current row to previous or next</SubTitle>
+        <SubSubTitle>LAG and LEAD — comparing current row to previous or next</SubSubTitle>
 
-        <CodeBox label="LAG and LEAD — row-to-row comparisons without self-joins">{`-- LAG: access the value from a previous row in the partition
+        <CodeBox label="Row-to-row comparisons without self-joins">{`-- LAG: access the value from a previous row in the partition
 -- LEAD: access the value from a following row in the partition
 
-SELECT
-    store_id,
-    order_date,
-    daily_revenue,
+SELECT store_id, order_date, daily_revenue,
 
-    -- Yesterday's revenue for this store
-    LAG(daily_revenue, 1, 0) OVER (
-        PARTITION BY store_id
-        ORDER BY order_date
-    ) AS prev_day_revenue,
-    -- Args: (column, offset, default_if_null)
-    -- offset=1 means one row back; default=0 when no previous row exists
+    -- Yesterday's revenue for this store. Args: (column, offset, default_if_null)
+    LAG(daily_revenue, 1, 0) OVER (PARTITION BY store_id ORDER BY order_date)
+        AS prev_day_revenue,
 
     -- Day-over-day change
-    daily_revenue - LAG(daily_revenue, 1, 0) OVER (
-        PARTITION BY store_id
-        ORDER BY order_date
-    ) AS day_over_day_change,
+    daily_revenue - LAG(daily_revenue, 1, 0) OVER (PARTITION BY store_id ORDER BY order_date)
+        AS day_over_day_change,
 
-    -- Day-over-day % change (careful with division — LAG can be 0)
+    -- Tomorrow's revenue
+    LEAD(daily_revenue, 1) OVER (PARTITION BY store_id ORDER BY order_date)
+        AS next_day_revenue
+
+FROM gold.daily_store_revenue
+WHERE order_date BETWEEN '2026-03-01' AND '2026-03-17'
+ORDER BY store_id, order_date;`}</CodeBox>
+
+        <CodeBox label="Real DE use case — detecting gaps in daily data">{`-- Careful with % change — LAG can be 0, so guard the division:
+SELECT store_id, order_date, daily_revenue,
     CASE
         WHEN LAG(daily_revenue, 1) OVER (PARTITION BY store_id ORDER BY order_date) IS NULL
           OR LAG(daily_revenue, 1) OVER (PARTITION BY store_id ORDER BY order_date) = 0
         THEN NULL
         ELSE ROUND(
             (daily_revenue - LAG(daily_revenue, 1) OVER (PARTITION BY store_id ORDER BY order_date))
-            / LAG(daily_revenue, 1) OVER (PARTITION BY store_id ORDER BY order_date) * 100,
-            2
-        )
-    END AS pct_change,
+            / LAG(daily_revenue, 1) OVER (PARTITION BY store_id ORDER BY order_date) * 100, 2)
+    END AS pct_change
+FROM gold.daily_store_revenue;
 
-    -- Tomorrow's revenue (from the future row's perspective)
-    LEAD(daily_revenue, 1) OVER (
-        PARTITION BY store_id
-        ORDER BY order_date
-    ) AS next_day_revenue
-
-FROM gold.daily_store_revenue
-WHERE order_date BETWEEN '2026-03-01' AND '2026-03-17'
-ORDER BY store_id, order_date;
-
-
--- REAL DE USE CASE: detect gaps in daily data
--- Find dates where a store had no data (gap detection)
+-- Find dates where a store had no data at all (gap detection):
 WITH store_dates AS (
-    SELECT
-        store_id,
-        order_date,
+    SELECT store_id, order_date,
         LEAD(order_date) OVER (PARTITION BY store_id ORDER BY order_date) AS next_date
     FROM gold.daily_store_revenue
 )
-SELECT store_id, order_date, next_date,
-       next_date - order_date - 1 AS missing_days
+SELECT store_id, order_date, next_date, next_date - order_date - 1 AS missing_days
 FROM store_dates
 WHERE next_date - order_date > 1   -- gap of more than 1 day
 ORDER BY missing_days DESC;`}</CodeBox>
 
-        <SubTitle>Running totals and moving averages</SubTitle>
+        <SubSubTitle>Running totals and moving averages</SubSubTitle>
 
-        <CodeBox label="Running totals and moving averages — frame clauses in depth">{`SELECT
-    store_id,
-    order_date,
-    daily_revenue,
+        <CodeBox label="Cumulative sum, 7-day moving average, and rolling sum">{`SELECT store_id, order_date, daily_revenue,
 
     -- Running total (cumulative sum from start of partition to current row)
     SUM(daily_revenue) OVER (
-        PARTITION BY store_id
-        ORDER BY order_date
+        PARTITION BY store_id ORDER BY order_date
         ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
     ) AS cumulative_revenue,
 
     -- 7-day moving average (last 7 days including today)
     AVG(daily_revenue) OVER (
-        PARTITION BY store_id
-        ORDER BY order_date
+        PARTITION BY store_id ORDER BY order_date
         ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
     ) AS moving_avg_7d,
-
-    -- 7-day moving sum
-    SUM(daily_revenue) OVER (
-        PARTITION BY store_id
-        ORDER BY order_date
-        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
-    ) AS rolling_7d_sum,
 
     -- Month-to-date total (from first day of current month to today)
     SUM(daily_revenue) OVER (
@@ -353,59 +348,44 @@ ORDER BY missing_days DESC;`}</CodeBox>
     ) * 100 AS pct_of_monthly_total
 
 FROM gold.daily_store_revenue
-ORDER BY store_id, order_date;
+ORDER BY store_id, order_date;`}</CodeBox>
 
+        <Output>{`ROWS vs RANGE — an important distinction:
 
--- ROWS vs RANGE — an important distinction:
---
--- ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
---   → exactly 6 rows before current row, regardless of value gaps
---   → correct for "last 7 rows"
---
--- RANGE BETWEEN INTERVAL '6 days' PRECEDING AND CURRENT ROW
---   → all rows within the last 6 days by value (calendar days)
---   → correct for "last 7 calendar days" even if some days have no data
---   → only works when ORDER BY column is DATE or TIMESTAMP
---
--- For moving averages over time series with gaps, RANGE is more correct.
--- For moving averages over sequences of rows, ROWS is more correct.`}</CodeBox>
+ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+  → exactly 6 rows before current row, regardless of value gaps
+  → correct for "last 7 rows"
 
-        <SubTitle>NTILE and PERCENT_RANK — distribution functions</SubTitle>
+RANGE BETWEEN INTERVAL '6 days' PRECEDING AND CURRENT ROW
+  → all rows within the last 6 calendar days by value
+  → correct for "last 7 calendar days" even if some days have no data
+  → only works when ORDER BY column is DATE or TIMESTAMP
 
-        <CodeBox label="NTILE and PERCENT_RANK — bucket and percentile calculations">{`SELECT
-    customer_id,
-    total_spend_ytd,
+For moving averages over time series with gaps, RANGE is more correct.
+For moving averages over sequences of rows, ROWS is more correct.`}</Output>
 
-    -- NTILE(n): divide rows into n equal-sized buckets
-    -- Useful for quartile/decile segmentation
+        <SubSubTitle>NTILE and PERCENT_RANK — distribution functions</SubSubTitle>
+
+        <CodeBox label="Bucketing and percentile calculations">{`SELECT customer_id, total_spend_ytd,
+
+    -- NTILE(n): divide rows into n equal-sized buckets (quartile/decile segmentation)
     NTILE(4) OVER (ORDER BY total_spend_ytd DESC) AS spend_quartile,
     -- 1 = top 25%, 2 = next 25%, 3 = next 25%, 4 = bottom 25%
 
-    NTILE(10) OVER (ORDER BY total_spend_ytd DESC) AS spend_decile,
-    -- 1 = top 10%, ..., 10 = bottom 10%
-
     -- PERCENT_RANK: what percentile is this row in? (0.0 to 1.0)
-    ROUND(PERCENT_RANK() OVER (ORDER BY total_spend_ytd) * 100, 1)
-        AS percentile_rank,
+    ROUND(PERCENT_RANK() OVER (ORDER BY total_spend_ytd) * 100, 1) AS percentile_rank,
 
     -- CUME_DIST: cumulative distribution (fraction of rows <= current)
-    ROUND(CUME_DIST() OVER (ORDER BY total_spend_ytd) * 100, 1)
-        AS cumulative_pct
+    ROUND(CUME_DIST() OVER (ORDER BY total_spend_ytd) * 100, 1) AS cumulative_pct
 
 FROM silver.customer_annual_stats
 ORDER BY total_spend_ytd DESC;
 
 -- REAL USE CASE: customer segmentation for marketing
-SELECT
-    customer_id,
-    total_orders,
-    total_spend_ytd,
+SELECT customer_id, total_orders, total_spend_ytd,
     CASE NTILE(5) OVER (ORDER BY total_spend_ytd DESC)
-        WHEN 1 THEN 'Platinum'   -- top 20%
-        WHEN 2 THEN 'Gold'       -- next 20%
-        WHEN 3 THEN 'Silver'     -- next 20%
-        WHEN 4 THEN 'Bronze'     -- next 20%
-        WHEN 5 THEN 'Standard'   -- bottom 20%
+        WHEN 1 THEN 'Platinum' WHEN 2 THEN 'Gold' WHEN 3 THEN 'Silver'
+        WHEN 4 THEN 'Bronze'   WHEN 5 THEN 'Standard'
     END AS customer_tier
 FROM silver.customer_annual_stats;`}</CodeBox>
       </section>
@@ -432,148 +412,97 @@ FROM silver.customer_annual_stats;`}</CodeBox>
           for a data engineer.
         </Para>
 
-        <CodeBox label="CTE structure — the right way to organise complex SQL">{`-- BAD: nested subquery — unreadable, hard to debug, impossible to test steps
-SELECT
-    s.store_name,
-    ranked.daily_revenue,
-    ranked.revenue_rank
+        <CodeBox label="BAD — nested subquery, unreadable and impossible to test in steps">{`SELECT s.store_name, ranked.daily_revenue, ranked.revenue_rank
 FROM (
-    SELECT
-        store_id,
-        SUM(order_amount) AS daily_revenue,
+    SELECT store_id, SUM(order_amount) AS daily_revenue,
         RANK() OVER (ORDER BY SUM(order_amount) DESC) AS revenue_rank
     FROM (
         SELECT order_id, store_id, order_amount
         FROM silver.orders
-        WHERE order_date = '2026-03-17'
-          AND status = 'delivered'
+        WHERE order_date = '2026-03-17' AND status = 'delivered'
     ) filtered
     GROUP BY store_id
 ) ranked
 JOIN silver.stores s ON ranked.store_id = s.store_id
-WHERE ranked.revenue_rank <= 5;
+WHERE ranked.revenue_rank <= 5;`}</CodeBox>
 
-
--- GOOD: CTE chain — each step is named, readable, testable independently
-WITH
+        <CodeBox label="GOOD — the same query as a CTE chain, each step named and testable">{`WITH
 -- Step 1: filter to the orders we care about
 delivered_orders AS (
     SELECT order_id, store_id, order_amount
     FROM silver.orders
-    WHERE order_date = '2026-03-17'
-      AND status    = 'delivered'
+    WHERE order_date = '2026-03-17' AND status = 'delivered'
 ),
-
 -- Step 2: aggregate by store
 store_revenue AS (
-    SELECT
-        store_id,
-        SUM(order_amount) AS daily_revenue,
-        COUNT(*)          AS order_count
+    SELECT store_id, SUM(order_amount) AS daily_revenue, COUNT(*) AS order_count
     FROM delivered_orders
     GROUP BY store_id
 ),
-
 -- Step 3: rank stores by revenue
 ranked_stores AS (
-    SELECT
-        store_id,
-        daily_revenue,
-        order_count,
+    SELECT store_id, daily_revenue, order_count,
         RANK() OVER (ORDER BY daily_revenue DESC) AS revenue_rank
     FROM store_revenue
 )
-
 -- Final: join to store names and filter top 5
-SELECT
-    s.store_name,
-    s.city,
-    rs.daily_revenue,
-    rs.order_count,
-    rs.revenue_rank
+SELECT s.store_name, s.city, rs.daily_revenue, rs.order_count, rs.revenue_rank
 FROM ranked_stores rs
 JOIN silver.stores s ON rs.store_id = s.store_id
 WHERE rs.revenue_rank <= 5
 ORDER BY rs.revenue_rank;`}</CodeBox>
 
-        <SubTitle>Multiple CTEs — building a full transformation pipeline in SQL</SubTitle>
+        <SubSubTitle>Building a full transformation pipeline in SQL</SubSubTitle>
 
-        <CodeBox label="Multi-CTE query — a complete dbt-style transformation">{`-- Typical dbt Gold model: daily customer metrics
-WITH
+        <CodeBox label="A typical dbt Gold model — base orders, cohort dates, delivered filter">{`WITH
 -- Base: all orders in the analysis window
 base_orders AS (
-    SELECT
-        o.order_id,
-        o.customer_id,
-        o.store_id,
-        o.order_amount,
-        o.status,
-        o.order_date,
-        o.created_at
+    SELECT o.order_id, o.customer_id, o.store_id, o.order_amount, o.status,
+           o.order_date, o.created_at
     FROM silver.orders o
     WHERE o.order_date BETWEEN '2026-01-01' AND '2026-03-17'
       AND o.status IN ('delivered', 'cancelled')
 ),
-
 -- Customer first order date (for cohort analysis)
 customer_first_order AS (
-    SELECT
-        customer_id,
-        MIN(order_date) AS first_order_date,
-        MIN(order_id)   AS first_order_id
+    SELECT customer_id, MIN(order_date) AS first_order_date, MIN(order_id) AS first_order_id
     FROM base_orders
     WHERE status = 'delivered'
     GROUP BY customer_id
 ),
-
 -- Delivered orders only (for revenue metrics)
 delivered AS (
     SELECT * FROM base_orders WHERE status = 'delivered'
-),
+),`}</CodeBox>
 
--- Customer-level aggregation
-customer_metrics AS (
+        <CodeBox label="...continued — customer-level aggregation">{`customer_metrics AS (
     SELECT
         d.customer_id,
-        COUNT(DISTINCT d.order_id)              AS total_orders,
-        SUM(d.order_amount)                     AS total_revenue,
-        AVG(d.order_amount)                     AS avg_order_value,
-        MAX(d.order_date)                       AS last_order_date,
-        COUNT(DISTINCT d.store_id)              AS stores_visited,
+        COUNT(DISTINCT d.order_id) AS total_orders,
+        SUM(d.order_amount)        AS total_revenue,
+        AVG(d.order_amount)        AS avg_order_value,
+        MAX(d.order_date)          AS last_order_date,
+        COUNT(DISTINCT d.store_id) AS stores_visited,
         cfo.first_order_date,
-
-        -- Days since first order
         ('2026-03-17'::DATE - cfo.first_order_date) AS customer_age_days,
-
-        -- Order frequency (orders per month since first order)
+        -- Order frequency (orders per month since first order):
         ROUND(
             COUNT(DISTINCT d.order_id)::NUMERIC
-            / GREATEST(
-                ('2026-03-17'::DATE - cfo.first_order_date) / 30.0,
-                1
-              ),
-            2
+            / GREATEST(('2026-03-17'::DATE - cfo.first_order_date) / 30.0, 1), 2
         ) AS orders_per_month
-
     FROM delivered d
     JOIN customer_first_order cfo USING (customer_id)
     GROUP BY d.customer_id, cfo.first_order_date
-),
+),`}</CodeBox>
 
--- Add customer dimension attributes
-final AS (
+        <CodeBox label="...continued — adding dimension attributes and value/recency segments">{`final AS (
     SELECT
-        cm.*,
-        c.customer_name,
-        c.city,
-        c.tier,
-        -- Classify by value
+        cm.*, c.customer_name, c.city, c.tier,
         CASE
             WHEN cm.total_revenue >= 50000 THEN 'high_value'
             WHEN cm.total_revenue >= 10000 THEN 'mid_value'
             ELSE 'low_value'
         END AS value_segment,
-        -- Classify by recency
         CASE
             WHEN '2026-03-17'::DATE - cm.last_order_date <= 30 THEN 'active'
             WHEN '2026-03-17'::DATE - cm.last_order_date <= 90 THEN 'at_risk'
@@ -582,60 +511,41 @@ final AS (
     FROM customer_metrics cm
     JOIN silver.customers c USING (customer_id)
 )
-
 SELECT * FROM final;`}</CodeBox>
 
-        <SubTitle>Recursive CTEs — for hierarchical and graph data</SubTitle>
+        <SubSubTitle>Recursive CTEs — for hierarchical and graph data</SubSubTitle>
 
-        <CodeBox label="Recursive CTE — traversing a hierarchy">{`-- Recursive CTEs traverse hierarchical data:
--- parent-child relationships, org charts, category trees
-
--- Example: product category hierarchy
--- categories table: (category_id, name, parent_category_id)
+        <CodeBox label="Traversing a product category hierarchy">{`-- categories table: (category_id, name, parent_category_id)
 -- Root categories have parent_category_id = NULL
 
 WITH RECURSIVE category_tree AS (
     -- Base case: start with root categories (no parent)
-    SELECT
-        category_id,
-        name,
-        parent_category_id,
-        name                   AS full_path,
-        0                      AS depth
+    SELECT category_id, name, parent_category_id,
+           name AS full_path, 0 AS depth
     FROM silver.categories
     WHERE parent_category_id IS NULL
 
     UNION ALL
 
     -- Recursive case: join each category to its children
-    SELECT
-        c.category_id,
-        c.name,
-        c.parent_category_id,
-        ct.full_path || ' > ' || c.name   AS full_path,  -- build path
-        ct.depth + 1                       AS depth
+    SELECT c.category_id, c.name, c.parent_category_id,
+           ct.full_path || ' > ' || c.name AS full_path,
+           ct.depth + 1 AS depth
     FROM silver.categories c
     JOIN category_tree ct ON c.parent_category_id = ct.category_id
 )
-
-SELECT
-    category_id,
-    name,
-    full_path,
-    depth
+SELECT category_id, name, full_path, depth
 FROM category_tree
-ORDER BY full_path;
+ORDER BY full_path;`}</CodeBox>
 
--- Result:
--- Electronics                              depth=0
--- Electronics > Phones                     depth=1
--- Electronics > Phones > Smartphones       depth=2
--- Electronics > Phones > Feature Phones    depth=2
--- Electronics > Laptops                    depth=1
+        <Output>{`Electronics                              depth=0
+Electronics > Phones                     depth=1
+Electronics > Phones > Smartphones       depth=2
+Electronics > Phones > Feature Phones    depth=2
+Electronics > Laptops                    depth=1
 
--- GUARD AGAINST INFINITE LOOPS:
--- Add WHERE depth < 10 to the recursive case
--- Some databases support MAXRECURSION hint`}</CodeBox>
+GUARD AGAINST INFINITE LOOPS: add WHERE depth < 10 to the recursive case.
+Some databases support a MAXRECURSION hint as an additional safeguard.`}</Output>
       </section>
 
       <Divider />
@@ -650,84 +560,59 @@ ORDER BY full_path;
           any pipeline. They come from source systems that emit the same event twice
           during retries, from CDC tools that deliver at-least-once, from pipeline
           reruns that re-insert already-loaded records, and from UNION operations
-          that do not account for shared rows between sources.
+          that do not account for shared rows between sources. SQL deduplication
+          using window functions is the standard, efficient approach — it handles
+          all three scenarios below in a single pass without expensive self-joins.
         </Para>
 
-        <Para>
-          SQL deduplication using window functions is the standard, efficient approach.
-          It handles all deduplication scenarios in a single pass without expensive
-          self-joins.
-        </Para>
+        <SubSubTitle>Scenario 1 — exact duplicates (all columns identical)</SubSubTitle>
 
-        <CodeBox label="Deduplication patterns — the three scenarios you will encounter">{`-- ── SCENARIO 1: Exact duplicates (all columns identical) ────────────────────
--- Keep one copy of each row where every column is the same
+        <CodeBox label="Keeping one copy of each fully-identical row">{`SELECT DISTINCT * FROM silver.orders;
+-- Simple but scans all rows and you cannot control which row is kept
 
-SELECT DISTINCT *
-FROM silver.orders;
--- Simple but scans all rows and cannot be controlled which row is kept
-
--- Better with CTE:
+-- Better with a CTE — explicit control over which copy survives:
 WITH deduped AS (
-    SELECT
-        *,
+    SELECT *,
         ROW_NUMBER() OVER (PARTITION BY order_id, customer_id, amount, status) AS rn
     FROM silver.orders
 )
-SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;
+SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;`}</CodeBox>
 
+        <SubSubTitle>Scenario 2 — same key, keep the most recent version</SubSubTitle>
 
--- ── SCENARIO 2: Same primary key, keep most recent version ───────────────────
--- Multiple rows with the same order_id — keep the one with the latest updated_at
-
-WITH deduped AS (
-    SELECT
-        *,
+        <CodeBox label="Multiple rows share order_id — keep the latest updated_at">{`WITH deduped AS (
+    SELECT *,
         ROW_NUMBER() OVER (
             PARTITION BY order_id          -- group by business key
             ORDER BY updated_at DESC       -- most recent first
         ) AS rn
     FROM silver.orders
 )
-SELECT * EXCLUDE (rn)
-FROM deduped
-WHERE rn = 1;
--- For each order_id, keeps exactly one row — the one with the latest updated_at
+SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;
+-- For each order_id, keeps exactly one row — the one with the latest updated_at`}</CodeBox>
 
+        <SubSubTitle>Scenario 3 — same key, keep the first seen version</SubSubTitle>
 
--- ── SCENARIO 3: Same primary key, keep first seen version ────────────────────
--- Keep the original record, ignore later duplicates
-
-WITH deduped AS (
-    SELECT
-        *,
+        <CodeBox label="Keep the original record, ignore later duplicates">{`WITH deduped AS (
+    SELECT *,
         ROW_NUMBER() OVER (
             PARTITION BY order_id
             ORDER BY created_at ASC,    -- oldest first
-                     ingested_at ASC    -- tiebreak by when pipeline saw it
+                     ingested_at ASC    -- tiebreak by when the pipeline saw it
         ) AS rn
     FROM silver.orders
 )
-SELECT * EXCLUDE (rn)
-FROM deduped
-WHERE rn = 1;
+SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;`}</CodeBox>
 
+        <SubSubTitle>Snowflake&rsquo;s QUALIFY, and cleaning up an existing table</SubSubTitle>
 
--- ── SNOWFLAKE: QUALIFY clause (no outer CTE needed) ──────────────────────────
--- Snowflake supports QUALIFY to filter on window function results directly
-
+        <CodeBox label="QUALIFY skips the wrapping CTE entirely">{`-- Snowflake supports QUALIFY to filter on window function results directly:
 SELECT *
 FROM silver.orders
-QUALIFY ROW_NUMBER() OVER (
-    PARTITION BY order_id
-    ORDER BY updated_at DESC
-) = 1;
--- Cleaner than wrapping in CTE — equivalent result
+QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY updated_at DESC) = 1;
+-- Cleaner than wrapping in a CTE — equivalent result`}</CodeBox>
 
-
--- ── IN-PLACE DEDUPLICATION: remove duplicates from an existing table ─────────
--- Use when you need to clean a table that already has duplicates
-
--- Step 1: identify rows to keep (in temp table or CTE)
+        <CodeBox label="In-place deduplication of a table that already has duplicates">{`-- Step 1: identify rows to keep
 CREATE TEMP TABLE orders_deduped AS
 SELECT * EXCLUDE (rn)
 FROM (
@@ -744,8 +629,7 @@ COMMIT;
 
 -- Or use DELETE with a CTE (PostgreSQL / Snowflake):
 WITH duplicates AS (
-    SELECT ctid,
-           ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY updated_at DESC) AS rn
+    SELECT ctid, ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY updated_at DESC) AS rn
     FROM silver.orders
 )
 DELETE FROM silver.orders
@@ -768,89 +652,74 @@ WHERE ctid IN (SELECT ctid FROM duplicates WHERE rn > 1);`}</CodeBox>
           but UNKNOWN. And UNKNOWN in a WHERE clause means the row is excluded.
         </Para>
 
-        <CodeBox label="NULL semantics — three-valued logic and its consequences">{`-- NULL arithmetic — results are always NULL
+        <SubSubTitle>Three-valued logic, and the silent WHERE-clause trap</SubSubTitle>
+
+        <CodeBox label="NULL arithmetic, comparisons, and boolean logic">{`-- NULL arithmetic — results are always NULL
 SELECT 380 + NULL;          -- NULL
 SELECT NULL * 0;            -- NULL (not 0!)
 SELECT 'hello' || NULL;     -- NULL (not 'hello')
 
 -- NULL comparisons — never use = NULL
 SELECT * FROM orders WHERE promo_code = NULL;   -- WRONG: returns 0 rows
-SELECT * FROM orders WHERE promo_code IS NULL;  -- CORRECT: returns rows with NULL promo_code
-SELECT * FROM orders WHERE promo_code IS NOT NULL;
+SELECT * FROM orders WHERE promo_code IS NULL;  -- CORRECT
 
 -- NULL in three-valued logic:
--- TRUE  AND NULL = NULL (not FALSE)
--- FALSE AND NULL = FALSE
--- TRUE  OR  NULL = TRUE
--- FALSE OR  NULL = NULL (not FALSE)
--- NOT NULL       = NULL
+-- TRUE  AND NULL = NULL (not FALSE)     FALSE AND NULL = FALSE
+-- TRUE  OR  NULL = TRUE                 FALSE OR  NULL = NULL (not FALSE)
+-- NOT NULL       = NULL`}</CodeBox>
 
--- Consequence: WHERE clause excludes rows where condition is NULL
--- This means: if promo_code is NULL, these rows are silently excluded:
+        <CodeBox label="Why WHERE silently drops NULL rows, and the fix">{`-- Consequence: WHERE clause excludes rows where the condition is NULL.
+-- If promo_code is NULL, these rows are silently excluded:
 SELECT * FROM orders WHERE promo_code != 'SAVE10';
 -- Rows where promo_code IS NULL are NOT returned — they fail the != comparison
+
 -- FIX:
-SELECT * FROM orders WHERE promo_code != 'SAVE10' OR promo_code IS NULL;
+SELECT * FROM orders WHERE promo_code != 'SAVE10' OR promo_code IS NULL;`}</CodeBox>
 
+        <SubSubTitle>NULL in aggregations</SubSubTitle>
 
--- ── NULL IN AGGREGATIONS ──────────────────────────────────────────────────────
--- NULL values are IGNORED in all aggregate functions EXCEPT COUNT(*)
-
-SELECT
+        <CodeBox label="NULLs are ignored by every aggregate function except COUNT(*)">{`SELECT
     COUNT(*)              AS total_rows,         -- counts ALL rows including NULL
     COUNT(promo_code)     AS rows_with_promo,    -- counts only non-NULL promo_code
-    COUNT(*) - COUNT(promo_code)
-                          AS rows_without_promo, -- difference = NULL rows
+    COUNT(*) - COUNT(promo_code) AS rows_without_promo,
     AVG(order_amount)     AS avg_amount,         -- NULL amounts excluded from avg
-    SUM(discount_amount)  AS total_discount      -- NULL discounts treated as 0 in SUM
-                                                  -- Wait — are they? No! NULL is NOT 0.
-                                                  -- SUM ignores NULLs, not treats as 0.
+    SUM(discount_amount)  AS total_discount      -- NULL discounts IGNORED, not treated as 0
 FROM silver.orders;
 
 -- Safe pattern: use COALESCE to treat NULL as 0 in sums
-SELECT SUM(COALESCE(discount_amount, 0)) AS total_discount FROM silver.orders;
--- Now NULL discount_amount is explicitly treated as 0
+SELECT SUM(COALESCE(discount_amount, 0)) AS total_discount FROM silver.orders;`}</CodeBox>
 
+        <SubSubTitle>COALESCE and NULLIF</SubSubTitle>
 
--- ── COALESCE: return first non-NULL value ─────────────────────────────────────
-SELECT
-    order_id,
-    COALESCE(promo_code, 'NO_PROMO') AS promo_code_safe,
-    COALESCE(delivery_fee, 0)         AS delivery_fee_safe,
+        <CodeBox label="Returning a default, and turning a sentinel value into NULL">{`-- COALESCE: return the first non-NULL value
+SELECT order_id,
+    COALESCE(promo_code, 'NO_PROMO')  AS promo_code_safe,
+    COALESCE(delivery_fee, 0)          AS delivery_fee_safe,
     COALESCE(notes, special_inst, '') AS display_notes  -- try notes, then special_inst, then ''
 FROM silver.orders;
 
-
--- ── NULLIF: return NULL if value equals a specific value ─────────────────────
--- Prevents division by zero elegantly
-SELECT
-    store_id,
-    total_revenue / NULLIF(total_orders, 0) AS avg_order_value
-    -- if total_orders = 0, NULLIF returns NULL → NULL/anything = NULL (not error)
+-- NULLIF: return NULL if the value equals a specific value — prevents /0 elegantly
+SELECT store_id, total_revenue / NULLIF(total_orders, 0) AS avg_order_value
 FROM gold.store_metrics;
+-- if total_orders = 0, NULLIF returns NULL → NULL/anything = NULL (not a division error)
 
--- Clean up dummy/placeholder values:
-SELECT NULLIF(phone_number, 'N/A') AS phone_clean FROM customers;
--- Returns NULL where phone_number = 'N/A'
+-- Clean up placeholder values:
+SELECT NULLIF(phone_number, 'N/A') AS phone_clean FROM customers;`}</CodeBox>
 
+        <SubSubTitle>NULL in JOINs</SubSubTitle>
 
--- ── NULL IN JOINs ─────────────────────────────────────────────────────────────
--- NULL = NULL is UNKNOWN, so NULL join keys never match
+        <CodeBox label="NULL join keys never match, and how to tell the two kinds of NULL apart">{`-- NULL = NULL is UNKNOWN, so NULL join keys never match
 SELECT o.*, c.name
 FROM orders o
 LEFT JOIN customers c ON o.customer_id = c.customer_id;
--- If o.customer_id IS NULL → no match → c.name IS NULL in result
+-- If o.customer_id IS NULL → no match → c.name IS NULL in the result
 
--- Common mistake: assuming all LEFT JOIN nulls come from missing matches
--- Some may come from NULL join keys in the left table itself
--- Distinguish them:
-SELECT
-    o.order_id,
-    o.customer_id,
-    c.name,
+-- Common mistake: assuming every LEFT JOIN null comes from a missing match.
+-- Some come from a NULL join key in the left table itself — distinguish them:
+SELECT o.order_id, o.customer_id, c.name,
     CASE
-        WHEN o.customer_id IS NULL     THEN 'null_key_in_orders'
-        WHEN c.customer_id IS NULL     THEN 'missing_customer'
+        WHEN o.customer_id IS NULL THEN 'null_key_in_orders'
+        WHEN c.customer_id IS NULL THEN 'missing_customer'
         ELSE 'matched'
     END AS join_status
 FROM orders o
@@ -871,10 +740,10 @@ LEFT JOIN customers c ON o.customer_id = c.customer_id;`}</CodeBox>
           that appear in one dataset but not another.
         </Para>
 
-        <CodeBox label="UNION, INTERSECT, EXCEPT — when to use each">{`-- ── UNION: combine rows from two queries ────────────────────────────────────
+        <SubSubTitle>UNION ALL vs. UNION</SubSubTitle>
 
--- UNION ALL: include all rows from both queries (keeps duplicates)
--- Use UNION ALL by default — it is faster because no deduplication step
+        <CodeBox label="Combining rows, with and without deduplication">{`-- UNION ALL: include all rows from both queries (keeps duplicates)
+-- Use UNION ALL by default — faster, no deduplication step
 SELECT order_id, order_amount, 'online' AS channel FROM silver.online_orders
 UNION ALL
 SELECT order_id, order_amount, 'instore' AS channel FROM silver.instore_orders;
@@ -884,12 +753,11 @@ SELECT order_id, order_amount, 'instore' AS channel FROM silver.instore_orders;
 SELECT customer_id FROM silver.email_subscribers
 UNION
 SELECT customer_id FROM silver.sms_subscribers;
--- Returns unique customer_ids who subscribed to either channel
+-- Returns unique customer_ids who subscribed to either channel`}</CodeBox>
 
+        <SubSubTitle>INTERSECT and EXCEPT</SubSubTitle>
 
--- ── INTERSECT: rows that appear in BOTH queries ───────────────────────────────
-
--- Find customers subscribed to both email AND SMS
+        <CodeBox label="Rows in both queries, and rows in only the first">{`-- INTERSECT: rows that appear in BOTH queries
 SELECT customer_id FROM silver.email_subscribers
 INTERSECT
 SELECT customer_id FROM silver.sms_subscribers;
@@ -899,42 +767,32 @@ SELECT DISTINCT e.customer_id
 FROM silver.email_subscribers e
 INNER JOIN silver.sms_subscribers s USING (customer_id);
 
-
--- ── EXCEPT: rows in first query but NOT in second ────────────────────────────
--- (Called MINUS in Oracle/some other databases)
-
--- Find email subscribers who are NOT SMS subscribers
+-- EXCEPT: rows in the first query but NOT in the second (MINUS in Oracle)
 SELECT customer_id FROM silver.email_subscribers
 EXCEPT
-SELECT customer_id FROM silver.sms_subscribers;
+SELECT customer_id FROM silver.sms_subscribers;`}</CodeBox>
 
--- REAL DE USE CASE: data completeness check
--- Find order_ids in the source (PostgreSQL) but missing from the warehouse
+        <SubSubTitle>Real DE use cases — completeness checks and multi-source unions</SubSubTitle>
+
+        <CodeBox label="Finding a pipeline gap with EXCEPT">{`-- Find order_ids in the source (PostgreSQL) but missing from the warehouse
 SELECT order_id FROM source.orders WHERE order_date = '2026-03-17'
 EXCEPT
 SELECT order_id FROM silver.orders WHERE order_date = '2026-03-17';
--- Returns order_ids that were ingested but not yet in warehouse
--- If this returns rows: the pipeline has a gap
+-- Returns order_ids that were ingested but not yet in the warehouse.
+-- If this returns rows: the pipeline has a gap.`}</CodeBox>
 
-
--- ── UNION ALL for combining multiple sources (common DE pattern) ──────────────
--- Combine payments from multiple payment providers into one table
-
-WITH all_payments AS (
-    SELECT payment_id, merchant_id, amount, 'stripe'   AS provider, created_at
+        <CodeBox label="Combining payments from multiple providers with UNION ALL">{`WITH all_payments AS (
+    SELECT payment_id, merchant_id, amount, 'stripe' AS provider, created_at
     FROM silver.stripe_payments
     UNION ALL
-    SELECT payment_id, merchant_id, amount, 'paypal'   AS provider, created_at
+    SELECT payment_id, merchant_id, amount, 'paypal' AS provider, created_at
     FROM silver.paypal_payments
     UNION ALL
-    SELECT payment_id, merchant_id, amount, 'square'   AS provider, created_at
+    SELECT payment_id, merchant_id, amount, 'square' AS provider, created_at
     FROM silver.square_payments
 )
-SELECT
-    provider,
-    DATE_TRUNC('day', created_at) AS payment_date,
-    COUNT(*)                       AS transaction_count,
-    SUM(amount)                    AS total_volume
+SELECT provider, DATE_TRUNC('day', created_at) AS payment_date,
+    COUNT(*) AS transaction_count, SUM(amount) AS total_volume
 FROM all_payments
 GROUP BY 1, 2
 ORDER BY 2, 1;`}</CodeBox>
@@ -955,36 +813,24 @@ ORDER BY 2, 1;`}</CodeBox>
           SCD handling is one of the most-tested topics in data engineering interviews.
         </Para>
 
-        <CodeBox label="SCD Type 1 — overwrite (no history preserved)">{`-- SCD TYPE 1: update in place, discard old value
--- Use when: you only care about current state, history is not needed
--- Example: correct a data entry mistake in an address
-
--- UPSERT pattern (INSERT or UPDATE):
+        <CodeBox label="SCD Type 1 — overwrite, no history preserved">{`-- Use when: you only care about current state, history is not needed
 INSERT INTO silver.customers (customer_id, name, city, updated_at)
 VALUES (4201938, 'Emily Johnson', 'Austin', NOW())
 ON CONFLICT (customer_id)
-DO UPDATE SET
-    city       = EXCLUDED.city,
-    updated_at = EXCLUDED.updated_at;
--- If customer 4201938 exists: update city from 'Seattle' to 'Austin'
--- If not: insert as new row
+DO UPDATE SET city = EXCLUDED.city, updated_at = EXCLUDED.updated_at;
 
--- PROBLEM: all historical analysis now shows Austin
--- "How much did Emily spend while she lived in Seattle?" → impossible to answer
--- Use SCD Type 2 if that question matters to the business`}</CodeBox>
+-- PROBLEM: all historical analysis now shows Austin.
+-- "How much did Emily spend while she lived in Seattle?" → impossible to answer.
+-- Use SCD Type 2 if that question matters to the business.`}</CodeBox>
 
-        <CodeBox label="SCD Type 2 — add new row (full history preserved)">{`-- SCD TYPE 2: add a new row for each change, expire the old row
--- Use when: you need to track history — "what was X at time T?"
--- Example: customer moves city — track both old and new for historical analysis
+        <SubSubTitle>SCD Type 2 — table structure and the expire+insert steps</SubSubTitle>
 
--- SCD Type 2 table structure:
-CREATE TABLE silver.customers_scd2 (
+        <CodeBox label="Full history preserved via versioned rows">{`CREATE TABLE silver.customers_scd2 (
     customer_sk    BIGSERIAL PRIMARY KEY,   -- surrogate key (new per version)
     customer_id    BIGINT    NOT NULL,      -- business key (same across versions)
     name           VARCHAR   NOT NULL,
     city           VARCHAR   NOT NULL,
     tier           VARCHAR   NOT NULL,
-    -- SCD metadata columns:
     valid_from     DATE      NOT NULL,      -- when this version became active
     valid_to       DATE,                    -- when this version expired (NULL = current)
     is_current     BOOLEAN   NOT NULL DEFAULT TRUE,
@@ -993,28 +839,25 @@ CREATE TABLE silver.customers_scd2 (
 
 -- STEP 1: expire the current row
 UPDATE silver.customers_scd2
-SET
-    valid_to   = CURRENT_DATE - INTERVAL '1 day',
-    is_current = FALSE
-WHERE customer_id = 4201938
-  AND is_current  = TRUE;
+SET valid_to = CURRENT_DATE - INTERVAL '1 day', is_current = FALSE
+WHERE customer_id = 4201938 AND is_current = TRUE;
 
 -- STEP 2: insert the new version
 INSERT INTO silver.customers_scd2
     (customer_id, name, city, tier, valid_from, valid_to, is_current)
 VALUES
-    (4201938, 'Emily Johnson', 'Austin', 'Gold', CURRENT_DATE, NULL, TRUE);
+    (4201938, 'Emily Johnson', 'Austin', 'Gold', CURRENT_DATE, NULL, TRUE);`}</CodeBox>
 
--- QUERY: "What city was Emily in when she placed order 9284751?"
+        <SubSubTitle>Point-in-time queries, and the dbt snapshot equivalent</SubSubTitle>
+
+        <CodeBox label="Joining a fact to the version that was active at the time">{`-- QUERY: "What city was Emily in when she placed order 9284751?"
 SELECT c.city
 FROM silver.orders o
 JOIN silver.customers_scd2 c
   ON o.customer_id = c.customer_id
  AND o.order_date BETWEEN c.valid_from AND COALESCE(c.valid_to, '9999-12-31')
 WHERE o.order_id = 9284751;
--- Returns 'Seattle' if the order was placed before the move
--- Returns 'Austin' if placed after
-
+-- Returns 'Seattle' if placed before the move, 'Austin' if placed after
 
 -- dbt snapshot pattern (generates SCD2 automatically):
 -- {% snapshot customers_snapshot %}
@@ -1023,31 +866,25 @@ WHERE o.order_id = 9284751;
 -- SELECT customer_id, name, city, tier FROM {{ source('prod', 'customers') }}
 -- {% endsnapshot %}`}</CodeBox>
 
-        <CodeBox label="SCD Type 3 — add column (limited history)">{`-- SCD TYPE 3: add a column for the previous value
--- Use when: you only need to track one change back (current + previous)
--- Example: customer segment changes — track current and previous segment
-
+        <CodeBox label="SCD Type 3 — add column, limited history">{`-- Use when: you only need to track one change back (current + previous)
 CREATE TABLE silver.customers_scd3 (
     customer_id      BIGINT  PRIMARY KEY,
     name             VARCHAR NOT NULL,
     current_tier     VARCHAR NOT NULL,
     previous_tier    VARCHAR,          -- NULL if never changed
-    tier_changed_at  TIMESTAMPTZ,      -- when the most recent change happened
+    tier_changed_at  TIMESTAMPTZ,
     city             VARCHAR NOT NULL
 );
 
--- UPDATE pattern:
 UPDATE silver.customers_scd3
-SET
-    previous_tier  = current_tier,    -- save current as previous
-    current_tier   = 'Platinum',      -- set new current
+SET previous_tier = current_tier,   -- save current as previous
+    current_tier   = 'Platinum',    -- set new current
     tier_changed_at = NOW()
 WHERE customer_id = 4201938;
 
--- LIMITATION: only tracks one previous value
--- After a second change: previous_tier is overwritten
--- Cannot answer "what was the tier two changes ago?"
--- Use SCD Type 2 for full history`}</CodeBox>
+-- LIMITATION: only tracks one previous value. After a second change,
+-- previous_tier is overwritten — cannot answer "two changes ago?"
+-- Use SCD Type 2 for full history.`}</CodeBox>
       </section>
 
       <Divider />
@@ -1065,50 +902,29 @@ WHERE customer_id = 4201938;
           PostgreSQL with notes on Snowflake and BigQuery differences.
         </Para>
 
-        <CodeBox label="Date arithmetic and truncation — the essential patterns">{`-- ── DATE TRUNCATION ──────────────────────────────────────────────────────────
--- DATE_TRUNC rounds down to the start of the specified period
+        <SubSubTitle>Date truncation and arithmetic</SubSubTitle>
 
-SELECT
-    order_id,
-    created_at,
-
+        <CodeBox label="DATE_TRUNC across warehouses, and PostgreSQL date arithmetic">{`SELECT order_id, created_at,
     DATE_TRUNC('day',   created_at) AS order_day,        -- 2026-03-17 00:00:00
     DATE_TRUNC('week',  created_at) AS order_week_start, -- 2026-03-16 (Monday)
     DATE_TRUNC('month', created_at) AS order_month,      -- 2026-03-01 00:00:00
-    DATE_TRUNC('year',  created_at) AS order_year,       -- 2026-01-01 00:00:00
-    DATE_TRUNC('hour',  created_at) AS order_hour        -- 2026-03-17 20:00:00
-
+    DATE_TRUNC('year',  created_at) AS order_year        -- 2026-01-01 00:00:00
 FROM silver.orders;
+-- Snowflake: DATE_TRUNC('month', created_at) — same syntax
+-- BigQuery:  DATE_TRUNC(created_at, MONTH)   — arguments reversed!
 
--- In Snowflake: DATE_TRUNC('month', created_at) — same syntax
--- In BigQuery: DATE_TRUNC(created_at, MONTH) — arguments reversed!
-
-
--- ── DATE ARITHMETIC ───────────────────────────────────────────────────────────
--- PostgreSQL:
 SELECT
-    CURRENT_DATE,                              -- today: 2026-03-17
-    CURRENT_DATE - INTERVAL '7 days',         -- 7 days ago: 2026-03-10
-    CURRENT_DATE - INTERVAL '1 month',        -- 1 month ago: 2026-02-17
-    CURRENT_DATE + INTERVAL '30 days',        -- 30 days ahead: 2026-04-16
+    CURRENT_DATE - INTERVAL '7 days'  AS week_ago,
+    CURRENT_DATE + INTERVAL '30 days' AS thirty_ahead,
+    EXTRACT(DOW FROM CURRENT_DATE)    AS day_of_week,   -- 0=Sunday, 6=Saturday
+    EXTRACT(EPOCH FROM created_at)    AS unix_ts,       -- seconds since 1970
+    CURRENT_DATE - order_date         AS days_since_order,
+    AGE(CURRENT_DATE, order_date)     AS age_interval   -- interval '14 days'
+FROM silver.orders;`}</CodeBox>
 
-    -- Date parts:
-    EXTRACT(DOW FROM CURRENT_DATE),           -- day of week (0=Sunday, 6=Saturday)
-    EXTRACT(DOY FROM CURRENT_DATE),           -- day of year (1–365)
-    EXTRACT(MONTH FROM created_at),           -- month number (1–12)
-    EXTRACT(EPOCH FROM created_at),           -- Unix timestamp (seconds since 1970)
+        <SubSubTitle>Common date-range patterns</SubSubTitle>
 
-    -- Date difference:
-    CURRENT_DATE - order_date                 AS days_since_order,  -- integer
-    AGE(CURRENT_DATE, order_date)             AS age_interval,      -- interval '14 days'
-    DATE_PART('day', CURRENT_DATE - order_date::DATE) AS days_int   -- explicitly integer
-
-FROM silver.orders;
-
-
--- ── COMMON DATE PATTERNS ──────────────────────────────────────────────────────
-
--- Last 7 days (inclusive of today):
+        <CodeBox label="Last 7 days, month-to-date, previous month, same day last year">{`-- Last 7 days (inclusive of today):
 WHERE order_date >= CURRENT_DATE - INTERVAL '6 days'
 
 -- Month-to-date:
@@ -1119,91 +935,66 @@ WHERE order_date >= DATE_TRUNC('month', CURRENT_DATE)
 WHERE order_date >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')
   AND order_date <  DATE_TRUNC('month', CURRENT_DATE)
 
--- Same day last year:
-WHERE order_date = CURRENT_DATE - INTERVAL '1 year'
-
 -- Last complete week (Monday–Sunday):
 WHERE order_date >= DATE_TRUNC('week', CURRENT_DATE - INTERVAL '7 days')
-  AND order_date <  DATE_TRUNC('week', CURRENT_DATE)
+  AND order_date <  DATE_TRUNC('week', CURRENT_DATE)`}</CodeBox>
 
+        <SubSubTitle>Timezone handling</SubSubTitle>
 
--- ── TIMEZONE HANDLING ─────────────────────────────────────────────────────────
--- Always work in UTC internally, convert to local time (America/New_York) only for display
+        <CodeBox label="Converting UTC storage to local time for display only">{`-- Always work in UTC internally, convert to local time only for display
 
--- Convert UTC timestamp to local time for reporting:
-SELECT
-    order_id,
+-- PostgreSQL:
+SELECT order_id,
     created_at AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS created_at_local
 FROM silver.orders;
 
--- Snowflake timezone conversion:
-SELECT CONVERT_TIMEZONE('UTC', 'America/New_York', created_at) AS local_time FROM orders;
-
--- BigQuery timezone conversion:
-SELECT DATETIME(created_at, 'America/New_York') AS local_time FROM orders;
+-- Snowflake:  SELECT CONVERT_TIMEZONE('UTC', 'America/New_York', created_at) ...
+-- BigQuery:   SELECT DATETIME(created_at, 'America/New_York') ...
 
 -- Safe local-day grouping (orders placed between midnight and midnight local time):
-SELECT
-    DATE(created_at AT TIME ZONE 'America/New_York') AS order_date_local,
-    COUNT(*)                                      AS order_count
+SELECT DATE(created_at AT TIME ZONE 'America/New_York') AS order_date_local,
+    COUNT(*) AS order_count
 FROM silver.orders
-GROUP BY 1
-ORDER BY 1;`}</CodeBox>
+GROUP BY 1 ORDER BY 1;`}</CodeBox>
 
         <SubTitle>Cohort analysis — the classic date SQL challenge</SubTitle>
 
-        <CodeBox label="Cohort retention analysis — a complete DE SQL pattern">{`-- Monthly cohort retention: for each signup month cohort,
+        <CodeBox label="Assigning cohorts, and listing every active month per customer">{`-- Monthly cohort retention: for each signup month cohort,
 -- what % of customers are still ordering in month N?
 
 WITH
 -- Step 1: assign each customer to their signup cohort (month of first order)
 cohort_assignment AS (
-    SELECT
-        customer_id,
-        DATE_TRUNC('month', MIN(order_date)) AS cohort_month
+    SELECT customer_id, DATE_TRUNC('month', MIN(order_date)) AS cohort_month
     FROM silver.orders
     WHERE status = 'delivered'
     GROUP BY customer_id
 ),
-
 -- Step 2: for each customer, list every month they had at least one order
 active_months AS (
-    SELECT DISTINCT
-        customer_id,
-        DATE_TRUNC('month', order_date) AS active_month
+    SELECT DISTINCT customer_id, DATE_TRUNC('month', order_date) AS active_month
     FROM silver.orders
     WHERE status = 'delivered'
-),
+),`}</CodeBox>
 
--- Step 3: join and calculate cohort_period (0 = cohort month, 1 = one month later, etc.)
+        <CodeBox label="...continued — computing cohort_period and the retention percentage">{`-- Step 3: join and calculate cohort_period (0 = cohort month, 1 = one month later)
 cohort_data AS (
-    SELECT
-        ca.cohort_month,
-        am.active_month,
-        -- How many months after cohort month is this?
-        EXTRACT(YEAR  FROM AGE(am.active_month, ca.cohort_month)) * 12
-        + EXTRACT(MONTH FROM AGE(am.active_month, ca.cohort_month))
-            AS cohort_period,
+    SELECT ca.cohort_month, am.active_month,
+        EXTRACT(YEAR FROM AGE(am.active_month, ca.cohort_month)) * 12
+        + EXTRACT(MONTH FROM AGE(am.active_month, ca.cohort_month)) AS cohort_period,
         COUNT(DISTINCT am.customer_id) AS customers_active
     FROM cohort_assignment ca
     JOIN active_months am USING (customer_id)
     WHERE am.active_month >= ca.cohort_month
     GROUP BY 1, 2, 3
 ),
-
 -- Step 4: calculate cohort size (customers in month 0)
 cohort_sizes AS (
     SELECT cohort_month, customers_active AS cohort_size
-    FROM cohort_data
-    WHERE cohort_period = 0
+    FROM cohort_data WHERE cohort_period = 0
 )
-
 -- Final: retention rates
-SELECT
-    cd.cohort_month,
-    cs.cohort_size,
-    cd.cohort_period,
-    cd.customers_active,
+SELECT cd.cohort_month, cs.cohort_size, cd.cohort_period, cd.customers_active,
     ROUND(cd.customers_active::NUMERIC / cs.cohort_size * 100, 1) AS retention_pct
 FROM cohort_data cd
 JOIN cohort_sizes cs USING (cohort_month)
@@ -1225,128 +1016,84 @@ ORDER BY cohort_month, cohort_period;`}</CodeBox>
           does not.
         </Para>
 
-        <SubTitle>Reading EXPLAIN ANALYZE in PostgreSQL and Snowflake</SubTitle>
+        <SubSubTitle>Reading EXPLAIN ANALYZE in PostgreSQL</SubSubTitle>
 
-        <CodeBox label="Understanding query plans — what to look for">{`-- ── POSTGRESQL: EXPLAIN ANALYZE ─────────────────────────────────────────────
-EXPLAIN ANALYZE
-SELECT
-    s.store_name,
-    COUNT(*) AS order_count,
-    SUM(o.amount) AS total_revenue
+        <CodeBox label="A query plan, and the signals that matter">{`EXPLAIN ANALYZE
+SELECT s.store_name, COUNT(*) AS order_count, SUM(o.amount) AS total_revenue
 FROM silver.orders o
 JOIN silver.stores s ON o.store_id = s.store_id
 WHERE o.order_date >= '2026-01-01'
 GROUP BY s.store_name;
 
 -- Sample output:
--- HashAggregate  (cost=... rows=10) (actual time=892ms rows=10)
---   ->  Hash Join  (cost=... rows=480k) (actual time=24ms rows=482k)
---         Hash Cond: (o.store_id = s.store_id)
---         ->  Index Scan using idx_orders_date on orders o
---               (actual time=0.04ms rows=482193)
---               Index Cond: (order_date >= '2026-01-01')
---         ->  Hash  (actual time=0.03ms rows=10)
---               ->  Seq Scan on stores s  (actual time=0.02ms rows=10)
--- Planning Time: 1.2 ms
--- Execution Time: 896 ms
+-- HashAggregate (actual time=892ms rows=10)
+--   ->  Hash Join (actual time=24ms rows=482k)
+--         ->  Index Scan using idx_orders_date on orders o (rows=482193)
+--         ->  Hash -> Seq Scan on stores s (rows=10)
+-- Execution Time: 896 ms`}</CodeBox>
 
--- KEY THINGS TO LOOK FOR:
---   "Seq Scan" on a large table → likely missing index
---   "Index Scan" → index is being used ✓
---   "Hash Join" → joining medium tables efficiently ✓
---   "Nested Loop" on large tables → may be slow
---   rows estimate vs actual rows differing by 10×+ → stale statistics
---   high "actual time" on one node → that node is the bottleneck
+        <Output>{`KEY THINGS TO LOOK FOR:
+"Seq Scan" on a large table       → likely missing index
+"Index Scan"                      → index is being used ✓
+"Hash Join"                       → joining medium tables efficiently ✓
+"Nested Loop" on large tables      → may be slow
+rows estimate vs actual differing by 10×+  → stale statistics
+high "actual time" on one node     → that node is the bottleneck`}</Output>
 
+        <SubSubTitle>Reading EXPLAIN in Snowflake</SubSubTitle>
 
--- ── SNOWFLAKE: EXPLAIN ────────────────────────────────────────────────────────
--- Snowflake does not use traditional indexes — it uses micro-partition pruning
-
-EXPLAIN
+        <CodeBox label="Snowflake uses micro-partition pruning, not traditional indexes">{`EXPLAIN
 SELECT store_name, SUM(amount) FROM orders WHERE order_date >= '2026-01-01'
 GROUP BY store_name;
 
 -- Look for in Snowflake:
 --   "Partition pruning: 847 of 1024 partitions pruned" → filter is working ✓
---   "TableScan: ALL PARTITIONS" → no partition pruning → check clustering key
+--   "TableScan: ALL PARTITIONS" → no pruning → check clustering key
 --   "SpillToLocalStorage" → query is spilling — increase warehouse size or
---                           rewrite query to reduce intermediate result size`}</CodeBox>
+--                           rewrite the query to reduce intermediate result size`}</CodeBox>
 
-        <SubTitle>The ten most impactful optimisation rules</SubTitle>
+        <SubSubTitle>Ten impactful optimisation rules — 1 through 5</SubSubTitle>
 
-        <CodeBox label="Query optimisation rules — ordered by impact">{`-- 1. FILTER EARLY — push WHERE conditions as early as possible in CTEs
--- BAD: filter after the JOIN
-SELECT * FROM orders o JOIN customers c USING (customer_id)
-WHERE o.order_date >= '2026-03-01';
-
--- GOOD: filter before the JOIN — reduces rows joining
-WITH recent_orders AS (
-    SELECT * FROM orders WHERE order_date >= '2026-03-01'
-)
+        <CodeBox label="Filter early, avoid SELECT *, don't wrap indexed columns, prefer JOINs, COUNT(*)">{`-- 1. FILTER EARLY — push WHERE conditions as early as possible in CTEs
+-- GOOD: filter before the JOIN, reducing rows joining
+WITH recent_orders AS (SELECT * FROM orders WHERE order_date >= '2026-03-01')
 SELECT * FROM recent_orders o JOIN customers c USING (customer_id);
 
+-- 2. AVOID SELECT * — on columnar warehouses it reads every column,
+-- negating the columnar benefit
+SELECT order_id, customer_id, amount FROM orders;
 
--- 2. AVOID SELECT * IN PRODUCTION — select only columns you need
--- SELECT * reads all columns including ones your query never uses
--- On columnar warehouses, SELECT * reads every column — negates columnar benefit
-SELECT order_id, customer_id, amount FROM orders;  -- not SELECT *
+-- 3. AVOID FUNCTIONS ON INDEXED/FILTERED COLUMNS — prevents index/pruning use
+-- BAD:  WHERE EXTRACT(YEAR FROM order_date) = 2026    (full scan!)
+-- GOOD: WHERE order_date >= '2026-01-01' AND order_date < '2027-01-01'
 
+-- 4. USE JOINS INSTEAD OF CORRELATED SUBQUERIES — a correlated subquery
+-- runs once per outer row; a JOIN runs once.
 
--- 3. AVOID FUNCTIONS ON INDEXED COLUMNS IN WHERE — prevents index use
--- BAD: applying function to indexed column prevents index use
-WHERE LOWER(email) = 'emily@example.com'
-WHERE EXTRACT(YEAR FROM order_date) = 2026   -- full scan!
+-- 5. COUNT(*) is the SQL standard — no practical difference from COUNT(1)
+-- in modern databases. Use COUNT(*).`}</CodeBox>
 
--- GOOD: compute the comparison value instead, leave the column raw
-WHERE email = LOWER('Emily@Example.com')     -- or store email pre-lowercased
-WHERE order_date >= '2026-01-01'             -- range on the column directly
-  AND order_date <  '2027-01-01'
+        <SubSubTitle>Ten impactful optimisation rules — 6 through 10</SubSubTitle>
 
+        <CodeBox label="Avoid unneeded DISTINCT, materialise reused CTEs, prune partitions, join order, approximation">{`-- 6. AVOID DISTINCT WHEN NOT NEEDED — it triggers an extra sort/hash step.
+-- If the join is known to produce unique rows, omit DISTINCT.
 
--- 4. USE JOINS INSTEAD OF CORRELATED SUBQUERIES
--- BAD: correlated subquery runs once per outer row
-SELECT
-    o.*,
-    (SELECT name FROM customers WHERE customer_id = o.customer_id) AS customer_name
-FROM orders o;
+-- 7. MATERIALISE INTERMEDIATE CTEs for reuse in Snowflake / BigQuery —
+-- a CTE referenced multiple times may be re-executed each time
+-- (database-dependent). Use CREATE TEMP TABLE for CTEs referenced >once
+-- in complex queries.
 
--- GOOD: JOIN runs once
-SELECT o.*, c.name AS customer_name
-FROM orders o
-JOIN customers c USING (customer_id);
+-- 8. PARTITION PRUNING — always filter on partition columns. Without a
+-- partition filter: full table scan regardless of other filters.
 
+-- 9. JOIN ORDER — put the smaller table on the right in HASH JOINs.
+-- Most optimisers (PostgreSQL) handle this automatically; for very large
+-- tables in Snowflake/BigQuery, hint with the smaller table on the right.
 
--- 5. COUNT(1) vs COUNT(*) — no practical difference in modern databases
--- Both count rows. COUNT(*) is the SQL standard. Use it.
-SELECT COUNT(*) FROM orders;
-
-
--- 6. AVOID DISTINCT when not needed — it triggers an extra sort/hash step
--- If you know the join produces unique results, omit DISTINCT
--- If you need uniqueness, check whether a better JOIN design eliminates duplicates
-
-
--- 7. MATERIALISE INTERMEDIATE CTEs for reuse in Snowflake / BigQuery
--- A CTE referenced multiple times may be re-executed each time (database-dependent)
--- In Snowflake, use CREATE TEMP TABLE for CTEs referenced > once in complex queries
-
-
--- 8. PARTITION PRUNING — always filter on partition columns
--- Snowflake: cluster by the column you filter on most frequently
--- Parquet/Iceberg: filter on the partition column in WHERE clause
--- Without partition filter: full table scan regardless of other filters
-
-
--- 9. JOIN ORDER — put the smaller table on the right in HASH JOINs
--- PostgreSQL optimiser usually handles this automatically
--- In Snowflake/BigQuery for very large tables: hint with smaller table on right side
-
-
--- 10. APPROXIMATE FUNCTIONS for exploration on very large datasets
--- Instead of COUNT(DISTINCT customer_id) which requires loading all IDs:
-SELECT APPROX_COUNT_DISTINCT(customer_id) FROM orders;  -- Snowflake
-SELECT HLL_COUNT.MERGE(HLL_COUNT.INIT(customer_id)) FROM orders;  -- BigQuery
--- Typically within 1–2% of exact count, but runs much faster`}</CodeBox>
+-- 10. APPROXIMATE FUNCTIONS for exploration on very large datasets:
+SELECT APPROX_COUNT_DISTINCT(customer_id) FROM orders;             -- Snowflake
+SELECT HLL_COUNT.MERGE(HLL_COUNT.INIT(customer_id)) FROM orders;    -- BigQuery
+-- Typically within 1–2% of the exact count, but runs much faster.`}</CodeBox>
       </section>
 
       <Divider />
@@ -1363,88 +1110,99 @@ SELECT HLL_COUNT.MERGE(HLL_COUNT.INIT(customer_id)) FROM orders;  -- BigQuery
           important differences a data engineer needs to know.
         </Para>
 
-        <CodeBox label="Key SQL differences across warehouses">{`-- ── JSON / SEMI-STRUCTURED DATA ──────────────────────────────────────────────
+        <SubSubTitle>JSON / semi-structured data, and array handling</SubSubTitle>
 
--- PostgreSQL:
-SELECT payload->>'order_id' AS order_id,    -- text value
-       payload->'amount'    AS amount_json,  -- JSON value
-       (payload->>'amount')::DECIMAL         -- cast to numeric
+        <CodeBox label="Three warehouses, three JSON path syntaxes and array-unpacking styles">{`-- PostgreSQL:
+SELECT payload->>'order_id' AS order_id, (payload->>'amount')::DECIMAL
 FROM orders WHERE payload IS NOT NULL;
 
 -- Snowflake (VARIANT column):
-SELECT
-    payload:order_id::INTEGER          AS order_id,
-    payload:customer.city::VARCHAR     AS city,        -- nested path
-    payload:items[0]:name::VARCHAR     AS first_item   -- array index
+SELECT payload:order_id::INTEGER          AS order_id,
+       payload:customer.city::VARCHAR     AS city,        -- nested path
+       payload:items[0]:name::VARCHAR     AS first_item   -- array index
 FROM orders;
 
 -- BigQuery (JSON column):
-SELECT
-    JSON_VALUE(payload, '$.order_id')  AS order_id,
-    JSON_VALUE(payload, '$.customer.city') AS city
+SELECT JSON_VALUE(payload, '$.order_id') AS order_id,
+       JSON_VALUE(payload, '$.customer.city') AS city
 FROM orders;
 
+-- ARRAY UNPACKING:
+SELECT order_id, UNNEST(items) AS item FROM orders;                    -- PostgreSQL
+SELECT o.order_id, f.value:item_name::VARCHAR FROM orders o,
+       LATERAL FLATTEN(input => o.items) f;                            -- Snowflake
+SELECT order_id, item FROM orders, UNNEST(items) AS item;              -- BigQuery`}</CodeBox>
 
--- ── ARRAY HANDLING ────────────────────────────────────────────────────────────
+        <SubSubTitle>QUALIFY, string functions, and regex</SubSubTitle>
 
--- PostgreSQL: UNNEST
-SELECT order_id, UNNEST(items) AS item FROM orders;
-
--- Snowflake: FLATTEN
-SELECT o.order_id, f.value:item_name::VARCHAR AS item_name
-FROM orders o, LATERAL FLATTEN(input => o.items) f;
-
--- BigQuery: UNNEST
-SELECT order_id, item
-FROM orders, UNNEST(items) AS item;
-
-
--- ── WINDOW FUNCTION QUALIFY (Snowflake / BigQuery only) ──────────────────────
--- PostgreSQL requires a CTE:
+        <CodeBox label="Filtering window results, concatenation, splitting, and pattern matching">{`-- PostgreSQL requires a CTE to filter on a window function:
 WITH ranked AS (SELECT *, ROW_NUMBER() OVER (...) AS rn FROM orders)
 SELECT * FROM ranked WHERE rn = 1;
 
--- Snowflake / BigQuery — QUALIFY filters window function results directly:
+-- Snowflake / BigQuery — QUALIFY filters window results directly:
 SELECT * FROM orders
 QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY updated_at DESC) = 1;
 
-
--- ── STRING FUNCTIONS ─────────────────────────────────────────────────────────
--- Concatenation:
-SELECT 'Hello' || ' ' || 'World';          -- PostgreSQL, Snowflake, BigQuery
-SELECT CONCAT('Hello', ' ', 'World');      -- All three
-
 -- String splitting:
--- PostgreSQL:  SPLIT_PART(str, delimiter, field_number)
--- Snowflake:   SPLIT_PART(str, delimiter, field_number)  -- same
--- BigQuery:    SPLIT(str, delimiter)[OFFSET(0)]          -- returns array
+-- PostgreSQL/Snowflake: SPLIT_PART(str, delimiter, field_number)
+-- BigQuery:             SPLIT(str, delimiter)[OFFSET(0)]  — returns an array
 
 -- Regex:
--- PostgreSQL:  ~ for match, regexp_replace(), regexp_extract()
--- Snowflake:   REGEXP_LIKE(), REGEXP_REPLACE(), REGEXP_SUBSTR()
--- BigQuery:    REGEXP_CONTAINS(), REGEXP_REPLACE(), REGEXP_EXTRACT()
+-- PostgreSQL: ~ for match, regexp_replace(), regexp_extract()
+-- Snowflake:  REGEXP_LIKE(), REGEXP_REPLACE(), REGEXP_SUBSTR()
+-- BigQuery:   REGEXP_CONTAINS(), REGEXP_REPLACE(), REGEXP_EXTRACT()`}</CodeBox>
 
+        <SubSubTitle>Date functions and row limiting</SubSubTitle>
 
--- ── DATE FUNCTIONS ────────────────────────────────────────────────────────────
--- Get current date:
-CURRENT_DATE                    -- PostgreSQL, Snowflake
-CURRENT_DATE()                  -- BigQuery
+        <CodeBox label="The same operation, three different function names">{`-- Date truncation — BigQuery reverses the argument order:
+DATE_TRUNC('month', ts)         -- PostgreSQL, Snowflake
+DATE_TRUNC(ts, MONTH)           -- BigQuery — reversed!
 
--- Date truncation:
-DATE_TRUNC('month', ts)         -- PostgreSQL: DATE_TRUNC(part, value)
-DATE_TRUNC('month', ts)         -- Snowflake: same
-DATE_TRUNC(ts, MONTH)           -- BigQuery: DATE_TRUNC(value, part) — reversed!
-
--- Add intervals:
+-- Adding intervals:
 ts + INTERVAL '7 days'          -- PostgreSQL
 DATEADD('day', 7, ts)           -- Snowflake
 DATE_ADD(ts, INTERVAL 7 DAY)    -- BigQuery
 
+-- Limiting rows:
+SELECT * FROM orders LIMIT 10;                    -- PostgreSQL, Snowflake, BigQuery
+SELECT TOP 10 * FROM orders;                       -- SQL Server / Redshift (also supports LIMIT)
+SELECT * FROM orders FETCH FIRST 10 ROWS ONLY;     -- SQL standard`}</CodeBox>
+      </section>
 
--- ── LIMITING ROWS ────────────────────────────────────────────────────────────
-SELECT * FROM orders LIMIT 10;          -- PostgreSQL, Snowflake, BigQuery
-SELECT TOP 10 * FROM orders;            -- SQL Server / Redshift (also supports LIMIT)
-SELECT * FROM orders FETCH FIRST 10 ROWS ONLY;  -- SQL standard`}</CodeBox>
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About SQL for Data Engineering</SectionTitle>
+
+        {[
+          {
+            wrong: '"A window function is basically a GROUP BY with extra syntax"',
+            right: 'Part 02 draws the actual distinction: GROUP BY collapses rows into one per group, while a window function returns a value on every individual row without collapsing anything — that\'s exactly why "each order alongside its store\'s total revenue" is trivial with a window function and impossible with GROUP BY alone.',
+          },
+          {
+            wrong: '"RANK() is fine for deduplication — it and ROW_NUMBER() do basically the same thing"',
+            right: 'Part 02 and Part 04 are both explicit that RANK() can return more than one row per group when values tie, while ROW_NUMBER() guarantees exactly one — deduplication logic that uses RANK() silently keeps duplicate rows whenever a tie happens to occur.',
+          },
+          {
+            wrong: '"SUM() and AVG() treat NULL the same way COALESCE(x, 0) would"',
+            right: 'Part 05 spells out the actual behavior: aggregate functions IGNORE NULLs rather than counting them as zero — SUM(discount_amount) on a column with NULLs silently produces a smaller total than expected, which is a different bug than treating NULL as 0 would be.',
+          },
+          {
+            wrong: '"UNION is the safe default when combining data from multiple sources"',
+            right: 'Part 06 is explicit that UNION ALL should be the default in data pipelines — UNION\'s deduplication can silently drop a legitimate record from one source that happens to share every column value with a record from another, which is exactly the kind of coincidental collision multi-source payment data can produce.',
+          },
+          {
+            wrong: '"WHERE status != \'cancelled\' returns every non-cancelled row"',
+            right: 'Part 05 and this module\'s Interview Prep Q4 both walk through the same trap: because NULL != anything evaluates to NULL rather than TRUE, any row where status IS NULL is silently excluded from that filter — the query looks like it means "everything except cancelled" but actually means "everything except cancelled and anything with unknown status."',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1483,19 +1241,15 @@ SELECT * FROM orders FETCH FIRST 10 ROWS ONLY;  -- SQL standard`}</CodeBox>
             pattern from this module.
           </Para>
 
-          <CodeBox label="gold/daily_store_category_metrics.sql — complete production model">{`-- Gold model: daily revenue metrics by store and category
--- Powers the FreshCart Revenue Dashboard
--- Refresh: daily at 06:00 AM ET
+          <SubSubTitle>Base and daily aggregation</SubSubTitle>
+
+          <CodeBox label="gold/daily_store_category_metrics.sql — steps 1-2">{`-- Refresh: daily at 06:00 AM ET
 
 WITH
--- Step 1: Base — delivered orders in analysis window
--- Filter pushed down to Silver before any aggregation
+-- Step 1: Base — delivered orders in the analysis window,
+-- filter pushed down to Silver before any aggregation
 base AS (
-    SELECT
-        o.order_id,
-        o.store_id,
-        p.category,
-        o.order_amount,
+    SELECT o.order_id, o.store_id, p.category, o.order_amount,
         DATE(o.created_at AT TIME ZONE 'America/New_York') AS order_date
     FROM silver.orders o
     JOIN silver.order_items oi ON o.order_id = oi.order_id
@@ -1504,71 +1258,54 @@ base AS (
       AND o.created_at >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '2 months')
     -- 2 months back to support MoM comparisons
 ),
-
 -- Step 2: Daily aggregation by store + category
 daily_agg AS (
-    SELECT
-        store_id,
-        category,
-        order_date,
+    SELECT store_id, category, order_date,
         COUNT(DISTINCT order_id) AS order_count,
         SUM(order_amount)        AS daily_revenue
     FROM base
     GROUP BY 1, 2, 3
-),
+),`}</CodeBox>
 
--- Step 3: Window function layer — running totals, comparisons, rankings
+          <SubSubTitle>The window function layer</SubSubTitle>
+
+          <CodeBox label="...continued — step 3, running totals, day-over-day, and ranking">{`-- Step 3: Window function layer — running totals, comparisons, rankings
 enriched AS (
-    SELECT
-        store_id,
-        category,
-        order_date,
-        order_count,
-        daily_revenue,
+    SELECT store_id, category, order_date, order_count, daily_revenue,
 
         -- Running month-to-date revenue
         SUM(daily_revenue) OVER (
-            PARTITION BY store_id, category,
-                         DATE_TRUNC('month', order_date)
+            PARTITION BY store_id, category, DATE_TRUNC('month', order_date)
             ORDER BY order_date
             ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
         ) AS mtd_revenue,
 
         -- Day-over-day revenue change
-        daily_revenue
-        - COALESCE(LAG(daily_revenue) OVER (
-            PARTITION BY store_id, category
-            ORDER BY order_date
-          ), 0)
-        AS dod_revenue_change,
+        daily_revenue - COALESCE(LAG(daily_revenue) OVER (
+            PARTITION BY store_id, category ORDER BY order_date
+        ), 0) AS dod_revenue_change,
 
         -- 7-day moving average
         ROUND(AVG(daily_revenue) OVER (
-            PARTITION BY store_id, category
-            ORDER BY order_date
+            PARTITION BY store_id, category ORDER BY order_date
             ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
         ), 2) AS moving_avg_7d,
 
         -- Rank within category on each day (which store performed best?)
         RANK() OVER (
-            PARTITION BY category, order_date
-            ORDER BY daily_revenue DESC
+            PARTITION BY category, order_date ORDER BY daily_revenue DESC
         ) AS store_rank_in_category
 
     FROM daily_agg
-),
+),`}</CodeBox>
 
--- Step 4: Add store dimension attributes
-final AS (
-    SELECT
-        e.*,
-        s.store_name,
-        s.city,
-        s.store_manager
+          <SubSubTitle>Final dimension join</SubSubTitle>
+
+          <CodeBox label="...continued — step 4, adding store attributes">{`final AS (
+    SELECT e.*, s.store_name, s.city, s.store_manager
     FROM enriched e
     JOIN silver.stores s USING (store_id)
 )
-
 SELECT * FROM final
 ORDER BY order_date DESC, category, store_rank_in_category;`}</CodeBox>
 
@@ -1690,6 +1427,42 @@ Use UNION (without ALL) only when you genuinely want to find the set of distinct
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Wrapping every window function call in its own repeated OVER (...) instead of naming it once',
+            a: 'Part 02\'s LAG examples show this compounding fast — the same PARTITION BY store_id ORDER BY order_date gets typed three or four times in one query. It works, but it\'s also exactly how a day-over-day calculation quietly drifts out of sync with the row it\'s supposed to compare against when only one copy gets edited.',
+          },
+          {
+            q: 'Reaching for a nested subquery instead of a CTE chain when a query has more than one logical step',
+            a: 'Part 03\'s BAD/GOOD comparison is built specifically to make this visible — the nested version and the CTE version return identical results, but only the CTE chain lets you test step 2 in isolation or hand the query to a reviewer who can follow it without mentally un-nesting three levels of parentheses.',
+          },
+          {
+            q: 'Assuming SUM() or AVG() over a column with NULLs is equivalent to treating those NULLs as zero',
+            a: 'Part 05 is explicit that aggregate functions ignore NULLs rather than substituting zero — a revenue total can look "off by a suspiciously small amount" for months before anyone notices, which is exactly the failure mode in this module\'s Error Library\'s first entry.',
+          },
+          {
+            q: 'Filtering with a plain != or NOT IN on a column that can contain NULL',
+            a: 'Part 05 and Interview Prep Q4 both walk through the same silent trap: three-valued logic makes NULL != x evaluate to NULL, not TRUE, so those rows vanish from the result with no error and no warning. Add OR column IS NULL explicitly whenever NULL is a real possibility.',
+          },
+          {
+            q: 'Defaulting to UNION instead of UNION ALL when combining rows from multiple sources',
+            a: 'Part 06 and this module\'s Misconceptions section both flag the same risk — UNION\'s deduplication can silently drop a genuinely distinct record from one source that happens to match another source\'s row on every visible column, which is a real risk when combining payment data from multiple providers.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1764,7 +1537,7 @@ Use UNION (without ALL) only when you genuinely want to find the set of distinct
         'UNION ALL is almost always the right choice over UNION. UNION ALL is faster (no deduplication step) and preserves all records from all sources. Use UNION only when you explicitly want distinct values across two sets. When deduplication is needed, do it explicitly with ROW_NUMBER rather than implicitly with UNION.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
