@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,30 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+// A visually distinct block for a realistic API response / terminal output —
+// separated from the request itself so "thing you send" and "thing you get
+// back" are never commingled inside one code-commented wall of text.
+const Output = ({ children, label }: { children: string; label?: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> {label ?? 'response'}
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +96,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -124,14 +170,16 @@ const CompareTable = ({ headers, rows, keys }: CompareTableProps) => (
   </div>
 )
 
+const inlineCode = { fontFamily: 'var(--font-mono)', fontSize: 13 } as const
+
 export default function WorkingWithAPIsModule() {
   return (
     <LearnLayout
       title="Working with APIs — REST, Auth, Pagination, Rate Limits"
-      description="How APIs work, every auth pattern, all pagination styles, rate limits, and webhooks vs polling."
+      description="How APIs work, every auth pattern, all pagination styles, rate limits, and webhooks vs polling — built as one real payment-ingestion pipeline, not a wall of unrelated snippets."
       section="Data Engineering — Module 18"
-      readTime="70 min"
-      updatedAt="March 2026"
+      readTime="75 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why APIs Matter ────────────────────────────────── */}
@@ -142,19 +190,19 @@ export default function WorkingWithAPIsModule() {
         <Para>
           A data engineer who cannot work confidently with APIs is blocked from
           half the data sources they will encounter. Payment processors, CRM
-          systems, marketing platforms, weather services, logistics APIs,
-          government data portals — none of them hand you a database connection
-          string. They hand you an API key and a documentation URL.
+          systems, marketing platforms, logistics partners — none of them hand
+          you a database connection string. They hand you an API key and a
+          documentation URL.
         </Para>
 
         <Para>
-          Module 14 covered the Python mechanics of making API calls. This module
-          goes deeper: how HTTP and REST actually work under the hood, every
-          authentication pattern in production use, all three pagination styles
-          with their trade-offs, rate limiting strategies both reactive and
-          proactive, webhooks vs polling and when to choose each, and how to
-          design API ingestion pipelines that are reliable, resumable, and
-          production-safe.
+          This module is built around one real, ongoing example: FreshCart needs
+          a pipeline that pulls transaction data from its payment gateway into
+          the warehouse. Every technique below — auth, pagination, rate limits,
+          webhooks — is a piece of that one pipeline, built up incrementally, not
+          a disconnected reference for eight unrelated topics. Near the end, the
+          Real World section applies the exact same process to onboarding a
+          second, completely different vendor, so you see the pattern generalise.
         </Para>
 
         <HighlightBox>
@@ -167,8 +215,8 @@ export default function WorkingWithAPIsModule() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
             {[
               { num: '01', name: 'HTTP and REST fundamentals', desc: 'Methods, status codes, headers, request/response anatomy.' },
-              { num: '02', name: 'Authentication patterns', desc: 'API keys, Bearer tokens, OAuth 2.0, HMAC — each in depth.' },
-              { num: '03', name: 'Pagination', desc: 'Offset, cursor, and next-URL — trade-offs and implementation.' },
+              { num: '02', name: 'Authentication patterns', desc: 'API keys, Bearer tokens, OAuth 2.0, HMAC, JWT — each in depth.' },
+              { num: '03', name: 'Pagination', desc: 'Offset, cursor, and next-URL — trade-offs and real implementations.' },
               { num: '04', name: 'Rate limiting', desc: 'Detecting limits, backoff strategies, proactive throttling.' },
               { num: '05', name: 'Webhooks vs polling', desc: 'When to use each, security verification, reliability patterns.' },
               { num: '06', name: 'Schema challenges', desc: 'Handling breaking changes, versioning, optional fields safely.' },
@@ -198,56 +246,51 @@ export default function WorkingWithAPIsModule() {
         <SectionTitle>HTTP and REST — What Actually Happens When You Call an API</SectionTitle>
 
         <Para>
-          Every API call is an HTTP request. Understanding the anatomy of that
-          request and response — methods, headers, status codes, body — lets you
-          diagnose API problems instantly, understand what a vendor's documentation
-          is telling you, and write code that handles every response correctly.
+          Every API call is an HTTP request. Understanding its anatomy — method,
+          headers, status code, body — lets you diagnose problems instantly and
+          write code that handles every response correctly, instead of only the
+          happy path.
         </Para>
 
-        <SubTitle>The anatomy of an HTTP request and response</SubTitle>
+        <SubSubTitle>What your code actually sends</SubSubTitle>
 
-        <CodeBox label="HTTP request and response — every component explained">{`HTTP REQUEST (what your code sends):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GET /v1/payments?from=1710633000&to=1710719400&count=100 HTTP/1.1
-Host: api.stripe.com
-Authorization: Basic cnpwX2xpdmVfeHh4Ong=      ← base64(key_id:key_secret)
-Content-Type: application/json
+        <CodeBox label="A real request to the FreshCart payment gateway">{`GET /v1/payments?from=1710633000&to=1710719400&count=100 HTTP/1.1
+Host: api.payment-gateway.example.com
+Authorization: Bearer sk_live_xxxxxxxxxxxx
 Accept: application/json
-User-Agent: FreshCart-Pipeline/1.0
-X-Request-ID: f8a3b2c4-1234-5678-abcd-ef0123456789
+User-Agent: FreshCart-Pipeline/1.0`}</CodeBox>
 
-[body — empty for GET, JSON payload for POST/PUT/PATCH]
+        <Para>
+          Five pieces make up every request: the <strong>method</strong> (GET —
+          read without side effects), the <strong>path</strong> (the resource
+          being accessed), the <strong>query string</strong> (filter and
+          pagination parameters), <strong>headers</strong> (metadata about the
+          request), and a <strong>body</strong> — empty here, since GET requests
+          don't carry one.
+        </Para>
 
-Components:
-  Method:   GET — read data without side effects
-  Path:     /v1/payments — the resource being accessed
-  Query:    ?from=...&to=...&count=100 — filter/pagination parameters
-  Headers:  key-value metadata about the request
-  Body:     data sent to the server (POST/PUT/PATCH only)
+        <SubSubTitle>What comes back</SubSubTitle>
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-HTTP RESPONSE (what the server sends back):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-HTTP/1.1 200 OK
+        <Output label="response">{`HTTP/1.1 200 OK
 Content-Type: application/json
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 847
 X-RateLimit-Reset: 1710720000
-Retry-After: (only present on 429 responses)
 
 {
-  "entity": "collection",
   "count": 100,
-  "items": [...],
+  "items": [ ... ],
   "cursor": "eyJpZCI6InBheV94eHh4In0="
-}
+}`}</Output>
 
-Response components:
-  Status line: HTTP version + status code + reason phrase
-  Headers:     metadata (content type, rate limit info, pagination)
-  Body:        the actual data (usually JSON for REST APIs)`}</CodeBox>
+        <Para>
+          The status line tells you at a glance whether the request succeeded;
+          the rate-limit headers (Part 05) and the <code style={inlineCode}>cursor</code>{' '}
+          field (Part 04) are both things this module comes back to build real
+          logic around — they are not just decorative metadata.
+        </Para>
 
-        <SubTitle>HTTP methods — what each one means</SubTitle>
+        <SubSubTitle>HTTP methods — what each one means</SubSubTitle>
 
         <CompareTable
           headers={[
@@ -255,65 +298,51 @@ Response components:
             { label: 'Meaning', color: '#00e676' },
             { label: 'Has body?', color: '#7b61ff' },
             { label: 'Idempotent?', color: '#f97316' },
-            { label: 'DE use case', color: '#4285f4' },
           ]}
-          keys={['method', 'meaning', 'body', 'idempotent', 'use']}
+          keys={['method', 'meaning', 'body', 'idempotent']}
           rows={[
-            { method: 'GET', meaning: 'Read a resource — no side effects', body: 'No', idempotent: 'Yes — same result every time', use: 'Fetch payments, list orders, get customer' },
-            { method: 'POST', meaning: 'Create a new resource or trigger an action', body: 'Yes', idempotent: 'No — creates a new resource each call', use: 'Submit a batch, trigger a report export, send a webhook' },
-            { method: 'PUT', meaning: 'Replace a resource entirely with the payload', body: 'Yes', idempotent: 'Yes — replaces to the same state', use: 'Update a configuration, replace a record fully' },
-            { method: 'PATCH', meaning: 'Partially update a resource (only specified fields)', body: 'Yes', idempotent: 'Usually yes', use: 'Update one field of a record' },
-            { method: 'DELETE', meaning: 'Delete a resource', body: 'Rarely', idempotent: 'Yes — deleting something already deleted still succeeds', use: 'Rarely used in DE ingestion' },
+            { method: 'GET', meaning: 'Read a resource — no side effects', body: 'No', idempotent: 'Yes — same result every time' },
+            { method: 'POST', meaning: 'Create a new resource or trigger an action', body: 'Yes', idempotent: 'No — creates something new each call' },
+            { method: 'PUT', meaning: 'Replace a resource entirely', body: 'Yes', idempotent: 'Yes — replaces to the same state' },
+            { method: 'PATCH', meaning: 'Partially update specific fields', body: 'Yes', idempotent: 'Usually yes' },
+            { method: 'DELETE', meaning: 'Delete a resource', body: 'Rarely', idempotent: 'Yes — deleting twice still succeeds' },
           ]}
         />
 
-        <SubTitle>HTTP status codes — what every data engineer must memorise</SubTitle>
+        <SubSubTitle>Status codes and what your pipeline should do with each</SubSubTitle>
 
-        <CodeBox label="Status codes — the complete DE reference">{`2xx — SUCCESS
-  200 OK              Standard success — request processed, data in body
-  201 Created         Resource was created (POST responses)
-  202 Accepted        Request received but processing async — poll for result
-  204 No Content      Success but no body (DELETE responses often)
+        <CompareTable
+          headers={[
+            { label: 'Code' },
+            { label: 'Meaning', color: '#00e676' },
+            { label: 'Pipeline action', color: '#ff4757' },
+          ]}
+          keys={['code', 'meaning', 'action']}
+          rows={[
+            { code: '200 / 201', meaning: 'Success — data in the response body', action: 'Process the data' },
+            { code: '202 Accepted', meaning: 'Request received, processing async', action: 'Poll for the result' },
+            { code: '400 Bad Request', meaning: 'Your request is malformed', action: 'Log and send to DLQ — do not retry' },
+            { code: '401 Unauthorized', meaning: 'Credentials missing or invalid', action: 'Alert — do not retry' },
+            { code: '404 Not Found', meaning: 'Resource does not exist', action: 'Log a warning, may have been deleted' },
+            { code: '429 Too Many Requests', meaning: 'Rate limit exceeded', action: 'Back off and retry (Part 05)' },
+            { code: '5xx', meaning: "Something failed on their end", action: 'Retry with exponential backoff' },
+          ]}
+        />
 
-3xx — REDIRECTION
-  301 Moved Permanently   Resource at a new URL — update your endpoint
-  302 Found / Temporary   Temporary redirect — follow but do not update
-  304 Not Modified        Resource unchanged since If-Modified-Since — use cache
+        <Callout type="tip">
+          The single most useful line in that table is the split between 4xx and
+          5xx: a 4xx means <em>your</em> request is wrong and retrying the exact
+          same request will fail identically every time — fix the request
+          instead. A 5xx means the problem is on their end and is usually
+          transient — retrying with backoff is the correct response.
+        </Callout>
 
-4xx — CLIENT ERROR (your code is wrong — do NOT retry automatically)
-  400 Bad Request         Malformed request — wrong parameters, invalid JSON
-  401 Unauthorized        Missing or invalid authentication credentials
-  403 Forbidden           Authenticated but not authorised for this resource
-  404 Not Found           Resource does not exist
-  405 Method Not Allowed  Using GET where POST is required (or vice versa)
-  409 Conflict            Request conflicts with current state (duplicate)
-  410 Gone                Resource permanently deleted (stop trying)
-  422 Unprocessable       Request understood but semantically invalid
-  429 Too Many Requests   Rate limit exceeded — MUST back off and retry
-
-5xx — SERVER ERROR (their problem — retry with backoff)
-  500 Internal Server Error  Something crashed on their end — transient usually
-  502 Bad Gateway            Upstream server error — transient
-  503 Service Unavailable    Server overloaded or in maintenance — transient
-  504 Gateway Timeout        Upstream timeout — transient
-
-PIPELINE DECISION:
-  2xx  → process the data
-  3xx  → follow redirect (requests library does this automatically)
-  400  → log error, send to DLQ — your request is malformed
-  401  → alert — credentials are wrong or expired, do not retry
-  403  → alert — check permissions, do not retry
-  404  → log warning — resource may have been deleted
-  429  → back off and retry (check Retry-After header)
-  5xx  → retry with exponential backoff`}</CodeBox>
-
-        <SubTitle>REST vs GraphQL vs gRPC — knowing which you are dealing with</SubTitle>
+        <SubSubTitle>REST vs GraphQL vs gRPC</SubSubTitle>
 
         <Para>
-          Most public APIs and vendor APIs that data engineers ingest from are REST.
-          Some internal APIs at larger companies use GraphQL (Facebook, Shopify admin)
-          or gRPC (Google Cloud services). Understanding the difference prevents
-          confusion when a documentation page does not look like standard REST.
+          Most vendor APIs a data engineer ingests from are REST. Recognising the
+          other two prevents confusion when a documentation page doesn't look
+          like standard REST at all.
         </Para>
 
         <CompareTable
@@ -325,319 +354,221 @@ PIPELINE DECISION:
           ]}
           keys={['aspect', 'rest', 'graphql', 'grpc']}
           rows={[
-            { aspect: 'Request format', rest: 'HTTP GET/POST to specific URL per resource', graphql: 'HTTP POST to single endpoint with query in body', grpc: 'Binary Protobuf over HTTP/2' },
-            { aspect: 'Response format', rest: 'JSON (usually)', graphql: 'JSON, exactly the fields you requested', grpc: 'Binary Protobuf (fast, compact)' },
-            { aspect: 'Versioning', rest: 'URL (/v1/, /v2/) or header', graphql: 'Schema evolution (add fields, deprecate)', grpc: 'Protobuf schema versioning' },
-            { aspect: 'Over-fetching', rest: 'Common — API returns all fields even if you need 2', graphql: 'None — you specify exact fields needed', grpc: 'None — schema defines exact fields' },
-            { aspect: 'DE tooling support', rest: 'Universal — every tool, every language', graphql: 'Good — Python gql library, Fivetran support', grpc: 'Good for Google Cloud APIs' },
-            { aspect: 'Common examples', rest: 'Stripe, Stripe, Salesforce, GitHub, most vendor APIs', graphql: 'Shopify Admin, GitHub v4, Supabase', grpc: 'Google Cloud Storage, BigQuery, Pub/Sub' },
+            { aspect: 'Request shape', rest: 'HTTP GET/POST per resource', graphql: 'One POST endpoint, query in the body', grpc: 'Binary Protobuf over HTTP/2' },
+            { aspect: 'Over-fetching', rest: 'Common — returns all fields', graphql: 'None — you specify exact fields', grpc: 'None — schema defines exact fields' },
+            { aspect: 'Common examples', rest: 'Stripe, Salesforce, GitHub REST', graphql: 'Shopify Admin, GitHub GraphQL v4', grpc: 'Google Cloud APIs' },
           ]}
         />
       </section>
 
       <Divider />
 
-      {/* ── Part 03 — Authentication Patterns ────────────────────────── */}
+      {/* ── Part 03 — Authentication ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 03 — Authentication Patterns" />
         <SectionTitle>Authentication — Every Pattern a Data Engineer Encounters</SectionTitle>
 
         <Para>
-          Every API that is not public requires authentication — proof that your
-          code is allowed to access the data. There are five authentication patterns
-          in widespread use. A data engineer who recognises each pattern on sight
-          can implement any new API integration without confusion.
+          Any API that is not fully public requires proof your code is allowed
+          to access it. Four patterns cover almost everything you'll meet in
+          practice — recognising which one an API uses on sight is most of the
+          battle.
         </Para>
 
-        <SubTitle>Pattern 1 — API Key</SubTitle>
-
-        <CodeBox label="API Key authentication — the most common pattern">{`# An API key is a static string that identifies your application.
-# Sent with every request — either as a header or query parameter.
-
-import os
-import requests
-
-API_KEY = os.environ['STRIPE_API_KEY']   # NEVER hardcode
-
-# Method A: Authorization header (most secure, most common)
-response = requests.get(
-    'https://api.example.com/v1/payments',
-    headers={
-        'Authorization': f'Bearer \${API_KEY}',
-        'Content-Type': 'application/json',
-    },
-)
-
-# Method B: Custom header (some APIs use their own header name)
-response = requests.get(
-    'https://api.example.com/v1/payments',
-    headers={'X-API-Key': API_KEY},
-)
-
-# Method C: Query parameter (least secure — key appears in logs and URLs)
-response = requests.get(
-    'https://api.example.com/v1/payments',
-    params={'api_key': API_KEY},
-)
-
-# Stripe uses HTTP Basic Auth with key_id as username, key_secret as password:
-from requests.auth import HTTPBasicAuth
-
-response = requests.get(
-    'https://api.stripe.com/v1/payments',
-    auth=HTTPBasicAuth(
-        os.environ['STRIPE_KEY_ID'],
-        os.environ['STRIPE_KEY_SECRET'],
-    ),
-)
-
-# SECURITY RULES FOR API KEYS:
-# 1. Never hardcode — always read from environment variables
-# 2. Never commit to git (add .env to .gitignore)
-# 3. Use different keys per environment (dev key, prod key)
-# 4. Rotate periodically (every 90 days is common)
-# 5. Restrict key permissions to only what the pipeline needs (read-only)
-# 6. Monitor for unusual usage — most providers have usage dashboards`}</CodeBox>
-
-        <SubTitle>Pattern 2 — OAuth 2.0</SubTitle>
+        <SubSubTitle>Pattern 1 — API Key</SubSubTitle>
 
         <Para>
-          OAuth 2.0 is the standard for delegated authorisation — it allows your
-          pipeline to access data on behalf of a user or organisation without
-          ever seeing that user's password. It is more complex than API keys but
-          required for APIs that serve user-specific data: Google Analytics,
-          Salesforce, HubSpot, QuickBooks.
+          The simplest pattern: a static string, sent with every request.
         </Para>
 
-        <CodeBox label="OAuth 2.0 — the four grant types a DE encounters">{`# OAuth 2.0 GRANT TYPES — choose based on the use case:
+        <CodeBox label="Command — the standard way, an Authorization header">{`import os, requests
 
-# ── CLIENT BrexENTIALS (for server-to-server, no user involved) ───────────────
-# Use for: your pipeline accessing your own organisation's data
-# Examples: Google Cloud APIs, internal company APIs, Salesforce connected apps
+API_KEY = os.environ['GATEWAY_API_KEY']   # never hardcode
 
-import requests, os, time
+response = requests.get(
+    'https://api.payment-gateway.example.com/v1/payments',
+    headers={'Authorization': f'Bearer {API_KEY}'},
+)`}</CodeBox>
 
-class OAuth2ClientCredentials:
-    """Manages OAuth 2.0 client credentials tokens with automatic refresh."""
+        <Para>
+          Some APIs use their own header name instead of the standard{' '}
+          <code style={inlineCode}>Authorization</code>, and a rarer, less secure
+          option puts the key directly in the URL:
+        </Para>
 
-    def __init__(self, token_url: str, client_id: str, client_secret: str, scope: str = ''):
-        self.token_url = token_url
-        self.client_id = client_id
-        self.client_secret = client_secret
-        self.scope = scope
-        self._token: str | None = None
-        self._expires_at: float = 0
+        <CodeBox label="Command — two other forms you'll still encounter">{`# A custom header (check the vendor's docs for the exact name):
+requests.get(url, headers={'X-API-Key': API_KEY})
 
-    def get_token(self) -> str:
+# Query parameter — avoid when you have a choice: keys end up in
+# server access logs and browser history, not just request headers:
+requests.get(url, params={'api_key': API_KEY})`}</CodeBox>
+
+        <Callout type="warning">
+          Six habits worth building permanently around any API key: never
+          hardcode it (always read from environment variables), never commit it
+          (keep <code style={inlineCode}>.env</code> in{' '}
+          <code style={inlineCode}>.gitignore</code>), use different keys per
+          environment, rotate periodically, restrict the key's permissions to
+          only what the pipeline actually needs (read-only where possible), and
+          watch the provider's usage dashboard for anything unexpected.
+        </Callout>
+
+        <SubSubTitle>Pattern 2 — OAuth 2.0</SubSubTitle>
+
+        <Para>
+          OAuth 2.0 is the standard for delegated authorisation — your pipeline
+          gets a limited, time-boxed token instead of ever seeing a real
+          password. It's required for APIs serving user-specific data:
+          Salesforce, Google Analytics, HubSpot. The variant a data pipeline
+          uses most is <strong>Client Credentials</strong> — server-to-server,
+          no human involved.
+        </Para>
+
+        <CodeBox label="Step 1 — request a token">{`import requests, time
+
+def fetch_token(token_url, client_id, client_secret, scope=''):
+    response = requests.post(
+        token_url,
+        data={
+            'grant_type': 'client_credentials',
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'scope': scope,
+        },
+        timeout=30,
+    )
+    response.raise_for_status()
+    return response.json()`}</CodeBox>
+
+        <Output label="response">{`{
+  "access_token": "eyJhbGciOiJSUzI1NiIs...",
+  "expires_in": 3600,
+  "token_type": "Bearer"
+}`}</Output>
+
+        <Para>
+          <code style={inlineCode}>expires_in</code> is seconds until the token
+          goes stale — 3600 here, one hour. Requesting a fresh token on every
+          single API call would work, but wastes a full network round trip each
+          time. A small manager class caches the token and only refreshes it
+          once it's actually close to expiring:
+        </Para>
+
+        <CodeBox label="Step 2 — cache the token, refresh only when needed">{`class OAuth2ClientCredentials:
+    def __init__(self, token_url, client_id, client_secret, scope=''):
+        self.token_url, self.client_id = token_url, client_id
+        self.client_secret, self.scope = client_secret, scope
+        self._token = None
+        self._expires_at = 0
+
+    def get_token(self):
         if self._token and time.time() < self._expires_at - 60:
-            return self._token          # return cached token (with 60s buffer)
+            return self._token          # cached, with a 60s safety buffer
 
-        response = requests.post(
-            self.token_url,
-            data={
-                'grant_type':    'client_credentials',
-                'client_id':     self.client_id,
-                'client_secret': self.client_secret,
-                'scope':         self.scope,
-            },
-            timeout=30,
-        )
-        response.raise_for_status()
-        data = response.json()
-
-        self._token      = data['access_token']
+        data = fetch_token(self.token_url, self.client_id, self.client_secret, self.scope)
+        self._token = data['access_token']
         self._expires_at = time.time() + data.get('expires_in', 3600)
         return self._token
 
-    def auth_header(self) -> dict:
-        return {'Authorization': f'Bearer \${self.get_token()}'}
+    def auth_header(self):
+        return {'Authorization': f'Bearer {self.get_token()}'}`}</CodeBox>
 
+        <Para>
+          The 60-second buffer matters: without it, a token could expire
+          mid-request — between the check and the API actually receiving it —
+          causing an intermittent 401 that's hard to reproduce.
+        </Para>
 
-# Usage:
-auth = OAuth2ClientCredentials(
-    token_url     = 'https://auth.example.com/oauth/token',
-    client_id     = os.environ['CLIENT_ID'],
-    client_secret = os.environ['CLIENT_SECRET'],
-    scope         = 'read:payments read:orders',
-)
+        <Para>
+          The other OAuth variant, <strong>Authorization Code</strong>, is for
+          accessing a specific <em>user's</em> data and needs a browser in the
+          loop once: the user logs in and approves access, your app receives a
+          code, and exchanges it for an access token plus a long-lived{' '}
+          <strong>refresh token</strong>. The part your pipeline actually
+          automates is using that refresh token to get new access tokens
+          indefinitely, with no user involved again:
+        </Para>
 
-response = requests.get(
-    'https://api.example.com/v1/payments',
-    headers=auth.auth_header(),
-)
-
-
-# ── AUTHORIZATION CODE (user grants permission — requires browser) ─────────────
-# Use for: accessing a specific user's data in Salesforce, Google Analytics, etc.
-# Flow:
-#   1. Redirect user to provider's auth URL with your client_id
-#   2. User logs in and approves access
-#   3. Provider redirects back to your callback URL with a code
-#   4. Exchange code for access_token + refresh_token
-#   5. Use access_token for API calls
-#   6. When access_token expires, use refresh_token to get a new one
-#      (refresh_tokens are long-lived — store securely)
-
-# Step 6: Token refresh (the part you automate in your pipeline)
-def refresh_access_token(refresh_token: str) -> dict:
+        <CodeBox label="Refreshing an access token from a stored refresh token">{`def refresh_access_token(refresh_token, client_id, client_secret):
     response = requests.post(
         'https://auth.salesforce.com/services/oauth2/token',
         data={
-            'grant_type':    'refresh_token',
+            'grant_type': 'refresh_token',
             'refresh_token': refresh_token,
-            'client_id':     os.environ['SF_CLIENT_ID'],
-            'client_secret': os.environ['SF_CLIENT_SECRET'],
+            'client_id': client_id,
+            'client_secret': client_secret,
         },
     )
     response.raise_for_status()
-    return response.json()   # contains new access_token (and sometimes new refresh_token)
+    return response.json()   # a new access_token (sometimes a new refresh_token too)`}</CodeBox>
 
+        <SubSubTitle>Pattern 3 — HMAC Signature</SubSubTitle>
 
-# ── IMPLICIT and PASSWORD GRANT ───────────────────────────────────────────────
-# Implicit grant: deprecated — do not use for new integrations
-# Password grant: use username/password directly — avoid if possible (security risk)
-#                 Some legacy internal APIs still use this`}</CodeBox>
+        <Para>
+          HMAC signs each request with a shared secret instead of sending a
+          token at all — the server recomputes the signature and compares. Used
+          by AWS, and by most providers for verifying <em>incoming</em> webhooks
+          (Part 06).
+        </Para>
 
-        <SubTitle>Pattern 3 — HMAC Signature</SubTitle>
+        <CodeBox label="Signing an outgoing request">{`import hmac, hashlib, time
 
-        <CodeBox label="HMAC signature authentication — request signing">{`# HMAC (Hash-based Message Authentication Code) signs each request
-# with a shared secret. The server recomputes the signature and compares.
-# Used by: AWS Signature v4, Shopify webhooks, Stripe webhooks,
-#          some payment gateway APIs.
+def sign_request(method, path, body, secret):
+    timestamp = str(int(time.time()))
+    string_to_sign = f'{timestamp}\\n{method.upper()}\\n{path}\\n{body}'
 
-import hmac
-import hashlib
-import time
-import base64
-
-def sign_request(
-    method: str,
-    path: str,
-    body: str,
-    secret: str,
-    timestamp: str | None = None,
-) -> dict:
-    """
-    Create HMAC-SHA256 signature for a request.
-    Returns headers to include with the request.
-    """
-    timestamp = timestamp or str(int(time.time()))
-
-    # Build the string to sign (format varies by API — check their docs)
-    string_to_sign = f'\${timestamp}\n\${method.upper()}\n\${path}\n\${body}'
-
-    # Compute HMAC-SHA256
     signature = hmac.new(
-        secret.encode('utf-8'),
-        string_to_sign.encode('utf-8'),
-        hashlib.sha256,
+        secret.encode('utf-8'), string_to_sign.encode('utf-8'), hashlib.sha256,
     ).hexdigest()
 
-    return {
-        'X-Timestamp': timestamp,
-        'X-Signature': signature,
-        'Content-Type': 'application/json',
-    }
+    return {'X-Timestamp': timestamp, 'X-Signature': signature}`}</CodeBox>
 
+        <Para>
+          Verifying an <em>incoming</em> signature (what you do inside a webhook
+          handler) uses the same math in reverse:
+        </Para>
 
-# Usage:
-import json
-payload = {'from': 1710633000, 'to': 1710719400}
-body    = json.dumps(payload)
+        <CodeBox label="Verifying an incoming webhook signature">{`def verify_webhook_signature(payload_body: bytes, signature_header: str, secret: str) -> bool:
+    expected = hmac.new(secret.encode('utf-8'), payload_body, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(expected, signature_header)`}</CodeBox>
 
-headers = sign_request(
-    method = 'POST',
-    path   = '/v1/payments/bulk',
-    body   = body,
-    secret = os.environ['API_SECRET'],
-)
+        <Callout type="warning">
+          Use <code style={inlineCode}>hmac.compare_digest</code>, never{' '}
+          <code style={inlineCode}>expected == signature_header</code>. A plain
+          equality check exits the moment it finds the first mismatched
+          character — which means the exact time the comparison takes leaks
+          information about how much of the signature was correct. An attacker
+          measuring response times can use that to guess a valid signature one
+          byte at a time. <code style={inlineCode}>compare_digest</code> always
+          takes the same time no matter where (or whether) the strings differ.
+        </Callout>
 
-response = requests.post(
-    'https://api.example.com/v1/payments/bulk',
-    headers=headers,
-    data=body,
-)
+        <SubSubTitle>Pattern 4 — JWT (JSON Web Tokens)</SubSubTitle>
 
+        <Para>
+          A JWT is a self-contained token — three base64 pieces joined by dots
+          (<code style={inlineCode}>header.payload.signature</code>) that encode
+          claims like user ID and expiry directly in the token itself, no
+          server-side lookup needed to check them.
+        </Para>
 
-# VERIFYING INCOMING HMAC SIGNATURES (for webhooks):
-# When an API sends you a webhook, verify it before processing:
+        <CodeBox label="Reading the expiry claim out of a JWT, without verifying its signature">{`import base64, json, time
 
-def verify_webhook_signature(
-    payload_body: bytes,
-    signature_header: str,
-    secret: str,
-) -> bool:
-    """Verify an incoming webhook's HMAC signature."""
-    expected = hmac.new(
-        secret.encode('utf-8'),
-        payload_body,
-        hashlib.sha256,
-    ).hexdigest()
-
-    # Use hmac.compare_digest to prevent timing attacks
-    return hmac.compare_digest(expected, signature_header)
-
-
-# In your webhook handler (Flask/FastAPI):
-# body = request.get_data()
-# signature = request.headers.get('X-Signature')
-# if not verify_webhook_signature(body, signature, SECRET):
-#     return 401`}</CodeBox>
-
-        <SubTitle>Pattern 4 — JWT (JSON Web Tokens)</SubTitle>
-
-        <CodeBox label="JWT — reading and using JSON Web Tokens">{`# JWT (JSON Web Token) is a self-contained token that encodes claims
-# (user ID, roles, expiry) in a signed JSON structure.
-# Format: header.payload.signature (base64url-encoded, dot-separated)
-
-import base64, json, time
-
-def decode_jwt_payload(token: str) -> dict:
-    """Decode JWT payload WITHOUT verifying signature (for inspection only)."""
+def decode_jwt_payload(token):
     parts = token.split('.')
-    if len(parts) != 3:
-        raise ValueError(f'Invalid JWT format: expected 3 parts, got \${len(parts)}')
+    payload_b64 = parts[1] + '=' * (4 - len(parts[1]) % 4)   # restore stripped base64 padding
+    return json.loads(base64.urlsafe_b64decode(payload_b64))
 
-    # Add padding if needed (base64url omits = padding)
-    payload_b64 = parts[1] + '=' * (4 - len(parts[1]) % 4)
-    payload = json.loads(base64.urlsafe_b64decode(payload_b64))
-    return payload
+def is_jwt_expired(token, buffer_seconds=60):
+    exp = decode_jwt_payload(token).get('exp')
+    return exp is not None and time.time() > (exp - buffer_seconds)`}</CodeBox>
 
-
-def is_jwt_expired(token: str, buffer_seconds: int = 60) -> bool:
-    """Check if a JWT token has expired (or will expire within buffer_seconds)."""
-    payload = decode_jwt_payload(token)
-    exp = payload.get('exp')
-    if exp is None:
-        return False   # no expiry claim — token does not expire
-    return time.time() > (exp - buffer_seconds)
-
-
-# Token management for APIs that use JWT:
-class JWTTokenManager:
-    """Manages a JWT token with automatic refresh when approaching expiry."""
-
-    def __init__(self, token_url: str, credentials: dict):
-        self.token_url   = token_url
-        self.credentials = credentials
-        self._token: str | None = None
-
-    def get_valid_token(self) -> str:
-        if self._token and not is_jwt_expired(self._token, buffer_seconds=120):
-            return self._token
-
-        # Fetch new token
-        response = requests.post(
-            self.token_url,
-            json=self.credentials,
-            timeout=30,
-        )
-        response.raise_for_status()
-        self._token = response.json()['token']
-        return self._token
-
-    def auth_header(self) -> dict:
-        return {'Authorization': f'Bearer \${self.get_valid_token()}'}`}</CodeBox>
+        <TryThis>
+          Paste any JWT you have (or generate a throwaway one at jwt.io) into{' '}
+          <code style={inlineCode}>decode_jwt_payload</code> above and print the
+          result. Seeing the claims come out as a plain dict — no library, no
+          server call — makes the "self-contained token" idea click immediately.
+        </TryThis>
       </section>
 
       <Divider />
@@ -645,241 +576,117 @@ class JWTTokenManager:
       {/* ── Part 04 — Pagination ─────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 04 — Pagination" />
-        <SectionTitle>Pagination — Three Styles, Their Trade-offs, and Complete Implementations</SectionTitle>
+        <SectionTitle>Pagination — Three Styles, and Which One to Actually Use</SectionTitle>
 
         <Para>
-          No API returns a million records in one response. Pagination is how
-          APIs split large result sets into pages. Every data engineer who fetches
-          data from APIs must understand all three pagination styles because each
-          works differently, has different failure modes, and requires different
-          code to handle correctly.
+          No API returns a million records in one response. Every data engineer
+          who pulls from APIs meets all three pagination styles, and they fail
+          in genuinely different ways — worth understanding before you pick one.
         </Para>
 
-        <SubTitle>Style 1 — Offset/Limit (page-based)</SubTitle>
+        <SubSubTitle>Style 1 — Offset/limit</SubSubTitle>
 
-        <CodeBox label="Offset pagination — implementation, problems, and when to use">{`# Offset pagination: specify where to start (offset) and how many to return (limit)
-# API parameters: ?page=3&limit=100  OR  ?offset=200&limit=100
+        <CodeBox label="Command — page by position">{`# ?page=3&limit=100  ==  SELECT * FROM payments LIMIT 100 OFFSET 200`}</CodeBox>
 
-# ── HOW IT WORKS ──────────────────────────────────────────────────────────────
-# Page 1: SELECT * FROM payments LIMIT 100 OFFSET 0    → rows 1-100
-# Page 2: SELECT * FROM payments LIMIT 100 OFFSET 100  → rows 101-200
-# Page 3: SELECT * FROM payments LIMIT 100 OFFSET 200  → rows 201-300
+        <Para>
+          Simple to reason about, and it's the only style that lets you jump
+          straight to "page 50 of 100." It has two real problems on a live
+          dataset, though. First, <strong>performance</strong>: an{' '}
+          <code style={inlineCode}>OFFSET 50000</code> forces the database to
+          read and discard 50,000 rows just to reach your page — pages get
+          slower the deeper you go. Second, and more dangerous,{' '}
+          <strong>correctness</strong>: if a new record is inserted while you're
+          mid-pagination, every offset after it silently shifts by one, and a
+          record that would have been on page 2 quietly disappears from your
+          results with no error at all.
+        </Para>
 
-from typing import Iterator
-import requests, os, time
-
-def fetch_all_offset(base_url: str, headers: dict, params: dict) -> Iterator[dict]:
-    """Fetch all records using offset/page pagination."""
+        <CodeBox label="A minimal offset-paginated fetch loop">{`def fetch_all_offset(base_url, headers, limit=100):
     page = 1
-    limit = params.get('limit', 100)
-
     while True:
-        response = requests.get(
-            base_url,
-            headers=headers,
-            params={**params, 'page': page, 'limit': limit},
-            timeout=30,
-        )
-        response.raise_for_status()
-        data = response.json()
-
-        # APIs signal end of results differently — handle common patterns:
-        items = (
-            data.get('items') or
-            data.get('data') or
-            data.get('results') or
-            data                    # some APIs return the array directly
-        )
-        if isinstance(items, dict):
-            items = []   # unexpected format
-
+        resp = requests.get(base_url, headers=headers, params={'page': page, 'limit': limit})
+        resp.raise_for_status()
+        items = resp.json().get('items', [])
         if not items:
-            break        # no more items — we are done
-
-        for item in items:
-            yield item
-
-        # Check total count if provided:
-        total = data.get('total') or data.get('count')
-        if total and page * limit >= total:
-            break        # fetched all records
-
+            break
+        yield from items
         if len(items) < limit:
-            break        # partial page — last page
+            break
+        page += 1`}</CodeBox>
 
-        page += 1
-        time.sleep(0.1)   # light throttle to avoid rate limiting
+        <Callout type="tip">
+          Reach for offset pagination only for small, largely static datasets,
+          or when an API simply doesn't offer anything better. For anything
+          large or actively changing, cursor pagination (next) is the correct
+          default.
+        </Callout>
 
+        <SubSubTitle>Style 2 — Cursor pagination</SubSubTitle>
 
-# ── PROBLEMS WITH OFFSET PAGINATION ───────────────────────────────────────────
-# 1. SKIPPING: if new records are inserted during pagination, pages shift
-#    Page 1 fetches records 1-100.
-#    Someone inserts a new record at position 50.
-#    Page 2 now starts at the OLD record 101, but that is now record 102.
-#    Record 101 (old) is now record 100+1=101, shifted — you miss it.
+        <Para>
+          Instead of a position, the API hands back an opaque cursor pointing at
+          a specific record — typically its ID or timestamp, base64-encoded.
+          The next request sends that cursor back, and the API executes
+          something closer to <code style={inlineCode}>WHERE id {'>'} cursor_value
+          ORDER BY id LIMIT 100</code> — an index lookup, not a scan-and-discard.
+          Both of offset's problems disappear: a new insertion elsewhere in the
+          table doesn't shift where your cursor points, and the lookup stays
+          fast no matter how deep you are.
+        </Para>
 
-# 2. PERFORMANCE: OFFSET N is slow at large N
-#    SELECT * FROM payments ORDER BY created_at OFFSET 50000 LIMIT 100
-#    The database must read and discard 50,000 rows to get to offset 50,000.
-#    At page 1000 with limit 100, it discards 100,000 rows. Very slow.
-
-# WHEN TO USE OFFSET:
-# → Small datasets (< 100k records)
-# → Static datasets that do not change during pagination
-# → APIs that do not offer cursor pagination
-# → When you need to jump to a specific page (e.g., page 50 of 100)`}</CodeBox>
-
-        <SubTitle>Style 2 — Cursor pagination (keyset pagination)</SubTitle>
-
-        <CodeBox label="Cursor pagination — the correct approach for large, live datasets">{`# Cursor pagination: API returns an opaque cursor representing your position.
-# Next request sends the cursor, API returns the next page from that position.
-# The cursor typically encodes the last record's ID or timestamp.
-
-# ── HOW IT WORKS ──────────────────────────────────────────────────────────────
-# Under the hood, cursor = base64({"id": "pay_xxxxxxxx", "ts": 1710633047})
-# API executes: SELECT * FROM payments WHERE id > 'pay_xxxxxxxx' ORDER BY id LIMIT 100
-# This is O(log n) via index seek — fast regardless of dataset size.
-
-import json
-from pathlib import Path
-
-def fetch_all_cursor(
-    url: str,
-    headers: dict,
-    params: dict,
-    checkpoint_path: str | None = None,
-) -> Iterator[dict]:
-    """
-    Fetch all records using cursor pagination.
-    Saves checkpoint after each page — resumes safely on failure.
-    """
-    checkpoint = Path(checkpoint_path) if checkpoint_path else None
-    cursor = None
-
-    # Load previous checkpoint if it exists
-    if checkpoint and checkpoint.exists():
-        saved = json.loads(checkpoint.read_text())
-        cursor = saved.get('cursor')
-        print(f'Resuming from cursor: \${cursor[:20]}...' if cursor else 'Starting fresh')
-
-    total_fetched = 0
+        <CodeBox label="A cursor-paginated fetch loop, with a checkpoint you'll extend in Part 08">{`def fetch_all_cursor(url, headers, params, checkpoint_path=None):
+    cursor = load_checkpoint(checkpoint_path)   # None on a fresh start
 
     while True:
-        request_params = {**params}
-        if cursor:
-            request_params['cursor'] = cursor   # or 'after', 'page_token', etc.
+        request_params = {**params, **({'cursor': cursor} if cursor else {})}
+        resp = requests.get(url, headers=headers, params=request_params, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
 
-        response = requests.get(url, headers=headers, params=request_params, timeout=30)
-        response.raise_for_status()
-        data = response.json()
+        items = data.get('items', [])
+        yield from items
 
-        items = data.get('items') or data.get('data') or []
+        cursor = data.get('cursor')
+        save_checkpoint(checkpoint_path, cursor)   # survives a mid-run crash
 
-        for item in items:
-            yield item
+        if not cursor or not items:
+            break`}</CodeBox>
 
-        total_fetched += len(items)
+        <Para>
+          That checkpoint save is what makes cursor pagination genuinely
+          resumable, not just faster: if the process crashes on page 4,000,
+          the next run reads the saved cursor and picks up exactly there —
+          it does not silently restart from page 1 and re-fetch everything.
+        </Para>
 
-        # Get next cursor — different APIs use different field names:
-        cursor = (
-            data.get('cursor') or
-            data.get('next_cursor') or
-            data.get('page_info', {}).get('end_cursor') or  # Shopify
-            data.get('paging', {}).get('cursors', {}).get('after') or  # Facebook
-            None
-        )
+        <SubSubTitle>Style 3 — Next-URL / Link header</SubSubTitle>
 
-        # Save checkpoint after each successful page
-        if checkpoint and cursor:
-            checkpoint.write_text(json.dumps({'cursor': cursor, 'fetched': total_fetched}))
+        <Para>
+          Some APIs (GitHub, most Django REST Framework services) hand you the{' '}
+          <em>entire next request</em> as a ready-made URL, either in the body
+          or in a standardised <code style={inlineCode}>Link</code> header —
+          you don't construct the next request at all, you just follow it.
+        </Para>
 
-        # Stop conditions:
-        has_more = data.get('has_more') or data.get('has_next_page')
-        if not cursor or not items or (has_more is False):
-            break
+        <CodeBox label="Following whichever form the API uses">{`import re
 
-        time.sleep(0.05)   # small delay between pages
-
-    # Clean up checkpoint on successful completion
-    if checkpoint and checkpoint.exists():
-        checkpoint.unlink()
-
-    print(f'Total fetched: \${total_fetched:,}')
-
-
-# ── CURSOR PAGINATION ADVANTAGES ──────────────────────────────────────────────
-# 1. No skipping: cursor points to a specific record, not a position
-#    New inserts during pagination do not affect already-fetched pages
-# 2. Performance: O(log n) index lookup vs O(n) offset scan
-# 3. Resumable: save cursor after each page, resume after failure
-# 4. Consistent: reads the same data even if pagination takes hours
-
-# ── CURSOR LIMITATIONS ─────────────────────────────────────────────────────────
-# Cannot jump to a specific page (no "page 50 of 100")
-# Cursor is opaque — you cannot construct one yourself
-# Cursor may expire after some time (check API docs for TTL)`}</CodeBox>
-
-        <SubTitle>Style 3 — Link header / next URL</SubTitle>
-
-        <CodeBox label="Next-URL pagination — following the Link header">{`# Some APIs (GitHub, many REST frameworks) return the next page URL
-# directly in the response — either in the body or in the Link header.
-
-# Link header format (RFC 5988):
-# Link: <https://api.github.com/repos/org/repo/commits?page=2>; rel="next",
-#       <https://api.github.com/repos/org/repo/commits?page=10>; rel="last"
-
-import re
-
-def parse_link_header(link_header: str | None) -> dict[str, str]:
-    """Parse RFC 5988 Link header into a dict of {rel: url}."""
+def parse_link_header(link_header):
     if not link_header:
         return {}
+    return dict(re.findall(r'<([^>]+)>;\\s*rel="([^"]+)"', link_header))
 
-    links = {}
-    for match in re.finditer(r'<([^>]+)>;\s*rel="([^"]+)"', link_header):
-        url, rel = match.group(1), match.group(2)
-        links[rel] = url
-    return links   # e.g. {'next': 'https://...', 'last': 'https://...'}
-
-
-def fetch_all_next_url(
-    start_url: str,
-    headers: dict,
-) -> Iterator[dict]:
-    """Fetch all records by following next URLs from response."""
-    url: str | None = start_url
-
+def fetch_all_next_url(start_url, headers):
+    url = start_url
     while url:
-        response = requests.get(url, headers=headers, timeout=30)
-        response.raise_for_status()
+        resp = requests.get(url, headers=headers, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
 
-        # Items may be in body or the response might BE the list:
-        data = response.json()
-        items = data if isinstance(data, list) else data.get('items', [])
+        yield from data.get('items', [])
 
-        for item in items:
-            yield item
+        url = data.get('next') or parse_link_header(resp.headers.get('Link')).get('next')`}</CodeBox>
 
-        # Find next URL — check body first, then Link header:
-        next_url_in_body = (
-            data.get('next') if isinstance(data, dict) else None
-        )
-
-        if next_url_in_body:
-            url = next_url_in_body
-        else:
-            # Check Link header:
-            links = parse_link_header(response.headers.get('Link'))
-            url = links.get('next')   # None if no more pages
-
-        time.sleep(0.05)
-
-
-# APIs that use next-URL pagination:
-# GitHub API:     Link header with rel="next"
-# Salesforce:     body: {"nextRecordsUrl": "/services/data/v57.0/query/..."}
-# Django REST:    body: {"next": "http://api.example.com/items/?page=2"}
-# DRF pagination: body: {"next": "...", "previous": "...", "results": [...]}`}</CodeBox>
+        <Table3 />
       </section>
 
       <Divider />
@@ -887,182 +694,94 @@ def fetch_all_next_url(
       {/* ── Part 05 — Rate Limiting ───────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 05 — Rate Limiting" />
-        <SectionTitle>Rate Limiting — Staying Within API Quotas Without Failing</SectionTitle>
+        <SectionTitle>Rate Limiting — Staying Under Quota Instead of Just Reacting to 429</SectionTitle>
 
         <Para>
-          Every production API imposes rate limits — caps on how many requests
-          you can make per second, per minute, or per day. Exceeding them results
-          in 429 Too Many Requests responses that block your pipeline. The correct
-          approach to rate limiting is two-layered: proactive throttling that
-          stays below the limit, and reactive handling that backs off correctly
-          when a 429 is returned.
+          Every production API caps how many requests you can make per second,
+          minute, or day. The right approach is two layers: proactive
+          throttling that stays under the limit, and reactive handling for the
+          occasional 429 that gets through anyway.
         </Para>
 
-        <SubTitle>Reading rate limit headers</SubTitle>
+        <SubSubTitle>Reading what the API is already telling you</SubSubTitle>
 
-        <CodeBox label="Rate limit headers — what they tell you and how to use them">{`# Most APIs communicate rate limit state via response headers.
-# Header names vary by API — here are the most common patterns:
+        <Para>
+          Recall the response headers from Part 02 —{' '}
+          <code style={inlineCode}>X-RateLimit-Remaining</code> is not just
+          informational, it's the input to a real decision:
+        </Para>
 
-# Stripe / Stripe / SendGrid style:
-response.headers['X-RateLimit-Limit']      # your total limit (e.g. 1000/min)
-response.headers['X-RateLimit-Remaining']  # requests remaining this window
-response.headers['X-RateLimit-Reset']      # Unix timestamp when window resets
-
-# GitHub style:
-response.headers['x-ratelimit-limit']      # same, lowercase
-response.headers['x-ratelimit-used']       # requests used (not remaining)
-response.headers['x-ratelimit-reset']      # reset timestamp
-
-# Retry-After header (sent with 429 responses):
-response.headers['Retry-After']            # seconds to wait (integer)
-                                           # OR HTTP date string
-
-
-def check_rate_limit_headers(response: requests.Response) -> None:
-    """Log rate limit state from response headers."""
-    limit     = response.headers.get('X-RateLimit-Limit')
+        <CodeBox label="Slowing down before you actually get rate-limited">{`def check_rate_limit_headers(response):
+    limit = response.headers.get('X-RateLimit-Limit')
     remaining = response.headers.get('X-RateLimit-Remaining')
-    reset     = response.headers.get('X-RateLimit-Reset')
+    reset = response.headers.get('X-RateLimit-Reset')
 
-    if limit and remaining:
-        pct_used = 100 * (1 - int(remaining) / int(limit))
-        print(f'Rate limit: \${remaining}/\${limit} remaining (\${pct_used:.0f}% used)')
+    if limit and remaining and int(remaining) < int(limit) * 0.1:
+        wait = max(0, int(reset) - int(time.time())) if reset else 5
+        print(f'Approaching rate limit — waiting {wait}s for window reset')
+        time.sleep(wait + 1)`}</CodeBox>
 
-        # Proactive slowdown when approaching the limit:
-        if int(remaining) < int(limit) * 0.1:   # less than 10% remaining
-            if reset:
-                wait = max(0, int(reset) - int(time.time()))
-                print(f'Approaching rate limit — waiting \${wait}s for window reset')
-                time.sleep(wait + 1)
+        <SubSubTitle>Handling a 429 that happens anyway</SubSubTitle>
 
-
-def handle_rate_limit_response(response: requests.Response) -> float:
-    """
-    Extract the wait time from a 429 response.
-    Returns seconds to wait before retrying.
-    """
+        <CodeBox label="Reading how long to wait from the response itself">{`def handle_rate_limit_response(response):
     retry_after = response.headers.get('Retry-After')
-
     if retry_after:
         try:
-            # Integer: seconds to wait
-            return float(retry_after)
+            return float(retry_after)          # most common: seconds
         except ValueError:
-            # HTTP date string: parse it
             from email.utils import parsedate_to_datetime
-            retry_dt = parsedate_to_datetime(retry_after)
+            from datetime import datetime, timezone
+            retry_dt = parsedate_to_datetime(retry_after)   # rarer: an HTTP date
             return max(0, (retry_dt - datetime.now(timezone.utc)).total_seconds())
+    return 5.0   # no header at all — a sane default`}</CodeBox>
 
-    # No Retry-After header — use exponential backoff:
-    return 5.0   # default minimum wait`}</CodeBox>
+        <SubSubTitle>Proactive throttling — a token bucket</SubSubTitle>
 
-        <SubTitle>Proactive rate limiting — the token bucket approach</SubTitle>
+        <Para>
+          Reacting to 429s is a safety net, not a strategy — a well-behaved
+          pipeline should rarely trigger one at all. A <strong>token
+          bucket</strong> smooths this out: a bucket holds a fixed number of
+          tokens, refills at a steady rate, and every call consumes one token,
+          waiting if none are available.
+        </Para>
 
-        <CodeBox label="Token bucket rate limiter — proactive throttling before hitting the limit">{`import time
-import threading
+        <CodeBox label="A minimal token bucket limiter">{`import threading
 
 class TokenBucketRateLimiter:
-    """
-    Token bucket rate limiter for API calls.
-
-    Theory: a bucket holds up to 'capacity' tokens.
-    Tokens are added at 'rate' per second.
-    Each API call consumes one token.
-    If no tokens are available, wait until one is added.
-
-    This smooths out request bursts and prevents hitting the API's own limits.
-    """
-
-    def __init__(self, calls_per_second: float, burst_size: int | None = None):
-        self.rate     = calls_per_second
+    def __init__(self, calls_per_second, burst_size=None):
+        self.rate = calls_per_second
         self.capacity = burst_size or int(calls_per_second)
-        self.tokens   = float(self.capacity)
+        self.tokens = float(self.capacity)
         self.last_refill = time.monotonic()
-        self._lock    = threading.Lock()
+        self._lock = threading.Lock()
 
-    def _refill(self) -> None:
-        now = time.monotonic()
-        elapsed = now - self.last_refill
-        self.tokens = min(self.capacity, self.tokens + elapsed * self.rate)
-        self.last_refill = now
-
-    def acquire(self) -> None:
-        """Block until a token is available."""
+    def acquire(self):
         while True:
             with self._lock:
-                self._refill()
+                now = time.monotonic()
+                self.tokens = min(self.capacity, self.tokens + (now - self.last_refill) * self.rate)
+                self.last_refill = now
                 if self.tokens >= 1.0:
                     self.tokens -= 1.0
                     return
-            # Not enough tokens — sleep a bit and try again
-            time.sleep(1.0 / self.rate / 2)
+            time.sleep(1.0 / self.rate / 2)`}</CodeBox>
 
+        <Para>
+          Call <code style={inlineCode}>limiter.acquire()</code> immediately
+          before every API request. If tokens are available it returns
+          instantly; if not, it blocks just long enough for the bucket to
+          refill — the pipeline naturally paces itself to the rate you configured,
+          instead of firing requests as fast as possible and hoping.
+        </Para>
 
-# Practical rate limiter for common API limits:
-class APIRateLimiter:
-    """Combined proactive + reactive rate limiting."""
-
-    def __init__(
-        self,
-        calls_per_second: float = 10.0,
-        calls_per_minute: int   = 500,
-        max_retries: int        = 5,
-    ):
-        self.per_second = TokenBucketRateLimiter(calls_per_second)
-        self.per_minute = TokenBucketRateLimiter(calls_per_minute / 60.0, burst_size=calls_per_minute)
-        self.max_retries = max_retries
-
-    def call(self, func, *args, **kwargs):
-        """Call a function with rate limiting and retry on 429."""
-        for attempt in range(1, self.max_retries + 1):
-            self.per_second.acquire()
-            self.per_minute.acquire()
-
-            try:
-                response = func(*args, **kwargs)
-
-                if response.status_code == 200:
-                    check_rate_limit_headers(response)
-                    return response
-
-                elif response.status_code == 429:
-                    wait = handle_rate_limit_response(response)
-                    # Add jitter: random fraction of the wait time
-                    wait *= (0.8 + 0.4 * __import__('random').random())
-                    print(f'Rate limited (attempt \${attempt}/\${self.max_retries}). Waiting \${wait:.1f}s')
-                    time.sleep(wait)
-                    continue
-
-                elif response.status_code in (500, 502, 503, 504):
-                    wait = min(60, 2 ** attempt)
-                    print(f'Server error \${response.status_code} (attempt \${attempt}). Waiting \${wait}s')
-                    time.sleep(wait)
-                    continue
-
-                else:
-                    response.raise_for_status()
-
-            except requests.exceptions.Timeout:
-                wait = min(30, 2 ** attempt)
-                print(f'Timeout (attempt \${attempt}). Waiting \${wait}s')
-                time.sleep(wait)
-
-        raise RuntimeError(f'All \${self.max_retries} attempts failed')
-
-
-# Usage — wrap your API calls with the rate limiter:
-limiter = APIRateLimiter(
-    calls_per_second=8,    # stay under 10/s limit
-    calls_per_minute=450,  # stay under 500/min limit
-)
-
-response = limiter.call(
-    requests.get,
-    'https://api.stripe.com/v1/payments',
-    auth=HTTPBasicAuth(KEY_ID, KEY_SECRET),
-    params={'from': from_ts, 'to': to_ts, 'count': 100},
-    timeout=30,
-)`}</CodeBox>
+        <TryThis>
+          Set <code style={inlineCode}>calls_per_second=2</code> and call{' '}
+          <code style={inlineCode}>acquire()</code> in a tight loop 10 times
+          with a timestamp printed each time. You'll see the calls naturally
+          space themselves roughly 0.5s apart — the bucket enforcing the rate
+          without you writing any explicit <code style={inlineCode}>sleep</code>{' '}
+          logic yourself.
+        </TryThis>
       </section>
 
       <Divider />
@@ -1070,551 +789,351 @@ response = limiter.call(
       {/* ── Part 06 — Webhooks vs Polling ────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 06 — Webhooks vs Polling" />
-        <SectionTitle>Webhooks vs Polling — When to Use Each and How to Use Both Reliably</SectionTitle>
+        <SectionTitle>Webhooks vs Polling — And Why Production Systems Use Both</SectionTitle>
 
         <Para>
-          Polling means your pipeline regularly asks an API "do you have new data?"
-          Webhooks mean the API calls your endpoint when new data is available.
-          Both patterns are in widespread use and serve different needs. A data
-          engineer must know which to use for each situation and how to implement
-          both reliably.
+          Polling means your pipeline regularly asks "anything new?" Webhooks
+          mean the API calls <em>you</em> the moment something happens.
         </Para>
 
         <CompareTable
-          headers={[
-            { label: 'Dimension' },
-            { label: 'Polling', color: '#7b61ff' },
-            { label: 'Webhooks', color: '#00e676' },
-          ]}
+          headers={[{ label: 'Dimension' }, { label: 'Polling', color: '#7b61ff' }, { label: 'Webhooks', color: '#00e676' }]}
           keys={['dim', 'polling', 'webhooks']}
           rows={[
-            { dim: 'How it works', polling: 'Your pipeline calls the API on a schedule, fetches new records since last run', webhooks: 'API sends HTTP POST to your endpoint when an event occurs' },
-            { dim: 'Latency', polling: 'Depends on poll interval — minutes to hours', webhooks: 'Near-real-time — seconds after the event' },
-            { dim: 'API load', polling: 'Repeated calls regardless of whether data changed', webhooks: 'API calls you only when there is something to send' },
-            { dim: 'Implementation effort', polling: 'Simple — a scheduled Python script', webhooks: 'Requires a publicly accessible HTTPS endpoint' },
-            { dim: 'Reliability', polling: 'Reliable — you control when you pull', webhooks: 'Delivery not guaranteed — must handle retries from provider and missing events' },
-            { dim: 'Good for', polling: 'Batch pipelines, simple scheduled ingestion, APIs that do not offer webhooks', webhooks: 'Real-time event processing, payment notifications, order status updates' },
-            { dim: 'Bad for', polling: 'High-frequency events (too much polling), APIs with strict rate limits', webhooks: 'Bulk historical backfill, simple infrastructure that cannot expose HTTPS endpoints' },
+            { dim: 'Latency', polling: 'Minutes to hours, depending on interval', webhooks: 'Near-real-time — seconds' },
+            { dim: 'Reliability', polling: 'You control exactly when you pull', webhooks: 'Delivery is not guaranteed by the provider' },
+            { dim: 'Effort', polling: 'A scheduled script', webhooks: 'A public HTTPS endpoint you must run' },
+            { dim: 'Best for', polling: 'Batch pipelines, no webhook support', webhooks: 'Real-time events like payment confirmations' },
           ]}
         />
 
-        <SubTitle>Reliable webhook handling</SubTitle>
+        <SubSubTitle>A production webhook handler, one requirement at a time</SubSubTitle>
 
-        <CodeBox label="Production webhook receiver — security, idempotency, async processing">{`# A production webhook handler has four requirements:
-# 1. Verify the signature (security)
-# 2. Respond 200 immediately (reliability)
-# 3. Process asynchronously (performance)
-# 4. Handle duplicates idempotently (correctness)
+        <Para>A real webhook receiver has four jobs, in this exact order:</Para>
 
-# FastAPI webhook endpoint:
-from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
-import hmac, hashlib, json
-from datetime import datetime, timezone
-
-app = FastAPI()
-
-# In-memory set for deduplication (use Redis in production):
-processed_event_ids: set[str] = set()
-
-def verify_signature(body: bytes, signature: str, secret: str) -> bool:
-    """Verify HMAC-SHA256 webhook signature."""
-    expected = 'sha256=' + hmac.new(
-        secret.encode(),
-        body,
-        hashlib.sha256,
-    ).hexdigest()
-    return hmac.compare_digest(expected, signature)
-
-
-def process_event(event: dict) -> None:
-    """Background task — actual processing happens here."""
-    event_type = event.get('event')
-    payload    = event.get('payload', {})
-
-    if event_type == 'payment.captured':
-        payment = payload.get('payment', {}).get('entity', {})
-        # Write to database, publish to Kafka, etc.
-        write_payment_to_db(payment)
-
-    elif event_type == 'order.paid':
-        order = payload.get('order', {}).get('entity', {})
-        update_order_status(order)
-
-    else:
-        print(f'Unhandled event type: \${event_type}')
-
-
-@app.post('/webhooks/stripe')
-async def stripe_webhook(
-    request: Request,
-    background_tasks: BackgroundTasks,
-):
-    body = await request.body()
-
-    # ── 1. VERIFY SIGNATURE ────────────────────────────────────────────────────
-    signature = request.headers.get('X-Stripe-Signature', '')
-    if not verify_signature(body, signature, STRIPE_WEBHOOK_SECRET):
-        raise HTTPException(status_code=401, detail='Invalid signature')
-
-    event = json.loads(body)
-
-    # ── 2. RESPOND 200 IMMEDIATELY ─────────────────────────────────────────────
-    # Webhook providers retry if they do not get 200 quickly.
-    # Do not wait for processing to complete before returning.
-    # If processing takes 10 seconds and the provider times out at 5s,
-    # you will receive the same event multiple times.
-
-    # ── 3. IDEMPOTENCY CHECK ───────────────────────────────────────────────────
-    event_id = event.get('account_id', '') + ':' + event.get('payload', {}).get('payment', {}).get('entity', {}).get('id', '')
-    if event_id in processed_event_ids:
-        return {'status': 'already_processed'}   # still return 200
-
-    processed_event_ids.add(event_id)
-
-    # ── 4. PROCESS IN BACKGROUND ───────────────────────────────────────────────
-    background_tasks.add_task(process_event, event)
-
-    return {'status': 'accepted'}   # return 200 immediately
-
-
-# PRODUCTION CONSIDERATIONS FOR WEBHOOKS:
-# - Use Redis SET with NX (set if not exists) for distributed idempotency
-# - Store events in a queue (Kafka, SQS, RabbitMQ) before processing
-# - Log every received event with timestamp and event_id before processing
-# - Monitor webhook delivery: most providers show delivery success rates
-# - Implement a reconciliation job that polls the API to catch missed webhooks
-# - Set up alerting if webhook delivery rate drops below 95%`}</CodeBox>
-
-        <SubTitle>The hybrid pattern — webhooks plus periodic reconciliation</SubTitle>
+        <CodeBox label="1 — Verify the signature before trusting anything in the body">{`if not verify_webhook_signature(body, signature, WEBHOOK_SECRET):
+    raise HTTPException(status_code=401)`}</CodeBox>
 
         <Para>
-          Webhooks are not guaranteed to be delivered. Providers retry on failure,
-          but if your server was down during the retry window, events are lost.
-          The production-grade pattern uses webhooks for low-latency event
-          processing combined with periodic polling to reconcile any gaps.
+          Your endpoint is a public URL anyone can send a request to. Skipping
+          this step means a malicious actor can send a fake{' '}
+          <code style={inlineCode}>payment.captured</code> event and have your
+          pipeline treat an unpaid order as paid.
         </Para>
 
-        <CodeBox label="Hybrid pattern — webhook primary, polling for gap reconciliation">{`# Primary path: webhook receives events in near-real-time
-# Reconciliation path: hourly poll fills in any missed events
+        <CodeBox label="2 — Check whether you've already processed this exact event">{`if event_id in processed_event_ids:
+    return {'status': 'already_processed'}   # still 200 — do not reprocess`}</CodeBox>
 
-# Reconciliation job (runs every hour):
-def reconcile_missed_payments(lookback_hours: int = 2) -> int:
-    """
-    Fetch all payments from the last N hours and upsert them.
-    Catches any webhook deliveries that failed.
-    """
-    from_ts = int(time.time()) - (lookback_hours * 3600)
-    to_ts   = int(time.time())
+        <Para>
+          This matters because of requirement 3 below: providers retry
+          deliveries, so the same event can arrive more than once, by design.
+        </Para>
 
-    fetched = upserted = 0
+        <CodeBox label="3 — Respond 200 immediately, process afterward">{`background_tasks.add_task(process_event, event)
+return {'status': 'accepted'}`}</CodeBox>
 
-    for payment in fetch_all_cursor(
-        url     = 'https://api.stripe.com/v1/payments',
-        headers = auth_header(),
-        params  = {'from': from_ts, 'to': to_ts, 'count': 100},
-    ):
-        fetched += 1
-        # Upsert: update if exists, insert if new
-        was_new = upsert_payment(payment)
-        if was_new:
-            upserted += 1
+        <Callout type="warning">
+          This ordering is not a style preference. Most providers retry a
+          webhook if they don't receive a 200 within 5–10 seconds. If your
+          handler does real work — a database write, a downstream API call —{' '}
+          <em>before</em> responding, and that work takes longer than the
+          provider's timeout, you will receive the same event a second time
+          while the first one is still running. Respond first, then process in
+          the background — which is exactly why the idempotency check in
+          step 2 is not optional.
+        </Callout>
 
-    print(f'Reconciliation: fetched=\${fetched}, new=\${upserted}')
-    return upserted
+        <CodeBox label="4 — the actual processing, run as a background task">{`def process_event(event):
+    if event.get('event') == 'payment.captured':
+        write_payment_to_db(event['payload']['payment']['entity'])
+    elif event.get('event') == 'order.paid':
+        update_order_status(event['payload']['order']['entity'])`}</CodeBox>
 
+        <SubSubTitle>The hybrid pattern — webhooks are not enough alone</SubSubTitle>
 
-# Schedule with cron:
-# 0 * * * * python3 /pipelines/reconcile_payments.py
+        <Para>
+          Webhook delivery is not guaranteed — if your server was down during a
+          provider's retry window, that event is simply gone. The production
+          pattern pairs webhooks (for low latency) with an hourly reconciliation
+          poll (for completeness):
+        </Para>
 
-# This pattern guarantees:
-# - Low latency for most events (webhook path)
-# - 100% completeness (reconciliation catches missed webhooks)
-# - At-most-once processing per event (upsert idempotency)`}</CodeBox>
+        <CodeBox label="An hourly job that catches anything a webhook missed">{`def reconcile_missed_payments(lookback_hours=2):
+    from_ts = int(time.time()) - lookback_hours * 3600
+    to_ts = int(time.time())
+
+    new_count = 0
+    for payment in fetch_all_cursor(PAYMENTS_URL, auth_header(), {'from': from_ts, 'to': to_ts}):
+        if upsert_payment(payment):   # upsert returns True only for a genuinely new row
+            new_count += 1
+
+    print(f'Reconciliation: {new_count} payments recovered')`}</CodeBox>
+
+        <Para>
+          Because <code style={inlineCode}>upsert_payment</code> is idempotent
+          (Part 07 covers exactly why), running this on a 2-hour lookback every
+          hour is safe even though it re-checks payments the webhook path
+          already processed — anything already recorded is a no-op update, not
+          a duplicate.
+        </Para>
       </section>
 
       <Divider />
 
-      {/* ── Part 07 — API Schema Challenges ──────────────────────────── */}
+      {/* ── Part 07 — Schema Challenges ──────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 07 — Schema Challenges" />
-        <SectionTitle>API Schema Challenges — Versioning, Breaking Changes, and Optional Fields</SectionTitle>
+        <SectionTitle>Writing a Parser That Survives the API Changing Under You</SectionTitle>
 
         <Para>
-          APIs change over time. Providers add fields, rename things, change types,
-          and deprecate endpoints. A data pipeline that works perfectly today can
-          break silently next month when a vendor ships a new API version.
-          Understanding how to handle API evolution defensively is what separates
-          fragile pipelines from robust ones.
+          APIs evolve. Providers add fields, rename them, and occasionally
+          change a field's type entirely. A pipeline that works today can break
+          silently next month when a vendor ships a new version — unless the
+          parser was written defensively from the start.
         </Para>
 
-        <SubTitle>API versioning — what each strategy means for your pipeline</SubTitle>
-
         <CompareTable
-          headers={[
-            { label: 'Strategy' },
-            { label: 'How it looks', color: '#00e676' },
-            { label: 'Impact on pipelines', color: '#f97316' },
-          ]}
-          keys={['strategy', 'looks', 'impact']}
+          headers={[{ label: 'Versioning' }, { label: 'Looks like', color: '#00e676' }, { label: 'Impact', color: '#f97316' }]}
+          keys={['s', 'l', 'i']}
           rows={[
-            { strategy: 'URL versioning', looks: '/v1/payments, /v2/payments', impact: 'Old URL keeps working until explicitly deprecated. You control when to migrate. Most common and most DE-friendly.' },
-            { strategy: 'Header versioning', looks: 'API-Version: 2026-03-01', impact: 'Must send version header on every request. If omitted, gets default (may change). Always specify explicitly.' },
-            { strategy: 'Query param versioning', looks: '?version=2', impact: 'Easy to forget. Parameter is in URL logs. Otherwise similar to URL versioning.' },
-            { strategy: 'No versioning (semver)', looks: 'Single URL, changes are "backward compatible"', impact: 'Most dangerous for pipelines. Provider may add fields (safe) or change types (breaking). Monitor API changelogs.' },
+            { s: 'URL (/v1/, /v2/)', l: '/v1/payments vs /v2/payments', i: 'Old URL keeps working until deprecated — you control migration timing' },
+            { s: 'Header', l: 'API-Version: 2026-03-01', i: 'Must send it explicitly; omitting it silently uses a default that can change' },
+            { s: 'No versioning', l: 'One URL, "backward compatible" changes', i: 'Riskiest — a provider can add a field safely or change a type unsafely' },
           ]}
         />
 
-        <SubTitle>Writing defensive code that handles API changes gracefully</SubTitle>
+        <Para>
+          The specific field that trips up almost every real payment
+          integration is the amount: some providers return integer cents,
+          others return a float in dollars, and some return either depending on
+          payment method. Handle it once, in one place:
+        </Para>
 
-        <CodeBox label="Defensive API parsing — handling optional fields and type changes">{`# ── PRINCIPLE: be liberal in what you accept ──────────────────────────────────
-# Do not assume a field exists. Do not assume a field has the same type forever.
-# Write code that handles the common variations without crashing.
+        <CodeBox label="A parser that accepts every format a real API actually sends">{`from decimal import Decimal, InvalidOperation
 
-from decimal import Decimal, InvalidOperation
-from datetime import datetime, timezone
-from typing import Any
-
-def safe_get(obj: dict, *keys: str, default=None) -> Any:
-    """Safely navigate a nested dict without KeyError."""
-    for key in keys:
-        if not isinstance(obj, dict):
-            return default
-        obj = obj.get(key, default)
-        if obj is default:
-            return default
-    return obj
-
-
-def parse_amount(raw: Any) -> Decimal | None:
-    """
-    Parse monetary amount from various formats APIs use:
-    - Integer cents:  38000 (Stripe)
-    - Float dollars:  380.00
-    - String:        "380.00" or "380,00" (European comma)
-    - None/missing:  return None
-    """
+def parse_amount(raw):
     if raw is None:
         return None
     try:
         if isinstance(raw, int):
-            return Decimal(raw) / 100    # cents to dollars
-        raw_str = str(raw).replace(',', '.')  # normalise European comma
-        return Decimal(raw_str)
+            return Decimal(raw) / 100        # integer cents → dollars
+        return Decimal(str(raw).replace(',', '.'))  # float, string, or European comma
     except InvalidOperation:
-        return None
+        return None`}</CodeBox>
 
+        <CodeBox label="Command">{`>>> parse_amount(3800)      # Stripe-style integer cents
+Decimal('38.00')
+>>> parse_amount(38.00)     # a float already in dollars
+Decimal('38.00')
+>>> parse_amount("38,00")   # a European-formatted string
+Decimal('38.00')`}</CodeBox>
 
-def parse_timestamp(raw: Any) -> datetime | None:
-    """
-    Parse timestamp from various formats:
-    - Unix seconds: 1710633047
-    - Unix milliseconds: 1710633047000
-    - ISO 8601: "2026-03-17T20:14:32-04:00"
-    - Date only: "2026-03-17"
-    """
+        <Para>
+          Timestamps have the same problem — Unix seconds, Unix milliseconds,
+          and ISO 8601 strings are all common, sometimes from the very same
+          API depending on the endpoint:
+        </Para>
+
+        <CodeBox label="One function, every format">{`from datetime import datetime, timezone
+
+def parse_timestamp(raw):
     if raw is None:
         return None
-    try:
-        if isinstance(raw, (int, float)):
-            # Detect milliseconds vs seconds
-            ts = raw / 1000 if raw > 1e10 else raw
-            return datetime.fromtimestamp(ts, tz=timezone.utc)
-        if isinstance(raw, str):
-            if 'T' in raw or '+' in raw or 'Z' in raw:
-                return datetime.fromisoformat(raw.replace('Z', '+00:00'))
-            # Date-only
-            return datetime.strptime(raw, '%Y-%m-%d').replace(tzinfo=timezone.utc)
-    except (ValueError, OSError):
-        return None
-    return None
+    if isinstance(raw, (int, float)):
+        ts = raw / 1000 if raw > 1e10 else raw   # >1e10 means milliseconds, not seconds
+        return datetime.fromtimestamp(ts, tz=timezone.utc)
+    if isinstance(raw, str) and ('T' in raw or 'Z' in raw):
+        return datetime.fromisoformat(raw.replace('Z', '+00:00'))
+    return None`}</CodeBox>
 
+        <Para>
+          With both helpers in place, the actual record parser reads as a flat,
+          honest mapping — every field handled defensively, nothing assumed:
+        </Para>
 
-def parse_payment(raw: dict) -> dict:
-    """
-    Parse a raw API payment record defensively.
-    Handles field renames, type changes, and optional fields across API versions.
-    """
+        <CodeBox label="Combining both into one record parser">{`def parse_payment(raw):
     return {
-        # Primary field with fallback to old field name:
-        'payment_id':   raw.get('id') or raw.get('payment_id'),
+        'payment_id': raw.get('id') or raw.get('payment_id'),
+        'amount': parse_amount(raw.get('amount')),
+        'currency': raw.get('currency', 'USD'),
+        'status': (raw.get('status') or '').lower() or None,
+        'created_at': parse_timestamp(raw.get('created_at') or raw.get('created')),
+        '_raw': raw,   # keep the original — never silently discard unknown data
+    }`}</CodeBox>
 
-        # Amount: handle int (cents) or float (dollars) or string:
-        'amount':       parse_amount(raw.get('amount')),
+        <Para>
+          That last field, <code style={inlineCode}>_raw</code>, is a habit
+          worth keeping even once a pipeline feels stable: when the provider
+          eventually adds a field you'll want later, it's already sitting in
+          every historical row, instead of lost forever from records ingested
+          before you noticed.
+        </Para>
 
-        # Currency: default to USD if missing:
-        'currency':     raw.get('currency', 'USD'),
-
-        # Status: normalise to lowercase:
-        'status':       (raw.get('status') or '').lower() or None,
-
-        # Nested field with safe navigation:
-        'method':       safe_get(raw, 'method') or safe_get(raw, 'payment_method', 'type'),
-
-        # Timestamp: handle multiple formats:
-        'created_at':   parse_timestamp(raw.get('created_at') or raw.get('created')),
-        'captured_at':  parse_timestamp(raw.get('captured_at')),
-
-        # Optional fields: None if missing:
-        'vpa':          raw.get('vpa') or raw.get('upi_id'),
-        'bank':         raw.get('bank'),
-        'wallet':       raw.get('wallet'),
-        'description':  raw.get('description') or raw.get('notes', {}).get('description'),
-
-        # Preserve unknown fields for debugging (do not silently discard):
-        '_raw':         raw,
-    }
-
-
-# ── MONITORING FOR API CHANGES ────────────────────────────────────────────────
-def detect_schema_changes(sample: list[dict], expected_fields: set[str]) -> None:
-    """
-    Detect when the API starts returning unexpected new fields.
-    Log a warning so engineers can decide whether to capture them.
-    """
-    if not sample:
-        return
-
-    all_fields = set()
-    for record in sample:
-        all_fields.update(record.keys())
-
-    new_fields = all_fields - expected_fields
-    missing_fields = expected_fields - all_fields
-
+        <CodeBox label="A lightweight tripwire for a schema change you didn't expect">{`def detect_schema_changes(sample, expected_fields):
+    seen_fields = {k for record in sample for k in record}
+    new_fields = seen_fields - expected_fields
     if new_fields:
-        print(f'WARNING: API returning new fields not in schema: \${new_fields}')
-        # Alert: consider whether these fields contain useful data
-
-    if missing_fields:
-        print(f'WARNING: Expected fields missing from API response: \${missing_fields}')
-        # Alert: API may have renamed or removed fields`}</CodeBox>
+        print(f'WARNING: API is returning new fields not in schema: {new_fields}')`}</CodeBox>
       </section>
 
       <Divider />
 
-      {/* ── Part 08 — Complete Ingestion Pipeline Design ──────────────── */}
+      {/* ── Part 08 — Building the Production Pipeline ────────────────── */}
       <section style={{ marginBottom: 64 }}>
-        <SectionTag text="// Part 08 — Production Pipeline Design" />
-        <SectionTitle>Designing a Production-Grade API Ingestion Pipeline</SectionTitle>
+        <SectionTag text="// Part 08 — Building the Production Pipeline" />
+        <SectionTitle>Assembling Everything Into One Real Ingestion Pipeline</SectionTitle>
 
         <Para>
-          The individual skills — authentication, pagination, rate limiting —
-          combine into a coherent pipeline design. A production API ingestion
-          pipeline has five architectural properties: it is idempotent (safe to
-          rerun), resumable (survives failures mid-run), observable (logs its
-          state clearly), defensive (handles API changes without crashing), and
-          respectful (stays within rate limits without hammering the API).
+          Every piece so far has been in isolation. Now they combine into the
+          actual FreshCart payment-ingestion pipeline this module has been
+          building toward — five properties stacked in order: authenticated,
+          rate-limited, resumable, defensive, and idempotent.
         </Para>
 
-        <CodeBox label="Complete production API ingestion pipeline — all patterns combined">{`"""
-FreshCart Payment Gateway Ingestion Pipeline
-Fetches payments from payment API → validates → upserts to PostgreSQL
-Architecture: idempotent, resumable, rate-limited, defensive
-"""
+        <SubSubTitle>Step 1 — configuration and structured logging</SubSubTitle>
 
-import os, json, time, logging, uuid
-from decimal import Decimal
-from datetime import datetime, timezone, timedelta
+        <CodeBox label="payment_ingestion.py — setup">{`import os, json, time, logging, uuid
 from pathlib import Path
-from typing import Iterator
 
-import requests
-from requests.auth import HTTPBasicAuth
-import psycopg2
-from psycopg2.extras import execute_values
+API_BASE = 'https://api.payment-gateway.example.com/v1'
+DLQ_PATH = Path('/data/dlq/payments.ndjson')
+RUN_ID = str(uuid.uuid4())
 
-# ── Configuration ──────────────────────────────────────────────────────────────
-API_BASE       = 'https://api.payment-gateway.example.com/v1'
-KEY_ID         = os.environ['GATEWAY_KEY_ID']
-KEY_SECRET     = os.environ['GATEWAY_KEY_SECRET']
-DB_URL         = os.environ['DATABASE_URL']
-CHECKPOINT_DIR = Path('/data/checkpoints')
-DLQ_PATH       = Path('/data/dlq/payments.ndjson')
-RUN_ID         = str(uuid.uuid4())
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger('payment_ingestion')`}</CodeBox>
 
-CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
-DLQ_PATH.parent.mkdir(parents=True, exist_ok=True)
+        <Para>
+          <code style={inlineCode}>RUN_ID</code> gets attached to every log line
+          for this run — when three pipeline runs overlap in a shared log file
+          at 2 AM, this is what lets you filter to just the one that failed.
+        </Para>
 
-logging.basicConfig(
-    level=logging.INFO,
-    format=f'{{"ts":"%(asctime)s","level":"%(levelname)s","run_id":"{RUN_ID}","msg":"%(message)s"}}',
-)
-log = logging.getLogger('payment_ingestion')
+        <SubSubTitle>Step 2 — an authenticated fetch with retry, rate limiting, and backoff</SubSubTitle>
 
+        <CodeBox label="Combining Part 03's auth, Part 05's limiter, and status-code handling from Part 02">{`limiter = TokenBucketRateLimiter(calls_per_second=8)   # stay under a 10/s API limit
 
-# ── Rate limiter ───────────────────────────────────────────────────────────────
-class SimpleRateLimiter:
-    def __init__(self, rps: float):
-        self.interval = 1.0 / rps
-        self.last     = 0.0
-
-    def wait(self):
-        now     = time.monotonic()
-        elapsed = now - self.last
-        if elapsed < self.interval:
-            time.sleep(self.interval - elapsed)
-        self.last = time.monotonic()
-
-limiter = SimpleRateLimiter(rps=8.0)  # 8 req/s, API limit is 10
-
-
-# ── Fetch with retry and rate limiting ────────────────────────────────────────
-def api_get(path: str, params: dict, max_retries: int = 5) -> dict:
-    """Make an authenticated GET request with retry logic."""
-    url = f'\${API_BASE}\${path}'
+def api_get(path, params, max_retries=5):
+    url = f'{API_BASE}{path}'
 
     for attempt in range(1, max_retries + 1):
-        limiter.wait()   # proactive rate limiting
-        try:
-            resp = requests.get(
-                url,
-                auth=HTTPBasicAuth(KEY_ID, KEY_SECRET),
-                params=params,
-                timeout=30,
-            )
+        limiter.acquire()
+        resp = requests.get(url, headers=auth_header(), params=params, timeout=30)
 
-            if resp.status_code == 200:
-                return resp.json()
+        if resp.status_code == 200:
+            check_rate_limit_headers(resp)
+            return resp.json()
+        elif resp.status_code == 429:
+            time.sleep(handle_rate_limit_response(resp))
+        elif resp.status_code in (500, 502, 503, 504):
+            time.sleep(min(60, 2 ** attempt))
+        else:
+            resp.raise_for_status()   # a 4xx — do not retry, something is genuinely wrong
 
-            elif resp.status_code == 429:
-                wait = float(resp.headers.get('Retry-After', 2 ** attempt))
-                log.warning('Rate limited. Waiting %.1fs (attempt \${d}/\${d})', wait, attempt, max_retries)
-                time.sleep(wait)
+    raise RuntimeError(f'API call failed after {max_retries} attempts')`}</CodeBox>
 
-            elif resp.status_code in (500, 502, 503, 504):
-                wait = min(60, 2 ** attempt)
-                log.warning('Server error \${d}. Waiting %.1fs', resp.status_code, wait)
-                time.sleep(wait)
+        <Para>
+          Notice this function is really just Part 02's status-code decision
+          table, Part 03's <code style={inlineCode}>auth_header()</code>, and
+          Part 05's rate limiting and backoff — expressed as code, nothing new.
+        </Para>
 
-            else:
-                resp.raise_for_status()   # 4xx — do not retry
+        <SubSubTitle>Step 3 — paginated fetch with a checkpoint</SubSubTitle>
 
-        except requests.exceptions.Timeout:
-            wait = min(30, 2 ** attempt)
-            log.warning('Timeout (attempt \${d}/\${d}). Waiting %.1fs', attempt, max_retries, wait)
-            time.sleep(wait)
+        <CodeBox label="The exact cursor-pagination pattern from Part 04, now checkpointed to a real file">{`def fetch_payments(from_ts, to_ts):
+    checkpoint_file = Path(f'/data/checkpoints/payments_{from_ts}_{to_ts}.json')
+    cursor = json.loads(checkpoint_file.read_text())['cursor'] if checkpoint_file.exists() else None
 
-    raise RuntimeError(f'API call failed after \${max_retries} attempts')
-
-
-# ── Paginated fetch with checkpoint ───────────────────────────────────────────
-def fetch_payments(from_ts: int, to_ts: int) -> Iterator[dict]:
-    """Fetch all payments in time range with cursor checkpointing."""
-    checkpoint_file = CHECKPOINT_DIR / f'payments_\${from_ts}_\${to_ts}.json'
-    cursor = None
-
-    if checkpoint_file.exists():
-        saved = json.loads(checkpoint_file.read_text())
-        cursor = saved.get('cursor')
-        log.info('Resuming fetch from checkpoint cursor')
-
-    pages = 0
     while True:
-        params = {'from': from_ts, 'to': to_ts, 'count': 100}
-        if cursor:
-            params['cursor'] = cursor
+        params = {'from': from_ts, 'to': to_ts, 'count': 100, **({'cursor': cursor} if cursor else {})}
+        data = api_get('/payments', params)
 
-        data   = api_get('/payments', params)
-        items  = data.get('items', [])
-        pages += 1
-
-        log.info('Page \${d}: \${d} payments', pages, len(items))
-        for item in items:
-            yield item
+        yield from data.get('items', [])
 
         cursor = data.get('cursor')
         if cursor:
             checkpoint_file.write_text(json.dumps({'cursor': cursor}))
-
-        if not cursor or not items:
+        if not cursor or not data.get('items'):
             break
 
-    checkpoint_file.unlink(missing_ok=True)
+    checkpoint_file.unlink(missing_ok=True)   # clean up only on a full, successful run`}</CodeBox>
 
+        <SubSubTitle>Step 4 — parse defensively, route failures to a dead-letter queue</SubSubTitle>
 
-# ── Parse defensively ─────────────────────────────────────────────────────────
-def parse_payment(raw: dict) -> dict | None:
+        <CodeBox label="Every bad record gets logged, not silently dropped and not crashing the run">{`def parse_payment_safe(raw):
     try:
-        amount_raw = raw.get('amount')
-        amount = Decimal(str(amount_raw)) / 100 if isinstance(amount_raw, int) else \
-                 Decimal(str(amount_raw)) if amount_raw is not None else None
-
-        if amount is None or amount < 0:
-            raise ValueError(f'Invalid amount: \${amount_raw}')
-
-        ts_raw = raw.get('created_at')
-        created_at = datetime.fromtimestamp(ts_raw / 1000 if ts_raw > 1e10 else ts_raw,
-                                             tz=timezone.utc) if ts_raw else None
-
-        return {
-            'payment_id': raw['id'],
-            'amount':     amount,
-            'currency':   raw.get('currency', 'USD'),
-            'status':     (raw.get('status') or '').lower(),
-            'method':     raw.get('method'),
-            'created_at': created_at,
-        }
+        record = parse_payment(raw)   # from Part 07
+        if record['amount'] is None or record['amount'] < 0:
+            raise ValueError(f"invalid amount: {raw.get('amount')}")
+        return record
     except Exception as e:
         with open(DLQ_PATH, 'a') as f:
-            f.write(json.dumps({'error': str(e), 'record': raw}) + '\n')
-        log.warning('Record sent to DLQ: \${s}', str(e))
-        return None
+            f.write(json.dumps({'error': str(e), 'record': raw}) + '\\n')
+        log.warning('Record sent to DLQ: %s', e)
+        return None`}</CodeBox>
 
+        <Para>
+          The dead-letter queue is what makes a bad record a Tuesday-afternoon
+          investigation instead of a failed pipeline run at 6 AM — one
+          malformed row gets logged and skipped, and the other 47,999 good
+          rows still load on schedule.
+        </Para>
 
-# ── Upsert batch ──────────────────────────────────────────────────────────────
-def upsert_batch(records: list[dict], conn) -> int:
-    rows = [
-        (r['payment_id'], float(r['amount']), r['currency'],
-         r['status'], r['method'], r['created_at'])
-        for r in records
-    ]
+        <SubSubTitle>Step 5 — idempotent writes</SubSubTitle>
+
+        <CodeBox label="An upsert, keyed on the provider's own ID — the whole idempotency story in one query">{`from psycopg2.extras import execute_values
+
+def upsert_batch(records, conn):
+    rows = [(r['payment_id'], float(r['amount']), r['currency'], r['status'], r['created_at']) for r in records]
     with conn.cursor() as cur:
         execute_values(cur, """
-            INSERT INTO silver.payments
-                (payment_id, amount, currency, status, method, created_at)
+            INSERT INTO silver.payments (payment_id, amount, currency, status, created_at)
             VALUES %s
-            ON CONFLICT (payment_id) DO UPDATE SET
-                status     = EXCLUDED.status,
-                amount     = EXCLUDED.amount,
-                updated_at = NOW()
+            ON CONFLICT (payment_id) DO UPDATE SET status = EXCLUDED.status, updated_at = NOW()
         """, rows)
     conn.commit()
-    return len(rows)
+    return len(rows)`}</CodeBox>
 
+        <Para>
+          <code style={inlineCode}>ON CONFLICT (payment_id) DO UPDATE</code> is
+          the entire idempotency guarantee in one line: running this pipeline
+          twice for the same date, or hitting the same record via both the
+          webhook path and the reconciliation poll, produces the same end
+          state either way — never a duplicate row.
+        </Para>
 
-# ── Main ───────────────────────────────────────────────────────────────────────
-def run(run_date: str) -> None:
-    log.info('Pipeline started for date: \${s}', run_date)
+        <SubSubTitle>Step 6 — put it together, with a fixed (not relative) time window</SubSubTitle>
+
+        <CodeBox label="The main entry point">{`def run(run_date):
+    log.info('Pipeline started for %s (run_id=%s)', run_date, RUN_ID)
     dt = datetime.strptime(run_date, '%Y-%m-%d').replace(tzinfo=timezone.utc)
-    from_ts = int(dt.timestamp())
-    to_ts   = int((dt + timedelta(days=1)).timestamp())
+    from_ts, to_ts = int(dt.timestamp()), int((dt + timedelta(days=1)).timestamp())
 
-    loaded = skipped = 0
-    batch: list[dict] = []
+    loaded, skipped, batch = 0, 0, []
 
-    with psycopg2.connect(DB_URL) as conn:
+    with psycopg2.connect(os.environ['DATABASE_URL']) as conn:
         for raw in fetch_payments(from_ts, to_ts):
-            parsed = parse_payment(raw)
+            parsed = parse_payment_safe(raw)
             if parsed is None:
                 skipped += 1
                 continue
-
             batch.append(parsed)
             if len(batch) >= 5000:
                 loaded += upsert_batch(batch, conn)
-                log.info('Batch upserted: total=\${d}', loaded)
                 batch = []
-
         if batch:
             loaded += upsert_batch(batch, conn)
 
-    log.info('Pipeline complete: loaded=\${d} skipped=\${d}', loaded, skipped)
+    log.info('Pipeline complete: loaded=%d skipped=%d', loaded, skipped)`}</CodeBox>
 
-
-if __name__ == '__main__':
-    import sys
-    run(sys.argv[1] if len(sys.argv) > 1 else
-        (datetime.now(timezone.utc) - timedelta(days=1)).strftime('%Y-%m-%d'))`}</CodeBox>
+        <Callout type="tip">
+          <code style={inlineCode}>from_ts</code>/<code style={inlineCode}>to_ts</code>{' '}
+          are computed from the <code style={inlineCode}>run_date</code>{' '}
+          argument, not from "right now." That single choice is what makes the
+          whole pipeline idempotent at the extraction level too — running it
+          three times for <code style={inlineCode}>2026-03-17</code> always
+          asks the API for exactly the same window, whether it's 6 AM or 6 PM
+          when you run it.
+        </Callout>
       </section>
 
       <Divider />
@@ -1629,7 +1148,7 @@ if __name__ == '__main__':
         }}>
           💼 What This Looks Like at Work
         </div>
-        <SectionTitle>Onboarding a New Vendor API — From Documentation to Production</SectionTitle>
+        <SectionTitle>Onboarding a Second Vendor — From Documentation to Production</SectionTitle>
 
         <div style={{
           background: 'var(--surface)', border: '1px solid var(--border)',
@@ -1642,173 +1161,208 @@ if __name__ == '__main__':
             display: 'inline-block', marginBottom: 20, letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Scenario — FreshCart · Onboarding a new logistics API
+            Scenario — FreshCart · Onboarding a new logistics API, ShipFast
           </div>
 
           <Para>
-            FreshCart has just signed with a new last-mile delivery partner,
-            ShipFast. You are asked to build a pipeline that ingests daily
-            delivery performance data from ShipFast's API into the warehouse.
-            Here is the actual process a senior data engineer follows.
+            FreshCart has just signed with a new delivery partner, ShipFast, and
+            you're asked to ingest their daily delivery performance data. The
+            payment pipeline just built is not reusable code here — it's a
+            reusable <em>process</em>, applied to an entirely different API.
+          </Para>
+
+          <SubSubTitle>Step 1 — read the docs with a DE lens</SubSubTitle>
+          <Para>
+            Auth: API key in a header — simple. Rate limit: 500 requests per
+            minute — comfortable. Pagination: cursor-based — good, the same
+            pattern from Part 04. Webhooks: available, for status changes.
+          </Para>
+
+          <SubSubTitle>Step 2 — test with curl before writing any code</SubSubTitle>
+          <CodeBox label="Manual exploration, before any pipeline code exists">{`curl -s -H "X-API-Key: $SHIPFAST_API_KEY" \\
+     "https://api.shipfast.io/v2/deliveries?date=2026-03-17&limit=5"`}</CodeBox>
+          <Output label="response">{`{
+  "data": [ ... ],
+  "pagination": { "cursor": "eyJpZCI6MTI...", "has_more": true, "total": 48234 }
+}`}</Output>
+          <Para>
+            One request, and three of Part 04's exact concepts are already
+            confirmed: cursor-based, a <code style={inlineCode}>total</code>{' '}
+            field for validating counts, and a shape close enough to the
+            payment API that the same <code style={inlineCode}>fetch_all_cursor</code>{' '}
+            pattern applies with almost no changes.
+          </Para>
+
+          <SubSubTitle>Step 3 — identify the data quality risks</SubSubTitle>
+          <Para>
+            The <code style={inlineCode}>amount</code> field is sometimes an
+            integer, sometimes a float, exactly like Part 07's{' '}
+            <code style={inlineCode}>parse_amount</code> was built to handle.{' '}
+            <code style={inlineCode}>delivered_at</code> is null for
+            undelivered orders. <code style={inlineCode}>agent_id</code> refers
+            to ShipFast's internal IDs, not FreshCart's — three things the
+            parser handles defensively, reusing Part 07's exact helpers.
+          </Para>
+
+          <SubSubTitle>Steps 4–6 — build small, backfill, then layer on webhooks</SubSubTitle>
+          <Para>
+            Run for one day first, and compare the API's <code style={inlineCode}>total</code>{' '}
+            against rows actually written — any mismatch means a pagination or
+            parsing bug, caught immediately rather than in production. Backfill
+            90 days of history with the same checkpointed loop from Part 08's
+            Step 3, so a crash on day 47 resumes from day 47, not day 1.
+            Finally, register a webhook endpoint for status changes, reusing
+            Part 06's four-step handler (verify, dedupe, respond, process) and
+            Part 06's hourly reconciliation job to catch anything missed.
           </Para>
 
           <Para>
-            <strong>Step 1 — Read the documentation with a DE lens.</strong> The
-            first things you look for: authentication method (API key in header —
-            simple), rate limits (500 requests per minute — comfortable), pagination
-            style (cursor-based — good), available endpoints (deliveries, routes,
-            agents), and whether they offer webhooks (yes, for status changes).
-          </Para>
-
-          <Para>
-            <strong>Step 2 — Test with curl before writing any code.</strong>
-          </Para>
-
-          <CodeBox label="Manual API exploration before building the pipeline">{`# First test: can we authenticate and get any data?
-curl -s -H "X-API-Key: \${SHIPFAST_API_KEY}" \
-     "https://api.shipfast.io/v2/deliveries?date=2026-03-17&limit=5" \
-     | python3 -m json.tool
-
-# Output reveals the data structure:
-# {
-#   "data": [...],
-#   "pagination": {
-#     "cursor": "eyJpZCI6MTI...",
-#     "has_more": true,
-#     "total": 48234
-#   }
-# }
-
-# Second test: what does a delivery record look like?
-# Note the field names and types — write them down before coding
-
-# Third test: check rate limit headers on the response:
-curl -s -I -H "X-API-Key: \${SHIPFAST_API_KEY}" \
-     "https://api.shipfast.io/v2/deliveries?date=2026-03-17&limit=1" \
-     | grep -i "x-rate"
-# X-RateLimit-Limit: 500
-# X-RateLimit-Remaining: 499
-# X-RateLimit-Reset: 1710720060`}</CodeBox>
-
-          <Para>
-            <strong>Step 3 — Identify the data quality risks.</strong> The delivery
-            records have an <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>amount</code> field
-            that is sometimes an integer (cents) and sometimes a float (dollars) depending
-            on whether the delivery had COD. There is a{' '}
-            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>delivered_at</code> field
-            that is null for undelivered orders. The{' '}
-            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>agent_id</code> field
-            refers to ShipFast's internal agent IDs, not FreshCart's. These are the
-            three things you handle defensively in the parser.
-          </Para>
-
-          <Para>
-            <strong>Step 4 — Build, test with a small date range, verify counts.</strong>
-            Run the pipeline for one day, compare the count returned by the API's{' '}
-            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>total</code> field
-            against the rows written to the database. They must match. Any discrepancy
-            means your pagination logic has a bug or your parser is silently dropping records.
-          </Para>
-
-          <Para>
-            <strong>Step 5 — Backfill historical data.</strong> ShipFast has data
-            from 90 days ago. Run the pipeline with a date range loop, one day at a
-            time, with checkpointing so if it fails on day 47 it resumes from day 47.
-          </Para>
-
-          <Para>
-            <strong>Step 6 — Set up webhooks for real-time status updates.</strong>
-            Register your endpoint URL in the ShipFast dashboard. Implement the
-            signature verification, the idempotency check, and the background
-            processor. Schedule the hourly reconciliation job to catch any missed
-            webhook deliveries.
-          </Para>
-
-          <Para>
-            Total time from task assignment to production: typically two days for
-            a straightforward API. The framework above covers every step — the
-            patterns do not change, only the specific field names and endpoint URLs.
+            Total time from task assignment to production: about two days.
+            Every step reused a pattern already built for the payment pipeline
+            — only the field names, endpoint URLs, and specific quirks changed.
           </Para>
         </div>
       </section>
 
       <Divider />
 
-      {/* ── Part 10 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 10 — Misconceptions ─────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 10 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Working with APIs</SectionTitle>
+
+        {[
+          {
+            wrong: '"Cursor pagination is just a fancier, unnecessary version of offset pagination"',
+            right: 'On a live, actively-changing dataset, offset pagination can silently skip or duplicate records when rows are inserted mid-pagination — with no error raised anywhere. Cursor pagination is not a nicety; on production data it is frequently the difference between correct and silently wrong results.',
+          },
+          {
+            wrong: '"If an API call fails, the safe default is to just retry it"',
+            right: 'Only for 429 and 5xx responses. A 4xx means your own request is malformed or unauthorized — retrying the identical request produces the identical failure every time. Blindly retrying every failure wastes time and can mask a real bug as a transient one.',
+          },
+          {
+            wrong: '"Webhooks are more reliable than polling because they\'re real-time"',
+            right: 'Real-time and reliable are different properties. Webhook delivery is not guaranteed — if your endpoint is briefly down during a provider\'s retry window, that event is gone. Production systems pair webhooks (for latency) with periodic reconciliation polling (for completeness) precisely because neither alone is sufficient.',
+          },
+          {
+            wrong: '"Responding 200 to a webhook only after your database write completes is the safer, more correct order"',
+            right: 'It is the opposite: most providers retry if they don\'t receive 200 within 5-10 seconds, so slow synchronous processing before responding causes duplicate deliveries of the same event. Respond 200 immediately, then process in the background, with an idempotency check to safely absorb the resulting duplicates.',
+          },
+          {
+            wrong: '"Once a pipeline works against an API, it will keep working unless you change your own code"',
+            right: 'APIs change on their own timeline — providers add fields, rename them, or change a type. A parser that assumes a fixed, unchanging shape breaks the moment the vendor ships an unrelated update. Defensive parsing (Part 07) is not paranoia, it is planning for something that reliably happens to every long-lived integration eventually.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, padding: '20px 24px', marginBottom: 16,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 11 — Interview Prep ─────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 10 — Interview Prep" />
+        <SectionTag text="// Part 11 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
           {
             q: 'Q1. What is the difference between cursor pagination and offset pagination? When would you use each?',
-            a: `Offset pagination specifies where to start in a result set by a number: give me 100 records starting from position 500. The API executes this as a database query with LIMIT and OFFSET, which requires the database to read and skip over the first 500 rows before returning the 100 you need. At small scales this is fast. At large scales — offset 50,000 in a table of 10 million rows — the database must scan 50,000 rows just to discard them, making deep pages slow.
+            a: `Offset pagination specifies where to start by a number: give me 100 records starting from position 500. The API executes this as LIMIT and OFFSET, which requires the database to read and discard the first 500 rows before returning the 100 you need — fast at small scale, but a deep offset (position 50,000 in a 10-million-row table) forces scanning and discarding 50,000 rows just to reach your page.
 
-The more critical problem with offset pagination is correctness. If new records are inserted into the dataset while you are paginating, the offsets shift. Records that were at position 100 are now at position 101. Your page 2 request, which asks for rows 101-200, skips the record that shifted into position 100. Data engineers using offset pagination on live, changing datasets frequently miss records or see duplicates in the output.
+The more critical problem is correctness on a live dataset. If new records are inserted while you're paginating, offsets shift underneath you — a record at position 100 moves to 101, and your next request (still asking for "position 101-200" from before the shift) skips it entirely, with no error.
 
-Cursor pagination returns an opaque cursor (usually encoding the ID or timestamp of the last returned record) alongside each page. The next request sends this cursor back, and the API executes a query like SELECT * FROM deliveries WHERE id > cursor_value ORDER BY id LIMIT 100. This is an index range scan — O(log n) regardless of how deep into the dataset you are. New records do not affect already-fetched pages because the cursor points to a specific record, not a position.
+Cursor pagination returns an opaque cursor encoding the last record's ID or timestamp. The next request sends it back, and the API executes something like WHERE id > cursor_value ORDER BY id LIMIT 100 — an index range scan, fast regardless of depth, and unaffected by insertions elsewhere in the table because the cursor points at a specific record, not a position.
 
-Use offset pagination for small static datasets where simplicity matters more than performance, or when the API does not offer cursor pagination. Use cursor pagination for everything else — large datasets, live changing data, and any dataset where you need reliable resumability after a failure. Cursor-based pagination is the correct default choice for production API ingestion.`,
+Use offset for small, static datasets or when an API simply doesn't offer cursor pagination. Use cursor pagination for everything else — it's the correct default for production ingestion of any dataset that's large or actively changing.`,
           },
           {
-            q: 'Q2. An API you are ingesting from starts returning 429 responses. Walk me through your handling strategy.',
-            a: `A 429 response means rate limit exceeded — the API will not serve your requests until you slow down. My handling has three layers.
+            q: 'Q2. An API you\'re ingesting from starts returning 429 responses. Walk me through your handling strategy.',
+            a: `429 means the rate limit is exceeded. My handling has three layers.
 
-The first response to a 429 is to read the Retry-After header. Most production APIs include this header on 429 responses, specifying exactly how many seconds to wait before the rate limit window resets. I extract this value, add a small random jitter of 10-20% to avoid synchronised retries across multiple pipeline instances, and sleep for that duration before retrying the exact same request.
+First, react correctly to the 429 itself: read the Retry-After header if present, add 10-20% random jitter to avoid synchronized retries across pipeline instances, and sleep that long before retrying the same request. Without a Retry-After header, fall back to exponential backoff — 2s, 4s, 8s, up to a cap — with the same jitter.
 
-If there is no Retry-After header, I fall back to exponential backoff: wait 2 seconds after the first 429, 4 seconds after the second, 8 seconds after the third, up to a maximum of 60 seconds. I add jitter to each wait to prevent the thundering herd problem where all retrying clients resume simultaneously.
+Second, and more important, prevent most 429s from happening at all: a proactive rate limiter (a token bucket) paces requests below the API's stated limit, and I check X-RateLimit-Remaining on every successful response, slowing down further if it drops below roughly 10% of the total.
 
-The second layer is proactive rate limiting before hitting the limit at all. I check the X-RateLimit-Remaining header on every successful response. When remaining requests drop below 10% of the limit, I proactively slow down — either by increasing the sleep time between requests or by pausing entirely until the window resets according to X-RateLimit-Reset. This prevents 429s from occurring rather than just handling them reactively.
-
-The third layer is monitoring and alerting. If 429s are occurring frequently, it means my pipeline's default pace is too fast for the API's limits. I would permanently reduce the requests-per-second target in my rate limiter configuration. Frequent 429s also suggest my pipeline may be competing with other users of the same API key, which would require coordinating rate limits across instances.`,
+Third, treat frequent 429s as a signal to fix the configuration, not just the retry logic — if they're common, my limiter's target rate is set too high for this API, or my pipeline may be sharing a rate-limit bucket with another process using the same key, which needs coordinating separately.`,
           },
           {
-            q: 'Q3. How do you verify the authenticity of incoming webhooks and why is this important?',
-            a: `Webhook authenticity verification is essential because your webhook endpoint is a public HTTPS URL that anyone on the internet can send requests to. Without verification, a malicious actor could send fake payment confirmation webhooks to your endpoint, causing your pipeline to process orders that were never actually paid for or triggering other business actions based on fraudulent data.
+            q: 'Q3. How do you verify the authenticity of incoming webhooks and why does it matter?',
+            a: `A webhook endpoint is a public HTTPS URL — anyone on the internet can send it a request. Without verification, an attacker could send a fake payment.captured event and have your pipeline treat an unpaid order as paid.
 
-Most webhook providers use HMAC-SHA256 signatures. The provider computes a signature by hashing the raw request body using a shared secret key (which only you and the provider know) and a specific algorithm. They include this signature in a request header — Stripe uses Stripe-Signature, Stripe uses X-Stripe-Signature, Shopify uses X-Shopify-Hmac-Sha256.
+Most providers sign the raw request body with HMAC-SHA256 using a secret only you and the provider know, and include the resulting signature in a header. To verify: read the raw body as bytes before any JSON parsing, compute the same HMAC-SHA256 over it with your secret, and compare that to the signature header.
 
-To verify the webhook: read the raw request body as bytes (before any JSON parsing), read the signature from the header, compute the expected HMAC signature using the same algorithm (HMAC-SHA256) with your secret key and the raw body, and compare the expected signature to the received one.
-
-There is one critical implementation detail: use hmac.compare_digest for the comparison, not a simple equality check. A naive string comparison exits early when it finds the first non-matching character, which leaks information about how much of the signature matched through timing differences. hmac.compare_digest always takes the same time regardless of where the strings differ, preventing timing attacks.
-
-If the signature does not match, return HTTP 401 immediately without processing the payload. Never skip verification in production — the performance cost is negligible (one HMAC computation per request) and the security benefit is significant.`,
+The comparison must use hmac.compare_digest, not a plain equality check. A naive comparison returns as soon as it finds the first mismatched character, and that timing difference leaks information about how much of the signature was correct — an attacker measuring response times could reconstruct a valid signature byte by byte. compare_digest takes constant time regardless of where the strings diverge, closing that channel. If the signature doesn't match, return 401 immediately without processing anything in the body.`,
           },
           {
             q: 'Q4. How would you design an API ingestion pipeline to be idempotent?',
-            a: `An idempotent pipeline produces the same result whether it runs once or a hundred times against the same input. This property is essential for data pipelines because failures and reruns are not exceptional — they are expected operational events.
+            a: `Idempotent means running the pipeline once or a hundred times against the same input produces the same result — essential, because failures and reruns are a normal operational reality, not an edge case.
 
-Idempotency in an API ingestion pipeline has three components.
-
-The first is idempotent writes. Instead of INSERT, use upsert operations: INSERT ... ON CONFLICT (unique_key) DO UPDATE. This ensures that re-inserting a record that already exists updates it to the correct state rather than creating a duplicate. The unique key is the API's own identifier for the record — payment_id, order_id, event_id. Every table in the pipeline should have a UNIQUE constraint on this business key.
-
-The second is idempotent extraction. For time-based incremental extraction, always use a fixed time window determined by the run date parameter rather than relative windows like "last 24 hours." Relative windows change their meaning depending on when the pipeline runs — a retry at 2 PM fetches different data than the original run at 6 AM. Fixed windows like "date=2026-03-17 means from midnight to midnight UTC" fetch the same data every time they are run for the same date.
-
-The third is checkpoint-based resumability. For large paginated extractions, save the cursor position after each successfully processed page. On failure, restart from the last saved cursor rather than from the beginning. This means a pipeline that processes 500 of 1,000 pages before failing will resume from page 500 on the next run, not re-process pages 1-499 again. While the upsert semantics would handle re-processing correctly, avoiding it is more efficient.`,
+Three things make that true. First, idempotent writes: upsert on the API's own business key (ON CONFLICT (payment_id) DO UPDATE) instead of a plain INSERT, so reprocessing a record updates it in place rather than duplicating it. Second, idempotent extraction: compute the time window from the run_date parameter, not from "now" — a fixed window like "2026-03-17 means midnight to midnight UTC" fetches identically no matter when the pipeline actually executes, whereas a relative window like "last 24 hours" fetches a different range every retry. Third, checkpoint-based resumability: save the pagination cursor after every successfully processed page, so a crash partway through resumes from the last checkpoint instead of reprocessing everything from page one — the upsert would make that safe anyway, but resuming correctly is far more efficient.`,
           },
           {
-            q: 'Q5. What is OAuth 2.0 and when would a data pipeline use it instead of a simple API key?',
-            a: `OAuth 2.0 is an authorisation framework that allows an application to obtain limited access to data in another service without directly handling that service's user credentials. Instead of sharing a password, OAuth provides a time-limited access token that represents a specific set of permissions.
+            q: 'Q5. What is OAuth 2.0, and when would a pipeline use it instead of a simple API key?',
+            a: `OAuth 2.0 grants limited, time-boxed access without ever sharing a real password — a token represents a specific set of permissions instead.
 
-A data pipeline uses OAuth 2.0 instead of a simple API key in two scenarios.
+A pipeline reaches for it in two situations. The first is accessing user-specific data on a third-party platform — Salesforce, Google Analytics, HubSpot — where the data belongs to a specific user's account and the platform requires their explicit consent. The Authorization Code grant handles this: a one-time browser flow issues a long-lived refresh token, and the pipeline uses that refresh token indefinitely afterward to obtain short-lived access tokens with no further user interaction.
 
-The first is when accessing user-specific data in a third-party platform. Salesforce, Google Analytics, HubSpot, and QuickBooks all require OAuth because the data belongs to a specific user's account and the platform needs explicit user consent before your pipeline can access it. The user authorises your pipeline through a browser flow, the platform issues a refresh token that your pipeline stores securely, and your pipeline uses the refresh token to obtain short-lived access tokens automatically. A simple API key cannot work here because these platforms have no concept of a static key that accesses one user's account.
+The second is server-to-server access to your own organization's resources — Google Cloud APIs, Salesforce connected apps — where the Client Credentials grant issues tokens directly from a client ID and secret, no user involved at all. This is more secure than a static API key specifically because the token expires quickly (often one hour), so a leaked token has a much smaller window of exposure than a leaked key that's valid indefinitely.
 
-The second is for server-to-server authorisation using the Client Credentials grant. When your pipeline accesses your own organisation's Google Cloud APIs, internal company APIs, or Salesforce connected apps configured for automated access, the Client Credentials flow issues tokens without user interaction. Your pipeline authenticates with a client ID and client secret, receives a short-lived access token, and includes it in API requests. This is more secure than a long-lived API key because the token expires quickly — typically in one hour — and a compromised token cannot be used for long.
-
-The practical difference in implementation: API key pipelines send the same static string with every request forever. OAuth pipelines must periodically obtain new access tokens as old ones expire, which requires storing the refresh token securely and building token refresh logic into the pipeline. This is more complexity but required when the API mandates it.`,
+The practical cost: an API-key pipeline sends the same string forever, while an OAuth pipeline must track token expiry and refresh proactively — more moving parts, but required whenever the API mandates it.`,
           },
         ].map((item, i) => (
           <div key={i} style={{
             background: 'var(--surface)', border: '1px solid var(--border)',
             borderRadius: 12, padding: '24px 28px', marginBottom: 20,
           }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>
-              {item.q}
-            </div>
-            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
-              {item.a}
-            </div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Using a relative time window ("last 24 hours") for incremental extraction',
+            a: 'A retry or rerun at a different time of day fetches a different range than the original run, so the pipeline produces different row counts every time it executes for what was supposed to be "the same" period. Always compute a fixed window from the run_date parameter, never from the current time.',
+          },
+          {
+            q: 'Calling response.json() without checking the status code first',
+            a: 'A 429 or 5xx response is often an HTML error page or a CDN maintenance page, not JSON — .json() throws a confusing JSONDecodeError that hides the real problem. Check response.status_code (or call raise_for_status()) before ever attempting to parse the body as JSON.',
+          },
+          {
+            q: 'Treating all failed requests the same way and retrying everything',
+            a: 'A 4xx means your request itself is wrong — retrying the identical request produces the identical failure every time and just wastes time. Only 429 (rate limited) and 5xx (their problem, usually transient) are worth retrying; a 4xx needs the request fixed, not repeated.',
+          },
+          {
+            q: 'Processing a webhook synchronously before returning a response',
+            a: "Providers retry if they don't get a 200 within a few seconds — slow synchronous processing (a database write, a downstream call) routinely causes the same event to be delivered twice. Respond 200 immediately, then process asynchronously, with an idempotency check to safely handle the resulting duplicate.",
+          },
+          {
+            q: 'Assuming a field will always be present and always be the same type',
+            a: 'A field that\'s always an integer today can become a string tomorrow after a vendor "improvement," and a field that\'s always present can become optional. Every field access should have an explicit fallback (.get() with a default), and numeric/date fields specifically should handle the 2-3 formats real APIs actually send.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
           </div>
         ))}
       </section>
@@ -1822,29 +1376,29 @@ The practical difference in implementation: API key pipelines send the same stat
 
         {[
           {
-            error: `requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 — after response.json() on what should be a JSON API`,
-            cause: 'The API returned a non-JSON response. Common causes: a 429 or 5xx error with an HTML error page as the body, a maintenance page intercepted by a CDN, a redirect to a login page when the session expired, or a network proxy returning its own error message. The response looked like a success at the network level but the body is not JSON.',
-            fix: 'Always check response.status_code before calling response.json(). Use response.raise_for_status() to raise an exception for 4xx/5xx before attempting JSON parse. Add a defensive try/except: try: data = response.json() except ValueError: logger.error("Non-JSON response body: %s", response.text[:500]); raise. Log the raw response text on failure — it often contains the actual error message from a proxy or CDN.',
+            error: `requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1`,
+            cause: 'The API returned a non-JSON body: an HTML error page from a 429/5xx, a maintenance page from a CDN, or a redirect to a login page after the session expired. The network call succeeded, but the body is not JSON.',
+            fix: 'Always call response.raise_for_status() (or check status_code) before response.json(). Wrap the parse in try/except ValueError and log response.text[:500] on failure — it often contains the real error from a proxy or CDN.',
           },
           {
-            error: `Pagination returns duplicate records — the same payment_id appears twice in the ingested data`,
-            cause: 'Most likely caused by offset pagination on a live dataset. New records were inserted into the API\'s database between page 1 and page 2, shifting the offset. A record that was at position 100 is now at position 101. When page 2 requests offset=100, it receives the shifted record again. Alternatively, a cursor was not saved correctly and a page was fetched twice after a retry.',
-            fix: 'Switch to cursor pagination if the API supports it — cursors are stable regardless of insertions. If offset pagination is unavoidable, add a UNIQUE constraint on payment_id in the destination table and use ON CONFLICT DO UPDATE (upsert). Duplicates from offset drift become idempotent updates rather than duplicate rows. Add deduplication in the Silver transformation layer as a safety net.',
+            error: `Pagination returns the same payment_id twice`,
+            cause: "Almost always offset pagination on a live dataset — a new record was inserted between page 1 and page 2, shifting every subsequent offset, and the same record is served again. Less commonly, a cursor wasn't saved correctly and a page was re-fetched after a retry.",
+            fix: 'Switch to cursor pagination if the API supports it. If offset is unavoidable, add a UNIQUE constraint on the business key and upsert (ON CONFLICT DO UPDATE) so a duplicate becomes a no-op update instead of a duplicate row.',
           },
           {
-            error: `requests.exceptions.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed — when calling an internal API`,
-            cause: 'The API server is using a self-signed SSL certificate or an internal CA certificate that is not in Python\'s trusted certificate store. This commonly occurs with internal APIs running behind a corporate proxy or in a private network environment using an internal PKI.',
-            fix: 'For internal APIs with corporate CA certificates: obtain the CA certificate file from your IT team and pass it: requests.get(url, verify="/path/to/corporate-ca-bundle.crt"). For development with a known-safe self-signed cert: requests.get(url, verify=False) — but add a warning because this disables all SSL verification and should never be used in production. The correct production fix is always to install the proper CA certificate. Never set verify=False in production code.',
+            error: `requests.exceptions.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED]`,
+            cause: "The server is using a self-signed or internal-CA certificate not in Python's trusted certificate store — common with internal APIs behind a corporate proxy.",
+            fix: 'Obtain the CA bundle from IT and pass it explicitly: requests.get(url, verify="/path/to/ca-bundle.crt"). Never set verify=False in production — it disables all certificate checking, not just this one issue.',
           },
           {
-            error: `Pipeline produces different row counts on reruns — 48,234 on first run, 48,891 on second run for the same date`,
-            cause: 'The pipeline uses a relative time window ("last 24 hours") rather than a fixed date window. The two runs executed at different times, so "last 24 hours" covers different time ranges. Additionally, late-arriving data at the API (payments that were processed after midnight but timestamped before midnight) may appear in a later run but not the first.',
-            fix: 'Always use a fixed, deterministic time window for each pipeline run: "date=2026-03-17 means from 2026-03-17T00:00:00Z to 2026-03-18T00:00:00Z." Pass the date as a parameter, compute the exact timestamp boundaries in the code, and always use those same boundaries regardless of when the pipeline runs. For late-arriving data: run the pipeline with a 6–12 hour delay after the period ends (the 2026-03-17 run executes at 06:00 on 2026-03-18) and use upserts so late-arriving records update existing rows correctly.',
+            error: `The same pipeline run produces different row counts each time — 48,234 then 48,891`,
+            cause: 'A relative time window ("last 24 hours") instead of a fixed one, combined with late-arriving data at the source — records timestamped before midnight but processed by the vendor after it.',
+            fix: 'Compute a fixed window from the run_date parameter (e.g. exactly midnight to midnight UTC for that date), and run with a 6-12 hour delay after the period ends so most late-arriving data is already settled; use upserts so anything still late updates correctly on the next run.',
           },
           {
-            error: `Webhook events being processed multiple times — the same payment.captured event creates duplicate records`,
-            cause: 'The webhook provider is retrying delivery because your endpoint took too long to respond and timed out. Most webhook providers retry if they do not receive a 200 response within 5–10 seconds. If your handler does processing synchronously (database writes, external API calls) that takes more than the timeout, the provider retries while the first processing is still running. Both runs complete, creating duplicates.',
-            fix: 'Return HTTP 200 immediately upon receiving the webhook, before doing any processing. Store the raw event in a queue (database table, Redis, SQS) and process asynchronously in a background task. Add idempotency: before processing any event, check whether its event_id has already been processed (using a processed_events table or a Redis SET). If already processed, return 200 without processing again. Use hmac.compare_digest for signature verification — if using a slow verification method, move signature verification before the 200 response but keep actual business logic async.',
+            error: `The same payment.captured webhook event creates two rows`,
+            cause: "Your handler processed synchronously and took longer than the provider's delivery timeout, so it retried while the first attempt was still running — both completed, both inserted.",
+            fix: 'Return 200 immediately, before processing. Check an idempotency table/set keyed by event_id before doing any real work, and skip (returning 200 unchanged) if it\'s already been seen.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1858,17 +1412,11 @@ The practical difference in implementation: API key pipelines send the same stat
               borderRadius: 6, padding: '8px 12px', lineHeight: 1.5,
             }}>{item.error}</div>
             <div style={{ marginBottom: 8 }}>
-              <span style={{
-                fontSize: 10, fontWeight: 700, color: 'var(--muted)',
-                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
-              }}>Cause: </span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase' }}>Cause: </span>
               <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.cause}</span>
             </div>
             <div>
-              <span style={{
-                fontSize: 10, fontWeight: 700, color: 'var(--accent)',
-                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
-              }}>Fix: </span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase' }}>Fix: </span>
               <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.fix}</span>
             </div>
           </div>
@@ -1877,19 +1425,16 @@ The practical difference in implementation: API key pipelines send the same stat
 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
       <KeyTakeaways items={[
-        'Every API call is an HTTP request. The method (GET/POST/PUT/PATCH/DELETE) describes the intent. Status codes 2xx mean success, 4xx mean your code is wrong (do not retry), 5xx mean the server has a problem (retry with backoff). 429 means rate limit exceeded — always back off and retry.',
-        'API keys are static strings — always read from environment variables, never hardcode. OAuth 2.0 Client Credentials is for server-to-server access without user interaction. OAuth Authorization Code is for accessing user-specific data in third-party platforms. HMAC signatures sign each request with a shared secret to prove the sender.',
-        'Cursor pagination is almost always better than offset pagination for production pipelines. Cursors are stable — new insertions during pagination do not shift positions and cause skipped or duplicated records. Offsets are position-based and break on live changing datasets. Always prefer cursor pagination when the API offers it.',
-        'Rate limiting requires two layers: proactive (a token bucket limiter that stays below the limit) and reactive (detecting 429 responses, reading Retry-After headers, and backing off with jitter). Jitter — random variation in backoff times — prevents thundering herds where multiple retrying clients all resume simultaneously.',
-        'Webhooks deliver events in near-real-time but are not guaranteed. Always verify the HMAC signature before processing (use hmac.compare_digest to prevent timing attacks). Return 200 immediately and process asynchronously to avoid retry storms. Implement idempotency checks using the event ID. Schedule hourly reconciliation polling to catch any missed webhook deliveries.',
-        'Write defensive API parsers. Use .get() with defaults for every field access. Handle multiple formats for amounts (integer cents vs float dollars vs string), timestamps (Unix seconds vs milliseconds vs ISO 8601), and status values (lowercase normalisation). Log schema changes when unexpected new fields appear.',
-        'The production pipeline design has five properties: idempotent (upserts not inserts, unique constraints on business keys), resumable (cursor checkpointing that survives failures), observable (structured logging with run_id), defensive (safe field parsing that never crashes on unexpected data), and respectful (proactive rate limiting that stays within API quotas).',
-        'Use fixed time windows for incremental extraction — not relative windows. "date=2026-03-17 means from midnight to midnight UTC" produces the same result regardless of when the pipeline runs. Relative windows ("last 24 hours") produce different results on reruns, making the pipeline non-idempotent.',
-        'The hybrid pattern — webhooks for real-time plus periodic polling for reconciliation — is the production-grade solution for event-driven ingestion. Neither alone is sufficient: webhooks alone miss events during downtime, polling alone adds latency and wastes API quota.',
-        'Always test a new API manually with curl before writing code. Check authentication works, understand the response structure, read the rate limit headers, confirm the pagination style, and download a small sample to inspect field names and types. Ten minutes with curl prevents hours of debugging misunderstood API behaviour.',
+        'Every API call is an HTTP request. 2xx means success, 4xx means your request is wrong (do not retry as-is), 5xx means retry with backoff. 429 specifically means back off and retry using the Retry-After header.',
+        'API keys are static strings from environment variables, never hardcoded. OAuth 2.0 Client Credentials is for server-to-server access; Authorization Code is for user-specific data via a third party. HMAC signs requests with a shared secret and is how you verify incoming webhooks.',
+        'Cursor pagination is the correct default for production: stable under concurrent writes, fast at any depth, and genuinely resumable via a saved checkpoint. Offset pagination degrades on both performance and correctness as a live dataset grows.',
+        'Rate limiting needs two layers: a proactive token bucket that paces requests below the limit, and reactive handling (Retry-After, exponential backoff, jitter) for the 429s that get through anyway.',
+        'Webhooks are low-latency but not guaranteed — always pair them with periodic reconciliation polling. A webhook handler must verify the signature (hmac.compare_digest), respond 200 immediately, and only then process, with an idempotency check to absorb the resulting duplicate deliveries.',
+        'Write defensive parsers: .get() with defaults for every field, and explicit handling for every real-world format a field might arrive in (integer cents vs float dollars, Unix seconds vs milliseconds vs ISO 8601). Keep the raw record alongside the parsed one — it is what saves you when a field you need shows up after the fact.',
+        'A production pipeline is idempotent (upserts on a business key), resumable (a saved pagination checkpoint), and computes its time window from the run date, never from "now" — that one choice is what makes reruns produce identical results instead of silently different ones.',
+        'Always test a new API with curl before writing a line of pipeline code — confirm auth works, read the pagination style and rate-limit headers, and inspect a real sample response. Ten minutes here prevents hours of debugging a misunderstood API later.',
       ]} />
 
-    
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
@@ -1903,5 +1448,19 @@ The practical difference in implementation: API key pipelines send the same stat
         </Link>
       </div>
     </LearnLayout>
+  )
+}
+
+function Table3() {
+  return (
+    <CompareTable
+      headers={[{ label: 'Style' }, { label: 'Best for', color: '#00e676' }, { label: 'Watch out for', color: '#ff4757' }]}
+      keys={['style', 'best', 'watch']}
+      rows={[
+        { style: 'Offset/limit', best: 'Small, static datasets; jumping to a specific page', watch: 'Slow at deep pages; skips/duplicates on live data' },
+        { style: 'Cursor', best: 'Large or actively-changing datasets — the default choice', watch: 'Cannot jump to an arbitrary page; cursors may expire' },
+        { style: 'Next-URL / Link header', best: 'APIs that hand you the whole next request already-built', watch: 'Format varies — body field vs Link header, check the docs' },
+      ]}
+    />
   )
 }
