@@ -22,14 +22,29 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 style={{ fontSize: 'clamp(16px, 1.8vw, 20px)', fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text)', marginBottom: 12, fontFamily: 'var(--font-display)' }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>{label}</div>}
     <pre style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.9, color: 'var(--text)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{ background: 'transparent', border: '1px dashed var(--border)', borderRadius: 10, padding: '14px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.8, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
       <code>{children}</code>
     </pre>
   </div>
@@ -39,6 +54,16 @@ const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin
 
 const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>{children}</div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)', borderRadius: 10, padding: '16px 20px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent2)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
 )
 
 interface TableRow { [key: string]: string }
@@ -78,7 +103,7 @@ export default function SlowlyChangingDimensionsModule() {
       description="Every SCD type in depth — when each is the right choice, full SQL implementations, dbt snapshot patterns, and the operational pitfalls."
       section="Data Engineering — Module 34"
       readTime="60 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Core Problem ────────────────────────────────── */}
@@ -90,17 +115,17 @@ export default function SlowlyChangingDimensionsModule() {
           Dimension tables describe business entities — customers, stores, products,
           employees. These entities are not static. A customer moves from Seattle
           to Austin. A store changes its manager. A product gets recategorised
-          from "snacks" to "premium snacks." A salesperson moves from one region
+          from &ldquo;snacks&rdquo; to &ldquo;premium snacks.&rdquo; A salesperson moves from one region
           to another.
         </Para>
 
         <Para>
           When a dimension attribute changes, you face a design question: what
           should happen to the historical facts that reference the old value? Should
-          past orders show the customer's old city or their new city? Should
+          past orders show the customer&rsquo;s old city or their new city? Should
           historical sales reports show the product in its old category or its
           new one? The answer depends on the business question being answered —
-          and "slowly changing dimension" patterns are the formalised set of answers.
+          and &ldquo;slowly changing dimension&rdquo; patterns are the formalised set of answers.
         </Para>
 
         <HighlightBox>
@@ -127,11 +152,19 @@ export default function SlowlyChangingDimensionsModule() {
 
         <Callout type="tip">
           Type 5 is not listed — it was defined in some Kimball texts as a
-          "mini-dimension" pattern but is rarely used in practice and not in
+          &ldquo;mini-dimension&rdquo; pattern but is rarely used in practice and not in
           the standard Kimball curriculum. Types 0, 1, 2, 3, 4, 6, and 7 are
           the canonical set. Types 1, 2, and 6 cover the vast majority of
           real-world use cases.
         </Callout>
+
+        <TryThis>
+          Pick one dimension attribute you work with regularly and ask: if this
+          value changes, should past facts show the old value or the new one?
+          Whichever answer you gave is the exact question Part 08&rsquo;s decision
+          tree formalizes — keep your answer in mind as you read through
+          Types 1 and 2.
+        </TryThis>
       </section>
 
       <Divider />
@@ -150,35 +183,35 @@ export default function SlowlyChangingDimensionsModule() {
           the correct one by definition.
         </Para>
 
-        <CodeBox label="SCD Type 0 — immutable attributes, no update ever">{`TYPE 0 EXAMPLES:
+        <CodeBox label="Type 0 — examples and the load rule">{`TYPE 0 EXAMPLES:
   customer.registration_date    ← when the customer first registered (never changes)
   customer.original_city        ← city where the customer first signed up (immutable)
   store.opening_date            ← when the store opened (historical fact, fixed)
   product.sku                   ← product identifier (never reassigned)
   employee.hire_date            ← when they joined the company
 
-TYPE 0 IMPLEMENTATION:
-  On dimension load: INSERT new rows, NEVER update Type 0 columns.
+TYPE 0 RULE: On dimension load, INSERT new rows, NEVER update Type 0 columns.`}</CodeBox>
 
-  -- dbt Silver model for customers:
-  INSERT INTO silver.customers (customer_id, registration_date, ...)
-  VALUES (...)
-  ON CONFLICT (customer_id) DO UPDATE SET
-      -- Type 0 columns NOT in the update list:
-      -- registration_date = EXCLUDED.registration_date  ← omitted intentionally
-      -- Type 1 columns in the update list:
-      city    = EXCLUDED.city,
-      tier    = EXCLUDED.tier,
-      updated_at = EXCLUDED.updated_at
-  ;
-  -- registration_date is never overwritten even if source sends a different value.
+        <CodeBox label="Type 0 — the upsert that omits Type 0 columns, and a verification query">{`-- dbt Silver model for customers:
+INSERT INTO silver.customers (customer_id, registration_date, ...)
+VALUES (...)
+ON CONFLICT (customer_id) DO UPDATE SET
+    -- Type 0 columns NOT in the update list:
+    -- registration_date = EXCLUDED.registration_date  ← omitted intentionally
+    -- Type 1 columns in the update list:
+    city    = EXCLUDED.city,
+    tier    = EXCLUDED.tier,
+    updated_at = EXCLUDED.updated_at
+;
+-- registration_date is never overwritten even if source sends a different value.
 
-  -- Verification: confirm no Type 0 column was ever changed
-  SELECT customer_id, COUNT(DISTINCT registration_date) AS date_versions
-  FROM dimension_history_table
-  GROUP BY customer_id
-  HAVING COUNT(DISTINCT registration_date) > 1;
-  -- Returns: 0 rows — if any rows returned, a Type 0 column was changed incorrectly.`}</CodeBox>
+-- Verification: confirm no Type 0 column was ever changed
+SELECT customer_id, COUNT(DISTINCT registration_date) AS date_versions
+FROM dimension_history_table
+GROUP BY customer_id
+HAVING COUNT(DISTINCT registration_date) > 1;`}</CodeBox>
+
+        <Output>{`-- Returns: 0 rows — if any rows returned, a Type 0 column was changed incorrectly.`}</Output>
 
         <SubTitle>SCD Type 1 — Overwrite</SubTitle>
 
@@ -189,51 +222,44 @@ TYPE 0 IMPLEMENTATION:
           new value when joined to the dimension.
         </Para>
 
-        <CodeBox label="SCD Type 1 — overwrite in place, no history kept">{`TYPE 1 EXAMPLES:
-  customer.phone_number         ← updated when customer changes phone
-  customer.email                ← updated when customer updates email
-  store.manager_name            ← current manager (past manager irrelevant to most reports)
-  product.description           ← updated when product copy is revised
-  store.is_active               ← current operational status
+        <CodeBox label="Type 1 — examples and when to use it">{`TYPE 1 EXAMPLES:
+  customer.phone_number  ← updated when customer changes phone
+  customer.email         ← updated when customer updates email
+  store.manager_name     ← current manager (past manager irrelevant to most reports)
+  product.description    ← updated when product copy is revised
+  store.is_active        ← current operational status
 
 TYPE 1 WHEN TO USE:
   ✓ The old value was genuinely wrong (data correction)
   ✓ History is not needed — reports always want current value
   ✓ The attribute has no analytical significance historically
-  ✗ When historical accuracy matters for past events
-    (then use Type 2 instead)
+  ✗ When historical accuracy matters for past events (then use Type 2 instead)`}</CodeBox>
 
-TYPE 1 IMPLEMENTATION:
-  -- Upsert that overwrites changed attributes:
-  INSERT INTO dim_store
-      (store_sk, store_id, store_name, manager_name, is_active, updated_at)
-  VALUES
-      (1, 'ST001', 'FreshMart Midtown', 'Marcus Bennett', TRUE, NOW())
-  ON CONFLICT (store_id)
-  DO UPDATE SET
-      manager_name = EXCLUDED.manager_name,   -- Type 1: always overwrite
-      is_active    = EXCLUDED.is_active,       -- Type 1: always overwrite
-      updated_at   = EXCLUDED.updated_at
-  ;
+        <CodeBox label="Type 1 — the overwrite upsert, and its effect on historical facts">{`-- Upsert that overwrites changed attributes:
+INSERT INTO dim_store
+    (store_sk, store_id, store_name, manager_name, is_active, updated_at)
+VALUES
+    (1, 'ST001', 'FreshCart Midtown', 'Marcus Bennett', TRUE, NOW())
+ON CONFLICT (store_id)
+DO UPDATE SET
+    manager_name = EXCLUDED.manager_name,   -- Type 1: always overwrite
+    is_active    = EXCLUDED.is_active,       -- Type 1: always overwrite
+    updated_at   = EXCLUDED.updated_at
+;
 
-  EFFECT ON HISTORICAL FACT ROWS:
-    Before update: manager = 'Olivia Brown'
-    After update:  manager = 'Marcus Bennett' (overwritten)
+-- EFFECT ON HISTORICAL FACT ROWS:
+-- Before update: manager = 'Olivia Brown'.  After update: manager = 'Marcus Bennett'.
+-- fct_orders joined to dim_store WHERE store_id = 'ST001': ALL historical orders
+-- now show manager_name = 'Marcus Bennett' — even orders placed when Olivia
+-- Brown was the manager. This IS the correct behaviour for Type 1 — if you
+-- want historical orders to show who the manager was at the time, you need
+-- Type 2 instead.`}</CodeBox>
 
-    fct_orders joined to dim_store WHERE store_id = 'ST001':
-    ALL historical orders now show manager_name = 'Marcus Bennett'
-    — even orders placed when Olivia Brown was the manager.
-
-    This is the correct behaviour for Type 1.
-    If you want historical orders to show who the manager was at the time,
-    you need Type 2 — Type 1 explicitly gives up that capability.
-
-TYPE 1 IN dbt:
-  -- Silver models use incremental merge with no special SCD logic:
-  {{ config(materialized='incremental', unique_key='store_id',
-            incremental_strategy='merge') }}
-  -- All tracked columns are in the merge update set.
-  -- No valid_from, valid_to, or is_current needed for Type 1.`}</CodeBox>
+        <Output>{`-- TYPE 1 IN dbt: Silver models use incremental merge with no special SCD
+-- logic — all tracked columns are in the merge update set. No valid_from,
+-- valid_to, or is_current needed for Type 1.
+{{ config(materialized='incremental', unique_key='store_id',
+          incremental_strategy='merge') }}`}</Output>
       </section>
 
       <Divider />
@@ -255,72 +281,58 @@ TYPE 1 IN dbt:
           exact version that was active at the time of the fact.
         </Para>
 
-        <SubTitle>Type 2 — the complete data model and change mechanics</SubTitle>
+        <SubSubTitle>The change mechanics</SubSubTitle>
 
-        <CodeBox label="SCD Type 2 — full implementation with version tracking">{`DIM_CUSTOMER WITH SCD TYPE 2:
-
-Initial state — customer 4201938 registered from Seattle:
-  customer_sk  customer_id  city        tier      valid_from   valid_to    is_current
-  ───────────────────────────────────────────────────────────────────────────────────
-  1            4201938      Seattle   silver    2024-01-15   NULL        TRUE
+        <CodeBox label="A customer moves — expiring the old row, inserting the new version">{`Initial state — customer 4201938 registered from Seattle:
+  customer_sk  customer_id  city      tier    valid_from   valid_to    is_current
+  1            4201938      Seattle   silver  2024-01-15   NULL        TRUE
 
 Customer places order 9284751 on 2024-06-10:
   fct_orders: order_sk=..., customer_sk=1, order_amount=380  ← joins to row 1
 
 Customer moves to Austin, updates profile on 2026-02-01:
 
-CHANGE OPERATION:
-  -- Step 1: expire the current row
-  UPDATE dim_customer
-  SET valid_to   = '2026-01-31',
-      is_current = FALSE
-  WHERE customer_id = 4201938
-    AND is_current  = TRUE;
+-- Step 1: expire the current row
+UPDATE dim_customer
+SET valid_to = '2026-01-31', is_current = FALSE
+WHERE customer_id = 4201938 AND is_current = TRUE;
 
-  -- Step 2: insert the new version
-  INSERT INTO dim_customer
-      (customer_sk, customer_id, city, tier, valid_from, valid_to, is_current)
-  VALUES
-      (2, 4201938, 'Austin', 'silver', '2026-02-01', NULL, TRUE);
+-- Step 2: insert the new version
+INSERT INTO dim_customer
+    (customer_sk, customer_id, city, tier, valid_from, valid_to, is_current)
+VALUES
+    (2, 4201938, 'Austin', 'silver', '2026-02-01', NULL, TRUE);`}</CodeBox>
 
-RESULTING TABLE STATE:
-  customer_sk  customer_id  city        tier    valid_from   valid_to    is_current
-  ────────────────────────────────────────────────────────────────────────────────
-  1            4201938      Seattle   silver  2024-01-15   2026-01-31  FALSE  ← expired
-  2            4201938      Austin   silver  2026-02-01   NULL        TRUE   ← current
+        <Output>{`RESULTING TABLE STATE:
+customer_sk  customer_id  city     tier    valid_from   valid_to    is_current
+1            4201938      Seattle  silver  2024-01-15   2026-01-31  FALSE  ← expired
+2            4201938      Austin   silver  2026-02-01   NULL        TRUE   ← current
 
 Customer places order 9284755 on 2026-03-01:
-  fct_orders: order_sk=..., customer_sk=2, order_amount=460  ← joins to row 2
+fct_orders: order_sk=..., customer_sk=2, order_amount=460  ← joins to row 2`}</Output>
 
-POINT-IN-TIME QUERIES:
+        <SubSubTitle>Point-in-time queries — the payoff</SubSubTitle>
 
--- What city was customer 4201938 in when they placed order 9284751 (2024-06-10)?
-SELECT c.city
-FROM fct_orders f
+        <CodeBox label="Three queries that only work correctly because the surrogate key is versioned">{`-- What city was customer 4201938 in when they placed order 9284751 (2024-06-10)?
+SELECT c.city FROM fct_orders f
 JOIN dim_customer c ON f.customer_sk = c.customer_sk
 WHERE f.order_sk = <order_sk_for_9284751>;
 -- Returns: 'Seattle' ← correct — the fact stored customer_sk=1 at load time
 
--- What is customer 4201938's current city?
-SELECT city FROM dim_customer
-WHERE customer_id = 4201938 AND is_current = TRUE;
--- Returns: 'Austin' ← correct
-
 -- Revenue by customer city, historically accurate:
 SELECT c.city, SUM(f.order_amount)
-FROM fct_orders f
-JOIN dim_customer c ON f.customer_sk = c.customer_sk
+FROM fct_orders f JOIN dim_customer c ON f.customer_sk = c.customer_sk
 GROUP BY c.city;
 -- order_sk from 2024: joins to customer_sk=1 → Seattle
 -- order_sk from 2026: joins to customer_sk=2 → Austin
 -- Both cities get credit for orders placed when the customer was there ✓
 
-WRONG APPROACH (joining on natural key with is_current):
-  JOIN dim_customer c ON f.customer_id = c.customer_id AND c.is_current = TRUE
-  -- This joins ALL orders (including 2024 ones) to the CURRENT version
-  -- The 2024 Seattle order now shows 'Austin' — historically wrong ✗`}</CodeBox>
+-- WRONG APPROACH (joining on natural key with is_current):
+JOIN dim_customer c ON f.customer_id = c.customer_id AND c.is_current = TRUE
+-- This joins ALL orders (including 2024 ones) to the CURRENT version —
+-- the 2024 Seattle order now shows 'Austin' — historically wrong ✗`}</CodeBox>
 
-        <SubTitle>Type 2 — choosing which attributes to track</SubTitle>
+        <SubTitle>Choosing which attributes to track</SubTitle>
 
         <Para>
           Not every dimension attribute should be Type 2. Applying Type 2 to
@@ -345,10 +357,10 @@ WRONG APPROACH (joining on natural key with is_current):
         ))}
 
         <div style={{ marginTop: 24 }}>
-          <SubTitle>Type 2 — handling multiple changes in one load</SubTitle>
+          <SubTitle>Handling multiple changes in one load</SubTitle>
         </div>
 
-        <CodeBox label="Type 2 — the full load procedure for production pipelines">{`# PRODUCTION TYPE 2 LOAD PROCEDURE (Python):
+        <CodeBox label="Production Type 2 load — new entities">{`# PRODUCTION TYPE 2 LOAD PROCEDURE (Python):
 # Handles: new entities, Type 2 tracked changes, Type 1 changes
 
 def load_dim_customer_scd2(
@@ -357,24 +369,18 @@ def load_dim_customer_scd2(
     type2_columns: list[str],   # ['city', 'tier']
     type1_columns: list[str],   # ['phone_masked', 'email_hashed']
 ) -> dict:
-    """
-    Load dimension with SCD Type 2 for tracked columns.
-    Type 2 columns: expire old row + insert new row on change.
-    Type 1 columns: update in-place on current row (no new row).
-    """
+    """Type 2 columns: expire old row + insert new row on change.
+    Type 1 columns: update in-place on current row (no new row)."""
     stats = {'new': 0, 'type2_change': 0, 'type1_change': 0, 'unchanged': 0}
 
     for row in source_rows:
         customer_id = row['customer_id']
-
-        # Find existing current row:
         existing = dest_conn.execute("""
             SELECT * FROM dim_customer
             WHERE customer_id = %s AND is_current = TRUE
         """, (customer_id,)).fetchone()
 
         if existing is None:
-            # New entity — insert first version:
             sk = generate_surrogate_key(customer_id, row['updated_at'])
             dest_conn.execute("""
                 INSERT INTO dim_customer
@@ -384,18 +390,15 @@ def load_dim_customer_scd2(
             """, (sk, customer_id, row['city'], row['tier'],
                   row['phone_masked'], row['updated_at'].date()))
             stats['new'] += 1
-            continue
+            continue`}</CodeBox>
 
-        # Check Type 2 columns for changes:
-        type2_changed = any(
-            row[col] != existing[col] for col in type2_columns
-        )
+        <CodeBox label="Production Type 2 load — Type 2 changes vs. Type 1 fallback">{`        # Check Type 2 columns for changes:
+        type2_changed = any(row[col] != existing[col] for col in type2_columns)
 
         if type2_changed:
             # Expire old row:
             dest_conn.execute("""
-                UPDATE dim_customer
-                SET valid_to = %s, is_current = FALSE
+                UPDATE dim_customer SET valid_to = %s, is_current = FALSE
                 WHERE customer_sk = %s
             """, (row['updated_at'].date() - timedelta(days=1), existing['customer_sk']))
 
@@ -412,14 +415,10 @@ def load_dim_customer_scd2(
 
         else:
             # No Type 2 change — check Type 1:
-            type1_changed = any(
-                row[col] != existing[col] for col in type1_columns
-            )
+            type1_changed = any(row[col] != existing[col] for col in type1_columns)
             if type1_changed:
-                # Update in place (no new row, no expiry):
                 dest_conn.execute("""
-                    UPDATE dim_customer
-                    SET phone_masked = %s, dim_updated_at = NOW()
+                    UPDATE dim_customer SET phone_masked = %s, dim_updated_at = NOW()
                     WHERE customer_sk = %s
                 """, (row['phone_masked'], existing['customer_sk']))
                 stats['type1_change'] += 1
@@ -445,44 +444,35 @@ def load_dim_customer_scd2(
           in a dbt-based platform.
         </Para>
 
-        <CodeBox label="dbt snapshot — complete Type 2 implementation with both strategies">{`-- STRATEGY 1: timestamp — detects changes via an updated_at column
--- Use when: source table has a reliable updated_at timestamp
+        <SubSubTitle>Strategy 1 — timestamp</SubSubTitle>
+
+        <CodeBox label="Detecting changes via an updated_at column">{`-- Use when: source table has a reliable updated_at timestamp
 
 -- snapshots/customers_snapshot.sql
 {% snapshot customers_snapshot %}
 {{ config(
-    target_database = 'freshmart_prod',
+    target_database = 'freshcart_prod',
     target_schema   = 'snapshots',
     unique_key      = 'customer_id',
     strategy        = 'timestamp',
     updated_at      = 'updated_at',      -- column dbt monitors for changes
     invalidate_hard_deletes = True,      -- expire rows when source row disappears
 ) }}
-SELECT
-    customer_id,
-    customer_name,
-    email_hashed,
-    city,
-    state,
-    tier,
-    acquisition_channel,
-    registration_date,
-    updated_at
+SELECT customer_id, customer_name, email_hashed, city, state, tier,
+       acquisition_channel, registration_date, updated_at
 FROM {{ source('silver', 'customers') }}
 WHERE is_current = TRUE
 {% endsnapshot %}
 
 -- dbt adds these columns automatically:
---   dbt_scd_id       VARCHAR  — unique ID per version (hash of key + dbt_valid_from)
+--   dbt_scd_id       VARCHAR   — unique ID per version (hash of key + dbt_valid_from)
 --   dbt_updated_at   TIMESTAMP — when dbt last processed this row
 --   dbt_valid_from   TIMESTAMP — when this version became active
---   dbt_valid_to     TIMESTAMP — when this version expired (NULL = current)
+--   dbt_valid_to     TIMESTAMP — when this version expired (NULL = current)`}</CodeBox>
 
+        <SubSubTitle>Strategy 2 — check</SubSubTitle>
 
--- STRATEGY 2: check — compares column values directly
--- Use when: no reliable updated_at, or when you need to track specific columns only
-
-{% snapshot customers_snapshot %}
+        <CodeBox label="Comparing column values directly, when no reliable timestamp exists">{`{% snapshot customers_snapshot %}
 {{ config(
     target_schema  = 'snapshots',
     unique_key     = 'customer_id',
@@ -492,22 +482,20 @@ WHERE is_current = TRUE
     invalidate_hard_deletes = True,
 ) }}
 SELECT * FROM {{ source('silver', 'customers') }}
-{% endsnapshot %}
+{% endsnapshot %}`}</CodeBox>
 
+        <Output>{`HOW dbt SNAPSHOT RUNS:
+- Reads the source query. For each row, checks if any check_cols (or
+  updated_at) changed since last run.
+- If changed: expires old row (dbt_valid_to = NOW()), inserts new row
+  (dbt_valid_from = NOW(), dbt_valid_to = NULL).
+- If unchanged: no action.
+- If row disappeared from source AND invalidate_hard_deletes=True: expires
+  the current row (marks it as deleted).`}</Output>
 
--- HOW dbt SNAPSHOT RUNS:
--- dbt snapshot reads the source query
--- For each row, checks if any check_cols changed since last run
--- If changed: expires old row (sets dbt_valid_to = NOW())
---             inserts new row (dbt_valid_from = NOW(), dbt_valid_to = NULL)
--- If unchanged: no action
--- If row disappeared from source AND invalidate_hard_deletes=True:
---   expires the current row (marks it as deleted)
+        <SubSubTitle>Building dim_customer from the snapshot</SubSubTitle>
 
-
--- BUILDING dim_customer FROM THE SNAPSHOT:
--- models/gold/dims/dim_customer.sql
-{{ config(materialized='table') }}
+        <CodeBox label="models/gold/dims/dim_customer.sql">{`{{ config(materialized='table') }}
 
 WITH snapshot AS (
     SELECT * FROM {{ ref('customers_snapshot') }}
@@ -515,92 +503,76 @@ WITH snapshot AS (
 SELECT
     {{ dbt_utils.generate_surrogate_key(['customer_id', 'dbt_valid_from']) }}
         AS customer_sk,
-    customer_id,
-    customer_name,
-    email_hashed,
-    city,
+    customer_id, customer_name, email_hashed, city,
     CASE
-        WHEN state IN ('Texas','Georgia','Florida','Alabama','Tennessee')
-        THEN 'South'
+        WHEN state IN ('Texas','Georgia','Florida','Alabama','Tennessee') THEN 'South'
         WHEN state IN ('California','Oregon','Washington') THEN 'West'
         WHEN state IN ('New York','New Jersey','Massachusetts','Pennsylvania','Connecticut') THEN 'Northeast'
         ELSE 'Midwest'
-    END                                    AS region,
-    tier,
-    acquisition_channel,
-    registration_date,
-    CAST(dbt_valid_from AS DATE)           AS valid_from,
-    CAST(dbt_valid_to AS DATE)             AS valid_to,
+    END AS region,
+    tier, acquisition_channel, registration_date,
+    CAST(dbt_valid_from AS DATE) AS valid_from,
+    CAST(dbt_valid_to AS DATE)   AS valid_to,
     CASE WHEN dbt_valid_to IS NULL THEN TRUE ELSE FALSE END AS is_current
-FROM snapshot
+FROM snapshot`}</CodeBox>
 
+        <Output>{`-- RUNNING SNAPSHOTS:
+dbt snapshot                          # run all snapshots
+dbt snapshot -s customers_snapshot    # run one snapshot
 
--- RUNNING SNAPSHOTS:
--- dbt snapshot                     ← run all snapshots
--- dbt snapshot -s customers_snapshot  ← run one snapshot
+-- IMPORTANT: dbt snapshot should run MORE FREQUENTLY than dbt run. If a
+-- customer changes city twice in one day and snapshot only runs nightly,
+-- the intermediate city is never captured — only the final day-end state.
+-- For high-change dimensions: run snapshot every 15-30 minutes.`}</Output>
 
--- IMPORTANT: dbt snapshot should run MORE FREQUENTLY than dbt run.
--- If a customer changes city twice in one day and snapshot only runs nightly:
---   the intermediate city is never captured — only the final day-end state.
--- For high-change dimensions: run snapshot every 15-30 minutes.`}</CodeBox>
+        <SubTitle>Backfilling history when deploying Type 2 for the first time</SubTitle>
 
-        <SubTitle>Snapshot backfill — what to do when deploying Type 2 to an existing table</SubTitle>
+        <Para>
+          You are deploying SCD Type 2 on the customers dimension for the first
+          time. The dimension currently exists as a Type 1 table (no history).
+          You need to populate the snapshot with the existing customer data.
+        </Para>
 
-        <CodeBox label="dbt snapshot initial deploy — backfilling history">{`CHALLENGE: you are deploying SCD Type 2 on the customers dimension for the
-first time. The dimension currently exists as a Type 1 table (no history).
-You need to populate the snapshot with the existing customer data.
-
-OPTION A: full-refresh (simplest, loses any history that existed)
+        <CodeBox label="Option A — full refresh, and Option B — seeding historical versions">{`OPTION A: full-refresh (simplest, loses any history that existed)
   dbt snapshot --full-refresh
-  This drops and recreates the snapshot table from scratch.
-  All existing customers get one row with:
-    dbt_valid_from = NOW()
-    dbt_valid_to   = NULL
-    is_current     = TRUE
-  Result: going forward, all changes are captured. Past history: lost.
-  Acceptable when: no meaningful historical changes existed before this point.
+  Drops and recreates the snapshot table from scratch. All existing
+  customers get one row with dbt_valid_from=NOW(), dbt_valid_to=NULL,
+  is_current=TRUE. Going forward, all changes are captured. Past history
+  is lost. Acceptable when no meaningful historical changes existed before.
 
 OPTION B: seed historical versions from a separate data source
-  If you have an audit log, CDC history in Bronze, or source system history:
-  Build a seed file or staging model with historical versions:
-    customer_id  city         tier    updated_at
-    4201938      Seattle    silver  2024-01-15  ← original registration
-    4201938      Austin    silver  2026-02-01  ← after move
-
+  If you have an audit log, CDC history in Bronze, or source system history,
+  build a seed file with historical versions:
+    customer_id  city     tier    updated_at
+    4201938      Seattle  silver  2024-01-15  ← original registration
+    4201938      Austin   silver  2026-02-01  ← after move
   Manually insert these into the snapshot table in the correct format
-  BEFORE running dbt snapshot for the first time.
-  Then dbt snapshot manages all future changes.
+  BEFORE running dbt snapshot for the first time — dbt manages all future
+  changes from there.`}</CodeBox>
 
-OPTION C: change_cols detection requires source data to carry history
-  If the Silver customers table has change history (via CDC + Bronze):
-    Create a staging model that produces one row per version:
-    SELECT customer_id, city, tier,
-           change_timestamp AS updated_at
+        <CodeBox label="Option C — building the backfill from CDC history, and monitoring snapshot health">{`OPTION C: change history sourced from Bronze CDC
+  Create a staging model that produces one row per version:
+    SELECT customer_id, city, tier, change_timestamp AS updated_at
     FROM silver.customers_cdc_history
     ORDER BY customer_id, change_timestamp
-  Point the dbt snapshot at this staging model.
-  dbt snapshot processes each row, creating version rows as they appear.
-  Result: full historical SCD2 table built from CDC history.
+  Point the dbt snapshot at this staging model — it processes each row,
+  creating version rows as they appear, building a full historical SCD2
+  table from CDC history.
 
 MONITORING SNAPSHOT HEALTH:
-  -- Check how many version rows exist per customer:
+  -- Version count per customer (investigate if any customer > 50):
   SELECT customer_id, COUNT(*) AS version_count
-  FROM customers_snapshot
-  GROUP BY customer_id
-  ORDER BY version_count DESC
-  LIMIT 20;
-  -- If max versions > 50: investigate — rapid changes may indicate bad data
+  FROM customers_snapshot GROUP BY customer_id
+  ORDER BY version_count DESC LIMIT 20;
 
-  -- Check for gaps in valid_from/valid_to continuity:
-  SELECT customer_id
-  FROM customers_snapshot
+  -- Gaps in valid_from/valid_to continuity (an expired version with no successor):
+  SELECT customer_id FROM customers_snapshot
   WHERE dbt_valid_to IS NOT NULL
     AND NOT EXISTS (
         SELECT 1 FROM customers_snapshot s2
         WHERE s2.customer_id = customers_snapshot.customer_id
           AND s2.dbt_valid_from = customers_snapshot.dbt_valid_to
-    )
-  -- Returns rows where an expired version has no successor — data gap`}</CodeBox>
+    )`}</CodeBox>
       </section>
 
       <Divider />
@@ -618,7 +590,9 @@ MONITORING SNAPSHOT HEALTH:
           a single row without any joins.
         </Para>
 
-        <CodeBox label="SCD Type 3 — implementation and limitations">{`TYPE 3 TABLE STRUCTURE:
+        <SubSubTitle>Structure and the change operation</SubSubTitle>
+
+        <CodeBox label="Table structure, and updating the row when the customer moves">{`TYPE 3 TABLE STRUCTURE:
   dim_customer:
     customer_sk       BIGINT PRIMARY KEY
     customer_id       BIGINT
@@ -627,58 +601,54 @@ MONITORING SNAPSHOT HEALTH:
     city_changed_at   DATE                 ← when the city last changed
     tier              VARCHAR(20)          ← CURRENT tier
     previous_tier     VARCHAR(20)          ← PREVIOUS tier
-    ...
 
 INITIAL STATE:
-  customer_sk  customer_id  city        previous_city  tier    previous_tier
-  1            4201938      Seattle   NULL           silver  NULL
+  customer_sk  customer_id  city     previous_city  tier    previous_tier
+  1            4201938      Seattle  NULL           silver  NULL
 
-CUSTOMER MOVES TO HYDERABAD (2026-02-01):
+CUSTOMER MOVES TO AUSTIN (2026-02-01):
   UPDATE dim_customer
-  SET previous_city    = city,          -- save current → previous
-      city             = 'Austin',   -- new current
-      city_changed_at  = '2026-02-01'
-  WHERE customer_id = 4201938;
+  SET previous_city   = city,          -- save current → previous
+      city            = 'Austin',      -- new current
+      city_changed_at = '2026-02-01'
+  WHERE customer_id = 4201938;`}</CodeBox>
 
-RESULTING ROW:
-  customer_sk  customer_id  city         previous_city  tier    previous_tier
-  1            4201938      Austin    Seattle      silver  NULL
+        <Output>{`RESULTING ROW:
+customer_sk  customer_id  city    previous_city  tier    previous_tier
+1            4201938      Austin  Seattle        silver  NULL`}</Output>
 
-QUERIES ENABLED BY TYPE 3:
-  -- Revenue from customers who recently moved to each city:
-  SELECT
-      city                                    AS current_city,
-      SUM(CASE WHEN f.order_date > c.city_changed_at THEN f.order_amount ELSE 0 END)
-          AS revenue_after_move,
-      previous_city                           AS came_from
-  FROM fct_orders f
-  JOIN dim_customer c USING (customer_sk)
-  WHERE c.city_changed_at IS NOT NULL   -- only customers who have moved
-  GROUP BY 1, 3;
+        <SubSubTitle>What Type 3 enables, and where it breaks down</SubSubTitle>
+
+        <CodeBox label="A query Type 3 enables, and its three structural limitations">{`-- Revenue from customers who recently moved to each city:
+SELECT city AS current_city,
+    SUM(CASE WHEN f.order_date > c.city_changed_at THEN f.order_amount ELSE 0 END)
+        AS revenue_after_move,
+    previous_city AS came_from
+FROM fct_orders f JOIN dim_customer c USING (customer_sk)
+WHERE c.city_changed_at IS NOT NULL   -- only customers who have moved
+GROUP BY 1, 3;
 
 TYPE 3 LIMITATIONS:
-  ✗ Only one level of history (current + previous)
-     If customer moves again (Austin → New York):
-       previous_city becomes Austin (Seattle is LOST)
-  ✗ No point-in-time accuracy for fact table joins
-     All orders always join to the same single row — no version control
-     A 2024 order in Seattle and a 2026 order in Austin both join
-     to the same row (current city = New York eventually)
-  ✗ Works only when the change trajectory is: old → new (two states)
-     Not suitable for attributes that change frequently
+  ✗ Only one level of history — if the customer moves again (Austin → New
+    York), previous_city becomes Austin and Seattle is LOST.
+  ✗ No point-in-time accuracy for fact table joins — all orders always join
+    to the same single row, so a 2024 Seattle order and a 2026 Austin order
+    both join to the same row.
+  ✗ Works only for a two-state trajectory (old → new), not attributes that
+    change frequently.`}</CodeBox>
 
-TYPE 3 WHEN TO USE:
-  ✓ When you need a simple "compare current vs previous" view
-  ✓ When the attribute changes at most once or twice in the entity's lifetime
-  ✓ When simplicity is more important than full history
-  ✓ Common use case: sales territory reassignment
-     salesperson.territory: shows current territory + previous territory
-     "How did revenue change after the territory reshuffle?"
+        <SubSubTitle>When Type 3 is genuinely the right choice</SubSubTitle>
 
-TYPE 3 IS RARELY THE BEST CHOICE:
-  Type 1: history not needed
-  Type 2: full point-in-time history needed
-  Type 3: somewhere between — often superseded by Type 6 (hybrid)`}</CodeBox>
+        <CodeBox label="The narrow case Type 3 fits well">{`TYPE 3 WHEN TO USE:
+  ✓ A simple "compare current vs previous" view is all that's needed
+  ✓ The attribute changes at most once or twice in the entity's lifetime
+  ✓ Simplicity matters more than full history
+  ✓ Common case: sales territory reassignment — salesperson.territory shows
+    current + previous territory, answering "how did revenue change after
+    the territory reshuffle?"
+
+Type 1: history not needed. Type 2: full point-in-time history needed.
+Type 3: somewhere between — often superseded by Type 6 (hybrid).`}</CodeBox>
       </section>
 
       <Divider />
@@ -699,32 +669,23 @@ TYPE 3 IS RARELY THE BEST CHOICE:
           as lean as possible.
         </Para>
 
-        <CodeBox label="SCD Type 4 — current table plus separate history table">{`TYPE 4 STRUCTURE:
-
-dim_customer (current versions only — lean table):
-  customer_sk  customer_id  city       tier    updated_at
-  ──────────────────────────────────────────────────────
+        <CodeBox label="Type 4 — current table plus separate history table">{`dim_customer (current versions only — lean table):
+  customer_sk  customer_id  city    tier    updated_at
   1            4201938      Austin  silver  2026-02-01
 
 dim_customer_history (all historical versions):
-  customer_history_sk  customer_id  city       tier    valid_from   valid_to
-  ────────────────────────────────────────────────────────────────────────────
+  customer_history_sk  customer_id  city     tier    valid_from   valid_to
   100                  4201938      Seattle  silver  2024-01-15   2026-01-31
-  101                  4201938      Austin  silver  2026-02-01   NULL
-
-BENEFITS:
-  dim_customer stays small → fast for current-state queries
-  dim_customer_history contains full history → available for audit / time travel
+  101                  4201938      Austin   silver  2026-02-01   NULL
 
 WHEN TYPE 4 IS USEFUL:
   ✓ Very large dimension tables where adding version rows slows down current queries
-  ✓ When 95% of queries only need current values and the history table is rarely joined
-  ✓ Compliance / audit use cases where a separate history table is required by policy
+  ✓ 95% of queries only need current values, history table rarely joined
+  ✓ Compliance / audit use cases requiring a separate history table by policy
 
-LIMITATION:
-  More complex to query — must choose between dim_customer (current) and
-  dim_customer_history (full history) depending on use case.
-  Most teams prefer Type 2 — the version rows in one table is simpler.`}</CodeBox>
+LIMITATION: more complex to query — must choose between dim_customer
+(current) and dim_customer_history (full history). Most teams prefer Type 2
+since one table with version rows is simpler.`}</CodeBox>
 
         <SubTitle>SCD Type 6 — the hybrid (Type 1 + Type 2 + Type 3)</SubTitle>
 
@@ -737,63 +698,54 @@ LIMITATION:
           current-state queries without joins to the current row.
         </Para>
 
-        <CodeBox label="SCD Type 6 — the hybrid approach in practice">{`TYPE 6 TABLE STRUCTURE:
-
-dim_customer (Type 6 — history + current value in every row):
+        <CodeBox label="Type 6 structure — current_city lives in every row, city stays version-specific">{`dim_customer (Type 6 — history + current value in every row):
   customer_sk      BIGINT PK      ← unique per version (surrogate)
   customer_id      BIGINT         ← natural key
   city             VARCHAR        ← city AS OF THIS VERSION (historical accuracy)
   current_city     VARCHAR        ← current city for all versions (Type 1 overwrite)
   previous_city    VARCHAR        ← previous city (Type 3)
-  tier             VARCHAR        ← tier AS OF THIS VERSION
-  current_tier     VARCHAR        ← current tier for all versions
   valid_from       DATE           ← when this version became active
   valid_to         DATE           ← when this version expired (NULL = current)
   is_current       BOOLEAN
 
 TABLE STATE (customer moved Seattle → Austin):
-  customer_sk  customer_id  city       current_city  valid_from   valid_to    is_current
-  ──────────────────────────────────────────────────────────────────────────────────────
-  1            4201938      Seattle  Austin     2024-01-15   2026-01-31  FALSE
-  2            4201938      Austin  Austin     2026-02-01   NULL        TRUE
+  customer_sk  customer_id  city     current_city  valid_from   valid_to    is_current
+  1            4201938      Seattle  Austin        2024-01-15   2026-01-31  FALSE
+  2            4201938      Austin   Austin        2026-02-01   NULL        TRUE
 
 NOTE: current_city = 'Austin' in BOTH rows, even the historical row.
-      city        = 'Seattle' in the historical row (point-in-time accurate).
+      city = 'Seattle' in the historical row (point-in-time accurate).`}</CodeBox>
 
-QUERIES ENABLED BY TYPE 6:
-  -- Historical revenue by city (point-in-time accurate):
-  SELECT c.city AS historical_city, SUM(f.order_amount)
-  FROM fct_orders f JOIN dim_customer c ON f.customer_sk = c.customer_sk
-  GROUP BY c.city;
-  -- Uses c.city (the version-specific city) ← historically correct ✓
+        <CodeBox label="Type 6 — both query shapes from a single fact-to-dimension join">{`-- Historical revenue by city (point-in-time accurate):
+SELECT c.city AS historical_city, SUM(f.order_amount)
+FROM fct_orders f JOIN dim_customer c ON f.customer_sk = c.customer_sk
+GROUP BY c.city;
+-- Uses c.city (version-specific) ← historically correct ✓
 
-  -- Current revenue by city (where customers ARE TODAY):
-  SELECT c.current_city, SUM(f.order_amount)
-  FROM fct_orders f JOIN dim_customer c ON f.customer_sk = c.customer_sk
-  GROUP BY c.current_city;
-  -- Uses c.current_city ← all orders attributed to Austin (where customer is now) ✓
-  -- No need to join only to is_current=TRUE rows — current_city is in every row
+-- Current revenue by city (where customers ARE TODAY):
+SELECT c.current_city, SUM(f.order_amount)
+FROM fct_orders f JOIN dim_customer c ON f.customer_sk = c.customer_sk
+GROUP BY c.current_city;
+-- Uses c.current_city ← all orders attributed to Austin (where customer is now) ✓
+-- No is_current=TRUE filter needed — current_city is in every row.
+-- Both queries from ONE join — this is Type 6's key advantage over Type 2 alone.`}</CodeBox>
 
-  -- Both queries from ONE fact table join — no separate dim query needed.
-  -- This is Type 6's key advantage over Type 2 alone.
+        <CodeBox label="Type 6 update procedure — Type 1 overwrite across all rows, then Type 2 expire+insert">{`-- Step 1: update current_city in ALL existing rows for this customer:
+UPDATE dim_customer
+SET current_city = 'Austin'    -- Type 1 overwrite on all versions
+WHERE customer_id = 4201938;
 
-UPDATE PROCEDURE (when city changes):
-  -- Step 1: update current_city in ALL existing rows for this customer:
-  UPDATE dim_customer
-  SET current_city = 'Austin'    -- Type 1 overwrite on all versions
-  WHERE customer_id = 4201938;
+-- Step 2: expire the current row + insert new version (Type 2):
+UPDATE dim_customer
+SET valid_to = '2026-01-31', is_current = FALSE
+WHERE customer_id = 4201938 AND is_current = TRUE;
 
-  -- Step 2: expire the current row + insert new version (Type 2):
-  UPDATE dim_customer
-  SET valid_to = '2026-01-31', is_current = FALSE
-  WHERE customer_id = 4201938 AND is_current = TRUE;
+INSERT INTO dim_customer
+    (customer_sk, customer_id, city, current_city, valid_from, valid_to, is_current)
+VALUES (2, 4201938, 'Austin', 'Austin', '2026-02-01', NULL, TRUE);
 
-  INSERT INTO dim_customer
-      (customer_sk, customer_id, city, current_city, valid_from, valid_to, is_current)
-  VALUES (2, 4201938, 'Austin', 'Austin', '2026-02-01', NULL, TRUE);
-
-  dbt SNAPSHOT does NOT natively support Type 6.
-  Type 6 requires a custom dbt macro or a Python pipeline.`}</CodeBox>
+-- dbt snapshot does NOT natively support Type 6 — it requires a custom
+-- dbt macro or a Python pipeline.`}</CodeBox>
       </section>
 
       <Divider />
@@ -813,49 +765,39 @@ UPDATE PROCEDURE (when city changes):
           without any Type 1 overwrite columns.
         </Para>
 
-        <CodeBox label="SCD Type 7 — dual FK in the fact table">{`SCD TYPE 7 TABLE STRUCTURE:
+        <SubSubTitle>Structure — a pure Type 2 dimension, dual keys in the fact</SubSubTitle>
 
-dim_customer (pure Type 2 — no current_city column needed):
-  customer_sk  customer_id  city       tier    valid_from   valid_to    is_current
-  ───────────────────────────────────────────────────────────────────────────────
+        <CodeBox label="dim_customer stays pure Type 2; fct_orders carries both surrogate keys">{`dim_customer (pure Type 2 — no current_city column needed):
+  customer_sk  customer_id  city     tier    valid_from   valid_to    is_current
   1            4201938      Seattle  silver  2024-01-15   2026-01-31  FALSE
-  2            4201938      Austin  silver  2026-02-01   NULL        TRUE
+  2            4201938      Austin   silver  2026-02-01   NULL        TRUE
 
 fct_orders (with DUAL surrogate keys):
   order_sk  history_customer_sk  current_customer_sk  order_amount  order_date
-  ─────────────────────────────────────────────────────────────────────────────
-  100       1                    2                    380.00        2024-06-10
-  101       2                    2                    460.00        2026-03-01
+  100       1                    2                     380.00       2024-06-10
+  101       2                    2                     460.00       2026-03-01
 
   history_customer_sk: the SK active at order time (stored at fact load time)
-  current_customer_sk: the SK of the current version (updated when customer changes)
+  current_customer_sk: the SK of the current version (updated when customer changes)`}</CodeBox>
 
-QUERIES:
+        <CodeBox label="Two queries, two different joins, same fact table">{`-- Historical revenue by city (point-in-time accurate):
+SELECT c.city, SUM(f.order_amount) FROM fct_orders f
+JOIN dim_customer c ON f.history_customer_sk = c.customer_sk
+GROUP BY c.city;
+-- Order 100 → SK=1 → 'Seattle'. Order 101 → SK=2 → 'Austin' ✓
 
-  -- Historical revenue by city (point-in-time accurate):
-  SELECT c.city, SUM(f.order_amount)
-  FROM fct_orders f
-  JOIN dim_customer c ON f.history_customer_sk = c.customer_sk
-  GROUP BY c.city;
-  -- Order 100: joins to SK=1 → city='Seattle'
-  -- Order 101: joins to SK=2 → city='Austin' ✓ historically accurate
+-- Current revenue by city (where customers are TODAY):
+SELECT c.city, SUM(f.order_amount) FROM fct_orders f
+JOIN dim_customer c ON f.current_customer_sk = c.customer_sk
+WHERE c.is_current = TRUE
+GROUP BY c.city;
+-- Both orders join to SK=2 → 'Austin' — "revenue from customers now in Austin" ✓`}</CodeBox>
 
-  -- Current revenue by city (where customers are TODAY):
-  SELECT c.city, SUM(f.order_amount)
-  FROM fct_orders f
-  JOIN dim_customer c ON f.current_customer_sk = c.customer_sk
-  WHERE c.is_current = TRUE
-  GROUP BY c.city;
-  -- Both orders join to SK=2 → city='Austin'
-  -- "How much revenue came from customers who are NOW in Austin?" ✓
-
-TYPE 7 COMPLEXITY:
-  Requires updating current_customer_sk in the fact table when
-  a customer's current version changes — this means updating fact rows,
-  which is expensive for large fact tables.
-  Most teams avoid this unless the use case specifically requires it.
-  Type 6 is more common in practice (current_city column in the dimension
-  row is cheaper to maintain than updating millions of fact table rows).`}</CodeBox>
+        <Output>{`TYPE 7 COMPLEXITY: requires updating current_customer_sk in the fact table
+whenever a customer's current version changes — expensive for large fact
+tables. Most teams avoid this unless the use case specifically requires it.
+Type 6 is more common in practice (a current_city column in the dimension
+row is cheaper to maintain than updating millions of fact table rows).`}</Output>
       </section>
 
       <Divider />
@@ -886,9 +828,9 @@ TYPE 7 COMPLEXITY:
           ]}
         />
 
-        <CodeBox label="The decision tree — which SCD type for which situation">{`DECISION TREE:
+        <SubSubTitle>The decision tree</SubSubTitle>
 
-Does the attribute change?
+        <CodeBox label="Which SCD type for which situation">{`Does the attribute change?
   No → Type 0 (fixed)
   Yes → Does historical accuracy matter for analysis?
     No → Type 1 (overwrite)
@@ -899,24 +841,57 @@ Does the attribute change?
           No  → Type 2 (standard — use is_current filter when needed)
           Yes → Type 6 (add current_city column to dimension)
         Is the dimension table very large (10M+ rows)?
-          Yes → Consider Type 4 (separate history table)
+          Yes → Consider Type 4 (separate history table)`}</CodeBox>
 
-
-PRACTICAL GUIDANCE (2026):
+        <Output>{`PRACTICAL GUIDANCE (2026):
   80% of use cases: TYPE 2 (with dbt snapshot)
   15% of use cases: TYPE 1 (for corrections and non-analytical attributes)
    5% of use cases: TYPE 6, 3, or 4 (special requirements)
   TYPE 7: almost never needed — Type 6 handles the same use case more simply
 
 REAL EXAMPLES FROM FOOD DELIVERY PLATFORMS:
-  customer.city:                 Type 2 (revenue attribution changes with location)
-  customer.tier:                 Type 2 (LTV and cohort analysis by acquisition tier)
-  customer.phone_masked:         Type 1 (contact info — never needed historically)
-  customer.registration_date:    Type 0 (immutable — when they first joined)
-  store.manager_name:            Type 1 (most reports — manager history not tracked)
-  store.region:                  Type 2 (if region changes affect territory reporting)
-  product.category:              Type 2 (if sales reporting by category matters)
-  product.price:                 NOT in dimension — put price in fact table as a fact`}</CodeBox>
+  customer.city:              Type 2 (revenue attribution changes with location)
+  customer.tier:               Type 2 (LTV and cohort analysis by acquisition tier)
+  customer.phone_masked:        Type 1 (contact info — never needed historically)
+  customer.registration_date:   Type 0 (immutable — when they first joined)
+  store.manager_name:           Type 1 (most reports — manager history not tracked)
+  product.price:                NOT in dimension — put price in fact table as a fact`}</Output>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Slowly Changing Dimensions</SectionTitle>
+
+        {[
+          {
+            wrong: '"Type 2 is strictly the safer default — apply it to every dimension attribute"',
+            right: 'Part 03\'s attribute-by-attribute table is explicit that applying Type 2 everywhere creates excessive version rows and query complexity for no benefit — customer.phone_number is a clean "No" because no report ever needs the phone number that was true at order time.',
+          },
+          {
+            wrong: '"Joining a fact table to a dimension\'s natural key with an is_current filter is basically the same as joining on the surrogate key"',
+            right: 'Part 03\'s "wrong approach" callout shows exactly how these diverge: the natural-key-plus-is_current join reassigns every historical fact to whatever the CURRENT dimension version is, silently destroying the point-in-time accuracy Type 2 exists to provide — which is exactly the bug in this module\'s Real World section and Error Library\'s first entry.',
+          },
+          {
+            wrong: '"A dbt snapshot with strategy=\'timestamp\' is always the safer, more accurate choice over strategy=\'check\'"',
+            right: 'This module\'s Error Library shows the opposite happening in production: when a Silver pipeline sets updated_at=NOW() on every upsert regardless of whether values actually changed, the timestamp strategy creates a new version on every single run. The check strategy, comparing actual column values, is what catches this correctly.',
+          },
+          {
+            wrong: '"Once a customer\'s row is expired in a Type 2 dimension, the historical row is basically frozen and never touched again"',
+            right: 'Part 06\'s Type 6 update procedure is a direct counterexample — the current_city column is deliberately overwritten on ALL rows, including already-expired historical ones, precisely so that "where is this customer now?" can be answered without a separate lookup.',
+          },
+          {
+            wrong: '"If a value was wrong for months before anyone noticed, the fix is always a Type 2 correction so the wrong period is preserved"',
+            right: 'Interview Prep Q4 draws the actual distinction that matters: a genuine data-entry error (the value was NEVER really true) calls for a Type 1 correction that overwrites history, while a real historical business state (the value WAS true for a period, then legitimately changed) calls for Type 2 — conflating the two produces either lost-but-real history or preserved-but-fictional history.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -941,69 +916,65 @@ REAL EXAMPLES FROM FOOD DELIVERY PLATFORMS:
             Austin. You are asked to investigate.
           </Para>
 
-          <CodeBox label="SCD investigation — finding the Type 1 where Type 2 was needed">{`-- Step 1: Check the customer dimension for suspected customers
-SELECT customer_id, city, valid_from, valid_to, is_current
+          <SubSubTitle>Step 1-2 — checking the dimension, then Bronze CDC history</SubSubTitle>
+
+          <CodeBox label="Confirming the dimension has no version history">{`SELECT customer_id, city, valid_from, valid_to, is_current
 FROM dim_customer
 WHERE customer_id IN (4201938, 4201939, 4201940, 4201941)
-ORDER BY customer_id;
+ORDER BY customer_id;`}</CodeBox>
 
--- Returns only ONE row per customer:
--- 4201938  Austin  2024-01-15  NULL  TRUE
--- 4201939  Austin  2024-03-02  NULL  TRUE
--- etc.
+          <Output>{`-- Returns only ONE row per customer:
+4201938  Austin  2024-01-15  NULL  TRUE
+4201939  Austin  2024-03-02  NULL  TRUE
 
--- Only one row per customer — no version history.
--- is_current = TRUE for all (only one version exists).
--- valid_from = their registration date (no type 2 tracking).
--- dim_customer was built with Type 1 (overwrite) — not Type 2.
+-- Only one row per customer — no version history. is_current=TRUE for all
+-- (only one version exists). valid_from = registration date (no Type 2
+-- tracking). dim_customer was built with Type 1 (overwrite) — not Type 2.`}</Output>
 
--- Step 2: Check Bronze CDC history for actual customer location changes
-SELECT customer_id, city, updated_at, _change_type
+          <CodeBox label="Cross-checking against Bronze CDC to find the real history">{`SELECT customer_id, city, updated_at, _change_type
 FROM bronze.customers_cdc
 WHERE customer_id = 4201938
-ORDER BY updated_at;
--- Returns:
--- 4201938  Seattle  2024-01-15  insert  ← registered in Seattle
--- 4201938  Austin  2026-02-01  update  ← moved to Austin
+ORDER BY updated_at;`}</CodeBox>
 
--- Confirmed: customer 4201938 was in Seattle until 2026-02-01.
--- The dim_customer table overwrote 'Seattle' with 'Austin' (Type 1).
--- ALL historical orders from 2024 and 2025 now show city = 'Austin'.
--- This is why Austin revenue looks inflated and Seattle looks deflated.
+          <Output>{`4201938  Seattle  2024-01-15  insert  ← registered in Seattle
+4201938  Austin   2026-02-01  update  ← moved to Austin
 
--- Step 3: Estimate the impact
-SELECT
-    c.city AS wrong_city,
-    DATE_PART('year', f.order_date) AS year,
-    COUNT(*) AS affected_orders,
-    SUM(f.order_amount) AS misattributed_revenue
+Confirmed: customer 4201938 was in Seattle until 2026-02-01. dim_customer
+overwrote 'Seattle' with 'Austin' (Type 1). ALL historical orders from
+2024 and 2025 now show city = 'Austin' — this is why Austin revenue looks
+inflated and Seattle looks deflated.`}</Output>
+
+          <SubSubTitle>Step 3 — estimating the impact, and the migration plan</SubSubTitle>
+
+          <CodeBox label="Quantifying how much revenue was misattributed">{`SELECT c.city AS wrong_city, DATE_PART('year', f.order_date) AS year,
+    COUNT(*) AS affected_orders, SUM(f.order_amount) AS misattributed_revenue
 FROM fct_orders f
 JOIN dim_customer c ON f.customer_sk = c.customer_sk
 JOIN bronze.customers_cdc cdc ON f.customer_id = cdc.customer_id
     AND f.order_date < '2026-02-01'   -- orders placed before the move
-WHERE c.city = 'Austin'           -- currently attributed to Austin
-  AND cdc.city = 'Seattle'         -- but were actually in Seattle
-  AND cdc._change_type = 'insert'    -- initial registration city
-GROUP BY 1, 2;
--- Shows: 18,234 orders, $1.47 million misattributed from Seattle to Austin
+WHERE c.city = 'Austin'          -- currently attributed to Austin
+  AND cdc.city = 'Seattle'        -- but were actually in Seattle
+  AND cdc._change_type = 'insert' -- initial registration city
+GROUP BY 1, 2;`}</CodeBox>
 
--- MIGRATION PLAN:
--- 1. Build SCD Type 2 snapshot from Bronze CDC history
--- 2. Rebuild dim_customer with version rows from CDC
--- 3. Reload fct_orders — re-lookup customer_sk using the date-range join
--- 4. Rebuild Gold revenue models
--- Full migration: 4 days of engineering, 1 day of validation
+          <Output>{`Shows: 18,234 orders, $1.47 million misattributed from Seattle to Austin
 
--- PREVENTION:
--- dbt snapshot runs every hour on the silver.customers source
--- strategy = 'check', check_cols = ['city', 'tier', 'state']
--- Future city changes create a new version row automatically`}</CodeBox>
+MIGRATION PLAN:
+1. Build SCD Type 2 snapshot from Bronze CDC history
+2. Rebuild dim_customer with version rows from CDC
+3. Reload fct_orders — re-lookup customer_sk using the date-range join
+4. Rebuild Gold revenue models
+Full migration: 4 days of engineering, 1 day of validation
+
+PREVENTION: dbt snapshot now runs hourly on the silver.customers source
+using strategy='check', check_cols=['city', 'tier', 'state'] — future
+city changes create a new version row automatically.`}</Output>
 
           <Para>
             This is one of the most common SCD incidents in production — a dimension
             was built with Type 1 when the business question required Type 2. The
-            data engineer who built it did not ask "do historical facts need to
-            reflect the value that was true at the time?" Revenue attribution by
+            data engineer who built it did not ask &ldquo;do historical facts need to
+            reflect the value that was true at the time?&rdquo; Revenue attribution by
             city requires exactly that. The fix required rebuilding the dimension
             from the preserved Bronze CDC history — which is why preserving raw
             Bronze data is so valuable.
@@ -1089,6 +1060,42 @@ The fix is to run snapshots frequently — every 15-30 minutes for dimensions th
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Joining a fact table to a Type 2 dimension using the natural key plus an is_current filter, instead of the surrogate key',
+            a: 'Part 03\'s "wrong approach" callout and this module\'s Error Library first entry are the same bug from two angles — that join reassigns every historical fact to whichever version is current right now, which is precisely what Type 2 is supposed to prevent.',
+          },
+          {
+            q: 'Applying Type 2 to every dimension attribute "to be safe"',
+            a: 'Part 03\'s attribute table shows several attributes (phone_number, is_active) that are clean Type 1 cases — tracking them as Type 2 anyway just multiplies version rows and query complexity for a business question nobody is asking.',
+          },
+          {
+            q: 'Deploying a dbt snapshot without checking whether the source updated_at column is trustworthy',
+            a: 'This module\'s Error Library shows what happens when it isn\'t: a Silver pipeline that sets updated_at=NOW() on every upsert (not just real changes) makes the timestamp strategy create a new version on every single run. Check what actually drives updated_at before picking timestamp over check.',
+          },
+          {
+            q: 'Running a dbt snapshot at the same cadence as the dbt run that consumes it',
+            a: 'Part 04 and Interview Prep Q5 both flag the same failure: a snapshot that only runs as often as the downstream model misses any intermediate state a fast-changing dimension passed through, and back-dates valid_from to the run time instead of the real change time.',
+          },
+          {
+            q: 'Treating a Type 6 dimension\'s current_city column as write-once instead of updating it across all existing rows on every change',
+            a: 'Part 06\'s update procedure is explicit that Step 1 overwrites current_city on every row for that customer, historical rows included — skip that step and current_city silently goes stale on old rows, which is exactly the kind of duplicate-current-row bug this module\'s Error Library documents for Type 6.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1149,7 +1156,7 @@ The fix is to run snapshots frequently — every 15-30 minutes for dimensions th
         'The most common SCD incident in production: a dimension built with Type 1 when the business question required Type 2. Revenue attribution, cohort analysis, and territory performance all depend on historical accuracy. When diagnosed, the fix requires rebuilding the dimension from Bronze CDC history and reloading fact table surrogate keys. This is why Bronze CDC history preservation is so valuable.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
