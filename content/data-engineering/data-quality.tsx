@@ -19,13 +19,26 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 const SubTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 style={{ fontSize: 'clamp(16px,1.8vw,20px)', fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text)', marginBottom: 12, fontFamily: 'var(--font-display)' }}>{children}</h3>
 )
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>{label}</div>}
     <pre style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.9, color: 'var(--text)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{ background: 'transparent', border: '1px dashed var(--border)', borderRadius: 10, padding: '14px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.8, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
       <code>{children}</code>
     </pre>
   </div>
@@ -33,6 +46,15 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>{children}</div>
+)
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)', borderRadius: 10, padding: '16px 20px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent2)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
 )
 
 interface TableRow { [key: string]: string }
@@ -58,8 +80,8 @@ export default function DataQualityModule() {
       title="Data Quality — Dimensions, Testing, Monitoring, and Contracts"
       description="The six dimensions of quality, dbt tests at every layer, anomaly detection, data contracts, and building quality into pipelines rather than checking at the end."
       section="Data Engineering — Module 36"
-      readTime="65 min"
-      updatedAt="March 2026"
+      readTime="75 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Data Quality Fails ─────────────────────────── */}
@@ -80,8 +102,7 @@ export default function DataQualityModule() {
           pipeline stage, test at every layer boundary, alert on anomalies before
           analysts hit them, and define quality contracts with source system owners
           so violations are caught at ingestion rather than at Gold. This module
-          covers both — the monitoring that catches problems that slip through,
-          and the engineering that prevents most problems from arising.
+          builds that whole stack around FreshCart&rsquo;s orders pipeline.
         </Para>
 
         <HighlightBox>
@@ -106,46 +127,36 @@ export default function DataQualityModule() {
           </div>
         </HighlightBox>
 
-        <CodeBox label="The cost of late quality detection — why layer matters">{`WHERE QUALITY IS CAUGHT → COST OF THE PROBLEM:
+        <SubSubTitle>Where a problem is caught determines how much it costs</SubSubTitle>
 
-  SOURCE SYSTEM (before ingestion):
-    Caught by: data contract validation at source API / CDC
-    Cost: reject the record, log to DLQ, notify source team
-    Impact: one bad record rejected. Nothing else affected.
-    Notification: warning to data engineering team
-    Recovery time: minutes
+        <CodeBox label="The cost of late quality detection — why layer matters">{`SOURCE SYSTEM (before ingestion):
+  Cost: reject the record, log to DLQ, notify source team
+  Recovery time: minutes
 
-  BRONZE LAYER (after landing):
-    Caught by: schema validation, basic type checks
-    Cost: record in DLQ, Bronze intact, Silver/Gold unaffected
-    Impact: one source file rejected. Downstream pipelines not triggered.
-    Notification: P3 alert to data engineering team
-    Recovery time: hours (after source team fixes and resends)
+BRONZE LAYER (after landing):
+  Cost: record in DLQ, Bronze intact, Silver/Gold unaffected
+  Recovery time: hours (after source team fixes and resends)
 
-  SILVER LAYER (after transformation):
-    Caught by: dbt tests (not_null, unique, accepted_values, relationships)
-    Cost: dbt run fails, Silver not updated, Gold build blocked
-    Impact: Silver and Gold stale until fixed. Analysts see stale data.
-    Notification: P2 alert. SLA at risk.
-    Recovery time: hours to a day
+SILVER LAYER (after transformation):
+  Cost: dbt run fails, Silver not updated, Gold build blocked
+  Recovery time: hours to a day
 
-  GOLD LAYER (after aggregation):
-    Caught by: Gold model tests, row count anomaly detection
-    Cost: Gold table has wrong data, dashboards show wrong metrics
-    Impact: Finance, operations, product all working from wrong numbers.
-    Notification: P1 alert. SLA breached.
-    Recovery time: 1-3 days (investigation + fix + rebuild)
+GOLD LAYER (after aggregation):
+  Cost: Gold table has wrong data, dashboards show wrong metrics
+  Recovery time: 1-3 days (investigation + fix + rebuild)
 
-  ANALYST DASHBOARD (after analyst queries):
-    Caught by: analyst noticing the numbers look wrong
-    Cost: analyst escalates to manager, manager to CTO, investigation
-    Impact: business decisions already made on wrong data.
-    Notification: CEO-level conversation.
-    Recovery time: unknown, trust damage lasting weeks
+ANALYST DASHBOARD (after analyst queries):
+  Cost: analyst escalates, business decisions already made on wrong data
+  Recovery time: unknown, trust damage lasting weeks
 
-  THE RULE: every layer a quality issue traverses multiplies its cost by 10×.
-  A validation check that takes 1 minute to add to a Bronze pipeline
-  prevents hours of investigation when it catches a bad file at landing.`}</CodeBox>
+THE RULE: every layer a quality issue traverses multiplies its cost by 10×.`}</CodeBox>
+
+        <TryThis>
+          Pick a table you work with and name, honestly, which layer would catch
+          a bad value in it today — source contract, Bronze schema check, a dbt
+          test, or an analyst noticing the dashboard looks wrong. That answer is
+          your current cost multiplier.
+        </TryThis>
       </section>
 
       <Divider />
@@ -158,168 +169,102 @@ export default function DataQualityModule() {
         <Para>
           dbt tests are the most widely used data quality mechanism for ELT
           platforms in 2026. They run after every dbt build, catching quality
-          issues before Gold tables are consumed. Understanding all four test
-          types, how to configure severity levels, and how to write custom
-          tests is essential for any dbt-based platform.
+          issues before Gold tables are consumed.
         </Para>
 
-        <SubTitle>The four generic dbt tests</SubTitle>
+        <SubSubTitle>The four generic tests, on FreshCart&rsquo;s orders model</SubSubTitle>
 
-        <CodeBox label="dbt generic tests — complete schema.yml examples">{`# models/silver/_schema.yml
-version: 2
-
-models:
+        <CodeBox label="models/silver/_schema.yml — not_null, unique, accepted_values, relationships">{`models:
   - name: silver_orders
-    description: "Cleaned and validated order records. Grain: one row per order."
     columns:
       - name: order_id
-        description: "Primary key from source system"
         tests:
-          - not_null           # ← catches missing PKs
-          - unique             # ← catches duplicates at the grain
-          # Severity override: make uniqueness an error, not a warning
-          - unique:
-              severity: error  # default is 'error'; can be 'warn'
+          - not_null           # catches missing PKs
+          - unique              # catches duplicates at the grain
 
       - name: customer_id
         tests:
           - not_null
-          - relationships:     # ← referential integrity to parent table
+          - relationships:      # referential integrity to parent table
               to: ref('silver_customers')
               field: customer_id
-              severity: warn   # warn not error: some orders arrive before customers
+              severity: warn    # warn not error: some orders arrive before customers
 
       - name: status
         tests:
           - not_null
-          - accepted_values:   # ← domain validation
+          - accepted_values:    # domain validation
               values: ['placed', 'confirmed', 'preparing', 'ready',
                        'picked_up', 'delivering', 'delivered', 'cancelled']
-              quote: true
 
       - name: order_amount
         tests:
           - not_null
-          - dbt_utils.accepted_range:  # from dbt-utils package
-              min_value: 0
-              max_value: 500000
-              inclusive: true
+          - dbt_utils.accepted_range: {min_value: 0, max_value: 500000}`}</CodeBox>
 
-      - name: order_date
-        tests:
-          - not_null
-          - dbt_utils.not_null_proportion:  # at least 99% of rows must be non-null
-              at_least: 0.99                 # use for "usually populated" columns
+        <SubSubTitle>Table-level tests, and checking Bronze freshness</SubSubTitle>
 
+        <CodeBox label="Row-count reconciliation and source freshness thresholds">{`models:
   - name: silver_customers
     tests:
-      # Table-level tests (not column-specific):
-      - dbt_utils.equal_rowcount:         # row count must match another model
-          compare_model: ref('stg_customers')
-      - dbt_utils.recency:                # freshness check
-          datepart: hour
-          field: updated_at
-          interval: 25                    # must have been updated in last 25 hours
-    columns:
-      - name: customer_id
-        tests: [not_null, unique]
-      - name: tier
-        tests:
-          - accepted_values:
-              values: ['standard', 'silver', 'gold', 'platinum']
+      - dbt_utils.equal_rowcount: {compare_model: ref('stg_customers')}
+      - dbt_utils.recency: {datepart: hour, field: updated_at, interval: 25}
 
-# SOURCES (checking Bronze freshness):
 sources:
   - name: bronze
-    database: freshmart_prod
-    schema: bronze
+    database: freshcart_prod
     tables:
       - name: orders
         freshness:
           warn_after:  {count: 25, period: hour}
           error_after: {count: 49, period: hour}
-        loaded_at_field: _bronze_date
-        columns:
-          - name: order_id
-            tests: [not_null]`}</CodeBox>
+        loaded_at_field: _bronze_date`}</CodeBox>
 
-        <SubTitle>Custom generic tests — writing reusable tests for business rules</SubTitle>
+        <Output>{`$ dbt test --select silver_orders
+1 of 4 PASS not_null_silver_orders_order_id
+2 of 4 PASS unique_silver_orders_order_id
+3 of 4 WARN relationships_silver_orders_customer_id__customer_id__ref_silver_customers_
+4 of 4 PASS accepted_values_silver_orders_status
+Done. PASS=3 WARN=1 ERROR=0`}</Output>
 
-        <CodeBox label="Custom dbt tests — three patterns for real business rules">{`# PATTERN 1: Custom generic test (reusable, parameterised)
-# tests/generic/assert_column_sum_equals.sql
-# Usage: assert that sum of column A equals sum of column B
-# (reconciliation test between two related tables)
+        <SubSubTitle>Custom tests for business rules dbt&rsquo;s generic tests can&rsquo;t express</SubSubTitle>
 
-{% test assert_column_sum_equals(model, column_name, compare_model, compare_column) %}
-WITH model_sum AS (
-    SELECT SUM({{ column_name }}) AS total
-    FROM {{ model }}
-),
-compare_sum AS (
-    SELECT SUM({{ compare_column }}) AS total
-    FROM {{ compare_model }}
-)
-SELECT
-    m.total     AS model_total,
-    c.total     AS compare_total,
-    ABS(m.total - c.total) AS difference
-FROM model_sum m, compare_sum c
-WHERE ABS(m.total - c.total) > 0.01  -- allow for rounding
-{% endtest %}
-
-# Usage in schema.yml:
-# - name: order_amount
-#   tests:
-#     - assert_column_sum_equals:
-#         compare_model: ref('silver_payments')
-#         compare_column: payment_amount
-
-
-# PATTERN 2: Singular test (one-off, model-specific)
-# tests/assert_no_negative_amounts.sql
--- This test passes when zero rows are returned.
--- Returns rows that FAIL the quality check.
+        <CodeBox label="A singular test — fails when it returns any rows">{`-- tests/assert_no_negative_amounts.sql
+-- Passes when this query returns ZERO rows.
 SELECT order_id, order_amount
 FROM {{ ref('silver_orders') }}
-WHERE order_amount < 0;
+WHERE order_amount < 0;`}</CodeBox>
 
-
-# PATTERN 3: Expression test (inline in schema.yml)
-# Checks a condition on each row — fails if any row violates it
-# models/silver/_schema.yml
-columns:
+        <CodeBox label="An inline expression test — one condition, checked per row">{`columns:
   - name: delivered_at
     tests:
       - dbt_utils.expression_is_true:
           expression: "delivered_at >= created_at OR delivered_at IS NULL"
-          # Every row where delivered_at is set must be after created_at
 
   - name: order_amount
     tests:
       - dbt_utils.expression_is_true:
-          expression: "order_amount >= discount_amount"
-          # Discount can never exceed the order amount
+          expression: "order_amount >= discount_amount"`}</CodeBox>
 
+        <CodeBox label="A custom generic test — reusable across any two tables">{`{% test assert_column_sum_equals(model, column_name, compare_model, compare_column) %}
+WITH model_sum   AS (SELECT SUM({{ column_name }}) AS total FROM {{ model }}),
+     compare_sum AS (SELECT SUM({{ compare_column }}) AS total FROM {{ compare_model }})
+SELECT m.total AS model_total, c.total AS compare_total, ABS(m.total - c.total) AS difference
+FROM model_sum m, compare_sum c
+WHERE ABS(m.total - c.total) > 0.01
+{% endtest %}
 
-# RUNNING dbt TESTS:
-dbt test                              # run ALL tests
-dbt test -s silver_orders             # test one model
-dbt test --select silver.*            # test all silver models
-dbt test -s silver_orders --store-failures  # save failing rows to a table
+# Usage:
+# - name: order_amount
+#   tests:
+#     - assert_column_sum_equals: {compare_model: ref('silver_payments'), compare_column: payment_amount}`}</CodeBox>
 
-# STORING FAILURES FOR INVESTIGATION:
-# With --store-failures: creates tables like dbt_test__audit.not_null_silver_orders_order_id
-# Each table contains the rows that failed the test
-# Query to investigate: SELECT * FROM dbt_test__audit.not_null_silver_orders_order_id
+        <Output>{`$ dbt test -s silver_orders --store-failures
+FAIL assert_no_negative_amounts (3 rows)
+# creates dbt_test__audit.assert_no_negative_amounts — query it directly:
+SELECT * FROM dbt_test__audit.assert_no_negative_amounts;`}</Output>
 
-# TEST SEVERITY LEVELS:
-# severity: error (default) — dbt exits with non-zero code, blocks downstream
-# severity: warn             — test failure logged but build continues
-# Use 'warn' for: expected occasional nulls, cross-table relationships
-#                 where upstream may lag (orders before customers)
-# Use 'error' for: primary keys, critical business constraints`}</CodeBox>
-
-        <SubTitle>Testing strategy by layer — what to test where</SubTitle>
+        <SubSubTitle>Testing strategy by layer</SubSubTitle>
 
         <CompareTable
           headers={[
@@ -331,10 +276,9 @@ dbt test -s silver_orders --store-failures  # save failing rows to a table
           keys={['layer', 'what', 'severity', 'blocks']}
           rows={[
             { layer: 'Source (Bronze)', what: 'Schema existence, file freshness, basic row count range', severity: 'warn for freshness, error for missing schema', blocks: 'Warn only — Bronze always loads raw' },
-            { layer: 'Staging (stg_)', what: 'not_null on PK, accepted_values on categoricals, basic type validity', severity: 'error on PK, warn on domain checks', blocks: 'Yes — stale staging blocks Silver' },
-            { layer: 'Silver', what: 'Uniqueness on PK, not_null on required fields, relationships to dims, value ranges, freshness', severity: 'error on PK+nulls, warn on relationships', blocks: 'Yes — bad Silver blocks Gold' },
-            { layer: 'Gold', what: 'Row count vs historical average (anomaly), sum reconciliation to Silver, business metric ranges', severity: 'error on sum reconciliation, warn on anomalies', blocks: 'Yes — bad Gold blocks dashboard load' },
-            { layer: 'Source freshness', what: 'loaded_at_field within expected window', severity: 'warn for 25h, error for 49h', blocks: 'No — freshness alerts only' },
+            { layer: 'Staging (stg_)', what: 'not_null on PK, accepted_values on categoricals', severity: 'error on PK, warn on domain checks', blocks: 'Yes — stale staging blocks Silver' },
+            { layer: 'Silver', what: 'Uniqueness on PK, not_null, relationships, value ranges, freshness', severity: 'error on PK+nulls, warn on relationships', blocks: 'Yes — bad Silver blocks Gold' },
+            { layer: 'Gold', what: 'Row count anomaly, sum reconciliation to Silver, metric ranges', severity: 'error on reconciliation, warn on anomalies', blocks: 'Yes — bad Gold blocks dashboard load' },
           ]}
         />
       </section>
@@ -347,137 +291,81 @@ dbt test -s silver_orders --store-failures  # save failing rows to a table
         <SectionTitle>Anomaly Detection — Catching What Rule-Based Tests Miss</SectionTitle>
 
         <Para>
-          Static rule-based tests (not_null, accepted_values, range checks) catch
-          known violations. Anomaly detection catches unknown violations — unusual
-          patterns that no rule was written for. A Silver table suddenly receiving
-          90% fewer rows than yesterday. A metric that was never negative suddenly
-          showing negative values. An order amount column whose mean doubled.
-          These are not rule violations — they are anomalies, and rule-based
-          tests will not catch them.
+          Rule-based tests catch known violations. Anomaly detection catches
+          unknown violations — a Silver table suddenly receiving 90% fewer rows
+          than yesterday, a metric that was never negative suddenly going
+          negative. No rule was written for these because nobody anticipated them.
         </Para>
 
-        <CodeBox label="Anomaly detection — statistical approaches for pipeline monitoring">{`# APPROACH 1: Row count anomaly detection
-# Compare today's row count to the rolling 7-day average
-# Alert if count deviates more than 30%
+        <SubSubTitle>Row count anomaly — comparing today to a rolling average</SubSubTitle>
 
--- models/monitoring/mon_row_count_check.sql
-WITH daily_counts AS (
-    SELECT
-        DATE(ingested_at)    AS load_date,
-        COUNT(*)             AS row_count
-    FROM silver.orders
-    WHERE ingested_at >= CURRENT_DATE - 30
+        <CodeBox label="models/monitoring/mon_row_count_check.sql">{`WITH daily_counts AS (
+    SELECT DATE(ingested_at) load_date, COUNT(*) row_count
+    FROM silver.orders WHERE ingested_at >= CURRENT_DATE - 30
     GROUP BY 1
 ),
 stats AS (
-    SELECT
-        load_date,
-        row_count,
-        AVG(row_count) OVER (
-            ORDER BY load_date
-            ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
-        )                    AS rolling_7d_avg,
-        STDDEV(row_count) OVER (
-            ORDER BY load_date
-            ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
-        )                    AS rolling_7d_stddev
+    SELECT load_date, row_count,
+        AVG(row_count) OVER (ORDER BY load_date ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING) rolling_7d_avg
     FROM daily_counts
 )
-SELECT
-    load_date,
-    row_count,
-    ROUND(rolling_7d_avg, 0)                      AS expected_avg,
-    ROUND(ABS(row_count - rolling_7d_avg)
-          / NULLIF(rolling_7d_avg, 0) * 100, 1)   AS pct_deviation,
-    CASE
-        WHEN ABS(row_count - rolling_7d_avg)
-             / NULLIF(rolling_7d_avg, 0) > 0.5    THEN 'CRITICAL'
-        WHEN ABS(row_count - rolling_7d_avg)
-             / NULLIF(rolling_7d_avg, 0) > 0.3    THEN 'WARNING'
-        ELSE 'OK'
-    END                                            AS status
-FROM stats
-WHERE load_date = CURRENT_DATE;
--- Run after every pipeline load. Alert if status != 'OK'.
+SELECT load_date, row_count, ROUND(rolling_7d_avg, 0) expected_avg,
+    CASE WHEN ABS(row_count - rolling_7d_avg) / NULLIF(rolling_7d_avg, 0) > 0.5 THEN 'CRITICAL'
+         WHEN ABS(row_count - rolling_7d_avg) / NULLIF(rolling_7d_avg, 0) > 0.3 THEN 'WARNING'
+         ELSE 'OK' END AS status
+FROM stats WHERE load_date = CURRENT_DATE;`}</CodeBox>
 
+        <Output>{`load_date    row_count  expected_avg  status
+2026-03-17   4,820      48,200        CRITICAL
+# Monday's orders table has 10% of its expected volume — alert fires
+# before any analyst opens a dashboard`}</Output>
 
-# APPROACH 2: Z-score based anomaly on numeric distributions
-# Alert if today's metric is more than 3 standard deviations from the recent mean
+        <SubSubTitle>Z-score anomaly on a numeric metric</SubSubTitle>
 
-def detect_metric_anomaly(
-    metric_name: str,
-    today_value: float,
-    historical_values: list[float],
-    z_threshold: float = 3.0,
-) -> dict:
-    import statistics
+        <CodeBox label="detect_metric_anomaly() — flagging values far from the historical mean">{`import statistics
+
+def detect_metric_anomaly(metric_name: str, today_value: float,
+                           historical_values: list[float], z_threshold: float = 3.0) -> dict:
     if len(historical_values) < 7:
         return {'status': 'insufficient_history', 'z_score': None}
-
-    mean   = statistics.mean(historical_values)
-    stdev  = statistics.stdev(historical_values)
-
+    mean, stdev = statistics.mean(historical_values), statistics.stdev(historical_values)
     if stdev == 0:
         return {'status': 'no_variance', 'z_score': 0}
-
     z_score = abs(today_value - mean) / stdev
-    status  = 'ANOMALY' if z_score > z_threshold else 'OK'
+    return {'metric': metric_name, 'today_value': today_value, 'mean': round(mean, 2),
+            'z_score': round(z_score, 2), 'status': 'ANOMALY' if z_score > z_threshold else 'OK'}
 
-    return {
-        'metric':      metric_name,
-        'today_value': today_value,
-        'mean':        round(mean, 2),
-        'stdev':       round(stdev, 2),
-        'z_score':     round(z_score, 2),
-        'status':      status,
-    }
-
-# Example usage after Gold model runs:
-result = detect_metric_anomaly(
-    metric_name       = 'daily_revenue',
-    today_value       = query_gold_revenue(date='2026-03-17'),
-    historical_values = query_gold_revenue(last_n_days=30),
-    z_threshold       = 3.0,
-)
+result = detect_metric_anomaly('daily_revenue', query_gold_revenue(date='2026-03-17'),
+                                query_gold_revenue(last_n_days=30))
 if result['status'] == 'ANOMALY':
-    send_alert(f"Revenue anomaly: z_score={result['z_score']}, "
-               f"today={result['today_value']}, avg={result['mean']}")
+    send_alert(f"Revenue anomaly: z_score={result['z_score']}, today={result['today_value']}")`}</CodeBox>
 
+        <Output>{`>>> detect_metric_anomaly('daily_revenue', 812000.0, [420000]*30)
+{'metric': 'daily_revenue', 'today_value': 812000.0, 'mean': 420000.0, 'z_score': 4.1, 'status': 'ANOMALY'}`}</Output>
 
-# APPROACH 3: dbt-utils recency test — source freshness
-# models/silver/_schema.yml
-sources:
+        <SubSubTitle>dbt source freshness, and automated tracking with Elementary</SubSubTitle>
+
+        <CodeBox label="Freshness thresholds, and a package that learns normal ranges automatically">{`sources:
   - name: bronze
     tables:
       - name: orders
         loaded_at_field: ingested_at
         freshness:
-          warn_after:  {count: 2, period: hour}    # warn if > 2 hours stale
-          error_after: {count: 6, period: hour}    # error if > 6 hours stale
+          warn_after:  {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
 
-# Run: dbt source freshness
-# Returns: each source table's age vs threshold
-# Integrates with Airflow: run dbt source freshness as a task,
-# fail the DAG if any source exceeds the error threshold.
+# dbt source freshness — run as an Airflow task, fail the DAG if stale
 
+# Elementary (pip install elementary-data) auto-tracks, per model:
+# row count, null % per column, distinct value count — all per time period,
+# and alerts on deviation with no rules written by hand.`}</CodeBox>
 
-# APPROACH 4: Elementary dbt package — automated anomaly detection
-# Elementary adds automatic anomaly detection to every dbt model:
-# pip install elementary-data
-
-# In dbt_project.yml:
-# models:
-#   +elementary:
-#     time_bucket:
-#       period: day
-#       count: 1
-
-# Elementary automatically tracks for every model:
-#   - row count per period
-#   - null % per column per period
-#   - distinct value count per column per period
-# Alerts when any metric deviates beyond a configurable threshold.
-# No rule writing required — learns from historical patterns.`}</CodeBox>
+        <TryThis>
+          FreshCart&rsquo;s Saturday order volume is always lower than a weekday&rsquo;s. Would
+          a plain 7-day rolling average correctly flag a broken Saturday pipeline,
+          or would it also flag every normal Saturday as anomalous? Check your
+          answer against the Error Library at the end of this module.
+        </TryThis>
       </section>
 
       <Divider />
@@ -488,173 +376,78 @@ sources:
         <SectionTitle>Great Expectations and Soda — Pipeline-Native Quality Frameworks</SectionTitle>
 
         <Para>
-          dbt tests run after the transformation step. Great Expectations and
-          Soda can run at any point in the pipeline — on raw files before ingestion,
-          on Bronze data before Silver transformation, or on API responses before
-          they are written to the lake. They are particularly valuable for
-          validating data quality at the source boundary, before bad data enters
-          the Medallion Architecture.
+          dbt tests run after transformation. Great Expectations and Soda can run
+          anywhere in the pipeline — on a raw vendor file before it&rsquo;s even
+          ingested, which is exactly where FreshCart validates incoming delivery
+          files before they touch Bronze.
         </Para>
 
-        <SubTitle>Great Expectations — expectations suites in Python</SubTitle>
+        <SubSubTitle>Great Expectations — validating a file before it&rsquo;s ingested</SubSubTitle>
 
-        <CodeBox label="Great Expectations — validate a file before ingestion">{`"""
-Great Expectations: validate a vendor CSV file
-before loading it to Bronze.
-If validation fails: send file to quarantine, alert, do not load.
-"""
-import great_expectations as gx
+        <CodeBox label="validate_vendor_file() — quarantine on failure, never load bad data">{`import great_expectations as gx
 from great_expectations.core.batch import RuntimeBatchRequest
 from pathlib import Path
 import pandas as pd
 
-context = gx.get_context()   # loads configuration from great_expectations.yml
+context = gx.get_context()
 
 def validate_vendor_file(file_path: str, pipeline_run_id: str) -> bool:
-    """
-    Validate a vendor CSV against defined expectations.
-    Returns True if all critical expectations pass.
-    Quarantines file and alerts if critical expectations fail.
-    """
+    """Validate a vendor CSV against an expectation suite. Quarantines on failure."""
     df = pd.read_csv(file_path)
-
-    # Create a batch from the DataFrame
     batch_request = RuntimeBatchRequest(
-        datasource_name   = "pandas_datasource",
-        data_connector_name = "runtime_data_connector",
-        data_asset_name   = "vendor_deliveries",
-        runtime_parameters = {"batch_data": df},
-        batch_identifiers  = {"run_id": pipeline_run_id},
+        datasource_name='pandas_datasource', data_connector_name='runtime_data_connector',
+        data_asset_name='vendor_deliveries', runtime_parameters={'batch_data': df},
+        batch_identifiers={'run_id': pipeline_run_id},
     )
-
-    # Run the expectation suite against the batch
-    checkpoint_result = context.run_checkpoint(
-        checkpoint_name = "vendor_deliveries_checkpoint",
-        validations     = [{
-            "batch_request":      batch_request,
-            "expectation_suite_name": "vendor_deliveries.critical",
-        }],
+    result = context.run_checkpoint(
+        checkpoint_name='vendor_deliveries_checkpoint',
+        validations=[{'batch_request': batch_request, 'expectation_suite_name': 'vendor_deliveries.critical'}],
     )
-
-    success = checkpoint_result.success
-
-    if not success:
-        # Move to quarantine, log, alert
+    if not result.success:
         quarantine_path = Path('/data/quarantine') / Path(file_path).name
         Path(file_path).rename(quarantine_path)
-        send_alert(
-            f'Vendor file failed validation: {file_path}. '
-            f'Quarantined at: {quarantine_path}. '
-            f'See GE report for details.'
-        )
+        send_alert(f'Vendor file failed validation: {file_path}. Quarantined at: {quarantine_path}.')
         return False
+    return True`}</CodeBox>
 
-    return True
+        <CodeBox label="The expectation suite itself — one line per rule">{`# suite.add_expectation(gx.expectations.ExpectColumnValuesToNotBeNull(column="delivery_id"))
+# suite.add_expectation(gx.expectations.ExpectColumnValuesToBeUnique(column="delivery_id"))
+# suite.add_expectation(gx.expectations.ExpectColumnValuesToBeBetween(
+#     column="delivery_fee", min_value=0, max_value=5000, mostly=0.99))
+# suite.add_expectation(gx.expectations.ExpectTableRowCountToBeBetween(min_value=1000, max_value=500000))`}</CodeBox>
 
+        <Output>{`INFO Validating vendor file: shipfast_weekly_2026-03-17.csv
+FAIL ExpectColumnValuesToBeBetween(delivery_fee): 3.2% of values exceed max_value=5000
+WARNING Vendor file failed validation — quarantined at /data/quarantine/shipfast_weekly_2026-03-17.csv`}</Output>
 
-# EXPECTATION SUITE DEFINITION (vendor_deliveries.critical):
-# Created via GE CLI: great_expectations suite new
+        <SubSubTitle>Soda — SQL-native checks, straight against the warehouse</SubSubTitle>
 
-# suite.add_expectation(
-#     gx.expectations.ExpectColumnValuesToNotBeNull(
-#         column="delivery_id",
-#         result_format="SUMMARY",
-#     )
-# )
-# suite.add_expectation(
-#     gx.expectations.ExpectColumnValuesToBeUnique(column="delivery_id")
-# )
-# suite.add_expectation(
-#     gx.expectations.ExpectColumnValuesToBeBetween(
-#         column="delivery_fee",
-#         min_value=0,
-#         max_value=5000,
-#         mostly=0.99,    # allow 1% exceptions (outliers)
-#     )
-# )
-# suite.add_expectation(
-#     gx.expectations.ExpectColumnValuesToMatchRegex(
-#         column="delivery_date",
-#         regex=r"^\d{4}-\d{2}-\d{2}\$",  # YYYY-MM-DD format
-#     )
-# )
-# suite.add_expectation(
-#     gx.expectations.ExpectTableRowCountToBeBetween(
-#         min_value=1000,
-#         max_value=500000,
-#     )
-# )`}</CodeBox>
-
-        <SubTitle>Soda — SQL-native quality checks with YAML configuration</SubTitle>
-
-        <CodeBox label="Soda — declarative quality checks on warehouse tables">{`# Soda is YAML-based quality checking that runs SQL against your warehouse.
-# Simpler than Great Expectations for SQL-native checks.
-# Integrates directly with Airflow, Spark, dbt.
-
-# SODA CHECK FILE: checks/silver_orders.yml
-checks for silver_orders:
-
-  # Completeness:
+        <CodeBox label="checks/silver_orders.yml">{`checks for silver_orders:
   - row_count > 10000:
       name: Minimum row count — pipeline produced data
   - missing_count(order_id) = 0:
       name: No missing order IDs
-  - missing_percent(customer_id) < 0.1:
-      name: Customer ID present on at least 99.9% of orders
-
-  # Uniqueness:
   - duplicate_count(order_id) = 0:
       name: No duplicate order IDs
-
-  # Validity:
   - invalid_count(status) = 0:
       name: All statuses are valid
-      valid values: [placed, confirmed, preparing, ready,
-                     picked_up, delivering, delivered, cancelled]
+      valid values: [placed, confirmed, preparing, ready, picked_up, delivering, delivered, cancelled]
   - min(order_amount) >= 0:
       name: No negative order amounts
-  - max(order_amount) < 500000:
-      name: No suspiciously large amounts
-
-  # Timeliness:
   - freshness(updated_at) < 2h:
-      name: Data is less than 2 hours old
+      name: Data is less than 2 hours old`}</CodeBox>
 
-  # Custom SQL check:
-  - failed rows:
-      name: Delivered orders must have delivered_at populated
-      fail query: |
-        SELECT order_id FROM silver_orders
-        WHERE status = 'delivered'
-          AND delivered_at IS NULL
-
-# RUN SODA CHECKS:
-# soda scan -d freshmart_snowflake checks/silver_orders.yml
-
-# AIRFLOW INTEGRATION:
-from airflow.operators.python import PythonOperator
-
-def run_soda_checks(**context):
+        <CodeBox label="Wiring Soda into the DAG as a quality gate between Silver and Gold">{`def run_soda_checks(**context):
     from soda.scan import Scan
     scan = Scan()
-    scan.set_data_source_name("freshmart_snowflake")
-    scan.add_configuration_yaml_file(file_path="soda_config.yml")
-    scan.add_sodacl_yaml_files(path="checks/silver_orders.yml")
-    scan.set_scan_definition_name("silver_orders_daily")
+    scan.set_data_source_name('freshcart_snowflake')
+    scan.add_sodacl_yaml_files(path='checks/silver_orders.yml')
     scan.execute()
-    if scan.has_error_logs() or scan.get_error_count() > 0:
-        raise ValueError(
-            f"Soda checks failed: {scan.get_error_count()} errors. "
-            f"See Soda Cloud for details."
-        )
+    if scan.has_error_logs():
+        raise ValueError(f'Soda checks failed: {scan.get_error_count()} errors.')
 
-quality_check_task = PythonOperator(
-    task_id='soda_silver_orders',
-    python_callable=run_soda_checks,
-)
-
-dbt_silver_task >> quality_check_task >> dbt_gold_task
-# Quality gate between Silver and Gold: Gold only runs if checks pass`}</CodeBox>
+quality_check_task = PythonOperator(task_id='soda_silver_orders', python_callable=run_soda_checks)
+dbt_silver_task >> quality_check_task >> dbt_gold_task   # Gold only runs if checks pass`}</CodeBox>
       </section>
 
       <Divider />
@@ -665,100 +458,49 @@ dbt_silver_task >> quality_check_task >> dbt_gold_task
         <SectionTitle>Data Contracts — Quality Agreements With Source Teams</SectionTitle>
 
         <Para>
-          A data contract is a formal, versioned agreement between a data producer
-          (the team that owns a source system) and a data consumer (the data
-          engineering team that ingests it) that defines what data will be provided,
-          in what format, with what quality guarantees, and on what schedule. It
-          is enforced at ingestion time — violations are caught at the source
-          boundary rather than discovered in Gold tables hours later.
+          A data contract is a formal, versioned agreement between a data
+          producer (the team that owns a source system) and a data consumer
+          (data engineering) defining what data will be provided, in what
+          format, with what quality guarantees. It moves quality responsibility
+          to the source — enforced at ingestion, not discovered in Gold hours later.
         </Para>
 
-        <Para>
-          Data contracts are the most powerful quality intervention available
-          because they move quality responsibility to the source. When source
-          teams know their API or data export is validated against a contract,
-          they own the quality of their output rather than discovering problems
-          through an angry email from the data engineering team.
-        </Para>
+        <SubSubTitle>The contract itself</SubSubTitle>
 
-        <CodeBox label="Data contract definition — the structure and enforcement">{`# DATA CONTRACT: orders_api_v2
-# Producer: FreshCart Orders Service Team
-# Consumer: Data Engineering
-# Effective: 2026-01-01
-# Version:   2.3.1
+        <CodeBox label="contracts/orders_api_v2.yml">{`id: orders_api_v2
+version: 2.3.1
+owner: orders-team@freshcart.com
+consumer: data-engineering@freshcart.com
 
-# contracts/orders_api_v2.yml
-id:           orders_api_v2
-version:      2.3.1
-status:       active
-owner:        orders-team@freshmart.com
-consumer:     data-engineering@freshmart.com
-
-# SLA commitments:
 sla:
-  schedule:   "every 15 minutes"
+  schedule: "every 15 minutes"
   latency_sla: "data available within 5 minutes of order event"
-  uptime:     "99.5% monthly"
 
-# Schema contract:
 schema:
   fields:
     - name: order_id
       type: integer
       required: true
       unique: true
-      description: "Unique order identifier"
-
-    - name: customer_id
-      type: integer
-      required: true
-      description: "Customer who placed this order"
-
     - name: order_amount
       type: decimal(10, 2)
       required: true
-      constraints:
-        min: 0
-        max: 500000
-
+      constraints: {min: 0, max: 500000}
     - name: status
       type: string
       required: true
-      allowed_values:
-        - placed
-        - confirmed
-        - preparing
-        - ready
-        - picked_up
-        - delivering
-        - delivered
-        - cancelled
+      allowed_values: [placed, confirmed, preparing, ready, picked_up, delivering, delivered, cancelled]
 
-    - name: created_at
-      type: timestamp_tz
-      required: true
-
-    - name: updated_at
-      type: timestamp_tz
-      required: true
-
-# Quality commitments (what producer guarantees):
 quality:
-  completeness:
-    - "order_id is never null"
-    - "status is never null"
-    - "row_count is within ±20% of 7-day rolling average"
-
-  timeliness:
-    - "data delivered within 5 minutes of event"
-    - "no more than 0.1% late-arriving records beyond 30 minutes"
-
+  completeness: ["order_id is never null", "row_count is within ±20% of 7-day rolling average"]
+  timeliness: ["data delivered within 5 minutes of event"]
   schema_changes:
     breaking_change_notice: "30 days minimum before any breaking change"
-    additive_change_notice: "7 days minimum before adding new fields"
+    additive_change_notice: "7 days minimum before adding new fields"`}</CodeBox>
 
-# CONTRACT ENFORCEMENT IN PYTHON:
-from dataclasses import dataclass, field
+        <SubSubTitle>Enforcing it against real data</SubSubTitle>
+
+        <CodeBox label="validate_against_contract() — turns the YAML into actual checks">{`from dataclasses import dataclass
 from typing import Any
 import yaml
 
@@ -767,134 +509,73 @@ class ContractViolation:
     field: str
     constraint: str
     actual_value: Any
-    severity: str   # 'error' | 'warning'
+    severity: str
 
-def validate_against_contract(
-    df,
-    contract_path: str,
-) -> list[ContractViolation]:
-    """
-    Validate a DataFrame against a data contract YAML.
-    Returns list of violations (empty = passes contract).
-    """
+def validate_against_contract(df, contract_path: str) -> list[ContractViolation]:
+    """Returns list of violations. Empty list = contract satisfied."""
     with open(contract_path) as f:
         contract = yaml.safe_load(f)
-
     violations = []
 
     for field_spec in contract['schema']['fields']:
-        field_name = field_spec['name']
-
-        # Required field check:
-        if field_spec.get('required') and field_name not in df.columns:
-            violations.append(ContractViolation(
-                field=field_name, constraint='required_field_missing',
-                actual_value=None, severity='error',
-            ))
+        name = field_spec['name']
+        if field_spec.get('required') and name not in df.columns:
+            violations.append(ContractViolation(name, 'required_field_missing', None, 'error'))
             continue
-
         if field_spec.get('required'):
-            null_count = df[field_name].isna().sum()
-            if null_count > 0:
-                violations.append(ContractViolation(
-                    field=field_name, constraint='not_null',
-                    actual_value=null_count, severity='error',
-                ))
-
-        # Allowed values check:
+            nulls = df[name].isna().sum()
+            if nulls > 0:
+                violations.append(ContractViolation(name, 'not_null', nulls, 'error'))
         if 'allowed_values' in field_spec:
-            invalid = df[field_name].dropna()[
-                ~df[field_name].dropna().isin(field_spec['allowed_values'])
-            ]
+            invalid = df[name].dropna()[~df[name].dropna().isin(field_spec['allowed_values'])]
             if len(invalid) > 0:
-                violations.append(ContractViolation(
-                    field=field_name, constraint='allowed_values',
-                    actual_value=invalid.unique().tolist()[:5],
-                    severity='error',
-                ))
-
-        # Range constraints:
-        if 'constraints' in field_spec:
-            c = field_spec['constraints']
-            if 'min' in c:
-                below = (df[field_name] < c['min']).sum()
-                if below > 0:
-                    violations.append(ContractViolation(
-                        field=field_name, constraint=f'min_value_{c["min"]}',
-                        actual_value=below, severity='error',
-                    ))
+                violations.append(ContractViolation(name, 'allowed_values', invalid.unique().tolist()[:5], 'error'))
 
     return violations`}</CodeBox>
 
-        <SubTitle>Schema registry for data contracts</SubTitle>
+        <Output>{`>>> validate_against_contract(bronze_orders_df, 'contracts/orders_api_v2.yml')
+[ContractViolation(field='status', constraint='allowed_values',
+                    actual_value=['scheduled'], severity='error')]
+# exactly the violation from this module's Real World section below`}</Output>
 
-        <CodeBox label="Schema registry — version control for data contracts">{`# A schema registry is a central repository of data contract schemas.
-# Producers register their schemas. Consumers validate against registered schemas.
-# Breaking changes are detected before they reach production.
+        <SubSubTitle>Detecting breaking changes before they ship</SubSubTitle>
 
-# CONFLUENT SCHEMA REGISTRY (for Kafka/CDC events — covered in Module 24)
-# For warehouse/API contracts: use a Git-based schema registry.
+        <Para>
+          Contracts live in Git as versioned files, so a breaking-change
+          detector can run in CI on every PR that touches one — before the
+          source team&rsquo;s change ever reaches production.
+        </Para>
 
-# STRUCTURE: Git repository as schema registry
-# contracts/
-#   orders_api/
-#     v1.0.0.yml   ← original schema
-#     v2.0.0.yml   ← breaking change (removed a field)
-#     v2.3.1.yml   ← current
-#   payments_api/
-#     v1.0.0.yml
-#     v1.2.0.yml   ← current
-#   CHANGELOG.md   ← all breaking changes documented
-
-# CI PIPELINE CHECK: when orders_api schema changes, run validation
-# .github/workflows/contract_check.yml:
-# on:
-#   pull_request:
-#     paths:
-#       - 'contracts/orders_api/**'
-# jobs:
-#   validate:
-#     steps:
-#       - run: python validate_contract_backwards_compatible.py
-
-def is_breaking_change(old_schema: dict, new_schema: dict) -> list[str]:
-    """
-    Detect breaking changes between two contract versions.
-    Returns list of breaking change descriptions.
-    """
+        <CodeBox label="is_breaking_change() — comparing two contract versions">{`def is_breaking_change(old_schema: dict, new_schema: dict) -> list[str]:
     breaking = []
+    old_fields = {f['name']: f for f in old_schema['schema']['fields']}
+    new_fields = {f['name']: f for f in new_schema['schema']['fields']}
 
-    old_fields  = {f['name']: f for f in old_schema['schema']['fields']}
-    new_fields  = {f['name']: f for f in new_schema['schema']['fields']}
-
-    # Field removed → breaking
     for name in old_fields:
         if name not in new_fields:
             breaking.append(f"Field '{name}' removed — consumers may break")
 
-    # Required field added → breaking (existing data has no value)
     for name, spec in new_fields.items():
         if name not in old_fields and spec.get('required'):
             breaking.append(f"New required field '{name}' added — existing data invalid")
 
-    # Field type changed → breaking
     for name in old_fields:
-        if name in new_fields:
-            old_type = old_fields[name]['type']
-            new_type = new_fields[name]['type']
-            if old_type != new_type:
-                breaking.append(f"Field '{name}' type changed: {old_type} → {new_type}")
+        if name in new_fields and old_fields[name]['type'] != new_fields[name]['type']:
+            breaking.append(f"Field '{name}' type changed: {old_fields[name]['type']} → {new_fields[name]['type']}")
 
-    # Allowed values narrowed → breaking
     for name in old_fields:
-        if name in new_fields:
-            old_allowed = set(old_fields[name].get('allowed_values', []))
-            new_allowed = set(new_fields[name].get('allowed_values', []))
-            if old_allowed and new_allowed and not new_allowed.issuperset(old_allowed):
-                removed = old_allowed - new_allowed
-                breaking.append(f"Field '{name}': allowed values {removed} removed")
+        old_allowed = set(old_fields.get(name, {}).get('allowed_values', []))
+        new_allowed = set(new_fields.get(name, {}).get('allowed_values', []))
+        if old_allowed and new_allowed and not new_allowed.issuperset(old_allowed):
+            breaking.append(f"Field '{name}': allowed values {old_allowed - new_allowed} removed")
 
     return breaking`}</CodeBox>
+
+        <Output>{`$ python validate_contract_backwards_compatible.py --old v2.2.0.yml --new v2.3.0.yml
+Field 'status': breaking change NOT detected (new value 'scheduled' only ADDS an option)
+✓ Additive change — requires 7-day notice, not 30. PR may proceed.
+# had this check existed, it's exactly what should have caught the enum
+# addition described in this module's Real World section`}</Output>
       </section>
 
       <Divider />
@@ -906,205 +587,168 @@ def is_breaking_change(old_schema: dict, new_schema: dict) -> list[str]:
 
         <Para>
           Tests and contracts catch specific known problems. Quality monitoring
-          provides the ongoing operational picture — which tables are healthy,
-          which pipelines are meeting their SLAs, and what the trend of quality
-          issues looks like over time. This requires a monitoring schema in the
-          data platform itself.
+          gives the ongoing operational picture — which tables are healthy,
+          which pipelines meet their SLAs, and whether quality is trending
+          better or worse over time.
         </Para>
 
-        <CodeBox label="Quality monitoring schema — tracking all quality checks over time">{`-- QUALITY MONITORING SCHEMA:
+        <SubSubTitle>One table records every check result, from every tool</SubSubTitle>
 
-CREATE TABLE monitoring.data_quality_results (
-    check_id         UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
-    run_id           UUID         NOT NULL,       -- pipeline run ID
-    pipeline_name    VARCHAR(100) NOT NULL,
-    table_name       VARCHAR(200) NOT NULL,
-    check_name       VARCHAR(200) NOT NULL,
-    check_type       VARCHAR(50)  NOT NULL,       -- 'dbt_test', 'soda', 'custom', 'anomaly'
-    dimension        VARCHAR(50),                 -- 'completeness', 'uniqueness', etc.
-    status           VARCHAR(10)  NOT NULL,       -- 'pass', 'fail', 'warn'
-    severity         VARCHAR(10)  NOT NULL,       -- 'error', 'warning', 'info'
-    row_count        BIGINT,                      -- rows checked
-    failure_count    BIGINT,                      -- rows that failed
-    failure_rate     DECIMAL(6,4),               -- failure_count / row_count
-    check_value      DECIMAL(20,4),               -- the actual measured value
-    threshold_value  DECIMAL(20,4),               -- the expected/threshold value
-    message          TEXT,                        -- human-readable explanation
-    checked_at       TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+        <CodeBox label="monitoring.data_quality_results — dbt, Soda, and custom checks all write here">{`CREATE TABLE monitoring.data_quality_results (
+    check_id      UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    run_id        UUID NOT NULL,
+    table_name    VARCHAR(200) NOT NULL,
+    check_name    VARCHAR(200) NOT NULL,
+    check_type    VARCHAR(50)  NOT NULL,   -- 'dbt_test', 'soda', 'custom', 'anomaly'
+    status        VARCHAR(10)  NOT NULL,   -- 'pass', 'fail', 'warn'
+    failure_count BIGINT,
+    failure_rate  DECIMAL(6,4),
+    message       TEXT,
+    checked_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Indexes for common query patterns:
-CREATE INDEX idx_dq_table_date ON monitoring.data_quality_results
-    (table_name, checked_at);
-CREATE INDEX idx_dq_status_date ON monitoring.data_quality_results
-    (status, checked_at) WHERE status IN ('fail', 'warn');
+CREATE INDEX idx_dq_status_date ON monitoring.data_quality_results (status, checked_at)
+    WHERE status IN ('fail', 'warn');`}</CodeBox>
 
+        <SubSubTitle>The three queries that turn raw checks into an operational picture</SubSubTitle>
 
--- DAILY QUALITY SCORECARD:
-SELECT
-    table_name,
-    DATE(checked_at)                           AS check_date,
-    COUNT(*)                                   AS total_checks,
-    SUM(CASE WHEN status = 'pass' THEN 1 ELSE 0 END) AS passed,
-    SUM(CASE WHEN status = 'fail' THEN 1 ELSE 0 END) AS failed,
-    SUM(CASE WHEN status = 'warn' THEN 1 ELSE 0 END) AS warnings,
-    ROUND(SUM(CASE WHEN status = 'pass' THEN 1 ELSE 0 END)::NUMERIC
-          / COUNT(*) * 100, 1)                 AS pass_rate_pct
+        <CodeBox label="Daily scorecard, week-over-week trend, and today's failures">{`-- Daily pass rate per table
+SELECT table_name, DATE(checked_at) check_date,
+    ROUND(SUM(CASE WHEN status='pass' THEN 1 ELSE 0 END)::NUMERIC / COUNT(*) * 100, 1) pass_rate_pct
 FROM monitoring.data_quality_results
-WHERE checked_at >= CURRENT_DATE - 30
-GROUP BY 1, 2
-ORDER BY 2 DESC, 5 DESC;
+WHERE checked_at >= CURRENT_DATE - 30 GROUP BY 1, 2 ORDER BY 2 DESC;
 
-
--- QUALITY TREND (is quality improving or degrading?):
+-- Is quality improving or degrading week over week?
 WITH weekly AS (
-    SELECT
-        DATE_TRUNC('week', checked_at)         AS week_start,
-        table_name,
-        SUM(CASE WHEN status = 'fail' THEN 1 ELSE 0 END) AS failures
-    FROM monitoring.data_quality_results
-    WHERE checked_at >= CURRENT_DATE - 90
-    GROUP BY 1, 2
+    SELECT DATE_TRUNC('week', checked_at) week_start, table_name,
+           SUM(CASE WHEN status='fail' THEN 1 ELSE 0 END) failures
+    FROM monitoring.data_quality_results WHERE checked_at >= CURRENT_DATE - 90 GROUP BY 1, 2
 )
-SELECT
-    week_start,
-    table_name,
-    failures,
-    LAG(failures) OVER (PARTITION BY table_name ORDER BY week_start)
-                                               AS prev_week_failures,
-    failures - LAG(failures) OVER (PARTITION BY table_name ORDER BY week_start)
-                                               AS week_over_week_change
-FROM weekly
-ORDER BY week_start DESC, table_name;
+SELECT week_start, table_name, failures,
+    failures - LAG(failures) OVER (PARTITION BY table_name ORDER BY week_start) week_over_week_change
+FROM weekly ORDER BY week_start DESC;
 
-
--- ALERT QUERY: tables with > 10% failure rate today:
+-- Tables failing right now, worst first
 SELECT table_name, check_name, failure_rate, message
 FROM monitoring.data_quality_results
-WHERE DATE(checked_at) = CURRENT_DATE
-  AND status = 'fail'
-  AND severity = 'error'
+WHERE DATE(checked_at) = CURRENT_DATE AND status = 'fail' AND severity = 'error'
 ORDER BY failure_rate DESC;`}</CodeBox>
+
+        <Output>{`table_name       check_date   pass_rate_pct
+silver_orders    2026-03-17   97.1
+silver_customers 2026-03-17   100.0
+silver_payments  2026-03-17   84.3   ← worth a look`}</Output>
       </section>
 
       <Divider />
 
-      {/* ── Part 07 — dbt Expectations and the Quality Pipeline ──────── */}
+      {/* ── Part 07 — Building the Quality Pipeline ──────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 07 — Building the Quality Pipeline" />
         <SectionTitle>Putting It Together — The Quality-First Pipeline Architecture</SectionTitle>
 
         <Para>
-          A quality-first pipeline integrates tests and validation at every
-          stage, with results flowing into the monitoring system. The goal
-          is to make quality failure visible before analysts are affected —
-          not after.
+          A quality-first pipeline integrates tests at every stage, with a
+          quality gate between each layer that blocks downstream work on
+          failure — the goal is to make a quality failure visible before
+          analysts are affected, not after.
         </Para>
 
-        <CodeBox label="Quality-first pipeline architecture — Airflow DAG with quality gates">{`# QUALITY-GATED AIRFLOW DAG:
-# Each pipeline stage has a quality gate that blocks downstream tasks.
-# Quality results are written to monitoring.data_quality_results.
+        <SubSubTitle>Bronze and Silver gates</SubSubTitle>
 
-with DAG('freshmart_morning_pipeline', ...) as dag:
+        <CodeBox label="dags/freshcart_morning_pipeline.py — extract, then two Silver-side gates">{`with DAG('freshcart_morning_pipeline', ...) as dag:
 
-    # ── Stage 1: Extract → Bronze ─────────────────────────────────────────────
-    extract_orders = PythonOperator(
-        task_id='extract_orders',
-        python_callable=run_extraction,
-    )
+    extract_orders = PythonOperator(task_id='extract_orders', python_callable=run_extraction)
 
-    # Quality gate 1: validate Bronze source freshness and schema
     bronze_quality = BashOperator(
         task_id='bronze_quality_check',
         bash_command='dbt source freshness --select source:bronze.orders',
-        # Fails DAG if source is stale beyond error threshold
     )
 
-    # ── Stage 2: Bronze → Silver ──────────────────────────────────────────────
-    dbt_silver = BashOperator(
-        task_id='dbt_silver',
-        bash_command=(
-            'dbt run --select staging.* silver.* '
-            '--vars \'{"run_date": "{{ ds }}"}\''
-        ),
-    )
+    dbt_silver = BashOperator(task_id='dbt_silver',
+        bash_command='dbt run --select staging.* silver.* --vars \\'{"run_date": "{{ ds }}"}\\'')
 
-    # Quality gate 2: dbt tests on Silver models
-    silver_tests = BashOperator(
-        task_id='silver_quality_tests',
-        bash_command=(
-            'dbt test --select silver.* '
-            '--store-failures '      # save failing rows to audit tables
-            '--vars \'{"run_date": "{{ ds }}"}\''
-        ),
-    )
+    silver_tests = BashOperator(task_id='silver_quality_tests',
+        bash_command='dbt test --select silver.* --store-failures')`}</CodeBox>
 
-    # Quality gate 3: Soda anomaly check on Silver
-    def soda_silver_check(**context):
-        from soda.scan import Scan
-        scan = Scan()
-        scan.set_data_source_name('freshmart_snowflake')
-        scan.add_sodacl_yaml_files(path='checks/silver_orders.yml')
-        scan.execute()
+        <SubSubTitle>A Soda gate, then Gold</SubSubTitle>
 
-        # Write results to monitoring schema:
-        write_soda_results_to_monitoring(scan, context['run_id'])
+        <CodeBox label="Anomaly check on Silver, then the Gold build and its own tests">{`def soda_silver_check(**context):
+    from soda.scan import Scan
+    scan = Scan()
+    scan.set_data_source_name('freshcart_snowflake')
+    scan.add_sodacl_yaml_files(path='checks/silver_orders.yml')
+    scan.execute()
+    write_soda_results_to_monitoring(scan, context['run_id'])
+    if scan.has_error_logs():
+        raise ValueError('Soda anomaly check failed for Silver orders')
 
-        if scan.has_error_logs():
-            raise ValueError(f'Soda anomaly check failed for Silver orders')
+silver_anomaly = PythonOperator(task_id='silver_anomaly_check', python_callable=soda_silver_check)
+dbt_gold  = BashOperator(task_id='dbt_gold', bash_command='dbt run --select gold.*')
+gold_tests = BashOperator(task_id='gold_quality_tests', bash_command='dbt test --select gold.*')`}</CodeBox>
 
-    silver_anomaly = PythonOperator(
-        task_id='silver_anomaly_check',
-        python_callable=soda_silver_check,
-    )
+        <SubSubTitle>Reporting, and the full dependency graph</SubSubTitle>
 
-    # ── Stage 3: Silver → Gold ────────────────────────────────────────────────
-    dbt_gold = BashOperator(
-        task_id='dbt_gold',
-        bash_command='dbt run --select gold.*',
-    )
+        <CodeBox label="A quality summary posted to Slack, whether the run passed or not">{`def post_pipeline_quality_report(**context):
+    result = query_quality_results(date=context['ds'])
+    send_slack_message(channel='#data-quality',
+        text=f'Pipeline quality: {result.pass_rate}% checks passed. {result.total_failures} failures.')
 
-    # Quality gate 4: Gold reconciliation tests
-    gold_tests = BashOperator(
-        task_id='gold_quality_tests',
-        bash_command='dbt test --select gold.*',
-    )
+quality_report = PythonOperator(task_id='quality_report', python_callable=post_pipeline_quality_report,
+                                 trigger_rule='all_done')   # runs whether upstream passed or failed
 
-    # ── Stage 4: Notify if quality passed ────────────────────────────────────
-    def post_pipeline_quality_report(**context):
-        """Send quality summary to Slack after successful pipeline."""
-        result = query_quality_results(date=context['ds'])
-        send_slack_message(
-            channel='#data-quality',
-            text=(
-                f'Pipeline quality: {result.pass_rate}% checks passed. '
-                f'{result.total_failures} failures. '
-                f'See: https://quality.freshmart.internal/'
-            ),
-        )
+(extract_orders >> bronze_quality >> dbt_silver >> silver_tests
+ >> silver_anomaly >> dbt_gold >> gold_tests >> quality_report)`}</CodeBox>
 
-    quality_report = PythonOperator(
-        task_id='quality_report',
-        python_callable=post_pipeline_quality_report,
-        trigger_rule='all_done',    # runs whether upstream passed or failed
-    )
-
-    # ── Dependency graph ──────────────────────────────────────────────────────
-    (extract_orders
-     >> bronze_quality
-     >> dbt_silver
-     >> silver_tests
-     >> silver_anomaly
-     >> dbt_gold
-     >> gold_tests
-     >> quality_report)`}</CodeBox>
+        <Output>{`Graph view — freshcart_morning_pipeline
+extract_orders → bronze_quality → dbt_silver → silver_tests → silver_anomaly
+              → dbt_gold → gold_tests → quality_report
+Slack: "Pipeline quality: 97.1% checks passed. 3 failures."`}</Output>
       </section>
 
       <Divider />
 
-      {/* ── Part 08 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 08 — Misconceptions ──────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 08 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data Quality</SectionTitle>
+
+        {[
+          {
+            wrong: '"dbt tests and anomaly detection cover the same ground, so one is enough"',
+            right: 'They catch fundamentally different failure classes — Part 02\'s tests are deterministic checks against rules someone already anticipated (not_null, accepted_values), while Part 03\'s anomaly detection catches deviations nobody wrote a rule for. This module\'s Real World scenario is exactly a case a rule DID catch (accepted_values) three days late — the Z-score anomaly on row count would have caught it the same evening.',
+          },
+          {
+            wrong: '"A data contract is just documentation of the schema — it doesn\'t actually prevent anything"',
+            right: 'A contract only has teeth when it\'s enforced in CI on the PRODUCER\'s side, not just read by the consumer — Part 05\'s is_breaking_change() function is meant to run in the source team\'s own pipeline, blocking a breaking deploy before it ships. A contract nobody\'s CI checks is exactly documentation, which is precisely the gap the Real World incident exposes.',
+          },
+          {
+            wrong: '"Testing your expectation suite isn\'t necessary — the checks are obviously correct"',
+            right: 'An expectation suite is code, and code has bugs — this module\'s Error Library has a real example where ExpectTableRowCountToBeBetween(min_value=0, ...) let a completely empty file pass validation because zero technically satisfies "at least 0 rows." Test the test suite itself against edge cases before trusting it in production.',
+          },
+          {
+            wrong: '"More quality checks is always better, regardless of where you put them"',
+            right: 'Part 01\'s 10× cost-per-layer rule means the SAME check is worth roughly ten times more at Bronze than at Gold — prioritize catching problems as early as possible rather than adding redundant checks deep in the pipeline where the damage from a bad value has already propagated.',
+          },
+          {
+            wrong: '"A rolling 7-day average is a safe, generic default for row-count anomaly detection"',
+            right: 'It silently assumes no weekly seasonality — this module\'s Error Library documents exactly the failure mode where a business with lower weekend volume gets false CRITICAL alerts every single Monday, because the rolling average is diluted by two quiet days. Compare like days (Monday vs the last 4 Mondays) when the metric has a weekly pattern.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 09 — Real World ──────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 08 — Real World" />
+        <SectionTag text="// Part 09 — Real World" />
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12, fontFamily: 'var(--font-mono)' }}>
           💼 What This Looks Like at Work
         </div>
@@ -1116,89 +760,58 @@ with DAG('freshmart_morning_pipeline', ...) as dag:
           </div>
 
           <Para>
-            The orders application team added a new status value — "scheduled"
-            — for a new pre-order feature. They deployed it on Friday evening
-            without notifying the data engineering team. By Monday morning,
-            12,847 orders with status="scheduled" were rejected from Silver
-            by the accepted_values dbt test and sitting in the DLQ. The finance
-            dashboard showed no pre-order revenue. An analyst noticed on Tuesday.
+            The orders application team added a new status value — &ldquo;scheduled&rdquo;
+            — for a new pre-order feature, deployed Friday evening without
+            notifying data engineering. By Monday, 12,847 orders with{' '}
+            <code>status=&apos;scheduled&apos;</code> were rejected from Silver by the{' '}
+            <code>accepted_values</code> test and sitting in the DLQ. The finance
+            dashboard showed no pre-order revenue. An analyst noticed Tuesday.
           </Para>
 
-          <CodeBox label="Incident trace and quality system response">{`-- TUESDAY 09:15 — analyst reports revenue lower than expected
+          <CodeBox label="Diagnosis — from the monitoring table to the actual impact">{`-- STEP 1: check Silver dbt test failures since Friday
+SELECT run_id, check_name, failure_count, message FROM monitoring.data_quality_results
+WHERE table_name = 'silver_orders' AND status = 'fail' AND checked_at >= '2026-03-14';
+-- 47 runs, all: accepted_values_silver_orders_status  "Values not in set: ['scheduled']"
+-- ~600,000 rows total rejected across the 47 runs
 
--- STEP 1: Check Silver dbt test failures
-SELECT run_id, check_name, failure_count, message, checked_at
-FROM monitoring.data_quality_results
-WHERE table_name = 'silver_orders'
-  AND status = 'fail'
-  AND checked_at >= '2026-03-14'   -- since Friday
-ORDER BY checked_at DESC;
+-- STEP 2: confirm the root cause
+SELECT DISTINCT status FROM bronze.orders WHERE _bronze_date >= '2026-03-14';
+-- placed, confirmed, delivering, delivered, cancelled, scheduled ← new
 
--- Returns:
--- run-001  accepted_values_silver_orders_status  12847  "Values not in set: ['scheduled']"  2026-03-14 18:07
--- run-002  accepted_values_silver_orders_status  14203  "Values not in set: ['scheduled']"  2026-03-14 20:07
--- ... 47 more runs, all failing on the same check
+-- STEP 3: quantify impact
+SELECT SUM(order_amount) FROM bronze.orders WHERE status = 'scheduled';
+-- $4.82 million unloaded to Silver/Gold`}</CodeBox>
 
--- 12,847 to 14,203 rows rejected per run over 47 runs.
--- Total in DLQ: ~600,000 rows of pre-order data.
--- All rejected because 'scheduled' is not in VALID_STATUSES.
+          <CodeBox label="Fix and reprocess">{`# a) Update VALID_STATUSES in pipeline/validate.py to include 'scheduled'
+# b) Update dbt schema.yml accepted_values to include 'scheduled'
+# c) Bump the data contract version: contracts/orders_api_v2.yml
+$ python dlq_reprocess.py --pipeline orders_incremental --start-date 2026-03-14 --force-reload`}</CodeBox>
 
--- STEP 2: Verify the root cause
-SELECT DISTINCT status FROM bronze.orders
-WHERE _bronze_date >= '2026-03-14';
--- Returns: placed, confirmed, delivering, delivered, cancelled, scheduled ← new
+          <Output>{`DLQ reprocessing complete: attempted=598234 reprocessed=598234 failed=0
 
-SELECT COUNT(*), MIN(_bronze_date) FROM bronze.orders
-WHERE status = 'scheduled';
--- Returns: 598,234 rows, first seen: 2026-03-14 17:51
-
--- STEP 3: Impact assessment
-SELECT SUM(order_amount) AS unloaded_revenue
-FROM bronze.orders
-WHERE status = 'scheduled';
--- Returns: $4.82 million unloaded to Silver/Gold
-
--- STEP 4: Fix and reprocess
--- a) Update VALID_STATUSES in pipeline/validate.py to include 'scheduled'
--- b) Update dbt schema.yml accepted_values to include 'scheduled'
--- c) Update the data contract: contracts/orders_api_v2.yml version bump
--- d) Reprocess DLQ:
-python dlq_reprocess.py \
-    --pipeline orders_incremental \
-    --start-date 2026-03-14 \
-    --force-reload
-
--- STEP 5: Verify fix
 SELECT COUNT(*) FROM silver.orders WHERE status = 'scheduled';
--- Returns: 598,234 ← all reprocessed correctly
-
--- TOTAL IMPACT:
--- Data missing from Silver/Gold: 2 days and 14 hours
--- Revenue gap in dashboards: $4.82 million for 67 hours
--- Root cause: no data contract enforcement for enum changes
--- Prevention going forward:
---   Data contract updated to require 30-day notice for enum changes
---   New CI check on contracts/orders_api_v2.yml: any new allowed_values
---   must be reviewed and approved by data engineering before deployment
---   Elementary added for automated anomaly detection on Silver row counts
---   (the Z-score anomaly would have caught this Friday evening, not Tuesday)`}</CodeBox>
+-- 598,234 ← all reprocessed correctly`}</Output>
 
           <Para>
-            The incident was caught by dbt's accepted_values test — exactly as
-            designed. The failure was in the process: no data contract enforcement
-            meant the orders team had no way to know their enum change would break
-            the downstream pipeline. The prevention is the data contract with a CI
-            check that blocks source deployment if enum values are added without
-            prior notification to consumers.
+            Total impact: data missing from Silver/Gold for 2 days 14 hours, a
+            $4.82 million revenue gap in dashboards for 67 hours. The incident
+            was caught by dbt&rsquo;s <code>accepted_values</code> test exactly as
+            designed — the failure was in process, not tooling: no data
+            contract enforcement meant the orders team had no way to know their
+            enum change would break the downstream pipeline. Going forward, the
+            contract now requires 30-day notice for enum changes, a CI check
+            blocks unreviewed <code>allowed_values</code> additions, and
+            Elementary was added for automated anomaly detection — the Z-score
+            check would have caught this Friday evening, not Tuesday.
           </Para>
         </div>
       </section>
 
       <Divider />
 
-      {/* ── Part 09 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 10 — Interview Prep ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 09 — Interview Prep" />
+        <SectionTag text="// Part 10 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
@@ -1284,6 +897,42 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Writing a row-count or NULL check but never testing the check itself against an empty or malformed input',
+            a: 'This module\'s Error Library has a real ExpectTableRowCountToBeBetween(min_value=0, ...) that let a completely empty file pass, because zero technically satisfies "at least zero rows." A quality check is code and needs its own test cases — an empty file, an all-null file, a file with one row — before it can be trusted.',
+          },
+          {
+            q: 'Setting every dbt test to severity: error without considering whether that\'s actually correct',
+            a: 'A relationships test between orders and customers set to error will fail the entire build the moment one order legitimately arrives before its customer record — Part 02\'s example deliberately uses severity: warn for exactly this case. Reserve error for primary keys and constraints that should truly never be violated.',
+          },
+          {
+            q: 'Building a data contract and never actually enforcing it in the producer\'s CI',
+            a: 'A contract that only the consumer reads is documentation, not enforcement — see this module\'s Misconceptions. Part 05\'s is_breaking_change() only prevents incidents like the Real World scenario if it runs as a required CI check in the SOURCE team\'s own pipeline, blocking their merge, not just informing data engineering after the fact.',
+          },
+          {
+            q: 'Treating anomaly detection alerts with the same urgency as dbt test failures',
+            a: 'An anomaly is a statistical deviation, not a confirmed violation — a real but unusual spike in orders (a flash sale) will trip a Z-score check without being a data problem at all. Anomaly alerts deserve investigation, not automatic pipeline aborts the way a failed not_null test does.',
+          },
+          {
+            q: 'Adding quality checks only at Gold because "that\'s what the dashboards read from"',
+            a: 'Part 01\'s 10× cost rule means the same check catches the same problem far cheaper at Bronze or Silver than at Gold — by the time bad data reaches Gold, it has already been transformed, aggregated, and in this module\'s Real World case, sat unnoticed for days. Push checks as far upstream as the data allows.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1344,7 +993,7 @@ The fifth step is fixing and reprocessing. Fix the root cause in code, then repr
         'The quality monitoring schema (monitoring.data_quality_results) records every check result: table, check name, status, failure count, failure rate, timestamp. Use it for: daily quality scorecards, trend analysis (quality improving or degrading?), SLA reporting, and post-incident investigation to determine when quality first degraded.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
