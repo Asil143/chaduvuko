@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -130,8 +173,8 @@ export default function IdempotencyAtomicityModule() {
       title="Idempotency, Atomicity, and Pipeline Restartability"
       description="The three properties that separate reliable pipelines from fragile ones — precise definitions, implementation at every layer, and automatic failure recovery."
       section="Data Engineering — Module 26"
-      readTime="60 min"
-      updatedAt="March 2026"
+      readTime="70 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why These Three Properties ─────────────────────── */}
@@ -150,12 +193,10 @@ export default function IdempotencyAtomicityModule() {
         <Para>
           Three properties distinguish a reliable pipeline from a fragile one.
           Idempotency means running the pipeline multiple times with the same input
-          always produces the same correct output — no duplicates, no data loss.
-          Atomicity means each unit of work either completes fully or not at all —
-          no partial states that leave the destination in an inconsistent condition.
-          Restartability means a pipeline that fails at any point can resume from
-          exactly where it stopped — no reprocessing data already written, no
-          skipping data not yet written.
+          always produces the same correct output. Atomicity means each unit of
+          work either completes fully or not at all. Restartability means a
+          pipeline that fails at any point can resume from exactly where it
+          stopped. This module builds all three around FreshCart&rsquo;s orders pipeline.
         </Para>
 
         <HighlightBox>
@@ -225,6 +266,13 @@ export default function IdempotencyAtomicityModule() {
           commits prevent partial states that make reruns produce different results.
           Together they form the correctness foundation of every production pipeline.
         </Callout>
+
+        <TryThis>
+          Ask of any pipeline you&rsquo;ve written: &ldquo;what happens if this runs twice for
+          the exact same input, back to back?&rdquo; If you don&rsquo;t know the answer with
+          certainty, that pipeline isn&rsquo;t idempotent yet — it just hasn&rsquo;t been
+          rerun in a way that exposed it.
+        </TryThis>
       </section>
 
       <Divider />
@@ -236,172 +284,96 @@ export default function IdempotencyAtomicityModule() {
 
         <Para>
           In mathematics, a function f is idempotent if f(f(x)) = f(x) — applying
-          it twice gives the same result as applying it once. In data engineering,
-          an idempotent pipeline run produces the same destination state whether it
-          executes once or twenty times for the same input parameters. This property
-          is not optional — it is the difference between a pipeline that can be
-          operated and one that requires a human to babysit every rerun.
+          it twice gives the same result as applying it once. An idempotent
+          pipeline run produces the same destination state whether it executes
+          once or twenty times for the same input parameters.
         </Para>
 
-        <SubTitle>The three forms of idempotency a pipeline needs</SubTitle>
+        <SubSubTitle>Form 1 — write-layer idempotency: upserts and UNIQUE constraints</SubSubTitle>
 
-        <CodeBox label="Idempotency at the write layer — upserts and UNIQUE constraints">{`# ── FORM 1: WRITE-LAYER IDEMPOTENCY ─────────────────────────────────────────
-# Every write operation to the destination must be idempotent.
-# The mechanism: upsert (INSERT with conflict handling) + UNIQUE constraint.
-
-# BAD: plain INSERT — NOT idempotent
+        <CodeBox label="Plain INSERT vs upsert — the difference a rerun exposes">{`-- BAD: plain INSERT — NOT idempotent
 INSERT INTO silver.orders (order_id, status, amount)
 VALUES (9284751, 'delivered', 380.00);
--- Run this twice → two rows with order_id = 9284751
--- Run after a failure and partial write → inconsistent duplicates
+-- run this twice → two rows with order_id = 9284751
 
-# GOOD: upsert — idempotent
-INSERT INTO silver.orders (order_id, status, amount, updated_at, ingested_at)
-VALUES (9284751, 'delivered', 380.00, '2026-03-17 20:14:32', NOW())
-ON CONFLICT (order_id)
-DO UPDATE SET
-    status     = EXCLUDED.status,
-    amount     = EXCLUDED.amount,
-    updated_at = EXCLUDED.updated_at,
-    ingested_at = NOW()
+-- GOOD: upsert — idempotent
+INSERT INTO silver.orders (order_id, status, amount, updated_at)
+VALUES (9284751, 'delivered', 380.00, '2026-03-17 20:14:32')
+ON CONFLICT (order_id) DO UPDATE SET
+    status = EXCLUDED.status, amount = EXCLUDED.amount, updated_at = EXCLUDED.updated_at
 WHERE silver.orders.updated_at < EXCLUDED.updated_at;
--- The WHERE clause prevents overwriting newer data with older data.
--- Run this N times → exactly one row, always with the latest values.
--- REQUIRES: UNIQUE constraint or PRIMARY KEY on order_id.
+-- the WHERE clause stops a replayed OLDER record from overwriting a newer one
+-- REQUIRES a UNIQUE constraint or PK on order_id — verify it exists:
+SELECT constraint_name FROM information_schema.table_constraints
+WHERE table_name = 'orders' AND constraint_type IN ('PRIMARY KEY', 'UNIQUE');`}</CodeBox>
 
--- Without the UNIQUE constraint, ON CONFLICT has nothing to conflict on:
--- PostgreSQL silently inserts a duplicate instead of updating.
--- Always verify:
-SELECT constraint_name, constraint_type
-FROM information_schema.table_constraints
-WHERE table_name = 'orders' AND constraint_type IN ('PRIMARY KEY', 'UNIQUE');
+        <Output>{`>>> run pipeline for 2026-03-17, twice in a row
+SELECT COUNT(*) FROM silver.orders WHERE order_date = '2026-03-17';
+-- 48,234  (identical after both runs — upsert did its job)`}</Output>
 
+        <SubSubTitle>Form 2 — extraction-layer idempotency: fixed windows, not relative ones</SubSubTitle>
 
-# ── FORM 2: EXTRACTION-LAYER IDEMPOTENCY ──────────────────────────────────────
-# The extraction query must produce the same result for the same parameters.
-# Fixed time windows, not relative windows.
-
-# BAD: relative window — NOT idempotent
+        <CodeBox label="A relative window changes on rerun; a fixed one never does">{`-- BAD: relative window — NOT idempotent
 SELECT * FROM orders WHERE updated_at > NOW() - INTERVAL '15 minutes';
--- A run at 06:00 extracts data from 05:45.
--- A rerun at 06:10 extracts data from 05:55 — DIFFERENT DATA.
--- Rows between 05:45 and 05:55 are missed on the rerun.
+-- a run at 06:00 extracts from 05:45; a rerun at 06:10 extracts from 05:55 —
+-- rows between 05:45 and 05:55 are silently missed on the rerun
 
-# GOOD: fixed window from checkpoint — idempotent
-# checkpoint = '2026-03-17 05:45:00'
-# source_now  = '2026-03-17 06:00:00' (fixed at run start, stored in run record)
+-- GOOD: fixed window, upper bound stored at run start
 SELECT * FROM orders
-WHERE updated_at > '2026-03-17 05:45:00'
-  AND updated_at <= '2026-03-17 06:00:00';
--- Run this at 06:00 or 06:10 or 06:30 — always extracts the same rows.
--- The upper bound is fixed when the run starts, not re-computed on retry.
+WHERE updated_at > '2026-03-17 05:45:00'   -- from checkpoint
+  AND updated_at <= '2026-03-17 06:00:00'; -- fixed at run start, not re-computed on retry`}</CodeBox>
 
+        <SubSubTitle>Form 3 — file-output idempotency: overwrite, not append</SubSubTitle>
 
-# ── FORM 3: FILE-OUTPUT IDEMPOTENCY ────────────────────────────────────────────
-# Writing files to S3 or a data lake must be idempotent.
+        <CodeBox label="Append duplicates on rerun; overwrite never does">{`# BAD: append — NOT idempotent (rerun adds duplicate rows to the same file)
+# with open('s3://bucket/orders/2026-03-17.csv', 'a') as f: f.write(new_rows)
 
-# BAD: append to existing file — NOT idempotent
-# with open('s3://bucket/orders/2026-03-17.csv', 'a') as f:
-#     f.write(new_rows)   # rerun appends duplicate rows to same file
+# GOOD: overwrite the partition — idempotent
+df.write.mode('overwrite').partitionBy('order_date').parquet('s3://freshcart-lake/silver/orders')
+# rerunning for 2026-03-17 overwrites the date=2026-03-17 partition —
+# output is identical no matter how many times it runs`}</CodeBox>
 
-# GOOD: overwrite partition — idempotent
-df.write \
-    .mode('overwrite') \             # replace the partition, never append
-    .partitionBy('order_date') \
-    .parquet('s3://freshmart-lake/silver/orders')
-# Rerunning for 2026-03-17 overwrites the date=2026-03-17 partition.
-# The output is identical regardless of how many times it runs.
+        <SubSubTitle>Idempotency keys — for APIs and message systems</SubSubTitle>
 
-# GOOD: include run_id in filename — idempotent per run
-# output_path = f's3://bucket/orders/date=2026-03-17/run-{run_id}.parquet'
-# If run succeeds: file exists with correct data.
-# If run reruns (new run_id): new file written, old cleaned up by compaction.
-# Downstream reads the partition (all files in date=2026-03-17/) — correct.`}</CodeBox>
+        <Para>
+          When a pipeline calls an external API or writes to a queue, the
+          operation may be delivered more than once (at-least-once delivery).
+          An idempotency key stops the duplicate from having a second real effect.
+        </Para>
 
-        <SubTitle>Idempotency keys — the pattern for APIs and message systems</SubTitle>
-
-        <CodeBox label="Idempotency keys — preventing duplicate processing in event-driven pipelines">{`# When a pipeline calls an external API or writes to a message queue,
-# the operation may be delivered more than once (at-least-once delivery).
-# Idempotency keys prevent the duplicate from having side effects.
-
-# ── SENDING TO AN API WITH IDEMPOTENCY KEY ────────────────────────────────────
-import hashlib, json, requests
+        <CodeBox label="A deterministic key from the operation's own inputs">{`import hashlib
 
 def create_payment_idempotency_key(payment_id: str, amount: float, ts: str) -> str:
-    """
-    Generate a deterministic idempotency key from the operation's unique inputs.
-    Same inputs → same key every time → API recognises duplicate and ignores it.
-    """
-    payload = f'\${payment_id}:\${amount}:\${ts}'
+    """Same inputs → same key every time → API recognises and ignores the duplicate."""
+    payload = f'{payment_id}:{amount}:{ts}'
     return hashlib.sha256(payload.encode()).hexdigest()[:32]
 
-idempotency_key = create_payment_idempotency_key('pay_xxx', 380.00, '2026-03-17T20:14:32Z')
+key = create_payment_idempotency_key('pay_xxx', 380.00, '2026-03-17T20:14:32Z')
+response = requests.post('https://api.stripe.com/v1/payments',
+    headers={'X-Idempotency-Key': key, 'Authorization': f'Bearer {api_key}'},
+    json={'amount': 38000, 'currency': 'USD'})
+# a retry with the same key returns the SAME response — the payment is not duplicated`}</CodeBox>
 
-response = requests.post(
-    'https://api.stripe.com/v1/payments',
-    headers={
-        'X-Idempotency-Key': idempotency_key,
-        'Authorization':     f'Bearer \${api_key}',
-    },
-    json={'amount': 38000, 'currency': 'USD'},
-)
-# If this request is retried with the same idempotency key:
-# Stripe returns the SAME response as the first successful call.
-# The payment is NOT created twice. ✓
+        <SubSubTitle>Consumer-side deduplication — Redis and a database table</SubSubTitle>
 
-
-# ── CONSUMER-SIDE IDEMPOTENCY — TRACKING PROCESSED EVENT IDs ─────────────────
-# When consuming from Kafka or a webhook, the same event may arrive twice.
-# Track processed event IDs to detect and skip duplicates.
-
-# Simple in-memory set (for single-process consumers):
-processed_ids: set[str] = set()
-
-def process_event(event: dict) -> None:
-    event_id = event['event_id']  # or source.lsn for CDC events
-
-    if event_id in processed_ids:
-        log.info('Duplicate event \${s} — skipping', event_id)
-        return
-
-    # Process the event
-    upsert_to_silver(event)
-    processed_ids.add(event_id)
-
-# Distributed in-memory (Redis SET NX — for multi-process consumers):
+        <CodeBox label="Tracking which event IDs have already been processed">{`# Distributed dedup — Redis SET NX (atomic, safe for concurrent consumers)
 def is_duplicate(event_id: str, redis_client) -> bool:
-    """
-    Returns True if this event was already processed.
-    SET NX: set if not exists — atomic, safe for concurrent consumers.
-    """
-    # nx=True: only set if key does not exist
-    # ex=86400: expire after 24 hours (events older than 24h assumed unique)
-    result = redis_client.set(
-        f'processed:\${event_id}',
-        '1',
-        nx=True,
-        ex=86400,
-    )
+    result = redis_client.set(f'processed:{event_id}', '1', nx=True, ex=86400)
     return result is None   # None = key already existed = duplicate
 
-
-# ── DATABASE-LEVEL IDEMPOTENCY TRACKING ───────────────────────────────────────
-# For pipelines that must guarantee exactly-once processing:
-# Record processed event IDs in the destination database.
-
+# Database-level, for pipelines that must guarantee exactly-once:
 CREATE TABLE IF NOT EXISTS pipeline.processed_events (
-    event_id    VARCHAR(100) PRIMARY KEY,
-    processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    pipeline     VARCHAR(100) NOT NULL
+    event_id VARCHAR(100) PRIMARY KEY, processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Before processing each event:
-INSERT INTO pipeline.processed_events (event_id, pipeline)
-VALUES ('evt_xxx', 'orders_cdc')
-ON CONFLICT (event_id) DO NOTHING
-RETURNING event_id;
--- If returns a row: first time seeing this event → process it
--- If returns nothing: duplicate → skip it`}</CodeBox>
+INSERT INTO pipeline.processed_events (event_id) VALUES ('evt_xxx')
+ON CONFLICT (event_id) DO NOTHING RETURNING event_id;
+-- returns a row  → first time seeing this event → process it
+-- returns nothing → duplicate → skip it`}</CodeBox>
+
+        <Output>{`>>> INSERT ... ON CONFLICT (event_id) DO NOTHING RETURNING event_id  (2nd delivery of evt_xxx)
+(0 rows)
+# empty result set — the consumer knows to skip processing entirely`}</Output>
       </section>
 
       <Divider />
@@ -412,253 +384,131 @@ RETURNING event_id;
         <SectionTitle>Atomicity — No Partial States, Ever</SectionTitle>
 
         <Para>
-          Atomicity in a pipeline means each logical unit of work either completes
-          fully or leaves no trace. The destination never contains partial results
-          that represent an incomplete operation — never half a batch, never a
-          truncated table that lost its data, never a file that was 60% written
-          when the process was killed.
+          Atomicity means each logical unit of work either completes fully or
+          leaves no trace — never half a batch, never a truncated table that
+          lost its data, never a file that was 60% written when the process died.
         </Para>
 
-        <Para>
-          The challenge is that most pipeline operations span multiple steps.
-          Truncating a table and reloading it are two steps. Writing a Parquet
-          file and moving it to the final location are two steps. Updating a row
-          and recording the event are two steps. Atomicity is about making these
-          multi-step operations appear as a single indivisible unit.
-        </Para>
+        <SubSubTitle>Transaction batching — the difference a crash exposes</SubSubTitle>
 
-        <SubTitle>Atomicity at the database layer</SubTitle>
-
-        <CodeBox label="Database atomicity — transactions, batch inserts, and staging swaps">{`# ── TRANSACTION BATCHING ───────────────────────────────────────────────────────
-# Every write to a relational database should be batched in a transaction.
-# Without transactions, each row auto-commits individually.
-
-# BAD: auto-commit per row — NOT atomic
-conn.autocommit = True   # default in many drivers
+        <CodeBox label="Auto-commit per row vs one transaction per batch">{`# BAD: auto-commit per row — NOT atomic
+conn.autocommit = True
 for row in rows:
     cur.execute("INSERT INTO silver.orders ...", row)
-# If process crashes after row 23,000 of 50,000:
-# 23,000 rows in destination, 27,000 missing. No way to know where to restart.
+# crash after row 23,000 of 50,000 → 23,000 rows in, 27,000 missing, no clean restart point
 
-# GOOD: batch transaction — atomic
-conn.autocommit = False   # explicit transaction management
-with conn:   # context manager: commits on exit, rolls back on exception
+# GOOD: one transaction per batch — atomic
+conn.autocommit = False
+with conn:   # commits on exit, rolls back on exception
     for row in rows:
         cur.execute("INSERT INTO silver.orders ...", row)
-    # If crash: entire batch rolled back. Destination unchanged. Rerun = correct.
+    # crash mid-loop: the ENTIRE batch rolls back — destination unchanged, rerun is correct
 
-# EVEN BETTER: executemany for bulk insert (10-100× faster than row loop):
+# BETTER: bulk insert, 10-100× faster than a row loop
 with conn:
-    psycopg2.extras.execute_values(
-        cur,
+    psycopg2.extras.execute_values(cur,
         "INSERT INTO silver.orders (order_id, status, amount) VALUES %s "
-        "ON CONFLICT (order_id) DO UPDATE SET "
-        "status = EXCLUDED.status, amount = EXCLUDED.amount",
-        [(row['order_id'], row['status'], row['amount']) for row in rows],
-        page_size=5000,   # rows per INSERT statement
-    )
+        "ON CONFLICT (order_id) DO UPDATE SET status = EXCLUDED.status",
+        [(r['order_id'], r['status'], r['amount']) for r in rows], page_size=5000)`}</CodeBox>
 
-# SNOWFLAKE: every statement is auto-committed unless inside explicit transaction
-# For multi-statement atomicity in Snowflake:
-conn.execute("BEGIN")
-conn.execute("INSERT INTO silver.orders_staging ...")
-conn.execute("MERGE INTO silver.orders USING silver.orders_staging ...")
-conn.execute("DROP TABLE silver.orders_staging")
-conn.execute("COMMIT")
-# On any error: conn.execute("ROLLBACK")
+        <SubSubTitle>Staging table swap — zero-downtime full reload</SubSubTitle>
 
-
-# ── STAGING TABLE SWAP — zero-downtime full reload ─────────────────────────────
-# For full-load pipelines: write to new table, then atomically swap.
-# The OLD table serves queries until the instant of swap.
-
-# PostgreSQL (DDL is transactional — rare among databases):
-with conn:
-    # Step 1: load new data into staging (queries still hit old table)
-    cur.execute("CREATE TABLE silver.store_master_new AS "
-                "SELECT * FROM source.stores")
-
-    # Step 2: atomic swap — both renames in same transaction
+        <CodeBox label="The old table serves queries until the exact instant of swap">{`with conn:
+    cur.execute("CREATE TABLE silver.store_master_new AS SELECT * FROM source.stores")
     cur.execute("ALTER TABLE silver.store_master RENAME TO store_master_old")
     cur.execute("ALTER TABLE silver.store_master_new RENAME TO store_master")
-    # ↑ From this line forward, ALL queries see new data.
-    # Zero window where the table is empty or has partial data.
-
-    # Step 3: drop old (still in same transaction — safe)
+    # ↑ from this line, ALL queries see new data — zero window of empty/partial data
     cur.execute("DROP TABLE silver.store_master_old")
-# COMMIT: rename becomes permanent. Readers see clean transition.
+# COMMIT: rename becomes permanent
 
-# What readers see:
-# Before transaction commits: store_master_old (old data)
-# After transaction commits:  store_master (new data)
-# During transaction:         store_master_old (due to MVCC)
-# NEVER: empty table, partial table, two tables simultaneously
+-- Snowflake equivalent (atomic DDL):
+ALTER TABLE silver.store_master SWAP WITH silver.store_master_new;   -- instant, no downtime`}</CodeBox>
 
-# Snowflake equivalent (atomic DDL):
-conn.execute("CREATE TABLE silver.store_master_new AS SELECT * FROM source.stores")
-conn.execute("ALTER TABLE silver.store_master SWAP WITH silver.store_master_new")
-# SWAP is atomic in Snowflake — instant switch, no downtime
-conn.execute("DROP TABLE silver.store_master_new")`}</CodeBox>
+        <Output>{`Readers, at every instant during the swap:
+before commit:  store_master_old (old data, via MVCC)
+after commit:   store_master (new data)
+NEVER visible:  an empty table, a partially-loaded table, or two tables at once`}</Output>
 
-        <SubTitle>Atomicity for file operations</SubTitle>
+        <SubSubTitle>File-level atomicity — write-then-rename and S3</SubSubTitle>
 
-        <CodeBox label="File-level atomicity — write-then-rename and staged writes">{`# Files cannot be partially written and remain consistent.
-# A file being written can be observed in an incomplete state
-# by other processes unless atomicity is enforced explicitly.
-
-# ── WRITE-THEN-RENAME (the standard pattern) ──────────────────────────────────
-import os
-from pathlib import Path
+        <CodeBox label="write_parquet_atomically() — readers never see a partial file">{`from pathlib import Path
 
 def write_parquet_atomically(df, final_path: str) -> None:
-    """
-    Write a DataFrame to Parquet atomically.
-    Other processes never see a partial file.
-    """
-    final = Path(final_path)
-    tmp   = final.with_suffix('.tmp.parquet')
-
+    final, tmp = Path(final_path), Path(final_path).with_suffix('.tmp.parquet')
     try:
-        # Write to temporary location (potentially slow)
-        df.to_parquet(tmp, compression='zstd', index=False)
-
-        # Rename to final location (atomic on POSIX filesystems)
-        # On local filesystems: guaranteed atomic if same filesystem
-        tmp.rename(final)
-        # ↑ This is atomic: readers either see the old file or the new file.
-        # They NEVER see a partial write.
-
+        df.to_parquet(tmp, compression='zstd', index=False)   # potentially slow
+        tmp.rename(final)   # atomic on POSIX — readers see old OR new, never partial
     except Exception:
-        # Clean up incomplete temp file on failure
         if tmp.exists():
             tmp.unlink()
         raise
 
+# S3: a single PUT is atomic (object exists fully or not at all).
+# Use a distinct temp prefix for in-progress writes, then copy to final:
+#   write to:  s3://bucket/tmp/run-{run_id}/part-001.parquet
+#   copy to:   s3://bucket/bronze/orders/date=2026-03-17/part-001.parquet
+#   delete:    s3://bucket/tmp/run-{run_id}/part-001.parquet
+# downstream readers only scan the bronze/ prefix — never see in-progress tmp/ files`}</CodeBox>
 
-# ── S3 ATOMIC WRITES ──────────────────────────────────────────────────────────
-# S3 PUT operations are atomic for a single object — either the full
-# object exists or it does not. S3 does not expose partial uploads.
-# However, multipart uploads (> 5 MB) have a non-atomic assembly step.
+        <Callout type="tip">
+          Delta Lake solves multi-file atomicity: writes go to the table
+          directory first (invisible), then a single JSON entry in{' '}
+          <code>_delta_log/</code> atomically makes all new files visible at once.
+          If the process dies before that log entry is written, the orphaned
+          Parquet files are simply invisible until <code>VACUUM</code> cleans them up.
+        </Callout>
 
-# SAFE: write complete file in one PUT (< 5 MB):
-import boto3
-s3 = boto3.client('s3')
-s3.put_object(Bucket='freshmart-lake', Key='bronze/orders/part-001.parquet', Body=data)
-# Atomic: readers see old key value or new key value, never partial content.
+        <SubSubTitle>Pipeline-level atomicity — write, validate, then promote</SubSubTitle>
 
-# SAFE: multipart upload with explicit completion:
-# boto3 TransferManager handles multipart automatically and atomically.
-# The CompleteMultipartUpload API call is atomic — file becomes visible
-# only when ALL parts are committed.
+        <Para>
+          A single write being atomic isn&rsquo;t enough if the pipeline itself has
+          multiple steps. The write-validate-commit pattern: write to staging,
+          validate, then atomically promote — if validation fails, production is
+          never touched at all.
+        </Para>
 
-# IMPORTANT: use a distinct temporary prefix for in-progress writes:
-# Write to: s3://bucket/tmp/run-{run_id}/part-001.parquet
-# Then copy: s3://bucket/bronze/orders/date=2026-03-17/part-001.parquet
-# Then delete: s3://bucket/tmp/run-{run_id}/part-001.parquet
-# Downstream readers only scan bronze/orders/date=2026-03-17/ — they
-# never see partial in-progress files from the tmp/ prefix.
-
-
-# ── DELTA LAKE ATOMICITY ───────────────────────────────────────────────────────
-# Delta Lake uses a transaction log for atomic multi-file commits.
-# Every Delta write is an atomic transaction at the table level.
-
-# Writing 3 Parquet files to a Delta table:
-# 1. Write all 3 Parquet files to the table directory (not yet visible)
-# 2. Write a new entry to _delta_log/000000000000000042.json
-#    containing references to all 3 files
-# 3. The log entry is written atomically (single file PUT to S3)
-# Once the log entry exists: ALL 3 files become visible simultaneously.
-# If step 1 completes but step 2 fails: the 3 Parquet files exist
-# but are invisible to readers (not referenced in any log entry).
-# Next successful write: Delta VACUUM cleans up the unreferenced files.
-# Result: no partial state ever visible to readers.`}</CodeBox>
-
-        <SubTitle>Atomicity at the pipeline level — the two-phase pattern</SubTitle>
-
-        <CodeBox label="Pipeline-level atomicity — write-validate-commit pattern">{`# A multi-step pipeline needs atomicity at the pipeline level, not just
-# at individual writes. The write-validate-commit pattern achieves this.
-
-# PATTERN: Write to staging → validate → atomically promote to production
-# If validation fails: staging is deleted, production is unchanged.
-# Readers always see either the old production data or the new production data.
-
-def write_with_validation(
-    rows: list[dict],
-    dest_conn,
-    run_id: str,
-) -> None:
-    """
-    Write rows to production only if validation passes.
-    Production table is never modified if validation fails.
-    """
+        <CodeBox label="Phase 1 and 2 — write to staging, then validate before touching production">{`def write_with_validation(rows: list[dict], dest_conn, run_id: str) -> None:
     staging_table = f'silver.orders_staging_{run_id.replace("-", "_")}'
-
     try:
-        # ── Phase 1: Write to staging (can fail — production unaffected) ──────
+        # Phase 1: write to staging — can fail, production is unaffected
         with dest_conn:
-            dest_conn.execute(f'CREATE TABLE {staging_table} AS '
-                              f'SELECT * FROM silver.orders WHERE 1=0')  # empty table, same schema
-            psycopg2.extras.execute_values(
-                dest_conn.cursor(),
-                f'INSERT INTO {staging_table} VALUES %s',
-                [tuple(row.values()) for row in rows],
-            )
+            dest_conn.execute(f'CREATE TABLE {staging_table} AS SELECT * FROM silver.orders WHERE 1=0')
+            psycopg2.extras.execute_values(dest_conn.cursor(),
+                f'INSERT INTO {staging_table} VALUES %s', [tuple(r.values()) for r in rows])
 
-        # ── Phase 2: Validate staging data ────────────────────────────────────
+        # Phase 2: validate staging BEFORE it ever touches production
         with dest_conn.cursor() as cur:
-            # Check: no negative amounts
             cur.execute(f'SELECT COUNT(*) FROM {staging_table} WHERE order_amount < 0')
             if cur.fetchone()[0] > 0:
                 raise ValueError('Staging has negative order amounts')
 
-            # Check: no NULL required fields
-            cur.execute(f'SELECT COUNT(*) FROM {staging_table} '
-                        f'WHERE order_id IS NULL OR customer_id IS NULL')
-            if cur.fetchone()[0] > 0:
-                raise ValueError('Staging has NULL required fields')
-
-            # Check: row count is reasonable (within 10% of last 7 days average)
-            cur.execute("""
-                SELECT AVG(daily_count) FROM (
-                    SELECT DATE(ingested_at) AS day, COUNT(*) AS daily_count
-                    FROM silver.orders
-                    WHERE ingested_at > NOW() - INTERVAL '7 days'
-                    GROUP BY 1
-                ) counts
-            """)
+            cur.execute("SELECT AVG(daily_count) FROM (SELECT DATE(ingested_at) d, COUNT(*) daily_count "
+                        "FROM silver.orders WHERE ingested_at > NOW() - INTERVAL '7 days' GROUP BY 1) c")
             avg_daily = cur.fetchone()[0] or 0
-            staging_count = len(rows)
-            if avg_daily > 0 and abs(staging_count - avg_daily) / avg_daily > 0.5:
-                raise ValueError(
-                    f'Staging row count \${staging_count} deviates >50%% from '
-                    f'7-day average \${avg_daily:.0f}'
-                )
+            if avg_daily > 0 and abs(len(rows) - avg_daily) / avg_daily > 0.5:
+                raise ValueError(f'Staging row count {len(rows)} deviates >50% from 7-day average {avg_daily:.0f}')`}</CodeBox>
 
-        # ── Phase 3: Atomically promote staging to production ─────────────────
+        <CodeBox label="Phase 3 — promote, and always clean up staging either way">{`        # Phase 3: validation passed — atomically promote staging to production
         with dest_conn:
             dest_conn.execute(f"""
-                INSERT INTO silver.orders
-                SELECT * FROM {staging_table}
-                ON CONFLICT (order_id) DO UPDATE SET
-                    status     = EXCLUDED.status,
-                    order_amount = EXCLUDED.order_amount,
-                    updated_at = EXCLUDED.updated_at,
-                    ingested_at = EXCLUDED.ingested_at
+                INSERT INTO silver.orders SELECT * FROM {staging_table}
+                ON CONFLICT (order_id) DO UPDATE SET status = EXCLUDED.status,
+                    order_amount = EXCLUDED.order_amount, updated_at = EXCLUDED.updated_at
                 WHERE silver.orders.updated_at < EXCLUDED.updated_at
             """)
-
     except Exception:
-        # Validation or promotion failed — staging still exists, production unchanged
-        raise
-
+        raise   # staging still exists for inspection, production is unchanged
     finally:
-        # Always clean up staging regardless of success or failure
         try:
             dest_conn.execute(f'DROP TABLE IF EXISTS {staging_table}')
             dest_conn.commit()
         except Exception:
-            pass   # best effort cleanup`}</CodeBox>
+            pass   # best-effort cleanup`}</CodeBox>
+
+        <Output>{`>>> write_with_validation(rows_with_one_negative_amount, conn, run_id)
+ValueError: Staging has negative order amounts
+# production silver.orders: untouched, still showing yesterday's correct data
+# the staging table is dropped in the finally block regardless`}</Output>
       </section>
 
       <Divider />
@@ -670,128 +520,68 @@ def write_with_validation(
 
         <Para>
           A restartable pipeline picks up exactly where it left off after any
-          failure — at any point in the pipeline, at any time, with any reason
-          for failure. No human involvement needed to determine what was processed,
-          what was not, and what needs to be re-run. The pipeline figures this out
-          automatically.
+          failure, with no human involvement. Restartability requires two
+          things: a checkpoint that records progress accurately, and idempotent
+          writes that make re-processing safe.
         </Para>
 
-        <Para>
-          Restartability requires two things: a checkpoint that records progress
-          accurately, and idempotent writes that make re-processing safe. Without
-          idempotency, restartability cannot be achieved — if re-running already-written
-          data creates duplicates, you cannot restart from a checkpoint that includes
-          any already-written data.
-        </Para>
+        <SubSubTitle>Checkpoint granularity — how much work is lost on failure</SubSubTitle>
 
-        <SubTitle>Granularity of checkpointing — coarse vs fine-grained</SubTitle>
+        <CodeBox label="Coarse vs medium-grained checkpointing">{`COARSE (one checkpoint at end of run):
+  Fails on row 9,847 of 10,000 → next run re-processes ALL 10,000 from scratch.
+  Cost: O(run_size) lost. Complexity: low. Use for: fast runs (< 5 min).
 
-        <CodeBox label="Checkpoint granularity — matching the cost of reprocessing">{`CHECKPOINT GRANULARITY: how much work is lost on failure and restarted?
+MEDIUM (checkpoint after each batch):
+  Fails on batch 8 of 10 → next run re-processes only batches 8-10 (3,000 rows).
+  Cost: O(batch_size) lost. Complexity: medium. Use for: long runs (> 10 min).
 
-COARSE-GRAINED (one checkpoint per full run):
-  Save checkpoint at the END of the entire run.
-  If run processes 10,000 rows and fails on row 9,847:
-    → Checkpoint still shows the watermark from before this run started
-    → Next run re-processes all 10,000 rows from scratch
-  Cost: O(run_size) work lost on failure
-  Complexity: low — one checkpoint write per run
-  Use when: runs are fast (< 5 minutes), reprocessing is cheap
-
-  from checkpoint import save_watermark
-  # Inside run():
-  extract_rows()
-  transform_rows()
-  load_rows()
-  save_watermark(until)   # save only at end — all or nothing
-
-MEDIUM-GRAINED (one checkpoint per batch):
-  Save checkpoint after each batch of BATCH_SIZE rows.
-  If run processes 10,000 rows in 10 batches and fails on batch 8:
-    → Checkpoint shows end of batch 7 (7,000 rows processed)
-    → Next run re-processes only batches 8-10 (3,000 rows)
-  Cost: O(BATCH_SIZE) work lost on failure
-  Complexity: medium — N checkpoint writes per run
-  Use when: runs are long (> 10 minutes), batches are large
-
-  batch_watermark = since   # start of this run
+  batch_watermark = since
   for batch in extract_batches(since, until):
       transform_and_load(batch)
-      batch_watermark = batch[-1]['updated_at']   # max updated_at in this batch
-      save_watermark(batch_watermark)             # checkpoint after each batch
-  # On failure during batch 8: checkpoint shows end of batch 7 watermark
+      batch_watermark = batch[-1]['updated_at']
+      save_watermark(batch_watermark)   # checkpoint after EACH batch`}</CodeBox>
 
-FINE-GRAINED (one checkpoint per row group or file):
-  Save checkpoint after writing each Parquet file or row group.
-  If run fails mid-file:
-    → Checkpoint shows last successfully written file
-    → Next run continues from that file
-  Cost: O(file_size) work lost on failure
-  Complexity: high — many checkpoint writes, must track file inventory
-  Use when: files are large (500 MB+), each file takes minutes to write
+        <Output>{`FreshCart's silver_orders pipeline: 10,000 rows, batch_size=1,000, fails on batch 8
+Coarse:  next run re-extracts and re-processes 10,000 rows (~12 min)
+Medium:  next run re-extracts and re-processes 3,000 rows (~4 min)
+Both produce the identical final row count — medium is just faster to recover`}</Output>
 
-  # Used by Spark Structured Streaming automatically
-  # checkpointLocation stores last committed offset after each trigger
-
-SPARK CHECKPOINT SEMANTICS:
-  Spark Structured Streaming saves checkpoint state after every trigger.
-  If Spark crashes mid-trigger: the trigger is re-executed from its start.
-  The trigger is the atomic unit — writes within one trigger are either
-  all committed (if writeStream uses Delta with MERGE) or all rolled back.
-  checkpointLocation stores:
-    - Last committed Kafka offsets (where to resume reading from)
-    - Aggregation state (for stateful streaming operations)
-    - Metadata about the last committed batch`}</CodeBox>
-
-        <SubTitle>Designing for restartability — the checklist</SubTitle>
+        <SubSubTitle>Designing for restartability — the checklist</SubSubTitle>
 
         {[
           {
             check: 'Fixed extraction windows — upper bound set at run start',
-            detail: 'Store the run\'s upper bound (source_now) in the run record or pass it as a parameter. Retried runs use the same upper bound as the original run, not a new "now." This ensures the extraction window is identical across attempts.',
-            code: `# Store run parameters — reuse on retry
-run_upper_bound = get_source_now(conn)   # source DB time at run start
+            detail: 'Store the run\'s upper bound (source_now) in the run record or pass it as a parameter. Retried runs use the same upper bound as the original run, not a new "now."',
+            code: `run_upper_bound = get_source_now(conn)   # source DB time at run start
 run_record.store('upper_bound', run_upper_bound.isoformat())
-# On retry: load from run_record instead of re-computing`,
+# on retry: load from run_record instead of re-computing`,
           },
           {
             check: 'Idempotent destination writes — upsert, not INSERT',
-            detail: 'Every write to the destination uses ON CONFLICT DO UPDATE so that re-processing already-written rows updates them to the same values rather than inserting duplicates. Combined with the WHERE target.updated_at < EXCLUDED.updated_at condition, even out-of-order re-processing is safe.',
-            code: `# Upsert: safe to process the same row N times
-INSERT INTO silver.orders (order_id, status, updated_at)
-VALUES (%s, %s, %s)
-ON CONFLICT (order_id) DO UPDATE SET
-    status = EXCLUDED.status,
-    updated_at = EXCLUDED.updated_at
+            detail: 'Every write uses ON CONFLICT DO UPDATE, combined with a WHERE updated_at < EXCLUDED.updated_at condition, so out-of-order re-processing is also safe.',
+            code: `INSERT INTO silver.orders (order_id, status, updated_at) VALUES (%s, %s, %s)
+ON CONFLICT (order_id) DO UPDATE SET status = EXCLUDED.status, updated_at = EXCLUDED.updated_at
 WHERE silver.orders.updated_at < EXCLUDED.updated_at;`,
           },
           {
             check: 'Atomic checkpoint advancement — checkpoint saved after write',
-            detail: 'The checkpoint is saved after the destination write succeeds. If the write fails, the checkpoint does not advance. The next run re-processes the same data. Atomic write (write-then-rename) ensures no corrupt checkpoint state.',
-            code: `# CORRECT ORDER: write first, checkpoint second
-write_to_destination(rows)      # Step 1: durable write
-save_checkpoint(new_watermark)  # Step 2: advance checkpoint
-# If step 1 fails: step 2 never runs → checkpoint unchanged → rerun is safe
-# If step 2 fails: data was written but checkpoint not advanced
-#   → next run re-processes already-written rows
-#   → upsert handles duplicates correctly`,
+            detail: 'The checkpoint is saved after the destination write succeeds. If the write fails, the checkpoint does not advance and the next run re-processes the same data.',
+            code: `write_to_destination(rows)      # Step 1: durable write
+save_checkpoint(new_watermark)  # Step 2: advance checkpoint — only if step 1 succeeded`,
           },
           {
-            check: 'Resumable file operations — in-progress files in temp location',
-            detail: 'Files being written go to a temporary prefix or directory. Completed files are moved atomically to the final location. A crashed mid-write leaves a temp file that the next run overwrites. Final location only contains complete files.',
-            code: `# Write to tmp, move to final when complete
-tmp_path = f's3://bucket/tmp/run-\${run_id}/part-001.parquet'
-final_path = f's3://bucket/silver/orders/date=2026-03-17/part-001.parquet'
-df.to_parquet(tmp_path)    # write to temp
-s3.copy_object(src=tmp_path, dst=final_path)   # atomic copy to final
-s3.delete_object(tmp_path)  # clean up temp`,
+            check: 'Resumable file operations — in-progress files in a temp location',
+            detail: 'Files being written go to a temporary prefix. Completed files move atomically to the final location. A crashed mid-write leaves a temp file the next run simply overwrites.',
+            code: `tmp_path = f's3://bucket/tmp/run-{run_id}/part-001.parquet'
+df.to_parquet(tmp_path)
+s3.copy_object(src=tmp_path, dst=final_path)
+s3.delete_object(tmp_path)`,
           },
           {
             check: 'Idempotent file writes — overwrite, not append',
-            detail: 'File writes use overwrite mode, not append mode. A rerun overwrites the output from the previous attempt. Append mode would create duplicate files on rerun.',
-            code: `# Overwrite the partition — idempotent
-df.write.mode('overwrite').partitionBy('order_date').parquet(path)
-# NOT: df.write.mode('append').partitionBy('order_date').parquet(path)
-# Append mode + rerun = duplicate data in partition`,
+            detail: 'File writes use overwrite mode. A rerun overwrites the previous attempt\'s output instead of appending duplicate files.',
+            code: `df.write.mode('overwrite').partitionBy('order_date').parquet(path)
+# NOT mode('append') — append + rerun = duplicate data in the partition`,
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -826,10 +616,10 @@ df.write.mode('overwrite').partitionBy('order_date').parquet(path)
         <SectionTitle>Non-Idempotent Patterns — Recognising and Fixing Them</SectionTitle>
 
         <Para>
-          Non-idempotent pipeline patterns are often not obvious — they look
-          reasonable on first read. The test is always: what happens if this
-          pipeline runs twice for the same input? If the answer is "different
-          from running it once," the pattern is non-idempotent.
+          Non-idempotent patterns are often not obvious — they look reasonable
+          on first read. The test is always: what happens if this pipeline runs
+          twice for the same input? If the answer is &ldquo;different from running it
+          once,&rdquo; the pattern is non-idempotent.
         </Para>
 
         <CompareTable
@@ -840,150 +630,76 @@ df.write.mode('overwrite').partitionBy('order_date').parquet(path)
           ]}
           keys={['ap', 'wrong', 'fix']}
           rows={[
-            {
-              ap: 'Plain INSERT without ON CONFLICT',
-              wrong: 'Duplicate rows in destination. COUNT(*) doubles on every rerun. All downstream aggregations are wrong.',
-              fix: 'Add ON CONFLICT (pk) DO UPDATE. Add UNIQUE constraint on business key. Every rerun produces the same row count.',
-            },
-            {
-              ap: 'TRUNCATE then INSERT in separate transactions',
-              wrong: 'A failure after TRUNCATE but before INSERT leaves the table empty. Queries see zero rows. Next run starts from an empty table — correct, but downstream was served empty data.',
-              fix: 'Use staging table swap: load new data into a staging table, then atomically rename staging to production in one transaction. Readers always see either old or new, never empty.',
-            },
-            {
-              ap: 'Relative time windows (NOW() - INTERVAL \'15 min\')',
-              wrong: 'A rerun at a different time of day extracts a different window. Rows between the original run\'s window and the rerun\'s window are either missed or double-processed.',
-              fix: 'Store the extraction window\'s upper bound at run start. On retry, reuse the stored upper bound. Run parameters are immutable once set.',
-            },
-            {
-              ap: 'Append mode file writes',
-              wrong: 'Each rerun appends new files to the partition. After N reruns, the partition has N copies of the same data. Queries return N× too many rows.',
-              fix: 'Use overwrite mode per partition. Rerun overwrites the partition entirely. The output is always exactly one copy of the data regardless of rerun count.',
-            },
-            {
-              ap: 'Saving checkpoint before write',
-              wrong: 'If the write fails after the checkpoint advances, the next run starts from after the failed data. The unwritten rows are permanently skipped. Silent data loss.',
-              fix: 'Write to destination first, save checkpoint second. If write fails, checkpoint does not advance. Next run re-processes same data. Upsert semantics handle duplicates.',
-            },
-            {
-              ap: 'Side effects in transformation (email, payment, webhook)',
-              wrong: 'Transformation sends an email notification per row. On rerun, every row triggers a duplicate email. Customers receive duplicate notifications.',
-              fix: 'Separate side effects from transformation. Record the intent to send (write to an outbox table) rather than sending directly. A separate idempotent consumer processes the outbox with deduplication.',
-            },
-            {
-              ap: 'Auto-increment sequence used as business key',
-              wrong: 'On rerun, new rows get new auto-increment IDs even though they represent the same business event. Downstream joins by ID fail to match. Aggregations count same events twice.',
-              fix: 'Use the source system\'s business key (order_id from the source) as the UNIQUE constraint for conflict detection, not the destination\'s auto-increment surrogate key.',
-            },
+            { ap: 'Plain INSERT without ON CONFLICT', wrong: 'Duplicate rows in destination. COUNT(*) doubles on every rerun.', fix: 'Add ON CONFLICT (pk) DO UPDATE plus a UNIQUE constraint on the business key.' },
+            { ap: 'TRUNCATE then INSERT in separate transactions', wrong: 'A failure between the two leaves the table empty. Queries see zero rows.', fix: 'Use staging table swap — atomic rename in one transaction.' },
+            { ap: "Relative time windows (NOW() - INTERVAL '15 min')", wrong: 'A rerun at a different time extracts a different window. Rows are missed or double-processed.', fix: 'Store the extraction window\'s upper bound at run start; reuse it on retry.' },
+            { ap: 'Append mode file writes', wrong: 'Each rerun adds new files to the partition — N reruns means N copies of the same data.', fix: 'Use overwrite mode per partition. Output is always exactly one copy.' },
+            { ap: 'Saving checkpoint before write', wrong: 'If the write fails after the checkpoint advances, unwritten rows are permanently skipped.', fix: 'Write first, checkpoint second. Upsert semantics handle the resulting duplicates safely.' },
+            { ap: 'Side effects in transformation (email, payment, webhook)', wrong: 'A rerun re-triggers the side effect — customers get duplicate notifications.', fix: 'Record intent in an outbox table; a separate idempotent consumer sends with deduplication.' },
           ]}
         />
       </section>
 
       <Divider />
 
-      {/* ── Part 06 — Transactional Outbox Revisited ─────────────────── */}
+      {/* ── Part 06 — Idempotency Across System Boundaries ───────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 06 — Idempotency Across System Boundaries" />
         <SectionTitle>Idempotency Across System Boundaries — The Hardest Case</SectionTitle>
 
         <Para>
           Idempotency within a single database is straightforward — ON CONFLICT
-          handles it. Idempotency across multiple systems is fundamentally harder
-          because there is no single transaction coordinator. A pipeline step that
-          writes to a database AND sends a Kafka message AND calls an API cannot
-          use a single transaction — each system has its own commit protocol.
+          handles it. Across multiple systems it&rsquo;s harder: a step that writes to
+          a database AND publishes to Kafka AND calls an API has no single
+          transaction coordinator spanning all three.
         </Para>
 
-        <CodeBox label="Cross-system idempotency — the saga pattern and idempotency keys">{`# SCENARIO: Order completion pipeline
-# Must: 1) Update silver.orders (Snowflake)
-#        2) Publish event to Kafka
-#        3) Call delivery service API
-# If ANY step fails: must be safe to retry entire sequence
-
-# ── THE PROBLEM ───────────────────────────────────────────────────────────────
-def complete_order_UNSAFE(order_id: int, conn, kafka_producer, api_client):
-    # Step 1: Update DB
-    conn.execute("UPDATE silver.orders SET status='completed' WHERE order_id=%s",
-                 (order_id,))
-    conn.commit()   # committed
-
-    # Step 2: Publish event (network error here?)
+        <CodeBox label="The unsafe version — any retry after any step risks a duplicate">{`def complete_order_UNSAFE(order_id: int, conn, kafka_producer, api_client):
+    conn.execute("UPDATE silver.orders SET status='completed' WHERE order_id=%s", (order_id,))
+    conn.commit()                                          # committed
     kafka_producer.produce('orders.completed', key=str(order_id), value={...})
-    kafka_producer.flush()   # if this fails: DB is committed, Kafka not
+    kafka_producer.flush()                                 # if this fails: DB done, Kafka not
+    api_client.notify_delivery_service(order_id)           # if this fails: both above done
+    # any retry now = duplicate Kafka message, or worse, a duplicate charge to the merchant`}</CodeBox>
 
-    # Step 3: Call API (timeout here?)
-    api_client.notify_delivery_service(order_id)   # if this fails: both above done
-
-    # ANY STEP FAILING AND RETRYING = inconsistent state
-    # Step 1 retry: duplicate DB update (idempotent if using upsert — OK)
-    # Step 2 retry: duplicate Kafka message
-    # Step 3 retry: duplicate API call — may charge the merchant twice!
-
-
-# ── THE FIX: idempotency at every external call ────────────────────────────────
-def complete_order_SAFE(order_id: int, run_id: str, conn, kafka_producer, api_client):
-
-    # Step 1: Upsert (idempotent DB write)
+        <CodeBox label="The safe version — every external call carries its own idempotency guard">{`def complete_order_SAFE(order_id: int, run_id: str, conn, kafka_producer, api_client):
     conn.execute("""
-        INSERT INTO silver.orders (order_id, status, completed_at)
-        VALUES (%s, 'completed', NOW())
-        ON CONFLICT (order_id) DO UPDATE SET
-            status = 'completed',
-            completed_at = EXCLUDED.completed_at
+        INSERT INTO silver.orders (order_id, status, completed_at) VALUES (%s, 'completed', NOW())
+        ON CONFLICT (order_id) DO UPDATE SET status = 'completed', completed_at = EXCLUDED.completed_at
         WHERE silver.orders.status != 'completed'
     """, (order_id,))
     conn.commit()
 
-    # Step 2: Kafka publish with idempotent producer config
-    # enable.idempotence=True: Kafka guarantees exactly-once delivery
-    # within a single producer session (retries do not produce duplicates)
-    kafka_producer.produce(
-        'orders.completed',
-        key=str(order_id),
-        value={'order_id': order_id, 'idempotency_key': f'\${run_id}:\${order_id}'},
-        # Consumer-side: check idempotency_key before processing
-    )
+    # enable.idempotence=True on the Kafka producer: retries never produce duplicates
+    kafka_producer.produce('orders.completed', key=str(order_id),
+        value={'order_id': order_id, 'idempotency_key': f'{run_id}:{order_id}'})
 
-    # Step 3: API call with idempotency key
-    idempotency_key = f'order-complete-\${order_id}-\${run_id[:8]}'
-    api_client.notify_delivery_service(
-        order_id=order_id,
-        headers={'X-Idempotency-Key': idempotency_key},
-        # If API supports idempotency keys: second call with same key is a no-op
-    )
+    idempotency_key = f'order-complete-{order_id}-{run_id[:8]}'
+    api_client.notify_delivery_service(order_id=order_id, headers={'X-Idempotency-Key': idempotency_key})`}</CodeBox>
 
+        <SubSubTitle>The saga pattern — tracking which steps already completed</SubSubTitle>
 
-# ── SAGA PATTERN: track state across multi-step operations ────────────────────
-# For long multi-step pipelines where each step calls an external system:
-# Record the completion of each step, and skip already-completed steps on retry.
-
-CREATE TABLE pipeline.order_completion_sagas (
-    order_id        BIGINT      PRIMARY KEY,
-    run_id          VARCHAR(36) NOT NULL,
-    db_updated      BOOLEAN     NOT NULL DEFAULT FALSE,
-    kafka_published BOOLEAN     NOT NULL DEFAULT FALSE,
-    api_notified    BOOLEAN     NOT NULL DEFAULT FALSE,
-    completed_at    TIMESTAMPTZ,
-    updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        <CodeBox label="Skip already-done steps on retry, instead of re-doing the whole sequence">{`CREATE TABLE pipeline.order_completion_sagas (
+    order_id BIGINT PRIMARY KEY, run_id VARCHAR(36) NOT NULL,
+    db_updated BOOLEAN NOT NULL DEFAULT FALSE, kafka_published BOOLEAN NOT NULL DEFAULT FALSE,
+    api_notified BOOLEAN NOT NULL DEFAULT FALSE, completed_at TIMESTAMPTZ
 );
 
 def complete_order_with_saga(order_id: int, run_id: str, ...):
     saga = load_or_create_saga(order_id, run_id)
-
     if not saga.db_updated:
-        update_db(order_id)
-        mark_saga_step(order_id, 'db_updated')
-
+        update_db(order_id); mark_saga_step(order_id, 'db_updated')
     if not saga.kafka_published:
-        publish_kafka(order_id)
-        mark_saga_step(order_id, 'kafka_published')
-
+        publish_kafka(order_id); mark_saga_step(order_id, 'kafka_published')
     if not saga.api_notified:
-        notify_api(order_id)
-        mark_saga_step(order_id, 'api_notified')
+        notify_api(order_id); mark_saga_step(order_id, 'api_notified')
+    mark_saga_complete(order_id)`}</CodeBox>
 
-    mark_saga_complete(order_id)
-    # On retry: already-completed steps are skipped entirely`}</CodeBox>
+        <Output>{`>>> complete_order_with_saga(9284751, run_id, ...)   # retried after step 2 failed
+# db_updated=True already → skipped
+# kafka_published=False → publishes now
+# api_notified=False → notifies now
+# no duplicate DB update, no duplicate charge — each step ran exactly once`}</Output>
       </section>
 
       <Divider />
@@ -994,142 +710,127 @@ def complete_order_with_saga(order_id: int, run_id: str, ...):
         <SectionTitle>How to Test That Your Pipeline Is Actually Idempotent</SectionTitle>
 
         <Para>
-          Claiming a pipeline is idempotent is easy. Verifying it is idempotent
-          requires specific tests. These tests should be part of every pipeline's
-          integration test suite — run them before production deployment, after
-          any significant change, and as part of the CI pipeline.
+          Claiming a pipeline is idempotent is easy. Verifying it requires
+          specific tests — these belong in every pipeline&rsquo;s CI suite, run before
+          every production deployment.
         </Para>
 
-        <CodeBox label="Idempotency test suite — the three tests every pipeline needs">{`"""
-tests/test_idempotency.py
-Tests that the pipeline produces correct results when run multiple times.
-Requires: test PostgreSQL + test Snowflake (or SQLite equivalent)
-"""
+        <SubSubTitle>Test 1 — run twice, expect an identical row count</SubSubTitle>
 
-import pytest
-from datetime import datetime, timezone
-from pipeline.main import run_pipeline
+        <CodeBox label="test_double_run_produces_same_row_count">{`def test_double_run_produces_same_row_count(self, test_db, test_dest):
+    run_date = '2026-03-17'
+    run_pipeline(run_date, source_conn=test_db, dest_conn=test_dest)
+    count_after_run1 = test_dest.execute("SELECT COUNT(*) FROM silver.orders").fetchone()[0]
 
+    run_pipeline(run_date, source_conn=test_db, dest_conn=test_dest)
+    count_after_run2 = test_dest.execute("SELECT COUNT(*) FROM silver.orders").fetchone()[0]
 
-class TestIdempotency:
-    """
-    Tests that verify the pipeline is idempotent:
-    running it N times produces the same result as running it once.
-    """
+    assert count_after_run1 == count_after_run2, (
+        f'Row count changed on second run: {count_after_run1} → {count_after_run2}')`}</CodeBox>
 
-    def test_double_run_produces_same_row_count(self, test_db, test_dest):
-        """Running the pipeline twice must not duplicate rows."""
-        run_date = '2026-03-17'
+        <SubSubTitle>Test 2 — a source update between runs should still land correctly</SubSubTitle>
 
-        # Run 1
-        result1 = run_pipeline(run_date, source_conn=test_db, dest_conn=test_dest)
-        count_after_run1 = test_dest.execute(
-            "SELECT COUNT(*) FROM silver.orders"
-        ).fetchone()[0]
+        <CodeBox label="test_rerun_after_source_update_uses_latest_values">{`def test_rerun_after_source_update_uses_latest_values(self, test_db, test_dest):
+    run_pipeline('2026-03-17', source_conn=test_db, dest_conn=test_dest)
+    assert get_status(test_dest, 9284751) == 'placed'
 
-        # Run 2 (same date, same data)
-        result2 = run_pipeline(run_date, source_conn=test_db, dest_conn=test_dest)
-        count_after_run2 = test_dest.execute(
-            "SELECT COUNT(*) FROM silver.orders"
-        ).fetchone()[0]
+    test_db.execute("UPDATE orders SET status='delivered', updated_at=NOW() WHERE order_id=9284751")
+    reset_checkpoint_to_before_run1()
 
-        assert count_after_run1 == count_after_run2, (
-            f'Row count changed on second run: '
-            f'\${count_after_run1} → \${count_after_run2} (duplicates created?)'
-        )
+    run_pipeline('2026-03-17', source_conn=test_db, dest_conn=test_dest)
+    assert get_status(test_dest, 9284751) == 'delivered'`}</CodeBox>
 
-    def test_rerun_after_source_update_uses_latest_values(self, test_db, test_dest):
-        """If source data changes between runs, destination reflects latest."""
-        run_date = '2026-03-17'
+        <SubSubTitle>Test 3 — simulate a mid-batch crash, verify recovery is exact</SubSubTitle>
 
-        # Run 1: order 9284751 has status='placed'
-        run_pipeline(run_date, source_conn=test_db, dest_conn=test_dest)
-        status_after_run1 = test_dest.execute(
-            "SELECT status FROM silver.orders WHERE order_id = 9284751"
-        ).fetchone()[0]
-        assert status_after_run1 == 'placed'
+        <CodeBox label="test_pipeline_recovers_correctly_after_mid_run_failure">{`def test_pipeline_recovers_correctly_after_mid_run_failure(self, test_db, test_dest):
+    insert_test_orders(test_db, count=10_000)
 
-        # Source updates order status
-        test_db.execute(
-            "UPDATE orders SET status='delivered', updated_at=NOW() "
-            "WHERE order_id = 9284751"
-        )
-        # Reset checkpoint to before run1's window
-        reset_checkpoint_to_before_run1()
+    call_count = 0
+    def upsert_that_fails_on_batch_4(rows, conn):
+        nonlocal call_count
+        call_count += 1
+        if call_count == 4:
+            raise RuntimeError('Simulated failure on batch 4')
+        return original_upsert(rows, conn)
 
-        # Run 2: should pick up the update
-        run_pipeline(run_date, source_conn=test_db, dest_conn=test_dest)
-        status_after_run2 = test_dest.execute(
-            "SELECT status FROM silver.orders WHERE order_id = 9284751"
-        ).fetchone()[0]
-        assert status_after_run2 == 'delivered'
+    with pytest.raises(RuntimeError):
+        with patch('pipeline.load.upsert_batch', side_effect=upsert_that_fails_on_batch_4):
+            run_pipeline('2026-03-17', source_conn=test_db, dest_conn=test_dest)
 
-    def test_pipeline_recovers_correctly_after_mid_run_failure(self, test_db, test_dest):
-        """
-        Simulates a failure after writing half the batches.
-        The next run should complete correctly without duplicates.
-        """
-        # Insert 10,000 test orders
-        insert_test_orders(test_db, count=10_000)
+    count_after_failure = row_count(test_dest)
+    assert 0 < count_after_failure < 10_000   # some batches landed, not all
 
-        # Patch the load function to fail after batch 3
-        call_count = 0
-        original_upsert = pipeline.load.upsert_batch
+    run_pipeline('2026-03-17', source_conn=test_db, dest_conn=test_dest)   # recovery run
+    assert row_count(test_dest) == 10_000     # no duplicates, no gaps`}</CodeBox>
 
-        def upsert_that_fails_on_batch_4(rows, conn):
-            nonlocal call_count
-            call_count += 1
-            if call_count == 4:
-                raise RuntimeError('Simulated failure on batch 4')
-            return original_upsert(rows, conn)
+        <SubSubTitle>Test 4 — the most direct test: ten runs, one result</SubSubTitle>
 
-        with pytest.raises(RuntimeError, match='Simulated failure'):
-            with patch('pipeline.load.upsert_batch', side_effect=upsert_that_fails_on_batch_4):
-                run_pipeline('2026-03-17', source_conn=test_db, dest_conn=test_dest)
-
-        count_after_failure = test_dest.execute(
-            "SELECT COUNT(*) FROM silver.orders"
-        ).fetchone()[0]
-        # Some batches were written before the failure
-        assert 0 < count_after_failure < 10_000
-
-        # Recovery run: complete the pipeline
+        <CodeBox label="test_ten_runs_same_result">{`def test_ten_runs_same_result(self, test_db, test_dest):
+    results = []
+    for i in range(10):
+        reset_checkpoint_for_run('2026-03-17')
         run_pipeline('2026-03-17', source_conn=test_db, dest_conn=test_dest)
-        count_after_recovery = test_dest.execute(
-            "SELECT COUNT(*) FROM silver.orders"
-        ).fetchone()[0]
+        count = row_count(test_dest)
+        checksum = test_dest.execute("SELECT SUM(order_amount) FROM silver.orders").fetchone()[0]
+        results.append((count, checksum))
 
-        # Should have exactly 10,000 rows — no duplicates, no gaps
-        assert count_after_recovery == 10_000
+    assert len(set(results)) == 1, (
+        f'Pipeline is NOT idempotent — 10 runs produced {len(set(results))} different results')`}</CodeBox>
 
-    def test_ten_runs_same_result(self, test_db, test_dest):
-        """The most direct idempotency test: run 10 times, same result."""
-        run_date = '2026-03-17'
-        results = []
-
-        for i in range(10):
-            reset_checkpoint_for_run(run_date)
-            run_pipeline(run_date, source_conn=test_db, dest_conn=test_dest)
-            count = test_dest.execute(
-                "SELECT COUNT(*) FROM silver.orders"
-            ).fetchone()[0]
-            checksum = test_dest.execute(
-                "SELECT SUM(order_amount) FROM silver.orders"
-            ).fetchone()[0]
-            results.append((count, checksum))
-
-        # All runs should produce identical results
-        assert len(set(results)) == 1, (
-            f'Pipeline is NOT idempotent — 10 runs produced \${len(set(results))} '
-            f'different results: \${results}'
-        )`}</CodeBox>
+        <Output>{`$ pytest tests/test_idempotency.py -v
+test_double_run_produces_same_row_count PASSED
+test_rerun_after_source_update_uses_latest_values PASSED
+test_pipeline_recovers_correctly_after_mid_run_failure PASSED
+test_ten_runs_same_result PASSED
+========================== 4 passed in 3.82s ===========================`}</Output>
       </section>
 
       <Divider />
 
-      {/* ── Part 08 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 08 — Misconceptions ──────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 08 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Idempotency and Atomicity</SectionTitle>
+
+        {[
+          {
+            wrong: '"ON CONFLICT DO UPDATE automatically makes a write idempotent, no other setup needed"',
+            right: 'ON CONFLICT has nothing to conflict ON without a UNIQUE constraint or primary key on the target column — this module\'s Error Library has the exact failure mode where PostgreSQL silently inserts a duplicate instead of updating, because the constraint was never added. Always verify the constraint exists before trusting the upsert.',
+          },
+          {
+            wrong: '"Wrapping writes in a database transaction is the same as making the pipeline idempotent"',
+            right: 'Part 03\'s distinction is precise: a transaction gives you atomicity (all-or-nothing for ONE execution), not idempotency (safe repetition across MULTIPLE executions). A plain INSERT wrapped in a transaction is perfectly atomic and still creates duplicates the second time it runs.',
+          },
+          {
+            wrong: '"Saving the checkpoint as soon as a batch is written is safer than waiting"',
+            right: 'It\'s the opposite — Part 04\'s restartability checklist and this module\'s Interview Prep Q3 both show that a checkpoint advanced before the write is durable risks silently skipping data forever if the write then fails. Write first, checkpoint second, every time.',
+          },
+          {
+            wrong: '"Idempotency only matters for database writes — API calls and file writes are a separate concern"',
+            right: 'Part 02\'s three forms (write-layer, extraction-layer, file-output) and Part 06\'s cross-system saga pattern all exist because every kind of side effect — a row, a file, an API call, a Kafka message — needs its own idempotency mechanism. A pipeline with a perfectly idempotent database write can still double-charge a customer through a non-idempotent API call in the same run.',
+          },
+          {
+            wrong: '"If a pipeline has passed code review and works in staging, it\'s idempotent enough"',
+            right: 'Idempotency is specifically the kind of property that looks fine until the exact rerun scenario that breaks it actually happens — this module\'s Real World incident is a pipeline that worked perfectly for months until someone manually re-triggered it for an already-processed date. Part 07\'s explicit test suite is what catches this before production, not code review by itself.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, padding: '20px 24px', marginBottom: 16,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 09 — Real World ──────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 08 — Real World" />
+        <SectionTag text="// Part 09 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
           textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12,
@@ -1154,96 +855,66 @@ class TestIdempotency:
           </div>
 
           <Para>
-            At 07:15 AM, the finance team reports that yesterday's revenue figure
-            in the dashboard shows $8,423,000 — exactly double the $4,211,500
-            expected from manual bank reconciliation. The data engineering team
-            begins investigating.
+            At 07:15 AM, the finance team reports yesterday&rsquo;s revenue figure shows
+            $8,423,000 — exactly double the $4,211,500 expected from manual bank
+            reconciliation. The data engineering team begins investigating.
           </Para>
 
-          <CodeBox label="Incident investigation — root cause and recovery">{`# Step 1: Check when the doubling occurred
-SELECT DATE(ingested_at), COUNT(*) AS row_count, SUM(order_amount) AS revenue
-FROM silver.orders
-WHERE order_date = '2026-03-17'
-GROUP BY 1
-ORDER BY 1;
+          <CodeBox label="Diagnosis — from the symptom to the exact line of SQL responsible">{`-- Step 1: when did the doubling occur?
+SELECT DATE(ingested_at), COUNT(*) row_count, SUM(order_amount) revenue
+FROM silver.orders WHERE order_date = '2026-03-17' GROUP BY 1 ORDER BY 1;
+-- 48,234 rows, $4,211,500 (morning load — correct)
+-- 96,468 rows, $8,423,000 (evening — doubled!)
 
-# Output:
-# 2026-03-17  →  48,234 rows  →  $4,211,500  (morning load — correct)
-# 2026-03-17  →  96,468 rows  →  $8,423,000  (evening — doubled!)
+-- Step 2: duplicate order IDs?
+SELECT order_id, COUNT(*) copies FROM silver.orders
+WHERE order_date = '2026-03-17' GROUP BY order_id HAVING COUNT(*) > 1;
+-- 48,234 rows returned — every single order_id has exactly 2 copies
 
-# Step 2: Check for duplicate order IDs
-SELECT order_id, COUNT(*) AS copies
-FROM silver.orders
-WHERE order_date = '2026-03-17'
-GROUP BY order_id
-HAVING COUNT(*) > 1
-LIMIT 10;
-# Returns 48,234 rows — every single order_id has exactly 2 copies
+-- Step 3: Airflow run history
+SELECT dag_run_id, start_date, state FROM airflow.dag_run
+WHERE dag_id = 'orders_pipeline_incremental' AND start_date::DATE = '2026-03-17';
+-- shows TWO full-load runs at 18:00 and 18:15 — someone triggered a manual backfill
 
-# Step 3: Check Airflow run history
-SELECT dag_run_id, start_date, end_date, state
-FROM airflow.dag_run
-WHERE dag_id = 'orders_pipeline_incremental'
-  AND start_date::DATE = '2026-03-17'
-ORDER BY start_date;
-
-# Output shows two FULL LOAD runs at 18:00 and 18:15
-# (someone had triggered a "backfill" from the Airflow UI that ran full load mode)
-
-# Step 4: Check the Silver table's INSERT statement
+-- Step 4: the actual INSERT statement
 SELECT query_text FROM snowflake.account_usage.query_history
-WHERE query_text ILIKE '%INSERT INTO silver.orders%'
-  AND start_time::DATE = '2026-03-17'
-LIMIT 5;
-# Query: "INSERT INTO silver.orders SELECT * FROM orders_staging"
-# → Plain INSERT, NO ON CONFLICT — not idempotent!
+WHERE query_text ILIKE '%INSERT INTO silver.orders%' AND start_time::DATE = '2026-03-17';
+-- "INSERT INTO silver.orders SELECT * FROM orders_staging" — plain INSERT, no ON CONFLICT`}</CodeBox>
 
-# Root cause:
-# 1. The pipeline used plain INSERT without ON CONFLICT
-# 2. A manual backfill ran the pipeline twice for the same date
-# 3. Each run inserted all rows again → 2× duplicates
-
-# IMMEDIATE FIX: deduplicate the table
+          <CodeBox label="Immediate fix, then the permanent one">{`-- IMMEDIATE: deduplicate
 CREATE TABLE silver.orders_deduped AS
-SELECT DISTINCT ON (order_id) *
-FROM silver.orders
-ORDER BY order_id, ingested_at DESC;
-
+SELECT DISTINCT ON (order_id) * FROM silver.orders ORDER BY order_id, ingested_at DESC;
 ALTER TABLE silver.orders RENAME TO orders_duplicated_backup;
 ALTER TABLE silver.orders_deduped RENAME TO orders;
 
-# VERIFY:
-SELECT COUNT(*), SUM(order_amount) FROM silver.orders
-WHERE order_date = '2026-03-17';
-# Returns: 48,234 rows, $4,211,500 ← correct
+-- PERMANENT:
+-- 1. INSERT → INSERT ... ON CONFLICT DO UPDATE
+-- 2. ALTER TABLE silver.orders ADD CONSTRAINT uq_order_id UNIQUE (order_id);
+-- 3. Add an idempotency test to CI (Part 07) that fails if a rerun changes row count
+-- 4. max_active_runs=1, and require code review for manual backfills`}</CodeBox>
 
-# PERMANENT FIX: make the pipeline idempotent
-# 1. Change INSERT to INSERT ... ON CONFLICT DO UPDATE
-# 2. Add UNIQUE constraint: ALTER TABLE silver.orders ADD CONSTRAINT uq_order_id UNIQUE (order_id);
-# 3. Add idempotency test to CI that fails if running twice increases row count
-# 4. Enable Airflow max_active_runs=1 and require code review for manual backfills
+          <Output>{`SELECT COUNT(*), SUM(order_amount) FROM silver.orders WHERE order_date = '2026-03-17';
+-- 48,234 rows, $4,211,500 ← correct
 
-# TOTAL IMPACT:
-# Duration: 07:15 AM alert → 07:52 AM fully resolved (37 minutes)
-# Finance report delayed: 52 minutes past SLA
-# Revenue reports for the day: correct in production by 08:00 AM`}</CodeBox>
+Total impact: 07:15 alert → 07:52 fully resolved (37 minutes).
+Finance report delayed 52 minutes past SLA. Correct in production by 08:00 AM.`}</Output>
 
           <Para>
             The incident happened because one failure mode — a manual trigger of
             the pipeline for an already-processed date — was never considered.
-            The plain INSERT that worked fine for the first run created duplicates
-            on the second. Adding ON CONFLICT DO UPDATE and a UNIQUE constraint
-            took 15 minutes. The idempotency test would have caught this before
-            the first production deployment.
+            The plain INSERT that worked fine for the first run created
+            duplicates on the second. Adding <code>ON CONFLICT DO UPDATE</code> and
+            a UNIQUE constraint took 15 minutes. The idempotency test would have
+            caught this before the first production deployment.
           </Para>
         </div>
       </section>
 
       <Divider />
 
-      {/* ── Part 09 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 10 — Interview Prep ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 09 — Interview Prep" />
+        <SectionTag text="// Part 10 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
@@ -1324,6 +995,45 @@ The broader principle: the pipeline should have no externally-visible side effec
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Assuming ON CONFLICT works without checking the UNIQUE constraint actually exists',
+            a: 'This is the single most common gap in this module — Part 02, the Real World incident, and the Error Library all circle back to it. ON CONFLICT (order_id) with no matching constraint on order_id doesn\'t error, it just silently behaves like a plain INSERT. Verify the constraint with information_schema.table_constraints before trusting the upsert.',
+          },
+          {
+            q: 'Treating "wrapped in a transaction" and "idempotent" as the same guarantee',
+            a: 'Part 03 and this module\'s Misconceptions both address this directly: a transaction gives you atomicity for one run, not safety across reruns. A perfectly atomic plain INSERT still duplicates every row the second time it executes.',
+          },
+          {
+            q: 'Using TRUNCATE + INSERT as two separate statements instead of a staging swap',
+            a: 'The table is genuinely empty for the entire gap between the two statements — any query or dashboard reading during that window sees zero rows, not an error. Part 03\'s staging-table-rename pattern closes this window down to the duration of an atomic rename.',
+          },
+          {
+            q: 'Reaching for a relative time window ("last 15 minutes") because it\'s simpler to write',
+            a: 'It\'s simpler until the exact moment it\'s rerun at a different time of day than originally scheduled — Part 02 shows precisely how this silently drops or duplicates rows on retry. Store the window\'s upper bound once, at run start, and never recompute it.',
+          },
+          {
+            q: 'Adding idempotency as a fix after an incident instead of testing for it up front',
+            a: 'Part 07\'s four tests exist specifically so idempotency is verified before the first production deployment, not discovered via a finance team complaint at 7 AM (this module\'s Real World section). Run the double-run and ten-run tests in CI on every pipeline before it ships.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1398,7 +1108,7 @@ The broader principle: the pipeline should have no externally-visible side effec
         'The root cause of most data quality incidents is non-idempotent pipelines combined with a trigger that causes a rerun: manual backfill, Airflow bug, infrastructure restart, or test run in production. The defence is making every pipeline idempotent by default — not as an afterthought when the incident happens.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
