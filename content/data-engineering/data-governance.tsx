@@ -19,13 +19,26 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 const SubTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 style={{ fontSize: 'clamp(16px,1.8vw,20px)', fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text)', marginBottom: 12, fontFamily: 'var(--font-display)' }}>{children}</h3>
 )
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>{label}</div>}
     <pre style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.9, color: 'var(--text)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{ background: 'transparent', border: '1px dashed var(--border)', borderRadius: 10, padding: '14px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.8, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
       <code>{children}</code>
     </pre>
   </div>
@@ -33,6 +46,15 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>{children}</div>
+)
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)', borderRadius: 10, padding: '16px 20px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent2)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
 )
 
 interface TableRow { [key: string]: string }
@@ -59,7 +81,7 @@ export default function DataGovernanceModule() {
       description="What governance actually means in practice — lineage, cataloging, access control, GDPR, PII handling, and the data mesh organizational pattern."
       section="Data Engineering — Module 38"
       readTime="65 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What Governance Actually Is ─────────────────────── */}
@@ -70,7 +92,7 @@ export default function DataGovernanceModule() {
         <Para>
           Data governance is the system of policies, processes, and technical
           controls that ensure data in a platform is discoverable, trustworthy,
-          secure, and compliant. The word "governance" sounds administrative —
+          secure, and compliant. The word &ldquo;governance&rdquo; sounds administrative —
           policy documents, steering committees, approval workflows. The reality
           for a data engineer is much more concrete: implementing lineage tracking
           so that when a metric is wrong you can trace it back to its source in
@@ -109,6 +131,13 @@ export default function DataGovernanceModule() {
             ))}
           </div>
         </HighlightBox>
+
+        <TryThis>
+          Pick any table you work with regularly and try to answer, without
+          looking anything up: who owns it, when was it last updated, and what
+          does each column actually mean? If you can&rsquo;t answer all three, that
+          table has a governance gap — the kind this module exists to close.
+        </TryThis>
       </section>
 
       <Divider />
@@ -122,13 +151,13 @@ export default function DataGovernanceModule() {
           Data lineage is the record of how data moves through a platform —
           which source systems produced it, which transformations touched it,
           which downstream datasets depend on it. It answers two questions that
-          come up in every data platform: "where did this data come from?" and
-          "if I change this table, what breaks?"
+          come up in every data platform: &ldquo;where did this data come from?&rdquo; and
+          &ldquo;if I change this table, what breaks?&rdquo;
         </Para>
 
-        <SubTitle>Column-level lineage — the precise version</SubTitle>
+        <SubSubTitle>Table-level vs. column-level lineage</SubSubTitle>
 
-        <CodeBox label="Column-level lineage — what it means and how to implement it">{`TABLE-LEVEL LINEAGE:
+        <CodeBox label="Two granularities of lineage">{`TABLE-LEVEL LINEAGE:
   silver.orders ← bronze.orders (via dbt stg_orders)
   gold.daily_revenue ← silver.orders + silver.stores
 
@@ -148,16 +177,17 @@ Column-level lineage tells you:
   - Which transformations were applied along the way
   - Impact analysis: if orders.order_amount definition changes,
     which Gold columns are affected?
-  - Audit: prove to a regulator which source fields produced a reported metric
+  - Audit: prove to a regulator which source fields produced a reported metric`}</CodeBox>
 
+        <SubSubTitle>Implementing lineage with OpenLineage</SubSubTitle>
 
-IMPLEMENTING LINEAGE WITH OPENLINEAGE:
+        <Para>
+          OpenLineage is an open standard (a CNCF project) for lineage event
+          emission. Any tool that implements it — Spark, dbt, Airflow, Flink —
+          emits lineage events that any catalog can consume.
+        </Para>
 
-OpenLineage is an open standard (CNCF project) for lineage event emission.
-Any tool that implements it emits lineage events that any catalog can consume.
-
-# OpenLineage event structure (emitted by Spark, dbt, Airflow, Flink):
-{
+        <CodeBox label="An OpenLineage event — job and inputs">{`{
   "eventType": "COMPLETE",
   "eventTime": "2026-03-17T06:14:32.000Z",
   "run": {
@@ -167,12 +197,12 @@ Any tool that implements it emits lineage events that any catalog can consume.
     }
   },
   "job": {
-    "namespace": "freshmart.dbt",
+    "namespace": "freshcart.dbt",
     "name": "silver.orders"
   },
   "inputs": [
     {
-      "namespace": "freshmart.bronze",
+      "namespace": "freshcart.bronze",
       "name": "orders",
       "facets": {
         "schema": {
@@ -184,31 +214,33 @@ Any tool that implements it emits lineage events that any catalog can consume.
         }
       }
     }
-  ],
-  "outputs": [
+  ],`}</CodeBox>
+
+        <CodeBox label="...continued — outputs and the column-lineage facet">{`  "outputs": [
     {
-      "namespace": "freshmart.silver",
+      "namespace": "freshcart.silver",
       "name": "orders",
       "facets": {
         "columnLineage": {
           "fields": {
-            "order_id":   {"inputFields": [{"namespace":"freshmart.bronze","name":"orders","field":"order_id"}]},
+            "order_id":   {"inputFields": [{"namespace":"freshcart.bronze","name":"orders","field":"order_id"}]},
             "net_revenue":{"inputFields": [
-              {"namespace":"freshmart.bronze","name":"orders","field":"amount"},
-              {"namespace":"freshmart.bronze","name":"orders","field":"discount_amount"}
+              {"namespace":"freshcart.bronze","name":"orders","field":"amount"},
+              {"namespace":"freshcart.bronze","name":"orders","field":"discount_amount"}
             ]}
           }
         }
       }
     }
   ]
-}
+}`}</CodeBox>
 
+        <SubSubTitle>Lineage backends and dbt&rsquo;s built-in lineage</SubSubTitle>
 
-LINEAGE BACKENDS:
-  Marquez:    open source, stores OpenLineage events, REST API, simple UI
-  DataHub:    comprehensive catalog + lineage, ingestion connectors for dbt/Spark/Airflow
-  Atlan:      managed, deep dbt/Airflow integration
+        <CodeBox label="Where lineage events get stored and browsed">{`LINEAGE BACKENDS:
+  Marquez:      open source, stores OpenLineage events, REST API, simple UI
+  DataHub:      comprehensive catalog + lineage, ingestion connectors for dbt/Spark/Airflow
+  Atlan:        managed, deep dbt/Airflow integration
   OpenMetadata: open source alternative to DataHub
 
 dbt LINEAGE (automatic, no extra setup):
@@ -216,59 +248,44 @@ dbt LINEAGE (automatic, no extra setup):
   dbt docs generate produces a browsable lineage graph:
     dbt docs generate && dbt docs serve
   Shows: every model, its SQL, its upstream models, its downstream models.
-  Column-level lineage: dbt-column-lineage package adds column mapping.
+  Column-level lineage: dbt-column-lineage package adds column mapping.`}</CodeBox>
 
-  USE CASE — impact analysis:
-    "I need to change the definition of customer.tier.
-     Which Gold models use this column?"
-    Answer: browse dbt lineage graph → click silver.customers.tier
-    → see all downstream models highlighted
-    → identify: gold.customer_segments, gold.daily_revenue (via customer tier filter)
-    → plan migration accordingly`}</CodeBox>
+        <SubSubTitle>Lineage for impact analysis — the practical workflow</SubSubTitle>
 
-        <SubTitle>Lineage for impact analysis — the practical workflow</SubTitle>
+        <Para>
+          Say you need to change the Silver orders table: add a new
+          <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> tip_amount</code> column,
+          and change how <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>net_revenue</code> is
+          calculated (previously <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>order_amount - discount_amount</code>,
+          now adding <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>+ tip_amount</code>).
+        </Para>
 
-        <CodeBox label="Impact analysis using lineage — before changing a model">{`SCENARIO: You need to change the Silver orders table —
-add a new 'tip_amount' column and change how 'net_revenue' is calculated
-(previously: order_amount - discount_amount,
- new:         order_amount - discount_amount + tip_amount)
+        <CodeBox label="Without lineage — the expensive way">{`You make the change, run dbt, and discover 4 Gold models break
+because they all had column-specific assertions on net_revenue.
+You also broke a dashboard that a non-dbt BI tool was using.
+Investigation time: 3 hours.`}</CodeBox>
 
-WITHOUT LINEAGE:
-  You make the change, run dbt, and discover 4 Gold models break
-  because they all had column-specific assertions on net_revenue.
-  You also broke a dashboard that a non-dbt BI tool was using.
-  Investigation time: 3 hours.
+        <CodeBox label="With lineage — check downstream consumers first">{`Step 1: Query the dbt graph for all downstream consumers of silver.orders:
+$ dbt ls --select +silver.orders+
+  silver.orders
+  gold.daily_revenue         ← depends on silver.orders
+  gold.customer_ltv          ← depends on silver.orders
+  gold.fct_orders_wide       ← depends on silver.orders
+  gold.store_performance     ← depends on silver.orders
 
-WITH LINEAGE:
-  Step 1: Query DataHub / dbt graph for all downstream consumers of net_revenue:
-  $ dbt ls --select +silver.orders+   # all models that depend on silver.orders
-  Output:
-    silver.orders
-    gold.daily_revenue         ← depends on silver.orders
-    gold.customer_ltv          ← depends on silver.orders
-    gold.fct_orders_wide       ← depends on silver.orders
-    gold.store_performance     ← depends on silver.orders
+Step 2: Check which downstream models use net_revenue specifically —
+  all four use SUM(net_revenue) or the raw column directly. All affected.
 
-  Step 2: Check which downstream models USE net_revenue specifically:
-    gold.daily_revenue: SUM(net_revenue)          ← affected
-    gold.customer_ltv:  SUM(net_revenue) / ...    ← affected
-    gold.fct_orders_wide: net_revenue column       ← affected
-    gold.store_performance: SUM(net_revenue)       ← affected
+Step 3: Check for non-dbt consumers (BI tools, APIs, external queries) via
+  DataHub catalog → silver.orders.net_revenue → "Downstream consumers" tab
+  Shows: Metabase dashboard "Daily Revenue" — uses this column directly
 
-  Step 3: Check for non-dbt consumers (BI tools, APIs, external queries):
-    DataHub catalog → silver.orders.net_revenue → "Downstream consumers" tab
-    Shows: Metabase dashboard "Daily Revenue" — uses this column directly
+Step 4: Plan the migration — add tip_amount first (non-breaking), update
+  net_revenue backward-compatibly, notify the Metabase dashboard owner,
+  update all 4 Gold models together, deploy Silver → Gold in one dbt run.`}</CodeBox>
 
-  Step 4: Plan migration:
-    - Add tip_amount as a new column first (non-breaking)
-    - Update net_revenue in a backward-compatible way
-    - Notify Metabase dashboard owner of net_revenue change
-    - Update all 4 Gold models to handle new net_revenue semantics
-    - Deploy in order: Silver → Gold (same deployment, same dbt run)
-    - Update Metabase dashboard after validation
-
-  Total time with lineage: 30 minutes of planning, zero surprises.
-  Total time without: 3 hours of debugging broken things.`}</CodeBox>
+        <Output>{`Total time with lineage:    30 minutes of planning, zero surprises.
+Total time without lineage: 3 hours of debugging broken things after the fact.`}</Output>
       </section>
 
       <Divider />
@@ -280,22 +297,23 @@ WITH LINEAGE:
 
         <Para>
           A data catalog is a searchable inventory of all data assets in the
-          platform. Without one, analysts spend hours asking "which table
-          should I use for revenue?" on Slack, use the wrong table, and make
-          decisions on data they don't understand. With one, they search for
-          "revenue", find the canonical Gold table, read its description and
+          platform. Without one, analysts spend hours asking &ldquo;which table
+          should I use for revenue?&rdquo; on Slack, use the wrong table, and make
+          decisions on data they don&rsquo;t understand. With one, they search for
+          &ldquo;revenue&rdquo;, find the canonical Gold table, read its description and
           owner, check when it was last updated, and start their analysis
           immediately.
         </Para>
 
-        <SubTitle>DataHub — the open source enterprise catalog</SubTitle>
+        <SubSubTitle>DataHub — the open source enterprise catalog</SubSubTitle>
 
-        <CodeBox label="DataHub — ingesting metadata and building a searchable catalog">{`DataHub is the most widely deployed open source data catalog in 2026.
-It has native ingestion connectors for: dbt, Spark, Airflow, Snowflake,
-BigQuery, Redshift, Kafka, Looker, Tableau, and 40+ other tools.
+        <Para>
+          DataHub is the most widely deployed open source data catalog in 2026.
+          It has native ingestion connectors for dbt, Spark, Airflow, Snowflake,
+          BigQuery, Redshift, Kafka, Looker, Tableau, and 40+ other tools.
+        </Para>
 
-DATAHUB INGESTION (recipe configuration):
-# datahub_recipes/dbt_freshmart.yml
+        <CodeBox label="DataHub ingestion recipes — dbt and Snowflake sources">{`# datahub_recipes/dbt_freshcart.yml
 source:
   type: dbt
   config:
@@ -303,111 +321,99 @@ source:
     catalog_path:        /path/to/dbt/target/catalog.json
     sources_path:        /path/to/dbt/target/sources.json
     target_platform:     snowflake
-    # Ingest: models, columns, descriptions, tags, owners, tests
     include_column_lineage: true  # column-level lineage from dbt
-    # Map dbt model owners to DataHub users:
     owner_extraction_pattern: "^Team:(?P<owner>.*)$"
-
 sink:
   type: datahub-rest
   config:
     server: "http://datahub-gms:8080"
 
-# datahub_recipes/snowflake_freshmart.yml
+# datahub_recipes/snowflake_freshcart.yml
 source:
   type: snowflake
   config:
-    account_id:   freshmart.snowflake.com
+    account_id:   freshcart.snowflake.com
     username:     datahub_service_account
-    database:     freshmart_prod
+    database:     freshcart_prod
     warehouse:    analyst_wh
     include_table_lineage: true    # query log-based lineage
     include_column_lineage: true
     include_usage_stats:   true    # who queried what and when
 
-# RUN: datahub ingest -c datahub_recipes/dbt_freshmart.yml
-# RUN: datahub ingest -c datahub_recipes/snowflake_freshmart.yml
+# RUN: datahub ingest -c datahub_recipes/dbt_freshcart.yml
+# RUN: datahub ingest -c datahub_recipes/snowflake_freshcart.yml`}</CodeBox>
 
+        <Output>{`WHAT DATAHUB PROVIDES AFTER INGESTION:
+Search:       "net revenue" → finds gold.daily_revenue.net_revenue
+Description:  "Net revenue after discounts. Source: silver.orders."
+Owner:        data-team@freshcart.com
+Lineage:      upstream: silver.orders, downstream: Metabase dashboard
+Usage:        queried by priya@freshcart.com, 48 times in last 7 days
+Quality:      last dbt test run: all 12 tests passed, 2026-03-17
+Tags:         [PII-free, Gold, Finance, SLA-monitored]`}</Output>
 
-WHAT DATAHUB PROVIDES AFTER INGESTION:
-  Search:       "net revenue" → finds gold.daily_revenue.net_revenue
-  Description:  "Net revenue after discounts. Source: silver.orders."
-  Owner:        data-team@freshmart.com
-  Lineage:      upstream: silver.orders, downstream: Metabase dashboard
-  Schema:       all columns with types and descriptions
-  Usage:        queried by priya@freshmart.com, 48 times in last 7 days
-  Quality:      last dbt test run: all 12 tests passed, 2026-03-17
-  Tags:         [PII-free, Gold, Finance, SLA-monitored]
-  Glossary:     "Net Revenue" → business definition from Finance team
+        <CodeBox label="Making dbt descriptions flow into DataHub">{`# models/gold/_schema.yml
+models:
+  - name: daily_revenue
+    description: >
+      Pre-aggregated daily revenue by store and date.
+      Updated daily at 06:30 ET. SLA: complete by 08:00 ET.
+      Source of truth for Finance dashboard.
+    meta:
+      owner: data-team@freshcart.com
+      sla: "08:00 ET daily"
+      consumers: [finance-dashboard, cfo-report]
+    columns:
+      - name: net_revenue
+        description: >
+          Total order revenue after discounts.
+          Calculation: SUM(order_amount - discount_amount)
+          from silver.orders WHERE status = 'delivered'.
+        meta:
+          is_pii: false
+          business_owner: finance@freshcart.com
 
+# When dbt docs generate runs → DataHub ingestion picks up descriptions
+# Descriptions become visible in DataHub search and table pages`}</CodeBox>
 
-MAKING dbt DESCRIPTIONS FLOW INTO DATAHUB:
-  # models/gold/_schema.yml
-  models:
-    - name: daily_revenue
-      description: >
-        Pre-aggregated daily revenue by store and date.
-        Updated daily at 06:30 ET. SLA: complete by 08:00 ET.
-        Source of truth for Finance dashboard.
-      meta:
-        owner: data-team@freshmart.com
-        sla: "08:00 ET daily"
-        consumers: [finance-dashboard, cfo-report]
-      columns:
-        - name: net_revenue
-          description: >
-            Total order revenue after discounts.
-            Calculation: SUM(order_amount - discount_amount)
-            from silver.orders WHERE status = 'delivered'.
-          meta:
-            is_pii: false
-            business_owner: finance@freshmart.com
-
-  # When dbt docs generate runs → DataHub ingestion picks up descriptions
-  # Descriptions visible in DataHub search and table pages
-
-
-DEVERYDAY GOVERNANCE WORKFLOW FOR A DATA ENGINEER:
+        <CodeBox label="Everyday governance workflow for a data engineer">{`EVERYDAY GOVERNANCE WORKFLOW FOR A DATA ENGINEER:
   Before adding a new Gold table:
     1. Create dbt model with complete description in schema.yml
     2. Add owner meta field (team email)
     3. Add column descriptions for all columns
     4. Add relevant tags (PII-free, Gold, team)
     5. Add to DataHub business glossary if it defines a new term
-  
+
   After deployment:
     DataHub ingestion runs → table discoverable in catalog within 1 hour
     Analyst can find it, read the description, understand the grain
     Without Slack DMs to the data team`}</CodeBox>
 
-        <SubTitle>Business glossary — defining terms once</SubTitle>
+        <SubSubTitle>Business glossary — defining terms once</SubSubTitle>
 
-        <CodeBox label="Business glossary — one definition, used everywhere">{`PROBLEM WITHOUT A GLOSSARY:
-  Finance: "revenue" = sum of all order amounts including cancelled
-  Operations: "revenue" = delivered orders only
-  Product: "revenue" = GMV (gross merchandise value, all statuses)
-  Three teams, three definitions, three different numbers in the same meeting.
+        <CodeBox label="The problem without a shared glossary">{`Finance:    "revenue" = sum of all order amounts including cancelled
+Operations: "revenue" = delivered orders only
+Product:    "revenue" = GMV (gross merchandise value, all statuses)
+Three teams, three definitions, three different numbers in the same meeting.`}</CodeBox>
 
-BUSINESS GLOSSARY IN DATAHUB:
-  Term: "Net Revenue"
-  Definition: Sum of (order_amount - discount_amount) for orders with
-              status = 'delivered'. Excludes cancelled and in-progress orders.
-              Approved by: CFO on 2026-01-15.
-  Owners: finance@freshmart.com (business), data-team@freshmart.com (technical)
-  Linked assets: gold.daily_revenue.net_revenue, gold.customer_ltv.net_revenue
+        <CodeBox label="A business glossary in DataHub">{`Term: "Net Revenue"
+Definition: Sum of (order_amount - discount_amount) for orders with
+            status = 'delivered'. Excludes cancelled and in-progress orders.
+            Approved by: CFO on 2026-01-15.
+Owners: finance@freshcart.com (business), data-team@freshcart.com (technical)
+Linked assets: gold.daily_revenue.net_revenue, gold.customer_ltv.net_revenue
 
-  Term: "GMV (Gross Merchandise Value)"
-  Definition: Sum of order_amount for all orders regardless of status.
-              Used for investor reporting. Does NOT subtract discounts.
-  Owners: product@freshmart.com
-  Linked assets: gold.investor_metrics.gmv
+Term: "GMV (Gross Merchandise Value)"
+Definition: Sum of order_amount for all orders regardless of status.
+            Used for investor reporting. Does NOT subtract discounts.
+Owners: product@freshcart.com
+Linked assets: gold.investor_metrics.gmv
 
-  Once defined: every table column tagged with "Net Revenue" gets the
-  canonical definition. Analysts see the definition when they hover the column.
-  The SAME definition appears in every BI tool, in DataHub, and in dbt docs.
+Once defined: every table column tagged with "Net Revenue" gets the
+canonical definition. Analysts see it when they hover the column — the
+SAME definition appears in every BI tool, in DataHub, and in dbt docs.`}</CodeBox>
 
-CREATING A GLOSSARY TERM IN DATAHUB (Python API):
-import datahub.emitter.mce_builder as builder
+        <CodeBox label="Creating a glossary term via the DataHub Python API">{`import datahub.emitter.mce_builder as builder
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
 from datahub.metadata.schema_classes import GlossaryTermInfoClass
 
@@ -416,12 +422,9 @@ term_info = GlossaryTermInfoClass(
     definition="Sum of (order_amount - discount_amount) for status='delivered'.",
     termSource="INTERNAL",
     sourceRef="Finance/MetricsDefinitions.pdf",
-    sourceUrl="https://docs.freshmart.internal/metrics/net-revenue",
+    sourceUrl="https://docs.freshcart.internal/metrics/net-revenue",
 )
-emitter.emit_mcp(MetadataChangeProposalWrapper(
-    entityUrn=term_urn,
-    aspect=term_info,
-))`}</CodeBox>
+emitter.emit_mcp(MetadataChangeProposalWrapper(entityUrn=term_urn, aspect=term_info))`}</CodeBox>
       </section>
 
       <Divider />
@@ -442,49 +445,44 @@ emitter.emit_mcp(MetadataChangeProposalWrapper(
           accidentally exfiltrates customer data.
         </Para>
 
-        <CodeBox label="Role-based access control — the complete model for a data platform">{`ROLE HIERARCHY FOR A DATA PLATFORM (Snowflake example):
+        <SubSubTitle>Role hierarchy and grant statements (Snowflake)</SubSubTitle>
 
-ROLE HIERARCHY:
-  SYSADMIN
-  └── DATA_PLATFORM_ADMIN      ← full platform access (data engineering lead)
-      ├── PIPELINE_ROLE         ← transformation pipelines (read bronze, write silver/gold)
-      ├── ANALYST_ROLE          ← read silver/gold, no PII, no bronze
-      ├── DATA_SCIENTIST_ROLE   ← read bronze/silver/gold, no PII columns
-      ├── BI_SERVICE_ROLE       ← read gold only, used by Metabase service account
-      ├── FINANCE_ROLE          ← read gold finance schema only
-      └── OPERATIONS_ROLE       ← read gold operations schema only
+        <CodeBox label="Role hierarchy for a data platform">{`SYSADMIN
+└── DATA_PLATFORM_ADMIN      ← full platform access (data engineering lead)
+    ├── PIPELINE_ROLE         ← transformation pipelines (read bronze, write silver/gold)
+    ├── ANALYST_ROLE          ← read silver/gold, no PII, no bronze
+    ├── DATA_SCIENTIST_ROLE   ← read bronze/silver/gold, no PII columns
+    ├── BI_SERVICE_ROLE       ← read gold only, used by Metabase service account
+    ├── FINANCE_ROLE          ← read gold finance schema only
+    └── OPERATIONS_ROLE       ← read gold operations schema only`}</CodeBox>
 
-GRANT STATEMENTS:
-
--- PIPELINE_ROLE: runs dbt, reads bronze, writes silver and gold
-GRANT USAGE ON DATABASE freshmart_prod TO ROLE pipeline_role;
-GRANT USAGE ON SCHEMA freshmart_prod.bronze TO ROLE pipeline_role;
-GRANT SELECT ON ALL TABLES IN SCHEMA freshmart_prod.bronze TO ROLE pipeline_role;
-GRANT USAGE, CREATE TABLE ON SCHEMA freshmart_prod.silver TO ROLE pipeline_role;
-GRANT USAGE, CREATE TABLE ON SCHEMA freshmart_prod.gold   TO ROLE pipeline_role;
+        <CodeBox label="Grant statements per role">{`-- PIPELINE_ROLE: runs dbt, reads bronze, writes silver and gold
+GRANT USAGE ON DATABASE freshcart_prod TO ROLE pipeline_role;
+GRANT USAGE ON SCHEMA freshcart_prod.bronze TO ROLE pipeline_role;
+GRANT SELECT ON ALL TABLES IN SCHEMA freshcart_prod.bronze TO ROLE pipeline_role;
+GRANT USAGE, CREATE TABLE ON SCHEMA freshcart_prod.silver TO ROLE pipeline_role;
+GRANT USAGE, CREATE TABLE ON SCHEMA freshcart_prod.gold   TO ROLE pipeline_role;
 
 -- ANALYST_ROLE: read silver and gold, no bronze (has raw PII), no write
-GRANT USAGE ON DATABASE freshmart_prod TO ROLE analyst_role;
-GRANT USAGE ON SCHEMA freshmart_prod.silver TO ROLE analyst_role;
-GRANT USAGE ON SCHEMA freshmart_prod.gold   TO ROLE analyst_role;
-GRANT SELECT ON ALL TABLES IN SCHEMA freshmart_prod.silver TO ROLE analyst_role;
-GRANT SELECT ON ALL TABLES IN SCHEMA freshmart_prod.gold   TO ROLE analyst_role;
+GRANT USAGE ON DATABASE freshcart_prod TO ROLE analyst_role;
+GRANT USAGE ON SCHEMA freshcart_prod.silver TO ROLE analyst_role;
+GRANT USAGE ON SCHEMA freshcart_prod.gold   TO ROLE analyst_role;
+GRANT SELECT ON ALL TABLES IN SCHEMA freshcart_prod.silver TO ROLE analyst_role;
+GRANT SELECT ON ALL TABLES IN SCHEMA freshcart_prod.gold   TO ROLE analyst_role;
 -- Explicitly block: no access to bronze (raw PII in landing/bronze)
 
 -- BI_SERVICE_ROLE: Metabase service account, read gold only
-GRANT USAGE ON SCHEMA freshmart_prod.gold TO ROLE bi_service_role;
-GRANT SELECT ON ALL TABLES IN SCHEMA freshmart_prod.gold TO ROLE bi_service_role;
+GRANT USAGE ON SCHEMA freshcart_prod.gold TO ROLE bi_service_role;
+GRANT SELECT ON ALL TABLES IN SCHEMA freshcart_prod.gold TO ROLE bi_service_role;
 
 -- FUTURE GRANTS: apply to tables created after the GRANT statement
-GRANT SELECT ON FUTURE TABLES IN SCHEMA freshmart_prod.silver TO ROLE analyst_role;
-GRANT SELECT ON FUTURE TABLES IN SCHEMA freshmart_prod.gold   TO ROLE analyst_role;
--- Without FUTURE GRANTS: every new Silver/Gold table must be manually granted
+GRANT SELECT ON FUTURE TABLES IN SCHEMA freshcart_prod.silver TO ROLE analyst_role;
+GRANT SELECT ON FUTURE TABLES IN SCHEMA freshcart_prod.gold   TO ROLE analyst_role;
+-- Without FUTURE GRANTS: every new Silver/Gold table must be manually granted`}</CodeBox>
 
+        <SubSubTitle>Column-level masking with Dynamic Data Masking</SubSubTitle>
 
-COLUMN-LEVEL MASKING (Snowflake Dynamic Data Masking):
-
--- Create masking policy for email column:
-CREATE OR REPLACE MASKING POLICY mask_email_pii
+        <CodeBox label="Masking policy definition and column attachment">{`CREATE OR REPLACE MASKING POLICY mask_email_pii
 AS (val STRING) RETURNS STRING ->
     CASE
         WHEN CURRENT_ROLE() IN ('DATA_PLATFORM_ADMIN', 'PIPELINE_ROLE')
@@ -494,22 +492,18 @@ AS (val STRING) RETURNS STRING ->
         ELSE '***MASKED***'                   -- everyone else sees mask
     END;
 
--- Apply masking policy to the column:
-ALTER TABLE freshmart_prod.silver.customers
+ALTER TABLE freshcart_prod.silver.customers
 ALTER COLUMN customer_email
-SET MASKING POLICY mask_email_pii;
+SET MASKING POLICY mask_email_pii;`}</CodeBox>
 
--- Now:
--- Analyst queries silver.customers: customer_email = '***MASKED***'
--- Data engineer queries silver.customers: customer_email = 'priya@example.com'
--- Data scientist queries silver.customers: customer_email = 'sha256hash...'
--- All three query the SAME table — masking is transparent
+        <Output>{`Analyst queries silver.customers:        customer_email = '***MASKED***'
+Data engineer queries silver.customers:  customer_email = 'priya@example.com'
+Data scientist queries silver.customers: customer_email = 'sha256hash...'
+All three query the SAME table — masking is transparent, no separate views.`}</Output>
 
+        <SubSubTitle>Row-level security — filtering rows by user attributes</SubSubTitle>
 
-ROW-LEVEL SECURITY (filter rows by user attributes):
--- Store managers should only see their store's data in gold.store_performance
-
-CREATE OR REPLACE ROW ACCESS POLICY store_data_isolation
+        <CodeBox label="Row access policy — store managers see only their store">{`CREATE OR REPLACE ROW ACCESS POLICY store_data_isolation
 AS (store_id VARCHAR) RETURNS BOOLEAN ->
     CURRENT_ROLE() IN ('DATA_PLATFORM_ADMIN', 'ANALYST_ROLE')   -- full access
     OR store_id = (
@@ -518,75 +512,56 @@ AS (store_id VARCHAR) RETURNS BOOLEAN ->
         WHERE username = CURRENT_USER()
     );
 
-ALTER TABLE freshmart_prod.gold.store_performance
+ALTER TABLE freshcart_prod.gold.store_performance
 ADD ROW ACCESS POLICY store_data_isolation ON (store_id);
 -- Store manager queries gold.store_performance:
--- Automatically filtered to their assigned store only
--- No WHERE clause needed — enforced at engine level`}</CodeBox>
+-- automatically filtered to their assigned store only — no WHERE clause needed`}</CodeBox>
 
-        <SubTitle>AWS Lake Formation — access control for S3 data lakes</SubTitle>
+        <SubSubTitle>AWS Lake Formation — access control for S3 data lakes</SubSubTitle>
 
-        <CodeBox label="AWS Lake Formation — fine-grained access on S3-backed tables">{`# Lake Formation sits on top of S3 + Glue Catalog.
-# Grants table/column/row level permissions on Glue catalog tables.
-# Works with: Athena, Redshift Spectrum, EMR, Glue ETL.
+        <Para>
+          Lake Formation sits on top of S3 and the Glue Catalog. It grants
+          table, column, and row-level permissions on Glue catalog tables, and
+          works with Athena, Redshift Spectrum, EMR, and Glue ETL.
+        </Para>
 
-import boto3
+        <CodeBox label="Column-level grant — excluding PII columns">{`import boto3
 lf = boto3.client('lakeformation')
 
-# Grant column-level permission (exclude PII columns):
 lf.grant_permissions(
     Principal={'DataLakePrincipalIdentifier': 'arn:aws:iam::123456:role/AnalystRole'},
     Resource={
         'TableWithColumns': {
-            'DatabaseName': 'freshmart_silver',
+            'DatabaseName': 'freshcart_silver',
             'Name': 'customers',
-            # Grant access to all columns EXCEPT these PII columns:
             'ColumnWildcard': {
                 'ExcludedColumnNames': ['customer_email', 'phone_number', 'address']
             },
         }
     },
     Permissions=['SELECT'],
-)
+)`}</CodeBox>
 
-# Grant table-level read on gold:
-lf.grant_permissions(
-    Principal={'DataLakePrincipalIdentifier': 'arn:aws:iam::123456:role/AnalystRole'},
-    Resource={
-        'Table': {
-            'DatabaseName': 'freshmart_gold',
-            'Name': 'daily_revenue',
-        }
-    },
-    Permissions=['SELECT'],
-)
-
-# DATA FILTER — row-level security via filter expression:
-lf.create_data_cells_filter(
+        <CodeBox label="Row-level data filter">{`lf.create_data_cells_filter(
     TableData={
         'TableCatalogId': '123456789',
-        'DatabaseName':   'freshmart_gold',
+        'DatabaseName':   'freshcart_gold',
         'TableName':      'store_performance',
         'Name':           'south_region_filter',
-        # Row filter — only South region stores:
-        'RowFilter': {
-            'FilterExpression': "store_region = 'South'"
-        },
-        # Column filter — exclude financial metrics:
+        'RowFilter': {'FilterExpression': "store_region = 'South'"},
         'ColumnWildcard': {
             'ExcludedColumnNames': ['gross_margin_pct', 'operating_cost']
         },
     }
-)
+)`}</CodeBox>
 
-# AUDIT LOG — all access recorded to CloudTrail:
-# Every SELECT on a Lake Formation-registered table generates a CloudTrail event.
+        <CodeBox label="Audit log — every access recorded to CloudTrail">{`# Every SELECT on a Lake Formation-registered table generates a CloudTrail event.
 # Query: which users accessed silver.customers in the last 30 days?
-# SELECT userIdentity.principalId, eventTime, requestParameters.tableName
-# FROM cloudtrail_logs
-# WHERE eventName = 'GetTable'
-#   AND requestParameters.tableName = 'customers'
-#   AND eventTime > CURRENT_DATE - 30`}</CodeBox>
+SELECT userIdentity.principalId, eventTime, requestParameters.tableName
+FROM cloudtrail_logs
+WHERE eventName = 'GetTable'
+  AND requestParameters.tableName = 'customers'
+  AND eventTime > CURRENT_DATE - 30`}</CodeBox>
       </section>
 
       <Divider />
@@ -597,28 +572,30 @@ lf.create_data_cells_filter(
         <SectionTitle>PII Classification, GDPR, and Right-to-Erasure</SectionTitle>
 
         <Para>
-          GDPR (EU) and CCPA (California's Consumer Privacy Act, expanded by the CPRA
-          in 2023) require that organisations: know where personal data is stored, protect
-          it with appropriate controls, and honour erasure requests within 30 days.
-          For a data platform, this means: classifying which columns contain PII,
-          masking or removing PII at the Silver layer boundary, and implementing
-          a right-to-erasure pipeline that can delete or anonymise a specific
-          customer's data across all layers.
+          GDPR (EU) and CCPA (California&rsquo;s Consumer Privacy Act, expanded by
+          the CPRA in 2023) require that organisations know where personal data
+          is stored, protect it with appropriate controls, and honour erasure
+          requests within 30 days. For a data platform, this means classifying
+          which columns contain PII, masking or removing PII at the Silver
+          layer boundary, and implementing a right-to-erasure pipeline that can
+          delete or anonymise a specific customer&rsquo;s data across all layers.
         </Para>
 
-        <CodeBox label="PII classification — automated tagging with sensitivity levels">{`# PII CLASSIFICATION TAXONOMY:
-# Level 1 — Direct identifiers (highest sensitivity):
-#   customer_email, phone_number, national_id (SSN), passport_number
-#   bank_account_number, credit_card_number
-# Level 2 — Indirect identifiers (can identify combined with other data):
-#   full_name, address, date_of_birth, ip_address, device_id, GPS coordinates
-# Level 3 — Quasi-identifiers (alone not identifying, combined risky):
-#   city, gender, age_group, job_title, company_name
-# Level 4 — Non-PII (no restriction):
-#   order_amount, product_category, store_id, order_status
+        <SubSubTitle>PII classification taxonomy</SubSubTitle>
 
-# AUTOMATED PII DETECTION (using regex + ML heuristics):
-import re
+        <CodeBox label="Four sensitivity levels">{`Level 1 — Direct identifiers (highest sensitivity):
+  customer_email, phone_number, national_id (SSN), passport_number,
+  bank_account_number, credit_card_number
+Level 2 — Indirect identifiers (can identify combined with other data):
+  full_name, address, date_of_birth, ip_address, device_id, GPS coordinates
+Level 3 — Quasi-identifiers (alone not identifying, combined risky):
+  city, gender, age_group, job_title, company_name
+Level 4 — Non-PII (no restriction):
+  order_amount, product_category, store_id, order_status`}</CodeBox>
+
+        <SubSubTitle>Automated PII detection</SubSubTitle>
+
+        <CodeBox label="Regex-based column scanning">{`import re
 from dataclasses import dataclass
 
 @dataclass
@@ -629,41 +606,35 @@ class PIIDetectionResult:
     confidence: float
 
 PATTERNS = {
-    'email':    (1, re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')),
-    'phone_us': (1, re.compile(r'\b(?:\+1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b')),
-    'ssn':      (1, re.compile(r'\b\d{3}-?\d{2}-?\d{4}\b')),
+    'email':    (1, re.compile(r'\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b')),
+    'phone_us': (1, re.compile(r'\\b(?:\\+1[-.\\s]?)?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}\\b')),
+    'ssn':      (1, re.compile(r'\\b\\d{3}-?\\d{2}-?\\d{4}\\b')),
     'name':     (2, None),   # requires ML classifier — name detection is hard with regex
-    'ip_addr':  (2, re.compile(r'\b(?:\d{1,3}\.){3}\d{1,3}\b')),
+    'ip_addr':  (2, re.compile(r'\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b')),
 }
 
 def detect_pii_in_column(sample_values: list[str], column_name: str) -> PIIDetectionResult:
-    """Scan a sample of column values for PII patterns."""
     hits = {'email': 0, 'phone_us': 0, 'ssn': 0, 'ip_addr': 0}
     total = len(sample_values)
-
     for val in sample_values:
         if not isinstance(val, str):
             continue
         for pii_type, (level, pattern) in PATTERNS.items():
             if pattern and pattern.search(val):
                 hits[pii_type] += 1
-
     for pii_type, count in hits.items():
         confidence = count / total if total > 0 else 0
         if confidence > 0.3:    # > 30% of sampled values match
             level = PATTERNS[pii_type][0]
-            return PIIDetectionResult(
-                column=column_name, pii_level=level,
-                pii_type=pii_type, confidence=round(confidence, 2),
-            )
+            return PIIDetectionResult(column=column_name, pii_level=level, pii_type=pii_type, confidence=round(confidence, 2))
+    return PIIDetectionResult(column=column_name, pii_level=4, pii_type='none', confidence=1.0)`}</CodeBox>
 
-    return PIIDetectionResult(column=column_name, pii_level=4,
-                               pii_type='none', confidence=1.0)
+        <Output>{`>>> detect_pii_in_column(['priya@example.com', 'raj@example.com', 'not-an-email'], 'contact_field')
+PIIDetectionResult(column='contact_field', pii_level=1, pii_type='email', confidence=0.67)`}</Output>
 
+        <SubSubTitle>Tagging PII in dbt schema.yml</SubSubTitle>
 
-# TAGGING PII IN dbt SCHEMA.YML:
-# models/bronze/_schema.yml
-columns:
+        <CodeBox label="models/bronze/_schema.yml">{`columns:
   - name: customer_email
     meta:
       pii_level: 1
@@ -683,39 +654,29 @@ columns:
 # {{ transform_pii_column('customer_email') }}
 # Generates: SHA2(customer_email, 256) AS customer_email_hashed`}</CodeBox>
 
-        <SubTitle>Right-to-erasure — the GDPR delete pipeline</SubTitle>
+        <SubSubTitle>Right-to-erasure — the GDPR delete pipeline</SubSubTitle>
 
-        <CodeBox label="Right-to-erasure — how to honour GDPR delete requests without breaking pipelines">{`"""
-GDPR Right-to-Erasure (Article 17) pipeline.
-Customer submits a deletion request.
-Within 30 days: their PII must be anonymised or deleted across all layers.
+        <Para>
+          The Medallion Architecture is designed for immutability — Bronze is
+          append-only, so a right-to-erasure request cannot simply
+          <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> DELETE</code> rows.
+          The fix is to overwrite PII with a sentinel value while preserving
+          non-PII facts (order counts, amounts) for statistical use.
+        </Para>
 
-CHALLENGE: The Medallion Architecture is designed for immutability.
-Bronze is append-only. We cannot just DELETE rows.
-"""
-
-from datetime import date, datetime
-from typing import Optional
+        <CodeBox label="Step 1 — anonymising the Bronze layer">{`from datetime import date, datetime
 import hashlib
 
 DELETION_SENTINEL = 'GDPR_ERASED'
 
-def process_erasure_request(
-    customer_id: int,
-    request_date: date,
-    conn,
-) -> dict:
-    """
-    Anonymise or delete a customer's PII across all layers.
-    Does NOT delete the row — replaces PII values with a sentinel.
-    Preserves non-PII columns (order counts, amounts) for statistical use.
-    """
+def process_erasure_request(customer_id: int, request_date: date, conn) -> dict:
+    """Anonymise a customer's PII across all layers. Does NOT delete rows —
+    replaces PII values with a sentinel. Preserves non-PII columns for
+    statistical use."""
     results = {}
 
-    # ── BRONZE LAYER ──────────────────────────────────────────────────────────
-    # Bronze is the raw layer. PII must be overwritten here first.
-    # This is the ONLY time we write UPDATE to Bronze — for legal compliance.
-
+    # BRONZE is the raw layer. This is the ONLY time we UPDATE Bronze —
+    # for legal compliance, overriding the append-only design principle.
     bronze_rows = conn.execute("""
         UPDATE bronze.customers
         SET customer_email  = %s,
@@ -730,11 +691,10 @@ def process_erasure_request(
           DELETION_SENTINEL, datetime.utcnow(), customer_id)).fetchall()
 
     results['bronze_rows_updated'] = len(bronze_rows)
+    return results`}</CodeBox>
 
-    # ── SILVER LAYER ──────────────────────────────────────────────────────────
-    # Silver has already-masked columns (email_hashed) but may still have
+        <CodeBox label="Step 2 — anonymising Silver and Gold">{`    # SILVER already has masked columns (email_hashed) but may still have
     # quasi-identifiers like full_name or address.
-
     conn.execute("""
         UPDATE silver.customers
         SET customer_name  = %s,
@@ -750,48 +710,40 @@ def process_erasure_request(
         WHERE customer_id = %s
     """, (DELETION_SENTINEL, customer_id))
 
-    # ── GOLD LAYER ────────────────────────────────────────────────────────────
-    # Gold aggregates (revenue by store, etc.) do NOT contain PII rows.
-    # Pre-computed aggregates are fine — customer is anonymous in aggregates.
-    # No update needed for most Gold tables.
-
-    # EXCEPTION: Gold fct_orders_wide has customer city + region at order level
-    # If these are quasi-identifying in context: anonymise them too.
+    # GOLD aggregates (revenue by store, etc.) do NOT contain PII rows — no
+    # update needed for most Gold tables. EXCEPTION: fct_orders_wide has
+    # customer city + region at order level, which can be quasi-identifying.
     conn.execute("""
         UPDATE gold.fct_orders_wide
         SET customer_tier   = NULL,
             customer_city   = NULL,
             customer_region = NULL
         WHERE customer_id = %s
-    """, (customer_id,))
+    """, (customer_id,))`}</CodeBox>
 
-    # ── RECORD ERASURE ────────────────────────────────────────────────────────
-    conn.execute("""
+        <CodeBox label="Step 3 — recording the erasure and notifying downstream systems">{`    conn.execute("""
         INSERT INTO governance.erasure_requests
             (customer_id, request_date, completed_at, layers_updated, status)
         VALUES (%s, %s, %s, %s, 'completed')
     """, (customer_id, request_date, datetime.utcnow(), str(results)))
-
     conn.commit()
 
-    # ── DOWNSTREAM SYSTEMS ─────────────────────────────────────────────────────
-    # ML models trained on this customer's data: log for retraining audit
-    # Kafka topics: publish erasure event for downstream consumers
-    # Data Vault: update satellite records for this hub key
+    # DOWNSTREAM SYSTEMS:
+    # - ML models trained on this customer's data: log for retraining audit
+    # - Kafka topics: publish an erasure event for downstream consumers
+    # - Data Vault: update satellite records for this hub key
     # All systems subscribed to the erasure event must handle PII deletion.
 
-    return results
+    return results`}</CodeBox>
 
-
-# GDPR COMPLIANCE CHECKLIST FOR A DATA PLATFORM:
-# ✓ PII inventory: every column tagged with pii_level in schema.yml
-# ✓ Masking at Silver boundary: PII replaced before analyst access
-# ✓ Access control: Bronze (raw PII) not accessible to analysts
-# ✓ Audit log: all accesses to PII-containing tables logged
-# ✓ Erasure pipeline: tested, runs within 30 days of request
-# ✓ Data retention: Bronze PII tables have lifecycle policies (max 2 years)
-# ✓ Data residency: customer data stays in approved US region (state law requirement)
-# ✓ Consent log: when consent was given/revoked, stored in governance schema`}</CodeBox>
+        <CodeBox label="GDPR compliance checklist for a data platform">{`✓ PII inventory: every column tagged with pii_level in schema.yml
+✓ Masking at Silver boundary: PII replaced before analyst access
+✓ Access control: Bronze (raw PII) not accessible to analysts
+✓ Audit log: all accesses to PII-containing tables logged
+✓ Erasure pipeline: tested, runs within 30 days of request
+✓ Data retention: Bronze PII tables have lifecycle policies (max 2 years)
+✓ Data residency: customer data stays in approved region (state law requirement)
+✓ Consent log: when consent was given/revoked, stored in governance schema`}</CodeBox>
       </section>
 
       <Divider />
@@ -805,7 +757,7 @@ def process_erasure_request(
           Data mesh is an organisational and architectural pattern for data
           platforms at scale. It proposes that data ownership should be
           decentralised — domain teams (orders, payments, logistics) own and
-          publish their data as "data products," and a central platform team
+          publish their data as &ldquo;data products,&rdquo; and a central platform team
           provides the infrastructure and standards. It is a response to the
           bottleneck that emerges at large organisations when a central data
           engineering team is the only team that can build data pipelines.
@@ -824,30 +776,10 @@ def process_erasure_request(
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
             {[
-              {
-                principle: 'Domain Ownership',
-                color: '#00e676',
-                def: 'The Orders team owns orders data. The Payments team owns payments data. They build, maintain, and are responsible for the quality of their data products.',
-                impact: 'A central DE team still exists — but provides infrastructure, not pipelines for every domain.',
-              },
-              {
-                principle: 'Data as a Product',
-                color: '#7b61ff',
-                def: 'Data is treated like a software product: it has an owner, a schema contract, an SLA, quality guarantees, and documentation. Consumers can discover and use it reliably.',
-                impact: 'Domain teams define and publish data products to an internal catalog. Central team sets quality standards.',
-              },
-              {
-                principle: 'Self-Serve Infrastructure',
-                color: '#f97316',
-                def: 'Domain teams can build and deploy data pipelines without needing the central DE team for every step. Standard tooling, templates, and CI/CD for data.',
-                impact: 'Central team builds dbt project templates, pipeline scaffolding, and catalog integration that domain teams use.',
-              },
-              {
-                principle: 'Federated Governance',
-                color: '#4285f4',
-                def: 'Governance standards (access control, PII classification, quality thresholds) are defined centrally but enforced locally by each domain team.',
-                impact: 'Central team defines the rules. Domain teams implement them in their own pipelines.',
-              },
+              { principle: 'Domain Ownership', color: '#00e676', def: 'The Orders team owns orders data. The Payments team owns payments data. They build, maintain, and are responsible for the quality of their data products.', impact: 'A central DE team still exists — but provides infrastructure, not pipelines for every domain.' },
+              { principle: 'Data as a Product', color: '#7b61ff', def: 'Data is treated like a software product: it has an owner, a schema contract, an SLA, quality guarantees, and documentation. Consumers can discover and use it reliably.', impact: 'Domain teams define and publish data products to an internal catalog. Central team sets quality standards.' },
+              { principle: 'Self-Serve Infrastructure', color: '#f97316', def: 'Domain teams can build and deploy data pipelines without needing the central DE team for every step. Standard tooling, templates, and CI/CD for data.', impact: 'Central team builds dbt project templates, pipeline scaffolding, and catalog integration that domain teams use.' },
+              { principle: 'Federated Governance', color: '#4285f4', def: 'Governance standards (access control, PII classification, quality thresholds) are defined centrally but enforced locally by each domain team.', impact: 'Central team defines the rules. Domain teams implement them in their own pipelines.' },
             ].map((item) => (
               <div key={item.principle} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderLeft: `3px solid ${item.color}`, borderRadius: 8, padding: '14px 16px' }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: item.color, fontFamily: 'var(--font-display)', marginBottom: 6 }}>{item.principle}</div>
@@ -858,14 +790,10 @@ def process_erasure_request(
           </div>
         </HighlightBox>
 
-        <SubTitle>Data mesh vs centralised — the trade-off table</SubTitle>
+        <SubSubTitle>Data mesh vs. centralised — the trade-off table</SubSubTitle>
 
         <CompareTable
-          headers={[
-            { label: 'Dimension' },
-            { label: 'Centralised DE team', color: '#00e676' },
-            { label: 'Data Mesh', color: '#7b61ff' },
-          ]}
+          headers={[{ label: 'Dimension' }, { label: 'Centralised DE team', color: '#00e676' }, { label: 'Data Mesh', color: '#7b61ff' }]}
           keys={['dim', 'central', 'mesh']}
           rows={[
             { dim: 'Org size sweet spot', central: '< 50 engineers, 1-3 domain teams', mesh: '200+ engineers, 10+ domain teams' },
@@ -896,12 +824,7 @@ def process_erasure_request(
         <SectionTitle>The Governance Tooling Landscape — What Each Tool Does</SectionTitle>
 
         <CompareTable
-          headers={[
-            { label: 'Tool' },
-            { label: 'Category', color: '#4285f4' },
-            { label: 'What it does', color: '#00e676' },
-            { label: 'Best for', color: '#7b61ff' },
-          ]}
+          headers={[{ label: 'Tool' }, { label: 'Category', color: '#4285f4' }, { label: 'What it does', color: '#00e676' }, { label: 'Best for', color: '#7b61ff' }]}
           keys={['tool', 'cat', 'what', 'best']}
           rows={[
             { tool: 'DataHub', cat: 'Catalog + Lineage', what: 'Open source. Ingestion connectors for 40+ tools. Search, lineage graph, business glossary, data quality integration.', best: 'Enterprise open source catalog, strong dbt+Airflow integration' },
@@ -921,6 +844,42 @@ def process_erasure_request(
 
       <Divider />
 
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data Governance</SectionTitle>
+
+        {[
+          {
+            wrong: '"Governance is a compliance/legal concern — engineering just implements what legal asks for"',
+            right: 'Part 02\'s impact-analysis workflow shows governance solving a purely engineering problem: without lineage, a routine column change takes 3 hours of reactive debugging; with it, 30 minutes of planning. Lineage, cataloging, and access control save engineering time on their own, independent of any compliance requirement.',
+          },
+          {
+            wrong: '"Column-level access control means maintaining a separate view per role"',
+            right: 'Part 04\'s masking-policy approach is specifically the alternative to that: one masking policy attached directly to the column serves every role transparently — the analyst, the data scientist, and the engineer all query the same silver.customers table and each sees the correct version of the value, with no per-role view to keep in sync.',
+          },
+          {
+            wrong: '"GDPR erasure means deleting the customer\'s rows from every table"',
+            right: 'Part 05 is explicit that rows are never deleted — PII values are overwritten with a sentinel (GDPR_ERASED) while non-PII facts (order counts, amounts) are preserved for statistical validity, and Bronze in particular is only ever UPDATEd for this one legally-mandated reason, not deleted from.',
+          },
+          {
+            wrong: '"A data catalog is just a UI on top of a database schema browser"',
+            right: 'Part 03\'s DataHub walkthrough shows a catalog carries information no schema browser has: business descriptions and glossary terms tied to columns, usage statistics showing who actually queries a table, data-quality status from the last dbt test run, and full lineage — none of which exists in the source database itself.',
+          },
+          {
+            wrong: '"Data mesh is the natural next step for any team outgrowing a single data engineer"',
+            right: 'Part 06 is direct about the actual threshold: data mesh only pays off past roughly 200 engineers and 10+ domains, and it requires each domain team to already have real data engineering capability — adopting it earlier, as Part 09\'s interview answer for Q5 spells out, produces inconsistent quality across domains rather than the coordination relief it promises.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Part 08 — Real World ─────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 08 — Real World" />
@@ -935,101 +894,77 @@ def process_erasure_request(
           </div>
 
           <Para>
-            FreshCart's Data Protection Officer conducts a GDPR audit. They find
+            FreshCart&rsquo;s Data Protection Officer conducts a GDPR audit. They find
             that customer emails and phone numbers in silver.customers are directly
             accessible to 12 analysts, the data engineer who quit last year still
             has active Snowflake credentials, and there is no audit log of who
             accessed customer data. You are given two weeks to fix all three.
           </Para>
 
-          <CodeBox label="GDPR remediation — the engineering response">{`FINDING 1: PII accessible to all analysts in silver.customers
+          <SubSubTitle>Finding 1 — PII accessible to all analysts</SubSubTitle>
 
-CURRENT STATE:
-  GRANT SELECT ON ALL TABLES IN SCHEMA silver TO ROLE analyst_role;
-  silver.customers has: customer_email, phone_number, full_name, address
+          <CodeBox label="Fix — column masking policies for each PII column type">{`-- Current: GRANT SELECT ON ALL TABLES IN SCHEMA silver TO ROLE analyst_role;
+-- silver.customers has: customer_email, phone_number, full_name, address
 
-FIX — Column masking policy (Snowflake):
-  -- Step 1: Create masking policies for each PII column type
-  CREATE MASKING POLICY mask_email AS (v VARCHAR) RETURNS VARCHAR ->
-      CASE WHEN CURRENT_ROLE() IN ('PIPELINE_ROLE','DATA_PLATFORM_ADMIN')
-           THEN v ELSE SHA2(v, 256) END;
+CREATE MASKING POLICY mask_email AS (v VARCHAR) RETURNS VARCHAR ->
+    CASE WHEN CURRENT_ROLE() IN ('PIPELINE_ROLE','DATA_PLATFORM_ADMIN')
+         THEN v ELSE SHA2(v, 256) END;
 
-  CREATE MASKING POLICY mask_phone AS (v VARCHAR) RETURNS VARCHAR ->
-      CASE WHEN CURRENT_ROLE() IN ('PIPELINE_ROLE','DATA_PLATFORM_ADMIN')
-           THEN v ELSE REGEXP_REPLACE(v, '.', 'X') END;
+CREATE MASKING POLICY mask_phone AS (v VARCHAR) RETURNS VARCHAR ->
+    CASE WHEN CURRENT_ROLE() IN ('PIPELINE_ROLE','DATA_PLATFORM_ADMIN')
+         THEN v ELSE REGEXP_REPLACE(v, '.', 'X') END;
 
-  CREATE MASKING POLICY mask_name AS (v VARCHAR) RETURNS VARCHAR ->
-      CASE WHEN CURRENT_ROLE() IN ('PIPELINE_ROLE','DATA_PLATFORM_ADMIN')
-           THEN v ELSE LEFT(v, 1) || '***' END;   -- 'P***' (initial only)
+CREATE MASKING POLICY mask_name AS (v VARCHAR) RETURNS VARCHAR ->
+    CASE WHEN CURRENT_ROLE() IN ('PIPELINE_ROLE','DATA_PLATFORM_ADMIN')
+         THEN v ELSE LEFT(v, 1) || '***' END;   -- 'P***' (initial only)
 
-  -- Step 2: Apply to PII columns
-  ALTER TABLE silver.customers ALTER COLUMN customer_email
-      SET MASKING POLICY mask_email;
-  ALTER TABLE silver.customers ALTER COLUMN phone_number
-      SET MASKING POLICY mask_phone;
-  ALTER TABLE silver.customers ALTER COLUMN full_name
-      SET MASKING POLICY mask_name;
+ALTER TABLE silver.customers ALTER COLUMN customer_email SET MASKING POLICY mask_email;
+ALTER TABLE silver.customers ALTER COLUMN phone_number SET MASKING POLICY mask_phone;
+ALTER TABLE silver.customers ALTER COLUMN full_name SET MASKING POLICY mask_name;
+-- No data model changes needed. No view required. Masking is transparent.`}</CodeBox>
 
-  -- Verify: analyst queries silver.customers:
-  -- customer_email = 'a3f4...sha256hash...'
-  -- phone_number   = 'XXXXXXXXXX'
-  -- full_name      = 'P***'
-  -- No data model changes needed. No view required. Column masking is transparent.
+          <Output>{`Analyst queries silver.customers:
+customer_email = 'a3f4...sha256hash...'
+phone_number   = 'XXXXXXXXXX'
+full_name      = 'P***'`}</Output>
 
-FINDING 2: Departed employee still has active credentials
+          <SubSubTitle>Finding 2 — departed employee still has active credentials</SubSubTitle>
 
-FIX — Access review and automated offboarding:
-  -- Audit: find all users with recent login activity
-  SELECT user_name, last_success_login, login_history
-  FROM snowflake.account_usage.users
-  WHERE disabled = FALSE
-  ORDER BY last_success_login DESC;
-  -- Found: former_employee@freshmart.com, last login 47 days ago
+          <CodeBox label="Fix — access review and automated offboarding">{`SELECT user_name, last_success_login, login_history
+FROM snowflake.account_usage.users
+WHERE disabled = FALSE
+ORDER BY last_success_login DESC;
+-- Found: former_employee@freshcart.com, last login 47 days ago
 
-  -- Disable immediately:
-  ALTER USER former_employee@freshmart.com SET DISABLED = TRUE;
+ALTER USER former_employee@freshcart.com SET DISABLED = TRUE;
 
-  -- Preventive: Automate offboarding via HR system integration
-  -- When HR marks employee as departed:
-  -- 1. Disable Snowflake user (API call)
-  -- 2. Revoke all role assignments
-  -- 3. Log access review completion
-  -- 4. Notify security team
+-- Preventive: automate offboarding via HR system integration —
+-- when HR marks an employee departed: disable Snowflake user, revoke all
+-- role assignments, log the access review, notify the security team.`}</CodeBox>
 
-FINDING 3: No audit log of customer data access
+          <SubSubTitle>Finding 3 — no audit log of customer data access</SubSubTitle>
 
-FIX — Enable Snowflake access history and build audit query:
-  -- Snowflake retains access_history for 365 days in ACCOUNT_USAGE schema.
-  -- No setup needed — it is always on.
-  -- DPO needed access to query it:
+          <CodeBox label="Fix — enable Snowflake access history for the DPO">{`-- Snowflake retains access_history for 365 days in ACCOUNT_USAGE. Always on.
+GRANT SELECT ON SNOWFLAKE.ACCOUNT_USAGE.ACCESS_HISTORY TO ROLE dpo_role;
 
-  GRANT SELECT ON SNOWFLAKE.ACCOUNT_USAGE.ACCESS_HISTORY TO ROLE dpo_role;
+-- DPO audit query: who accessed customer PII in the last 90 days?
+SELECT user_name, query_start_time, query_text, base_objects_accessed
+FROM snowflake.account_usage.access_history,
+     LATERAL FLATTEN(base_objects_accessed) f
+WHERE f.value:objectName::STRING ILIKE '%silver.customers%'
+  AND query_start_time >= CURRENT_DATE - 90
+ORDER BY query_start_time DESC;
 
-  -- DPO audit query: who accessed customer PII in the last 90 days?
-  SELECT
-      user_name,
-      query_start_time,
-      query_text,
-      base_objects_accessed
-  FROM snowflake.account_usage.access_history,
-       LATERAL FLATTEN(base_objects_accessed) f
-  WHERE f.value:objectName::STRING ILIKE '%silver.customers%'
-    AND query_start_time >= CURRENT_DATE - 90
-  ORDER BY query_start_time DESC;
+-- Ongoing: schedule a weekly DPO report to governance.pii_access_log
+-- for a permanent audit trail beyond Snowflake's 365-day retention.`}</CodeBox>
 
-  -- Returns: complete log of every access to silver.customers
-  -- With: who, when, what query
-
-  -- Ongoing: schedule weekly DPO report to governance.pii_access_log
-  -- for permanent audit trail beyond Snowflake's 365-day retention.
-
-OUTCOMES AFTER REMEDIATION:
-  - PII masked for all analysts: same-day fix via column masking
-  - Departed employee disabled: same day
-  - Audit log available to DPO: 1 day (access grant + query setup)
-  - Full PII inventory across all tables: 1 week (schema.yml audit)
-  - Automated offboarding process: 2 weeks (HR integration)
-  - GDPR compliance documentation updated: 2 weeks`}</CodeBox>
+          <Output>{`OUTCOMES AFTER REMEDIATION:
+PII masked for all analysts:            same-day fix via column masking
+Departed employee disabled:             same day
+Audit log available to DPO:             1 day (access grant + query setup)
+Full PII inventory across all tables:   1 week (schema.yml audit)
+Automated offboarding process:          2 weeks (HR integration)
+GDPR compliance documentation updated:  2 weeks`}</Output>
         </div>
       </section>
 
@@ -1063,7 +998,7 @@ The catalog should include: table and column descriptions (what the data means, 
 
 A business glossary is the other critical component. It defines business terms — "Net Revenue," "GMV," "Active Customer" — with canonical definitions approved by the business. Each Gold column is linked to its glossary term. When an analyst searches for "revenue," they find the canonical term, its definition, and the table columns that implement it. This eliminates the divergent definitions problem.
 
-Keeping it current is the hardest part. Metadata captured once and never updated becomes misleading — a table marked "owner: data-team@freshmart.com" when the actual owner moved teams six months ago is worse than no metadata. Automate ingestion: run DataHub ingestion after every dbt deploy. Require description updates as part of the PR review for any new model. Include a "last verified" date that engineers update when they confirm metadata is still accurate.`,
+Keeping it current is the hardest part. Metadata captured once and never updated becomes misleading — a table marked "owner: data-team@freshcart.com" when the actual owner moved teams six months ago is worse than no metadata. Automate ingestion: run DataHub ingestion after every dbt deploy. Require description updates as part of the PR review for any new model. Include a "last verified" date that engineers update when they confirm metadata is still accurate.`,
           },
           {
             q: 'Q3. Explain column-level access control. How would you implement it in Snowflake and why is it better than creating separate views?',
@@ -1107,6 +1042,42 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
             <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Granting OWNERSHIP or ACCOUNTADMIN to an analyst role "just to unblock them faster"',
+            a: 'Part 04\'s masking policies and this module\'s Error Library both note that masking silently stops applying to any role with OWNERSHIP or ACCOUNTADMIN — an elevated role doesn\'t just over-grant access, it bypasses PII protection entirely without any error or warning. Keep analyst roles strictly to SELECT on the schemas they need.',
+          },
+          {
+            q: 'Treating a one-off SQL script in the warehouse as equivalent to a dbt model',
+            a: 'This module\'s Error Library shows exactly what breaks: a table built by a manual script never appears in the dbt manifest, so DataHub\'s lineage graph shows it with no upstream at all — even though it was clearly built from another table. Every Gold table needs to go through dbt specifically so lineage and cataloging stay accurate automatically.',
+          },
+          {
+            q: 'Assuming a GDPR erasure request means deleting rows from Bronze',
+            a: 'Part 05 is explicit that Bronze is append-only by design, and the correct erasure pattern overwrites PII fields with a sentinel value in an UPDATE — the one deliberate exception to Bronze\'s immutability rule — rather than deleting rows, which would corrupt partition-level guarantees and audit counts.',
+            },
+          {
+            q: 'Building column-level access control as a set of per-role SQL views',
+            a: 'Part 04 walks through why this doesn\'t scale: a table with ten PII columns and five roles becomes fifty separate view-column references to keep in sync every time masking logic changes. A single masking policy attached to the column handles every role transparently and is the pattern this track uses everywhere.',
+          },
+          {
+            q: 'Rolling out data mesh because the current data team feels overloaded',
+            a: 'Part 06\'s trade-off table and Part 09\'s Q5 both point to the same threshold — data mesh only becomes the right call past roughly 200 engineers and 10+ domains, and only once domain teams already have real data engineering capability. Below that, the standard fix is better documentation, a catalog, and data contracts with a centralised team, not a governance model built for a much larger org.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
           </div>
         ))}
       </section>
@@ -1173,7 +1144,7 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
         'Lineage for impact analysis workflow: before changing a model, run dbt ls --select +model_name+ to find all downstream models. Cross-check in DataHub for non-dbt consumers (BI tools, APIs). Update all downstream models together in one deployment. Never change a Gold column definition without knowing all downstream consumers — one unplanned downstream breakage erodes team trust more than any performance issue.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
