@@ -19,13 +19,26 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 const SubTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 style={{ fontSize: 'clamp(16px,1.8vw,20px)', fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text)', marginBottom: 12, fontFamily: 'var(--font-display)' }}>{children}</h3>
 )
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>{label}</div>}
     <pre style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.9, color: 'var(--text)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{ background: 'transparent', border: '1px dashed var(--border)', borderRadius: 10, padding: '14px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.8, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
       <code>{children}</code>
     </pre>
   </div>
@@ -33,6 +46,15 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>{children}</div>
+)
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)', borderRadius: 10, padding: '16px 20px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent2)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
 )
 
 interface TableRow { [key: string]: string }
@@ -58,8 +80,8 @@ export default function MonitoringObservabilityModule() {
       title="Monitoring and Observability for Data Pipelines"
       description="SLAs, alerting tiers, pipeline health dashboards, structured logging, metric collection, DLQ monitoring, and building an on-call culture for data teams."
       section="Data Engineering — Module 37"
-      readTime="60 min"
-      updatedAt="March 2026"
+      readTime="70 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Monitoring vs Observability ─────────────────────── */}
@@ -77,11 +99,8 @@ export default function MonitoringObservabilityModule() {
         <Para>
           Observability is the property of a system that makes it possible to
           answer arbitrary questions about its behaviour from the outside — even
-          questions you did not think to ask when you built the monitoring. An
-          observable pipeline produces rich enough logs, metrics, and traces that
-          you can determine why an unusual thing happened, not just that it happened.
-          Monitoring catches the fires you anticipated. Observability helps you
-          understand the fires you did not.
+          questions you did not think to ask when you built the monitoring. This
+          module builds both, around FreshCart&rsquo;s Silver orders pipeline.
         </Para>
 
         <HighlightBox>
@@ -90,27 +109,9 @@ export default function MonitoringObservabilityModule() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
             {[
-              {
-                signal: 'Metrics',
-                color: '#00e676',
-                def: 'Numeric measurements aggregated over time. Row counts, latency percentiles, error rates, queue depths. Low cardinality, high frequency.',
-                tools: 'Prometheus, Datadog, CloudWatch, Grafana',
-                pipeline_use: 'Rows processed per second. Pipeline duration. DLQ depth. Warehouse credit usage.',
-              },
-              {
-                signal: 'Logs',
-                color: '#7b61ff',
-                def: 'Discrete events with context. Structured JSON logs that record what happened, when, and with what parameters. High cardinality, queryable.',
-                tools: 'CloudWatch Logs, Elasticsearch/Kibana, Datadog Logs, Loki',
-                pipeline_use: 'Every pipeline run start/end. Validation failures with row details. Retry attempts. DLQ entries.',
-              },
-              {
-                signal: 'Traces',
-                color: '#f97316',
-                def: 'End-to-end request paths across services. A trace shows how a specific data event flowed from source through all transformation stages to the Gold table.',
-                tools: 'Jaeger, Zipkin, AWS X-Ray, Datadog APM',
-                pipeline_use: 'Tracing a single order from Kafka event through Bronze → Silver → Gold. Identifying which stage added the most latency.',
-              },
+              { signal: 'Metrics', color: '#00e676', def: 'Numeric measurements aggregated over time. Row counts, latency percentiles, error rates, queue depths. Low cardinality, high frequency.', tools: 'Prometheus, Datadog, CloudWatch, Grafana', pipeline_use: 'Rows processed per second. Pipeline duration. DLQ depth. Warehouse credit usage.' },
+              { signal: 'Logs', color: '#7b61ff', def: 'Discrete events with context. Structured JSON logs that record what happened, when, and with what parameters. High cardinality, queryable.', tools: 'CloudWatch Logs, Elasticsearch/Kibana, Datadog Logs, Loki', pipeline_use: 'Every pipeline run start/end. Validation failures with row details. Retry attempts. DLQ entries.' },
+              { signal: 'Traces', color: '#f97316', def: 'End-to-end request paths across services. A trace shows how a specific data event flowed from source through all transformation stages to the Gold table.', tools: 'Jaeger, Zipkin, AWS X-Ray, Datadog APM', pipeline_use: 'Tracing a single order from Kafka event through Bronze → Silver → Gold. Identifying which stage added the most latency.' },
             ].map((item) => (
               <div key={item.signal} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}30`, borderTop: `3px solid ${item.color}`, borderRadius: 10, padding: '16px 18px' }}>
                 <div style={{ fontSize: 14, fontWeight: 800, color: item.color, fontFamily: 'var(--font-display)', marginBottom: 6 }}>{item.signal}</div>
@@ -123,6 +124,12 @@ export default function MonitoringObservabilityModule() {
             ))}
           </div>
         </HighlightBox>
+
+        <TryThis>
+          A dashboard shows &ldquo;silver_orders: FAILED.&rdquo; That&rsquo;s monitoring. Now name
+          three questions only logs or traces could answer about WHY it failed —
+          before reading Part 03.
+        </TryThis>
       </section>
 
       <Divider />
@@ -134,99 +141,60 @@ export default function MonitoringObservabilityModule() {
 
         <Para>
           SLA, SLO, and SLI are terms borrowed from software reliability
-          engineering that the data engineering world has adopted because they
-          provide precise language for production commitments. Using them correctly
-          transforms vague agreements ("the pipeline should be fast") into
-          measurable, enforceable contracts.
+          engineering. Using them correctly transforms vague agreements (&ldquo;the
+          pipeline should be fast&rdquo;) into measurable, enforceable contracts.
         </Para>
 
-        <CodeBox label="SLI, SLO, SLA — definitions and examples for data pipelines">{`SLI: SERVICE LEVEL INDICATOR
-  The actual measured metric — what you measure.
-  For data pipelines:
-    Pipeline completion time:     time from scheduled start to last write
-    Data freshness:               age of the most recently available data
-    Row count:                    number of records in the target table
-    Error rate:                   fraction of pipeline runs that fail
-    DLQ accumulation rate:        rejected records per run
+        <CodeBox label="SLI, SLO, SLA — definitions and FreshCart examples">{`SLI (measured):    pipeline completion time, data freshness, error rate, DLQ rate
+SLO (internal target): "Silver orders completes within 90 min of scheduled start"
+                        "Gold daily_revenue is no older than 2 hours"
+                        "Error rate < 1% over any 7-day rolling window"
+SLA (external promise): "Finance dashboards have yesterday's data by 08:00 ET"
+                         "Any data correction is available within 4 hours"
 
-SLO: SERVICE LEVEL OBJECTIVE
-  The target value for the SLI — what you aim for.
-  For data pipelines:
-    "Silver orders pipeline completes within 90 minutes of scheduled start"
-    "Gold daily_revenue data is no older than 2 hours at any point"
-    "Pipeline error rate is < 1% over any 7-day rolling window"
-    "DLQ depth does not exceed 10,000 records at any time"
-  SLOs are internal commitments — what the team aims to achieve.
+ERROR BUDGET: SLO "99% of runs complete within 90 min", 6-hourly pipeline:
+  Monthly runs: 30 × 4 = 120.  Allowed misses: 120 × 1% ≈ 1.2 runs/month.
+  When the budget is exhausted: stop new features, focus on reliability.
 
-SLA: SERVICE LEVEL AGREEMENT
-  The contractual commitment to a consumer — what you promise.
-  For data pipelines:
-    "Finance dashboards will have yesterday's data by 08:00 ET"
-    "ML feature store updates daily by 06:00 ET"
-    "Any data correction will be available within 4 hours of detection"
-  SLAs are external commitments — what the business depends on.
-  Breaching an SLA has consequences (business impact, escalation).
+Pipeline                SLI                 SLO             SLA
+silver_orders_daily     completion_time      < 60 min        —
+gold_daily_revenue      data_freshness       < 2h            data by 08:00 ET
+ml_feature_store        completion_time      < 30 min        complete by 06:00 ET`}</CodeBox>
 
-ERROR BUDGET:
-  If SLO is "99% of pipeline runs complete within 90 minutes":
-    Monthly runs: 30 × (24/6) = 120 runs   (6-hourly pipeline)
-    Allowed failures: 120 × 1% = 1.2 runs
-    Error budget: about 1 allowed SLO miss per month
-  When error budget is exhausted: stop new features, focus on reliability.
+        <SubSubTitle>Tracking SLOs in a real table</SubSubTitle>
 
-FRESHMART SLO EXAMPLES:
-  Pipeline                SLI                  SLO             SLA
-  ──────────────────────────────────────────────────────────────────────
-  silver_orders_daily     completion_time      < 60 min        —
-  gold_daily_revenue      data_freshness       < 2h            data by 08:00 ET
-  ml_feature_store        completion_time      < 30 min        complete by 06:00 ET
-  bronze_ingestion        error_rate           < 0.1%          —
-  dlq_reprocessing        completion_time      < 4h            correction within 4h`}</CodeBox>
+        <CodeBox label="monitoring.pipeline_slo_tracking">{`CREATE TABLE monitoring.pipeline_slo_tracking (
+    run_id UUID NOT NULL, pipeline_name VARCHAR(100) NOT NULL,
+    scheduled_start TIMESTAMPTZ NOT NULL, actual_start TIMESTAMPTZ, actual_end TIMESTAMPTZ,
+    slo_target_min INT NOT NULL, actual_duration_min DECIMAL(8,2), met_slo BOOLEAN,
+    sla_deadline TIMESTAMPTZ, met_sla BOOLEAN, status VARCHAR(20) NOT NULL,
+    rows_processed BIGINT, rows_rejected BIGINT, recorded_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);`}</CodeBox>
 
-        <SubTitle>Defining and tracking SLOs in practice</SubTitle>
-
-        <CodeBox label="SLO tracking — measuring and reporting on pipeline SLOs">{`-- SLO TRACKING TABLE:
-CREATE TABLE monitoring.pipeline_slo_tracking (
-    run_id          UUID         NOT NULL,
-    pipeline_name   VARCHAR(100) NOT NULL,
-    scheduled_start TIMESTAMPTZ  NOT NULL,
-    actual_start    TIMESTAMPTZ,
-    actual_end      TIMESTAMPTZ,
-    slo_target_min  INT          NOT NULL,   -- target completion time in minutes
-    actual_duration_min DECIMAL(8,2),
-    met_slo         BOOLEAN,
-    sla_deadline    TIMESTAMPTZ,            -- NULL if no SLA for this pipeline
-    met_sla         BOOLEAN,
-    status          VARCHAR(20)  NOT NULL,  -- 'running', 'success', 'failed'
-    rows_processed  BIGINT,
-    rows_rejected   BIGINT,
-    recorded_at     TIMESTAMPTZ  NOT NULL DEFAULT NOW()
-);
-
--- DAILY SLO REPORT:
-SELECT
-    pipeline_name,
-    COUNT(*)                                       AS total_runs,
-    SUM(CASE WHEN met_slo THEN 1 ELSE 0 END)      AS slo_met_count,
-    ROUND(SUM(CASE WHEN met_slo THEN 1 ELSE 0 END)::NUMERIC
-          / COUNT(*) * 100, 1)                     AS slo_met_pct,
-    ROUND(AVG(actual_duration_min), 1)             AS avg_duration_min,
-    ROUND(PERCENTILE_CONT(0.95) WITHIN GROUP
-          (ORDER BY actual_duration_min), 1)       AS p95_duration_min,
-    SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) AS failures
+        <CodeBox label="The two queries every SLO review actually runs">{`-- Daily SLO report
+SELECT pipeline_name, COUNT(*) total_runs,
+    ROUND(SUM(CASE WHEN met_slo THEN 1 ELSE 0 END)::NUMERIC / COUNT(*) * 100, 1) slo_met_pct,
+    ROUND(PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY actual_duration_min), 1) p95_duration_min
 FROM monitoring.pipeline_slo_tracking
-WHERE scheduled_start >= CURRENT_DATE - 30
-GROUP BY pipeline_name
-ORDER BY slo_met_pct ASC;
+WHERE scheduled_start >= CURRENT_DATE - 30 GROUP BY pipeline_name ORDER BY slo_met_pct ASC;
 
--- SLA BREACH HISTORY (the ones that matter most):
-SELECT pipeline_name, scheduled_start, sla_deadline,
-       actual_end, actual_end - sla_deadline AS breach_duration
+-- SLA breach history (the ones that matter most)
+SELECT pipeline_name, scheduled_start, sla_deadline, actual_end - sla_deadline breach_duration
 FROM monitoring.pipeline_slo_tracking
-WHERE met_sla = FALSE
-  AND sla_deadline IS NOT NULL
-  AND scheduled_start >= CURRENT_DATE - 30
+WHERE met_sla = FALSE AND sla_deadline IS NOT NULL AND scheduled_start >= CURRENT_DATE - 30
 ORDER BY scheduled_start DESC;`}</CodeBox>
+
+        <Output>{`pipeline_name       total_runs  slo_met_pct  p95_duration_min
+silver_orders_daily 30          96.7         64.2
+gold_daily_revenue  30          100.0        18.5   ← healthiest pipeline this month
+ml_feature_store    30          83.3         41.8   ← worth investigating`}</Output>
+
+        <Callout type="tip">
+          Set SLOs stricter than SLAs. If the SLA is &ldquo;data by 08:00 ET,&rdquo; set the
+          SLO as &ldquo;completes within 90 minutes of the 06:00 start&rdquo; — done by 07:30.
+          Alerting is calibrated to the SLO, giving you time to react before the
+          SLA — the business promise — is ever actually breached.
+        </Callout>
       </section>
 
       <Divider />
@@ -237,187 +205,95 @@ ORDER BY scheduled_start DESC;`}</CodeBox>
         <SectionTitle>Structured Logging — The Foundation of Observable Pipelines</SectionTitle>
 
         <Para>
-          Unstructured log messages like "Pipeline completed" are useless for
+          Unstructured log messages like &ldquo;Pipeline completed&rdquo; are useless for
           diagnosis. Structured JSON logs with consistent fields are queryable,
-          aggregatable, and searchable. Every pipeline run should emit a structured
-          log entry at each stage with enough context to reconstruct exactly what
-          happened, to whom, and why it succeeded or failed.
+          aggregatable, and searchable.
         </Para>
 
-        <CodeBox label="Structured logging — the standard for production pipelines">{`"""
-Structured logging for data pipelines.
-All log entries are JSON with consistent fields.
-Queryable in CloudWatch Insights, Elasticsearch, Datadog.
-"""
-import json
-import logging
-import traceback
+        <SubSubTitle>A small logger class, used everywhere</SubSubTitle>
+
+        <CodeBox label="PipelineLogger — one class, consistent JSON fields">{`import json, logging
 from datetime import datetime, timezone
 from typing import Any
-from uuid import uuid4
 
 class PipelineLogger:
-    """
-    Structured logger that emits JSON to stdout.
-    Fields are consistent across all pipeline runs.
-    """
     def __init__(self, pipeline_name: str, run_id: str):
-        self.pipeline_name = pipeline_name
-        self.run_id        = run_id
-        self._logger       = logging.getLogger(pipeline_name)
+        self.pipeline_name, self.run_id = pipeline_name, run_id
 
     def _emit(self, level: str, event: str, **kwargs: Any) -> None:
-        entry = {
-            'timestamp':     datetime.now(timezone.utc).isoformat(),
-            'level':         level,
-            'event':         event,
-            'pipeline':      self.pipeline_name,
-            'run_id':        self.run_id,
-            **kwargs,
-        }
+        entry = {'timestamp': datetime.now(timezone.utc).isoformat(), 'level': level,
+                 'event': event, 'pipeline': self.pipeline_name, 'run_id': self.run_id, **kwargs}
         print(json.dumps(entry), flush=True)   # stdout → log aggregator
 
-    def info(self, event: str, **kwargs):
-        self._emit('INFO', event, **kwargs)
+    def info(self, event: str, **kwargs):    self._emit('INFO', event, **kwargs)
+    def warning(self, event: str, **kwargs): self._emit('WARNING', event, **kwargs)
+    def error(self, event: str, **kwargs):   self._emit('ERROR', event, **kwargs)`}</CodeBox>
 
-    def warning(self, event: str, **kwargs):
-        self._emit('WARNING', event, **kwargs)
+        <SubSubTitle>Using it through a real pipeline run</SubSubTitle>
 
-    def error(self, event: str, **kwargs):
-        self._emit('ERROR', event, **kwargs)
-
-
-# USAGE IN A PIPELINE:
-def run_silver_pipeline(run_date: str) -> dict:
+        <CodeBox label="run_silver_pipeline() — one log call per meaningful event">{`def run_silver_pipeline(run_date: str) -> dict:
     run_id = str(uuid4())
-    log    = PipelineLogger('silver_orders', run_id)
-
+    log = PipelineLogger('silver_orders', run_id)
     log.info('pipeline_started', run_date=run_date, trigger='scheduled')
 
     try:
-        # Stage 1: Extract from Bronze
-        start = datetime.now(timezone.utc)
-        rows  = extract_from_bronze(run_date)
-        log.info('extract_complete',
-                 stage='extract',
-                 rows_extracted=len(rows),
-                 duration_sec=(datetime.now(timezone.utc) - start).total_seconds(),
-                 source='bronze.orders',
-                 run_date=run_date)
+        rows = extract_from_bronze(run_date)
+        log.info('extract_complete', stage='extract', rows_extracted=len(rows), source='bronze.orders')
 
-        # Stage 2: Validate
         valid, rejected = validate_rows(rows)
         if rejected:
-            log.warning('validation_rejections',
-                        stage='validate',
-                        rejected_count=len(rejected),
-                        rejection_rate=round(len(rejected) / len(rows), 4),
-                        sample_errors=[r['error'] for r in rejected[:3]])
+            log.warning('validation_rejections', stage='validate', rejected_count=len(rejected),
+                        rejection_rate=round(len(rejected) / len(rows), 4))
             write_to_dlq(rejected, run_id)
 
-        # Stage 3: Transform and load
-        start = datetime.now(timezone.utc)
         rows_written = load_to_silver(valid, run_date)
-        log.info('load_complete',
-                 stage='load',
-                 rows_written=rows_written,
-                 duration_sec=(datetime.now(timezone.utc) - start).total_seconds(),
-                 target='silver.orders',
-                 run_date=run_date)
-
-        log.info('pipeline_complete',
-                 status='success',
-                 rows_extracted=len(rows),
-                 rows_written=rows_written,
-                 rows_rejected=len(rejected),
-                 rejection_rate=round(len(rejected) / len(rows), 4))
-
+        log.info('load_complete', stage='load', rows_written=rows_written, target='silver.orders')
+        log.info('pipeline_complete', status='success', rows_written=rows_written)
         return {'status': 'success', 'rows_written': rows_written}
 
     except Exception as exc:
-        log.error('pipeline_failed',
-                  status='failed',
-                  error_type=type(exc).__name__,
-                  error_message=str(exc),
-                  stacktrace=traceback.format_exc())
-        raise
+        log.error('pipeline_failed', error_type=type(exc).__name__, error_message=str(exc))
+        raise`}</CodeBox>
 
+        <Output>{`{"timestamp": "2026-03-17T06:14:32.847Z", "level": "INFO", "event": "extract_complete",
+ "pipeline": "silver_orders", "run_id": "d7c7a7b8-...", "stage": "extract",
+ "rows_extracted": 48234, "source": "bronze.orders"}
 
-# WHAT THIS PRODUCES IN CLOUDWATCH / DATADOG:
-# {
-#   "timestamp": "2026-03-17T06:14:32.847Z",
-#   "level": "INFO",
-#   "event": "extract_complete",
-#   "pipeline": "silver_orders",
-#   "run_id": "d7c7a7b8-3e1a-...",
-#   "stage": "extract",
-#   "rows_extracted": 48234,
-#   "duration_sec": 47.3,
-#   "source": "bronze.orders",
-#   "run_date": "2026-03-17"
-# }
+-- CloudWatch Insights: runs with > 5% rejection rate, last 7 days
+fields @timestamp, pipeline, run_id, rejection_rate
+| filter event = "pipeline_complete" and rejection_rate > 0.05
+| sort @timestamp desc | limit 20`}</Output>
 
-# CLOUDWATCH INSIGHTS QUERIES:
-# Find all runs that had > 5% rejection rate in last 7 days:
-# fields @timestamp, pipeline, run_id, rejection_rate
-# | filter event = "pipeline_complete" and rejection_rate > 0.05
-# | sort @timestamp desc
-# | limit 20
+        <SubSubTitle>Correlation IDs — threading one identifier through every system</SubSubTitle>
 
-# Average extraction duration per pipeline, last 30 days:
-# stats avg(duration_sec) as avg_secs by pipeline
-# | filter event = "extract_complete"
-# | sort avg_secs desc`}</CodeBox>
+        <Para>
+          Without a shared identifier, a data quality incident spanning Bronze,
+          Silver, Gold, and Airflow means manually correlating four separate,
+          separately-timestamped logs. Propagating one correlation ID through
+          every stage turns that into a single query.
+        </Para>
 
-        <SubTitle>Correlation IDs — threading context across distributed systems</SubTitle>
-
-        <CodeBox label="Correlation IDs — linking logs across pipeline stages and services">{`# PROBLEM: a data quality incident spans 4 systems.
-# Bronze extraction log: run_id=abc123
-# Silver transformation log: separate log, no link back to Bronze
-# Gold build log: another log, no link to Silver or Bronze
-# Airflow task logs: separate from all the above
-# When Silver has bad data, you cannot find which Bronze run caused it.
-
-# SOLUTION: propagate a single correlation ID through all stages.
-
-# 1. Airflow DAG generates the run correlation ID:
-from airflow.operators.python import PythonOperator
-from uuid import uuid4
+        <CodeBox label="Generating the ID once, in Airflow, and reusing it everywhere">{`from uuid import uuid4
 
 def generate_run_context(**context):
     """Generate correlation ID and push to XCom for all downstream tasks."""
-    correlation_id = str(uuid4())
-    context['ti'].xcom_push(key='correlation_id', value=correlation_id)
-    context['ti'].xcom_push(key='run_date', value=context['ds'])
+    context['ti'].xcom_push(key='correlation_id', value=str(uuid4()))
 
-generate_context = PythonOperator(
-    task_id='generate_run_context',
-    python_callable=generate_run_context,
-)
-
-# 2. Every downstream task pulls the correlation ID and includes it:
 def run_bronze_extraction(**context):
-    correlation_id = context['ti'].xcom_pull(
-        task_ids='generate_run_context', key='correlation_id'
-    )
+    correlation_id = context['ti'].xcom_pull(task_ids='generate_run_context', key='correlation_id')
     log = PipelineLogger('bronze_orders', run_id=correlation_id)
     log.info('extraction_started', stage='bronze')
-    # All Bronze logs tagged with correlation_id
 
 def run_silver_transform(**context):
-    correlation_id = context['ti'].xcom_pull(
-        task_ids='generate_run_context', key='correlation_id'
-    )
+    correlation_id = context['ti'].xcom_pull(task_ids='generate_run_context', key='correlation_id')
     log = PipelineLogger('silver_orders', run_id=correlation_id)
-    log.info('transform_started', stage='silver')
-    # Same correlation_id — linkable to Bronze logs
+    log.info('transform_started', stage='silver')   # same correlation_id — linkable to Bronze`}</CodeBox>
 
-# 3. In CloudWatch Insights: search for correlation_id to see the FULL run:
-# fields @timestamp, event, stage, rows_extracted, rows_rejected, error_message
-# | filter run_id = "d7c7a7b8-3e1a-4a2c-9b4d-..."
-# | sort @timestamp asc
-# Shows: every log entry from Bronze through Silver through Gold for that run.
-# Incident investigation time: minutes (not hours of cross-log searching).`}</CodeBox>
+        <Output>{`-- search ONE id, see the whole run across Bronze → Silver → Gold:
+fields @timestamp, event, stage, rows_extracted, rows_rejected, error_message
+| filter run_id = "d7c7a7b8-3e1a-4a2c-9b4d-..."
+| sort @timestamp asc
+-- incident investigation: minutes, not hours of cross-log searching`}</Output>
       </section>
 
       <Divider />
@@ -428,114 +304,65 @@ def run_silver_transform(**context):
         <SectionTitle>Alerting Tiers — What Gets Paged at 2 AM vs What Waits Until Morning</SectionTitle>
 
         <Para>
-          Alert fatigue is the most dangerous failure mode of a monitoring system.
-          When every minor pipeline warning generates a PagerDuty page, engineers
-          stop responding to pages because 90% of them are noise. The one real
-          incident then goes undetected for hours. Tiered alerting is the answer:
-          only alerts that require immediate human action at any hour are P1.
-          Everything else waits for business hours.
+          Alert fatigue is the most dangerous failure mode of a monitoring
+          system. When every minor warning pages the on-call engineer, they stop
+          responding — the one real incident then goes undetected for hours.
         </Para>
 
         <CompareTable
-          headers={[
-            { label: 'Priority' },
-            { label: 'Definition', color: '#ff4757' },
-            { label: 'Response', color: '#f97316' },
-            { label: 'Channel', color: '#4285f4' },
-            { label: 'Pipeline examples', color: '#7b61ff' },
-          ]}
-          keys={['priority', 'def', 'response', 'channel', 'examples']}
+          headers={[{ label: 'Priority' }, { label: 'Definition', color: '#ff4757' }, { label: 'Response', color: '#f97316' }, { label: 'Channel', color: '#4285f4' }]}
+          keys={['priority', 'def', 'response', 'channel']}
           rows={[
-            { priority: 'P1 — Critical', def: 'SLA breach imminent or occurring. Business impact now. Requires immediate action.', response: 'Page on-call immediately. Wake up if night. Acknowledge within 5 min.', channel: 'PagerDuty page + SMS + Slack #incidents', examples: 'Finance pipeline will miss 08:00 SLA. Production Gold table has wrong data. All ingestion pipelines failed.' },
-            { priority: 'P2 — High', def: 'SLA at risk but not yet breached. Pipeline degraded. Data quality issue detected.', response: 'Slack alert. Respond within 1 hour during business hours.', channel: 'Slack #data-alerts + email', examples: 'Silver pipeline 30 min behind schedule. DLQ depth growing rapidly. dbt test failure blocking Gold.' },
-            { priority: 'P3 — Medium', def: 'Known issue with workaround. Pipeline slow but will complete. Data quality warning.', response: 'Address during business hours. Next working day acceptable.', channel: 'Slack #data-warnings', examples: 'Pipeline running slow (P95 > SLO but P50 normal). New enum value rejected to DLQ. Source freshness warning.' },
-            { priority: 'P4 — Low', def: 'Informational. Metric trending in wrong direction. Pre-emptive notice.', response: 'Reviewed weekly. No immediate action.', channel: 'Email digest / dashboard', examples: 'Row count 10% below 30-day average. DLQ has 200 records (below threshold). Cluster cost 15% above budget.' },
+            { priority: 'P1 — Critical', def: 'SLA breach imminent or occurring. Business impact now.', response: 'Page on-call immediately, any hour. Ack within 5 min.', channel: 'PagerDuty + SMS + #incidents' },
+            { priority: 'P2 — High', def: 'SLA at risk but not breached. Pipeline degraded.', response: 'Respond within 1 hour, business hours.', channel: '#data-alerts + email' },
+            { priority: 'P3 — Medium', def: 'Known issue with workaround. Data quality warning.', response: 'Next working day acceptable.', channel: '#data-warnings' },
+            { priority: 'P4 — Low', def: 'Informational. Metric trending in the wrong direction.', response: 'Reviewed weekly.', channel: 'Email digest / dashboard' },
           ]}
         />
 
-        <SubTitle>Writing good alert messages — the anatomy of an actionable alert</SubTitle>
+        <SubSubTitle>What separates an actionable alert from noise</SubSubTitle>
 
-        <CodeBox label="Good vs bad alert messages — what separates useful from noise">{`BAD ALERT (not actionable, missing context):
-  Title:   silver_orders FAILED
-  Body:    Pipeline silver_orders failed at 06:14:32.
-  Action:  (none specified)
-  → Engineer receives this at 2 AM. Has no idea what to do.
-    Which step failed? How much data is affected? Is there a runbook?
+        <CodeBox label="Bad alert vs good alert, same failure">{`BAD:  Title: silver_orders FAILED
+      Body:  Pipeline silver_orders failed at 06:14:32.
+      → engineer at 2 AM has no idea what to do next
 
-GOOD ALERT (actionable, context-rich):
-  Title:   [P2] silver_orders — FAILED — 2026-03-17 06:14 ET
-  Body:
-    Pipeline: silver_orders
-    Run date:  2026-03-17
-    Failed at: validation stage (step 2 of 4)
-    Error:     48,234 rows rejected — unrecognised status 'scheduled'
-               (new value added by orders team, not in allowed list)
-    Impact:    Silver orders not updated. Gold daily_revenue build blocked.
-               Finance dashboard will show stale data.
-    SLA:       Gold must be ready by 08:00 ET (1h 45m remaining)
-    DLQ:       48,234 rows in DLQ → pipeline/dlq_reprocess.py
-    Run ID:    d7c7a7b8-3e1a-4a2c-9b4d-...
-    Runbook:   https://runbooks.freshmart.internal/silver-orders-failure
-    Logs:      https://cloudwatch/log-groups/silver-orders?runId=d7c7a7b8
-  → Engineer knows exactly what happened, why, what the impact is,
-    how long before SLA breach, and how to fix it.
+GOOD: Title: [P2] silver_orders — FAILED — 2026-03-17 06:14 ET
+      Failed at: validation stage (step 2 of 4)
+      Error:     48,234 rows rejected — unrecognised status 'scheduled'
+      Impact:    Gold daily_revenue build blocked. Finance dashboard will be stale.
+      SLA:       Gold must be ready by 08:00 ET (1h 45m remaining)
+      DLQ:       48,234 rows → pipeline/dlq_reprocess.py
+      Runbook:   https://runbooks.freshcart.internal/silver-orders-failure`}</CodeBox>
 
-ALERT MESSAGE TEMPLATE:
-def format_alert_message(
-    pipeline:   str,
-    run_date:   str,
-    stage:      str,
-    error:      str,
-    impact:     str,
-    sla_time:   str | None,
-    run_id:     str,
-    runbook_url: str,
-) -> str:
+        <CodeBox label="format_alert_message() — generating the good version automatically">{`def format_alert_message(pipeline: str, run_date: str, stage: str, error: str,
+                          impact: str, sla_time: str | None, run_id: str, runbook_url: str) -> str:
     time_to_sla = compute_time_to_sla(sla_time) if sla_time else None
     return f"""
 Pipeline:  {pipeline}
-Run date:  {run_date}
 Failed at: {stage}
 Error:     {error}
 Impact:    {impact}
 {f"SLA:    {sla_time} ({time_to_sla} remaining)" if sla_time else ""}
 Run ID:    {run_id}
 Runbook:   {runbook_url}
-""".strip()
+""".strip()`}</CodeBox>
 
-
-AIRFLOW CALLBACK FOR ALERTS:
-def on_failure_callback(context):
-    """Send tiered alert on Airflow task failure."""
-    dag_id    = context['dag'].dag_id
-    task_id   = context['task_instance'].task_id
-    run_id    = context['run_id']
-    exception = context.get('exception', 'unknown error')
-
-    # Determine priority based on SLA proximity and task criticality:
-    priority  = determine_alert_priority(dag_id, task_id, context)
-    message   = format_alert_message(
-        pipeline   = f'{dag_id}.{task_id}',
-        run_date   = context['ds'],
-        stage      = task_id,
-        error      = str(exception),
-        impact     = get_downstream_impact(dag_id, task_id),
-        sla_time   = get_sla_for_pipeline(dag_id),
-        run_id     = run_id,
-        runbook_url = f'https://runbooks.freshmart.internal/{dag_id}',
+        <CodeBox label="Wiring it to Airflow's on_failure_callback, routed by priority">{`def on_failure_callback(context):
+    dag_id, task_id = context['dag'].dag_id, context['task_instance'].task_id
+    priority = determine_alert_priority(dag_id, task_id, context)
+    message = format_alert_message(
+        pipeline=f'{dag_id}.{task_id}', run_date=context['ds'], stage=task_id,
+        error=str(context.get('exception', 'unknown error')),
+        impact=get_downstream_impact(dag_id, task_id), sla_time=get_sla_for_pipeline(dag_id),
+        run_id=context['run_id'], runbook_url=f'https://runbooks.freshcart.internal/{dag_id}',
     )
-
     if priority == 'P1':
         send_pagerduty_alert(message, severity='critical')
         send_slack_alert('#incidents', message)
     elif priority == 'P2':
         send_slack_alert('#data-alerts', message)
     else:
-        send_slack_alert('#data-warnings', message)
-
-
-with DAG('freshmart_morning_pipeline', on_failure_callback=on_failure_callback):
-    ...`}</CodeBox>
+        send_slack_alert('#data-warnings', message)`}</CodeBox>
       </section>
 
       <Divider />
@@ -546,90 +373,47 @@ with DAG('freshmart_morning_pipeline', on_failure_callback=on_failure_callback):
         <SectionTitle>Pipeline Health Dashboard — The Operational View</SectionTitle>
 
         <Para>
-          A pipeline health dashboard gives the data team a single view of the
-          entire platform's status. It answers the question every data engineer
-          asks when they start work: "is everything okay?" without requiring them
-          to check six different tools. The most effective dashboards show current
-          status, trend over time, and SLO performance — not raw metrics that
-          require interpretation.
+          A pipeline health dashboard answers &ldquo;is everything okay?&rdquo; without
+          checking six different tools. Effective dashboards show current
+          status, trend, and SLO performance — not raw metrics to interpret.
         </Para>
 
-        <CodeBox label="Pipeline health schema — the foundation for a Grafana or Metabase dashboard">{`-- PIPELINE RUN HISTORY TABLE (feeds all dashboard panels):
-CREATE TABLE monitoring.pipeline_runs (
-    run_id          UUID          NOT NULL PRIMARY KEY,
-    pipeline_name   VARCHAR(100)  NOT NULL,
-    dag_id          VARCHAR(100),
-    run_date        DATE          NOT NULL,
-    scheduled_at    TIMESTAMPTZ   NOT NULL,
-    started_at      TIMESTAMPTZ,
-    completed_at    TIMESTAMPTZ,
-    status          VARCHAR(20)   NOT NULL,  -- running/success/failed/skipped
-    trigger_type    VARCHAR(20),             -- scheduled/manual/sensor
-    rows_extracted  BIGINT,
-    rows_rejected   BIGINT,
-    rows_written    BIGINT,
-    duration_sec    DECIMAL(10,2),
-    slo_target_sec  INT,
-    met_slo         BOOLEAN,
-    sla_deadline    TIMESTAMPTZ,
-    met_sla         BOOLEAN,
-    error_message   TEXT,
-    run_metadata    JSONB
-);
+        <CodeBox label="monitoring.pipeline_runs — feeds every dashboard panel">{`CREATE TABLE monitoring.pipeline_runs (
+    run_id UUID NOT NULL PRIMARY KEY, pipeline_name VARCHAR(100) NOT NULL, dag_id VARCHAR(100),
+    run_date DATE NOT NULL, scheduled_at TIMESTAMPTZ NOT NULL, started_at TIMESTAMPTZ, completed_at TIMESTAMPTZ,
+    status VARCHAR(20) NOT NULL,   -- running/success/failed/skipped
+    rows_extracted BIGINT, rows_rejected BIGINT, rows_written BIGINT, duration_sec DECIMAL(10,2),
+    slo_target_sec INT, met_slo BOOLEAN, sla_deadline TIMESTAMPTZ, met_sla BOOLEAN, error_message TEXT
+);`}</CodeBox>
 
--- CURRENT PLATFORM STATUS (for the "is everything okay?" panel):
-WITH latest_runs AS (
-    SELECT DISTINCT ON (pipeline_name)
-        pipeline_name, status, completed_at, met_sla, error_message
-    FROM monitoring.pipeline_runs
-    WHERE run_date = CURRENT_DATE
+        <CodeBox label="The 'is everything okay?' panel">{`WITH latest_runs AS (
+    SELECT DISTINCT ON (pipeline_name) pipeline_name, status, completed_at, met_sla, error_message
+    FROM monitoring.pipeline_runs WHERE run_date = CURRENT_DATE
     ORDER BY pipeline_name, started_at DESC
 )
-SELECT
-    pipeline_name,
-    status,
-    CASE
-        WHEN status = 'success' AND met_sla THEN '✅ OK'
-        WHEN status = 'success' AND NOT COALESCE(met_sla, TRUE) THEN '⚠️ SLA MISSED'
-        WHEN status = 'running'  THEN '🔄 RUNNING'
-        WHEN status = 'failed'   THEN '🔴 FAILED'
-        ELSE '⏳ PENDING'
-    END                                    AS health_indicator,
-    EXTRACT(EPOCH FROM (NOW() - completed_at)) / 60 AS mins_ago,
+SELECT pipeline_name,
+    CASE WHEN status = 'success' AND met_sla THEN '✅ OK'
+         WHEN status = 'success' AND NOT COALESCE(met_sla, TRUE) THEN '⚠️ SLA MISSED'
+         WHEN status = 'running' THEN '🔄 RUNNING'
+         WHEN status = 'failed' THEN '🔴 FAILED' ELSE '⏳ PENDING' END AS health_indicator,
     error_message
-FROM latest_runs
-ORDER BY
-    CASE status WHEN 'failed' THEN 0
-                WHEN 'running' THEN 1
-                ELSE 2 END,
-    pipeline_name;
+FROM latest_runs ORDER BY CASE status WHEN 'failed' THEN 0 WHEN 'running' THEN 1 ELSE 2 END;`}</CodeBox>
 
--- 7-DAY SLO TREND (shows whether platform is getting better or worse):
-SELECT
-    run_date,
-    pipeline_name,
-    COUNT(*)                                               AS runs,
-    ROUND(SUM(CASE WHEN met_slo THEN 1 ELSE 0 END)::NUMERIC
-          / NULLIF(COUNT(*), 0) * 100, 1)                 AS slo_pct,
-    ROUND(AVG(duration_sec) / 60, 1)                      AS avg_duration_min,
-    SUM(rows_rejected)                                     AS total_rejected
-FROM monitoring.pipeline_runs
-WHERE run_date >= CURRENT_DATE - 7
-  AND status IN ('success', 'failed')
-GROUP BY 1, 2
-ORDER BY 1 DESC, 2;
+        <Output>{`pipeline_name          health_indicator   error_message
+silver_orders_daily    🔴 FAILED          accepted_values: status 'scheduled' not in list
+gold_daily_revenue     ✅ OK              (null)
+ml_feature_store       ✅ OK              (null)`}</Output>
 
--- ALERTING BACKLOG (unresolved issues):
-SELECT
-    pipeline_name,
-    run_date,
-    status,
-    error_message,
-    started_at,
-    EXTRACT(EPOCH FROM (NOW() - started_at)) / 3600  AS hours_since_start
+        <CodeBox label="7-day SLO trend and the unresolved-issues backlog">{`SELECT run_date, pipeline_name, COUNT(*) runs,
+    ROUND(SUM(CASE WHEN met_slo THEN 1 ELSE 0 END)::NUMERIC / NULLIF(COUNT(*), 0) * 100, 1) slo_pct
 FROM monitoring.pipeline_runs
-WHERE status IN ('failed', 'running')
-  AND run_date >= CURRENT_DATE - 2
+WHERE run_date >= CURRENT_DATE - 7 AND status IN ('success', 'failed')
+GROUP BY 1, 2 ORDER BY 1 DESC, 2;
+
+SELECT pipeline_name, run_date, status, error_message,
+    EXTRACT(EPOCH FROM (NOW() - started_at)) / 3600 hours_since_start
+FROM monitoring.pipeline_runs
+WHERE status IN ('failed', 'running') AND run_date >= CURRENT_DATE - 2
 ORDER BY started_at;`}</CodeBox>
       </section>
 
@@ -641,129 +425,59 @@ ORDER BY started_at;`}</CodeBox>
         <SectionTitle>DLQ Monitoring — Tracking Rejected Records Across the Platform</SectionTitle>
 
         <Para>
-          The dead letter queue (DLQ) is where rejected records go when they fail
-          validation. A DLQ that is never monitored is worse than no DLQ — it
-          creates the illusion that data quality is good because the bad records
-          are silently quarantined. DLQ monitoring tracks accumulation rates,
-          rejection reasons, and age of unresolved records.
+          A DLQ that is never monitored is worse than no DLQ — it creates the
+          illusion that quality is good because the bad records are silently
+          quarantined. DLQ monitoring tracks accumulation rate, rejection
+          reasons, and the age of unresolved records.
         </Para>
 
-        <CodeBox label="DLQ monitoring — tracking, alerting, and operational queries">{`-- DLQ TABLE (from Module 27 — reproduced here for monitoring context):
-CREATE TABLE pipeline.dead_letter_queue (
-    dlq_id         UUID          NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
-    run_id         UUID          NOT NULL,
-    pipeline_name  VARCHAR(100)  NOT NULL,
-    source_table   VARCHAR(200),
-    error_type     VARCHAR(100)  NOT NULL,
-    error_message  TEXT          NOT NULL,
-    raw_record     JSONB         NOT NULL,
-    business_key   VARCHAR(200),            -- e.g. order_id value
-    run_date       DATE          NOT NULL,
-    arrived_at     TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
-    status         VARCHAR(20)   NOT NULL DEFAULT 'pending',
-    resolved_at    TIMESTAMPTZ,
-    resolution_note TEXT
-);
+        <SubSubTitle>The accumulation monitor — run after every pipeline</SubSubTitle>
 
+        <CodeBox label="Pending records per pipeline, and the depth-plus-age alert">{`SELECT pipeline_name, error_type, COUNT(*) pending_count,
+    EXTRACT(EPOCH FROM (NOW() - MIN(arrived_at))) / 3600 hours_pending
+FROM pipeline.dead_letter_queue WHERE status = 'pending'
+GROUP BY pipeline_name, error_type ORDER BY pending_count DESC;
 
--- DLQ ACCUMULATION MONITOR (run after every pipeline):
-SELECT
-    pipeline_name,
-    error_type,
-    COUNT(*)                                    AS pending_count,
-    MIN(arrived_at)                             AS oldest_record,
-    EXTRACT(EPOCH FROM (NOW() - MIN(arrived_at))) / 3600 AS hours_pending,
-    MAX(arrived_at)                             AS latest_record
+-- alert: same error type, > 1000 pending, older than 2 hours
+SELECT pipeline_name, error_type, COUNT(*) depth
 FROM pipeline.dead_letter_queue
-WHERE status = 'pending'
-GROUP BY pipeline_name, error_type
-ORDER BY pending_count DESC;
+WHERE status = 'pending' AND arrived_at < NOW() - INTERVAL '2 hours'
+GROUP BY pipeline_name, error_type HAVING COUNT(*) > 1000 ORDER BY depth DESC;`}</CodeBox>
 
--- ALERT: DLQ depth exceeds threshold for more than 2 hours
--- (alert fires if same error type has > 1000 records pending > 2h)
-SELECT pipeline_name, error_type, COUNT(*) AS depth,
-       MIN(arrived_at) AS first_seen
-FROM pipeline.dead_letter_queue
-WHERE status = 'pending'
-  AND arrived_at < NOW() - INTERVAL '2 hours'
-GROUP BY pipeline_name, error_type
-HAVING COUNT(*) > 1000
-ORDER BY depth DESC;
+        <Output>{`pipeline_name    error_type              depth
+silver_orders    accepted_values_status  48234   ← the exact incident from this
+                                                    module's Real World section`}</Output>
 
+        <SubSubTitle>Reprocessing, once the root cause is fixed</SubSubTitle>
 
--- DLQ TREND: is the problem getting better or worse?
-SELECT
-    DATE(arrived_at)                            AS arrival_date,
-    pipeline_name,
-    error_type,
-    COUNT(*)                                    AS records_rejected,
-    COUNT(CASE WHEN status = 'resolved' THEN 1 END) AS resolved,
-    COUNT(CASE WHEN status = 'pending' THEN 1 END)  AS still_pending
-FROM pipeline.dead_letter_queue
-WHERE arrived_at >= CURRENT_DATE - 30
-GROUP BY 1, 2, 3
-ORDER BY 1 DESC, 4 DESC;
-
-
--- DLQ REPROCESSING PIPELINE:
-def reprocess_dlq(
-    pipeline_name: str,
-    error_type: str,
-    run_date: str,
-    dry_run: bool = False,
-) -> dict:
-    """
-    Reprocess pending DLQ records after the underlying cause is fixed.
-    dry_run=True: logs what would be reprocessed without actually doing it.
-    """
-    records = fetch_pending_dlq_records(
-        pipeline_name=pipeline_name,
-        error_type=error_type,
-        run_date=run_date,
-    )
-
+        <CodeBox label="reprocess_dlq() — dry-run first, always">{`def reprocess_dlq(pipeline_name: str, error_type: str, run_date: str, dry_run: bool = False) -> dict:
+    records = fetch_pending_dlq_records(pipeline_name=pipeline_name, error_type=error_type, run_date=run_date)
     if not records:
         return {'status': 'no_records', 'count': 0}
-
     if dry_run:
         return {'status': 'dry_run', 'would_reprocess': len(records)}
 
     processed, failed = 0, 0
     for record in records:
         try:
-            # Re-run the pipeline step that originally rejected this record:
             result = reprocess_single_record(record, pipeline_name)
-            mark_dlq_resolved(record['dlq_id'],
-                              note=f'Reprocessed successfully. Row: {result}')
+            mark_dlq_resolved(record['dlq_id'], note=f'Reprocessed successfully. Row: {result}')
             processed += 1
         except Exception as exc:
             mark_dlq_failed(record['dlq_id'], note=str(exc))
             failed += 1
+    return {'status': 'complete', 'processed': processed, 'failed': failed}`}</CodeBox>
 
-    return {'status': 'complete', 'processed': processed, 'failed': failed}
+        <SubSubTitle>Alerting on growth, not just a static threshold</SubSubTitle>
 
-
-# ALERTING ON DLQ GROWTH:
-# In Airflow, after every Silver pipeline run:
-def check_dlq_health(**context):
-    """Alert if DLQ depth is growing faster than resolution rate."""
-    from pipeline.monitoring import query_dlq_stats
-    stats = query_dlq_stats(
-        pipeline_name='silver_orders',
-        run_date=context['ds'],
-    )
+        <CodeBox label="check_dlq_health() — an Airflow task after every Silver run">{`def check_dlq_health(**context):
+    stats = query_dlq_stats(pipeline_name='silver_orders', run_date=context['ds'])
     if stats.pending_records > 10_000:
-        raise ValueError(
-            f"DLQ depth critical: {stats.pending_records} pending records. "
-            f"Most common error: {stats.top_error_type} "
-            f"({stats.top_error_count} records). "
-            f"See: https://runbooks.freshmart.internal/dlq-reprocess"
-        )
+        raise ValueError(f"DLQ depth critical: {stats.pending_records} pending. "
+                          f"Top error: {stats.top_error_type} ({stats.top_error_count} records).")
     elif stats.pending_records > 1_000:
-        send_slack_warning(
-            f"DLQ depth elevated: {stats.pending_records} pending. "
-            f"Top error: {stats.top_error_type}."
-        )`}</CodeBox>
+        send_slack_warning(f"DLQ depth elevated: {stats.pending_records} pending. "
+                            f"Top error: {stats.top_error_type}.")`}</CodeBox>
       </section>
 
       <Divider />
@@ -774,106 +488,93 @@ def check_dlq_health(**context):
         <SectionTitle>Metrics Collection — What to Measure and How to Expose It</SectionTitle>
 
         <Para>
-          Metrics are numeric time-series measurements. They are cheaper to
-          store and query than logs, and they enable alerting on thresholds
-          and trends. Every pipeline run should emit a small set of standard
-          metrics that feed a real-time dashboard and alert rules.
+          Metrics are numeric time-series measurements — cheaper to store and
+          query than logs, and what alerting on thresholds and trends is built on.
         </Para>
 
-        <CodeBox label="Pipeline metrics — what to measure and how to publish them">{`# STANDARD PIPELINE METRICS — what every pipeline should emit
+        <CodeBox label="The three metric types every pipeline should emit">{`COUNTER (always increasing):   pipeline.runs.total{status="success"}
+                                pipeline.rows.rejected{pipeline="silver_orders"}
+GAUGE (current value):         pipeline.dlq.depth{pipeline="silver_orders"}
+                                pipeline.data_freshness_sec{table="silver.orders"}
+HISTOGRAM (distribution):      pipeline.run_duration_seconds{pipeline="silver_orders"}`}</CodeBox>
 
-COUNTER METRICS (always increasing):
-  pipeline.runs.total{pipeline="silver_orders",status="success"}    # total successful runs
-  pipeline.runs.total{pipeline="silver_orders",status="failed"}     # total failed runs
-  pipeline.rows.extracted{pipeline="silver_orders"}                  # total rows extracted
-  pipeline.rows.rejected{pipeline="silver_orders"}                   # total rows rejected
-  pipeline.rows.written{pipeline="silver_orders"}                    # total rows written
-
-GAUGE METRICS (current value, can go up or down):
-  pipeline.dlq.depth{pipeline="silver_orders"}                       # current DLQ depth
-  pipeline.last_run_duration_sec{pipeline="silver_orders"}           # last run duration
-  pipeline.data_freshness_sec{table="silver.orders"}                 # age of last update
-
-HISTOGRAM METRICS (distribution of values):
-  pipeline.run_duration_seconds{pipeline="silver_orders"}            # duration distribution
-  pipeline.rows_per_second{pipeline="silver_orders"}                 # processing throughput
-
-
-# EMITTING METRICS TO DATADOG (statsd protocol):
-from datadog import DogStatsd
+        <CodeBox label="Emitting to Datadog via statsd">{`from datadog import DogStatsd
 statsd = DogStatsd(host='localhost', port=8125)
 
-def emit_pipeline_metrics(
-    pipeline_name:  str,
-    status:         str,
-    duration_sec:   float,
-    rows_extracted: int,
-    rows_rejected:  int,
-    rows_written:   int,
-    run_date:       str,
-):
-    tags = [f'pipeline:{pipeline_name}', f'run_date:{run_date}']
-
-    # Increment run counter by status:
+def emit_pipeline_metrics(pipeline_name: str, status: str, duration_sec: float,
+                           rows_extracted: int, rows_rejected: int) -> None:
+    tags = [f'pipeline:{pipeline_name}']
     statsd.increment('pipeline.runs.total', tags=tags + [f'status:{status}'])
-
-    # Record duration as histogram (for p50, p95, p99 calculations):
     statsd.histogram('pipeline.run_duration_seconds', duration_sec, tags=tags)
-
-    # Record row counts:
-    statsd.gauge('pipeline.rows_extracted_last_run', rows_extracted, tags=tags)
-    statsd.gauge('pipeline.rows_rejected_last_run',  rows_rejected,  tags=tags)
-    statsd.gauge('pipeline.rows_written_last_run',   rows_written,   tags=tags)
-
-    # Rejection rate as a derived gauge:
     if rows_extracted > 0:
-        rejection_rate = rows_rejected / rows_extracted
-        statsd.gauge('pipeline.rejection_rate', rejection_rate, tags=tags)
+        statsd.gauge('pipeline.rejection_rate', rows_rejected / rows_extracted, tags=tags)`}</CodeBox>
 
-
-# EMITTING METRICS TO CLOUDWATCH:
-import boto3
+        <CodeBox label="Emitting to CloudWatch">{`import boto3
 cloudwatch = boto3.client('cloudwatch')
 
-def emit_to_cloudwatch(pipeline_name: str, rows_rejected: int, run_date: str):
+def emit_to_cloudwatch(pipeline_name: str, rows_rejected: int, run_date: str) -> None:
     cloudwatch.put_metric_data(
         Namespace='FreshCart/DataPipelines',
-        MetricData=[
-            {
-                'MetricName': 'RowsRejected',
-                'Dimensions': [
-                    {'Name': 'PipelineName', 'Value': pipeline_name},
-                    {'Name': 'RunDate',      'Value': run_date},
-                ],
-                'Value':   rows_rejected,
-                'Unit':    'Count',
-            },
-        ],
+        MetricData=[{'MetricName': 'RowsRejected',
+                      'Dimensions': [{'Name': 'PipelineName', 'Value': pipeline_name}],
+                      'Value': rows_rejected, 'Unit': 'Count'}],
     )
-    # Alert rule in CloudWatch:
-    # ALARM when RowsRejected > 10000 for ANY pipeline for 1 evaluation period.
+    # Alarm rule: RowsRejected > 10000 for ANY pipeline, 1 evaluation period`}</CodeBox>
 
-
-# GRAFANA DASHBOARD PANELS (what to display):
-# Panel 1: Pipeline status grid — each pipeline as a colored status square
-# Panel 2: SLO compliance rate (line chart, 30-day trend per pipeline)
-# Panel 3: Daily row counts (stacked bar — extracted/written/rejected)
-# Panel 4: Run duration P95 vs SLO target (over 30 days)
-# Panel 5: DLQ depth (time series per pipeline)
-# Panel 6: Warehouse credit usage (bar chart, daily)
-# Panel 7: Error rate (line chart, threshold line at SLO)
-# Panel 8: Recent failures (table — last 10 failed runs with links to logs)`}</CodeBox>
+        <Output>{`GRAFANA DASHBOARD PANELS:
+1. Pipeline status grid (colored tile per pipeline)   5. DLQ depth (time series)
+2. SLO compliance (30-day trend line)                 6. Warehouse credit usage
+3. Daily row counts (stacked bar)                     7. Error rate vs SLO line
+4. Run duration P95 vs SLO target                     8. Recent failures (table + log links)`}</Output>
       </section>
 
       <Divider />
 
-      {/* ── Part 08 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 08 — Misconceptions ──────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 08 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Monitoring and Observability</SectionTitle>
+
+        {[
+          {
+            wrong: '"Monitoring and observability are the same thing, just different names for dashboards"',
+            right: 'Part 01 draws the real line: monitoring answers questions you anticipated (is it running, did it finish), observability answers questions you didn\'t think to ask in advance. A dashboard full of green checkmarks is monitoring; being able to trace one specific bad order through Bronze → Silver → Gold via a correlation ID (Part 03) is observability.',
+          },
+          {
+            wrong: '"More alerts means better coverage, so err on the side of alerting more"',
+            right: 'This is precisely the alert-fatigue failure this module\'s Error Library and Real World section both document — 47 pages from one root cause, or a false-positive SLA alert firing daily. Part 04\'s tiered model exists to route the RIGHT alerts to the right urgency, not to maximize alert volume.',
+          },
+          {
+            wrong: '"A pipeline health dashboard showing all green means the platform is actually healthy"',
+            right: 'This module\'s Error Library has a real case where every pipeline showed "OK" while a Gold table had been stale for 6 hours — the freshness check was reading the wrong timestamp column. A dashboard is only as trustworthy as the queries and columns feeding it; verify what a green checkmark is actually measuring before trusting it.',
+          },
+          {
+            wrong: '"SLOs and SLAs are basically interchangeable terms for \'how fast it should be\'"',
+            right: 'Part 02 is specific about why they\'re not: an SLO is an internal engineering target with an error budget the team controls; an SLA is an external promise with business consequences the team does NOT get to unilaterally adjust. Setting SLOs stricter than SLAs is a deliberate buffer, not a coincidence of naming.',
+          },
+          {
+            wrong: '"DLQ monitoring is done once the alert threshold is configured"',
+            right: 'This module\'s Error Library shows a DLQ that grew by 25,000 records a day for 90 days, reaching 2.3 million, because the threshold only checked DAILY additions, never total pending depth. A one-time threshold configuration is the beginning of DLQ monitoring, not the end of it — Part 06\'s alerting checks the cumulative depth specifically to avoid this.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 09 — Real World ──────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 08 — Real World" />
+        <SectionTag text="// Part 09 — Real World" />
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12, fontFamily: 'var(--font-mono)' }}>
           💼 What This Looks Like at Work
         </div>
-        <SectionTitle>Building an On-Call Rotation — The Data Team's First Production Incident Response</SectionTitle>
+        <SectionTitle>Building an On-Call Rotation — The Data Team&rsquo;s First Production Incident Response</SectionTitle>
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'rgba(0,230,118,0.1)', border: '1px solid rgba(0,230,118,0.2)', borderRadius: 6, padding: '4px 10px', fontFamily: 'var(--font-mono)', display: 'inline-block', marginBottom: 20, letterSpacing: '.1em', textTransform: 'uppercase' }}>
@@ -881,123 +582,70 @@ def emit_to_cloudwatch(pipeline_name: str, rows_rejected: int, run_date: str):
           </div>
 
           <Para>
-            The data engineering team has grown to 8 people and the platform
-            is serving finance, operations, and product teams. The pipeline
-            occasionally fails at night or on weekends and nobody finds out
-            until Monday morning. The team needs a sustainable on-call process
-            that does not burn out engineers.
+            The data engineering team has grown to 8 people, serving finance,
+            operations, and product. The pipeline occasionally fails at night or
+            on weekends and nobody finds out until Monday. The team needs a
+            sustainable on-call process that doesn&rsquo;t burn engineers out.
           </Para>
 
-          <CodeBox label="Building a data on-call process — the practical components">{`COMPONENT 1: RUNBOOKS (make incidents resolvable by the on-call engineer)
+          <SubSubTitle>Runbooks — so the on-call engineer isn&rsquo;t starting from zero</SubSubTitle>
 
-  Every pipeline gets a runbook at:
-  https://runbooks.freshmart.internal/{pipeline_name}
+          <CodeBox label="silver_orders runbook — excerpted">{`## silver_orders Runbook
+Runs daily at 06:00 ET. SLA: complete by 07:30 ET. Owner: data-platform@freshcart.com
 
-  RUNBOOK TEMPLATE:
-  ## silver_orders Runbook
+**Failure 1: accepted_values test fails for 'status' column**
+Cause: Orders team added a new status value.
+Fix:
+  1. python dlq_reprocess.py --dry-run --pipeline silver_orders --date {DATE}
+  2. Add new status to VALID_STATUSES in pipeline/validate.py
+  3. dbt run -s silver_orders && dbt test -s silver_orders
+  4. python dlq_reprocess.py --pipeline silver_orders --date {DATE}
+Time to fix: 30 minutes.
 
-  ### What does this pipeline do?
-  Reads Bronze orders from S3, validates and transforms to Silver.
-  Runs daily at 06:00 ET. SLA: complete by 07:30 ET.
-  Owned by: data-platform@freshmart.com
+**Failure 2: source freshness check fails (Bronze > 6 hours old)**
+Fix: Check silver_ingestion Airflow DAG, trigger a manual run.
+Escalate to: Marcus if ingestion issue persists > 2 hours.`}</CodeBox>
 
-  ### Common failure modes and how to fix them:
+          <SubSubTitle>Rotation, and the guardrails that prevent burnout</SubSubTitle>
 
-  **Failure 1: accepted_values test fails for 'status' column**
-  Cause: Orders team added a new status value.
-  Fix:
-    1. Check DLQ: python dlq_reprocess.py --dry-run --pipeline silver_orders --date {DATE}
-    2. Add new status to VALID_STATUSES in pipeline/validate.py
-    3. Re-run: dbt run -s silver_orders silver_orders_tests
-    4. Reprocess DLQ: python dlq_reprocess.py --pipeline silver_orders --date {DATE}
-    5. Confirm in Slack: silver_orders complete. DLQ cleared.
-  Time to fix: 30 minutes.
+          <CodeBox label="8-person rotation and its non-negotiable limits">{`Week-long rotation, PagerDuty schedule: each engineer on-call once every 8 weeks.
+Responsibilities: P1 within 5 min (any hour), P2 within 1 hour (business hours),
+                  post-mortem for any P1 or repeated P2.
 
-  **Failure 2: source freshness check fails (Bronze > 6 hours old)**
-  Cause: Bronze ingestion pipeline failed.
-  Fix: Check silver_ingestion Airflow DAG. Trigger manual run.
-  Escalate to: Marcus if ingestion issue persists > 2 hours.
-  Time to fix: depends on upstream.
+GUARDRAILS:
+  Max 2 P1 pages per night — otherwise the process itself is broken.
+  P3/P4 pages that wake someone → the threshold is wrong, fix it, don't just endure it.
+  On-call engineer has zero feature work that week (protection time).`}</CodeBox>
 
-  **Failure 3: Memory error in Spark transformation**
-  Fix: Re-trigger the Airflow DAG task.
-  If fails again: increase spark.executor.memory in pipeline/config.py (try 12g)
-  Re-trigger.
-  Time to fix: 15 minutes.
+          <SubSubTitle>A real post-mortem, and the calibration loop that follows it</SubSubTitle>
 
+          <CodeBox label="Blameless post-mortem — system analysis, not blame">{`## Incident: silver_orders missed SLA — 2026-03-17
+Duration: 06:00–09:15 ET (SLA breached at 07:30). Severity: P1.
 
-COMPONENT 2: ON-CALL ROTATION
+Timeline:
+  06:14 — pipeline failed: accepted_values error on status='scheduled'
+  06:15 — P2 alert fired (should have escalated to P1 sooner)
+  07:32 — on-call acknowledged after SLA breach escalation
+  08:12 — fix deployed, DLQ reprocessed → 09:15 Gold rebuilt
 
-  Week-long rotation. One engineer per week.
-  Rotation for 8-person team: each engineer on-call once every 8 weeks.
-  Tools: PagerDuty rotation schedule.
+Root cause: orders team deployed a new status enum without notifying data team.
+Action items:
+  [ ] Add data contract CI check for enum changes (owner: Emily, by 2026-03-31)
+  [ ] Escalate silver_orders failures to P1 if SLA is within 1 hour`}</CodeBox>
 
-  ON-CALL RESPONSIBILITIES:
-    - Respond to P1 alerts within 5 minutes (any time)
-    - Respond to P2 alerts within 1 hour (business hours)
-    - Use runbook to resolve, escalate if not in runbook
-    - Write post-mortem for any P1 or repeated P2
-    - Monday: review previous week's incidents, improve runbooks
-
-  ON-CALL GUARDRAILS (prevents burnout):
-    - Max 2 P1 pages per night (otherwise process is broken)
-    - If P3/P4 pages wake engineer: alert threshold is too low → fix it
-    - On-call engineer has no feature work that week (protection time)
-    - Incidents that exceed 2 hours get a P1 post-mortem
-
-
-COMPONENT 3: INCIDENT POST-MORTEMS
-
-  Template (blameless — no blame, only system analysis):
-
-  ## Incident: silver_orders missed SLA — 2026-03-17
-
-  **Duration:** 2026-03-17 07:42 ET to 09:15 ET (1h 33m)
-  **Impact:** Finance dashboard stale from 07:30 to 09:15 (1h 45m)
-  **Severity:** P1 (SLA breach)
-
-  **Timeline:**
-    06:00 — silver_orders pipeline started
-    06:14 — pipeline failed: accepted_values error on status='scheduled'
-    06:15 — P2 alert fired (Slack #data-alerts)
-    07:30 — SLA deadline. Gold not ready. P1 escalated.
-    07:32 — On-call engineer acknowledged page
-    07:45 — Root cause identified: new 'scheduled' status in orders system
-    08:12 — Fix deployed, DLQ reprocessed
-    09:15 — Gold rebuilt. Finance dashboard updated.
-
-  **Root cause:** Orders team deployed new status enum value without notifying
-  data team or updating the data contract.
-
-  **What went wrong:**
-    1. No data contract enforcement — source can change enums without review
-    2. P2 alert fired but nobody acted for 1h 16min → should have been P1
-
-  **Action items:**
-    [ ] Add data contract CI check for enum changes (owner: Emily, by 2026-03-31)
-    [ ] Escalate silver_orders failures to P1 if SLA is within 1 hour
-    [ ] Add 'scheduled' and future status additions to accepted_values test
-
-
-COMPONENT 4: ALERT THRESHOLD CALIBRATION
-
-  Review weekly: are alerts firing too much or too little?
-  Target: on-call engineer should receive 1-2 P1/P2 alerts per week on average.
-  If receiving 20+ alerts per week: alert fatigue → raise thresholds.
-  If receiving 0 alerts for 4 weeks but incidents found later: too quiet → lower.
-
-  Monthly review: look at false positive rate:
-    False positive rate = (alerts that required no action / total alerts)
-    Target: < 20% false positive rate.
-    If > 20%: improve alert specificity.`}</CodeBox>
+          <Output>{`Monthly alert calibration review:
+Target: 1-2 P1/P2 alerts per on-call week.
+20+ alerts/week  → alert fatigue, raise thresholds.
+0 alerts for 4 weeks, but incidents found later → too quiet, lower thresholds.
+False positive rate (alerts needing no action / total alerts): target < 20%.`}</Output>
         </div>
       </section>
 
       <Divider />
 
-      {/* ── Part 09 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 10 — Interview Prep ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 09 — Interview Prep" />
+        <SectionTag text="// Part 10 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
@@ -1073,6 +721,42 @@ The practical implementation is a PipelineLogger class that wraps Python's loggi
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Configuring Airflow SLA at the DAG level instead of the task level',
+            a: 'DAG-level SLA is measured from the DAG\'s epoch start_date, not from each run\'s scheduled time — after 30 days of a daily pipeline, the elapsed time from start_date already exceeds any reasonable SLA, so it fires on every single run. This exact bug is in the Error Library below; the fix is setting sla on individual task operators.',
+          },
+          {
+            q: 'Pointing a freshness check at whichever timestamp column happens to exist',
+            a: 'A loaded_at column that dbt only updates on rows that actually changed will show yesterday\'s timestamp on a quiet day with no new orders — making a perfectly fine table look stale. Use a column like freshness_checked_at that updates on every run regardless of whether any row changed.',
+          },
+          {
+            q: 'Treating print() statements as logging because they show up in the console during local development',
+            a: 'print() output has no structure, no consistent fields, and often isn\'t even captured as parseable JSON by the log aggregator in production — Part 03\'s PipelineLogger exists because "it worked when I ran it locally" is not the same as "it\'s queryable when an incident happens at 2 AM."',
+          },
+          {
+            q: 'Building a DLQ alert that only checks the day\'s new additions',
+            a: 'This module\'s Error Library documents a DLQ that reached 2.3 million records over 90 days because the alert only fired on daily growth exceeding a threshold, never on cumulative depth. Always alert on total pending count, not just the delta since yesterday.',
+          },
+          {
+            q: 'Writing runbook steps as vague investigation prompts instead of exact commands',
+            a: '"Investigate the error" tells an on-call engineer nothing they didn\'t already know from the alert. Part 09\'s runbook excerpt works because every step is copy-pasteable — an exact command, an exact file, an exact re-run instruction — which is what actually gets an unfamiliar engineer through an incident at 2 AM.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1133,7 +817,7 @@ The practical implementation is a PipelineLogger class that wraps Python's loggi
         'On-call for data teams is sustainable with the right infrastructure: runbooks for every pipeline, tiered alerting with low false positive rates, a weekly rotation (8 engineers = on-call once every 8 weeks), protection time (on-call engineer has no feature work that week), and post-mortems for every P1 that improve runbooks and reduce future incident rates.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
