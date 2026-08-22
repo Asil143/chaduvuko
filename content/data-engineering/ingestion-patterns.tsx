@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -130,8 +173,8 @@ export default function IngestionPatternsModule() {
       title="Data Ingestion Patterns — Full Load, Incremental, CDC"
       description="The three patterns that cover every source — when each is correct, how each fails, and how to choose."
       section="Data Engineering — Module 23"
-      readTime="60 min"
-      updatedAt="March 2026"
+      readTime="65 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ───────────────────────────────────────────────────── */}
@@ -140,20 +183,17 @@ export default function IngestionPatternsModule() {
         <SectionTitle>Every Ingestion Problem Falls Into One of Three Patterns</SectionTitle>
 
         <Para>
-          A data engineer's first job with any new source system is answering one
-          question: how do I get data out of this reliably, completely, and without
-          harming it? The answer is almost always a variant of one of three ingestion
-          patterns. Recognising which pattern fits which source — and understanding
-          precisely why — is one of the most fundamental skills in the discipline.
+          A data engineer&rsquo;s first job with any new source system is answering one
+          question: how do I get data out of this reliably, completely, and
+          without harming it? The answer is almost always a variant of one of
+          three ingestion patterns.
         </Para>
 
         <Para>
           The three patterns exist on a spectrum from simple-but-expensive to
-          complex-but-efficient. The simplest pattern reads everything every time.
-          The most complex pattern reads only what changed, down to the individual
-          database operation level. The right choice depends on the source's
-          characteristics, the data's update frequency, the destination's freshness
-          requirement, and the source system's tolerance for load.
+          complex-but-efficient. This module builds all three around FreshCart&rsquo;s
+          actual table inventory — reference data, the orders table, and the
+          tables where a missed delete is a real problem.
         </Para>
 
         <HighlightBox>
@@ -200,6 +240,13 @@ export default function IngestionPatternsModule() {
             ))}
           </div>
         </HighlightBox>
+
+        <TryThis>
+          Name one table you&rsquo;ve worked with and answer, honestly: how would you
+          know if a row was deleted from the source? If the answer is &ldquo;I
+          wouldn&rsquo;t,&rdquo; that table is probably ingested incrementally when it
+          shouldn&rsquo;t be — keep that in mind through Part 03.
+        </TryThis>
       </section>
 
       <Divider />
@@ -222,63 +269,51 @@ export default function IngestionPatternsModule() {
         </div>
 
         <Para>
-          Full load is the simplest ingestion pattern. Every run reads the complete
-          source table and replaces the destination's content entirely. No watermarks,
-          no change tracking, no complexity. For small tables that change frequently
-          in hard-to-track ways, it is often the correct and permanent choice.
+          Every run reads the complete source table and replaces the
+          destination&rsquo;s content entirely. No watermarks, no change tracking.
+          For small tables that change frequently in hard-to-track ways, this
+          is often the correct and permanent choice.
         </Para>
 
-        <SubTitle>How full load works</SubTitle>
+        <SubSubTitle>Two implementation variants</SubSubTitle>
 
-        <CodeBox label="Full load — the pattern and its two implementation variants">{`FULL LOAD PATTERN:
-  Every run:
-    1. Read ALL rows from source
-    2. Truncate destination (or write to staging)
-    3. Insert all rows into destination
-    4. Done — destination is an exact copy of source at run time
+        <CodeBox label="Variant A — truncate and reload (simple, empty during the transaction)">{`BEGIN;
+TRUNCATE TABLE silver.store_master;
+INSERT INTO silver.store_master
+SELECT store_id, store_name, city, region, is_active, manager_id FROM source.stores;
+COMMIT;
+-- other queries see either all-old or all-new, never empty (MVCC) — but only
+-- while this single transaction is what they're reading against`}</CodeBox>
 
-VARIANT A: Truncate and reload (simple, destination empty during load)
-  BEGIN;
-  TRUNCATE TABLE silver.store_master;
-  INSERT INTO silver.store_master
-  SELECT
-      store_id, store_name, city, region, is_active, manager_id
-  FROM source.stores;
-  COMMIT;
-  -- Atomically: destination is empty for the duration of the transaction
-  -- Other queries see either all-old or all-new, never empty (due to MVCC)
+        <CodeBox label="Variant B — staging table swap (zero-downtime, always available)">{`CREATE TABLE silver.store_master_new AS
+SELECT store_id, store_name, city, region, is_active, manager_id FROM source.stores;
 
-VARIANT B: Staging table swap (zero-downtime, destination always available)
-  -- Step 1: load to staging table
-  CREATE TABLE silver.store_master_new AS
-  SELECT store_id, store_name, city, region, is_active, manager_id
-  FROM source.stores;
+BEGIN;
+ALTER TABLE silver.store_master RENAME TO store_master_old;
+ALTER TABLE silver.store_master_new RENAME TO store_master;
+COMMIT;
 
-  -- Step 2: atomic rename (milliseconds)
-  BEGIN;
-  ALTER TABLE silver.store_master RENAME TO store_master_old;
-  ALTER TABLE silver.store_master_new RENAME TO store_master;
-  COMMIT;
+DROP TABLE silver.store_master_old;
+-- during load: store_master_old serves queries. after rename: store_master (new) does.
+-- zero seconds where the table is empty or has partial data`}</CodeBox>
 
-  -- Step 3: drop old table
-  DROP TABLE silver.store_master_old;
-  -- During load: store_master_old serves queries
-  -- After rename: store_master (new) serves queries
-  -- Zero seconds where table is empty or has partial data
+        <CodeBox label="The same pattern in Python">{`def full_load_with_swap(source_conn, dest_conn, table: str) -> int:
+    df = pd.read_sql(f"SELECT * FROM {table}", source_conn)
+    staging = f"{table}_staging"
+    df.to_sql(staging, dest_conn, if_exists='replace', index=False)
+    with dest_conn.cursor() as cur:
+        cur.execute(f"ALTER TABLE {table} RENAME TO {table}_old")
+        cur.execute(f"ALTER TABLE {staging} RENAME TO {table}")
+        cur.execute(f"DROP TABLE {table}_old")
+    dest_conn.commit()
+    return len(df)`}</CodeBox>
 
-PYTHON IMPLEMENTATION (full load with staging swap):
-  def full_load_with_swap(source_conn, dest_conn, table: str) -> int:
-      df = pd.read_sql(f"SELECT * FROM \${table}", source_conn)
-      staging = f"\${table}_staging"
-      df.to_sql(staging, dest_conn, if_exists='replace', index=False)
-      with dest_conn.cursor() as cur:
-          cur.execute(f"ALTER TABLE \${table} RENAME TO \${table}_old")
-          cur.execute(f"ALTER TABLE \${staging} RENAME TO \${table}")
-          cur.execute(f"DROP TABLE \${table}_old")
-      dest_conn.commit()
-      return len(df)`}</CodeBox>
+        <Output>{`>>> full_load_with_swap(source_conn, dest_conn, 'store_master')
+40
+# 40 stores reloaded, zero downtime — analysts querying store_master mid-swap
+# saw either the complete old table or the complete new one`}</Output>
 
-        <SubTitle>When full load is genuinely the right choice</SubTitle>
+        <SubSubTitle>When full load is genuinely the right choice</SubSubTitle>
 
         {[
           {
@@ -311,35 +346,25 @@ PYTHON IMPLEMENTATION (full load with staging swap):
           </div>
         ))}
 
-        <SubTitle>When full load breaks down</SubTitle>
+        <SubSubTitle>When full load breaks down</SubSubTitle>
 
-        <CodeBox label="Full load failure modes — when the pattern stops working">{`FAILURE MODE 1: Table grows too large for full extraction
-  Table: orders (FreshCart) — 500 million rows after 3 years
-  Full load time: 6 hours
-  Pipeline SLA: complete by 6 AM
-  Pipeline runtime on a bad day: started 11 PM, finishes 5 AM next day
-  → Barely fits. One slow query and the SLA is breached.
-  → After year 4: 700 million rows → 8.5 hours → SLA breach guaranteed.
-  Signal to switch: full load duration > 20% of run interval.
+        <CodeBox label="Four failure modes, and the signal that tells you it's time to switch">{`1. TABLE GROWS TOO LARGE
+   orders: 500M rows, full load takes 6h, SLA is 6 AM → barely fits.
+   Signal to switch: full load duration > 20% of the run interval.
 
-FAILURE MODE 2: Source load during extraction
-  Full extraction reads every row via a full table scan.
-  On a production PostgreSQL database:
-    → Fills the buffer pool (evicts hot pages)
-    → Application queries slow down for 30–60 minutes after
-    → If source cannot provide a read replica, this causes harm
-  Solution: extract from a read replica, not the primary.
+2. SOURCE LOAD DURING EXTRACTION
+   A full table scan fills the buffer pool, evicting hot pages —
+   the application slows down for 30-60 min afterward.
+   Fix: extract from a read replica, never the primary.
 
-FAILURE MODE 3: Destination inconsistency window
-  Between TRUNCATE and INSERT completion, destination is empty.
-  If a query runs during this window, it sees no data.
-  Solution: staging table swap (Variant B above) eliminates this window.
+3. DESTINATION INCONSISTENCY WINDOW
+   TRUNCATE-then-INSERT (Variant A) leaves the table empty mid-transaction
+   for any query outside that transaction. Fix: staging swap (Variant B).
 
-FAILURE MODE 4: Reload overwrites late-arriving data
-  If a row was manually corrected in the destination (a data fix),
-  the next full load overwrites it with the uncorrected source value.
-  This is expected behaviour for full load — but teams get surprised by it.
-  If you need to preserve destination edits: use incremental or CDC instead.`}</CodeBox>
+4. RELOAD OVERWRITES LATE-ARRIVING CORRECTIONS
+   A manual data fix in the destination gets silently overwritten by the
+   next full load. Expected behavior — but teams get surprised by it.
+   If destination edits must survive: use incremental or CDC instead.`}</CodeBox>
       </section>
 
       <Divider />
@@ -362,191 +387,104 @@ FAILURE MODE 4: Reload overwrites late-arriving data
         </div>
 
         <Para>
-          Incremental ingestion reads only the rows that were created or modified
-          since the previous run. A high-watermark column — typically an
-          <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> updated_at</code> timestamp
-          or an auto-incrementing ID — tracks progress. The pipeline records the
-          maximum watermark value it saw on the last run, and uses it as the lower
-          bound for the next run's extraction query.
+          A high-watermark column — typically <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>updated_at</code> — tracks
+          progress. A 1-billion-row orders table receiving 100,000 changes a
+          day only requires reading 100,000 rows per run, not 1 billion.
         </Para>
 
-        <Para>
-          This pattern scales to arbitrarily large tables. A 1-billion-row orders
-          table that receives 100,000 new or updated orders per day only requires
-          reading 100,000 rows per run, not 1 billion. The extraction time is
-          proportional to the change volume, not the total table size.
-        </Para>
+        <SubSubTitle>Checkpoint management — load and save, atomically</SubSubTitle>
 
-        <SubTitle>Complete incremental implementation</SubTitle>
-
-        <CodeBox label="Incremental ingestion — complete production implementation">{`import json
-import logging
-from datetime import datetime, timezone, timedelta
+        <CodeBox label="checkpoint.py">{`import json, logging
+from datetime import datetime, timezone
 from pathlib import Path
 
-import psycopg2
-import pandas as pd
-
 log = logging.getLogger('incremental_ingestion')
-
 CHECKPOINT_FILE = Path('/data/checkpoints/orders_watermark.json')
 
-# ── Watermark management ───────────────────────────────────────────────────────
-
 def load_watermark() -> datetime:
-    """Load the last successfully processed watermark."""
     if CHECKPOINT_FILE.exists():
-        data = json.loads(CHECKPOINT_FILE.read_text())
-        wm = datetime.fromisoformat(data['watermark'])
-        log.info('Loaded watermark: \${s}', wm.isoformat())
+        wm = datetime.fromisoformat(json.loads(CHECKPOINT_FILE.read_text())['watermark'])
+        log.info('Loaded watermark: %s', wm.isoformat())
         return wm
-    # First run — use a safe historical start
     default = datetime(2020, 1, 1, tzinfo=timezone.utc)
-    log.info('No checkpoint found — starting from \${s}', default.isoformat())
+    log.info('No checkpoint found — starting from %s', default.isoformat())
     return default
 
-
 def save_watermark(watermark: datetime) -> None:
-    """Save watermark atomically — write temp then rename."""
     tmp = CHECKPOINT_FILE.with_suffix('.tmp')
     tmp.write_text(json.dumps({'watermark': watermark.isoformat()}))
-    tmp.rename(CHECKPOINT_FILE)   # atomic on POSIX filesystems
+    tmp.rename(CHECKPOINT_FILE)   # atomic on POSIX`}</CodeBox>
 
+        <SubSubTitle>Extraction and loading</SubSubTitle>
 
-# ── Extraction ─────────────────────────────────────────────────────────────────
-
-def extract_changed_orders(
-    conn,
-    since: datetime,
-    until: datetime,
-) -> pd.DataFrame:
-    """
-    Extract orders modified between since and until.
-    Uses a closed lower bound (>) to avoid re-processing the boundary row.
-    Uses a closed upper bound (<=) to include rows modified at exactly until.
-    """
-    query = """
-        SELECT
-            order_id, customer_id, store_id,
-            order_amount, status, created_at, updated_at
-        FROM orders
-        WHERE updated_at > %s
-          AND updated_at <= %s
-        ORDER BY updated_at ASC
-    """
-    df = pd.read_sql(query, conn, params=(since, until))
-    log.info('Extracted \${d} rows (updated \${s} to \${s})',
-             len(df), since.isoformat(), until.isoformat())
+        <CodeBox label="extract.py and load.py">{`def extract_changed_orders(conn, since: datetime, until: datetime) -> pd.DataFrame:
+    """since is exclusive, until is inclusive — no boundary row re-processed or skipped."""
+    df = pd.read_sql("""
+        SELECT order_id, customer_id, store_id, order_amount, status, created_at, updated_at
+        FROM orders WHERE updated_at > %s AND updated_at <= %s ORDER BY updated_at ASC
+    """, conn, params=(since, until))
+    log.info('Extracted %d rows (updated %s to %s)', len(df), since.isoformat(), until.isoformat())
     return df
 
-
-# ── Loading ────────────────────────────────────────────────────────────────────
-
 def upsert_orders(df: pd.DataFrame, dest_conn) -> int:
-    """Upsert orders into Silver layer — idempotent."""
     if df.empty:
         return 0
     with dest_conn.cursor() as cur:
         for _, row in df.iterrows():
             cur.execute("""
-                INSERT INTO silver.orders
-                    (order_id, customer_id, store_id, order_amount, status,
-                     created_at, updated_at, ingested_at)
+                INSERT INTO silver.orders (order_id, customer_id, store_id, order_amount, status, created_at, updated_at, ingested_at)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
-                ON CONFLICT (order_id) DO UPDATE SET
-                    status      = EXCLUDED.status,
-                    order_amount = EXCLUDED.order_amount,
-                    updated_at  = EXCLUDED.updated_at,
-                    ingested_at = NOW()
+                ON CONFLICT (order_id) DO UPDATE SET status = EXCLUDED.status, updated_at = EXCLUDED.updated_at, ingested_at = NOW()
                 WHERE silver.orders.updated_at < EXCLUDED.updated_at
-            """, (row.order_id, row.customer_id, row.store_id,
-                  row.order_amount, row.status, row.created_at, row.updated_at))
+            """, (row.order_id, row.customer_id, row.store_id, row.order_amount, row.status, row.created_at, row.updated_at))
     dest_conn.commit()
-    return len(df)
+    return len(df)`}</CodeBox>
 
+        <SubSubTitle>Wiring it together</SubSubTitle>
 
-# ── Main pipeline ──────────────────────────────────────────────────────────────
-
-def run_incremental(source_conn, dest_conn) -> dict:
-    """Run one incremental ingestion cycle."""
+        <CodeBox label="run_incremental() — the whole cycle">{`def run_incremental(source_conn, dest_conn) -> dict:
     since = load_watermark()
-    # Use source DB's NOW() as upper bound to avoid clock skew:
-    until = pd.read_sql("SELECT NOW() AT TIME ZONE 'UTC'",
-                        source_conn).iloc[0, 0].to_pydatetime()
+    until = pd.read_sql("SELECT NOW() AT TIME ZONE 'UTC'", source_conn).iloc[0, 0].to_pydatetime()
 
     df = extract_changed_orders(source_conn, since, until)
-
     if df.empty:
-        log.info('No changes since last watermark')
         return {'rows_processed': 0, 'new_watermark': since.isoformat()}
 
     written = upsert_orders(df, dest_conn)
-    # Only advance watermark AFTER successful write:
-    save_watermark(until)
+    save_watermark(until)   # only AFTER the write succeeded
+    return {'rows_processed': written, 'new_watermark': until.isoformat()}`}</CodeBox>
 
-    return {
-        'rows_processed': written,
-        'new_watermark':  until.isoformat(),
-        'max_source_ts':  df['updated_at'].max().isoformat() if not df.empty else None,
-    }`}</CodeBox>
+        <Output>{`INFO Loaded watermark: 2026-03-17T05:45:00+00:00
+INFO Extracted 1,842 rows (updated 2026-03-17T05:45:00+00:00 to 2026-03-17T06:00:00+00:00)
+>>> run_incremental(source_conn, dest_conn)
+{'rows_processed': 1842, 'new_watermark': '2026-03-17T06:00:00+00:00'}`}</Output>
 
-        <SubTitle>The critical pitfalls of incremental ingestion</SubTitle>
+        <SubSubTitle>The four pitfalls that break incremental in production</SubSubTitle>
 
-        <CodeBox label="Incremental ingestion pitfalls — what breaks and how to handle it">{`PITFALL 1: HARD DELETES ARE INVISIBLE
-  Scenario: order_id 9284751 is deleted from the source PostgreSQL table.
-  Incremental query: SELECT * FROM orders WHERE updated_at > checkpoint
-  What happens: the deleted row produces no result in the query.
-  Destination: still has order_id 9284751 from the previous ingestion run.
-  Impact: destination data diverges from source silently. Metrics wrong.
+        <CodeBox label="Hard deletes and a missing updated_at column">{`# PITFALL 1: HARD DELETES ARE INVISIBLE
+# A deleted row produces no result from 'WHERE updated_at > checkpoint' —
+# there's nothing left to return. Destination silently diverges from source.
+# Fix A: use CDC (captures DELETE explicitly)
+# Fix B: soft-delete column (deleted_at / is_deleted) — updates updated_at, so it's seen
+# Fix C: periodic full-load reconciliation (weekly) if deletes are rare
 
-  Solutions:
-  A) Use CDC instead (CDC captures DELETE operations explicitly)
-  B) Use a soft-delete column: deleted_at TIMESTAMPTZ or is_deleted BOOLEAN
-     Soft deletes update updated_at → appear in incremental query
-     Pipeline handles is_deleted=TRUE by marking destination row as deleted
-  C) Periodic full load to reconcile (run full load weekly on top of incremental)
-     Full load will overwrite destination to match source — deletes reconciled
-     Use when: deletions are rare, weekly reconciliation is acceptable
+# PITFALL 2: NO updated_at COLUMN
+# Fix A: use max(primary_key) as watermark — ONLY safe if rows are insert-only
+# Fix B: CDC (doesn't depend on an application-maintained timestamp)
+# Fix C: full load, if the table is small enough`}</CodeBox>
 
-PITFALL 2: MISSING updated_at COLUMN
-  Many legacy tables have only created_at (immutable).
-  Solution A: use max(primary_key_id) as watermark if PK is auto-increment
-    SELECT * FROM orders WHERE order_id > last_max_id
-    Works when: rows are insert-only (orders are never updated after creation)
-    Breaks when: rows are updated (updates do not change the ID)
-  Solution B: use CDC (does not depend on application-managed timestamps)
-  Solution C: full load if the table is small enough
+        <CodeBox label="Clock skew and late-arriving updates">{`# PITFALL 3: CLOCK SKEW BETWEEN SOURCE AND PIPELINE SERVER
+# pipeline clock 06:00:00, source clock 06:00:02 (2s ahead) —
+# a row inserted at 06:00:01 on the source's clock looks like "the future" and gets excluded
+# Fix: always use the SOURCE database's NOW() as the upper bound, never the pipeline server's
 
-PITFALL 3: CLOCK SKEW BETWEEN SOURCE AND PIPELINE SERVER
-  Pipeline server clock: 06:00:00 UTC
-  Source DB clock:       06:00:02 UTC (2 seconds ahead)
-  Watermark saved after last run: 06:00:00 UTC (pipeline server time)
-  Next query: WHERE updated_at > '06:00:00'
-  Row inserted at 05:59:59 on source clock? INCLUDED (correct)
-  Row inserted at 06:00:01 on source clock? EXCLUDED (source says future)
-  Row inserted between 06:00:00 and 06:00:02? POTENTIALLY MISSED
+# PITFALL 4: LATE-ARRIVING UPDATES
+# row.updated_at = 11:58:00, but it doesn't actually reach the source table until
+# 12:03:00 (a delayed application retry) — by then the checkpoint has already moved past 12:00:00
+# Fix: extend the LOWER bound back by a safe margin (e.g. 30 min) and rely on
+# upsert to make the resulting re-processed overlap rows harmless`}</CodeBox>
 
-  Fix: always use the SOURCE DATABASE's NOW() as the upper bound:
-    SELECT NOW() FROM source_db  -- source time, not pipeline server time
-    Query: WHERE updated_at > last_checkpoint AND updated_at <= source_now
-  Or: overlap the extraction window by 5 minutes:
-    since = last_watermark - timedelta(minutes=5)
-    until = source_now
-    Use upsert at destination to handle re-processed rows idempotently.
-
-PITFALL 4: BACKFILL AND LATE-ARRIVING UPDATES
-  Row updated_at: 2026-03-17 11:58:00
-  Pipeline checkpoint at: 2026-03-17 12:00:00
-  Row arrives in source DB at: 2026-03-17 12:03:00 (application retry delayed)
-  Next pipeline run query: WHERE updated_at > 12:00:00
-  Row's updated_at (11:58:00) < checkpoint (12:00:00) → MISSED
-
-  Fix: use an overlap window that extends the lower bound back by a safe margin
-    since = last_checkpoint - timedelta(minutes=30)  # 30-minute lookback
-  Upsert handles duplicates from the overlap idempotently.
-  Cost: ~30 minutes of re-processed rows per run (small if update volume is moderate)`}</CodeBox>
-
-        <SubTitle>Watermark column selection — the decision matters</SubTitle>
+        <SubSubTitle>Watermark column selection — the decision matters</SubSubTitle>
 
         <CompareTable
           headers={[
@@ -559,10 +497,9 @@ PITFALL 4: BACKFILL AND LATE-ARRIVING UPDATES
           keys={['wm', 'query', 'updates', 'deletes', 'notes']}
           rows={[
             { wm: 'updated_at (TIMESTAMPTZ)', query: 'WHERE updated_at > checkpoint', updates: '✓ Yes', deletes: '✗ No', notes: 'Best option. Requires the application to maintain updated_at correctly.' },
-            { wm: 'created_at only', query: 'WHERE created_at > checkpoint', updates: '✗ No — updates not captured', deletes: '✗ No', notes: 'Only correct for append-only tables (logs, events, immutable facts).' },
-            { wm: 'Auto-increment PK', query: 'WHERE order_id > max_id', updates: '✗ No — updates not captured', deletes: '✗ No', notes: 'Only for insert-only tables. Breaks if records are inserted out of ID order.' },
-            { wm: 'Combination (created OR updated)', query: 'WHERE created_at > cp OR updated_at > cp', updates: '✓ Yes', deletes: '✗ No', notes: 'Handle tables with separate created_at and updated_at columns carefully.' },
-            { wm: 'None — use CDC', query: 'Read WAL directly', updates: '✓ Yes', deletes: '✓ Yes', notes: 'When no reliable timestamp exists. Most complete but most complex.' },
+            { wm: 'created_at only', query: 'WHERE created_at > checkpoint', updates: '✗ No', deletes: '✗ No', notes: 'Only correct for append-only tables (logs, events, immutable facts).' },
+            { wm: 'Auto-increment PK', query: 'WHERE order_id > max_id', updates: '✗ No', deletes: '✗ No', notes: 'Only for insert-only tables. Breaks if rows insert out of ID order.' },
+            { wm: 'None — use CDC', query: 'Read WAL directly', updates: '✓ Yes', deletes: '✓ Yes', notes: 'When no reliable timestamp exists. Most complete, most complex.' },
           ]}
         />
       </section>
@@ -587,236 +524,119 @@ PITFALL 4: BACKFILL AND LATE-ARRIVING UPDATES
         </div>
 
         <Para>
-          Change Data Capture reads the database's own transaction log — the
-          Write-Ahead Log (WAL) in PostgreSQL, the binlog in MySQL — and converts
-          every insert, update, and delete into a structured event that the pipeline
-          can consume. CDC captures everything the database records, which includes
-          operations that are invisible to any query-based approach: hard deletes,
-          multi-table transactions, and changes happening faster than the query
+          CDC reads the database&rsquo;s own transaction log — the Write-Ahead Log in
+          PostgreSQL — and converts every insert, update, and delete into a
+          structured event. This captures what no query-based approach can:
+          hard deletes, multi-table transactions, and changes faster than any
           polling interval.
         </Para>
 
-        <SubTitle>How CDC works at the database level</SubTitle>
+        <SubSubTitle>From a database operation to a Kafka message</SubSubTitle>
 
-        <CodeBox label="CDC internals — from database operation to pipeline event">{`HOW POSTGRESQL WAL-BASED CDC WORKS:
+        <CodeBox label="One UPDATE, traced from SQL to WAL to the event a consumer receives">{`-- Application writes:
+UPDATE orders SET status = 'delivered' WHERE order_id = 9284751;
 
-  APPLICATION writes to PostgreSQL:
-    BEGIN;
-    UPDATE orders SET status = 'delivered' WHERE order_id = 9284751;
-    INSERT INTO delivery_logs (order_id, delivered_at) VALUES (9284751, NOW());
-    COMMIT;
+-- PostgreSQL WAL records (simplified):
+-- {LSN: 0/1A3F2B8, op: UPDATE, table: orders,
+--  old: {order_id: 9284751, status: 'confirmed'}, new: {..., status: 'delivered'}}
 
-  POSTGRESQL WAL records (binary format, simplified):
-    {LSN: 0/1A3F2B8, txn: 847291, op: UPDATE, table: orders,
-     old: {order_id: 9284751, status: 'confirmed'},
-     new: {order_id: 9284751, status: 'delivered'}}
-    {LSN: 0/1A3F2BC, txn: 847291, op: INSERT, table: delivery_logs,
-     new: {order_id: 9284751, delivered_at: '2026-03-17T20:14:32Z'}}
-    {LSN: 0/1A3F2C0, txn: 847291, op: COMMIT}
-
-  DEBEZIUM reads WAL via PostgreSQL's logical replication protocol:
-    Decodes binary WAL records into structured JSON events
-    Publishes to Kafka topic: 'prod.public.orders'
-
-  KAFKA MESSAGE (what the pipeline consumer receives):
-    {
-      "before": {"order_id": 9284751, "status": "confirmed"},
-      "after":  {"order_id": 9284751, "status": "delivered"},
-      "op":     "u",          // u=update, c=create, r=read/snapshot, d=delete
-      "ts_ms":  1710698072847,
-      "source": {
-        "db":    "production",
-        "table": "orders",
-        "lsn":   28437128,     // log sequence number — position in WAL
-        "txId":  847291
-      }
-    }
-
-  For a DELETE:
-    {
-      "before": {"order_id": 9284751, "status": "delivered"},
-      "after":  null,
-      "op":     "d"            // delete — before image available, after is null
-    }
-
-  CDC CAPTURES EVERYTHING:
-  ✓ INSERT  → op: "c", before: null, after: {new row}
-  ✓ UPDATE  → op: "u", before: {old values}, after: {new values}
-  ✓ DELETE  → op: "d", before: {deleted row}, after: null
-  ✓ Schema changes (with schema registry) → schema evolution events
-  ✓ Transaction boundaries → group multi-table operations atomically`}</CodeBox>
-
-        <SubTitle>Setting up CDC with Debezium on PostgreSQL</SubTitle>
-
-        <CodeBox label="PostgreSQL CDC setup — step by step">{`# STEP 1: Configure PostgreSQL for logical replication
-# Edit postgresql.conf:
-wal_level = logical           # must be 'logical' (not 'replica' or 'minimal')
-max_replication_slots = 10    # number of CDC consumers allowed
-max_wal_senders = 10          # parallel WAL streaming connections
-
-# Restart PostgreSQL after changing wal_level.
-
-# STEP 2: Create a dedicated replication user
-CREATE USER debezium_user REPLICATION LOGIN PASSWORD 'strong_password';
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO debezium_user;
-GRANT USAGE ON SCHEMA public TO debezium_user;
-
-# STEP 3: Create a logical replication slot (tracks CDC position)
--- Run in psql:
-SELECT pg_create_logical_replication_slot('debezium_slot', 'pgoutput');
--- pgoutput is the built-in PostgreSQL logical replication plugin
-
-# STEP 4: Configure Debezium connector (JSON config posted to Kafka Connect REST API)
-# POST http://kafka-connect:8083/connectors
+-- Debezium decodes the WAL and publishes to Kafka topic 'prod.public.orders':
 {
-  "name": "freshmart-orders-cdc",
-  "config": {
-    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
-    "database.hostname":      "postgres-primary",
-    "database.port":          "5432",
-    "database.user":          "debezium_user",
-    "database.password":      "strong_password",
-    "database.dbname":        "freshmart_prod",
-    "database.server.name":   "freshmart",
-    "table.include.list":     "public.orders,public.customers,public.payments",
-    "plugin.name":            "pgoutput",
-    "slot.name":              "debezium_slot",
-    "publication.name":       "dbz_publication",
-    "snapshot.mode":          "initial",
-    "topic.prefix":           "freshmart.cdc",
-    "key.converter":          "org.apache.kafka.connect.json.JsonConverter",
-    "value.converter":        "org.apache.kafka.connect.json.JsonConverter",
-    "transforms":             "unwrap",
-    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
-    "transforms.unwrap.drop.tombstones": "false"
-  }
+  "before": {"order_id": 9284751, "status": "confirmed"},
+  "after":  {"order_id": 9284751, "status": "delivered"},
+  "op": "u",   // c=create, u=update, d=delete, r=read/snapshot
+  "source": {"lsn": 28437128, "txId": 847291}
 }
 
-# Debezium creates Kafka topics:
-#   freshmart.cdc.public.orders
-#   freshmart.cdc.public.customers
-#   freshmart.cdc.public.payments
+-- A DELETE looks like: {"before": {...}, "after": null, "op": "d"}`}</CodeBox>
 
-# STEP 5: Consume CDC events in your pipeline
-from confluent_kafka import Consumer
-import json
+        <Output>{`CDC captures everything:
+✓ INSERT → op: "c"   ✓ UPDATE → op: "u" (before+after)   ✓ DELETE → op: "d" (before image)
+✓ Schema changes (with schema registry)   ✓ Transaction boundaries (atomic groups)`}</Output>
 
-consumer = Consumer({
-    'bootstrap.servers': 'kafka:9092',
-    'group.id':          'freshmart-cdc-pipeline',
-    'auto.offset.reset': 'earliest',
-    'enable.auto.commit': False,   # manual commit — at-least-once delivery
-})
-consumer.subscribe(['freshmart.cdc.public.orders'])
+        <SubSubTitle>Setting up Debezium on PostgreSQL</SubSubTitle>
+
+        <CodeBox label="Step 1-3 — the source database side">{`# postgresql.conf — must restart PostgreSQL after this
+wal_level = logical
+max_replication_slots = 10
+max_wal_senders = 10
+
+CREATE USER debezium_user REPLICATION LOGIN PASSWORD 'strong_password';
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO debezium_user;
+
+SELECT pg_create_logical_replication_slot('debezium_slot', 'pgoutput');`}</CodeBox>
+
+        <CodeBox label="Step 4 — the Debezium connector config">{`// POST http://kafka-connect:8083/connectors
+{
+  "name": "freshcart-orders-cdc",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgres-primary",
+    "database.dbname": "freshcart_prod",
+    "table.include.list": "public.orders,public.customers,public.payments",
+    "plugin.name": "pgoutput",
+    "slot.name": "debezium_slot",
+    "snapshot.mode": "initial",
+    "topic.prefix": "freshcart.cdc"
+  }
+}
+// creates Kafka topics: freshcart.cdc.public.{orders,customers,payments}`}</CodeBox>
+
+        <CodeBox label="Step 5 — consuming the events">{`consumer = Consumer({'bootstrap.servers': 'kafka:9092', 'group.id': 'freshcart-cdc-pipeline',
+                      'enable.auto.commit': False})   # manual commit — at-least-once
+consumer.subscribe(['freshcart.cdc.public.orders'])
 
 while True:
     msg = consumer.poll(timeout=1.0)
     if msg is None or msg.error():
         continue
-
     event = json.loads(msg.value())
-    op    = event.get('op')         # 'c', 'u', 'd', 'r'
-    after = event.get('after')      # new row values (null for deletes)
-    before = event.get('before')    # old row values (null for inserts)
+    if event['op'] in ('c', 'u', 'r'):
+        upsert_to_silver(event['after'])
+    elif event['op'] == 'd':
+        soft_delete_in_silver(event['before']['order_id'])
+    consumer.commit()   # only after the write succeeds`}</CodeBox>
 
-    if op in ('c', 'u', 'r'):       # insert, update, or read (snapshot)
-        upsert_to_silver(after)
-    elif op == 'd':                  # delete
-        soft_delete_in_silver(before['order_id'])
-
-    consumer.commit()               # commit after successful processing`}</CodeBox>
-
-        <SubTitle>CDC initial snapshot — handling the bootstrap problem</SubTitle>
+        <SubSubTitle>The initial snapshot — bootstrapping a large table</SubSubTitle>
 
         <Para>
-          When you first set up CDC, you need to copy the existing table data before
-          the CDC stream begins. This is the initial snapshot — Debezium handles it
-          automatically with <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>snapshot.mode: initial</code>.
-          It reads the entire table once at startup, emitting each row as an
-          <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> op: "r"</code> (read)
-          event, then switches to streaming WAL changes. The pipeline sees a seamless
-          sequence: snapshot rows first, then real-time changes.
+          The first time CDC starts, it needs the existing data too, not just
+          future changes. <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>snapshot.mode: initial</code> reads
+          the entire table as <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>&quot;r&quot;</code> events
+          before switching to streaming — but for 500M rows that snapshot alone can take 8+ hours.
         </Para>
 
-        <CodeBox label="CDC snapshot modes — choosing the right bootstrap strategy">{`SNAPSHOT MODES (Debezium configuration):
+        <CodeBox label="A faster bootstrap for large tables">{`# snapshot.mode options: initial (default, full read then stream) | never (stream only,
+# misses everything before connector start) | schema_only (schema only, no data) | always (dev only)
 
-snapshot.mode = initial (default)
-  → On first start: read entire table as "r" events (consistent snapshot)
-  → After snapshot: stream WAL changes
-  → Use when: you need historical data AND going forward changes
-  → Note: snapshot can take hours for large tables
+# PRACTICAL BOOTSTRAP for a 500M-row table:
+# 1. pg_dump → S3 (parallel, 1-2 hours)
+# 2. Bulk load the S3 dump into the destination
+# 3. Start Debezium with snapshot.mode=schema_only, from the WAL LSN at dump time
+# 4. Apply WAL events from that LSN forward — catches up during/after the bulk load
+# → reduces bootstrap from 8 hours to ~2 hours`}</CodeBox>
 
-snapshot.mode = never
-  → No snapshot — start streaming from current WAL position
-  → Use when: you already populated the destination from a separate bulk load
-              and only need forward changes
-  → Danger: you will miss changes that occurred before the CDC connector started
+        <SubSubTitle>Operational concerns every DE must know</SubSubTitle>
 
-snapshot.mode = schema_only
-  → Capture table schema but no data rows
-  → Only stream going-forward changes
-  → Use when: destination is pre-populated (e.g., restored from backup)
+        <CodeBox label="Replication slot bloat and lag — the two things that page you">{`-- A stuck consumer means WAL accumulates on the SOURCE forever until it's read.
+-- Monitor:
+SELECT slot_name, pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn) AS lag_bytes
+FROM pg_replication_slots;
+-- Alert when lag_bytes > 10 GB. If the consumer is unrecoverable: DROP the slot
+-- (accepting data loss) rather than let the source disk fill and crash the database.`}</CodeBox>
 
-snapshot.mode = always
-  → Full snapshot on every connector restart
-  → Only use in development/testing — very expensive in production
+        <Output>{`CDC LATENCY (Debezium + Kafka + consumer), end to end:
+Source write → Kafka event:        50-200ms
+Kafka event → consumer processing:  10-100ms
+Consumer → destination write:       50-500ms
+Total: 200ms - 1s — fine for near-real-time dashboards, NOT for synchronous app flow`}</Output>
 
-PRACTICAL BOOTSTRAP STRATEGY FOR LARGE TABLES:
-  For a 500M row orders table, Debezium snapshot takes 8+ hours.
-  Better approach:
-    1. pg_dump → S3 (parallel, fast: 1-2 hours)
-    2. Bulk load S3 dump to destination
-    3. Start Debezium with snapshot.mode=schema_only from the WAL LSN
-       at the time the dump was taken
-    4. Apply WAL events from that LSN forward (catches up during/after bulk load)
-  This reduces bootstrap from 8 hours to 2 hours for large tables.`}</CodeBox>
-
-        <SubTitle>CDC operational considerations</SubTitle>
-
-        <CodeBox label="CDC in production — operational concerns every DE must know">{`CONCERN 1: REPLICATION SLOT BLOAT
-  A PostgreSQL replication slot retains WAL segments until the consumer
-  has confirmed reading them. If the CDC consumer is down or slow,
-  WAL accumulates indefinitely on the source database.
-  A slow consumer can fill the source disk and crash the database.
-
-  Monitoring: SELECT slot_name, pg_wal_lsn_diff(pg_current_wal_lsn(),
-              restart_lsn) AS lag_bytes FROM pg_replication_slots;
-  Alert when lag_bytes > 10 GB.
-  Action: if consumer is stuck, DROP the replication slot (accepts data loss)
-          rather than let the source database fill up.
-
-CONCERN 2: SLOT LAG GROWING
-  pg_stat_replication shows the gap between source WAL and consumer position.
-  Lag grows when: high write volume, consumer processing is slow,
-                  network between source and consumer is slow.
-  Monitor: set up Datadog/Prometheus alert when replication lag > 5 minutes.
-
-CONCERN 3: TABLE SCHEMA CHANGES (DDL events)
-  Adding a column to the source table mid-stream:
-  → Events before the column addition have the old schema
-  → Events after have the new schema
-  → Debezium (with Schema Registry) handles this automatically
-  → Without Schema Registry: your consumer may fail to parse new event schema
-  ALWAYS use Confluent Schema Registry with Debezium in production.
-
-CONCERN 4: AT-LEAST-ONCE DELIVERY
-  Debezium + Kafka provides at-least-once delivery — the same event
-  may be delivered more than once during consumer restarts or failures.
-  Destination must handle idempotently: upsert on primary key, not INSERT.
-  Never use CDC with a plain INSERT at destination.
-
-CONCERN 5: INITIAL SNAPSHOT SIZE
-  For tables > 100M rows, initial snapshot is expensive.
-  Use the pg_dump + schema_only approach described above.
-  Always monitor snapshot progress: Debezium metrics show rows snapshotted.
-
-CDC LATENCY BENCHMARKS (Debezium + Kafka + consumer):
-  Source write to Kafka event: 50–200ms
-  Kafka event to consumer processing: 10–100ms
-  Consumer to destination write: 50–500ms
-  Total end-to-end (typical): 200ms – 1 second
-  This is suitable for: near-real-time dashboards, data lake freshness
-  NOT suitable for: synchronous application flow (too slow for user-facing)`}</CodeBox>
+        <Callout type="warning">
+          CDC + Kafka is at-least-once delivery — the same event can arrive
+          twice on consumer restart. The destination write must be a genuine
+          upsert on a UNIQUE business key. A plain INSERT with CDC will
+          eventually double a row.
+        </Callout>
       </section>
 
       <Divider />
@@ -836,17 +656,14 @@ CDC LATENCY BENCHMARKS (Debezium + Kafka + consumer):
           keys={['dim', 'full', 'incremental', 'cdc']}
           rows={[
             { dim: 'What is read', full: 'Every row, every run', incremental: 'Only rows with updated_at > checkpoint', cdc: 'Every database operation from WAL' },
-            { dim: 'Captures inserts', full: '✓ Yes', incremental: '✓ Yes (via updated_at or created_at)', cdc: '✓ Yes (op: c)' },
-            { dim: 'Captures updates', full: '✓ Yes (overwrites)', incremental: '✓ Yes (if updated_at maintained)', cdc: '✓ Yes (op: u, with before/after)' },
-            { dim: 'Captures hard deletes', full: '✓ Yes (row absent after reload)', incremental: '✗ No (deleted rows invisible to query)', cdc: '✓ Yes (op: d, with before image)' },
-            { dim: 'Source load', full: 'Full table scan every run — high', incremental: 'Index scan on watermark column — low', cdc: 'WAL streaming — minimal (async read)' },
-            { dim: 'Latency', full: 'Run interval (minutes to hours)', incremental: 'Run interval (minutes to hours)', cdc: 'Near-real-time (seconds)' },
-            { dim: 'Before image available', full: '✗ No', incremental: '✗ No', cdc: '✓ Yes — previous values before change' },
+            { dim: 'Captures hard deletes', full: '✓ Yes (row absent after reload)', incremental: '✗ No (invisible to query)', cdc: '✓ Yes (op: d, with before image)' },
+            { dim: 'Source load', full: 'Full table scan every run — high', incremental: 'Index scan on watermark — low', cdc: 'WAL streaming — minimal (async)' },
+            { dim: 'Latency', full: 'Run interval', incremental: 'Run interval', cdc: 'Near-real-time (seconds)' },
+            { dim: 'Before image available', full: '✗ No', incremental: '✗ No', cdc: '✓ Yes — previous values' },
             { dim: 'Complexity', full: 'Low', incremental: 'Medium', cdc: 'High' },
-            { dim: 'Infrastructure required', full: 'Source DB + destination', incremental: 'Source DB + destination + checkpoint', cdc: 'WAL logical replication + Kafka + Debezium + destination' },
-            { dim: 'Requires source config', full: 'No', incremental: 'No (read-only query)', cdc: 'Yes — wal_level=logical, replication slot' },
-            { dim: 'Recovery from failure', full: 'Re-run full load', incremental: 'Re-run from last checkpoint', cdc: 'Resume from last committed Kafka offset' },
-            { dim: 'Best for', full: 'Small tables, reference data, no change tracking', incremental: 'Large append-heavy tables with updated_at', cdc: 'Any table with deletes, financial data, low latency' },
+            { dim: 'Requires source config', full: 'No', incremental: 'No', cdc: 'Yes — wal_level=logical, replication slot' },
+            { dim: 'Recovery from failure', full: 'Re-run full load', incremental: 'Re-run from checkpoint', cdc: 'Resume from last Kafka offset' },
+            { dim: 'Best for', full: 'Small tables, reference data', incremental: 'Large append-heavy tables', cdc: 'Deletes, financial data, low latency' },
           ]}
         />
       </section>
@@ -859,88 +676,99 @@ CDC LATENCY BENCHMARKS (Debezium + Kafka + consumer):
         <SectionTitle>How to Choose the Right Pattern for Any Source Table</SectionTitle>
 
         <Para>
-          The choice between the three patterns is never arbitrary — it is determined
-          by the source table's characteristics. Answer these four questions in order
-          and the right pattern becomes clear.
+          The choice is never arbitrary — it&rsquo;s determined by the source
+          table&rsquo;s characteristics. Answer these four questions in order and the
+          right pattern becomes clear.
         </Para>
 
-        <CodeBox label="Ingestion pattern decision framework">{`QUESTION 1: What is the table's approximate row count and growth rate?
-  < 1 million rows AND grows slowly?    → Full Load is viable (fast, simple)
-  > 1 million rows OR grows quickly?    → Incremental or CDC required
+        <CodeBox label="Four questions, in order">{`1. Row count and growth rate?
+   < 1M rows, grows slowly  → Full Load is viable
+   > 1M rows or grows fast  → Incremental or CDC required
 
-QUESTION 2: Does the table have a reliable updated_at column?
-  Yes (maintained by application on every write):
-    → Incremental is viable. Continue to Question 3.
-  No (only created_at, or no timestamp at all):
-    → If table is insert-only: use created_at or auto-increment PK
-    → If table has updates/deletes: CDC or Full Load (no other option)
+2. Reliable updated_at column?
+   Yes → Incremental is viable, continue to Q3
+   No, insert-only → use created_at or auto-increment PK
+   No, has updates/deletes → CDC or Full Load only
 
-QUESTION 3: Are hard deletes important for the destination?
-  No (deletes are rare, destination can lag on deletions, or soft deletes used):
-    → Incremental is sufficient.
-  Yes (deletes must be captured accurately and promptly):
-    → CDC required. Incremental cannot see hard deletes.
+3. Do hard deletes matter for the destination?
+   No (rare, or soft-deleted) → Incremental is sufficient
+   Yes → CDC required — incremental cannot see hard deletes
 
-QUESTION 4: What is the latency requirement?
-  > 15 minutes acceptable:
-    → Incremental with periodic schedule is fine.
-  < 15 minutes required:
-    → CDC (near-real-time) or micro-batch incremental (5-minute interval).
-  < 1 minute required:
-    → CDC only.
+4. Latency requirement?
+   > 15 min acceptable → Incremental on a schedule
+   < 15 min           → CDC, or 5-minute micro-batch incremental
+   < 1 min             → CDC only`}</CodeBox>
 
-PRACTICAL ROUTING TABLE:
-  product_categories    (500 rows, rarely changes)               → Full Load
-  store_master          (10 rows, updated monthly)               → Full Load
-  orders                (500M rows, updated frequently)          → Incremental
-  customers             (10M rows, hard deletes for GDPR)        → CDC
-  payment_transactions  (1B rows, financial accuracy critical)   → CDC
-  delivery_events       (append-only, no deletes)                → Incremental
-  inventory             (updates + deletes frequently)           → CDC
-  promo_codes           (small, full correctness needed)         → Full Load
-  audit_logs            (append-only, insert-only)               → Incremental (created_at)
-  user_sessions         (frequent updates, deletes on logout)    → CDC`}</CodeBox>
+        <CodeBox label="Practical routing, FreshCart's own tables">{`product_categories    (500 rows, rarely changes)             → Full Load
+orders                (500M rows, updated frequently)        → Incremental
+customers             (10M rows, hard deletes for GDPR)      → CDC
+payment_transactions  (1B rows, financial accuracy critical) → CDC
+delivery_events       (append-only, no deletes)              → Incremental (created_at)
+inventory             (updates + deletes frequently)         → CDC`}</CodeBox>
 
-        <SubTitle>The mixed-pattern architecture — most production platforms use all three</SubTitle>
+        <SubSubTitle>Most production platforms use all three at once</SubSubTitle>
 
-        <CodeBox label="FreshCart ingestion architecture — all three patterns in use">{`FRESHMART DATA PLATFORM — INGESTION PATTERN BY TABLE:
+        <CodeBox label="FreshCart's actual ingestion schedule">{`FULL LOAD (nightly, 5 min total):
+  reference.store_master, reference.product_categories, reference.city_tier_mapping
 
-  FULL LOAD (nightly, fast):
-    reference.store_master          10 rows    → Replaces nightly
-    reference.product_categories    850 rows   → Replaces nightly
-    reference.city_tier_mapping     500 rows   → Replaces nightly
-    reference.store_manager         10 rows    → Replaces nightly
+INCREMENTAL (every 15 min, updated_at watermark):
+  orders (500M rows), delivery_events (2B rows, created_at), customer_reviews (created_at)
 
-  INCREMENTAL (every 15 minutes, updated_at watermark):
-    orders                          500M rows  → updated_at watermark
-    delivery_events                 2B rows    → created_at (append-only)
-    customer_reviews                50M rows   → created_at (append-only)
-    inventory_snapshots             daily      → full date partition replace
+CDC (continuous, sub-second latency):
+  customers (GDPR deletes), payments (financial), merchant_accounts, inventory_live
 
-  CDC (continuous, sub-second latency):
-    customers          (GDPR deletes must be captured)
-    payments           (financial, every operation matters)
-    merchant_accounts  (balance changes, fraud patterns)
-    inventory_live     (real-time stock for flash sales)
-
-  INGESTION PIPELINE SCHEDULE:
-    00:00 UTC: Full load — all reference tables (5 minutes total)
-    Every 15 min: Incremental — orders, delivery_events, reviews
-    Continuous: CDC stream — customers, payments, merchants, inventory
-
-  TOTAL INFRASTRUCTURE:
-    Full Load: 2 cron jobs, no special infrastructure
-    Incremental: 3 scheduled Airflow tasks
-    CDC: 1 Debezium connector, 4 Kafka topics, 1 Kafka consumer group
-    → Most data volume handled by incremental
-    → Most operational complexity in CDC (but only for 4 tables)`}</CodeBox>
+TOTAL INFRASTRUCTURE:
+  Full load: 2 cron jobs. Incremental: 3 Airflow tasks.
+  CDC: 1 Debezium connector, 4 Kafka topics, 1 consumer group.
+  → Most data volume is incremental. Most operational complexity is CDC — for only 4 tables.`}</CodeBox>
       </section>
 
       <Divider />
 
-      {/* ── Part 07 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 07 — Misconceptions ──────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 07 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Ingestion Patterns</SectionTitle>
+
+        {[
+          {
+            wrong: '"Incremental ingestion is strictly better than full load — always prefer it"',
+            right: 'Part 02 lists real cases where full load is the correct, permanent choice: small reference tables, tables with no reliable timestamp, and tables where deletes matter but CDC is more infrastructure than the table is worth. Incremental adds real complexity (checkpoints, watermark pitfalls) that isn\'t worth paying for on a 500-row table.',
+          },
+          {
+            wrong: '"If a table has an updated_at column, incremental ingestion captures everything that matters"',
+            right: 'It captures every UPDATE, but Part 03\'s Pitfall 1 is specific: a hard DELETE produces no row for the query to return at all, regardless of how good updated_at is. An updated_at column solves the update problem, not the delete problem — those are two separate risks.',
+          },
+          {
+            wrong: '"CDC is just a faster version of incremental ingestion"',
+            right: 'The difference isn\'t speed, it\'s what\'s structurally visible — Part 04\'s before/after image and explicit delete events come from reading the WAL directly, something no polling query at any frequency can produce. A CDC pipeline running once an hour still captures deletes that a 1-minute incremental poll cannot.',
+          },
+          {
+            wrong: '"A replication slot is just Debezium\'s internal bookkeeping — nothing to actively monitor"',
+            right: 'This module\'s Error Library and Part 04\'s operational concerns both treat this as a genuine production risk: an unmonitored, stuck slot causes PostgreSQL to retain WAL indefinitely, and on a high-write table that fills the source disk and crashes the PRODUCTION database, not just the CDC pipeline.',
+          },
+          {
+            wrong: '"Once you pick full load, incremental, or CDC for a table, that\'s a permanent architectural decision"',
+            right: 'Part 06\'s FreshCart routing table shows all three patterns coexisting across different tables in the same platform, and Part 02\'s "signal to switch" (full load duration exceeding 20% of the run interval) is specifically meant to trigger re-evaluating that decision as a table grows — the right pattern for a table today may not be the right one in a year.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, padding: '20px 24px', marginBottom: 16,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 08 — Real World ──────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 07 — Real World" />
+        <SectionTag text="// Part 08 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
           textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12,
@@ -965,79 +793,49 @@ PRACTICAL ROUTING TABLE:
           </div>
 
           <Para>
-            The customer success team reports that cancelled orders are still showing
-            up as "active" on the customer analytics dashboard. Orders that customers
-            cancelled yesterday are appearing as "placed" in the Silver layer.
-            You are assigned to investigate.
+            The customer success team reports that cancelled orders are still
+            showing up as &ldquo;active&rdquo; on the dashboard. Orders customers cancelled
+            yesterday appear as &ldquo;placed&rdquo; in the Silver layer.
           </Para>
 
-          <CodeBox label="Diagnosis — tracing missing updates to ingestion pattern">{`-- Step 1: confirm the discrepancy
--- Check order 9284751 (reported as wrong)
-SELECT order_id, status, updated_at FROM production.orders
-WHERE order_id = 9284751;
--- Returns: {order_id: 9284751, status: 'cancelled', updated_at: '2026-03-17 14:32:00'}
+          <CodeBox label="Diagnosis — confirming the gap and finding the checkpoint">{`SELECT order_id, status, updated_at FROM production.orders WHERE order_id = 9284751;
+-- {status: 'cancelled', updated_at: '2026-03-17 14:32:00'}
+SELECT order_id, status, updated_at FROM silver.orders WHERE order_id = 9284751;
+-- {status: 'placed', updated_at: '2026-03-17 08:14:00'}   ← 6-hour gap
 
-SELECT order_id, status, updated_at FROM silver.orders
-WHERE order_id = 9284751;
--- Returns: {order_id: 9284751, status: 'placed', updated_at: '2026-03-17 08:14:00'}
+-- checkpoint file: {"watermark": "2026-03-17T08:00:00+00:00"} — hasn't moved in 6 hours
 
--- Silver shows 'placed' from the morning run.
--- Source shows 'cancelled' since 14:32.
--- 6-hour gap. Why didn't the 15-minute incremental pick it up?
+$ tail -100 /var/log/airflow/orders_incremental_20260317.log | grep ERROR
+08:15:42 ERROR Connection to source database timed out
+08:15:42 ERROR Pipeline failed — checkpoint NOT advanced
+14:00:00 INFO  Database connection restored`}</CodeBox>
 
--- Step 2: check the watermark checkpoint
--- File: /data/checkpoints/orders_watermark.json
--- Contents: {"watermark": "2026-03-17T08:00:00+00:00"}
--- Watermark is from this MORNING! Has not advanced in 6 hours.
+          <Output>{`14:00:02 INFO Loaded watermark: 2026-03-17T08:00:00+00:00
+14:00:03 INFO Extracted 284,721 rows (updated 08:00 to 14:00)
+14:00:47 INFO 284,721 rows upserted successfully
+14:00:47 INFO Saved watermark: 2026-03-17T14:00:00+00:00
 
--- Step 3: check the incremental pipeline logs
-tail -100 /var/log/airflow/orders_incremental_20260317.log | grep ERROR
--- 2026-03-17 08:15:42 ERROR Connection to source database timed out
--- 2026-03-17 08:15:42 ERROR Pipeline failed — checkpoint NOT advanced
--- (All subsequent runs also failed — Airflow retried but same DB issue)
--- 2026-03-17 14:00:00 INFO Database connection restored
--- 2026-03-17 14:00:02 INFO Loaded watermark: 2026-03-17T08:00:00+00:00
--- 2026-03-17 14:00:03 INFO Extracted 284,721 rows (updated 08:00 to 14:00)
--- 2026-03-17 14:00:47 INFO 284,721 rows upserted successfully
--- 2026-03-17 14:00:47 INFO Saved watermark: 2026-03-17T14:00:00+00:00
-
--- The pipeline recovered at 14:00 and processed the 6-hour backlog.
--- But the dashboard was still stale when the report was checked at 14:15
--- because the pipeline had just caught up and the analyst ran the query
--- while it was still processing.
-
--- Step 4: verify the fix
-SELECT order_id, status FROM silver.orders WHERE order_id = 9284751;
--- Returns: {order_id: 9284751, status: 'cancelled'}  ← correct now
-
--- Root cause: 6-hour DB connectivity failure → incremental fell behind
--- The incremental pattern correctly recovered using the saved watermark.
--- The 6-hour gap was recovered exactly — no data was missed, no duplicates.
--- This is checkpointing working correctly.`}</CodeBox>
+SELECT status FROM silver.orders WHERE order_id = 9284751;
+-- 'cancelled' ← correct now`}</Output>
 
           <Para>
-            The incident was not a bug in the ingestion pattern — it was a 6-hour
-            source database outage. The incremental pattern with checkpointing
+            This was not a bug in the ingestion pattern — it was a 6-hour source
+            database outage. The incremental pattern with checkpointing
             recovered perfectly: it resumed exactly where it stopped, processed
-            the backlog, and the Silver layer was correct within minutes of the
-            database recovering.
-          </Para>
-
-          <Para>
-            This is the correct behaviour. A full load pattern would have required
-            a full table scan after recovery (6 hours). A CDC pattern would have
-            required WAL catch-up (fast, but Kafka retention must have covered the
-            6-hour gap). The incremental pattern recovered with no special handling
-            — just the next scheduled run.
+            the backlog, and Silver was correct within minutes of the database
+            recovering. A full load would have needed a full 6-hour table scan
+            to recover the same ground; CDC would have needed Kafka retention
+            to have covered the whole 6-hour gap. Incremental just needed its
+            next scheduled run.
           </Para>
         </div>
       </section>
 
       <Divider />
 
-      {/* ── Part 08 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 09 — Interview Prep ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 08 — Interview Prep" />
+        <SectionTag text="// Part 09 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
@@ -1104,6 +902,45 @@ The correct monitoring setup: query pg_replication_slots regularly and alert whe
             <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
               {item.a}
             </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Choosing incremental for a table without checking whether hard deletes actually happen there',
+            a: 'A table that looks append-heavy today can start receiving deletes later (GDPR requests, a new "remove account" feature) with nobody revisiting the ingestion pattern — Part 03\'s Pitfall 1 becomes a silent, growing data gap. Ask specifically about deletes, not just updates, before picking incremental.',
+          },
+          {
+            q: 'Using the pipeline server\'s clock instead of the source database\'s clock for the extraction upper bound',
+            a: 'Even a few seconds of clock skew between the pipeline host and the source database can silently exclude rows right at the boundary — Part 03\'s Pitfall 3 is exactly this. Always fetch NOW() from the source connection itself, never from the pipeline\'s local system clock.',
+          },
+          {
+            q: 'Setting up a Debezium connector without a monitoring alert on the replication slot',
+            a: 'Part 04 and this module\'s Error Library both treat this as one of the highest-severity operational gaps in data engineering — an unmonitored slot doesn\'t just slow the CDC pipeline down, it can fill the SOURCE database\'s disk and crash production. Wire the lag alert before the connector goes live, not after an incident.',
+          },
+          {
+            q: 'Saving the checkpoint before confirming the destination write succeeded',
+            a: 'If the write then fails, the watermark has already advanced — the unwritten rows are silently skipped forever on the next run. Part 03\'s run_incremental() saves the watermark as the LAST step specifically to avoid this, matching the same rule taught in this track\'s idempotency module.',
+          },
+          {
+            q: 'Treating a stale prod reference table as evidence full load "isn\'t needed anymore" for it',
+            a: 'A rarely-changing table is exactly the case where full load is still correct and simplest — see Part 02\'s scenario list. Switching a 500-row reference table to incremental or CDC adds real operational complexity (checkpoints, replication slots) for a table that never needed it.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
           </div>
         ))}
       </section>
@@ -1184,7 +1021,7 @@ The correct monitoring setup: query pg_replication_slots regularly and alert whe
         'Most production platforms use all three patterns simultaneously: full load for reference tables (nightly, fast), incremental for large transaction tables (every 15 minutes), and CDC for financial and customer tables where deletes matter (continuous). Match the pattern to the table\'s characteristics, not to a personal preference.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
