@@ -19,13 +19,26 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 const SubTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 style={{ fontSize: 'clamp(16px,1.8vw,20px)', fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text)', marginBottom: 12, fontFamily: 'var(--font-display)' }}>{children}</h3>
 )
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>{label}</div>}
     <pre style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.9, color: 'var(--text)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{ background: 'transparent', border: '1px dashed var(--border)', borderRadius: 10, padding: '14px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.8, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
       <code>{children}</code>
     </pre>
   </div>
@@ -33,6 +46,15 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>{children}</div>
+)
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)', borderRadius: 10, padding: '16px 20px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent2)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
 )
 
 interface TableRow { [key: string]: string }
@@ -58,8 +80,8 @@ export default function InfrastructureAsCodeModule() {
       title="Infrastructure as Code for Data Engineering"
       description="Terraform fundamentals, provisioning Snowflake warehouses, S3 buckets, Airflow environments, IAM roles, and managing data infrastructure with state, modules, and CI/CD."
       section="Data Engineering — Module 45"
-      readTime="60 min"
-      updatedAt="March 2026"
+      readTime="70 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Data Engineers Need IaC ─────────────────────── */}
@@ -80,10 +102,10 @@ export default function InfrastructureAsCodeModule() {
         <Para>
           Infrastructure as Code treats cloud resources like software: defined
           in version-controlled files, reviewed through pull requests, tested
-          in CI, and deployed through an automated pipeline. A data engineer
-          who can write Terraform to provision a complete data platform environment
-          in one command has a significant operational advantage over one who
-          creates resources manually.
+          in CI, and deployed through an automated pipeline. This module builds
+          the Terraform configuration for FreshCart&rsquo;s actual data platform —
+          the S3 lake, the IAM roles, the Snowflake account, and the CI/CD
+          pipeline that applies changes safely — one piece at a time.
         </Para>
 
         <HighlightBox>
@@ -118,98 +140,76 @@ export default function InfrastructureAsCodeModule() {
         <Para>
           Terraform is the dominant IaC tool in 2026. It has providers for every
           major cloud (AWS, Azure, GCP) and for data tools like Snowflake,
-          Databricks, and Confluent. Understanding the core concepts — providers,
-          resources, state, plan, and apply — is sufficient to manage most data
-          platform infrastructure.
+          Databricks, and Confluent. Understanding providers, resources, state,
+          plan, and apply is sufficient to manage most data platform infrastructure.
         </Para>
 
-        <CodeBox label="Terraform core concepts — providers, resources, state, plan, apply">{`TERRAFORM WORKFLOW:
+        <SubSubTitle>Providers and the core workflow</SubSubTitle>
 
-  terraform init     ← download provider plugins, initialise backend
-  terraform plan     ← show what will change (no actual changes made)
-  terraform apply    ← apply the changes (creates/updates/destroys resources)
-  terraform destroy  ← tear down all resources in the configuration
-
-PROVIDER: the plugin that talks to a cloud or service API
-  # providers.tf
-  terraform {
-    required_providers {
-      aws = {
-        source  = "hashicorp/aws"
-        version = "~> 5.0"
-      }
-      snowflake = {
-        source  = "Snowflake-Labs/snowflake"
-        version = "~> 0.87"
-      }
-    }
-    # Remote state backend (required for team use):
-    backend "s3" {
-      bucket         = "freshmart-terraform-state"
-      key            = "data-platform/terraform.tfstate"
-      region         = "ap-south-1"
-      encrypt        = true
-      dynamodb_table = "freshmart-terraform-locks"  # prevents concurrent applies
-    }
+        <CodeBox label="providers.tf — declaring the providers and remote state backend">{`terraform {
+  required_providers {
+    aws       = { source = "hashicorp/aws",              version = "~> 5.0"  }
+    snowflake = { source = "Snowflake-Labs/snowflake",    version = "~> 0.87" }
   }
-
-  provider "aws" {
-    region = var.aws_region
+  # Remote state backend (required for team use):
+  backend "s3" {
+    bucket         = "freshcart-terraform-state"
+    key            = "data-platform/terraform.tfstate"
+    region         = "ap-south-1"
+    encrypt        = true
+    dynamodb_table = "freshcart-terraform-locks"   # prevents concurrent applies
   }
+}
 
-  provider "snowflake" {
-    account  = var.snowflake_account
-    username = var.snowflake_user
-    password = var.snowflake_password
-    role     = "SYSADMIN"
-  }
+provider "aws"       { region = var.aws_region }
+provider "snowflake" {
+  account = var.snowflake_account
+  username = var.snowflake_user
+  password = var.snowflake_password
+  role     = "SYSADMIN"
+}`}</CodeBox>
 
-RESOURCE: a single infrastructure object (S3 bucket, Snowflake warehouse, etc.)
-  # Each resource block = one real cloud resource
-  resource "aws_s3_bucket" "data_lake" {
-    bucket = "freshmart-data-lake-\${var.environment}"  # freshmart-data-lake-prod
-    tags   = local.common_tags
-  }
+        <Output>{`$ terraform init
+Initializing the backend...
+Initializing provider plugins...
+- Finding hashicorp/aws versions matching "~> 5.0"...
+- Finding Snowflake-Labs/snowflake versions matching "~> 0.87"...
+Terraform has been successfully initialized!`}</Output>
 
-STATE: Terraform's record of what it has created
-  Stored in: S3 (remote, for teams) or locally (.terraform/terraform.tfstate)
-  Contains:  mapping from resource blocks → actual cloud resource IDs
-  Critical:  never edit manually. Never delete. If lost: expensive to recover.
-  Remote state: use S3 + DynamoDB lock (prevents two engineers applying simultaneously)
+        <SubSubTitle>Reading a plan before every apply</SubSubTitle>
 
-PLAN OUTPUT (what to read before every apply):
-  terraform plan
-  # Terraform will perform the following actions:
+        <CodeBox label="terraform plan output — the three change types">{`$ terraform plan
+Terraform will perform the following actions:
 
   # aws_s3_bucket.data_lake will be created (+)
   + resource "aws_s3_bucket" "data_lake" {
-    + bucket = "freshmart-data-lake-prod"
+    + bucket = "freshcart-data-lake-prod"
     + id     = (known after apply)
   }
 
   # aws_s3_bucket.staging will be destroyed (-)
   - resource "aws_s3_bucket" "staging" {
-    - bucket = "freshmart-staging-old"
-    - id     = "freshmart-staging-old"
+    - bucket = "freshcart-staging-old"
   }
 
-  # aws_snowflake_warehouse.analytics will be updated in-place (~)
+  # snowflake_warehouse.analytics will be updated in-place (~)
   ~ resource "snowflake_warehouse" "analytics" {
     ~ warehouse_size = "SMALL" → "MEDIUM"
   }
 
-  Plan: 1 to add, 1 to change, 1 to destroy.
+Plan: 1 to add, 1 to change, 1 to destroy.`}</CodeBox>
 
-  READ THE PLAN CAREFULLY before apply.
-  (-) destroy: something will be permanently deleted. Understand why.
-  (~) update: in-place change. Usually safe.
-  (+) create: new resource. Check the configuration.
-  -/+ replace: resource must be destroyed and recreated (data loss risk).`}</CodeBox>
+        <Callout type="warning">
+          Read the plan carefully before every apply. <strong>(-) destroy</strong> means
+          something is permanently deleted — understand why. <strong>(~) update</strong> is
+          usually safe. <strong>(+) create</strong> is a new resource — check its config.{' '}
+          <strong>-/+ replace</strong> means the resource is destroyed and recreated — a real
+          data-loss risk for anything stateful.
+        </Callout>
 
-        <SubTitle>Variables, outputs, and locals — making Terraform reusable</SubTitle>
+        <SubSubTitle>Variables, locals, and outputs — making it reusable</SubSubTitle>
 
-        <CodeBox label="Variables and outputs — parameterising Terraform for multiple environments">{`# variables.tf — declare inputs
-variable "environment" {
+        <CodeBox label="variables.tf and locals.tf">{`variable "environment" {
   description = "Deployment environment: dev, staging, or prod"
   type        = string
   validation {
@@ -218,70 +218,37 @@ variable "environment" {
   }
 }
 
-variable "aws_region" {
-  description = "AWS region for all resources"
-  type        = string
-  default     = "ap-south-1"
-}
-
 variable "snowflake_account" {
-  description = "Snowflake account identifier"
-  type        = string
-  sensitive   = true   # marked sensitive: not shown in plan output
+  type      = string
+  sensitive = true   # marked sensitive: not shown in plan output
 }
 
-variable "data_retention_days" {
-  description = "Number of days to retain data in S3 Standard before transition"
-  type        = number
-  default     = 90
-}
-
-# locals.tf — computed values used throughout the configuration
 locals {
-  name_prefix = "freshmart-\${var.environment}"
-  common_tags = {
-    Environment = var.environment
-    Project     = "freshmart-data-platform"
-    ManagedBy   = "terraform"
-    Team        = "data-engineering"
-  }
-  # Size overrides per environment:
-  snowflake_warehouse_size = {
-    dev     = "X-SMALL"
-    staging = "SMALL"
-    prod    = "MEDIUM"
-  }
-}
-
-# outputs.tf — values to expose after apply (useful for other modules)
-output "data_lake_bucket_name" {
-  description = "Name of the S3 data lake bucket"
-  value       = aws_s3_bucket.data_lake.id
+  name_prefix = "freshcart-\${var.environment}"
+  common_tags = { Environment = var.environment, Project = "freshcart-data-platform", ManagedBy = "terraform" }
+  snowflake_warehouse_size = { dev = "X-SMALL", staging = "SMALL", prod = "MEDIUM" }
 }
 
 output "data_lake_bucket_arn" {
-  description = "ARN of the S3 data lake bucket"
-  value       = aws_s3_bucket.data_lake.arn
-}
+  value = aws_s3_bucket.data_lake.arn
+}`}</CodeBox>
 
-output "snowflake_pipeline_role" {
-  description = "Name of the Snowflake role for pipeline service accounts"
-  value       = snowflake_role.pipeline.name
-}
-
-# ENVIRONMENT-SPECIFIC VARIABLE FILES:
-# terraform/environments/prod.tfvars
+        <CodeBox label="Per-environment .tfvars files">{`# terraform/environments/prod.tfvars
 environment          = "prod"
-aws_region           = "ap-south-1"
 data_retention_days  = 365
 
 # terraform/environments/dev.tfvars
 environment          = "dev"
-aws_region           = "ap-south-1"
 data_retention_days  = 30
 
-# Deploy to prod:   terraform apply -var-file=environments/prod.tfvars
-# Deploy to dev:    terraform apply -var-file=environments/dev.tfvars`}</CodeBox>
+# Deploy to prod: terraform apply -var-file=environments/prod.tfvars
+# Deploy to dev:  terraform apply -var-file=environments/dev.tfvars`}</CodeBox>
+
+        <TryThis>
+          Look at the plan output above and find the one line that tells you
+          this apply is safe to run without a maintenance window, and the one
+          line that would make you stop and ask a teammate first.
+        </TryThis>
       </section>
 
       <Divider />
@@ -292,21 +259,26 @@ data_retention_days  = 30
         <SectionTitle>Provisioning an S3 Data Lake — Complete Terraform Configuration</SectionTitle>
 
         <Para>
-          The S3 data lake is the foundation of the Medallion Architecture. Its
-          Terraform configuration covers the bucket, encryption, versioning,
-          lifecycle policies, access logging, and the bucket policies that
-          implement zone-based access control — all in version-controlled code.
+          The S3 data lake is the foundation of FreshCart&rsquo;s Medallion
+          Architecture. Its Terraform configuration covers the bucket, encryption,
+          versioning, lifecycle policies, access logging, and the notifications
+          that trigger downstream processing — all in version-controlled code.
         </Para>
 
-        <CodeBox label="S3 data lake — complete Terraform configuration">{`# s3.tf — data lake bucket with all production settings
+        <SubSubTitle>The bucket, encryption, and public access blocking</SubSubTitle>
 
-resource "aws_s3_bucket" "data_lake" {
+        <CodeBox label="s3.tf — bucket, KMS encryption, and public access block">{`resource "aws_s3_bucket" "data_lake" {
   bucket        = "\${local.name_prefix}-data-lake"
   force_destroy = var.environment == "dev"   # only allow destroy in dev
   tags          = local.common_tags
 }
 
-# Encryption: all objects encrypted with KMS key
+resource "aws_kms_key" "data_lake" {
+  description         = "FreshCart data lake encryption key"
+  enable_key_rotation = true
+  tags                = local.common_tags
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "data_lake" {
   bucket = aws_s3_bucket.data_lake.id
   rule {
@@ -318,74 +290,53 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "data_lake" {
   }
 }
 
-# Block all public access (critical for data lakes)
+# Block all public access — critical for data lakes
 resource "aws_s3_bucket_public_access_block" "data_lake" {
   bucket                  = aws_s3_bucket.data_lake.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-}
+}`}</CodeBox>
 
-# Versioning: enables recovery from accidental deletion
-resource "aws_s3_bucket_versioning" "data_lake" {
+        <SubSubTitle>Versioning and zone-based lifecycle rules</SubSubTitle>
+
+        <CodeBox label="s3.tf — versioning and per-zone lifecycle transitions">{`resource "aws_s3_bucket_versioning" "data_lake" {
   bucket = aws_s3_bucket.data_lake.id
-  versioning_configuration {
-    status = "Enabled"
-  }
+  versioning_configuration { status = "Enabled" }
 }
 
-# Lifecycle: transition objects through storage tiers automatically
 resource "aws_s3_bucket_lifecycle_configuration" "data_lake" {
-  bucket = aws_s3_bucket.data_lake.id
+  bucket     = aws_s3_bucket.data_lake.id
   depends_on = [aws_s3_bucket_versioning.data_lake]
 
-  # Landing zone: short-lived raw files
-  rule {
+  rule {   # landing: short-lived raw files
     id     = "landing-zone-expiry"
     status = "Enabled"
     filter { prefix = "landing/" }
     expiration { days = 30 }
-    # Files older than 30 days deleted automatically
   }
 
-  # Bronze: transition to cheaper storage after 90 days
-  rule {
+  rule {   # bronze: transition to cheaper storage over time
     id     = "bronze-tiering"
     status = "Enabled"
     filter { prefix = "bronze/" }
-    transition {
-      days          = 90
-      storage_class = "STANDARD_IA"
-    }
-    transition {
-      days          = 365
-      storage_class = "GLACIER"
-    }
-    noncurrent_version_expiration {
-      noncurrent_days = 30   # delete old versions after 30 days
-    }
+    transition { days = 90  storage_class = "STANDARD_IA" }
+    transition { days = 365 storage_class = "GLACIER" }
+    noncurrent_version_expiration { noncurrent_days = 30 }
   }
 
-  # Silver/Gold: standard IA after 180 days
-  rule {
+  rule {   # silver/gold: standard IA after 180 days
     id     = "silver-gold-tiering"
     status = "Enabled"
-    filter {
-      or {
-        prefix = "silver/"
-        prefix = "gold/"
-      }
-    }
-    transition {
-      days          = 180
-      storage_class = "STANDARD_IA"
-    }
+    filter { or { prefix = "silver/" prefix = "gold/" } }
+    transition { days = 180 storage_class = "STANDARD_IA" }
   }
-}
+}`}</CodeBox>
 
-# Access logging: who accessed what, for GDPR audit
-resource "aws_s3_bucket" "access_logs" {
+        <SubSubTitle>Access logging and event notifications</SubSubTitle>
+
+        <CodeBox label="s3.tf — access logs and Lambda trigger on new landing files">{`resource "aws_s3_bucket" "access_logs" {
   bucket = "\${local.name_prefix}-data-lake-logs"
   tags   = local.common_tags
 }
@@ -396,7 +347,6 @@ resource "aws_s3_bucket_logging" "data_lake" {
   target_prefix = "s3-access-logs/"
 }
 
-# Bucket notification: trigger Lambda on new landing files
 resource "aws_s3_bucket_notification" "data_lake" {
   bucket = aws_s3_bucket.data_lake.id
   lambda_function {
@@ -404,20 +354,18 @@ resource "aws_s3_bucket_notification" "data_lake" {
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "landing/"
   }
-}
-
-# KMS key for encryption
-resource "aws_kms_key" "data_lake" {
-  description             = "FreshCart data lake encryption key"
-  deletion_window_in_days = 30
-  enable_key_rotation     = true
-  tags                    = local.common_tags
-}
-
-resource "aws_kms_alias" "data_lake" {
-  name          = "alias/\${local.name_prefix}-data-lake"
-  target_key_id = aws_kms_key.data_lake.key_id
 }`}</CodeBox>
+
+        <Output>{`$ terraform apply
+aws_kms_key.data_lake: Creating...
+aws_kms_key.data_lake: Creation complete after 4s
+aws_s3_bucket.data_lake: Creating...
+aws_s3_bucket.data_lake: Creation complete after 2s
+...
+Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
+
+Outputs:
+data_lake_bucket_arn = "arn:aws:s3:::freshcart-prod-data-lake"`}</Output>
       </section>
 
       <Divider />
@@ -428,19 +376,16 @@ resource "aws_kms_alias" "data_lake" {
         <SectionTitle>IAM for Data Platforms — Least Privilege as Code</SectionTitle>
 
         <Para>
-          IAM is the access control layer for all AWS resources. For a data
-          platform, four IAM roles cover the primary access patterns: ingestion
+          Four IAM roles cover FreshCart&rsquo;s primary access patterns: ingestion
           pipelines (write to landing/bronze), transformation pipelines (read
           bronze, write silver/gold), analyst access (read silver/gold only),
-          and the CI service account (read all, create/delete staging environments).
-          Defining these in Terraform ensures the principle of least privilege
-          is enforced consistently and reviewable.
+          and the CI service account. Defining these in Terraform makes least
+          privilege consistent and reviewable.
         </Para>
 
-        <CodeBox label="IAM roles and policies for a data platform — complete example">{`# iam.tf — roles for the data platform access patterns
+        <SubSubTitle>The ingestion pipeline role</SubSubTitle>
 
-# ── INGESTION PIPELINE ROLE ────────────────────────────────────────────────────
-resource "aws_iam_role" "pipeline_ingestion" {
+        <CodeBox label="iam.tf — ingestion pipeline: write landing and bronze only">{`resource "aws_iam_role" "pipeline_ingestion" {
   name               = "\${local.name_prefix}-pipeline-ingestion"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume.json
   tags               = local.common_tags
@@ -452,29 +397,15 @@ resource "aws_iam_policy" "pipeline_ingestion" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "WriteLanding"
-        Effect = "Allow"
-        Action = ["s3:PutObject", "s3:GetObject"]
-        Resource = [
-          "\${aws_s3_bucket.data_lake.arn}/landing/*",
-          "\${aws_s3_bucket.data_lake.arn}/bronze/*",
-        ]
+        Sid = "WriteLanding", Effect = "Allow"
+        Action   = ["s3:PutObject", "s3:GetObject"]
+        Resource = ["\${aws_s3_bucket.data_lake.arn}/landing/*", "\${aws_s3_bucket.data_lake.arn}/bronze/*"]
       },
       {
-        Sid      = "ListBucket"
-        Effect   = "Allow"
-        Action   = ["s3:ListBucket", "s3:GetBucketLocation"]
-        Resource = aws_s3_bucket.data_lake.arn
-        Condition = {
-          StringLike = { "s3:prefix" = ["landing/*", "bronze/*"] }
-        }
-      },
-      {
-        Sid    = "UseKMS"
-        Effect = "Allow"
-        Action = ["kms:GenerateDataKey", "kms:Decrypt"]
+        Sid = "UseKMS", Effect = "Allow"
+        Action   = ["kms:GenerateDataKey", "kms:Decrypt"]
         Resource = aws_kms_key.data_lake.arn
-      }
+      },
     ]
   })
 }
@@ -482,94 +413,42 @@ resource "aws_iam_policy" "pipeline_ingestion" {
 resource "aws_iam_role_policy_attachment" "ingestion_policy" {
   role       = aws_iam_role.pipeline_ingestion.name
   policy_arn = aws_iam_policy.pipeline_ingestion.arn
-}
+}`}</CodeBox>
 
+        <SubSubTitle>Transformation and analyst roles</SubSubTitle>
 
-# ── TRANSFORMATION PIPELINE ROLE (dbt, Spark) ─────────────────────────────────
-resource "aws_iam_role" "pipeline_transform" {
-  name               = "\${local.name_prefix}-pipeline-transform"
-  assume_role_policy = data.aws_iam_policy_document.ec2_assume.json
-  tags               = local.common_tags
-}
-
+        <CodeBox label="iam.tf — transform (dbt/Spark) and analyst roles">{`# TRANSFORM: reads bronze, writes silver+gold, NO access to landing (raw PII)
 resource "aws_iam_policy" "pipeline_transform" {
   name = "\${local.name_prefix}-pipeline-transform-policy"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      {
-        Sid    = "ReadBronze"
-        Effect = "Allow"
-        Action = ["s3:GetObject", "s3:ListBucket"]
-        Resource = [
-          "\${aws_s3_bucket.data_lake.arn}/bronze/*",
-          aws_s3_bucket.data_lake.arn,
-        ]
-      },
-      {
-        Sid    = "WriteTransformed"
-        Effect = "Allow"
-        Action = ["s3:PutObject", "s3:DeleteObject", "s3:GetObject"]
-        Resource = [
-          "\${aws_s3_bucket.data_lake.arn}/silver/*",
-          "\${aws_s3_bucket.data_lake.arn}/gold/*",
-        ]
-      },
-      # NO access to: landing/ (raw PII, ingestion only)
+      { Sid = "ReadBronze", Effect = "Allow", Action = ["s3:GetObject", "s3:ListBucket"],
+        Resource = ["\${aws_s3_bucket.data_lake.arn}/bronze/*", aws_s3_bucket.data_lake.arn] },
+      { Sid = "WriteTransformed", Effect = "Allow", Action = ["s3:PutObject", "s3:DeleteObject"],
+        Resource = ["\${aws_s3_bucket.data_lake.arn}/silver/*", "\${aws_s3_bucket.data_lake.arn}/gold/*"] },
     ]
   })
 }
 
-
-# ── ANALYST ROLE (read silver and gold, no raw PII) ───────────────────────────
-resource "aws_iam_role" "analyst" {
-  name               = "\${local.name_prefix}-analyst"
-  assume_role_policy = data.aws_iam_policy_document.federated_assume.json
-  tags               = local.common_tags
-}
-
+# ANALYST: reads silver+gold only, no raw PII access at all
 resource "aws_iam_policy" "analyst" {
   name = "\${local.name_prefix}-analyst-policy"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      {
-        Sid    = "ReadAnalyticsLayers"
-        Effect = "Allow"
-        Action = ["s3:GetObject"]
-        Resource = [
-          "\${aws_s3_bucket.data_lake.arn}/silver/*",
-          "\${aws_s3_bucket.data_lake.arn}/gold/*",
-        ]
-        # Explicit deny for PII columns handled at Athena/LakeFormation level
-      },
-      {
-        Sid    = "ListForAnalytics"
-        Effect = "Allow"
-        Action = ["s3:ListBucket"]
-        Resource = aws_s3_bucket.data_lake.arn
-        Condition = {
-          StringLike = {
-            "s3:prefix" = ["silver/*", "gold/*"]
-          }
-        }
-      }
+      { Sid = "ReadAnalyticsLayers", Effect = "Allow", Action = ["s3:GetObject"],
+        Resource = ["\${aws_s3_bucket.data_lake.arn}/silver/*", "\${aws_s3_bucket.data_lake.arn}/gold/*"] },
     ]
   })
-}
+}`}</CodeBox>
 
-# Assume role policy documents:
-data "aws_iam_policy_document" "lambda_assume" {
+        <SubSubTitle>Who is allowed to assume each role</SubSubTitle>
+
+        <CodeBox label="iam.tf — assume-role policy documents">{`data "aws_iam_policy_document" "lambda_assume" {
   statement {
     actions = ["sts:AssumeRole"]
-    principals { type = "Service"; identifiers = ["lambda.amazonaws.com"] }
-  }
-}
-
-data "aws_iam_policy_document" "ec2_assume" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    principals { type = "Service"; identifiers = ["ec2.amazonaws.com"] }
+    principals { type = "Service" identifiers = ["lambda.amazonaws.com"] }
   }
 }
 
@@ -582,6 +461,10 @@ data "aws_iam_policy_document" "federated_assume" {
     }
   }
 }`}</CodeBox>
+
+        <Output>{`# an analyst who assumes this role and tries to read landing/ gets exactly this:
+$ aws s3 cp s3://freshcart-prod-data-lake/landing/orders_raw.csv .
+fatal error: An error occurred (AccessDenied) when calling the GetObject operation`}</Output>
       </section>
 
       <Divider />
@@ -592,34 +475,29 @@ data "aws_iam_policy_document" "federated_assume" {
         <SectionTitle>Snowflake Infrastructure — Warehouses, Roles, and Databases in Terraform</SectionTitle>
 
         <Para>
-          Snowflake has a first-class Terraform provider maintained by Snowflake
-          Labs. This allows the complete Snowflake account configuration —
-          warehouses, databases, schemas, roles, grants, users, and resource
-          monitors — to be managed as code. When a new analyst joins, adding
-          them to the Snowflake platform is a one-line PR rather than a
-          console click sequence.
+          Snowflake&rsquo;s first-class Terraform provider lets the entire account
+          configuration — warehouses, databases, schemas, roles, grants, and
+          users — be managed as code. Adding a new analyst becomes a one-line PR
+          instead of a console click sequence.
         </Para>
 
-        <CodeBox label="Snowflake Terraform — warehouses, databases, roles, and grants">{`# snowflake.tf — complete Snowflake infrastructure
+        <SubSubTitle>Warehouses, sized per environment</SubSubTitle>
 
-# ── WAREHOUSES ────────────────────────────────────────────────────────────────
-resource "snowflake_warehouse" "dbt_pipeline" {
-  name           = "\${upper(var.environment)}_DBT_PIPELINE_WH"
-  warehouse_size = lookup(local.snowflake_warehouse_size, var.environment, "SMALL")
-  auto_suspend   = 300       # 5 min idle → suspend
-  auto_resume    = true
+        <CodeBox label="snowflake.tf — three warehouses for three workloads">{`resource "snowflake_warehouse" "dbt_pipeline" {
+  name              = "\${upper(var.environment)}_DBT_PIPELINE_WH"
+  warehouse_size    = lookup(local.snowflake_warehouse_size, var.environment, "SMALL")
+  auto_suspend      = 300     # 5 min idle → suspend
+  auto_resume       = true
   max_cluster_count = 1
-  comment        = "dbt transformation pipeline warehouse - \${var.environment}"
 }
 
 resource "snowflake_warehouse" "analyst" {
   name              = "\${upper(var.environment)}_ANALYST_WH"
   warehouse_size    = "SMALL"
-  auto_suspend      = 600    # 10 min idle
+  auto_suspend      = 600
   auto_resume       = true
   max_cluster_count = var.environment == "prod" ? 3 : 1
   scaling_policy    = var.environment == "prod" ? "ECONOMY" : "STANDARD"
-  comment           = "Analyst self-service queries - \${var.environment}"
 }
 
 resource "snowflake_warehouse" "dashboard" {
@@ -627,101 +505,52 @@ resource "snowflake_warehouse" "dashboard" {
   warehouse_size = "X-SMALL"
   auto_suspend   = 60
   auto_resume    = true
-  comment        = "BI tool service account warehouse - \${var.environment}"
-}
+}`}</CodeBox>
 
+        <SubSubTitle>A resource monitor — preventing runaway cost</SubSubTitle>
 
-# ── RESOURCE MONITOR — prevent runaway cost ───────────────────────────────────
-resource "snowflake_resource_monitor" "monthly_limit" {
+        <CodeBox label="snowflake.tf — credit quota with tiered alerts">{`resource "snowflake_resource_monitor" "monthly_limit" {
   name         = "\${upper(var.environment)}_MONTHLY_MONITOR"
   credit_quota = var.environment == "prod" ? 1000 : 100
 
-  notify_triggers     = [75, 90]   # alert at 75% and 90% of quota
-  suspend_triggers    = [100]       # suspend warehouses at 100%
-  suspend_immediately_triggers = [110]  # hard stop at 110%
+  notify_triggers              = [75, 90]    # alert at 75% and 90%
+  suspend_triggers              = [100]       # suspend warehouses at 100%
+  suspend_immediately_triggers  = [110]        # hard stop at 110%
+  notify_users = ["data-team-lead@freshcart.com"]
+}`}</CodeBox>
 
-  notify_users = ["data-team-lead@freshmart.com"]
-}
+        <Output>{`# Slack alert from the resource monitor, mid-month:
+⚠️ PROD_MONTHLY_MONITOR at 76% of 1000 credit quota (760 credits used)
+# at 100% every warehouse under this monitor suspends automatically —
+# no pipeline can silently burn through an unlimited compute budget`}</Output>
 
-resource "snowflake_warehouse" "dbt_pipeline_monitor" {
-  name             = "\${upper(var.environment)}_DBT_PIPELINE_WH"
-  resource_monitor = snowflake_resource_monitor.monthly_limit.name
-  # ... other settings from above
-}
+        <SubSubTitle>Databases, schemas, and zone-based roles</SubSubTitle>
 
-
-# ── DATABASES AND SCHEMAS ─────────────────────────────────────────────────────
-resource "snowflake_database" "freshmart" {
-  name                        = "FRESHMART_\${upper(var.environment)}"
-  data_retention_time_in_days = var.environment == "prod" ? 30 : 1
-  comment                     = "FreshCart data platform - \${var.environment}"
-}
-
-resource "snowflake_schema" "bronze" {
-  database = snowflake_database.freshmart.name
-  name     = "BRONZE"
+        <CodeBox label="snowflake.tf — one database, four schemas, three roles">{`resource "snowflake_database" "freshcart" {
+  name                        = "FRESHCART_\${upper(var.environment)}"
   data_retention_time_in_days = var.environment == "prod" ? 30 : 1
 }
 
-resource "snowflake_schema" "silver" {
-  database = snowflake_database.freshmart.name
-  name     = "SILVER"
-}
+resource "snowflake_schema" "bronze"     { database = snowflake_database.freshcart.name  name = "BRONZE" }
+resource "snowflake_schema" "silver"     { database = snowflake_database.freshcart.name  name = "SILVER" }
+resource "snowflake_schema" "gold"       { database = snowflake_database.freshcart.name  name = "GOLD" }
+resource "snowflake_schema" "monitoring" { database = snowflake_database.freshcart.name  name = "MONITORING" }
 
-resource "snowflake_schema" "gold" {
-  database = snowflake_database.freshmart.name
-  name     = "GOLD"
-}
+resource "snowflake_role" "pipeline"    { name = "\${upper(var.environment)}_PIPELINE_ROLE"   comment = "dbt and Spark service accounts" }
+resource "snowflake_role" "analyst"     { name = "\${upper(var.environment)}_ANALYST_ROLE"    comment = "Read access to silver and gold" }
+resource "snowflake_role" "bi_service"  { name = "\${upper(var.environment)}_BI_SERVICE_ROLE"  comment = "Metabase/Tableau — read gold only" }`}</CodeBox>
 
-resource "snowflake_schema" "monitoring" {
-  database = snowflake_database.freshmart.name
-  name     = "MONITORING"
-}
+        <SubSubTitle>Grants — wiring roles to schemas</SubSubTitle>
 
-
-# ── ROLES ─────────────────────────────────────────────────────────────────────
-resource "snowflake_role" "pipeline" {
-  name    = "\${upper(var.environment)}_PIPELINE_ROLE"
-  comment = "dbt and Spark pipeline service accounts"
-}
-
-resource "snowflake_role" "analyst" {
-  name    = "\${upper(var.environment)}_ANALYST_ROLE"
-  comment = "Analyst read access to silver and gold"
-}
-
-resource "snowflake_role" "bi_service" {
-  name    = "\${upper(var.environment)}_BI_SERVICE_ROLE"
-  comment = "Metabase/Tableau service account - read gold only"
-}
-
-
-# ── GRANTS ────────────────────────────────────────────────────────────────────
-# Pipeline role: read bronze, write silver + gold
-resource "snowflake_schema_grant" "pipeline_bronze_read" {
-  database_name = snowflake_database.freshmart.name
-  schema_name   = snowflake_schema.bronze.name
-  privilege     = "USAGE"
-  roles         = [snowflake_role.pipeline.name]
-}
-
-resource "snowflake_schema_grant" "pipeline_silver_write" {
-  database_name = snowflake_database.freshmart.name
+        <CodeBox label="snowflake.tf — pipeline writes silver/gold, analyst reads only">{`resource "snowflake_schema_grant" "pipeline_silver_write" {
+  database_name = snowflake_database.freshcart.name
   schema_name   = snowflake_schema.silver.name
   privilege     = "CREATE TABLE"
   roles         = [snowflake_role.pipeline.name]
 }
 
-# Analyst role: read silver + gold, NOT bronze
-resource "snowflake_schema_grant" "analyst_silver" {
-  database_name = snowflake_database.freshmart.name
-  schema_name   = snowflake_schema.silver.name
-  privilege     = "USAGE"
-  roles         = [snowflake_role.analyst.name]
-}
-
 resource "snowflake_table_grant" "analyst_silver_select" {
-  database_name = snowflake_database.freshmart.name
+  database_name = snowflake_database.freshcart.name
   schema_name   = snowflake_schema.silver.name
   privilege     = "SELECT"
   roles         = [snowflake_role.analyst.name]
@@ -732,31 +561,28 @@ resource "snowflake_warehouse_grant" "analyst_warehouse" {
   warehouse_name = snowflake_warehouse.analyst.name
   privilege      = "USAGE"
   roles          = [snowflake_role.analyst.name]
-}
+}`}</CodeBox>
 
+        <SubSubTitle>Users, driven from a single variable</SubSubTitle>
 
-# ── USERS ─────────────────────────────────────────────────────────────────────
-# Manage Snowflake users from a variable-driven config:
-variable "snowflake_analysts" {
-  description = "List of analyst email addresses"
-  type        = list(string)
-  default     = []
+        <CodeBox label="snowflake.tf — analyst users generated from a list of emails">{`variable "snowflake_analysts" {
+  type    = list(string)
+  default = []
 }
 
 resource "snowflake_user" "analysts" {
-  for_each      = toset(var.snowflake_analysts)
-  name          = replace(each.value, "@freshmart.com", "")
-  email         = each.value
-  login_name    = each.value
-  default_role  = snowflake_role.analyst.name
-  default_warehouse = snowflake_warehouse.analyst.name
+  for_each             = toset(var.snowflake_analysts)
+  name                 = replace(each.value, "@freshcart.com", "")
+  email                = each.value
+  default_role         = snowflake_role.analyst.name
+  default_warehouse    = snowflake_warehouse.analyst.name
   must_change_password = true
 }
 
 resource "snowflake_role_grants" "analysts" {
-  for_each  = toset(var.snowflake_analysts)
-  role_name = snowflake_role.analyst.name
-  users     = [replace(each.value, "@freshmart.com", "")]
+  for_each   = toset(var.snowflake_analysts)
+  role_name  = snowflake_role.analyst.name
+  users      = [replace(each.value, "@freshcart.com", "")]
   depends_on = [snowflake_user.analysts]
 }`}</CodeBox>
       </section>
@@ -769,107 +595,73 @@ resource "snowflake_role_grants" "analysts" {
         <SectionTitle>Terraform Modules — Reusable Infrastructure Components</SectionTitle>
 
         <Para>
-          A Terraform module is a reusable, parameterised configuration for
-          a set of related resources. For a data platform, common modules
-          include: data_lake (S3 bucket with all production settings),
-          snowflake_env (one Snowflake database + schemas + roles per environment),
-          and airflow_env (MWAA or self-hosted Airflow deployment). Using
-          modules means dev and prod use the same tested configuration with
-          different variable values — no environment drift.
+          A Terraform module is a reusable, parameterised configuration for a
+          set of related resources. Wrapping Part 03&rsquo;s S3 setup as a{' '}
+          <code>data_lake</code> module means dev and prod use the exact same
+          tested configuration with different variable values — no environment
+          drift, no duplicated resource blocks.
         </Para>
 
-        <CodeBox label="Terraform module structure — the data lake module">{`# MODULE STRUCTURE:
-# modules/
-#   data_lake/
-#     main.tf       ← resource definitions
-#     variables.tf  ← input variables
-#     outputs.tf    ← output values
-#   snowflake_env/
-#     main.tf
-#     variables.tf
-#     outputs.tf
-#   airflow_mwaa/
-#     main.tf
-#     variables.tf
-#     outputs.tf
+        <SubSubTitle>Defining the module</SubSubTitle>
 
-# modules/data_lake/variables.tf
-variable "environment"          { type = string }
-variable "aws_region"           { type = string }
-variable "retention_days_landing"  { type = number; default = 30  }
-variable "retention_days_bronze"   { type = number; default = 365 }
-variable "enable_versioning"    { type = bool;   default = true  }
-variable "tags"                 { type = map(string); default = {} }
+        <CodeBox label="modules/data_lake/ — variables, resources, outputs">{`# modules/data_lake/variables.tf
+variable "environment"        { type = string }
+variable "retention_days_bronze" { type = number  default = 365 }
+variable "enable_versioning"  { type = bool    default = true  }
+variable "tags"               { type = map(string)  default = {} }
 
-# modules/data_lake/main.tf — all S3 resources from Part 03
+# modules/data_lake/main.tf — all the S3 resources from Part 03, parameterised
 resource "aws_s3_bucket" "data_lake" {
-  bucket = "freshmart-\${var.environment}-data-lake"
+  bucket = "freshcart-\${var.environment}-data-lake"
   tags   = merge(var.tags, { Environment = var.environment })
 }
-# ... (all the lifecycle, encryption, versioning resources)
+# ... encryption, versioning, lifecycle resources reference var.retention_days_bronze etc.
 
 # modules/data_lake/outputs.tf
-output "bucket_id"  { value = aws_s3_bucket.data_lake.id  }
 output "bucket_arn" { value = aws_s3_bucket.data_lake.arn }
-output "kms_key_id" { value = aws_kms_key.data_lake.id    }
+output "kms_key_id"  { value = aws_kms_key.data_lake.id    }`}</CodeBox>
 
+        <SubSubTitle>Calling the same module for prod and dev</SubSubTitle>
 
-# ROOT MODULE — uses modules for each environment:
-# environments/prod/main.tf
-
+        <CodeBox label="environments/{prod,dev}/main.tf — same module, different inputs">{`# environments/prod/main.tf
 module "data_lake_prod" {
-  source = "../../modules/data_lake"
-
-  environment              = "prod"
-  aws_region               = "ap-south-1"
-  retention_days_landing   = 30
-  retention_days_bronze    = 730    # 2 years for prod
-  enable_versioning        = true
-  tags = {
-    Environment = "prod"
-    CostCenter  = "data-platform"
-  }
+  source                = "../../modules/data_lake"
+  environment           = "prod"
+  retention_days_bronze = 730     # 2 years for prod
+  enable_versioning     = true
 }
 
 module "snowflake_prod" {
-  source = "../../modules/snowflake_env"
-
-  environment             = "prod"
-  snowflake_account       = var.snowflake_account
+  source                  = "../../modules/snowflake_env"
+  environment              = "prod"
   warehouse_size_pipeline = "MEDIUM"
-  warehouse_size_analyst  = "SMALL"
   analyst_cluster_count   = 3
-  data_retention_days     = 30
-  analysts = [
-    "priya@freshmart.com",
-    "rahul@freshmart.com",
-    "ananya@freshmart.com",
-  ]
+  analysts = ["priya@freshcart.com", "rahul@freshcart.com"]
 }
 
-# environments/dev/main.tf — SAME MODULES, different variables:
+# environments/dev/main.tf — SAME modules, cheaper settings
 module "data_lake_dev" {
-  source = "../../modules/data_lake"
-
-  environment              = "dev"
-  aws_region               = "ap-south-1"
-  retention_days_landing   = 7      # shorter retention in dev
-  retention_days_bronze    = 30
-  enable_versioning        = false  # cheaper: no versioning in dev
-  tags = { Environment = "dev" }
+  source                = "../../modules/data_lake"
+  environment           = "dev"
+  retention_days_bronze = 30
+  enable_versioning     = false   # cheaper: no versioning in dev
 }
 
 module "snowflake_dev" {
-  source = "../../modules/snowflake_env"
-
-  environment             = "dev"
-  snowflake_account       = var.snowflake_account
-  warehouse_size_pipeline = "X-SMALL"  # smaller for dev
-  warehouse_size_analyst  = "X-SMALL"
+  source                  = "../../modules/snowflake_env"
+  environment              = "dev"
+  warehouse_size_pipeline = "X-SMALL"
   analyst_cluster_count   = 1
-  data_retention_days     = 1
-  analysts = []  # dev uses personal credentials
+  analysts = []   # dev uses personal credentials
 }`}</CodeBox>
+
+        <TryThis>
+          If the <code>data_lake</code> module&rsquo;s lifecycle policy needs a new
+          rule for a &ldquo;quarantine&rdquo; zone, where does that change get made — inside
+          <code>modules/data_lake/main.tf</code>, or inside each environment&rsquo;s{' '}
+          <code>main.tf</code>? Why does that answer matter for keeping dev and
+          prod actually identical in structure?
+        </TryThis>
       </section>
 
       <Divider />
@@ -881,148 +673,143 @@ module "snowflake_dev" {
 
         <Para>
           Infrastructure changes carry higher risk than code changes — a wrong
-          Terraform apply can delete a production S3 bucket or an IAM role that
-          pipelines depend on. The CI/CD pipeline for Terraform must require
-          a human review of the plan before any apply, and must apply in a
-          controlled way that prevents concurrent runs.
+          apply can delete a production S3 bucket or an IAM role pipelines
+          depend on. The pipeline must require a human to review the plan
+          before any apply, and must prevent concurrent runs.
         </Para>
 
-        <CodeBox label="GitHub Actions Terraform CI/CD — plan on PR, apply on merge">{`# .github/workflows/terraform.yml
-name: Terraform
+        <SubSubTitle>Plan on every pull request</SubSubTitle>
 
+        <CodeBox label=".github/workflows/terraform.yml — plan job">{`name: Terraform
 on:
-  pull_request:
-    paths: ['terraform/**']
-  push:
-    branches: [main]
-    paths: ['terraform/**']
-
-env:
-  AWS_REGION:        ap-south-1
-  TF_WORKING_DIR:    terraform/environments/prod
+  pull_request: { paths: ['terraform/**'] }
+  push:          { branches: [main], paths: ['terraform/**'] }
 
 jobs:
   terraform-plan:
-    name: "Terraform Plan"
-    runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.7.0"
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume:   \${{ secrets.AWS_TERRAFORM_ROLE_ARN }}
-          aws-region:       ap-south-1
-
-      - name: Terraform Init
-        working-directory: \${{ env.TF_WORKING_DIR }}
-        run: terraform init
-
-      - name: Terraform Format Check
-        run: terraform fmt -check -recursive terraform/
-
-      - name: Terraform Validate
-        working-directory: \${{ env.TF_WORKING_DIR }}
-        run: terraform validate
-
-      - name: Terraform Plan
-        id: plan
-        working-directory: \${{ env.TF_WORKING_DIR }}
-        run: |
-          terraform plan \\
-            -var-file=../../environments/prod.tfvars \\
-            -out=tfplan \\
-            -detailed-exitcode \\
-            2>&1 | tee plan_output.txt
-        continue-on-error: true
-
-      - name: Post Plan to PR
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs   = require('fs');
-            const plan = fs.readFileSync('terraform/environments/prod/plan_output.txt', 'utf8');
-            const truncated = plan.length > 60000 ? plan.slice(-60000) : plan;
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo:  context.repo.repo,
-              body:  \`## Terraform Plan\n\n<details><summary>Show Plan</summary>\n\n\\\`\\\`\\\`\n\${truncated}\n\\\`\\\`\\\`\n</details>\`,
-            });
-
-      - name: Fail if plan errored
-        if: steps.plan.outputs.exitcode == '1'
-        run: exit 1
-
-
-  terraform-apply:
-    name: "Terraform Apply"
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: production    # requires manual approval in GitHub Environments
-
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
         with: { terraform_version: "1.7.0" }
+      - uses: aws-actions/configure-aws-credentials@v4
+        with: { role-to-assume: \${{ secrets.AWS_TERRAFORM_ROLE_ARN }}, aws-region: ap-south-1 }
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - run: terraform init
+      - run: terraform fmt -check -recursive terraform/
+      - run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -var-file=../../environments/prod.tfvars -out=tfplan -detailed-exitcode 2>&1 | tee plan_output.txt
+        continue-on-error: true
+
+      - name: Post plan as PR comment
+        uses: actions/github-script@v7
         with:
-          role-to-assume: \${{ secrets.AWS_TERRAFORM_ROLE_ARN }}
-          aws-region:     ap-south-1
+          script: |
+            const fs = require('fs');
+            const plan = fs.readFileSync('plan_output.txt', 'utf8');
+            const truncated = plan.length > 60000 ? plan.slice(-60000) : plan;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number, owner: context.repo.owner, repo: context.repo.repo,
+              body: \`## Terraform Plan\\n\\n<details><summary>Show Plan</summary>\\n\\n\\\`\\\`\\\`\\n\${truncated}\\n\\\`\\\`\\\`\\n</details>\`,
+            });
 
-      - name: Terraform Init
-        working-directory: \${{ env.TF_WORKING_DIR }}
-        run: terraform init
+      - if: steps.plan.outputs.exitcode == '1'
+        run: exit 1`}</CodeBox>
 
-      - name: Terraform Apply
-        working-directory: \${{ env.TF_WORKING_DIR }}
-        run: |
-          terraform apply \\
-            -var-file=../../environments/prod.tfvars \\
-            -auto-approve \\
-            -input=false
+        <SubSubTitle>Apply only on merge, with a manual approval gate</SubSubTitle>
 
+        <CodeBox label=".github/workflows/terraform.yml — apply job">{`  terraform-apply:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: production   # requires manual approval in GitHub Environments
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: "1.7.0" }
+      - uses: aws-actions/configure-aws-credentials@v4
+        with: { role-to-assume: \${{ secrets.AWS_TERRAFORM_ROLE_ARN }}, aws-region: ap-south-1 }
+      - run: terraform init
+      - run: terraform apply -var-file=../../environments/prod.tfvars -auto-approve -input=false`}</CodeBox>
 
-# KEY SAFETY FEATURES:
-# 1. Plan on PR:         shows what will change BEFORE merge
-# 2. Human approval:    GitHub Environments 'production' requires approval
-# 3. DynamoDB locking:  only one apply can run at a time (state locking)
-# 4. Role assumption:   CI uses a restricted IAM role, not admin keys
-# 5. exit code check:   plan exit code 1 = error, exit code 2 = changes (expected)
+        <Output>{`Pull request #482 opened
+✓ terraform-plan: Plan: 2 to add, 1 to change, 0 to destroy. (posted as PR comment)
+✓ 1 reviewer approved
+✓ merged to main
+⏸ terraform-apply: waiting for approval (environment: production)
+✓ approved by data-team-lead
+✓ terraform-apply: Apply complete! Resources: 2 added, 1 changed, 0 destroyed.`}</Output>
 
+        <SubSubTitle>Protecting critical resources from accidental destroy</SubSubTitle>
 
-# PREVENTING ACCIDENTAL DESTROYS:
-# lifecycle block prevents Terraform from destroying critical resources:
-resource "aws_s3_bucket" "data_lake_prod" {
+        <CodeBox label="Locking down production resources">{`resource "aws_s3_bucket" "data_lake_prod" {
   # ... bucket config ...
   lifecycle {
-    prevent_destroy = true   # terraform destroy will fail with an error
-    # To actually destroy: remove this block, plan, review, apply
+    prevent_destroy = true   # terraform destroy fails with an error
+    # to actually destroy: remove this block, plan, review, apply
   }
 }
 
-# Same for production Snowflake database:
-resource "snowflake_database" "freshmart_prod" {
-  name = "FRESHMART_PROD"
-  lifecycle {
-    prevent_destroy = true
-  }
+resource "snowflake_database" "freshcart_prod" {
+  name = "FRESHCART_PROD"
+  lifecycle { prevent_destroy = true }
 }`}</CodeBox>
+
+        <Callout type="tip">
+          Five safety features working together: plan-on-PR (see changes before
+          merge), human approval via GitHub Environments, DynamoDB state
+          locking (only one apply at a time), a restricted IAM role for CI
+          (never admin keys), and <code>prevent_destroy</code> on anything
+          genuinely catastrophic to lose.
+        </Callout>
       </section>
 
       <Divider />
 
-      {/* ── Part 08 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 08 — Misconceptions ──────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 08 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Infrastructure as Code</SectionTitle>
+
+        {[
+          {
+            wrong: '"Terraform state is just a cache — I can delete and regenerate it"',
+            right: 'State is the only record linking your .tf resource blocks to the real cloud resource IDs. Delete it and Terraform has no idea those resources already exist — the next apply tries to create duplicates, or fails on naming conflicts, for every single resource in the configuration. State is data, not a cache, and Part 05\'s Interview Prep Q2 explains exactly why remote state with locking is non-negotiable for a team.',
+          },
+          {
+            wrong: '"Renaming a resource block is a harmless refactor, like renaming a variable in code"',
+            right: 'Terraform identifies resources by their block name, not by what they represent — renaming snowflake_warehouse.analytics to snowflake_warehouse.analyst_wh looks like a destroy-then-create to Terraform, not a rename. This exact mistake is Q5 in this module\'s Interview Prep and is fixed with a moved block, not by hoping the plan looks fine.',
+          },
+          {
+            wrong: '"An S3 lifecycle rule without a prefix filter just applies more broadly, which is fine"',
+            right: 'It applies to every object in the entire bucket, not "more broadly" — a 30-day expiration meant only for landing/ deletes Gold and Silver data too if the filter block is missing. This exact bug is in the Error Library below and it is one of the most consequential single-line omissions in this whole module.',
+          },
+          {
+            wrong: '"sensitive = true encrypts the value so it\'s safe in state and logs"',
+            right: 'sensitive = true only redacts the value from CLI plan/apply OUTPUT — the actual value is still stored in plain text inside the Terraform state file. State itself must be encrypted at rest (the S3 backend\'s encrypt = true in Part 02) and access-controlled; marking a variable sensitive is a display setting, not an encryption mechanism.',
+          },
+          {
+            wrong: '"Modules are for big platform teams — a small data team doesn\'t need them"',
+            right: 'The value of a module shows up the moment you need a second environment, which almost every real data team has (dev and prod, at minimum). Part 06\'s data_lake module is the same handful of S3 resources either way — the question is whether you write them once and parameterise, or copy-paste them and let dev and prod quietly drift apart.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 09 — Real World ──────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 08 — Real World" />
+        <SectionTag text="// Part 09 — Real World" />
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12, fontFamily: 'var(--font-mono)' }}>
           💼 What This Looks Like at Work
         </div>
@@ -1041,83 +828,62 @@ resource "snowflake_database" "freshmart_prod" {
             30 minutes with one PR.
           </Para>
 
-          <CodeBox label="IaC-driven onboarding — one PR to provision a complete developer environment">{`# PR TITLE: feat(infra): add dev environment for marcus.bennett
-
-# Step 1: Add new analyst to Snowflake users list
-# terraform/environments/dev/main.tf — update analysts variable:
+          <CodeBox label="One PR — add Marcus to the analysts list and his dev S3 access">{`# terraform/environments/dev/main.tf
 module "snowflake_dev" {
-  source  = "../../modules/snowflake_env"
+  source      = "../../modules/snowflake_env"
   environment = "dev"
   analysts = [
-    "jenna@freshmart.com",
-    "marcus.bennett@freshmart.com",   # ← ADD THIS LINE
+    "jenna@freshcart.com",
+    "marcus.bennett@freshcart.com",   # ← ADD THIS LINE
   ]
 }
 
-# Step 2: Add developer S3 access prefix
-# modules/s3_developer_access/main.tf:
+# modules/s3_developer_access/main.tf
 resource "aws_iam_policy" "dev_s3_access" {
   for_each = toset(var.developer_emails)
-  name = "freshmart-dev-\${replace(each.value, "@freshmart.com", "")}-s3"
+  name     = "freshcart-dev-\${replace(each.value, "@freshcart.com", "")}-s3"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
       Effect   = "Allow"
       Action   = ["s3:GetObject", "s3:PutObject", "s3:ListBucket"]
-      Resource = [
-        "arn:aws:s3:::freshmart-dev-data-lake/dev/\${replace(each.value, "@freshmart.com", "")}/*",
-        "arn:aws:s3:::freshmart-dev-data-lake",
-      ]
+      Resource = ["arn:aws:s3:::freshcart-dev-data-lake/dev/\${replace(each.value, "@freshcart.com", "")}/*"]
     }]
   })
-}
+}`}</CodeBox>
 
-# Step 3: Open PR → CI runs terraform plan → plan shows:
-# + snowflake_user.analysts["marcus.bennett@freshmart.com"] will be created
-# + snowflake_role_grants.analysts["marcus.bennett@freshmart.com"] will be created
-# + aws_iam_policy.dev_s3_access["marcus.bennett@freshmart.com"] will be created
-# Plan: 3 to add, 0 to change, 0 to destroy.
+          <Output>{`Plan: 3 to add, 0 to change, 0 to destroy.
+  + snowflake_user.analysts["marcus.bennett@freshcart.com"]
+  + snowflake_role_grants.analysts["marcus.bennett@freshcart.com"]
+  + aws_iam_policy.dev_s3_access["marcus.bennett@freshcart.com"]
 
-# Step 4: PR reviewed and merged → terraform apply runs
-# → Snowflake user created with analyst role, temp password, MUST_CHANGE_PASSWORD=true
-# → IAM policy created and attached to Marcus's AWS identity
+# PR reviewed and merged → terraform apply runs:
+# → Snowflake user created, temp password, MUST_CHANGE_PASSWORD=true
+# → IAM policy created and attached
 
-# MARCUS'S ONBOARDING CHECKLIST (30 minutes total):
-# [x] Data engineering lead opens PR with Marcus's email
-# [x] PR reviewed, merged — Snowflake access provisioned automatically
-# [x] Marcus receives email with temp Snowflake password (changes on first login)
-# [x] Marcus clones the dbt repository
-# [x] Marcus runs: export DBT_DEV_SCHEMA=dev_marcus_first_task
-# [x] Marcus runs: dbt run --target dev --select +silver.orders (first dbt run)
-# [x] Marcus queries his dev schema in Snowflake — data there immediately
-
-# CONTRAST WITH MANUAL ONBOARDING (before IaC):
-# Day 1:  Submit Jira ticket for Snowflake access to IT helpdesk
-# Day 2:  Follow up on Jira ticket
-# Day 3:  IT creates Snowflake user (wrong role — analyst not pipeline)
-# Day 3:  Email IT to change role
-# Day 4:  Submit AWS access request form to security team
-# Day 4:  dbt setup fails — no Snowflake credentials documentation
-# Day 5:  Everything finally working — 5 days of frustration
-# Manual: 5 days, 6 Slack messages, 2 Jira tickets, 1 frustrated engineer
-
-# WITH IaC: 30 minutes, 1 PR, zero tickets, zero Slack messages.`}</CodeBox>
+Marcus's checklist (30 minutes total):
+[x] PR merged — Snowflake + AWS access provisioned automatically
+[x] Receives temp Snowflake password (forced change on first login)
+[x] Clones the dbt repo, runs: dbt run --target dev --select +silver.orders
+[x] Queries his dev schema in Snowflake — data there immediately`}</Output>
 
           <Para>
-            The IaC approach also means Marcus's offboarding is equally simple:
-            a PR removing his email from the analysts list. Terraform applies,
-            the Snowflake user is destroyed, the IAM policy is deleted, and all
-            access is revoked in one automated step. No forgotten accounts,
-            no manual cleanup, no security audit findings.
+            Contrast with the manual process this replaced: a Jira ticket to IT
+            on day 1, a follow-up on day 2, a Snowflake user created with the
+            wrong role on day 3, an AWS access request form on day 4, and dbt
+            setup finally working on day 5 — five days, six Slack messages, two
+            tickets, one frustrated engineer. Offboarding Marcus later is just as
+            simple: remove his email from the list, merge, and every piece of
+            access is revoked in one automated step.
           </Para>
         </div>
       </section>
 
       <Divider />
 
-      {/* ── Part 09 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 10 — Interview Prep ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 09 — Interview Prep" />
+        <SectionTag text="// Part 10 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
@@ -1197,6 +963,42 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Running terraform apply locally against production instead of through CI',
+            a: 'A local apply bypasses the plan-as-PR-comment review, the required approval gate, and uses whatever credentials happen to be on the engineer\'s laptop instead of the restricted CI role. Part 07\'s entire CI/CD setup exists specifically so no single person\'s local terminal can single-handedly change production.',
+          },
+          {
+            q: 'Marking a credential variable sensitive but forgetting to mark the output that exposes it',
+            a: 'sensitive = true on a variable does not automatically propagate to every output derived from it — an output block that references a sensitive variable must independently be marked output "db_password" { sensitive = true }, or the value prints in plain text the moment someone runs terraform output.',
+          },
+          {
+            q: 'Writing an S3 lifecycle rule and assuming the default scope is "this one prefix"',
+            a: 'The default scope with no filter block is the entire bucket. This is the single most consequential omission in this module\'s Error Library — a 30-day landing-zone cleanup rule with no filter deletes Gold and Silver data on the same schedule.',
+          },
+          {
+            q: 'Treating dev and prod Terraform code as two separate copies instead of one module, two variable files',
+            a: 'Two copies drift the moment either one gets a one-off fix that isn\'t backported to the other — exactly the environment-parity problem IaC exists to solve in the first place. Part 06\'s module pattern (one module, called twice with different .tfvars) is what keeps them structurally identical by construction.',
+          },
+          {
+            q: 'Skipping prevent_destroy on production because "we\'re always careful with applies"',
+            a: 'Careful applies still get bitten by resource renames that look like harmless refactors — the exact accidental-warehouse-deletion scenario in this module\'s Interview Prep Q5. prevent_destroy costs nothing to add and turns a silent production incident into a Terraform error that stops the apply cold.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1221,12 +1023,12 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
           {
             error: `terraform import is needed because a production S3 bucket was created manually and is now out of sync with the Terraform configuration`,
             cause: 'A developer created an S3 bucket manually in the AWS console months ago for a quick experiment. The bucket grew into a production resource. Now the team wants to manage it with Terraform but cannot simply add a resource block — Terraform would try to create a new bucket with the same name, which fails because the bucket already exists.',
-            fix: 'Use terraform import to bring the existing resource under Terraform management: terraform import aws_s3_bucket.data_lake_manual freshmart-manual-bucket. This adds the existing bucket to Terraform state without creating a new resource. After import: run terraform plan to see what configuration drift exists between the Terraform code and the actual bucket settings. Update the Terraform code to match the current state, re-run terraform plan to confirm zero changes, then commit. Going forward: enforce IaC discipline — all new production resources must be created via Terraform PR, not console. Use AWS Config rules to detect resources created outside Terraform and alert the team.',
+            fix: 'Use terraform import to bring the existing resource under Terraform management: terraform import aws_s3_bucket.data_lake_manual freshcart-manual-bucket. This adds the existing bucket to Terraform state without creating a new resource. After import: run terraform plan to see what configuration drift exists between the Terraform code and the actual bucket settings. Update the Terraform code to match the current state, re-run terraform plan to confirm zero changes, then commit. Going forward: enforce IaC discipline — all new production resources must be created via Terraform PR, not console. Use AWS Config rules to detect resources created outside Terraform and alert the team.',
           },
           {
             error: `Sensitive Snowflake credentials appear in the terraform plan output in CI logs — password is visible in GitHub Actions logs`,
             cause: 'The Snowflake password variable was defined as type = string without the sensitive = true flag. When terraform plan runs and shows changes to Snowflake resources, the provider includes the connection attributes in the plan output — including the password. GitHub Actions stores workflow logs and the password is now in the log history.',
-            fix: 'Immediately rotate the Snowflake password (assume it is compromised). Add sensitive = true to all credential variables in variables.tf: variable "snowflake_password" { type = string; sensitive = true }. Sensitive variables are redacted as (sensitive value) in plan output. Also mark Terraform outputs that include credentials as sensitive: output "db_password" { value = var.snowflake_password; sensitive = true }. For CI: use GitHub Actions secret masking — store credentials as GitHub Secrets and reference via \${{ secrets.SNOWFLAKE_PASSWORD }}. GitHub automatically masks values of secrets in logs. Use environment variables for credential passing, not variable files checked into the repository.',
+            fix: 'Immediately rotate the Snowflake password (assume it is compromised). Add sensitive = true to all credential variables in variables.tf: variable "snowflake_password" { type = string; sensitive = true }. Sensitive variables are redacted as (sensitive value) in plan output. Also mark Terraform outputs that include credentials as sensitive: output "db_password" { value = var.snowflake_password; sensitive = true }. For CI: use GitHub Actions secret masking — store credentials as GitHub Secrets and reference via ${{ secrets.SNOWFLAKE_PASSWORD }}. GitHub automatically masks values of secrets in logs. Use environment variables for credential passing, not variable files checked into the repository.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
@@ -1248,7 +1050,7 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
         'Infrastructure as Code treats cloud resources — S3 buckets, Snowflake warehouses, IAM roles — like software: defined in version-controlled files, reviewed in PRs, deployed through CI/CD. The benefits: reproducibility, auditability, drift prevention, cost visibility, security by default, and environment parity between dev and prod.',
         'Terraform core workflow: init (download providers, initialise backend) → plan (show what will change, no changes made) → apply (make the changes). Always read the plan before apply. The three change types: + (create), ~ (update in-place), - (destroy). Any destroy operation requires deliberate review.',
         'Terraform state maps resource blocks to real cloud resource IDs. Remote state (S3 + DynamoDB) is mandatory for teams: S3 provides durability and sharing, DynamoDB prevents concurrent applies from corrupting state. Never edit state manually. If state is lost: expensive to recover via terraform import.',
-        'Variables make Terraform reusable across environments. Use sensitive = true on credential variables — they are redacted in plan output. Use validation blocks to enforce valid values. Use locals for computed values used throughout the configuration. Use .tfvars files per environment (prod.tfvars, dev.tfvars) to separate configuration from code.',
+        'Variables make Terraform reusable across environments. Use sensitive = true on credential variables — they are redacted in plan output (but still stored in plain text in state, which itself must be encrypted). Use validation blocks to enforce valid values. Use .tfvars files per environment to separate configuration from code.',
         'Terraform modules encapsulate related resources as reusable components. A data_lake module wraps the S3 bucket, encryption, versioning, lifecycle policies, and access logging. A snowflake_env module wraps databases, schemas, roles, warehouses, and grants. Both prod and dev call the same module with different variable values — guaranteeing structural consistency.',
         'S3 lifecycle policies must always specify a filter prefix. A lifecycle rule without a filter applies to ALL objects in the bucket. A 30-day deletion rule intended for landing/ applied without a prefix filter will delete all Silver and Gold data. Review every lifecycle rule in CI for a mandatory filter block.',
         'The prevent_destroy lifecycle block prevents Terraform from destroying a critical resource. Terraform refuses to apply any plan that would destroy a resource with this flag. To remove a resource intentionally: remove the lifecycle block in a separate PR, review that intent explicitly, then delete. Apply this to all production databases, schemas, and S3 buckets.',
@@ -1257,7 +1059,7 @@ For the immediate recovery after an accidental delete: a Snowflake warehouse hol
         'Onboarding a new engineer with IaC: add their email to the analysts variable list, open a PR, CI runs terraform plan showing the user creation, merge after review, Terraform provisions the Snowflake user with correct roles, IAM policies, and dev S3 access in minutes. Offboarding is the reverse: remove the email, PR, merge, access revoked automatically. Zero tickets, zero forgotten accounts.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
