@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -51,6 +55,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
       background: 'var(--bg2)', border: '1px solid var(--border)',
       borderRadius: 10, padding: '18px 22px', overflowX: 'auto',
       fontSize: 13, lineHeight: 1.9, color: 'var(--text)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
       fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
     }}>
       <code>{children}</code>
@@ -71,56 +96,21 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   </div>
 )
 
-interface TableRow { [key: string]: string }
-interface CompareTableProps {
-  headers: { label: string; color?: string }[]
-  rows: TableRow[]
-  keys: string[]
-}
-
-const CompareTable = ({ headers, rows, keys }: CompareTableProps) => (
-  <div style={{ overflowX: 'auto', marginBottom: 28 }}>
-    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, lineHeight: 1.6 }}>
-      <thead>
-        <tr>
-          {headers.map((h, i) => (
-            <th key={h.label} style={{
-              padding: '10px 16px', textAlign: 'left',
-              fontSize: i === 0 ? 10 : 11, fontWeight: 700,
-              letterSpacing: i === 0 ? '.12em' : '.06em',
-              textTransform: 'uppercase',
-              color: h.color ?? 'var(--muted)',
-              fontFamily: 'var(--font-mono)',
-              borderBottom: h.color ? `2px solid ${h.color}` : '1px solid var(--border)',
-              background: h.color ? `${h.color}08` : 'var(--bg2)',
-              minWidth: i === 0 ? 130 : 160,
-            }}>{h.label}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, i) => (
-          <tr key={i} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--bg2)' }}>
-            {keys.map((k, ki) => (
-              <td key={k} style={{
-                padding: '10px 16px',
-                color: ki === 0 ? 'var(--muted)' : 'var(--text)',
-                fontSize: ki === 0 ? 11 : 13,
-                fontFamily: ki === 0 ? 'var(--font-mono)' : 'inherit',
-                fontWeight: ki === 0 ? 700 : 400,
-                textTransform: ki === 0 ? 'uppercase' : 'none',
-                letterSpacing: ki === 0 ? '.06em' : 'normal',
-                borderBottom: '1px solid var(--border)',
-                borderLeft: ki > 0 && headers[ki]?.color
-                  ? `2px solid ${headers[ki].color}40`
-                  : ki > 0 ? '1px solid var(--border)' : 'none',
-                verticalAlign: 'top',
-              }}>{row[k]}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -131,7 +121,7 @@ export default function CDCModule() {
       description="WAL internals, Debezium architecture, Schema Registry, the Outbox Pattern, event ordering, and operating CDC in production."
       section="Data Engineering — Module 24"
       readTime="70 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What CDC Actually Is ───────────────────────────── */}
@@ -191,6 +181,13 @@ export default function CDCModule() {
             ))}
           </div>
         </HighlightBox>
+
+        <TryThis>
+          Before reading further, try to answer from Module 23 alone: what does
+          CDC capture that a nightly incremental job on <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>updated_at</code> cannot?
+          Keep that answer in mind through Part 06 (ordering) and Part 10&rsquo;s
+          Real World case — it&rsquo;s the same gap, seen from two different angles.
+        </TryThis>
       </section>
 
       <Divider />
@@ -201,7 +198,7 @@ export default function CDCModule() {
         <SectionTitle>The Write-Ahead Log — What It Is and How CDC Reads It</SectionTitle>
 
         <Para>
-          The Write-Ahead Log is PostgreSQL's durability guarantee. Every change
+          The Write-Ahead Log is PostgreSQL&rsquo;s durability guarantee. Every change
           to the database is recorded in the WAL <em>before</em> the actual data
           pages are modified. On a crash, PostgreSQL replays the WAL from the last
           checkpoint to recover all committed transactions. The WAL is an ordered,
@@ -214,28 +211,25 @@ export default function CDCModule() {
           Because the WAL already records every INSERT, UPDATE, and DELETE in
           precise order, it is the perfect source for a change stream. The challenge
           is reading it: the WAL is in a binary format designed for internal database
-          use, not for external consumption. PostgreSQL's logical replication feature
+          use, not for external consumption. PostgreSQL&rsquo;s logical replication feature
           solves this by decoding the WAL into a structured, readable format.
         </Para>
 
-        <SubTitle>WAL levels and logical replication</SubTitle>
+        <SubSubTitle>The three WAL levels</SubSubTitle>
 
-        <CodeBox label="WAL levels — what each means for CDC">{`PostgreSQL WAL has three levels (wal_level setting):
-
-MINIMAL:
+        <CodeBox label="Only one WAL level is usable for CDC">{`MINIMAL:
   Records only what is needed for crash recovery.
-  Does NOT record enough information for logical decoding.
-  Cannot be used for CDC.
+  Does NOT record enough information for logical decoding. Cannot be used for CDC.
   This is the default in older PostgreSQL versions.
 
 REPLICA:
   Records enough for physical replication (exact byte-for-byte copy).
-  Still does NOT record enough for logical decoding.
-  Used for standby replicas, not CDC.
+  Still does NOT record enough for logical decoding. Used for standby
+  replicas, not CDC.
 
 LOGICAL:
-  Records full before and after images of changed rows.
-  Includes enough information for logical decoding — exactly what CDC needs.
+  Records full before and after images of changed rows. Includes enough
+  information for logical decoding — exactly what CDC needs.
   Required for Debezium and any WAL-based CDC tool.
   Slight overhead: larger WAL files due to full row images.
   Setting: wal_level = logical  (requires PostgreSQL restart)
@@ -243,9 +237,11 @@ LOGICAL:
 ADDITIONAL SETTINGS REQUIRED FOR CDC:
   max_replication_slots = 10  # how many logical replication consumers allowed
   max_wal_senders = 10        # parallel WAL streaming connections
-  wal_sender_timeout = 60000  # ms — close idle WAL sender connections
+  wal_sender_timeout = 60000  # ms — close idle WAL sender connections`}</CodeBox>
 
-HOW LOGICAL DECODING WORKS:
+        <SubSubTitle>Logical decoding and the LSN</SubSubTitle>
+
+        <CodeBox label="How Debezium connects, and the LSN that orders everything">{`HOW LOGICAL DECODING WORKS:
   PostgreSQL exposes two interfaces for logical decoding:
   1. pg_logical_slot_get_changes() — pull-based SQL function
   2. Streaming replication protocol — push-based (what Debezium uses)
@@ -256,36 +252,28 @@ HOW LOGICAL DECODING WORKS:
 
 LOG SEQUENCE NUMBER (LSN):
   Every WAL record has an LSN — a monotonically increasing 64-bit integer
-  representing its position in the WAL stream.
-  Format in PostgreSQL: 0/1A3F2B8 (hexadecimal offset)
-  LSN is used for:
-    - Tracking how far the consumer has read (confirmed_flush_lsn in replication slot)
-    - Ordering events (lower LSN = happened earlier)
-    - Resuming after failure (start reading from last confirmed LSN)
+  representing its position in the WAL stream. Format: 0/1A3F2B8 (hex).
+  Used for: tracking how far the consumer has read (confirmed_flush_lsn in
+  the replication slot), ordering events (lower LSN = happened earlier),
+  and resuming after failure (start reading from last confirmed LSN).
 
-  Viewing current LSN:
+  Viewing current LSN and consumer lag:
     SELECT pg_current_wal_lsn();         -- where we are now
-    SELECT pg_wal_lsn_diff(
-        pg_current_wal_lsn(),
-        confirmed_flush_lsn
-    ) AS lag_bytes
+    SELECT pg_wal_lsn_diff(pg_current_wal_lsn(), confirmed_flush_lsn) AS lag_bytes
     FROM pg_replication_slots
     WHERE slot_name = 'debezium_slot';   -- how far behind the consumer is`}</CodeBox>
 
-        <SubTitle>What the WAL actually contains</SubTitle>
+        <SubSubTitle>What the WAL actually contains</SubSubTitle>
 
-        <CodeBox label="WAL record structure — from database operation to decoded event">{`APPLICATION EXECUTES:
+        <CodeBox label="A SQL statement, and the raw WAL records it produces">{`APPLICATION EXECUTES:
   BEGIN;
-  UPDATE orders
-  SET status = 'delivered', delivered_at = NOW()
+  UPDATE orders SET status = 'delivered', delivered_at = NOW()
   WHERE order_id = 9284751;
   COMMIT;
 
 WAL RECORDS WRITTEN (binary, simplified representation):
   Record 1: XLOG_HEAP_UPDATE
     relation:    16423 (orders table OID)
-    old_ctid:    (0, 47)           -- physical location of old row
-    new_ctid:    (0, 847)          -- physical location of new row
     old_tuple:   [9284751, 'confirmed', NULL]
     new_tuple:   [9284751, 'delivered', '2026-03-17 20:14:32 UTC']
     lsn:         0/1A3F2B8
@@ -294,56 +282,37 @@ WAL RECORDS WRITTEN (binary, simplified representation):
   Record 2: XLOG_XACT_COMMIT
     xid:         847291
     commit_time: 2026-03-17 20:14:32.847 UTC
-    lsn:         0/1A3F2C4
+    lsn:         0/1A3F2C4`}</CodeBox>
 
-HOW LOGICAL DECODING TRANSFORMS THIS:
-  1. Debezium reads binary WAL records via replication protocol
-  2. Applies the 'pgoutput' logical replication plugin (built into PostgreSQL)
-  3. pgoutput translates OIDs to table names, type-decodes raw bytes
-  4. Debezium wraps the decoded event in an envelope:
+        <CodeBox label="How logical decoding turns that into a Debezium event">{`1. Debezium reads binary WAL records via the replication protocol
+2. Applies the 'pgoutput' logical replication plugin (built into PostgreSQL)
+3. pgoutput translates OIDs to table names, type-decodes raw bytes
+4. Debezium wraps the decoded event in an envelope, published to Kafka:
 
-  DECODED EVENT (JSON, published to Kafka):
-  {
-    "schema": { ... avro schema definition ... },
-    "payload": {
-      "before": {
-        "order_id": 9284751,
-        "status": "confirmed",
-        "delivered_at": null
-      },
-      "after": {
-        "order_id": 9284751,
-        "status": "delivered",
-        "delivered_at": 1710706472000000  -- microseconds since epoch
-      },
-      "source": {
-        "version": "2.5.0.Final",
-        "connector": "postgresql",
-        "name": "freshmart",
-        "ts_ms": 1710706472847,
-        "snapshot": "false",
-        "db": "freshmart_prod",
-        "sequence": "[\"0/1A3F2B4\",\"0/1A3F2B8\"]",  -- [lastCommittedLsn, lsn]
-        "schema": "public",
-        "table": "orders",
-        "txId": 847291,
-        "lsn": 28434104,
-        "xmin": null
-      },
-      "op": "u",       -- u=update, c=create, d=delete, r=read/snapshot
-      "ts_ms": 1710706472901,  -- when Debezium processed this event
-      "transaction": null
-    }
+{
+  "payload": {
+    "before": {"order_id": 9284751, "status": "confirmed", "delivered_at": null},
+    "after":  {"order_id": 9284751, "status": "delivered",
+               "delivered_at": 1710706472000000},  -- microseconds since epoch
+    "source": {
+      "connector": "postgresql", "name": "freshcart", "db": "freshcart_prod",
+      "ts_ms": 1710706472847, "snapshot": "false",
+      "sequence": "[\\"0/1A3F2B4\\",\\"0/1A3F2B8\\"]",  -- [lastCommittedLsn, lsn]
+      "table": "orders", "txId": 847291, "lsn": 28434104
+    },
+    "op": "u",             -- u=update, c=create, d=delete, r=read/snapshot
+    "ts_ms": 1710706472901  -- when Debezium processed this event
   }
+}`}</CodeBox>
 
-  KEY FIELDS FOR DATA ENGINEERS:
-    op:           the operation type
-    before:       row values BEFORE the change (null for inserts)
-    after:        row values AFTER the change (null for deletes)
-    source.lsn:   position in WAL — use for ordering and dedup
-    source.txId:  transaction ID — group multi-table ops from same txn
-    source.ts_ms: event time at source (commit time)
-    ts_ms:        processing time (when Debezium emitted to Kafka)`}</CodeBox>
+        <Output>{`KEY FIELDS FOR DATA ENGINEERS:
+op:           the operation type
+before:       row values BEFORE the change (null for inserts)
+after:        row values AFTER the change (null for deletes)
+source.lsn:   position in WAL — use for ordering and dedup
+source.txId:  transaction ID — group multi-table ops from same txn
+source.ts_ms: event time at source (commit time)
+ts_ms:        processing time (when Debezium emitted to Kafka)`}</Output>
       </section>
 
       <Divider />
@@ -362,138 +331,135 @@ HOW LOGICAL DECODING TRANSFORMS THIS:
           behave correctly under failure.
         </Para>
 
-        <SubTitle>Debezium component architecture</SubTitle>
+        <SubSubTitle>Component architecture</SubSubTitle>
 
-        <CodeBox label="Debezium full architecture — all components and their roles">{`DEBEZIUM ARCHITECTURE:
+        <CodeBox label="Source DB, Kafka Connect, Kafka, and consumers">{`SOURCE DB          KAFKA CONNECT           KAFKA              CONSUMERS
+─────────────────────────────────────────────────────────────────────────
+PostgreSQL    ←──  Debezium           →   Topic:             Spark
+(primary)          PostgreSQL             freshcart.cdc       Streaming
+                   Connector              .public.orders
+                   (Kafka Connect         Topic:             Python
+Replication  ←──   Worker process)   →   freshcart.cdc      Consumer
+Slot                                      .public.customers
+                   Schema Registry   →   Topic:             Flink
+                   (sidecar)              freshcart.cdc
+                                          .public.payments
 
-  SOURCE DB          KAFKA CONNECT           KAFKA              CONSUMERS
-  ─────────────────────────────────────────────────────────────────────────
-  PostgreSQL    ←──  Debezium           →   Topic:             Spark
-  (primary)          PostgreSQL             freshmart.cdc       Streaming
-                     Connector              .public.orders
-                     (Kafka Connect         Topic:             Python
-  Replication  ←──   Worker process)   →   freshmart.cdc      Consumer
-  Slot                                      .public.customers
-                     Schema Registry   →   Topic:             Flink
-                     (sidecar)              freshmart.cdc
-                                            .public.payments
+KAFKA CONNECT:
+  - Distributed worker framework that runs connector plugins
+  - Scales horizontally — multiple workers share connector load
+  - Stores connector offsets (LSN position) in a Kafka topic
+    (not in the source database — offset is in _connect-offsets topic)
+  - REST API: POST/GET/DELETE connectors, check status, restart
 
-  KAFKA CONNECT:
-    - Distributed worker framework that runs connector plugins
-    - Scales horizontally — multiple workers share connector load
-    - Stores connector offsets (LSN position) in a Kafka topic
-      (not in the source database — offset is in _connect-offsets topic)
-    - REST API: POST/GET/DELETE connectors, check status, restart
+DEBEZIUM POSTGRESQL CONNECTOR:
+  - Connects to PostgreSQL as a logical replication client
+  - Reads WAL events via streaming replication protocol
+  - Decodes binary WAL records using the pgoutput plugin
+  - Publishes one Kafka message per database row change
+  - Kafka message key: primary key of the changed row (for partition routing)`}</CodeBox>
 
-  DEBEZIUM POSTGRESQL CONNECTOR:
-    - Connects to PostgreSQL as a logical replication client
-    - Reads WAL events via streaming replication protocol
-    - Decodes binary WAL records using pgoutput plugin
-    - Publishes one Kafka message per database row change
-    - Kafka message key: primary key of the changed row (for partition routing)
-    - Kafka message value: the full event envelope (before/after/source)
+        <SubSubTitle>Offset storage and the delivery guarantee</SubSubTitle>
 
-  KAFKA TOPIC NAMING:
-    Default pattern: {server.name}.{schema}.{table}
-    Example: freshmart.public.orders
-    One topic per table (recommended) — allows independent consumer groups
-    Alternatively: route all tables to one topic (harder to manage)
+        <CodeBox label="Where position is tracked, and why duplicates are possible">{`KAFKA TOPIC NAMING:
+  Default pattern: {server.name}.{schema}.{table}
+  Example: freshcart.public.orders
+  One topic per table (recommended) — allows independent consumer groups.
 
-  OFFSET STORAGE:
-    Debezium stores its WAL position (LSN) in a Kafka topic,
-    NOT in the source PostgreSQL replication slot alone.
-    Two records of position:
-    1. confirmed_flush_lsn in PostgreSQL replication slot
-       (what PostgreSQL knows the consumer has processed)
-    2. Kafka Connect offset (internal __connect-offsets topic)
-       (what Kafka Connect tracks as the connector's position)
-    On restart: Debezium resumes from the Kafka Connect offset,
-    tells PostgreSQL slot to start streaming from that LSN.
+OFFSET STORAGE:
+  Debezium stores its WAL position (LSN) in a Kafka topic, NOT only in the
+  source PostgreSQL replication slot. Two records of position exist:
+  1. confirmed_flush_lsn in the PostgreSQL replication slot
+     (what PostgreSQL knows the consumer has processed)
+  2. Kafka Connect offset (internal __connect-offsets topic)
+     (what Kafka Connect tracks as the connector's position)
+  On restart: Debezium resumes from the Kafka Connect offset, then tells
+  the PostgreSQL slot to start streaming from that LSN.
 
-  DELIVERY GUARANTEE:
-    At-least-once: Debezium commits to Kafka before advancing the
-    replication slot. On crash-restart, Debezium may re-emit the
-    last batch of events (since the Kafka offset was not yet confirmed).
-    Consumer MUST handle duplicates idempotently.`}</CodeBox>
+DELIVERY GUARANTEE:
+  At-least-once: Debezium commits to Kafka before advancing the replication
+  slot. On crash-restart, Debezium may re-emit the last batch of events
+  (since the Kafka offset was not yet confirmed). Consumers MUST handle
+  duplicates idempotently.`}</CodeBox>
 
-        <SubTitle>Connector configuration — the critical parameters</SubTitle>
+        <SubSubTitle>Connector configuration — the critical parameters</SubSubTitle>
 
-        <CodeBox label="Debezium PostgreSQL connector — complete production configuration">{`{
-  "name": "freshmart-orders-cdc",
+        <CodeBox label="Connection, table selection, and column filtering">{`{
+  "name": "freshcart-orders-cdc",
   "config": {
-
-    // ── Connector class ───────────────────────────────────────────────
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
 
-    // ── Source database connection ────────────────────────────────────
-    "database.hostname":         "postgres-primary.internal",
-    "database.port":             "5432",
-    "database.user":             "debezium",
-    "database.password":         "\${file:/secrets/debezium.properties:db.password}",
-    "database.dbname":           "freshmart_prod",
-    "database.server.name":      "freshmart",    // prefix for Kafka topic names
+    // Source database connection:
+    "database.hostname":    "postgres-primary.internal",
+    "database.port":        "5432",
+    "database.user":        "debezium",
+    "database.password":    "\${file:/secrets/debezium.properties:db.password}",
+    "database.dbname":      "freshcart_prod",
+    "database.server.name": "freshcart",    // prefix for Kafka topic names
 
-    // ── Table selection (include/exclude) ────────────────────────────
+    // Table selection (include/exclude):
     "table.include.list": "public.orders,public.customers,public.payments",
     // OR exclude system tables:
     "table.exclude.list": "public.schema_migrations,public.sessions",
 
-    // ── Column filtering (exclude PII from specific tables) ───────────
-    "column.exclude.list": "public.customers.raw_phone,public.customers.ssn",
+    // Column filtering (exclude PII from specific tables):
+    "column.exclude.list": "public.customers.raw_phone,public.customers.ssn"
     // Excluded columns appear as null in CDC events — use for PII fields
     // that should not flow through Kafka
-
-    // ── Logical replication plugin ────────────────────────────────────
-    "plugin.name":        "pgoutput",    // built into PostgreSQL 10+
-    "slot.name":          "debezium_freshmart",
-    "publication.name":   "dbz_freshmart_pub",
-
-    // ── Snapshot configuration ───────────────────────────────────────
-    "snapshot.mode":      "initial",    // initial | never | schema_only | always
-    "snapshot.isolation.mode": "serializable",  // consistent snapshot
-
-    // ── Kafka topic configuration ─────────────────────────────────────
-    "topic.prefix":       "freshmart.cdc",
-    // Results in topics: freshmart.cdc.public.orders
-    //                    freshmart.cdc.public.customers
-
-    // ── Serialization (use Avro + Schema Registry in production) ─────
-    "key.converter":   "io.confluent.kafka.serializers.KafkaAvroSerializer",
-    "value.converter": "io.confluent.kafka.serializers.KafkaAvroSerializer",
-    "key.converter.schema.registry.url":   "http://schema-registry:8081",
-    "value.converter.schema.registry.url": "http://schema-registry:8081",
-
-    // ── Heartbeat (prevents slot lag during low-write periods) ────────
-    "heartbeat.interval.ms": "30000",  // emit heartbeat every 30 seconds
-    // Without heartbeat: on low-write tables, the replication slot LSN
-    // never advances, WAL accumulates, slot lag appears to grow forever.
-    // Heartbeat emits a WAL record every N ms to advance the confirmed LSN.
-
-    // ── Event flattening (simplify event structure) ────────────────────
-    "transforms":             "unwrap",
-    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
-    "transforms.unwrap.add.fields":        "op,table,lsn,source.ts_ms",
-    "transforms.unwrap.delete.handling.mode": "rewrite",
-    // ExtractNewRecordState flattens the envelope:
-    // BEFORE: {before: {...}, after: {...}, op: "u", source: {...}}
-    // AFTER:  {order_id: 9284751, status: "delivered", __op: "u", __lsn: ...}
-    // Simpler for consumers but loses the before image
-
-    // ── Tombstone handling (for deletes) ──────────────────────────────
-    "tombstones.on.delete": "true",
-    // After a DELETE event, Debezium emits a tombstone (null-value message)
-    // with the same key. Kafka uses tombstones to compact deleted records.
-    // Consumers must handle null value messages without crashing.
-
-    // ── Decimal handling ──────────────────────────────────────────────
-    "decimal.handling.mode": "string",
-    // Options: precise (Avro Decimal), double (lossy), string (safe for all consumers)
-    // Use "string" unless consumers can handle Avro Decimal type correctly
-
-    // ── Interval handling ─────────────────────────────────────────────
-    "interval.handling.mode": "string"
   }
 }`}</CodeBox>
+
+        <Output>{`The "\${file:...}" syntax above is genuine Kafka Connect config-provider
+syntax — it resolves the password from a local properties file at runtime,
+not a template bug. This is one of the few places in this module where
+"\${" is correct as written.`}</Output>
+
+        <SubSubTitle>Snapshot mode, topic naming, and serialization</SubSubTitle>
+
+        <CodeBox label="Logical replication plugin, snapshot, and Schema Registry wiring">{`"plugin.name":        "pgoutput",    // built into PostgreSQL 10+
+"slot.name":          "debezium_freshcart",
+"publication.name":   "dbz_freshcart_pub",
+
+"snapshot.mode":           "initial",       // initial | never | schema_only | always
+"snapshot.isolation.mode": "serializable",  // consistent snapshot
+
+"topic.prefix": "freshcart.cdc",
+// Results in topics: freshcart.cdc.public.orders, freshcart.cdc.public.customers
+
+// Use Avro + Schema Registry in production, not raw JSON:
+"key.converter":   "io.confluent.kafka.serializers.KafkaAvroSerializer",
+"value.converter": "io.confluent.kafka.serializers.KafkaAvroSerializer",
+"key.converter.schema.registry.url":   "http://schema-registry:8081",
+"value.converter.schema.registry.url": "http://schema-registry:8081"`}</CodeBox>
+
+        <SubSubTitle>Heartbeat and event flattening</SubSubTitle>
+
+        <CodeBox label="Keeping the slot moving, and simplifying the event shape">{`"heartbeat.interval.ms": "30000",  // emit heartbeat every 30 seconds
+// Without heartbeat: on low-write tables, the replication slot LSN never
+// advances, WAL accumulates, slot lag appears to grow forever. Heartbeat
+// emits a WAL record every N ms to advance the confirmed LSN.
+
+"transforms":             "unwrap",
+"transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+"transforms.unwrap.add.fields":           "op,table,lsn,source.ts_ms",
+"transforms.unwrap.delete.handling.mode": "rewrite",
+// ExtractNewRecordState flattens the envelope:
+// BEFORE: {before: {...}, after: {...}, op: "u", source: {...}}
+// AFTER:  {order_id: 9284751, status: "delivered", __op: "u", __lsn: ...}
+// Simpler for consumers, but loses the before image`}</CodeBox>
+
+        <SubSubTitle>Tombstones and type handling</SubSubTitle>
+
+        <CodeBox label="Delete tombstones, and safe decimal/interval serialization">{`"tombstones.on.delete": "true",
+// After a DELETE event, Debezium emits a tombstone (null-value message)
+// with the same key. Kafka uses tombstones to compact deleted records.
+// Consumers must handle null value messages without crashing.
+
+"decimal.handling.mode": "string",
+// Options: precise (Avro Decimal), double (lossy), string (safe for all consumers)
+// Use "string" unless consumers can handle the Avro Decimal type correctly
+
+"interval.handling.mode": "string"`}</CodeBox>
       </section>
 
       <Divider />
@@ -505,7 +471,7 @@ HOW LOGICAL DECODING TRANSFORMS THIS:
 
         <Para>
           Schema Registry solves the versioning problem that makes CDC brittle without
-          it. When the source table's schema changes — a column is added, a type
+          it. When the source table&rsquo;s schema changes — a column is added, a type
           changes, a column is renamed — every Kafka message format changes with it.
           Without Schema Registry, consumers that were written to parse the old
           format crash on the new format. With Schema Registry, schema evolution
@@ -513,141 +479,102 @@ HOW LOGICAL DECODING TRANSFORMS THIS:
           what changes are allowed.
         </Para>
 
-        <SubTitle>How Schema Registry works</SubTitle>
+        <SubSubTitle>The producer–registry–consumer contract</SubSubTitle>
 
-        <CodeBox label="Schema Registry — the contract between producers and consumers">{`SCHEMA REGISTRY ROLE:
+        <CodeBox label="How a schema ID gets embedded in every message">{`PRODUCER (Debezium)                    SCHEMA REGISTRY         CONSUMER (Spark/Python)
+──────────────────────────────────────────────────────────────────────────────────────
+Detects orders table has:
+  order_id: INT8, status: VARCHAR, amount: DECIMAL
 
-  PRODUCER (Debezium)                    SCHEMA REGISTRY         CONSUMER (Spark/Python)
-  ──────────────────────────────────────────────────────────────────────────────────────
-  Detects orders table has:
-    order_id: INT8
-    status: VARCHAR
-    amount: DECIMAL
+Registers Avro schema → POST /subjects/freshcart.cdc.public.orders-value/versions
+Receives schema_id: 42
 
-  Registers Avro schema → POST /subjects/freshmart.cdc.public.orders-value/versions
-  Receives schema_id: 42
+Serializes message:                    Stores schema:
+[magic_byte=0][schema_id=42][avro..]   ID 42 → Avro schema for orders v1
+→ Publishes to Kafka topic
 
-  Serializes message:
-  [magic_byte=0][schema_id=42][avro_bytes...]
-  → Publishes to Kafka topic
+                                                                Consumer reads message:
+                                                                Sees [schema_id=42][...]
+                                                                Fetches schema 42 from
+                                                                registry, deserializes
+                                                                → {order_id: 9284751,
+                                                                   status: "delivered",
+                                                                   amount: 380.00}`}</CodeBox>
 
-                                          Stores schema:
-                                          ID 42 → Avro schema for orders v1
+        <SubSubTitle>Schema evolution — adding a column</SubSubTitle>
 
-  Consumer reads Kafka message:
-  Sees [magic_byte=0][schema_id=42][...]
-  Fetches schema 42 from registry
-  Deserializes avro_bytes using schema 42
-  Gets: {order_id: 9284751, status: "delivered", amount: 380.00}
+        <CodeBox label="A backward-compatible schema change, and how consumers experience it">{`Source DBA adds: ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL(6,2) DEFAULT 0;
 
+Debezium detects the schema change from the WAL DDL record.
+New schema registers as version 2 (schema_id: 43):
+  Added field: {"name": "delivery_fee", "type": ["null", "float"], "default": null}
 
-AVRO SCHEMA FOR ORDERS TABLE (simplified):
-  {
-    "type": "record",
-    "name": "orders",
-    "namespace": "freshmart.cdc.public",
-    "fields": [
-      {"name": "order_id",   "type": "long"},
-      {"name": "status",     "type": ["null", "string"], "default": null},
-      {"name": "amount",     "type": {"type": "bytes", "logicalType": "decimal",
-                                      "precision": 10, "scale": 2}},
-      {"name": "created_at", "type": ["null", "long"], "default": null,
-                             "logicalType": "timestamp-micros"}
-    ]
-  }
+COMPATIBILITY CHECK:
+  Registry checks: is schema v2 backward-compatible with v1?
+  Rule: adding a field with a default value is backward-compatible. ✓
+  Rule: removing a required field is NOT backward-compatible. ✗
 
-SCHEMA EVOLUTION — ADDING A COLUMN:
-  Source DBA adds: ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL(6,2) DEFAULT 0;
-  Debezium detects the schema change from the WAL DDL record.
-  New schema registers as version 2 (schema_id: 43):
-    Added field: {"name": "delivery_fee", "type": ["null", "float"], "default": null}
+CONSUMER BEHAVIOUR:
+  Old consumers (schema v1) reading a v2 message: delivery_fee is unknown → ignored ✓
+  New consumers (schema v2) reading a v1 message: delivery_fee missing → default null ✓
+  Both consumers continue working without redeployment.`}</CodeBox>
 
-  COMPATIBILITY CHECK:
-    Registry checks: is schema v2 backward-compatible with v1?
-    Backward compatibility: new schema can READ messages written by old schema.
-    Rule: adding a field with a default value is backward-compatible. ✓
-    Rule: removing a required field is NOT backward-compatible. ✗
+        <SubSubTitle>Compatibility modes</SubSubTitle>
 
-  CONSUMER BEHAVIOUR:
-    Consumer with schema v1 reads message written with schema v2:
-    → delivery_fee field is unknown → ignored (backward-compatible)
-    Consumer with schema v2 reads message written with schema v1:
-    → delivery_fee field missing → uses default null (backward-compatible)
-    Both consumers continue working without redeployment.
+        <CodeBox label="Four modes, from permissive to strict">{`BACKWARD (default):
+  New schema can read data produced by the previous schema.
+  Allows: adding fields with defaults, removing fields without defaults.
+  Prevents: adding required fields, changing types.
+  Best for: consumers that need to read old messages.
 
+FORWARD:
+  Previous schema can read data produced by the new schema.
+  Opposite of backward — protects old consumers from new producers.
 
-COMPATIBILITY MODES (configurable per subject):
-  BACKWARD (default):
-    New schema can read data produced by previous schema.
-    Allows: adding fields with defaults, removing fields without defaults.
-    Prevents: adding required fields, changing types.
-    Best for: consumers that need to read old messages.
+FULL:
+  Both backward and forward. Most restrictive. Only additive changes.
+  Best for: strict production environments.
 
-  FORWARD:
-    Previous schema can read data produced by new schema.
-    Opposite of backward — protects old consumers from new producers.
+NONE:
+  No compatibility checking. Any change allowed. Use only in development.`}</CodeBox>
 
-  FULL:
-    Both backward and forward. Most restrictive. Only additive changes.
-    Best for: strict production environments.
+        <SubSubTitle>Consuming Avro CDC events in Python</SubSubTitle>
 
-  NONE:
-    No compatibility checking. Any change allowed.
-    Use only in development.`}</CodeBox>
-
-        <SubTitle>Schema Registry in practice</SubTitle>
-
-        <CodeBox label="Consuming Avro CDC events in Python with Schema Registry">{`from confluent_kafka import Consumer
-from confluent_kafka.avro import AvroConsumer
+        <CodeBox label="AvroConsumer setup and routing by operation type">{`from confluent_kafka.avro import AvroConsumer
 from confluent_kafka.avro.serializer import SerializerError
-import json
 
 # AvroConsumer handles schema fetching and Avro deserialization automatically:
 consumer = AvroConsumer({
-    'bootstrap.servers':        'kafka:9092',
-    'group.id':                 'freshmart-cdc-silver-writer',
-    'schema.registry.url':      'http://schema-registry:8081',
-    'auto.offset.reset':        'earliest',
-    'enable.auto.commit':       False,   # manual commit for at-least-once
+    'bootstrap.servers':   'kafka:9092',
+    'group.id':            'freshcart-cdc-silver-writer',
+    'schema.registry.url': 'http://schema-registry:8081',
+    'auto.offset.reset':   'earliest',
+    'enable.auto.commit':  False,   # manual commit for at-least-once
 })
-
-consumer.subscribe([
-    'freshmart.cdc.public.orders',
-    'freshmart.cdc.public.payments',
-])
+consumer.subscribe(['freshcart.cdc.public.orders', 'freshcart.cdc.public.payments'])
 
 def process_event(msg) -> None:
     """Process one CDC event with schema-aware deserialization."""
     if msg.value() is None:
-        # Tombstone event (after a delete) — value is null
-        # Key still contains the primary key of the deleted record
+        # Tombstone event (after a delete) — value is null, key has the primary key
         key = msg.key()
         handle_tombstone(key['order_id'] if key else None)
         return
 
     event = msg.value()   # AvroConsumer deserialized using Schema Registry
-    op    = event.get('__op') or event.get('op')
-
-    # Route by operation type:
-    if op in ('c', 'r'):   # create or snapshot read
+    op = event.get('__op') or event.get('op')
+    if op in ('c', 'r', 'u'):
         upsert_to_silver(event)
-    elif op == 'u':         # update
-        upsert_to_silver(event)
-    elif op == 'd':         # delete
-        # With ExtractNewRecordState transform: event contains old values + __deleted=true
-        mark_deleted_in_silver(event.get('order_id'))
+    elif op == 'd':
+        mark_deleted_in_silver(event.get('order_id'))`}</CodeBox>
 
-    # Idempotency key: use source LSN for dedup
-    # If we process the same event twice (at-least-once), upsert handles it
-
-
-while True:
+        <CodeBox label="The consumer loop — commit only after a successful write">{`while True:
     try:
         msg = consumer.poll(1.0)
         if msg is None:
             continue
         if msg.error():
-            print(f'Consumer error: \${msg.error()}')
+            print(f'Consumer error: {msg.error()}')
             continue
 
         process_event(msg)
@@ -655,7 +582,7 @@ while True:
 
     except SerializerError as e:
         # Schema deserialization failed — schema incompatibility
-        print(f'Schema error: \${e}')
+        print(f'Schema error: {e}')
         # Do NOT commit — message will be redelivered
         # Alert: schema compatibility issue needs investigation`}</CodeBox>
       </section>
@@ -675,106 +602,86 @@ while True:
           participate in a single transaction?
         </Para>
 
-        <SubTitle>The dual-write problem</SubTitle>
+        <SubSubTitle>The dual-write problem</SubSubTitle>
 
-        <CodeBox label="The dual-write problem — why it cannot be solved naively">{`THE PROBLEM: payment service must update DB AND publish event
+        <CodeBox label="Why the naive approach cannot be made safe">{`NAIVE APPROACH (incorrect):
+  BEGIN;
+  UPDATE payments SET status = 'captured', captured_at = NOW()
+  WHERE payment_id = 'pay_xxx';
+  COMMIT;                                     -- Step 1: DB write succeeds
+  producer.send('payments.captured', event)   -- Step 2: Kafka publish
 
-  NAIVE APPROACH (incorrect):
-    BEGIN;
-    UPDATE payments SET status = 'captured', captured_at = NOW()
-    WHERE payment_id = 'pay_xxx';
-    COMMIT;                           -- Step 1: DB write succeeds
+FAILURE MODES:
+  A) DB write succeeds, process crashes before Kafka publish
+     → downstream services never notified — inconsistency
+  B) Kafka publish succeeds, DB write fails (rolled back)
+     → downstream services fulfill an order that was never paid for
 
-    producer.send('payments.captured', event)  -- Step 2: Kafka publish
+TWO-PHASE COMMIT (XA)? Theoretically solves this, but Kafka does not
+participate in XA transactions and XA is too slow for high-throughput
+production systems — not practical here.`}</CodeBox>
 
-  FAILURE MODES:
-    A) DB write succeeds, then process crashes before Kafka publish
-       → DB has status='captured'
-       → Kafka has no event
-       → Downstream services (order fulfillment, analytics) never notified
-       → Inconsistency between payment status and downstream systems
+        <SubSubTitle>Step 1-2 — the outbox table and the atomic write</SubSubTitle>
 
-    B) Kafka publish succeeds, then DB write fails (rolled back)
-       → Kafka has event saying payment captured
-       → DB shows payment still pending
-       → Downstream services fulfill an order that was not paid for
-       → Financial inconsistency — potentially serious
+        <CodeBox label="Writing the business update and the event in one transaction">{`-- STEP 1: Create an outbox table (in the application database):
+CREATE TABLE outbox_events (
+    event_id        UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    aggregate_type  VARCHAR(50) NOT NULL,   -- 'order', 'payment', etc.
+    aggregate_id    VARCHAR(50) NOT NULL,   -- the entity's ID
+    event_type      VARCHAR(100) NOT NULL,  -- 'PaymentCaptured', etc.
+    payload         JSONB       NOT NULL,   -- event data
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX idx_outbox_created ON outbox_events(created_at);
 
-  TWO-PHASE COMMIT (XA Transactions)?
-    Theoretically solves this but:
-    → Most modern systems do not support XA
-    → XA is slow (requires synchronisation between DB and Kafka)
-    → Kafka does not participate in XA transactions
-    → Not practical in high-throughput production systems`}</CodeBox>
+-- STEP 2: Application writes to both payments AND outbox atomically:
+BEGIN;
+UPDATE payments SET status = 'captured', captured_at = NOW()
+WHERE payment_id = 'pay_xxx';
 
-        <SubTitle>The Outbox Pattern — the correct solution</SubTitle>
+INSERT INTO outbox_events (aggregate_type, aggregate_id, event_type, payload)
+VALUES (
+    'payment', 'pay_xxx', 'PaymentCaptured',
+    '{"payment_id": "pay_xxx", "amount": 38000, "currency": "INR",
+      "merchant_id": "merch_001", "captured_at": "2026-03-17T20:14:32Z"}'
+);
+COMMIT;
+-- Both succeed or both fail — no inconsistency possible`}</CodeBox>
 
-        <CodeBox label="Outbox Pattern — using CDC to reliably publish events">{`THE OUTBOX PATTERN:
-  Key insight: the database is the single source of truth.
-  Instead of writing to DB AND Kafka, write everything to DB,
-  and use CDC to reliably deliver the event to Kafka.
+        <SubSubTitle>Step 3 — Debezium reads the outbox via CDC</SubSubTitle>
 
-  STEP 1: Create an outbox table (in the application database):
-    CREATE TABLE outbox_events (
-        event_id        UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
-        aggregate_type  VARCHAR(50) NOT NULL,   -- 'order', 'payment', etc.
-        aggregate_id    VARCHAR(50) NOT NULL,   -- the entity's ID
-        event_type      VARCHAR(100) NOT NULL,  -- 'PaymentCaptured', etc.
-        payload         JSONB       NOT NULL,   -- event data
-        created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-    -- Index for processing order:
-    CREATE INDEX idx_outbox_created ON outbox_events(created_at);
+        <CodeBox label="The Outbox Event Router transform">{`{
+  "transforms": "outbox",
+  "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
+  "transforms.outbox.table.field.event.id":      "event_id",
+  "transforms.outbox.table.field.event.key":     "aggregate_id",
+  "transforms.outbox.table.field.event.payload": "payload",
+  "transforms.outbox.route.by.field":            "aggregate_type",
+  "transforms.outbox.route.topic.replacement":   "outbox.\${routedByValue}"
+}
+// Routes events to Kafka topics by aggregate_type:
+// 'payment' events → Kafka topic: outbox.payment
+// 'order' events   → Kafka topic: outbox.order
+// The "\${routedByValue}" above is genuine Debezium SMT placeholder syntax —
+// not a template bug.`}</CodeBox>
 
-  STEP 2: Application writes to both payments AND outbox atomically:
-    BEGIN;
-    -- Update the actual business table:
-    UPDATE payments
-    SET status = 'captured', captured_at = NOW()
-    WHERE payment_id = 'pay_xxx';
+        <SubSubTitle>Steps 4-5, and why this works</SubSubTitle>
 
-    -- Write the event to the outbox (same transaction!):
-    INSERT INTO outbox_events (aggregate_type, aggregate_id, event_type, payload)
-    VALUES (
-        'payment',
-        'pay_xxx',
-        'PaymentCaptured',
-        '\${{"payment_id": "pay_xxx", "amount": 38000, "currency": "INR",
-          "merchant_id": "merch_001", "captured_at": "2026-03-17T20:14:32Z"}}'
-    );
-    COMMIT;
-    -- Both succeed or both fail — no inconsistency possible
+        <CodeBox label="Consuming, cleaning up, and the correctness argument">{`STEP 4: Consumers process events from outbox Kafka topics.
 
-  STEP 3: Debezium reads the outbox_events table via CDC:
-    Debezium configuration (Outbox Event Router transform):
-    {
-      "transforms": "outbox",
-      "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
-      "transforms.outbox.table.field.event.id":      "event_id",
-      "transforms.outbox.table.field.event.key":     "aggregate_id",
-      "transforms.outbox.table.field.event.payload": "payload",
-      "transforms.outbox.route.by.field":            "aggregate_type",
-      "transforms.outbox.route.topic.replacement":   "outbox.\${routedByValue}"
-    }
-
-    This routes events to Kafka topics by aggregate_type:
-    'payment' events → Kafka topic: outbox.payment
-    'order' events   → Kafka topic: outbox.order
-
-  STEP 4: Consumers process events from outbox Kafka topics.
-
-  STEP 5 (optional): Delete processed outbox rows periodically:
-    DELETE FROM outbox_events WHERE created_at < NOW() - INTERVAL '7 days';
-    -- Or use a separate cleanup job — the outbox is not an event store,
-    -- Kafka is. Outbox rows are only needed until CDC reads them.
+STEP 5 (optional): Delete processed outbox rows periodically:
+  DELETE FROM outbox_events WHERE created_at < NOW() - INTERVAL '7 days';
+  -- Or use a separate cleanup job — the outbox is not an event store,
+  -- Kafka is. Outbox rows are only needed until CDC reads them.
 
 WHY THIS WORKS:
   The outbox INSERT is in the same transaction as the business logic update.
-  If the transaction commits: both payment update AND outbox event exist in DB.
-  If the transaction rolls back: neither exists.
-  CDC reads the outbox and publishes to Kafka — CDC provides at-least-once delivery.
-  Downstream consumers handle duplicates with idempotency keys (event_id).
-  Result: exactly-once business semantics from at-least-once delivery + idempotency.`}</CodeBox>
+  If the transaction commits: both the payment update AND the outbox event
+  exist in the DB. If it rolls back: neither exists.
+  CDC reads the outbox and publishes to Kafka — CDC provides at-least-once
+  delivery. Downstream consumers handle duplicates with idempotency keys
+  (event_id). Result: exactly-once business semantics from at-least-once
+  delivery + idempotency.`}</CodeBox>
 
         <Callout type="tip">
           <strong>The Outbox Pattern is the recommended architecture</strong> for
@@ -800,8 +707,9 @@ WHY THIS WORKS:
           that cause subtle bugs in CDC consumers.
         </Para>
 
-        <CodeBox label="CDC ordering guarantees — what is and is not guaranteed">{`WHAT CDC GUARANTEES:
+        <SubSubTitle>What CDC does and does not guarantee</SubSubTitle>
 
+        <CodeBox label="Ordering within a partition, but not across tables or partitions">{`WHAT CDC GUARANTEES:
   Within a single Kafka partition → events are strictly ordered by LSN.
   For a given primary key → all events for that row go to the same partition
   (because Kafka partition key = row's primary key by default).
@@ -809,94 +717,69 @@ WHY THIS WORKS:
 
 WHAT CDC DOES NOT GUARANTEE:
 
-  1. ORDERING ACROSS TABLES:
-     Event A (orders table, LSN 1000) and Event B (customers table, LSN 1001)
-     may arrive in different Kafka partitions and be consumed out of order
-     if the consumers for those topics run at different speeds.
+1. ORDERING ACROSS TABLES:
+   Event A (orders, LSN 1000) and Event B (customers, LSN 1001) may land in
+   different Kafka partitions and be consumed out of order if the consumers
+   for those topics run at different speeds. Example: a payment is captured
+   (payments topic, LSN 5000) and the order status updated (orders topic,
+   LSN 5001) — a consumer reading both topics may process the order update
+   first, depending on consumer lag per topic.
 
-     Example: A payment is captured (payments topic, LSN 5000) and the
-     order status updated (orders topic, LSN 5001). A consumer that reads
-     both topics may process the order update before the payment capture
-     depending on consumer lag per topic.
+2. ORDERING ACROSS KAFKA PARTITIONS:
+   A high-write table may have multiple Kafka partitions. Events for
+   different primary keys go to different partitions — ordered within each
+   partition, but not between them. order_id 9284751 (partition 0) and
+   order_id 9284752 (partition 1) events may arrive interleaved in any order.`}</CodeBox>
 
-  2. ORDERING ACROSS KAFKA PARTITIONS:
-     A table with high write volume may have multiple Kafka partitions.
-     Events for different primary keys go to different partitions.
-     Events within each partition are ordered, but between partitions they are not.
-     order_id 9284751 (partition 0) and order_id 9284752 (partition 1) events
-     may arrive interleaved in any order at a consumer reading both partitions.
+        <SubSubTitle>Snapshot + stream ordering, and the safe pattern</SubSubTitle>
 
-  3. SNAPSHOT + STREAM ORDERING:
-     During initial snapshot, Debezium emits all existing rows as op=r events.
-     Streaming changes begin from the snapshot LSN.
-     But: the snapshot may take hours. During snapshot, the source table is
-     being modified. The snapshot reads a consistent point-in-time view,
-     then streaming catches up. Between snapshot completion and stream catchup,
-     there is a window where the consumer has a mix of:
-       - Snapshot rows (as of snapshot start time)
-       - Stream changes (from snapshot start LSN forward)
-     The consumer must handle this: upsert semantics reconcile both correctly.
+        <CodeBox label="The window between snapshot completion and stream catch-up">{`3. SNAPSHOT + STREAM ORDERING:
+   During initial snapshot, Debezium emits all existing rows as op=r events.
+   Streaming changes begin from the snapshot LSN. The snapshot may take
+   hours, and the source table is being modified during it — between
+   snapshot completion and stream catchup, the consumer sees a mix of
+   snapshot rows (as of snapshot start time) and stream changes (from
+   snapshot start LSN forward). Upsert semantics reconcile both correctly.
 
-PRACTICAL IMPLICATION FOR DATA ENGINEERS:
+SAFE PATTERN — process one table at a time, in order:
+  consumer reads freshcart.cdc.public.orders one partition at a time
+  → events for the same order are ordered, downstream safe
 
-  SAFE PATTERN — process one table at a time, in order:
-    consumer reads freshmart.cdc.public.orders one partition at a time
-    → events for same order are ordered, downstream safe
+UNSAFE PATTERN — join across CDC streams in the consumer:
+  consumer reads orders AND payments topics simultaneously, tries to join
+  "when payment captured, also update order status" → ordering not
+  guaranteed across topics → race condition possible
 
-  UNSAFE PATTERN — join across CDC streams in the consumer:
-    consumer reads orders AND payments topic simultaneously
-    tries to join: "when payment captured, also update order status"
-    → ordering not guaranteed across topics
-    → race condition: order update arrives before payment capture in consumer
+CORRECT PATTERN for cross-table consistency:
+  Let each CDC stream write to its own Silver table independently. Let dbt
+  handle the join in a SQL model — SQL joins are order-independent. Never
+  implement cross-table joins in the CDC consumer layer.`}</CodeBox>
 
-  CORRECT PATTERN for cross-table consistency:
-    Let each CDC stream write to its own Silver table independently.
-    Let dbt handle the join in a SQL model.
-    SQL joins are order-independent — dbt reads whatever is in both tables
-    at the time the model runs.
-    Never try to implement cross-table joins in the CDC consumer layer.`}</CodeBox>
+        <SubSubTitle>Transaction boundaries — atomicity from source to consumer</SubSubTitle>
 
-        <SubTitle>Transaction boundaries — atomicity from source to consumer</SubTitle>
+        <CodeBox label="A single source transaction can split across Kafka topics">{`SOURCE TRANSACTION:
+  BEGIN;
+  INSERT INTO orders (order_id, status) VALUES (9284753, 'placed');
+  INSERT INTO order_items (order_id, product_id, qty) VALUES (9284753, 42, 2);
+  COMMIT;                          -- both rows committed atomically
 
-        <CodeBox label="Transaction-aware CDC — preserving atomicity across tables">{`PROBLEM: A single source transaction updates two tables.
-  The consumer may see the two events separately and process them
-  out of order or independently, violating the intended atomicity.
+CDC EVENTS (Debezium emits, both sharing txId: 847292):
+  {op: "c", table: "orders",      txId: 847292, ...}
+  {op: "c", table: "order_items", txId: 847292, ...}
+  -- may be on different Kafka topics/partitions`}</CodeBox>
 
-  SOURCE TRANSACTION:
-    BEGIN;
-    INSERT INTO orders (order_id, status) VALUES (9284753, 'placed');
-    INSERT INTO order_items (order_id, product_id, qty) VALUES (9284753, 42, 2);
-    COMMIT;                          -- both rows committed atomically
+        <CodeBox label="Transaction metadata, and the simpler analytics-friendly approach">{`SOLUTION: enable Debezium's transaction metadata support:
+  {"provide.transaction.metadata": "true"}
+  Debezium emits BEGIN {txId, event_count} and COMMIT {txId, event_count,
+  data_collections} events on a transaction metadata topic. A consumer can
+  buffer events until the full transaction is received, then process
+  atomically together.
 
-  CDC EVENTS (Debezium emits):
-    {op: "c", table: "orders",      txId: 847292, ...}
-    {op: "c", table: "order_items", txId: 847292, ...}
-
-  Note: both events share txId: 847292.
-  They may be on different Kafka topics/partitions.
-
-SOLUTION: Debezium transaction metadata support
-  Enable transaction metadata topic:
-  {
-    "provide.transaction.metadata": "true",
-    "transaction.metadata.factory": "io.debezium.pipeline.txmetadata..."
-  }
-
-  Debezium emits an additional event on the transaction metadata topic:
-    BEGIN event:  {txId: 847292, event_count: 2}
-    COMMIT event: {txId: 847292, event_count: 2, data_collections: [...]}
-
-  Consumer can use this to:
-  - Know exactly how many events belong to transaction 847292
-  - Buffer events until all events in the transaction are received
-  - Process them atomically together or skip if incomplete
-
-  SIMPLER APPROACH for analytics:
-  Don't try to preserve transaction boundaries at the consumer layer.
-  Write each event to its own Silver table with upsert semantics.
-  Run dbt models that JOIN across Silver tables — dbt sees a consistent
-  snapshot of all Silver tables at query time.
-  This is usually sufficient for analytical use cases.`}</CodeBox>
+SIMPLER APPROACH for analytics: don't try to preserve transaction
+boundaries at the consumer layer. Write each event to its own Silver table
+with upsert semantics, and run dbt models that JOIN across Silver tables —
+dbt sees a consistent snapshot of all Silver tables at query time. This is
+usually sufficient for analytical use cases.`}</CodeBox>
       </section>
 
       <Divider />
@@ -913,90 +796,59 @@ SOLUTION: Debezium transaction metadata support
           to crash is an operational incident, not an expected upgrade.
         </Para>
 
-        <CodeBox label="Schema evolution scenarios — what Debezium handles and what requires care">{`SCENARIO 1: ADD A NEW COLUMN (backward-compatible)
-  Source: ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL(6,2) DEFAULT 0;
+        <SubSubTitle>Scenario 1 — adding a column (backward-compatible)</SubSubTitle>
 
-  Debezium behaviour:
-  - Detects DDL change from WAL
-  - Registers new Avro schema (adds delivery_fee field with null default)
-  - New schema version: backward-compatible with previous schema
-  - Schema Registry accepts the new version (compatibility check passes)
+        <CodeBox label="The safe case, and its consumer + warehouse impact">{`Source: ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL(6,2) DEFAULT 0;
 
-  Messages BEFORE the DDL: delivery_fee field absent in Avro, consumers use default null
-  Messages AFTER the DDL:  delivery_fee field present with value
+Debezium behaviour:
+  - Detects DDL change from WAL, registers a new Avro schema
+  - New schema version is backward-compatible — Registry accepts it
 
-  Consumer impact:
-  - Old consumers (schema v1): see delivery_fee as null (backward-compatible) ✓
-  - New consumers (schema v2): see correct delivery_fee value ✓
-  - NO consumer crash, NO redeployment required for existing consumers
+Messages BEFORE the DDL: delivery_fee absent, consumers use default null
+Messages AFTER the DDL:  delivery_fee present with value
 
-  Data warehouse impact:
+Consumer impact: old consumers (schema v1) see null (backward-compatible) ✓
+new consumers (schema v2) see the correct value ✓ — NO crash, NO redeploy.
+
+Data warehouse impact:
   - dbt Silver model needs updating to SELECT delivery_fee
-  - Run: ALTER TABLE silver.orders ADD COLUMN delivery_fee DECIMAL(6,2);
-  - Or: dbt run --full-refresh silver.orders (recreates table with new schema)
+  - ALTER TABLE silver.orders ADD COLUMN delivery_fee DECIMAL(6,2);
+  - Or: dbt run --full-refresh silver.orders`}</CodeBox>
 
+        <SubSubTitle>Scenario 2 — renaming a column (breaking)</SubSubTitle>
 
-SCENARIO 2: RENAME A COLUMN (breaking change)
-  Source: ALTER TABLE orders RENAME COLUMN order_amount TO amount;
+        <CodeBox label="Why renames break the Registry, and the safe migration path">{`Source: ALTER TABLE orders RENAME COLUMN order_amount TO amount;
 
-  Debezium behaviour:
-  - Old schema had "order_amount" field
-  - New schema has "amount" field
+Debezium behaviour:
   - Removing "order_amount" WITHOUT a default: NOT backward-compatible!
   - Schema Registry REJECTS this schema if compatibility mode = BACKWARD
+  - If blocked: connector pauses, requires manual intervention
 
-  How Debezium handles it:
-  - Emits the column under the NEW name in post-DDL events
-  - Pre-DDL events remain with the old column name in Kafka
-  - If Schema Registry blocks: connector pauses, requires manual intervention
+SAFE MIGRATION APPROACH (avoid breaking changes):
+1. Add the NEW column: ALTER TABLE orders ADD COLUMN amount DECIMAL(10,2);
+2. Write to both columns temporarily (application change)
+3. Backfill: UPDATE orders SET amount = order_amount WHERE amount IS NULL;
+4. Consumer updated to read "amount" column
+5. Drop old column: ALTER TABLE orders DROP COLUMN order_amount;
+6. Update Debezium schema: new version removes order_amount
+This staged migration takes longer but never breaks the pipeline.`}</CodeBox>
 
-  SAFE MIGRATION APPROACH (avoid breaking changes):
-  1. Add the NEW column: ALTER TABLE orders ADD COLUMN amount DECIMAL(10,2);
-  2. Write to both columns temporarily (application change)
-  3. Backfill: UPDATE orders SET amount = order_amount WHERE amount IS NULL;
-  4. Consumer updated to read "amount" column
-  5. Drop old column: ALTER TABLE orders DROP COLUMN order_amount;
-  6. Update Debezium schema: new schema version removes order_amount
-  This staged migration takes longer but never breaks the pipeline.
+        <SubSubTitle>Scenario 3 — changing a column type, and the schema-change event</SubSubTitle>
 
+        <CodeBox label="Widening is safe, narrowing is not; Debezium logs every DDL">{`Source: ALTER TABLE orders ALTER COLUMN status TYPE VARCHAR(50);  -- was VARCHAR(20)
 
-SCENARIO 3: CHANGE A COLUMN TYPE (potentially breaking)
-  Source: ALTER TABLE orders ALTER COLUMN status TYPE VARCHAR(50);
-                                                   -- was VARCHAR(20)
+Widening (VARCHAR(20) → VARCHAR(50)) is usually safe — values that were
+valid VARCHAR(20) are still valid VARCHAR(50). Debezium emits strings, so
+the width change is transparent.
 
-  Impact: Widening (VARCHAR(20) → VARCHAR(50)) is usually safe.
-  Values that were valid VARCHAR(20) are still valid VARCHAR(50).
-  Debezium emits strings — the type width change is transparent.
+Narrowing (VARCHAR(50) → VARCHAR(20)) is dangerous — existing data may
+violate the new constraint. Debezium/Schema Registry may reject this if
+truncation is detected.
 
-  Narrowing (VARCHAR(50) → VARCHAR(20)) is dangerous.
-  Existing data may violate the new constraint.
-  Debezium / Schema Registry may reject this if truncation is detected.
-
-
-DEBEZIUM SCHEMA CHANGE EVENT:
-  When Debezium detects a DDL event, it emits a schema change event
-  to a separate topic: {server.name}.schema-changes.{database}
-
-  {
-    "source": {"db": "freshmart_prod"},
-    "historyRecord": {
-      "ddl": "ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL(6,2) DEFAULT 0",
-      "tableChanges": [
-        {
-          "type": "ALTER",
-          "id": "public.orders",
-          "table": {
-            "columns": [
-              ... full new column list ...
-            ]
-          }
-        }
-      ]
-    }
-  }
-
-  This topic is used by Debezium internally for schema history.
-  Also useful for: auditing schema changes, alerting when unexpected DDL occurs.`}</CodeBox>
+DEBEZIUM SCHEMA CHANGE EVENT: on every DDL, Debezium emits an event to a
+separate topic ({server.name}.schema-changes.{database}) containing the
+raw DDL text and the full new column list. Useful for auditing schema
+changes and alerting when unexpected DDL occurs.`}</CodeBox>
       </section>
 
       <Divider />
@@ -1013,98 +865,82 @@ DEBEZIUM SCHEMA CHANGE EVENT:
           micro-batch consumer to land batches of events efficiently.
         </Para>
 
-        <CodeBox label="CDC to data lake — efficient landing pattern">{`CDC LANDING ARCHITECTURE:
+        <SubSubTitle>Why not write each event directly to S3</SubSubTitle>
 
-  PostgreSQL → Debezium → Kafka → [Spark Streaming / Flink] → Delta Lake
-                                    (micro-batch consumer)      (Bronze layer)
+        <CodeBox label="The small-file math, and the correct architecture">{`PostgreSQL → Debezium → Kafka → [Spark Streaming / Flink] → Delta Lake
+                                  (micro-batch consumer)      (Bronze layer)
 
-  WHY NOT WRITE EACH EVENT DIRECTLY TO S3:
-    At 10,000 events/second: 10,000 S3 PUT requests/second
-    Each Parquet file: ~1 KB (tiny — the small file problem at its worst)
-    After 1 hour: 36,000,000 tiny files — unusable for analytics
+At 10,000 events/second, writing each event as its own file means 10,000
+S3 PUT requests/second, each Parquet file ~1 KB. After 1 hour: 36,000,000
+tiny files — unusable for analytics.
 
-  CORRECT APPROACH: buffer in Kafka, write batches to Delta Lake
+CORRECT APPROACH: buffer in Kafka, write batches to Delta Lake on a
+micro-batch trigger.`}</CodeBox>
 
-  SPARK STRUCTURED STREAMING (micro-batch, 5-minute trigger):
+        <SubSubTitle>Reading from Kafka and parsing the Avro payload</SubSubTitle>
 
-  from pyspark.sql import SparkSession
-  from pyspark.sql.functions import col, from_json, current_timestamp
-  from pyspark.sql.types import StructType, LongType, StringType, TimestampType
+        <CodeBox label="Spark Structured Streaming — the read side">{`from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, from_json, current_timestamp
+from pyspark.sql.types import StructType, LongType, StringType
 
-  spark = SparkSession.builder \
-      .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
-      .getOrCreate()
+spark = SparkSession.builder \\
+    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \\
+    .getOrCreate()
 
-  # Read from Kafka (raw bytes):
-  raw = spark.readStream \
-      .format("kafka") \
-      .option("kafka.bootstrap.servers", "kafka:9092") \
-      .option("subscribe", "freshmart.cdc.public.orders") \
-      .option("startingOffsets", "latest") \
-      .option("maxOffsetsPerTrigger", 500_000) \  # limit batch size
-      .load()
+raw = spark.readStream \\
+    .format("kafka") \\
+    .option("kafka.bootstrap.servers", "kafka:9092") \\
+    .option("subscribe", "freshcart.cdc.public.orders") \\
+    .option("startingOffsets", "latest") \\
+    .option("maxOffsetsPerTrigger", 500_000) \\
+    .load()
 
-  # Parse Avro (with Schema Registry):
-  # from_avro() with Schema Registry URL handles deserialization
-  orders_schema = StructType() \
-      .add("order_id",   LongType()) \
-      .add("status",     StringType()) \
-      .add("amount",     StringType()) \  # decimal as string
-      .add("updated_at", LongType()) \    # microseconds epoch
-      .add("__op",       StringType()) \  # operation type
-      .add("__lsn",      LongType())      # WAL LSN for ordering
+orders_schema = StructType() \\
+    .add("order_id",   LongType()) \\
+    .add("status",     StringType()) \\
+    .add("amount",     StringType()) \\  # decimal as string
+    .add("updated_at", LongType()) \\    # microseconds epoch
+    .add("__op",       StringType()) \\  # operation type
+    .add("__lsn",      LongType())       # WAL LSN for ordering
 
-  parsed = raw \
-      .select(from_json(col("value").cast("string"), orders_schema).alias("e")) \
-      .select("e.*") \
-      .withColumn("ingested_at", current_timestamp())
+parsed = raw.select(from_json(col("value").cast("string"), orders_schema).alias("e")) \\
+    .select("e.*").withColumn("ingested_at", current_timestamp())`}</CodeBox>
 
-  # Write to Delta Lake using MERGE for idempotent upserts:
-  def upsert_to_delta(batch_df, batch_id):
-      from delta.tables import DeltaTable
-      if DeltaTable.isDeltaTable(spark, "s3://freshmart-lake/bronze/orders"):
-          delta_table = DeltaTable.forPath(spark, "s3://freshmart-lake/bronze/orders")
-          delta_table.alias("target").merge(
-              batch_df.alias("source"),
-              "target.order_id = source.order_id"
-          ).whenMatchedUpdateAll() \
-           .whenNotMatchedInsertAll() \
-           .execute()
-      else:
-          batch_df.write.format("delta") \
-              .mode("overwrite") \
-              .partitionBy("date") \
-              .save("s3://freshmart-lake/bronze/orders")
+        <SubSubTitle>Upserting to Delta Lake and starting the stream</SubSubTitle>
 
-  query = parsed.writeStream \
-      .foreachBatch(upsert_to_delta) \
-      .option("checkpointLocation", "s3://freshmart-lake/checkpoints/orders_cdc") \
-      .trigger(processingTime="5 minutes") \
-      .start()
+        <CodeBox label="foreachBatch merge, and the 5-minute trigger">{`def upsert_to_delta(batch_df, batch_id):
+    from delta.tables import DeltaTable
+    if DeltaTable.isDeltaTable(spark, "s3://freshcart-lake/bronze/orders"):
+        delta_table = DeltaTable.forPath(spark, "s3://freshcart-lake/bronze/orders")
+        delta_table.alias("target").merge(
+            batch_df.alias("source"), "target.order_id = source.order_id"
+        ).whenMatchedUpdateAll().whenNotMatchedInsertAll().execute()
+    else:
+        batch_df.write.format("delta").mode("overwrite") \\
+            .partitionBy("date").save("s3://freshcart-lake/bronze/orders")
 
-  query.awaitTermination()
+query = parsed.writeStream \\
+    .foreachBatch(upsert_to_delta) \\
+    .option("checkpointLocation", "s3://freshcart-lake/checkpoints/orders_cdc") \\
+    .trigger(processingTime="5 minutes") \\
+    .start()
+query.awaitTermination()`}</CodeBox>
 
+        <SubSubTitle>Handling deletes, and keeping files compacted</SubSubTitle>
 
-HANDLING DELETE EVENTS IN THE DATA LAKE:
-  Option A: Soft-delete flag
-    Store __op and __deleted fields in Delta Lake.
-    dbt Silver model: WHERE __op != 'd' OR __deleted != true
-    Preserves full history (useful for audit).
-
-  Option B: Hard delete via Delta MERGE DELETE clause
-    .whenMatchedDelete(condition="source.__op = 'd'")
-    Removes row from Delta Lake — cleaner but loses history.
-
-  Option C: Separate deleted records table
-    Route delete events to bronze.orders_deletes table.
-    dbt Silver: EXCEPT customer_ids IN (SELECT order_id FROM bronze.orders_deletes)
-    Useful when you want both full history and current state.
+        <CodeBox label="Three delete strategies, and the OPTIMIZE schedule">{`HANDLING DELETE EVENTS IN THE DATA LAKE:
+  Option A — soft-delete flag: store __op/__deleted in Delta Lake, dbt
+    Silver filters WHERE __op != 'd'. Preserves full history for audit.
+  Option B — hard delete via Delta MERGE DELETE clause:
+    .whenMatchedDelete(condition="source.__op = 'd'"). Cleaner, loses history.
+  Option C — separate deleted-records table: route deletes to
+    bronze.orders_deletes, dbt Silver EXCEPTs those IDs. Keeps both views.
 
 COMPACTION SCHEDULE:
-  CDC streams create many small Delta files per 5-minute trigger.
-  Run OPTIMIZE daily:
-  OPTIMIZE delta.\`s3://freshmart-lake/bronze/orders\`
-  WHERE date >= current_date - 7;`}</CodeBox>
+  CDC streams create many small Delta files per 5-minute trigger. Run
+  OPTIMIZE daily:
+    OPTIMIZE delta.\`s3://freshcart-lake/bronze/orders\`
+    WHERE date >= current_date - 7;`}</CodeBox>
       </section>
 
       <Divider />
@@ -1123,15 +959,12 @@ COMPACTION SCHEDULE:
           waiting to happen.
         </Para>
 
-        <CodeBox label="CDC monitoring — everything to instrument and alert on">{`# ── POSTGRESQL MONITORING QUERIES ────────────────────────────────────────────
+        <SubSubTitle>PostgreSQL monitoring queries</SubSubTitle>
 
--- Replication slot lag (most critical metric):
-SELECT
-    slot_name,
-    active,
+        <CodeBox label="Replication slot lag — the single most critical metric">{`-- Replication slot lag:
+SELECT slot_name, active,
     pg_wal_lsn_diff(pg_current_wal_lsn(), confirmed_flush_lsn) AS lag_bytes,
-    pg_wal_lsn_diff(pg_current_wal_lsn(), confirmed_flush_lsn) / 1024 / 1024
-        AS lag_mb,
+    pg_wal_lsn_diff(pg_current_wal_lsn(), confirmed_flush_lsn) / 1024 / 1024 AS lag_mb,
     now() - pg_last_xact_replay_timestamp() AS replication_delay
 FROM pg_replication_slots;
 
@@ -1141,63 +974,47 @@ FROM pg_replication_slots;
 -- active = false: CRITICAL — slot exists but consumer is disconnected
 
 -- WAL disk usage:
-SELECT pg_size_pretty(sum(size)) AS wal_disk_usage
-FROM pg_ls_waldir();
+SELECT pg_size_pretty(sum(size)) AS wal_disk_usage FROM pg_ls_waldir();`}</CodeBox>
 
--- Active replication connections:
-SELECT application_name, state, sent_lsn, write_lsn, flush_lsn,
-       replay_lsn, sync_state
-FROM pg_stat_replication;
+        <SubSubTitle>Debezium and Kafka Connect monitoring</SubSubTitle>
 
-
-# ── DEBEZIUM / KAFKA CONNECT MONITORING ───────────────────────────────────────
-
-import requests
+        <CodeBox label="Checking connector health via the REST API">{`import requests
 
 # Check connector status:
-response = requests.get('http://kafka-connect:8083/connectors/freshmart-orders-cdc/status')
+response = requests.get('http://kafka-connect:8083/connectors/freshcart-orders-cdc/status')
 status = response.json()
 # Expected: {"connector": {"state": "RUNNING"}, "tasks": [{"state": "RUNNING", ...}]}
 # Alert if state != "RUNNING"
 
-# List all connectors and their status:
-response = requests.get('http://kafka-connect:8083/connectors?expand=status')
-
 # Pause/resume connector (for maintenance):
-requests.put('http://kafka-connect:8083/connectors/freshmart-orders-cdc/pause')
-requests.put('http://kafka-connect:8083/connectors/freshmart-orders-cdc/resume')
+requests.put('http://kafka-connect:8083/connectors/freshcart-orders-cdc/pause')
+requests.put('http://kafka-connect:8083/connectors/freshcart-orders-cdc/resume')
 
 # Restart a failed task:
-requests.post('http://kafka-connect:8083/connectors/freshmart-orders-cdc/tasks/0/restart')
+requests.post('http://kafka-connect:8083/connectors/freshcart-orders-cdc/tasks/0/restart')`}</CodeBox>
 
+        <SubSubTitle>Kafka consumer lag monitoring</SubSubTitle>
 
-# ── KAFKA CONSUMER LAG MONITORING ────────────────────────────────────────────
-
-# Using kafka-consumer-groups.sh:
-# kafka-consumer-groups.sh --bootstrap-server kafka:9092 \
-#   --describe --group freshmart-cdc-silver-writer
+        <CodeBox label="Per-partition lag, from the CLI and from Python">{`# kafka-consumer-groups.sh --bootstrap-server kafka:9092 \\
+#   --describe --group freshcart-cdc-silver-writer
 #
-# Output shows lag per partition:
-# TOPIC                           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG
-# freshmart.cdc.public.orders     0          1847291         1847301         10
-# freshmart.cdc.public.orders     1          2039847         2039847         0
+# TOPIC                          PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG
+# freshcart.cdc.public.orders    0          1847291         1847301         10
+# freshcart.cdc.public.orders    1          2039847         2039847         0
 
-# Using Python (confluent-kafka):
 from confluent_kafka.admin import AdminClient
 admin = AdminClient({'bootstrap.servers': 'kafka:9092'})
-offsets = admin.list_consumer_group_offsets(['freshmart-cdc-silver-writer'])
-# ALERT if any partition lag > 10,000 events or > 5 minutes of events
+offsets = admin.list_consumer_group_offsets(['freshcart-cdc-silver-writer'])
+# ALERT if any partition lag > 10,000 events or > 5 minutes of events`}</CodeBox>
 
+        <SubSubTitle>An automated health-check script</SubSubTitle>
 
-# ── AUTOMATED MONITORING SCRIPT ───────────────────────────────────────────────
-
-import psycopg2, requests, time
+        <CodeBox label="Combining slot lag and connector state into one alert list">{`import psycopg2, requests
 
 def check_cdc_health(pg_conn_str: str, kafka_connect_url: str) -> list[str]:
     """Check CDC health, return list of alert messages."""
     alerts = []
 
-    # Check replication slot lag:
     with psycopg2.connect(pg_conn_str) as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -1207,87 +1024,97 @@ def check_cdc_health(pg_conn_str: str, kafka_connect_url: str) -> list[str]:
             """)
             for slot_name, active, lag_mb in cur.fetchall():
                 if not active:
-                    alerts.append(f'CRITICAL: Slot \${slot_name} is INACTIVE')
+                    alerts.append(f'CRITICAL: Slot {slot_name} is INACTIVE')
                 elif lag_mb and lag_mb > 10240:
-                    alerts.append(f'CRITICAL: Slot \${slot_name} lag = \${lag_mb:.0f} MB')
+                    alerts.append(f'CRITICAL: Slot {slot_name} lag = {lag_mb:.0f} MB')
                 elif lag_mb and lag_mb > 1024:
-                    alerts.append(f'WARNING: Slot \${slot_name} lag = \${lag_mb:.0f} MB')
+                    alerts.append(f'WARNING: Slot {slot_name} lag = {lag_mb:.0f} MB')
 
-    # Check connector status:
-    resp = requests.get(f'\${kafka_connect_url}/connectors?expand=status', timeout=10)
+    resp = requests.get(f'{kafka_connect_url}/connectors?expand=status', timeout=10)
     for name, info in resp.json().items():
         state = info['status']['connector']['state']
         if state != 'RUNNING':
-            alerts.append(f'CRITICAL: Connector \${name} state = \${state}')
+            alerts.append(f'CRITICAL: Connector {name} state = {state}')
         for task in info['status']['tasks']:
             if task['state'] != 'RUNNING':
-                alerts.append(f'CRITICAL: Connector \${name} task \${task["id"]} = \${task["state"]}')
+                alerts.append(f'CRITICAL: Connector {name} task {task["id"]} = {task["state"]}')
 
     return alerts`}</CodeBox>
 
-        <SubTitle>Recovery runbook — what to do when CDC breaks</SubTitle>
+        <SubSubTitle>Recovery runbook — connector failures and slot lag</SubSubTitle>
 
-        <CodeBox label="CDC recovery scenarios — the runbook for each failure">{`FAILURE 1: Connector FAILED state
-  Symptom: connector status shows FAILED
+        <CodeBox label="Failure 1-2 — connector FAILED, and replication lag growing">{`FAILURE 1: Connector FAILED state
   Likely cause: PostgreSQL connectivity issue, schema change, credential expiry
-
-  Recovery:
-  1. Check connector error: GET /connectors/{name}/status
-     → error_trace field shows the specific exception
-  2. Fix the root cause (restore DB connection, update credential, etc.)
-  3. Restart the failed task: POST /connectors/{name}/tasks/0/restart
-  4. If task keeps failing: DELETE and recreate the connector
-     (may require re-snapshot if offset is incompatible)
+  Recovery: (1) GET /connectors/{name}/status → error_trace shows the exact
+  exception. (2) Fix the root cause. (3) Restart the failed task:
+  POST /connectors/{name}/tasks/0/restart. (4) If it keeps failing: DELETE
+  and recreate the connector (may require re-snapshot).
 
 FAILURE 2: Replication slot lag growing (consumer slow)
-  Symptom: lag_mb increasing, not decreasing
-  Risk: if lag grows indefinitely, source disk fills
+  Risk: if lag grows indefinitely, source disk fills.
+  Recovery: (1) identify the bottleneck — consumer or broker slow? Check
+  kafka-consumer-groups.sh --describe. (2) if consumer slow: scale up the
+  consumer group. (3) if Kafka is the bottleneck: increase topic partitions.
+  (4) if unrecoverable and lag > 50 GB with no improvement in 30 min:
+  consider dropping the slot (accepts data loss) to protect the source DB.`}</CodeBox>
 
-  Recovery:
-  1. Identify bottleneck: is Kafka consumer or Kafka broker slow?
-     Check: kafka-consumer-groups.sh --describe --group {group}
-  2. If consumer is slow: scale up consumer group (add instances)
-  3. If Kafka is the bottleneck: increase topic partitions
-  4. If unrecoverable: temporarily increase consumer batch size
-     maxOffsetsPerTrigger (Spark) or fetch.max.bytes (plain consumer)
-  5. Alert escalation: if lag > 50 GB with no improvement in 30 min:
-     Consider dropping slot (accepts data loss) to protect source DB
+        <SubSubTitle>Recovery runbook — offset, failover, and schema failures</SubSubTitle>
 
-FAILURE 3: Consumer group offset behind Kafka retention
-  Symptom: Kafka error: "Offset 0 is not available, earliest is 48000000"
-  Cause: Consumer was paused/stopped for > Kafka retention period
-         Kafka deleted old messages, consumer offset is now before earliest
+        <CodeBox label="Failures 3-5 — retention gap, primary failover, breaking schema change">{`FAILURE 3: Consumer offset behind Kafka retention
+  Symptom: "Offset 0 is not available, earliest is 48000000" — consumer was
+  paused longer than Kafka's retention period.
+  Recovery: reset consumer group offset to earliest available, then either
+  re-snapshot from current state or reprocess everything (upserts handle it).
 
-  Recovery:
-  1. Reset consumer group offset to earliest available:
-     kafka-consumer-groups.sh --bootstrap-server kafka:9092 \
-       --group {group} --topic {topic} --reset-offsets --to-earliest --execute
-  2. Delete the Debezium connector checkpoint (so it re-snapshots from current)
-  3. Or: if destination can tolerate re-processing, reset to beginning
-         and re-process everything (upserts handle idempotency)
+FAILURE 4: PostgreSQL primary failover
+  Symptom: Debezium loses connection to the old primary.
+  Recovery: update database.hostname to the new primary (ideally via a DNS
+  alias), restart the connector — it resumes from the last confirmed LSN.
+  Note: WAL LSN sequence resets if the replica wasn't fully caught up —
+  some events may be replayed or lost; heartbeats help detect this.
 
-FAILURE 4: PostgreSQL primary failover (switchover to replica)
-  Symptom: Debezium loses connection to old primary, new primary is promoted
+FAILURE 5: Schema change breaks the consumer
+  Symptom: SerializerError or NullPointerException on new events.
+  Recovery: check GET /subjects/{topic}-value/versions/latest. If the
+  schema was accepted, update consumer code for the new field. If rejected
+  by the Registry (a genuine breaking change), work with the source team
+  on a safe staged migration instead.`}</CodeBox>
+      </section>
 
-  Recovery:
-  1. Update Debezium connector database.hostname to new primary
-     (use a DNS alias like postgres.internal that points to current primary)
-  2. Restart connector with new hostname config
-  3. Debezium resumes from last confirmed LSN on new primary
-  Note: WAL LSN sequence resets if replica was not fully caught up to old primary
-        Some events may be replayed or lost — use heartbeats to detect this
+      <Divider />
 
-FAILURE 5: Schema change breaks consumer
-  Symptom: consumer throws SerializerError or NullPointerException on new events
-  Cause: source table schema changed, Schema Registry rejected incompatible schema
-         OR consumer code does not handle new field
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Change Data Capture</SectionTitle>
 
-  Recovery:
-  1. Check Schema Registry: GET /subjects/{topic}-value/versions/latest
-  2. If schema was accepted: update consumer code to handle new field
-  3. If schema was rejected by Registry: investigate why
-     (breaking change — column removed without default, type narrowed)
-     Work with source team to do a safe migration instead`}</CodeBox>
+        {[
+          {
+            wrong: '"CDC guarantees events arrive at consumers in the order they happened"',
+            right: 'Part 06 draws the line precisely: ordering is guaranteed only within a single Kafka partition for a given primary key — never across tables, never across partitions. This module\'s Interview Prep Q3 walks through exactly this misconception causing an order-cancelled event to be processed before order-delivered.',
+          },
+          {
+            wrong: '"Schema Registry is optional infrastructure — you can add it later once CDC is stable"',
+            right: 'Part 04 is explicit that without it, any source schema change silently breaks whatever consumer code was written against the old message shape. This module\'s Error Library shows the version of this failure that happens without a Registry catching it first: consumers crash in production with a confusing deserialization error instead of the connector pausing safely.',
+          },
+          {
+            wrong: '"The Outbox Pattern is over-engineering — just publish to Kafka right after the database write"',
+            right: 'Part 05\'s dual-write section shows both failure directions of the naive approach are real and asymmetric in severity — a lost event under-notifies downstream systems, but a phantom event (Kafka says captured, DB rolled back) can cause an order to ship that was never actually paid for.',
+          },
+          {
+            wrong: '"A replication slot is Debezium\'s internal bookkeeping, not something to actively monitor"',
+            right: 'Part 09\'s monitoring section and this module\'s Error Library agree: an unmonitored slot doesn\'t just fall behind quietly — the source database itself keeps accumulating WAL until disk fills, which can crash the production database, not merely the CDC pipeline.',
+          },
+          {
+            wrong: '"Since Debezium reads the WAL, before-images are always available for every table automatically"',
+            right: 'This module\'s Interview Prep Q2 and Q5 both flag the actual requirement — PostgreSQL only records full before-images when REPLICA IDENTITY FULL is explicitly set on the table; by default only primary-key columns appear in the before image, which is not enough for audit trails or GDPR erasure verification.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1319,7 +1146,7 @@ FAILURE 5: Schema change breaks consumer
           </div>
 
           <Para>
-            FreshCart's legal team informs the data engineering team that under GDPR
+            FreshCart&rsquo;s legal team informs the data engineering team that under GDPR
             (applicable to users in the EU), customers can request deletion of their
             personal data. When a deletion request is processed by the application
             team, the customer row in PostgreSQL is hard-deleted. The data engineering
@@ -1332,90 +1159,77 @@ FAILURE 5: Schema change breaks consumer
             uses an <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>updated_at</code> watermark
             and cannot detect hard deletes. Silver and Gold tables in Snowflake still
             contain data for deleted customers. This is a compliance violation.
+            <strong> The solution: CDC on the customers table.</strong>
           </Para>
 
-          <Para>
-            <strong>The solution: CDC on the customers table.</strong>
-          </Para>
+          <SubSubTitle>Step 1-2 — switch to CDC, handle delete events</SubSubTitle>
 
-          <CodeBox label="GDPR erasure via CDC — complete implementation">{`STEP 1: Switch customers table ingestion from incremental to CDC.
+          <CodeBox label="Decommissioning incremental, and processing the delete">{`STEP 1: Switch customers table ingestion from incremental to CDC.
   Configure Debezium to capture the customers table.
-  Create consumer that writes to bronze.customers (Delta Lake).
+  Create a consumer that writes to bronze.customers (Delta Lake).
   Decommission the incremental Python pipeline.
 
 STEP 2: Handle DELETE events in the consumer:
   def process_customer_event(event: dict) -> None:
       op = event.get('__op') or event.get('op')
-
       if op == 'd':
-          # Customer deletion — GDPR erasure
-          customer_id = event.get('customer_id') or \
+          customer_id = event.get('customer_id') or \\
                         (event.get('before') or {}).get('customer_id')
-
-          # 1. Delete from bronze:
           spark.sql(f"""
-              DELETE FROM delta.\`s3://freshmart-lake/bronze/customers\`
-              WHERE customer_id = \${customer_id}
+              DELETE FROM delta.\`s3://freshcart-lake/bronze/customers\`
+              WHERE customer_id = {customer_id}
           """)
-
-          # 2. Record in erasure log for audit:
           log_erasure(customer_id, reason='gdpr_deletion',
                       erased_at=datetime.now(timezone.utc))
-
-          # 3. Publish erasure event for downstream systems:
           publish_to_kafka('customer.erasure', {
               'customer_id': customer_id,
               'erased_at':   datetime.now(timezone.utc).isoformat(),
           })
-
       elif op in ('c', 'u', 'r'):
-          upsert_to_bronze(event)
+          upsert_to_bronze(event)`}</CodeBox>
 
-STEP 3: dbt Silver model respects deletions:
-  -- models/silver/customers.sql
-  WITH bronze AS (
-      SELECT * FROM \${ref('bronze_customers')}
-  ),
-  -- Exclude any customer IDs in the erasure log:
-  erased AS (
-      SELECT customer_id FROM \${ref('erasure_log')}
-      WHERE erased_at >= DATEADD('day', -30, CURRENT_DATE)
-  )
-  SELECT b.*
-  FROM bronze b
-  LEFT JOIN erased e USING (customer_id)
-  WHERE e.customer_id IS NULL   -- exclude erased customers
+          <SubSubTitle>Step 3-4 — exclude erased customers, cascade to Gold</SubSubTitle>
 
-STEP 4: Cascade deletions to Gold tables:
-  dbt run --select +customers+  -- re-run all models downstream of customers
-  This rebuilds Gold tables without deleted customer data.
+          <CodeBox label="dbt Silver model respects the erasure log">{`-- models/silver/customers.sql
+WITH bronze AS (
+    SELECT * FROM {{ ref('bronze_customers') }}
+),
+erased AS (
+    SELECT customer_id FROM {{ ref('erasure_log') }}
+    WHERE erased_at >= DATEADD('day', -30, CURRENT_DATE)
+)
+SELECT b.*
+FROM bronze b
+LEFT JOIN erased e USING (customer_id)
+WHERE e.customer_id IS NULL   -- exclude erased customers
 
-STEP 5: Purge PII from Kafka (important!):
-  Kafka retains messages for the configured retention period.
-  CDC events for a deleted customer contain PII in the 'before' field.
-  Use Kafka's tombstone mechanism:
-    - Producer sends null-value message with same key (customer_id)
-    - When topic compaction runs, tombstone removes all older messages
-      with that key
-  Or: use Kafka Schema Registry + Confluent's data masking feature
-      to field-level encrypt PII in CDC events.
+-- STEP 4: cascade to Gold
+-- dbt run --select +customers+  (rebuilds all downstream models)`}</CodeBox>
 
-STEP 6: Verify compliance:
-  SELECT COUNT(*) FROM silver.customers WHERE customer_id = \${deleted_id};
+          <SubSubTitle>Step 5-6 — purge Kafka PII, verify compliance</SubSubTitle>
+
+          <CodeBox label="Tombstones for Kafka, and the final verification queries">{`STEP 5: Purge PII from Kafka.
+  Kafka retains messages for the configured retention period, and CDC
+  events for a deleted customer contain PII in the 'before' field.
+  Use Kafka's tombstone mechanism: a null-value message with the same key
+  (customer_id) triggers log compaction, removing all older messages with
+  that key once compaction runs.
+
+STEP 6: Verify compliance.
+  SELECT COUNT(*) FROM silver.customers WHERE customer_id = {deleted_id};
   -- Must return 0
+  SELECT COUNT(*) FROM gold.customer_ltv WHERE customer_id = {deleted_id};
+  -- Must return 0`}</CodeBox>
 
-  SELECT COUNT(*) FROM gold.customer_ltv WHERE customer_id = \${deleted_id};
-  -- Must return 0
-
-  Result: GDPR erasure complete within minutes of the application deletion,
-  well within the 30-day compliance window.`}</CodeBox>
+          <Output>{`Result: GDPR erasure complete within minutes of the application deletion,
+well within the 30-day compliance window.`}</Output>
 
           <Para>
             This pattern — CDC enabling reliable hard-delete propagation — is one of
             the most common business-driven reasons for adopting CDC beyond
             analytics performance. Incremental ingestion simply cannot support
-            right-to-erasure requirements. CDC is the only query-based ingestion
-            alternative to full periodic reloads for propagating deletions.
+            right-to-erasure requirements. CDC is the only alternative to full
+            periodic reloads for propagating deletions.
           </Para>
         </div>
       </section>
@@ -1509,6 +1323,42 @@ The entire pipeline from application deletion to warehouse erasure completes in 
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Joining across two CDC topics directly inside the consumer to enforce business logic ordering',
+            a: 'Part 06 is explicit that ordering is only guaranteed within a single Kafka partition for one primary key — never across topics. The correct pattern, used throughout this module, is to let each stream write to its own Silver table and let dbt do the cross-table join in SQL, which is naturally order-independent.',
+          },
+          {
+            q: 'Assuming the before image is always populated for every UPDATE and DELETE event',
+            a: 'Interview Prep Q2 and Q5 both flag the actual PostgreSQL default: without REPLICA IDENTITY FULL explicitly set on the table, only primary-key columns appear in the before image. Any audit trail or GDPR erasure verification that depends on the full before image needs this set deliberately, table by table.',
+          },
+          {
+            q: 'Writing plain INSERT statements in a CDC consumer instead of an upsert',
+            a: 'Part 03 is explicit that Debezium is at-least-once delivery — a connector restart can and will re-emit already-published events. This module\'s Error Library shows exactly what that produces with plain INSERT: duplicate rows with the same order_id and different statuses after a restart.',
+          },
+          {
+            q: 'Treating a growing replication slot lag as a Kafka-side problem only',
+            a: 'Part 09\'s monitoring section and this module\'s Error Library both make the same point: the WAL that an unconsumed slot retains lives on the SOURCE PostgreSQL server, not in Kafka — so unresolved lag risks filling the production database\'s own disk, not just delaying the pipeline.',
+          },
+          {
+            q: 'Deploying a source schema change (renaming or dropping a column) without coordinating with the CDC team first',
+            a: 'Part 07\'s Scenario 2 and Interview Prep Q4 both show the same failure: an uncoordinated breaking change gets rejected by Schema Registry, and the connector pauses in production until someone intervenes. The staged migration (add new column, backfill, migrate consumers, then drop the old column) is what keeps that change from ever becoming an incident.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1516,12 +1366,12 @@ The entire pipeline from application deletion to warehouse erasure completes in 
 
         {[
           {
-            error: `Debezium connector FAILED: ERROR: logical replication slot "debezium_freshmart" does not exist — after PostgreSQL primary failover`,
+            error: `Debezium connector FAILED: ERROR: logical replication slot "debezium_freshcart" does not exist — after PostgreSQL primary failover`,
             cause: 'During a PostgreSQL primary failover, the promoted replica did not have the replication slot from the old primary. Replication slots are not automatically replicated to standbys in standard PostgreSQL — they exist only on the node where they were created. When the old primary failed and a replica was promoted, the slot was not on the new primary.',
             fix: 'Configure the PostgreSQL cluster to use pg_failover_slots extension, which synchronises replication slots to standby servers before promotion. Alternatively, use a DNS alias (postgres-primary.internal) for Debezium to connect to, and after failover, create a new replication slot on the new primary and restart Debezium with a fresh snapshot. If some WAL events were lost during failover, determine the data loss window from the failover timestamp and backfill that window from an application backup or by running a targeted incremental extraction.',
           },
           {
-            error: `Kafka consumer error: org.apache.kafka.common.errors.SerializationException — Error deserializing key/value for partition freshmart.cdc.public.orders-0 — Schema not found`,
+            error: `Kafka consumer error: org.apache.kafka.common.errors.SerializationException — Error deserializing key/value for partition freshcart.cdc.public.orders-0 — Schema not found`,
             cause: 'The consumer is attempting to deserialize a message using a schema ID that does not exist in the Schema Registry. Most common causes: the Schema Registry was reset or its data was deleted, the consumer is pointing to a different Schema Registry than the producer, or a message was published before the schema was properly registered in the Registry.',
             fix: 'Verify the consumer and producer are configured with the same Schema Registry URL. Check if the schema ID referenced in the failing message exists: GET http://schema-registry:8081/schemas/ids/{schema_id}. If the schema does not exist, it was either deleted from the Registry or the consumer is reading from a different environment\'s topic. Re-register the schema by restarting the Debezium connector with snapshot.mode=schema_only — it will re-register all table schemas. If the schema was intentionally deleted, reset consumer offset to after the last message using the deleted schema.',
           },
@@ -1533,7 +1383,7 @@ The entire pipeline from application deletion to warehouse erasure completes in 
           {
             error: `PostgreSQL error: could not write to file "pg_wal/000000010000000100000000": No space left on device — source database disk full due to replication slot lag`,
             cause: 'The Debezium consumer has been stopped or is too slow to consume WAL events. PostgreSQL\'s replication slot retains WAL segments until the consumer confirms it has read them. With the consumer not advancing the confirmed_flush_lsn, PostgreSQL accumulated days or weeks of WAL on the source server\'s disk until it was full.',
-            fix: 'Emergency: immediately drop the replication slot to allow PostgreSQL to clean up WAL and free disk space: SELECT pg_drop_replication_slot(\'debezium_freshmart\'). This accepts data loss — accept it to prevent a complete database outage. Once disk pressure is resolved, create a new slot and restart Debezium with a fresh snapshot. Long-term: set up monitoring on pg_replication_slots lag with alerts at 1 GB and 10 GB thresholds. Add heartbeats to the connector. Consider setting a max_slot_wal_keep_size in postgresql.conf to limit how much WAL a slot can retain.',
+            fix: 'Emergency: immediately drop the replication slot to allow PostgreSQL to clean up WAL and free disk space: SELECT pg_drop_replication_slot(\'debezium_freshcart\'). This accepts data loss — accept it to prevent a complete database outage. Once disk pressure is resolved, create a new slot and restart Debezium with a fresh snapshot. Long-term: set up monitoring on pg_replication_slots lag with alerts at 1 GB and 10 GB thresholds. Add heartbeats to the connector. Consider setting a max_slot_wal_keep_size in postgresql.conf to limit how much WAL a slot can retain.',
           },
           {
             error: `CDC consumer produces duplicate rows in Silver table — the same order_id appears twice with different statuses after a Debezium connector restart`,
@@ -1583,7 +1433,7 @@ The entire pipeline from application deletion to warehouse erasure completes in 
         'CDC for data lakes: do not write each event directly to S3. Use a Spark Structured Streaming micro-batch consumer (5-minute trigger) that reads from Kafka and upserts to Delta Lake. Run Delta OPTIMIZE daily to compact the small files the micro-batch pattern creates. Handle DELETE events explicitly — mark as soft-deleted or use Delta MERGE DELETE clause.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
