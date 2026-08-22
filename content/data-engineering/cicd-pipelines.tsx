@@ -19,13 +19,26 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 const SubTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 style={{ fontSize: 'clamp(16px,1.8vw,20px)', fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text)', marginBottom: 12, fontFamily: 'var(--font-display)' }}>{children}</h3>
 )
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
-const CodeBox = ({ children, label }: { children: string | React.ReactNode; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+const CodeBox = ({ children, label }: { children: string; label?: string }) => (
+  <div style={{ marginBottom: 16 }}>
     {label && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>{label}</div>}
     <pre style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.9, color: 'var(--text)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{ background: 'transparent', border: '1px dashed var(--border)', borderRadius: 10, padding: '14px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.8, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
       <code>{children}</code>
     </pre>
   </div>
@@ -33,6 +46,15 @@ const CodeBox = ({ children, label }: { children: string | React.ReactNode; labe
 const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>{children}</div>
+)
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)', borderRadius: 10, padding: '16px 20px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent2)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
 )
 
 interface TableRow { [key: string]: string }
@@ -58,8 +80,8 @@ export default function CICDPipelinesModule() {
       title="CI/CD for Data Pipelines"
       description="Testing dbt models in CI, environment promotion, blue-green deployments, Airflow deployment patterns, slim CI, and building a safe deployment pipeline for data transformations."
       section="Data Engineering — Module 44"
-      readTime="60 min"
-      updatedAt="March 2026"
+      readTime="70 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Data Pipelines Need CI/CD ───────────────────── */}
@@ -72,18 +94,14 @@ export default function CICDPipelinesModule() {
           to staging, run integration tests, deploy to production. Data pipeline
           CI/CD shares this structure but has unique challenges. A dbt model
           change does not just change code — it changes the data in a production
-          table that analysts are querying right now. A schema change in a Gold
-          model can silently break three Metabase dashboards. A wrong SQL
-          expression produces incorrect numbers that make it into a CFO report.
+          table that analysts are querying right now.
         </Para>
 
         <Para>
-          The stakes of a bad data deployment are different from a bad software
-          deployment. A software bug surfaces as an error page that users see and
-          report. A data bug surfaces as a wrong number in a report that looks
-          correct until someone notices it does not match expectations — often
-          days later, after decisions have been made. This asymmetry means data
-          CI/CD must be more rigorous about testing before deployment, not less.
+          A software bug surfaces as an error page users see and report. A data
+          bug surfaces as a wrong number that looks correct until someone
+          notices it doesn&rsquo;t match expectations — often days later. This module
+          builds FreshCart&rsquo;s dbt and Airflow CI/CD pipeline around that asymmetry.
         </Para>
 
         <HighlightBox>
@@ -106,6 +124,13 @@ export default function CICDPipelinesModule() {
             ))}
           </div>
         </HighlightBox>
+
+        <TryThis>
+          Think of the last time you (or a teammate) pushed a schema change.
+          Was there anything automated that would have caught a renamed column
+          before it reached a dashboard? If the honest answer is &ldquo;no,&rdquo; that&rsquo;s
+          exactly the gap this module&rsquo;s Real World section walks through.
+        </TryThis>
       </section>
 
       <Divider />
@@ -116,123 +141,78 @@ export default function CICDPipelinesModule() {
         <SectionTitle>Environment Strategy — Dev, Staging, and Production</SectionTitle>
 
         <Para>
-          A data platform needs at least two environments — development and
-          production — and ideally three, adding a staging environment that
-          mirrors production data and configuration. Each environment serves
-          a specific purpose in the promotion pipeline, and the configuration
-          must ensure that code changes flow in one direction: dev → staging → prod.
+          A data platform needs at least dev and production, and ideally a
+          staging/CI environment that mirrors production data. Each environment
+          serves a specific purpose, and configuration must ensure code flows
+          one direction: dev → staging → prod.
         </Para>
 
-        <CodeBox label="Environment strategy — what each environment provides and how dbt targets map">{`ENVIRONMENT HIERARCHY:
+        <CodeBox label="Three environments, what each is for">{`DEV — individual developer sandbox
+  Data: subset of production (last 7 days). Schema: dev_{developer_name}
+  Isolation: complete — dev changes cannot affect staging or prod
+  Lifespan: created on branch checkout, deleted after merge
 
-  DEV (developer sandbox)
-  ─────────────────────────────────────────────────────────────────────────
-  Purpose:     Individual developer workspace for iterative development
-  Data:        Subset of production data (last 7 days, sampled or full)
-  Schema:      dev_{developer_name} or dev_{branch_name}
-               e.g. dev_priya_feature_order_tier
-  Access:      Developer's personal credentials
-  Isolation:   Completely isolated — dev changes cannot affect staging or prod
-  Cost:        Low — small data volume, developer queries only
-  Lifespan:    Created on branch checkout, deleted after merge
+STAGING / CI — automated testing environment
+  Data: clone of production (Zero-Copy Clone). Schema: ci_{PR_number}
+  Isolation: each PR gets its own schema
+  Lifespan: created on PR open, deleted after PR merge
 
-  STAGING / CI (automated testing environment)
-  ─────────────────────────────────────────────────────────────────────────
-  Purpose:     Run automated tests against a clean copy of recent production data
-  Data:        Clone of production data (last 30 days) OR Snowflake Zero-Copy Clone
-  Schema:      ci_{PR_number} or staging_{branch_name}
-  Access:      CI service account (read prod, write staging schema)
-  Isolation:   Each PR gets its own isolated staging schema
-  Cost:        Moderate — production data volume but only active during CI
-  Lifespan:    Created on PR open, deleted after PR merge
+PRODUCTION — serves real analysts and BI tools
+  Data: full production data, updated by live pipelines
+  Access: pipeline service accounts write; analysts read-only
+  Lifespan: permanent`}</CodeBox>
 
-  PRODUCTION
-  ─────────────────────────────────────────────────────────────────────────
-  Purpose:     Serves real analytical consumers (analysts, BI tools, APIs)
-  Data:        Full production data, updated by live pipelines
-  Schema:      silver, gold (canonical schema names)
-  Access:      Pipeline service accounts only (write); analysts read-only
-  Isolation:   No direct developer write access — changes only via PR + CI
-  Cost:        Full production compute and storage
-  Lifespan:    Permanent
+        <SubSubTitle>dbt profiles.yml — one file, three targets</SubSubTitle>
 
-
-dbt TARGET CONFIGURATION (profiles.yml):
-
-freshmart:
-  target: dev   # default target for local development
+        <CodeBox label="profiles.yml — dev, ci, and prod targets">{`freshcart:
+  target: dev
 
   outputs:
     dev:
-      type:     snowflake
-      account:  freshmart.snowflake.com
-      user:     "{{ env_var('SNOWFLAKE_USER') }}"
-      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
-      role:     analyst_role
-      database: freshmart_dev
-      schema:   "dev_{{ env_var('DBT_DEV_SCHEMA', 'default') }}"
-      # Local: schema = dev_priya_feature_xyz
-      # CI:    schema = ci_pr_142
+      type: snowflake
+      account: freshcart.snowflake.com
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      role: analyst_role
+      database: freshcart_dev
+      schema: "dev_{{ env_var('DBT_DEV_SCHEMA', 'default') }}"
 
     ci:
-      type:     snowflake
-      account:  freshmart.snowflake.com
-      user:     "{{ env_var('CI_SNOWFLAKE_USER') }}"
-      password: "{{ env_var('CI_SNOWFLAKE_PASSWORD') }}"
-      role:     ci_service_role
-      database: freshmart_ci
-      schema:   "ci_{{ env_var('PR_NUMBER', 'manual') }}"
-      # Each PR gets: ci_142, ci_143, etc.
+      type: snowflake
+      role: ci_service_role
+      database: freshcart_ci
+      schema: "ci_{{ env_var('PR_NUMBER', 'manual') }}"   # ci_142, ci_143, ...
 
     prod:
-      type:     snowflake
-      account:  freshmart.snowflake.com
-      user:     "{{ env_var('PROD_SNOWFLAKE_USER') }}"
-      password: "{{ env_var('PROD_SNOWFLAKE_PASSWORD') }}"
-      role:     pipeline_role
-      database: freshmart_prod
-      schema:   silver    # or gold, depending on the model group`}</CodeBox>
+      type: snowflake
+      role: pipeline_role
+      database: freshcart_prod
+      schema: silver   # or gold, depending on the model group`}</CodeBox>
 
-        <SubTitle>Snowflake Zero-Copy Clone — cheap production-like staging</SubTitle>
+        <SubSubTitle>Snowflake Zero-Copy Clone — production-like staging at near-zero cost</SubSubTitle>
 
-        <CodeBox label="Snowflake Zero-Copy Clone — production data for CI at near-zero cost">{`PROBLEM: Running CI tests against production data is expensive.
-  Cloning production tables for each PR: copies 10 TB → expensive and slow.
+        <Para>
+          Cloning 10 TB of production data for every PR would be expensive and
+          slow. Snowflake&rsquo;s Zero-Copy Clone creates an instant snapshot that
+          shares data pages with the source until rows are modified.
+        </Para>
 
-SOLUTION: Snowflake Zero-Copy Clone
-  Creates an instant snapshot of a database/schema at zero storage cost.
-  Clone shares data pages with source until rows are modified.
-  Creating a 10 TB clone: 0-5 seconds, $0.00 storage (until writes)
-
--- Clone production schemas for a PR:
-CREATE OR REPLACE DATABASE freshmart_ci_pr_142
-  CLONE freshmart_prod;
--- Creates an identical copy of freshmart_prod in ~2 seconds.
--- Storage cost: $0 (shared pages with freshmart_prod).
--- Write operations on the clone use new storage (small for CI tests).
-
--- CI SETUP SCRIPT:
-def create_ci_environment(pr_number: int) -> str:
-    """Create an isolated CI environment using Zero-Copy Clone."""
-    ci_db = f'freshmart_ci_pr_{pr_number}'
+        <CodeBox label="Creating and tearing down an isolated CI database per PR">{`def create_ci_environment(pr_number: int) -> str:
+    ci_db = f'freshcart_ci_pr_{pr_number}'
     snowflake_conn.execute(f"""
         CREATE OR REPLACE DATABASE {ci_db}
-        CLONE freshmart_prod
+        CLONE freshcart_prod
         DATA_RETENTION_TIME_IN_DAYS = 1
     """)
     return ci_db
 
 def teardown_ci_environment(pr_number: int) -> None:
-    """Clean up CI environment after tests complete."""
-    ci_db = f'freshmart_ci_pr_{pr_number}'
-    snowflake_conn.execute(f'DROP DATABASE IF EXISTS {ci_db}')
+    snowflake_conn.execute(f'DROP DATABASE IF EXISTS freshcart_ci_pr_{pr_number}')
 
-# In CI pipeline:
-# 1. On PR open:    create_ci_environment(pr_number)
-# 2. Run dbt tests: dbt test --target ci
-# 3. On PR close:   teardown_ci_environment(pr_number)
+# In the CI pipeline: create on PR open → dbt test --target ci → teardown on PR close`}</CodeBox>
 
-# BigQuery equivalent: BigQuery snapshots or dataset copies
-# gcloud bigquery cp freshmart_prod freshmart_ci_pr_142 --location=asia-south1`}</CodeBox>
+        <Output>{`$ python -c "from scripts.ci import create_ci_environment; create_ci_environment(142)"
+Creating database freshcart_ci_pr_142 as a clone of freshcart_prod...
+Done in 2.1s.  Storage cost: $0.00 (shared pages with freshcart_prod)`}</Output>
       </section>
 
       <Divider />
@@ -243,207 +223,122 @@ def teardown_ci_environment(pr_number: int) -> None:
         <SectionTitle>dbt CI — What to Run on Every Pull Request</SectionTitle>
 
         <Para>
-          A dbt CI pipeline runs on every pull request before merge. It catches
-          compile errors, test failures, and schema breaking changes before they
-          reach production. The key challenge is speed — a CI run that takes
-          45 minutes blocks the developer and tempts them to merge without
-          waiting. The solution is slim CI: only run tests on models that
-          were changed or depend on changed models.
+          A dbt CI pipeline runs on every pull request before merge. The key
+          challenge is speed — a 45-minute CI run tempts developers to merge
+          without waiting. The answer is slim CI: only test models that were
+          changed, or depend on changed models.
         </Para>
 
-        <CodeBox label="GitHub Actions dbt CI — complete workflow">{`# .github/workflows/dbt_ci.yml
-name: dbt CI
+        <SubSubTitle>The workflow shell — trigger, environment, and setup</SubSubTitle>
 
+        <CodeBox label=".github/workflows/dbt_ci.yml — top half">{`name: dbt CI
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'dbt/**'
-      - '.github/workflows/dbt_ci.yml'
+    paths: ['dbt/**']
 
 jobs:
   dbt-ci:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     env:
-      DBT_PROFILES_DIR:    /home/runner/.dbt
-      CI_SNOWFLAKE_USER:   \${{ secrets.CI_SNOWFLAKE_USER }}
+      CI_SNOWFLAKE_USER: \${{ secrets.CI_SNOWFLAKE_USER }}
       CI_SNOWFLAKE_PASSWORD: \${{ secrets.CI_SNOWFLAKE_PASSWORD }}
-      PR_NUMBER:           \${{ github.event.pull_request.number }}
-
+      PR_NUMBER: \${{ github.event.pull_request.number }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0    # needed for dbt --select state:modified
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: pip
-
-      - name: Install dbt
-        run: pip install dbt-snowflake==1.8.0 dbt-utils
-
-      - name: Write dbt profiles
-        run: |
-          mkdir -p /home/runner/.dbt
-          cat > /home/runner/.dbt/profiles.yml << 'EOF'
-          freshmart:
-            target: ci
-            outputs:
-              ci:
-                type: snowflake
-                account: freshmart.snowflake.com
-                user: "{{ env_var('CI_SNOWFLAKE_USER') }}"
-                password: "{{ env_var('CI_SNOWFLAKE_PASSWORD') }}"
-                role: ci_service_role
-                database: "freshmart_ci_pr_{{ env_var('PR_NUMBER') }}"
-                schema: dbt_ci
-                warehouse: CI_WH
-                threads: 8
-          EOF
-
-      - name: Create CI database (Snowflake Zero-Copy Clone)
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }   # needed for dbt --select state:modified
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11', cache: pip }
+      - run: pip install dbt-snowflake==1.8.0 dbt-utils
+      - name: Create CI database (Zero-Copy Clone)
         run: python scripts/ci/create_ci_db.py --pr \${{ github.event.pull_request.number }}
+      - run: dbt deps
+        working-directory: dbt`}</CodeBox>
 
-      - name: dbt deps (install packages)
-        working-directory: dbt
-        run: dbt deps
+        <SubSubTitle>The checks that actually catch problems</SubSubTitle>
 
-      - name: dbt compile (catch SQL syntax errors)
+        <CodeBox label=".github/workflows/dbt_ci.yml — bottom half">{`      - name: dbt compile (catch SQL syntax errors)
         working-directory: dbt
         run: dbt compile --target ci
 
       - name: dbt run — SLIM CI (only changed models + downstream)
         working-directory: dbt
-        run: |
-          # Slim CI: only run models modified in this PR + their dependents.
-          # This runs 5-20 models instead of all 150. CI time: 4 min vs 45 min.
-          dbt run --target ci \\
-            --select state:modified+ \\
-            --defer \\
-            --state ./prod_artifacts \\
-            --exclude tag:skip_ci
+        run: dbt run --target ci --select state:modified+ --defer --state ./prod_artifacts
 
       - name: dbt test — tests for changed models + downstream
         working-directory: dbt
-        run: |
-          dbt test --target ci \\
-            --select state:modified+ \\
-            --defer \\
-            --state ./prod_artifacts \\
-            --store-failures
-
-      - name: dbt docs — generate for PR preview
-        working-directory: dbt
-        if: always()
-        run: dbt docs generate --target ci
+        run: dbt test --target ci --select state:modified+ --defer --state ./prod_artifacts --store-failures
 
       - name: Check for breaking schema changes
         run: python scripts/ci/check_schema_changes.py --pr \${{ github.event.pull_request.number }}
 
       - name: Teardown CI database
-        if: always()   # clean up even if previous steps failed
-        run: python scripts/ci/teardown_ci_db.py --pr \${{ github.event.pull_request.number }}
-
-      - name: Post test results to PR
         if: always()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const results = require('./dbt/target/run_results.json');
-            const passed  = results.results.filter(r => r.status === 'pass').length;
-            const failed  = results.results.filter(r => r.status === 'fail').length;
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo:  context.repo.repo,
-              body:  \`## dbt CI Results\\n✅ \${passed} passed  ❌ \${failed} failed\`,
-            });`}</CodeBox>
+        run: python scripts/ci/teardown_ci_db.py --pr \${{ github.event.pull_request.number }}`}</CodeBox>
 
-        <SubTitle>Slim CI — running only changed models with --defer</SubTitle>
+        <Output>{`✓ dbt compile        12s
+✓ dbt run (4 models) 48s   ← slim CI: 4 of 150 models
+✓ dbt test (4 models) 22s
+✓ schema change check 3s   — no breaking changes detected
+✓ teardown             4s
+Total: 1m 29s`}</Output>
 
-        <CodeBox label="Slim CI — dbt state:modified and --defer explained">{`SLIM CI CONCEPTS:
+        <SubSubTitle>Slim CI — how state:modified+ and --defer actually work together</SubSubTitle>
 
-1. STATE-BASED SELECTION (state:modified):
-   dbt compares the current code (manifest.json from the PR branch)
-   to a reference state (manifest.json from the last production run).
-   Only models that changed — or depend on changed models — are selected.
+        <Para>
+          State-based selection compares the PR&rsquo;s manifest to a reference
+          manifest from the last production run. Only changed models — plus
+          their dependents — are selected.
+        </Para>
 
-   state:modified     → only models whose SQL or config changed
-   state:modified+    → changed models + all downstream dependents
-   +state:modified    → changed models + all upstream ancestors
-   +state:modified+   → full subtree around changed models
+        <CodeBox label="What state:modified+ actually selects, for a one-model change">{`PR changes: silver.orders
 
-   EXAMPLE: PR changes silver.orders.
-   state:modified+ selects:
-     silver.orders                  ← changed directly
-     gold.daily_revenue             ← downstream of silver.orders
-     gold.customer_ltv              ← downstream of silver.orders
-     gold.fct_orders_wide           ← downstream of silver.orders
-   Skips: silver.customers, silver.payments, unrelated gold models.
-   Runs 4 models instead of 80. CI time: ~4 min instead of 45 min.
+state:modified+  selects:
+  silver.orders          ← changed directly
+  gold.daily_revenue     ← downstream of silver.orders
+  gold.customer_ltv      ← downstream of silver.orders
+  gold.fct_orders_wide   ← downstream of silver.orders
+Skips: silver.customers, silver.payments, and all unrelated gold models.
+Runs 4 models instead of 150. CI time: ~1 min instead of 45 min.`}</CodeBox>
 
-2. --DEFER (use production data for unmodified upstream models):
-   When running silver.orders in CI, it needs bronze.orders as input.
-   bronze.orders exists in production but not in the CI database.
-   --defer tells dbt: for models NOT in the CI run, use the production
-   version of that model from the prod database.
+        <Para>
+          The remaining problem: <code>silver.orders</code> reads from{' '}
+          <code>bronze.orders</code>, which isn&rsquo;t part of this run&rsquo;s selection and
+          doesn&rsquo;t exist in the CI schema. <code>--defer</code> tells dbt to read
+          unselected upstream models from production instead of failing.
+        </Para>
 
-   Without --defer:
-     silver.orders → tries to read from ci_pr_142.bronze.orders → NOT FOUND → error
+        <CodeBox label="Without --defer vs with it">{`# Without --defer:
+#   silver.orders → tries freshcart_ci_pr_142.bronze.orders → NOT FOUND → error
 
-   With --defer --state ./prod_artifacts:
-     silver.orders → reads from freshmart_prod.bronze.orders → works! ✓
-   The CI environment only writes the models in state:modified+.
-   Everything else is deferred to production data.
+# With --defer --state ./prod_artifacts:
+#   silver.orders → reads freshcart_prod.bronze.orders → works
 
-3. PROD ARTIFACTS (the reference state):
-   prod_artifacts/manifest.json is the manifest from the last successful
-   production run. It is stored as:
-     - An artifact in the CI/CD system (GitHub Actions cache/artifact)
-     - Or fetched from dbt Cloud's API
-     - Or stored in S3 and downloaded at CI start
+# prod_artifacts/manifest.json is the reference — kept current in S3:
+aws s3 cp s3://freshcart-ci-artifacts/dbt/manifest.json ./prod_artifacts/   # at CI start
+aws s3 cp ./target/manifest.json s3://freshcart-ci-artifacts/dbt/          # after every prod deploy`}</CodeBox>
 
-   FETCHING PROD MANIFEST FROM S3:
-   aws s3 cp s3://freshmart-ci-artifacts/dbt/manifest.json ./prod_artifacts/
-   aws s3 cp s3://freshmart-ci-artifacts/dbt/catalog.json  ./prod_artifacts/
+        <SubSubTitle>Detecting breaking schema changes automatically</SubSubTitle>
 
-   UPDATING PROD MANIFEST after successful prod deployment:
-   aws s3 cp ./target/manifest.json s3://freshmart-ci-artifacts/dbt/
-   # Runs at end of every successful production dbt run
+        <CodeBox label="scripts/ci/check_schema_changes.py">{`def detect_breaking_changes(current_manifest: dict, prod_manifest: dict) -> list[str]:
+    breaking = []
+    for node_id, node in prod_manifest['nodes'].items():
+        if node_id not in current_manifest['nodes']:
+            breaking.append(f"Model removed: {node['name']}")
+            continue
+        prod_cols = {c: v['data_type'] for c, v in node.get('columns', {}).items()}
+        current_cols = {c: v['data_type'] for c, v in current_manifest['nodes'][node_id].get('columns', {}).items()}
+        for col, dtype in prod_cols.items():
+            if col not in current_cols:
+                breaking.append(f"{node['name']}.{col} removed")
+            elif current_cols[col] != dtype:
+                breaking.append(f"{node['name']}.{col}: {dtype} → {current_cols[col]}")
+    return breaking`}</CodeBox>
 
-
-4. SCHEMA CHANGE DETECTION:
-   A script that compares current manifest to prod manifest and
-   flags breaking changes: removed columns, type changes, renamed columns.
-
-   # scripts/ci/check_schema_changes.py
-   def detect_breaking_changes(
-       current_manifest: dict,
-       prod_manifest:    dict,
-   ) -> list[str]:
-       breaking = []
-       for node_id, node in prod_manifest['nodes'].items():
-           if node_id not in current_manifest['nodes']:
-               breaking.append(f"Model removed: {node['name']}")
-               continue
-           prod_cols    = {c: v['data_type']
-                          for c, v in node.get('columns', {}).items()}
-           current_cols = {c: v['data_type']
-                          for c, v in current_manifest['nodes'][node_id]
-                          .get('columns', {}).items()}
-           for col, dtype in prod_cols.items():
-               if col not in current_cols:
-                   breaking.append(f"{node['name']}.{col} removed")
-               elif current_cols[col] != dtype:
-                   breaking.append(
-                       f"{node['name']}.{col}: {dtype} → {current_cols[col]}"
-                   )
-       return breaking`}</CodeBox>
+        <Output>{`BREAKING SCHEMA CHANGES DETECTED:
+  - gold.daily_revenue.net_revenue removed
+If this is intentional, update all downstream consumers first.`}</Output>
       </section>
 
       <Divider />
@@ -454,116 +349,61 @@ jobs:
         <SectionTitle>Deploying to Production — Safe Deployment Patterns for dbt</SectionTitle>
 
         <Para>
-          Deploying dbt changes to production requires more care than deploying
-          application code. A full dbt run on production tables that takes 3 hours
-          cannot be rolled back instantly if a bug is found 2 hours in. Safe
-          deployment patterns reduce the blast radius and enable fast recovery.
+          A full dbt run on production tables that takes 3 hours cannot be
+          rolled back instantly if a bug is found 2 hours in. Safe deployment
+          patterns reduce blast radius and enable fast recovery.
         </Para>
 
-        <CodeBox label="Production deployment strategies for dbt — from simplest to safest">{`STRATEGY 1: DIRECT DEPLOYMENT (simplest — fine for most cases)
-  On merge to main: run dbt in production environment.
-  Any test failure blocks the deployment.
-  Rollback: re-run the previous git tag.
+        <SubSubTitle>Strategy 1 — direct deployment, for most changes</SubSubTitle>
 
-  GITHUB ACTIONS — PRODUCTION DEPLOY:
-  name: dbt Production Deploy
-  on:
-    push:
-      branches: [main]
+        <CodeBox label=".github/workflows — deploy on merge to main">{`on:
+  push:
+    branches: [main]
 
-  jobs:
-    deploy:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: Deploy to production
-          run: |
-            dbt deps
-            dbt run  --target prod --vars '{"run_date": "{{ ds }}"}'
-            dbt test --target prod
-        - name: Update prod artifacts in S3
-          run: aws s3 cp ./target/manifest.json s3://freshmart-ci-artifacts/dbt/
+jobs:
+  deploy:
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          dbt deps
+          dbt run --target prod
+          dbt test --target prod
+      - run: aws s3 cp ./target/manifest.json s3://freshcart-ci-artifacts/dbt/`}</CodeBox>
 
+        <SubSubTitle>Strategy 2 — blue-green, for high-risk Gold changes</SubSubTitle>
 
-STRATEGY 2: BLUE-GREEN DEPLOYMENT (for high-risk Gold changes)
-  Build the new version of the table in a shadow schema.
-  Validate it. Atomically swap the schema pointer.
-  Rollback: swap back to the old schema (still exists).
+        <CodeBox label="Build in a shadow schema, validate, then atomically swap">{`def blue_green_deploy_gold_model(model_name: str, run_date: str):
+    # Step 1: build in a shadow schema — not live to analysts yet
+    subprocess.run(['dbt', 'run', '--target', 'prod', '--select', model_name,
+        '--vars', json.dumps({'run_date': run_date, 'target_schema': 'gold_shadow'})], check=True)
 
-  IMPLEMENTATION IN SNOWFLAKE:
-  def blue_green_deploy_gold_model(model_name: str, run_date: str):
-      """
-      Build the new version in a shadow schema.
-      If tests pass: swap shadow → production.
-      Old production schema preserved for 24h for rollback.
-      """
-      # Step 1: Build in shadow schema (not live to analysts):
-      subprocess.run([
-          'dbt', 'run', '--target', 'prod',
-          '--select', model_name,
-          '--vars', json.dumps({'run_date': run_date,
-                                'target_schema': 'gold_shadow'}),
-      ], check=True)
+    # Step 2: test the shadow schema before anyone sees it
+    subprocess.run(['dbt', 'test', '--target', 'prod', '--select', model_name,
+        '--vars', json.dumps({'target_schema': 'gold_shadow'})], check=True)
 
-      # Step 2: Run tests against shadow schema:
-      subprocess.run([
-          'dbt', 'test', '--target', 'prod',
-          '--select', model_name,
-          '--vars', json.dumps({'target_schema': 'gold_shadow'}),
-      ], check=True)
+    # Step 3: atomic swap — analysts see the new version immediately
+    conn.execute("BEGIN;")
+    conn.execute("ALTER SCHEMA freshcart_prod.gold RENAME TO freshcart_prod.gold_old_20260317;")
+    conn.execute("ALTER SCHEMA freshcart_prod.gold_shadow RENAME TO freshcart_prod.gold;")
+    conn.execute("COMMIT;")   # both renames atomic — never a window with no 'gold' schema
 
-      # Step 3: Atomic schema swap (analysts see new version immediately):
-      conn.execute("""
-          ALTER SCHEMA freshmart_prod.gold
-          RENAME TO freshmart_prod.gold_old_20260317;
-      """)
-      conn.execute("""
-          ALTER SCHEMA freshmart_prod.gold_shadow
-          RENAME TO freshmart_prod.gold;
-      """)
-      # Analysts querying gold.daily_revenue now see the new version.
-      # If rollback needed: rename back.
+    # Step 4: keep the old schema for 24h, then drop it
+    schedule_schema_drop('gold_old_20260317', delay_hours=24)`}</CodeBox>
 
-      # Step 4: Drop old schema after 24h validation window:
-      schedule_schema_drop('gold_old_20260317', delay_hours=24)
+        <SubSubTitle>Strategy 3 — incremental deployment, for schema migrations on huge tables</SubSubTitle>
 
+        <CodeBox label="Add nullable → backfill separately → add the constraint last">{`-- Step 1: add the column as nullable (this dbt run) — analysts see NULL, no breakage
+-- Step 2: backfill as a SEPARATE job, so it doesn't lock the table for 3 hours
+UPDATE silver.orders SET tip_amount = 0.0
+WHERE tip_amount IS NULL AND created_at < '2026-03-17';   -- rows before the feature launch
+-- Step 3: only once backfill is complete, add not_null to schema.yml`}</CodeBox>
 
-STRATEGY 3: INCREMENTAL DEPLOYMENT (for schema migrations)
-  When adding a new column to a large Silver table:
-  Step 1: Add column as nullable in the same dbt run.
-          Analysts see NULL for the new column — no breakage.
-  Step 2: Backfill the new column value for all existing rows.
-          Run as a separate job with progress tracking.
-  Step 3: Once backfill complete: apply not_null constraint.
-          Remove the temporary nullable flag.
-
-  This prevents a 3-hour "backfill lock" on a 500M-row table
-  that would block analysts from querying it.
-
-  -- Step 1: Add column (dbt schema.yml change):
-  -- new column 'tip_amount' added with no tests initially.
-  -- Step 2: Backfill script (run separately):
-  UPDATE silver.orders
-  SET tip_amount = 0.0
-  WHERE tip_amount IS NULL
-    AND created_at < '2026-03-17';   -- all rows before the feature launch
-  -- Step 3: Add not_null test to schema.yml after backfill completes.
-
-
-ROLLBACK STRATEGY:
-  dbt does not have a native "rollback" command.
-  Rollback options:
-  1. Revert the git commit and redeploy:
-     git revert HEAD && git push origin main → CI/CD re-deploys old version
-  2. Delta Lake time travel:
-     RESTORE TABLE silver.orders TO VERSION AS OF 41
-     (restores the Silver table to the state before the bad deploy)
-  3. Blue-green: swap back to old schema (if blue-green was used)
-
-  WHICH TO USE:
-  Simple model logic change: git revert + redeploy (safest, cleanest)
-  Large data change: Delta time travel (fastest data recovery)
-  Critical Gold model: blue-green swap (immediate, no recompute needed)`}</CodeBox>
+        <Callout type="tip">
+          dbt has no native rollback command. Pick the mechanism to match the
+          failure: a logic error → <code>git revert</code> and redeploy; a large
+          data corruption → Delta Lake&rsquo;s <code>RESTORE TABLE ... TO VERSION AS OF</code>;
+          a bad Gold deploy that used blue-green → swap the schema back.
+        </Callout>
       </section>
 
       <Divider />
@@ -574,118 +414,70 @@ ROLLBACK STRATEGY:
         <SectionTitle>Airflow Deployment — DAG Versioning and Safe Updates</SectionTitle>
 
         <Para>
-          Deploying Airflow DAGs has unique challenges compared to dbt models.
           A DAG change takes effect the next time the scheduler parses it —
-          typically within 30 seconds. If the change modifies a DAG that is
-          currently running, the in-progress run may behave unexpectedly with
-          the new code. DAG versioning and safe deployment patterns prevent
-          mid-run disruptions.
+          typically within 30 seconds. If it modifies a DAG that&rsquo;s currently
+          running, the in-progress run may behave unexpectedly.
         </Para>
 
-        <CodeBox label="Airflow deployment patterns — DAG versioning and CI/CD">{`AIRFLOW DAG DEPLOYMENT APPROACHES:
+        <SubSubTitle>Git Sync — the common path, and its real risk</SubSubTitle>
 
-APPROACH 1: GIT SYNC (most common for managed Airflow)
-  Airflow reads DAG files directly from a Git repository.
-  Any push to the main branch is reflected in Airflow within 30-60 seconds.
-  Used by: Google Cloud Composer, MWAA, Astronomer.
+        <CodeBox label="Push to main → live in Airflow within a minute">{`# Used by Cloud Composer, MWAA, Astronomer:
+# push to main → CI passes → Git Sync detects the change → scheduler re-parses → live
 
-  FLOW:
-    Developer pushes → CI tests pass → merge to main → Git Sync detects change
-    → Airflow scheduler re-parses DAG file → change is live
+# RISK: no staging step for Airflow DAGs.
+#   A syntax error makes the DAG disappear from the UI entirely.
+#   A schedule change takes effect immediately — possibly mid-run.
 
-  RISK: no staging for Airflow DAGs.
-    A syntax error in a DAG file makes the DAG disappear from the UI.
-    A schedule change takes effect immediately, possibly mid-run.
+# MITIGATION:
+#   python -m py_compile dags/*.py    — catch syntax errors before merge
+#   airflow dags list-import-errors   — catch import errors before merge
+#   pause the DAG for genuinely risky changes: pause → deploy → verify → unpause`}</CodeBox>
 
-  MITIGATION:
-    - Run python -m py_compile dags/*.py in CI to catch syntax errors
-    - Run airflow dags list-import-errors in CI to catch import errors
-    - Use DAG pausing for risky changes (pause, deploy, verify, unpause)
+        <SubSubTitle>Versioning the DAG ID for breaking schedule or structure changes</SubSubTitle>
 
+        <CodeBox label="Don't mutate a running DAG's schedule — version it instead">{`# RISKY: modifying the existing DAG's schedule mid-stream
+# DAG('freshcart_morning_pipeline', schedule='0 2 * * *', ...) → schedule='0 6 * * *'
+# a run already in progress sees the new schedule on its next evaluation
 
-APPROACH 2: DAG VERSIONING (for breaking schedule/structure changes)
-  When changing a DAG's schedule or removing tasks, create a new DAG ID.
-  Old DAG runs to completion. New DAG takes over from next run.
+# SAFER: version the DAG ID
+DAG('freshcart_morning_pipeline_v2', schedule='0 6 * * *', ...)
+# v1 finishes its current cycle undisturbed; v2 starts fresh on the new schedule
+# once v1 has no more in-progress runs, delete it`}</CodeBox>
 
-  # Bad approach: modify existing DAG schedule mid-stream
-  DAG('freshmart_morning_pipeline', schedule='0 2 * * *', ...)
-  # Change to:
-  DAG('freshmart_morning_pipeline', schedule='0 6 * * *', ...)
-  # Risk: if a run is in progress, it sees the new schedule on next evaluation.
+        <SubSubTitle>CI checks for DAG files, and the unit tests that catch structural bugs</SubSubTitle>
 
-  # Good approach: version the DAG ID for breaking changes
-  DAG('freshmart_morning_pipeline_v2', schedule='0 6 * * *', ...)
-  # v1 continues running its current cycle.
-  # v2 starts on the new schedule from the first run after deploy.
-  # Once v1 has no more in-progress runs: delete it.
+        <CodeBox label=".github/workflows/airflow_ci.yml — the checks that matter">{`- run: flake8 dags/ --max-line-length=120
+- run: |
+    for f in dags/*.py; do python -m py_compile "$f" && echo "OK: $f"; done
+- run: airflow db init && airflow dags list-import-errors
+- run: python scripts/ci/validate_dag_structure.py   # unique task IDs, no cycles, start/end present
+- run: pytest tests/dags/ -v`}</CodeBox>
 
+        <CodeBox label="tests/dags/test_freshcart_pipeline.py — structural assertions">{`from airflow.models import DagBag
 
-APPROACH 3: STAGED DEPLOYMENT WITH TESTING
-  CI pipeline for Airflow DAGs:
-
-  # .github/workflows/airflow_ci.yml
-  steps:
-    - name: Lint DAG files
-      run: |
-        pip install apache-airflow flake8
-        flake8 dags/ --max-line-length=120
-
-    - name: Validate DAG syntax (no import errors)
-      run: |
-        for dag_file in dags/*.py; do
-          python -m py_compile "\$dag_file" && echo "OK: \$dag_file"
-        done
-
-    - name: Check for import errors using Airflow CLI
-      run: |
-        airflow db init
-        airflow dags list-import-errors
-        # Fails CI if any DAG has import errors
-
-    - name: Validate DAG structure (task dependencies, no cycles)
-      run: |
-        python scripts/ci/validate_dag_structure.py
-        # Checks: all task IDs are unique, no circular dependencies,
-        # required tasks (start, end EmptyOperators) present,
-        # all referenced connections exist in Airflow connections
-
-    - name: Run DAG unit tests
-      run: pytest tests/dags/ -v
-
-
-UNIT TESTING AIRFLOW DAGS:
-import pytest
-from airflow.models import DagBag
-
-def test_freshmart_pipeline_dag_structure():
+def test_freshcart_pipeline_dag_structure():
     dagbag = DagBag(dag_folder='dags/', include_examples=False)
-    dag    = dagbag.get_dag('freshmart_morning_pipeline')
-
+    dag = dagbag.get_dag('freshcart_morning_pipeline')
     assert dag is not None, "DAG not found"
     assert len(dagbag.import_errors) == 0, f"Import errors: {dagbag.import_errors}"
+    task_ids = [t.task_id for t in dag.tasks]
+    assert 'dbt_silver' in task_ids and 'dbt_gold' in task_ids
 
-    task_ids = [task.task_id for task in dag.tasks]
-    assert 'start' in task_ids,      "Missing 'start' task"
-    assert 'end'   in task_ids,      "Missing 'end' task"
-    assert 'dbt_silver' in task_ids, "Missing 'dbt_silver' task"
-    assert 'dbt_gold'   in task_ids, "Missing 'dbt_gold' task"
-
-def test_freshmart_pipeline_task_order():
-    dagbag = DagBag(dag_folder='dags/', include_examples=False)
-    dag    = dagbag.get_dag('freshmart_morning_pipeline')
-
-    # Verify that dbt_silver runs before dbt_gold:
-    silver_task = dag.get_task('dbt_silver')
-    gold_task   = dag.get_task('dbt_gold')
-
-    assert gold_task.task_id in [t.task_id for t in silver_task.downstream_list], \
-        "dbt_gold must be downstream of dbt_silver"
+def test_freshcart_pipeline_task_order():
+    dag = DagBag(dag_folder='dags/').get_dag('freshcart_morning_pipeline')
+    silver, gold = dag.get_task('dbt_silver'), dag.get_task('dbt_gold')
+    assert gold.task_id in [t.task_id for t in silver.downstream_list]
 
 def test_schedule_is_set():
-    dagbag = DagBag(dag_folder='dags/', include_examples=False)
-    dag    = dagbag.get_dag('freshmart_morning_pipeline')
-    assert dag.schedule_interval is not None, "DAG has no schedule"
+    dag = DagBag(dag_folder='dags/').get_dag('freshcart_morning_pipeline')
+    assert dag.schedule_interval is not None
     assert dag.catchup is False, "catchup must be False in production DAGs"`}</CodeBox>
+
+        <Output>{`$ pytest tests/dags/ -v
+test_freshcart_pipeline_dag_structure PASSED
+test_freshcart_pipeline_task_order PASSED
+test_schedule_is_set PASSED
+========================== 3 passed in 0.41s ===========================`}</Output>
       </section>
 
       <Divider />
@@ -696,137 +488,73 @@ def test_schedule_is_set():
         <SectionTitle>Testing Strategies for Data Pipelines — Unit, Integration, and E2E</SectionTitle>
 
         <Para>
-          Data pipelines are harder to unit test than application code because
-          the business logic is in SQL and the side effects are writes to a
-          database. The testing pyramid for data pipelines is inverted compared
-          to software: integration and end-to-end tests provide more value than
-          unit tests, because most bugs occur at the boundary between the SQL
-          and the data, not in pure logic.
+          The testing pyramid for data pipelines is inverted compared to
+          software: integration and end-to-end tests provide more value than
+          unit tests, because most bugs live at the boundary between SQL and
+          data, not in pure logic.
         </Para>
 
-        <CodeBox label="Testing pyramid for data pipelines — what to test and how">{`DATA PIPELINE TESTING PYRAMID:
+        <CodeBox label="The inverted pyramid">{`End-to-end   (full pipeline, prod-like data, validated outputs)   ← most valuable, slowest
+Integration  (dbt tests against real data volumes)                 ← good coverage, medium speed
+Unit         (pure Python — validators, hash key generators)       ← least valuable alone, fastest
 
-  End-to-end (run full pipeline against prod-like data, validate outputs)
-     ↑ most valuable but slowest
-  Integration tests (run dbt models against real data, validate with dbt tests)
-     ↑ good coverage, medium speed
-  Unit tests (test pure Python logic — validation functions, hash key generators)
-     ↓ least valuable alone, fastest
+Do NOT try to unit-test SQL by mocking the database — that doesn't work.`}</CodeBox>
 
-  Unlike software, the pyramid is widest at the top for data pipelines.
-  A dbt model with correct SQL tests is more valuable than mocking the SQL.
+        <SubSubTitle>Unit tests — for the Python logic, not the SQL</SubSubTitle>
 
+        <CodeBox label="tests/unit/test_validation.py">{`from pipeline.validate import validate_order_row
 
-UNIT TESTS (for pure Python logic):
-  Test validation functions, hash key generators, transformation helpers.
-  Do NOT try to unit test SQL by mocking the database — that doesn't work.
+def test_valid_order_passes():
+    row = {'order_id': 9284751, 'customer_id': 4201938, 'order_amount': 380.00, 'status': 'delivered'}
+    result = validate_order_row(row)
+    assert result.is_valid, f"Expected valid, got: {result.error}"
 
-  # tests/unit/test_validation.py
-  import pytest
-  from pipeline.validate import validate_order_row, VALID_STATUSES
+def test_negative_amount_rejected():
+    row = {'order_id': 1, 'customer_id': 1, 'order_amount': -10, 'status': 'placed'}
+    result = validate_order_row(row)
+    assert not result.is_valid and result.error_type == 'negative_amount'
 
-  def test_valid_order_passes():
-      row = {
-          'order_id':     9284751,
-          'customer_id':  4201938,
-          'order_amount': 380.00,
-          'status':       'delivered',
-      }
-      result = validate_order_row(row)
-      assert result.is_valid, f"Expected valid, got: {result.error}"
+def test_hash_key_is_deterministic():
+    from pipeline.vault import compute_hub_hk
+    assert compute_hub_hk('4201938') == compute_hub_hk('4201938')
+    assert compute_hub_hk('ST001') == compute_hub_hk(' st001 ')   # normalised before hashing`}</CodeBox>
 
-  def test_negative_amount_rejected():
-      row = {'order_id': 1, 'customer_id': 1, 'order_amount': -10, 'status': 'placed'}
-      result = validate_order_row(row)
-      assert not result.is_valid
-      assert result.error_type == 'negative_amount'
+        <SubSubTitle>Integration tests — dbt tests against real production data volumes</SubSubTitle>
 
-  def test_invalid_status_rejected():
-      row = {'order_id': 1, 'customer_id': 1, 'order_amount': 100, 'status': 'unknown'}
-      result = validate_order_row(row)
-      assert not result.is_valid
-      assert result.error_type == 'invalid_status'
-      assert 'unknown' in result.error_message
+        <Para>
+          Run in CI against the Zero-Copy Clone. This is where most real bugs
+          get caught: a <code>not_null</code> test that passes on 1,000 dev rows can
+          fail on 50 million production rows with edge cases dev never had.
+        </Para>
 
-  def test_hash_key_is_deterministic():
-      from pipeline.vault import compute_hub_hk
-      key1 = compute_hub_hk('4201938')
-      key2 = compute_hub_hk('4201938')
-      assert key1 == key2
+        <Output>{`$ dbt test --target ci --select state:modified+
+FAIL not_null_silver_orders_customer_id (12 rows)
+# passed locally on a 1,000-row dev sample — these 12 nulls only exist in production`}</Output>
 
-  def test_hash_key_normalisation():
-      from pipeline.vault import compute_hub_hk
-      # Upper, lower, and padded versions must produce the same key:
-      assert compute_hub_hk('ST001') == compute_hub_hk('st001')
-      assert compute_hub_hk('ST001') == compute_hub_hk(' ST001 ')
+        <SubSubTitle>End-to-end tests — the whole pipeline, validated against business invariants</SubSubTitle>
 
+        <CodeBox label="tests/e2e/test_morning_pipeline.py">{`def test_morning_pipeline_e2e(snowflake_conn, dbt_runner):
+    test_date = date.today() - timedelta(days=1)
+    result = dbt_runner.run(select='staging.* silver.* gold.*', vars={'run_date': str(test_date)}, target='ci')
+    assert result.success, f"Pipeline failed: {result.errors}"
 
-INTEGRATION TESTS (dbt tests against real data — the most valuable):
-  Run in CI against the Zero-Copy Clone of production data.
-  These are the dbt tests in schema.yml — not_null, unique, accepted_values.
-  The value: tests run against PRODUCTION DATA VOLUMES.
-  A not_null test that passes locally on 1,000 dev rows may fail on
-  50 million production rows because production has edge cases dev does not.
+    rows = snowflake_conn.execute(
+        f"SELECT COUNT(*) FROM ci_pr_142.gold.daily_revenue WHERE order_date = '{test_date}'").scalar()
+    assert 40_000 < rows < 100_000, f"Unexpected row count: {rows}"
 
-  Run in CI:
-    dbt test --target ci --select state:modified+
-  All dbt tests for changed models run against production-like data.
-  Failures block the PR before merge.
+    negative_revenue = snowflake_conn.execute(
+        f"SELECT COUNT(*) FROM ci_pr_142.gold.daily_revenue WHERE net_revenue < 0").scalar()
+    assert negative_revenue == 0
 
+    # Bronze = Silver + DLQ — every extracted row is accounted for somewhere
+    bronze = snowflake_conn.execute(f"SELECT COUNT(*) FROM ci_pr_142.bronze.orders WHERE _bronze_date = '{test_date}'").scalar()
+    silver = snowflake_conn.execute(f"SELECT COUNT(*) FROM ci_pr_142.silver.orders WHERE DATE(created_at) = '{test_date}'").scalar()
+    dlq = snowflake_conn.execute(f"SELECT COUNT(*) FROM ci_pr_142.pipeline.dead_letter_queue WHERE run_date = '{test_date}'").scalar()
+    assert bronze == silver + dlq, f"Row count mismatch: {bronze} bronze != {silver} silver + {dlq} dlq"`}</CodeBox>
 
-END-TO-END TESTS (run full pipeline, validate output):
-  Run the complete pipeline (extraction → Bronze → Silver → Gold) on
-  a subset of production data. Validate the output tables match expectations.
-
-  # tests/e2e/test_morning_pipeline.py
-  import pytest
-  from datetime import date, timedelta
-
-  def test_morning_pipeline_e2e(snowflake_conn, dbt_runner):
-      """
-      Run a full pipeline on a small date range.
-      Validate key output metrics match known-good values.
-      """
-      test_date = date.today() - timedelta(days=1)
-
-      # Run the full pipeline for one day:
-      result = dbt_runner.run(
-          select='staging.* silver.* gold.*',
-          vars={'run_date': str(test_date)},
-          target='ci',
-      )
-      assert result.success, f"Pipeline failed: {result.errors}"
-
-      # Validate row counts are in expected range:
-      rows = snowflake_conn.execute(f"""
-          SELECT COUNT(*) FROM ci_pr_142.gold.daily_revenue
-          WHERE order_date = '{test_date}'
-      """).scalar()
-      assert 40_000 < rows < 100_000, f"Unexpected row count: {rows}"
-
-      # Validate key business invariants:
-      negative_revenue = snowflake_conn.execute(f"""
-          SELECT COUNT(*) FROM ci_pr_142.gold.daily_revenue
-          WHERE net_revenue < 0
-      """).scalar()
-      assert negative_revenue == 0, f"Found {negative_revenue} negative revenue rows"
-
-      # Validate Silver reconciles with Bronze:
-      bronze_count = snowflake_conn.execute(f"""
-          SELECT COUNT(*) FROM ci_pr_142.bronze.orders
-          WHERE _bronze_date = '{test_date}'
-      """).scalar()
-      silver_count = snowflake_conn.execute(f"""
-          SELECT COUNT(*) FROM ci_pr_142.silver.orders
-          WHERE DATE(created_at) = '{test_date}'
-      """).scalar()
-      dlq_count = snowflake_conn.execute(f"""
-          SELECT COUNT(*) FROM ci_pr_142.pipeline.dead_letter_queue
-          WHERE pipeline_name = 'silver_orders' AND run_date = '{test_date}'
-      """).scalar()
-      # Bronze = Silver + DLQ (all rows accounted for):
-      assert bronze_count == silver_count + dlq_count, \
-          f"Row count mismatch: {bronze_count} bronze != {silver_count} silver + {dlq_count} dlq"`}</CodeBox>
+        <Output>{`$ pytest tests/e2e/test_morning_pipeline.py -v
+test_morning_pipeline_e2e PASSED
+# bronze=48234, silver=48222, dlq=12 → 48234 == 48222 + 12 ✓`}</Output>
       </section>
 
       <Divider />
@@ -856,19 +584,56 @@ END-TO-END TESTS (run full pipeline, validate output):
         />
 
         <Callout type="tip">
-          The total CI/CD cycle from commit to production should target under
-          45 minutes. Slim CI (state:modified+) keeps the test stage under 10
-          minutes for typical changes. Production deployment runs only changed
-          models, which keeps production deployment times proportional to the
-          size of the change rather than the size of the entire dbt project.
+          Target under 45 minutes from commit to production. Slim CI keeps the
+          test stage under 10 minutes for a typical PR, and production
+          deployment stays proportional to the size of the change, not the
+          size of the entire dbt project.
         </Callout>
       </section>
 
       <Divider />
 
-      {/* ── Part 08 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 08 — Misconceptions ──────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 08 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data CI/CD</SectionTitle>
+
+        {[
+          {
+            wrong: '"If dbt compiles and the tests pass, the PR is safe to merge"',
+            right: 'This module\'s Real World incident is exactly a PR where compile succeeded and every dbt test passed — the column rename simply had no test written against it, because not_null and unique don\'t know a column was renamed out from under three dashboards. Passing tests prove the tests you wrote weren\'t violated, not that nothing broke.',
+          },
+          {
+            wrong: '"Slim CI (state:modified+) is just a speed optimization — it doesn\'t change what gets tested"',
+            right: 'It changes coverage in a way worth being deliberate about: Part 03\'s example only tests the 4 models actually affected by a change, which is correct and fast, but it also means a stale prod_artifacts manifest (this module\'s Error Library) silently causes either far too little or far too much to run — slim CI is only as trustworthy as the reference state it diffs against.',
+          },
+          {
+            wrong: '"A blue-green schema swap is basically instant, so it doesn\'t need the same care as a slow migration"',
+            right: 'This module\'s Error Library documents exactly the failure: an unwrapped two-step rename where the connection drops between the two ALTER statements leaves production with no gold schema at all for 5 minutes. "Fast" and "atomic" are different properties — Part 04\'s BEGIN/COMMIT wrapping is what actually makes the swap atomic.',
+          },
+          {
+            wrong: '"Renaming a column is a simple, low-risk change since the data itself doesn\'t change"',
+            right: 'The data staying identical is exactly why it\'s dangerous — nothing about the VALUES looks wrong, so no anomaly detection or data-quality check fires. Only a check that specifically watches for renamed/removed columns (Part 03\'s schema change detection) catches it, which is why this module treats it as its own distinct category of risk, not a subset of "SQL changed."',
+          },
+          {
+            wrong: '"Testing an incremental model in CI is equivalent to testing it in production"',
+            right: 'This module\'s Error Library has the exact gap: CI ran in incremental mode and only validated today\'s new rows (which had the new column populated), while 400 million existing production rows had NULL for it — the not_null test passed in CI and failed on the real deploy. A schema addition to an incremental model needs a --full-refresh test pass, not an incremental one.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 09 — Real World ──────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 08 — Real World" />
+        <SectionTag text="// Part 09 — Real World" />
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12, fontFamily: 'var(--font-mono)' }}>
           💼 What This Looks Like at Work
         </div>
@@ -880,108 +645,57 @@ END-TO-END TESTS (run full pipeline, validate output):
           </div>
 
           <Para>
-            A data engineer renames <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>net_revenue</code> to
-            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> revenue_after_discount</code> in
-            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> gold.daily_revenue</code> for clarity.
-            The rename is a SQL-only change in one dbt model. No dbt tests fail.
-            The PR is merged. Three Metabase dashboards that query
-            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}> net_revenue</code> directly
-            break immediately. Finance notices at 09:00.
+            A data engineer renames <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>net_revenue</code> to{' '}
+            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>revenue_after_discount</code> in{' '}
+            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>gold.daily_revenue</code> for clarity. No dbt
+            tests fail. The PR merges. Three Metabase dashboards querying{' '}
+            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>net_revenue</code> directly break
+            immediately. Finance notices at 09:00.
           </Para>
 
-          <CodeBox label="The incident and the CI improvements that prevent it">{`THE INCIDENT:
-  Change: gold/daily_revenue.sql
-    -- Before:
-    order_amount - discount_amount AS net_revenue
-    -- After:
-    order_amount - discount_amount AS revenue_after_discount
+          <CodeBox label="What CI saw, and what it didn't">{`✓ SQL compiled successfully
+✓ dbt tests passed (not_null, unique on order_date, store_id)
+✗ No check that net_revenue was removed
+✗ No check that Metabase uses net_revenue
+✗ No breakage visible until the prod deploy already happened
 
-  Impact: 3 Metabase dashboards query:
-    SELECT SUM(net_revenue) FROM gold.daily_revenue WHERE ...
-    → After rename: net_revenue column no longer exists → dashboard error
+Detection: 45 min (analyst reports broken dashboard). Fix: 20 min (alias added, redeployed).
+Total impact: 1h 5min of broken Finance dashboards in the morning.`}</CodeBox>
 
-  Detection time: 45 minutes (Finance analyst reports broken dashboard)
-  Fix time:      20 minutes (add net_revenue as alias, redeploy)
-  Total impact:  1h 5min of broken Finance dashboards in the morning
+          <SubSubTitle>Fix 1 — schema change detection on every PR</SubSubTitle>
 
-ROOT CAUSE: No schema change detection in CI.
-  The PR had:
-    ✓ SQL compiled successfully
-    ✓ dbt tests passed (not_null, unique on order_date, store_id)
-    ✗ No check that net_revenue was removed
-    ✗ No check that Metabase uses net_revenue
-    ✗ No breakage visible until prod deploy
+          <CodeBox label="scripts/ci/check_schema_changes.py, wired into every PR">{`def check_for_breaking_column_changes():
+    prod = load_manifest('./prod_artifacts/manifest.json')
+    current = load_manifest('./target/manifest.json')
+    changes = detect_breaking_changes(prod['nodes'], current['nodes'])
+    if changes:
+        print("BREAKING SCHEMA CHANGES DETECTED:")
+        for c in changes:
+            print(f"  - {c}")
+        print("If this is intentional, update all downstream consumers first.")
+        sys.exit(1)`}</CodeBox>
 
-CI IMPROVEMENTS ADDED AFTER THIS INCIDENT:
+          <SubSubTitle>Fix 2 — the backward-compatible migration pattern, going forward</SubSubTitle>
 
-1. SCHEMA CHANGE DETECTION (in every PR):
-   # scripts/ci/check_schema_changes.py
-   def check_for_breaking_column_changes():
-       """
-       Compare current manifest to prod manifest.
-       Fail CI if any column was removed or renamed in a Gold model.
-       """
-       prod     = load_manifest('./prod_artifacts/manifest.json')
-       current  = load_manifest('./target/manifest.json')
-       changes  = detect_breaking_changes(prod['nodes'], current['nodes'])
-       if changes:
-           print("BREAKING SCHEMA CHANGES DETECTED:")
-           for c in changes:
-               print(f"  - {c}")
-           print()
-           print("If this is intentional, update all downstream consumers first.")
-           print("Then re-run CI with: git commit -m 'chore: update consumers'")
-           sys.exit(1)
+          <CodeBox label="Add the new name, keep the old one, remove it later — same as API deprecation">{`-- This PR: both columns exist, nothing breaks
+order_amount - discount_amount AS revenue_after_discount,
+order_amount - discount_amount AS net_revenue,  -- backward-compat alias
 
-   # Output on this PR:
-   # BREAKING SCHEMA CHANGES DETECTED:
-   #   - gold.daily_revenue.net_revenue removed
-   # If this is intentional, update all downstream consumers first.
+-- Next PR, after all dashboards have migrated: remove the net_revenue alias`}</CodeBox>
 
-2. DOWNSTREAM CONSUMER CHECK (for Gold columns):
-   # As part of DataHub ingestion, tag all Metabase columns that
-   # reference each Gold column.
-   # CI queries DataHub API:
-   def check_downstream_consumers(changed_columns: list[str]) -> list[str]:
-       """Return list of BI tools using any of the changed columns."""
-       affected = []
-       for col in changed_columns:
-           consumers = datahub_client.get_downstream_consumers(
-               table='gold.daily_revenue', column=col
-           )
-           affected.extend(consumers)
-       return affected
-
-   # Output: ["Metabase: Daily Revenue dashboard", "CFO Report export"]
-   # CI fails with: "These consumers must be updated before this column is renamed."
-
-3. BACKWARD-COMPATIBLE MIGRATION PATTERN:
-   # The correct way to rename a column:
-
-   # Step 1 (this PR): Add the new column, keep the old as an alias
-   order_amount - discount_amount AS revenue_after_discount,
-   order_amount - discount_amount AS net_revenue,  -- ← backward compat alias
-
-   # Step 2: Notify all dashboard owners about the migration window.
-   # Step 3 (next PR, after dashboards updated): Remove net_revenue alias.
-
-   # This is the same deprecation pattern used in software APIs.
-   # Add the new name. Keep the old name. Remove old name only after all consumers migrated.
-
-RESULT AFTER CI IMPROVEMENTS:
-  Next time a Gold column is renamed or removed:
-  CI fails with: "BREAKING SCHEMA CHANGES: net_revenue removed"
-  Developer sees: list of consumers to update before this is safe to merge.
-  Engineer cannot merge until consumers are updated or the PR is modified.
-  Zero production breakages from schema changes.`}</CodeBox>
+          <Output>{`Next time a Gold column is renamed:
+CI fails with: "BREAKING SCHEMA CHANGES: net_revenue removed"
+Developer sees: ["Metabase: Daily Revenue dashboard", "CFO Report export"]
+Cannot merge until consumers are updated or the PR adds a backward-compat alias.
+Zero production breakages from schema changes since.`}</Output>
         </div>
       </section>
 
       <Divider />
 
-      {/* ── Part 09 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 10 — Interview Prep ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 09 — Interview Prep" />
+        <SectionTag text="// Part 10 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
@@ -1063,6 +777,42 @@ The goal is not process for its own sake — it is making the data platform trus
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Trusting dbt tests alone to catch schema-shape changes like column renames',
+            a: 'not_null and unique tests check VALUES, not column NAMES — a rename passes every existing test while breaking every dashboard that hardcodes the old name. Part 03\'s schema change detection is a separate check specifically for this, and this module\'s Real World incident is what happens without it.',
+          },
+          {
+            q: 'Letting the prod_artifacts manifest go stale',
+            a: 'Slim CI\'s state:modified+ selection is only correct if the reference manifest reflects the actual last production deploy — this module\'s Error Library shows a stale manifest causing CI to (wrongly) treat all 150 models as changed, defeating the entire point of slim CI. The S3 manifest upload has to run as part of every successful prod deployment, not as an occasional manual step.',
+          },
+          {
+            q: 'Running a two-step schema rename without wrapping it in a transaction',
+            a: 'Between the two ALTER SCHEMA RENAME statements, there is a real window where the target schema name doesn\'t exist at all — this module\'s Error Library documents exactly this causing 5 minutes of production outage from a dropped connection mid-swap. Wrap both renames in BEGIN/COMMIT.',
+          },
+          {
+            q: 'Testing a new required column against an incremental CI run instead of a full refresh',
+            a: 'An incremental test run only validates today\'s new rows, which have the new column populated — it says nothing about the hundreds of millions of existing rows that will have NULL for it in production. Force a --full-refresh in CI specifically when a PR adds a new not_null column to an incremental model.',
+          },
+          {
+            q: 'Treating Airflow DAG deploys as low-risk because "it\'s just a schedule"',
+            a: 'A DAG file with an import error doesn\'t fail loudly — it silently disappears from the Airflow UI, and nobody notices until the pipeline it used to run stops showing up in run history. Part 05\'s py_compile + DagBag import checks in CI exist because this failure mode is otherwise invisible until someone goes looking for a missing DAG.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1070,14 +820,14 @@ The goal is not process for its own sake — it is making the data platform trus
 
         {[
           {
-            error: `dbt CI fails with "compilation error: relation 'freshmart_ci_pr_142.bronze.orders' does not exist" — state:modified+ run cannot find upstream models`,
-            cause: 'The --defer flag was not included in the CI dbt run command. Without --defer, dbt tries to read bronze.orders from the CI database (freshmart_ci_pr_142) which does not contain bronze.orders — it only contains the models being built in this PR. The CI database was created as a Zero-Copy Clone of production, so bronze.orders does exist in freshmart_ci_pr_142.bronze, but the CI target schema is dbt_ci and dbt is looking in the wrong place.',
-            fix: 'Add --defer --state ./prod_artifacts to the CI dbt run command: dbt run --target ci --select state:modified+ --defer --state ./prod_artifacts. The --defer flag tells dbt to use production versions of models not in the current run\'s selection. Verify that prod_artifacts/manifest.json was downloaded at CI start from S3. If prod_artifacts is empty, the defer cannot work — add a CI step that downloads the manifest: aws s3 cp s3://freshmart-ci-artifacts/dbt/manifest.json ./prod_artifacts/manifest.json.',
+            error: `dbt CI fails with "compilation error: relation 'freshcart_ci_pr_142.bronze.orders' does not exist" — state:modified+ run cannot find upstream models`,
+            cause: 'The --defer flag was not included in the CI dbt run command. Without --defer, dbt tries to read bronze.orders from the CI database (freshcart_ci_pr_142) which does not contain bronze.orders — it only contains the models being built in this PR. The CI database was created as a Zero-Copy Clone of production, so bronze.orders does exist in freshcart_ci_pr_142.bronze, but the CI target schema is dbt_ci and dbt is looking in the wrong place.',
+            fix: 'Add --defer --state ./prod_artifacts to the CI dbt run command: dbt run --target ci --select state:modified+ --defer --state ./prod_artifacts. The --defer flag tells dbt to use production versions of models not in the current run\'s selection. Verify that prod_artifacts/manifest.json was downloaded at CI start from S3. If prod_artifacts is empty, the defer cannot work — add a CI step that downloads the manifest: aws s3 cp s3://freshcart-ci-artifacts/dbt/manifest.json ./prod_artifacts/manifest.json.',
           },
           {
             error: `Slim CI runs the full project on every PR — state:modified+ selects all 150 models instead of the 4 that were changed`,
             cause: 'The prod_artifacts/manifest.json is outdated or missing. When the reference manifest does not match the current production state, dbt cannot determine which models are unchanged — it treats all models as potentially modified. Alternatively, the prod manifest was not updated after the last production deployment, so the reference state is stale and most models appear changed by comparison.',
-            fix: 'Ensure the production manifest is updated at the end of every successful production dbt run: aws s3 cp ./target/manifest.json s3://freshmart-ci-artifacts/dbt/manifest.json. This step must run as part of the production deployment pipeline. At CI start, download the manifest: aws s3 cp s3://freshmart-ci-artifacts/dbt/manifest.json ./prod_artifacts/. If this download fails (S3 bucket empty or permission error), fall back to running all models rather than failing CI silently with full-project runs.',
+            fix: 'Ensure the production manifest is updated at the end of every successful production dbt run: aws s3 cp ./target/manifest.json s3://freshcart-ci-artifacts/dbt/manifest.json. This step must run as part of the production deployment pipeline. At CI start, download the manifest: aws s3 cp s3://freshcart-ci-artifacts/dbt/manifest.json ./prod_artifacts/. If this download fails (S3 bucket empty or permission error), fall back to running all models rather than failing CI silently with full-project runs.',
           },
           {
             error: `A DAG deployed successfully but disappears from the Airflow UI within minutes — no error in CI, but logs show "No module named 'pipeline.custom_operators'"`,
@@ -1123,7 +873,7 @@ The goal is not process for its own sake — it is making the data platform trus
         'The PR process and CI gates are an investment in trust. Analysts who have been burned by wrong data distrust every number. Analysts who trust the data use it confidently and make better decisions. The minutes spent in CI are returned many times over in analyst confidence, fewer post-incident investigations, and stakeholder trust in the data platform.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
