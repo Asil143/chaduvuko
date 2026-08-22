@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -130,8 +173,8 @@ export default function WhatIsAPipelineModule() {
       title="What is a Data Pipeline? Anatomy and Design Principles"
       description="The anatomy of every pipeline, the design principles that make them reliable, and the patterns that separate good from fragile."
       section="Data Engineering — Module 20"
-      readTime="55 min"
-      updatedAt="March 2026"
+      readTime="65 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Precise Definition ─────────────────────────── */}
@@ -140,7 +183,7 @@ export default function WhatIsAPipelineModule() {
         <SectionTitle>What a Data Pipeline Actually Is</SectionTitle>
 
         <Para>
-          The term "data pipeline" gets used loosely — sometimes to mean a single
+          The term &ldquo;data pipeline&rdquo; gets used loosely — sometimes to mean a single
           Python script, sometimes to mean an entire data platform, sometimes to
           mean a Kafka stream. Before building pipelines professionally, you need
           a precise mental model of what a pipeline is, what it consists of, and
@@ -198,6 +241,13 @@ export default function WhatIsAPipelineModule() {
           all of them pipelines is the same structure: source → extract → transform
           → load → sink, with orchestration and monitoring around it.
         </Para>
+
+        <TryThis>
+          Pick any script or job you&rsquo;ve written that touches data, even a small
+          one. Name its source, its sink, and every transformation in between —
+          if you can&rsquo;t name all three cleanly, that&rsquo;s worth noticing before you
+          read Part 03&rsquo;s design principles.
+        </TryThis>
       </section>
 
       <Divider />
@@ -212,74 +262,38 @@ export default function WhatIsAPipelineModule() {
         <Para>
           Every pipeline starts with a source. The source determines what extraction
           approach is possible, what change detection mechanism is available, and
-          what data quality guarantees you can rely on. Understanding the source
-          deeply — its schema, its update frequency, its scale, its consistency
-          model — is the first thing a data engineer does before designing any pipeline.
+          what data quality guarantees you can rely on.
         </Para>
 
         <CodeBox label="The source taxonomy — what kinds of sources exist">{`SOURCE TYPE          EXAMPLES                    EXTRACTION APPROACH
-─────────────────────────────────────────────────────────────────────────────
 Relational DB        PostgreSQL, MySQL, Oracle   CDC (Debezium) or SQL incremental
-Document DB          MongoDB, Firestore           Change Streams or scheduled export
-Key-Value            Redis, DynamoDB             Snapshot (no built-in CDC)
-Column-Family        Cassandra, HBase            Spark connector or CDC plugin
-REST API             Stripe, Salesforce        HTTP pagination with cursor
+Document DB          MongoDB, Firestore          Change Streams or scheduled export
+REST API             Stripe, Salesforce          HTTP pagination with cursor
 Event Stream         Kafka, Kinesis, Pub/Sub     Kafka Consumer Group (streaming)
 File Drop            SFTP, S3 landing zone       File event trigger or scheduled scan
-SaaS Platform        Stripe, HubSpot, Shopify    Official connectors or REST API
-Message Queue        RabbitMQ, SQS               Consumer subscription
 Webhook              Payment events, IoT         HTTP endpoint + Kafka/DB write
-Batch Export         Partner CSV files, reports  Scheduled SFTP/S3 poll
 
 WHAT TO UNDERSTAND ABOUT EACH SOURCE:
-  Schema:        What are the fields, types, and constraints?
-  Cardinality:   How many rows? How fast does it grow?
-  Change rate:   How many inserts/updates/deletes per hour?
-  Latency need:  Does the business need real-time or batch is fine?
-  Quality:       Is source data clean? Are there known gaps or inconsistencies?
-  Access:        Read replica? Production only? Rate limited?
-  History:       How far back can we pull? Is there a retention policy?`}</CodeBox>
+  Schema, cardinality, change rate, latency need, quality, access, and
+  history — before designing any pipeline, know all seven for its source.`}</CodeBox>
 
-        <SubTitle>Extraction — getting data out of the source</SubTitle>
+        <SubSubTitle>Extraction — full vs incremental</SubSubTitle>
 
         <Para>
-          Extraction is the mechanism by which data moves from the source into the
-          pipeline. The two fundamental extraction patterns are <strong>full extraction</strong>
-          (read everything every time) and <strong>incremental extraction</strong>
-          (read only what changed since the last run). The choice between them has
-          enormous consequences for pipeline performance and source system load.
+          The two fundamental extraction patterns are <strong>full extraction</strong>{' '}
+          (read everything every time) and <strong>incremental extraction</strong>{' '}
+          (read only what changed since the last run). The choice has enormous
+          consequences for pipeline performance and source system load.
         </Para>
 
-        <CodeBox label="Full vs incremental extraction — trade-offs and implementation">{`# ── FULL EXTRACTION ──────────────────────────────────────────────────────────
-# Read every row in the source table on every run.
-# Simple. Correct. Expensive at scale.
+        <CodeBox label="Full extraction — simple, correct, expensive at scale">{`SELECT * FROM orders;   -- every row, every time
 
-SELECT * FROM orders;               -- every row, every time
+# Use for: small tables (<1M rows), reference/dimension tables,
+#          tables with no reliable "changed at" timestamp
+# Avoid for: large transaction tables, high-velocity sources,
+#            sources with rate limits or shared connection pools`}</CodeBox>
 
-# When to use full extraction:
-#   Small tables (< 1M rows, < 100 MB)
-#   Tables that have no reliable "changed at" timestamp
-#   Reference/dimension tables (product categories, store master)
-#   When the source cannot be queried incrementally safely
-
-# When NOT to use:
-#   Large transaction tables (billions of rows)
-#   High-velocity sources (thousands of inserts/minute)
-#   Sources with rate limits or shared connection pools
-
-
-# ── INCREMENTAL EXTRACTION (high-watermark) ───────────────────────────────────
-# Read only rows created or modified since the last run.
-# Requires a monotonically increasing column (timestamp or auto-increment ID).
-
--- Get all orders modified since the last checkpoint:
-SELECT *
-FROM orders
-WHERE updated_at > '2026-03-16 06:00:00'   -- last successful run timestamp
-  AND updated_at <= '2026-03-17 06:00:00'; -- current run timestamp
-
-# Checkpoint management in Python:
-import json
+        <CodeBox label="Incremental extraction — a checkpoint-driven watermark">{`import json
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -287,152 +301,80 @@ CHECKPOINT = Path('/data/checkpoints/orders.json')
 
 def load_checkpoint() -> datetime:
     if CHECKPOINT.exists():
-        data = json.loads(CHECKPOINT.read_text())
-        return datetime.fromisoformat(data['last_updated_at'])
-    return datetime(2020, 1, 1, tzinfo=timezone.utc)   # beginning of time
+        return datetime.fromisoformat(json.loads(CHECKPOINT.read_text())['last_updated_at'])
+    return datetime(2020, 1, 1, tzinfo=timezone.utc)
 
 def save_checkpoint(ts: datetime) -> None:
     CHECKPOINT.write_text(json.dumps({'last_updated_at': ts.isoformat()}))
 
-last_run = load_checkpoint()
-current_run = datetime.now(timezone.utc)
+last_run, current_run = load_checkpoint(), datetime.now(timezone.utc)
+rows = db.query("SELECT * FROM orders WHERE updated_at > %s AND updated_at <= %s",
+                 (last_run, current_run))
 
-# Extract rows modified between last_run and current_run:
-rows = db.query(
-    "SELECT * FROM orders WHERE updated_at > %s AND updated_at <= %s",
-    (last_run, current_run),
-)
-
-# Only save checkpoint after successful write to destination:
 write_to_destination(rows)
-save_checkpoint(current_run)   # advance checkpoint only on success
+save_checkpoint(current_run)   # advance ONLY after a successful write`}</CodeBox>
 
-
-# ── INCREMENTAL PITFALLS ──────────────────────────────────────────────────────
-# 1. Late-arriving data: rows written with a past timestamp after the window closed
-#    Solution: overlap windows by 30 minutes and use upsert at destination
-
-# 2. Deletes: incremental queries only see modified rows, not deleted ones
-#    Solution: CDC (Change Data Capture) — see Module 24
-
-# 3. Clock skew: source DB clock differs from pipeline clock
-#    Solution: always use the source DB's NOW() as the upper bound
-
-# 4. No updated_at column: some tables have only created_at
-#    Solution: use max(id) as watermark if auto-increment; otherwise full extract`}</CodeBox>
+        <Output>{`# four pitfalls this pattern has to account for:
+1. Late-arriving data past the window       → overlap by 30 min, upsert at destination
+2. Deletes are invisible to incremental SQL → use CDC (Module 24)
+3. Clock skew between pipeline and source   → use the source DB's own NOW()
+4. No updated_at column at all              → use max(id) watermark, or full extract`}</Output>
 
         <SubTitle>Transformation — the heart of the pipeline</SubTitle>
 
         <Para>
-          Transformation is where raw source data becomes clean, typed, validated,
-          business-ready data. Transformations range from trivial (renaming a column)
-          to complex (computing 90-day cohort retention across billions of events).
-          Every transformation in a pipeline is a business decision encoded in code —
-          and every transformation is a potential source of bugs.
+          Every transformation in a pipeline is a business decision encoded in
+          code — and every transformation is a potential source of bugs.
         </Para>
 
-        <CodeBox label="The transformation taxonomy — every operation type">{`TRANSFORMATION TYPE    WHAT IT DOES                          EXAMPLE
-─────────────────────────────────────────────────────────────────────────────
-Type casting           Convert string to correct type        "380.00" → DECIMAL
-Null handling          Replace, filter, or flag nulls        COALESCE(amount, 0)
-Deduplication          Remove duplicate rows                 ROW_NUMBER() OVER (PARTITION BY id)
-Filtering              Remove invalid/out-of-scope rows      WHERE status != 'test'
-Normalisation          Standardise values                    LOWER(status), TRIM(name)
-Enrichment             Add data from another source          JOIN to customers table
-Aggregation            Compute metrics                       SUM, COUNT, AVG, PERCENTILE
-Flattening             Expand nested structures              UNNEST(items), JSON extraction
-Pivoting               Reshape wide-to-long or long-to-wide  PIVOT(status values)
-Business rules         Apply domain logic                    IF amount > threshold THEN tier = 'high'
-Anonymisation          Mask or hash PII for compliance       SHA256(email)
-Window calculations    Running totals, moving averages       SUM OVER (PARTITION BY ... ORDER BY ...)
+        <CodeBox label="The transformation taxonomy — every operation type">{`TYPE              EXAMPLE
+Type casting      "380.00" → DECIMAL
+Null handling     COALESCE(amount, 0)
+Deduplication     ROW_NUMBER() OVER (PARTITION BY id)
+Filtering         WHERE status != 'test'
+Normalisation     LOWER(status), TRIM(name)
+Enrichment        JOIN to customers table
+Aggregation       SUM, COUNT, AVG, PERCENTILE
+Anonymisation     SHA256(email)
+Window calc       SUM OVER (PARTITION BY ... ORDER BY ...)
 
-WHERE TRANSFORMATIONS HAPPEN:
-  Python (Pandas/PySpark):  general-purpose, imperative, easy to test
-  SQL/dbt:                  set-based, declarative, best for tabular data
-  Spark:                    large-scale distributed, complex transformations
-  Stream processors:        Flink, Spark Streaming — real-time transformations`}</CodeBox>
+WHERE IT HAPPENS: Python/Pandas (general-purpose, easy to test) ·
+SQL/dbt (set-based, best for tabular data) · Spark (distributed, complex) ·
+Flink/Spark Streaming (real-time)`}</CodeBox>
 
-        <SubTitle>Loading — writing to the destination</SubTitle>
+        <SubSubTitle>Loading — full replace, append, and upsert</SubSubTitle>
 
-        <CodeBox label="Load patterns — full replace, append, upsert, and merge">{`# The loading pattern determines how new data interacts with existing data
-
-# ── FULL REPLACE (TRUNCATE AND RELOAD) ───────────────────────────────────────
-# Delete everything in the destination, reload from source.
-# Simple. Safe. Only works for full extraction.
-# Use for: small dimension tables, reference tables, daily full snapshots
-
-BEGIN;
-TRUNCATE TABLE silver.store_master;
+        <CodeBox label="Full replace — simple, but the table is briefly empty">{`TRUNCATE TABLE silver.store_master;
 INSERT INTO silver.store_master SELECT * FROM source_store_master;
-COMMIT;
 
-# Risk: window between TRUNCATE and INSERT where table is empty
-# Fix: use a staging table + atomic swap:
+-- Fix the empty-window risk with a staging table + atomic rename swap:
 CREATE TABLE silver.store_master_staging AS SELECT * FROM source_store_master;
-ALTER TABLE silver.store_master_staging RENAME TO store_master_new;
 ALTER TABLE silver.store_master RENAME TO store_master_old;
-ALTER TABLE store_master_new RENAME TO store_master;
-DROP TABLE silver.store_master_old;
+ALTER TABLE silver.store_master_staging RENAME TO store_master;
+DROP TABLE silver.store_master_old;`}</CodeBox>
 
-
-# ── APPEND ONLY ───────────────────────────────────────────────────────────────
-# Only add new rows. Never update or delete.
-# Use for: event logs, immutable facts, audit trails
-
-INSERT INTO silver.events (event_id, user_id, event_type, ts)
-SELECT event_id, user_id, event_type, ts
-FROM staging.events
+        <CodeBox label="Append-only — for immutable events, with a duplicate guard">{`INSERT INTO silver.events (event_id, user_id, event_type, ts)
+SELECT event_id, user_id, event_type, ts FROM staging.events
 WHERE ts > (SELECT MAX(ts) FROM silver.events);
+-- add a UNIQUE constraint on event_id + ON CONFLICT DO NOTHING to survive reruns`}</CodeBox>
 
-# Risk: duplicates on rerun (if some rows already inserted)
-# Fix: add UNIQUE constraint on event_id + use ON CONFLICT DO NOTHING
-
-
-# ── UPSERT (INSERT OR UPDATE) ────────────────────────────────────────────────
-# Insert new rows. Update existing rows if they changed.
-# The workhorse of incremental loading.
-# Use for: mutable entities (orders, customers, products)
-
--- PostgreSQL:
-INSERT INTO silver.orders (order_id, status, amount, updated_at)
+        <CodeBox label="Upsert — the workhorse of incremental loading">{`INSERT INTO silver.orders (order_id, status, amount, updated_at)
 VALUES (%s, %s, %s, %s)
-ON CONFLICT (order_id)
-DO UPDATE SET
-    status     = EXCLUDED.status,
-    amount     = EXCLUDED.amount,
-    updated_at = EXCLUDED.updated_at
+ON CONFLICT (order_id) DO UPDATE SET
+    status = EXCLUDED.status, amount = EXCLUDED.amount, updated_at = EXCLUDED.updated_at
 WHERE silver.orders.updated_at < EXCLUDED.updated_at;
--- The WHERE clause prevents overwriting newer data with older data (important!)
+-- the WHERE clause stops a replayed OLD record from overwriting a newer one
 
--- Snowflake MERGE:
-MERGE INTO silver.orders AS target
-USING staging.orders AS source
+-- Snowflake MERGE — same idea:
+MERGE INTO silver.orders AS target USING staging.orders AS source
 ON target.order_id = source.order_id
-WHEN MATCHED AND target.updated_at < source.updated_at THEN
-    UPDATE SET status = source.status, amount = source.amount
-WHEN NOT MATCHED THEN
-    INSERT (order_id, status, amount, updated_at)
-    VALUES (source.order_id, source.status, source.amount, source.updated_at);
+WHEN MATCHED AND target.updated_at < source.updated_at THEN UPDATE SET status = source.status
+WHEN NOT MATCHED THEN INSERT (order_id, status, amount, updated_at)
+    VALUES (source.order_id, source.status, source.amount, source.updated_at);`}</CodeBox>
 
-
-# ── DELTA MERGE (for lakehouses) ─────────────────────────────────────────────
-from delta.tables import DeltaTable
-
-DeltaTable.forPath(spark, 's3://freshmart-lake/silver/orders').alias('target') \
-    .merge(
-        source    = staging_df.alias('source'),
-        condition = 'target.order_id = source.order_id',
-    ) \
-    .whenMatchedUpdate(
-        condition = 'target.updated_at < source.updated_at',
-        set = {
-            'status':     'source.status',
-            'amount':     'source.amount',
-            'updated_at': 'source.updated_at',
-        },
-    ) \
-    .whenNotMatchedInsertAll() \
-    .execute()`}</CodeBox>
+        <Output>{`-- a replayed record with an OLDER updated_at than what's already in the table:
+UPDATE 0
+-- the WHERE clause silently skipped it — exactly the intended, idempotent behavior`}</Output>
       </section>
 
       <Divider />
@@ -451,10 +393,9 @@ DeltaTable.forPath(spark, 's3://freshmart-lake/silver/orders').alias('target') \
         </Para>
 
         <Para>
-          The difference is design principles. These eight principles are what
-          senior data engineers apply when designing pipelines and what they
-          look for when reviewing pipeline code. Apply them and pipelines become
-          reliable infrastructure. Ignore them and pipelines become technical debt.
+          The difference is design principles. These eight are what senior data
+          engineers apply when designing pipelines and what they look for when
+          reviewing pipeline code.
         </Para>
 
         {[
@@ -570,6 +511,13 @@ DeltaTable.forPath(spark, 's3://freshmart-lake/silver/orders').alias('target') \
             </div>
           </div>
         ))}
+
+        <TryThis>
+          Take the fragile pipeline in this module&rsquo;s Real World section below
+          before you get there — just the five-line snippet — and name which of
+          these eight principles each of its five problems violates. Then check
+          your answers against the actual breakdown.
+        </TryThis>
       </section>
 
       <Divider />
@@ -582,90 +530,45 @@ DeltaTable.forPath(spark, 's3://freshmart-lake/silver/orders').alias('target') \
         <Para>
           Real data platforms are not single linear pipelines. They are networks
           of pipelines with different shapes. Recognising the topology of a data
-          flow immediately tells you its failure modes, its parallelism opportunities,
-          and its monitoring requirements.
+          flow immediately tells you its failure modes, its parallelism
+          opportunities, and its monitoring requirements.
         </Para>
 
-        <CodeBox label="Common pipeline topologies — shapes, examples, and properties">{`# ── LINEAR PIPELINE ───────────────────────────────────────────────────────────
-# Source → Transform → Sink
-# The simplest topology. One input, one output, sequential stages.
+        <SubSubTitle>Linear, fan-out, and fan-in</SubSubTitle>
 
+        <CodeBox label="Three basic shapes">{`LINEAR — one input, one output, sequential stages
   [PostgreSQL orders] → [Python cleaner] → [S3 Bronze Parquet]
+  Simple failure model. No parallelism between stages.
 
-# Properties:
-#   Simple failure model: one failure point, clear restart path
-#   No parallelism between stages
-#   Used for: simple batch ingestion, API-to-warehouse pipelines
-
-
-# ── FAN-OUT PIPELINE ─────────────────────────────────────────────────────────
-# One source, multiple sinks.
-# Same data written to multiple destinations simultaneously or sequentially.
-
+FAN-OUT — one source, multiple sinks (may partially fail)
                         ┌→ [S3 data lake (Parquet)]
   [Kafka payments] ─────┤→ [PostgreSQL (OLTP write-through)]
                         └→ [Elasticsearch (search index)]
+  Must decide: fail all if any fail, or allow partial success?
 
-# Properties:
-#   If one sink fails, others may succeed → inconsistency across sinks
-#   Must decide: fail all if any fail, or allow partial success?
-#   Used for: CDC fan-out, event-driven architectures, dual-write patterns
-
-
-# ── FAN-IN PIPELINE ──────────────────────────────────────────────────────────
-# Multiple sources, one sink.
-# Data from different sources merged into one unified destination.
-
+FAN-IN — multiple sources merged into one sink
   [Stripe payments] ─┐
-  [Square payments]    ─┤→ [UNION ALL] → [silver.all_payments]
-  [Venmo payments]  ─┘
+  [Square payments]  ─┤→ [UNION ALL] → [silver.all_payments]
+  [Venmo payments]   ─┘
+  Must dedup after union — same transaction ID from multiple sources?`}</CodeBox>
 
-# Properties:
-#   If one source fails, do you write partial data or wait for all sources?
-#   Must dedup after union (same transaction ID from multiple sources?)
-#   Used for: multi-source consolidation, polyglot persistence → unified lake
+        <SubSubTitle>DAGs, streaming, and Lambda architecture</SubSubTitle>
 
-
-# ── DAG PIPELINE ─────────────────────────────────────────────────────────────
-# Multiple stages with dependencies. Some stages can run in parallel.
-# A Directed Acyclic Graph (DAG) — no cycles.
-
+        <CodeBox label="More complex shapes — dependencies, continuous flow, and dual paths">{`DAG — stages with dependencies, some run in parallel (no cycles)
   [Extract orders] ─────┬──────────────────┐
   [Extract customers] ──┤→ [Silver orders] →┤→ [Gold daily revenue]
   [Extract restaurants] ─┘                  └→ [Gold customer LTV]
+  A failed upstream stage blocks all downstream stages — this is what Airflow models.
 
-# Properties:
-#   Stages without dependencies can run in parallel (faster)
-#   A failed upstream stage blocks all downstream stages
-#   This is exactly what Airflow DAGs model
-#   Used for: dbt projects, complex multi-source transformations
+STREAMING — continuous, event-driven, no concept of "a run"
+  [Kafka: orders] → [Flink/Spark Streaming] → [Kafka: enriched_orders]
+                                             → [Cassandra (real-time store)]
+  Failure means falling behind (consumer lag), not stopping completely.
 
-
-# ── STREAMING PIPELINE ───────────────────────────────────────────────────────
-# Continuous, event-driven. Data is processed as it arrives, not in batches.
-
-  [Kafka topic: orders] → [Flink/Spark Streaming] → [Kafka topic: enriched_orders]
-                                                   → [Cassandra (real-time store)]
-
-# Properties:
-#   No concept of "a run" — continuous execution
-#   Failure means falling behind, not stopping completely (consumer lag)
-#   State management is complex (windowing, watermarks)
-#   Used for: real-time dashboards, fraud detection, CDC materialisation
-
-
-# ── LAMBDA ARCHITECTURE (batch + streaming combined) ─────────────────────────
-# Two paths: slow batch path for accuracy, fast streaming path for low latency.
-
-  [Source data] ──┬─ [Batch (Spark, nightly)] ──────────→ [Batch layer (accurate)]
-                  └─ [Streaming (Flink, real-time)] ──────→ [Speed layer (fast)]
-                                                                     ↓
-                                                         [Serving layer: merge both]
-
-# Properties:
-#   Complex to maintain: two codebases for same logic
-#   Kappa architecture (streaming only) is the modern alternative
-#   Used for: systems that need both historical accuracy and real-time freshness`}</CodeBox>
+LAMBDA — batch path for accuracy + streaming path for low latency
+  [Source] ──┬─ [Batch, nightly] ─────→ [Batch layer (accurate)]
+             └─ [Streaming, real-time] → [Speed layer (fast)] → [Serving: merge both]
+  Two codebases for the same logic — Kappa (streaming-only) is the modern alternative.`}</CodeBox>
       </section>
 
       <Divider />
@@ -676,11 +579,10 @@ DeltaTable.forPath(spark, 's3://freshmart-lake/silver/orders').alias('target') \
         <SectionTitle>ETL vs ELT vs EL — Why the Order Matters</SectionTitle>
 
         <Para>
-          The three-letter acronyms ETL, ELT, and EL describe where transformation
-          happens in the pipeline. This is not a trivial naming distinction —
-          the position of the transformation step determines what tools you use,
-          who can see and change the transformation logic, and how you debug when
-          data is wrong.
+          The three acronyms describe where transformation happens in the
+          pipeline — not a trivial naming distinction. The position of the
+          transformation step determines what tools you use, who can see and
+          change the logic, and how you debug when data is wrong.
         </Para>
 
         <CompareTable
@@ -692,76 +594,33 @@ DeltaTable.forPath(spark, 's3://freshmart-lake/silver/orders').alias('target') \
           ]}
           keys={['pattern', 'name', 'where', 'when']}
           rows={[
-            {
-              pattern: 'ETL',
-              name: 'Extract → Transform → Load',
-              where: 'Before loading. Data is cleaned and shaped BEFORE it reaches the destination. Python/Spark pipeline does the transformation.',
-              when: 'Source data is sensitive (PII must be masked before landing), destination has strict schema enforcement, transformation is complex and requires Python/ML.',
-            },
-            {
-              pattern: 'ELT',
-              name: 'Extract → Load → Transform',
-              where: 'After loading. Raw data lands in the warehouse/lake first, THEN SQL/dbt transforms it in place. The destination does the transformation work.',
-              when: 'Modern data warehouse (Snowflake/BigQuery) is the compute engine. Transformation logic is primarily SQL. Analysts need access to raw data. Schema flexibility is needed at load time.',
-            },
-            {
-              pattern: 'EL',
-              name: 'Extract → Load (no transform)',
-              where: 'No transformation. Raw data is landed exactly as received in the destination.',
-              when: 'Landing zone / Bronze layer ingestion. Transformation happens later in a separate pipeline. Need to preserve the exact original data for audit, debugging, or reprocessing.',
-            },
+            { pattern: 'ETL', name: 'Extract → Transform → Load', where: 'Before loading — a Python/Spark pipeline does the transformation.', when: 'Sensitive source data (PII masking before landing), strict destination schema, transformation needs Python/ML.' },
+            { pattern: 'ELT', name: 'Extract → Load → Transform', where: 'After loading — raw data lands first, THEN SQL/dbt transforms it in place.', when: 'A modern warehouse (Snowflake/BigQuery) is the compute engine. Logic is primarily SQL. Analysts need raw data access.' },
+            { pattern: 'EL', name: 'Extract → Load (no transform)', where: 'No transformation — raw data lands exactly as received.', when: 'Landing zone / Bronze ingestion. Preserve the exact original data for audit, debugging, or reprocessing.' },
           ]}
         />
 
-        <CodeBox label="ETL vs ELT — the same transformation done two different ways">{`# ── ETL: transform BEFORE loading (Python pipeline) ─────────────────────────
-
-# Python pipeline does all transformation:
-def etl_orders(source_conn, dest_conn):
-    # Extract
+        <CodeBox label="ETL — transform BEFORE loading, in Python">{`def etl_orders(source_conn, dest_conn):
     raw = pd.read_sql("SELECT * FROM orders WHERE updated_at > %s", source_conn)
-
-    # Transform (Python/Pandas)
     raw = raw.drop_duplicates(subset=['order_id'])
     raw = raw[raw['amount'] > 0]
     raw['status'] = raw['status'].str.lower().str.strip()
-    raw['created_at'] = pd.to_datetime(raw['created_at'], utc=True)
     raw['customer_city'] = raw['customer'].apply(lambda x: x.get('city'))  # flatten JSON
-    raw = raw[raw['status'].isin(['placed','confirmed','delivered','cancelled'])]
+    raw.to_sql('silver_orders', dest_conn, if_exists='append', index=False)`}</CodeBox>
 
-    # Load — destination receives clean, typed data
-    raw.to_sql('silver_orders', dest_conn, if_exists='append', index=False)
-
-
-# ── ELT: load raw THEN transform with SQL/dbt ────────────────────────────────
-
-# Step 1: EL — load raw data as-is
+        <CodeBox label="ELT — load raw, THEN transform with dbt inside the warehouse">{`# Step 1: EL — load raw data as-is
 def extract_load_orders(source_conn, warehouse_conn):
     raw = pd.read_sql("SELECT * FROM orders WHERE updated_at > %s", source_conn)
-    raw.to_sql('raw_orders', warehouse_conn, if_exists='append')  # load raw, no transforms
+    raw.to_sql('raw_orders', warehouse_conn, if_exists='append')
 
-# Step 2: dbt model transforms the raw table inside the warehouse
-# models/silver/orders.sql:
-# WITH source AS (
-#     SELECT * FROM {{ source('raw', 'orders') }}
-# ),
-# cleaned AS (
-#     SELECT
-#         order_id,
-#         amount::DECIMAL(10,2),
-#         LOWER(TRIM(status)) AS status,
-#         created_at::TIMESTAMPTZ
-#     FROM source
-#     WHERE amount > 0
-#       AND LOWER(status) IN ('placed','confirmed','delivered','cancelled')
-#     QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY updated_at DESC) = 1
-# )
-# SELECT * FROM cleaned;
+# Step 2: models/silver/orders.sql — dbt transforms the raw table in place
+# SELECT order_id, amount::DECIMAL(10,2), LOWER(TRIM(status)) AS status
+# FROM {{ source('raw', 'orders') }}
+# WHERE amount > 0 AND LOWER(status) IN ('placed','confirmed','delivered','cancelled')
+# QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY updated_at DESC) = 1
 
-# MODERN BEST PRACTICE (2026):
-#   EL raw data into the lake/warehouse (Bronze layer)
-#   dbt/SQL transforms it in place (Silver and Gold layers)
-#   Python ETL only for: PII masking, ML feature engineering, complex flattening
-#   Never transform in the extraction layer if the warehouse can do it`}</CodeBox>
+# 2026 default: EL raw into Bronze, dbt transforms Silver/Gold.
+# Python ETL only for PII masking, ML features, and complex flattening.`}</CodeBox>
       </section>
 
       <Divider />
@@ -778,91 +637,49 @@ def extract_load_orders(source_conn, warehouse_conn):
           automatically, and alert clearly when human intervention is needed.
         </Para>
 
-        <CodeBox label="Pipeline failure taxonomy — every way a pipeline can break">{`FAILURE CATEGORY      EXAMPLES                         DEFAULT BEHAVIOUR    CORRECT BEHAVIOUR
-──────────────────────────────────────────────────────────────────────────────────────────────────
-Source unavailable    DB connection timeout             Crash with error    Retry with backoff
-                      API 503 Service Unavailable                           Alert if > N retries
-                      SFTP server unreachable
+        <CompareTable
+          headers={[
+            { label: 'Category' },
+            { label: 'Example', color: '#f97316' },
+            { label: 'Default (bad) behavior', color: '#ff4757' },
+            { label: 'Correct behavior', color: '#00e676' },
+          ]}
+          keys={['cat', 'example', 'bad', 'good']}
+          rows={[
+            { cat: 'Source unavailable', example: 'DB timeout, API 503, SFTP unreachable', bad: 'Crash with error', good: 'Retry with backoff, alert if > N retries' },
+            { cat: 'Source data changed', example: 'New/renamed column, type change', bad: 'Wrong data written silently', good: 'Schema validation, alert + DLQ' },
+            { cat: 'Source data quality', example: 'NULL in required field, duplicate PKs', bad: 'Wrong aggregations (silent!)', good: 'Row-level validation, DLQ invalid rows' },
+            { cat: 'Transformation bug', example: 'Wrong SQL logic, off-by-one date range', bad: 'Wrong data, no error', good: 'dbt tests before deploy, code review' },
+            { cat: 'Resource exhaustion', example: 'OOM, disk full, API rate limit', bad: 'Crash or corrupt output', good: 'Chunked processing, proactive throttling' },
+            { cat: 'Infrastructure', example: 'Network partition, pod eviction', bad: 'Timeout, mid-run failure', good: 'Backoff retry, resumable from checkpoint' },
+            { cat: 'Orchestration', example: 'Dependency failed, timezone bug', bad: 'Downstream skipped silently', good: 'Explicit failure propagation, fixed UTC schedule' },
+            { cat: 'SLA breach', example: 'Pipeline takes 4h instead of 1h', bad: 'Late data in dashboards', good: 'Timeout + SLA monitoring, not just failure alerts' },
+          ]}
+        />
 
-Source data changed   New column added to source        Wrong data written   Schema validation
-                      Column renamed in source API      silently             Alert + DLQ bad rows
-                      Type changed (string → number)
+        <SubSubTitle>Metrics every pipeline should record on every run</SubSubTitle>
 
-Source data quality   NULL in required field            Wrong aggregations  Row-level validation
-                      Negative amounts                  (silent!)           DLQ invalid rows
-                      Duplicate primary keys                                Alert if DLQ fills up
-
-Transformation bug    Wrong SQL logic                   Wrong data written   dbt tests catch before deploy
-                      Off-by-one in date range          (no error!)          Code review
-                      NULL propagation in calculation                        Data quality checks
-
-Destination issue     Warehouse out of disk             Crash with error    Retry, then alert
-                      Schema mismatch on write          Schema check fails  Schema validation before write
-                      Table locked by another query     Timeout or deadlock Retry + timeout config
-
-Resource exhaustion   OOM on large dataset              Crash               Chunked processing
-                      Disk full mid-write               Corrupt output      Disk space checks before run
-                      Rate limit on API sink            Throttling error    Proactive rate limiting
-
-Infrastructure        Network partition                 Timeout             Retry with exponential backoff
-                      Pod eviction (Kubernetes)         Mid-run failure     Resumable from checkpoint
-                      Spot instance termination         Data corruption     SIGTERM handler + checkpoint
-
-Orchestration         Dependency task failed            Downstream skipped  Explicit failure propagation
-                      Wrong schedule (timezone bug)     Wrong time range    Fixed UTC schedule + monitoring
-                      Concurrent runs overlap           Duplicate data      Lock file / mutex
-
-SLA breach            Pipeline takes 4h instead of 1h  Late data in dash   Timeout + alerting
-                      Source delivers data late         Late pipeline run    SLA monitoring, not just failure
-                      Backfill job blocks daily run     Daily run delayed   Job priority management`}</CodeBox>
-
-        <SubTitle>The pipeline health checklist</SubTitle>
-
-        <Para>
-          A pipeline is not just "running" or "not running." There are intermediate
-          states that require attention: running too slowly (SLA risk), producing
-          fewer rows than expected (data quality issue), or succeeding but writing
-          wrong data (the most dangerous state because it produces no alert).
-        </Para>
-
-        <CodeBox label="Pipeline health metrics — what to measure on every run">{`# Write these metrics after every pipeline run to a runs table:
-
-CREATE TABLE monitoring.pipeline_runs (
-    run_id          UUID        PRIMARY KEY,
-    pipeline_name   VARCHAR(100) NOT NULL,
-    run_date        DATE        NOT NULL,
-    started_at      TIMESTAMPTZ NOT NULL,
-    finished_at     TIMESTAMPTZ,
-    status          VARCHAR(20) NOT NULL,  -- 'running', 'success', 'failed', 'partial'
-    rows_extracted  BIGINT,
-    rows_written    BIGINT,
-    rows_rejected   BIGINT,
-    duration_seconds DECIMAL(10,2),
-    error_message   TEXT,
-    dlq_count       INTEGER DEFAULT 0,
-    created_at      TIMESTAMPTZ DEFAULT NOW()
+        <CodeBox label="monitoring.pipeline_runs — the table every alert reads from">{`CREATE TABLE monitoring.pipeline_runs (
+    run_id UUID PRIMARY KEY, pipeline_name VARCHAR(100) NOT NULL, run_date DATE NOT NULL,
+    started_at TIMESTAMPTZ NOT NULL, finished_at TIMESTAMPTZ,
+    status VARCHAR(20) NOT NULL,   -- 'running', 'success', 'failed', 'partial'
+    rows_extracted BIGINT, rows_written BIGINT, rows_rejected BIGINT,
+    duration_seconds DECIMAL(10,2), error_message TEXT, dlq_count INTEGER DEFAULT 0
 );
 
--- ALERT CONDITIONS (set up in monitoring tool):
--- 1. status = 'failed'                          → immediate alert
--- 2. duration_seconds > expected_duration * 2   → SLA warning
--- 3. rows_written < expected_rows * 0.8         → data quality alert
--- 4. rows_rejected > total_rows * 0.05           → data quality alert (>5% rejected)
--- 5. dlq_count > 100                            → investigate DLQ
--- 6. No row inserted for today at 8 AM          → pipeline did not run
-
--- DATA QUALITY CHECK after every run:
-SELECT
-    run_date,
-    rows_written,
-    LAG(rows_written) OVER (ORDER BY run_date) AS prev_day_rows,
+-- day-over-day row count check, run after every load:
+SELECT run_date, rows_written, LAG(rows_written) OVER (ORDER BY run_date) prev_day_rows,
     ABS(rows_written - LAG(rows_written) OVER (ORDER BY run_date))
-    / NULLIF(LAG(rows_written) OVER (ORDER BY run_date), 0) AS pct_change
-FROM monitoring.pipeline_runs
-WHERE pipeline_name = 'orders_ingestion'
-ORDER BY run_date DESC
-LIMIT 30;
--- Alert if pct_change > 0.3 (30% day-over-day change is suspicious)`}</CodeBox>
+    / NULLIF(LAG(rows_written) OVER (ORDER BY run_date), 0) pct_change
+FROM monitoring.pipeline_runs WHERE pipeline_name = 'orders_ingestion'
+ORDER BY run_date DESC LIMIT 30;`}</CodeBox>
+
+        <Output>{`ALERT CONDITIONS:
+status = 'failed'                     → immediate alert
+duration_seconds > expected * 2       → SLA warning
+rows_written < expected * 0.8         → data quality alert
+rows_rejected > total_rows * 0.05     → data quality alert
+No row inserted for today by 8 AM    → pipeline did not run at all`}</Output>
       </section>
 
       <Divider />
@@ -886,36 +703,12 @@ LIMIT 30;
           ]}
           keys={['term', 'meaning', 'example']}
           rows={[
-            {
-              term: 'Task',
-              meaning: 'The smallest unit of work — one atomic operation that succeeds or fails as a whole.',
-              example: 'Run dbt model fct_orders. Extract one day of orders from API. Write one batch to S3.',
-            },
-            {
-              term: 'Job',
-              meaning: 'A single executable unit — a script, a Spark application, a dbt model run. One process, one purpose.',
-              example: 'orders_ingestion.py — a Python script that runs once and exits. spark-submit process_events.jar.',
-            },
-            {
-              term: 'Pipeline',
-              meaning: 'A sequence of tasks or jobs that move data from source to sink. May be a single job or multiple jobs in sequence.',
-              example: 'Extract orders → Bronze Parquet → Silver cleaning → Gold aggregation.',
-            },
-            {
-              term: 'Workflow',
-              meaning: 'A coordinated set of pipelines with dependencies, schedules, and error handling. A workflow defines what runs when and in what order.',
-              example: 'The daily FreshCart workflow: ingest orders + customers + products, then run dbt Silver, then run Gold models.',
-            },
-            {
-              term: 'DAG',
-              meaning: 'Directed Acyclic Graph — the specific representation of a workflow as a graph where nodes are tasks and edges are dependencies. Used in Airflow.',
-              example: 'An Airflow DAG with 12 tasks: 3 extraction tasks → 2 validation tasks → 4 dbt tasks → 3 alert tasks.',
-            },
-            {
-              term: 'Orchestrator',
-              meaning: 'The system that schedules and executes workflows — manages dependencies, retries, alerting, and history.',
-              example: 'Apache Airflow, Prefect, Dagster, dbt Cloud, AWS Step Functions, GitHub Actions.',
-            },
+            { term: 'Task', meaning: 'The smallest unit of work — one atomic operation that succeeds or fails as a whole.', example: 'Run dbt model fct_orders. Extract one day of orders from API.' },
+            { term: 'Job', meaning: 'A single executable unit — a script, a Spark application, a dbt model run.', example: 'orders_ingestion.py — a Python script that runs once and exits.' },
+            { term: 'Pipeline', meaning: 'A sequence of tasks or jobs that move data from source to sink.', example: 'Extract orders → Bronze Parquet → Silver cleaning → Gold aggregation.' },
+            { term: 'Workflow', meaning: 'A coordinated set of pipelines with dependencies, schedules, and error handling.', example: 'The daily FreshCart workflow: ingest orders + customers + products, then Silver, then Gold.' },
+            { term: 'DAG', meaning: 'Directed Acyclic Graph — the graph representation of a workflow, used in Airflow.', example: 'An Airflow DAG with 12 tasks: 3 extraction → 2 validation → 4 dbt → 3 alert.' },
+            { term: 'Orchestrator', meaning: 'The system that schedules and executes workflows.', example: 'Apache Airflow, Prefect, Dagster, dbt Cloud, GitHub Actions.' },
           ]}
         />
       </section>
@@ -929,75 +722,49 @@ LIMIT 30;
 
         <Para>
           A pipeline that is correct but unreadable, untestable, and unmaintainable
-          is a liability. Production pipelines run for years. The team that maintains
-          them changes. The data engineer who wrote it three years ago is not
-          available to explain why a particular branch condition exists. Good pipeline
-          code is self-documenting, testable at every layer, and structured so that
-          changes can be made safely.
+          is a liability. Production pipelines run for years, and the person who
+          wrote a particular branch condition three years ago is rarely around to
+          explain it. Good pipeline code is self-documenting, testable at every
+          layer, and structured so changes can be made safely.
         </Para>
 
-        <CodeBox label="Good pipeline structure — the template every pipeline should follow">{`"""
-orders_ingestion_pipeline.py
+        <SubSubTitle>Setup — imports, constants, and validated config</SubSubTitle>
 
+        <CodeBox label="orders_ingestion_pipeline.py — header and configuration">{`"""
 Daily orders ingestion: PostgreSQL source → S3 Bronze Parquet
-Schedule: 8:30 PM ET daily, previous day (00:30 UTC)
-Owner: data-team@freshmart.com
-SLA: complete by 9:30 PM ET (previous day)
-Dependencies: none (first pipeline in daily DAG)
-
-Idempotent: yes (upserts on order_id)
-Resumable: yes (checkpoint per S3 partition written)
+Schedule: 00:30 UTC daily, previous day. Owner: data-team@freshcart.com
+Idempotent: yes (upserts on order_id). Resumable: yes (checkpoint per file).
 """
-
-# ── IMPORTS: clear separation of standard, third-party, local ─────────────────
-import os
-import json
-import logging
-import uuid
+import os, json, logging, uuid
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Iterator
-
 import psycopg2
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-# ── CONSTANTS: at the top, named, never magic numbers ─────────────────────────
-BATCH_SIZE      = 100_000
-TARGET_FILE_MB  = 512
-CHECKPOINT_DIR  = Path('/data/checkpoints')
-DLQ_DIR         = Path('/data/dlq')
+BATCH_SIZE     = 100_000
+CHECKPOINT_DIR = Path('/data/checkpoints')
+DLQ_DIR        = Path('/data/dlq')
 
-# ── CONFIGURATION: from environment, validated at startup ─────────────────────
 class Config:
     db_url:  str = os.environ['SOURCE_DB_URL']
-    s3_path: str = os.environ['S3_OUTPUT_PATH']
+    s3_path: str = os.environ['S3_OUTPUT_PATH']`}</CodeBox>
 
-# ── FUNCTIONS: each one does one thing, has a clear name ──────────────────────
+        <SubSubTitle>Extraction and validation — small, single-purpose functions</SubSubTitle>
 
-def extract_orders(conn, run_date: date) -> Iterator[dict]:
-    """
-    Extract all orders for run_date from PostgreSQL.
-    Uses run_date as the fixed window — idempotent for the same date.
-    Yields one row at a time — constant memory regardless of volume.
-    """
+        <CodeBox label="Each function does one thing and has a clear name">{`def extract_orders(conn, run_date: date) -> Iterator[dict]:
+    """Extract all orders for run_date. Fixed window — idempotent for the same date."""
     start_ts = datetime(run_date.year, run_date.month, run_date.day, tzinfo=timezone.utc)
     end_ts   = start_ts + timedelta(days=1)
-
     with conn.cursor('orders_cursor') as cur:   # server-side cursor: streams rows
-        cur.execute(
-            "SELECT * FROM orders WHERE created_at >= %s AND created_at < %s",
-            (start_ts, end_ts),
-        )
+        cur.execute("SELECT * FROM orders WHERE created_at >= %s AND created_at < %s",
+                     (start_ts, end_ts))
         for row in cur:
-            yield dict(zip([desc[0] for desc in cur.description], row))
-
+            yield dict(zip([d[0] for d in cur.description], row))
 
 def validate_row(row: dict) -> tuple[dict | None, str | None]:
-    """
-    Validate one order row. Returns (clean_row, None) or (None, error_reason).
-    Pure function — no I/O, fully unit-testable.
-    """
+    """Pure function — no I/O, fully unit-testable."""
     if not row.get('order_id'):
         return None, 'missing_order_id'
     if (row.get('amount') or 0) <= 0:
@@ -1006,83 +773,102 @@ def validate_row(row: dict) -> tuple[dict | None, str | None]:
         return None, f'invalid_status: {row.get("status")}'
     return row, None
 
-
 def write_parquet_batch(rows: list[dict], path: str) -> None:
-    """Write a list of row dicts to a Parquet file. Single responsibility."""
-    table = pa.Table.from_pylist(rows)
-    pq.write_table(table, path, compression='zstd')
+    pq.write_table(pa.Table.from_pylist(rows), path, compression='zstd')`}</CodeBox>
 
+        <SubSubTitle>Orchestration — wiring extract, validate, and load together</SubSubTitle>
 
-def run(run_date: date) -> dict:
-    """
-    Main pipeline function. Orchestrates extract → validate → load.
-    Returns run statistics.
-    """
-    run_id  = str(uuid.uuid4())
-    log     = logging.getLogger('orders_ingestion')
-    stats   = {'run_id': run_id, 'rows_extracted': 0, 'rows_written': 0, 'rows_rejected': 0}
-
+        <CodeBox label="run() — the main function, and its entry point">{`def run(run_date: date) -> dict:
+    run_id, log = str(uuid.uuid4()), logging.getLogger('orders_ingestion')
+    stats = {'run_id': run_id, 'rows_extracted': 0, 'rows_written': 0, 'rows_rejected': 0}
     log.info('Pipeline started', extra={'run_date': str(run_date), 'run_id': run_id})
 
-    conn = psycopg2.connect(Config.db_url)
-    batch: list[dict] = []
-    chunk = 0
-
+    conn, batch, chunk = psycopg2.connect(Config.db_url), [], 0
     try:
         for row in extract_orders(conn, run_date):
             stats['rows_extracted'] += 1
             clean, error = validate_row(row)
-
             if error:
                 stats['rows_rejected'] += 1
-                # Write to DLQ — do not crash the whole pipeline for one bad row
                 with open(DLQ_DIR / f'orders_{run_date}_{run_id}.ndjson', 'a') as f:
-                    f.write(json.dumps({'error': error, 'row': row}) + '\n')
+                    f.write(json.dumps({'error': error, 'row': row}) + '\\n')
                 continue
-
             batch.append(clean)
-
             if len(batch) >= BATCH_SIZE:
                 chunk += 1
-                output_path = f'{Config.s3_path}/date={run_date}/part-{chunk:05d}.parquet'
-                write_parquet_batch(batch, output_path)
+                write_parquet_batch(batch, f'{Config.s3_path}/date={run_date}/part-{chunk:05d}.parquet')
                 stats['rows_written'] += len(batch)
-                log.info('Batch written', extra={'chunk': chunk, 'cumulative': stats['rows_written']})
                 batch = []
-
-        # Write final partial batch:
         if batch:
             chunk += 1
-            output_path = f'{Config.s3_path}/date={run_date}/part-{chunk:05d}.parquet'
-            write_parquet_batch(batch, output_path)
+            write_parquet_batch(batch, f'{Config.s3_path}/date={run_date}/part-{chunk:05d}.parquet')
             stats['rows_written'] += len(batch)
-
     finally:
         conn.close()
 
     log.info('Pipeline complete', extra=stats)
     return stats
 
-
-# ── ENTRY POINT: handles CLI arguments, calls run() ───────────────────────────
 if __name__ == '__main__':
     import sys
     logging.basicConfig(level=logging.INFO, format='%(message)s')
-
-    run_date = (
-        date.fromisoformat(sys.argv[1])
-        if len(sys.argv) > 1
-        else date.today() - timedelta(days=1)
-    )
+    run_date = date.fromisoformat(sys.argv[1]) if len(sys.argv) > 1 else date.today() - timedelta(days=1)
     result = run(run_date)
     sys.exit(0 if result['rows_rejected'] / max(result['rows_extracted'], 1) < 0.05 else 1)`}</CodeBox>
+
+        <Output>{`{"run_date": "2026-03-17", "run_id": "a1f9-...", "msg": "Pipeline started"}
+...
+{"rows_extracted": 812400, "rows_written": 811980, "rows_rejected": 420, "msg": "Pipeline complete"}
+$ echo $?
+0   # 420/812400 = 0.05% rejection — well under the 5% exit-code threshold`}</Output>
       </section>
 
       <Divider />
 
-      {/* ── Part 09 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 09 — Misconceptions ──────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 09 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data Pipelines</SectionTitle>
+
+        {[
+          {
+            wrong: '"A pipeline that runs without errors is a working pipeline"',
+            right: 'This module\'s Real World fragile pipeline and its Error Library both show the opposite: dropna() silently deletes rows, a bad filter silently excludes a category, and the run still reports success. The most dangerous failure mode in a pipeline produces no error at all — Part 06\'s row-count and value-range monitoring exists specifically to catch what "no error" doesn\'t.',
+          },
+          {
+            wrong: '"ETL and ELT are basically the same thing with the letters reordered"',
+            right: 'The reordering changes who can see and edit the transformation logic, not just where the compute happens — Part 05\'s ELT preserves raw data (so any transformation bug is fixable by re-running SQL against the same Bronze data) while ETL discards raw input the moment it\'s transformed, so a bug found later means re-extracting from the source all over again.',
+          },
+          {
+            wrong: '"A DAG and a pipeline are interchangeable terms — everyone knows what you mean"',
+            right: 'Part 07 exists because they answer different questions — "the pipeline is slow" is about data processing logic, "the DAG failed" is usually about one specific task inside an orchestrator. A single Airflow DAG commonly wraps several distinct pipelines; conflating the terms makes incident communication genuinely ambiguous, not just informally imprecise.',
+          },
+          {
+            wrong: '"Idempotency and resumability are two names for the same property"',
+            right: 'They solve different failure moments — idempotency (Part 03, Principle 01) is about what happens when the SAME work runs twice; resumability (Principle 02) is about not having to redo work that already succeeded before a crash. A pipeline can be idempotent but not resumable (safe to rerun from scratch, but slow to do so) or resumable but not idempotent (picks up from a checkpoint, but duplicates rows if the checkpoint save itself failed).',
+          },
+          {
+            wrong: '"Full extraction is just the simple/beginner version of incremental extraction"',
+            right: 'Full extraction is the CORRECT choice for small reference tables and sources with no reliable changed-at column — Part 02 lists it as a legitimate pattern, not a shortcut to graduate out of. The mistake is using it by default on tables large enough that incremental extraction is the only thing that keeps source load and pipeline duration reasonable.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, padding: '20px 24px', marginBottom: 16,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 10 — Real World ──────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 09 — Real World" />
+        <SectionTag text="// Part 10 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
           textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12,
@@ -1124,55 +910,50 @@ df.to_sql('silver_orders', warehouse_conn, if_exists='replace')  # PROBLEM 4
 print("done")                                          # PROBLEM 5`}</CodeBox>
 
           <Para>
-            <strong>Problem 1 — Full extraction every run:</strong> SELECT * FROM orders
-            reads the entire orders table (currently 180 million rows) every morning.
-            Takes 4 hours. Slows production database. No incremental pattern.
+            <strong>Problem 1 — Full extraction every run:</strong> reads all 180
+            million rows every morning, taking 4 hours and slowing production.
+            No incremental pattern (violates Source Isolation).
           </Para>
-
           <Para>
             <strong>Problem 2 — Silent type casting failure:</strong>{' '}
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>astype(float)</code>{' '}
-            raises a ValueError and crashes the entire pipeline if any amount is a
-            non-numeric string (which happens from a specific vendor once a week).
+            crashes the entire pipeline the moment one vendor sends a non-numeric
+            amount, which happens weekly (violates Data Quality Enforcement).
           </Para>
-
           <Para>
             <strong>Problem 3 — Silent data deletion:</strong>{' '}
             <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>dropna()</code>{' '}
-            drops ALL rows containing ANY null value. Orders with a null promo_code
-            (the majority) are silently deleted. Revenue metrics are wrong.
+            drops every row with any null — orders missing a promo_code (the
+            majority) vanish, and revenue metrics are quietly wrong.
           </Para>
-
           <Para>
             <strong>Problem 4 — Truncate-and-replace every run:</strong>{' '}
-            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>if_exists='replace'</code>{' '}
-            drops and recreates the entire table every run. The table is empty during
-            the 4-hour run. Analysts see zero data all morning. No idempotency.
+            <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>if_exists=&apos;replace&apos;</code>{' '}
+            drops and recreates the table every run — empty for the whole 4-hour
+            window (violates Idempotency and Atomicity).
           </Para>
-
           <Para>
-            <strong>Problem 5 — No logging, no observability:</strong> The only output
-            is "done." No row counts, no timing, no run ID. When something goes wrong,
-            there is no information to debug with.
+            <strong>Problem 5 — No observability:</strong> the only output is
+            &ldquo;done&rdquo; — no row counts, no timing, no run ID to debug with.
           </Para>
 
           <Para>
             After applying the eight design principles, the pipeline becomes the
-            structured, resumable, observable version shown in Part 08. It processes
-            only yesterday's new orders (incremental), validates each row individually
-            and sends failures to a DLQ (data quality enforcement), writes in batches
-            with upserts (idempotency), logs structured metrics (observability), and
-            takes 4 minutes instead of 4 hours (source isolation). Every principle
-            has a direct, measurable impact.
+            structured, resumable, observable version shown in Part 08. It
+            processes only yesterday&rsquo;s new orders (incremental), validates each
+            row and routes failures to a DLQ (data quality enforcement), writes
+            in batches with upserts (idempotency), logs structured metrics
+            (observability), and takes 4 minutes instead of 4 hours (source
+            isolation). Every principle has a direct, measurable impact.
           </Para>
         </div>
       </section>
 
       <Divider />
 
-      {/* ── Part 10 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 11 — Interview Prep ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 10 — Interview Prep" />
+        <SectionTag text="// Part 11 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
@@ -1245,6 +1026,45 @@ The distinction matters practically: a pipeline can exist without a DAG (a cron 
             <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
               {item.a}
             </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Reaching for dropna() as a general-purpose cleaning step',
+            a: 'dropna() with no subset argument removes a row if ANY column is null, not just the ones that matter — Part 10\'s fragile pipeline example loses most of its orders this way because promo_code is legitimately null on most rows. Always scope it: dropna(subset=["order_id", "amount"]).',
+          },
+          {
+            q: 'Using if_exists="replace" on a table anything else depends on',
+            a: 'The table is genuinely empty for the entire duration of the write — any dashboard or downstream job reading it mid-run sees zero rows, not an error. Part 02\'s staging-table-plus-atomic-rename pattern exists specifically to remove this window.',
+          },
+          {
+            q: 'Treating "the pipeline finished without an exception" as proof it worked correctly',
+            a: 'This module\'s Real World and Error Library both show pipelines that ran cleanly to completion while silently deleting or filtering out rows. Absence of an exception is not evidence of correctness — a row-count check comparing output to source is.',
+          },
+          {
+            q: 'Picking ETL or ELT by habit rather than by where the transformation actually needs to happen',
+            a: 'Part 05 isn\'t a stylistic choice — PII masking has to happen in ETL before data lands anywhere it shouldn\'t, while most business logic belongs in ELT/dbt so raw data stays available for reprocessing. Check which constraint actually applies before defaulting to whichever pattern you used last time.',
+          },
+          {
+            q: 'Assuming a pipeline is done being designed once it moves data correctly on the happy path',
+            a: 'Part 03\'s eight principles are not features to add later — Resumability, Isolation, and Minimal Footprint in particular are structural decisions that are expensive to retrofit once a pipeline is already in production and other systems depend on its current behavior.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
           </div>
         ))}
       </section>
@@ -1325,7 +1145,7 @@ The distinction matters practically: a pipeline can exist without a DAG (a cron 
         'A pipeline and a DAG are not the same thing. A pipeline is a data flow. A DAG is the dependency graph that orchestrates multiple pipelines or tasks. An Airflow DAG for the morning data platform may contain 15 tasks across 6 pipelines.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
