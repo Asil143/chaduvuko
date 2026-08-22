@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -130,8 +173,8 @@ export default function PipelineOrchestrationModule() {
       title="Pipeline Orchestration — Airflow, DAGs, Scheduling, and Dependency Management"
       description="What orchestration actually does, Airflow architecture, DAG design, scheduling, backfills, Sensors, and when to use alternatives."
       section="Data Engineering — Module 28"
-      readTime="65 min"
-      updatedAt="March 2026"
+      readTime="70 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What Orchestration Actually Is ─────────────────── */}
@@ -150,12 +193,12 @@ export default function PipelineOrchestrationModule() {
         </Para>
 
         <Para>
-          The distinction matters because the question "why do I need Airflow when
-          I have cron?" has a precise answer: cron tells you when to run. Airflow
+          The distinction matters because the question &ldquo;why do I need Airflow when
+          I have cron?&rdquo; has a precise answer: cron tells you when to run. Airflow
           tells you what to run, in what order, on what conditions, with what
-          resource limits, and what to do when it fails. For a single pipeline,
-          cron is often sufficient. For ten interdependent pipelines with shared
-          resources and a shared SLA, you need an orchestrator.
+          resource limits, and what to do when it fails. This module builds up
+          FreshCart&rsquo;s actual morning DAG — the pipeline that turns raw orders
+          into Gold-layer revenue tables every night — one Airflow concept at a time.
         </Para>
 
         <HighlightBox>
@@ -201,139 +244,82 @@ export default function PipelineOrchestrationModule() {
 
         <Para>
           Apache Airflow is the dominant orchestration tool for data engineering.
-          It is used at Google, Airbnb, Lyft, Twitter, and virtually every company
-          with a mature data platform. Understanding its internal architecture —
-          not just how to write DAGs — lets you tune it, scale it, and diagnose
-          failures that are architectural rather than code bugs.
+          Understanding its internal architecture — not just how to write DAGs —
+          lets you tune it, scale it, and diagnose failures that are architectural
+          rather than code bugs.
         </Para>
 
-        <SubTitle>Airflow components and their roles</SubTitle>
+        <SubSubTitle>Five components, one job each</SubSubTitle>
 
-        <CodeBox label="Airflow architecture — every component and what it does">{`AIRFLOW COMPONENTS:
-
-  WEBSERVER
-  ─────────
-  • Flask application serving the Airflow UI
-  • Shows DAG graph, Gantt chart, task logs, run history
-  • Allows manual triggers, backfill initiation, variable management
+        <CodeBox label="Airflow architecture — every component and what it does">{`WEBSERVER
+  • Flask app serving the UI — graph view, Gantt chart, task logs, run history
   • Reads state from the metadata database (does not execute tasks)
-  • Port: 8080 (default)
 
-  SCHEDULER
-  ─────────
-  • The brain of Airflow — runs continuously as a daemon
-  • Parses DAG files from the DAGs folder every heartbeat (30s default)
-  • Creates DagRun objects when schedule intervals trigger
-  • Creates TaskInstance objects for each task in triggered DagRuns
-  • Evaluates task dependencies — queues tasks whose upstream tasks succeeded
-  • Sends queued tasks to the executor
-  • Scales: Airflow 2.x supports multiple scheduler instances for HA
+SCHEDULER
+  • The brain — runs continuously, parses DAG files every heartbeat (30s default)
+  • Creates DagRuns when schedule intervals trigger, queues eligible tasks
+  • Airflow 2.x supports multiple scheduler instances for HA
 
-  EXECUTOR
-  ────────
-  • Receives task instances from the scheduler and runs them
-  • Different executors for different deployment scales:
+EXECUTOR
+  • Receives queued task instances from the scheduler and runs them
+  • SequentialExecutor: one task at a time, dev/testing only
+  • LocalExecutor:      subprocesses on the scheduler machine, small teams
+  • CeleryExecutor:     distributes to workers via Redis/RabbitMQ, horizontal scale
+  • KubernetesExecutor: one pod per task, fully isolated, scales to zero — most common in 2026
 
-    SequentialExecutor:  runs one task at a time in the scheduler process
-                         for development/testing only — not for production
+METADATA DATABASE (PostgreSQL or MySQL)
+  • Stores all state: DAG definitions, DagRuns, TaskInstances, XCom, pools
+  • Source of truth — if the DB is down, Airflow stops
 
-    LocalExecutor:       runs tasks as subprocesses on the scheduler machine
-                         single-machine production (small teams, limited scale)
+WORKERS
+  • Actually execute the task code, write logs, report success/failure back to the DB`}</CodeBox>
 
-    CeleryExecutor:      distributes tasks to Celery workers via a message
-                         broker (Redis or RabbitMQ) — horizontal scaling
-                         tasks run on separate worker machines
+        <Output>{`Task execution, start to finish:
+1. Scheduler parses DAG file → creates DagRun at schedule time
+2. Scheduler evaluates dependencies → marks eligible tasks QUEUED
+3. Scheduler sends the TaskInstance to the Executor
+4. Executor assigns the task to a Worker
+5. Worker runs the task code, writes logs, reports SUCCESS/FAILURE to metadata DB
+6. Scheduler sees SUCCESS → queues downstream tasks
+7. UI reads state from metadata DB → task shows green`}</Output>
 
-    KubernetesExecutor:  spins up a new Kubernetes pod per task
-                         fully isolated — each task has its own container
-                         scales to zero when idle — most common in 2026
+        <SubSubTitle>Logical date vs execution time — the most confusing concept in Airflow</SubSubTitle>
 
-  METADATA DATABASE (PostgreSQL or MySQL)
-  ───────────────────────────────────────
-  • Stores all Airflow state: DAG definitions, DagRuns, TaskInstances
-  • Tables: dag, dag_run, task_instance, log, variable, connection, pool, xcom
-  • Every task state change is a write to this database
-  • This is the source of truth — if the DB is down, Airflow stops
+        <Para>
+          The <code>logical_date</code> (called <code>execution_date</code> before
+          Airflow 2.2) is <strong>not</strong> when the DAG run executes — it is the
+          start of the data interval the run is responsible for. Airflow always runs
+          one interval behind, because it waits for the interval to fully close
+          before processing it.
+        </Para>
 
-  WORKERS (CeleryExecutor / KubernetesExecutor)
-  ──────────────────────────────────────────────
-  • Actually execute the task code (PythonOperator functions, BashOperator scripts)
-  • Read the task definition from the metadata database
-  • Write logs to S3/GCS or the Airflow log directory
-  • Report task completion (success/failure) back to the metadata database
-
-  DAG FILES DIRECTORY
-  ───────────────────
-  • Python files containing DAG and task definitions
-  • Mounted on the scheduler and all workers (must be in sync)
-  • Scheduler re-parses all DAG files every scheduler_heartbeat_sec
-  • Changes to DAG files take effect within ~30 seconds without restart
-
-DATA FLOW FOR A SINGLE TASK EXECUTION:
-  1. Scheduler parses DAG file → creates DagRun at schedule time
-  2. Scheduler evaluates task dependencies → marks eligible tasks QUEUED
-  3. Scheduler sends queued TaskInstance to Executor
-  4. Executor assigns task to a Worker
-  5. Worker runs the task code (PythonOperator, BashOperator, etc.)
-  6. Worker writes task log to log storage
-  7. Worker reports SUCCESS or FAILURE to metadata DB
-  8. Scheduler sees SUCCESS → queues downstream tasks
-  9. UI reads state from metadata DB → shows task as SUCCESS (green)`}</CodeBox>
-
-        <SubTitle>Airflow execution date vs logical date — the most confusing concept</SubTitle>
-
-        <CodeBox label="Execution date vs logical date — what they mean and how to use them">{`# The most confusing concept in Airflow: the execution_date (now called
-# logical_date in Airflow 2.2+) is NOT when the DAG run executes.
-# It is the START of the data interval the run processes.
-
-# EXAMPLE:
-# DAG schedule: '0 6 * * *'  (daily at 06:00 UTC)
-# DAG start_date: 2026-03-01
-
+        <CodeBox label="What logical_date actually means">{`# DAG schedule: '0 6 * * *' (daily at 06:00 UTC)
 # The run that executes at 2026-03-17 06:00 UTC has:
-#   logical_date (execution_date): 2026-03-16 06:00:00 UTC
-#   data_interval_start:           2026-03-16 06:00:00 UTC
-#   data_interval_end:             2026-03-17 06:00:00 UTC
-
-# Airflow runs one interval BEHIND the current time.
-# The 06:00 March 17 run processes data for the March 16 interval.
-# This is by design: at 06:00 March 17, all March 16 data is complete.
-
-# WHY THIS MATTERS FOR DATA ENGINEERING:
-# If your pipeline uses the execution_date to determine which data to process:
-
-from airflow.operators.python import PythonOperator
-from datetime import datetime, timezone
+#   logical_date:       2026-03-16 06:00:00 UTC
+#   data_interval_start: 2026-03-16 06:00:00 UTC
+#   data_interval_end:   2026-03-17 06:00:00 UTC
+# → at 06:00 on the 17th, all of the 16th's data is complete and safe to process
 
 def process_orders(**context):
-    # WRONG: uses actual current time — not reproducible on backfill
-    run_date = datetime.now().strftime('%Y-%m-%d')
+    run_date_wrong = datetime.now().strftime('%Y-%m-%d')                 # NOT reproducible on backfill
+    run_date_right = context['data_interval_start'].strftime('%Y-%m-%d') # reproducible on backfill
 
-    # CORRECT: uses Airflow's logical date — reproducible on backfill
-    run_date = context['data_interval_start'].strftime('%Y-%m-%d')
-    # On 2026-03-17 run: run_date = '2026-03-16'
-    # On backfill for 2026-02-15: run_date = '2026-02-14'
+# Jinja templates for the same value:
+# {{ ds }}                  → '2026-03-16'
+# {{ ds_nodash }}           → '20260316'
+# {{ data_interval_start }} → '2026-03-16T06:00:00+00:00'`}</CodeBox>
 
-task = PythonOperator(
-    task_id='process_orders',
-    python_callable=process_orders,
-    # provide_context=True is default in Airflow 2.x
-)
+        <Output>{`# Backfilling 2026-02-15 with the WRONG version:
+run_date_wrong → today's actual date, no matter what's being backfilled — broken
 
-# TEMPLATES: Airflow provides Jinja templates for common date values
-# {{ ds }}              → data_interval_start date: '2026-03-16'
-# {{ ds_nodash }}       → '20260316'
-# {{ data_interval_start }} → '2026-03-16T06:00:00+00:00'
-# {{ data_interval_end }}   → '2026-03-17T06:00:00+00:00'
-# {{ run_id }}          → 'scheduled__2026-03-17T06:00:00+00:00'
-# {{ dag.dag_id }}      → 'orders_pipeline_incremental'
+# Backfilling 2026-02-15 with the RIGHT version:
+run_date_right → '2026-02-14'  (logical_date for the Feb 15 run is Feb 14) — correct`}</Output>
 
-# Example with templates:
-BashOperator(
-    task_id='export_report',
-    bash_command='python generate_report.py --date {{ ds }}',
-    # On 2026-03-17 run: generates report for 2026-03-16
-)`}</CodeBox>
+        <TryThis>
+          A DAG is scheduled <code>&apos;0 2 * * *&apos;</code> and today is March 18. Work
+          out, on paper, the <code>logical_date</code> and <code>data_interval_end</code> of
+          the run that just fired — then check your answer against the pattern above.
+        </TryThis>
       </section>
 
       <Divider />
@@ -341,38 +327,19 @@ BashOperator(
       {/* ── Part 03 — DAG Design Patterns ────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 03 — DAG Design Patterns" />
-        <SectionTitle>DAG Design — What Good DAGs Look Like</SectionTitle>
+        <SectionTitle>DAG Design — Building FreshCart&rsquo;s Morning Pipeline</SectionTitle>
 
         <Para>
           A DAG file is Python code — which means it can be a beautifully simple
-          dependency declaration or a 600-line mess of business logic, SQL queries,
-          and API calls embedded directly in the DAG. The fundamental design rule
-          is: DAG files are configuration, not logic. All business logic lives in
-          the pipeline package. The DAG wires together tasks and sets schedules,
-          retries, and dependencies.
+          dependency declaration or a 600-line mess of business logic embedded
+          directly in the DAG. The rule: DAG files are configuration, not logic.
+          All business logic lives in the pipeline package; the DAG wires tasks
+          together and sets schedules, retries, and dependencies.
         </Para>
 
-        <SubTitle>The FreshCart morning DAG — a complete production example</SubTitle>
+        <SubSubTitle>DAG-level configuration</SubSubTitle>
 
-        <CodeBox label="dags/freshmart_morning_pipeline.py — complete production DAG">{`"""
-FreshCart Morning Pipeline DAG
-Runs daily at 02:00 UTC (10:00 PM ET, previous day)
-Processes previous day's data across all layers
-
-Task dependency graph:
-  extract_orders ─────┬──────────────────────────────────────────────────────────┐
-  extract_customers ──┤                                                           │
-  extract_payments ───┤                                                           │
-  extract_deliveries ─┘                                                           │
-                       ↓                                                          │
-                  dbt_silver ──────────────────────────────────┐                 │
-                  (stg + silver models)                         ↓                 ↓
-                                                         dbt_gold      quality_checks
-                                                         (Gold models)      ↓
-                                                                     notify_finance
-"""
-
-from datetime import datetime, timedelta
+        <CodeBox label="dags/freshcart_morning_pipeline.py — default_args and the DAG shell">{`from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python   import PythonOperator
 from airflow.operators.bash     import BashOperator
@@ -380,168 +347,122 @@ from airflow.operators.empty    import EmptyOperator
 from airflow.utils.task_group   import TaskGroup
 from airflow.models             import Variable
 
-# ── DAG-level configuration ────────────────────────────────────────────────────
 default_args = {
-    'owner':             'data-team',
-    'depends_on_past':   False,
-    'retries':           2,
-    'retry_delay':       timedelta(minutes=3),
+    'owner': 'data-team', 'depends_on_past': False,
+    'retries': 2, 'retry_delay': timedelta(minutes=3),
     'retry_exponential_backoff': True,
     'execution_timeout': timedelta(minutes=30),
-    'email_on_failure':  True,
-    'email':             ['data-team@freshmart.com'],
+    'email_on_failure': True, 'email': ['data-team@freshcart.com'],
 }
 
 with DAG(
-    dag_id          = 'freshmart_morning_pipeline',
+    dag_id          = 'freshcart_morning_pipeline',
     default_args    = default_args,
     description     = 'FreshCart daily data platform — Bronze → Silver → Gold',
-    schedule        = '0 2 * * *',    # 02:00 UTC daily = 10:00 PM ET (previous day)
+    schedule        = '0 2 * * *',    # 02:00 UTC daily
     start_date      = datetime(2026, 1, 1),
     catchup         = False,          # do not backfill on deploy
     max_active_runs = 1,              # no concurrent runs
     tags            = ['daily', 'production', 'silver', 'gold'],
-    doc_md          = """
-        ## FreshCart Morning Pipeline
-
-        Processes the previous day's data through all layers.
-
-        **Layers:** Bronze (raw) → Silver (cleaned) → Gold (aggregated)
-        **SLA:** All Gold tables complete by 10:30 PM ET (previous day)
-        **Owner:** data-team@freshmart.com
-
-        See: https://docs.freshmart.internal/data-platform/morning-pipeline
-    """,
 ) as dag:
-
     start = EmptyOperator(task_id='start')
-    end   = EmptyOperator(task_id='end')
+    end   = EmptyOperator(task_id='end')`}</CodeBox>
 
-    # ── Extraction task group (parallel) ──────────────────────────────────────
-    with TaskGroup('extract', tooltip='Extract from all source systems') as extract_group:
+        <SubSubTitle>Extraction — a parallel task group</SubSubTitle>
 
-        def make_extract_task(source: str, pool_slots: int = 1):
-            """Factory for extraction tasks — avoids repetition."""
-            def extract_fn(**context):
-                from pipelines.extract import run_extraction
-                run_date = context['data_interval_start'].strftime('%Y-%m-%d')
-                run_extraction(source=source, run_date=run_date)
+        <CodeBox label="dags/freshcart_morning_pipeline.py — extracting from four sources at once">{`with TaskGroup('extract', tooltip='Extract from all source systems') as extract_group:
 
-            return PythonOperator(
-                task_id         = f'extract_\${source}',
-                python_callable = extract_fn,
-                pool            = 'source_db_pool',  # limit parallel DB connections
-                pool_slots      = pool_slots,
-                sla             = timedelta(minutes=15),
-            )
+    def make_extract_task(source: str, pool_slots: int = 1):
+        """Factory for extraction tasks — avoids repetition."""
+        def extract_fn(**context):
+            from pipelines.extract import run_extraction
+            run_date = context['data_interval_start'].strftime('%Y-%m-%d')
+            run_extraction(source=source, run_date=run_date)
 
-        extract_orders     = make_extract_task('orders')
-        extract_customers  = make_extract_task('customers')
-        extract_payments   = make_extract_task('payments')
-        extract_deliveries = make_extract_task('deliveries')
-        # These four run in PARALLEL (no dependency between them within the group)
-
-    # ── dbt Silver (runs after ALL extractions complete) ──────────────────────
-    dbt_silver = BashOperator(
-        task_id      = 'dbt_silver',
-        bash_command = (
-            'dbt run --target prod '
-            '--select staging.* silver.* '
-            '--vars \'{"run_date": "{{ ds }}"}\' '
-            '&& dbt test --target prod --select staging.* silver.*'
-        ),
-        env = {
-            'DBT_PROFILES_DIR': '/etc/dbt',
-            'SNOWFLAKE_ACCOUNT': Variable.get('snowflake_account'),
-        },
-        execution_timeout = timedelta(minutes=45),
-        sla               = timedelta(minutes=40),
-    )
-
-    # ── dbt Gold (runs after Silver) ──────────────────────────────────────────
-    dbt_gold = BashOperator(
-        task_id      = 'dbt_gold',
-        bash_command = (
-            'dbt run --target prod --select gold.* '
-            '--vars \'{"run_date": "{{ ds }}"}\' '
-            '&& dbt test --target prod --select gold.*'
-        ),
-        env              = {'DBT_PROFILES_DIR': '/etc/dbt'},
-        execution_timeout = timedelta(minutes=20),
-        sla              = timedelta(minutes=15),
-    )
-
-    # ── Quality checks (runs after Gold) ──────────────────────────────────────
-    def run_quality_checks(**context):
-        """Row count anomaly detection and freshness validation."""
-        from pipelines.quality import check_all_gold_tables
-        run_date = context['data_interval_start'].strftime('%Y-%m-%d')
-        result   = check_all_gold_tables(run_date=run_date)
-        if result.has_anomalies:
-            raise ValueError(f'Quality checks failed: \${result.summary}')
-        # Push results to XCom for the notification task
-        context['ti'].xcom_push(key='quality_result', value=result.to_dict())
-
-    quality_checks = PythonOperator(
-        task_id         = 'quality_checks',
-        python_callable = run_quality_checks,
-        execution_timeout = timedelta(minutes=5),
-    )
-
-    # ── Finance notification (final step) ────────────────────────────────────
-    def notify_finance(**context):
-        from pipelines.notifications import send_daily_summary
-        run_date       = context['data_interval_start'].strftime('%Y-%m-%d')
-        quality_result = context['ti'].xcom_pull(
-            task_ids='quality_checks', key='quality_result'
+        return PythonOperator(
+            task_id=f'extract_{source}', python_callable=extract_fn,
+            pool='source_db_pool', pool_slots=pool_slots,
+            sla=timedelta(minutes=15),
         )
-        send_daily_summary(run_date=run_date, quality=quality_result)
 
-    notify = PythonOperator(
-        task_id         = 'notify_finance',
-        python_callable = notify_finance,
-    )
+    extract_orders     = make_extract_task('orders')
+    extract_customers  = make_extract_task('customers')
+    extract_payments   = make_extract_task('payments')
+    extract_deliveries = make_extract_task('deliveries')
+    # these four run in PARALLEL — no dependency between them within the group`}</CodeBox>
 
-    # ── Dependency graph ──────────────────────────────────────────────────────
-    start >> extract_group >> dbt_silver >> dbt_gold >> quality_checks >> notify >> end`}</CodeBox>
+        <SubSubTitle>Transformation — dbt Silver, then dbt Gold</SubSubTitle>
 
-        <SubTitle>Task pools — controlling resource consumption</SubTitle>
-
-        <CodeBox label="Airflow pools — limiting parallel resource usage">{`# POOLS: Airflow's mechanism for limiting concurrent resource usage
-# without limiting task parallelism globally.
-
-# Create pools via Airflow UI (Admin → Pools) or CLI:
-# airflow pools set source_db_pool 5 "Max 5 concurrent source DB connections"
-# airflow pools set snowflake_pool  8 "Max 8 concurrent Snowflake queries"
-# airflow pools set api_pool        3 "Max 3 concurrent API calls to Stripe"
-
-# PROBLEM WITHOUT POOLS:
-# If 20 tasks all try to connect to the source PostgreSQL replica simultaneously,
-# you exhaust the connection pool, some tasks fail, others slow down.
-
-# SOLUTION WITH POOLS:
-# Assign all source extraction tasks to 'source_db_pool' (size=5).
-# Only 5 extraction tasks run at once, regardless of total task parallelism.
-
-# In task definition:
-extract_orders = PythonOperator(
-    task_id    = 'extract_orders',
-    python_callable = extract_orders_fn,
-    pool       = 'source_db_pool',   # assign to this pool
-    pool_slots = 1,                  # consumes 1 slot from the pool
-    # Heavy tasks can consume 2+ slots: pool_slots=2
+        <CodeBox label="dags/freshcart_morning_pipeline.py — the dbt layers, run after extraction completes">{`dbt_silver = BashOperator(
+    task_id='dbt_silver',
+    bash_command=(
+        'dbt run --target prod --select staging.* silver.* '
+        '--vars \\'{"run_date": "{{ ds }}"}\\' '
+        '&& dbt test --target prod --select staging.* silver.*'
+    ),
+    env={'DBT_PROFILES_DIR': '/etc/dbt', 'SNOWFLAKE_ACCOUNT': Variable.get('snowflake_account')},
+    execution_timeout=timedelta(minutes=45), sla=timedelta(minutes=40),
 )
 
-# REAL POOL STRATEGY FOR A MEDIUM DATA PLATFORM:
-# source_db_pool:  5  — limit concurrent reads from prod replicas
-# snowflake_pool:  8  — limit concurrent Snowflake warehouse queries
-# api_pool:        3  — limit concurrent calls to rate-limited APIs
-# dbt_pool:        2  — limit concurrent dbt runs (memory intensive)
-# default_pool:   16  — general task concurrency
+dbt_gold = BashOperator(
+    task_id='dbt_gold',
+    bash_command=(
+        'dbt run --target prod --select gold.* --vars \\'{"run_date": "{{ ds }}"}\\' '
+        '&& dbt test --target prod --select gold.*'
+    ),
+    env={'DBT_PROFILES_DIR': '/etc/dbt'},
+    execution_timeout=timedelta(minutes=20), sla=timedelta(minutes=15),
+)`}</CodeBox>
 
-# CHECKING POOL STATUS:
-# airflow pools list
-# Or: SELECT * FROM airflow.slot_pool in the metadata database`}</CodeBox>
+        <SubSubTitle>Quality checks and the finance notification</SubSubTitle>
+
+        <CodeBox label="dags/freshcart_morning_pipeline.py — final two tasks, wired with XCom">{`def run_quality_checks(**context):
+    from pipelines.quality import check_all_gold_tables
+    run_date = context['data_interval_start'].strftime('%Y-%m-%d')
+    result   = check_all_gold_tables(run_date=run_date)
+    if result.has_anomalies:
+        raise ValueError(f'Quality checks failed: {result.summary}')
+    context['ti'].xcom_push(key='quality_result', value=result.to_dict())
+
+quality_checks = PythonOperator(task_id='quality_checks', python_callable=run_quality_checks,
+                                 execution_timeout=timedelta(minutes=5))
+
+def notify_finance(**context):
+    from pipelines.notifications import send_daily_summary
+    run_date       = context['data_interval_start'].strftime('%Y-%m-%d')
+    quality_result = context['ti'].xcom_pull(task_ids='quality_checks', key='quality_result')
+    send_daily_summary(run_date=run_date, quality=quality_result)
+
+notify = PythonOperator(task_id='notify_finance', python_callable=notify_finance)
+
+# ── the whole graph in one line ───────────────────────────────────────────────
+start >> extract_group >> dbt_silver >> dbt_gold >> quality_checks >> notify >> end`}</CodeBox>
+
+        <Output>{`Graph view — freshcart_morning_pipeline, 2026-03-17 02:00 run
+start → [extract_orders, extract_customers, extract_payments, extract_deliveries]
+      → dbt_silver → dbt_gold → quality_checks → notify_finance → end
+Total duration: 38 min 12 s   Status: success`}</Output>
+
+        <SubSubTitle>Pools — controlling resource consumption</SubSubTitle>
+
+        <Para>
+          Without pools, 20 tasks all connecting to the same source replica
+          simultaneously exhaust its connection limit — some fail, others slow
+          down. A pool caps concurrent usage of one shared resource without
+          limiting overall task parallelism.
+        </Para>
+
+        <CodeBox label="Assigning tasks to pools">{`# airflow pools set source_db_pool 5 "Max 5 concurrent source DB connections"
+# airflow pools set snowflake_pool  8 "Max 8 concurrent Snowflake queries"
+# airflow pools set api_pool        3 "Max 3 concurrent API calls"
+
+extract_orders = PythonOperator(
+    task_id='extract_orders', python_callable=extract_orders_fn,
+    pool='source_db_pool', pool_slots=1,   # heavy tasks can consume 2+ slots
+)
+
+# A REAL POOL STRATEGY FOR A MEDIUM PLATFORM:
+# source_db_pool: 5   snowflake_pool: 8   api_pool: 3   dbt_pool: 2   default_pool: 16`}</CodeBox>
       </section>
 
       <Divider />
@@ -549,191 +470,109 @@ extract_orders = PythonOperator(
       {/* ── Part 04 — Scheduling Patterns ────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 04 — Scheduling Patterns" />
-        <SectionTitle>Scheduling — Cron, Timetables, and Data-Aware Scheduling</SectionTitle>
+        <SectionTitle>Scheduling — Cron, Datasets, and Waiting on External Conditions</SectionTitle>
 
         <Para>
-          Airflow supports three types of scheduling: cron-based (run on a fixed
-          time schedule), dataset-driven (run when upstream data changes), and
-          manual (triggered by humans or external systems). Understanding all three
-          and when each is appropriate is the foundation of a well-designed
-          orchestration strategy.
+          Airflow supports three scheduling styles: cron-based (fixed time),
+          dataset-driven (run when upstream data changes), and manual
+          (human- or system-triggered). Knowing all three — and when each is
+          appropriate — is the foundation of a well-designed strategy.
         </Para>
 
-        <SubTitle>Cron-based scheduling — the baseline</SubTitle>
+        <SubSubTitle>Cron-based scheduling — the baseline</SubSubTitle>
 
-        <CodeBox label="Cron scheduling patterns for data pipelines">{`# STANDARD CRON SCHEDULES:
-schedule = '0 2 * * *'        # Daily at 02:00 UTC
-schedule = '*/15 * * * *'     # Every 15 minutes
-schedule = '0 */4 * * *'      # Every 4 hours
-schedule = '0 2 * * 1'        # Weekly — Mondays at 02:00 UTC
-schedule = '0 2 1 * *'        # Monthly — 1st of month at 02:00
+        <CodeBox label="Cron schedules and catchup/backfill defaults">{`schedule = '0 2 * * *'     # daily at 02:00 UTC
+schedule = '*/15 * * * *'  # every 15 minutes
+schedule = '@daily'        # Airflow shorthand for '0 0 * * *'
+schedule = None            # manual trigger only
 
-# AIRFLOW SHORTHAND:
-schedule = '@daily'    # 0 0 * * *
-schedule = '@hourly'   # 0 * * * *
-schedule = '@weekly'   # 0 0 * * 0
-schedule = None        # no schedule — only manual trigger
+# ALWAYS use UTC for schedules — a schedule that silently shifts 30 minutes
+# with another country's DST change is very hard to debug.
 
-# TIMEZONE AWARENESS (Airflow 2.x):
-from pendulum import timezone as tz
-with DAG(
-    dag_id   = 'orders_daily',
-    schedule = '0 2 * * *',    # this is always UTC in Airflow
-    # To specify a local timezone: use pendulum timezone
-    start_date = datetime(2026, 1, 1, tzinfo=tz('America/New_York')),
-    # Schedule is still UTC — but start_date is local-timezone-aware
-) as dag: ...
+# catchup=True (default in some versions): a DAG paused 3 days creates
+#   3 DagRuns for the missed intervals on resume — useful for date-range
+#   pipelines, dangerous for high-frequency ones (hundreds of runs).
+# catchup=False: only the latest interval runs on resume — set this
+#   explicitly on production DAGs, never rely on the default.
 
-# BEST PRACTICE: always use UTC for schedules.
-# Convert to local time only in display or notification formatting.
-# A pipeline that changes schedule by 30 minutes when DST changes
-# in another country (which affects UTC offsets in some regions)
-# is very hard to debug.
+with DAG(catchup=False, max_active_runs=1, ...): ...`}</CodeBox>
 
+        <SubSubTitle>Dataset-driven scheduling — Airflow 2.4+</SubSubTitle>
 
-# MULTIPLE SCHEDULES FOR THE SAME DATA:
-# If you need the same data processed at different frequencies for different
-# consumers, create separate DAGs with different schedules:
+        <Para>
+          Dataset scheduling replaces complex <code>ExternalTaskSensor</code> polling
+          with a declarative dependency: a consumer DAG waits for the datasets
+          its upstream producers declare, with no time-based polling at all.
+        </Para>
 
-# For the daily finance report:
-with DAG(dag_id='orders_daily', schedule='0 2 * * *', ...): ...
+        <CodeBox label="Declaring producers and consumers of the same logical dataset">{`from airflow import Dataset
 
-# For the hourly operations dashboard:
-with DAG(dag_id='orders_hourly', schedule='0 * * * *', ...): ...
+ORDERS_SILVER    = Dataset('snowflake://freshcart/silver/orders')
+CUSTOMERS_SILVER = Dataset('snowflake://freshcart/silver/customers')
+PAYMENTS_SILVER  = Dataset('snowflake://freshcart/silver/payments')
 
-# For the real-time fraud check:
-with DAG(dag_id='orders_15min', schedule='*/15 * * * *', ...): ...
-
-
-# CATCHUP AND BACKFILL:
-# catchup=True (default): if DAG was paused for 3 days, Airflow will
-#   create 3 DagRuns for the missed intervals on resume.
-#   Useful for: pipelines that process specific date ranges
-#   Dangerous for: high-frequency pipelines (creates hundreds of runs)
-
-# catchup=False: only run the most recent interval on resume.
-#   Use for: most production pipelines
-#   Set explicitly — never rely on the default
-
-with DAG(catchup=False, max_active_runs=1, ...): ...
-# max_active_runs=1 prevents concurrent runs even during backfill`}</CodeBox>
-
-        <SubTitle>Dataset-driven scheduling — Airflow 2.4+</SubTitle>
-
-        <CodeBox label="Dataset-driven scheduling — trigger when upstream data is ready">{`# DATASET SCHEDULING: trigger a DAG when another DAG produces new data.
-# Replaces complex ExternalTaskSensor patterns with declarative dependencies.
-
-from airflow import Dataset
-
-# Define datasets (logical names for data outputs):
-ORDERS_SILVER = Dataset('snowflake://freshmart/silver/orders')
-CUSTOMERS_SILVER = Dataset('snowflake://freshmart/silver/customers')
-PAYMENTS_SILVER  = Dataset('snowflake://freshmart/silver/payments')
-
-# Producer DAG: declare which datasets each task produces
+# Producer DAG: declares which dataset a task produces
 with DAG('orders_silver_pipeline', schedule='0 2 * * *') as dag:
-    load_orders = PythonOperator(
-        task_id         = 'load_orders',
-        python_callable = run_orders_pipeline,
-        outlets         = [ORDERS_SILVER],   # declares: this task produces this dataset
-    )
+    load_orders = PythonOperator(task_id='load_orders', python_callable=run_orders_pipeline,
+                                  outlets=[ORDERS_SILVER])
 
-# Consumer DAG: trigger when ALL listed datasets are updated
-with DAG(
-    dag_id   = 'gold_daily_revenue',
-    schedule = [ORDERS_SILVER, CUSTOMERS_SILVER, PAYMENTS_SILVER],
-    # ^ triggers when ALL THREE datasets have been updated
-) as dag:
-    build_gold = PythonOperator(
-        task_id         = 'build_gold_revenue',
-        python_callable = run_gold_pipeline,
-    )
+# Consumer DAG: triggers when ALL three listed datasets have been updated
+with DAG(dag_id='gold_daily_revenue', schedule=[ORDERS_SILVER, CUSTOMERS_SILVER, PAYMENTS_SILVER]) as dag:
+    build_gold = PythonOperator(task_id='build_gold_revenue', python_callable=run_gold_pipeline)`}</CodeBox>
 
-# BENEFIT: gold_daily_revenue waits for all upstream Silver pipelines
-# to complete before running — no time-based polling, no ExternalTaskSensor,
-# no hardcoded schedule assumptions.
+        <Callout type="tip">
+          Use dataset scheduling when Gold genuinely depends on several Silver
+          pipelines finishing and you want that dependency visible in the DAG
+          definition itself. Skip it for very high-frequency pipelines (too much
+          dataset-update overhead) or conditional logic like &ldquo;only trigger if
+          more than 10,000 rows loaded&rdquo; — that still needs a Sensor or a custom check.
+        </Callout>
 
-# WHEN TO USE DATASET SCHEDULING:
-# ✓ Gold depends on multiple Silver pipelines completing
-# ✓ Silver is event-driven (variable timing)
-# ✓ You want the dependency to be explicit in the DAG definition
-# ✓ Airflow 2.4+
+        <SubSubTitle>Sensors — waiting for a file, another DAG, or a custom condition</SubSubTitle>
 
-# WHEN NOT TO USE IT:
-# ✗ High-frequency pipelines (many datasets updated per hour creates overhead)
-# ✗ Complex conditional logic ('only trigger if > 10,000 rows were loaded')
-# ✗ Cross-environment dependencies (prod Silver triggering staging Gold)`}</CodeBox>
+        <CodeBox label="S3KeySensor and ExternalTaskSensor — always mode='reschedule'">{`from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
+from airflow.sensors.external_task import ExternalTaskSensor
 
-        <SubTitle>Sensors — waiting for external conditions</SubTitle>
-
-        <CodeBox label="Airflow Sensors — waiting for files, databases, and external events">{`from airflow.sensors.filesystem          import FileSensor
-from airflow.sensors.external_task       import ExternalTaskSensor
-from airflow.sensors.python              import PythonSensor
-from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
-
-# ── S3KeySensor: wait for a file to appear on S3 ─────────────────────────────
 wait_for_vendor_file = S3KeySensor(
-    task_id        = 'wait_for_shipfast_weekly_file',
-    bucket_key     = 's3://freshmart-landing/shipfast/weekly_deliveries_{{ ds_nodash }}.csv',
-    bucket_name    = None,     # included in bucket_key
-    aws_conn_id    = 'aws_default',
-    poke_interval  = 300,      # check every 5 minutes
-    timeout        = 7200,     # fail after 2 hours
-    mode           = 'reschedule',   # release worker slot between polls (important!)
-    soft_fail      = True,     # mark as SKIPPED (not FAILED) if timeout — continue DAG
+    task_id='wait_for_shipfast_weekly_file',
+    bucket_key='s3://freshcart-landing/shipfast/weekly_deliveries_{{ ds_nodash }}.csv',
+    poke_interval=300, timeout=7200,
+    mode='reschedule',   # releases the worker slot between polls — never 'poke'
+    soft_fail=True,      # SKIPPED (not FAILED) on timeout — DAG continues
 )
-# mode='reschedule': sensor releases its worker slot between polls.
-# mode='poke' (default): holds the worker slot continuously — wastes resources.
-# ALWAYS use mode='reschedule' for sensors with long wait times.
 
-
-# ── ExternalTaskSensor: wait for a task in another DAG ───────────────────────
 wait_for_upstream = ExternalTaskSensor(
-    task_id              = 'wait_for_orders_silver',
-    external_dag_id      = 'orders_silver_pipeline',
-    external_task_id     = 'load_orders',       # None = wait for whole DAG
-    execution_date_fn    = lambda dt: dt,        # same logical date
-    allowed_states       = ['success'],
-    mode                 = 'reschedule',
-    poke_interval        = 60,
-    timeout              = 3600,
-)
+    task_id='wait_for_orders_silver', external_dag_id='orders_silver_pipeline',
+    external_task_id='load_orders', allowed_states=['success'],
+    mode='reschedule', poke_interval=60, timeout=3600,
+)`}</CodeBox>
 
-
-# ── PythonSensor: wait for any custom condition ───────────────────────────────
-def check_source_row_count(**context) -> bool:
-    """Return True when source has >= 1000 rows for today's date."""
+        <CodeBox label="PythonSensor — waiting on any custom condition">{`def check_source_row_count(**context) -> bool:
+    """Return True once source has >= 1000 rows for today's date."""
     run_date = context['data_interval_start'].strftime('%Y-%m-%d')
     count    = get_source_row_count(run_date)
     if count >= 1000:
         return True
-    print(f'Source has \${count} rows — waiting for at least 1000')
+    print(f'Source has {count} rows — waiting for at least 1000')
     return False
 
 wait_for_data = PythonSensor(
-    task_id         = 'wait_for_source_data',
-    python_callable = check_source_row_count,
-    poke_interval   = 180,     # check every 3 minutes
-    timeout         = 7200,    # fail after 2 hours
-    mode            = 'reschedule',
-)
+    task_id='wait_for_source_data', python_callable=check_source_row_count,
+    poke_interval=180, timeout=7200, mode='reschedule',
+)`}</CodeBox>
 
+        <Output>{`Task log — wait_for_source_data, poll 4 of ~24:
+Source has 640 rows — waiting for at least 1000
+[reschedule] releasing worker slot, will check again in 180s
+...
+Source has 1120 rows — condition met, proceeding`}</Output>
 
-# ── SENSOR BEST PRACTICES ────────────────────────────────────────────────────
-# 1. Always use mode='reschedule' — never 'poke' for waits > 5 minutes.
-#    'poke' holds a worker slot. 20 poke sensors = 20 workers blocked.
-#    'reschedule' returns the slot between polls.
-
-# 2. Set reasonable timeouts — a sensor with no timeout blocks forever.
-#    Set timeout to: max_expected_wait + safety_buffer.
-#    For vendor files arriving by 8 AM: timeout = 6h (from 2 AM run start).
-
-# 3. Use soft_fail=True for optional data sources — marks SKIPPED not FAILED.
-#    Allows downstream tasks to still run even if the file never arrived.
-#    Use only when absence of the file is an acceptable outcome.
-
-# 4. Use ExternalTaskSensor sparingly — it creates tight coupling between DAGs.
-#    Prefer Dataset scheduling (Airflow 2.4+) for explicit data dependencies.`}</CodeBox>
+        <TryThis>
+          Find a sensor you&apos;d write for your own project — waiting on a file, an
+          API becoming healthy, a row count threshold. Would <code>mode=&apos;poke&apos;</code> or{' '}
+          <code>mode=&apos;reschedule&apos;</code> be correct for it, and why does the
+          expected wait time change your answer?
+        </TryThis>
       </section>
 
       <Divider />
@@ -744,98 +583,64 @@ wait_for_data = PythonSensor(
         <SectionTitle>Backfills — Processing Historical Data Correctly</SectionTitle>
 
         <Para>
-          A backfill is the process of running a pipeline for historical date
-          ranges — either because the pipeline was just deployed and needs to
-          process existing data, or because historical runs failed and need to
-          be re-executed. Backfills are a first-class operation in Airflow and
-          a routine part of data platform operations.
+          A backfill runs a pipeline for historical date ranges — either because
+          it was just deployed and needs to process existing data, or because
+          historical runs failed and need re-execution. Backfills are a routine,
+          first-class operation, not an emergency procedure.
         </Para>
 
-        <CodeBox label="Backfill patterns — CLI, API, and programmatic approaches">{`# ── AIRFLOW CLI BACKFILL ──────────────────────────────────────────────────────
+        <SubSubTitle>Running a backfill from the CLI</SubSubTitle>
 
-# Backfill a DAG for a date range:
-airflow dags backfill \
-    --dag-id freshmart_morning_pipeline \
-    --start-date 2026-01-01 \
-    --end-date   2026-03-16 \
-    --max-active-runs 3 \   # run 3 days in parallel
-    --reset-dagruns           # re-run if DagRun already exists
+        <CodeBox label="airflow dags backfill — date range, single date, and dry run">{`airflow dags backfill --dag-id freshcart_morning_pipeline \\
+    --start-date 2026-01-01 --end-date 2026-03-16 \\
+    --max-active-runs 3     # run 3 days in parallel
 
-# Backfill a single date:
-airflow dags backfill \
-    --dag-id freshmart_morning_pipeline \
-    --start-date 2026-03-15 \
-    --end-date   2026-03-15
+airflow dags backfill --dag-id freshcart_morning_pipeline \\
+    --start-date 2026-03-15 --end-date 2026-03-15   # single date
 
-# Dry run (shows what would run without executing):
-airflow dags backfill \
-    --dag-id freshmart_morning_pipeline \
-    --start-date 2026-01-01 \
-    --end-date   2026-03-16 \
-    --dry-run
+airflow dags backfill --dag-id freshcart_morning_pipeline \\
+    --start-date 2026-01-01 --end-date 2026-03-16 --dry-run   # shows what would run`}</CodeBox>
 
-# ── IMPORTANT: catchup vs backfill ───────────────────────────────────────────
-# catchup=True with DAG resuming: automatic backfill on unpause
-# catchup=False: no automatic backfill — only the latest interval
-# Manual backfill CLI: works regardless of catchup setting
+        <Output>{`Backfill: freshcart_morning_pipeline, 2026-01-01 → 2026-03-16 (75 days)
+Running with max_active_runs=3: 25 batches
+[1/25] 2026-01-01 ... 2026-01-03: RUNNING
+[2/25] 2026-01-04 ... 2026-01-06: RUNNING
+...
+Backfill complete: 75 succeeded, 0 failed`}</Output>
 
-# RECOMMENDATION:
-# Set catchup=False on all production DAGs to prevent accidental
-# catchup floods when a DAG is unpaused.
-# Use explicit CLI backfills when historical processing is needed.
+        <SubSubTitle>Clearing tasks and triggering manual runs</SubSubTitle>
 
+        <CodeBox label="Clearing a task for rerun, and passing custom config">{`# Clear a specific task and everything downstream of it — re-runs on next heartbeat
+airflow tasks clear --dag-id freshcart_morning_pipeline \\
+    --task-id dbt_gold --start-date 2026-03-17 --downstream
 
-# ── CLEARING TASKS FOR RERUN ───────────────────────────────────────────────────
-# Clearing a task marks it as 'none' (unexecuted) — it will re-run on the
-# next scheduler heartbeat.
-
-# Clear all tasks in a DAG run:
-airflow tasks clear \
-    --dag-id freshmart_morning_pipeline \
-    --start-date 2026-03-17 \
-    --end-date   2026-03-17
-
-# Clear a specific task (and optionally its downstream tasks):
-airflow tasks clear \
-    --dag-id freshmart_morning_pipeline \
-    --task-id dbt_gold \
-    --start-date 2026-03-17 \
-    --downstream     # also clear all tasks downstream of dbt_gold
-
-# ── TRIGGERING A MANUAL RUN ────────────────────────────────────────────────────
 # Manual trigger with custom configuration:
-airflow dags trigger \
-    --dag-id freshmart_morning_pipeline \
+airflow dags trigger --dag-id freshcart_morning_pipeline \\
     --conf '{"run_date": "2026-03-17", "force_full_reload": true}'
 
-# In the DAG code, read the conf:
+# Reading the conf in the DAG:
 def run_fn(**context):
-    conf          = context['dag_run'].conf or {}
-    run_date      = conf.get('run_date', context['ds'])
-    force_reload  = conf.get('force_full_reload', False)
+    conf         = context['dag_run'].conf or {}
+    run_date     = conf.get('run_date', context['ds'])
+    force_reload = conf.get('force_full_reload', False)`}</CodeBox>
 
+        <SubSubTitle>What a pipeline must do to support backfills correctly</SubSubTitle>
 
-# ── BACKFILL DESIGN CONSIDERATIONS ────────────────────────────────────────────
-# 1. IDEMPOTENCY IS ESSENTIAL:
-#    Backfills re-run pipelines for dates that may have already been processed.
-#    If the pipeline is not idempotent, backfills create duplicates.
-#    Every pipeline must use upsert semantics.
+        <CodeBox label="The four design requirements">{`1. IDEMPOTENCY IS ESSENTIAL
+   Backfills re-run pipelines for dates that may already be processed.
+   A non-idempotent pipeline (plain INSERT) creates duplicates. Use upserts.
 
-# 2. BACKFILL RATE:
-#    For a daily DAG backfilling 90 days with max_active_runs=3:
-#    90 runs / 3 parallel = 30 batches
-#    If each run takes 10 minutes: 30 × 10 = 300 minutes (5 hours)
-#    Plan backfills during low-traffic hours — they consume significant resources.
+2. BACKFILL RATE
+   90 days at max_active_runs=3, 10 min/run → 30 batches × 10 min = 5 hours.
+   Plan backfills during low-traffic hours.
 
-# 3. DEPENDENCY ORDERING:
-#    Backfills respect task dependencies within a DAG.
-#    They do NOT respect cross-DAG dependencies automatically.
-#    If Gold DAG depends on Silver DAG, backfill Silver first, then Gold.
+3. DEPENDENCY ORDERING
+   Backfills respect task dependencies WITHIN a DAG, not ACROSS DAGs.
+   If Gold depends on Silver, backfill Silver first, then Gold.
 
-# 4. SOURCE AVAILABILITY:
-#    Historical data must be available in the source.
-#    A CDC-based pipeline backfilling 90 days needs 90 days of WAL (if using CDC)
-#    or a separate bulk extraction from the source database.`}</CodeBox>
+4. SOURCE AVAILABILITY
+   Historical data must still exist in the source — a CDC pipeline
+   backfilling 90 days needs 90 days of WAL, or a separate bulk extract.`}</CodeBox>
       </section>
 
       <Divider />
@@ -846,91 +651,65 @@ def run_fn(**context):
         <SectionTitle>Dynamic Task Mapping — Generating Tasks at Runtime</SectionTitle>
 
         <Para>
-          Dynamic task mapping (Airflow 2.3+) lets you generate tasks at runtime
-          based on data — instead of hardcoding a task per store, you generate
-          one task per store dynamically after reading the store list from a
-          database. This is cleaner than parametrising a single task with a loop
-          because each store gets its own task instance with its own logs, retries,
-          and status tracking.
+          Dynamic task mapping (Airflow 2.3+) generates one task per entity at
+          runtime — instead of hardcoding a task per store, FreshCart reads the
+          active store list from the database and gets one independent task
+          instance per store, each with its own logs, retries, and status.
         </Para>
 
-        <CodeBox label="Dynamic task mapping — generating tasks from runtime data">{`from airflow.decorators import task, dag
-from datetime import datetime
+        <SubSubTitle>Mapping over a runtime-fetched list</SubSubTitle>
 
-# ── SIMPLE DYNAMIC MAPPING ────────────────────────────────────────────────────
+        <CodeBox label="process_all_stores — one task instance per active store">{`from airflow.decorators import task, dag
 
-@dag(
-    dag_id   = 'process_all_stores',
-    schedule = '0 6 * * *',
-    start_date = datetime(2026, 1, 1),
-)
+@dag(dag_id='process_all_stores', schedule='0 6 * * *', start_date=datetime(2026, 1, 1))
 def process_all_stores_dag():
 
     @task
     def get_active_stores() -> list[str]:
-        """Fetch the list of active store IDs from the database."""
         conn = get_db_connection()
-        rows = conn.execute(
-            "SELECT store_id FROM reference.stores WHERE is_active = TRUE"
-        ).fetchall()
-        return [row[0] for row in rows]   # ['ST001', 'ST002', ..., 'ST010']
+        rows = conn.execute("SELECT store_id FROM reference.stores WHERE is_active = TRUE").fetchall()
+        return [row[0] for row in rows]   # ['ST001', ..., 'ST010']
 
     @task
     def process_store_data(store_id: str, **context) -> dict:
-        """Process data for one store — runs as a separate task per store."""
-        run_date = context['ds']   # data_interval_start date
+        run_date = context['ds']
         result   = run_store_pipeline(store_id=store_id, run_date=run_date)
         return {'store_id': store_id, 'rows_written': result.rows_written}
 
     @task
     def aggregate_results(store_results: list[dict]) -> None:
-        """Collect results from all store tasks and log summary."""
         total = sum(r['rows_written'] for r in store_results)
-        print(f'All stores complete: \${len(store_results)} stores, \${total} total rows')
+        print(f'All stores complete: {len(store_results)} stores, {total} total rows')
 
-    # Dynamic mapping: process_store_data runs once per element in stores list
-    stores       = get_active_stores()
-    store_results = process_store_data.expand(store_id=stores)
-    # Creates: process_store_data[0] for ST001
-    #          process_store_data[1] for ST002
-    #          ...
-    #          process_store_data[9] for ST010
-    # Each runs in parallel (subject to pool limits)
-
+    stores        = get_active_stores()
+    store_results = process_store_data.expand(store_id=stores)   # one task per store, in parallel
     aggregate_results(store_results)
 
-dag = process_all_stores_dag()
+dag = process_all_stores_dag()`}</CodeBox>
 
+        <Output>{`Graph view: process_all_stores, 2026-03-17
+get_active_stores → process_store_data[0..9] (parallel, per store) → aggregate_results
+All stores complete: 10 stores, 812,400 total rows`}</Output>
 
-# ── MAPPING WITH MULTIPLE PARAMETERS ──────────────────────────────────────────
+        <SubSubTitle>Mapping over multiple parameters at once</SubSubTitle>
 
-@task
+        <CodeBox label="expand_kwargs — one task per parameter combination">{`@task
 def process_store_category(store_id: str, category: str) -> dict:
     return run_pipeline(store_id=store_id, category=category)
 
-# expand_kwargs: map a list of parameter dicts
 combinations = [
     {'store_id': 'ST001', 'category': 'grocery'},
     {'store_id': 'ST001', 'category': 'beverages'},
     {'store_id': 'ST002', 'category': 'grocery'},
 ]
-results = process_store_category.expand_kwargs(combinations)
-# Creates 3 task instances, one per combination
+results = process_store_category.expand_kwargs(combinations)   # 3 task instances`}</CodeBox>
 
-
-# ── WHEN TO USE DYNAMIC TASK MAPPING ─────────────────────────────────────────
-# ✓ Processing N entities (stores, merchants, dates) in parallel
-# ✓ The entity list changes — new stores added, closed stores removed
-# ✓ You want per-entity visibility in the Airflow UI (not just one big task)
-# ✓ You want per-entity retries (failed store retries independently)
-
-# ✓ Instead of: writing a loop inside a PythonOperator and processing all stores
-#   in one task — single task has single retry, single log, hard to debug
-# ✓ Use when: each entity has meaningful independent execution semantics
-
-# ✗ DO NOT use for: very high fan-out (> 1000 tasks per DAG run)
-#   Dynamic task mapping creates task instances in the Airflow DB
-#   1000+ instances per run impacts scheduler performance`}</CodeBox>
+        <Callout type="warning">
+          Use dynamic task mapping for N entities where each needs independent
+          retries and its own log — not a loop inside one task (single retry,
+          single log, hard to debug). Avoid it above roughly 1,000 mapped tasks
+          per run — that many task instances measurably slows the scheduler.
+        </Callout>
       </section>
 
       <Divider />
@@ -941,92 +720,68 @@ results = process_store_category.expand_kwargs(combinations)
         <SectionTitle>XCom — Passing Data Between Tasks</SectionTitle>
 
         <Para>
-          XCom (cross-communication) is Airflow's mechanism for tasks to pass
-          small pieces of data to downstream tasks. The emphasis is on <em>small</em> —
-          XCom is stored in the metadata database and is designed for passing
-          run statistics, status flags, and configuration values, not for passing
-          entire DataFrames or large datasets.
+          XCom (cross-communication) lets tasks pass small pieces of data to
+          downstream tasks. The emphasis is on <em>small</em> — XCom lives in the
+          metadata database and is for run statistics, status flags, and file
+          paths, never for DataFrames or large result sets.
         </Para>
 
-        <CodeBox label="XCom patterns — what to pass and what not to pass">{`# ── XCOM PUSH AND PULL ───────────────────────────────────────────────────────
+        <SubSubTitle>Push and pull — the manual API</SubSubTitle>
 
-def extraction_task(**context):
-    """Run extraction and push metrics to XCom."""
+        <CodeBox label="Pushing metrics, pulling them downstream">{`def extraction_task(**context):
     result = run_extraction(run_date=context['ds'])
-
-    # Push metrics — small values only
     context['ti'].xcom_push(key='rows_extracted', value=result.rows_extracted)
     context['ti'].xcom_push(key='rows_rejected',  value=result.rows_rejected)
-    context['ti'].xcom_push(key='run_id',         value=result.run_id)
-    context['ti'].xcom_push(key='watermark',      value=result.watermark)
     # XCom value limit: ~48 KB default in PostgreSQL VARCHAR — keep it small
 
 def quality_check_task(**context):
-    """Use XCom values from upstream task."""
     ti = context['ti']
-
-    # Pull from specific task:
     rows_extracted = ti.xcom_pull(task_ids='extract_orders', key='rows_extracted')
     rows_rejected  = ti.xcom_pull(task_ids='extract_orders', key='rows_rejected')
-
     if rows_extracted == 0:
         raise ValueError('No rows extracted — possible source outage')
 
     rejection_rate = rows_rejected / rows_extracted
     if rejection_rate > 0.05:
-        raise ValueError(f'Rejection rate \${rejection_rate:.1%} exceeds 5%% threshold')
+        raise ValueError(f'Rejection rate {rejection_rate:.1%} exceeds 5% threshold')`}</CodeBox>
 
-# ── RETURN VALUE XCOM (TaskFlow API) ─────────────────────────────────────────
-from airflow.decorators import task
+        <SubSubTitle>The TaskFlow API — return values are XCom automatically</SubSubTitle>
+
+        <CodeBox label="@task return values flow into the next task without manual push/pull">{`from airflow.decorators import task
 
 @task
 def extract_orders(run_date: str) -> dict:
     result = run_extraction(run_date=run_date)
-    # Return value is automatically pushed as XCom 'return_value'
-    return {
-        'rows_extracted': result.rows_extracted,
-        'rows_rejected':  result.rows_rejected,
-        'run_id':         result.run_id,
-    }
+    return {'rows_extracted': result.rows_extracted, 'rows_rejected': result.rows_rejected}
 
 @task
 def quality_check(extraction_result: dict) -> None:
-    # The dict is automatically passed from the return value XCom
-    rows     = extraction_result['rows_extracted']
-    rejected = extraction_result['rows_rejected']
-    if rows == 0:
+    if extraction_result['rows_extracted'] == 0:
         raise ValueError('No rows extracted')
 
-# In DAG:
+# In the DAG:
 result = extract_orders(run_date='{{ ds }}')
-quality_check(result)   # result is passed as XCom automatically
+quality_check(result)   # result is passed as XCom automatically`}</CodeBox>
 
+        <SubSubTitle>The one XCom anti-pattern that actually breaks Airflow</SubSubTitle>
 
-# ── XCOM ANTI-PATTERNS ────────────────────────────────────────────────────────
-
-# BAD: passing large data through XCom
+        <CodeBox label="Never push large data — push a reference to it instead">{`# BAD — passing 500 MB through the metadata database
 @task
-def load_data(**context):
-    df = pd.read_csv('s3://bucket/orders.csv')   # 500 MB
-    context['ti'].xcom_push(key='dataframe', value=df.to_dict())
-    # XCom is stored in the metadata DB — passing 500 MB will crash Airflow
-
-# GOOD: pass a reference, not the data
-@task
-def load_data(**context):
+def load_data_bad(**context):
     df = pd.read_csv('s3://bucket/orders.csv')
-    output_path = f's3://bucket/tmp/run-\${context["run_id"]}/orders.parquet'
-    df.to_parquet(output_path)
-    context['ti'].xcom_push(key='output_path', value=output_path)
-    # Pass the S3 path (small string), not the data itself
+    context['ti'].xcom_push(key='dataframe', value=df.to_dict())   # crashes Airflow
 
-# ── XCOM CLEANUP ──────────────────────────────────────────────────────────────
-# XCom values are stored in the metadata DB until:
-#   - The DagRun is deleted
-#   - An admin runs airflow db clean
-# For high-frequency pipelines: monitor the xcom table size
-# SELECT task_id, COUNT(*), SUM(LENGTH(value)) FROM xcom
-# GROUP BY task_id ORDER BY 3 DESC LIMIT 10;`}</CodeBox>
+# GOOD — write the data, push only the path
+@task
+def load_data_good(**context):
+    df = pd.read_csv('s3://bucket/orders.csv')
+    output_path = f's3://bucket/tmp/run-{context["run_id"]}/orders.parquet'
+    df.to_parquet(output_path)
+    context['ti'].xcom_push(key='output_path', value=output_path)`}</CodeBox>
+
+        <Output>{`ValueError: XCOM value exceeds maximum size (48 KB)
+# this is exactly what load_data_bad above triggers — the fix is load_data_good's
+# pattern: push the S3 path (a few dozen bytes), not the data itself`}</Output>
       </section>
 
       <Divider />
@@ -1055,12 +810,10 @@ def load_data(**context):
           rows={[
             { dim: 'Market share', airflow: 'Dominant — used everywhere', prefect: 'Growing — popular for Python-native teams', dagster: 'Growing — popular for software-engineering-focused teams' },
             { dim: 'Core concept', airflow: 'DAG of tasks with dependencies and schedule', prefect: 'Flow of tasks — more Pythonic, less configuration', dagster: 'Software-defined assets — data as first-class objects' },
-            { dim: 'DAG/Pipeline definition', airflow: 'Python with decorators, operators, DAG context manager', prefect: 'Pure Python with @flow and @task decorators', dagster: '@asset and @job decorators — assets define data, not just tasks' },
             { dim: 'Local development', airflow: 'Complex — needs metadata DB, scheduler, webserver', prefect: 'Simple — runs locally with no infrastructure', dagster: 'Simple — runs locally, good DX' },
             { dim: 'Dynamic workflows', airflow: 'Dynamic Task Mapping (2.3+) — improved but still complex', prefect: 'Native — Python loops and conditions work naturally', dagster: 'Native — partitions and dynamic jobs built-in' },
             { dim: 'Data lineage', airflow: 'Limited — tasks know nothing about data assets', prefect: 'Limited — similar to Airflow', dagster: 'First-class — assets track upstream/downstream data' },
             { dim: 'Testing', airflow: 'Hard — requires Airflow infrastructure to test DAGs', prefect: 'Easy — flows are regular Python functions', dagster: 'Easy — well-designed for unit testing' },
-            { dim: 'Managed offering', airflow: 'MWAA (AWS), Cloud Composer (GCP), Astronomer', prefect: 'Prefect Cloud (fully managed)', dagster: 'Dagster Cloud (fully managed)' },
             { dim: 'When to choose', airflow: 'Large teams, complex multi-team platforms, broad ecosystem', prefect: 'Python-native teams, simpler pipelines, easier local dev', dagster: 'Teams that want strong data asset lineage, modern DX' },
           ]}
         />
@@ -1069,17 +822,56 @@ def load_data(**context):
           <strong>For interview purposes</strong> and for most data engineering
           roles in 2026: know Airflow deeply. It is the tool you will encounter
           at most companies. Know Prefect and Dagster conceptually — enough to
-          discuss trade-offs and express a considered opinion. If you are building
-          a new platform from scratch, Dagster's asset-centric model is increasingly
-          compelling because it aligns naturally with the ELT + dbt pattern.
+          discuss trade-offs and express a considered opinion.
         </Callout>
       </section>
 
       <Divider />
 
-      {/* ── Part 09 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 09 — Misconceptions ──────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 09 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Orchestration</SectionTitle>
+
+        {[
+          {
+            wrong: '"logical_date is just a fancy name for when the DAG happened to run"',
+            right: 'It is specifically the start of the data interval being processed, deliberately one interval behind real time — Part 02\'s example run at 06:00 on the 17th has a logical_date of the 16th. Using datetime.now() instead of context[\'data_interval_start\'] is the single most common bug that silently breaks backfills.',
+          },
+          {
+            wrong: '"Sensors are the correct tool for any cross-DAG dependency"',
+            right: 'A Sensor polls repeatedly and, in mode=\'poke\', holds a worker slot the entire time — Part 04\'s comparison with Dataset scheduling (Airflow 2.4+) shows an event-driven alternative with zero polling overhead for the common case of "wait for another DAG\'s output." Sensors remain the right tool for conditions Airflow doesn\'t control, like a vendor SFTP drop.',
+          },
+          {
+            wrong: '"catchup=True is a safe default because Airflow will just handle whatever backlog exists"',
+            right: 'Airflow does handle it — by creating one DagRun per missed interval simultaneously. For a 15-minute DAG paused two weeks, that\'s 1,344 DagRuns competing for scheduler and worker resources at once, exactly the failure mode in this module\'s Error Library. catchup=False plus a deliberate, rate-limited CLI backfill is the production-safe pattern.',
+          },
+          {
+            wrong: '"XCom is fine for passing a DataFrame between tasks since Airflow handles serialization"',
+            right: 'XCom is a row in the metadata database, not a general message bus — Part 07\'s anti-pattern example is the exact ValueError: XCOM value exceeds maximum size (48 KB) that a serialized DataFrame triggers. Write the data to S3 and pass the path; that\'s the entire fix.',
+          },
+          {
+            wrong: '"Dynamic task mapping and a for loop inside one PythonOperator are basically the same thing"',
+            right: 'A for loop inside one task gives you one combined log, one retry for all N entities together, and a single failure that hides which entity actually failed. Part 06\'s .expand() creates N independent task instances with independent logs and independent retries — the difference matters the moment store #7 out of 10 fails and #1-6 shouldn\'t have to re-run.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, padding: '20px 24px', marginBottom: 16,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 10 — Real World ──────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 09 — Real World" />
+        <SectionTag text="// Part 10 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
           textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12,
@@ -1104,104 +896,64 @@ def load_data(**context):
           </div>
 
           <Para>
-            The SLA for the morning pipeline is 10:30 PM ET (previous day). It used to complete
-            by 10:10 PM ET. Over the last four weeks it has been completing later:
-            10:14, 10:21, 10:28, and this week it missed the SLA at 10:34 PM ET.
-            No code was changed. You are asked to investigate.
+            The SLA for the morning pipeline is 10:30 PM ET (previous day). It used
+            to complete by 10:10 PM ET. Over the last four weeks it has been
+            completing later: 10:14, 10:21, 10:28, and this week it missed the SLA
+            at 10:34 PM ET. No code was changed. You are asked to investigate.
           </Para>
 
-          <CodeBox label="Performance investigation — finding the bottleneck">{`# Step 1: Check historical run durations in Airflow metadata DB
-SELECT
-    DATE(execution_date)        AS run_date,
-    dag_id,
-    duration                    AS total_seconds,
-    ROUND(duration / 60.0, 1)   AS total_minutes
-FROM dag_run
-WHERE dag_id    = 'freshmart_morning_pipeline'
-  AND state     = 'success'
+          <CodeBox label="Step 1-2 — isolating which task is actually slow">{`-- Historical run durations from the Airflow metadata DB:
+SELECT DATE(execution_date) run_date, ROUND(duration / 60.0, 1) total_minutes
+FROM dag_run WHERE dag_id = 'freshcart_morning_pipeline' AND state = 'success'
   AND execution_date > NOW() - INTERVAL '30 days'
 ORDER BY execution_date DESC;
+-- 2026-03-17: 64 min ← SLA BREACH   2026-03-10: 51 min   2026-02-24: 38 min ← was fine
+-- total duration grew 68% in 3 weeks — something is scaling linearly
 
-# Shows:
-# 2026-03-17  freshmart_morning_pipeline  3840s  64 min  ← SLA BREACH
-# 2026-03-16  freshmart_morning_pipeline  3540s  59 min
-# 2026-03-10  freshmart_morning_pipeline  3060s  51 min
-# 2026-03-03  freshmart_morning_pipeline  2580s  43 min
-# 2026-02-24  freshmart_morning_pipeline  2280s  38 min  ← was fine here
+-- Break duration down by task:
+SELECT task_id, DATE(execution_date) run_date, ROUND(duration / 60.0, 1) minutes
+FROM task_instance WHERE dag_id = 'freshcart_morning_pipeline' AND state = 'success'
+  AND task_id IN ('extract_orders', 'dbt_silver', 'dbt_gold');
+-- extract_orders: 8 → 8 → 8 → 8 min   (stable)
+-- dbt_silver:    12 → 15 → 18 → 22 min ← growing linearly
+-- dbt_gold:       4 → 4 → 4 → 4 min   (stable)`}</CodeBox>
 
-# Total duration grew 68% in 3 weeks. Something is scaling linearly.
-
-# Step 2: Break down duration by task
-SELECT
-    task_id,
-    DATE(execution_date) AS run_date,
-    ROUND(duration / 60.0, 1) AS minutes
-FROM task_instance
-WHERE dag_id = 'freshmart_morning_pipeline'
-  AND state  = 'success'
-  AND task_id IN ('extract_orders', 'dbt_silver', 'dbt_gold')
-  AND execution_date > NOW() - INTERVAL '30 days'
-ORDER BY task_id, execution_date;
-
-# Results:
-# extract_orders: 8 min → 8 min → 8 min → 8 min  (stable — not the problem)
-# dbt_silver:     12 min → 15 min → 18 min → 22 min  ← growing linearly
-# dbt_gold:       4 min → 4 min → 4 min → 4 min  (stable)
-
-# dbt_silver is the bottleneck. It's slowing down by ~3 minutes per week.
-
-# Step 3: Check which dbt model inside dbt_silver is slow
-# Look at dbt logs in the task log:
-# dbt run completed in 1324s
+          <CodeBox label="Step 3-5 — finding the model, then the actual query pattern">{`# dbt_silver's own log shows which model inside it is slow:
 # Model staging.stg_orders completed in 42s
 # Model silver.orders completed in 1280s   ← THIS ONE
 
-# Step 4: Check silver.orders model
-# It's an incremental dbt model. Check the source table growth:
-SELECT
-    DATE(created_at) AS date,
-    COUNT(*) AS daily_new_orders
-FROM raw.orders
-GROUP BY 1
-ORDER BY 1 DESC
-LIMIT 30;
+-- Source table growth:
+SELECT DATE(created_at) date, COUNT(*) daily_new_orders FROM raw.orders
+GROUP BY 1 ORDER BY 1 DESC LIMIT 30;
+-- FreshCart is growing: 48k/day → 52k → 56k → 60k
 
-# FreshCart is growing: 48k orders/day → 52k → 56k → 60k
-# Silver.orders incremental model runs:
-# WHERE source_date = '{{ ds }}'
-# And then computes window functions over ALL historical orders
+-- silver.orders model SQL:
+-- SUM(order_amount) OVER (PARTITION BY store_id, month ORDER BY created_at)
+-- This window function reads ALL historical orders on every run —
+-- as the table grows, the model gets slower even though only today's rows are new.`}</CodeBox>
 
-# The issue: window function in silver.orders reads ALL historical rows
-# to compute running totals, even though only today's rows are new.
+          <Output>{`Fix: materialise the monthly running total as a separate Gold model.
+  silver.orders:              just cleans and validates (fast — only new rows)
+  gold.monthly_store_revenue: the full window-function aggregate (slow, but runs once, persisted)
 
-# Step 5: Check the silver.orders dbt model SQL
-# Finds: a window function computing running monthly total
-# SUM(order_amount) OVER (PARTITION BY store_id, month ORDER BY created_at)
-# This reads ALL orders for every run — as the table grows, it gets slower.
-
-# Fix: materialise the monthly aggregate as a separate Gold model.
-# silver.orders: just cleans and validates (fast — only new rows)
-# gold.monthly_store_revenue: full aggregate (slow but runs once, persisted)
-
-# After fix:
-# 2026-03-18  freshmart_morning_pipeline  2340s  39 min  ← back to baseline`}</CodeBox>
+After fix:
+2026-03-18  freshcart_morning_pipeline  2340s  39 min  ← back to baseline`}</Output>
 
           <Para>
-            The investigation used Airflow's metadata database to isolate the
-            slow task, then dbt logs to isolate the slow model, then SQL analysis
-            to understand the growth pattern. The fix was architectural — moving
-            the expensive computation from an incremental Silver model (runs daily
-            on all data) to a Gold model (runs once, result persisted). Three weeks
-            of gradual SLA degradation resolved in one refactor.
+            The investigation used Airflow&rsquo;s metadata database to isolate the
+            slow task, dbt logs to isolate the slow model, and SQL analysis to
+            understand the growth pattern. The fix was architectural — moving
+            the expensive computation from an incremental Silver model (runs
+            daily on all data) to a Gold model (runs once, result persisted).
           </Para>
         </div>
       </section>
 
       <Divider />
 
-      {/* ── Part 10 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 11 — Interview Prep ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 10 — Interview Prep" />
+        <SectionTag text="// Part 11 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
@@ -1272,6 +1024,45 @@ Use Sensors when: you need to check an external condition that is not controlled
             <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
               {item.a}
             </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Writing all the extraction, transformation, and notification logic directly inside the DAG file',
+            a: 'The DAG file gets re-parsed by the scheduler every heartbeat (30s default) — heavy imports or slow top-level code in the DAG file slows down every DAG the scheduler manages, not just this one. Part 03\'s pattern keeps the DAG file to task wiring and imports the actual logic (pipelines.extract, pipelines.quality) inside each task function.',
+          },
+          {
+            q: 'Leaving a Sensor on the default mode="poke" because it "works fine in testing"',
+            a: 'It works fine with one sensor. This module\'s Error Library entry — 100 sensors stuck "running," workers busy, nothing processing — is exactly what happens once several poke sensors exist at once, because each one permanently occupies a worker slot for its entire wait. mode="reschedule" costs nothing and prevents this entirely.',
+          },
+          {
+            q: 'Assuming catchup=False means old data will never be processed',
+            a: 'catchup=False only disables automatic backfill on unpause — it says nothing about whether historical data can be processed. Part 05\'s CLI backfill (airflow dags backfill --start-date ... --end-date ...) works regardless of the catchup setting; the two are independent controls, not the same thing.',
+          },
+          {
+            q: 'Testing a DAG only by triggering it manually in the Airflow UI',
+            a: 'A manual trigger doesn\'t exercise scheduled-run behavior (logical_date, data_interval_start) the way a real scheduled run does, so a bug that only shows up through the logical_date calculation — like Part 02\'s datetime.now() mistake — passes a manual test and fails in production. Test with the actual context values a scheduled run would produce.',
+          },
+          {
+            q: 'Adding a new task to a DAG and assuming it just works without checking pool assignment',
+            a: 'A new extraction task that isn\'t assigned to source_db_pool competes for connections outside the pool\'s limit, defeating the entire point of Part 03\'s pool strategy. Every task that touches a shared, rate-limited resource needs an explicit pool assignment — it\'s not inherited automatically from similar tasks nearby.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
           </div>
         ))}
       </section>
@@ -1352,7 +1143,7 @@ Use Sensors when: you need to check an external condition that is not controlled
         'Airflow is dominant and must be known deeply. Prefect is Pythonic and easier for local development. Dagster is asset-centric and has strong data lineage — aligns well with the dbt+ELT pattern. For interviews: know Airflow thoroughly, know Prefect/Dagster conceptually, have an opinion on trade-offs.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
