@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -130,8 +173,8 @@ export default function FilesAtScaleModule() {
       title="Working with Files at Scale"
       description="File organisation, compression, partitioning, the small file problem, and format conversion pipelines."
       section="Data Engineering — Module 19"
-      readTime="60 min"
-      updatedAt="March 2026"
+      readTime="65 min"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Files at Scale Is Its Own Topic ────────────── */}
@@ -150,10 +193,10 @@ export default function FilesAtScaleModule() {
         </Para>
 
         <Para>
-          This module covers the file engineering that sits between "I know Parquet
-          exists" and "I can design a file layer that scales to petabytes and still
-          serves fast queries." These decisions are made once and lived with for years
-          — getting them right matters.
+          This module covers the file engineering that sits between &ldquo;I know
+          Parquet exists&rdquo; and &ldquo;I can design a file layer that scales to petabytes
+          and still serves fast queries.&rdquo; These decisions are made once and lived
+          with for years — getting them right matters.
         </Para>
 
         <HighlightBox>
@@ -187,6 +230,13 @@ export default function FilesAtScaleModule() {
             ))}
           </div>
         </HighlightBox>
+
+        <TryThis>
+          Before reading Part 02, list a file (CSV, log, export) from any project
+          you&rsquo;ve touched. Does its name tell you when it was created, which system
+          produced it, and whether it&rsquo;s safe to overwrite — without opening it? If
+          not, you&rsquo;re about to see exactly what&rsquo;s missing.
+        </TryThis>
       </section>
 
       <Divider />
@@ -215,7 +265,7 @@ export default function FilesAtScaleModule() {
 # Pattern: {source}_{entity}_{start_ts}_{end_ts}_{batch_id}.{ext}
 stripe_payments_20260317T000000Z_20260317T235959Z_f8a3b2c4.json
 shopify_orders_20260317T060000Z_20260317T120000Z_9e1d7c3f.csv
-shipfast_deliveries_20260317T000000Z_20260317T235959Z_2b4a8d6e.parquet
+freshcart_deliveries_20260317T000000Z_20260317T235959Z_2b4a8d6e.parquet
 
 # What each component gives you:
 # stripe       → which source system (filter by prefix)
@@ -227,16 +277,17 @@ shipfast_deliveries_20260317T000000Z_20260317T235959Z_2b4a8d6e.parquet
 # Pattern: {entity}/year={YYYY}/month={MM}/day={DD}/{entity}_{ts}_{id}.parquet
 # (Hive-style partitioning — covered in Part 03)
 
-s3://freshmart-lake/bronze/payments/year=2026/month=03/day=17/
+s3://freshcart-lake/bronze/payments/year=2026/month=03/day=17/
   payments_20260317T000000Z_f8a3b2c4.parquet
   payments_20260317T060000Z_9e1d7c3f.parquet
 
 # ── SILVER AND GOLD: clean entity-oriented names ─────────────────────────────
-s3://freshmart-lake/silver/orders/date=2026-03-17/part-00001.parquet
-s3://freshmart-lake/gold/daily_revenue/date=2026-03-17/part-00001.parquet
+s3://freshcart-lake/silver/orders/date=2026-03-17/part-00001.parquet
+s3://freshcart-lake/gold/daily_revenue/date=2026-03-17/part-00001.parquet`}</CodeBox>
 
-# ── WHAT NOT TO DO ────────────────────────────────────────────────────────────
-# BAD: no timestamp — cannot determine when file was created
+        <SubSubTitle>What not to do</SubSubTitle>
+
+        <CodeBox label="Naming mistakes that cause real pain later">{`# BAD: no timestamp — cannot determine when file was created
 orders.csv
 
 # BAD: ambiguous date format — is 03/17/26 March or day 3?
@@ -257,40 +308,32 @@ orders_final.parquet
 orders_final_v2.parquet
 orders_final_v2_ACTUALLY_FINAL.parquet   # this is not a joke`}</CodeBox>
 
-        <SubTitle>Naming for operational visibility</SubTitle>
+        <SubSubTitle>Naming for operational visibility</SubSubTitle>
 
-        <CodeBox label="Adding operational context to filenames">{`# Production pipelines write many files per day.
-# Good names let you diagnose issues without opening files.
+        <Para>
+          Production pipelines write many files per day. Good names let you
+          diagnose issues without opening a single one.
+        </Para>
 
-# Include run metadata in filename for traceability:
-# {entity}_{date}_{pipeline_run_id}_{chunk_index:04d}.parquet
-
-orders_20260317_run-abc123_0001.parquet
-orders_20260317_run-abc123_0002.parquet
-orders_20260317_run-abc123_0003.parquet
-
-# Benefits:
-# 1. Know exactly which pipeline run wrote each file
-# 2. 0001/0002/0003 tells you how many chunks were written
-# 3. If a run writes 0001 and 0002 but not 0003, you know it stopped early
-# 4. Re-running produces different run_id — old files are not overwritten
-
-# Generating this in Python:
-import uuid
-from datetime import date, timezone
+        <CodeBox label="Generating traceable filenames in Python">{`import uuid
+from datetime import date
 
 def make_output_filename(
-    entity:     str,
-    run_date:   date,
-    run_id:     str,
-    chunk_idx:  int,
-    fmt:        str = 'parquet',
+    entity:    str,
+    run_date:  date,
+    run_id:    str,
+    chunk_idx: int,
+    fmt:       str = 'parquet',
 ) -> str:
-    return f"\${entity}_\${run_date.strftime('%Y%m%d')}_run-\${run_id[:8]}_\${chunk_idx:04d}.\${fmt}"
+    return f"{entity}_{run_date.strftime('%Y%m%d')}_run-{run_id[:8]}_{chunk_idx:04d}.{fmt}"
 
 run_id = str(uuid.uuid4())
-# "orders_20260317_run-f8a3b2c4_0001.parquet"
 print(make_output_filename('orders', date(2026, 3, 17), run_id, 1))`}</CodeBox>
+
+        <Output>{`orders_20260317_run-f8a3b2c4_0001.parquet
+
+# if a run writes chunks 0001 and 0002 but not 0003, you know from the
+# filenames alone that it stopped early — no log file needed to tell you that`}</Output>
       </section>
 
       <Divider />
@@ -304,20 +347,19 @@ print(make_output_filename('orders', date(2026, 3, 17), run_id, 1))`}</CodeBox>
           Partitioning is the practice of organising files into a directory
           hierarchy based on column values. When a query filters on a partition
           column, the query engine reads only the directories matching that filter
-          and skips all others. A query for last week's orders on a dataset
+          and skips all others. A query for last week&rsquo;s orders on a dataset
           partitioned by date reads 7 directories out of 1,000 — 99.3% of files
           never open. This is called partition pruning and it is the most
           impactful performance optimisation in a data lake.
         </Para>
 
-        <SubTitle>Hive-style partitioning — the standard</SubTitle>
+        <SubSubTitle>Hive-style partitioning — the standard</SubSubTitle>
 
-        <CodeBox label="Hive-style partitioning — structure and how query engines use it">{`# Hive-style partitioning uses key=value directory names.
+        <CodeBox label="Hive-style partitioning — directory structure">{`# Hive-style partitioning uses key=value directory names.
 # Query engines (Spark, Athena, Presto, BigQuery external tables)
 # understand this structure natively and prune partitions automatically.
 
-# Directory structure for orders partitioned by date:
-s3://freshmart-lake/silver/orders/
+s3://freshcart-lake/silver/orders/
   date=2026-03-15/
     part-00001.parquet    (rows where date = 2026-03-15)
     part-00002.parquet
@@ -328,48 +370,36 @@ s3://freshmart-lake/silver/orders/
     part-00002.parquet
     part-00003.parquet
 
-# Query: SELECT COUNT(*) FROM orders WHERE date = '2026-03-17'
-# Without partitioning:  reads ALL files → 100% I/O
-# With date partitioning: reads ONLY date=2026-03-17/ → ~0.3% I/O (1 of 365 days)
-
 # Multi-level partitioning (for finer granularity):
-s3://freshmart-lake/silver/orders/
-  year=2026/
-    month=03/
-      day=17/
-        store=ST001/
-          part-00001.parquet
-        store=ST002/
-          part-00001.parquet
+s3://freshcart-lake/silver/orders/
+  year=2026/month=03/day=17/
+    store=ST001/part-00001.parquet
+    store=ST002/part-00001.parquet`}</CodeBox>
 
-# Query: WHERE year=2026 AND month=03 AND store='ST001'
-# Reads: ONLY year=2026/month=03/*/store=ST001/ files
+        <Output>{`-- Query: SELECT COUNT(*) FROM orders WHERE date = '2026-03-17'
+-- Without partitioning:   reads ALL files  → 100% I/O
+-- With date partitioning: reads ONLY date=2026-03-17/ → ~0.3% I/O (1 of 365 days)
 
-# Writing Hive-partitioned Parquet in Python (PyArrow):
+-- Query: WHERE year=2026 AND month=03 AND store='ST001'
+-- Reads: ONLY year=2026/month=03/*/store=ST001/ files`}</Output>
+
+        <CodeBox label="Writing Hive-partitioned Parquet — PyArrow and PySpark">{`# PyArrow:
 import pyarrow as pa
 import pyarrow.parquet as pq
-import pandas as pd
 
-df = pd.read_csv('orders.csv')
 df['date'] = pd.to_datetime(df['created_at']).dt.date.astype(str)
-
 table = pa.Table.from_pandas(df)
 pq.write_to_dataset(
-    table,
-    root_path='s3://freshmart-lake/silver/orders',
-    partition_cols=['date'],             # creates date=YYYY-MM-DD/ dirs
-    filesystem=s3_filesystem,           # pyarrow.fs.S3FileSystem
+    table, root_path='s3://freshcart-lake/silver/orders',
+    partition_cols=['date'],            # creates date=YYYY-MM-DD/ dirs
+    filesystem=s3_filesystem, compression='snappy',
     existing_data_behavior='overwrite_or_ignore',
-    compression='snappy',
 )
 
-# Writing in PySpark:
-df.write \
-  .mode('overwrite') \
-  .partitionBy('date') \
-  .parquet('s3://freshmart-lake/silver/orders')`}</CodeBox>
+# PySpark:
+df.write.mode('overwrite').partitionBy('date').parquet('s3://freshcart-lake/silver/orders')`}</CodeBox>
 
-        <SubTitle>Choosing the right partition key — the most important decision</SubTitle>
+        <SubSubTitle>Choosing the right partition key — the most important decision</SubSubTitle>
 
         <Para>
           The partition key must match the most common query filter. If analysts
@@ -482,7 +512,7 @@ df.write \
           ]}
         />
 
-        <SubTitle>Splittability — why it matters for Spark performance</SubTitle>
+        <SubSubTitle>Splittability — why it matters for Spark performance</SubSubTitle>
 
         <Para>
           A splittable format allows multiple Spark executors to read different
@@ -491,71 +521,51 @@ df.write \
           that eliminates the parallelism that makes Spark fast.
         </Para>
 
-        <CodeBox label="Splittability — the codec choice that determines Spark parallelism">{`# SPLITTABLE: Parquet/Avro with Snappy, ZSTD, or LZ4
-# Each row group (Parquet) or data block (Avro) is compressed independently.
-# Spark assigns one row group per task — true parallel reading.
+        <CodeBox label="The same 500 MB file, two codecs, two very different read times">{`# SPLITTABLE: Parquet with Snappy, ZSTD, or LZ4
+# Each row group is compressed independently — Spark assigns one row
+# group per task, so all executors work in parallel.
+s3://freshcart-lake/silver/orders/date=2026-03-17/part-00001.parquet
 
-s3://freshmart-lake/silver/orders/date=2026-03-17/part-00001.parquet
-# This single 500 MB Parquet file with 10 row groups:
-# → Spark creates 10 tasks, each reading one 50 MB row group in parallel
-# → All 10 executors work simultaneously
-# → Read time: ~5 seconds with 10 executors
+# NON-SPLITTABLE: plain .gz CSV
+# One executor must decompress the ENTIRE file before splitting; the
+# rest sit idle.
+s3://freshcart-lake/landing/orders_20260317.csv.gz`}</CodeBox>
 
-# NON-SPLITTABLE: plain .gz CSV files
-s3://freshmart-lake/landing/orders_20260317.csv.gz
-# This single 500 MB gzip file:
-# → One executor must decompress the ENTIRE file before splitting
-# → Other executors wait idle
-# → Read time: ~50 seconds (10× slower)
+        <Output>{`500 MB Parquet + Snappy, 10 row groups, 10 executors:
+→ read time: ~5 seconds (true parallel read)
 
-# HOW TO CHECK IF A FILE IS SPLITTABLE:
-# Parquet with Snappy/ZSTD → always splittable (row group level)
-# Parquet with GZIP → splittable (row group level) in modern Parquet
-# .csv.gz → NOT splittable
-# .csv.bz2 → splittable (bz2 supports block splitting but still slow)
-# Avro with any codec → splittable (block level)
-# .json.gz → NOT splittable
+500 MB .csv.gz, same 10 executors:
+→ read time: ~50 seconds (one executor decompresses alone, others idle)`}</Output>
 
-# RULE: for data lake storage, always use Parquet (inherently splittable
-#        regardless of codec) or Avro. Never store large raw .gz CSV files
-#        in the analytical layer.`}</CodeBox>
+        <Para>
+          Rule of thumb: for data lake storage, always use Parquet (inherently
+          splittable regardless of codec) or Avro. Never store large raw{' '}
+          <code>.gz</code> CSV files in the analytical layer.
+        </Para>
 
-        <SubTitle>Codec selection by use case</SubTitle>
+        <SubSubTitle>Codec selection by use case</SubSubTitle>
 
-        <CodeBox label="Codec decision guide — practical recommendations">{`# DATA LAKE — Parquet files (Silver, Gold, Bronze)
-pq.write_table(table, path, compression='zstd')   # best all-rounder for 2026
-pq.write_table(table, path, compression='snappy') # safe default, widely supported
+        <CodeBox label="Codec decision guide — practical recommendations">{`# DATA LAKE — Parquet files (Bronze, Silver, Gold)
+pq.write_table(table, path, compression='zstd')     # best all-rounder for 2026
+pq.write_table(table, path, compression='snappy')   # safe default, widely supported
 
 # Per-column compression (Parquet supports different codecs per column):
-pq.write_table(
-    table, path,
-    compression={
-        'order_id':   'zstd',    # numeric ID — compresses well with delta encoding
-        'order_text': 'snappy',  # free text — fast decomp matters for queries
-        'image_url':  'gzip',    # URL strings — ratio more important than speed
-    }
-)
+pq.write_table(table, path, compression={
+    'order_id':   'zstd',    # numeric ID — compresses well with delta encoding
+    'order_text': 'snappy',  # free text — fast decomp matters for queries
+    'image_url':  'gzip',    # URL strings — ratio more important than speed
+})
 
-# KAFKA / STREAMING (Avro messages)
-# LZ4 — lowest latency, minimal CPU overhead
-# Producer config: compression.type=lz4
+# KAFKA / STREAMING — LZ4 for lowest latency and minimal CPU overhead
+# producer config: compression.type=lz4
 
-# LANDING ZONE (vendor CSV/JSON files — as received, do not re-compress)
-# Accept whatever the vendor sends, land it as-is
-# Convert to Parquet/Snappy at Bronze layer
+# LANDING ZONE — accept whatever the vendor sends as-is, convert at Bronze
+# ARCHIVAL (data > 2 years old) — GZIP for CSV, ZSTD level 19 for Parquet
 
-# ARCHIVAL (data older than 2 years, rarely accessed)
-# GZIP for CSV archives, BROTLI or ZSTD level 19 for Parquet
-# Trade CPU time at write for storage savings on cold data
-
-# COMPRESSION LEVEL TUNING (ZSTD):
-pq.write_table(table, path,
-    compression='zstd',
-    compression_level=1,   # fastest, moderate ratio (default)
-    # compression_level=3,   # good ratio, still fast
-    # compression_level=9,   # high ratio, slower — for archival
-    # compression_level=19,  # max ratio, very slow — cold storage only
-)`}</CodeBox>
+# ZSTD compression level tuning:
+pq.write_table(table, path, compression='zstd', compression_level=1)  # fastest (default)
+# compression_level=9  → high ratio, slower — for archival
+# compression_level=19 → max ratio, very slow — cold storage only`}</CodeBox>
       </section>
 
       <Divider />
@@ -575,145 +585,94 @@ pq.write_table(table, path,
         <Para>
           The root cause is almost always streaming or micro-batch pipelines that
           write many small files over time, or highly partitioned tables where
-          each partition gets very few rows per pipeline run. The diagnosis and
-          solution are both well-understood — but many teams do not apply them
-          until performance has already degraded severely.
+          each partition gets very few rows per pipeline run.
         </Para>
 
-        <SubTitle>Why small files are slow</SubTitle>
+        <SubSubTitle>What it looks like</SubSubTitle>
 
-        <CodeBox label="The small file problem — what it looks like and why it is slow">{`# HEALTHY file structure: few large files per partition
-s3://freshmart-lake/silver/orders/date=2026-03-17/
+        <CodeBox label="Healthy vs unhealthy file layout for the same data">{`# HEALTHY: few large files per partition
+s3://freshcart-lake/silver/orders/date=2026-03-17/
   part-00001.parquet  (480 MB)
   part-00002.parquet  (520 MB)
   part-00003.parquet  (495 MB)
-# 3 files × ~500 MB each = 1.5 GB total
-# Spark creates 3 tasks, each reads one large file efficiently
+# 3 files, ~500 MB each → 3 Spark tasks, each reads one large file efficiently
 
 # SMALL FILE PROBLEM: many tiny files per partition
-s3://freshmart-lake/silver/orders/date=2026-03-17/
+s3://freshcart-lake/silver/orders/date=2026-03-17/
   part-00001.parquet  (2.1 KB)   ← written by 5-minute micro-batch 00:05
   part-00002.parquet  (1.8 KB)   ← written by 5-minute micro-batch 00:10
-  part-00003.parquet  (2.4 KB)   ← written by 5-minute micro-batch 00:15
-  ... (287 more files)
+  ... (286 more files) ...
   part-00288.parquet  (1.9 KB)   ← written by 5-minute micro-batch 23:55
-# 288 files × ~2 KB each = 576 KB total data (same data!)
-# Spark creates 288 tasks — 288× task scheduling overhead
-# S3 LIST request returns 288 file metadata entries
-# Each file read requires a separate S3 GET request
+# 288 files, ~576 KB total (same data!) → 288 Spark tasks, 288× overhead`}</CodeBox>
 
-# WHAT SMALL FILES DO TO PERFORMANCE:
-# 1. S3/ADLS LIST calls:
-#    Listing 3 files:   <10ms
-#    Listing 288 files: ~100ms (and S3 paginates at 1,000 objects)
-#    Listing 50,000 files: 5-10 seconds just for the directory listing
+        <Output>{`S3 LIST calls:       3 files <10ms  •  288 files ~100ms  •  50,000 files 5-10s
+Spark task overhead: ~100ms/task × 288 tasks = ~29s of pure scheduling overhead
+                      (vs. ~300ms for the 3-file layout — 97× more overhead)
+Parquet footer reads: 288 separate S3 GET requests just for file metadata
 
-# 2. Spark task overhead:
-#    Each Spark task has ~100ms JVM overhead for scheduling
-#    288 tasks × 100ms = ~29 seconds of pure overhead
-#    3 tasks × 100ms = ~300ms overhead
-#    Same data, 97× more overhead
+Scale of the problem: a pipeline writing every 5 minutes across 10 store
+partitions produces 2,880 files/day → 1,051,200 files/year. Most systems
+start struggling well before 1M files.`}</Output>
 
-# 3. Parquet footer reads:
-#    Each Parquet file requires reading its footer to get schema and statistics
-#    288 footer reads = 288 S3 GET requests for metadata
-#    Most of these tiny files have no useful statistics anyway
+        <SubSubTitle>Solution 1 — compact existing small files</SubSubTitle>
 
-# 4. Hive Metastore / Glue catalog:
-#    Every file is a separate entry in partition metadata
-#    MSCK REPAIR TABLE (rediscover partitions) takes minutes on lakes
-#    with millions of files instead of seconds
+        <CodeBox label="Compaction — rewriting a partition's small files as fewer large ones">{`from pyspark.sql import SparkSession
 
-# SCALE OF THE PROBLEM at large companies:
-# A pipeline writing every 5 minutes produces 288 files/day per partition
-# With 10 store partitions: 2,880 files/day
-# After 1 year: 1,051,200 files
-# After 3 years: 3,153,600 files — most systems start struggling around 1M files`}</CodeBox>
-
-        <SubTitle>Solutions — compaction, coalescing, and preventing accumulation</SubTitle>
-
-        <CodeBox label="Solving the small file problem — three approaches">{`# ── APPROACH 1: COMPACTION (merging small files into large ones) ──────────────
-# Run a compaction job after each pipeline run or on a schedule
-
-from pyspark.sql import SparkSession
-
-def compact_partition(
-    spark: SparkSession,
-    path: str,
-    date: str,
-    target_file_size_mb: int = 512,
-) -> None:
-    """
-    Read all small files in a partition and rewrite as fewer large files.
-    Target: 1 file per 512 MB of compressed data (128 MB min, 1 GB max).
-    """
-    partition_path = f"\${path}/date=\${date}"
-
+def compact_partition(spark: SparkSession, path: str, date: str, target_file_size_mb: int = 512) -> None:
+    """Read all small files in a partition and rewrite as fewer large files."""
+    partition_path = f"{path}/date={date}"
     df = spark.read.parquet(partition_path)
     row_count = df.count()
 
-    # Calculate target number of files
     # Rough estimate: 1M rows ≈ 100 MB compressed Parquet
-    estimated_mb = row_count / 10_000
-    target_files = max(1, int(estimated_mb / target_file_size_mb))
+    estimated_mb  = row_count / 10_000
+    target_files  = max(1, int(estimated_mb / target_file_size_mb))
 
-    df.coalesce(target_files) \
-      .write \
-      .mode('overwrite') \
-      .parquet(partition_path)
+    df.coalesce(target_files).write.mode('overwrite').parquet(partition_path)
+    print(f"Compacted date={date}: {row_count:,} rows → {target_files} files")`}</CodeBox>
 
-    print(f"Compacted date=\${date}: \${row_count:,} rows → \${target_files} files")
+        <Output>{`Compacted date=2026-03-17: 48,200,000 rows → 6 files
+# 288 tiny files → 6 files of ~500 MB each, same data, same query results`}</Output>
 
+        <SubSubTitle>Solution 2 — prevent small files at write time</SubSubTitle>
 
-# ── APPROACH 2: COALESCE BEFORE WRITE ─────────────────────────────────────────
-# Prevent small files at write time by coalescing the output DataFrame
-
+        <CodeBox label="Coalescing before write, and Delta Lake OPTIMIZE">{`# Coalesce the output DataFrame before writing:
 def write_compact_parquet(df, output_path: str, partition_col: str = 'date') -> None:
-    """Write Parquet with controlled file count per partition."""
-    # Count rows to estimate file count needed
-    row_count  = df.count()
-    target_mb  = 512     # target file size in MB
-    rows_per_mb = 10_000  # ~10k rows per MB of compressed Parquet (adjust to your data)
-
+    row_count    = df.count()
+    target_mb    = 512
+    rows_per_mb  = 10_000
     target_files = max(1, int(row_count / (target_mb * rows_per_mb)))
 
-    df.repartition(target_files, partition_col) \
-      .write \
-      .mode('overwrite') \
-      .partitionBy(partition_col) \
-      .parquet(output_path)
+    df.repartition(target_files, partition_col) \\
+      .write.mode('overwrite').partitionBy(partition_col).parquet(output_path)
 
 
-# ── APPROACH 3: DELTA LAKE AUTO-OPTIMISE ──────────────────────────────────────
-# Delta Lake (and Iceberg) have built-in compaction via OPTIMIZE
-
-# Delta Lake:
+# Delta Lake / Iceberg have built-in compaction — run on a schedule instead:
 # OPTIMIZE silver.orders WHERE date = '2026-03-17';
-# → Reads all small files in that partition, rewrites as ~1 GB files
-# → Does NOT change table content — only file organisation
-# → After OPTIMIZE, run VACUUM to remove old small files
-
-# Python API:
 from delta.tables import DeltaTable
-
-delta_table = DeltaTable.forPath(spark, 's3://freshmart-lake/silver/orders')
+delta_table = DeltaTable.forPath(spark, 's3://freshcart-lake/silver/orders')
 delta_table.optimize().where("date = '2026-03-17'").executeCompaction()
+# OPTIMIZE does not change table content, only file organisation —
+# run VACUUM afterward to reclaim space from the old small files`}</CodeBox>
 
-# Schedule OPTIMIZE to run after every batch write:
-# OPTIMIZE runs in ~seconds for small tables, minutes for large ones
-# Run daily: OPTIMIZE silver.orders WHERE date >= current_date - 7
+        <SubSubTitle>Solution 3 — batch streaming writes into larger intervals</SubSubTitle>
 
-# ── APPROACH 4: PREVENT AT STREAM WRITE TIME ──────────────────────────────────
-# Spark Structured Streaming: control output file size
-streamDf.writeStream \
-    .trigger(processingTime='1 hour') \
-    .option('maxRecordsPerFile', 500_000) \
-    .partitionBy('date') \
-    .parquet('s3://freshmart-lake/silver/orders')
+        <CodeBox label="Structured Streaming — controlling output file size at the source">{`streamDf.writeStream \\
+    .trigger(processingTime='1 hour') \\
+    .option('maxRecordsPerFile', 500_000) \\
+    .partitionBy('date') \\
+    .parquet('s3://freshcart-lake/silver/orders')
 
-# processingTime='1 hour' batches 1 hour of data before writing
+# processingTime='1 hour' batches an hour of data before writing:
 # → 24 files/day instead of 288 files/day (12× improvement)
-# maxRecordsPerFile limits maximum records per output file`}</CodeBox>
+# maxRecordsPerFile caps the maximum records per output file`}</CodeBox>
+
+        <TryThis>
+          Run <code>compact_partition</code>&rsquo;s math on paper for a partition with
+          2,000 rows and <code>target_file_size_mb=512</code>. What does{' '}
+          <code>target_files</code> come out to, and why does the{' '}
+          <code>max(1, ...)</code> guard matter for a partition this small?
+        </TryThis>
       </section>
 
       <Divider />
@@ -724,105 +683,80 @@ streamDf.writeStream \
         <SectionTitle>Target File Sizes — What the Numbers Actually Mean</SectionTitle>
 
         <Para>
-          Every modern storage and compute guide says files should be "128 MB to
-          1 GB." Where does this range come from? Understanding the reasoning
+          Every modern storage and compute guide says files should be &ldquo;128 MB to
+          1 GB.&rdquo; Where does this range come from? Understanding the reasoning
           behind it lets you tune for your specific workload rather than applying
           a rule blindly.
         </Para>
 
-        <CodeBox label="Target file size reasoning — why 128 MB to 1 GB">{`# WHY TOO-SMALL IS BAD (< 32 MB):
-# ── Overhead dominates:
-#    S3 GET request latency: ~10ms
-#    Parquet footer read:    ~5ms
-#    Spark task scheduling:  ~100ms
-#    For a 1 KB file: overhead (115ms) >> actual read time (<1ms)
-#    For a 512 MB file: overhead (115ms) << actual read time (~500ms)
-# ── Metadata catalog grows large (each file = one catalog entry)
-# ── S3 LIST paginated at 1,000 objects — large counts require many API calls
+        <CodeBox label="Why too small and too large both hurt">{`# TOO SMALL (< 32 MB): overhead dominates the actual read
+#   S3 GET latency:        ~10ms
+#   Parquet footer read:   ~5ms
+#   Spark task scheduling: ~100ms
+#   For a 1 KB file:   overhead (115ms) >> actual read time (<1ms)
+#   For a 512 MB file: overhead (115ms) << actual read time (~500ms)
+#   Metadata catalog also grows large — one entry per file
 
-# WHY TOO-LARGE IS BAD (> 2 GB):
-# ── Spark cannot split a single file across multiple tasks
-#    (within a file, tasks map to row groups, not to bytes)
-#    One 4 GB file → one executor reads all 4 GB serially
-#    Four 1 GB files → four executors read 1 GB each in parallel
-# ── Partial failures waste more work:
-#    A failed write of 4 GB wastes 4 GB of work
-#    A failed write of 512 MB wastes only 512 MB
-# ── Schema discovery and footer reads take longer on very large files
+# TOO LARGE (> 2 GB): single-executor bottleneck
+#   Spark cannot split a single file across tasks by bytes, only by row group
+#   One 4 GB file  → one executor reads all 4 GB serially
+#   Four 1 GB files → four executors read 1 GB each in parallel
+#   A failed write of 4 GB also wastes 4 GB of work; 512 MB wastes far less
 
-# THE SWEET SPOT:
-# Target: 256 MB to 1 GB per file (compressed Parquet)
-# Minimum: 128 MB  (below this, overhead ratio becomes significant)
-# Maximum: 1–2 GB  (above this, single-executor bottleneck emerges)
+# THE SWEET SPOT: 256 MB – 1 GB per file (compressed Parquet)
+# minimum 128 MB, maximum 1-2 GB`}</CodeBox>
 
-# PRACTICAL CALIBRATION:
-# Run this on a sample partition to understand your row size:
-import pyarrow.parquet as pq
+        <SubSubTitle>Calibrating your own target</SubSubTitle>
 
-metadata = pq.read_metadata('s3://freshmart-lake/silver/orders/date=2026-03-17/part-00001.parquet')
-file_size_mb  = metadata.serialized_size / (1024 * 1024)
-row_count     = metadata.num_rows
+        <CodeBox label="Reading Parquet metadata to calibrate target_files calculations">{`import pyarrow.parquet as pq
+
+metadata = pq.read_metadata('s3://freshcart-lake/silver/orders/date=2026-03-17/part-00001.parquet')
+file_size_mb   = metadata.serialized_size / (1024 * 1024)
+row_count      = metadata.num_rows
 num_row_groups = metadata.num_row_groups
 
-print(f"File size: \${file_size_mb:.1f} MB")
-print(f"Row count: \${row_count:,}")
-print(f"Row groups: \${num_row_groups}")
-print(f"MB per million rows: \${file_size_mb / row_count * 1_000_000:.1f}")
-# Use this last number to calibrate target_files calculations
+print(f"File size: {file_size_mb:.1f} MB")
+print(f"Row count: {row_count:,}")
+print(f"Row groups: {num_row_groups}")
+print(f"MB per million rows: {file_size_mb / row_count * 1_000_000:.1f}")`}</CodeBox>
 
-# ROW GROUP SIZE WITHIN PARQUET FILES:
-# Each Parquet file is divided into row groups (typically 100k-1M rows each)
-# Row group size affects:
-# - Predicate pushdown granularity (each row group has min/max statistics)
-# - Memory during write (one row group is buffered in memory during write)
-# - Parallelism within file (Spark assigns one task per row group)
+        <Output>{`File size: 487.3 MB
+Row count: 3,842,900
+Row groups: 8
+MB per million rows: 126.8
+# use this last number to size target_files in the compaction functions above`}</Output>
 
-# Tuning row groups in PyArrow:
-pq.write_table(
+        <Para>
+          Row groups within a Parquet file also matter: smaller row groups give
+          finer predicate pushdown (each row group carries its own min/max
+          statistics) but more metadata overhead; larger row groups are the
+          opposite trade.
+        </Para>
+
+        <CodeBox label="Tuning row group size">{`pq.write_table(
     table, path,
     row_group_size=500_000,   # 500k rows per row group
-    # Smaller row groups: better predicate pushdown, more metadata overhead
-    # Larger row groups: less metadata overhead, coarser pruning
 )`}</CodeBox>
 
-        <SubTitle>Bloom filters — accelerating point lookups in Parquet</SubTitle>
+        <SubSubTitle>Bloom filters — accelerating point lookups in Parquet</SubSubTitle>
 
-        <CodeBox label="Bloom filters — enabling fast point lookups in Parquet files">{`# Parquet supports bloom filters on specific columns.
-# A bloom filter is a probabilistic data structure that answers:
-# "Is value X definitely NOT in this row group?"
-# If yes → skip the row group entirely (zero reads)
-# If no  → maybe (the row group might have it) → read and check
+        <Para>
+          A bloom filter is a probabilistic structure that answers &ldquo;is value X
+          definitely NOT in this row group?&rdquo; If yes, the row group is skipped
+          entirely with zero reads — useful specifically for point lookups on
+          high-cardinality columns, not for date filters that partition pruning
+          already handles.
+        </Para>
 
-# Without bloom filter:
-# "Find order_id = 9284751 in a 500 MB Parquet file"
-# Must read every row group and check every value: slow
-# With bloom filter:
-# Bloom filter answers "9284751 is NOT in row groups 1,3,4,5,7,8,9,10"
-# Only row group 2 and 6 need to be read: ~10× faster
-
-# WHEN TO ADD BLOOM FILTERS:
-# ✓ UUID or string primary key columns (high cardinality, point lookups common)
-# ✓ External ID columns (payment_id, order_id from source systems)
-# ✓ Any column where queries do "WHERE column = specific_value"
-# ✗ Date columns (already pruned by partition pruning)
-# ✗ Low-cardinality columns (status, boolean — min/max stats already handle these)
-
-# Adding bloom filters with PyArrow:
-import pyarrow.parquet as pq
-
-pq.write_table(
-    table,
-    'output.parquet',
-    compression='zstd',
-    write_bloom_filter=True,                         # enable for all columns
-    bloom_filter_columns=['payment_id', 'order_id'], # or specify columns
-    bloom_filter_false_positive_rate=0.05,           # 5% false positive rate
-    # Lower rate → larger bloom filter → better pruning but more memory
+        <CodeBox label="Adding bloom filters with PyArrow">{`pq.write_table(
+    table, 'output.parquet', compression='zstd',
+    write_bloom_filter=True,
+    bloom_filter_columns=['payment_id', 'order_id'],   # high-cardinality point-lookup columns
+    bloom_filter_false_positive_rate=0.05,              # lower rate → larger filter, better pruning
 )
 
-# Snowflake / BigQuery clustering achieves similar effect via table clustering:
-# ALTER TABLE silver.orders CLUSTER BY (date, store_id);
-# Snowflake physically co-locates rows with same cluster key values → fast point lookups`}</CodeBox>
+# Snowflake / BigQuery achieve a similar effect via table clustering:
+# ALTER TABLE silver.orders CLUSTER BY (date, store_id);`}</CodeBox>
       </section>
 
       <Divider />
@@ -833,183 +767,145 @@ pq.write_table(
         <SectionTitle>Format Conversion Pipelines — CSV/JSON to Parquet in Production</SectionTitle>
 
         <Para>
-          The most common file operation in data lake Bronze layer is format
+          The most common file operation in a data lake&rsquo;s Bronze layer is format
           conversion: raw CSV and JSON files from vendors and APIs become typed,
-          compressed, partitioned Parquet files. This operation seems simple but
-          has dozens of real-world edge cases that must be handled to produce
-          reliable, resumable, production-safe pipelines.
+          compressed, partitioned Parquet files. This looks simple but has real
+          edge cases — encoding, bad rows, schema mismatches — that a production
+          pipeline has to handle explicitly.
         </Para>
 
-        <CodeBox label="Production CSV-to-Parquet conversion pipeline">{`"""
-Bronze layer format conversion: CSV landing → Parquet Bronze
-Handles: encoding detection, schema inference, type casting,
-         bad row logging, resumability, S3 output.
-"""
+        <SubSubTitle>Reading the source file defensively</SubSubTitle>
 
-import os, json, logging
-from pathlib import Path
-from datetime import date, datetime, timezone
-from typing import Iterator
-
+        <CodeBox label="csv_to_parquet.py — schema, encoding detection, chunked read">{`import logging
 import chardet
 import pandas as pd
 import pyarrow as pa
-import pyarrow.parquet as pq
-import pyarrow.fs as pafs
+from typing import Iterator
 
 log = logging.getLogger('csv_to_parquet')
 
-# ── Schema definition (explicit is better than inferred) ──────────────────────
+# Explicit schema — better than letting Parquet infer types from messy CSV
 ORDERS_SCHEMA = pa.schema([
-    pa.field('order_id',     pa.int64(),                  nullable=False),
-    pa.field('store_id',     pa.string(),                  nullable=False),
-    pa.field('customer_id',  pa.int64(),                  nullable=True),
-    pa.field('amount',       pa.decimal128(10, 2),        nullable=False),
-    pa.field('status',       pa.string(),                  nullable=False),
-    pa.field('created_at',   pa.timestamp('us', tz='UTC'), nullable=False),
-    pa.field('ingested_at',  pa.timestamp('us', tz='UTC'), nullable=False),
+    pa.field('order_id',    pa.int64(),                  nullable=False),
+    pa.field('store_id',    pa.string(),                  nullable=False),
+    pa.field('customer_id', pa.int64(),                  nullable=True),
+    pa.field('amount',      pa.decimal128(10, 2),        nullable=False),
+    pa.field('status',      pa.string(),                  nullable=False),
+    pa.field('created_at',  pa.timestamp('us', tz='UTC'), nullable=False),
+    pa.field('ingested_at', pa.timestamp('us', tz='UTC'), nullable=False),
 ])
 
+
 def detect_encoding(filepath: str, sample_bytes: int = 100_000) -> str:
-    """Detect file encoding from first N bytes."""
+    """Detect file encoding from the first N bytes."""
     with open(filepath, 'rb') as f:
         raw = f.read(sample_bytes)
     result = chardet.detect(raw)
-    encoding = result.get('encoding') or 'utf-8'
-    confidence = result.get('confidence', 0)
-    log.info('Detected encoding: \${s} (confidence: \${.0%})', encoding, confidence)
+    encoding, confidence = result.get('encoding') or 'utf-8', result.get('confidence', 0)
+    log.info(f'Detected encoding: {encoding} (confidence: {confidence:.0%})')
     return encoding if confidence > 0.7 else 'utf-8'
 
 
 def read_csv_chunked(filepath: str, chunk_size: int = 200_000) -> Iterator[pd.DataFrame]:
-    """Read CSV in chunks, detecting encoding and handling bad lines."""
+    """Read CSV in chunks, with detected encoding and bad-line tolerance."""
     encoding = detect_encoding(filepath)
-    bad_lines_path = filepath.replace('.csv', '_bad_lines.ndjson')
-
     try:
         for chunk in pd.read_csv(
-            filepath,
-            chunksize     = chunk_size,
-            encoding      = encoding,
-            encoding_errors = 'replace',   # replace undecodable bytes with ?
-            dtype         = str,           # read all as string first, cast later
-            na_values     = ['', 'NULL', 'null', 'N/A', 'n/a', 'NA', '-'],
-            keep_default_na = True,
-            on_bad_lines  = 'warn',        # log bad lines, do not crash
+            filepath, chunksize=chunk_size, encoding=encoding, encoding_errors='replace',
+            dtype=str, na_values=['', 'NULL', 'null', 'N/A', 'n/a', 'NA', '-'],
+            on_bad_lines='warn',
         ):
             yield chunk
     except Exception as e:
-        log.error('Failed to read CSV \${s}: \${s}', filepath, str(e))
-        raise
+        log.error('Failed to read CSV %s: %s', filepath, str(e))
+        raise`}</CodeBox>
 
+        <SubSubTitle>Casting and cleaning each chunk</SubSubTitle>
+
+        <CodeBox label="csv_to_parquet.py — cast_chunk()">{`from datetime import date
 
 def cast_chunk(chunk: pd.DataFrame, source_date: date) -> pd.DataFrame:
     """Apply type casting and add pipeline metadata columns."""
     df = chunk.copy()
 
-    # Cast numeric columns:
     for col in ['order_id', 'customer_id']:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')
 
     if 'amount' in df.columns:
-        df['amount'] = pd.to_numeric(
-            df['amount'].str.replace(',', '', regex=False),   # remove thousands sep
-            errors='coerce',
-        ).round(2)
+        df['amount'] = pd.to_numeric(df['amount'].str.replace(',', '', regex=False), errors='coerce').round(2)
 
-    # Cast timestamps:
     if 'created_at' in df.columns:
-        df['created_at'] = pd.to_datetime(
-            df['created_at'], utc=True, errors='coerce'
-        )
+        df['created_at'] = pd.to_datetime(df['created_at'], utc=True, errors='coerce')
 
-    # Add pipeline metadata:
     df['ingested_at'] = pd.Timestamp.now(tz='UTC')
-    df['source_date'] = source_date.isoformat()   # partition column
+    df['source_date']  = source_date.isoformat()   # partition column
 
-    # Drop rows with NULL primary key (unrecoverable):
     bad_mask = df['order_id'].isna()
     if bad_mask.any():
-        log.warning('Dropping \${d} rows with NULL order_id', bad_mask.sum())
+        log.warning('Dropping %d rows with NULL order_id', bad_mask.sum())
         df = df[~bad_mask]
 
-    return df
+    return df`}</CodeBox>
 
+        <SubSubTitle>Assembling the conversion pipeline</SubSubTitle>
 
-def convert_csv_to_parquet(
-    input_path:  str,
-    output_root: str,
-    source_date: date,
-    s3_bucket:   str | None = None,
-) -> dict:
-    """
-    Convert a CSV file to partitioned Parquet on S3.
-    Returns stats: {'rows_written', 'rows_rejected', 'files_written'}
-    """
+        <CodeBox label="csv_to_parquet.py — convert_csv_to_parquet()">{`import pyarrow.parquet as pq
+import pyarrow.fs as pafs
+from pathlib import Path
+
+def convert_csv_to_parquet(input_path: str, output_root: str, source_date: date, s3_bucket: str | None = None) -> dict:
+    """Convert a CSV file to partitioned Parquet. Returns rows_written/rows_rejected/files_written."""
     stats = {'rows_written': 0, 'rows_rejected': 0, 'files_written': 0}
     all_tables = []
 
     for chunk_idx, chunk in enumerate(read_csv_chunked(input_path)):
         original_rows = len(chunk)
-        cast = cast_chunk(chunk, source_date)
+        cast    = cast_chunk(chunk, source_date)
         dropped = original_rows - len(cast)
-
         if dropped:
             stats['rows_rejected'] += dropped
-            log.warning('Chunk \${d}: dropped \${d} invalid rows', chunk_idx, dropped)
+            log.warning('Chunk %d: dropped %d invalid rows', chunk_idx, dropped)
 
         if len(cast) > 0:
             try:
-                table = pa.Table.from_pandas(cast, schema=ORDERS_SCHEMA, safe=False)
-                all_tables.append(table)
+                all_tables.append(pa.Table.from_pandas(cast, schema=ORDERS_SCHEMA, safe=False))
             except Exception as e:
-                log.error('Schema cast failed on chunk \${d}: \${s}', chunk_idx, str(e))
+                log.error('Schema cast failed on chunk %d: %s', chunk_idx, str(e))
                 raise
-
         stats['rows_written'] += len(cast)
 
     if not all_tables:
         log.warning('No valid rows to write')
         return stats
 
-    full_table = pa.concat_tables(all_tables)
-
-    # Write partitioned Parquet:
-    output_path = f"\${output_root}/orders"
-    if s3_bucket:
-        filesystem = pafs.S3FileSystem(region='ap-south-1')
-        output_path = f"\${s3_bucket}/bronze/orders"
-    else:
-        filesystem = pafs.LocalFileSystem()
+    full_table  = pa.concat_tables(all_tables)
+    output_path = f"{s3_bucket}/bronze/orders" if s3_bucket else output_root + "/orders"
+    filesystem  = pafs.S3FileSystem(region='ap-south-1') if s3_bucket else pafs.LocalFileSystem()
+    if not s3_bucket:
         Path(output_path).mkdir(parents=True, exist_ok=True)
 
     pq.write_to_dataset(
-        full_table,
-        root_path   = output_path,
-        partition_cols = ['source_date'],
-        filesystem  = filesystem,
-        compression = 'zstd',
-        row_group_size = 500_000,
-        write_statistics = True,
-        existing_data_behavior = 'overwrite_or_ignore',
+        full_table, root_path=output_path, partition_cols=['source_date'],
+        filesystem=filesystem, compression='zstd', row_group_size=500_000,
+        write_statistics=True, existing_data_behavior='overwrite_or_ignore',
     )
 
-    log.info(
-        'Conversion complete: \${:,} rows written, \${:,} rejected, source_date=\${s}',
-        stats['rows_written'], stats['rows_rejected'], source_date.isoformat(),
-    )
+    log.info(f"Conversion complete: {stats['rows_written']:,} rows written, "
+             f"{stats['rows_rejected']:,} rejected, source_date={source_date.isoformat()}")
     return stats`}</CodeBox>
 
-        <SubTitle>JSON-to-Parquet conversion with schema normalisation</SubTitle>
+        <Output>{`INFO Detected encoding: utf-8 (confidence: 99%)
+WARNING Chunk 3: dropped 12 invalid rows
+INFO Conversion complete: 199,988 rows written, 12 rejected, source_date=2026-03-17`}</Output>
 
-        <CodeBox label="JSON/NDJSON to Parquet — handling nested structures">{`import json
+        <SubSubTitle>JSON-to-Parquet with nested-structure flattening</SubSubTitle>
+
+        <CodeBox label="json_to_parquet.py — flattening nested vendor JSON">{`import json
 from typing import Iterator
-import pyarrow as pa
-import pyarrow.parquet as pq
 
 def read_ndjson(filepath: str) -> Iterator[dict]:
-    """Stream records from NDJSON file one at a time."""
+    """Stream records from an NDJSON file one at a time."""
     with open(filepath, encoding='utf-8') as f:
         for line_num, line in enumerate(f, start=1):
             line = line.strip()
@@ -1018,57 +914,42 @@ def read_ndjson(filepath: str) -> Iterator[dict]:
             try:
                 yield json.loads(line)
             except json.JSONDecodeError as e:
-                log.warning('Invalid JSON on line \${d}: \${s}', line_num, str(e))
+                log.warning('Invalid JSON on line %d: %s', line_num, str(e))
 
 
 def flatten_order(raw: dict) -> dict:
     """Flatten nested order JSON to a flat dict for Parquet storage."""
     return {
-        'order_id':         raw.get('order_id') or raw.get('id'),
-        'customer_id':      raw.get('customer', {}).get('id'),
-        'customer_city':    raw.get('customer', {}).get('address', {}).get('city'),
-        'restaurant_id':    raw.get('restaurant', {}).get('id'),
-        'restaurant_name':  raw.get('restaurant', {}).get('name'),
-        'order_amount':     raw.get('payment', {}).get('amount'),
-        'payment_method':   raw.get('payment', {}).get('method'),
-        'item_count':       len(raw.get('items', [])),
-        'status':           raw.get('status'),
-        'created_at':       raw.get('created_at'),
-        'promo_code':       raw.get('promo_code'),
-        # Keep full payload for reference (rarely needed fields):
-        '_raw_items':       json.dumps(raw.get('items', [])),
-    }
+        'order_id':        raw.get('order_id') or raw.get('id'),
+        'customer_id':     raw.get('customer', {}).get('id'),
+        'customer_city':   raw.get('customer', {}).get('address', {}).get('city'),
+        'restaurant_id':   raw.get('restaurant', {}).get('id'),
+        'order_amount':    raw.get('payment', {}).get('amount'),
+        'payment_method':  raw.get('payment', {}).get('method'),
+        'item_count':      len(raw.get('items', [])),
+        'status':          raw.get('status'),
+        'created_at':      raw.get('created_at'),
+        '_raw_items':      json.dumps(raw.get('items', [])),   # kept for reference
+    }`}</CodeBox>
 
+        <CodeBox label="json_to_parquet.py — streaming write with ParquetWriter">{`import pyarrow.parquet as pq
 
-def json_to_parquet(
-    input_path:  str,
-    output_path: str,
-    batch_size:  int = 100_000,
-) -> int:
+def json_to_parquet(input_path: str, output_path: str, batch_size: int = 100_000) -> int:
     """Convert NDJSON to Parquet with flattening. Returns total rows written."""
-    total = 0
-    batch: list[dict] = []
-    writer = None
+    total, batch, writer = 0, [], None
 
     for record in read_ndjson(input_path):
-        flat = flatten_order(record)
-        batch.append(flat)
-
+        batch.append(flatten_order(record))
         if len(batch) >= batch_size:
-            df    = pd.DataFrame(batch)
-            table = pa.Table.from_pandas(df)
-
+            table = pa.Table.from_pandas(pd.DataFrame(batch))
             if writer is None:
                 writer = pq.ParquetWriter(output_path, table.schema, compression='zstd')
-
             writer.write_table(table)
             total += len(batch)
             batch = []
 
-    # Write final batch:
     if batch:
-        df    = pd.DataFrame(batch)
-        table = pa.Table.from_pandas(df)
+        table = pa.Table.from_pandas(pd.DataFrame(batch))
         if writer is None:
             writer = pq.ParquetWriter(output_path, table.schema, compression='zstd')
         writer.write_table(table)
@@ -1076,9 +957,11 @@ def json_to_parquet(
 
     if writer:
         writer.close()
-
-    log.info('Wrote \${:,} rows to \${s}', total, output_path)
+    log.info(f"Wrote {total:,} rows to {output_path}")
     return total`}</CodeBox>
+
+        <Output>{`WARNING Invalid JSON on line 40218: Expecting ',' delimiter: line 1 column 812
+INFO Wrote 199,999 rows to s3://freshcart-lake/bronze/orders_json/2026-03-17.parquet`}</Output>
       </section>
 
       <Divider />
@@ -1090,197 +973,166 @@ def json_to_parquet(
 
         <Para>
           A data lake without a lifecycle policy is a storage cost that grows
-          indefinitely. Every file written to S3 costs $0.023 per GB per month
+          indefinitely. Every file written to S3 costs money per GB per month
           forever, unless explicitly deleted or transitioned to cheaper storage.
-          Lifecycle management is the operational discipline that keeps storage
-          costs under control without deleting data that is still needed.
         </Para>
 
-        <CodeBox label="S3 lifecycle policy — automated tier transitions and deletion">{`# S3 Lifecycle policy (set via AWS Console or Terraform)
-# Automatically moves/deletes files based on age
+        <SubSubTitle>S3 lifecycle rules — automated tier transitions</SubSubTitle>
 
-# Terraform example:
-resource "aws_s3_bucket_lifecycle_configuration" "freshmart_lake" {
-  bucket = "freshmart-data-lake"
+        <CodeBox label="Terraform — landing zone and Bronze lifecycle rules">{`resource "aws_s3_bucket_lifecycle_configuration" "freshcart_lake" {
+  bucket = "freshcart-data-lake"
 
-  # Rule 1: Landing zone — raw files only kept 30 days
-  # After conversion to Bronze, raw files are not needed
+  # Landing zone — raw files only needed until converted to Bronze
   rule {
     id     = "landing-zone-cleanup"
     status = "Enabled"
-
     filter { prefix = "landing/" }
-
-    # Move to Infrequent Access after 7 days:
-    transition {
-      days          = 7
-      storage_class = "STANDARD_IA"   # 45% cheaper than Standard
-    }
-
-    # Delete after 30 days:
+    transition { days = 7  storage_class = "STANDARD_IA" }
     expiration { days = 30 }
   }
 
-  # Rule 2: Bronze layer — keep 1 year in Standard, then archive
+  # Bronze — keep 1 year in Standard, then archive
   rule {
     id     = "bronze-archive"
     status = "Enabled"
-
     filter { prefix = "bronze/" }
-
-    transition {
-      days          = 90
-      storage_class = "STANDARD_IA"
-    }
-
-    transition {
-      days          = 365
-      storage_class = "GLACIER_IR"     # Glacier Instant Retrieval ~68% cheaper
-    }
+    transition { days = 90  storage_class = "STANDARD_IA" }
+    transition { days = 365 storage_class = "GLACIER_IR" }
   }
+}`}</CodeBox>
 
-  # Rule 3: Silver layer — keep 2 years Standard, then long-term archive
+        <CodeBox label="Terraform — Silver lifecycle rule">{`resource "aws_s3_bucket_lifecycle_configuration" "freshcart_lake_silver" {
+  bucket = "freshcart-data-lake"
+
   rule {
     id     = "silver-lifecycle"
     status = "Enabled"
-
     filter { prefix = "silver/" }
-
-    transition {
-      days          = 180
-      storage_class = "STANDARD_IA"
-    }
-
-    transition {
-      days          = 730     # 2 years
-      storage_class = "GLACIER"   # Deep Archive — cheapest, 12h retrieval
-    }
+    transition { days = 180 storage_class = "STANDARD_IA" }
+    transition { days = 730 storage_class = "GLACIER" }   # 2 years
   }
 
-  # Rule 4: Gold layer — keep hot forever (small, frequently accessed)
-  # No lifecycle rule needed for Gold — it is usually small
-}
+  # Gold layer — usually small, kept hot forever, no rule needed
+}`}</CodeBox>
 
-# STORAGE COST COMPARISON (per GB/month, US East):
-# S3 Standard:              $0.023
-# S3 Standard-IA:           $0.0125  (45% cheaper, 30-day minimum)
-# S3 Glacier Instant:       $0.004   (83% cheaper, millisecond retrieval)
-# S3 Glacier Flexible:      $0.0036  (84% cheaper, 3-5 hour retrieval)
-# S3 Glacier Deep Archive:  $0.00099 (96% cheaper, 12+ hour retrieval)`}</CodeBox>
+        <CompareTable
+          headers={[{ label: 'Storage class' }, { label: '$/GB/month', color: '#00e676' }, { label: 'Savings vs Standard', color: '#f97316' }, { label: 'Retrieval' }]}
+          keys={['tier', 'cost', 'savings', 'retrieval']}
+          rows={[
+            { tier: 'S3 Standard', cost: '$0.023', savings: '—', retrieval: 'Instant' },
+            { tier: 'Standard-IA', cost: '$0.0125', savings: '45% cheaper', retrieval: 'Instant (30-day min)' },
+            { tier: 'Glacier Instant', cost: '$0.004', savings: '83% cheaper', retrieval: 'Milliseconds' },
+            { tier: 'Glacier Flexible', cost: '$0.0036', savings: '84% cheaper', retrieval: '3–5 hours' },
+            { tier: 'Glacier Deep Archive', cost: '$0.00099', savings: '96% cheaper', retrieval: '12+ hours' },
+          ]}
+        />
 
-        <SubTitle>Delta Lake VACUUM — cleaning up old file versions</SubTitle>
+        <SubSubTitle>Delta Lake VACUUM — cleaning up old file versions</SubSubTitle>
 
-        <CodeBox label="Delta Lake VACUUM — removing old data files safely">{`# Delta Lake writes new Parquet files for every UPDATE, DELETE, and OPTIMIZE.
-# Old files are kept (for time travel) but accumulate space costs.
-# VACUUM removes files that are no longer needed for time travel.
+        <Para>
+          Delta Lake writes new Parquet files for every UPDATE, DELETE, and
+          OPTIMIZE. Old files are kept for time travel but cost real money —
+          VACUUM removes files no longer needed for that.
+        </Para>
 
-# Default retention: 7 days (safe minimum — ensures no active transactions use old files)
-# VACUUM silently skips files newer than retention threshold
+        <CodeBox label="Running VACUUM safely">{`-- Default retention: 7 days (safe minimum for active transactions)
+VACUUM silver.orders RETAIN 168 HOURS;
 
-# Run VACUUM after OPTIMIZE to reclaim space from compaction:
--- SQL:
-VACUUM silver.orders RETAIN 168 HOURS;  -- 168h = 7 days
-VACUUM silver.orders RETAIN 720 HOURS;  -- 30 days (if time travel is needed that far back)
-
--- Python API:
+-- Python API, with a dry run first:
 from delta.tables import DeltaTable
+dt = DeltaTable.forPath(spark, 's3://freshcart-lake/silver/orders')
+dt.vacuum(retentionHours=168, dry_run=True)   # shows what WOULD be deleted
+dt.vacuum(retentionHours=168)                  # then actually delete
 
-dt = DeltaTable.forPath(spark, 's3://freshmart-lake/silver/orders')
-dt.vacuum(retentionHours=168)
+# Schedule weekly on all Silver/Gold tables: 0 3 * * 0 (Sunday 3 AM)`}</CodeBox>
 
-# VACUUM dry run (shows what WOULD be deleted without deleting):
-dt.vacuum(retentionHours=168, dry_run=True)
+        <SubSubTitle>Auditing what you actually have</SubSubTitle>
 
-# WARNING: setting retention to < 7 days requires explicitly disabling the safety check:
-spark.conf.set('spark.databricks.delta.retentionDurationCheck.enabled', 'false')
-dt.vacuum(retentionHours=0)   # removes ALL old files — only for dev/testing
-
-# SCHEDULE: run VACUUM weekly on all Silver and Gold tables
-# Automate with Airflow DAG or Databricks Job:
-# 0 3 * * 0  (every Sunday at 3 AM)
-
-# ICEBERG equivalent:
-# CALL catalog.system.expire_snapshots(
-#   table => 'silver.orders',
-#   older_than => TIMESTAMP '2026-02-17 00:00:00',
-#   retain_last => 10
-# );`}</CodeBox>
-
-        <SubTitle>Practical file inventory — knowing what you have</SubTitle>
-
-        <CodeBox label="File inventory queries — auditing your data lake's health">{`# Regular file inventory helps catch small file problems early
-# and verifies lifecycle policies are working as expected.
-
-import boto3
+        <CodeBox label="File inventory — auditing a data lake's health">{`import boto3
 from collections import defaultdict
-from datetime import datetime, timezone
 
 def audit_s3_prefix(bucket: str, prefix: str) -> dict:
-    """
-    Audit S3 prefix: count files, total size, average size, min/max size.
-    Returns health report for identifying small file problems.
-    """
+    """Count files, total size, and flag small-file-problem symptoms."""
     s3 = boto3.client('s3')
     paginator = s3.get_paginator('list_objects_v2')
-
-    sizes = []
-    partition_files = defaultdict(list)
+    sizes, partition_files = [], defaultdict(list)
 
     for page in paginator.paginate(Bucket=bucket, Prefix=prefix):
         for obj in page.get('Contents', []):
             size_mb = obj['Size'] / (1024 * 1024)
             sizes.append(size_mb)
-
-            # Group by partition (last directory level)
-            key_parts = obj['Key'].split('/')
-            partition = '/'.join(key_parts[:-1])
+            partition = '/'.join(obj['Key'].split('/')[:-1])
             partition_files[partition].append(size_mb)
 
     if not sizes:
         return {'error': 'No files found'}
 
-    total_gb   = sum(sizes) / 1024
-    avg_mb     = sum(sizes) / len(sizes)
-    small_files = sum(1 for s in sizes if s < 10)  # files < 10 MB
-
+    small_files = sum(1 for s in sizes if s < 10)
     report = {
-        'total_files':  len(sizes),
-        'total_gb':     round(total_gb, 2),
-        'avg_mb':       round(avg_mb, 1),
-        'min_mb':       round(min(sizes), 3),
-        'max_mb':       round(max(sizes), 1),
-        'small_files':  small_files,
-        'small_pct':    round(small_files / len(sizes) * 100, 1),
-        'partitions':   len(partition_files),
+        'total_files': len(sizes), 'total_gb': round(sum(sizes) / 1024, 2),
+        'avg_mb': round(sum(sizes) / len(sizes), 1),
+        'small_files': small_files, 'small_pct': round(small_files / len(sizes) * 100, 1),
+        'partitions': len(partition_files),
     }
-
-    # Flag health issues:
     if small_files / len(sizes) > 0.5:
-        report['warning'] = f'More than 50% of files are < 10 MB — compaction needed'
-    if len(sizes) > 100_000:
-        report['warning'] = 'More than 100k files — metadata listing will be slow'
+        report['warning'] = 'More than 50% of files are < 10 MB — compaction needed'
+    return report`}</CodeBox>
 
-    return report
-
-
-# Example output:
-# {
-#   'total_files':  48234,
-#   'total_gb':     142.7,
-#   'avg_mb':       3.0,       ← WAY too small (should be 128–512 MB)
-#   'min_mb':       0.002,
-#   'max_mb':       12.4,
-#   'small_files':  45891,
-#   'small_pct':    95.1,      ← 95% of files are tiny
-#   'warning':      'More than 50% of files are < 10 MB — compaction needed'
-# }`}</CodeBox>
+        <Output>{`{
+  'total_files': 48234, 'total_gb': 142.7, 'avg_mb': 3.0,
+  'small_files': 45891, 'small_pct': 95.1, 'partitions': 1095,
+  'warning': 'More than 50% of files are < 10 MB — compaction needed'
+}
+# avg_mb of 3.0 against a 128-512 MB target, with 95% of files under 10 MB,
+# is exactly the small file problem from Part 05 — this audit is what catches it`}</Output>
       </section>
 
       <Divider />
 
-      {/* ── Part 09 — Real World ─────────────────────────────────────── */}
+      {/* ── Part 09 — Misconceptions ──────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Part 09 — Misconceptions" />
+        <SectionTitle>Five Misconceptions About Files at Scale</SectionTitle>
+
+        {[
+          {
+            wrong: '"More partitions always means better query performance"',
+            right: 'Partitioning has overhead — every partition is metadata the catalog and query planner must track. Part 03\'s customer_id example and Part 09\'s Real World investigation both show the same failure: partitioning too finely (by minute, or by a high-cardinality column) creates more small files and slower metadata operations than not partitioning that dimension at all.',
+          },
+          {
+            wrong: '"ZSTD or Snappy — the codec choice barely matters once files are in Parquet"',
+            right: 'Codec affects both storage cost and query speed, not just one or the other, and the two goals sometimes pull in opposite directions. Part 04\'s comparison shows GZIP achieving a much better compression ratio than Snappy while decompressing over 2× slower — the wrong choice for a frequently-queried Silver table quietly taxes every single read.',
+          },
+          {
+            wrong: '"The small file problem only matters at truly massive scale — millions of files"',
+            right: 'Part 05 shows the overhead per file (S3 LIST cost, ~100ms Spark task scheduling, a separate footer read) is roughly constant regardless of total data volume, so a partition with only a few hundred tiny files already pays a real, measurable tax — long before the count reaches the six or seven figures usually associated with "the small file problem."',
+          },
+          {
+            wrong: '"Compression and splittability are the same property"',
+            right: 'They are independent. GZIP compresses well but a raw .gz file is not splittable; Parquet is splittable at the row group level no matter which of Snappy, ZSTD, GZIP, or LZ4 compresses it. Part 04\'s side-by-side (5 seconds vs 50 seconds for the same 500 MB) is a splittability difference, not a compression-ratio difference.',
+          },
+          {
+            wrong: '"An explicit Parquet schema is optional — type inference works fine"',
+            right: 'Part 07\'s ORDERS_SCHEMA exists because inferred types from messy CSV input are exactly where production pipelines break: a column that\'s all integers in a sample file but gets one stray "N/A" in production infers as a string, and every downstream consumer expecting an int64 breaks. An explicit schema converts that into a clear, catchable cast error instead of a silent type mismatch three steps downstream.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, padding: '20px 24px', marginBottom: 16,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+              ✕ &quot;{item.wrong}&quot;
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Part 10 — Real World ──────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
-        <SectionTag text="// Part 09 — Real World" />
+        <SectionTag text="// Part 10 — Real World" />
         <div style={{
           fontSize: 10, fontWeight: 700, letterSpacing: '.12em',
           textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12,
@@ -1310,66 +1162,44 @@ def audit_s3_prefix(bucket: str, prefix: str) -> dict:
             the query. You investigate.
           </Para>
 
-          <CodeBox label="Diagnosis and resolution — file engineering fixes an 18-minute query">{`# Step 1: Check the Athena query execution details
-# In Athena console, click the query → "Execution detail"
-# Data scanned: 4.2 TB  ← this is the problem signal
-# Expected for a 90-day query: ~400 GB
+          <CodeBox label="Diagnosis — checking the execution details and the catalog">{`# Step 1: Athena console → query execution detail
+# Data scanned: 4.2 TB  ← the problem signal (expected ~400 GB for 90 days)
 
-# Step 2: Check partition count in the catalog
-aws glue get-partitions \
-    --database-name freshmart_silver \
-    --table-name events \
+# Step 2: check partition count in the catalog
+$ aws glue get-partitions --database-name freshcart_silver --table-name events \\
     --query 'Partitions | length(@)'
-# Returns: 156,420 partitions
-# Expected for 3 years of daily data: ~1,095 partitions
-# Something created 155,000 extra partitions!
+# 156,420 partitions — expected ~1,095 for 3 years of daily data
 
-# Step 3: Find the culprit partition key
-aws glue get-partitions \
-    --database-name freshmart_silver \
-    --table-name events \
+# Step 3: find the culprit partition key
+$ aws glue get-partitions --database-name freshcart_silver --table-name events \\
     --query 'Partitions[0:5].StorageDescriptor.Location'
-# s3://freshmart-lake/silver/events/date=2026-03-17/hour=20/minute=14/
-# s3://freshmart-lake/silver/events/date=2026-03-17/hour=20/minute=15/
-# Found it: the pipeline was accidentally partitioning by MINUTE!
+# s3://freshcart-lake/silver/events/date=2026-03-17/hour=20/minute=14/
+# s3://freshcart-lake/silver/events/date=2026-03-17/hour=20/minute=15/
+# → the pipeline was accidentally partitioning by MINUTE
 
-# Counting files:
-aws s3 ls s3://freshmart-lake/silver/events/ --recursive \
-    | awk '{print \$4}' | wc -l
-# 4,847,293 files — each file has ~1 KB (one minute of events)
+$ aws s3 ls s3://freshcart-lake/silver/events/ --recursive | awk '{print $4}' | wc -l
+# 4,847,293 files — each ~1 KB (one minute of events)`}</CodeBox>
 
-# Step 4: Understand the impact
-# Athena: to list all partitions for MSCK REPAIR TABLE → tens of thousands of API calls
-# Athena: to execute query → reads 4.2 TB instead of 400 GB (no minute-level pruning benefit)
-# Glue catalog: 156k partition entries → slow SHOW PARTITIONS, slow query planning
-
-# Step 5: Fix — rewrite with date-only partitioning
-from pyspark.sql import SparkSession
+          <CodeBox label="Fix — rewrite with date-only partitioning">{`from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 
-df = spark.read.parquet('s3://freshmart-lake/silver/events/')
+df = spark.read.parquet('s3://freshcart-lake/silver/events/')
+df.write.mode('overwrite').partitionBy('date').parquet('s3://freshcart-lake/silver/events_v2/')
 
-# Rewrite with correct partition: date only
-df.write \
-  .mode('overwrite') \
-  .partitionBy('date') \
-  .parquet('s3://freshmart-lake/silver/events_v2/')
+spark.sql('MSCK REPAIR TABLE freshcart_silver.events_v2')`}</CodeBox>
 
-# Step 6: Run MSCK REPAIR TABLE to update Glue catalog
-spark.sql('MSCK REPAIR TABLE freshmart_silver.events_v2')
-
-# After fix:
-# Partitions: 1,095 (date-only)
-# Files: ~3,285 (3 per day × 1,095 days)
-# Avg file size: ~130 MB
-# Query time: 94 seconds (was 18 minutes — 11× improvement)
-# Data scanned: 412 GB (was 4.2 TB — 10× reduction)`}</CodeBox>
+          <Output>{`Before → After
+Partitions:      156,420  →  1,095
+Files:            ~4.8M   →  ~3,285
+Avg file size:    ~1 KB   →  ~130 MB
+Query time:      18 min   →  94 sec   (11× improvement)
+Data scanned:     4.2 TB  →  412 GB   (10× reduction)`}</Output>
 
           <Para>
             The root cause was a single line in the Spark write configuration that
             added <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>minute</code> as a
             partition column alongside <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>date</code>.
-            This turned 1,095 daily partitions into 1,576,800 minute partitions —
+            This turned 1,095 daily partitions into 1.5 million minute partitions —
             all valid, all correct data, but completely unusable for analytics.
             Two hours of investigation and a Spark rewrite job fixed it permanently.
           </Para>
@@ -1378,9 +1208,9 @@ spark.sql('MSCK REPAIR TABLE freshmart_silver.events_v2')
 
       <Divider />
 
-      {/* ── Part 10 — Interview Prep ─────────────────────────────────── */}
+      {/* ── Part 11 — Interview Prep ──────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="prep">
-        <SectionTag text="// Part 10 — Interview Prep" />
+        <SectionTag text="// Part 11 — Interview Prep" />
         <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
 
         {[
@@ -1463,6 +1293,45 @@ Fifth, check for missing or stale statistics. Query optimisers use column statis
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Naming an output file "latest" or "final" and overwriting it on every run',
+            a: 'A mutable name loses all history — you cannot tell what "latest" pointed to yesterday, and a bad run silently destroys the last good file. Part 02\'s pattern (entity, ISO timestamp, run ID) makes every file immutable and traceable to the exact run that produced it.',
+          },
+          {
+            q: 'Letting a new partition column slip in without checking its cardinality first',
+            a: 'This module\'s Real World section exists because someone added minute alongside date in a Spark partitionBy call — a one-line change that turned 1,095 partitions into 1.5 million. Before adding any column to partitionBy, ask how many distinct values it has and whether queries actually filter on it.',
+          },
+          {
+            q: 'Assuming a .gz file behaves like a Parquet file because "it\'s compressed either way"',
+            a: 'Compression ratio and splittability are unrelated properties (see this module\'s Misconceptions). A gzip-compressed CSV cannot be split across Spark executors regardless of how well it compresses — only Parquet\'s row-group structure (or Avro\'s block structure) makes a file genuinely parallel to read.',
+          },
+          {
+            q: 'Writing a format-conversion pipeline without an explicit target schema',
+            a: 'Letting Parquet infer types from a CSV sample works until production sends one row that breaks the inferred type — a stray "N/A" in what looked like an all-integer column. Part 07\'s ORDERS_SCHEMA turns that into an explicit, catchable error at conversion time instead of a confusing type mismatch three steps downstream.',
+          },
+          {
+            q: 'Setting up a data lake with no lifecycle policy at all',
+            a: 'Storage cost on S3 Standard never goes away on its own — every file written, including ones nobody has read in two years, keeps billing at full price forever. Part 08\'s lifecycle rules (transition to Infrequent Access, then Glacier, then expire) are a one-time Terraform change that keeps this from becoming a growing, unnoticed cost.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1472,7 +1341,7 @@ Fifth, check for missing or stale statistics. Query optimisers use column statis
           {
             error: `Athena query scanned 4.2 TB but table has only 400 GB of data — partition filter WHERE date = '2026-03-17' is not working`,
             cause: 'Partition pruning is not firing. The most common causes: the filter uses a function on the partition column (DATE_TRUNC or CAST), the table was created with a different partition column name than what the query uses, or the Glue catalog partitions were never registered (MSCK REPAIR TABLE was never run after writing new partitions). When partition pruning fails, Athena scans the entire table.',
-            fix: 'Verify the exact partition column name: SHOW PARTITIONS table_name in Athena. Ensure the WHERE clause uses the column directly without functions: WHERE date = \'2026-03-17\' not WHERE CAST(date AS DATE) = \'2026-03-17\'. If partitions are missing from the catalog: run MSCK REPAIR TABLE freshmart_silver.orders to rediscover all partitions. For ongoing pipelines, add partition registration to the pipeline: AWS Glue addPartition API or ALTER TABLE ADD PARTITION.',
+            fix: 'Verify the exact partition column name: SHOW PARTITIONS table_name in Athena. Ensure the WHERE clause uses the column directly without functions: WHERE date = \'2026-03-17\' not WHERE CAST(date AS DATE) = \'2026-03-17\'. If partitions are missing from the catalog: run MSCK REPAIR TABLE freshcart_silver.orders to rediscover all partitions. For ongoing pipelines, add partition registration to the pipeline: AWS Glue addPartition API or ALTER TABLE ADD PARTITION.',
           },
           {
             error: `pyarrow.lib.ArrowInvalid: Could not convert 'N/A' with type str: tried to convert to int64 — when writing a DataFrame to Parquet with an explicit schema`,
@@ -1537,7 +1406,7 @@ Fifth, check for missing or stale statistics. Query optimisers use column statis
         'When an Athena or Spark query is suddenly slow: check data scanned (should match partition size), count files per partition (thousands of tiny files = small file problem), verify format is Parquet not CSV/JSON, confirm partition pruning is firing (no functions on partition columns in WHERE), and check if MSCK REPAIR TABLE needs to be run to register new partitions.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
