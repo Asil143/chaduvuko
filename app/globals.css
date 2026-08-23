@@ -138,6 +138,7 @@
     color: var(--text2);
     line-height: 1.85;
     margin-bottom: 1.4rem;
+    max-width: 760px;
   }
   .prose-chaduvuko h2 {
     font-family: 'Syne', sans-serif;
