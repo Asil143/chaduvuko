@@ -36,12 +36,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -60,6 +64,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -70,6 +95,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -138,7 +181,7 @@ export default function DataFormatsModule() {
       description="How each format works internally, when to use it, and what breaks when you pick the wrong one."
       section="Data Engineering — Module 08"
       readTime="60 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Formats Matter ─────────────────────────────── */}
@@ -245,6 +288,13 @@ COLUMNAR FORMAT (Parquet / ORC):
   Query: SELECT SUM(amount) FROM orders
   Reads: ONLY the "amount" column = 4 values read, 4 needed
   10-100× less I/O for analytical queries at scale`}</CodeBox>
+
+        <TryThis>
+          Pick a table you query regularly and count how many of its columns a typical
+          query actually reads out of the total. That fraction is roughly the I/O
+          reduction a columnar format would give you for that same query — a query
+          reading 3 of 30 columns has a lot more to gain than one reading 25 of 30.
+        </TryThis>
       </section>
 
       <Divider />
@@ -303,7 +353,7 @@ What the file actually is on disk:
 Quoting rule (RFC 4180):
   If a value contains the delimiter, wrap it in double quotes:
   9284755,4201938,"New York, Maharashtra",380.00,delivered
-                  ──────────────────── 
+                  ────────────────────
                   quoted because it contains a comma
 
   If a value contains double quotes, escape them by doubling:
@@ -449,7 +499,7 @@ Python reading NDJSON efficiently:
           repetition adds hundreds of megabytes of overhead that carries zero information.
         </Para>
 
-        <CodeBox label="JSON key repetition overhead — why JSON is storage-inefficient">{`10 million order records stored as JSON:
+        <CodeBox label="JSON key repetition overhead — the per-record cost">{`10 million order records stored as JSON:
 
 Each record:
   {"order_id":9284751,"customer_id":4201938,"city":"Seattle",
@@ -461,9 +511,9 @@ Key name overhead per record:
   "city"        = 6 chars
   "amount"      = 8 chars
   "status"      = 8 chars
-  "created_at"  = 12 chars
-  Total key overhead = 57 chars per record × 10M records
-                     = 570 MB of key names carrying zero data
+  "created_at"  = 12 chars`}</CodeBox>
+        <Output>{`Total key overhead = 57 chars per record × 10M records
+                   = 570 MB of key names carrying zero data
 
 Compared formats for same 10M orders:
   JSON (uncompressed):  ~4.2 GB
@@ -471,8 +521,8 @@ Compared formats for same 10M orders:
   CSV (uncompressed):   ~1.8 GB
   CSV (gzip):           ~0.4 GB
   Parquet:              ~0.3 GB  ← columnar + compression combined
-  
-JSON is fine for transfer. It is a poor choice for storage at scale.`}</CodeBox>
+
+JSON is fine for transfer. It is a poor choice for storage at scale.`}</Output>
 
         <SubTitle>When to use JSON</SubTitle>
         <Para>
@@ -581,9 +631,8 @@ Footer statistics for "city" column per row group:
   Row Group 2:  Min=Chicago,   Max=Miami     → CANNOT contain Seattle ✗ skip
   Row Group 3:  Min=Baltimore, Max=Seattle → MAY contain Seattle ✓ read
   Row Group 4:  Min=Miami,     Max=Austin → CANNOT contain Seattle ✗ skip
-  ...
-
-Result: 6 of 10 row groups are skipped entirely.
+  ...`}</CodeBox>
+        <Output>{`Result: 6 of 10 row groups are skipped entirely.
         Only 4 million rows are read, not 10 million.
         Query is 60% faster before columnar storage even factors in.
 
@@ -591,7 +640,7 @@ Combined with columnar storage (reading only the amount and city columns):
   Traditional CSV:   Read 10M rows × 5 columns = 50M values
   Parquet:           Read 4M rows × 2 columns  = 8M values
   Effective speedup: ~6× from predicate pushdown × ~2.5× from columnar
-                   = ~15× total faster than CSV for this query`}</CodeBox>
+                   = ~15× total faster than CSV for this query`}</Output>
 
         <Para>
           <strong>Mechanism 2 — Encoding and compression per column.</strong> Because
@@ -648,6 +697,14 @@ GZIP:   slower, better ratio (~4-5×) — use for archival storage`}</CodeBox>
           through a message broker (use Avro), or you are working in a Hive/MapReduce
           ecosystem that prefers ORC.
         </Para>
+
+        <TryThis>
+          Check a query engine's scan statistics (Snowflake's query profile, Athena's
+          "Data scanned", or Spark's SQL tab) on a Parquet table you use regularly.
+          Confirm predicate pushdown is actually pruning row groups for your common
+          filters — if the bytes scanned barely change with a selective WHERE clause,
+          pushdown isn't working the way this Part describes.
+        </TryThis>
       </section>
 
       <Divider />
@@ -688,11 +745,12 @@ GZIP:   slower, better ratio (~4-5×) — use for archival storage`}</CodeBox>
           greatest strength and its primary source of operational complexity.
         </Para>
 
-        <CodeBox label="Avro schema and data — how they work together">{`Avro Schema (written in JSON, stored separately):
+        <SubSubTitle>The schema, and the binary data it describes</SubSubTitle>
+        <CodeBox label="Avro schema (JSON), and the binary data it governs">{`Avro Schema (written in JSON, stored separately):
 {
   "type": "record",
   "name": "Order",
-  "namespace": "com.freshmart.data",
+  "namespace": "com.freshcart.data",
   "fields": [
     {"name": "order_id",     "type": "long"},
     {"name": "customer_id",  "type": "long"},
@@ -711,9 +769,10 @@ Avro binary data (what the file actually stores):
 
   Field names are looked up from the schema, not stored with data.
   This makes Avro files smaller than JSON (no key repetition)
-  but requires schema availability to read.
+  but requires schema availability to read.`}</CodeBox>
 
-Avro file format:
+        <SubSubTitle>The file layout, and why the schema sits in the header instead of the footer</SubSubTitle>
+        <CodeBox label="Avro file format — schema-first, splittable data blocks">{`Avro file format:
   ┌──────────────────────────────────────────────┐
   │ File header: magic bytes + schema (JSON)     │  ← schema embedded in file
   ├──────────────────────────────────────────────┤
@@ -761,7 +820,7 @@ WHY THIS MATTERS:
   In a Kafka pipeline, 50 microservices may consume from one topic.
   If a producer changes its Avro schema in a non-backward-compatible
   way, all 50 consumers break simultaneously.
-  
+
   Schema Registry (Confluent or AWS Glue Schema Registry) enforces
   compatibility rules automatically — rejects schema changes that
   would break consumers. Every production Kafka + Avro deployment
@@ -916,7 +975,8 @@ WHY THIS MATTERS:
           are not marginal — they directly translate to cloud storage bills.
         </Para>
 
-        <CodeBox label="100 million order records — storage size by format">{`Dataset: 100M orders, 12 columns
+        <SubSubTitle>Uncompressed and compressed size, by format</SubSubTitle>
+        <CodeBox label="100 million order records — size by format">{`Dataset: 100M orders, 12 columns
   order_id, customer_id, restaurant_id, city, category,
   amount, quantity, status, payment_method, created_at,
   delivered_at, promo_code (50% null)
@@ -931,9 +991,10 @@ Parquet             N/A (always     ~4.2 GB (snappy)    Columnar + per-column
                      compressed)    ~2.8 GB (zstd)       encoding + compression
 ORC                 N/A             ~3.9 GB (zlib)      Similar to Parquet,
                                     ~3.1 GB (snappy)     slightly different
-                                                         compression tradeoffs
+                                                         compression tradeoffs`}</CodeBox>
 
-COST AT AWS S3 STANDARD PRICING (~$0.023/GB/month):
+        <SubSubTitle>What that difference costs at S3 pricing, and how it scales</SubSubTitle>
+        <CodeBox label="Storage cost at scale, CSV vs Parquet">{`COST AT AWS S3 STANDARD PRICING (~$0.023/GB/month):
   CSV (gzip):    9.0 GB × $0.023 = $0.21/month
   JSON (gzip):   14.0 GB × $0.023 = $0.32/month
   Avro (snappy): 11.0 GB × $0.023 = $0.25/month
@@ -987,6 +1048,49 @@ Format choice is a cost decision as much as a performance decision.`}</CodeBox>
             },
           ]}
         />
+
+        <TryThis>
+          Estimate the size of your own team's largest CSV or JSON dataset still
+          sitting in the lake. Using this Part's ratios (Parquet at roughly 0.1–0.3×
+          CSV size), project what converting it to Parquet would save annually in
+          storage cost alone — before even counting the query-cost savings.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data Formats</SectionTitle>
+
+        {[
+          {
+            wrong: '"CSV is fine to keep in the data lake — storage is cheap"',
+            right: 'Part 02\'s "when to use CSV" guidance and Part 08\'s cost numbers both say the opposite: CSV in the lake costs 3–10× more in storage than Parquet at scale, and the query-cost side (full scans, no predicate pushdown) is usually the bigger expense. "Cheap per GB" ignores both the size multiplier and the compute cost of querying it.',
+          },
+          {
+            wrong: '"JSON and Parquet are basically interchangeable — they\'re both just files in the lake"',
+            right: 'Part 03\'s key-repetition breakdown and Part 08\'s size comparison show JSON runs 3–5× larger than Parquet for the same data, with none of Parquet\'s predicate pushdown. The file format determines both storage cost and query speed — it is not an implementation detail.',
+          },
+          {
+            wrong: '"Avro is strictly worse than Parquet since Parquet is faster for analytics"',
+            right: 'Part 05 and Interview Prep Q2 are explicit that Avro\'s row orientation is precisely what makes it fit Kafka\'s one-record-at-a-time write pattern — Parquet requires buffering thousands of rows before writing, which is incompatible with streaming. "Faster for analytics" and "wrong tool for the job" are different claims.',
+          },
+          {
+            wrong: '"Parquet\'s schema evolution means old and new files get automatically reconciled into one clean schema"',
+            right: 'This module\'s Error Library ("47 columns but dbt model expects 52") and Part 04\'s schema evolution note both show the real behavior: old files simply return NULL for columns that didn\'t exist when they were written. Nothing is backfilled automatically — the dbt model has to handle the NULLs explicitly with COALESCE.',
+          },
+          {
+            wrong: '"ORC is obsolete now that Parquet has won"',
+            right: 'Part 06\'s comparison table and Callout are explicit that ORC remains the right default in Hive and legacy Hadoop environments, and its ZLIB compression sometimes out-performs Parquet\'s Snappy. The practical rule is "use Parquet for new projects," not "ORC is dead" — ecosystem fit still decides the choice in existing Hive shops.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1145,6 +1249,45 @@ I would present this to the analyst as a two-week migration project with measura
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Pointing a query engine at a Parquet directory without checking it actually contains matching files',
+            a: 'This module\'s Error Library shows the "Unable to infer schema" exception that results — the path is wrong, the upstream pipeline wrote nothing, or files with conflicting schemas are mixed together. A quick `aws s3 ls --recursive | grep .parquet` before debugging further saves time chasing the wrong cause.',
+          },
+          {
+            q: 'Removing or renaming an Avro field without a default value and expecting the Schema Registry to allow it',
+            a: 'This module\'s Error Library shows exactly this rejection — the Schema Registry is enforcing the backward-compatibility rules from Part 05, not malfunctioning. Evolve schemas additively: add a default to a field before removing it, or add a new field alongside an old one rather than renaming in place.',
+          },
+          {
+            q: 'Storing Parquet files without date partitioning and expecting a WHERE clause to prune automatically',
+            a: 'This module\'s Error Library shows a $20.48 Athena query that scanned 4.2 TB for a 7-day filter — with no date-partitioned paths, there\'s nothing for the engine to prune against no matter how selective the WHERE clause looks. Predicate pushdown on row-group statistics (Part 04) and partition pruning are separate mechanisms; you need both.',
+          },
+          {
+            q: 'Writing large Parquet or ORC files directly to their final path instead of write-then-atomic-rename',
+            a: 'This module\'s Error Library shows a "Malformed ORC file footer" error from a write that was interrupted mid-file — since both formats store their index in a footer written last, a partial write has no usable footer at all. Write to a temporary key and move it to the final path only once the write completes.',
+          },
+          {
+            q: 'Treating NULLs in old Parquet files after a schema change as a bug rather than expected behavior',
+            a: 'This module\'s Error Library shows a dbt model expecting 52 columns getting NULLs for 5 of them from older files with only 47 — Part 04 is explicit that this is Parquet schema evolution working correctly, not corruption. Handle it with COALESCE and sensible defaults in the transformation, or backfill old files through the new pipeline logic if uniform NULLs are unacceptable.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1219,7 +1362,7 @@ I would present this to the analyst as a two-week migration project with measura
         'Format choice is a cost decision. At 100 million rows, CSV costs 3× more in S3 storage than Parquet. At 10 billion rows, the annual cost difference between CSV and Parquet can exceed $10,000. Format migrations at companies still using CSV in their data lakes typically produce 5–10× storage reduction and pay back migration effort in weeks.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
