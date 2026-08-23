@@ -186,9 +186,16 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const isAIML = pathname.startsWith('/learn/ai-ml/')
   const aimlModuleNum = isAIML ? getAIMLModuleNum(pathname) : null
   const displaySection = aimlModuleNum ? `AI/ML — Module ${aimlModuleNum}` : section
+  // These five tracks already show a numbered progress bar + pills (DESectionNav,
+  // SQLSectionNav, PythonSectionNav, HtmlCssSectionNav, or the AI/ML page header) for
+  // moving between modules, so the separate Previous/Next widget below is redundant
+  // there — and worse, it was sourced from a hand-maintained list that had drifted out
+  // of sync with these tracks' real module order. Suppress it only for these tracks;
+  // other pages (foundations, cloud guides, projects, etc.) still rely on it.
+  const hasPillNav = !!sqlSlug || !!deSlug || !!pySlug || !!htmlCssSlug || isAIML
   const { prev: autoPrev, next: autoNext } = getPrevNext(pathname)
-  const prev = prevOverride ? { ...prevOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoPrev
-  const next = nextOverride ? { ...nextOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoNext
+  const prev = hasPillNav ? null : prevOverride ? { ...prevOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoPrev
+  const next = hasPillNav ? null : nextOverride ? { ...nextOverride, color: '#00c2ff', section: '', xp: 0, difficulty: 'Beginner' as const, readTime: '' } : autoNext
   const meta = getPageMeta(pathname)
   const suggestedNext = NEXT_PAGES[pathname] ?? getNextPages(pathname)
 
