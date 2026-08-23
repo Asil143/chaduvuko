@@ -68,6 +68,45 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -90,7 +129,7 @@ export default function WhatIsDataModule() {
       description="The foundation of everything — bits, bytes, files, and why data needs engineers."
       section="Data Engineering — Module 01"
       readTime="55 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What Actually Is Data ─────────────────────────── */}
@@ -229,6 +268,14 @@ Binary 01000001  =  0    1    0    0    0    0    0    1
           and the range of values your system can handle. You cannot make those decisions well
           without understanding that storage is ultimately about bits.
         </Callout>
+
+        <TryThis>
+          Convert the binary number 00011001 to decimal by hand, using the position
+          values from the table above (128, 64, 32, 16, 8, 4, 2, 1). Then check
+          your answer by converting it back — decimal to binary — using repeated
+          division by 2. Doing this once by hand makes every future "why is this
+          32-bit vs 64-bit" decision concrete instead of abstract.
+        </TryThis>
       </section>
 
       <Divider />
@@ -720,6 +767,14 @@ Best for:                           Best for:
           data your applications run on. Understanding when to use each is one of the first
           architectural decisions you will face on the job.
         </Para>
+
+        <TryThis>
+          Pick one system you know of (an app you use, a project you're building)
+          and decide: should its data live in a file or a database? Walk through
+          the four problems above one at a time — does it need fast lookups by
+          key, concurrent writers, all-or-nothing transactions, or enforced
+          structure? If none apply, a file is a perfectly good, simpler choice.
+        </TryThis>
       </section>
 
       <Divider />
@@ -1014,6 +1069,45 @@ Practically, this means: preserving source timestamps so analysts know when even
             <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
               {item.a}
             </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Treating "it looks right on screen" as proof that two pieces of text are actually identical',
+            a: 'Part 04\'s text-encoding section and this module\'s Misconceptions section ("Text is just text") both explain why this assumption fails — encoding differences, invisible characters, and different Unicode representations of the same visible character can make two strings look identical while being different bytes, silently breaking joins and lookups.',
+          },
+          {
+            q: 'Choosing an integer type (or not thinking about it at all) without checking whether the values could exceed its range',
+            a: 'Part 04\'s integer storage table shows exactly this failure mode by name — the Error Library\'s "Python int too large to convert to C long" entry and the DoorDash order-ID example both point to the same fix: default to 64-bit for any ID or counter that could plausibly grow past 2 billion, rather than assuming 32-bit is always enough.',
+          },
+          {
+            q: 'Storing or computing money as a float because it "seemed to work" in testing',
+            a: 'Part 04\'s Callout and Interview Prep Q1 both walk through why this passes small tests and fails in production — floating point rounding errors are tiny per-operation and invisible until they accumulate across enough transactions to show up as a reconciliation discrepancy, exactly like the Error Library\'s "$0.02 discrepancy" entry.',
+          },
+          {
+            q: 'Loading an entire large file into memory because it worked fine on a small sample',
+            a: 'Part 05\'s RAM vs Disk section explains the mechanism directly — a machine with 16 GB of RAM cannot hold a 50 GB file no matter how well the code worked on a 500 MB test file. The Error Library\'s MemoryError entry and its chunked-reading fix are the direct consequence of skipping this Part\'s reasoning.',
+          },
+          {
+            q: 'Running analytical queries directly against the production application database because "it has the data I need"',
+            a: 'Part 08\'s Scale section and Interview Prep Q4 both explain why this is a structural mistake, not just a performance inconvenience — OLTP databases are architecturally optimized for different access patterns than OLAP queries need, and a full-table-scan analytics query on a live production database risks degrading the application for real users placing real orders at that moment.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
           </div>
         ))}
       </section>
