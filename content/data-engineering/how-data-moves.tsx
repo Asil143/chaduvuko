@@ -45,7 +45,7 @@ const Para = ({ children }: { children: React.ReactNode }) => (
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -57,6 +57,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
       background: 'var(--bg2)', border: '1px solid var(--border)',
       borderRadius: 10, padding: '18px 22px', overflowX: 'auto',
       fontSize: 13, lineHeight: 1.9, color: 'var(--text)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
       fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
     }}>
       <code>{children}</code>
@@ -77,6 +98,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   </div>
 )
 
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
+)
+
 // ── Page ────────────────────────────────────────────────────────────────────
 
 export default function HowDataMovesModule() {
@@ -86,7 +125,7 @@ export default function HowDataMovesModule() {
       description="The complete end-to-end journey — from data creation to business decisions."
       section="Data Engineering — Module 03"
       readTime="55 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Journey of a Single Data Point ─────────────── */}
@@ -114,7 +153,8 @@ export default function HowDataMovesModule() {
           least a dozen different metrics. Here is exactly how.
         </Para>
 
-        <CodeBox label="The journey of one Uber Eats order — 8:14 PM to 9:00 AM next day">{`8:14:32 PM  → Customer taps "Place Order" on the Uber Eats app
+        <SubSubTitle>The first 90 seconds — order placed, written, and fanned out to consumers</SubSubTitle>
+        <CodeBox label="The journey of one Uber Eats order — the first 90 seconds">{`8:14:32 PM  → Customer taps "Place Order" on the Uber Eats app
 
 8:14:32 PM  → Mobile app sends HTTP POST request to Uber Eats's
                Order Service API with order details as JSON
@@ -137,9 +177,10 @@ export default function HowDataMovesModule() {
 
 8:14:35 PM  → Analytics service writes the raw event as JSON
                to Azure Data Lake Storage (the landing zone)
-               Path: /raw/orders/2026/03/17/20/ZMT-9284751.json
+               Path: /raw/orders/2026/03/17/20/ZMT-9284751.json`}</CodeBox>
 
-11:00 PM    → Scheduled batch pipeline runs:
+        <SubSubTitle>The overnight batch pipeline — from landing zone to the dashboard at 9 AM</SubSubTitle>
+        <CodeBox label="The journey of one Uber Eats order — overnight to the dashboard">{`11:00 PM    → Scheduled batch pipeline runs:
                Reads all new JSON files from the landing zone
                Validates, deduplicates, converts to Parquet format
                Writes to: /bronze/orders/date=2026-03-17/
@@ -394,14 +435,20 @@ Question 3: How do you identify what has changed?
   updated_at timestamp exists → Filter WHERE updated_at > last_run_time
   Auto-increment ID exists    → Filter WHERE id > last_max_id
   Neither exists              → Use CDC (read the database transaction log)
-  File-based source           → Track which files have been processed
-
-Real example — DoorDash orders ingestion decision:
+  File-based source           → Track which files have been processed`}</CodeBox>
+        <Output>{`Real example — DoorDash orders ingestion decision:
   Freshness needed: hourly for ops dashboards
   Source size: 3M+ rows per day, growing
   Change detection: order_time timestamp + order_id auto-increment
   Decision: Incremental batch, runs every hour,
-            filters WHERE order_time > last_checkpoint`}</CodeBox>
+            filters WHERE order_time > last_checkpoint`}</Output>
+
+        <TryThis>
+          For a pipeline you maintain (or one you're designing), answer this Part's three
+          decision-tree questions explicitly: required freshness, source size, and change-detection
+          method. If the pipeline's actual design doesn't match what those answers imply — say
+          it's a full load against a 50M-row table — that mismatch is worth investigating.
+        </TryThis>
       </section>
 
       <Divider />
@@ -634,6 +681,13 @@ Gold tables are what Power BI dashboards, data science notebooks, and business r
                    Tableau              Notebooks              Store
                    Dashboards           Model Training         Real-time
                                                                Serving`}</CodeBox>
+
+        <TryThis>
+          Pick one Gold table you use regularly and trace its lineage backward: which Silver
+          table(s) feed it, and which Bronze table(s) feed those? If you can't answer within
+          a minute, that's a documentation or catalog gap — one worth flagging before you
+          need it during an incident.
+        </TryThis>
       </section>
 
       <Divider />
@@ -807,11 +861,10 @@ DECISION RULE:
   "Does a bad decision made on 1-hour-old data cost more
    than the cost and complexity of a streaming pipeline?"
   If YES → streaming
-  If NO  → batch
-
-Most companies: 80% batch, 20% streaming
+  If NO  → batch`}</CodeBox>
+        <Output>{`Most companies: 80% batch, 20% streaming
 Most companies need streaming for: fraud detection, live inventory,
-  real-time recommendations, operational dashboards`}</CodeBox>
+  real-time recommendations, operational dashboards`}</Output>
 
         <Callout type="tip">
           <strong>The most common beginner mistake:</strong> choosing streaming when batch is
@@ -820,6 +873,13 @@ Most companies need streaming for: fraud detection, live inventory,
           actually require data that is seconds old. Always question whether the business
           genuinely needs streaming before committing to its complexity.
         </Callout>
+
+        <TryThis>
+          For a pipeline someone has proposed making "real-time," write down the specific
+          business decision that depends on sub-hour freshness. If nobody in the conversation
+          can name one, that's this Part's Callout playing out in real time — the "beginner
+          mistake" of choosing streaming for a preference, not a requirement.
+        </TryThis>
       </section>
 
       <Divider />
@@ -836,7 +896,8 @@ Most companies need streaming for: fraud detection, live inventory,
           tech companies in 2026.
         </Para>
 
-        <CodeBox label="Complete modern data platform architecture">{`┌─────────────────────────────────────────────────────────────────┐
+        <SubSubTitle>Source through consumers — the box diagram</SubSubTitle>
+        <CodeBox label="Complete modern data platform architecture — the pipeline">{`┌─────────────────────────────────────────────────────────────────┐
 │                     SOURCE SYSTEMS                              │
 │  PostgreSQL  │  Kafka streams  │  REST APIs  │  Files  │  Logs │
 └──────────────────────────┬──────────────────────────────────────┘
@@ -874,9 +935,10 @@ Most companies need streaming for: fraud detection, live inventory,
    BI Dashboards    Data Science      ML Feature         Reverse ETL
    Power BI         Notebooks         Store              → CRM
    Tableau          Model Training    Real-time          → App DB
-   Metabase         Experiments       Predictions        → Marketing
+   Metabase         Experiments       Predictions        → Marketing`}</CodeBox>
 
-CROSS-CUTTING:
+        <SubSubTitle>The cross-cutting concerns that wrap around every layer</SubSubTitle>
+        <CodeBox label="Cross-cutting concerns — orchestration, quality, observability, governance">{`CROSS-CUTTING:
   Orchestration (Airflow)   → schedules and monitors every step
   Data Quality (dbt tests)  → validates each layer's output
   Observability (alerts)    → notifies when pipelines fail or data degrades
@@ -889,6 +951,42 @@ CROSS-CUTTING:
           the industry. When you join a new team, you will immediately know where to look
           for each type of data and who is responsible for each layer.
         </Para>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About How Data Moves</SectionTitle>
+
+        {[
+          {
+            wrong: '"The landing zone and the Bronze layer are basically redundant — just pick one"',
+            right: 'Part 04 and this module\'s Interview Prep Q2 both draw the distinction precisely: the landing zone accepts heterogeneous raw formats with zero structure requirements, while Bronze standardises format and adds date partitioning. That standardisation is specifically what lets a query engine skip irrelevant partitions — the difference between a 2-minute query and a 3-second one.',
+          },
+          {
+            wrong: '"Streaming is strictly better than batch, since it\'s more real-time"',
+            right: 'Part 08\'s decision rule and Callout are explicit that streaming costs 3-5× the engineering effort of an equivalent batch pipeline, and most business questions don\'t need sub-hour freshness. Batch is the default in this module\'s framing, not a fallback — streaming is justified only by a specific decision that needs that freshness.',
+          },
+          {
+            wrong: '"Gold tables are just Bronze data with some aggregation on top"',
+            right: 'Part 05 and Interview Prep Q4 are both explicit that Gold is built from Silver, not Bronze — aggregating directly from Bronze would aggregate un-deduplicated, unvalidated data. Silver\'s cleaning work is a required step in between, not something Gold aggregation can skip.',
+          },
+          {
+            wrong: '"Once Silver is built and stable, Bronze can be deleted to save storage cost"',
+            right: 'Part 04\'s landing-zone rationale and Part 05\'s Bronze rules both state the same principle from different angles: Bronze must never be deleted, because it\'s the only way to reprocess correctly if a Silver transformation bug is discovered later — which, per Part 10\'s Real World scenario, is exactly the kind of bug that does eventually surface.',
+          },
+          {
+            wrong: '"A data discrepancy on a dashboard almost always means the source system has bad data"',
+            right: 'Part 10\'s Real World walkthrough and Interview Prep Q5 both model the opposite assumption: bisect the pipeline layer by layer without presuming where the bug is. In the worked example, the actual cause was a Silver-layer filter bug, not bad source data at all — assuming the source is guilty first wastes the exact time the bisection method is designed to save.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1053,6 +1151,45 @@ This systematic approach means I never spend more than 15–20 minutes finding t
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Scheduling a downstream pipeline by a fixed time gap instead of an explicit dependency on the upstream job finishing',
+            a: 'This module\'s Error Library shows the exact failure — a Bronze processing job starts before ingestion finishes writing files, and gets a FileNotFoundError. Configure the orchestrator so the downstream task depends on the upstream task\'s success (in Airflow, trigger_rule="all_success"), never on a time gap that assumes the upstream job always finishes within it.',
+          },
+          {
+            q: 'Using an INNER JOIN in a Silver transformation where rows without a match should still be kept',
+            a: 'This module\'s Error Library shows a Silver row-count validation catching exactly this — a join to a dimension table with an unmatched key silently drops the row entirely. Part 05\'s Silver rules describe joining with reference data as enrichment, not filtering; use LEFT JOIN when a missing match shouldn\'t remove the row.',
+          },
+          {
+            q: 'Joining to a table that can have multiple rows per key without deduplicating or aggregating it first',
+            a: 'This module\'s Error Library shows Gold table rows appearing 2.3× on average from exactly this — joining orders to a promotions table where one order can have several promotions causes fan-out. Collapse the right-side table to one row per key (STRING_AGG, MAX, or ROW_NUMBER) before joining, not after.',
+          },
+          {
+            q: 'Assuming a pipeline\'s runtime stays constant as data volume grows, with no schedule buffer',
+            a: 'This module\'s Error Library shows an SLA breach from exactly this assumption — a pipeline that used to finish comfortably before 6 AM starts finishing at 8:47 AM once volume grew. Profile which step scales worst, and schedule pipelines with a buffer rather than assuming yesterday\'s runtime holds forever.',
+          },
+          {
+            q: 'Letting two runs of the same scheduled pipeline execute concurrently against the same partition',
+            a: 'This module\'s Error Library shows a locked-partition error from precisely this: a pipeline that now takes longer than its schedule interval is still running when the next trigger fires. Configure the orchestrator for a single concurrent run per pipeline with a "latest only" or "skip if running" policy rather than letting overlapping runs collide.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1129,7 +1266,7 @@ This systematic approach means I never spend more than 15–20 minutes finding t
         'The serving layer is not just "put data in the warehouse." It means different things for different consumers: pre-aggregated Gold for analysts, Silver features for scientists, feature stores for ML engineers, reverse ETL for operational systems.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
