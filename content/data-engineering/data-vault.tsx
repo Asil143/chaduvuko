@@ -18,13 +18,26 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 const SubTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 style={{ fontSize: 'clamp(16px,1.8vw,20px)', fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text)', marginBottom: 12, fontFamily: 'var(--font-display)' }}>{children}</h3>
 )
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>{label}</div>}
     <pre style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.9, color: 'var(--text)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{ background: 'transparent', border: '1px dashed var(--border)', borderRadius: 10, padding: '14px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.8, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
       <code>{children}</code>
     </pre>
   </div>
@@ -32,6 +45,15 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 const Divider = () => <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>{children}</div>
+)
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)', borderRadius: 10, padding: '16px 20px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent2)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
 )
 
 interface TableRow { [key: string]: string }
@@ -58,7 +80,7 @@ export default function DataVaultModule() {
       description="Hubs, links, and satellites from first principles — hash keys, loading patterns, Business Vault, PIT tables, and when to choose Data Vault over dimensional modelling."
       section="Data Engineering — Module 35"
       readTime="60 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ───────────────────────────────────────────────────── */}
@@ -123,58 +145,55 @@ export default function DataVaultModule() {
           rules breaks auditability and parallelism.
         </Para>
 
-        <CodeBox label="The three Data Vault table types — rules and structure">{`DATA VAULT TABLE TYPE 1: HUB
-  Purpose:  Records the existence of a business concept.
-            Stores the unique business key from source systems.
-  Rule:     ONLY contains the business key and metadata. No descriptive attributes.
-  Columns:  hub_[entity]_hk   CHAR(32) PK   ← MD5 hash of business key
-            [entity]_bk       VARCHAR       ← the business key from source
-            load_dts          TIMESTAMPTZ   ← when first loaded (INSERT ONLY)
-            record_source     VARCHAR       ← which source system
+        <SubSubTitle>Hub — records that a business key exists, nothing more</SubSubTitle>
+        <CodeBox label="Table type 1: HUB — rules and structure">{`Purpose:  Records the existence of a business concept.
+          Stores the unique business key from source systems.
+Rule:     ONLY contains the business key and metadata. No descriptive attributes.
+Columns:  hub_[entity]_hk   CHAR(32) PK   ← MD5 hash of business key
+          [entity]_bk       VARCHAR       ← the business key from source
+          load_dts          TIMESTAMPTZ   ← when first loaded (INSERT ONLY)
+          record_source     VARCHAR       ← which source system
 
-  HUB_CUSTOMER:
-    hub_customer_hk         customer_bk  load_dts                  record_source
-    MD5('4201938')          '4201938'    2026-03-17 06:00 UTC      freshmart_orders_db
-    MD5('USR-42019')        'USR-42019'  2026-03-17 07:00 UTC      loyalty_app
-  Note: these two may be the same real customer — resolved in Business Vault via SAL.
-  The hub just records that each key was seen from its source.
+HUB_CUSTOMER:
+  hub_customer_hk         customer_bk  load_dts                  record_source
+  MD5('4201938')          '4201938'    2026-03-17 06:00 UTC      freshcart_orders_db
+  MD5('USR-42019')        'USR-42019'  2026-03-17 07:00 UTC      loyalty_app
+Note: these two may be the same real customer — resolved in Business Vault via SAL.
+The hub just records that each key was seen from its source.`}</CodeBox>
 
+        <SubSubTitle>Link — records a relationship between two or more hubs</SubSubTitle>
+        <CodeBox label="Table type 2: LINK — rules and structure">{`Purpose:  Records the relationship between two or more entities.
+Rule:     ONLY hub hash keys + metadata. No descriptive attributes.
+Columns:  lnk_[rel]_hk       CHAR(32) PK   ← hash of combined hub HKs
+          hub_[entity_1]_hk  CHAR(32)      ← FK to hub 1
+          hub_[entity_2]_hk  CHAR(32)      ← FK to hub 2
+          load_dts           TIMESTAMPTZ
+          record_source      VARCHAR
 
-DATA VAULT TABLE TYPE 2: LINK
-  Purpose:  Records the relationship between two or more entities.
-  Rule:     ONLY hub hash keys + metadata. No descriptive attributes.
-  Columns:  lnk_[rel]_hk       CHAR(32) PK   ← hash of combined hub HKs
-            hub_[entity_1]_hk  CHAR(32)      ← FK to hub 1
-            hub_[entity_2]_hk  CHAR(32)      ← FK to hub 2
-            load_dts           TIMESTAMPTZ
-            record_source      VARCHAR
+LNK_ORDER_CUSTOMER:
+  lnk_hk            hub_order_hk      hub_customer_hk    load_dts
+  MD5(hk1||hk2)     MD5('9284751')    MD5('4201938')     2026-03-17 ...`}</CodeBox>
 
-  LNK_ORDER_CUSTOMER:
-    lnk_hk            hub_order_hk      hub_customer_hk    load_dts
-    MD5(hk1||hk2)     MD5('9284751')    MD5('4201938')     2026-03-17 ...
+        <SubSubTitle>Satellite — descriptive attributes, one per source, full history</SubSubTitle>
+        <CodeBox label="Table type 3: SATELLITE — rules and structure">{`Purpose:  Stores descriptive attributes + full history of changes.
+Rule:     ONLY attributes from ONE source. If two sources describe the same
+          customer differently: TWO separate satellites, one per source.
+Columns:  hub_[entity]_hk   CHAR(32)      ← FK to parent hub (part of PK)
+          load_dts           TIMESTAMPTZ   ← when this version loaded (part of PK)
+          load_end_dts       TIMESTAMPTZ   ← when superseded (NULL = current)
+          hash_diff          CHAR(32)      ← hash of all attributes (change detect)
+          record_source      VARCHAR
+          [descriptive attributes]
 
+SAT_CUSTOMER_ORDERS_DB (from orders database):
+  hub_customer_hk  load_dts          load_end_dts      city       tier
+  MD5('4201938')   2024-01-15 06:00  2026-02-01 06:00  Seattle  silver  ← expired
+  MD5('4201938')   2026-02-01 06:00  NULL              Austin  silver  ← current
 
-DATA VAULT TABLE TYPE 3: SATELLITE
-  Purpose:  Stores descriptive attributes + full history of changes.
-  Rule:     ONLY attributes from ONE source. If two sources describe the same
-            customer differently: TWO separate satellites, one per source.
-  Columns:  hub_[entity]_hk   CHAR(32)      ← FK to parent hub (part of PK)
-            load_dts           TIMESTAMPTZ   ← when this version loaded (part of PK)
-            load_end_dts       TIMESTAMPTZ   ← when superseded (NULL = current)
-            hash_diff          CHAR(32)      ← hash of all attributes (change detect)
-            record_source      VARCHAR
-            [descriptive attributes]
-
-  SAT_CUSTOMER_ORDERS_DB (from orders database):
-    hub_customer_hk  load_dts          load_end_dts      city       tier
-    MD5('4201938')   2024-01-15 06:00  2026-02-01 06:00  Seattle  silver  ← expired
-    MD5('4201938')   2026-02-01 06:00  NULL              Austin  silver  ← current
-
-  SAT_CUSTOMER_LOYALTY_APP (from loyalty app — separate satellite):
-    hub_customer_hk  load_dts          city       loyalty_points
-    MD5('4201938')   2024-03-01 09:00  Seattle  4200
-
-  TWO satellites for the same customer: both raw versions preserved for audit.`}</CodeBox>
+SAT_CUSTOMER_LOYALTY_APP (from loyalty app — separate satellite):
+  hub_customer_hk  load_dts          city       loyalty_points
+  MD5('4201938')   2024-03-01 09:00  Seattle  4200`}</CodeBox>
+        <Output>{`TWO satellites for the same customer: both raw versions preserved for audit.`}</Output>
       </section>
 
       <Divider />
@@ -192,7 +211,8 @@ DATA VAULT TABLE TYPE 3: SATELLITE
           to load in complete parallel from the same source data.
         </Para>
 
-        <CodeBox label="Hash key computation — the complete standard">{`ALGORITHM: MD5 (128-bit) or SHA-256 (256-bit)
+        <SubSubTitle>The algorithm, normalisation, and NULL-handling rules</SubSubTitle>
+        <CodeBox label="Hash key standard — algorithm, normalisation, NULL handling">{`ALGORITHM: MD5 (128-bit) or SHA-256 (256-bit)
   Choose one algorithm per vault — never mix within a vault.
   Enterprise/regulated: SHA-256. General purpose: MD5.
 
@@ -213,36 +233,43 @@ HASH DIFF (for satellites — change detection):
   hash_diff = MD5(UPPER(TRIM(city)) || '||' || UPPER(TRIM(tier)) || '||' ...)
   If hash_diff changes between loads: insert new satellite row.
   If unchanged: skip (no new row needed).
-  NEVER include pipeline timestamps (ingested_at, load_dts) in hash_diff.
+  NEVER include pipeline timestamps (ingested_at, load_dts) in hash_diff.`}</CodeBox>
 
-PYTHON IMPLEMENTATION:
-  import hashlib
+        <SubSubTitle>The Python reference implementation</SubSubTitle>
+        <CodeBox label="Python implementation of hub, link, and satellite hashing">{`import hashlib
 
-  def hub_hk(business_key: str) -> str:
-      return hashlib.md5(
-          str(business_key).upper().strip().encode('utf-8')
-      ).hexdigest()
+def hub_hk(business_key: str) -> str:
+    return hashlib.md5(
+        str(business_key).upper().strip().encode('utf-8')
+    ).hexdigest()
 
-  def link_hk(*hub_hks: str) -> str:
-      combined = '||'.join(hk.upper() for hk in hub_hks)
-      return hashlib.md5(combined.encode('utf-8')).hexdigest()
+def link_hk(*hub_hks: str) -> str:
+    combined = '||'.join(hk.upper() for hk in hub_hks)
+    return hashlib.md5(combined.encode('utf-8')).hexdigest()
 
-  def sat_hashdiff(**attrs) -> str:
-      parts = []
-      for k in sorted(attrs.keys()):   # sort for determinism
-          v = str(attrs[k]).upper().strip() if attrs[k] is not None else 'N/A'
-          parts.append(v)
-      return hashlib.md5('||'.join(parts).encode('utf-8')).hexdigest()
+def sat_hashdiff(**attrs) -> str:
+    parts = []
+    for k in sorted(attrs.keys()):   # sort for determinism
+        v = str(attrs[k]).upper().strip() if attrs[k] is not None else 'N/A'
+        parts.append(v)
+    return hashlib.md5('||'.join(parts).encode('utf-8')).hexdigest()`}</CodeBox>
 
-WHY PARALLEL LOADING WORKS:
-  Hub, link, and satellite all compute their hash keys from the SAME source columns.
-  No table needs to wait for another. No lock, no sequence, no coordination.
+        <SubSubTitle>Why this makes hub, link, and satellite loads run in true parallel</SubSubTitle>
+        <CodeBox label="Why parallel loading works">{`Hub, link, and satellite all compute their hash keys from the SAME source columns.
+No table needs to wait for another. No lock, no sequence, no coordination.
 
-  Simultaneously (all from stg_orders):
-    hub_customer:      hub_hk = MD5(UPPER(TRIM(customer_id)))
-    lnk_order_cust:    lnk_hk = MD5(hub_order_hk || '||' || hub_customer_hk)
-    sat_order_details: hub_hk = MD5(UPPER(TRIM(order_id))), hash_diff computed
-  All three can start and complete independently at the same instant.`}</CodeBox>
+Simultaneously (all from stg_orders):
+  hub_customer:      hub_hk = MD5(UPPER(TRIM(customer_id)))
+  lnk_order_cust:    lnk_hk = MD5(hub_order_hk || '||' || hub_customer_hk)
+  sat_order_details: hub_hk = MD5(UPPER(TRIM(order_id))), hash_diff computed
+All three can start and complete independently at the same instant.`}</CodeBox>
+
+        <TryThis>
+          Take a business key from data you work with and compute MD5(UPPER(TRIM(key)))
+          by hand for two differently-cased or whitespace-padded versions of it. If
+          they don't produce the same hash, your normalisation step is wrong — and in
+          a real vault that means the same entity silently splits into two hub rows.
+        </TryThis>
       </section>
 
       <Divider />
@@ -252,6 +279,7 @@ WHY PARALLEL LOADING WORKS:
         <SectionTag text="// Part 04 — Loading Patterns" />
         <SectionTitle>Loading Hubs, Links, and Satellites — The Exact Patterns</SectionTitle>
 
+        <SubSubTitle>Hub loading — insert if not exists, nothing else</SubSubTitle>
         <CodeBox label="Hub loading — INSERT IF NOT EXISTS only">{`HUB LOADING RULES:
   1. INSERT ONLY — never UPDATE, never DELETE.
   2. If hub_hk already exists: skip (INSERT IF NOT EXISTS).
@@ -263,10 +291,11 @@ WHY PARALLEL LOADING WORKS:
       MD5(UPPER(TRIM(customer_id::VARCHAR))),
       customer_id::VARCHAR,
       CURRENT_TIMESTAMP(),
-      'freshmart_orders_db'
+      'freshcart_orders_db'
   FROM staging.stg_orders
   ON CONFLICT (hub_customer_hk) DO NOTHING;  -- skip silently if exists ✓`}</CodeBox>
 
+        <SubSubTitle>Link loading — relationships, and how effectivity satellites end them without deleting</SubSubTitle>
         <CodeBox label="Link loading — relationships, INSERT ONLY">{`LINK LOADING RULES:
   1. INSERT ONLY — never UPDATE, never DELETE.
   2. Compute hub hash keys from source data directly (not via join to hub table).
@@ -279,7 +308,7 @@ WHY PARALLEL LOADING WORKS:
       MD5(UPPER(TRIM(order_id::VARCHAR))),
       MD5(UPPER(TRIM(customer_id::VARCHAR))),
       CURRENT_TIMESTAMP(),
-      'freshmart_orders_db'
+      'freshcart_orders_db'
   FROM staging.stg_orders
   ON CONFLICT (lnk_order_customer_hk) DO NOTHING;
 
@@ -293,52 +322,54 @@ EFFECTIVITY SATELLITE (for relationship end dates):
     HK_1     2026-03-01    NULL           TRUE     ← new assignment
   Full history preserved — link never deleted.`}</CodeBox>
 
-        <CodeBox label="Satellite loading — hash_diff change detection">{`SATELLITE LOADING RULES:
-  1. INSERT ONLY (except updating load_end_dts on the row being expired).
-  2. New row inserted ONLY when hash_diff changes.
-  3. Expire previous current row: UPDATE SET load_end_dts = NOW().
-  4. One satellite per source system — never mix source attributes.
+        <SubSubTitle>Satellite loading, step 1-2 — compute hash_diff and isolate changed rows</SubSubTitle>
+        <CodeBox label="Satellite loading — computing hash_diff and finding changes">{`-- Step 1: compute hash_diff in staging, identify changed rows
+WITH staged AS (
+    SELECT
+        MD5(UPPER(TRIM(customer_id::VARCHAR)))  AS hub_customer_hk,
+        city, tier, phone_masked,
+        MD5(
+            UPPER(TRIM(COALESCE(city,   'N/A'))) || '||' ||
+            UPPER(TRIM(COALESCE(tier,   'N/A'))) || '||' ||
+            UPPER(TRIM(COALESCE(phone_masked, 'N/A')))
+        )                                       AS hash_diff,
+        CURRENT_TIMESTAMP()                     AS load_dts,
+        'freshcart_orders_db'                   AS record_source
+    FROM staging.stg_customers
+),
+-- Step 2: only rows where hash_diff changed or entity is new
+changed AS (
+    SELECT s.*
+    FROM staged s
+    LEFT JOIN (
+        SELECT DISTINCT ON (hub_customer_hk) hub_customer_hk, hash_diff
+        FROM raw_vault.sat_customer_orders_db
+        WHERE load_end_dts IS NULL
+        ORDER BY hub_customer_hk, load_dts DESC
+    ) cur ON s.hub_customer_hk = cur.hub_customer_hk
+    WHERE cur.hub_customer_hk IS NULL      -- new entity
+       OR s.hash_diff != cur.hash_diff     -- attribute changed
+)`}</CodeBox>
 
-  -- Step 1: compute hash_diff in staging, identify changed rows
-  WITH staged AS (
-      SELECT
-          MD5(UPPER(TRIM(customer_id::VARCHAR)))  AS hub_customer_hk,
-          city, tier, phone_masked,
-          MD5(
-              UPPER(TRIM(COALESCE(city,   'N/A'))) || '||' ||
-              UPPER(TRIM(COALESCE(tier,   'N/A'))) || '||' ||
-              UPPER(TRIM(COALESCE(phone_masked, 'N/A')))
-          )                                       AS hash_diff,
-          CURRENT_TIMESTAMP()                     AS load_dts,
-          'freshmart_orders_db'                   AS record_source
-      FROM staging.stg_customers
-  ),
-  -- Step 2: only rows where hash_diff changed or entity is new
-  changed AS (
-      SELECT s.*
-      FROM staged s
-      LEFT JOIN (
-          SELECT DISTINCT ON (hub_customer_hk) hub_customer_hk, hash_diff
-          FROM raw_vault.sat_customer_orders_db
-          WHERE load_end_dts IS NULL
-          ORDER BY hub_customer_hk, load_dts DESC
-      ) cur ON s.hub_customer_hk = cur.hub_customer_hk
-      WHERE cur.hub_customer_hk IS NULL      -- new entity
-         OR s.hash_diff != cur.hash_diff     -- attribute changed
-  )
-  -- Step 3: expire previous current rows
-  UPDATE raw_vault.sat_customer_orders_db
-  SET load_end_dts = NOW()
-  WHERE hub_customer_hk IN (SELECT hub_customer_hk FROM changed)
-    AND load_end_dts IS NULL;
+        <SubSubTitle>Satellite loading, step 3-4 — expire the old current row, insert the new one</SubSubTitle>
+        <CodeBox label="Satellite loading — expiring old rows and inserting new versions">{`-- Step 3: expire previous current rows
+UPDATE raw_vault.sat_customer_orders_db
+SET load_end_dts = NOW()
+WHERE hub_customer_hk IN (SELECT hub_customer_hk FROM changed)
+  AND load_end_dts IS NULL;
 
-  -- Step 4: insert new version rows
-  INSERT INTO raw_vault.sat_customer_orders_db
-      (hub_customer_hk, load_dts, load_end_dts, hash_diff, record_source,
-       city, tier, phone_masked)
-  SELECT hub_customer_hk, load_dts, NULL, hash_diff, record_source,
-         city, tier, phone_masked
-  FROM changed;`}</CodeBox>
+-- Step 4: insert new version rows
+INSERT INTO raw_vault.sat_customer_orders_db
+    (hub_customer_hk, load_dts, load_end_dts, hash_diff, record_source,
+     city, tier, phone_masked)
+SELECT hub_customer_hk, load_dts, NULL, hash_diff, record_source,
+       city, tier, phone_masked
+FROM changed;`}</CodeBox>
+        <Output>{`SATELLITE LOADING RULES (recap):
+1. INSERT ONLY (except updating load_end_dts on the row being expired).
+2. New row inserted ONLY when hash_diff changes.
+3. Expire previous current row: UPDATE SET load_end_dts = NOW().
+4. One satellite per source system — never mix source attributes.`}</Output>
       </section>
 
       <Divider />
@@ -348,34 +379,30 @@ EFFECTIVITY SATELLITE (for relationship end dates):
         <SectionTag text="// Part 05 — The Full Architecture" />
         <SectionTitle>The Four Layers — Raw Vault, Business Vault, Information Mart</SectionTitle>
 
-        <CodeBox label="Data Vault 2.0 full four-layer architecture">{`DATA VAULT 2.0 ARCHITECTURE:
-
-  SOURCE SYSTEMS
-  ────────────────────────────────────────────────────────────────────────
+        <SubSubTitle>Source through Raw Vault — the immutable, auditable source of truth</SubSubTitle>
+        <CodeBox label="Source, Staging, and Raw Vault layers">{`SOURCE SYSTEMS
   FreshCart Orders DB    Loyalty App    Finance System    Logistics Partner
 
-  ▼ Extract → Stage (typed landing, hash keys pre-computed, record_source set)
+▼ Extract → Stage (typed landing, hash keys pre-computed, record_source set)
 
-  STAGING AREA (not persistent — rebuilt each load)
-  ────────────────────────────────────────────────────────────────────────
+STAGING AREA (not persistent — rebuilt each load)
   stg_orders_db    stg_loyalty_app    stg_finance    stg_logistics
 
-  ▼ Parallel load (all tables simultaneously)
+▼ Parallel load (all tables simultaneously)
 
-  RAW VAULT (persistent, immutable, auditable)
-  ────────────────────────────────────────────────────────────────────────
+RAW VAULT (persistent, immutable, auditable)
   Hubs:        HUB_CUSTOMER, HUB_ORDER, HUB_STORE, HUB_PRODUCT
   Links:       LNK_ORDER_CUSTOMER, LNK_ORDER_STORE, LNK_ORDER_PRODUCT
   Satellites:  SAT_CUSTOMER_ORDERS_DB, SAT_CUSTOMER_LOYALTY_APP
                SAT_ORDER_ORDERS_DB, SAT_STORE_LOGISTICS
 
   Rules: no business rules applied, INSERT ONLY, full audit trail.
-  THIS IS THE SOURCE OF TRUTH.
+  THIS IS THE SOURCE OF TRUTH.`}</CodeBox>
 
-  ▼ Business rules applied
+        <SubSubTitle>Business Vault and Information Mart — where rules get applied and analysts get served</SubSubTitle>
+        <CodeBox label="Business Vault and Information Mart layers">{`▼ Business rules applied
 
-  BUSINESS VAULT (derived, still historical)
-  ────────────────────────────────────────────────────────────────────────
+BUSINESS VAULT (derived, still historical)
   Point-in-time (PIT) tables:   pre-join snapshots of satellites
   Bridge tables:                traversal helpers for complex paths
   Computed satellites (CSAT):   business-derived attributes
@@ -384,17 +411,17 @@ EFFECTIVITY SATELLITE (for relationship end dates):
   Rules: business rules applied (reconcile conflicting sources),
          INSERT-only / history-preserving, not exposed directly to analysts.
 
-  ▼ Dimensional transform
+▼ Dimensional transform
 
-  INFORMATION MART (volatile, consumer-specific)
-  ────────────────────────────────────────────────────────────────────────
+INFORMATION MART (volatile, consumer-specific)
   Standard dimensional model: fct_orders, dim_customer, dim_store, etc.
   Rules: rebuilt from Business Vault / Raw Vault at any time.
          NOT the source of truth. The Raw Vault is.`}</CodeBox>
 
         <SubTitle>Point-in-time (PIT) tables — the Business Vault query accelerator</SubTitle>
 
-        <CodeBox label="PIT tables — making Raw Vault data fast to query">{`PROBLEM:
+        <SubSubTitle>The problem PIT tables solve, and the equality join they enable</SubSubTitle>
+        <CodeBox label="PIT tables — turning slow satellite range scans into fast equality joins">{`PROBLEM:
   To get a customer's current attributes from the Raw Vault you need:
     JOIN hub → satellite with complex date range filters → repeat for each satellite
   At scale (billions of satellite rows): slow and complex.
@@ -418,11 +445,12 @@ PIT TABLE SOLUTION:
        ON p.hub_customer_hk = sl.hub_customer_hk
       AND p.sat_loy_ldts    = sl.load_dts
   WHERE p.snapshot_dts = '2026-03-17 23:59:59'
-    AND p.hub_customer_hk = MD5('4201938');
-  -- PIT eliminates the expensive date-range satellite scan.
-  -- Fast indexed equality joins replace slow range queries.
+    AND p.hub_customer_hk = MD5('4201938');`}</CodeBox>
+        <Output>{`PIT eliminates the expensive date-range satellite scan.
+Fast indexed equality joins replace slow range queries.`}</Output>
 
-SAME-AS-LINK (SAL):
+        <SubSubTitle>Same-as-links — recording that two hub records are really one entity</SubSubTitle>
+        <CodeBox label="Same-as-link (SAL) — identity resolution across sources">{`SAME-AS-LINK (SAL):
   Two hub records represent the same real entity:
     customer_bk='4201938' (orders_db) = customer_bk='USR-42019' (loyalty_app)
   SAL_CUSTOMER records this equivalence:
@@ -474,7 +502,8 @@ SAME-AS-LINK (SAL):
         <SectionTag text="// Part 07 — dbt for Data Vault" />
         <SectionTitle>Implementing Data Vault in dbt — AutomateDV</SectionTitle>
 
-        <CodeBox label="AutomateDV macros — hub, link, satellite in dbt">{`# STAGING MODEL (stg_orders.sql) — pre-compute all hash keys first:
+        <SubSubTitle>The staging model — every hash key pre-computed in one place</SubSubTitle>
+        <CodeBox label="AutomateDV — staging model with pre-computed hash keys">{`# STAGING MODEL (stg_orders.sql) — pre-compute all hash keys first:
 {{ config(materialized='view') }}
 SELECT
     {{ automate_dv.hash('customer_id', 'MD5') }}                    AS hub_customer_hk,
@@ -483,11 +512,11 @@ SELECT
     {{ automate_dv.hash(['status', 'amount', 'delivery_fee'],'MD5') }} AS order_hashdiff,
     order_id, customer_id, status, amount, delivery_fee,
     CURRENT_TIMESTAMP()   AS load_dts,
-    'freshmart_orders_db' AS record_source
-FROM {{ source('staging', 'orders') }}
+    'freshcart_orders_db' AS record_source
+FROM {{ source('staging', 'orders') }}`}</CodeBox>
 
-
-# HUB MODEL (hub_customer.sql):
+        <SubSubTitle>The hub, link, and satellite models — each just configuration over an AutomateDV macro</SubSubTitle>
+        <CodeBox label="AutomateDV — hub, link, and satellite model configs">{`# HUB MODEL (hub_customer.sql):
 {{ config(materialized='incremental', unique_key='hub_customer_hk') }}
 {{- automate_dv.hub(
     src_pk       = 'hub_customer_hk',
@@ -496,7 +525,6 @@ FROM {{ source('staging', 'orders') }}
     src_source   = 'record_source',
     source_model = 'stg_orders',
 ) -}}
-
 
 # LINK MODEL (lnk_order_customer.sql):
 {{ config(materialized='incremental', unique_key='lnk_order_customer_hk') }}
@@ -508,7 +536,6 @@ FROM {{ source('staging', 'orders') }}
     source_model = 'stg_orders',
 ) -}}
 
-
 # SATELLITE MODEL (sat_order_details.sql):
 {{ config(materialized='incremental', unique_key=['hub_order_hk','load_dts']) }}
 {{- automate_dv.sat(
@@ -519,11 +546,10 @@ FROM {{ source('staging', 'orders') }}
     src_eff      = 'load_end_dts',
     src_source   = 'record_source',
     source_model = 'stg_orders',
-) -}}
+) -}}`}</CodeBox>
 
-
-# dbt project structure:
-freshmart_vault/
+        <SubSubTitle>How the project folders map to Raw Vault, Business Vault, and marts</SubSubTitle>
+        <CodeBox label="dbt project structure for a Data Vault build">{`freshcart_vault/
 ├── models/
 │   ├── staging/         ← hash key pre-computation (views)
 │   ├── raw_vault/
@@ -536,6 +562,13 @@ freshmart_vault/
 │   └── marts/
 │       ├── dims/        ← dim_customer.sql (from PIT + SAT joins)
 │       └── facts/       ← fct_orders.sql`}</CodeBox>
+
+        <TryThis>
+          If you have access to a dbt project (or the sample above), compare how much
+          configuration a single AutomateDV hub() call needs versus the raw SQL in
+          Part 04's hub-loading pattern. The macro is generating the exact same
+          INSERT-IF-NOT-EXISTS logic — just without hand-writing it per table.
+        </TryThis>
       </section>
 
       <Divider />
@@ -556,6 +589,42 @@ freshmart_vault/
             <div style={{ fontSize: 13, fontWeight: 800, color: '#ff4757', fontFamily: 'var(--font-display)', marginBottom: 6 }}>⚠ Avoid Data Vault when: {item.avoid}</div>
             <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 8 }}>{item.reason}</div>
             <div style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>Better: {item.better}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data Vault</SectionTitle>
+
+        {[
+          {
+            wrong: '"Data Vault replaces dimensional modelling — you pick one or the other"',
+            right: 'Part 01 is explicit that Data Vault is an integration layer, not a delivery layer — the Information Mart on top is typically still a dimensional model. Part 06\'s Callout describes the common enterprise pattern: Data Vault for integration, dimensional modelling for the layer analysts actually query.',
+          },
+          {
+            wrong: '"Hash keys are just a modern substitute for auto-increment surrogate keys — pick whichever is convenient"',
+            right: 'Part 03 is specific that the whole point of hash keys is eliminating shared state: any process can independently compute MD5(UPPER(TRIM(key))) with no sequence generator or lock. That property is what makes Part 04\'s parallel hub/link/satellite loading possible — a sequence-based key would force serialised loading instead.',
+          },
+          {
+            wrong: '"A satellite should combine attributes from every source that describes the same entity, for a single clean view"',
+            right: 'Part 02\'s satellite rules say the opposite: one satellite per source system, never mixed. This module\'s Error Library shows exactly why — reconciling conflicting sources belongs in a Business Vault computed satellite (CSAT) with an explicit, documented precedence rule, not silently merged at the raw layer.',
+          },
+          {
+            wrong: '"Since Raw Vault is INSERT-only and fully auditable, you don\'t need PIT tables — just query the satellites directly"',
+            right: 'Part 05 is explicit that querying satellites directly means a multi-table join with date-range filters per satellite — expensive at scale. PIT tables exist specifically to turn that into fast equality joins; without them, building an Information Mart from the Raw Vault is described as "impractical."',
+          },
+          {
+            wrong: '"Data Vault is strictly more capable than dimensional modelling, so it\'s always the safer choice"',
+            right: 'Part 08 is direct about this: for a single source, a stable schema, a small team, or an analytics-first company, Data Vault\'s complexity cost buys nothing. Part 08\'s closing line calls out choosing Data Vault "because it sounds more enterprise-grade" as the critical mistake to avoid.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
           </div>
         ))}
       </section>
@@ -620,7 +689,7 @@ DATA VAULT APPROACH (additive, zero breaking changes):
   Weeks 5-6: Information Mart rebuilt to include QuickBasket
     dim_customer query reads from BOTH satellites (Business Vault resolves conflicts).
     fct_orders includes QuickBasket orders.
-    Existing FreshCart-only metrics: filter by record_source='freshmart_orders_db'.
+    Existing FreshCart-only metrics: filter by record_source='freshcart_orders_db'.
 
 RESULT: Zero breaking changes to existing analytics.
   QuickBasket data added in parallel new satellites.
@@ -704,6 +773,42 @@ The critical mistake is choosing Data Vault because it sounds more enterprise-gr
 
       <Divider />
 
+      {/* ── Common Mistakes ──────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Computing a hash key inline in every model instead of a single shared normalisation function',
+            a: 'This module\'s Error Library shows the direct consequence: one model hashes MD5(customer_id) while another hashes MD5(UPPER(TRIM(customer_id))), and a source that sends mixed-case or padded values silently splits into two hub rows. Part 03 is explicit that normalisation must be identical everywhere — use one reusable macro, never compute hashes inline.',
+          },
+          {
+            q: 'Letting a pipeline-generated timestamp leak into a satellite\'s hash_diff calculation',
+            a: 'Part 03\'s hash_diff rule and this module\'s Error Library both flag this: including ingested_at or any load-time timestamp in hash_diff means it changes on every run, so a satellite inserts a new "version" every load even when nothing about the actual business attributes changed.',
+          },
+          {
+            q: 'Loading a link by joining to the hub table to "look up" the hash key instead of computing it from source data',
+            a: 'This module\'s Error Library shows the failure mode directly: an INNER JOIN to hub_customer silently drops link rows for customers not yet in the hub. Part 04 is explicit that links must compute hub hash keys directly from source business keys — the same computation the hub itself uses — which is also what makes parallel loading possible in the first place.',
+          },
+          {
+            q: 'Skipping composite indexes on satellite tables because "the joins are just equality joins, they should be fast"',
+            a: 'This module\'s Error Library shows a 10× slowdown from exactly this assumption — an equality join still needs a composite index on (hub_hk, load_dts) or it falls back to a full satellite scan. Add the index (or CLUSTER BY on Snowflake) as part of standing up any new satellite, not after performance complaints.',
+          },
+          {
+            q: 'Letting an Information Mart model join two raw satellites directly when they disagree on an attribute',
+            a: 'This module\'s Error Library and Part 05\'s Business Vault description both point to the same fix: never let a mart join raw satellites directly when sources can conflict. Create a computed satellite (CSAT) with an explicit, documented precedence rule (e.g. COALESCE(loyalty_app.tier, orders_db.tier)) so every downstream mart gets the same, auditable answer.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -764,7 +869,7 @@ The critical mistake is choosing Data Vault because it sounds more enterprise-gr
         'The hybrid enterprise pattern: Data Vault for integration (Raw Vault + Business Vault), dimensional model for delivery (Information Mart). Never choose Data Vault because it sounds more enterprise-grade — the complexity cost is real and must be justified by specific multi-source integration and auditability requirements.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
