@@ -36,6 +36,10 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
@@ -57,6 +61,45 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
     }}>
       <code>{children}</code>
     </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -82,7 +125,7 @@ export default function DEUsaJobMarketModule() {
       description="Salaries, companies, skills, JD decoding, and breaking in from a non-CS background."
       section="Data Engineering — Module 06"
       readTime="50 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — State of the Market ────────────────────────────── */}
@@ -458,6 +501,14 @@ CI/CD & Infrastructure as Code    Terraform, Docker, GitHub Actions.
           who lists ten tools they've only used in tutorials. Interviewers probe for
           depth within the first two follow-up questions.
         </Callout>
+
+        <TryThis>
+          Take your own resume or portfolio and pick the single project you know
+          best. Write out, from memory, five follow-up questions an interviewer
+          could reasonably ask about it — then check whether you can actually
+          answer all five in real depth. Any gap is worth closing before you
+          list that project as a strength.
+        </TryThis>
       </section>
 
       <Divider />
@@ -621,6 +672,14 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
           engineering blog before choosing. A cert for a platform you'll never use
           professionally wastes study time better spent on a portfolio project.
         </Callout>
+
+        <TryThis>
+          Pull up the job postings of three companies you'd actually want to work
+          for and tally which cloud platform (AWS, Azure, GCP) appears most often.
+          Compare that against whichever certification you were already planning
+          to pursue — if they don't match, that's worth reconsidering before you
+          spend weeks studying for the wrong one.
+        </TryThis>
       </section>
 
       <Divider />
@@ -670,6 +729,42 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
           $172K base plus an increased equity grant — a 24% increase over the intial
           offer, achieved in a single negotiation email.
         </Callout>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About the US Data Engineering Job Market</SectionTitle>
+
+        {[
+          {
+            wrong: '"You need a CS degree to get hired as a data engineer in the US"',
+            right: 'Part 06 is explicit that a large share of working data engineers did not start with a CS degree — the "or equivalent experience" clause in job postings (Part 05) is real and increasingly common at product companies and startups. A strong portfolio and demonstrated skill substitute for the degree at most non-enterprise employers.',
+          },
+          {
+            wrong: '"The salary number in a job posting or on Glassdoor is basically fixed — there\'s not much room to negotiate"',
+            right: 'Part 08 is direct that US tech salary negotiation is expected, and companies build room into their initial offer anticipating a counter — the worked example shows a 24% increase achieved in a single negotiation email. Not negotiating is called out as the single most common way candidates leave money on the table.',
+          },
+          {
+            wrong: '"City determines your salary more than anything else — just move to San Francisco or Seattle"',
+            right: 'Part 02\'s "Company type multipliers" section is explicit that company type has a bigger impact on salary than city — the FAANG-vs-consulting gap for the same role, experience, and city is often 2-3×, larger than any city multiplier in that same Part.',
+          },
+          {
+            wrong: '"Listing as many tools as possible on your resume maximizes your chances"',
+            right: 'Part 04\'s Callout and this module\'s first TryThis both make the opposite case: interviewers probe for depth within the first two follow-up questions, and a thin list of tools you can discuss deeply beats a long list that collapses under questioning.',
+          },
+          {
+            wrong: '"If you\'re getting rejected or hearing silence, it means you\'re not qualified"',
+            right: 'Part 09\'s real career story reports roughly 100+ applications and single-digit interview conversion as the realistic range for a disciplined non-CS candidate — not evidence of being unqualified. This module\'s Common Mistakes and Error Library sections both cover the structural reasons (resume tailoring, ATS filtering) that explain most of this gap.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red,#ff4757)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -785,9 +880,9 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
 
       <Divider />
 
-      {/* ── Error Library ─────────────────────────────────────────────── */}
-      <section style={{ marginBottom: 32 }}>
-        <SectionTag text="// Error Library" />
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
         <SectionTitle>Mistakes You Will Make — And Exactly Why They Happen</SectionTitle>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -815,14 +910,79 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
         </div>
       </section>
 
-      <Callout type="info">
-        Ready to apply what you've learned? Head back to the{' '}
-        <Link href="/learn/data-engineering" style={{ color: 'var(--accent)' }}>
-          Data Engineering track
-        </Link>{' '}
-        or jump into the <Link href="/learn/interview" style={{ color: 'var(--accent)' }}>Interview Prep</Link> module.
-      </Callout>
+      <Divider />
 
+      {/* ── Error Library ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Error Library" />
+        <SectionTitle>Job Search Breakdowns — And Exactly Why They Happen</SectionTitle>
+
+        {[
+          {
+            error: `Application submitted through the company careers page — no response, no rejection email, complete silence after three weeks`,
+            cause: 'The resume was filtered out by the Applicant Tracking System (ATS) before any human reviewed it. Most large-company ATS software scores resumes against the exact keywords in the job description — a resume that says "data pipelines" when the JD says "ETL pipelines" can score low enough to never surface, even from a genuinely qualified candidate.',
+            fix: 'Mirror the exact terminology from the job description in the resume (without lying about experience) — if the JD says "data warehousing," use that phrase, not a close synonym. For roles at companies known to use aggressive ATS filtering, apply through a referral or direct recruiter message in parallel with the formal application, since a human-forwarded application usually bypasses the ATS scoring step entirely.',
+          },
+          {
+            error: `Recruiter phone screen ends abruptly right after the candidate states their salary expectation`,
+            cause: 'The stated number was either far below the role\'s actual level (signaling the candidate may be under-qualified or a poor culture fit for a more senior title) or far above the budgeted range for that specific req — either way, the recruiter has no room to continue the conversation productively.',
+            fix: 'Per Part 08, never give the first number — redirect and ask for the budgeted range instead. If pressed, research the specific level and company on Levels.fyi beforehand and give a wide, well-researched range rather than a single guessed figure, so the number reflects the actual role rather than a generic industry average.',
+          },
+          {
+            error: `Technical interview goes well, but the process goes silent after the take-home assignment is submitted`,
+            cause: 'Most take-home assignments are evaluated primarily on code quality, testing, and documentation — not just whether the output is correct. A working solution with no tests, no error handling, and no README explaining design decisions reads as unfinished, even if the core logic is right.',
+            fix: 'Treat every take-home as a portfolio piece, not just a puzzle to solve: include basic tests, handle at least the obvious edge cases, and write a short README explaining the design trade-offs made under the time constraint. This directly reflects the "explain the tradeoffs in your design decisions" criterion from Part 06.',
+          },
+          {
+            error: `A verbal offer is extended over a call, but the candidate resigns from their current job before receiving anything in writing — then the signed offer never arrives`,
+            cause: 'Verbal offers can and do change or fall through — a budget freeze, a hiring-manager change, or an internal approval that never finalizes can all cause a verbal offer to quietly disappear, and without a resignation already submitted, the downside is limited.',
+            fix: 'Part 08\'s negotiation rules are explicit: get the offer in writing before resigning a current job. This is not paranoia — it is standard practice, and no reputable company will consider it an unreasonable request from a candidate.',
+          },
+          {
+            error: `A candidate on a work visa gets to the final round, then the process ends with "we\'ve decided to go a different direction" with no further explanation`,
+            cause: 'Sponsorship requirements were not clarified early, and the company either does not sponsor visas for this role or has hit an internal cap on sponsorship approvals for the year — a constraint that has nothing to do with the candidate\'s technical performance, but surfaces only at the final stage when it becomes relevant to the hiring paperwork.',
+            fix: 'Per Part 05\'s Callout, filter for sponsorship availability before applying wherever possible, and ask the recruiter directly and early in the first screening call. This does not need to feel adversarial — most experienced recruiters would rather resolve this upfront than run a candidate through four interview rounds only for it to become a blocker at the end.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{
+              fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--red,#ff4757)',
+              marginBottom: 12, background: 'rgba(255,71,87,0.08)',
+              border: '1px solid rgba(255,71,87,0.2)',
+              borderRadius: 6, padding: '8px 12px', lineHeight: 1.5,
+            }}>
+              {item.error}
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <span style={{
+                fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
+              }}>Cause: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.cause}</span>
+            </div>
+            <div>
+              <span style={{
+                fontSize: 10, fontWeight: 700, color: 'var(--accent)',
+                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
+              }}>Fix: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.fix}</span>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* ── Next Module CTA ──────────────────────────────────────────────── */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
+        <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
+          What comes next
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
+          Module 07 covers the three data categories every data engineer works with daily — structured, semi-structured, and unstructured — and what each one demands from your pipeline design.
+        </p>
+        <Link href="/learn/data-engineering/data-types-structured" style={{ background: '#00e676', color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 07 → Structured, Semi-Structured and Unstructured Data
+        </Link>
+      </div>
     </LearnLayout>
   )
 }
