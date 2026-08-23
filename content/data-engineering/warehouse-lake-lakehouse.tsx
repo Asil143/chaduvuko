@@ -36,12 +36,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -60,6 +64,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -70,6 +95,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -135,7 +178,7 @@ export default function WarehouseLakeLakehouseModule() {
       description="Three answers to where we store data — the honest trade-offs and how to choose."
       section="Data Engineering — Module 11"
       readTime="55 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Same Problem, Three Solutions ───────────────── */}
@@ -266,7 +309,8 @@ export default function WarehouseLakeLakehouseModule() {
           pushdown, and distributed execution across many compute nodes.
         </Para>
 
-        <CodeBox label="Data warehouse — why it exists and what makes it fast">{`BUSINESS QUESTION: What was our daily revenue by city and restaurant
+        <SubSubTitle>The same query, two databases, two very different outcomes</SubSubTitle>
+        <CodeBox label="One business question, run on PostgreSQL vs Snowflake">{`BUSINESS QUESTION: What was our daily revenue by city and restaurant
                    category for the last 90 days?
 
 ON POSTGRESQL (operational database):
@@ -286,9 +330,10 @@ ON SNOWFLAKE (data warehouse):
   Result: 3.8 seconds
   Reason: columnar storage reads only amount and created_at columns,
           partitioning prunes to last 90 days only,
-          distributed execution across 8 compute nodes
+          distributed execution across 8 compute nodes`}</CodeBox>
 
-WHY WAREHOUSES EXIST:
+        <SubSubTitle>The five reasons warehouses exist as a separate system at all</SubSubTitle>
+        <CodeBox label="Why warehouses exist as a separate architectural layer">{`WHY WAREHOUSES EXIST:
   → Separate analytical compute from operational compute
     No more slowing down the live app with analytical queries
   → Optimised storage layout for analytical patterns
@@ -431,7 +476,8 @@ WHY WAREHOUSES EXIST:
           externally-defined schema at read time.
         </Para>
 
-        <CodeBox label="Schema-on-read — the lake's approach to flexibility">{`SCHEMA-ON-WRITE (warehouse):
+        <SubSubTitle>Schema-on-write vs schema-on-read, for the same order data</SubSubTitle>
+        <CodeBox label="Schema-on-write (warehouse) vs schema-on-read (data lake)">{`SCHEMA-ON-WRITE (warehouse):
   Before loading order data, you must define:
     CREATE TABLE orders (
       order_id BIGINT NOT NULL,
@@ -442,7 +488,7 @@ WHY WAREHOUSES EXIST:
     );
   Data that doesn't match this schema → REJECTED
 
-  New field added to source (restaurant_tier)? 
+  New field added to source (restaurant_tier)?
     → ALTER TABLE, migration, re-load. Days of work.
 
 SCHEMA-ON-READ (data lake):
@@ -458,13 +504,12 @@ SCHEMA-ON-READ (data lake):
   New field added to source?
     → Nothing to do. It just appears in new files.
     → Old files that lack the new field return null for it.
-    → No migration needed.
+    → No migration needed.`}</CodeBox>
+        <Output>{`Freedom: store ANY format — JSON, CSV, Parquet, images, audio.
+Cost: $0.023/GB/month on S3 vs $10,000+/TB for old warehouse hardware.
 
-  Freedom: store ANY format — JSON, CSV, Parquet, images, audio.
-  Cost: $0.023/GB/month on S3 vs $10,000+/TB for old warehouse hardware.
-
-  The tradeoff: you get flexibility and low cost.
-  You lose: schema enforcement, data quality guarantees, fast SQL.`}</CodeBox>
+The tradeoff: you get flexibility and low cost.
+You lose: schema enforcement, data quality guarantees, fast SQL.`}</Output>
 
         <SubTitle>Why the data lake became a data swamp</SubTitle>
 
@@ -568,6 +613,14 @@ SCHEMA-ON-READ (data lake):
             ))}
           </div>
         </div>
+
+        <TryThis>
+          Run this Part's data swamp diagnosis (in the Callout above) against a data
+          lake you have access to: can you tell if a dataset is current, can analysts
+          find what they need without asking an engineer, do reruns produce identical
+          results, and how long would a GDPR deletion actually take? Count how many
+          of the four you'd answer "no" to.
+        </TryThis>
       </section>
 
       <Divider />
@@ -609,7 +662,8 @@ SCHEMA-ON-READ (data lake):
 
         <SubTitle>How the table format layer works</SubTitle>
 
-        <CodeBox label="Delta Lake — how a transaction log adds ACID to object storage">{`Plain S3 without Delta Lake (data lake):
+        <SubSubTitle>Plain S3 vs S3 with a Delta transaction log alongside it</SubSubTitle>
+        <CodeBox label="Plain object storage vs the same storage with a Delta transaction log">{`Plain S3 without Delta Lake (data lake):
   s3://data-lake/orders/
     part-00001.parquet  (written Monday)
     part-00002.parquet  (written Tuesday)
@@ -642,9 +696,10 @@ Transaction log entry (JSON):
           "stats": {"numRecords": 100000,
                     "minValues": {"order_id": 9284751},
                     "maxValues": {"order_id": 9384750}}}
-}
+}`}</CodeBox>
 
-WHAT THE TRANSACTION LOG ENABLES:
+        <SubSubTitle>What the transaction log actually buys you</SubSubTitle>
+        <CodeBox label="What the transaction log enables">{`WHAT THE TRANSACTION LOG ENABLES:
   ✓ ACID transactions: readers see only committed transactions
   ✓ Time travel: read table as it was at any past transaction
       spark.read.format("delta").option("versionAsOf", 3).load(path)
@@ -653,6 +708,14 @@ WHAT THE TRANSACTION LOG ENABLES:
   ✓ Schema evolution: ALTER TABLE orders ADD COLUMN delivery_fee DECIMAL
   ✓ Concurrent writes: optimistic concurrency control, conflict detection
   ✓ Audit log: full history of every operation ever performed`}</CodeBox>
+
+        <TryThis>
+          If you have access to a Delta or Iceberg table, check its retention
+          configuration — Delta's default VACUUM retention, or Iceberg's
+          expire_snapshots settings. Confirm the retention window is longer than
+          the longest-running pipeline that reads from it. This module's Error
+          Library shows what happens when it isn't.
+        </TryThis>
 
         <SubTitle>The three table formats — Delta Lake, Iceberg, Hudi</SubTitle>
 
@@ -795,7 +858,8 @@ WHAT THE TRANSACTION LOG ENABLES:
           than treating them as alternatives.
         </Para>
 
-        <CodeBox label="Modern data platform — all three architectures in one design">{`LAYER               ARCHITECTURE    PURPOSE
+        <SubSubTitle>Which architecture each layer of the platform uses, and why</SubSubTitle>
+        <CodeBox label="Modern data platform — which layer uses which architecture">{`LAYER               ARCHITECTURE    PURPOSE
 ─────────────────────────────────────────────────────────────────────
 Landing Zone        Data Lake        Raw files in S3/ADLS exactly
 (object storage)                     as received — any format,
@@ -824,9 +888,10 @@ ML Feature Store    Lakehouse        Delta tables with low-latency
 Unstructured Data   Pure Data Lake   Images, audio, PDFs in S3.
 (object storage)                     No table format — just organised
                                      object storage with metadata table
-                                     tracking what exists.
+                                     tracking what exists.`}</CodeBox>
 
-REAL EXAMPLE — DoorDash-style architecture:
+        <SubSubTitle>All three architectures in one real, end-to-end pipeline</SubSubTitle>
+        <CodeBox label="A DoorDash-style pipeline touching all three architectures">{`REAL EXAMPLE — DoorDash-style architecture:
   Raw Kafka events (JSON) → S3 landing zone (data lake)
   Landing → Bronze Parquet (data lake, organised)
   Bronze → Silver Delta tables (lakehouse, ACID, deduplicated)
@@ -874,7 +939,8 @@ REAL EXAMPLE — DoorDash-style architecture:
         <SectionTag text="// Part 07 — The Choice Guide" />
         <SectionTitle>How to Choose the Right Architecture for Your Company</SectionTitle>
 
-        <CodeBox label="Architecture decision framework — match to your actual situation">{`SITUATION 1: Small to mid-size company, mostly structured data
+        <SubSubTitle>Small structured-data teams, and growth-stage teams with mixed data</SubSubTitle>
+        <CodeBox label="Decision framework, situations 1 and 2 — small teams and growth-stage teams">{`SITUATION 1: Small to mid-size company, mostly structured data
   Team:    1–3 data engineers, 2–5 analysts
   Data:    PostgreSQL, a few SaaS APIs, payment processor
   Volume:  < 500 GB total
@@ -892,9 +958,10 @@ SITUATION 2: Growth stage company, mixed structured + semi-structured
     → Bronze: raw Parquet in S3, preserves all data cheaply
     → Silver/Gold: dbt transformations into Snowflake
     → Analysts query Snowflake, raw lake is for reprocessing
-    → Add Delta Lake when update/delete requirements emerge
+    → Add Delta Lake when update/delete requirements emerge`}</CodeBox>
 
-SITUATION 3: Scale company, ML platform, streaming data
+        <SubSubTitle>Scale companies with ML/streaming, and regulated industries</SubSubTitle>
+        <CodeBox label="Decision framework, situations 3 and 4 — scale companies and regulated industries">{`SITUATION 3: Scale company, ML platform, streaming data
   Team:    10+ data engineers, ML team, analytics team
   Data:    Multiple DBs, Kafka, IoT, unstructured content
   Volume:  10 TB – PB scale
@@ -913,6 +980,49 @@ SITUATION 4: Regulated industry (banking, healthcare, insurance)
     → Lakehouse (Databricks + Unity Catalog) for scale + governance
     → Time travel in both enables point-in-time audit queries
     → Row-level security for column-level data masking (PII)`}</CodeBox>
+
+        <TryThis>
+          Match your own team against the four situations above — team size, data
+          sources, and volume. If your current architecture doesn't match the
+          situation you're actually in (say, a lakehouse for Situation 1's volume),
+          that gap is worth naming, whether it points toward simplifying or scaling up.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Warehouses, Lakes, and Lakehouses</SectionTitle>
+
+        {[
+          {
+            wrong: '"A data lake is basically a free-for-all dumping ground — storage is cheap, so it doesn\'t matter"',
+            right: 'Part 03 is explicit that "store everything now, worry later" is exactly the philosophy that produces a data swamp — the five listed problems (no schema enforcement, no ACID, no deletes, no governance, slow SQL) show the cost doesn\'t disappear, it just moves downstream into untrustworthy, unusable data.',
+          },
+          {
+            wrong: '"The lakehouse replaces the need for a data warehouse entirely"',
+            right: 'Part 06\'s "when to use just a warehouse" section and Part 07\'s Situation 1 both say the opposite: a small company with structured data and SQL analysts doesn\'t need lake or lakehouse complexity at all. The lakehouse is additive at specific trigger points (ML access, GDPR deletes, unstructured data), not a universal replacement.',
+          },
+          {
+            wrong: '"Delta Lake and Iceberg give you time travel, so you never have to worry about losing old data to cleanup jobs"',
+            right: 'This module\'s Error Library shows two separate incidents from the opposite assumption — Delta VACUUM deleting files an active job was still reading, and Iceberg expire_snapshots removing a snapshot a downstream pipeline needed. Retention is finite and must be configured deliberately, not assumed safe by default.',
+          },
+          {
+            wrong: '"Schema-on-read means you never have to think about schema"',
+            right: 'Part 03\'s schema-on-write vs schema-on-read comparison is explicit about the actual tradeoff: you gain write-time flexibility but lose enforcement and quality guarantees. Someone still has to reason about schema — it just happens at query time instead of load time, and Interview Prep Q2\'s data-swamp prevention steps are largely about restoring that discipline.',
+          },
+          {
+            wrong: '"Since object storage is so cheap, moving everything out of the warehouse into the lake is a straightforward cost win"',
+            right: 'Interview Prep Q5\'s tiered-storage answer is explicit that only cold, rarely-queried data should move — the actively-queried 20% stays in the warehouse because query performance still matters for that data. "Move everything" ignores the SQL-performance tradeoff in Part 05\'s comparison table.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1101,6 +1211,45 @@ Expected outcome: keep 1 TB in Snowflake at $480/month, move 3.5 TB to S3 Delta 
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Running VACUUM (or Iceberg\'s expire_snapshots) with a short or disabled retention window',
+            a: 'This module\'s Error Library shows the direct consequence twice — a Delta VACUUM deleting files an active Spark job was still reading, and an Iceberg snapshot expiring while a downstream pipeline still referenced it. Part 04\'s TryThis is exactly this check: confirm retention is longer than the longest job that reads the table before touching the default.',
+          },
+          {
+            q: 'Writing to a plain S3 data lake with no table format and assuming a completed pipeline run wrote everything it should have',
+            a: 'This module\'s Error Library shows silent data loss from exactly this gap — a pipeline failed partway, left some partitions complete and others incomplete, and the query engine had no way to know the write was unfinished since there\'s no transaction log to consult. Migrating to Delta Lake or Iceberg (Part 04) fixes this at the architecture level; a row-count validation step catches it in the meantime.',
+          },
+          {
+            q: 'Running two Spark jobs against the same Delta table at the same time without checking whether their writes could conflict',
+            a: 'This module\'s Error Library shows the DeltaAnalysisException that results — Delta\'s optimistic concurrency control detects the conflict and refuses the second write rather than silently corrupting data. That\'s the correct behavior, but it means concurrent writers to the same table need to be serialised or partitioned apart, not assumed safe by default.',
+          },
+          {
+            q: 'Querying a large Snowflake table repeatedly without a clustering key that matches the actual filter pattern',
+            a: 'This module\'s Error Library shows a single query that scanned 4.2 TB and cost $1,694 from exactly this gap — no clustering key aligned with the WHERE clause, so Snowflake had nothing to prune against. Check the query profile for partition pruning percentage before assuming a slow, expensive query is just "how big data is."',
+          },
+          {
+            q: 'Treating "storage is cheap" as a reason to skip tiering — leaving cold, rarely-queried data in the warehouse indefinitely',
+            a: 'Interview Prep Q5\'s tiered-storage answer shows the real cost gap directly: warehouse storage at ~$480/TB/month versus object storage at $23/TB/month for identical rarely-queried data. Part 05\'s comparison table is the reference for deciding what stays hot (Snowflake) versus what moves cold (Delta on S3, then Glacier) — leaving everything in the warehouse by default forgoes that saving for no analytical benefit.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1175,7 +1324,7 @@ Expected outcome: keep 1 TB in Snowflake at $480/month, move 3.5 TB to S3 Delta 
         'The most impactful single migration a data engineer can make on a legacy CSV data lake is: convert all files to Parquet + add date partitioning + add Delta Lake. This typically reduces query time by 10–20×, reduces storage cost by 5–10×, and adds GDPR-compliant deletion capability — all without changing the downstream SQL interface.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
