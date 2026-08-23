@@ -38,6 +38,10 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
@@ -59,6 +63,45 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
     }}>
       <code>{children}</code>
     </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -131,7 +174,7 @@ export default function MessageBrokersQueuesModule() {
       description="How messages flow from producer to consumer. Queues vs topics, durability, replication, compaction, backpressure, dead letter queues, ordering guarantees, and exactly-once semantics — the internal mechanics without tool noise."
       section="Data Engineering — Module 41"
       readTime="50 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What a Message Broker Actually Is ──────────────── */}
@@ -318,6 +361,16 @@ export default function MessageBrokersQueuesModule() {
           a downstream system from scratch using a queue, because the data
           is gone. With a topic, you reset the offset and replay.
         </Callout>
+
+        <TryThis>
+          Pick one integration you know of between two services (an order
+          system notifying a shipping system, a signup flow triggering a
+          welcome email). Decide honestly: is it a queue relationship (exactly
+          one consumer should act on each message) or a topic relationship
+          (multiple independent consumers each need to see it)? If more than
+          one service currently reacts to the same queue, that is worth
+          noticing — it is usually a sign the wrong primitive was chosen.
+        </TryThis>
       </section>
 
       <Divider />
@@ -370,7 +423,7 @@ export default function MessageBrokersQueuesModule() {
 
         <CodeBox label="partition on disk — physical file structure">
 {`# On the broker's filesystem, one partition looks like this:
-/data/kafka/freshmart.orders-3/          ← partition 3 of freshmart.orders topic
+/data/kafka/freshcart.orders-3/          ← partition 3 of freshcart.orders topic
     00000000000000000000.log             ← segment starting at offset 0
     00000000000000000000.index           ← sparse offset → byte-position index
     00000000000000000000.timeindex       ← timestamp → offset index
@@ -459,7 +512,7 @@ export default function MessageBrokersQueuesModule() {
         </Para>
 
         <CodeBox label="replication — leader, followers, and the ISR">
-{`# freshmart.orders partition 0 — replicated across 3 brokers (replication factor = 3)
+{`# freshcart.orders partition 0 — replicated across 3 brokers (replication factor = 3)
 
 # Broker 1 (leader for partition 0):
 #   log: [offset 0] [offset 1] ... [offset 10,000]   ← latest
@@ -558,7 +611,7 @@ export default function MessageBrokersQueuesModule() {
         </Para>
 
         <CodeBox label="log compaction — before and after">
-{`# freshmart.products — compacted topic
+{`# freshcart.products — compacted topic
 # Tracks current product price. Key = product_id. Value = current price.
 
 # Log BEFORE compaction (chronological, by offset):
@@ -638,7 +691,7 @@ export default function MessageBrokersQueuesModule() {
           in the producer or the consumer logic.
         </Para>
 
-        <CodeBox label="ordering — three ways it breaks in production">
+        <CodeBox label="ordering breaks — 1: producer retries, and 2: cross-partition merging">
 {`# ── Break 1: Producer retries with multiple in-flight requests ──────────────
 
 # Producer config: max.in.flight.requests.per.connection = 5 (default)
@@ -655,7 +708,7 @@ export default function MessageBrokersQueuesModule() {
 
 # ── Break 2: Consumer reading multiple partitions, merging by arrival order ──
 
-# Topic freshmart.orders has 4 partitions.
+# Topic freshcart.orders has 4 partitions.
 # Consumer reads from all 4 and processes events in the order they arrive.
 # Partition 0: order at 14:23:11 — arrives at consumer at 14:23:12
 # Partition 2: order at 14:23:09 — arrives at consumer at 14:23:13 (1 sec delay)
@@ -665,9 +718,10 @@ export default function MessageBrokersQueuesModule() {
 
 # Fix: do not assume cross-partition arrival order reflects event time order.
 # If business logic requires event time ordering across partitions,
-# buffer events and sort by event_time before processing — at the cost of latency.
-
-# ── Break 3: Leader failover during write ────────────────────────────────────
+# buffer events and sort by event_time before processing — at the cost of latency.`}
+        </CodeBox>
+        <CodeBox label="ordering breaks — 3: leader failover during write">
+{`# ── Break 3: Leader failover during write ────────────────────────────────────
 
 # Producer sends message M to partition leader (broker-1).
 # broker-1 writes M to its local log but crashes before replicating to followers.
@@ -764,6 +818,14 @@ export default function MessageBrokersQueuesModule() {
           already deleted. Monitor lag relative to your retention period, not
           just in absolute event count.
         </Callout>
+
+        <TryThis>
+          If you have access to a Kafka cluster (or a similar broker), run the
+          consumer-group lag command for a real consumer group and note the
+          lag per partition, not just the total. A total that looks fine can
+          hide one badly-lagging partition — the same trap as averaging away
+          the data-skew problem covered elsewhere in this track.
+        </TryThis>
       </section>
 
       <Divider />
@@ -792,7 +854,7 @@ export default function MessageBrokersQueuesModule() {
           the issue, and optionally replay them.
         </Para>
 
-        <CodeBox label="dead letter queue — implementation pattern">
+        <CodeBox label="dead letter queue — the retry loop">
 {`import json
 import logging
 from typing import Callable
@@ -822,16 +884,17 @@ def process_with_dlq(
             logger.warning(
                 f"Processing failed (attempt {attempt}/{MAX_RETRIES}): "
                 f"event_id={event.get('event_id')} error={exc}"
-            )
-
-    # All retries exhausted — send to DLQ
+            )`}
+        </CodeBox>
+        <CodeBox label="dead letter queue — writing the failed event once retries are exhausted">
+{`    # All retries exhausted — send to DLQ
     dlq_event = {
         "original_event":   event,
         "failed_at":        "2026-03-20T14:23:11Z",  # use datetime.utcnow().isoformat()
         "error_message":    str(last_exception),
         "error_type":       type(last_exception).__name__,
         "retry_count":      MAX_RETRIES,
-        "source_topic":     "freshmart.orders",
+        "source_topic":     "freshcart.orders",
         "source_partition": event.get("_partition"),
         "source_offset":    event.get("_offset"),
     }
@@ -847,12 +910,13 @@ def process_with_dlq(
         f"Event sent to DLQ: event_id={event.get('event_id')} "
         f"dlq_topic={dlq_topic}"
     )
-    # Return normally — caller commits offset, processing continues
-
-# DLQ topic naming convention:
+    # Return normally — caller commits offset, processing continues`}
+        </CodeBox>
+        <CodeBox label="dead letter queue — topic naming and what to monitor">
+{`# DLQ topic naming convention:
 # source_topic + ".dlq"
-# freshmart.orders → freshmart.orders.dlq
-# freshmart.payments → freshmart.payments.dlq
+# freshcart.orders → freshcart.orders.dlq
+# freshcart.payments → freshcart.payments.dlq
 
 # DLQ monitoring:
 # Alert: DLQ message count > 0 (any failure needs attention)
@@ -952,8 +1016,8 @@ def process_with_dlq(
           this is controlled by the <code>isolation.level</code> configuration.
         </Para>
 
-        <CodeBox label="kafka transaction — atomic read-process-write">
-{`# Read from freshmart.orders, transform, write to freshmart.orders.enriched
+        <CodeBox label="kafka transaction — configuring the transactional producer and consumer">
+{`# Read from freshcart.orders, transform, write to freshcart.orders.enriched
 # All in one transaction — either all succeed or none
 
 from confluent_kafka import Producer, Consumer, KafkaError
@@ -972,9 +1036,10 @@ consumer = Consumer({
     'isolation.level': 'read_committed',  # CRITICAL — only read committed messages
     'enable.auto.commit': False,           # CRITICAL — we commit inside the transaction
 })
-consumer.subscribe(['freshmart.orders'])
-
-while True:
+consumer.subscribe(['freshcart.orders'])`}
+        </CodeBox>
+        <CodeBox label="kafka transaction — the atomic read-process-write loop">
+{`while True:
     msg = consumer.poll(timeout=1.0)
     if msg is None or msg.error():
         continue
@@ -986,7 +1051,7 @@ while True:
         producer.begin_transaction()
 
         # Write enriched event to output topic
-        producer.produce('freshmart.orders.enriched', value=json.dumps(enriched))
+        producer.produce('freshcart.orders.enriched', value=json.dumps(enriched))
 
         # Commit consumer offset INSIDE the transaction
         # This is what makes it atomic — offset moves only when write succeeds
@@ -1014,12 +1079,57 @@ while True:
           consumer only sees messages from successfully committed transactions.
           Messages from in-flight or aborted transactions are invisible.
         </Para>
+
+        <TryThis>
+          Find a producer configuration in a codebase you have access to (or
+          a public example on GitHub) and check three settings:
+          <code>enable.idempotence</code>, <code>acks</code>, and
+          <code>max.in.flight.requests.per.connection</code>. Based on Part 06
+          and this Part, decide whether that combination could silently produce
+          duplicates or reorder messages under a network retry.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Message Brokers</SectionTitle>
+
+        {[
+          {
+            wrong: '"A message broker is just a pipe that moves data from A to B"',
+            right: 'Part 01 is explicit that the broker is an active storage and routing system with its own durability guarantees, replication strategy, and indexing structure — not a passive pipe. Part 03\'s commit-log-and-segments model is exactly what a "pipe" would not need.',
+          },
+          {
+            wrong: '"Queues and topics are basically the same thing with different names"',
+            right: 'Part 02\'s comparison table is the reference here: a queue read is destructive (the message is gone after one consumer takes it) while a topic read is non-destructive (every subscriber sees every message). Using a queue where a topic is needed silently drops the event for every consumer after the first.',
+          },
+          {
+            wrong: '"acks=all guarantees a message can never be lost"',
+            right: 'Part 04 is precise about the actual contract: acks=all only waits for replicas currently in the ISR. If min.insync.replicas is not also set, a shrunk ISR (down to just the leader) still satisfies acks=all — the safety comes from combining acks=all with min.insync.replicas, not from acks=all alone.',
+          },
+          {
+            wrong: '"If ordering is guaranteed, my consumer will always see events in the exact order they happened"',
+            right: 'Part 06\'s three ordering-break scenarios — producer retries, cross-partition merging, and leader failover — all happen even though the broker\'s per-partition guarantee holds perfectly. The guarantee is narrower than most engineers assume: same partition, not same topic, not same real-world sequence.',
+          },
+          {
+            wrong: '"A dead letter queue means the failed message is handled and can be ignored"',
+            right: 'Part 08 frames the DLQ as an escape valve that unblocks processing, not a resolution. A DLQ with unmonitored, ever-growing depth means silent, permanent data loss — the whole point of the pattern is that engineers inspect, fix, and replay, not that the failure disappears.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red,#ff4757)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
 
       {/* ── Part 10 — What This Looks Like at Work ───────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 10 — What This Looks Like at Work" />
         <SectionTitle>What This Looks Like on Day One</SectionTitle>
 
@@ -1067,6 +1177,171 @@ while True:
             messages. Every one of those points is in this module.
           </Para>
         </HighlightBox>
+      </section>
+
+      <Divider />
+
+      {/* ── Interview Prep ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
+        <SectionTag text="// Interview Prep" />
+        <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
+
+        {[
+          {
+            q: 'Q1. What is the difference between a queue and a topic, and how would you decide which one to use for a new integration?',
+            a: `A queue delivers each message to exactly one consumer and then removes it — a destructive read. A topic is a durable, ordered log that multiple independent subscribers can each read at their own pace without affecting each other — a non-destructive read, covered in Part 02.
+
+I would ask one question to decide: does more than one independent system need to react to this event? If the answer is "no, I just need this specific work item processed by any one of a pool of workers," that's a queue — the competing-consumers pattern for work distribution. If the answer is "yes, several unrelated services each need to know this happened," that's a topic — the pub-sub pattern for event broadcasting.
+
+The other deciding factor is replay. If I might need to rebuild a downstream system from scratch by reprocessing history, I need a topic — a queue's messages are gone the moment they're delivered, so there's nothing to replay.`,
+          },
+          {
+            q: 'Q2. Your team sets replication.factor=3 and assumes that guarantees no data loss. Is that assumption correct?',
+            a: `No, and this is one of the most common misconfigurations in production. Replication factor alone only says how many copies of the data exist — it says nothing about how many copies must confirm a write before the producer is told it succeeded.
+
+As Part 04 covers, that acknowledgement behaviour is controlled by the producer's acks setting combined with min.insync.replicas. With acks=1, the producer only waits for the leader to write locally — if the leader crashes before followers replicate, the message is lost even with replication.factor=3. Durability requires acks=all together with min.insync.replicas set to at least 2, so a write isn't acknowledged until it exists on multiple machines.
+
+I'd also flag that min.insync.replicas creates an availability trade-off: with RF=3 and min.isr=2, the topic becomes unavailable for writes if 2 of the 3 brokers are down. That's usually the right trade for financial data — reject writes rather than silently risk losing them — but it's a deliberate choice, not a free guarantee.`,
+          },
+          {
+            q: 'Q3. A consumer\'s lag keeps growing throughout the day. Walk me through how you\'d diagnose and fix it.',
+            a: `First I'd confirm it's a real, sustained trend and not noise — per Part 07, a lag with a positive slope over a meaningful window (not a single spike) means the consumer is structurally slower than the producer, and it will keep getting worse without intervention.
+
+Diagnosis: check whether the consumer group has fewer consumers than partitions — that caps parallelism regardless of processing speed. Check per-partition lag, not just the aggregate, since one slow partition can hide inside a healthy-looking average. Check what the consumer is actually doing per message — a slow downstream call (a database write, an external API) inside the processing loop is the most common root cause.
+
+Fix, in order of preference: scale out the consumer group up to the partition count first, since that's free parallelism. If already at the partition limit, optimise the per-event processing time. If neither is enough, increase the partition count — which requires repartitioning and is more disruptive. Throttling the producer is the last resort since it pushes the problem upstream.
+
+Critically, I'd also check the lag against the retention window, not just against zero — if lag ever exceeds retention, the oldest lagged events are permanently gone, not just delayed.`,
+          },
+          {
+            q: 'Q4. What is a poison message, and how does a dead letter queue prevent it from taking down your pipeline?',
+            a: `A poison message is an event that fails processing every time it's retried — a malformed payload, a value the consumer's logic can't handle, or a downstream dependency that consistently rejects that specific record. Without a DLQ, the consumer can't advance past that offset, so every message behind it in the partition is blocked indefinitely.
+
+The DLQ pattern, from Part 08, is: retry a bounded number of times, and if all retries fail, write the event (plus its error, source topic, partition, and offset) to a separate DLQ topic, then commit the original offset so processing continues. The failure is isolated to one message instead of stalling the whole partition.
+
+The part candidates often miss: a DLQ is not a resolution, it's a deferral. It needs monitoring — alerting on any DLQ depth greater than zero — and a replay mechanism so that once the root cause is fixed, the failed messages can be reproduced back to the original topic and processed correctly.`,
+          },
+          {
+            q: 'Q5. Explain how Kafka\'s idempotent producer prevents duplicate messages, and why it isn\'t sufficient on its own for exactly-once processing.',
+            a: `With enable.idempotence=true, the broker assigns each producer a Producer ID and tracks a monotonically increasing sequence number per (PID, partition). If the broker sees a sequence number it has already committed for that PID and partition, it silently discards the duplicate and returns success — this is what Part 09 walks through, and it's exactly what prevents the classic "ack was lost, producer retried, message got written twice" bug.
+
+The limit is scope: the broker only tracks a small window of recent sequence numbers per (PID, partition), and a new producer session gets a new PID. So idempotent producers deduplicate retries within one producer's live session, but not across a producer restart, and not for a consumer's own read-process-write cycle across topics.
+
+That broader case — read from topic A, process, write to topic B, and commit the offset in A, all atomically — is what Kafka transactions solve, using begin_transaction / send_offsets_to_transaction / commit_transaction, with the consumer set to isolation.level=read_committed so it never sees results from an aborted transaction. Idempotent producer and transactions solve different, complementary problems.`,
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>
+              {item.q}
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
+              {item.a}
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Choosing a queue for an integration that turns out to need more than one independent consumer',
+            a: 'Part 02\'s comparison table exists because this decision is easy to get backwards early — a queue silently gives the message to only one of the consumers competing for it, so a second subscriber added later gets nothing. Decide queue vs topic based on how many independent systems need the event, before building either.',
+          },
+          {
+            q: 'Assuming replication.factor alone provides durability, without checking acks and min.insync.replicas',
+            a: 'Part 04 and Interview Prep Q2 both cover this directly: RF=3 with acks=1 can still lose a message if the leader crashes before replicating. Durability requires acks=all plus min.insync.replicas set explicitly — replication factor by itself only says how many copies could exist, not how many must confirm before the write is considered safe.',
+          },
+          {
+            q: 'Trusting cross-partition arrival order as if it were event-time order',
+            a: 'Part 06\'s Break 2 shows a consumer reading four partitions and processing events in the order they happen to arrive — which is not the same as the order they happened in the real world. If business logic needs true event-time ordering across partitions, buffer and sort by event_time explicitly; don\'t assume the broker does this for you.',
+          },
+          {
+            q: 'Building a dead letter queue with no monitoring or replay plan',
+            a: 'Part 08 and Interview Prep Q4 both make the same point: a DLQ that nobody watches is just a slower, quieter way to lose data. Wire an alert on DLQ depth greater than zero from day one, and write the replay script before you need it under pressure.',
+          },
+          {
+            q: 'Relying on idempotent producers alone and assuming that solves exactly-once processing end to end',
+            a: 'Part 09 and Interview Prep Q5 are explicit that idempotent producers only deduplicate retries within a single producer session — a restart gets a new Producer ID and loses that protection. A true read-process-write-exactly-once pipeline needs Kafka transactions (or an equivalent), not idempotence alone.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Error Library ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Error Library" />
+        <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
+
+        {[
+          {
+            error: `Duplicate orders appear in the downstream analytics table — investigation shows the same order_id written twice with different offsets`,
+            cause: 'The producer has enable.idempotence=false and retries=3 (or similar). A network blip caused the broker\'s acknowledgement to be lost even though the write succeeded — the producer, having no proof the write landed, retried the same message, which the broker happily wrote again as a new, unrelated record at a new offset.',
+            fix: 'Set enable.idempotence=true on the producer. This assigns a Producer ID and per-partition sequence numbers, so the broker recognises and silently discards a retried write it has already committed, per Part 09. This is a config change, not an application-logic change — safe to enable without touching business code.',
+          },
+          {
+            error: `A consumer group is stuck — one partition shows lag climbing steadily while every other partition in the same group sits at zero`,
+            cause: 'A single partition has a hot key or an unusually large volume of messages for one entity, and only one consumer instance can ever process a given partition at a time. That one consumer is falling behind while its peers, assigned to lighter partitions, sit idle.',
+            fix: 'This is a partitioning-skew problem, not a general scaling problem — adding more consumers past the partition count does nothing, since a partition is only ever owned by one consumer at a time. Check whether the partition key concentrates too much volume on one key (Part 03\'s section on segments and Part 07\'s backpressure discussion both apply), and consider a better partition key or explicit load-splitting for that hot entity.',
+          },
+          {
+            error: `A downstream service reports receiving order events "from the past" — timestamps up to a day old showing up interleaved with current events`,
+            cause: 'The consumer restarted after being down, and is replaying from its last committed offset — which, correctly, includes everything it missed while it was offline. This is not corruption; it is the broker doing exactly what temporal decoupling promises: nothing is lost while a consumer is down.',
+            fix: 'The downstream service needs to handle this as expected behaviour, not an error — either by being idempotent to reprocessing, or by checking the event\'s embedded timestamp rather than assuming arrival order reflects recency. If genuinely stale events must be discarded, filter explicitly on event_time in the consumer logic rather than treating broker replay as a bug.',
+          },
+          {
+            error: `A schema change to an event's Avro definition causes every consumer of that topic to start throwing deserialization errors simultaneously`,
+            cause: 'The producer added a required field (or changed a field\'s type) without checking backward compatibility. Existing messages already in the topic don\'t have the new field, and consumers built against the old schema can\'t deserialize the new one — every consumer breaks at once, not gradually.',
+            fix: 'Add new fields as optional with a default value, never as required, and use a schema registry that enforces compatibility rules (BACKWARD, FORWARD, or FULL) at publish time so an incompatible schema change is rejected before it ever reaches the topic — this is the same class of problem covered for other formats in the DE track\'s schema-evolution material, and it applies identically to broker message schemas.',
+          },
+          {
+            error: `A "read-process-write" pipeline occasionally produces a result in the output topic with no corresponding offset commit — on restart, the same input is processed and written again`,
+            cause: 'The write to the output topic and the commit of the input offset were two separate, non-atomic operations. The process crashed between them: the output write succeeded, but the offset commit never happened, so on restart the consumer reprocesses the same input and writes a second, duplicate output.',
+            fix: 'Wrap the read-process-write cycle in a Kafka transaction — begin_transaction, produce the output, call send_offsets_to_transaction for the input offset, then commit_transaction — so the output write and the offset commit succeed or fail as one atomic unit, per Part 09. The consumer reading the output topic must also set isolation.level=read_committed, or it will see results from transactions that later aborted.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{
+              fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--red,#ff4757)',
+              marginBottom: 12, background: 'rgba(255,71,87,0.08)',
+              border: '1px solid rgba(255,71,87,0.2)',
+              borderRadius: 6, padding: '8px 12px', lineHeight: 1.5,
+            }}>
+              {item.error}
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <span style={{
+                fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
+              }}>Cause: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.cause}</span>
+            </div>
+            <div>
+              <span style={{
+                fontSize: 10, fontWeight: 700, color: 'var(--accent)',
+                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
+              }}>Fix: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.fix}</span>
+            </div>
+          </div>
+        ))}
       </section>
 
       <KeyTakeaways items={[
