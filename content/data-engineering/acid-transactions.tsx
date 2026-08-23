@@ -36,12 +36,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -60,6 +64,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -70,6 +95,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -135,7 +178,7 @@ export default function ACIDTransactionsModule() {
       description="Why ACID exists, what each property means, and what happens when it breaks."
       section="Data Engineering — Module 13"
       readTime="50 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Problem ACID Solves ────────────────────────── */}
@@ -294,6 +337,7 @@ WITHOUT ATOMICITY (naive implementation):
           without worrying about duplicating what was already written.
         </Para>
 
+        <SubSubTitle>An atomic batch write, wrapped in try/except with an explicit rollback</SubSubTitle>
         <CodeBox label="Atomic batch write in a data pipeline">{`# Python pipeline — atomic batch insert using a transaction
 import psycopg2
 
@@ -322,16 +366,22 @@ def load_orders_batch(orders: list[dict], conn) -> None:
         except Exception as e:
             cur.execute("ROLLBACK;")  # ← atomicity: undo all changes
             print(f"Transaction rolled back due to: {e}")
-            raise  # re-raise so the orchestrator knows it failed
+            raise  # re-raise so the orchestrator knows it failed`}</CodeBox>
+        <Output>{`Without the transaction:
+  If row 73,241 fails, rows 1–73,240 are already committed
+  Next run re-inserts rows 1–73,240 → duplicates
+  With ON CONFLICT this is handled, but messy
 
-# Without the transaction:
-#   If row 73,241 fails, rows 1–73,240 are already committed
-#   Next run re-inserts rows 1–73,240 → duplicates
-#   With ON CONFLICT this is handled, but messy
-#
-# With the transaction:
-#   If row 73,241 fails, rows 1–73,240 are rolled back
-#   Next run starts cleanly from row 1`}</CodeBox>
+With the transaction:
+  If row 73,241 fails, rows 1–73,240 are rolled back
+  Next run starts cleanly from row 1`}</Output>
+
+        <TryThis>
+          Find a batch-writing pipeline you maintain and check whether its writes are
+          wrapped in an explicit transaction. If not, work out concretely what a
+          failure at row 50,000 of 100,000 would leave behind in the target table —
+          and whether the next run would handle that state correctly.
+        </TryThis>
       </section>
 
       <Divider />
@@ -373,46 +423,43 @@ def load_orders_batch(orders: list[dict], conn) -> None:
 
         <SubTitle>What consistency means in practice</SubTitle>
 
-        <CodeBox label="Consistency — database-enforced vs application-enforced">{`DATABASE-ENFORCED CONSISTENCY (automatic):
+        <SubSubTitle>What the database enforces automatically, on every write</SubSubTitle>
+        <CodeBox label="Database-enforced consistency — checked on every transaction">{`Schema constraints the database checks on every transaction:
+  NOT NULL:    customer_id cannot be NULL
+  UNIQUE:      order_id cannot repeat
+  FOREIGN KEY: customer_id must exist in customers table
+  CHECK:       order_amount must be > 0
+               status must be in ('placed','confirmed','delivered','cancelled')
 
-  Schema constraints the database checks on every transaction:
-    NOT NULL:    customer_id cannot be NULL
-    UNIQUE:      order_id cannot repeat
-    FOREIGN KEY: customer_id must exist in customers table
-    CHECK:       order_amount must be > 0
-                 status must be in ('placed','confirmed','delivered','cancelled')
+Example: trying to insert an order with amount = -100
+  INSERT INTO orders (order_id, customer_id, amount, status)
+  VALUES (9284751, 4201938, -100.00, 'placed');
 
-  Example: trying to insert an order with amount = -100
-    INSERT INTO orders (order_id, customer_id, amount, status)
-    VALUES (9284751, 4201938, -100.00, 'placed');
+  → ERROR: new row violates check constraint "chk_order_amount"
+  → Transaction aborted. No partial state. ✓`}</CodeBox>
 
-    → ERROR: new row violates check constraint "chk_order_amount"
-    → Transaction aborted. No partial state. ✓
+        <SubSubTitle>What the database has no way of knowing — your pipeline's job</SubSubTitle>
+        <CodeBox label="Application-enforced consistency — your pipeline's responsibility">{`Business rules that cannot be expressed as simple DB constraints:
+  "A delivered order cannot be cancelled"
+  "A customer cannot have more than 5 active orders simultaneously"
+  "An order amount cannot exceed the customer's credit limit"
+  "Delivery time cannot be set before the order was placed"
 
-APPLICATION-ENFORCED CONSISTENCY (your responsibility):
+These rules must be checked in application/pipeline code BEFORE
+attempting the database write. The database has no way to know
+these business rules exist.
 
-  Business rules that cannot be expressed as simple DB constraints:
-    "A delivered order cannot be cancelled"
-    "A customer cannot have more than 5 active orders simultaneously"
-    "An order amount cannot exceed the customer's credit limit"
-    "Delivery time cannot be set before the order was placed"
-
-  These rules must be checked in application/pipeline code BEFORE
-  attempting the database write. The database has no way to know
-  these business rules exist.
-
-  Example of a consistency violation the DB cannot catch:
-    -- Order was already 'delivered' at 8:14 PM
-    -- At 8:45 PM, a bug in the status service sends 'cancelled'
-    UPDATE orders SET status = 'cancelled'
-    WHERE order_id = 9284751;
-    → DB allows this (no constraint prevents it)
-    → But it violates a business rule: you cannot cancel a delivered order
-    → Application code must check current status BEFORE allowing the update
-
-  This is why data quality checks in pipelines matter:
-  the database enforces its constraints; your pipeline must enforce
-  the business rules the database cannot express as constraints.`}</CodeBox>
+Example of a consistency violation the DB cannot catch:
+  -- Order was already 'delivered' at 8:14 PM
+  -- At 8:45 PM, a bug in the status service sends 'cancelled'
+  UPDATE orders SET status = 'cancelled'
+  WHERE order_id = 9284751;
+  → DB allows this (no constraint prevents it)
+  → But it violates a business rule: you cannot cancel a delivered order
+  → Application code must check current status BEFORE allowing the update`}</CodeBox>
+        <Output>{`This is why data quality checks in pipelines matter: the database
+enforces its constraints; your pipeline must enforce the business
+rules the database cannot express as constraints.`}</Output>
 
         <SubTitle>Consistency and data pipelines</SubTitle>
 
@@ -580,7 +627,8 @@ Result: 95 (wrong). Should be 100 - 10 - 5 = 85.`,
 
         <SubTitle>What isolation level should data pipelines use?</SubTitle>
 
-        <CodeBox label="Isolation levels for data engineering — practical guidance">{`INGESTION QUERIES (reading from production databases):
+        <SubSubTitle>Reading from production — REPEATABLE READ for a stable snapshot</SubSubTitle>
+        <CodeBox label="Isolation for ingestion queries">{`INGESTION QUERIES (reading from production databases):
   Use: READ COMMITTED (PostgreSQL default) or REPEATABLE READ
   Why: you want to read committed data, not in-progress changes
        READ COMMITTED: each of your SELECT statements sees a fresh snapshot
@@ -593,9 +641,10 @@ Result: 95 (wrong). Should be 100 - 10 - 5 = 85.`,
     SELECT * FROM orders WHERE created_at >= '2026-03-17';
     -- Even if new orders are committed during this query,
     -- they will NOT appear here (snapshot was taken at BEGIN)
-    COMMIT;
+    COMMIT;`}</CodeBox>
 
-WRITE PIPELINES (loading data into warehouse/lake tables):
+        <SubSubTitle>Writing to shared tables — when SERIALIZABLE prevents a real duplicate</SubSubTitle>
+        <CodeBox label="Isolation for write pipelines, and the practical rule">{`WRITE PIPELINES (loading data into warehouse/lake tables):
   Use: READ COMMITTED or SERIALIZABLE depending on conflict risk
   For simple appends: READ COMMITTED is sufficient
   For read-modify-write patterns (count then insert):
@@ -616,6 +665,14 @@ PRACTICAL RULE FOR DATA ENGINEERS:
   For concurrent writes to shared tables: use SERIALIZABLE
   Most pipelines: READ COMMITTED is fine because writes are controlled
                   (only one pipeline writes to a table at a time)`}</CodeBox>
+
+        <TryThis>
+          Check the default isolation level for a database your pipelines query —
+          in PostgreSQL, <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>SHOW TRANSACTION ISOLATION LEVEL;</code>.
+          If you have a long-running analytical extraction, confirm it's actually
+          running under REPEATABLE READ rather than the plain default — a query that
+          takes 15 minutes under READ COMMITTED can see rows committed mid-run.
+        </TryThis>
       </section>
 
       <Divider />
@@ -658,8 +715,8 @@ PRACTICAL RULE FOR DATA ENGINEERS:
           operation in a high-write database.
         </Para>
 
-        <CodeBox label="Durability — the WAL fsync and its performance implications">{`DURABILITY IMPLEMENTATION:
-
+        <SubSubTitle>The commit sequence, and what fsync actually costs</SubSubTitle>
+        <CodeBox label="Durability implementation and its performance impact">{`DURABILITY IMPLEMENTATION:
   Transaction COMMIT sequence:
     1. All operations in transaction written to WAL buffer (in memory)
     2. fsync() called → WAL buffer flushed to durable disk storage
@@ -686,14 +743,15 @@ PERFORMANCE IMPACT OF DURABILITY:
   For data pipelines: synchronous_commit = on is correct for all
   financial and critical data. For analytics data that can be
   reprocessed from source, synchronous_commit = off is acceptable
-  and dramatically improves write throughput.
+  and dramatically improves write throughput.`}</CodeBox>
 
-CLOUD DATABASE DURABILITY:
+        <SubSubTitle>How managed cloud databases and warehouses implement durability</SubSubTitle>
+        <CodeBox label="Durability in managed cloud databases and warehouses">{`CLOUD DATABASE DURABILITY:
   RDS PostgreSQL, Cloud SQL, Azure Database for PostgreSQL:
     → Multi-AZ deployments replicate WAL to a standby in a different
       availability zone synchronously before acknowledging commits
     → Survive data centre failure, not just single server failure
-    
+
   Snowflake / BigQuery:
     → Multiple copies of data written across multiple storage nodes
     → Commit acknowledged only after all copies are confirmed
@@ -734,7 +792,8 @@ CLOUD DATABASE DURABILITY:
 
         <SubTitle>Basic transaction syntax</SubTitle>
 
-        <CodeBox label="Transaction syntax — PostgreSQL and Python">{`-- SQL transaction syntax:
+        <SubSubTitle>BEGIN, COMMIT, ROLLBACK, and partial rollback with SAVEPOINT</SubSubTitle>
+        <CodeBox label="SQL transaction syntax">{`-- SQL transaction syntax:
 BEGIN;                     -- start transaction (also: START TRANSACTION)
   UPDATE accounts SET balance = balance - 5000 WHERE id = 'A001';
   UPDATE accounts SET balance = balance + 5000 WHERE id = 'B001';
@@ -757,11 +816,10 @@ BEGIN;
   -- If inventory update fails:
   ROLLBACK TO SAVEPOINT after_confirm;  -- undo only inventory update
   -- Order confirmation is preserved, inventory update is rolled back
+COMMIT;`}</CodeBox>
 
-  -- Continue with other work...
-COMMIT;
-
--- Python with psycopg2:
+        <SubSubTitle>The same pattern in Python with psycopg2</SubSubTitle>
+        <CodeBox label="Python transaction syntax">{`# Python with psycopg2:
 with psycopg2.connect(conn_string) as conn:
     with conn.cursor() as cur:
         try:
@@ -790,21 +848,22 @@ with psycopg2.connect(conn_string) as conn:
           covered in Module 09), and take a long time to roll back if they fail.
         </Para>
 
-        <CodeBox label="Transaction scope — too large vs correctly sized">{`TOO LARGE (one transaction for the entire batch):
+        <SubSubTitle>One transaction for a million rows — what it costs</SubSubTitle>
+        <CodeBox label="Transaction scope — too large">{`TOO LARGE (one transaction for the entire batch):
   BEGIN;
   INSERT INTO orders VALUES (row 1);
   INSERT INTO orders VALUES (row 2);
   ...
   INSERT INTO orders VALUES (row 1,000,000);  -- after 45 minutes...
-  COMMIT;
+  COMMIT;`}</CodeBox>
+        <Output>{`Problems:
+→ Holds row locks for 45 minutes
+→ If row 900,000 fails, ALL 900,000 previous rows are rolled back
+→ 45 minutes of WAL accumulation before any data is visible
+→ Other queries that need those rows are blocked for 45 minutes`}</Output>
 
-  Problems:
-  → Holds row locks for 45 minutes
-  → If row 900,000 fails, ALL 900,000 previous rows are rolled back
-  → 45 minutes of WAL accumulation before any data is visible
-  → Other queries that need those rows are blocked for 45 minutes
-
-CORRECTLY SIZED (one transaction per micro-batch):
+        <SubSubTitle>One transaction per micro-batch, with checkpoint tracking</SubSubTitle>
+        <CodeBox label="Transaction scope — correctly sized">{`CORRECTLY SIZED (one transaction per micro-batch):
   BATCH_SIZE = 10_000
 
   for batch in chunks(all_orders, BATCH_SIZE):
@@ -822,16 +881,22 @@ CORRECTLY SIZED (one transaction per micro-batch):
               # Retry only from the last checkpoint
               raise
 
-  Benefits:
-  → Each transaction holds locks for seconds, not hours
-  → On failure, only 10,000 rows need retrying (not 1,000,000)
-  → Committed data is visible progressively
-  → Checkpoint tracking enables resumable pipelines
-
 RULE: keep transactions as small as possible while still being
       atomic for the unit of work that must succeed or fail together.
       For pipelines: one transaction per batch, not one transaction
       for the entire pipeline run.`}</CodeBox>
+        <Output>{`Benefits:
+→ Each transaction holds locks for seconds, not hours
+→ On failure, only 10,000 rows need retrying (not 1,000,000)
+→ Committed data is visible progressively
+→ Checkpoint tracking enables resumable pipelines`}</Output>
+
+        <TryThis>
+          Find the batch size a pipeline you maintain actually uses per transaction.
+          If it's "the whole run" rather than a bounded chunk, estimate how long a
+          single transaction holds locks — and how much work a mid-run failure
+          would force you to redo.
+        </TryThis>
 
         <SubTitle>Autocommit — the hidden default that catches beginners</SubTitle>
 
@@ -846,7 +911,8 @@ RULE: keep transactions as small as possible while still being
           was wrong, and discovering there is nothing to roll back.
         </Para>
 
-        <CodeBox label="Autocommit — understanding the default and when to disable it">{`PSQL (PostgreSQL command line) — autocommit is ON by default:
+        <SubSubTitle>psql's autocommit default, and the safe pattern for destructive statements</SubSubTitle>
+        <CodeBox label="Autocommit in psql, and the safe practice for destructive operations">{`PSQL (PostgreSQL command line) — autocommit is ON by default:
   UPDATE orders SET status = 'cancelled';  -- Runs and commits immediately
   -- There is no ROLLBACK possible after this.
   -- If you meant to add a WHERE clause, the data is already modified.
@@ -858,18 +924,16 @@ RULE: keep transactions as small as possible while still being
   -- If count looks wrong:
   ROLLBACK;   -- undo safely
   -- If count looks right:
-  COMMIT;     -- make permanent
+  COMMIT;     -- make permanent`}</CodeBox>
 
-PYTHON / psycopg2 — autocommit is OFF by default:
+        <SubSubTitle>psycopg2 and SQLAlchemy default the opposite way — and the rule that covers both</SubSubTitle>
+        <CodeBox label="Autocommit in psycopg2 and SQLAlchemy, and the safest rule">{`PYTHON / psycopg2 — autocommit is OFF by default:
   conn = psycopg2.connect(...)
   cur = conn.cursor()
   cur.execute("UPDATE orders SET status = 'cancelled'")
   # NOT committed yet! Still in an implicit transaction.
   # conn.commit() must be called explicitly.
   # Without conn.commit(), changes are LOST when connection closes.
-
-  # This is why pipelines must call conn.commit() explicitly
-  # or use context managers that commit on clean exit.
 
 SQLALCHEMY — autocommit behaviour:
   session.execute(update_stmt)     # not committed
@@ -1043,7 +1107,8 @@ THE SAFEST RULE:
           data across its nodes. The practical implications:
         </Para>
 
-        <CodeBox label="BASE systems — what to expect when ingesting">{`CASSANDRA (AP / eventual consistency):
+        <SubSubTitle>Cassandra — duplicates, stale reads, and tombstones</SubSubTitle>
+        <CodeBox label="Cassandra — what to expect when ingesting">{`CASSANDRA (AP / eventual consistency):
 
   Problem 1 — Duplicate writes:
     At-least-once delivery semantics mean the same event can be
@@ -1065,13 +1130,50 @@ THE SAFEST RULE:
     The actual data is still present until compaction removes it.
     An extraction that happens between the tombstone write and compaction
     may see both the tombstone and the original data.
-    Solution: filter out tombstones. Check TTL columns and deletion flags.
+    Solution: filter out tombstones. Check TTL columns and deletion flags.`}</CodeBox>
 
-DYNAMODB (AP by default / CP with strongly consistent reads):
-    Default: eventually consistent reads (may be slightly stale)
-    Option:  strongly consistent reads (read from primary, 2× cost)
-    For DE pipelines: ALWAYS use strongly consistent reads (ConsistentRead=True)
-    to ensure you do not extract stale data.`}</CodeBox>
+        <SubSubTitle>DynamoDB — the strongly-consistent-read option</SubSubTitle>
+        <CodeBox label="DynamoDB — consistency options for extraction">{`DYNAMODB (AP by default / CP with strongly consistent reads):
+  Default: eventually consistent reads (may be slightly stale)
+  Option:  strongly consistent reads (read from primary, 2× cost)
+  For DE pipelines: ALWAYS use strongly consistent reads (ConsistentRead=True)
+  to ensure you do not extract stale data.`}</CodeBox>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About ACID and Transactions</SectionTitle>
+
+        {[
+          {
+            wrong: '"Snowflake and BigQuery are ACID compliant, so my data is automatically clean"',
+            right: 'Part 07\'s CompareTable and warning Callout are explicit that Atomicity, Isolation, and Durability are genuinely provided — but Consistency is only partial: constraints are defined in the DDL and never enforced at runtime. Interview Prep Q5 covers this exact misconception directly — dbt tests are what actually enforce consistency in a warehouse.',
+          },
+          {
+            wrong: '"Autocommit means every operation is automatically safe and reversible"',
+            right: 'Part 06\'s autocommit section says the opposite: autocommit means every statement commits immediately with nothing to roll back. The safe pattern — explicit BEGIN, verify, then COMMIT or ROLLBACK — exists precisely because autocommit gives you no undo by default.',
+          },
+          {
+            wrong: '"Wrapping the whole pipeline run in one big transaction is safer because it\'s \'more atomic\'"',
+            right: 'Part 06\'s transaction-scope section and Interview Prep Q3 both make the opposite case: a single transaction for a million rows holds locks for the entire duration and rolls back all prior work on any failure. Smaller, checkpointed batches are both safer to run and cheaper to retry — atomicity is about correctness per unit of work, not about maximizing transaction size.',
+          },
+          {
+            wrong: '"Eventual consistency just means the data shows up a little late, nothing else changes"',
+            right: 'Part 08 is explicit that BASE systems introduce more than staleness — at-least-once delivery produces genuine duplicate rows, and tombstone markers can leave both a deleted row and its tombstone visible during extraction. Deduplication and tombstone filtering are required steps, not staleness tolerance alone.',
+          },
+          {
+            wrong: '"REPEATABLE READ and SERIALIZABLE are basically interchangeable — pick whichever is convenient"',
+            right: 'Part 04\'s isolation-level table shows a real correctness gap: REPEATABLE READ still permits phantom reads under the SQL standard (PostgreSQL is a notable exception), while SERIALIZABLE prevents all four anomalies covered in this Part. The choice affects what anomalies your pipeline can actually see, not just its performance.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1247,6 +1349,45 @@ This is exactly what dbt tests are for. A unique test on order_id catches the du
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Running a bulk UPDATE or DELETE with autocommit still on, with no verification query before it commits',
+            a: 'Part 06\'s autocommit section is direct about the risk: psql commits every statement immediately, so there is nothing to roll back once a wrong WHERE clause has run. The safe pattern in that same section — BEGIN, run the change, verify with a SELECT, then COMMIT or ROLLBACK — exists specifically to catch this before it becomes permanent.',
+          },
+          {
+            q: 'Wrapping an entire pipeline\'s writes — a million rows — in a single transaction',
+            a: 'Part 06\'s transaction-scope section and Interview Prep Q3 both list the same five consequences: hours of held locks, all prior work lost on any failure, WAL accumulation, and delayed visibility to other queries. Batch into bounded transactions (10,000–100,000 rows) with checkpoint tracking instead.',
+          },
+          {
+            q: 'Opening a database transaction before making an external API call inside it',
+            a: 'This module\'s Error Library shows the direct consequence — idle_in_transaction_session_timeout killing a connection that sat open for 2 hours because the pipeline was waiting on an API response mid-transaction. Fetch external data before opening the transaction; keep only the actual database write inside BEGIN/COMMIT.',
+          },
+          {
+            q: 'Relying on ON CONFLICT DO UPDATE to prevent duplicates without an actual UNIQUE constraint on the conflict column',
+            a: 'This module\'s Error Library and Part 09\'s Real World scenario both trace a real financial discrepancy back to exactly this gap — ON CONFLICT has nothing to detect a conflict against without a UNIQUE constraint on settlement_id, so duplicate inserts succeeded silently. The constraint isn\'t optional; the upsert clause depends on it existing.',
+          },
+          {
+            q: 'Using TRUNCATE + INSERT to reload a table without wrapping both steps in one transaction',
+            a: 'This module\'s Error Library shows a table left empty after a pipeline truncated it and then failed before the INSERT completed. Part 02\'s atomicity principle applies directly here: TRUNCATE and the subsequent INSERT must be one atomic unit, or use an upsert pattern against the live table instead of truncate-and-reload.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1321,7 +1462,7 @@ This is exactly what dbt tests are for. A unique test on order_id catches the du
         'The most common ACID violation in production data pipelines is not a theoretical failure — it is missing explicit transaction boundaries on batch writes combined with missing UNIQUE constraints on business keys. These two omissions together turn a routine connection timeout into a financial data discrepancy.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
