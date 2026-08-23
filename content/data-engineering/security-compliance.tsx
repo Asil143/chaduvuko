@@ -191,7 +191,7 @@ export default function SecurityCompliancePage() {
       description="GDPR and the CCPA — what they mean for your pipelines and how to build systems that are compliant by design."
       section="Data Engineering — Module 39"
       readTime="50 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Last Verified ──────────────────────────────────────────────── */}
@@ -209,7 +209,7 @@ export default function SecurityCompliancePage() {
         marginBottom: 36,
       }}>
         <span style={{ fontSize: 9, opacity: 0.9 }}>✦</span>
-        Last verified March 2026 — GDPR (2018), CCPA/CPRA (2023)
+        Last verified August 2026 — GDPR (2018), CCPA/CPRA (2023)
       </div>
 
       {/* ── Why This Matters ───────────────────────────────────────────── */}
@@ -357,9 +357,9 @@ def decrypt_field(encrypted_value: str) -> str:
     """Decrypt a field when it needs to be read."""
     if encrypted_value is None:
         return None
-    return fernet.decrypt(encrypted_value.encode()).decode()
+    return fernet.decrypt(encrypted_value.encode()).decode()`} />
 
-# In your pipeline:
+      <CodeBlock lang="python" code={`# In your pipeline:
 row = {
     'user_id': 'U1234',
     'name': 'Jordan Lee',             # Not sensitive — store as is
@@ -485,7 +485,7 @@ ALTER TABLE customers
   SET MASKING POLICY email_mask;
 
 -- Analyst sees: jo****@****.com
--- Engineer sees: jordan@freshmart.com`} />
+-- Engineer sees: jordan@freshcart.com`} />
       </Card>
 
       {/* ── 4. Access control ──────────────────────────────────────────── */}
@@ -852,7 +852,7 @@ def get_secret(secret_name: str, region: str = 'us-east-1') -> dict:
     return json.loads(response['SecretString'])
 
 # In your pipeline
-db_secret = get_secret('freshmart/prod/postgres')
+db_secret = get_secret('freshcart/prod/postgres')
 connection_string = (
     f"postgresql://{db_secret['username']}:{db_secret['password']}"
     f"@{db_secret['host']}:{db_secret['port']}/{db_secret['dbname']}"
@@ -861,75 +861,214 @@ connection_string = (
 # Azure equivalent: use DefaultAzureCredential + Key Vault
 # from azure.keyvault.secrets import SecretClient
 # from azure.identity import DefaultAzureCredential
-# client = SecretClient(vault_url="https://kv-freshmart.vault.azure.net/", credential=DefaultAzureCredential())
+# client = SecretClient(vault_url="https://kv-freshcart.vault.azure.net/", credential=DefaultAzureCredential())
 # secret = client.get_secret("postgres-password").value`} />
 
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section data-toc-kind="myth">
+        <SectionTag>// Misconceptions</SectionTag>
+        <H2>Five Misconceptions About Security and Compliance</H2>
+
+        {[
+          {
+            wrong: '"Encryption at rest, which cloud providers enable by default, means our data is protected"',
+            right: 'Section 2 is explicit that default encryption at rest only protects you if the physical storage is stolen — it does nothing against a legitimate database user running SELECT email, phone FROM users. That gap is exactly why column-level encryption exists for genuinely sensitive fields.',
+          },
+          {
+            wrong: '"GDPR only applies to companies based in Europe"',
+            right: 'Section 5 states this directly: GDPR applies to any company that processes personal data of EU residents, including US companies with EU customers — location of the company is irrelevant, whose data you process is what matters.',
+          },
+          {
+            wrong: '"Deleting a user\'s rows from the database satisfies a GDPR or CCPA deletion request"',
+            right: 'Section 5\'s Right to Erasure row and the crypto-erasure section both make clear that deletion must reach every layer — raw, silver, gold — and every backup, not just the queryable warehouse tables. Section 5\'s crypto-erasure pattern exists specifically because a data lake\'s immutable, versioned storage makes true deletion much harder than a single DELETE statement.',
+          },
+          {
+            wrong: '"If GDPR and CCPA seem similar, building for one automatically covers the other"',
+            right: 'Section 6\'s GDPR-vs-CCPA comparison table shows real differences — different erasure deadlines (30 days vs 45, extendable to 90), different legal bases, different fine structures. The Callout closing that section is precise: building for GDPR-level rigor covers most CCPA requirements, but "most" is not "all," and the specific thresholds and terminology still need separate verification.',
+          },
+          {
+            wrong: '"Audit logging is a nice-to-have that can be added once the pipeline is stable"',
+            right: 'Section 8 frames audit logs as your proof of compliance and your first tool in a breach investigation — not an optional addition. Section 5\'s Data Breach Notification requirement (72-hour regulator notice under GDPR) is structurally impossible to meet without logs that already exist before the breach happens.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, padding: '20px 24px', marginBottom: 16,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#ff4757', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
       {/* ── 10. What this looks like at work ───────────────────────────── */}
-      <H2>10. What This Looks Like at Work</H2>
+      <section data-toc-kind="story">
+        <H2>10. What This Looks Like at Work</H2>
 
-      <Card title="Day 1 at a fintech (Stripe / Venmo / Brex)" accent="#00e676">
-        <Para>
-          Your first task might be: "We have a new CCPA compliance requirement — audit the
-          raw layer and flag every column that contains personal data." You open the data
-          catalogue, run a query across column names and sample values, and produce a
-          spreadsheet with every PII field, its table, and its current protection status.
-          That's a real day-one task, and it requires knowing what PII is.
-        </Para>
-      </Card>
+        <Card title="Day 1 at a fintech (Stripe / Venmo / Brex)" accent="#00e676">
+          <Para>
+            Your first task might be: "We have a new CCPA compliance requirement — audit the
+            raw layer and flag every column that contains personal data." You open the data
+            catalogue, run a query across column names and sample values, and produce a
+            spreadsheet with every PII field, its table, and its current protection status.
+            That's a real day-one task, and it requires knowing what PII is.
+          </Para>
+        </Card>
 
-      <Card title="At a healthcare company (Oscar Health / Teladoc)" accent="#0078d4">
-        <Para>
-          Health data is "sensitive personal information" under CCPA and protected health
-          information under HIPAA. Your pipeline that ingests patient records into the data
-          warehouse must use customer-managed encryption keys, full audit logging on every
-          SELECT, and row-level security so only the assigned doctor's team can see their
-          patients' records. A senior engineer will review your pipeline and specifically
-          check these controls before approving.
-        </Para>
-      </Card>
+        <Card title="At a healthcare company (Oscar Health / Teladoc)" accent="#0078d4">
+          <Para>
+            Health data is "sensitive personal information" under CCPA and protected health
+            information under HIPAA. Your pipeline that ingests patient records into the data
+            warehouse must use customer-managed encryption keys, full audit logging on every
+            SELECT, and row-level security so only the assigned doctor's team can see their
+            patients' records. A senior engineer will review your pipeline and specifically
+            check these controls before approving.
+          </Para>
+        </Card>
 
-      <Card title="In an interview" accent="#7b61ff">
-        <Para>
-          "How would you handle a GDPR deletion request in your current architecture?"
-          is a common senior DE interview question. The right answer covers: locating all
-          records for the user_id across all layers, the deletion mechanism (hard delete
-          vs crypto-erasure for the lake), updating aggregates if the user contributed to
-          pre-computed tables, and logging the deletion with a timestamp and actor.
-        </Para>
-      </Card>
+        <Card title="In an interview" accent="#7b61ff">
+          <Para>
+            "How would you handle a GDPR deletion request in your current architecture?"
+            is a common senior DE interview question. The right answer covers: locating all
+            records for the user_id across all layers, the deletion mechanism (hard delete
+            vs crypto-erasure for the lake), updating aggregates if the user contributed to
+            pre-computed tables, and logging the deletion with a timestamp and actor.
+          </Para>
+        </Card>
+      </section>
+
+      {/* ── Interview Prep ───────────────────────────────────────────── */}
+      <section data-toc-kind="prep">
+        <SectionTag>// Interview Prep</SectionTag>
+        <H2>5 Interview Questions — With Complete Answers</H2>
+
+        {[
+          {
+            q: 'Q1. Walk through how you would handle a GDPR right-to-erasure request in a pipeline that spans raw, silver, and gold layers plus backups.',
+            a: `I'd start by identifying every location that could hold this user's data: the data catalogue (Section 3) should already tag every table containing PII, so that's my starting checklist rather than a manual search. For each layer, the deletion mechanism differs — a warehouse table supports a straightforward DELETE, but the raw layer in an immutable data lake (S3/ADLS with versioning) is much harder to truly delete from.
+
+For the lake, I'd use crypto-erasure (Section 5): if the user's PII was encrypted with a per-user key at ingestion, deletion becomes deleting that key from the key management service rather than rewriting files. Every encrypted record for that user becomes permanently unreadable without touching a single file.
+
+I'd also check whether the user contributed to any pre-computed aggregates — a daily revenue rollup that included their transactions needs to be recomputed, not just have their row deleted, or the aggregate becomes silently wrong. Finally, I'd log the entire deletion action to the audit trail (Section 8) with a timestamp and actor, since "prove you deleted it" is itself a compliance requirement.`,
+          },
+          {
+            q: 'Q2. Why is TLS (encryption in transit) not sufficient on its own to protect sensitive data?',
+            a: `TLS protects data only while it's moving across a network — from a producer to a Kafka broker, from an API client to S3, from an application to a database. Section 2's Callout is direct about this: once data lands in storage, transit encryption does nothing for it anymore.
+
+Two separate problems need two separate solutions. Encryption at rest protects data if the physical storage medium is compromised — someone gets unauthorized access to the disk or the storage account. But even encryption at rest doesn't stop a legitimate, authenticated database user from running a plain SELECT on sensitive columns — that's what column-level encryption is for, encrypting specific fields so only systems holding the decryption key can read the real value.
+
+In a mature architecture, all three layers exist together: TLS for data in motion, storage-level encryption at rest as a baseline, and column-level encryption on the specific fields (SSNs, payment data) where even authenticated access should be restricted.`,
+          },
+          {
+            q: 'Q3. What is the difference between RBAC and ABAC, and when would you reach for each?',
+            a: `RBAC (Role-Based Access Control) assigns permissions to roles — Data Engineer, Analyst, Pipeline Service Account — and users inherit permissions by being assigned to a role, per Section 4. It's simple to reason about and works well when access patterns are stable: an analyst either can or can't see a given table, full stop.
+
+ABAC (Attribute-Based Access Control) is more fine-grained — access decisions incorporate attributes of the user, the data, and the context. Section 4's example is a regional restriction: an analyst can read customer data only when the customer's region matches the analyst's assigned region. RBAC alone can't express that condition without creating a separate role per region, which doesn't scale.
+
+I'd default to RBAC for most of a data platform's access model since it's easier to audit and reason about, and reach for ABAC specifically where row-level or column-level conditions depend on data attributes rather than just the user's job function — regional data residency requirements are the most common real case I'd expect to hit.`,
+          },
+          {
+            q: 'Q4. A regulator asks you to prove a specific user\'s data was deleted within the required window. What evidence do you actually need?',
+            a: `This is exactly the scenario Section 1 names as one of the three concrete threats a data engineer has to think about, and it's a good test of whether "we deleted it" is a real claim or just an assumption.
+
+I need an audit log entry (Section 8) recording the deletion action itself — timestamp, actor, what was deleted or what key was scheduled for deletion, and why (the specific erasure request). For crypto-erasure specifically, I need the KMS key deletion event with its own timestamp, since that's the actual moment the data became unreadable, not the moment someone clicked a button in an internal tool.
+
+I also need to show the deletion actually reached every layer — not just the warehouse table, but raw storage and any aggregates the user's data contributed to. Without a data catalogue mapping which tables contain this user's data (Section 3), I can't even enumerate what needed deleting in the first place, let alone prove I covered all of it. The proof isn't the deletion — it's the audit trail around the deletion.`,
+          },
+          {
+            q: 'Q5. Why is crypto-erasure the standard approach for GDPR deletion in a data lake instead of just rewriting the files?',
+            a: `Rewriting files in an object store to remove one user's records sounds simple but usually isn't, at scale. Data lake files (Parquet, often in Delta Lake or Iceberg tables) are frequently large and partitioned by something like date, not by user — a single user's records could be scattered across thousands of files. Rewriting all of them to physically remove specific rows is expensive, slow, and risky to get exactly right, especially with versioned storage where "deleted" versions may still be recoverable.
+
+Section 5's crypto-erasure pattern sidesteps this entirely: encrypt each user's PII with a unique, per-user key at write time, and store that key in a key management service. "Deleting" the user becomes deleting their key — a single, fast, auditable operation. Every record encrypted with that key becomes permanently unreadable without touching a single file in the lake.
+
+The trade-off is architectural commitment upfront — you need per-user encryption designed into the pipeline from the start, not bolted on later, which is the same "compliance by design beats compliance retrofitted" principle Section 7 makes as its central point.`,
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>
+              {item.q}
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
+              {item.a}
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section data-toc-kind="plain">
+        <SectionTag>// Common Mistakes</SectionTag>
+        <H2>Mistakes Beginners Make Constantly</H2>
+
+        {[
+          {
+            q: 'Assuming default cloud encryption at rest means sensitive fields don\'t need column-level encryption',
+            a: 'Section 2 and this module\'s Misconceptions section both cover this — encryption at rest protects against physical storage theft, not against a legitimate but overly broad SELECT query. SSNs, payment data, and similar fields need column-level encryption on top of the default, not instead of thinking about it further.',
+          },
+          {
+            q: 'Treating "the data was deleted from the warehouse table" as equivalent to a completed GDPR erasure request',
+            a: 'Section 5\'s Right to Erasure row and Interview Prep Q1 both make the same point: a real erasure has to reach raw, silver, gold, and backups — and any aggregate the user contributed to needs recomputing, not just their source row deleted.',
+          },
+          {
+            q: 'Hardcoding a credential "just for now" during development with a plan to move it to a secrets manager later',
+            a: 'Section 9 is explicit that a secret committed to Git is a secret that was leaked, even after the commit is deleted — it may already be in a fork or an automated scan. There is no safe "temporary" hardcoded credential; use environment variables or a secrets manager from the first commit.',
+          },
+          {
+            q: 'Building a pipeline that touches personal data first, and only thinking about compliance requirements once it\'s in production',
+            a: 'Section 7\'s entire framing — and its closing Key Takeaway — is that compliance retrofitted after the fact is roughly 10× harder than compliance designed in from the start. The "Before you build" checklist exists specifically to front-load these questions.',
+          },
+          {
+            q: 'Assuming GDPR-level compliance automatically satisfies CCPA, or vice versa, without checking the specific differences',
+            a: 'Section 6\'s comparison table and this module\'s Misconceptions section both show real gaps — different deadlines, different legal bases, different fine structures. Section 6\'s own Callout is careful to say GDPR-level rigor covers "most" CCPA requirements, not all of them.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
 
       {/* ── Errors you'll hit ──────────────────────────────────────────── */}
-      <H2>Errors You'll Hit</H2>
+      <section data-toc-kind="plain">
+        <H2>Errors You'll Hit</H2>
 
-      <ErrorBlock
-        error="SSL connection has been closed unexpectedly / SSL SYSCALL error"
-        cause="The database requires an SSL connection (sslmode=require) but the client tried to connect without SSL, or the certificate validation failed."
-        fix="Add ?sslmode=require to the connection string. If using a self-signed certificate, provide the CA cert path with sslrootcert=/path/to/ca.pem. Never set sslmode=disable in production."
-      />
+        <ErrorBlock
+          error="SSL connection has been closed unexpectedly / SSL SYSCALL error"
+          cause="The database requires an SSL connection (sslmode=require) but the client tried to connect without SSL, or the certificate validation failed."
+          fix="Add ?sslmode=require to the connection string. If using a self-signed certificate, provide the CA cert path with sslrootcert=/path/to/ca.pem. Never set sslmode=disable in production."
+        />
 
-      <ErrorBlock
-        error="botocore.exceptions.ClientError: An error occurred (AccessDeniedException) when calling the GetSecretValue operation"
-        cause="Your pipeline's IAM role does not have secretsmanager:GetSecretValue permission for this secret. Or the resource policy on the secret excludes your role."
-        fix="Attach a policy granting secretsmanager:GetSecretValue on the specific secret ARN to your pipeline's execution role. Check both the role policy and the secret's resource-based policy."
-      />
+        <ErrorBlock
+          error="botocore.exceptions.ClientError: An error occurred (AccessDeniedException) when calling the GetSecretValue operation"
+          cause="Your pipeline's IAM role does not have secretsmanager:GetSecretValue permission for this secret. Or the resource policy on the secret excludes your role."
+          fix="Attach a policy granting secretsmanager:GetSecretValue on the specific secret ARN to your pipeline's execution role. Check both the role policy and the secret's resource-based policy."
+        />
 
-      <ErrorBlock
-        error="cryptography.fernet.InvalidToken"
-        cause="Trying to decrypt data with a different key than the one used to encrypt it. Commonly happens after key rotation if old encrypted data is not re-encrypted before switching keys."
-        fix="During key rotation, decrypt all existing data with the old key and re-encrypt with the new key before retiring the old key. Keep old key active until migration is complete."
-      />
+        <ErrorBlock
+          error="cryptography.fernet.InvalidToken"
+          cause="Trying to decrypt data with a different key than the one used to encrypt it. Commonly happens after key rotation if old encrypted data is not re-encrypted before switching keys."
+          fix="During key rotation, decrypt all existing data with the old key and re-encrypt with the new key before retiring the old key. Keep old key active until migration is complete."
+        />
 
-      <ErrorBlock
-        error="OperationalError: SSL error: certificate verify failed"
-        cause="The SSL certificate presented by the server does not match the CA certificate your client is using to verify it. Common when moving between environments (dev uses self-signed, prod uses a proper CA)."
-        fix="Provide the correct CA certificate bundle. In cloud databases (RDS, Cloud SQL), download the CA cert from the cloud provider's documentation page and reference it in the connection config."
-      />
+        <ErrorBlock
+          error="OperationalError: SSL error: certificate verify failed"
+          cause="The SSL certificate presented by the server does not match the CA certificate your client is using to verify it. Common when moving between environments (dev uses self-signed, prod uses a proper CA)."
+          fix="Provide the correct CA certificate bundle. In cloud databases (RDS, Cloud SQL), download the CA cert from the cloud provider's documentation page and reference it in the connection config."
+        />
 
-      <ErrorBlock
-        error="Policy evaluation denied access — explicit deny in a bucket policy (S3)"
-        cause="A bucket policy contains a Deny statement for aws:SecureTransport = false (HTTP requests). Your pipeline or tool is sending an HTTP request to the bucket instead of HTTPS."
-        fix="Ensure your S3 client is configured to use HTTPS (the default in modern SDKs). If using a third-party tool, check for an http:// prefix in the bucket endpoint configuration."
-      />
+        <ErrorBlock
+          error="Policy evaluation denied access — explicit deny in a bucket policy (S3)"
+          cause="A bucket policy contains a Deny statement for aws:SecureTransport = false (HTTP requests). Your pipeline or tool is sending an HTTP request to the bucket instead of HTTPS."
+          fix="Ensure your S3 client is configured to use HTTPS (the default in modern SDKs). If using a third-party tool, check for an http:// prefix in the bucket endpoint configuration."
+        />
+      </section>
 
       {/* ── Key takeaways ──────────────────────────────────────────────── */}
       <KeyTakeaways items={[
