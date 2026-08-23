@@ -17,7 +17,6 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/foundations/python',       title: 'Python for Data Engineers',     section: 'Foundations', difficulty: 'Intermediate', color: '#00c2ff', readTime: '20 min', xp: 150 },
 
   // Data Engineering Track
-  { href: '/learn/data-engineering',                             title: 'Data Engineering Overview',         section: 'Data Engineering', difficulty: 'Beginner',     color: '#00c2ff', readTime: '10 min', xp: 100 },
   { href: '/learn/data-engineering/what-is-data-engineering',   title: 'What is Data Engineering?',         section: 'Data Engineering', difficulty: 'Beginner',     color: '#00c2ff', readTime: '10 min', xp: 100 },
   { href: '/learn/data-engineering/what-is-data',               title: 'What is Data?',                     section: 'Data Engineering', difficulty: 'Beginner',     color: '#00c2ff', readTime: '10 min', xp: 100 },
   { href: '/learn/data-engineering/de-vs-other-roles',          title: 'DE vs Other Roles',                 section: 'Data Engineering', difficulty: 'Beginner',     color: '#00c2ff', readTime: '10 min', xp: 100 },
@@ -152,10 +151,8 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/industry',  title: 'Top Companies Hiring', section: 'Industry',  difficulty: 'Beginner',     color: '#f5c542', readTime: '10 min', xp: 100 },
 
   // SQL Track
-  { href: '/learn/sql', title: 'SQL — Zero to Advanced', section: 'SQL', difficulty: 'Beginner', color: '#06b6d4', readTime: 'Self-paced', xp: 0 },
 
   // Python Track
-  { href: '/learn/python',                          title: 'Python — Foundations to Advanced',            section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: 'Self-paced', xp: 0 },
   { href: '/learn/python/what-is-python-setup',      title: 'What is Python? Setup & Your First Program',  section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: '55 min', xp: 150 },
   { href: '/learn/python/variables-data-types',      title: 'Variables, Data Types & Type Conversion',     section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: '60 min', xp: 150 },
   { href: '/learn/python/operators',                 title: 'Operators — Arithmetic, Comparison, Logical', section: 'Python', difficulty: 'Beginner', color: '#00e676', readTime: '50 min', xp: 150 },
@@ -204,7 +201,6 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/python/python-interview-prep',      title: 'Python Interview Prep — Common Questions and Patterns', section: 'Python', difficulty: 'Advanced', color: '#ff4757', readTime: '60 min', xp: 250 },
 
   // HTML & CSS Track
-  { href: '/learn/html-css',                                title: 'HTML & CSS — Foundations to Advanced',              section: 'HTML & CSS', difficulty: 'Beginner', color: '#00e676', readTime: 'Self-paced', xp: 0 },
   { href: '/learn/html-css/what-is-html-how-the-web-works',  title: 'What is HTML? How the Web Actually Works',          section: 'HTML & CSS', difficulty: 'Beginner', color: '#00e676', readTime: '40 min', xp: 150 },
   { href: '/learn/html-css/document-structure',               title: 'Document Structure — DOCTYPE, html, head, body',    section: 'HTML & CSS', difficulty: 'Beginner', color: '#00e676', readTime: '30 min', xp: 100 },
   { href: '/learn/html-css/text-semantic-structure',           title: 'Text Elements & Semantic Structure',                section: 'HTML & CSS', difficulty: 'Beginner', color: '#00e676', readTime: '40 min', xp: 150 },
@@ -249,7 +245,6 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/html-css/html-css-interview-prep',            title: 'HTML & CSS Interview Prep — Common Questions and Patterns', section: 'HTML & CSS', difficulty: 'Advanced', color: '#ff4757', readTime: '55 min', xp: 250 },
 
   // AI & ML
-  { href: '/learn/ai-ml',                   title: 'AI & ML — Zero to Production',            section: 'AI & ML', difficulty: 'Beginner',  color: '#4285f4', readTime: 'Self-paced', xp: 0 },
   { href: '/learn/ai-ml/ml-interview-prep', title: 'ML Interview Prep — 50 Complete Answers', section: 'AI & ML', difficulty: 'Advanced',  color: '#4285f4', readTime: '90 min',     xp: 300 },
 ]
 
