@@ -38,6 +38,10 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
@@ -59,6 +63,45 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
     }}>
       <code>{children}</code>
     </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -131,7 +174,7 @@ export default function StreamingDataModule() {
       description="Event-driven architecture, producers, consumers, offsets, partitions, consumer groups, delivery semantics, time, and ordering — the complete conceptual foundation before you touch Kafka or Flink."
       section="Data Engineering — Module 40"
       readTime="55 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Real Distinction ───────────────────────────── */}
@@ -420,8 +463,8 @@ export default function StreamingDataModule() {
         <Para>
           Topic naming matters in production. The standard convention is
           <code>domain.entity.action</code> or simply <code>domain-entity</code>
-          for general topics — for example: <code>freshmart.orders</code>,
-          <code>freshmart.payments</code>, <code>freshmart.inventory</code>.
+          for general topics — for example: <code>freshcart.orders</code>,
+          <code>freshcart.payments</code>, <code>freshcart.inventory</code>.
           Bad topic names like <code>data</code>, <code>events</code>, or
           <code>test123</code> create operational nightmares when you have
           400 topics and can't find anything.
@@ -491,6 +534,14 @@ export default function StreamingDataModule() {
 # → Completely destroys ordering — use only for events with no ordering requirement
 #    (example: server metrics, logs where per-server ordering doesn't matter)`}
         </CodeBox>
+
+        <TryThis>
+          Look at a topic or queue you have access to (or the FreshCart examples
+          in this Part) and identify its partition key. Estimate, even roughly,
+          whether that key's real-world value distribution is even or skewed —
+          the same question that separates a good partition key choice from a
+          hot-partition incident waiting to happen.
+        </TryThis>
 
         <SubTitle>Producers — the contract with the broker</SubTitle>
 
@@ -599,7 +650,7 @@ export default function StreamingDataModule() {
           has been sitting in the partition the whole time, waiting.
         </Para>
 
-        <CodeBox label="offset lifecycle — what actually happens">
+        <CodeBox label="offset lifecycle — the crash-and-resume scenario">
 {`# The offset lifecycle for one consumer reading partition 0:
 
 # Broker partition 0 state:
@@ -620,9 +671,10 @@ export default function StreamingDataModule() {
 # Consumer restarts.
 # Consumer asks broker: "What is my committed offset?"
 # Broker says: 442
-# Consumer resumes reading from offset 442 — no data lost, no data skipped
-
-# ─── Three offsets to know ───────────────────────────────────────────────────
+# Consumer resumes reading from offset 442 — no data lost, no data skipped`}
+        </CodeBox>
+        <CodeBox label="offset lifecycle — the three offsets and how lag is calculated">
+{`# ─── Three offsets to know ───────────────────────────────────────────────────
 
 # LOG-END OFFSET — the offset of the NEXT event that will be written
 # (the last written event is log-end-offset minus 1)
@@ -695,7 +747,7 @@ export default function StreamingDataModule() {
         <HighlightBox>
           <Para>
             <strong>Example — FreshCart order processing group:</strong><br />
-            Topic: <code>freshmart.orders</code> — 12 partitions<br />
+            Topic: <code>freshcart.orders</code> — 12 partitions<br />
             Consumer group: <code>order-processor</code> — 4 consumer instances
           </Para>
           <Para>
@@ -721,8 +773,8 @@ export default function StreamingDataModule() {
 # (increasing partition count on a live topic breaks ordering for hashed keys)
 
 # Rule 2: different groups = completely independent reads
-# Group "order-processor" reads freshmart.orders for processing
-# Group "order-analytics" ALSO reads freshmart.orders for analytics
+# Group "order-processor" reads freshcart.orders for processing
+# Group "order-analytics" ALSO reads freshcart.orders for analytics
 # They have completely separate committed offsets
 # Neither group affects the other — they are invisible to each other
 
@@ -873,6 +925,14 @@ def process_order(event):
             pipelines where Kafka's transactional API can handle it natively.
           </Para>
         </HighlightBox>
+
+        <TryThis>
+          Find a consumer function in a codebase you have access to and ask:
+          if this ran twice on the same event (same event_id, same payload),
+          would the result be identical to running it once? If you're not sure,
+          that's the exact gap the two idempotent-processing patterns above
+          are meant to close.
+        </TryThis>
       </section>
 
       <Divider />
@@ -1052,6 +1112,15 @@ event = {
 # → fails during rebalancing — different partitions resume at different speeds
 # → fails when events arrive from multiple geographic producers`}
         </CodeBox>
+
+        <TryThis>
+          Take an entity you'd stream events about (an order, a user session,
+          a shipment) and decide what its partition key should be, using
+          Pattern 1 above. Then name one other event type for the same entity
+          that must land in the same partition to preserve relative ordering —
+          this is the exercise that catches "order.placed and order.cancelled
+          ended up on different partitions" bugs before they ship.
+        </TryThis>
       </section>
 
       <Divider />
@@ -1170,8 +1239,44 @@ event = {
 
       <Divider />
 
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Streaming</SectionTitle>
+
+        {[
+          {
+            wrong: '"Streaming is just batch processing run more frequently — every second instead of every hour"',
+            right: 'Part 01 opens with exactly this misconception and refutes it directly: batch has a bounded dataset with a start and end, streaming has an unbounded dataset that never ends. This is a difference in data model and processing model, not just frequency.',
+          },
+          {
+            wrong: '"If events are processed in order within a partition, my whole pipeline processes events in order"',
+            right: 'Part 09 is explicit that ordering is guaranteed only within a partition — across partitions, and certainly across the whole topic, there is no ordering guarantee at all. Global ordering at real throughput is described as fundamentally impossible, not just difficult.',
+          },
+          {
+            wrong: '"Exactly-once delivery means the broker guarantees each event is delivered exactly one time"',
+            right: 'Part 07 is precise that true exactly-once requires distributed transaction coordination across every system involved, which is expensive and rarely done outside Kafka-to-Kafka pipelines. What most production systems actually run is at-least-once delivery with idempotent consumers — functionally equivalent, architecturally very different.',
+          },
+          {
+            wrong: '"A consumer reading a message removes it from the stream, same as a queue"',
+            right: 'This module\'s core definition (Part 01) is that a stream is append-only and non-destructive to read — Part 04\'s consumer section reinforces that multiple completely independent consumers can read the same events at their own pace, none affecting the others, which is impossible with a destructive-read queue.',
+          },
+          {
+            wrong: '"Sorting events by their timestamp gives you the correct real-world order they happened in"',
+            right: 'Part 08\'s three-clocks framework shows event time, ingestion time, and processing time are all different, and late-arriving data (a mobile app reconnecting after being offline) can make wall-clock sorting misleading even when using event_time — which is exactly why watermarks exist.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red,#ff4757)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Part 11 — What This Looks Like at Work ───────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 11 — What This Looks Like at Work" />
         <SectionTitle>What This Looks Like on Day One</SectionTitle>
 
@@ -1221,6 +1326,169 @@ event = {
             is in this module.
           </Para>
         </HighlightBox>
+      </section>
+
+      <Divider />
+
+      {/* ── Interview Prep ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
+        <SectionTag text="// Interview Prep" />
+        <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
+
+        {[
+          {
+            q: 'Q1. Explain the difference between batch and streaming processing beyond just "how often it runs."',
+            a: `Batch processes a bounded dataset — it has a defined start and end, you read all of it, process it, write results, and the job is done. Streaming processes an unbounded dataset — events keep arriving indefinitely, and the system must produce results continuously, not after "all the data" has arrived, because it never fully arrives, per Part 01.
+
+This difference cascades into everything else. State management differs: batch jobs are typically stateless, each run independent; streaming jobs are stateful, tracking what happened across the ongoing sequence of events. Failure recovery differs: a batch job re-runs from the last checkpoint over a known bounded input; a streaming job resumes from the last committed offset and keeps going, with no defined "end" to re-run to.
+
+The data model differs too — batch typically works with tables (point-in-time snapshots), while streaming works with events (immutable facts that something happened). Someone who says "streaming is just batch running every second" hasn't internalized that the entire processing model — not just the frequency — is different.`,
+          },
+          {
+            q: 'Q2. What is a partition key, and how would you choose one for a new topic?',
+            a: `A partition key is the field the broker hashes to decide which partition an event lands in — hash(partition_key) mod number_of_partitions, per Part 04. Events with the same partition key always land in the same partition, which is what gives you ordering guarantees for related events.
+
+The choice matters for two reasons: ordering and load distribution. For ordering — if you need all events for one entity (a customer, an order) to be processed in the sequence they happened, that entity's ID must be the partition key, since ordering is only guaranteed within a partition, not across partitions.
+
+For load distribution — the key needs high cardinality and even real-world distribution, or you get a hot partition. A key like customer_id (millions of distinct values) usually distributes well. A key like payment_method (a handful of values, one of which — card — dominates in most markets) creates a hot partition that receives a disproportionate share of traffic no matter how many total partitions exist. I'd check both the ordering requirement and the actual distribution of candidate keys before choosing.`,
+          },
+          {
+            q: 'Q3. What is consumer lag, and what does a growing lag actually tell you?',
+            a: `Consumer lag is log-end-offset minus committed offset, per Part 05 — the gap between the most recently written event in a partition and the last event the consumer has confirmed processing. Lag of zero means the consumer is fully caught up.
+
+A lag that is growing over time — not a one-off spike — means the consumer is structurally slower than the producer and will keep falling further behind unless something changes. It's the single most important operational metric for a streaming consumer because it's a leading indicator: a consumer with growing lag hasn't failed yet, but it will eventually breach whatever downstream SLA depends on freshness, and if it falls behind by more than the topic's retention period, the oldest lagged events get deleted before the consumer ever processes them — permanent, not just delayed, data loss.
+
+Diagnosing growing lag means checking whether the consumer group has fewer instances than partitions (a parallelism ceiling), whether per-event processing time increased, or whether one specific partition is unevenly loaded due to a skewed partition key — the same partition-key distribution question from Q2.`,
+          },
+          {
+            q: 'Q4. Explain at-most-once, at-least-once, and exactly-once delivery, and which one you\'d use for a payments pipeline.',
+            a: `At-most-once commits the offset before processing — if the consumer crashes between commit and finishing the work, that event is silently skipped. Events are processed zero or one times: never duplicated, but sometimes dropped. At-least-once commits the offset after processing — if the consumer crashes after processing but before committing, it reprocesses that event on restart. Events are never dropped, but may be processed more than once, which is why at-least-once requires idempotent processing logic.
+
+Exactly-once means every event affects the output exactly once regardless of crashes or retries. True exactly-once requires the consumer, the processing, and the output write to be coordinated in a single atomic transaction — Kafka supports this natively for Kafka-to-Kafka pipelines, but coordinating it across a database, a cache, and a file store simultaneously requires a distributed transaction, which is expensive and rarely worth it, per Part 07.
+
+For a payments pipeline, I would never use at-most-once — silently dropping a payment event is unacceptable. I'd use at-least-once delivery with a strictly idempotent consumer (an upsert keyed on a unique event_id or payment_id, so reprocessing the same event is a safe no-op). That gets exactly-once behavior in practice without the cost of a true distributed transaction, and it's the standard approach for financial event pipelines.`,
+          },
+          {
+            q: 'Q5. What is a watermark, and why can\'t a streaming system just wait until it\'s "sure" it has all the data for a time window before closing it?',
+            a: `A watermark is a declaration that the system believes all events with event time before some point T have arrived, so it's safe to close any window ending before T, per Part 08. Critically, a watermark is an estimate, not a guarantee — events can still arrive after it, and the system has already decided to treat the window as closed.
+
+The reason a system can't simply wait until it's "sure" is that there's no way to be certain — a mobile app can be offline for an unbounded amount of time and then send an event with an old event_time once it reconnects. Waiting indefinitely for perfect completeness means never producing a result at all, which defeats the purpose of a low-latency streaming system.
+
+So the watermark encodes a deliberate business trade-off: the allowed lateness setting (for example, "5 minutes") determines how long the system waits before closing a window and how many genuinely late events get dropped instead of included. Longer allowed lateness means more complete, more accurate results but higher output latency; shorter allowed lateness means faster results but more late data silently excluded. There is no setting that eliminates the trade-off — only where you place it.`,
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>
+              {item.q}
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
+              {item.a}
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Treating streaming as "batch but faster" and carrying batch assumptions (bounded data, stateless runs) into a streaming design',
+            a: 'Part 01 and this module\'s Misconceptions section both open with this exact error. A pipeline designed assuming the dataset eventually "ends" will handle state, checkpointing, and failure recovery incorrectly — those all depend on the dataset being genuinely unbounded.',
+          },
+          {
+            q: 'Choosing a partition key by convenience (whatever field is handy) instead of checking cardinality and distribution',
+            a: 'Part 04\'s partition key section and this module\'s first TryThis both point at the same failure mode — a low-cardinality or skewed key creates a hot partition that no amount of adding partitions can fix, since the hot key still hashes to one partition either way.',
+          },
+          {
+            q: 'Writing consumer logic that assumes at-most-once delivery ("this will only run once per event") in a system actually configured for at-least-once',
+            a: 'Part 07 is explicit that at-least-once is the default in almost every streaming system, and non-idempotent processing under at-least-once delivery causes double-counting or duplicate side effects the moment a consumer retries after a crash — which will eventually happen.',
+          },
+          {
+            q: 'Aggregating business metrics (revenue, order counts) on processing time instead of event time',
+            a: 'Part 08\'s Callout is explicit that this is one of the most common and least obvious bugs in streaming analytics — a report should reflect when something happened in the real world, not when your pipeline happened to get around to processing it, especially near day/window boundaries.',
+          },
+          {
+            q: 'Assuming events read from different partitions arrive at the consumer in a meaningful combined order',
+            a: 'Part 09 states plainly that ordering is guaranteed only within a partition — merging events from multiple partitions by arrival order at the consumer reflects processing-time coincidence, not the real sequence of what happened, per this module\'s Misconceptions section.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Error Library ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Error Library" />
+        <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
+
+        {[
+          {
+            error: `One consumer group's lag metric climbs steadily over hours, but adding more consumer instances to the group has no effect on the lag`,
+            cause: 'The consumer group already has as many active consumers as the topic has partitions — per Part 06, each partition can only be assigned to one consumer within a group at a time, so instances beyond the partition count sit idle with zero partitions assigned, contributing nothing to throughput.',
+            fix: 'Check the ratio of consumer instances to partitions first, before adding more instances. If truly more parallelism is needed, the partition count itself must increase — which is a more disruptive change since it typically requires repartitioning and can affect ordering for hash-based partition keys already in flight.',
+          },
+          {
+            error: `A downstream aggregation shows revenue attributed to the wrong hour — orders placed at 11:58 PM consistently show up in the next day's totals instead of the correct day`,
+            cause: 'The aggregation window is built on processing time (when the consumer handled the event) rather than event time (when the order actually happened), per Part 08. A slight pipeline delay pushes an event\'s processing across the midnight boundary even though it should count toward the earlier day.',
+            fix: 'Rebuild the aggregation to key on the event\'s embedded event_time field, with a watermark (e.g. 5 minutes of allowed lateness) to handle events that arrive after their window would otherwise have closed. This is explicitly the bug Part 08\'s Callout warns about.',
+          },
+          {
+            error: `A duplicate row appears in a downstream table for the same order after a consumer pod was restarted (deployment, crash, or autoscaling event)`,
+            cause: 'The consumer commits its offset after processing, which is correct at-least-once behavior — but the write to the downstream table is a plain INSERT, not an idempotent upsert. When the consumer reprocesses the last uncommitted event after restart, it inserts a second row for the same order.',
+            fix: 'Make the downstream write idempotent, keyed on the event\'s event_id or the order\'s natural key with ON CONFLICT DO NOTHING (or an equivalent upsert), per Part 07\'s idempotent processing patterns. At-least-once delivery is the correct default; the consumer\'s write logic is what needs to change, not the delivery guarantee.',
+          },
+          {
+            error: `A newly built analytics service, seeded by replaying 90 days of historical events, produces slightly different aggregate numbers than what was reported in production at the time`,
+            cause: 'The historical events themselves are faithfully replayed and unchanged (the log is immutable, per Part 02) — but the new service\'s processing logic, schema version, or enrichment lookups (like a store-metadata table) reflect today\'s state, not the state that existed when those events originally happened.',
+            fix: 'This is expected unless the pipeline explicitly point-in-time joins against historical reference data. If exact historical reproduction matters, any lookup tables joined during replay need their own historical versioning (e.g. SCD Type 2) so a replayed event enriches against the reference data as it existed at that event\'s event_time, not the current state.',
+          },
+          {
+            error: `A rebalance in a large consumer group causes a multi-second pause in event processing across the entire group, visible as a lag spike that recovers on its own`,
+            cause: 'A consumer joined or left the group (deployment, crash, scale-up/down), triggering a stop-the-world rebalance where every consumer in the group pauses while partitions are reassigned, per Part 06. Larger groups take longer to rebalance.',
+            fix: 'This is often expected behavior, not a bug — the fix is either accepting the brief pause as normal operational noise, or adopting incremental cooperative rebalancing (available in modern Kafka), which only reassigns the specific partitions that changed rather than pausing the whole group.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{
+              fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--red,#ff4757)',
+              marginBottom: 12, background: 'rgba(255,71,87,0.08)',
+              border: '1px solid rgba(255,71,87,0.2)',
+              borderRadius: 6, padding: '8px 12px', lineHeight: 1.5,
+            }}>
+              {item.error}
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <span style={{
+                fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
+              }}>Cause: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.cause}</span>
+            </div>
+            <div>
+              <span style={{
+                fontSize: 10, fontWeight: 700, color: 'var(--accent)',
+                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
+              }}>Fix: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.fix}</span>
+            </div>
+          </div>
+        ))}
       </section>
 
       <KeyTakeaways items={[
