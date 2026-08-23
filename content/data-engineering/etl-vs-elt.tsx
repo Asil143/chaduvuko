@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -131,7 +174,7 @@ export default function ETLvsELTModule() {
       description="Why ETL dominated for 30 years, why ELT replaced it, and when each still belongs in a modern stack."
       section="Data Engineering — Module 22"
       readTime="50 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why This Distinction Matters ───────────────────── */}
@@ -211,6 +254,7 @@ export default function ETLvsELTModule() {
 
         <SubTitle>The 1990s–2000s: storage was expensive, compute was centralised</SubTitle>
 
+        <SubSubTitle>What warehouse storage cost, and what that forced onto every pipeline</SubSubTitle>
         <CodeBox label="The economic constraint that created ETL">{`ECONOMIC REALITY OF DATA WAREHOUSING IN 2000:
 
   On-premises warehouse hardware (Teradata, IBM Netezza, Oracle Exadata):
@@ -229,50 +273,47 @@ export default function ETLvsELTModule() {
       → clean, type, deduplicate, join, validate
       → discard raw data after transformation
     Load ONLY the clean data into the warehouse
-      → warehouse stores only modelled, compressed, valuable data
 
   ETL tools of the era:
     IBM DataStage, Informatica PowerCenter, Oracle Data Integrator,
     Microsoft SSIS (SQL Server Integration Services), Talend
     → GUI-based, proprietary, $100k+ enterprise licences
-    → Each transformation step configured in drag-and-drop interfaces
     → Version control was difficult; collaboration was harder
     → "ETL developers" were a separate job title from software engineers`}</CodeBox>
 
         <SubTitle>The 2010s: cloud storage changed the economics entirely</SubTitle>
 
-        <CodeBox label="The infrastructure shift that made ELT possible">{`WHAT CHANGED IN THE 2010s:
+        <SubSubTitle>What changed — S3 and cloud warehouses removed the original constraint</SubSubTitle>
+        <CodeBox label="What changed in the 2010s">{`Amazon S3 launched 2006:
+  Storage cost: $0.023 per GB per month ($23 per TB)
+  Compare to on-premises warehouse hardware: $5,000–$50,000/TB
+  Reduction: 99.5% cheaper
+  → Suddenly affordable to store ALL raw data indefinitely
 
-  Amazon S3 launched 2006:
-    Storage cost: $0.023 per GB per month ($23 per TB)
-    Compare to on-premises warehouse hardware: $5,000–$50,000/TB
-    Reduction: 99.5% cheaper
-    → Suddenly affordable to store ALL raw data indefinitely
+Cloud data warehouses (Redshift 2012, BigQuery 2012, Snowflake 2014):
+  Separated compute from storage
+  Compute: pay-per-query or pay-per-warehouse-minute
+  Storage: cheap (Snowflake ~$40/TB/month, BigQuery ~$20/TB/month)
+  Massively parallel: 100s of nodes available on demand
+  → Warehouse compute was no longer the bottleneck`}</CodeBox>
 
-  Cloud data warehouses (Redshift 2012, BigQuery 2012, Snowflake 2014):
-    Separated compute from storage
-    Compute: pay-per-query or pay-per-warehouse-minute
-    Storage: cheap (Snowflake ~$40/TB/month, BigQuery ~$20/TB/month)
-    Massively parallel: 100s of nodes available on demand
-    → Warehouse compute was no longer the bottleneck
+        <SubSubTitle>The consequence — the ETL constraint evaporated, and ELT became possible</SubSubTitle>
+        <CodeBox label="The consequence — ELT becomes economically rational">{`CONSEQUENCE: the ETL constraint evaporated
+  You CAN afford to store raw data (S3 is nearly free)
+  You CAN afford to transform inside the warehouse (cheap on-demand compute)
+  You DO NOT need a separate ETL server (warehouse IS the compute engine)
 
-  CONSEQUENCE: the ETL constraint evaporated
-    You CAN afford to store raw data (S3 is nearly free)
-    You CAN afford to transform inside the warehouse (cheap on-demand compute)
-    You DO NOT need a separate ETL server (warehouse IS the compute engine)
+THEREFORE: transformation can happen AFTER loading (ELT)
+  Extract from source and load raw to S3 or warehouse staging
+  Transform inside the warehouse with SQL
+  → Raw data preserved in S3 forever
+  → No separate transformation server
+  → SQL replaces GUI-based ETL tools
+  → dbt (data build tool, launched 2016) codifies this with SQL + Git
 
-  THEREFORE: transformation can happen AFTER loading (ELT)
-    Extract from source and load raw to S3 or warehouse staging
-    Transform inside the warehouse with SQL
-    → Raw data preserved in S3 forever
-    → No separate transformation server
-    → SQL replaces GUI-based ETL tools
-    → dbt (data build tool, launched 2016) codifies this with SQL + Git
-
-  THE RESULT: ETL tools lost their purpose
-    When the warehouse can run SQL on 100 nodes at $0.25/query,
-    there is no reason to transform on a separate server first.
-    The transformation logic belongs in SQL, in the warehouse, under version control.`}</CodeBox>
+THE RESULT: ETL tools lost their purpose
+  When the warehouse can run SQL on 100 nodes at $0.25/query,
+  there is no reason to transform on a separate server first.`}</CodeBox>
 
         <Para>
           This is not "ETL is dead" — it is "the reason ETL was necessary no longer
@@ -309,7 +350,8 @@ export default function ETLvsELTModule() {
 
         <SubTitle>ETL data flow</SubTitle>
 
-        <CodeBox label="ETL flow — what happens at each stage">{`ETL DATA FLOW:
+        <SubSubTitle>Extract, transform, and load — all before the destination sees a single row</SubSubTitle>
+        <CodeBox label="ETL flow — the pipeline stages">{`ETL DATA FLOW:
 
   SOURCE              ETL ENGINE (Python/Spark/Informatica)    DESTINATION
   ─────────────────────────────────────────────────────────────────────────
@@ -328,19 +370,18 @@ export default function ETLvsELTModule() {
 
                       [Load]
                       INSERT INTO silver.orders
-                      ON CONFLICT (order_id) DO UPDATE ...
+                      ON CONFLICT (order_id) DO UPDATE ...`}</CodeBox>
+        <Output>{`WHAT THE DESTINATION RECEIVES: typed, validated, deduplicated, enriched rows
+only. Invalid rows never reach the destination. Raw source data is never
+stored in the destination.`}</Output>
 
-  WHAT THE DESTINATION RECEIVES:
-    Typed, validated, deduplicated, enriched rows only.
-    Invalid rows never reach the destination.
-    Raw source data is never stored in the destination.
-
-  WHAT IS LOST:
-    The original raw data is discarded after transformation.
-    If a bug was introduced in the transformation:
-      → Cannot reprocess raw data from the destination
-      → Must re-extract from the source (if still available)
-      → Or accept the incorrect data until a correction run
+        <SubSubTitle>What ETL loses, and the tools built around this pattern</SubSubTitle>
+        <CodeBox label="What is lost, and the typical ETL toolset">{`WHAT IS LOST:
+  The original raw data is discarded after transformation.
+  If a bug was introduced in the transformation:
+    → Cannot reprocess raw data from the destination
+    → Must re-extract from the source (if still available)
+    → Or accept the incorrect data until a correction run
 
 TYPICAL ETL TOOLS AND WHEN USED:
   Python + Pandas/PySpark:  Most common in modern pipelines
@@ -394,6 +435,13 @@ TYPICAL ETL TOOLS AND WHEN USED:
             }}>Example: {item.example}</div>
           </div>
         ))}
+
+        <TryThis>
+          For a pipeline you maintain, check whether raw source data survives anywhere
+          after transformation — a staging table, a landing zone, an S3 prefix. If it
+          doesn't, that pipeline has ETL's exact recovery problem: a bug found next
+          year means re-extracting from the source, if the source even still has the data.
+        </TryThis>
       </section>
 
       <Divider />
@@ -425,7 +473,8 @@ TYPICAL ETL TOOLS AND WHEN USED:
 
         <SubTitle>ELT data flow</SubTitle>
 
-        <CodeBox label="ELT flow — what happens at each stage">{`ELT DATA FLOW:
+        <SubSubTitle>Land the raw data first, then transform it in place with dbt</SubSubTitle>
+        <CodeBox label="ELT flow — extract and load, then transform inside the warehouse">{`ELT DATA FLOW:
 
   SOURCE              EL LAYER (thin Python loader)     DESTINATION (warehouse/lake)
   ──────────────────────────────────────────────────────────────────────────────────
@@ -457,19 +506,20 @@ TYPICAL ETL TOOLS AND WHEN USED:
             - name: order_id
               tests: [not_null, unique]
             - name: amount
-              tests: [{dbt_utils.accepted_range: {min_value: 0}}]
+              tests: [{dbt_utils.accepted_range: {min_value: 0}}]`}</CodeBox>
 
-  WHAT IS PRESERVED:
-    raw.orders contains the original source data — always.
-    If a bug is found in silver.orders 6 months later:
-      → dbt run --select silver.orders --full-refresh
-      → Reprocess from raw.orders in the same warehouse
-      → No re-extraction from source needed
+        <SubSubTitle>What survives a bug, and what each schema in the warehouse holds</SubSubTitle>
+        <CodeBox label="What ELT preserves, and what the destination contains">{`WHAT IS PRESERVED:
+  raw.orders contains the original source data — always.
+  If a bug is found in silver.orders 6 months later:
+    → dbt run --select silver.orders --full-refresh
+    → Reprocess from raw.orders in the same warehouse
+    → No re-extraction from source needed
 
-  WHAT THE DESTINATION CONTAINS:
-    raw schema:    exact source data, typed minimally for load
-    silver schema: cleaned, validated, deduplicated
-    gold schema:   aggregated, business-ready metrics`}</CodeBox>
+WHAT THE DESTINATION CONTAINS:
+  raw schema:    exact source data, typed minimally for load
+  silver schema: cleaned, validated, deduplicated
+  gold schema:   aggregated, business-ready metrics`}</CodeBox>
 
         <SubTitle>Why raw data preservation is ELT's most underappreciated advantage</SubTitle>
 
@@ -492,12 +542,15 @@ TYPICAL ETL TOOLS AND WHEN USED:
 
         <SubTitle>dbt — the tool that operationalises ELT</SubTitle>
 
-        <CodeBox label="dbt — the transformation layer in modern ELT">{`dbt (data build tool) is the standard transformation layer for ELT pipelines.
-It takes SQL SELECT statements and manages running them in the right order,
-testing the outputs, and generating documentation — all from within the warehouse.
+        <Para>
+          dbt takes SQL SELECT statements and manages running them in the right order,
+          testing the outputs, and generating documentation — all from within the
+          warehouse.
+        </Para>
 
-PROJECT STRUCTURE:
-  freshmart_dbt/
+        <SubSubTitle>How a dbt project is laid out, and what one staging model looks like</SubSubTitle>
+        <CodeBox label="dbt project structure and a staging model">{`PROJECT STRUCTURE:
+  freshcart_dbt/
   ├── models/
   │   ├── staging/         # stg_ models: raw → typed (thin layer)
   │   │   ├── stg_orders.sql
@@ -530,9 +583,10 @@ A SIMPLE dbt MODEL (models/staging/stg_orders.sql):
       FROM source
       WHERE order_id IS NOT NULL
   )
-  SELECT * FROM renamed
+  SELECT * FROM renamed`}</CodeBox>
 
-dbt COMMANDS:
+        <SubSubTitle>The commands you run daily, the tests dbt gives you for free, and where it sits in ELT</SubSubTitle>
+        <CodeBox label="dbt commands, tests, and how it fits into ELT">{`dbt COMMANDS:
   dbt run                    # run all models
   dbt run -s stg_orders      # run one model
   dbt run -s +fct_orders     # run fct_orders and all its ancestors
@@ -558,6 +612,13 @@ HOW dbt FITS INTO ELT:
   2. dbt: Transform raw → staging → intermediate → Gold (inside warehouse)
   3. BI tools (Metabase, Superset): Query Gold tables
   No separate compute engine. No code outside the warehouse for analytics logic.`}</CodeBox>
+
+        <TryThis>
+          Pick any Gold-layer model in a dbt project (yours, or the sample above) and
+          trace its ref() chain back to a raw source table. That lineage — visible,
+          version-controlled, and testable at every step — is the concrete thing ELT
+          gives you that a GUI-based ETL tool from Part 02 never could.
+        </TryThis>
       </section>
 
       <Divider />
@@ -607,47 +668,41 @@ HOW dbt FITS INTO ELT:
           transformations that cannot or should not happen inside the warehouse.
         </Para>
 
-        <CodeBox label="Modern hybrid architecture — where ETL and ELT each play">{`MODERN DATA PLATFORM ARCHITECTURE — BOTH PATTERNS IN USE:
-
-  SOURCES
-  ─────────────────────────────────────────────────────────────────────────
+        <SubSubTitle>Sources, ingestion, and the two ETL exceptions that stay outside the warehouse</SubSubTitle>
+        <CodeBox label="Modern hybrid architecture — sources through the ETL exceptions">{`SOURCES
   PostgreSQL (orders, customers)
   Stripe API (payments)
   ShipFast API (deliveries)
   Internal customer review data (contains PII)
   ML pipeline (model predictions)
 
-  INGESTION LAYER (thin EL — Python scripts / Fivetran / Airbyte)
-  ─────────────────────────────────────────────────────────────────────────
+INGESTION LAYER (thin EL — Python scripts / Fivetran / Airbyte)
   PostgreSQL CDC → raw.orders (EL — no transformation)
   Stripe API  → raw.payments (EL — minimal typing for load)
   ShipFast API  → raw.deliveries (EL — minimal typing for load)
 
-  ETL EXCEPTIONS — Python pipelines that transform BEFORE loading:
+ETL EXCEPTIONS — Python pipelines that transform BEFORE loading:
   Customer reviews → [Python ETL: mask email, hash user_id, extract sentiment]
                    → raw.reviews (PII-free, sentiment_score added)
   ML predictions   → [Python ETL: parse model output, apply business rules]
-                   → raw.risk_scores
+                   → raw.risk_scores`}</CodeBox>
 
-  TRANSFORMATION LAYER (dbt — ELT inside Snowflake)
-  ─────────────────────────────────────────────────────────────────────────
+        <SubSubTitle>The dbt transformation chain, the serving layer, and the decision rule that picks a pattern per source</SubSubTitle>
+        <CodeBox label="Transformation layer, serving layer, and the ELT-or-ETL decision rule">{`TRANSFORMATION LAYER (dbt — ELT inside Snowflake)
   raw.orders     → stg_orders (typed, deduplicated)
   raw.payments   → stg_payments (typed, validated)
   raw.deliveries → stg_deliveries (typed, validated)
   raw.reviews    → stg_reviews (already cleaned by ETL)
 
   stg_orders + stg_customers → int_orders_enriched (join)
-
   int_orders_enriched → fct_orders (Gold fact table)
   fct_orders          → daily_revenue (Gold aggregate)
   fct_orders          → customer_ltv (Gold aggregate)
 
-  SERVING LAYER
-  ─────────────────────────────────────────────────────────────────────────
+SERVING LAYER
   Metabase / Power BI → queries Gold tables in Snowflake
   FastAPI / GraphQL   → queries Silver tables for product features
   ML training         → reads raw.* tables in S3 directly (Spark)
-
 
 DECISION RULE: ELT or ETL for each source?
   Ask: can the raw data touch the warehouse safely?
@@ -744,6 +799,49 @@ DECISION RULE: ELT or ETL for each source?
             }}>
               <strong style={{ color: 'var(--accent)' }}>Fix:</strong> {item.fix}
             </div>
+          </div>
+        ))}
+
+        <TryThis>
+          Audit one dbt project (yours, or a public one) against these four
+          anti-patterns: business logic in the loader, a "raw" table that's already
+          cleaned, one giant model doing everything, and untested raw/staging layers.
+          Most projects that "feel like ELT" have at least one of these hiding in them.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About ETL and ELT</SectionTitle>
+
+        {[
+          {
+            wrong: '"ETL is obsolete — nobody should use it in 2026"',
+            right: 'Part 03 is explicit that ETL is still the correct choice in specific cases: PII masking before data reaches any analytical system, Python/ML transformations SQL cannot express, and destinations with incompatible schemas or no staging tables allowed. The shift is "ELT by default," covered in Part 06, not "ETL never."',
+          },
+          {
+            wrong: '"Since ELT preserves raw data, you don\'t need to test data quality as carefully"',
+            right: 'Part 07\'s anti-patterns and this module\'s Error Library both show the opposite: untested staging models let bad data flow silently into Gold, where it gets used in reports before anyone notices. Raw preservation only helps you fix the problem after the fact — it does nothing to stop bad data from reaching business users first.',
+          },
+          {
+            wrong: '"The EL layer should do as much cleanup as possible to make dbt\'s job easier"',
+            right: 'Part 07\'s first anti-pattern — "transforming in the EL layer" — is specifically about this instinct going wrong. Any business logic applied in the loader means the raw table is no longer actually raw, which breaks the exact reprocessing guarantee that makes ELT valuable over ETL in the first place.',
+          },
+          {
+            wrong: '"dbt is just SQL, so it doesn\'t need the rigor of software engineering practices"',
+            right: 'Part 04 is explicit that dbt\'s core value is bringing software-engineering discipline to transformations that used to live in ungoverned stored procedures or GUI tools — git-native version control, automated schema tests, and generated documentation are the point, not an afterthought.',
+          },
+          {
+            wrong: '"ELT lands raw data first, so it\'s fine to load any data including PII into the warehouse and mask it later"',
+            right: 'Part 03 and Part 06\'s decision rule both say the opposite: if raw data cannot safely touch the warehouse, that source stays ETL, with masking happening in Python before load — not ELT with a "mask it later" plan. Landing unmasked PII, even briefly, is the compliance violation itself.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
           </div>
         ))}
       </section>
@@ -939,6 +1037,45 @@ ELT with good dbt tests is more reliable than ETL with the same quality checks, 
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Letting a dbt staging model silently drop rows via a WHERE clause or INNER JOIN with no test to catch it',
+            a: 'This module\'s Error Library shows exactly this: raw.orders at 48,234 rows and stg_orders at 31,847 rows with no error raised. Part 07\'s "no tests on raw or staging" anti-pattern is the root cause — add a row-count comparison test between raw and staging so a silent drop fails the dbt build instead of quietly reaching Gold.',
+          },
+          {
+            q: 'Calling a table "raw" when the EL loader already cleaned or filtered it',
+            a: 'Part 07\'s "half-ELT" anti-pattern describes this precisely: if the raw table has already had business logic applied, reprocessing from it after a bug fix still produces wrong results, because the raw table isn\'t actually raw. Verify the raw schema matches the source column-for-column before trusting it as a recovery point.',
+          },
+          {
+            q: 'Writing one dbt model that extracts, joins five tables, and computes three aggregations',
+            a: 'Part 07\'s monolithic-model anti-pattern flags this directly: when a 300-line model fails, there\'s no way to isolate which step broke. Split into stg_ (type/clean), int_ (joins), and fct_/gold (business rules, aggregation) as shown in Part 04\'s project structure — each model does one conceptual thing.',
+          },
+          {
+            q: 'Running dbt on a schedule with no dependency check on whether the EL load actually succeeded',
+            a: 'This module\'s Error Library shows dbt failing with "relation raw.orders does not exist" after an EL failure went unnoticed. Add dbt source freshness checks or an explicit task dependency (Airflow: dbt task depends on the EL task) so a failed load blocks the dbt run instead of silently transforming stale or missing data.',
+          },
+          {
+            q: 'Treating a migration from ETL to ELT as automatically fixing existing data-quality problems',
+            a: 'This module\'s Error Library is explicit that migrating architecture does not add tests by itself — an untested metric that was wrong for 6 months under ETL stays wrong under ELT unless tests are added as part of the migration, not just raw-data preservation. Part 07\'s "no tests on raw or staging" anti-pattern applies just as much to a freshly-migrated ELT pipeline as to an old ETL one.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1013,7 +1150,7 @@ ELT with good dbt tests is more reliable than ETL with the same quality checks, 
         'When comparing ETL vs ELT for reliability: both can enforce data quality equally well with the same checks. But ELT additionally preserves the ability to recover from both known and unknown bugs by reprocessing from raw. Over the lifetime of a pipeline — typically years — this reprocessing capability is the more important reliability property.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
