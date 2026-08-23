@@ -98,7 +98,7 @@ export default function DESectionNav({ slug }: { slug: string }) {
                   opacity: isActive || isLive ? 1 : 0.5,
                 }}
               >
-                {m.title}
+                <span style={{ opacity: 0.7 }}>{m.id}.</span> {m.title}
               </Link>
             )
           })}
