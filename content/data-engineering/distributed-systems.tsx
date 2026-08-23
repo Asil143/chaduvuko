@@ -38,6 +38,10 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
@@ -59,6 +63,45 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
     }}>
       <code>{children}</code>
     </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -131,7 +174,7 @@ export default function DistributedSystemsModule() {
       description="CAP theorem applied to real data systems, consistency models, replication strategies, partitioning and sharding, distributed joins, fault tolerance and delivery semantics, consensus protocols, and the Saga pattern — explained for data engineers, not distributed systems PhDs."
       section="Data Engineering — Module 42"
       readTime="65 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why This Matters ───────────────────────────────── */}
@@ -294,6 +337,14 @@ export default function DistributedSystemsModule() {
           the latency vs consistency trade-off during normal operation is often
           more practically important than the partition behaviour.
         </Para>
+
+        <TryThis>
+          Pick three storage systems from your own stack (or from the table
+          above) and write down their CAP choice from memory, then check it
+          against documentation. Most engineers can name whether a system is
+          "fast" or "safe" but not precisely which of C or A it sacrifices
+          during a partition — that precision is what this Part is training.
+        </TryThis>
       </section>
 
       <Divider />
@@ -472,7 +523,7 @@ balance = read_wallet_balance(user_id='U1234')
           reads scale horizontally.
         </Para>
 
-        <CodeBox label="leader-follower — replication lag and its consequences">
+        <CodeBox label="leader-follower — the lag scenario and how to measure it">
 {`# PostgreSQL leader-follower replication lag scenario
 
 # Leader receives a write: INSERT INTO orders VALUES (ORD-9999, ...)
@@ -493,9 +544,10 @@ balance = read_wallet_balance(user_id='U1234')
 # On the follower:
 # SELECT now() - pg_last_xact_replay_timestamp() AS replication_lag;
 # → "00:00:00.003" (3 milliseconds of lag — healthy)
-# → "00:05:23" (5 minutes of lag — the follower is struggling, investigate)
-
-# Common causes of high replication lag:
+# → "00:05:23" (5 minutes of lag — the follower is struggling, investigate)`}
+        </CodeBox>
+        <CodeBox label="leader-follower — common causes of lag, and solutions">
+{`# Common causes of high replication lag:
 # 1. Follower disk I/O is saturated — cannot apply WAL fast enough
 # 2. Long-running query on follower blocking WAL replay (PostgreSQL pre-14 issue)
 # 3. Network congestion between leader and follower
@@ -847,6 +899,14 @@ orders_salted = orders.withColumn(
 # C00001_0, C00001_1, ..., C00001_19 are spread across 20 different executors
 result = orders_salted.join(store_salted, on='salted_key', how='left')`}
         </CodeBox>
+
+        <TryThis>
+          If you have access to a Spark UI (or similar job monitor), find a job
+          with a wide gap between the fastest and slowest task duration in the
+          same stage. That gap is a skew signal. Before applying a fix, check
+          whether a broadcast join (small table) would eliminate the shuffle
+          entirely — salting is a large-to-large-join fix, not a first resort.
+        </TryThis>
       </section>
 
       <Divider />
@@ -877,7 +937,7 @@ result = orders_salted.join(store_salted, on='salted_key', how='left')`}
           last checkpoint — at most 30 minutes of rework.
         </Para>
 
-        <CodeBox label="checkpointing — Spark and Kafka Streams">
+        <CodeBox label="checkpointing — a Spark streaming query with a durable checkpoint">
 {`# Spark streaming checkpoint — saves state and progress to durable storage
 spark = SparkSession.builder.getOrCreate()
 
@@ -886,22 +946,23 @@ query = (
     .readStream
     .format('kafka')
     .option('kafka.bootstrap.servers', 'broker:9092')
-    .option('subscribe', 'freshmart.orders')
+    .option('subscribe', 'freshcart.orders')
     .load()
     .writeStream
     .format('delta')
-    .option('path', 'abfss://gold@stfreshmartdev.dfs.core.windows.net/orders_agg/')
+    .option('path', 'abfss://gold@stfreshcartdev.dfs.core.windows.net/orders_agg/')
     .option(
         'checkpointLocation',
-        'abfss://checkpoints@stfreshmartdev.dfs.core.windows.net/orders_agg_ckpt/'
+        'abfss://checkpoints@stfreshcartdev.dfs.core.windows.net/orders_agg_ckpt/'
         # MUST be on durable storage (ADLS, S3) — not local disk
         # Local disk checkpoint = lost on executor failure = no recovery
     )
     .trigger(processingTime='1 minute')
     .start()
-)
-
-# What the checkpoint stores:
+)`}
+        </CodeBox>
+        <CodeBox label="checkpointing — what gets stored, and how often to checkpoint">
+{`# What the checkpoint stores:
 # 1. Kafka offsets consumed so far (per partition)
 # 2. Streaming aggregation state (partial counts, sums, windows)
 # 3. Schema of the output
@@ -1107,7 +1168,7 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
           lock, no coordinator bottleneck, and no two-phase protocol.
         </Para>
 
-        <CodeBox label="saga pattern — choreography style">
+        <CodeBox label="saga pattern — the happy path, four steps, no central coordinator">
 {`# DoorDash order placement — choreography-based saga
 # Each service listens for events and publishes its own events
 # No central coordinator
@@ -1133,9 +1194,10 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
 # Step 4 — Order Service
 # Listens for: inventory.reserved
 # Updates order state to CONFIRMED
-# Publishes: order.confirmed → triggers notification, logistics assignment
-
-# ── Failure path — compensating transactions ─────────────────────────────────
+# Publishes: order.confirmed → triggers notification, logistics assignment`}
+        </CodeBox>
+        <CodeBox label="saga pattern — the failure path, compensating transactions">
+{`# ── Failure path — compensating transactions ─────────────────────────────────
 # Inventory reservation fails AFTER payment was taken:
 
 # Inventory Service publishes: inventory.failed
@@ -1229,12 +1291,56 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
 # 4. NTP synchronisation + monitoring clock drift on all producer machines
 #    → Alert if any machine's clock drifts > 50ms`}
         </CodeBox>
+
+        <TryThis>
+          Find a place in a pipeline you know where two different machines'
+          timestamps get compared or sorted together (a join on event_time
+          across two source systems, a "most recent event" query across
+          producers). Ask whether that comparison assumes clock agreement —
+          and if so, whether a watermark or a monotonic offset would be safer.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Distributed Systems</SectionTitle>
+
+        {[
+          {
+            wrong: '"CAP theorem means you can only ever pick two of the three properties, permanently, for your whole system"',
+            right: 'Part 02 is precise that partition tolerance is not optional in any real network — the actual live choice is between consistency and availability, and only during an actual partition. Outside of a partition, PACELC (also Part 02) is the more relevant trade-off: latency versus consistency during normal operation.',
+          },
+          {
+            wrong: '"Replication factor 3 means my data is safe from loss"',
+            right: 'Part 04 shows this is incomplete: replication factor only says how many copies could exist. Whether a write is confirmed durable depends on acks/write-concern settings and how many replicas must acknowledge before the write is considered successful — RF=3 with a weak acknowledgement setting can still lose data.',
+          },
+          {
+            wrong: '"More partitions is always better for performance"',
+            right: 'Part 05\'s partitioning section shows the opposite failure mode is just as common as too few partitions: a low-cardinality or monotonically-increasing partition key creates a hot partition regardless of how many partitions exist in total. The fix is a better key, not simply more partitions.',
+          },
+          {
+            wrong: '"A JOIN is a JOIN — distributed engines just run it faster because they have more machines"',
+            right: 'Part 06 is explicit that a distributed join usually requires a shuffle — an all-to-all network transfer to co-locate matching rows — which is the single most expensive operation in distributed processing. More machines can make a shuffle join faster, but a broadcast join (avoiding the shuffle entirely) is usually a bigger win than more hardware.',
+          },
+          {
+            wrong: '"If two events have timestamps, you can always trust their order"',
+            right: 'Part 10 shows wall-clock timestamps from different machines can disagree by tens to hundreds of milliseconds even with NTP running — enough to reorder events at realistic throughput. Ordering that must be strictly correct should use a logical clock, a monotonic offset (like a Kafka partition offset), or an explicit watermark, not raw wall-clock comparison.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red,#ff4757)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
 
       {/* ── Part 11 — What This Looks Like at Work ───────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 11 — What This Looks Like at Work" />
         <SectionTitle>What This Looks Like on Day One</SectionTitle>
 
@@ -1286,6 +1392,169 @@ def write_order_count(date: str, count: int, pipeline_run_id: str):
             Every one of these is covered in this module and the modules before it.
           </Para>
         </HighlightBox>
+      </section>
+
+      <Divider />
+
+      {/* ── Interview Prep ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
+        <SectionTag text="// Interview Prep" />
+        <SectionTitle>5 Interview Questions — With Complete Answers</SectionTitle>
+
+        {[
+          {
+            q: 'Q1. Explain CAP theorem and how it applies to a real system you\'ve worked with or studied.',
+            a: `CAP theorem, proved by Eric Brewer, states a distributed data system can guarantee at most two of Consistency (every read gets the latest write), Availability (every request gets a non-error response), and Partition Tolerance (the system keeps working when nodes can't communicate).
+
+The key insight from Part 02 is that network partitions are not optional to plan for — cables get unplugged, availability zones lose connectivity, switches fail. Since partition tolerance is effectively mandatory in any real distributed system, the actual live decision is between consistency and availability during a partition.
+
+For a concrete example: Kafka configured with acks=all and min.insync.replicas=2 is CP for writes — if fewer than the minimum in-sync replicas are reachable during a partition, it refuses writes rather than risk losing data, at the cost of availability. Cassandra with a low consistency level is the opposite choice — it keeps serving reads and writes on all reachable nodes during a partition, accepting that some reads may return stale data. Neither choice is universally correct; it depends on whether the data is financial (favor consistency) or advisory, like a dashboard count (favor availability).`,
+          },
+          {
+            q: 'Q2. What is replication lag, and why can\'t you eliminate it just by adding more followers?',
+            a: `Replication lag is the delay between a write being committed on the leader and that write being visible on a follower, per Part 04. With asynchronous replication (the common default), the leader acknowledges a write to the application before followers have necessarily received it — so a read against a follower immediately after a write can miss that write.
+
+Adding more followers doesn't reduce lag — each follower replicates independently from the leader, so more followers just means more independent lag values, not less lag on any one of them. What actually reduces lag is addressing its root causes: follower disk I/O saturation, long-running queries blocking WAL replay, or network congestion between leader and follower.
+
+The practical fix depends on the requirement: for time-sensitive reads, route to the leader instead of a follower. For critical writes, use synchronous replication, which blocks the write until a follower confirms — trading write latency for a durability guarantee. And always monitor lag with an explicit threshold, since "how stale is acceptable" differs by use case — 100ms for OLTP followers, 30 seconds for an analytics follower.`,
+          },
+          {
+            q: 'Q3. A Spark job that ran fine in staging takes 10x longer in production on a larger dataset. How would you investigate?',
+            a: `My first suspicion, based on Part 06, is a shuffle join with data skew. I'd check the Spark UI's stage view for a task duration histogram — if most tasks finish quickly but one or a few run dramatically longer, that's the signature of skew: one partition (usually one hot join key) received far more data than the others.
+
+I'd confirm by checking whether the join key has a dominant value — a single large customer, a common payment method, or a monotonically increasing key like a timestamp. If so, the fix is salting: adding a random suffix to the hot key on both sides of the join so it's spread across many partitions instead of concentrated on one.
+
+Before reaching for salting, though, I'd check whether one side of the join is small enough to broadcast instead — a broadcast join eliminates the shuffle entirely and is usually a bigger win than fixing skew in a shuffle join. I'd also check whether staging's dataset was simply too small to expose the skew that only appears at production's data volume — a common reason bugs like this don't surface until production.`,
+          },
+          {
+            q: 'Q4. What is the difference between checkpointing and idempotency, and why do you need both for exactly-once processing?',
+            a: `Checkpointing, per Part 07, tells a failed job where to resume from — it saves progress (offsets consumed, aggregation state) to durable storage so a restart doesn't reprocess everything from the beginning. Idempotency determines whether resuming from that checkpoint produces correct results even if some work gets redone.
+
+These solve different problems. Checkpointing alone can still produce duplicates: if a job crashes after writing output but before the checkpoint records that the write happened, resuming will redo that write. Without an idempotent write (an upsert keyed on a natural key or pipeline run ID, rather than a blind INSERT or an incrementing UPDATE), that redo creates a duplicate or double-counts an aggregation.
+
+So checkpointing minimizes how much work gets redone after a failure, and idempotency makes it safe for that redone work to actually happen without corrupting the output. Exactly-once processing in practice almost always means at-least-once delivery (checkpointing handles resuming) plus idempotent consumers (idempotency handles correctness) — true exactly-once delivery at the network level is what checkpointing and idempotency together are approximating.`,
+          },
+          {
+            q: 'Q5. Explain the Saga pattern and why it\'s preferred over two-phase commit for transactions across microservices.',
+            a: `A saga, from Part 09, is a sequence of local transactions across independent services, connected by events, with compensating transactions defined for every step in case a later step fails. If step 3 of 4 fails, the saga runs compensating transactions for steps 1 and 2 in reverse order to undo their effects — there's no global lock and no central coordinator.
+
+Two-Phase Commit is the classical alternative: a coordinator tells every participant to prepare (lock resources) and then commit simultaneously. The problem at scale is that 2PC holds locks across services for the duration of the coordination round, which limits throughput, and if the coordinator crashes between prepare and commit, every participant is stuck holding its lock indefinitely with no way to resolve.
+
+Sagas trade strict, immediate consistency for eventual consistency and no cross-service locking — during the window between step 1 completing and a later step failing, the system is in a genuinely intermediate state (for example, payment taken but inventory not yet reserved). The pattern only works correctly if every step and every compensating transaction is idempotent, since events in a saga can be delivered more than once — without that, a duplicate compensating transaction (like double-refunding a payment) can cause more damage than the original failure.`,
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>
+              {item.q}
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
+              {item.a}
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Assuming a system\'s CAP label is a fixed, permanent property rather than a per-operation, per-configuration choice',
+            a: 'Part 02\'s table shows systems like Kafka can be CP for writes under one configuration (acks=all, min.isr set) and behave differently under a weaker one. Check the actual configured settings, not just the database\'s marketing category, before assuming its consistency guarantees.',
+          },
+          {
+            q: 'Reading from a follower for a time-sensitive check without accounting for replication lag',
+            a: 'Part 04 and Interview Prep Q2 both cover this: a follower read immediately after a write can miss that write entirely. Route time-critical reads to the leader, and treat follower reads as "recent, not necessarily current" for anything that matters.',
+          },
+          {
+            q: 'Choosing a partition key without checking its cardinality and write distribution first',
+            a: 'Part 05\'s hash-partitioning section shows a low-cardinality key (like payment_method) or a monotonically increasing key (like a raw timestamp) creates a hot partition even with plenty of total partitions available. Check the key\'s real-world distribution before committing to it, per this module\'s Misconceptions section.',
+          },
+          {
+            q: 'Reaching for salting before checking whether a broadcast join would eliminate the shuffle entirely',
+            a: 'Part 06 and this module\'s Try This after the salting example both point out that broadcast joins are the first thing to check for skew symptoms if one side of the join is small — salting is a large-to-large-join fix, and applying it when a broadcast would work is unnecessary complexity.',
+          },
+          {
+            q: 'Trusting wall-clock timestamps from different machines to establish a strict order of events',
+            a: 'Part 10 and this module\'s Misconceptions section both show clock skew of 10-100ms is normal even with NTP, which is enough to reorder events at realistic throughput. Use a logical clock, a monotonic offset, or an explicit watermark for anything where order must be provably correct.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Error Library ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Error Library" />
+        <SectionTitle>Errors You Will Hit — And Exactly Why They Happen</SectionTitle>
+
+        {[
+          {
+            error: `A downstream reporting query returns a count that's off by a handful of rows compared to the source system, but only sometimes — the discrepancy is not reproducible on re-run`,
+            cause: 'The report reads from a database follower, and the query happened to run in the small window between a write landing on the leader and that write replicating to the follower. This is normal asynchronous replication lag, not corruption — per Part 04, the follower is momentarily behind, not wrong.',
+            fix: 'For reports where this discrepancy is unacceptable, route the query to the leader instead of a follower. For reports where it is tolerable, document the expected staleness window and stop treating small, transient discrepancies as bugs — they are the expected behaviour of asynchronous replication.',
+          },
+          {
+            error: `A Spark job's total runtime is dominated by a single task that runs 10x longer than every other task in the same stage, visible in the Spark UI's event timeline as one long bar after all others have finished`,
+            cause: 'Data skew after a shuffle join — one partition (usually one hot join key, like a single large customer or a common categorical value) received a disproportionate share of the data, per Part 06. All other executors finish quickly and sit idle waiting for the one overloaded executor.',
+            fix: 'Check whether the smaller side of the join can be broadcast instead of shuffled — this eliminates skew entirely if applicable. If both sides are too large to broadcast, salt the join key: add a random suffix to spread the hot key\'s rows across multiple partitions on both sides of the join before joining on the salted key.',
+          },
+          {
+            error: `A streaming pipeline that was working correctly starts producing duplicate aggregation results after a routine restart or deployment`,
+            cause: 'The pipeline is not idempotent — an UPDATE statement like "SET count = count + new_count" instead of an upsert keyed on a stable identifier. On restart, the checkpoint correctly resumes from the last saved offset, but reprocessing the events between the checkpoint and the actual crash point adds their values a second time.',
+            fix: 'Rewrite the write as an idempotent upsert: INSERT ... ON CONFLICT (natural_key) DO UPDATE, gated on a pipeline_run_id or event_id so re-applying the same computation is a no-op, per Part 07\'s idempotent pipeline stage pattern. Checkpointing alone only controls where processing resumes — it does not make the write itself safe to repeat.',
+          },
+          {
+            error: `A saga-based order flow leaves an order permanently stuck in a "PENDING" or intermediate state after a payment refund, with no further events ever arriving`,
+            cause: 'A compensating transaction event was delivered but the consuming service was down, or the event was dropped, and there is no retry or dead-letter mechanism to guarantee it eventually gets processed. Per Part 09, a saga\'s correctness depends on every step and compensation actually being delivered and acted on — a lost event leaves the saga permanently incomplete.',
+            fix: 'Every saga step and compensating transaction needs the same delivery guarantees as any other critical pipeline event: retries, a dead letter queue for events that repeatedly fail, and monitoring that alerts when a saga has been in an intermediate state longer than expected. A saga with no timeout-and-alert mechanism can silently strand orders indefinitely.',
+          },
+          {
+            error: `A "most recent event per user" query occasionally returns an event that is not actually the most recent one when compared against the source system's own internal ordering`,
+            cause: 'The query orders by a wall-clock event_time field populated by the producing service, and two producers\' clocks were skewed relative to each other by tens of milliseconds — enough, at the pipeline\'s event rate, for a later-produced event to carry an earlier timestamp than an actually-earlier event, per Part 10.',
+            fix: 'For ordering that must be strictly correct, use a monotonic ordering key instead of wall-clock time — a Kafka partition offset (correct within a partition), a database-assigned sequence number, or a Lamport/vector logical clock. Reserve wall-clock event_time for approximate, human-facing purposes like "what time did this roughly happen," not for strict ordering logic.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{
+              fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--red,#ff4757)',
+              marginBottom: 12, background: 'rgba(255,71,87,0.08)',
+              border: '1px solid rgba(255,71,87,0.2)',
+              borderRadius: 6, padding: '8px 12px', lineHeight: 1.5,
+            }}>
+              {item.error}
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <span style={{
+                fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
+              }}>Cause: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.cause}</span>
+            </div>
+            <div>
+              <span style={{
+                fontSize: 10, fontWeight: 700, color: 'var(--accent)',
+                fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase',
+              }}>Fix: </span>
+              <span style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{item.fix}</span>
+            </div>
+          </div>
+        ))}
       </section>
 
       <KeyTakeaways items={[
