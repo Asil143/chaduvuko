@@ -217,7 +217,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
 
         {/* Page header */}
         <div className="border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg2)' }}>
-          <div className="max-w-[1760px] mx-auto px-4 md:px-6 py-8">
+          <div className="w-[96%] max-w-[2200px] mx-auto px-4 md:px-6 py-8">
             {breadcrumbs && (
               <nav className="flex items-center gap-1.5 text-xs font-mono mb-4" style={{ color: 'var(--muted)' }}>
                 <Link href="/" style={{ color: 'var(--accent)' }}>Home</Link>
@@ -258,7 +258,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
         </div>
 
         {/* Two-column layout: left nav + full-width content */}
-        <div className="max-w-[1760px] mx-auto flex">
+        <div className="w-[96%] max-w-[2200px] mx-auto flex">
 
           {/* ── LEFT SIDEBAR — sticky, full height ── */}
           <aside className="hidden lg:flex flex-col flex-shrink-0"
