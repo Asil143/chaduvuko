@@ -36,12 +36,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -60,6 +64,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -70,6 +95,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -135,7 +178,7 @@ export default function SQLvsNoSQLModule() {
       description="What each one trades off, four NoSQL families from first principles, and how to choose."
       section="Data Engineering — Module 10"
       readTime="55 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Misconception ──────────────────────────────── */}
@@ -288,7 +331,8 @@ export default function SQLvsNoSQLModule() {
           anti-patterns that are painful to query and maintain.
         </Para>
 
-        <CodeBox label="The schema rigidity problem — where relational breaks down">{`Problem: E-commerce product catalogue
+        <SubSubTitle>Forcing variable-structure data into fixed columns</SubSubTitle>
+        <CodeBox label="The schema rigidity problem — forcing every category into one table">{`Problem: E-commerce product catalogue
   Electronics: RAM, storage, display_size, processor, battery_life
   Clothing:    size, colour, fabric, gender, sleeve_length, care_instructions
   Books:       author, isbn, pages, publisher, genre, language, edition
@@ -310,14 +354,13 @@ Forcing this into one relational table:
     weight DECIMAL, expiry_date DATE, allergens TEXT,
     nutritional_info TEXT, storage_temp VARCHAR
     -- ... and 50 more product-specific columns
-  );
+  );`}</CodeBox>
+        <Output>{`A clothing row has 40+ NULL columns for electronics/books/food fields
+Adding a new category requires ALTER TABLE (schema migration)
+Table has 80+ columns, 75% NULL for any given row`}</Output>
 
-Result:
-  A clothing row has 40+ NULL columns for electronics/books/food fields
-  Adding a new category requires ALTER TABLE (schema migration)
-  Table has 80+ columns, 75% NULL for any given row
-
-Document database solution (MongoDB):
+        <SubSubTitle>The document database alternative — no forced-NULL columns</SubSubTitle>
+        <CodeBox label="Document database solution — only the fields relevant to each product">{`Document database solution (MongoDB):
   Electronics product: {"id":1, "name":"iPhone 15", "ram":"6GB", "storage":"128GB"}
   Clothing product:    {"id":2, "name":"Cotton Kurta", "size":"M", "fabric":"cotton"}
   Each document contains only the fields relevant to it.
@@ -379,17 +422,14 @@ Document database solution (MongoDB):
               you can only retrieve the value for a key you already know.
             </Para>
 
-            <CodeBox label="Key-value store — operations and real use cases">{`Redis operations:
+            <SubSubTitle>Basic operations and Redis's richer data structures</SubSubTitle>
+            <CodeBox label="Redis operations — strings, hashes, lists, sets, sorted sets">{`Redis operations:
   SET session:user_4201938 '{"user_id":4201938,"name":"Emily","cart":[...]}' EX 3600
   GET session:user_4201938  → returns the JSON string (or nil if expired)
   DEL session:user_4201938
 
   SET rate_limit:ip_192.168.1.1 0 EX 60
   INCR rate_limit:ip_192.168.1.1  → returns 1, 2, 3... (atomic increment)
-  GET rate_limit:ip_192.168.1.1   → returns current count
-
-  SET cache:product_SKU-00283741 '{"name":"...","price":2499,...}' EX 300
-  GET cache:product_SKU-00283741  → returns cached product JSON (or miss)
 
 Redis data structures (beyond plain strings):
   Hash:   HSET user:4201938 name "Emily" email "emily@example.com"
@@ -399,9 +439,10 @@ Redis data structures (beyond plain strings):
   Set:    SADD active_users 4201938      → track unique active users
           SCARD active_users             → count unique users
   Sorted Set: ZADD leaderboard 9800 "user_4201938"  → score-ranked set
-              ZRANGE leaderboard 0 9 REV             → top 10 users
+              ZRANGE leaderboard 0 9 REV             → top 10 users`}</CodeBox>
 
-USE CASES:
+            <SubSubTitle>What Redis is genuinely good for, and what to avoid</SubSubTitle>
+            <CodeBox label="Redis use cases and anti-patterns">{`USE CASES:
   ✓ Session storage (user is logged in, shopping cart)
   ✓ Caching (product details, API responses — avoid hitting DB every request)
   ✓ Rate limiting (N requests per minute per IP)
@@ -411,7 +452,7 @@ USE CASES:
 
 AVOID FOR:
   ✗ Anything requiring queries across multiple keys
-  ✗ Perforce primary data store (Redis is in-memory — data loss risk)
+  ✗ Primary data store (Redis is in-memory — data loss risk)
   ✗ Complex relationships or JOINs`}</CodeBox>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
@@ -475,7 +516,8 @@ AVOID FOR:
               very poor for the access patterns they are not.
             </Para>
 
-            <CodeBox label="Document store — MongoDB data model vs relational equivalent">{`RELATIONAL approach for a product catalogue:
+            <SubSubTitle>The same product, five relational tables vs one document</SubSubTitle>
+            <CodeBox label="Relational approach — five tables joined for one product">{`RELATIONAL approach for a product catalogue:
   Table: products       (id, name, price, category_id)
   Table: categories     (id, name, parent_id)
   Table: product_attrs  (product_id, attr_name, attr_value)
@@ -490,19 +532,18 @@ Query to get one product with all details:
   LEFT JOIN product_images i ON i.product_id = p.id
   LEFT JOIN product_reviews r ON r.product_id = p.id
   WHERE p.id = 'SKU-00283741'
-  → 5 table JOINs, multiple network round trips, complex query plan
+  → 5 table JOINs, multiple network round trips, complex query plan`}</CodeBox>
 
-DOCUMENT approach (MongoDB):
+            <SubSubTitle>The MongoDB document — one read, no joins</SubSubTitle>
+            <CodeBox label="Document approach — one self-contained document, one read">{`DOCUMENT approach (MongoDB):
 {
   "_id": "SKU-00283741",
   "name": "Samsung Galaxy S24",
   "price": 79999,
   "category": "Electronics > Smartphones",
   "attributes": {
-    "ram": "8GB",
-    "storage": "256GB",
-    "display": "6.2 inch FHD+",
-    "battery": "4000mAh"
+    "ram": "8GB", "storage": "256GB",
+    "display": "6.2 inch FHD+", "battery": "4000mAh"
   },
   "images": [
     {"url": "img/s24_front.jpg", "is_primary": true},
@@ -600,14 +641,14 @@ MONGODB QUERY LANGUAGE:
               which Cassandra will refuse or perform very slowly by design.
             </Para>
 
-            <CodeBox label="Cassandra data model — designed around query patterns, not entities">{`PROBLEM: Store delivery tracking events for millions of deliveries.
+            <SubSubTitle>Designing the table around the query, not the entity</SubSubTitle>
+            <CodeBox label="Cassandra table design, write path, and read path">{`PROBLEM: Store delivery tracking events for millions of deliveries.
   Requirements:
     - Write millions of GPS events per second (Uber Eats's delivery network)
     - Read all events for a specific delivery in time order
     - Events never updated once written
 
 CASSANDRA TABLE DESIGN (designed around the query, not the entity):
-
   CREATE TABLE delivery_events (
     delivery_id    UUID,          -- partition key: all events for one delivery on one node
     event_time     TIMESTAMP,     -- clustering key: sorted order within partition
@@ -625,9 +666,10 @@ WRITE (very fast — append to partition):
 READ (fast — all data for this delivery is on one node):
   SELECT * FROM delivery_events
   WHERE delivery_id = '9f8e7d6c-...'         -- REQUIRED: partition key
-  AND event_time >= '2026-03-17 20:00:00'    -- optional: clustering key range
+  AND event_time >= '2026-03-17 20:00:00'    -- optional: clustering key range`}</CodeBox>
 
-WHAT CASSANDRA CANNOT DO EFFICIENTLY:
+            <SubSubTitle>What Cassandra refuses to do, and the "one table per query" rule</SubSubTitle>
+            <CodeBox label="What Cassandra cannot do efficiently, and the design rule that follows">{`WHAT CASSANDRA CANNOT DO EFFICIENTLY:
   -- "Find all deliveries that failed today"
   SELECT * FROM delivery_events WHERE event_type = 'failed';
   → Full cluster scan. Very slow. Cassandra will warn or block this.
@@ -709,7 +751,8 @@ CASSANDRA RULE: design one table per query pattern.
               size of all relationships in the database.
             </Para>
 
-            <CodeBox label="Graph database — nodes, edges, and traversal queries">{`Neo4j graph model for a social commerce network:
+            <SubSubTitle>Nodes, edges, and a friend-of-friend recommendation query</SubSubTitle>
+            <CodeBox label="Neo4j — nodes, edges, and the Cypher traversal query">{`Neo4j graph model for a social commerce network:
 
 NODES (entities):
   (:User {id: 4201938, name: "Emily"})
@@ -731,9 +774,10 @@ CYPHER QUERY — "Recommend products to Emily":
   WHERE NOT (emily)-[:PURCHASED]->(product)
   RETURN product.name, count(*) AS purchase_count
   ORDER BY purchase_count DESC
-  LIMIT 5
+  LIMIT 5`}</CodeBox>
 
-This query: finds Emily's friends, finds what they bought,
+            <SubSubTitle>Why this stays fast as the network grows, and where graph databases fit</SubSubTitle>
+            <CodeBox label="Why graph traversal scales, and real use cases">{`This query: finds Emily's friends, finds what they bought,
             filters out what Emily already bought,
             ranks by friend purchase frequency.
 
@@ -769,6 +813,14 @@ REAL USE CASES:
             </div>
           </div>
         </div>
+
+        <TryThis>
+          For a NoSQL store you use (or one from this Part), write down the exact
+          query pattern it was originally chosen for. Then check whether the queries
+          actually running against it today still match that pattern — a Cassandra
+          table that has grown ad-hoc "WHERE event_type = X" queries bolted on is a
+          sign the access pattern has drifted from the design.
+        </TryThis>
       </section>
 
       <Divider />
@@ -887,6 +939,13 @@ REAL USE CASES:
             },
           ]}
         />
+
+        <TryThis>
+          Look up whether each production database your pipelines read from is
+          documented as CP or AP (check the vendor docs if you're not sure). For any
+          AP source, confirm your Silver-layer transformation actually deduplicates —
+          if it doesn't, that's a gap this Part's CompareTable already warned about.
+        </TryThis>
       </section>
 
       <Divider />
@@ -902,37 +961,34 @@ REAL USE CASES:
           does our current stack use?" Start with the data and access pattern.
         </Para>
 
-        <CodeBox label="The three-question database selection framework">{`QUESTION 1: What is the primary access pattern?
+        <SubSubTitle>Question 1 — what is the primary access pattern?</SubSubTitle>
+        <CodeBox label="Selection framework, question 1 — access pattern">{`"Give me this specific entity by its ID"
+  → Key-value (Redis) if speed and simplicity are priorities
+  → Document (MongoDB) if the entity has variable structure
 
-  "Give me this specific entity by its ID"
-    → Key-value (Redis) if speed and simplicity are priorities
-    → Document (MongoDB) if the entity has variable structure
+"Give me this document with all its related data in one read"
+  → Document store (MongoDB, Firestore)
 
-  "Give me this document with all its related data in one read"
-    → Document store (MongoDB, Firestore)
+"Give me all records matching these criteria with arbitrary filters"
+  → Relational (PostgreSQL, MySQL)
+  → OLAP warehouse (Snowflake, BigQuery) for analytical queries
 
-  "Give me all records matching these criteria with arbitrary filters"
-    → Relational (PostgreSQL, MySQL)
-    → OLAP warehouse (Snowflake, BigQuery) for analytical queries
+"Write millions of events per second, query by a known key"
+  → Column-family (Cassandra, DynamoDB)
+  → Time-series (InfluxDB, TimescaleDB) for temporal data
 
-  "Write millions of events per second, query by a known key"
-    → Column-family (Cassandra, DynamoDB)
-    → Time-series (InfluxDB, TimescaleDB) for temporal data
+"How are these entities connected? Find N-hop relationships"
+  → Graph database (Neo4j, Neptune)`}</CodeBox>
 
-  "How are these entities connected? Find N-hop relationships"
-    → Graph database (Neo4j, Neptune)
-
-QUESTION 2: How strong must the consistency guarantees be?
+        <SubSubTitle>Questions 2 and 3 — consistency guarantees, and genuine scale</SubSubTitle>
+        <CodeBox label="Selection framework, questions 2 and 3 — consistency and scale">{`QUESTION 2: How strong must the consistency guarantees be?
 
   "Financial transactions — partial updates are catastrophic"
     → Must have ACID. Relational database.
-
   "Product catalogue — slight staleness is acceptable"
     → AP NoSQL acceptable. MongoDB, DynamoDB.
-
   "User session data — stale session is acceptable, availability must be high"
     → AP is fine. Redis.
-
   "Delivery GPS events — eventual consistency acceptable"
     → AP acceptable. Cassandra.
 
@@ -940,15 +996,20 @@ QUESTION 3: What scale is genuinely needed?
 
   < 10M rows, standard read/write mix
     → PostgreSQL handles this comfortably. No NoSQL needed.
-
   > 100M rows, write-heavy, known access pattern
     → Column-family or key-value if the pattern fits.
-
   > 1B rows, analytical queries
     → Data warehouse (Snowflake/BigQuery), not operational database.
 
   Rule: do not introduce NoSQL complexity until relational cannot
         handle the workload. Most applications never reach that scale.`}</CodeBox>
+
+        <TryThis>
+          Pick one NoSQL database choice your team has already made and run it back
+          through these three questions. If the current answers no longer match why
+          it was originally chosen — the access pattern changed, or the scale never
+          actually arrived — that's worth raising, not just noting.
+        </TryThis>
 
         <SubTitle>The polyglot persistence pattern — using multiple databases together</SubTitle>
 
@@ -959,6 +1020,7 @@ QUESTION 3: What scale is genuinely needed?
           pattern uses the best database for each specific need.
         </Para>
 
+        <SubSubTitle>Five databases, five jobs, at one representative marketplace</SubSubTitle>
         <CodeBox label="Polyglot persistence — Etsy-style data architecture">{`ETSY (e-commerce marketplace) — representative polyglot architecture:
 
   PostgreSQL (relational, CP):
@@ -984,9 +1046,10 @@ QUESTION 3: What scale is genuinely needed?
   Elasticsearch (search index — a fifth type!):
     → Full-text product search ("vintage leather jacket under 200")
     → Inverted index — not relational, not a traditional NoSQL type
-    → Synced from MongoDB product catalogue via pipeline
+    → Synced from MongoDB product catalogue via pipeline`}</CodeBox>
 
-DATA ENGINEER'S ROLE IN THIS ARCHITECTURE:
+        <SubSubTitle>The data engineer's job across all five systems</SubSubTitle>
+        <CodeBox label="The data engineer's role — ingesting from every system in the stack">{`DATA ENGINEER'S ROLE IN THIS ARCHITECTURE:
   → Ingest from ALL five systems into the data lake
   → Each has a different extraction approach:
     PostgreSQL: CDC via Debezium WAL reading
@@ -1051,6 +1114,42 @@ DATA ENGINEER'S ROLE IN THIS ARCHITECTURE:
             },
           ]}
         />
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About SQL and NoSQL</SectionTitle>
+
+        {[
+          {
+            wrong: '"NoSQL is one thing — you either adopt it or you don\'t"',
+            right: 'Part 03 is explicit that "NoSQL" groups four completely different designs — key-value, document, column-family, graph — with nothing in common beyond not being relational. MongoDB and Cassandra solve opposite problems; treating "NoSQL" as one decision instead of four separate ones is the root confusion this module exists to fix.',
+          },
+          {
+            wrong: '"MongoDB scales better than PostgreSQL, so it\'s the safer default for a new product"',
+            right: 'Part 07\'s Real World scenario is a direct counterexample: a startup put billing and appointment data — both strongly relational, both needing ACID — into MongoDB "because NoSQL is web-scale," and had to migrate them back. Part 05\'s framework starts with access pattern, not with which database has the better scaling reputation.',
+          },
+          {
+            wrong: '"Cassandra scales well, so it\'s a good fit for an analytics dashboard"',
+            right: 'Interview Prep Q3 and Part 03\'s Cassandra section both make the same point: Cassandra\'s scaling is specifically for partition-key-based writes and reads, and it performs badly or refuses outright on the scan-and-aggregate pattern every analytics dashboard needs. "Scales well" describes one specific access pattern, not scale in general.',
+          },
+          {
+            wrong: '"CAP theorem means a well-engineered system can just deliver all three guarantees"',
+            right: 'Part 04 is explicit that partition tolerance is not optional in any real distributed system — networks do fail. The actual, unavoidable trade-off in practice is CP vs AP, and every database in this module\'s CompareTable made a real choice between them, not a way around the theorem.',
+          },
+          {
+            wrong: '"Since Cassandra and DynamoDB are designed to scale, data extracted from them is already as clean as a relational extract"',
+            right: 'Part 04\'s CompareTable and Interview Prep Q2 both flag the opposite: AP systems like Cassandra can produce duplicate or inconsistent values during partitions, reconciled later via Last-Write-Wins. This module\'s Common Mistakes and Error Library both treat "always deduplicate AP extracts in Silver" as a required step, not an edge case.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1213,6 +1312,45 @@ In practice, most data engineering work involves the relational model. Graph dat
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Reaching for $where in MongoDB or ALLOW FILTERING in Cassandra because it "makes the query work"',
+            a: 'This module\'s Error Library shows both sides of this: MongoDB $where is disabled on managed tiers precisely because it runs unindexed JavaScript, and Cassandra ALLOW FILTERING silently triggers a full cluster scan. Both are usually a sign the table or query was designed for a different access pattern than the one being run — see Part 03\'s "design one table per query" rule for Cassandra specifically.',
+          },
+          {
+            q: 'Querying Cassandra by a clustering key without providing the partition key',
+            a: 'This module\'s Error Library shows the exact error Cassandra returns for this. Part 03 is explicit that the partition key is required in every query because it\'s how Cassandra routes the request to one node — a query missing it would otherwise require scanning the whole cluster, which Cassandra refuses by design.',
+          },
+          {
+            q: 'Using plain insert instead of upsert on a pipeline that might rerun against a uniquely-indexed MongoDB collection',
+            a: 'This module\'s Error Library shows a DuplicateKeyError from exactly this — a rerun re-inserting a document whose order_id already exists. Any pipeline that must be safely rerunnable should use updateOne with upsert:true rather than insert, the same idempotency principle that applies to SQL\'s INSERT ... ON CONFLICT.',
+          },
+          {
+            q: 'Running an open-ended graph traversal with no hop limit',
+            a: 'This module\'s Error Library shows Neo4j\'s MemoryLimitExceededException from a pattern like MATCH (n)-[*]->(m) with no depth bound — the engine tries to materialize an unbounded subgraph. Part 03\'s graph section is explicit that traversal cost is proportional to edges actually visited; an unbounded pattern removes that guarantee entirely. Always bound hops explicitly, e.g. [*1..3].',
+          },
+          {
+            q: 'Trusting data extracted from an AP system (Cassandra, DynamoDB) as already deduplicated',
+            a: 'Part 04\'s CompareTable and Interview Prep Q2 both state this plainly: AP systems can return duplicate or inconsistent values reconciled later via Last-Write-Wins, and pipelines that skip an explicit Silver-layer dedup step will carry that inconsistency downstream into every metric built on top of it.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1287,7 +1425,7 @@ In practice, most data engineering work involves the relational model. Graph dat
         'Most applications never need NoSQL. PostgreSQL handles hundreds of millions of rows comfortably with proper indexing. Do not introduce NoSQL complexity until relational genuinely cannot handle the workload. The wrong database for the access pattern always causes more problems than it solves.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
