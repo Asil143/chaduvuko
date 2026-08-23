@@ -21,14 +21,29 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 style={{ fontSize: 'clamp(16px, 1.8vw, 20px)', fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text)', marginBottom: 12, fontFamily: 'var(--font-display)' }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>{label}</div>}
     <pre style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.9, color: 'var(--text)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{ background: 'transparent', border: '1px dashed var(--border)', borderRadius: 10, padding: '14px 22px', overflowX: 'auto', fontSize: 13, lineHeight: 1.8, color: 'var(--muted)', fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap' }}>
       <code>{children}</code>
     </pre>
   </div>
@@ -40,33 +55,13 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 24 }}>{children}</div>
 )
 
-interface TableRow { [key: string]: string }
-interface CompareTableProps {
-  headers: { label: string; color?: string }[]
-  rows: TableRow[]
-  keys: string[]
-}
-
-const CompareTable = ({ headers, rows, keys }: CompareTableProps) => (
-  <div style={{ overflowX: 'auto', marginBottom: 28 }}>
-    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, lineHeight: 1.6 }}>
-      <thead>
-        <tr>
-          {headers.map((h, i) => (
-            <th key={h.label} style={{ padding: '10px 16px', textAlign: 'left', fontSize: i === 0 ? 10 : 11, fontWeight: 700, letterSpacing: i === 0 ? '.12em' : '.06em', textTransform: 'uppercase', color: h.color ?? 'var(--muted)', fontFamily: 'var(--font-mono)', borderBottom: h.color ? `2px solid ${h.color}` : '1px solid var(--border)', background: h.color ? `${h.color}08` : 'var(--bg2)', minWidth: i === 0 ? 130 : 160 }}>{h.label}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, i) => (
-          <tr key={i} style={{ background: i % 2 === 0 ? 'var(--surface)' : 'var(--bg2)' }}>
-            {keys.map((k, ki) => (
-              <td key={k} style={{ padding: '10px 16px', color: ki === 0 ? 'var(--muted)' : 'var(--text)', fontSize: ki === 0 ? 11 : 13, fontFamily: ki === 0 ? 'var(--font-mono)' : 'inherit', fontWeight: ki === 0 ? 700 : 400, textTransform: ki === 0 ? 'uppercase' : 'none', letterSpacing: ki === 0 ? '.06em' : 'normal', borderBottom: '1px solid var(--border)', borderLeft: ki > 0 && headers[ki]?.color ? `2px solid ${headers[ki].color}40` : ki > 0 ? '1px solid var(--border)' : 'none', verticalAlign: 'top' }}>{row[k]}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)', borderRadius: 10, padding: '16px 20px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent2)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--font-mono)' }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -77,7 +72,7 @@ export default function DataModellingModule() {
       description="Dimensional modelling from first principles — grain, fact types, dimension design, surrogate keys, conformed dimensions, and the modern wide-table pattern."
       section="Data Engineering — Module 33"
       readTime="65 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 ───────────────────────────────────────────────────── */}
@@ -121,6 +116,13 @@ export default function DataModellingModule() {
             ))}
           </div>
         </HighlightBox>
+
+        <TryThis>
+          Pick any table you query regularly and try to state its grain in one
+          sentence: &ldquo;each row represents ___.&rdquo; If you can&rsquo;t state it cleanly, or
+          if two columns seem to disagree about what one row means, that table
+          has a grain problem — exactly what Part 02 is about.
+        </TryThis>
       </section>
 
       <Divider />
@@ -138,17 +140,12 @@ export default function DataModellingModule() {
           granularity — is the most common modelling mistake and the hardest to fix.
         </Para>
 
-        <CodeBox label="Grain examples — declaring what one row represents">{`GRAIN EXAMPLES FOR A FOOD DELIVERY PLATFORM:
+        <SubSubTitle>Three grain options for the same platform</SubSubTitle>
 
-OPTION A: One row per order
+        <CodeBox label="Order grain vs. line-item grain — what's valid at each">{`OPTION A: One row per order
   Grain declaration: "Each row represents one order placed by a customer"
-  Valid fact columns at this grain:
-    order_amount     ← total for this order ✓
-    discount_amount  ← discount applied to this order ✓
-    delivery_fee     ← delivery charge for this order ✓
-    num_items        ← count of items in this order ✓
-  Valid dimension FKs at this grain:
-    customer_sk, store_sk, order_date_sk, payment_method_sk
+  Valid fact columns: order_amount, discount_amount, delivery_fee, num_items
+  Valid dimension FKs: customer_sk, store_sk, order_date_sk, payment_method_sk
 
   VIOLATES this grain:
     product_id  ✗ — an order has many products (that is the line-item grain)
@@ -160,9 +157,11 @@ OPTION B: One row per order line item
   Valid FKs:   order_sk, product_sk, customer_sk, store_sk, date_sk
 
   VIOLATES this grain:
-    delivery_fee  ✗ — delivery applies to the whole order, not each line
+    delivery_fee  ✗ — delivery applies to the whole order, not each line`}</CodeBox>
 
-OPTION C: One row per delivery event
+        <SubSubTitle>A third option, and how to choose</SubSubTitle>
+
+        <CodeBox label="Delivery-event grain, and the rule for picking the right one">{`OPTION C: One row per delivery event
   Grain: "Each row represents one delivery attempt for one order"
   Valid facts: delivery_duration_mins, distance_km, driver_rating
 
@@ -173,12 +172,12 @@ CHOOSING THE GRAIN:
 
   RULE: declare the atomic grain first. Higher-level summaries are derived
   by aggregating. You CANNOT disaggregate — a sum at order level cannot
-  tell you which product within the order contributed what.
+  tell you which product within the order contributed what.`}</CodeBox>
 
-  Common mistake: choosing order grain then adding product_id "sometimes."
-  Adding product_id forces multiple rows per order → secretly changes grain
-  to line-item without declaring it → SUM(order_amount) double-counts.
-  Declare the grain explicitly and keep every column honest to it.`}</CodeBox>
+        <Output>{`Common mistake: choosing order grain, then adding product_id "sometimes."
+Adding product_id forces multiple rows per order → secretly changes grain
+to line-item without declaring it → SUM(order_amount) double-counts.
+Declare the grain explicitly and keep every column honest to it.`}</Output>
       </section>
 
       <Divider />
@@ -195,9 +194,10 @@ CHOOSING THE GRAIN:
           the business actually asks.
         </Para>
 
-        <CodeBox label="The four fact table types — definitions and examples">{`FACT TABLE TYPE 1: TRANSACTION FACT TABLE (most common)
-  One row per business transaction event.
-  Immutable — once written, never updated.
+        <SubSubTitle>Type 1 — transaction fact table, and Type 2 — periodic snapshot</SubSubTitle>
+
+        <CodeBox label="One row per event, vs. one row per entity per period">{`TYPE 1: TRANSACTION FACT TABLE (most common)
+  One row per business transaction event. Immutable — never updated.
   Row count grows with business volume.
 
   fct_orders:
@@ -208,7 +208,7 @@ CHOOSING THE GRAIN:
   Use when: measuring events that occurred — orders, payments, clicks.
 
 
-FACT TABLE TYPE 2: PERIODIC SNAPSHOT FACT TABLE
+TYPE 2: PERIODIC SNAPSHOT FACT TABLE
   One row per entity per time period — state at regular intervals.
   Appends new snapshot for each period — does NOT replace old rows.
   Row count = entities × time periods.
@@ -216,36 +216,32 @@ FACT TABLE TYPE 2: PERIODIC SNAPSHOT FACT TABLE
   fct_daily_inventory:
     snapshot_date_sk INT, product_sk BIGINT, store_sk BIGINT
     units_on_hand INT, units_received INT, units_sold INT
-    days_of_supply DECIMAL
 
   Use when: tracking ongoing state — inventory levels, account balances,
-            open tickets. "How many?" questions at a specific point in time.
+            open tickets. "How many?" questions at a specific point in time.`}</CodeBox>
 
+        <SubSubTitle>Type 3 — accumulating snapshot, and Type 4 — factless</SubSubTitle>
 
-FACT TABLE TYPE 3: ACCUMULATING SNAPSHOT FACT TABLE
+        <CodeBox label="One row per process lifecycle, vs. no numeric facts at all">{`TYPE 3: ACCUMULATING SNAPSHOT FACT TABLE
   One row per business process instance — updated as process progresses.
-  Tracks lifecycle through multiple stages.
   Row count = number of process instances (not events).
 
   fct_order_fulfillment:
     order_sk BIGINT
-    placed_date_sk INT, confirmed_date_sk INT
-    picked_up_date_sk INT, delivered_date_sk INT, cancelled_date_sk INT
+    placed_date_sk INT, confirmed_date_sk INT, picked_up_date_sk INT,
+    delivered_date_sk INT, cancelled_date_sk INT
     current_status VARCHAR(20)
-    confirm_lag_minutes DECIMAL, pickup_lag_minutes DECIMAL
-    delivery_minutes DECIMAL, total_fulfillment_minutes DECIMAL
+    confirm_lag_minutes DECIMAL, delivery_minutes DECIMAL
 
   Use when: tracking multi-step processes — order fulfillment, loan approvals.
   Rows are UPDATED as stages complete — unlike transaction facts.
-  Multiple date FKs — one per stage.
 
 
-FACT TABLE TYPE 4: FACTLESS FACT TABLE
+TYPE 4: FACTLESS FACT TABLE
   No numeric facts — just dimension FKs recording that an event occurred.
 
   fct_promotional_coverage:
-    promo_date_sk INT, product_sk BIGINT
-    store_sk BIGINT, promotion_sk BIGINT
+    promo_date_sk INT, product_sk BIGINT, store_sk BIGINT, promotion_sk BIGINT
     (no numeric columns — the ROW EXISTING is the fact)
 
   Use when: "Did this product run this promotion at this store on this date?"
@@ -255,9 +251,8 @@ FACT TABLE TYPE 4: FACTLESS FACT TABLE
 
         <SubTitle>Additive, semi-additive, and non-additive facts</SubTitle>
 
-        <CodeBox label="Fact additivity — which facts can be summed across which dimensions">{`ADDITIVE: can be summed across ALL dimensions
-  order_amount:  SUM across stores ✓  SUM across dates ✓  SUM across customers ✓
-  delivery_fee:  fully additive
+        <CodeBox label="Which facts can be summed across which dimensions">{`ADDITIVE: can be summed across ALL dimensions
+  order_amount, delivery_fee: fully additive.
   Most numeric business measures are additive.
   Store atomic values — do NOT pre-aggregate in the fact table.
 
@@ -267,18 +262,13 @@ SEMI-ADDITIVE: can be summed across SOME dimensions (not time)
     SUM across dates  ✗ (Mon + Tue + Wed inventory is meaningless)
     For time dimension: use AVG, MAX, or MIN — never SUM.
 
-  account_balance:
-    SUM across accounts ✓, SUM across months ✗ (snapshot, not flows)
-
 NON-ADDITIVE: cannot be meaningfully summed across ANY dimension
-  is_first_order (boolean):    COUNT(WHERE is_first_order = TRUE)
-  cancellation_rate (ratio):   compute from numerator/denominator at query time
-  avg_order_value:             store order_amount + num_orders, compute AVG at query
+  is_first_order (boolean):  COUNT(WHERE is_first_order = TRUE)
+  cancellation_rate (ratio): compute from numerator/denominator at query time
 
   RULE: never store derived ratios or percentages in fact tables.
   Store components (numerator, denominator) and compute ratios at query time.
   Storing cancellation_rate = 0.12 is correct today, wrong if denominator changes.
-  Storing cancellation_count=12 and order_count=100 is always correct.
 
 DEGENERATE DIMENSIONS:
   A dimension with only one attribute (the key itself), no descriptive context.
@@ -303,14 +293,13 @@ DEGENERATE DIMENSIONS:
           use intuitively.
         </Para>
 
-        <CodeBox label="Dimension table design — attributes, hierarchies, and surrogate keys">{`DIMENSION TABLE: dim_customer
+        <SubSubTitle>dim_customer — SCD2-tracked attributes</SubSubTitle>
 
-CREATE TABLE gold.dim_customer (
+        <CodeBox label="A dimension table with PII masking and version tracking">{`CREATE TABLE gold.dim_customer (
     customer_sk         BIGINT      NOT NULL PRIMARY KEY,  -- surrogate key
     customer_id         BIGINT      NOT NULL,              -- natural key
     customer_name       VARCHAR(200),
     email_hashed        VARCHAR(64) NOT NULL,   -- PII masked
-    phone_masked        VARCHAR(20),
     registration_date   DATE,
     city                VARCHAR(100),
     state               VARCHAR(50),
@@ -322,39 +311,33 @@ CREATE TABLE gold.dim_customer (
     valid_to            DATE,                   -- NULL = current version
     is_current          BOOLEAN     NOT NULL DEFAULT TRUE,
     dim_updated_at      TIMESTAMPTZ NOT NULL
-);
+);`}</CodeBox>
 
+        <SubSubTitle>dim_date — always pre-built, shared across every fact table</SubSubTitle>
 
-DIMENSION TABLE: dim_date (always pre-built, shared across all fact tables)
-
-CREATE TABLE gold.dim_date (
+        <CodeBox label="A complete calendar dimension, generated once">{`CREATE TABLE gold.dim_date (
     date_sk        INT  NOT NULL PRIMARY KEY,  -- integer YYYYMMDD: 20260317
     full_date      DATE NOT NULL,
     day_of_week    INT  NOT NULL,   -- 1=Monday, 7=Sunday
     day_name       VARCHAR(10),
-    day_of_month   INT,
     week_of_year   INT,
     month_number   INT,
     month_name     VARCHAR(10),
     quarter        INT,
     year           INT,
     fiscal_year    INT,
-    fiscal_quarter INT,
     is_weekday     BOOLEAN,
-    is_weekend     BOOLEAN,
     is_holiday     BOOLEAN,
     holiday_name   VARCHAR(100),   -- 'Diwali', 'Independence Day', ...
-    is_sale_day    BOOLEAN,
     season         VARCHAR(20)     -- 'festive', 'regular', 'summer'
 );
 -- Generate 2000-01-01 through 2030-12-31 (11,000 rows — tiny table)
 -- dbt: {{ dbt_utils.date_spine(datepart="day", start_date="'2020-01-01'",
---         end_date="'2030-12-31'") }}
+--         end_date="'2030-12-31'") }}`}</CodeBox>
 
+        <SubSubTitle>dim_store — a denormalised hierarchy in one table</SubSubTitle>
 
-DIMENSION TABLE: dim_store (hierarchy embedded — denormalised)
-
-CREATE TABLE gold.dim_store (
+        <CodeBox label="Why the hierarchy lives in one table, not three">{`CREATE TABLE gold.dim_store (
     store_sk       BIGINT      NOT NULL PRIMARY KEY,
     store_id       VARCHAR(10) NOT NULL,   -- natural key: 'ST001'
     store_name     VARCHAR(200),
@@ -366,50 +349,43 @@ CREATE TABLE gold.dim_store (
     latitude       DECIMAL(9,6),
     longitude      DECIMAL(9,6),
     opening_date   DATE,
-    is_active      BOOLEAN,
-    city_population BIGINT,
-    city_metro_area VARCHAR(100)
+    is_active      BOOLEAN
 );
 
-HIERARCHY DESIGN NOTE:
-  dim_store embeds city, state, and region directly (denormalised).
-  Do NOT create a separate dim_city table and join dim_store → dim_city.
-  That is "snowflaking" — adds join complexity for negligible benefit.
-  Analysts filter by dim_store.region — no extra join needed.`}</CodeBox>
+-- dim_store embeds city, state, and region directly (denormalised).
+-- Do NOT create a separate dim_city table and join dim_store → dim_city —
+-- that is "snowflaking," and it adds join complexity for negligible benefit.
+-- Analysts filter by dim_store.region — no extra join needed.`}</CodeBox>
 
         <SubTitle>Surrogate keys vs natural keys — why surrogates are non-negotiable</SubTitle>
 
-        <CodeBox label="Surrogate keys — why they exist and how they protect the model">{`NATURAL KEY: identifier from the source system
-  customer_id = 4201938  (from PostgreSQL application DB)
-  store_id    = 'ST001'  (from store management system)
+        <SubSubTitle>Reason 1-2 — SCD2 support and source-system independence</SubSubTitle>
 
+        <CodeBox label="Why point-in-time accuracy and schema-change resilience both depend on surrogates">{`NATURAL KEY: identifier from the source system (customer_id = 4201938)
 SURROGATE KEY: warehouse-generated integer, one per dimension row
-  customer_sk = 1  (first row in dim_customer — Seattle version)
-  customer_sk = 2  (second row — same customer after moving to Austin)
-
-WHY SURROGATE KEYS ARE REQUIRED:
 
 REASON 1: SCD Type 2 — each historical version needs a unique key
   Customer 4201938 moved from Seattle to Austin on 2026-02-01.
   dim_customer has two rows:
-    customer_sk=1, customer_id=4201938, city='Seattle', valid_from=2024-01-15, valid_to=2026-01-31
-    customer_sk=2, customer_id=4201938, city='Austin', valid_from=2026-02-01, valid_to=NULL
+    customer_sk=1, city='Seattle', valid_from=2024-01-15, valid_to=2026-01-31
+    customer_sk=2, city='Austin',  valid_from=2026-02-01, valid_to=NULL
 
   Fact table stores customer_sk at load time:
-    ORDER 9284751 placed 2026-01-10: stored customer_sk=1 → city='Seattle' ✓
-    ORDER 9284755 placed 2026-03-01: stored customer_sk=2 → city='Austin' ✓
+    Order placed 2026-01-10: stored customer_sk=1 → city='Seattle' ✓
+    Order placed 2026-03-01: stored customer_sk=2 → city='Austin' ✓
 
   Without surrogates: join on customer_id matches BOTH dimension rows.
   With is_current=TRUE filter: ALL orders show 'Austin' — historically wrong.
-  Surrogates are the only correct solution for point-in-time accuracy.
 
 REASON 2: Source system independence
   Source migrates customer_id from integer to UUID in 2027.
   WITHOUT surrogate keys: must update millions of fact table FK columns.
-  WITH surrogate keys: customer_sk=1 remains valid, unchanged.
-  Only dim_customer.customer_id column changes — fact table untouched.
+  WITH surrogate keys: customer_sk=1 remains valid, unchanged — only
+  dim_customer.customer_id changes.`}</CodeBox>
 
-REASON 3: Multiple source system integration
+        <SubSubTitle>Reason 3-4 — multi-source integration and join performance</SubSubTitle>
+
+        <CodeBox label="Preventing key collisions across systems, and why integer joins win">{`REASON 3: Multiple source system integration
   FreshCart acquires a competitor. Both had customer_id = 4201938.
   Surrogate keys: assign unique customer_sk per entity — no collision.
   Without surrogates: manual prefix/remap of all customer IDs — painful.
@@ -439,9 +415,9 @@ SURROGATE KEY GENERATION in dbt:
           visually to analysts who are not data engineers.
         </Para>
 
-        <CodeBox label="FreshCart orders star schema — structure and query pattern">{`STAR SCHEMA (ASCII diagram):
+        <SubSubTitle>The shape — one fact table, four dimensions</SubSubTitle>
 
-                        dim_date
+        <CodeBox label="FreshCart orders star schema">{`                        dim_date
                        (date_sk PK)
                             │ order_date_sk FK
                             │
@@ -455,49 +431,36 @@ dim_payment_method │          │ date_sk      │
                                │ order_amount │ ← FACTS
                                │ discount_amt │
                                │ delivery_fee │
-                               │ num_items    │
-                               └──────────────┘
+                               └──────────────┘`}</CodeBox>
 
+        <SubSubTitle>The canonical query pattern, and why it's fast</SubSubTitle>
 
-CANONICAL STAR SCHEMA QUERY PATTERN:
-SELECT
-    d.year,
-    d.month_name,
-    s.city,
-    s.region,
-    c.tier                                   AS customer_tier,
+        <CodeBox label="A standard star-schema query — filter dims, join, aggregate">{`SELECT
+    d.year, d.month_name, s.city, s.region, c.tier AS customer_tier,
     SUM(f.order_amount)                      AS gross_revenue,
-    SUM(f.discount_amount)                   AS total_discount,
     SUM(f.order_amount - f.discount_amount)  AS net_revenue,
-    COUNT(DISTINCT f.order_sk)               AS order_count,
-    COUNT(DISTINCT f.customer_sk)            AS unique_customers
+    COUNT(DISTINCT f.order_sk)               AS order_count
 FROM gold.fct_orders f
 JOIN gold.dim_date           d  ON f.order_date_sk    = d.date_sk
 JOIN gold.dim_store          s  ON f.store_sk          = s.store_sk
 JOIN gold.dim_customer       c  ON f.customer_sk       = c.customer_sk
 JOIN gold.dim_payment_method p  ON f.payment_method_sk = p.payment_sk
-WHERE d.year     = 2026
-  AND d.quarter  = 1
-  AND s.region   = 'Pacific Northwest'
-  AND c.is_current = TRUE
+WHERE d.year = 2026 AND d.quarter = 1
+  AND s.region = 'Pacific Northwest' AND c.is_current = TRUE
 GROUP BY 1, 2, 3, 4, 5
-ORDER BY 1, 2;
+ORDER BY 1, 2;`}</CodeBox>
 
-WHY STAR SCHEMA QUERIES ARE FAST:
-  1. Fact table has only integer FKs and numeric facts — narrow, fast to scan.
-  2. Dimension joins use integer equality — fastest join type.
-  3. Filter on dim attributes prunes dimensions first:
-     WHERE s.region = 'Pacific Northwest' → 2 store rows → only their fact rows scanned.
-  4. Aggregations operate on pre-filtered fact subsets — small, fast.
-  5. Columnar storage: only joined FK columns + aggregate columns read from disk.
+        <Output>{`WHY STAR SCHEMA QUERIES ARE FAST:
+1. Fact table has only integer FKs and numeric facts — narrow, fast to scan.
+2. Dimension joins use integer equality — fastest join type.
+3. Filter on dim attributes prunes dimensions first: WHERE s.region =
+   'Pacific Northwest' → 2 store rows → only their fact rows scanned.
+4. Columnar storage: only joined FK columns + aggregate columns read.
 
 STAR VS SNOWFLAKE SCHEMA:
-  3NF (snowflaked): store → city → state → region (3 extra joins for region)
-  Star (correct):   region is a column in dim_store (0 extra joins)
-
-  VERDICT: always star. Snowflake schemas add join complexity for negligible benefit.
-  Dimension tables are small — redundant city names in dim_store cost bytes, not GBs.
-  Use snowflake schema only when the dimension itself has millions of rows.`}</CodeBox>
+3NF (snowflaked): store → city → state → region (3 extra joins for region)
+Star (correct):   region is a column in dim_store (0 extra joins)
+VERDICT: always star, unless the dimension itself has millions of rows.`}</Output>
       </section>
 
       <Divider />
@@ -515,58 +478,47 @@ STAR VS SNOWFLAKE SCHEMA:
           metrics to payment metrics for the same customer in the same query.
         </Para>
 
-        <CodeBox label="Conformed dimensions — enabling cross-process analysis">{`CONFORMED DIMENSION: dim_customer shared across two fact tables
+        <SubSubTitle>What conformance enables, and what breaks it</SubSubTitle>
 
-  fct_orders                    fct_payments
-  ┌──────────────┐             ┌──────────────┐
-  │ customer_sk ─┼──────┐ ┌───┼─ customer_sk │
-  │ order_amount │      │ │   │ payment_amt  │
-  └──────────────┘      ▼ ▼   └──────────────┘
-                   ┌─────────────┐
-                   │ dim_customer│ ← CONFORMED: same table, same SK, same meaning
-                   │ customer_sk │   used by BOTH fact tables
-                   │ tier, city  │
-                   └─────────────┘
+        <CodeBox label="A cross-process query that only works because the SK numbering is shared">{`  fct_orders        dim_customer         fct_payments
+  customer_sk ────────► customer_sk ◄──────── customer_sk
+  order_amount           tier, city           payment_amt
 
-CROSS-PROCESS QUERY:
-  -- Payment success rate by customer tier:
-  SELECT
-      c.tier,
-      COUNT(DISTINCT o.order_sk)       AS total_orders,
-      COUNT(DISTINCT p.payment_sk)     AS successful_payments,
-      ROUND(COUNT(DISTINCT p.payment_sk)::NUMERIC
-          / COUNT(DISTINCT o.order_sk), 3) AS payment_success_rate
-  FROM gold.fct_orders o
-  JOIN gold.dim_customer c USING (customer_sk)
-  LEFT JOIN gold.fct_payments p ON o.order_sk = p.order_sk
-  WHERE p.status = 'captured' OR p.status IS NULL
-  GROUP BY c.tier;
-  -- Works ONLY because customer_sk=1 means the same customer in BOTH marts.
+-- Payment success rate by customer tier:
+SELECT c.tier,
+    COUNT(DISTINCT o.order_sk)   AS total_orders,
+    COUNT(DISTINCT p.payment_sk) AS successful_payments
+FROM gold.fct_orders o
+JOIN gold.dim_customer c USING (customer_sk)
+LEFT JOIN gold.fct_payments p ON o.order_sk = p.order_sk
+WHERE p.status = 'captured' OR p.status IS NULL
+GROUP BY c.tier;
+-- Works ONLY because customer_sk=1 means the same customer in BOTH marts.`}</CodeBox>
 
-WHAT BREAKS CROSS-PROCESS ANALYSIS:
-  Each mart builds its own customer dimension with different SK numbering:
-    customer_sk=1 in orders mart = customer 4201938
-    customer_sk=1 in payments mart = customer 4201939 ← DIFFERENT CUSTOMER
-  Cross-mart join produces nonsense silently.
+        <Output>{`WHAT BREAKS CROSS-PROCESS ANALYSIS:
+Each mart builds its own customer dimension with different SK numbering:
+  customer_sk=1 in orders mart   = customer 4201938
+  customer_sk=1 in payments mart = customer 4201939  ← DIFFERENT CUSTOMER
+Cross-mart join produces nonsense silently.
 
-CONFORMED dim_date: ALWAYS conformed. Every fact table uses the same dim_date.
-  Never build a separate date dimension per fact table.
-  date_sk=20260317 means March 17, 2026 everywhere.
+CONFORMED dim_date: ALWAYS conformed. Every fact table uses the same
+dim_date — never build a separate date dimension per fact table.
+date_sk=20260317 means March 17, 2026 everywhere.`}</Output>
 
-JUNK DIMENSIONS:
-  Low-cardinality flags that do not belong in any existing dimension:
-    is_promo_order (Y/N), is_late_delivery (Y/N), is_first_order (Y/N)
-  Consolidate into a single "junk dimension" table:
+        <SubSubTitle>Junk dimensions — consolidating low-cardinality flags</SubSubTitle>
 
-  CREATE TABLE gold.dim_order_flags (
-      order_flags_sk   INT  PRIMARY KEY,  -- pre-built all combinations
-      is_promo_order   BOOLEAN,
-      is_late_delivery BOOLEAN,
-      is_first_order   BOOLEAN,
-      is_weekend_order BOOLEAN
-  );
-  -- 16 rows for 4 boolean flags (2^4)
-  -- Fact table: one FK order_flags_sk → replaces 4 individual columns`}</CodeBox>
+        <CodeBox label="Replacing four boolean columns with one small dimension">{`-- Low-cardinality flags that don't belong in any existing dimension:
+-- is_promo_order (Y/N), is_late_delivery (Y/N), is_first_order (Y/N)
+
+CREATE TABLE gold.dim_order_flags (
+    order_flags_sk   INT  PRIMARY KEY,  -- pre-built all combinations
+    is_promo_order   BOOLEAN,
+    is_late_delivery BOOLEAN,
+    is_first_order   BOOLEAN,
+    is_weekend_order BOOLEAN
+);
+-- 16 rows for 4 boolean flags (2^4)
+-- Fact table: one FK order_flags_sk → replaces 4 individual columns`}</CodeBox>
       </section>
 
       <Divider />
@@ -585,29 +537,24 @@ JUNK DIMENSIONS:
           replacement for star schemas.
         </Para>
 
-        <CodeBox label="Wide table pattern — design, queries, and trade-offs">{`WIDE TABLE (OBT — One Big Table):
-  All dimension attributes denormalised into a single, very wide fact table.
-  No joins required at query time.
+        <SubSubTitle>Structure and query</SubSubTitle>
 
-  fct_orders_wide (80 columns, no joins needed):
-  ┌──────────────────────────────────────────────────────────────────┐
-  │ ORDER: order_id, order_amount, discount_amount, delivery_fee,   │
-  │        num_items, status, created_at, order_date, order_tier    │
-  │ CUSTOMER: customer_id, customer_tier, customer_city, region,    │
-  │           acquisition_channel                                    │
-  │ STORE: store_id, store_name, store_city, store_type, store_region│
-  │ PAYMENT: payment_method, payment_status, captured_at            │
-  │ DELIVERY: delivery_minutes, delivery_partner, driver_rating      │
-  └──────────────────────────────────────────────────────────────────┘
+        <CodeBox label="fct_orders_wide — 80 columns, zero joins at query time">{`fct_orders_wide:
+  ORDER: order_id, order_amount, discount_amount, delivery_fee, num_items, status
+  CUSTOMER: customer_id, customer_tier, customer_city, region, acquisition_channel
+  STORE: store_id, store_name, store_city, store_type, store_region
+  PAYMENT: payment_method, payment_status, captured_at
+  DELIVERY: delivery_minutes, delivery_partner, driver_rating
 
-WIDE TABLE QUERY:
-  SELECT store_region, customer_tier, SUM(order_amount) AS revenue
-  FROM gold.fct_orders_wide
-  WHERE order_date = '2026-03-17'
-  GROUP BY 1, 2;
-  -- ZERO joins. Columnar storage: only the 4 columns above read from disk.
+SELECT store_region, customer_tier, SUM(order_amount) AS revenue
+FROM gold.fct_orders_wide
+WHERE order_date = '2026-03-17'
+GROUP BY 1, 2;
+-- ZERO joins. Columnar storage: only the 4 columns above read from disk.`}</CodeBox>
 
-WHEN WIDE TABLES WIN:
+        <SubSubTitle>When each pattern wins</SubSubTitle>
+
+        <CodeBox label="Wide table strengths, and where star schema still wins">{`WHEN WIDE TABLES WIN:
   ✓ Non-technical analysts / auto-generated BI SQL — no joins to learn
   ✓ Columnar lakehouse engines — wide scans are efficient
   ✓ Moderate data volume (< 100M rows) — storage duplication acceptable
@@ -617,25 +564,23 @@ WHEN STAR SCHEMA WINS:
   ✓ Attributes change frequently — SCD2 simpler with separate dim tables
   ✓ Multiple fact tables at different grains — cannot embed all into one table
   ✓ Very large fact tables (billions of rows) — redundant attributes cost storage
-  ✓ Complex cross-process analysis via conformed dimensions
+  ✓ Complex cross-process analysis via conformed dimensions`}</CodeBox>
 
-THE PRAGMATIC HYBRID (2026 recommendation):
-  Build star schema for the canonical model (SCD2, conformed dimensions).
-  Derive a wide table for BI tool consumption:
+        <SubSubTitle>The pragmatic hybrid</SubSubTitle>
 
-  -- models/gold/fct_orders_wide.sql
-  SELECT
-      f.*,
-      c.tier AS customer_tier, c.city AS customer_city, c.region AS customer_region,
-      s.store_name, s.store_region,
-      p.payment_method
-  FROM gold.fct_orders f
-  JOIN gold.dim_customer       c ON f.customer_sk       = c.customer_sk
-  JOIN gold.dim_store          s ON f.store_sk          = s.store_sk
-  JOIN gold.dim_payment_method p ON f.payment_method_sk = p.payment_sk
-  -- Analysts query fct_orders_wide.
-  -- Modelling rigour lives in the star schema.
-  -- Best of both worlds.`}</CodeBox>
+        <CodeBox label="Star schema for rigour, a derived wide table for BI consumption">{`-- models/gold/fct_orders_wide.sql
+SELECT
+    f.*,
+    c.tier AS customer_tier, c.city AS customer_city, c.region AS customer_region,
+    s.store_name, s.store_region,
+    p.payment_method
+FROM gold.fct_orders f
+JOIN gold.dim_customer       c ON f.customer_sk       = c.customer_sk
+JOIN gold.dim_store          s ON f.store_sk          = s.store_sk
+JOIN gold.dim_payment_method p ON f.payment_method_sk = p.payment_sk
+
+-- Analysts query fct_orders_wide. Modelling rigour lives in the star
+-- schema. Best of both worlds.`}</CodeBox>
       </section>
 
       <Divider />
@@ -645,8 +590,9 @@ THE PRAGMATIC HYBRID (2026 recommendation):
         <SectionTag text="// Part 08 — dbt for Dimensional Modelling" />
         <SectionTitle>Implementing Dimensional Models in dbt</SectionTitle>
 
-        <CodeBox label="dbt dimensional model — dim_customer with SCD2 and surrogate keys">{`-- snapshots/customers_snapshot.sql
-{% snapshot customers_snapshot %}
+        <SubSubTitle>The snapshot — SCD2 for dim_customer</SubSubTitle>
+
+        <CodeBox label="snapshots/customers_snapshot.sql">{`{% snapshot customers_snapshot %}
 {{ config(
     target_schema = 'snapshots',
     unique_key    = 'customer_id',
@@ -658,39 +604,36 @@ SELECT customer_id, customer_name, email_hashed, city, state, tier,
        acquisition_channel, registration_date, updated_at
 FROM {{ source('silver', 'customers') }}
 WHERE is_current = TRUE
-{% endsnapshot %}
+{% endsnapshot %}`}</CodeBox>
 
+        <SubSubTitle>Building dim_customer from the snapshot</SubSubTitle>
 
--- models/gold/dims/dim_customer.sql
-{{ config(materialized='table', unique_key='customer_sk') }}
+        <CodeBox label="models/gold/dims/dim_customer.sql">{`{{ config(materialized='table', unique_key='customer_sk') }}
 
 WITH snapshot AS (SELECT * FROM {{ ref('customers_snapshot') }})
 SELECT
     {{ dbt_utils.generate_surrogate_key(['customer_id', 'dbt_valid_from']) }}
         AS customer_sk,
     customer_id,
-    INITCAP(TRIM(customer_name))        AS customer_name,
+    INITCAP(TRIM(customer_name)) AS customer_name,
     email_hashed,
-    LOWER(TRIM(city))                   AS city,
-    LOWER(TRIM(state))                  AS state,
+    LOWER(TRIM(city))  AS city,
+    LOWER(TRIM(state)) AS state,
     CASE
         WHEN state IN ('Texas','Georgia','Florida','Alabama','Tennessee') THEN 'South'
         WHEN state IN ('California','Oregon','Washington') THEN 'West'
-        WHEN state IN ('New York','New Jersey','Massachusetts','Pennsylvania','Connecticut') THEN 'Northeast'
         ELSE 'Midwest'
-    END                                 AS region,
-    tier,
-    acquisition_channel,
-    registration_date,
-    dbt_valid_from                      AS valid_from,
-    dbt_valid_to                        AS valid_to,
+    END AS region,
+    tier, acquisition_channel, registration_date,
+    dbt_valid_from AS valid_from,
+    dbt_valid_to   AS valid_to,
     CASE WHEN dbt_valid_to IS NULL THEN TRUE ELSE FALSE END AS is_current,
-    CURRENT_TIMESTAMP()                 AS dim_updated_at
-FROM snapshot
+    CURRENT_TIMESTAMP() AS dim_updated_at
+FROM snapshot`}</CodeBox>
 
+        <SubSubTitle>fct_orders — incremental config and the base CTE</SubSubTitle>
 
--- models/gold/facts/fct_orders.sql
-{{ config(
+        <CodeBox label="models/gold/facts/fct_orders.sql — configuration and source">{`{{ config(
     materialized='incremental',
     unique_key='order_sk',
     incremental_strategy='merge',
@@ -702,28 +645,19 @@ WITH orders AS (
     {% if is_incremental() %}
         WHERE updated_at > (SELECT MAX(order_updated_at) FROM {{ this }})
     {% endif %}
-)
-SELECT
+)`}</CodeBox>
+
+        <SubSubTitle>fct_orders — the surrogate key lookups and the SELECT</SubSubTitle>
+
+        <CodeBox label="...continued — resolving every dimension FK at load time">{`SELECT
     {{ dbt_utils.generate_surrogate_key(['o.order_id']) }} AS order_sk,
-    -- Dimension surrogate keys (looked up at load time):
-    c.customer_sk,
-    s.store_sk,
-    d.date_sk                                              AS order_date_sk,
-    COALESCE(p.payment_sk, -1)                             AS payment_method_sk,
-    -- Degenerate dimension:
-    o.order_id,
-    -- Additive facts:
-    o.order_amount,
-    o.discount_amount,
-    o.delivery_fee,
-    o.num_items,
-    o.order_amount - o.discount_amount                     AS net_revenue,
-    -- Non-additive flags:
-    o.is_first_order,
-    o.has_promo,
-    -- Audit:
-    o.created_at    AS order_created_at,
-    o.updated_at    AS order_updated_at,
+    c.customer_sk, s.store_sk, d.date_sk AS order_date_sk,
+    COALESCE(p.payment_sk, -1) AS payment_method_sk,
+    o.order_id,                                  -- degenerate dimension
+    o.order_amount, o.discount_amount, o.delivery_fee, o.num_items,
+    o.order_amount - o.discount_amount AS net_revenue,
+    o.is_first_order, o.has_promo,               -- non-additive flags
+    o.created_at AS order_created_at, o.updated_at AS order_updated_at,
     CURRENT_TIMESTAMP() AS fact_loaded_at
 FROM orders o
 JOIN {{ ref('dim_date') }}     d ON DATE(o.created_at) = d.full_date
@@ -732,6 +666,42 @@ JOIN {{ ref('dim_customer') }} c ON o.customer_id = c.customer_id
                                  AND COALESCE(c.valid_to, '9999-12-31')
 JOIN {{ ref('dim_store') }}    s ON o.store_id = s.store_id
 LEFT JOIN {{ ref('dim_payment_method') }} p ON o.payment_method = p.payment_method_name`}</CodeBox>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data Modelling</SectionTitle>
+
+        {[
+          {
+            wrong: '"The grain is a documentation detail — you can add columns first and formalize it later"',
+            right: 'Part 02 is explicit that grain has to come first precisely because every later column choice depends on it — adding product_id to an order-grain table silently multiplies rows per order, and this module\'s Error Library shows exactly what that does: SUM(order_amount) triples without any error being raised.',
+          },
+          {
+            wrong: '"Snowflaking a dimension (normalizing dim_store into dim_store → dim_city → dim_region) is the more correct, professional design"',
+            right: 'Part 05 makes the opposite case directly — for typical dimension sizes, denormalizing city/state/region into one dim_store row costs bytes, not gigabytes, while snowflaking adds real join complexity for negligible storage benefit. Snowflaking is only justified when a dimension itself has millions of rows.',
+          },
+          {
+            wrong: '"Joining a fact table to a dimension on the natural key (customer_id) is basically equivalent to joining on the surrogate key (customer_sk)"',
+            right: 'Part 04\'s Reason 1 and this module\'s Error Library both show this is where point-in-time accuracy dies — the natural-key join matches every historical SCD2 version simultaneously, causing exactly the "COUNT(order_id) triples" fan-out bug this module\'s Error Library opens with.',
+          },
+          {
+            wrong: '"Storing a pre-computed ratio like cancellation_rate in the fact table is fine as long as it\'s accurate when written"',
+            right: 'Part 03\'s non-additive facts section is specific about why this fails over time: a stored ratio is correct only until its denominator changes, at which point it\'s silently wrong with no error — storing the numerator and denominator separately and computing the ratio at query time is the only version that stays correct indefinitely.',
+          },
+          {
+            wrong: '"Wide tables (OBT) are strictly the modern replacement for star schemas — dimensional modelling is legacy"',
+            right: 'Part 07\'s hybrid recommendation pushes back on this directly: wide tables struggle specifically where star schemas excel — SCD2 tracking and cross-process analysis via conformed dimensions — which is why the pragmatic 2026 pattern keeps the star schema as the canonical model and derives a wide table from it, rather than replacing one with the other.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -754,7 +724,9 @@ LEFT JOIN {{ ref('dim_payment_method') }} p ON o.payment_method = p.payment_meth
             Same company, same month — $340 thousand difference. The CEO asks for an explanation.
           </Para>
 
-          <CodeBox label="Diagnosing the metrics disagreement">{`-- Finance dashboard SQL (Metabase auto-generated):
+          <SubSubTitle>Diagnosing the disagreement</SubSubTitle>
+
+          <CodeBox label="Two dashboards, two different SQL definitions of 'revenue'">{`-- Finance dashboard SQL (Metabase auto-generated):
 SELECT SUM(order_amount) FROM fct_orders
 WHERE order_date >= '2026-03-01' AND order_date < '2026-04-01';
 -- Returns: 4.21 million
@@ -766,29 +738,26 @@ WHERE d.month_name = 'March' AND d.year = 2026
   AND f.status = 'delivered';
 -- Returns: 3.87 million
 
--- TWO DIFFERENCES FOUND:
--- 1. Finance includes ALL statuses. Operations filters to 'delivered' only.
--- 2. Are the date ranges identical?
-
 -- Check status breakdown:
 SELECT status, SUM(order_amount) AS revenue
 FROM fct_orders
 WHERE order_date >= '2026-03-01' AND order_date < '2026-04-01'
-GROUP BY 1 ORDER BY 2 DESC;
--- placed:     0.12 million  ← Finance includes (not yet delivered)
--- confirmed:  0.08 million  ← Finance includes
--- delivering: 0.06 million  ← Finance includes
--- delivered:  3.87 million  ← Operations reports only this ✓
--- cancelled:  0.08 million  ← Finance includes CANCELLED orders!
+GROUP BY 1 ORDER BY 2 DESC;`}</CodeBox>
 
--- Root cause: both queries are "correct" — they measure different things.
--- Finance: GMV (all orders placed)
--- Operations: completed revenue (delivered only)
--- But BOTH are labelled "March revenue" — that is the problem.
+          <Output>{`placed:     0.12 million  ← Finance includes (not yet delivered)
+confirmed:  0.08 million  ← Finance includes
+delivering: 0.06 million  ← Finance includes
+delivered:  3.87 million  ← Operations reports only this ✓
+cancelled:  0.08 million  ← Finance includes CANCELLED orders!
 
--- MODELLING FIX: define canonical metric in dbt, one place:
--- models/gold/metrics/mrt_monthly_revenue.sql
-SELECT
+Root cause: both queries are "correct" — they measure different things.
+Finance: GMV (all orders placed). Operations: completed revenue
+(delivered only). But BOTH are labelled "March revenue" — that's the
+problem.`}</Output>
+
+          <SubSubTitle>The modelling fix — one canonical definition</SubSubTitle>
+
+          <CodeBox label="models/gold/metrics/mrt_monthly_revenue.sql">{`SELECT
     d.year, d.month_number, d.month_name,
     SUM(CASE WHEN f.status = 'delivered' THEN f.order_amount ELSE 0 END)
         AS delivered_revenue,
@@ -884,6 +853,42 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Adding a column to a fact table without checking whether it\'s actually true at the declared grain',
+            a: 'Part 02\'s grain examples show exactly how this happens — product_id looks harmless to add to an order-grain table, but it silently forces multiple rows per order, and this module\'s Error Library documents the direct consequence: a revenue dashboard showing 3x the correct value with no error anywhere in the pipeline.',
+          },
+          {
+            q: 'Joining a fact table to an SCD Type 2 dimension on the natural key instead of the surrogate key',
+            a: 'Part 04\'s Reason 1 is the whole explanation, and this module\'s Error Library shows the two ways it manifests — a fan-out that inflates COUNT(*), or an is_current=TRUE filter that makes every historical order silently show the customer\'s CURRENT city instead of the one true at order time.',
+          },
+          {
+            q: 'Building a separate dim_city or dim_product_category table to "properly normalize" a dimension',
+            a: 'Part 05 is direct about this: for typical dimension sizes, snowflaking trades a real cost (extra joins on every analyst query) for a benefit that barely matters (a few saved bytes per row). Denormalize the hierarchy into one dimension table unless that dimension itself has millions of rows.',
+          },
+          {
+            q: 'Storing a computed metric like average_order_value or conversion_rate directly in a fact or aggregate table',
+            a: 'Part 03\'s non-additive facts rule and this module\'s Real World section both point to the same failure mode: a stored ratio is only correct at the moment it was computed, and any later change to what should count in the denominator makes it silently wrong. Store the components, compute the ratio at query time.',
+          },
+          {
+            q: 'Letting two teams write independent SQL that both claim to compute the same named metric',
+            a: 'This module\'s entire Real World section is built around exactly this — Finance and Operations both had "correct" SQL for "March revenue" that returned numbers $340K apart, because nothing forced them to share a single definition. A canonical dbt metrics model, queried by every team, is the actual fix — not a data quality investigation.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -944,7 +949,7 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
         'Centralise business logic in dbt Gold models. A "revenue" metric disagreement between Finance and Operations ($4.21 million vs $3.87 million) is always a missing canonical definition problem, not a data quality problem. One dbt model defines delivered_revenue, gross_order_value, and cancelled_value — both teams query the canonical model and can no longer accidentally apply different filters to the same metric name.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
