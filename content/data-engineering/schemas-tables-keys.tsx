@@ -36,12 +36,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -60,6 +64,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -70,6 +95,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -135,7 +178,7 @@ export default function SchemasTablesKeysModule() {
       description="The foundation of every database — what each concept is and why it matters."
       section="Data Engineering — Module 12"
       readTime="50 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why This Matters ───────────────────────────────── */}
@@ -251,13 +294,12 @@ SELECT * FROM silver.orders WHERE created_at >= '2026-03-01';
 
 -- Setting the search path so you don't need full qualification:
 SET search_path = silver, gold, public;
-SELECT * FROM orders;   -- PostgreSQL looks in silver first, then gold
-
--- Why schema separation matters for data engineering:
+SELECT * FROM orders;   -- PostgreSQL looks in silver first, then gold`}</CodeBox>
+        <Output>{`Why schema separation matters for data engineering:
   dbt models write to specific schemas defined in dbt_project.yml
   Access control is granted at schema level (GRANT USAGE ON SCHEMA gold TO analyst_role)
   Different retention policies per schema (landing: 30 days, gold: permanent)
-  Pipeline monitoring groups metrics by schema to track each layer's health`}</CodeBox>
+  Pipeline monitoring groups metrics by schema to track each layer's health`}</Output>
 
         <SubTitle>Table-level schema — the structure definition</SubTitle>
 
@@ -270,7 +312,8 @@ SELECT * FROM orders;   -- PostgreSQL looks in silver first, then gold
           from one who builds fragile ones.
         </Para>
 
-        <CodeBox label="Complete table schema — every element explained">{`CREATE TABLE silver.orders (
+        <SubSubTitle>A complete table definition — columns and business rules</SubSubTitle>
+        <CodeBox label="Complete table schema — columns and business rules">{`CREATE TABLE silver.orders (
     -- PRIMARY KEY: unique identifier for this record
     order_id        BIGINT          NOT NULL,
 
@@ -297,9 +340,11 @@ SELECT * FROM orders;   -- PostgreSQL looks in silver first, then gold
     created_at      TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
     ingested_at     TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
-    pipeline_run_id UUID            NOT NULL,
+    pipeline_run_id UUID            NOT NULL
+);`}</CodeBox>
 
-    -- CONSTRAINTS defined inline
+        <SubSubTitle>The constraints for the same table, and what each element answers</SubSubTitle>
+        <CodeBox label="The same table's constraints, and the question each element answers">{`ALTER TABLE silver.orders ADD
     CONSTRAINT pk_orders            PRIMARY KEY (order_id),
     CONSTRAINT fk_orders_customer   FOREIGN KEY (customer_id)
                                     REFERENCES silver.customers(customer_id)
@@ -308,8 +353,7 @@ SELECT * FROM orders;   -- PostgreSQL looks in silver first, then gold
                                     REFERENCES silver.restaurants(restaurant_id)
                                     ON DELETE RESTRICT,
     CONSTRAINT chk_order_amount     CHECK (order_amount > 0),
-    CONSTRAINT chk_delivery_fee     CHECK (delivery_fee >= 0)
-);
+    CONSTRAINT chk_delivery_fee     CHECK (delivery_fee >= 0);
 
 -- Each element answers a question:
 --   BIGINT vs INTEGER    → how large can this ID grow?
@@ -348,21 +392,22 @@ SELECT * FROM orders;   -- PostgreSQL looks in silver first, then gold
 
         <SubTitle>Numeric types — the most common source of silent bugs</SubTitle>
 
-        <CodeBox label="Numeric types — sizes, ranges, and when to use each">{`INTEGER TYPES:
-  SMALLINT    2 bytes   -32,768 to 32,767
-                        Use: age, small counters, status codes
-                        Danger: auto-increment IDs that might exceed 32k
+        <SubSubTitle>Integer sizes — and where they silently run out of room</SubSubTitle>
+        <CodeBox label="Integer types — sizes, ranges, and where each overflows">{`SMALLINT    2 bytes   -32,768 to 32,767
+                      Use: age, small counters, status codes
+                      Danger: auto-increment IDs that might exceed 32k
 
-  INTEGER     4 bytes   -2,147,483,648 to 2,147,483,647 (~2.1 billion)
-                        Use: most IDs, counts, quantities
-                        Danger: DoorDash order IDs exceeded 2B — use BIGINT
+INTEGER     4 bytes   -2,147,483,648 to 2,147,483,647 (~2.1 billion)
+                      Use: most IDs, counts, quantities
+                      Danger: DoorDash order IDs exceeded 2B — use BIGINT
 
-  BIGINT      8 bytes   -9.2 quintillion to 9.2 quintillion
-                        Use: all auto-increment primary keys, timestamps
-                             as milliseconds, transaction IDs at scale
-                        Safe default for any ID column
+BIGINT      8 bytes   -9.2 quintillion to 9.2 quintillion
+                      Use: all auto-increment primary keys, timestamps
+                           as milliseconds, transaction IDs at scale
+                      Safe default for any ID column`}</CodeBox>
 
-FLOATING POINT TYPES (approximate — never use for money):
+        <SubSubTitle>Why FLOAT is wrong for money, and what to use instead</SubSubTitle>
+        <CodeBox label="Floating point vs exact numeric types, and auto-increment">{`FLOATING POINT TYPES (approximate — never use for money):
   REAL        4 bytes   ~7 significant decimal digits
   DOUBLE      8 bytes   ~15 significant decimal digits
                         Use: scientific measurements, ML feature values
@@ -387,7 +432,8 @@ SERIAL / AUTO-INCREMENT (PostgreSQL):
 
         <SubTitle>Text types — size matters more than you think</SubTitle>
 
-        <CodeBox label="Text types — choosing the right one">{`VARCHAR(n)    Variable length, max n characters
+        <SubSubTitle>VARCHAR, CHAR, TEXT — and the recommended length for common fields</SubSubTitle>
+        <CodeBox label="Text types — choosing the right one and the right length">{`VARCHAR(n)    Variable length, max n characters
               Storage: only uses space for actual content + overhead
               Use: names (VARCHAR(200)), emails (VARCHAR(320)),
                    phone numbers (VARCHAR(20)), status codes (VARCHAR(20))
@@ -420,7 +466,8 @@ The VARCHAR vs TEXT debate in PostgreSQL:
 
         <SubTitle>Date and time types — the most mishandled category</SubTitle>
 
-        <CodeBox label="Date/time types — timezone handling is critical">{`DATE          Calendar date only: 2026-03-17
+        <SubSubTitle>DATE, TIME, TIMESTAMP, and TIMESTAMPTZ — what each stores</SubSubTitle>
+        <CodeBox label="Date and time types — what each one actually stores">{`DATE          Calendar date only: 2026-03-17
               Storage: 4 bytes
               Use: birthdates, event dates, report dates
               No timezone — just a calendar date
@@ -447,18 +494,18 @@ THE RULE: always use TIMESTAMPTZ for event timestamps.
           (e.g., birth_date, report_date, expiry_date).
 
 INTERVAL      Duration: '3 days', '2 hours 30 minutes', '1 year'
-              Use: date arithmetic, scheduling intervals
-
-Common bugs from TIMESTAMP without timezone:
+              Use: date arithmetic, scheduling intervals`}</CodeBox>
+        <Output>{`Common bugs from TIMESTAMP without timezone:
   - Orders from West Coast US users at 11:30 PM appear to be from "the next day"
     when analysed by a European team in UTC
   - Partition pruning fails: WHERE created_at >= '2026-03-17'
     evaluates differently in PST vs UTC context
-  - Daylight saving time transitions produce duplicate or missing hours`}</CodeBox>
+  - Daylight saving time transitions produce duplicate or missing hours`}</Output>
 
         <SubTitle>Special types worth knowing</SubTitle>
 
-        <CodeBox label="Special data types used frequently in production schemas">{`UUID          Universally Unique Identifier
+        <SubSubTitle>UUID and BOOLEAN — identity and three-valued logic</SubSubTitle>
+        <CodeBox label="UUID and BOOLEAN — identity across systems, and NULL as a third value">{`UUID          Universally Unique Identifier
               Format: 550e8400-e29b-41d4-a716-446655440000
               Storage: 16 bytes (as UUID type) or 36 bytes (as CHAR(36))
               Use: globally unique IDs across distributed systems,
@@ -472,9 +519,10 @@ BOOLEAN       TRUE / FALSE / NULL
               Storage: 1 byte
               Use: flags, feature toggles, yes/no fields
               Note: three-valued logic — NULL means "unknown",
-                    not FALSE. WHERE is_premium = TRUE excludes NULLs.
+                    not FALSE. WHERE is_premium = TRUE excludes NULLs.`}</CodeBox>
 
-JSONB         Binary JSON, indexed
+        <SubSubTitle>JSONB, ARRAY, and ENUM — semi-structured and constrained values</SubSubTitle>
+        <CodeBox label="JSONB, ARRAY, and ENUM — when each earns its place in a relational table">{`JSONB         Binary JSON, indexed
               Storage: variable
               Use: semi-structured data within a relational table
                    (metadata, config, variable attributes per record)
@@ -494,6 +542,13 @@ ENUM          User-defined type with a fixed set of values
               Advantage: storage-efficient, enforces values at type level
               Disadvantage: adding values requires ALTER TYPE (can be slow)
               Recommendation: use VARCHAR + CHECK constraint instead for flexibility`}</CodeBox>
+
+        <TryThis>
+          Open a table you work with regularly and check two things: are monetary
+          columns DECIMAL or FLOAT, and are event-timestamp columns TIMESTAMPTZ or
+          plain TIMESTAMP? Both are silent bugs waiting to surface — one in an
+          aggregation, the other the first time someone in a different timezone queries it.
+        </TryThis>
       </section>
 
       <Divider />
@@ -522,7 +577,8 @@ ENUM          User-defined type with a fixed set of values
           the primary key.
         </Para>
 
-        <CodeBox label="Primary key — types and trade-offs">{`SURROGATE KEY (synthetic, auto-generated):
+        <SubSubTitle>Surrogate keys — synthetic, stable, and the usual default</SubSubTitle>
+        <CodeBox label="Surrogate primary keys — generated, stable, meaningless">{`SURROGATE KEY (synthetic, auto-generated):
   order_id BIGSERIAL PRIMARY KEY
   -- or --
   order_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
@@ -533,28 +589,29 @@ ENUM          User-defined type with a fixed set of values
     → Stable — never changes even if business data changes
     → Simple — single column, always a known type
     → Efficient — integer PKs are smaller and faster to index than UUIDs
-  
+
   Disadvantages:
     → Meaningless — tells you nothing about the row
-    → Requires a separate business key for deduplication
+    → Requires a separate business key for deduplication`}</CodeBox>
 
-NATURAL KEY (from the domain):
+        <SubSubTitle>Natural and composite keys — and the practical recommendation</SubSubTitle>
+        <CodeBox label="Natural and composite keys, and the recommended default">{`NATURAL KEY (from the domain):
   email VARCHAR(320) PRIMARY KEY  -- for a users table
   isbn  CHAR(13)     PRIMARY KEY  -- for a books table
-  
+
   Advantages:
     → Meaningful — also serves as a lookup key
     → No extra column needed
-  
+
   Disadvantages:
     → Can change (user changes email → cascading update everywhere)
     → Must be truly unique and immutable in the real world
     → Longer values create larger, slower indexes
-  
+
 COMPOSITE KEY (multiple columns together):
   PRIMARY KEY (order_id, item_sequence)  -- for an order_items table
   PRIMARY KEY (student_id, course_id)    -- for an enrollment table
-  
+
   Use when: no single column uniquely identifies a row, but a
             combination does. Common in junction/association tables.
 
@@ -572,7 +629,8 @@ changes. Keep natural keys as UNIQUE constraints, not the PK.`}</CodeBox>
           not exist.
         </Para>
 
-        <CodeBox label="Foreign keys — referential integrity and cascade options">{`-- Child table with foreign key references to two parent tables:
+        <SubSubTitle>Defining a foreign key, and the ON DELETE / ON UPDATE options</SubSubTitle>
+        <CodeBox label="Foreign keys — cascade options for delete and update">{`-- Child table with foreign key references to two parent tables:
 CREATE TABLE silver.orders (
     order_id      BIGINT PRIMARY KEY,
     customer_id   BIGINT NOT NULL,
@@ -599,9 +657,10 @@ ON DELETE options — what happens when the parent row is deleted:
 ON UPDATE options — what happens when the parent primary key changes:
   CASCADE     → UPDATE the foreign key value in all child rows automatically
   RESTRICT    → PREVENT the update if child rows reference it
-  (Same other options as ON DELETE)
+  (Same other options as ON DELETE)`}</CodeBox>
 
-REAL IMPACT: what FK violations look like without enforcement:
+        <SubSubTitle>What actually breaks without a foreign key, and warehouse behavior</SubSubTitle>
+        <CodeBox label="FK violations without enforcement, and FKs in data warehouses">{`REAL IMPACT: what FK violations look like without enforcement:
   Without FK constraint on customer_id:
     Customer 4201938 gets deleted (GDPR request)
     All their orders still exist with customer_id = 4201938
@@ -655,13 +714,12 @@ USE CASES for unique constraints:
 
 UNIQUE vs PRIMARY KEY:
   Primary key: exactly one per table, cannot be NULL
-  Unique:      multiple allowed per table, can be NULL (one NULL per column)
-
-UNIQUE in data engineering pipelines:
+  Unique:      multiple allowed per table, can be NULL (one NULL per column)`}</CodeBox>
+        <Output>{`UNIQUE in data engineering pipelines:
   External IDs from source systems should always have a UNIQUE constraint.
   Without it, a pipeline bug that re-inserts the same record creates duplicates
   that are invisible until someone notices metrics are inflated.
-  With the constraint, the duplicate insert fails visibly with an error.`}</CodeBox>
+  With the constraint, the duplicate insert fails visibly with an error.`}</Output>
 
         <SubTitle>Natural key vs surrogate key — a deeper look</SubTitle>
 
@@ -811,6 +869,14 @@ UNIQUE in data engineering pipelines:
           quality must be enforced by your pipeline code and dbt tests — not by the
           database.
         </Callout>
+
+        <TryThis>
+          Pick a table in your warehouse whose DDL declares a foreign key or primary
+          key constraint. Run a query that would violate it if it were actually
+          enforced — an orphaned foreign key, or a duplicate on the "primary key"
+          column. If rows come back, that's the constraint trap in this Part, live
+          in your own data.
+        </TryThis>
       </section>
 
       <Divider />
@@ -838,7 +904,8 @@ UNIQUE in data engineering pipelines:
 
         <SubTitle>The normal forms — intuitive explanation</SubTitle>
 
-        <CodeBox label="Normalisation — from a messy table to clean relational design">{`UNNORMALISED TABLE (everything in one table):
+        <SubSubTitle>Starting from one messy table, and fixing it through 1NF and 2NF</SubSubTitle>
+        <CodeBox label="From an unnormalised table through 1NF and 2NF">{`UNNORMALISED TABLE (everything in one table):
   order_id | customer_name | customer_email       | restaurant_name | items
   ─────────────────────────────────────────────────────────────────────────
   9284751  | Emily Johnson | emily@example.com    | Punjabi Dhaba   | Butter Chicken, Naan
@@ -848,34 +915,34 @@ UNIQUE in data engineering pipelines:
   Problems:
   → "Emily Johnson" and "emily@example.com" stored 2 times
     If her email changes, must update 2 rows (or more if she orders again)
-    If one update is missed → inconsistency
   → "Punjabi Dhaba" stored 2 times — same duplication problem
   → "items" column contains multiple values — cannot query individual items
 
 FIRST NORMAL FORM (1NF):
   Rule: each column contains a single atomic value (no lists/arrays in a cell)
-  
+
   Fix the "items" column by creating one row per item:
   order_id | customer_name | restaurant_name | item_name
   9284751  | Emily Johnson | Punjabi Dhaba   | Butter Chicken
   9284751  | Emily Johnson | Punjabi Dhaba   | Naan
-  
+
   Better but still has customer/restaurant duplication.
 
 SECOND NORMAL FORM (2NF):
   Rule: every non-key column must depend on the ENTIRE primary key,
         not just part of it. (Relevant for composite PKs)
-  
+
   In our order_items table with PK (order_id, item_name):
     customer_name depends only on order_id, not on item_name
-    → move customer_name to the orders table (depends on order_id only)
+    → move customer_name to the orders table (depends on order_id only)`}</CodeBox>
 
-THIRD NORMAL FORM (3NF) — the target for OLTP:
+        <SubSubTitle>Third normal form — the fully normalised, no-duplication design</SubSubTitle>
+        <CodeBox label="Third normal form (3NF) — the target for OLTP">{`THIRD NORMAL FORM (3NF) — the target for OLTP:
   Rule: every non-key column must depend DIRECTLY on the primary key,
         not on another non-key column (no transitive dependencies)
-  
+
   FULLY NORMALISED DESIGN (3NF):
-  
+
   customers:    customer_id | name         | email
                 4201938     | Emily Johnson | emily@example.com
                 1092847     | Marcus Bennett | marcus@example.com
@@ -891,11 +958,10 @@ THIRD NORMAL FORM (3NF) — the target for OLTP:
 
   order_items:  order_id | item_name      | quantity | unit_price
                 9284751  | Butter Chicken | 1        | 320.00
-                9284751  | Naan           | 2        | 30.00
-
-  Now: Emily's email is stored exactly ONCE → update in one place
-       "Punjabi Dhaba" is stored exactly ONCE → update in one place
-       Each table represents one entity, each column depends on its PK`}</CodeBox>
+                9284751  | Naan           | 2        | 30.00`}</CodeBox>
+        <Output>{`Now: Emily's email is stored exactly ONCE → update in one place
+     "Punjabi Dhaba" is stored exactly ONCE → update in one place
+     Each table represents one entity, each column depends on its PK`}</Output>
 
         <SubTitle>Denormalisation — when to deliberately undo normalisation</SubTitle>
 
@@ -908,7 +974,8 @@ THIRD NORMAL FORM (3NF) — the target for OLTP:
           rather than multi-table JOINs.
         </Para>
 
-        <CodeBox label="Denormalised Gold table — pre-joined for analytical queries">{`NORMALISED (Silver layer — correct for integrity):
+        <SubSubTitle>The normalised query vs the denormalised Gold table it feeds</SubSubTitle>
+        <CodeBox label="Normalised Silver query vs a denormalised Gold table">{`NORMALISED (Silver layer — correct for integrity):
   To answer "total revenue by restaurant category":
   SELECT r.category, SUM(o.order_amount)
   FROM silver.orders o
@@ -934,14 +1001,11 @@ DENORMALISED (Gold layer — correct for performance):
                  FROM gold.daily_order_metrics
                  WHERE order_date >= '2026-01-01'
                  GROUP BY restaurant_category;
-  → No JOIN. Just reads from one pre-aggregated table. Fast.
-
-  Trade-off: restaurant_category is now stored once per order in the
-             Gold table. If you need to update the category for all
-             restaurants in a city, you must rebuild the Gold table.
-  
-  This is correct — Gold tables are rebuilt on a schedule.
-  The cost is acceptable for the analytical performance gained.`}</CodeBox>
+  → No JOIN. Just reads from one pre-aggregated table. Fast.`}</CodeBox>
+        <Output>{`Trade-off: restaurant_category is now stored once per order in the Gold
+table. If you need to update the category for all restaurants in a city,
+you must rebuild the Gold table. This is correct — Gold tables are rebuilt
+on a schedule. The cost is acceptable for the analytical performance gained.`}</Output>
       </section>
 
       <Divider />
@@ -968,22 +1032,20 @@ updated_at      TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 ingested_at     TIMESTAMPTZ  NOT NULL DEFAULT NOW()  -- when pipeline ran
 pipeline_run_id UUID         NOT NULL                -- which specific run
 source_system   VARCHAR(50)  NOT NULL                -- which source this came from
-record_hash     CHAR(64)     NULL                    -- SHA-256 of key fields for dedup
-
--- Why each one matters:
+record_hash     CHAR(64)     NULL                    -- SHA-256 of key fields for dedup`}</CodeBox>
+        <Output>{`Why each one matters:
 created_at:      "When did this event happen in the real world?"
 updated_at:      "When was this record last modified in the source?"
 ingested_at:     "When did our pipeline process this row?"
-pipeline_run_id: "Which pipeline run produced this row?"
-                  When a bug is found: re-run that specific run with a fix
+pipeline_run_id: "Which pipeline run produced this row?" — when a bug is
+                  found: re-run that specific run with a fix
 source_system:   "Which of our 15 data sources did this come from?"
 record_hash:     "Is this an exact duplicate of a row we already have?"
 
 The difference between created_at and ingested_at:
   An order was placed at 2026-03-17 20:14:32 (created_at)
   Our pipeline processed it at 2026-03-18 02:14:47 (ingested_at)
-  These are different by 6 hours — both are useful for different analysis.
-  Mixing them up produces wrong time-based metrics.`}</CodeBox>
+  These are different by 6 hours — both are useful for different analysis.`}</Output>
 
         <SubTitle>The soft delete pattern — never actually delete rows</SubTitle>
 
@@ -1008,14 +1070,6 @@ WHERE order_id = 9284751;
 
 -- All queries filter to active records:
 SELECT * FROM silver.orders WHERE is_deleted = FALSE;
-
--- Historical analysis still works:
-SELECT COUNT(*) FROM silver.orders
-WHERE created_at >= '2026-01-01'
-  AND is_deleted = FALSE;     -- current count (excluding deleted)
-
-SELECT COUNT(*) FROM silver.orders
-WHERE created_at >= '2026-01-01';  -- all records ever created
 
 -- Create a view that hides deleted rows:
 CREATE VIEW silver.active_orders AS
@@ -1051,19 +1105,60 @@ SELECT
         WHEN 'v2' THEN (raw_payload->>'order_id')::BIGINT  -- renamed in v2
         WHEN 'v3' THEN (raw_payload->>'order_id')::BIGINT  -- same as v2
     END AS order_id,
-    
     CASE schema_version
         WHEN 'v1' THEN NULL                                -- didn't exist in v1
         WHEN 'v2' THEN (raw_payload->>'delivery_fee')::DECIMAL(6,2)
         WHEN 'v3' THEN (raw_payload->>'delivery_fee')::DECIMAL(6,2)
     END AS delivery_fee,
     ...
-FROM landing.orders_raw;
-
-Benefits:
+FROM landing.orders_raw;`}</CodeBox>
+        <Output>{`Benefits:
   → New source schema version? Add a new CASE branch.
   → Old data is still processable with its original schema version.
-  → Schema change history is explicit and auditable.`}</CodeBox>
+  → Schema change history is explicit and auditable.`}</Output>
+
+        <TryThis>
+          Pick three tables in your own data platform and check which of the four
+          audit columns (created_at, updated_at, ingested_at, pipeline_run_id) each
+          one is missing. For every missing column, name the debugging question you
+          would not be able to answer during an incident.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Schemas, Keys, and Constraints</SectionTitle>
+
+        {[
+          {
+            wrong: '"FLOAT is fine for money as long as you\'re careful to round the results"',
+            right: 'Part 03 is explicit that this is a correctness problem, not a style preference — IEEE 754 floating point cannot represent most decimal fractions exactly, and the error compounds across aggregation before any rounding happens. DECIMAL performs exact decimal arithmetic; rounding a FLOAT after the fact does not recover precision already lost.',
+          },
+          {
+            wrong: '"A foreign key constraint in a Snowflake or BigQuery table means the database enforces it, same as PostgreSQL"',
+            right: 'Part 04\'s foreign key section and Part 05\'s warehouse Callout are both explicit that Snowflake, BigQuery, and Redshift define FK/UNIQUE/PK constraints purely as documentation and query-optimiser hints — they are never enforced at runtime. dbt relationship tests are the actual enforcement layer in a warehouse.',
+          },
+          {
+            wrong: '"A table doesn\'t strictly need a primary key if the pipeline never updates existing rows"',
+            right: 'Part 04\'s primary key section and this module\'s Error Library both show the problem isn\'t update targeting alone — without a PK, duplicate inserts from pipeline reruns are invisible, and any JOIN from another table produces silent fan-out the moment the same ID appears twice.',
+          },
+          {
+            wrong: '"3NF is the correct design everywhere — denormalising is just cutting corners"',
+            right: 'Part 06 is explicit that normalisation and denormalisation are both correct, in different layers: 3NF is right for OLTP and Silver, but Gold is deliberately denormalised because analysts running ad-hoc queries against multi-table JOINs is a real performance cost, not a style issue.',
+          },
+          {
+            wrong: '"TIMESTAMP and TIMESTAMPTZ are interchangeable as long as the whole company is in one timezone"',
+            right: 'Part 03\'s date/time section and Part 08\'s Real World review both show this breaks the moment a report crosses a DST boundary or a single BI client\'s session timezone differs from the server\'s — the ambiguity is baked into the stored value itself, not something "being careful" about timezones can fix after the fact.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1259,6 +1354,45 @@ Third, DECIMAL type correction if financial amounts are stored as FLOAT. The flo
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Storing money as FLOAT "because it\'s just easier" than dealing with DECIMAL precision arguments',
+            a: 'Part 03 and this module\'s Error Library both show where this ends: reconciliation reports disagree with the payment processor by fractions of a cent that grow with transaction volume, and the root cause traces back to a type choice from day one. Default to DECIMAL(p,s) for every monetary column — there is no scenario in this module where FLOAT is the right call for money.',
+          },
+          {
+            q: 'Skipping NOT NULL because "the application already validates required fields"',
+            a: 'Part 05\'s constraint table and this module\'s Error Library both show the gap: a pipeline bug, not the application, is what actually inserts the NULL — and SUM/AVG silently exclude those NULL rows rather than erroring, so the metric looks plausible while quietly being wrong. Database-level NOT NULL catches what pipeline code alone cannot.',
+          },
+          {
+            q: 'Choosing a natural key like email as the primary key instead of a surrogate key',
+            a: 'Part 04\'s natural-vs-surrogate comparison is explicit about the failure mode: a natural key can change (a user changes their email), which cascades an update through every foreign key referencing it. Part 04\'s recommendation — surrogate PK plus a UNIQUE constraint on the natural key — gets the stability and the deduplication guarantee without the cascade risk.',
+          },
+          {
+            q: 'Assuming a foreign key constraint declared in a Snowflake or BigQuery table is actually enforced',
+            a: 'Part 05\'s warehouse Callout and this module\'s Error Library are both direct: cloud warehouse FK/UNIQUE/PK constraints are documentation and optimiser hints only. A pipeline can insert orphaned foreign keys or duplicate "primary keys" with zero errors. dbt relationship and unique tests are the actual enforcement layer — the DDL constraint alone gives false confidence.',
+          },
+          {
+            q: 'Treating audit columns (ingested_at, pipeline_run_id) as unnecessary overhead since they aren\'t business data',
+            a: 'Part 07 is explicit that these columns exist to answer exactly the two questions asked in every debugging session: "when did our pipeline touch this row?" and "which run produced it?" Skipping them doesn\'t save meaningful storage — it removes the only reliable way to trace a bad row back to the run that created it.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1333,7 +1467,7 @@ Third, DECIMAL type correction if financial amounts are stored as FLOAT. The flo
         'Data warehouses define constraints as documentation but do not enforce them. Your pipeline code and dbt tests are the enforcement layer in a warehouse. Always add at minimum: unique tests on primary key columns, not-null tests on required columns, and relationship tests on foreign key columns.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
