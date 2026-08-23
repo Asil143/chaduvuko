@@ -68,6 +68,45 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -90,7 +129,7 @@ export default function WhatIsDataEngineeringModule() {
       description="The role, the lifecycle, what DEs actually do, and how to break in."
       section="Data Engineering — Module 02"
       readTime="50 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Definition ─────────────────────────────────── */}
@@ -295,6 +334,15 @@ Operations also means monitoring: tracking pipeline run times, data freshness, r
           you revisit Transformation. A downstream ML team needs lower latency — you redesign
           Serving. A data engineer is always somewhere in this cycle on multiple projects simultaneously.
         </Callout>
+
+        <TryThis>
+          Pick any dashboard, report, or app feature you use regularly. Trace it
+          backwards through the six phases above — where was the underlying data
+          generated, how do you think it got ingested, where is it probably
+          stored, what transformation likely produced the number you see, and
+          how is it being served to you? You won't have the real answers, but
+          the exercise of guessing forces you to think in phases instead of tools.
+        </TryThis>
       </section>
 
       <Divider />
@@ -516,6 +564,14 @@ Friday
             </div>
           </div>
         ))}
+
+        <TryThis>
+          Find a real data engineering job posting and sort every tool it lists
+          into the eight categories above. If a listed tool doesn't fit any
+          category cleanly, that's worth investigating — either the category
+          map needs a mental adjustment, or the posting is using non-standard
+          terminology worth clarifying before you apply.
+        </TryThis>
       </section>
 
       <Divider />
@@ -806,6 +862,42 @@ Notes:
 
       <Divider />
 
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data Engineering</SectionTitle>
+
+        {[
+          {
+            wrong: '"Data engineering is basically writing SQL queries to pull reports, like a more technical analyst"',
+            right: 'Part 01\'s word-by-word definition is explicit that this is an engineering job — building and maintaining systems that run reliably, at scale, and automatically, not running one-off queries. Part 05\'s dependency chain draws the actual line: analysts query data, data engineers build and own the pipelines and platform that make querying possible at all.',
+          },
+          {
+            wrong: '"Once a pipeline is built and deployed, the work is basically done"',
+            right: 'Part 03\'s task breakdown and Part 06\'s day-in-the-life both show the opposite — a data engineer spends roughly 40% of their time maintaining and debugging pipelines that are already live, per the Callout closing Part 06. "Maintains" is in the one-sentence definition from Part 01 for a reason.',
+          },
+          {
+            wrong: '"You need to master every tool in the ecosystem — Spark, Kafka, Airflow, dbt, and dozens more — before you\'re job-ready"',
+            right: 'Part 04 opens by naming this exact overwhelm and resolving it directly: tools change, categories do not. Learning what problem each of the eight categories solves lets you pick up any specific tool within it quickly — mastering every tool up front is neither necessary nor how working data engineers actually operate.',
+          },
+          {
+            wrong: '"A data engineer and a software engineer do fundamentally the same job, just with different tools"',
+            right: 'Interview Prep Q2 draws a precise distinction: software engineers build products optimized for user-facing correctness and latency; data engineers build platforms optimized for data correctness, freshness, and queryability at scale — different systems, different failure modes, different things to optimize for, even though both write code.',
+          },
+          {
+            wrong: '"Without a CS degree or formal software background, data engineering isn\'t realistically accessible"',
+            right: 'Part 07\'s "Breaking in from a non-IT background" section makes the opposite case directly: the core of the job is logical thinking and understanding data, not algorithm theory, and it names data engineering as one of the most accessible senior technology disciplines for non-IT candidates — with domain knowledge from another field framed as a genuine advantage, not a gap to overcome.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red,#ff4757)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Part 08 — Real World ─────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 08 — Real World" />
@@ -969,6 +1061,45 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
             }}>
               {item.a}
             </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Describing data engineering to others (or to yourself) purely in terms of tools rather than the underlying job',
+            a: 'This module\'s Misconceptions section and Part 04 both make the same point from different angles — leading with "I use Spark and Airflow" instead of "I build and maintain systems that move data reliably" (Part 01\'s actual definition) obscures the job\'s real substance and makes every new tool feel like starting over.',
+          },
+          {
+            q: 'Assuming a pipeline is "done" once it passes its first successful run',
+            a: 'Part 03\'s task list and Part 06\'s day-in-the-life both show a first successful run is the start of a pipeline\'s life, not the end — the Callout closing Part 06 puts real numbers on this: roughly 40% of a data engineer\'s time goes to maintaining pipelines already in production, not building new ones.',
+          },
+          {
+            q: 'Trying to learn every tool in every category before considering yourself job-ready',
+            a: 'Part 04\'s opening Callout is explicit that this section is a map, not a tutorial, and that categories — not individual tools — are the durable thing to learn. Depth in one representative tool per category (per Interview Prep\'s emphasis on demonstrated ownership) beats shallow exposure to everything.',
+          },
+          {
+            q: 'Treating a discrepancy between two reported numbers as something to silently patch rather than root-cause',
+            a: 'Part 06\'s cohort-report investigation and the Error Library\'s row-count-drop entry both model the correct response: trace the divergence to its exact source before changing anything, since silently adjusting a number without understanding why it\'s wrong risks hiding a real data quality problem rather than fixing it.',
+          },
+          {
+            q: 'Assuming a non-CS or non-IT background is a disqualifying gap rather than a different kind of asset',
+            a: 'Part 07\'s "Breaking in from a non-IT background" section and this module\'s Misconceptions section both push back on this directly — domain knowledge from another field is named as a genuine competitive advantage for a data engineer, not a deficiency to compensate for.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
           </div>
         ))}
       </section>
