@@ -36,6 +36,10 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
@@ -57,6 +61,45 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
     }}>
       <code>{children}</code>
     </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -82,7 +125,7 @@ export default function DEEcosystemModule() {
       description="Every tool category, what it solves, and how they all connect."
       section="Data Engineering — Module 04"
       readTime="50 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why So Many Tools ──────────────────────────────── */}
@@ -567,7 +610,7 @@ WITH KAFKA:
               a directory) can be slow and expensive in an object store at scale.
             </Para>
 
-            <CodeBox label="Object storage key structure — conventions that enable efficient queries">{`S3 bucket: s3://freshmart-data-lake/
+            <CodeBox label="Object storage key structure — conventions that enable efficient queries">{`S3 bucket: s3://freshcart-data-lake/
 
 Object keys (what looks like folders is just key prefix):
   bronze/orders/date=2026-03-17/hour=08/part-00001.parquet
@@ -953,6 +996,13 @@ Tools:
               within its SLA? Good observability means you know about problems before
               stakeholders do.
             </Para>
+
+            <TryThis>
+              Pick any table you have access to and write, from memory, one Level 1
+              check (schema), one Level 2 check (statistical), and one Level 3 check
+              (business rule) you would add to it. Most beginners can only think of
+              Level 1 checks at first — noticing that gap is the point of the exercise.
+            </TryThis>
           </div>
         </div>
       </section>
@@ -1100,6 +1150,50 @@ What this JD is really asking:
   The "3+ years" is negotiable if you have strong project evidence.
   The tools are current flavour — if you know Prefect, you can learn Airflow.
   If you know Redshift, you can learn Snowflake. Categories are what count.`}</CodeBox>
+
+        <TryThis>
+          Find a real data engineering job posting (LinkedIn, Indeed, a company
+          careers page) and annotate every technology it lists with its category
+          number from Part 02, the way the sample JD above does. If a listed tool
+          doesn't fit cleanly into one of the ten categories, figure out which one
+          it's closest to and why.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About the Data Engineering Toolset</SectionTitle>
+
+        {[
+          {
+            wrong: '"You need to learn every tool in the ecosystem — Spark, Kafka, Airflow, dbt, Snowflake, and dozens more — before you can get hired"',
+            right: 'Part 01 is explicit that a job posting listing twenty tools is asking whether you understand the underlying categories — distributed processing, event streaming, orchestration — not whether you have hands-on experience with every named tool. Learn the ten categories from Part 02 and specific tools become fast to pick up.',
+          },
+          {
+            wrong: '"Apache Spark is the industry-standard transformation tool, so every serious data engineer should default to it"',
+            right: 'Part 03\'s Processing Engines section and its Callout are direct about this: dbt running SQL inside a warehouse handles most production transformation workloads (GB-TB scale) faster to build and easier to maintain than PySpark. Reaching for Spark on data that fits comfortably in a warehouse is called out as the most over-engineered mistake in the field.',
+          },
+          {
+            wrong: '"A data lake (S3/ADLS) and a data warehouse (Snowflake/BigQuery) are two competing choices — pick one"',
+            right: 'Interview Prep Q3 explains that most mature companies deliberately use both, each for what it is actually good at: cheap unlimited raw storage in the lake, fast SQL analytics in the warehouse — not a choice between redundant options.',
+          },
+          {
+            wrong: '"You should build your stack to match what FAANG companies use, since that\'s clearly the best technology"',
+            right: 'Part 04\'s three real company stacks show a Series B startup, a large enterprise, and a FAANG platform making completely different, equally valid tool choices for the same ten categories — each matched to their own scale and constraints. The Key Takeaways are explicit that a two-person team copying a billion-event-scale stack is a mismatch, not a best practice.',
+          },
+          {
+            wrong: '"Kafka is essentially a message queue, interchangeable with something like RabbitMQ or SQS"',
+            right: 'Part 03\'s Message Brokers section and Interview Prep Q1 both distinguish Kafka\'s retained, replayable event log — where multiple independent consumers can each read the same history at their own pace — from a traditional queue\'s destructive, single-delivery model. The two solve related but different problems.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red,#ff4757)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1265,6 +1359,45 @@ I would not implement a table format (Delta Lake, Iceberg) or a formal data qual
             <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
               {item.a}
             </div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Trying to learn every tool in every category before applying for jobs',
+            a: 'Part 01\'s hiring-manager framing and this module\'s Misconceptions section both make the same point: a job posting listing twenty tools is testing category understanding, not tool-by-tool memorisation. Pick one representative tool per category (Part 02) that matters for your target roles and go deep on those, not shallow on all twenty.',
+          },
+          {
+            q: 'Reaching for Apache Spark by default because it sounds like the "serious" choice for a resume',
+            a: 'Part 03\'s Processing Engines Callout names this directly as the most over-engineered mistake in the field — dbt on warehouse-scale data is simpler, cheaper, and easier to maintain for the 80% of workloads that don\'t genuinely need distributed processing.',
+          },
+          {
+            q: 'Assuming a specific tool listed in a job posting is a hard requirement rather than a category signal',
+            a: 'Part 05\'s sample JD walkthrough is explicit that "the tools are current flavour" — knowing Prefect transfers to Airflow, knowing Redshift transfers to Snowflake. Screening yourself out of an application because you haven\'t used the exact named tool ignores what the category actually represents.',
+          },
+          {
+            q: 'Copying a FAANG-scale stack (multi-cluster Kafka, Kubernetes-managed Airflow, Iceberg) for a small team\'s first data platform',
+            a: 'Part 04\'s three company stacks and the Key Takeaways both warn against this directly — matching tool choices to actual current scale, not aspirational future scale, is called one of the most valuable skills a data engineer develops. The startup stack in Part 06\'s Real World walkthrough shows what right-sized choices actually look like.',
+          },
+          {
+            q: 'Treating object storage and a data warehouse as redundant, and trying to pick only one',
+            a: 'Interview Prep Q3 and this module\'s Misconceptions section both explain why mature platforms use both deliberately — cheap unlimited raw storage in the lake, fast analytical SQL in the warehouse — rather than treating one as strictly superior to the other.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
           </div>
         ))}
       </section>
