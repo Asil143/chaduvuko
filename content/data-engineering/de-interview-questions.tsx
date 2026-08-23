@@ -61,6 +61,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -112,7 +133,7 @@ export default function DEInterviewQuestionsModule() {
       description="60 complete data engineering interview answers across Python, SQL, pipelines, Spark, Kafka, data modelling, warehousing, cloud, distributed systems, system design, and behavioural — written at senior engineer depth."
       section="Data Engineering — Module 47"
       readTime="90 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── How to use this module ───────────────────────────────────── */}
@@ -306,7 +327,7 @@ with multiprocessing.Pool(processes=8) as pool:
           type misconfigurations, and encoding errors constantly. The question
           is not whether to handle it, but at which layer and with which strategy.
         </Para>
-        <CodeBox label="malformed data handling — layered approach">
+        <CodeBox label="malformed data handling — the record types">
 {`from dataclasses import dataclass
 from typing import Optional
 import logging
@@ -326,9 +347,15 @@ class ParseResult:
     def __init__(self, record=None, error=None, raw=None):
         self.record = record   # OrderEvent if success
         self.error = error     # error message if failed
-        self.raw = raw         # original raw data — always preserved
-
-def parse_order_event(raw: dict) -> ParseResult:
+        self.raw = raw         # original raw data — always preserved`}
+        </CodeBox>
+        <Para>
+          The parser itself never raises — it always returns a <code>ParseResult</code>,
+          so a single malformed record can never crash the pipeline. Every rejection
+          path preserves the original raw record for replay after a fix.
+        </Para>
+        <CodeBox label="malformed data handling — the parser, never raises">
+{`def parse_order_event(raw: dict) -> ParseResult:
     """
     Parse a raw dict into an OrderEvent.
     Never raises — always returns a ParseResult.
@@ -379,10 +406,10 @@ def parse_order_event(raw: dict) -> ParseResult:
     except Exception as exc:
         # Catch-all: preserve the raw record, never lose data silently
         logger.error(f"Unexpected parse error: {exc} | raw={raw}")
-        return ParseResult(error=str(exc), raw=raw)
-
-# In the pipeline loop:
-valid_records, failed_records = [], []
+        return ParseResult(error=str(exc), raw=raw)`}
+        </CodeBox>
+        <CodeBox label="malformed data handling — the pipeline loop">
+{`valid_records, failed_records = [], []
 for raw in source_events:
     result = parse_order_event(raw)
     if result.record:
@@ -403,7 +430,7 @@ write_to_dlq(failed_records)  # Inspect and replay after fixing the source`}
           behaviour — without modifying the original function's code.
           They use the <code>@</code> syntax.
         </Para>
-        <CodeBox label="decorator — retry logic for flaky external API calls">
+        <CodeBox label="decorator — the retry-with-backoff implementation">
 {`import time
 import functools
 import logging
@@ -437,10 +464,10 @@ def retry(max_attempts=3, delay_seconds=2, backoff=2, exceptions=(Exception,)):
                     current_delay *= backoff
                     attempt += 1
         return wrapper
-    return decorator
-
-# Usage — decorate any fragile function
-@retry(max_attempts=5, delay_seconds=1, backoff=2, exceptions=(ConnectionError, TimeoutError))
+    return decorator`}
+        </CodeBox>
+        <CodeBox label="decorator — applying it to a fragile function call">
+{`@retry(max_attempts=5, delay_seconds=1, backoff=2, exceptions=(ConnectionError, TimeoutError))
 def fetch_store_metadata(store_id: str) -> dict:
     """Calls external store service — network may be flaky."""
     response = requests.get(f"https://stores.internal/api/v1/stores/{store_id}", timeout=5)
@@ -461,14 +488,13 @@ def fetch_store_metadata(store_id: str) -> dict:
           type inflation). The solution is chunked processing — read and process
           the file in fixed-size chunks, writing results incrementally.
         </Para>
-        <CodeBox label="chunked CSV processing — 50 GB on 8 GB RAM">
+        <CodeBox label="chunked CSV processing — option 1: pandas chunked reader">
 {`import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 
 CHUNK_SIZE = 100_000   # rows per chunk — tune based on row width and available RAM
 
-# Option 1: pandas chunked reader
 def process_large_csv(input_path: str, output_path: str):
     writer = None
     schema = None
@@ -492,9 +518,10 @@ def process_large_csv(input_path: str, output_path: str):
     if writer:
         writer.close()
 
-# Memory usage at any point: ~100k rows × ~500 bytes = ~50 MB (well within 8 GB)
-
-# Option 2: generator-based line-by-line for maximum memory efficiency
+# Memory usage at any point: ~100k rows × ~500 bytes = ~50 MB (well within 8 GB)`}
+        </CodeBox>
+        <CodeBox label="chunked CSV processing — option 2: line-by-line generator">
+{`# For maximum memory efficiency — process one row at a time
 def stream_csv_to_parquet(input_path: str, output_path: str):
     """Process one row at a time — minimum memory footprint."""
     import csv
@@ -570,9 +597,8 @@ for event in stream:
       </QA>
 
       <QA n={8} q="How do you write unit tests for a data transformation function?">
-        <CodeBox label="unit testing a transformation — pytest best practices">
-{`# The function under test
-def normalise_order(raw: dict) -> dict:
+        <CodeBox label="unit testing — the function under test">
+{`def normalise_order(raw: dict) -> dict:
     """
     Normalise a raw order dict from the source API.
     Returns a cleaned dict ready for warehouse insertion.
@@ -583,9 +609,10 @@ def normalise_order(raw: dict) -> dict:
         'status':      raw.get('status', 'unknown').lower().strip(),
         'city':        raw.get('city', '').strip() or None,
         'order_date':  raw['created_at'][:10],   # extract YYYY-MM-DD
-    }
-
-# Test file: test_normalise_order.py
+    }`}
+        </CodeBox>
+        <CodeBox label="unit testing — happy path and null-handling tests">
+{`# Test file: test_normalise_order.py
 import pytest
 from transformations import normalise_order
 
@@ -616,9 +643,10 @@ class TestNormaliseOrder:
         raw = {'order_id': 'O1', 'total_cents': 100, 'status': 'placed',
                'city': '   ', 'created_at': '2026-03-20T00:00:00Z'}
         result = normalise_order(raw)
-        assert result['city'] is None
-
-    def test_float_total_cents_coerced_to_int(self):
+        assert result['city'] is None`}
+        </CodeBox>
+        <CodeBox label="unit testing — type-coercion and required-field tests">
+{`    def test_float_total_cents_coerced_to_int(self):
         # Source system sometimes sends "349.00" as a float string
         raw = {'order_id': 'O1', 'total_cents': '349.00', 'status': 'placed',
                'created_at': '2026-03-20T00:00:00Z'}
@@ -653,7 +681,7 @@ class TestNormaliseOrder:
           the right choice — it handles process lifecycle management and provides
           clean <code>Future</code> objects for result collection.
         </Para>
-        <CodeBox label="concurrent.futures — parallel file processing">
+        <CodeBox label="concurrent.futures — the CPU-bound function to parallelise">
 {`from concurrent.futures import ProcessPoolExecutor, as_completed
 import os
 
@@ -665,9 +693,10 @@ def process_store_file(filepath: str) -> dict:
         'total_sales': sum(r['total_cents'] for r in records),
         'order_count': len(records),
         'filepath':    filepath,
-    }
-
-def process_all_stores_parallel(data_dir: str) -> list[dict]:
+    }`}
+        </CodeBox>
+        <CodeBox label="concurrent.futures — submitting work and collecting results">
+{`def process_all_stores_parallel(data_dir: str) -> list[dict]:
     filepaths = [
         os.path.join(data_dir, f)
         for f in os.listdir(data_dir)
@@ -803,16 +832,15 @@ ranked AS (
 SELECT city, product_id, product_name, total_revenue_cents, total_units_sold
 FROM ranked
 WHERE revenue_rank = 1
-ORDER BY total_revenue_cents DESC;
-
--- RANK vs DENSE_RANK vs ROW_NUMBER:
--- RANK():       ties get the same rank, next rank skips (1, 1, 3)
--- DENSE_RANK(): ties get the same rank, no skip      (1, 1, 2)
--- ROW_NUMBER(): every row gets a unique number       (1, 2, 3) — arbitrary for ties
-
--- If you want exactly ONE product per city even when tied, use ROW_NUMBER.
--- If you want all tied products, use RANK or DENSE_RANK with WHERE rank = 1.`}
+ORDER BY total_revenue_cents DESC;`}
         </CodeBox>
+        <Output>{`RANK vs DENSE_RANK vs ROW_NUMBER:
+RANK():       ties get the same rank, next rank skips (1, 1, 3)
+DENSE_RANK(): ties get the same rank, no skip      (1, 1, 2)
+ROW_NUMBER(): every row gets a unique number       (1, 2, 3) — arbitrary for ties
+
+If you want exactly ONE product per city even when tied, use ROW_NUMBER.
+If you want all tied products, use RANK or DENSE_RANK with WHERE rank = 1.`}</Output>
       </QA>
 
       <QA n={12} q="★ What is the difference between RANK, DENSE_RANK, and ROW_NUMBER? When does each produce different results?">
@@ -892,7 +920,7 @@ ORDER BY store_id, order_date;
       </QA>
 
       <QA n={14} q="What is a CTE and how is it different from a subquery? When would you prefer each?">
-        <CodeBox label="CTE vs subquery — readability and performance">
+        <CodeBox label="CTE vs subquery — the same query written both ways">
 {`-- Subquery approach — nested, harder to read, repeated if referenced twice
 SELECT city, AVG(order_count) AS avg_orders
 FROM (
@@ -915,9 +943,10 @@ city_stats AS (
     FROM weekly_orders    -- can reference the CTE twice without recomputing
     GROUP BY city
 )
-SELECT * FROM city_stats WHERE avg_orders > 100 ORDER BY avg_orders DESC;
-
--- Performance difference:
+SELECT * FROM city_stats WHERE avg_orders > 100 ORDER BY avg_orders DESC;`}
+        </CodeBox>
+        <CodeBox label="CTE vs subquery — when the performance difference actually matters">
+{`-- Performance difference:
 -- In PostgreSQL: a CTE is an "optimisation fence" — the planner treats it as
 --   a materialised subquery. The result is computed once and stored.
 --   Subqueries can be inlined and optimised with the outer query.
@@ -938,7 +967,7 @@ SELECT * FROM city_stats WHERE avg_orders > 100 ORDER BY avg_orders DESC;
       </QA>
 
       <QA n={15} q="★ Write a query to identify customers who ordered in January but not in February (lapsed customers).">
-        <CodeBox label="lapsed customers — three equivalent approaches">
+        <CodeBox label="lapsed customers — approach 1: NOT EXISTS, and approach 2: LEFT JOIN">
 {`-- Table: orders(order_id, customer_id, order_date, status)
 
 -- Approach 1: NOT EXISTS (most readable, typically best performance)
@@ -964,9 +993,10 @@ LEFT JOIN (
     WHERE DATE_TRUNC('month', order_date) = '2026-02-01' AND status = 'completed'
 ) feb
 ON jan.customer_id = feb.customer_id
-WHERE feb.customer_id IS NULL;   -- no matching February row = lapsed
-
--- Approach 3: EXCEPT (cleanest syntax where supported)
+WHERE feb.customer_id IS NULL;   -- no matching February row = lapsed`}
+        </CodeBox>
+        <CodeBox label="lapsed customers — approach 3: EXCEPT, and which to choose">
+{`-- Approach 3: EXCEPT (cleanest syntax where supported)
 SELECT DISTINCT customer_id FROM orders
 WHERE DATE_TRUNC('month', order_date) = '2026-01-01' AND status = 'completed'
 EXCEPT
@@ -1058,20 +1088,18 @@ WITH RECURSIVE category_tree AS (
 )
 SELECT category_id, category_name, depth, full_path
 FROM category_tree
-ORDER BY full_path;
-
-/*  Result:
-    category_id  category_name    depth  full_path
-    1            Electronics      1      Electronics
-    2            Phones           2      Electronics → Phones
-    4            Smartphones      3      Electronics → Phones → Smartphones
-    7            5G Smartphones   4      Electronics → Phones → Smartphones → 5G Smartphones
-    3            Laptops          2      Electronics → Laptops
-*/
-
--- Safety: add MAXDEPTH or a cycle detection guard for graphs that may have cycles
--- In PostgreSQL 14+: WITH RECURSIVE ... CYCLE category_id SET is_cycle USING path`}
+ORDER BY full_path;`}
         </CodeBox>
+        <Output>{`category_id  category_name    depth  full_path
+1            Electronics      1      Electronics
+2            Phones           2      Electronics → Phones
+4            Smartphones      3      Electronics → Phones → Smartphones
+7            5G Smartphones   4      Electronics → Phones → Smartphones → 5G Smartphones
+3            Laptops          2      Electronics → Laptops`}</Output>
+        <Para>
+          Safety: add a MAXDEPTH or cycle-detection guard for graphs that may
+          have cycles. In PostgreSQL 14+: <code>WITH RECURSIVE ... CYCLE category_id SET is_cycle USING path</code>.
+        </Para>
       </QA>
 
       <QA n={18} q="How would you deduplicate rows in SQL when you have no single unique key?">
@@ -1135,7 +1163,7 @@ WHERE ctid NOT IN (
 # The filter on order_date is pushed into the Parquet reader
 # Parquet skips row groups where max(order_date) < '2026-03-20'
 df = (spark.read.format('parquet')
-      .load('abfss://gold@stfreshmartdev.dfs.core.windows.net/orders/')
+      .load('abfss://gold@stfreshcartdev.dfs.core.windows.net/orders/')
       .filter("order_date = '2026-03-20'"))
 
 # Check if pushdown happened: look for PushedFilters in the plan
@@ -1161,7 +1189,7 @@ df.explain()
       </QA>
 
       <QA n={20} q="★ Write a query to calculate month-over-month revenue growth percentage by city.">
-        <CodeBox label="month-over-month growth — LAG window function">
+        <CodeBox label="month-over-month growth — building the LAG comparison">
 {`WITH monthly_revenue AS (
     SELECT
         city,
@@ -1183,8 +1211,10 @@ with_previous AS (
         -- LAG(col, 1) = value from the previous row within the partition
         -- LAG(col, 3) would give 3 months ago
     FROM monthly_revenue
-)
-SELECT
+)`}
+        </CodeBox>
+        <CodeBox label="month-over-month growth — computing the growth percentage">
+{`SELECT
     city,
     TO_CHAR(month, 'YYYY-MM')     AS month,
     ROUND(revenue_usd, 2)         AS revenue_usd,
@@ -1222,7 +1252,7 @@ ORDER BY city, month;
           a retry creates duplicate data. Three implementation patterns cover
           most cases.
         </Para>
-        <CodeBox label="idempotency — three implementation patterns">
+        <CodeBox label="idempotency — patterns 1 and 2: UPSERT and DELETE+INSERT">
 {`# Pattern 1: UPSERT on natural key (most common)
 # If the row exists, update it. If not, insert it. Running twice = same result.
 execute_sql("""
@@ -1245,15 +1275,16 @@ with transaction():
     execute_sql(
         "INSERT INTO daily_store_stats VALUES (%s, %s, %s, %s)",
         [store_id, order_date, revenue, count]
-    )
-
-# Pattern 3: Partition overwrite (for Parquet/Delta on cloud storage)
+    )`}
+        </CodeBox>
+        <CodeBox label="idempotency — pattern 3: partition overwrite, and what breaks it">
+{`# Pattern 3: Partition overwrite (for Parquet/Delta on cloud storage)
 # Overwrite the entire partition — second run replaces it atomically
 (df.write
    .format('delta')
    .mode('overwrite')
    .option('replaceWhere', "order_date = '2026-03-20'")
-   .save('abfss://gold@stfreshmartdev.dfs.core.windows.net/daily_store_stats/')
+   .save('abfss://gold@stfreshcartdev.dfs.core.windows.net/daily_store_stats/')
 )
 # replaceWhere: only overwrite the matching partition — other dates untouched
 # Atomic at the Delta Lake transaction level — no partial state visible to readers
@@ -1282,7 +1313,7 @@ with transaction():
           data and transform in-warehouse than to run a separate transformation
           cluster.
         </Para>
-        <CodeBox label="ETL vs ELT — decision criteria">
+        <CodeBox label="ETL — transform before loading, and when to choose it">
 {`# ETL — transform BEFORE loading
 # Use when:
 # - Destination has limited compute (legacy on-premise data warehouse)
@@ -1297,9 +1328,10 @@ clean_df = (raw_df
     .withColumn('total_usd', col('total_cents') / 100)
     .drop('raw_payload', 'internal_flags')   # strip PII before loading
     .dropDuplicates(['order_id']))
-clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')
-
-# ELT — load raw THEN transform in-warehouse
+clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')`}
+        </CodeBox>
+        <CodeBox label="ELT — load raw then transform in-warehouse, and when to choose it">
+{`# ELT — load raw THEN transform in-warehouse
 # Use when:
 # - Destination has powerful compute (Snowflake, BigQuery, Databricks)
 # - You need to iterate on transformation logic without re-ingesting data
@@ -1332,7 +1364,7 @@ clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')
           (polling), CDC reads the database's internal transaction log — in
           PostgreSQL, this is the WAL (Write-Ahead Log).
         </Para>
-        <CodeBox label="CDC with PostgreSQL logical replication">
+        <CodeBox label="CDC — three steps to enable logical replication">
 {`# PostgreSQL WAL-based CDC setup
 
 # Step 1: Enable logical replication on PostgreSQL
@@ -1342,14 +1374,14 @@ clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')
 #   max_wal_senders = 4
 
 # Step 2: Create a replication slot (Debezium or Fivetran does this automatically)
-# SELECT pg_create_logical_replication_slot('freshmart_cdc', 'pgoutput');
+# SELECT pg_create_logical_replication_slot('freshcart_cdc', 'pgoutput');
 
 # Step 3: Grant replication privilege
 # CREATE USER cdc_user WITH REPLICATION LOGIN PASSWORD 'secret';
-# GRANT SELECT ON ALL TABLES IN SCHEMA public TO cdc_user;
-
-# What CDC events look like (Debezium output format):
-{
+# GRANT SELECT ON ALL TABLES IN SCHEMA public TO cdc_user;`}
+        </CodeBox>
+        <CodeBox label="CDC — what a Debezium change event actually looks like">
+{`{
     "before": None,                          # INSERT: no previous state
     "after": {
         "order_id": "ORD-2026-887432",
@@ -1361,7 +1393,7 @@ clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')
     "op": "c",                               # c=create, u=update, d=delete, r=read(snapshot)
     "ts_ms": 1742480591000,                  # when the change occurred in PostgreSQL
     "source": {
-        "db": "freshmart_production",
+        "db": "freshcart_production",
         "schema": "public",
         "table": "orders",
         "lsn": 2847291648                    # Log Sequence Number — position in WAL
@@ -1369,9 +1401,10 @@ clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')
 }
 
 # For an UPDATE, "before" contains the old row, "after" contains the new row
-# This lets you compute what changed, not just what the new state is
-
-# CDC advantages over polling:
+# This lets you compute what changed, not just what the new state is`}
+        </CodeBox>
+        <CodeBox label="CDC — advantages over polling, and the operational risk to monitor">
+{`# CDC advantages over polling:
 # → Low latency: changes land in Kafka within milliseconds of the DB commit
 # → No missed changes: polling might miss a row that was inserted and deleted between polls
 # → No load on DB: reading WAL has minimal impact vs running SELECT COUNT(*) repeatedly
@@ -1393,7 +1426,7 @@ clean_df.write.mode('overwrite').saveAsTable('warehouse.orders')
           in a way that does not break existing consumers or require
           coordinating simultaneous deployments across all systems.
         </Para>
-        <CodeBox label="schema evolution — backward-compatible rules">
+        <CodeBox label="schema evolution — adding a backward-compatible field">
 {`# Using Avro with Schema Registry (the standard approach for Kafka pipelines)
 
 # Original schema (version 1):
@@ -1422,9 +1455,10 @@ schema_v2 = {
         # default=None = backward compatible (old consumers that don't know this field
         #                will use the default when reading old messages)
     ]
-}
-
-# Schema registry enforces compatibility:
+}`}
+        </CodeBox>
+        <CodeBox label="schema evolution — what's safe, what breaks, and the migration path">
+{`# Schema registry enforces compatibility:
 # BACKWARD: new schema can read messages written with old schema ✓
 # FORWARD:  old schema can read messages written with new schema ✓
 # FULL:     both backward and forward ✓
@@ -1473,7 +1507,7 @@ schema_v2 = {
       </QA>
 
       <QA n={26} q="★ How do you implement SCD Type 2 in a data warehouse pipeline?">
-        <CodeBox label="SCD Type 2 — MERGE implementation">
+        <CodeBox label="SCD Type 2 — the MERGE that expires changed records">
 {`-- SCD Type 2: preserve the full history of dimension changes
 -- When a customer changes their city, keep the old record (for historical orders)
 -- and add a new record with the updated city
@@ -1504,9 +1538,10 @@ WHEN MATCHED AND (
     target.tier != source.tier
 ) THEN UPDATE SET
     valid_to   = CURRENT_DATE - INTERVAL '1 day',
-    is_current = FALSE;
-
--- After the MERGE, insert new current records for changed customers
+    is_current = FALSE;`}
+        </CodeBox>
+        <CodeBox label="SCD Type 2 — inserting the new current row, and querying history">
+{`-- After the MERGE, insert new current records for changed customers
 INSERT INTO customers_dim (customer_sk, customer_id, customer_name, city, tier,
                            valid_from, valid_to, is_current)
 SELECT
@@ -1551,7 +1586,7 @@ WHERE o.order_id = 'ORD-001'
       </QA>
 
       <QA n={28} q="How do you handle late-arriving data in a batch pipeline that runs daily?">
-        <CodeBox label="late-arriving data — watermark and reprocessing strategies">
+        <CodeBox label="late-arriving data — strategies 1 and 2: delayed window and reprocessing">
 {`# Problem: daily batch pipeline runs at 2 AM for "yesterday's" data
 # Mobile app orders placed at 23:58 may not arrive in the data store until 00:10
 # These orders are missing from the 2 AM run
@@ -1582,9 +1617,10 @@ def run_daily_pipeline(processing_date: date):
 today = date.today()
 # Process yesterday + previous 2 days (catching late arrivals)
 for lag in [1, 2, 3]:
-    run_daily_pipeline(today - timedelta(days=lag))
-
-# Strategy 3: SLA-based cutoff with explicit late data tracking
+    run_daily_pipeline(today - timedelta(days=lag))`}
+        </CodeBox>
+        <CodeBox label="late-arriving data — strategies 3 and 4: SLA cutoff and Lambda architecture">
+{`# Strategy 3: SLA-based cutoff with explicit late data tracking
 # Define: events arriving > 48 hours late are "accepted but flagged"
 # Add a column: is_late_arrival = (ingestion_time - event_time) > 48h
 # Analytics team knows to treat flagged rows carefully in time-sensitive metrics
@@ -1614,7 +1650,7 @@ for lag in [1, 2, 3]:
           web UI provides visibility into every DAG run, every task's log,
           and the history of successes and failures.
         </Para>
-        <CodeBox label="Airflow DAG — FreshCart daily pipeline">
+        <CodeBox label="Airflow DAG — imports, default_args, and the DAG declaration">
 {`from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
@@ -1626,20 +1662,21 @@ default_args = {
     'retries':          2,
     'retry_delay':      timedelta(minutes=5),
     'email_on_failure': True,
-    'email':            ['data-alerts@freshmart.in'],
+    'email':            ['data-alerts@freshcart.in'],
 }
 
 with DAG(
-    dag_id='freshmart_daily_pipeline',
+    dag_id='freshcart_daily_pipeline',
     default_args=default_args,
     schedule_interval='0 3 * * *',      # 3 AM ET daily
     start_date=datetime(2026, 1, 1),
     catchup=False,                       # don't backfill missed runs on startup
     max_active_runs=1,                   # don't allow parallel runs of this DAG
-    tags=['freshmart', 'daily', 'gold'],
-) as dag:
-
-    # Task 1: validate raw data landed completely
+    tags=['freshcart', 'daily', 'gold'],
+) as dag:`}
+        </CodeBox>
+        <CodeBox label="Airflow DAG — tasks 1 and 2: validate raw, then transform to silver">
+{`    # Task 1: validate raw data landed completely
     validate_raw = PythonOperator(
         task_id='validate_raw_completeness',
         python_callable=check_all_stores_landed,   # custom function
@@ -1649,22 +1686,23 @@ with DAG(
     # Task 2: run Spark silver layer transformation
     silver_transform = SparkSubmitOperator(
         task_id='transform_to_silver',
-        application='s3://freshmart-jobs/silver_transform.py',
+        application='s3://freshcart-jobs/silver_transform.py',
         application_args=['--date', '{{ ds }}'],
         conf={'spark.executor.memory': '4g'},
-    )
-
-    # Task 3: run Spark gold layer aggregation
+    )`}
+        </CodeBox>
+        <CodeBox label="Airflow DAG — tasks 3 and 4: aggregate to gold, validate, and wire the chain">
+{`    # Task 3: run Spark gold layer aggregation
     gold_aggregate = SparkSubmitOperator(
         task_id='aggregate_to_gold',
-        application='s3://freshmart-jobs/gold_aggregate.py',
+        application='s3://freshcart-jobs/gold_aggregate.py',
         application_args=['--date', '{{ ds }}'],
     )
 
     # Task 4: validate gold output quality
     validate_gold = PostgresOperator(
         task_id='validate_gold_row_count',
-        postgres_conn_id='freshmart_warehouse',
+        postgres_conn_id='freshcart_warehouse',
         sql="""
             SELECT CASE
                 WHEN COUNT(*) < 10 THEN 1/0   -- division by zero = task failure
@@ -1680,7 +1718,7 @@ with DAG(
       </QA>
 
       <QA n={30} q="How do you monitor a production data pipeline? What metrics matter?">
-        <CodeBox label="pipeline monitoring — the metrics that matter">
+        <CodeBox label="pipeline monitoring — freshness and volume">
 {`# The four categories of pipeline metrics
 
 # 1. FRESHNESS — is the data up to date?
@@ -1707,9 +1745,10 @@ volume_query = """
 """
 # Alert: row_count < 8 (we expect 10 stores — if < 8, something is missing)
 # Alert: total_revenue_million < 50 (business floor — if below, likely a bug)
-# Alert: total_revenue_million > 500 (business ceiling — if above, likely a duplicate)
-
-# 3. SCHEMA — did the source schema change unexpectedly?
+# Alert: total_revenue_million > 500 (business ceiling — if above, likely a duplicate)`}
+        </CodeBox>
+        <CodeBox label="pipeline monitoring — schema, latency, and the monitoring stack">
+{`# 3. SCHEMA — did the source schema change unexpectedly?
 # dbt tests catch this in the transformation layer:
 # not_null on required columns, accepted_values on enum fields
 # Run: dbt test --select gold.daily_store_stats
@@ -1753,7 +1792,7 @@ volume_query = """
         </Para>
         <CodeBox label="lazy evaluation — why it matters for performance">
 {`# This code does NOT read any data or do any work:
-df = spark.read.parquet('s3://freshmart/orders/')   # no read yet
+df = spark.read.parquet('s3://freshcart/orders/')   # no read yet
 filtered = df.filter("order_date = '2026-03-20'")  # no filter yet
 joined = filtered.join(stores, 'store_id')          # no join yet
 aggregated = joined.groupBy('city').agg(sum('total_cents'))  # no aggregation yet
@@ -1793,7 +1832,7 @@ df.filter(...).cache()   # forces materialisation — breaks lazy optimisation
           distribution — one key value appears millions of times while others
           appear hundreds of times.
         </Para>
-        <CodeBox label="diagnosing and fixing data skew">
+        <CodeBox label="data skew — diagnosis, causes, and the broadcast-join fix">
 {`# DIAGNOSIS: Spark UI → Stages → Task Duration Histogram
 # Healthy: all tasks take ~same time
 # Skewed: most tasks finish in 30s, one takes 45 minutes
@@ -1806,9 +1845,10 @@ df.filter(...).cache()   # forces materialisation — breaks lazy optimisation
 # FIX 1: Broadcast join (when one side is small, < 10 MB)
 from pyspark.sql.functions import broadcast
 result = orders.join(broadcast(store_metadata), 'store_id')
-# No shuffle at all — no skew possible
-
-# FIX 2: Salting (when both sides are large)
+# No shuffle at all — no skew possible`}
+        </CodeBox>
+        <CodeBox label="data skew — salting a large-to-large join, and handling NULL keys">
+{`# FIX 2: Salting (when both sides are large)
 from pyspark.sql.functions import col, concat_ws, lit, explode, array, expr
 
 NUM_SALTS = 50
@@ -1923,7 +1963,7 @@ df.repartition(200, 'store_id')   # shuffle on store_id — equal per store, sor
           into an efficient physical execution plan before any computation
           starts. It does this through four phases.
         </Para>
-        <CodeBox label="Catalyst optimizer — four phases">
+        <CodeBox label="Catalyst optimizer — phase 1: analysis, and phase 2: logical rewrites">
 {`# Phase 1: Analysis — resolve column names and types
 # Your code: df.filter("order_date = '2026-03-20'")
 # Catalyst resolves: order_date exists in df, it is a DateType, '2026-03-20' can be cast
@@ -1944,9 +1984,10 @@ df.repartition(200, 'store_id')   # shuffle on store_id — equal per store, sor
 #   BEFORE: filter("YEAR(order_date) = 2025 AND MONTH(order_date) = 12")
 #   AFTER:  filter("order_date BETWEEN '2025-12-01' AND '2025-12-31'")
 
-# → Null propagation: simplify IS NULL / IS NOT NULL chains
-
-# Phase 3: Physical planning — choose physical operators
+# → Null propagation: simplify IS NULL / IS NOT NULL chains`}
+        </CodeBox>
+        <CodeBox label="Catalyst optimizer — phase 3: physical planning, and phase 4: code generation">
+{`# Phase 3: Physical planning — choose physical operators
 # For each logical operation, choose the best physical implementation:
 # → Join algorithm: BroadcastHashJoin (small table) or SortMergeJoin (both large)
 # → Aggregation: HashAggregate (fits in memory) or SortAggregate (spill to disk)
@@ -2056,7 +2097,7 @@ df.filter("order_date = '2026-03-20'").join(stores, 'store_id').explain(extended
       </QA>
 
       <QA n={39} q="What is Delta Lake and what problems does it solve that plain Parquet does not?">
-        <CodeBox label="Delta Lake vs plain Parquet — the gap">
+        <CodeBox label="Delta Lake vs Parquet — problem 1: no ACID, and problem 2: no MERGE">
 {`# Problem 1: Parquet has no ACID transactions
 # If a Spark job writing 100 Parquet files crashes after writing 60:
 # → The output directory has 60 partial files
@@ -2079,9 +2120,10 @@ spark.sql("""
     USING (SELECT 'ORD-001' AS order_id, 'completed' AS status) AS source
     ON target.order_id = source.order_id
     WHEN MATCHED THEN UPDATE SET status = source.status
-""")
-
-# Problem 3: Parquet has no schema enforcement on write
+""")`}
+        </CodeBox>
+        <CodeBox label="Delta Lake vs Parquet — problem 3: no schema enforcement, and problem 4: no time travel">
+{`# Problem 3: Parquet has no schema enforcement on write
 # Any Spark job can write a Parquet file with wrong column names or types
 # into your data lake — no validation, no error
 # Delta Lake enforces schema on write:
@@ -2098,7 +2140,7 @@ spark.read.format('delta').option('timestampAsOf', '2026-03-15').load(path)
       </QA>
 
       <QA n={40} q="★ How does Spark handle out-of-memory errors and how do you prevent them?">
-        <CodeBox label="Spark OOM — causes and fixes">
+        <CodeBox label="Spark OOM — memory model, and causes 1–2: driver collect, skew">
 {`# Spark memory is divided into:
 # Heap memory = reserved (300 MB) + user memory + unified memory
 # Unified memory = execution memory (shuffles, joins, sorts) + storage memory (caching)
@@ -2113,9 +2155,10 @@ spark.read.format('delta').option('timestampAsOf', '2026-03-15').load(path)
 # CAUSE 2: Skewed join / aggregation — one partition is huge
 # 100 executors finish in 2 minutes, 1 executor runs for 45 minutes
 # Eventually that executor OOMs because its partition is too large for its heap
-# Fix: salting (covered in Q32), or broadcast join for the small side
-
-# CAUSE 3: Caching too much data
+# Fix: salting (covered in Q32), or broadcast join for the small side`}
+        </CodeBox>
+        <CodeBox label="Spark OOM — causes 3–5: over-caching, shuffle partitions, UDF closures">
+{`# CAUSE 3: Caching too much data
 # df.cache() materialises the entire DataFrame in unified storage memory
 # If it doesn't fit: spills to disk (slow) or evicts other cached data (broken)
 # Fix: cache only DataFrames used in 2+ actions; unpersist when done
@@ -2418,7 +2461,7 @@ SELECT SUM(total_cents) FROM orders   -- reads 1 column out of 15
           engineering practices — version control, modular code, automated
           testing, CI/CD — to the transformation layer.
         </Para>
-        <CodeBox label="dbt — what a model looks like">
+        <CodeBox label="dbt — the model SQL, incremental config included">
 {`-- models/staging/stg_orders.sql
 -- This model is a SELECT statement. dbt runs it and creates a table or view.
 
@@ -2441,9 +2484,10 @@ FROM {{ source('raw', 'orders') }}    -- reference to a source table (tracks lin
 {% if is_incremental() %}
 -- On incremental runs: only process rows newer than the max we've already processed
 WHERE order_date > (SELECT MAX(order_date) FROM {{ this }})
-{% endif %}
-
--- Companion test file: models/staging/stg_orders.yml
+{% endif %}`}
+        </CodeBox>
+        <CodeBox label="dbt — the companion test file and how to run it">
+{`-- Companion test file: models/staging/stg_orders.yml
 -- models:
 --   - name: stg_orders
 --     columns:
@@ -2509,7 +2553,7 @@ WHERE order_date > (SELECT MAX(order_date) FROM {{ this }})
       </QA>
 
       <QA n={50} q="★ Design a data pipeline that handles upstream API rate limits.">
-        <CodeBox label="rate-limited API ingestion — design">
+        <CodeBox label="rate-limited API ingestion — the fetcher with retry and backoff">
 {`# Problem: source API allows 100 requests/minute. You need to fetch data for 10,000 entities.
 # Naive approach: 10,000 requests / 100 per minute = 100 minutes. API ban risk if bursty.
 
@@ -2540,9 +2584,10 @@ class RateLimitedFetcher:
                 except (aiohttp.ClientError, asyncio.TimeoutError) as e:
                     if attempt == 2:
                         return {'entity_id': entity_id, 'error': str(e)}
-                    await asyncio.sleep(2 ** attempt)   # exponential backoff
-
-async def fetch_all_entities(entity_ids: list[str]) -> list[dict]:
+                    await asyncio.sleep(2 ** attempt)   # exponential backoff`}
+        </CodeBox>
+        <CodeBox label="rate-limited API ingestion — running it, plus patterns for scaling further">
+{`async def fetch_all_entities(entity_ids: list[str]) -> list[dict]:
     fetcher = RateLimitedFetcher(requests_per_minute=90)  # stay under limit: 90 not 100
     async with aiohttp.ClientSession() as session:
         tasks = [
@@ -2567,7 +2612,7 @@ async def fetch_all_entities(entity_ids: list[str]) -> list[dict]:
           is the expand-and-contract pattern: run old and new pipelines
           in parallel, validate outputs match, then cut over.
         </Para>
-        <CodeBox label="ETL to ELT migration — parallel run strategy">
+        <CodeBox label="ETL to ELT migration — phase 1: build alongside, phase 2: validate">
 {`# Migration phases:
 
 # Phase 1: Build the new pipeline alongside the old (2-4 weeks)
@@ -2597,9 +2642,10 @@ validation_query = """
     ORDER BY abs_diff DESC
     LIMIT 100
 """
-# Run this daily. Investigate every discrepancy. Fix the new pipeline until diffs = 0.
-
-# Phase 3: Shadow mode (1 week)
+# Run this daily. Investigate every discrepancy. Fix the new pipeline until diffs = 0.`}
+        </CodeBox>
+        <CodeBox label="ETL to ELT migration — phase 3: shadow mode, phase 4: cutover, phase 5: decommission">
+{`# Phase 3: Shadow mode (1 week)
 # Point one non-critical consumer (internal analytics tool) to the new table
 # Monitor: do they report any data quality issues?
 # Keep old pipeline running — instant rollback if problems found
@@ -2648,7 +2694,7 @@ validation_query = """
       </QA>
 
       <QA n={53} q="How do you design for cost efficiency in a cloud data platform?">
-        <CodeBox label="cost optimisation — the high-impact levers">
+        <CodeBox label="cost optimisation — levers 1–2: auto-suspend and right-sizing">
 {`# The Pareto principle applies: 20% of decisions drive 80% of cloud costs.
 # Focus on these in order:
 
@@ -2667,9 +2713,10 @@ ALTER WAREHOUSE analytics_wh SET AUTO_RESUME = TRUE;    -- resume on next query
 # Spark: start with small cluster, use autoscaling rather than fixed large cluster
 spark.conf.set("spark.dynamicAllocation.enabled", "true")
 spark.conf.set("spark.dynamicAllocation.minExecutors", "2")
-spark.conf.set("spark.dynamicAllocation.maxExecutors", "50")
-
-# 3. STORAGE TIERING (automate, don't manually manage)
+spark.conf.set("spark.dynamicAllocation.maxExecutors", "50")`}
+        </CodeBox>
+        <CodeBox label="cost optimisation — levers 3–5: storage tiering, query efficiency, small files">
+{`# 3. STORAGE TIERING (automate, don't manually manage)
 # S3 Intelligent-Tiering: automatically moves objects to cheaper tiers based on access
 # Cost: Standard $0.023/GB → IA $0.0125/GB → Glacier $0.004/GB
 # For a 10 TB data lake: $230/month (Standard) vs $40/month (properly tiered) = 83% saving
