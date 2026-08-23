@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -131,7 +174,7 @@ export default function BatchVsStreamingModule() {
       description="When each processing model is right, the trade-offs nobody talks about, and how modern systems blend all three."
       section="Data Engineering — Module 21"
       readTime="55 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — The Core Question ──────────────────────────────── */}
@@ -227,6 +270,14 @@ export default function BatchVsStreamingModule() {
             ))}
           </div>
         </HighlightBox>
+
+        <TryThis>
+          Name a dashboard or report you use regularly and ask: how stale could
+          its data be before anyone would actually notice or act differently?
+          If the honest answer is &ldquo;a few minutes,&rdquo; it almost certainly doesn&rsquo;t
+          need streaming — Part 07&rsquo;s decision framework is built to make that
+          call precisely.
+        </TryThis>
       </section>
 
       <Divider />
@@ -253,7 +304,7 @@ export default function BatchVsStreamingModule() {
           set of data in one execution. The pipeline starts, reads all the data in
           its scope, processes it, writes the results, and exits. The next run starts
           at the next scheduled interval. Everything between runs is accumulated and
-          processed together — hence "batch."
+          processed together — hence &ldquo;batch.&rdquo;
         </Para>
 
         <Para>
@@ -264,48 +315,36 @@ export default function BatchVsStreamingModule() {
           every backfill operates on well-understood bounded data.
         </Para>
 
-        <SubTitle>How batch processing works internally</SubTitle>
+        <SubSubTitle>How batch processing works internally</SubSubTitle>
 
-        <CodeBox label="Batch processing model — what happens during one execution">{`BATCH PIPELINE EXECUTION CYCLE:
+        <CodeBox label="One batch pipeline execution, start to finish">{`T=06:00  Pipeline starts (triggered by cron or Airflow)
+         Run parameters: run_date = 2026-03-17
 
-  T=06:00  Pipeline starts (triggered by cron or Airflow)
-           Run parameters: run_date = 2026-03-17
+T=06:01  Extract phase:
+         Read all orders WHERE date = '2026-03-17'
+         → 48,234 rows fetched from PostgreSQL replica
+         → Written to S3 Bronze as Parquet
 
-  T=06:01  Extract phase:
-           Read all orders WHERE date = '2026-03-17'
-           → 48,234 rows fetched from PostgreSQL replica
-           → Written to S3 Bronze as Parquet
+T=06:08  Transform phase (dbt):
+         dbt run --select models/silver/orders.sql
+         → 48,234 rows cleaned and typed, 47 rows rejected (to DLQ)
+         → Written to silver.orders partition date=2026-03-17
 
-  T=06:08  Transform phase (dbt):
-           dbt run --select models/silver/orders.sql
-           → 48,234 rows cleaned and typed
-           → 47 rows rejected (written to DLQ)
-           → Written to silver.orders partition date=2026-03-17
+T=06:14  Aggregate phase (dbt Gold):
+         dbt run --select models/gold/daily_revenue.sql
+         → Computes SUM, COUNT, AVG per store per category
 
-  T=06:14  Aggregate phase (dbt Gold):
-           dbt run --select models/gold/daily_revenue.sql
-           → Computes SUM, COUNT, AVG per store per category
-           → Written to gold.daily_revenue
+T=06:17  PIPELINE EXITS — run complete. Duration: 17 minutes.
+         Next run: T+24h at 06:00`}</CodeBox>
 
-  T=06:17  PIPELINE EXITS — run complete
-           Duration: 17 minutes
-           Status: SUCCESS
-           Next run: T+24h at 06:00
+        <Output>{`WHAT HAPPENS BETWEEN T=06:17 AND T=06:00 NEXT DAY:
+The pipeline does not exist as a running process — no compute resources
+are consumed. Data written between runs accumulates, waiting for next
+batch. A customer who placed an order at 08:00 PM won't see it in
+analytics until 06:17 AM the NEXT day (22+ hour latency).
 
-  WHAT HAPPENED BETWEEN T=06:17 AND T=06:00 NEXT DAY:
-  → The pipeline does not exist as a running process
-  → No compute resources are consumed
-  → Data written between runs accumulates, waiting for next batch
-  → A customer who placed an order at 08:00 PM won't see it in
-    analytics until 06:17 AM the NEXT day (22+ hour latency)
-
-THIS IS FINE when:
-  The business question is "what was yesterday's revenue?" (answered at 6:17 AM)
-  The business question is "how did this week's promotions perform?" (daily is enough)
-
-THIS IS NOT FINE when:
-  The business question is "is there fraud happening RIGHT NOW?"
-  The business question is "what is the delivery driver's current location?"`}</CodeBox>
+THIS IS FINE when the business question is "what was yesterday's revenue?"
+THIS IS NOT FINE when the question is "is there fraud happening RIGHT NOW?"`}</Output>
 
         <SubTitle>Why batch is often the right answer despite its latency</SubTitle>
 
@@ -375,8 +414,8 @@ THIS IS NOT FINE when:
           Streaming processes each event as it arrives, with no concept of a run
           boundary. The pipeline is always running, continuously consuming events
           from a source (usually Kafka) and producing outputs with latency measured
-          in milliseconds to seconds. There is no "start of batch" and no "end of
-          batch" — just an infinite sequence of events flowing through the system.
+          in milliseconds to seconds. There is no &ldquo;start of batch&rdquo; and no &ldquo;end of
+          batch&rdquo; — just an infinite sequence of events flowing through the system.
         </Para>
 
         <SubTitle>The streaming data model — events, windows, and watermarks</SubTitle>
@@ -387,150 +426,136 @@ THIS IS NOT FINE when:
           precisely before writing a single line of streaming code.
         </Para>
 
-        <CodeBox label="Event time vs processing time — the most important streaming concept">{`EVENT TIME:     When the event actually happened (the timestamp in the event payload)
+        <SubSubTitle>Event time vs. processing time</SubSubTitle>
+
+        <CodeBox label="Why the two timestamps diverge, and why it matters">{`EVENT TIME:      When the event actually happened (timestamp in the payload)
 PROCESSING TIME: When the streaming system processed the event
 
-These two times diverge whenever:
-  - The network is slow (event took 30 seconds to arrive)
-  - The device was offline (mobile app buffered events, flushed when reconnected)
-  - The system was under load (Kafka consumer fell behind)
-  - The event source has retries (event replayed with original timestamp)
+These diverge whenever: the network is slow, the device was offline
+(mobile app buffered events, flushed on reconnect), the system was under
+load (consumer fell behind), or the event source has retries.
 
 EXAMPLE:
-  A FreshCart delivery agent marks an order "delivered" at 11:58 PM
-  on a bad network connection. The event reaches Kafka at 12:03 AM.
+  A FreshCart delivery agent marks an order "delivered" at 11:58 PM on a
+  bad network connection. The event reaches Kafka at 12:03 AM.
+    Event time:      2026-03-17 23:58:00  (when the tap happened)
+    Processing time: 2026-03-18 00:03:00  (when Kafka received it)
 
-  Event time:     2026-03-17 23:58:00  (when the tap happened)
-  Processing time: 2026-03-18 00:03:00  (when Kafka received it)
-
-  If your streaming pipeline counts "deliveries on 2026-03-17":
-    Using event time:     counts this delivery correctly for March 17
+  If your pipeline counts "deliveries on 2026-03-17":
+    Using event time:      counts this delivery correctly for March 17
     Using processing time: counts this delivery for March 18 — WRONG
 
-  ALWAYS use event time for business metrics.
-  Only use processing time for system metrics (consumer lag, throughput).
+  ALWAYS use event time for business metrics. Only use processing time
+  for system metrics (consumer lag, throughput).`}</CodeBox>
 
+        <SubSubTitle>Windows — tumbling, sliding, and session</SubSubTitle>
 
-WINDOWS:
-  Streaming aggregations operate over time windows — bounded periods
-  during which events are collected before computing results.
+        <CodeBox label="Three ways to bound a streaming aggregation">{`TUMBLING WINDOWS (non-overlapping, fixed size):
+  [00:00–01:00] [01:00–02:00] [02:00–03:00]
+  Each event belongs to exactly one window.
+  Use for: hourly/daily aggregates, session-independent metrics.
 
-  TUMBLING WINDOWS (non-overlapping, fixed size):
-    [00:00–01:00] [01:00–02:00] [02:00–03:00]
-    Each event belongs to exactly one window.
-    Use for: hourly/daily aggregates, session-independent metrics.
+SLIDING WINDOWS (overlapping, fixed size, moves by step):
+  [00:00–01:00] [00:30–01:30] [01:00–02:00]  (30-min step)
+  Each event may belong to multiple windows.
+  Use for: moving averages, rolling metrics.
 
-  SLIDING WINDOWS (overlapping, fixed size, moves by step):
-    [00:00–01:00] [00:30–01:30] [01:00–02:00]  (30-min step)
-    Each event may belong to multiple windows.
-    Use for: moving averages, rolling metrics.
+SESSION WINDOWS (variable size, bounded by inactivity gap):
+  [events...gap > 30min...][events...gap > 30min...][events...]
+  Window closes when no events arrive for the gap duration.
+  Use for: user session analysis, visit duration.`}</CodeBox>
 
-  SESSION WINDOWS (variable size, bounded by inactivity gap):
-    [events...gap > 30min...][events...gap > 30min...][events...]
-    Window closes when no events arrive for the gap duration.
-    Use for: user session analysis, visit duration.
+        <SubSubTitle>Watermarks — when it&rsquo;s safe to close a window</SubSubTitle>
 
-
-WATERMARKS:
-  A watermark is the streaming system's current estimate of the
-  maximum event time it has seen, minus an allowed lateness.
+        <CodeBox label="The formula, and the trade-off it controls">{`A watermark is the streaming system's current estimate of the maximum
+event time it has seen, minus an allowed lateness:
 
   watermark = max_event_time_seen - allowed_lateness
 
-  Purpose: tell the system when it is safe to close a window and
-           produce a result, even if late events might still arrive.
+Purpose: tell the system when it is safe to close a window and produce a
+result, even if late events might still arrive.
 
-  Example:
-    allowed_lateness = 5 minutes
-    max event time seen = 23:58:00
-    watermark = 23:53:00
+Example:
+  allowed_lateness = 5 minutes
+  max event time seen = 23:58:00 → watermark = 23:53:00
 
-    Window [23:00–24:00] is not closed yet — events up to 5 min
-    late may still arrive.
-    Window [22:00–23:00] IS closed — no events older than 23:53
-    can legitimately arrive.
+  Window [23:00–24:00] is not closed yet — events up to 5 min late may
+  still arrive. Window [22:00–23:00] IS closed — no events older than
+  23:53 can legitimately arrive.
 
-  Too small watermark → windows close early → late events dropped → incorrect results
-  Too large watermark → windows close late → higher latency → more memory used`}</CodeBox>
+  Too small watermark → windows close early → late events dropped
+  Too large watermark → windows close late → higher latency, more memory`}</CodeBox>
 
         <SubTitle>Streaming architecture — the components</SubTitle>
 
-        <CodeBox label="Streaming pipeline components — from event source to sink">{`STREAMING PIPELINE ARCHITECTURE:
+        <SubSubTitle>Event source, broker, processor, and sink</SubSubTitle>
 
-  EVENT SOURCE          MESSAGE BROKER      STREAM PROCESSOR     SINK
-  ─────────────────────────────────────────────────────────────────────────────
-  Payment service  →    Kafka topic:    →   Flink/Spark      →  Cassandra
-  (produces events)     payments.v1         Streaming           (real-time store)
-                                                             →  Kafka topic:
-                                                                enriched_payments
-                                                                (downstream)
-                                                             →  S3 Parquet
-                                                                (data lake landing)
+        <CodeBox label="The pipeline shape, and Kafka consumer group mechanics">{`EVENT SOURCE          MESSAGE BROKER      STREAM PROCESSOR     SINK
+Payment service  →    Kafka topic:    →   Flink/Spark      →  Cassandra
+(produces events)     payments.v1         Streaming           (real-time store)
+                                                           →  S3 Parquet
+                                                              (data lake landing)
 
-  KAFKA CONSUMER GROUP MECHANICS:
-    - Multiple consumer instances in a group share the topic partitions
-    - Each partition is consumed by exactly one consumer at a time
-    - Offset tracks position: which events have been processed
-    - Auto-commit offset vs manual commit after successful processing
+KAFKA CONSUMER GROUP MECHANICS:
+  - Multiple consumer instances in a group share the topic partitions
+  - Each partition is consumed by exactly one consumer at a time
+  - Offset tracks position: which events have been processed
+  - Auto-commit offset vs manual commit after successful processing`}</CodeBox>
 
-  CONSUMER OFFSET MANAGEMENT:
-    # Manual offset commit (recommended for correctness):
-    consumer.poll(timeout_ms=1000)
-    for message in records:
-        process(message.value)
-        write_to_sink(message.value)   # write BEFORE committing offset
-    consumer.commit()                  # commit AFTER successful write
-    # If write fails: do not commit → message reprocessed on next poll → at-least-once
+        <SubSubTitle>Manual offset commit — the safe pattern</SubSubTitle>
 
-    # Auto-commit (default, simpler, less safe):
-    # Offset committed on a timer regardless of whether processing succeeded
-    # Risk: offset committed before write completes → message lost on crash
-    consumer.enable_auto_commit = True  # do NOT use for financial data
+        <CodeBox label="Committing only after a successful write">{`# Manual offset commit (recommended for correctness):
+consumer.poll(timeout_ms=1000)
+for message in records:
+    process(message.value)
+    write_to_sink(message.value)   # write BEFORE committing offset
+consumer.commit()                  # commit AFTER successful write
+# If write fails: do not commit → message reprocessed on next poll → at-least-once
 
+# Auto-commit (default, simpler, less safe):
+# Offset committed on a timer regardless of whether processing succeeded.
+# Risk: offset committed before write completes → message lost on crash.
+consumer.enable_auto_commit = True  # do NOT use for financial data`}</CodeBox>
 
-  SPARK STRUCTURED STREAMING (micro-batch under the hood, streaming API):
+        <SubSubTitle>Spark Structured Streaming — reading and parsing</SubSubTitle>
 
-  from pyspark.sql import SparkSession
-  from pyspark.sql.functions import col, from_json, window, sum as spark_sum
-  from pyspark.sql.types import StructType, StringType, DecimalType, TimestampType
+        <CodeBox label="Kafka source, JSON schema, and the watermark">{`from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, from_json, window, sum as spark_sum
+from pyspark.sql.types import StructType, StringType, DecimalType, TimestampType
 
-  spark = SparkSession.builder.appName('payment_stream').getOrCreate()
+spark = SparkSession.builder.appName('payment_stream').getOrCreate()
 
-  payment_schema = StructType() \
-      .add('payment_id', StringType()) \
-      .add('amount', DecimalType(10, 2)) \
-      .add('store_id', StringType()) \
-      .add('event_time', TimestampType())
+payment_schema = StructType() \\
+    .add('payment_id', StringType()) \\
+    .add('amount', DecimalType(10, 2)) \\
+    .add('store_id', StringType()) \\
+    .add('event_time', TimestampType())
 
-  # Read from Kafka:
-  raw_stream = spark.readStream \
-      .format('kafka') \
-      .option('kafka.bootstrap.servers', 'kafka:9092') \
-      .option('subscribe', 'payments.v1') \
-      .option('startingOffsets', 'latest') \
-      .load()
+raw_stream = spark.readStream \\
+    .format('kafka') \\
+    .option('kafka.bootstrap.servers', 'kafka:9092') \\
+    .option('subscribe', 'payments.v1') \\
+    .option('startingOffsets', 'latest') \\
+    .load()
 
-  # Parse JSON payload:
-  payments = raw_stream \
-      .select(from_json(col('value').cast('string'), payment_schema).alias('data')) \
-      .select('data.*') \
-      .withWatermark('event_time', '5 minutes')
+payments = raw_stream \\
+    .select(from_json(col('value').cast('string'), payment_schema).alias('data')) \\
+    .select('data.*') \\
+    .withWatermark('event_time', '5 minutes')`}</CodeBox>
 
-  # Aggregate: revenue per store per 1-hour tumbling window:
-  hourly_revenue = payments \
-      .groupBy(
-          window('event_time', '1 hour'),
-          'store_id',
-      ) \
-      .agg(spark_sum('amount').alias('hourly_revenue'))
+        <SubSubTitle>Aggregating and writing to the sink</SubSubTitle>
 
-  # Write to sink:
-  query = hourly_revenue.writeStream \
-      .outputMode('update') \
-      .format('delta') \
-      .option('checkpointLocation', 's3://freshmart-lake/checkpoints/hourly_revenue') \
-      .trigger(processingTime='30 seconds') \
-      .start('s3://freshmart-lake/silver/hourly_revenue')`}</CodeBox>
+        <CodeBox label="A tumbling window aggregation, written with a 30-second trigger">{`# Aggregate: revenue per store per 1-hour tumbling window:
+hourly_revenue = payments \\
+    .groupBy(window('event_time', '1 hour'), 'store_id') \\
+    .agg(spark_sum('amount').alias('hourly_revenue'))
+
+query = hourly_revenue.writeStream \\
+    .outputMode('update') \\
+    .format('delta') \\
+    .option('checkpointLocation', 's3://freshcart-lake/checkpoints/hourly_revenue') \\
+    .trigger(processingTime='30 seconds') \\
+    .start('s3://freshcart-lake/silver/hourly_revenue')`}</CodeBox>
 
         <SubTitle>When streaming is actually required</SubTitle>
 
@@ -612,80 +637,62 @@ WATERMARKS:
 
         <SubTitle>Micro-batch vs true streaming — the important distinction</SubTitle>
 
-        <CodeBox label="Micro-batch vs true streaming — internal execution models">{`MICRO-BATCH (Spark Structured Streaming, default):
+        <CodeBox label="Two internal execution models, and how to choose between them">{`MICRO-BATCH (Spark Structured Streaming, default):
   t=0s:   Collect all Kafka messages arrived in last 30 seconds
   t=0.5s: Process as one Spark batch job (bounded)
-  t=2.3s: Write results to sink
-  t=2.3s: Commit Kafka offsets
+  t=2.3s: Write results to sink, commit Kafka offsets
   t=30s:  Collect next batch... repeat
 
-  Latency:   ~30 seconds (trigger interval + processing time)
-  Throughput: Very high (Spark is optimised for large batches)
-  State:      Managed per-batch via checkpoint
-  Strengths:  High throughput, familiar Spark APIs, good recovery
-  Weakness:   Minimum latency = trigger interval (cannot go below ~1 second practically)
+  Latency: ~30 seconds. Throughput: very high. State: per-batch checkpoint.
+  Weakness: minimum latency = trigger interval (can't go below ~1s practically)
 
 TRUE STREAMING (Apache Flink):
-  Event arrives → Immediately processed → Output emitted
-  No waiting for batch boundary. Each record is processed as it arrives.
+  Event arrives → Immediately processed → Output emitted. No batch boundary.
 
-  Latency:   Milliseconds (end-to-end 10–200ms typical)
-  Throughput: Lower per-record efficiency, higher parallelism
-  State:      Maintained continuously in distributed state store (RocksDB)
-  Strengths:  True low-latency, native event time semantics, complex CEP
-  Weakness:   More complex to operate, more expensive, harder to debug
+  Latency: milliseconds (10–200ms typical end-to-end).
+  State: maintained continuously in a distributed state store (RocksDB).
+  Weakness: more complex to operate, more expensive, harder to debug.
 
 CHOOSING:
-  Need < 1 second latency?      → True streaming (Flink)
+  Need < 1 second latency?       → True streaming (Flink)
   1 second – 15 minutes latency? → Micro-batch (Spark Structured Streaming)
   > 15 minutes latency?          → Batch (standard Spark or dbt)
   Most "real-time" dashboards?   → Micro-batch with 5-minute trigger`}</CodeBox>
 
         <SubTitle>Micro-batch implementation patterns</SubTitle>
 
-        <CodeBox label="Micro-batch with Spark Structured Streaming — trigger options">{`from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, from_json
-from pyspark.sql.types import StructType, StringType, DecimalType
+        <SubSubTitle>Trigger options in Spark Structured Streaming</SubSubTitle>
+
+        <CodeBox label="Fixed interval, once, available-now, and continuous triggers">{`from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.getOrCreate()
-
-stream = spark.readStream \
-    .format('kafka') \
-    .option('kafka.bootstrap.servers', 'kafka:9092') \
-    .option('subscribe', 'orders.v1') \
-    .load()
-
-# TRIGGER OPTIONS — control micro-batch interval:
+stream = spark.readStream.format('kafka') \\
+    .option('kafka.bootstrap.servers', 'kafka:9092') \\
+    .option('subscribe', 'orders.v1').load()
 
 # Fixed interval micro-batch (most common):
-query = stream.writeStream \
-    .trigger(processingTime='5 minutes') \  # process every 5 minutes
-    .format('delta') \
-    .option('checkpointLocation', 's3://freshmart-lake/checkpoints/orders_stream') \
-    .start('s3://freshmart-lake/bronze/orders_stream')
+query = stream.writeStream \\
+    .trigger(processingTime='5 minutes') \\
+    .format('delta') \\
+    .option('checkpointLocation', 's3://freshcart-lake/checkpoints/orders_stream') \\
+    .start('s3://freshcart-lake/bronze/orders_stream')
 
-# Once trigger — process all available data right now, then stop:
-# Useful for backfill or scheduled runs that want streaming semantics:
-query = stream.writeStream \
-    .trigger(once=True) \
-    .format('delta') \
-    .start('s3://freshmart-lake/bronze/orders_stream')
+# Once trigger — process all available data right now, then stop
+# (useful for backfill or scheduled runs that want streaming semantics):
+query = stream.writeStream.trigger(once=True).format('delta') \\
+    .start('s3://freshcart-lake/bronze/orders_stream')
 
 # Available-now trigger (Spark 3.3+) — process all available data in batches:
-query = stream.writeStream \
-    .trigger(availableNow=True) \
-    .format('delta') \
-    .start('s3://freshmart-lake/bronze/orders_stream')
+query = stream.writeStream.trigger(availableNow=True).format('delta') \\
+    .start('s3://freshcart-lake/bronze/orders_stream')
 
 # Continuous processing (experimental — approaches true streaming):
-query = stream.writeStream \
-    .trigger(continuous='1 second') \  # checkpoint every 1 second
-    .format('console') \
-    .start()
+query = stream.writeStream.trigger(continuous='1 second') \\
+    .format('console').start()`}</CodeBox>
 
+        <SubSubTitle>Micro-batch without Spark — a plain Python loop</SubSubTitle>
 
-# MICRO-BATCH WITH PLAIN PYTHON (no Spark — for simpler cases):
-import time
+        <CodeBox label="For simpler cases where Spark is more than the workload needs">{`import time
 from datetime import datetime, timedelta, timezone
 
 def run_micro_batch(interval_seconds: int = 300) -> None:
@@ -753,48 +760,41 @@ def run_micro_batch(interval_seconds: int = 300) -> None:
           result, trading latency for completeness.
         </Para>
 
-        <CodeBox label="Late-arriving data strategies — batch vs streaming approaches">{`# ── BATCH: the trivial solution ──────────────────────────────────────────────
-# Run with a delay to let late data arrive.
+        <SubSubTitle>Batch — the trivial solution</SubSubTitle>
+
+        <CodeBox label="A delay, and a correction run for the rare very-late arrivals">{`# Run with a delay to let late data arrive.
 # The March 17 batch runs at 6 AM March 18 — 6+ hours after midnight.
 # Any order timestamped March 17 but arriving late has 6 hours to arrive.
 # Simple. Correct. No special logic needed.
 
 # For very late data (hours or days late), run a correction batch:
 # 0 10 * * * python3 pipeline.py --date yesterday --mode correction
-# This reprocesses yesterday with all data that has arrived since the daily run.
-# Upsert semantics make this safe.
+# This reprocesses yesterday with all data that has arrived since the
+# daily run. Upsert semantics make this safe.`}</CodeBox>
 
+        <SubSubTitle>Micro-batch — overlap windows plus upsert</SubSubTitle>
 
-# ── MICRO-BATCH: overlap windows + upsert ────────────────────────────────────
-# Use overlapping time windows to catch most late arrivals.
-# Upsert on event_id ensures duplicates from overlap are handled.
-
-# If micro-batch interval is 5 minutes, query with 10-minute lookback:
+        <CodeBox label="A lookback wider than the trigger interval catches most late events">{`# If micro-batch interval is 5 minutes, query with 10-minute lookback:
 def extract_with_overlap(batch_end, overlap_minutes=10):
     batch_start = batch_end - timedelta(minutes=5 + overlap_minutes)
     return db.query(
         "SELECT * FROM events WHERE event_time BETWEEN %s AND %s",
         (batch_start, batch_end),
     )
-# This reads events from 15 minutes ago to now.
-# Events that arrived late (up to 10 minutes late) are included.
-# Upsert at destination handles the re-processing of already-seen events.
+# This reads events from 15 minutes ago to now. Events that arrived late
+# (up to 10 minutes late) are included. Upsert at destination handles the
+# re-processing of already-seen events.`}</CodeBox>
 
+        <SubSubTitle>Streaming — watermarks and output mode</SubSubTitle>
 
-# ── STREAMING (Spark): watermarks + allowed lateness ────────────────────────
-from pyspark.sql.functions import window, sum as spark_sum
+        <CodeBox label="Configuring allowed lateness, and how output mode affects late updates">{`from pyspark.sql.functions import window, sum as spark_sum
 
 # Define allowed lateness of 10 minutes:
-payments_with_watermark = payments \
-    .withWatermark('event_time', '10 minutes')
+payments_with_watermark = payments.withWatermark('event_time', '10 minutes')
 #   ↑ Any event more than 10 minutes behind the watermark is considered late
 
-# Aggregate with tumbling window:
-hourly_revenue = payments_with_watermark \
-    .groupBy(
-        window('event_time', '1 hour'),
-        'store_id',
-    ) \
+hourly_revenue = payments_with_watermark \\
+    .groupBy(window('event_time', '1 hour'), 'store_id') \\
     .agg(spark_sum('amount').alias('revenue'))
 
 # Output mode matters for late data:
@@ -802,33 +802,29 @@ hourly_revenue = payments_with_watermark \
 #              → Lowest memory, highest latency, correct
 # 'update':   Output whenever window data changes (including late updates)
 #              → Lower latency, more updates to downstream
-# 'complete':  Output all windows on every trigger
-#              → Only for small datasets (memory grows unboundedly)
+# 'complete': Output all windows on every trigger — only for small datasets
 
-query = hourly_revenue.writeStream \
-    .outputMode('update') \            # emit updates as late data arrives
-    .format('delta') \
-    .option('checkpointLocation', 's3://checkpoints/hourly_revenue') \
-    .trigger(processingTime='1 minute') \
-    .start('s3://freshmart-lake/silver/hourly_revenue_stream')
+query = hourly_revenue.writeStream \\
+    .outputMode('update') \\
+    .format('delta') \\
+    .option('checkpointLocation', 's3://checkpoints/hourly_revenue') \\
+    .trigger(processingTime='1 minute') \\
+    .start('s3://freshcart-lake/silver/hourly_revenue_stream')`}</CodeBox>
 
-# With update mode and upsert at destination (Delta MERGE):
-# → Window results are updated as late events arrive
-# → Final result is correct after watermark passes
-# → Downstream consumers see intermediate updates (must handle them)
+        <Output>{`With update mode and upsert at destination (Delta MERGE): window results
+are updated as late events arrive, and the final result is correct after
+the watermark passes. Downstream consumers see intermediate updates and
+must handle them.
 
+THE LATE DATA DECISION TREE:
+  99th percentile latency < 5 min:  allowed_lateness = 10 min
+  99th percentile latency < 30 min: allowed_lateness = 60 min
+  Data can be hours late (mobile app offline): use batch with correction run
 
-# ── THE LATE DATA DECISION TREE ───────────────────────────────────────────────
-# How late does your data arrive?    → How much lateness should you allow?
-#
-# 99th percentile latency < 5 min:    allowed_lateness = 10 min
-# 99th percentile latency < 30 min:   allowed_lateness = 60 min
-# Data can be hours late (mobile app offline):  use batch with correction run
-#
-# Rule: if you cannot bound your data lateness to < 1 hour,
-# streaming with watermarks becomes very expensive.
-# A 1-hour watermark on 1-minute windows means holding 60 windows open
-# in memory simultaneously. Use batch or micro-batch + correction instead.`}</CodeBox>
+Rule: if you cannot bound your data lateness to < 1 hour, streaming with
+watermarks becomes very expensive — a 1-hour watermark on 1-minute windows
+means holding 60 windows open in memory simultaneously. Use batch or
+micro-batch + correction instead.`}</Output>
       </section>
 
       <Divider />
@@ -845,67 +841,56 @@ query = hourly_revenue.writeStream \
           latency requirement genuinely requires it.
         </Para>
 
-        <CodeBox label="Processing model decision framework — the questions to ask">{`QUESTION 1: What is the maximum acceptable data latency for this use case?
+        <SubSubTitle>Questions 1-2 — latency tolerance and transformation complexity</SubSubTitle>
 
-  < 1 second:    True streaming only (Flink / Kafka Streams)
-  1s – 5 min:    Micro-batch (Spark Structured Streaming, 30s trigger)
-  5 – 60 min:    Micro-batch (5–15 minute trigger) or fast batch
-  > 1 hour:      Batch (daily, hourly, or whatever interval fits)
+        <CodeBox label="The two questions that eliminate streaming for most workloads">{`QUESTION 1: What is the maximum acceptable data latency for this use case?
+  < 1 second:  True streaming only (Flink / Kafka Streams)
+  1s – 5 min:  Micro-batch (Spark Structured Streaming, 30s trigger)
+  5 – 60 min:  Micro-batch (5–15 minute trigger) or fast batch
+  > 1 hour:    Batch (daily, hourly, or whatever interval fits)
 
   COMMON MISTAKE: picking streaming because "real-time" sounds better.
-  Ask: what decision or action requires this latency? If the answer
-  is "a dashboard refresh" — does the user genuinely need sub-second
-  updates, or would 5-minute updates serve equally well?
-
+  Ask: what decision or action requires this latency? If the answer is "a
+  dashboard refresh" — does the user genuinely need sub-second updates,
+  or would 5-minute updates serve equally well?
 
 QUESTION 2: How complex is the transformation logic?
-
-  Simple filtering/typing, no joins:      All three work fine
-  Joins to slowly-changing dimensions:    Batch or micro-batch (easier state)
-  Aggregations over large time windows:   Batch (all data available at once)
+  Simple filtering/typing, no joins:       All three work fine
+  Joins to slowly-changing dimensions:     Batch or micro-batch (easier state)
+  Aggregations over large time windows:    Batch (all data available at once)
   Pattern detection across event sequence: Streaming (Flink CEP)
-  ML model inference per event:           Streaming (low-latency requirement)
+  ML model inference per event:            Streaming (low-latency requirement)
 
-  RULE: if the transformation requires data from multiple time periods
-  or large lookups, streaming state management becomes complex and
-  expensive. Batch makes this trivial.
+  RULE: if the transformation requires data from multiple time periods or
+  large lookups, streaming state management becomes complex and expensive.
+  Batch makes this trivial.`}</CodeBox>
 
+        <SubSubTitle>Questions 3-5, and the practical routing table</SubSubTitle>
 
-QUESTION 3: How late can source events arrive?
-
+        <CodeBox label="Late-arrival tolerance, team readiness, data volume, and worked examples">{`QUESTION 3: How late can source events arrive?
   < 5 minutes late:   Micro-batch with 10-min lookback overlap
   5–60 minutes late:  Streaming with 60-min watermark OR micro-batch + correction
   Hours late (mobile offline data, delayed batch feeds): Batch only
 
-
 QUESTION 4: How complex can the operations model be?
-
-  Small team, no streaming expertise:    Batch (always)
-  Team familiar with Spark Streaming:    Micro-batch
-  Dedicated streaming engineers:         True streaming if latency requires it
-
-  RULE: streaming pipelines require more engineering expertise to build,
-  more infrastructure to run, and more time to debug. Only introduce this
-  complexity when the latency requirement justifies it.
-
+  Small team, no streaming expertise: Batch (always)
+  Team familiar with Spark Streaming: Micro-batch
+  Dedicated streaming engineers:       True streaming if latency requires it
 
 QUESTION 5: What is the data volume?
-
-  < 1 GB/day:    Batch on a single machine (Pandas, not even Spark needed)
-  1 GB – 1 TB/day: Batch Spark or micro-batch Spark
-  > 1 TB/day:    Micro-batch or streaming depending on latency needs
-  > 10 TB/day:   Almost certainly micro-batch or streaming
-
+  < 1 GB/day:       Batch on a single machine (Pandas, not even Spark needed)
+  1 GB – 1 TB/day:  Batch Spark or micro-batch Spark
+  > 1 TB/day:       Micro-batch or streaming depending on latency needs
+  > 10 TB/day:      Almost certainly micro-batch or streaming
 
 PRACTICAL ROUTING TABLE:
-  Finance report (daily revenue, costs):               BATCH
-  Operations dashboard (last 15 min):                  MICRO-BATCH (5 min)
-  Real-time fraud detection:                            STREAMING (Flink)
-  Customer segmentation (weekly):                       BATCH
-  Live delivery tracking:                               STREAMING
-  Hourly data quality check:                            MICRO-BATCH (10 min)
-  Monthly cohort retention analysis:                    BATCH
-  Payment gateway health monitoring:                    STREAMING`}</CodeBox>
+  Finance report (daily revenue, costs):    BATCH
+  Operations dashboard (last 15 min):       MICRO-BATCH (5 min)
+  Real-time fraud detection:                 STREAMING (Flink)
+  Customer segmentation (weekly):            BATCH
+  Live delivery tracking:                    STREAMING
+  Hourly data quality check:                 MICRO-BATCH (10 min)
+  Payment gateway health monitoring:         STREAMING`}</CodeBox>
 
         <SubTitle>The Kappa architecture — why Lambda is falling out of favour</SubTitle>
 
@@ -918,34 +903,22 @@ PRACTICAL ROUTING TABLE:
           between the two paths.
         </Para>
 
-        <CodeBox label="Lambda vs Kappa — the architectural evolution">{`LAMBDA ARCHITECTURE (2012–2020, now declining):
+        <CodeBox label="Lambda vs Kappa vs the modern hybrid">{`LAMBDA ARCHITECTURE (2012–2020, now declining):
   Source → Batch Layer (Spark, nightly) → Batch views (accurate, slow)
          → Speed Layer (Storm/Flink)    → Real-time views (fast, approximate)
                                          ↓
                                Serving Layer (merge both)
-
-  Problems:
-  - Two codebases doing the same logic (batch SQL + streaming Java)
-  - Subtle differences between batch and stream results (bugs)
-  - Operational complexity of maintaining two stacks
-  - Speed layer results replaced by batch results once batch catches up
+  Problems: two codebases doing the same logic, subtle batch/stream result
+  differences, operational complexity of maintaining two stacks.
 
 KAPPA ARCHITECTURE (2014–present, now dominant):
   Source → Kafka (persistent event log, replayed for reprocessing)
          → Single streaming pipeline (Flink or Spark Streaming)
          → Serving layer (no separate batch layer)
-
-  Reprocessing: replay Kafka from the beginning with a new consumer group
-  Historical:   Kafka retention configured for months/years of data
-
-  Benefits:
-  - Single codebase
-  - One source of truth
-  - Reprocessing is natural (replay Kafka)
-  - Simpler to operate
-
-  Limitation: requires Kafka to retain data long enough for full reprocessing
-              (expensive at high data volumes — terabytes stored in Kafka)
+  Reprocessing: replay Kafka from the beginning with a new consumer group.
+  Benefits: single codebase, one source of truth, natural reprocessing.
+  Limitation: requires Kafka to retain data long enough for full
+  reprocessing (expensive at high data volumes).
 
 MODERN HYBRID (2022–present, most practical):
   Source → Kafka (days of retention for streaming)
@@ -953,6 +926,42 @@ MODERN HYBRID (2022–present, most practical):
   Streaming path: Kafka → Flink/Spark Streaming → real-time sink (low latency)
   Batch path:     S3 → Spark batch → warehouse (historical accuracy, bulk)
   Both write to the same Delta Lake tables (upserts reconcile any differences)`}</CodeBox>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Processing Models</SectionTitle>
+
+        {[
+          {
+            wrong: '"Spark Structured Streaming is true streaming, the same way Flink is"',
+            right: 'Part 04 is explicit that Spark Structured Streaming is micro-batch under the hood — it collects records per trigger interval and processes each interval as a bounded Spark job. Only Apache Flink (and Kafka Streams) does genuine record-by-record processing with no batch boundary at all.',
+          },
+          {
+            wrong: '"A more real-time architecture is always a better architecture"',
+            right: 'Part 01 and Part 07 both push back on this directly — streaming adds real operational complexity, cost, and correctness challenges (watermarks, out-of-order events, state management) that only pay for themselves when a genuine business action depends on sub-minute latency. Otherwise it\'s pure overhead over a simpler batch or micro-batch pipeline.',
+          },
+          {
+            wrong: '"If data can arrive a few hours late, a large enough watermark solves it"',
+            right: 'Part 06\'s decision tree is specific about where watermarks stop being the right tool — holding windows open for hours to accommodate late data is expensive in memory and state, and batch with a correction run handles genuinely late data (mobile-offline, partner delays) far more cheaply than an oversized watermark would.',
+          },
+          {
+            wrong: '"Using processing time instead of event time for windowing is a minor implementation detail"',
+            right: 'Part 03\'s event-time section and this module\'s Error Library both treat this as a correctness bug, not a style choice — windowing on processing time silently miscounts events that arrived late relative to when they actually happened, which is exactly the kind of error that goes unnoticed until someone reconciles against a known-correct total.',
+          },
+          {
+            wrong: '"The Lambda architecture (separate batch and streaming layers) is still the standard way to get both speed and accuracy"',
+            right: 'Part 07 is explicit that Lambda has fallen out of favor specifically because it requires maintaining the same business logic twice, in two different languages, with subtle correctness drift between them — the Kappa architecture and the modern hybrid (both writing to the same Delta Lake tables) are what most platforms use today instead.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1131,6 +1140,42 @@ The one thing I would add is a data quality check: alert if the number of delive
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Defaulting to Kafka + Flink for a dashboard that only needs to refresh every few minutes',
+            a: 'Part 07\'s Question 1 and this module\'s Real World scenario both make the same point with FreshCart\'s operations dashboard: a 5-minute micro-batch trigger meets the actual latency need at a fraction of the operational complexity and cost of an always-on streaming cluster.',
+          },
+          {
+            q: 'Windowing a streaming aggregation on Kafka\'s message arrival timestamp instead of the event\'s own timestamp field',
+            a: 'Part 03\'s event-time section and this module\'s Error Library are explicit that this silently double-counts or misattributes events that arrived late relative to when they actually happened — always window on event_time from the payload, never on processing time.',
+          },
+          {
+            q: 'Using a very large watermark to "solve" data that can be hours late',
+            a: 'Part 06\'s decision tree draws the line precisely: a 1-hour watermark on 1-minute windows means holding 60 windows open in memory at once. Data that\'s genuinely hours late belongs to batch with a correction run, not an oversized streaming watermark.',
+          },
+          {
+            q: 'Using NOW() or CURRENT_TIMESTAMP inside a batch pipeline\'s extraction query instead of a fixed run_date parameter',
+            a: 'This module\'s Error Library shows exactly what breaks: a reprocessing run days later computes a different time window than the original run did, because the "last 24 hours" is relative to whenever the pipeline happens to execute. Parameterize with an explicit date and compute all boundaries from it.',
+          },
+          {
+            q: 'Leaving a streaming job stopped for longer than the source Kafka topic\'s retention period',
+            a: 'This module\'s Error Library documents the resulting StreamingQueryException — Kafka deletes old log segments on schedule regardless of whether a consumer has read them, so a paused job can come back to find its checkpoint offset points at messages that no longer exist.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1205,7 +1250,7 @@ The one thing I would add is a data quality check: alert if the number of delive
         'Mature data platforms use all three models simultaneously: batch for finance reports, micro-batch for operations dashboards, streaming for fraud detection. The skill is matching the model to the latency requirement — not picking one model for everything.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
