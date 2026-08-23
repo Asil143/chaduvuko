@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -131,7 +174,7 @@ export default function MedallionArchitectureModule() {
       description="What belongs in each layer, the exact transformations at each boundary, dbt and Spark integration, SCD handling, and governing a three-tier lakehouse."
       section="Data Engineering — Module 30"
       readTime="65 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What the Medallion Architecture Is ──────────────── */}
@@ -245,6 +288,13 @@ export default function MedallionArchitectureModule() {
           progressively stronger guarantees, transformations at each boundary are
           well-defined, and each layer is independently queryable.
         </Callout>
+
+        <TryThis>
+          Pick a table you query regularly and ask which of the three layers it
+          actually belongs to based on its guarantees, not its name. A table
+          called &ldquo;clean_orders&rdquo; that still has duplicate rows and untyped
+          columns is a Bronze table wearing a Silver label — worth flagging.
+        </TryThis>
       </section>
 
       <Divider />
@@ -275,7 +325,7 @@ export default function MedallionArchitectureModule() {
           transformation, Bronze is the raw material for reprocessing.
         </Para>
 
-        <SubTitle>What the Bronze layer does — and does not do</SubTitle>
+        <SubSubTitle>What the Bronze layer does — and does not do</SubSubTitle>
 
         <CodeBox label="Bronze layer contract — the exact transformations performed">{`BRONZE LAYER CONTRACT:
   Accepts:  Any data from the landing zone
@@ -287,88 +337,70 @@ TRANSFORMATIONS PERFORMED IN BRONZE:
   ✓ Hive-style partitioning: adds date= partition column
   ✓ Ingestion metadata: adds ingested_at, source_system, pipeline_run_id
   ✓ Light type coercion: minimum changes to make data loadable as Parquet
-      (e.g., parse timestamps to TimestampType for Parquet compatibility)
   ✓ Schema capture: record the schema seen from the source in catalog
 
 TRANSFORMATIONS NOT PERFORMED IN BRONZE:
   ✗ Business validation (valid statuses, amount ranges) — Silver's job
-  ✗ Deduplication — Silver's job
-  ✗ NULL handling — Silver's job
-  ✗ Join to other tables — Silver's job
+  ✗ Deduplication, NULL handling, joins — Silver's job
   ✗ Business rule application (tier classification, etc.) — Gold's job
   ✗ Dropping columns — preserve everything, even columns you don't use yet
 
 THE BRONZE IMMUTABILITY RULE:
-  Bronze data is append-only via CDC / incremental ingestion.
-  Once written, a Bronze row is never modified.
-  If the source sends a correction: append the corrected row.
-  Silver deduplication will keep the latest version.
-  This preserves the complete change history — invaluable for audits.
+  Bronze data is append-only via CDC / incremental ingestion. Once written,
+  a Bronze row is never modified. If the source sends a correction: append
+  the corrected row. Silver deduplication will keep the latest version.
+  This preserves the complete change history — invaluable for audits.`}</CodeBox>
 
-BRONZE DATA VOLUME REALITY:
-  Bronze retains all CDC events — every INSERT, UPDATE, DELETE.
-  For a table with 10M rows and 5% daily update rate:
-    Daily CDC events: 500,000 inserts + 500,000 updates = 1M events/day
-    After 1 year: 365M Bronze rows for 10M current rows in source
-  This is expected and correct — Bronze is the event log, Silver is the state.`}</CodeBox>
+        <Output>{`BRONZE DATA VOLUME REALITY:
+Bronze retains all CDC events — every INSERT, UPDATE, DELETE.
+For a table with 10M rows and 5% daily update rate:
+  Daily CDC events: 500,000 inserts + 500,000 updates = 1M events/day
+  After 1 year: 365M Bronze rows for 10M current rows in source
+This is expected and correct — Bronze is the event log, Silver is the state.`}</Output>
 
-        <SubTitle>Bronze implementation — Spark and Python patterns</SubTitle>
+        <SubSubTitle>Bronze implementation — the Spark ingestion function</SubSubTitle>
 
         <CodeBox label="Bronze layer pipeline — format conversion with schema preservation">{`"""
 Bronze pipeline: landing JSON → Bronze Parquet (Delta Lake)
 Preserves all source fields, adds ingestion metadata.
 """
-
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
-from pyspark.sql.types import TimestampType
-from delta.tables import DeltaTable
 from datetime import date
 
-spark = SparkSession.builder \
-    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+spark = SparkSession.builder \\
+    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \\
     .getOrCreate()
 
-BRONZE_PATH = "s3://freshmart-data-lake-prod/bronze/payments"
-LANDING_PATH = "s3://freshmart-data-lake-prod/landing/stripe"
+BRONZE_PATH = "s3://freshcart-data-lake-prod/bronze/payments"
+LANDING_PATH = "s3://freshcart-data-lake-prod/landing/stripe"
 
 def load_to_bronze(run_date: date) -> dict:
-    """
-    Load raw Stripe JSON from landing to Bronze Delta Lake.
-    Converts to Parquet, adds metadata, preserves all source fields.
-    """
-    landing_file = f"\${LANDING_PATH}/payments_\${run_date.strftime('%Y%m%d')}.json"
+    """Load raw Stripe JSON from landing to Bronze Delta Lake."""
+    landing_file = f"{LANDING_PATH}/payments_{run_date.strftime('%Y%m%d')}.json"
 
     # Read raw JSON — schema inferred from source (schema-on-read at Bronze)
     raw = spark.read.json(landing_file)
 
     # Only transformations allowed at Bronze:
-    bronze = raw \
-        .withColumn("_ingested_at",    F.current_timestamp()) \
-        .withColumn("_source_system",  F.lit("stripe")) \
-        .withColumn("_pipeline_run_id", F.lit(run_id)) \
-        .withColumn("_source_date",    F.lit(str(run_date))) \
+    bronze = raw \\
+        .withColumn("_ingested_at",    F.current_timestamp()) \\
+        .withColumn("_source_system",  F.lit("stripe")) \\
+        .withColumn("_pipeline_run_id", F.lit(run_id)) \\
         .withColumn("_bronze_date",    F.to_date(F.current_timestamp()))
     # Note: _ prefix on all metadata columns to distinguish from source columns
 
-    # Write to Delta Lake with date partition:
-    bronze.write \
-        .format("delta") \
-        .mode("append") \                  # Bronze is APPEND ONLY
-        .partitionBy("_bronze_date") \
-        .option("mergeSchema", "true") \   # allow new source columns to flow through
+    bronze.write \\
+        .format("delta").mode("append") \\      # Bronze is APPEND ONLY
+        .partitionBy("_bronze_date") \\
+        .option("mergeSchema", "true") \\        # allow new source columns to flow through
         .save(BRONZE_PATH)
 
-    # Register in Glue catalog if partition is new:
-    row_count = bronze.count()
-    return {
-        "rows_written": row_count,
-        "path": BRONZE_PATH,
-        "partition": str(run_date),
-    }
+    return {"rows_written": bronze.count(), "path": BRONZE_PATH, "partition": str(run_date)}`}</CodeBox>
 
+        <SubSubTitle>Schema evolution — what happens when the source adds a column</SubSubTitle>
 
-# BRONZE SCHEMA EVOLUTION STRATEGY:
+        <CodeBox label="Bronze accepts new columns automatically; Silver and Gold require explicit updates">{`# BRONZE SCHEMA EVOLUTION STRATEGY:
 # mergeSchema=true: if source adds a new column, Bronze accepts it
 # automatically. Silver must handle the new column explicitly.
 # When Silver fails because of an unexpected Bronze column:
@@ -416,8 +448,8 @@ def load_to_bronze(run_date: date) -> dict:
           history. The Bronze layer has every INSERT, UPDATE, and DELETE that
           happened over three years. The Silver layer has one row per order_id —
           the current state of that order, updated whenever Bronze receives a change.
-          Silver answers "what does the order look like now?" Bronze answers
-          "what happened to this order and when?"
+          Silver answers &ldquo;what does the order look like now?&rdquo; Bronze answers
+          &ldquo;what happened to this order and when?&rdquo;
         </Para>
 
         <SubTitle>The Silver transformation checklist</SubTitle>
@@ -427,12 +459,11 @@ def load_to_bronze(run_date: date) -> dict:
             step: '1. Type casting — every column to its correct type',
             detail: 'Bronze stores everything as strings (or inferred types) for maximum compatibility. Silver casts every column to its authoritative type: amounts to DECIMAL(10,2), timestamps to TIMESTAMPTZ, IDs to BIGINT. Type mismatches are rejected to the DLQ with a clear error.',
             sql: `-- models/silver/stg_payments.sql
-WITH source AS (SELECT * FROM \${ ref('bronze_payments') })
+WITH source AS (SELECT * FROM {{ ref('bronze_payments') }})
 SELECT
     payment_id::BIGINT               AS payment_id,
     order_id::BIGINT                 AS order_id,
     amount::DECIMAL(10,2)            AS amount,
-    currency                         AS currency,
     LOWER(TRIM(status))              AS status,
     created_at::TIMESTAMPTZ          AS created_at,
     _ingested_at                     AS bronze_ingested_at
@@ -516,10 +547,9 @@ REGEXP_REPLACE(phone, '[0-9]', 'X', 1, -1, 'i')
 
         <SubTitle>Silver as Delta Lake — MERGE for idempotent upserts</SubTitle>
 
-        <CodeBox label="Silver incremental materialisation — Delta MERGE via dbt">{`-- Silver layer in dbt uses the 'incremental' materialisation with Delta MERGE.
--- This is more efficient than full refresh for large tables.
+        <SubSubTitle>The incremental config and source CTE</SubSubTitle>
 
--- models/silver/payments.sql
+        <CodeBox label="models/silver/payments.sql — configuration and incremental filter">{`-- Silver layer in dbt uses the 'incremental' materialisation with Delta MERGE.
 {{ config(
     materialized  = 'incremental',
     unique_key    = 'payment_id',
@@ -538,8 +568,11 @@ WITH source AS (
             SELECT MAX(silver_updated_at) FROM {{ this }}
         )
     {% endif %}
-),
-deduplicated AS (
+),`}</CodeBox>
+
+        <SubSubTitle>Deduplication, the final SELECT, and the generated MERGE</SubSubTitle>
+
+        <CodeBox label="...continued — collapsing to one row per key and applying validation">{`deduplicated AS (
     SELECT *,
         ROW_NUMBER() OVER (
             PARTITION BY payment_id
@@ -561,14 +594,12 @@ final AS (
 SELECT * FROM final
 
 -- What dbt generates under the hood:
--- MERGE INTO silver.payments AS target
--- USING new_rows AS source
+-- MERGE INTO silver.payments AS target USING new_rows AS source
 -- ON target.payment_id = source.payment_id
 -- WHEN MATCHED THEN UPDATE SET status=..., amount=...
 -- WHEN NOT MATCHED THEN INSERT (payment_id, order_id, ...) VALUES (...)
-
--- IMPORTANT: merge_update_columns prevents overwriting
--- columns like created_at that should never change once set.`}</CodeBox>
+-- merge_update_columns prevents overwriting columns like created_at that
+-- should never change once set.`}</CodeBox>
       </section>
 
       <Divider />
@@ -595,86 +626,61 @@ SELECT * FROM final
           purpose-built layer — each Gold model is designed for a specific
           analytical consumer. The daily revenue model exists because the finance
           team needs it. The customer LTV model exists because the product team
-          needs it. Gold is the translation layer between "what the data says"
-          (Silver) and "what the business asks" (dashboards, reports, APIs).
+          needs it. Gold is the translation layer between &ldquo;what the data says&rdquo;
+          (Silver) and &ldquo;what the business asks&rdquo; (dashboards, reports, APIs).
         </Para>
 
         <SubTitle>The Gold layer design principles</SubTitle>
 
-        <CodeBox label="Gold layer design — three patterns for three use cases">{`GOLD PATTERN 1: PRE-AGGREGATED METRICS (most common)
-────────────────────────────────────────────────────────────
-Purpose: Replace expensive on-the-fly aggregations with pre-computed results.
-         A query that joins 500M orders, 10M customers, and 10M payments
-         in real time takes 4 minutes. Pre-aggregated Gold: < 1 second.
+        <SubSubTitle>Pattern 1 — pre-aggregated metrics</SubSubTitle>
 
-Example — daily store revenue:
+        <CodeBox label="Replacing an expensive on-the-fly aggregation with a pre-computed one">{`Purpose: A query that joins 500M orders, 10M customers, and 10M payments
+in real time takes 4 minutes. Pre-aggregated Gold: < 1 second.
+
 -- models/gold/daily_store_revenue.sql
 SELECT
     DATE(o.created_at AT TIME ZONE 'America/New_York')  AS order_date,
-    o.store_id,
-    s.store_name,
-    s.city,
+    o.store_id, s.store_name, s.city,
     COUNT(DISTINCT o.order_id)                       AS order_count,
     SUM(o.order_amount)                              AS gross_revenue,
-    SUM(o.discount_amount)                           AS total_discount,
     SUM(o.order_amount - o.discount_amount)          AS net_revenue,
     AVG(o.order_amount)                              AS avg_order_value,
-    COUNT(DISTINCT o.customer_id)                    AS unique_customers,
-    SUM(CASE WHEN o.status = 'cancelled' THEN 1 ELSE 0 END) AS cancellations,
     ROUND(SUM(CASE WHEN o.status = 'cancelled' THEN 1 ELSE 0 END)
           / COUNT(o.order_id) * 100, 2)              AS cancellation_rate_pct
 FROM {{ ref('silver_orders') }} o
 JOIN {{ ref('silver_stores') }} s USING (store_id)
 WHERE o.status IN ('delivered', 'cancelled')
 GROUP BY 1, 2, 3, 4
-ORDER BY 1 DESC, 6 DESC
+ORDER BY 1 DESC, 6 DESC`}</CodeBox>
 
+        <SubSubTitle>Pattern 2 — wide denormalised fact table for BI tools</SubSubTitle>
 
-GOLD PATTERN 2: WIDE DENORMALISED FACT TABLE (for BI tools)
-────────────────────────────────────────────────────────────
-Purpose: Join multiple Silver tables into one wide flat table.
-         BI tools (Metabase, Tableau, Looker) work best with single flat tables.
-         Analysts should not need to join — Gold does it for them.
+        <CodeBox label="Joining Silver tables once so analysts never have to">{`Purpose: BI tools (Metabase, Tableau, Looker) work best with single flat
+tables. Analysts should not need to join — Gold does it for them.
 
-Example — fct_orders (the "order 360"):
--- models/gold/fct_orders.sql
+-- models/gold/fct_orders.sql (the "order 360")
 SELECT
     o.order_id, o.order_amount, o.status, o.created_at,
-    -- Customer attributes (from silver.customers at order time):
     c.customer_id, c.city AS customer_city, c.tier AS customer_tier,
-    -- Store attributes:
     s.store_id, s.store_name, s.store_city,
-    -- Payment attributes:
     p.payment_method, p.payment_status, p.captured_at,
-    -- Delivery attributes:
     d.delivery_minutes, d.delivery_partner,
-    -- Derived metrics:
     CASE WHEN o.order_amount >= 2000 THEN 'premium'
          WHEN o.order_amount >= 500  THEN 'standard'
          ELSE 'economy' END                           AS order_tier,
-    CASE WHEN p.captured_at IS NOT NULL THEN TRUE
-         ELSE FALSE END                               AS is_paid
+    CASE WHEN p.captured_at IS NOT NULL THEN TRUE ELSE FALSE END AS is_paid
 FROM {{ ref('silver_orders') }}   o
 LEFT JOIN {{ ref('silver_customers') }} c USING (customer_id)
 LEFT JOIN {{ ref('silver_stores') }}    s USING (store_id)
 LEFT JOIN {{ ref('silver_payments') }}  p USING (order_id)
-LEFT JOIN {{ ref('silver_deliveries') }} d USING (order_id)
+LEFT JOIN {{ ref('silver_deliveries') }} d USING (order_id)`}</CodeBox>
 
+        <SubSubTitle>Pattern 3 — entity snapshots for historical analysis</SubSubTitle>
 
-GOLD PATTERN 3: ENTITY SNAPSHOTS (for historical analysis)
-────────────────────────────────────────────────────────────
-Purpose: Capture the state of an entity (customer, product) at a specific
-         point in time for cohort analysis and trend reporting.
-
-Example — daily customer snapshot:
--- models/gold/customer_daily_snapshot.sql
+        <CodeBox label="Capturing state at each point in time for cohort and trend reporting">{`-- models/gold/customer_daily_snapshot.sql
 SELECT
-    snapshot_date,
-    customer_id,
-    tier,
-    total_lifetime_orders,
-    total_lifetime_spend,
-    days_since_last_order,
+    snapshot_date, customer_id, tier,
+    total_lifetime_orders, total_lifetime_spend, days_since_last_order,
     CASE WHEN days_since_last_order <= 30 THEN 'active'
          WHEN days_since_last_order <= 90 THEN 'at_risk'
          ELSE 'churned' END                           AS lifecycle_status
@@ -701,35 +707,18 @@ CROSS JOIN (
 # BI Tool A: customer_tier = order_amount > 1000 THEN 'premium'
 # BI Tool B: customer_tier = order_amount > 1500 THEN 'premium'
 # Analyst C: customer_tier = lifetime_spend > 10000 THEN 'premium'
-# → Three different answers to "how many premium customers do we have"
-# → Finance, product, and marketing each have different numbers
+# → Finance, product, and marketing each have different "premium customer" counts
 
-# CORRECT PATTERN: Business logic in Gold, one definition
-# models/gold/customer_segments.sql:
-# customer_tier =
-#   CASE WHEN lifetime_spend >= 50000 THEN 'platinum'
-#        WHEN lifetime_spend >= 10000 THEN 'gold'
-#        WHEN lifetime_spend >= 2000  THEN 'silver'
-#        ELSE 'standard'
-#   END
-# This definition is in git, tested, reviewed, and versioned.
-# Every dashboard that queries customer_tier gets the same answer.
+# CORRECT PATTERN: Business logic in Gold, one definition, in git, tested,
+# reviewed, versioned. Every dashboard that queries customer_tier agrees.
 
-# THE DATA CONTRACT:
-# Gold models have explicit consumers listed in their documentation:
-# - Finance dashboard: uses daily_store_revenue, customer_ltv
-# - Operations dashboard: uses fct_orders, store_performance
-# - Product analytics: uses customer_daily_snapshot, feature_adoption
-
-# Before changing a Gold model, check all downstream consumers.
-# Breaking changes require:
-#   1. Announcing the change to all consumer teams
-#   2. Adding the new column alongside the old (backward-compatible)
-#   3. Migration period for consumers to update
-#   4. Removing the old column only after all consumers have migrated
-
-# dbt docs generate creates a lineage graph showing all downstream models.
-# Use it before any Gold model modification.`}</CodeBox>
+# THE DATA CONTRACT: Gold models have explicit consumers listed in their
+# documentation. Before changing a Gold model, check all downstream
+# consumers. Breaking changes require: announcing the change, adding the
+# new column alongside the old (backward-compatible), a migration period,
+# and removing the old column only after all consumers have migrated.
+# dbt docs generate creates a lineage graph showing all downstream models —
+# use it before any Gold model modification.`}</CodeBox>
       </section>
 
       <Divider />
@@ -753,7 +742,6 @@ CROSS JOIN (
             { dim: 'Schema model', bronze: 'Schema-on-read (mergeSchema=true)', silver: 'Schema enforced at MERGE', gold: 'Explicit, stable, consumer-specific' },
             { dim: 'Transformations', bronze: 'Format conversion, metadata only', silver: 'Types, dedup, nulls, validation, PII mask', gold: 'Joins, aggregations, business rules' },
             { dim: 'Update semantics', bronze: 'APPEND only (CDC events)', silver: 'MERGE (upsert on business key)', gold: 'Full rebuild or incremental MERGE' },
-            { dim: 'Table format', bronze: 'Delta Lake (mergeSchema)', silver: 'Delta Lake (ACID, time travel)', gold: 'Delta Lake (small, fast queries)' },
             { dim: 'dbt model type', bronze: 'Not in dbt (Python/Spark pipeline)', silver: 'incremental (merge strategy)', gold: 'table or incremental' },
             { dim: 'Retention', bronze: '1-3 years (reprocessing source)', silver: '2-5 years', gold: '1-2 years (rebuilt from Silver)' },
             { dim: 'Row count ratio', bronze: '10-50× Silver (all history)', silver: '1× (current state)', gold: '0.001-0.1× (aggregated)' },
@@ -779,64 +767,47 @@ CROSS JOIN (
           or Spark is more appropriate — is what produces a well-structured platform.
         </Para>
 
-        <CodeBox label="dbt layer mapping — which transformations belong where">{`dbt PROJECT STRUCTURE FOR MEDALLION ARCHITECTURE:
+        <SubSubTitle>The project structure</SubSubTitle>
 
-freshmart_dbt/
+        <CodeBox label="dbt project layout mapped onto Bronze/Silver/Gold">{`freshcart_dbt/
 ├── models/
 │   ├── staging/                ← Bronze → Silver staging (one-to-one source mapping)
 │   │   ├── _sources.yml        ← define Bronze tables as dbt sources
-│   │   ├── stg_payments.sql    ← cast types, rename, light cleaning
-│   │   ├── stg_orders.sql
-│   │   └── stg_customers.sql
-│   │
+│   │   └── stg_payments.sql    ← cast types, rename, light cleaning
 │   ├── intermediate/           ← optional layer: complex joins / business prep
 │   │   └── int_orders_with_payment.sql
-│   │
 │   ├── silver/                 ← Silver layer (trusted, current state)
 │   │   ├── _silver.yml         ← schema.yml with tests
-│   │   ├── orders.sql          ← materialised='incremental', merge
-│   │   ├── customers.sql
-│   │   └── payments.sql
-│   │
+│   │   └── orders.sql          ← materialised='incremental', merge
 │   └── gold/                   ← Gold layer (business metrics)
-│       ├── finance/
-│       │   ├── daily_revenue.sql
-│       │   └── customer_ltv.sql
-│       ├── operations/
-│       │   └── store_performance.sql
-│       └── product/
-│           └── customer_segments.sql
-│
-├── tests/
-│   └── generic/                ← custom dbt tests
-│       └── assert_positive_revenue.sql
-│
-└── macros/
-    └── generate_schema_name.sql  ← route models to correct schemas
+│       ├── finance/daily_revenue.sql
+│       ├── operations/store_performance.sql
+│       └── product/customer_segments.sql
+├── tests/generic/               ← custom dbt tests
+└── macros/generate_schema_name.sql  ← route models to correct schemas`}</CodeBox>
 
-MATERIALISATION STRATEGY BY LAYER:
-  staging models:       materialised='view'      (no storage cost, always fresh)
-  intermediate:         materialised='view' or 'ephemeral'
-  silver models:        materialised='incremental', incremental_strategy='merge'
-  gold aggregates:      materialised='table'     (full rebuild, small size)
-  gold large facts:     materialised='incremental', merge on business key
+        <SubSubTitle>Materialisation strategy by layer</SubSubTitle>
 
+        <CodeBox label="Which materialisation to use where">{`staging models:       materialised='view'      (no storage cost, always fresh)
+intermediate:         materialised='view' or 'ephemeral'
+silver models:        materialised='incremental', incremental_strategy='merge'
+gold aggregates:      materialised='table'     (full rebuild, small size)
+gold large facts:     materialised='incremental', merge on business key`}</CodeBox>
 
-dbt DOES WELL:
+        <SubSubTitle>What dbt does well, and where Spark/Python takes over</SubSubTitle>
+
+        <CodeBox label="The boundary rule, stated precisely">{`dbt DOES WELL:
   ✓ Bronze → Silver staging (SQL type casting, renaming, light cleaning)
   ✓ Silver → Gold joins and aggregations
   ✓ Incremental MERGE updates (via Delta Lake connector)
-  ✓ Test automation (not_null, unique, relationships, custom)
-  ✓ Documentation and lineage graphs
-  ✓ CI/CD integration (dbt test on every PR)
+  ✓ Test automation, documentation, lineage graphs, CI/CD integration
 
 dbt DOES NOT DO WELL (use Python/Spark instead):
-  ✗ File format conversion (CSV → Parquet) — use Spark
-  ✗ Large-scale deduplication on billions of rows — use Spark
-  ✗ ML feature engineering — use Python/Spark
-  ✗ Complex JSON flattening with nested arrays — Spark handles better
+  ✗ File format conversion (CSV → Parquet)
+  ✗ Large-scale deduplication on billions of rows
+  ✗ ML feature engineering, complex JSON flattening with nested arrays
   ✗ Real-time/streaming transformations — use Flink or Spark Streaming
-  ✗ PII masking with custom encryption libraries — use Python
+  ✗ PII masking with custom encryption libraries
 
 THE BOUNDARY RULE:
   If the transformation can be expressed as a SQL SELECT and runs within
@@ -856,73 +827,56 @@ THE BOUNDARY RULE:
         <Para>
           Late-arriving data — records that are delivered to the platform after
           their logical timestamp — is handled differently at each layer. The
-          Medallion Architecture's layer separation makes late data handling
+          Medallion Architecture&rsquo;s layer separation makes late data handling
           tractable: Bronze appends it, Silver merges it, Gold rebuilds or
           corrects it.
         </Para>
 
-        <CodeBox label="Late-arriving data flow — how it propagates through all three layers">{`SCENARIO:
-  An order was placed on 2026-03-17.
-  The mobile app was offline and synced late on 2026-03-19.
-  The event arrives in the landing zone on 2026-03-19 at 14:00 UTC.
-  The event's event_time is 2026-03-17 22:15 UTC (when it actually happened).
+        <SubSubTitle>The scenario, and how Bronze and Silver handle it</SubSubTitle>
+
+        <CodeBox label="An order placed 2026-03-17, synced late on 2026-03-19">{`SCENARIO:
+  Mobile app was offline; the event syncs on 2026-03-19 at 14:00 UTC.
+  event_time = 2026-03-17 22:15 UTC (when it actually happened).
 
 LAYER 1 — BRONZE: appended with current ingestion date
-  The Bronze pipeline runs on 2026-03-19.
   Row written to: bronze/orders/_bronze_date=2026-03-19/
-  Row has:
     event_time:   2026-03-17 22:15 UTC  (from the event — the real time)
     _bronze_date: 2026-03-19            (partition — when we received it)
-    _ingested_at: 2026-03-19 14:02 UTC  (when the pipeline ran)
-  → Bronze correctly stores it in the 2026-03-19 partition (when received)
-  → Bronze DOES NOT retroactively write to the 2026-03-17 partition
-  → Both the event time and ingestion time are preserved
+  → Bronze correctly stores it in the 2026-03-19 partition (when received),
+    and does NOT retroactively write to the 2026-03-17 partition.
 
-LAYER 2 — SILVER: merged using event_time as the business key basis
-  The Silver pipeline runs with a 30-minute overlap window.
-  The overlap catches late-arriving Bronze rows.
-  The MERGE on order_id updates the Silver row if:
-    source.updated_at > target.updated_at   (conditional update)
-
-  If the order existed in Silver already:
-    → The MERGE updates to the latest state (if source is newer)
-  If the order did NOT exist in Silver yet (was truly new):
-    → The MERGE inserts the row with event_time as created_at
+LAYER 2 — SILVER: merged using an overlap window
+  The Silver pipeline runs with a 30-minute overlap window that catches
+  late-arriving Bronze rows. MERGE on order_id updates the Silver row if
+  source.updated_at > target.updated_at (conditional update). If the order
+  did not exist in Silver yet, the MERGE inserts it with event_time as
+  created_at.
 
   Silver.orders for order_id 9284751 now has:
     created_at: 2026-03-17 22:15 UTC  (correct business time)
-    updated_at: 2026-03-19 14:02 UTC  (when we last saw it)
-    silver_updated_at: 2026-03-19 14:07 UTC
+    updated_at: 2026-03-19 14:02 UTC  (when we last saw it)`}</CodeBox>
 
-LAYER 3 — GOLD: correction depends on Gold model type
-  CASE A: Gold built from Silver with incremental MERGE
-    Silver has the correct state for order_id 9284751.
-    The next Gold dbt run sees the Silver row changed.
-    Gold is updated via MERGE — the 2026-03-17 aggregate is updated.
-    The order now appears in the 2026-03-17 daily revenue correctly.
+        <SubSubTitle>How Gold reflects the correction, and tuning the overlap window</SubSubTitle>
 
-  CASE B: Gold built with full date-partition rebuild
-    The Gold model selects from Silver WHERE order_date = 2026-03-17.
-    After Silver has the late-arriving order, the next full rebuild
-    of the 2026-03-17 partition includes it correctly.
-
-  CASE C: Gold aggregate has ALREADY been used in finance report
-    Finance saw $4,211,500 for 2026-03-17 in Monday's report.
-    After the late arrival, the correct total is $4,212,380.
-    Decision: does the business want the correction to appear?
-    If yes: rebuild 2026-03-17 Gold partition, send correction notice.
-    If no:  accept the lag as a known data characteristic.
-    The key: the CAPABILITY to correct exists because Silver is correct.
+        <CodeBox label="Three Gold scenarios, and the incremental filter that catches late Bronze rows">{`LAYER 3 — GOLD: correction depends on Gold model type
+  CASE A: incremental MERGE — the next Gold run sees the changed Silver
+    row and updates the 2026-03-17 aggregate via MERGE automatically.
+  CASE B: full date-partition rebuild — the next rebuild of the
+    2026-03-17 partition includes the late order correctly.
+  CASE C: the Gold aggregate was ALREADY used in a finance report — the
+    correction is a business decision: rebuild and send a correction
+    notice, or accept the lag as a known characteristic. The key point:
+    the CAPABILITY to correct exists because Silver is correct.
 
 OVERLAP WINDOW CONFIGURATION:
-  The Silver incremental model uses an overlap to catch late Bronze rows:
   {% if is_incremental() %}
       WHERE bronze_ingested_at > (
           SELECT MAX(silver_updated_at) - INTERVAL '30 minutes' FROM {{ this }}
       )
   {% endif %}
-  30 minutes catches most late-arriving Bronze rows without expensive reprocessing.
-  For data that can be days late: use a larger overlap (24h) + weekly full refresh.`}</CodeBox>
+  30 minutes catches most late-arriving Bronze rows without expensive
+  reprocessing. For data that can be days late: use a larger overlap
+  (24h) + weekly full refresh.`}</CodeBox>
       </section>
 
       <Divider />
@@ -940,7 +894,9 @@ OVERLAP WINDOW CONFIGURATION:
           makes all three representations possible from the same raw data.
         </Para>
 
-        <CodeBox label="SCD handling in Medallion — which layer handles which SCD type">{`BRONZE LAYER — Complete change history (all SCD types possible)
+        <SubSubTitle>Bronze — full history, and Silver&rsquo;s default (SCD Type 1)</SubSubTitle>
+
+        <CodeBox label="Bronze keeps every event; Silver's MERGE collapses them to current state">{`BRONZE LAYER — Complete change history (all SCD types possible)
   Bronze is append-only CDC events. Every change is stored:
     order_id=9284751, status='placed',    created_at=2026-03-17 14:00, op='c'
     order_id=9284751, status='confirmed', updated_at=2026-03-17 14:02, op='u'
@@ -950,62 +906,49 @@ OVERLAP WINDOW CONFIGURATION:
 SILVER LAYER — Current state (SCD Type 1 equivalent)
   Silver MERGE keeps one row per order_id — the most recent state.
   This is SCD Type 1: overwrite. No history in Silver itself.
-  Silver.orders for order_id=9284751:
     order_id=9284751, status='delivered', created_at=2026-03-17 14:00
-  If you need history: query Bronze directly.
+  If you need history: query Bronze directly.`}</CodeBox>
 
-SCD TYPE 2 IN SILVER — for entities that need historical state
-  Some entities genuinely need SCD Type 2 in Silver.
-  Example: customers change city and we need to know their city at order time.
+        <SubSubTitle>SCD Type 2 in Silver — via dbt snapshot</SubSubTitle>
 
-  customers_scd2 table (Silver):
-    customer_sk    ← surrogate key (unique per version)
-    customer_id    ← business key (same across versions)
-    city           ← tracked attribute
-    valid_from     ← when this version became active
-    valid_to       ← when this version was superseded (NULL = current)
-    is_current     ← boolean flag for easy filtering
+        <CodeBox label="Entities that need historical state (customer city at order time)">{`customers_scd2 table (Silver):
+  customer_sk    ← surrogate key (unique per version)
+  customer_id    ← business key (same across versions)
+  city           ← tracked attribute
+  valid_from     ← when this version became active
+  valid_to       ← when this version was superseded (NULL = current)
+  is_current     ← boolean flag for easy filtering
 
-  dbt snapshot generates SCD2 automatically:
-    -- snapshots/customers_snapshot.sql
-    {% snapshot customers_snapshot %}
-    {{ config(
-        target_schema  = 'silver',
-        unique_key     = 'customer_id',
-        strategy       = 'check',
-        check_cols     = ['city', 'tier'],   -- track changes to these columns
-        invalidate_hard_deletes = True,
-    ) }}
-    SELECT customer_id, city, tier, updated_at
-    FROM {{ source('silver', 'customers') }}
-    {% endsnapshot %}
-  dbt runs the snapshot, compares to current state, and:
-    - If city changed: expires old row (sets valid_to = today)
-                      inserts new row (valid_from = today, valid_to = NULL)
-    - If unchanged: does nothing
+-- snapshots/customers_snapshot.sql
+{% snapshot customers_snapshot %}
+{{ config(
+    target_schema  = 'silver',
+    unique_key     = 'customer_id',
+    strategy       = 'check',
+    check_cols     = ['city', 'tier'],   -- track changes to these columns
+    invalidate_hard_deletes = True,
+) }}
+SELECT customer_id, city, tier, updated_at
+FROM {{ source('silver', 'customers') }}
+{% endsnapshot %}
 
-GOLD LAYER — Point-in-time joins using SCD2
-  The fct_orders model needs to know the customer's city
-  AT THE TIME OF THE ORDER, not the current city.
+-- dbt runs the snapshot, compares to current state:
+--   If city changed: expires old row (valid_to=today), inserts new row
+--   If unchanged: does nothing`}</CodeBox>
 
-  -- models/gold/fct_orders.sql
-  SELECT
-      o.order_id,
-      o.customer_id,
-      c.city            AS customer_city_at_order_time,
-      o.order_amount,
-      o.created_at
-  FROM {{ ref('silver_orders') }} o
-  -- SCD2 join: find the version of the customer active at order time
-  JOIN {{ ref('customers_snapshot') }} c
-    ON  o.customer_id = c.customer_id
-    AND o.created_at BETWEEN c.valid_from
-                         AND COALESCE(c.valid_to, '9999-12-31')
+        <SubSubTitle>Gold&rsquo;s point-in-time join, and the decision tree</SubSubTitle>
 
-  This gives historically accurate customer city for every order.
-  If Emily moved from Seattle to Austin on 2026-02-01:
-    Orders before 2026-02-01: city = 'Seattle'
-    Orders from 2026-02-01:   city = 'Austin'
+        <CodeBox label="Joining fct_orders to the customer version active at order time">{`-- models/gold/fct_orders.sql
+SELECT
+    o.order_id, o.customer_id,
+    c.city AS customer_city_at_order_time,
+    o.order_amount, o.created_at
+FROM {{ ref('silver_orders') }} o
+JOIN {{ ref('customers_snapshot') }} c
+  ON  o.customer_id = c.customer_id
+  AND o.created_at BETWEEN c.valid_from AND COALESCE(c.valid_to, '9999-12-31')
+-- If Emily moved from Seattle to Austin on 2026-02-01:
+-- Orders before 2026-02-01: city = 'Seattle'. Orders from then on: 'Austin'.
 
 IMPLEMENTATION DECISION TREE:
   Does the entity change over time?
@@ -1015,6 +958,42 @@ IMPLEMENTATION DECISION TREE:
       Yes: Does Gold need point-in-time join accuracy?
         No:  Silver has current state, that's sufficient for reporting
         Yes: dbt snapshot → SCD Type 2 in Silver, Gold uses dated join`}</CodeBox>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About the Medallion Architecture</SectionTitle>
+
+        {[
+          {
+            wrong: '"Bronze is just a staging area — it should be cleaned up or dropped once Silver is built"',
+            right: 'Part 02 is explicit that Bronze\'s value is precisely in being permanent and unmodified — it\'s the only place a Silver bug can be reprocessed from without re-extracting from a source that may no longer have the data. This module\'s Real World section and Interview Prep Q4 both depend on Bronze still existing when a months-old bug is found.',
+          },
+          {
+            wrong: '"If Bronze has 300 million rows and the source only has 10 million, something is broken"',
+            right: 'Part 02\'s data volume reality box addresses this head-on: Bronze accumulates every CDC event (every INSERT, UPDATE, DELETE) while the source only shows current state — a 30x-50x row ratio is the expected shape of an event log versus a state table, not a bug (that specific mismatch IS a real bug pattern, but only when it shows up in Silver, as this module\'s Error Library documents).',
+          },
+          {
+            wrong: '"Once a source schema change reaches Bronze via mergeSchema, it\'s automatically available in Gold too"',
+            right: 'Part 02\'s schema evolution section and Interview Prep Q5 both walk through why this stops at Bronze: Silver staging models explicitly SELECT columns, so a new Bronze column requires a deliberate code change (with review) before it flows further — this is what prevents a source-side change from silently altering Gold metrics.',
+          },
+          {
+            wrong: '"Gold should always be built with dbt\'s materialized=\'incremental\' for efficiency"',
+            right: 'This module\'s Error Library shows the failure mode of applying that rule blindly: an incremental filter keyed on a column that changes on every Silver touch (not just Gold-relevant changes) rebuilds the "delta" every single run anyway. For small Gold aggregates, a full table rebuild is often simpler and just as fast.',
+          },
+          {
+            wrong: '"SCD Type 2 should be applied broadly across Silver, just in case Gold needs history later"',
+            right: 'Part 08\'s decision tree is deliberately narrow about this — SCD2 is only justified when Gold genuinely needs point-in-time join accuracy; for everything else, Silver\'s default SCD Type 1 (current state via MERGE) is simpler and sufficient, with full history always recoverable from Bronze if it turns out to be needed.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1051,69 +1030,61 @@ IMPLEMENTATION DECISION TREE:
             difference is $32,400 — 12 orders worth. You are asked to trace it.
           </Para>
 
-          <CodeBox label="Layer-by-layer trace — finding the root cause">{`STEP 1: Check Gold — is the dashboard reading the right table?
+          <SubSubTitle>Steps 1-3 — checking each layer against the one below it</SubSubTitle>
+
+          <CodeBox label="Confirming Gold matches Silver, then finding the row-count gap">{`STEP 1: Check Gold — is the dashboard reading the right table?
 SELECT SUM(net_revenue) FROM gold.daily_store_revenue
 WHERE order_date = '2026-03-15';
--- Returns: $4,183,000  (confirms dashboard is reading correct Gold table)
+-- Returns: $4,183,000
 
 STEP 2: Check Silver — does Silver match Gold?
 SELECT SUM(order_amount - discount_amount) AS silver_net
 FROM silver.orders
 WHERE DATE(created_at AT TIME ZONE 'America/New_York') = '2026-03-15'
   AND status IN ('delivered', 'cancelled');
--- Returns: $4,183,000  (Gold and Silver agree)
--- Root cause is upstream of Gold — it is in Silver or Bronze.
+-- Returns: $4,183,000  (Gold and Silver agree — problem is upstream)
 
-STEP 3: Compare Silver row count to expected
+STEP 3: Compare Silver row count to source
 SELECT COUNT(*) FROM silver.orders
 WHERE DATE(created_at AT TIME ZONE 'America/New_York') = '2026-03-15';
 -- Returns: 9,847 orders
 
 SELECT COUNT(DISTINCT order_id) FROM source.orders
 WHERE DATE(created_at AT TIME ZONE 'America/New_York') = '2026-03-15';
--- Returns: 9,859 orders  ← 12 orders missing in Silver!
+-- Returns: 9,859 orders  ← 12 orders missing in Silver!`}</CodeBox>
 
--- The 12 missing orders × avg $2,700 = $32,400 — matches the gap exactly.
+          <Output>{`The 12 missing orders × avg $2,700 = $32,400 — matches the gap exactly.`}</Output>
 
-STEP 4: Identify the missing orders
-SELECT s.order_id
-FROM source.orders s
+          <SubSubTitle>Steps 4-6 — finding the DLQ rejection reason, then fixing it</SubSubTitle>
+
+          <CodeBox label="Identifying the missing orders and the validation rule that rejected them">{`STEP 4: Identify the missing orders
+SELECT s.order_id FROM source.orders s
 LEFT JOIN silver.orders sv USING (order_id)
 WHERE DATE(s.created_at AT TIME ZONE 'America/New_York') = '2026-03-15'
   AND sv.order_id IS NULL;
 -- Returns 12 order_ids. All have status='refunded'.
 
-STEP 5: Check Silver validation rule
-SELECT * FROM silver.orders
-WHERE order_id IN (9284891, 9284892, ...)   -- the 12 missing ones
--- Returns nothing — they were rejected from Silver.
-
--- Check DLQ:
+STEP 5: Check the DLQ
 SELECT error_message, COUNT(*) FROM pipeline.dead_letter_queue
-WHERE pipeline_name = 'orders_incremental'
-  AND run_date = '2026-03-15'
-  AND status = 'pending'
+WHERE pipeline_name = 'orders_incremental' AND run_date = '2026-03-15'
 GROUP BY 1;
--- Returns:
--- invalid_status: 'refunded'  → 12 rows
+-- invalid_status: 'refunded' → 12 rows
 
--- Root cause found: the Silver validation rule has:
+-- Root cause: Silver's validation rule has
 --   status IN ('placed','confirmed','delivered','cancelled')
--- 'refunded' was added to the source system on 2026-03-10
--- but was never added to the Silver validation allowlist.
--- 12 orders with status='refunded' were silently rejected to DLQ.
+-- 'refunded' was added to the source system on 2026-03-10 but never
+-- added to the Silver validation allowlist — 12 orders silently rejected.
 
 STEP 6: Fix
 -- 1. Add 'refunded' to VALID_STATUSES in pipeline/validate.py
--- 2. Reprocess DLQ records for 2026-03-15:
-python dlq_reprocess.py --pipeline orders_incremental --run-date 2026-03-15
+-- 2. Reprocess DLQ: python dlq_reprocess.py --pipeline orders_incremental --run-date 2026-03-15
 -- 3. Silver is updated via MERGE — 12 new rows inserted.
--- 4. dbt run --select gold.daily_store_revenue --full-refresh (2026-03-15 partition)
--- 5. Dashboard now shows $4,215,400
+-- 4. dbt run --select gold.daily_store_revenue --full-refresh
+-- 5. Dashboard now shows $4,215,400`}</CodeBox>
 
-TOTAL TIME: 24 minutes from investigation to resolved.
+          <Output>{`TOTAL TIME: 24 minutes from investigation to resolved.
 KEY ENABLER: The DLQ preserved the rejected records with their error reason.
-Without DLQ: the 12 orders would have been silently lost with no trace.`}</CodeBox>
+Without DLQ: the 12 orders would have been silently lost with no trace.`}</Output>
 
           <Para>
             The Medallion Architecture made this diagnosis possible. Bronze had
@@ -1214,6 +1185,42 @@ This controlled propagation is why the architecture separates Bronze, Silver, an
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Applying business logic or validation rules directly in the Bronze pipeline "to save a step"',
+            a: 'Part 02 is explicit that Bronze\'s only job is format conversion and metadata — the moment Bronze starts filtering or transforming data, you lose the ability to reprocess from a truly raw source, which is the entire reason Bronze exists as a separate layer from Silver.',
+          },
+          {
+            q: 'Not updating the Silver validation allowlist when the source system adds a new valid status or enum value',
+            a: 'This module\'s Real World section and Error Library both show the exact consequence: rows with a legitimately new status get silently rejected to the DLQ, and the resulting revenue gap looks like a mystery until someone checks the DLQ\'s rejection reason.',
+          },
+          {
+            q: 'Joining a Gold fact table to a mutable Silver dimension table for historical dates without SCD2',
+            a: 'This module\'s Error Library documents the non-deterministic-Gold-results bug that comes from exactly this — a historical daily revenue figure that changes between runs because the customer dimension it joins to keeps changing underneath it. Part 08\'s decision tree exists to catch this before it becomes a bug.',
+          },
+          {
+            q: 'Configuring a Gold model as incremental without checking that the incremental filter tracks Gold-relevant changes specifically',
+            a: 'Part 06 and this module\'s Error Library both point at the same trap: filtering on a broad timestamp like silver_updated_at (which changes on every Silver touch) makes an "incremental" model reprocess everything on every run, with none of the efficiency the incremental strategy was supposed to provide.',
+          },
+          {
+            q: 'Scheduling a heavy Bronze OPTIMIZE job without checking what else reads from that table at the same time',
+            a: 'This module\'s Error Library shows OPTIMIZE\'s write lock blocking the Silver MERGE pipeline for hours when the two run concurrently — schedule compaction during a maintenance window, or scope OPTIMIZE to older partitions only, rather than locking the whole table during active hours.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1288,7 +1295,7 @@ This controlled propagation is why the architecture separates Bronze, Silver, an
         'The DLQ is the most valuable diagnostic tool in the Medallion Architecture. When Silver has fewer rows than expected, the DLQ shows exactly which rows were rejected and why. When a metric is wrong, the DLQ often contains the missing records with the validation error that explains the discrepancy. Without DLQ, missing data is invisible. With DLQ, it is queryable.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
