@@ -33,7 +33,7 @@ export default function AdminPage() {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/admin?key=' + key)
+      const res = await fetch('/api/admin', { headers: { 'x-admin-key': key } })
       if (res.status === 401) { setError('Wrong password'); setLoading(false); return }
       const data = await res.json()
       setComments(data.comments)
@@ -56,7 +56,7 @@ export default function AdminPage() {
 
   async function loadFlagged() {
     setLoading(true)
-    const res = await fetch('/api/admin?key=' + key)
+    const res = await fetch('/api/admin', { headers: { 'x-admin-key': key } })
     const data = await res.json()
     setComments(data.comments || [])
     setTab('flagged')

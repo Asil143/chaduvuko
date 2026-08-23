@@ -26,6 +26,7 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/data-engineering/batch-vs-streaming',         title: 'Batch vs Streaming',                section: 'Data Engineering', difficulty: 'Beginner',     color: '#00c2ff', readTime: '12 min', xp: 100 },
   { href: '/learn/data-engineering/etl-vs-elt',                 title: 'ETL vs ELT',                        section: 'Data Engineering', difficulty: 'Beginner',     color: '#00c2ff', readTime: '12 min', xp: 100 },
   { href: '/learn/data-engineering/ingestion-patterns',         title: 'Ingestion Patterns',                section: 'Data Engineering', difficulty: 'Intermediate', color: '#00c2ff', readTime: '14 min', xp: 150 },
+  { href: '/learn/data-engineering/change-data-capture',        title: 'Change Data Capture (CDC)',         section: 'Data Engineering', difficulty: 'Advanced',     color: '#00c2ff', readTime: '55 min', xp: 200 },
   { href: '/learn/data-engineering/batch-pipeline-from-scratch', title: 'Batch Pipeline From Scratch',      section: 'Data Engineering', difficulty: 'Intermediate', color: '#00c2ff', readTime: '15 min', xp: 150 },
   { href: '/learn/data-engineering/streaming-data',             title: 'Streaming Data',                    section: 'Data Engineering', difficulty: 'Intermediate', color: '#00c2ff', readTime: '14 min', xp: 150 },
   { href: '/learn/data-engineering/data-formats',               title: 'Data Formats',                      section: 'Data Engineering', difficulty: 'Intermediate', color: '#00c2ff', readTime: '12 min', xp: 150 },

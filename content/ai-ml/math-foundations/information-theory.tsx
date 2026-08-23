@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -1573,14 +1574,14 @@ for imp in implications:
               vectorised, readable, and production-ready from day one.
             </p>
           </div>
-          <div style={{
-            fontSize: 12, color: 'var(--muted)',
-            border: '1px solid var(--border)',
+          <Link href="/learn/ai-ml/programming/python-for-ml" style={{
+            fontSize: 12, color: '#888888', fontWeight: 700,
+            border: '1px solid #888888',
             padding: '7px 14px', borderRadius: 6,
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-mono)', textDecoration: 'none', whiteSpace: 'nowrap',
           }}>
-            coming soon
-          </div>
+            Start →
+          </Link>
         </div>
       </div>
 

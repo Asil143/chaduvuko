@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -939,14 +940,14 @@ print(f"\nCalibrated SVM ROC-AUC: {roc_auc_score(y_test, y_calib):.4f}")`} />
               actually works in production.
             </p>
           </div>
-          <div style={{
-            fontSize: 12, color: 'var(--muted)',
-            border: '1px solid var(--border)',
+          <Link href="/learn/ai-ml/classical-ml/knn" style={{
+            fontSize: 12, color: '#378ADD', fontWeight: 700,
+            border: '1px solid #378ADD',
             padding: '7px 14px', borderRadius: 6,
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-mono)', textDecoration: 'none', whiteSpace: 'nowrap',
           }}>
-            coming soon
-          </div>
+            Start →
+          </Link>
         </div>
       </div>
 

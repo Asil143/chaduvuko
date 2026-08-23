@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -1291,14 +1292,14 @@ print("     Fix: always scale y when using neural networks")`} />
               and how to diagnose every failure mode on real delivery data.
             </p>
           </div>
-          <div style={{
-            fontSize: 12, color: 'var(--muted)',
-            border: '1px solid var(--border)',
+          <Link href="/learn/ai-ml/data-engineering/encoding-categorical-features" style={{
+            fontSize: 12, color: '#378ADD', fontWeight: 700,
+            border: '1px solid #378ADD',
             padding: '7px 14px', borderRadius: 6,
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-mono)', textDecoration: 'none', whiteSpace: 'nowrap',
           }}>
-            coming soon
-          </div>
+            Start →
+          </Link>
         </div>
       </div>
 

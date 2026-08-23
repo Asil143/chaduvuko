@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -905,14 +906,14 @@ print(f"  weighted: weight by support — use for overall performance summary")`
               which model to choose.
             </p>
           </div>
-          <div style={{
-            fontSize: 12, color: 'var(--muted)',
-            border: '1px solid var(--border)',
+          <Link href="/learn/ai-ml/evaluation/cross-validation" style={{
+            fontSize: 12, color: '#1D9E75', fontWeight: 700,
+            border: '1px solid #1D9E75',
             padding: '7px 14px', borderRadius: 6,
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-mono)', textDecoration: 'none', whiteSpace: 'nowrap',
           }}>
-            coming soon
-          </div>
+            Start →
+          </Link>
         </div>
       </div>
 

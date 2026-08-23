@@ -1,26 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { verifyGithubIdentity } from '@/lib/comment-auth'
+
+const ADMIN_GITHUB = process.env.NEXT_PUBLIC_ADMIN_GITHUB || 'Asil143'
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
-  const { voter_id } = await req.json()
-  const commentId = params.id
+  const { pinned, gh_token } = await req.json()
 
-  const { data: existing } = await supabaseAdmin
-    .from('comment_upvotes')
-    .select('id')
-    .eq('comment_id', commentId)
-    .eq('voter_id', voter_id)
-    .maybeSingle()
+  // Pin/unpin is admin-only — verify the requester's GitHub login from a
+  // signed token rather than trusting a client-supplied admin_github string,
+  // which anyone could set to impersonate the admin.
+  const verified = verifyGithubIdentity(gh_token)
+  if (!verified || verified.github !== ADMIN_GITHUB)
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  if (existing) {
-    await supabaseAdmin.from('comment_upvotes')
-      .delete().eq('comment_id', commentId).eq('voter_id', voter_id)
-    await supabaseAdmin.rpc('decrement_upvotes', { comment_id: commentId })
-  } else {
-    await supabaseAdmin.from('comment_upvotes')
-      .insert({ comment_id: commentId, voter_id })
-    await supabaseAdmin.rpc('increment_upvotes', { comment_id: commentId })
-  }
-
+  await supabaseAdmin.from('comments').update({ is_pinned: !!pinned }).eq('id', params.id)
   return NextResponse.json({ ok: true })
 }

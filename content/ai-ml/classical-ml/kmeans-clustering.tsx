@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -1032,14 +1033,14 @@ print(f"\nNew restaurant (47.58°N, -122.31°W) → Zone {zone_id}")`} />
               Explained variance, scree plots, and when PCA helps and when it hurts.
             </p>
           </div>
-          <div style={{
-            fontSize: 12, color: 'var(--muted)',
-            border: '1px solid var(--border)',
+          <Link href="/learn/ai-ml/classical-ml/pca" style={{
+            fontSize: 12, color: '#378ADD', fontWeight: 700,
+            border: '1px solid #378ADD',
             padding: '7px 14px', borderRadius: 6,
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-mono)', textDecoration: 'none', whiteSpace: 'nowrap',
           }}>
-            coming soon
-          </div>
+            Start →
+          </Link>
         </div>
       </div>
 

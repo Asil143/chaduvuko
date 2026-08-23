@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 
 export async function GET(req: NextRequest) {
-  const auth = req.nextUrl.searchParams.get('key')
+  const auth = req.headers.get('x-admin-key')
   if (auth !== process.env.ADMIN_SECRET)
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 

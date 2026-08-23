@@ -25,6 +25,7 @@ interface User {
   avatar?: string
   github?: string
   provider: 'github' | 'guest'
+  ghToken?: string
 }
 
 const VOTER_KEY    = 'asil_voter_id'
@@ -267,9 +268,10 @@ export function CommentSection() {
     } catch {}
     const params = new URLSearchParams(window.location.search)
     const ghUser = params.get('gh_user')
+    const ghToken = params.get('gh_token')
     if (ghUser) {
       try {
-        const u = JSON.parse(decodeURIComponent(ghUser))
+        const u = { ...JSON.parse(decodeURIComponent(ghUser)), ghToken: ghToken || undefined }
         setUser(u)
         localStorage.setItem(USER_KEY, JSON.stringify(u))
         window.history.replaceState({}, '', window.location.pathname)
@@ -302,8 +304,8 @@ export function CommentSection() {
         body: JSON.stringify({
           page_slug: slug, content: text.trim(),
           author_name: user.name, author_email: user.email,
-          author_avatar: user.avatar, author_github: user.github,
-          auth_provider: user.provider, parent_id: parentId || null,
+          gh_token: user.provider === 'github' ? user.ghToken : undefined,
+          parent_id: parentId || null,
         }),
       })
       if (parentId) { setReplyContent(''); setReplyTo(null) } else setContent('')
@@ -324,7 +326,7 @@ export function CommentSection() {
   async function pin(id: string, currentlyPinned: boolean) {
     await fetch('/api/comments/' + id + '/pin', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pinned: !currentlyPinned, admin_github: user?.github }),
+      body: JSON.stringify({ pinned: !currentlyPinned, gh_token: user?.ghToken }),
     })
     fetchComments()
   }

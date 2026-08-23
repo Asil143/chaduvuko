@@ -495,7 +495,7 @@ if record["id"] not in seen:   # now O(1) instead of O(n)`}</CodeBox>
             fix: 'Compare functions\' relative tottime/cumtime to each other within the same profiled run, not the profiled run\'s total time to the unprofiled program\'s total time.',
           },
           {
-            error: `The profiler shows time concentrated in a built-in function like {method \\'append\\' of \\'list\\' objects}`,
+            error: `The profiler shows time concentrated in a built-in function like {method 'append' of 'list' objects}`,
             cause: 'The reported time is genuinely being spent inside that many calls to a built-in operation — often because it is being called an enormous number of times, not because any single call is slow.',
             fix: 'Look at ncalls for that line — an unexpectedly huge call count is usually the real signal, pointing to a loop structure worth reconsidering rather than the built-in operation itself.',
           },

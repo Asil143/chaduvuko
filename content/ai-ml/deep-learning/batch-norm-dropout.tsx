@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -177,7 +178,7 @@ export default function TrainingDeepNetworksPage() {
       readTime="22–28 min"
       updatedAt="March 2026"
     >
-      <MLPageHeader section="deep-learning" topic="training-deep-networks" />
+      <MLPageHeader section="deep-learning" topic="batch-norm-dropout" />
 
       {/* ══ SECTION 1 — PLAIN ENGLISH ══════════════════════════════════════════ */}
       <div style={S.sec}>
@@ -1030,14 +1031,14 @@ print(f"Best val loss:  {best_val_loss:.6f}")`} />
               objects at any position in an image.
             </p>
           </div>
-          <div style={{
-            fontSize: 12, color: 'var(--muted)',
-            border: '1px solid var(--border)',
+          <Link href="/learn/ai-ml/deep-learning/cnns-image-classification" style={{
+            fontSize: 12, color: '#7b61ff', fontWeight: 700,
+            border: '1px solid #7b61ff',
             padding: '7px 14px', borderRadius: 6,
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-mono)', textDecoration: 'none', whiteSpace: 'nowrap',
           }}>
-            coming soon
-          </div>
+            Start →
+          </Link>
         </div>
       </div>
 

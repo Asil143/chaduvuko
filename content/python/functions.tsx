@@ -583,7 +583,7 @@ print(counter)         # 2 — the global itself was actually modified`}</CodeBo
 
         {[
           {
-            wrong: '"def greet(name, greeting=\\"Hello\\"): re-evaluates greeting=\\"Hello\\" fresh on every call"',
+            wrong: '"def greet(name, greeting="Hello"): re-evaluates greeting="Hello" fresh on every call"',
             right: 'Default values are evaluated exactly ONCE, when the def statement runs, not on every call. For an immutable default like a string this is invisible and harmless. For a mutable default like a list or dict, it means every call sharing the default is sharing the exact same object — the mutable-default trap from Part 02.',
           },
           {

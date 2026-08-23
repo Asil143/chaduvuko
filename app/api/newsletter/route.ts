@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export async function POST(req: NextRequest) {
   const { email, name } = await req.json()
-  if (!email || !email.includes('@'))
+  if (typeof email !== 'string' || !EMAIL_RE.test(email))
     return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
 
   const { error } = await supabaseAdmin

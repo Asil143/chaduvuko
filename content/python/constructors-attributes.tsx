@@ -502,7 +502,7 @@ print(alice.id, bob.id)   # 1000 1001 — a working shared auto-incrementing ID`
             right: 'It creates exactly one list, shared by every instance until an instance explicitly reassigns (not mutates) that attribute. Mutating it with .append() changes the one shared object for everyone, which is exactly the trap covered in Part 03. Mutable per-instance state belongs inside __init__, assigned to self.',
           },
           {
-            wrong: '"self.company_name = \\"Acme\\" changes the shared class attribute for every instance"',
+            wrong: '"self.company_name = "Acme" changes the shared class attribute for every instance"',
             right: 'It does the opposite — it creates a brand new instance attribute on that one object, which shadows the class attribute only for that instance. Every other instance, and the class attribute itself, is completely unaffected, exactly as shown in Part 02.',
           },
           {

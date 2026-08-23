@@ -199,7 +199,7 @@ print(f"{p}")     # Keyboard ($79.99)  <- f-strings also call __str__`}</CodeBox
 
 p = Product("Keyboard", 79.99)
 p                 # Product(name='Keyboard', price=79.99)   <- shown at the REPL / in a debugger
-repr(p)           # 'Product(name=\\'Keyboard\\', price=79.99)'
+repr(p)           # "Product(name='Keyboard', price=79.99)"  <- Python switches to double quotes here, since the string itself contains a single quote
 print([p])        # [Product(name='Keyboard', price=79.99)] <- lists print elements' repr, not str!`}</CodeBox>
 
         <Para>

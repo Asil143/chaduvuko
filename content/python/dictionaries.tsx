@@ -646,7 +646,7 @@ def annotate_drivers(drivers, tickets):
             right: 'This was true before Python 3.7. Since 3.7, insertion order is a language guarantee, not an implementation detail — iterating a dict returns keys in the exact order they were first inserted, every time.',
           },
           {
-            wrong: '"employee[\\"salary\\"] and employee.get(\\"salary\\") do the same thing"',
+            wrong: '"employee["salary"] and employee.get("salary") do the same thing"',
             right: 'They behave identically only when the key exists. When it does not, [] raises a KeyError and crashes the program, while .get() returns None (or a supplied default) gracefully. Which one you want depends entirely on whether a missing key is an expected case or a real bug.',
           },
           {

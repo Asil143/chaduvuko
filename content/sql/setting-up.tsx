@@ -614,7 +614,7 @@ CREATE TABLE order_items (
       />
 
       <Callout type="info">
-        The data INSERT statements (all 208 rows of FreshCart data) are in the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>data/sql-freshmart.ts</code> file in the Chaduvuko GitHub repository. Copy the SQL from the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>FRESHMART_SEED_SQL</code> constant and run it after the CREATE TABLE statements above.
+        The data INSERT statements (all 208 rows of FreshCart data) are in the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>data/sql-freshcart.ts</code> file in the Chaduvuko GitHub repository. Copy the SQL from the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>FRESHCART_SEED_SQL</code> constant and run it after the CREATE TABLE statements above.
       </Callout>
 
       <HR />

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { verifyGithubIdentity } from '@/lib/comment-auth'
 
 export async function GET(req: NextRequest) {
   const slug    = req.nextUrl.searchParams.get('slug')   || ''
@@ -29,15 +30,32 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const { page_slug, content, author_name, author_email,
-          author_avatar, author_github, auth_provider, parent_id } = await req.json()
+          gh_token, parent_id } = await req.json()
 
-  if (!page_slug || !content?.trim() || !author_name?.trim())
+  if (!page_slug || !content?.trim())
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+
+  // A GitHub-attributed comment (name, avatar, the "GitHub ✓" badge, the link
+  // to a real github.com profile) is only trusted when it's backed by a valid
+  // signed token from a completed OAuth login — never from client-supplied
+  // author_github/author_avatar/auth_provider fields, which anyone could set
+  // directly in a POST body to impersonate another GitHub user.
+  const verified = verifyGithubIdentity(gh_token)
+
+  const author_name_final   = verified ? verified.name  : author_name?.trim()
+  const author_avatar_final = verified ? verified.avatar : undefined
+  const author_github_final = verified ? verified.github : undefined
+  const auth_provider_final = verified ? 'github' : 'guest'
+
+  if (!author_name_final)
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
 
   const { data, error } = await supabaseAdmin
     .from('comments')
-    .insert({ page_slug, content: content.trim(), author_name,
-              author_email, author_avatar, author_github, auth_provider,
+    .insert({ page_slug, content: content.trim(), author_name: author_name_final,
+              author_email: verified ? verified.email : author_email,
+              author_avatar: author_avatar_final, author_github: author_github_final,
+              auth_provider: auth_provider_final,
               parent_id: parent_id || null })
     .select().single()
 

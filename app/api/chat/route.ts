@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { groqComplete } from '@/lib/groq'
 
 const SYSTEM = `You are Chaduvuko's learning assistant — a friendly senior developer mentoring students breaking into tech, specifically the US job market.
 
@@ -19,44 +20,23 @@ US market salary context (mid-level, USD): Data Engineer $130K-$175K. ML Enginee
 
 Keep responses concise — 2 to 4 short paragraphs, line breaks generously. Be specific when recommending tracks. If someone asks something unrelated to tech or careers, gently steer back.`
 
+const FALLBACK_REPLY = "Sorry, I'm having trouble responding right now — try again in a moment."
+
 export async function POST(req: NextRequest) {
   try {
     const { messages, pageContext } = await req.json()
-
-    const apiKey = process.env.GROQ_API_KEY
-    if (!apiKey) {
-      return NextResponse.json({ reply: 'DEBUG: GROQ_API_KEY is missing from environment variables.' })
-    }
-
     const systemWithContext = SYSTEM + (pageContext || '')
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-oss-120b',
-        max_tokens: 800,
-        temperature: 0.7,
-        messages: [
-          { role: 'system', content: systemWithContext },
-          ...messages,
-        ],
-      }),
-    })
+    const result = await groqComplete(
+      process.env.GROQ_API_KEY,
+      [{ role: 'system', content: systemWithContext }, ...messages],
+      { maxTokens: 800, temperature: 0.7 }
+    )
 
-    const data = await response.json()
-
-    if (!response.ok) {
-      return NextResponse.json({ reply: `DEBUG Groq error ${response.status}: ${JSON.stringify(data?.error?.message || data)}` })
-    }
-
-    const reply = data.choices?.[0]?.message?.content || 'No reply from Groq.'
-    return NextResponse.json({ reply })
-
+    if (!result.ok) return NextResponse.json({ reply: FALLBACK_REPLY })
+    return NextResponse.json({ reply: result.reply })
   } catch (error) {
-    return NextResponse.json({ reply: `DEBUG exception: ${String(error)}` })
+    console.error('POST /api/chat: exception', error)
+    return NextResponse.json({ reply: FALLBACK_REPLY })
   }
 }

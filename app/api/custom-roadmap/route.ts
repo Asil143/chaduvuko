@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { groqComplete } from '@/lib/groq'
 
 export const maxDuration = 60
 
@@ -90,74 +91,29 @@ function buildProfileBlock(profile: Record<string, string> | undefined): string 
   return `\n\nStudent profile (fill in reasonable assumptions for anything not listed here):\n${lines.join('\n')}`
 }
 
-const PRIMARY_MODEL = 'openai/gpt-oss-120b'
-const FALLBACK_MODEL = 'openai/gpt-oss-20b'
-
-// Retries against FALLBACK_MODEL on a rate limit (429 / rate_limit_exceeded) or a
-// missing/decommissioned model (404) — Groq has deprecated production models with
-// little notice before (llama-3.3-70b-versatile and llama-3.1-8b-instant both went
-// away on 2026-08-16), so treat "model doesn't exist" the same as "model is busy":
-// don't fail the whole request, just try the other one.
-function shouldRetryWithFallback(status: number, data: unknown): boolean {
-  if (status === 429 || status === 404) return true
-  const code = (data as { error?: { code?: string; type?: string } })?.error?.code
-  const type = (data as { error?: { code?: string; type?: string } })?.error?.type
-  return code === 'rate_limit_exceeded' || type === 'rate_limit_exceeded'
-    || code === 'model_not_found' || code === 'model_decommissioned'
-}
-
-async function callGroq(apiKey: string, model: string, userMessage: string) {
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      max_tokens: 8000,
-      temperature: 0.5,
-      messages: [
-        { role: 'system', content: SYSTEM },
-        { role: 'user', content: userMessage },
-      ],
-    }),
-  })
-  const data = await response.json()
-  return { response, data }
-}
+const FALLBACK_REPLY = "Sorry, I'm having trouble building this roadmap right now — try again in a moment."
 
 export async function POST(req: NextRequest) {
   try {
     const { topic, profile } = await req.json()
 
     if (!topic || typeof topic !== 'string' || !topic.trim()) {
-      return NextResponse.json({ reply: 'DEBUG: no topic provided.' })
-    }
-
-    const apiKey = process.env.GROQ_API_KEY
-    if (!apiKey) {
-      return NextResponse.json({ reply: 'DEBUG: GROQ_API_KEY is missing from environment variables.' })
+      return NextResponse.json({ reply: 'Tell me what topic you want a roadmap for.' })
     }
 
     const userMessage = `Technology/topic: ${topic}${buildProfileBlock(profile)}`
 
-    let { response, data } = await callGroq(apiKey, PRIMARY_MODEL, userMessage)
-    let usedFallback = false
+    const result = await groqComplete(
+      process.env.GROQ_API_KEY,
+      [{ role: 'system', content: SYSTEM }, { role: 'user', content: userMessage }],
+      { maxTokens: 8000, temperature: 0.5 }
+    )
 
-    if (!response.ok && shouldRetryWithFallback(response.status, data)) {
-      usedFallback = true
-      ;({ response, data } = await callGroq(apiKey, FALLBACK_MODEL, userMessage))
-    }
-
-    if (!response.ok) {
-      return NextResponse.json({ reply: `DEBUG Groq error ${response.status}: ${JSON.stringify(data?.error?.message || data)}` })
-    }
-
-    const reply = data.choices?.[0]?.message?.content || 'No reply from Groq.'
-    return NextResponse.json({ reply, ...(usedFallback ? { usedFallback: true } : {}) })
+    if (!result.ok) return NextResponse.json({ reply: FALLBACK_REPLY })
+    return NextResponse.json({ reply: result.reply, ...(result.usedFallback ? { usedFallback: true } : {}) })
 
   } catch (error) {
-    return NextResponse.json({ reply: `DEBUG exception: ${String(error)}` })
+    console.error('POST /api/custom-roadmap: exception', error)
+    return NextResponse.json({ reply: FALLBACK_REPLY })
   }
 }

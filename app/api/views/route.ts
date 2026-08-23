@@ -12,15 +12,10 @@ export async function POST(req: NextRequest) {
   const { slug } = await req.json()
   if (!slug) return NextResponse.json({ error: 'No slug' }, { status: 400 })
 
-  const { data: existing } = await supabaseAdmin
-    .from('page_views').select('id, views').eq('slug', slug).maybeSingle()
+  // Atomic upsert-and-increment (see supabase/migrations/20260823_increment_page_view.sql) —
+  // the previous select-then-update here lost increments under concurrent requests.
+  const { data, error } = await supabaseAdmin.rpc('increment_page_view', { p_slug: slug })
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  if (existing) {
-    await supabaseAdmin.from('page_views')
-      .update({ views: existing.views + 1 }).eq('id', existing.id)
-    return NextResponse.json({ views: existing.views + 1 })
-  } else {
-    await supabaseAdmin.from('page_views').insert({ slug, views: 1 })
-    return NextResponse.json({ views: 1 })
-  }
+  return NextResponse.json({ views: data })
 }

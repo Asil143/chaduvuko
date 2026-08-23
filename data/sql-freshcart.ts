@@ -402,10 +402,6 @@ export const SQL_TABLES = [
   },
 ];
 
-// ─── Backwards-compatible aliases (used by SQLPlayground) ─────────────────────
-export const FRESHMART_SCHEMA_SQL = FRESHCART_SCHEMA_SQL;
-export const FRESHMART_SEED_SQL   = FRESHCART_SEED_SQL;
-
 // ─── Full curriculum map ──────────────────────────────────────────────────────
 export type ModuleStatus = 'live' | 'coming-soon';
 

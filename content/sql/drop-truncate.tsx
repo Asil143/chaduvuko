@@ -490,7 +490,7 @@ TRUNCATE TABLE products     RESTART IDENTITY;
 TRUNCATE TABLE stores       RESTART IDENTITY;
 
 -- Step 2: Re-seed with fresh test data
--- (Run the seed SQL from data/sql-freshmart.ts here)
+-- (Run the seed SQL from data/sql-freshcart.ts here)
 
 -- Alternative: single command with CASCADE
 -- WARNING: truncates ALL referencing tables too

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -582,14 +583,14 @@ if restaurant == "popular_restaurant":
               Linear Regression — predicting DoorDash delivery time
             </div>
           </div>
-          <span style={{
-            fontSize: 10, padding: '4px 12px', borderRadius: 4,
-            background: 'var(--bg)', color: 'var(--muted)',
-            border: '1px solid var(--border)', fontFamily: 'var(--font-mono)',
-            whiteSpace: 'nowrap' as const,
+          <Link href="/learn/ai-ml/classical-ml/linear-regression" style={{
+            fontSize: 10, fontWeight: 700, padding: '4px 12px', borderRadius: 4,
+            background: 'var(--bg)', color: '#378ADD',
+            border: '1px solid #378ADD', fontFamily: 'var(--font-mono)',
+            whiteSpace: 'nowrap' as const, textDecoration: 'none',
           }}>
-            coming soon
-          </span>
+            Start →
+          </Link>
         </div>
       </div>
 

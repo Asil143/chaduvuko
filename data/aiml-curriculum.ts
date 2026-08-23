@@ -39,7 +39,7 @@ export const AIML_SECTIONS: Section[] = [
     topics: [
       { slug: 'vectors-matrices-tensors',  title: 'Vectors, Matrices and Tensors',                   status: 'live' },
       { slug: 'matrix-multiplication',     title: 'Matrix Multiplication and Linear Transformations', status: 'live' },
-      { slug: 'dot-product-similarity',    title: 'Dot Product and Similarity',                       status: 'soon' },
+      { slug: 'dot-product-similarity',    title: 'Dot Product and Similarity',                       status: 'live' },
       { slug: 'eigenvalues-eigenvectors',  title: 'Eigenvalues and Eigenvectors',                     status: 'live' },
       { slug: 'derivatives-and-gradients', title: 'Derivatives, Gradients and the Chain Rule',        status: 'live' },
       { slug: 'probability-distributions', title: 'Probability Distributions and Bayes Theorem',      status: 'live' },
@@ -130,7 +130,7 @@ export const AIML_SECTIONS: Section[] = [
       { slug: 'activation-functions', title: 'Activation Functions and Loss Functions',     status: 'live' },
       { slug: 'optimisers',           title: 'Optimisers — SGD, Adam, AdamW',              status: 'live' },
       { slug: 'batch-norm-dropout',   title: 'Batch Normalisation and Dropout',             status: 'live' },
-      { slug: 'cnns',                 title: 'CNNs — Shopify Product Image Classification',  status: 'live' },
+      { slug: 'cnns-image-classification', title: 'CNNs — Shopify Product Image Classification',  status: 'live' },
       { slug: 'rnns-and-lstms',       title: 'RNNs and LSTMs — Sequence Modelling',        status: 'live' },
       { slug: 'transformers-and-attention',         title: 'Transformers and Self-Attention',             status: 'live' },
     ],

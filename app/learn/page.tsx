@@ -69,7 +69,7 @@ const TRACKS = [
     jobs: 'Data Analyst · Backend Dev · DBA',
     status: 'live' as const,
     href: '/learn/sql',
-    modules: 60,
+    modules: 62,
   },
   {
     cat: 'data' as Cat,
@@ -176,6 +176,17 @@ const TRACKS = [
   // ── Web Dev ────────────────────────────────────────────────────────────────
   {
     cat: 'web' as Cat,
+    icon: '🌐', color: '#e34c26',
+    name: 'HTML & CSS',
+    desc: 'Web foundations done right — Semantic HTML, Flexbox, CSS Grid, Responsive Design, animations. 42 modules.',
+    pills: ['Semantic HTML', 'Flexbox', 'CSS Grid', 'Responsive', 'Animations'],
+    jobs: 'Frontend Dev · Web Developer',
+    status: 'live' as const,
+    href: '/learn/html-css',
+    modules: 42,
+  },
+  {
+    cat: 'web' as Cat,
     icon: '⚛️', color: '#38bdf8',
     name: 'React.js',
     desc: 'Component-based UI development — hooks, state, context, and production patterns.',
@@ -218,7 +229,6 @@ const SKILLS = [
   { badge: 'Kotlin', title: 'Kotlin', status: 'soon' as const, href: '#', desc: 'Android and JVM backend development — Coroutines, Jetpack Compose, Spring Boot with Kotlin.', pills: ['Coroutines', 'Jetpack', 'Spring Boot', 'Null Safety', 'Android'] },
   { badge: 'Bash', title: 'Bash / Shell Scripting', status: 'soon' as const, href: '#', desc: 'Automate everything on Linux — scripts, cron jobs, file operations, pipelines for DevOps.', pills: ['Scripts', 'Cron Jobs', 'File Ops', 'Pipelines', 'Automation'] },
   // Web Dev
-  { badge: 'Web Dev', title: 'HTML & CSS', status: 'live' as const, href: '/learn/html-css', desc: 'Web foundations done right — Semantic HTML, Flexbox, CSS Grid, Responsive Design, animations.', pills: ['Semantic HTML', 'Flexbox', 'CSS Grid', 'Responsive', 'Animations'] },
   { badge: 'Web Dev', title: 'Angular', status: 'soon' as const, href: '#', desc: 'Enterprise-grade frontend framework — Components, Services, RxJS, NgRx, Dependency Injection.', pills: ['Components', 'Services', 'RxJS', 'NgRx', 'DI'] },
   { badge: 'Web Dev', title: 'Django', status: 'soon' as const, href: '#', desc: 'Python web framework for production — ORM, REST APIs, Auth, Celery, deployment on AWS.', pills: ['ORM', 'REST APIs', 'Auth', 'Celery', 'Deployment'] },
   { badge: 'Web Dev', title: 'Spring Boot', status: 'soon' as const, href: '#', desc: 'Java enterprise application framework — REST, JPA, Spring Security, Kafka, Microservices.', pills: ['REST', 'JPA', 'Security', 'Kafka', 'Microservices'] },

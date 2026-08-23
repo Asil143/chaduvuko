@@ -201,7 +201,7 @@ export default function LinksNavigation() {
           user. This is a real attack pattern with a name: <strong>tabnabbing</strong>.
         </Para>
 
-        <CodeBox label="The fix — always pair target=\\'_blank\\' with rel">{`<a href="https://example.com" target="_blank" rel="noopener noreferrer">
+        <CodeBox label="The fix — always pair target='_blank' with rel">{`<a href="https://example.com" target="_blank" rel="noopener noreferrer">
   External site
 </a>`}</CodeBox>
 
@@ -434,7 +434,7 @@ export default function LinksNavigation() {
   Read the feature
 </a>`}</CodeBox>
 
-          <CodeBox label="The required fix — applied to every external target=\\'_blank\\' link on the site">{`<a href="https://partner-press-site.com/article"
+          <CodeBox label="The required fix — applied to every external target='_blank' link on the site">{`<a href="https://partner-press-site.com/article"
    target="_blank"
    rel="noopener noreferrer">
   Read the feature
@@ -605,7 +605,7 @@ export default function LinksNavigation() {
             fix: 'Confirm the id on the target element exactly matches the fragment in the href, character for character, including case.',
           },
           {
-            error: `Security review / lint warning: "target=\\'_blank\\' without rel=\\'noopener\\'"`,
+            error: `Security review / lint warning: "target='_blank' without rel='noopener'"`,
             cause: 'A link opens in a new tab without the rel attribute that prevents the new page from getting a JavaScript reference back to the opener — the tabnabbing vulnerability covered in Part 03.',
             fix: "Add rel=\"noopener noreferrer\" to every target=\"_blank\" link pointing at a destination you don't fully control.",
           },
