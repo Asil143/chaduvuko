@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -131,7 +174,7 @@ export default function DataLakeArchitectureModule() {
       description="What a data lake is, why it was invented, zone-based organisation, compute-storage separation, and the rise of the lakehouse."
       section="Data Engineering — Module 29"
       readTime="55 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What a Data Lake Actually Is ────────────────────── */}
@@ -221,97 +264,71 @@ export default function DataLakeArchitectureModule() {
 
         <SubTitle>The three warehouse limitations that created demand for lakes</SubTitle>
 
-        <CodeBox label="The warehouse limitations that motivated the data lake">{`WAREHOUSE LIMITATION 1: Cost of unstructured and semi-structured data
-  ────────────────────────────────────────────────────────────────────
-  A data warehouse (Teradata, Oracle, Redshift 2012) stores structured tables.
-  Loading semi-structured JSON from application logs requires:
-    - Flattening the JSON into tabular columns (an ETL step)
-    - Defining a schema before loading
-    - Storing in the warehouse's proprietary columnar format
+        <SubSubTitle>Limitation 1 — the cost of storing unstructured and semi-structured data</SubSubTitle>
+        <CodeBox label="Warehouse cost per TB vs Hadoop vs S3, for the same data">{`A data warehouse (Teradata, Oracle, Redshift 2012) stores structured tables.
+Loading semi-structured JSON from application logs requires:
+  - Flattening the JSON into tabular columns (an ETL step)
+  - Defining a schema before loading
+  - Storing in the warehouse's proprietary columnar format
 
-  Application logs at Amazon in 2013: 10 TB/day of JSON event logs
-  Cost to store in Teradata: $50,000/TB × 10 TB × 365 = $182M/year
-  Cost to store on HDFS (Hadoop): ~$1,000/TB = $3.65M/year
-  Cost to store on S3 (2015): $23/TB = $83,950/year
+For unstructured data (images, audio, ML model outputs):
+Warehouses simply could not store them at all.
+You needed a separate system regardless.`}</CodeBox>
+        <Output>{`Application logs at Amazon in 2013: 10 TB/day of JSON event logs
+Cost to store in Teradata: $50,000/TB × 10 TB × 365 = $182M/year
+Cost to store on HDFS (Hadoop): ~$1,000/TB = $3.65M/year
+Cost to store on S3 (2015): $23/TB = $83,950/year`}</Output>
 
-  For unstructured data (images, audio, ML model outputs):
-  Warehouses simply could not store them at all.
-  You needed a separate system regardless.
-
-WAREHOUSE LIMITATION 2: Schema-on-write inflexibility
-  ────────────────────────────────────────────────────────────────────
-  Warehouse schema must be defined before loading.
-  A new event type requires:
+        <SubSubTitle>Limitations 2 and 3 — schema-on-write rigidity, and coupled compute/storage</SubSubTitle>
+        <CodeBox label="Why schema-on-write and coupled scaling forced the lake into existence">{`LIMITATION 2: Schema-on-write inflexibility
+  Warehouse schema must be defined before loading. A new event type requires:
     - Schema design (hours to days)
     - Table creation and ALTER TABLE (minutes, but blocking)
     - ETL pipeline update (days of engineering work)
     - Schema approval from DBA (days to weeks at large companies)
 
   At a fast-growing startup: 5 new event types per week.
-  Each requires a full schema-change workflow.
   Result: data arrives 2 weeks after the event type is shipped.
   Business: "We can't analyse this event — the data team hasn't added it yet."
-
   Data lake answer: just drop the JSON file in the landing zone.
   No schema required at write time. Define it when you query.
 
-WAREHOUSE LIMITATION 3: Coupled compute and storage scaling
-  ────────────────────────────────────────────────────────────────────
+LIMITATION 3: Coupled compute and storage scaling
   Traditional warehouse: compute and storage are the same hardware.
   To add more storage: buy more nodes (also adds unwanted compute).
   To add more compute: buy more nodes (also adds unwanted storage).
-  Hardware refresh every 3-5 years: millions of dollars, planned outage.
 
   At Airbnb 2011: data growing 3× per year, compute needed for batch jobs.
   Adding storage for data growth forced adding compute they did not need.
-  Cost and complexity scaled together with no ability to separate them.
-
   Data lake answer: S3 for storage (infinite, pay per GB).
   Spark cluster for compute (spin up/down, pay per hour).
   Scale each independently. Pay only for what you use.
 
 THESE THREE PROBLEMS created the Hadoop + HDFS ecosystem (2009-2014)
-and then the cloud object storage + Spark ecosystem (2014-present).
-The architectural choices of data lakes are direct responses to these
-specific warehouse limitations.`}</CodeBox>
+and then the cloud object storage + Spark ecosystem (2014-present).`}</CodeBox>
 
         <SubTitle>The evolution: Hadoop → Cloud data lake</SubTitle>
 
-        <CodeBox label="Data lake evolution — from Hadoop to modern cloud storage">{`GENERATION 1: HADOOP + HDFS (2009-2016)
-  ─────────────────────────────────────────────────────────────
-  Storage: HDFS (Hadoop Distributed File System)
-    - Runs on commodity hardware in on-premise data centres
-    - Files replicated 3× across nodes for durability
-    - Block size: 128 MB — designed for sequential MapReduce reads
+        <SubSubTitle>Generation 1 and 2 — on-premise Hadoop, then cloud object storage + Spark</SubSubTitle>
+        <CodeBox label="Data lake evolution — Hadoop era and cloud object storage era">{`GENERATION 1: HADOOP + HDFS (2009-2016)
+  Storage: HDFS — commodity hardware, on-premise, files replicated 3×
   Compute: MapReduce → Hive → Spark (2014 onward)
   Format:  Text files (CSV, JSON), then Parquet and ORC
-
-  Problems with Hadoop:
-    - HDFS and compute tightly coupled (same cluster)
-    - Operational complexity: ZooKeeper, NameNode HA, YARN tuning
-    - S3 became cheaper than HDFS by 2015 ($23/TB vs $100+/TB)
-    - Cluster always running even when no jobs — wasted cost
+  Problems: HDFS and compute tightly coupled, operational complexity
+    (ZooKeeper, NameNode HA, YARN tuning), S3 cheaper by 2015
+    ($23/TB vs $100+/TB), cluster always running even when idle
 
 GENERATION 2: CLOUD OBJECT STORAGE + SPARK (2015-2022)
-  ─────────────────────────────────────────────────────────────
   Storage: S3 (AWS), ADLS Gen2 (Azure), GCS (Google Cloud)
-    - Infinitely scalable, 99.999999999% (11 9s) durability
-    - $23/TB/month — cheaper than any on-premise storage
-    - No cluster management, no replication configuration
+    - Infinitely scalable, 99.999999999% (11 9s) durability, $23/TB/month
   Compute: Spark on EMR / Databricks / HDInsight (ephemeral clusters)
-    - Spin up cluster for a job, terminate when done
-    - No cost when no jobs running
+    - Spin up cluster for a job, terminate when done — no idle cost
   Format:  Parquet, Avro, ORC (columnar, compressed, splittable)
+  Problems: no ACID transactions (concurrent writes corrupt partitions),
+    no row-level UPDATE/DELETE, no schema enforcement, "data swamp"`}</CodeBox>
 
-  Problems with Gen 2:
-    - No ACID transactions (concurrent writes corrupt partitions)
-    - No ability to UPDATE or DELETE single rows (only full partition overwrite)
-    - No schema enforcement — anyone can write anything anywhere
-    - Metadata catalog (Glue, Hive Metastore) becomes a bottleneck
-    - "Data swamp": ungoverned lakes become unusable over time
-
-GENERATION 3: OPEN TABLE FORMATS + LAKEHOUSE (2020-present)
-  ─────────────────────────────────────────────────────────────
+        <SubSubTitle>Generation 3 — open table formats bring back what Gen 2 lost</SubSubTitle>
+        <CodeBox label="Open table formats and the lakehouse generation">{`GENERATION 3: OPEN TABLE FORMATS + LAKEHOUSE (2020-present)
   Storage: S3 / ADLS / GCS (same as Gen 2)
   Format:  Parquet files + transaction log layer
     - Delta Lake (Databricks): _delta_log/ JSON transaction log
@@ -394,9 +411,10 @@ GENERATION 3: OPEN TABLE FORMATS + LAKEHOUSE (2020-present)
 
         <SubTitle>The standard four-zone model</SubTitle>
 
-        <CodeBox label="Data lake zone organisation — the standard model">{`DATA LAKE ZONES (S3 bucket organisation for FreshCart):
+        <SubSubTitle>The bucket layout — one prefix per zone, entity, and partition</SubSubTitle>
+        <CodeBox label="Data lake zone organisation — the bucket layout">{`DATA LAKE ZONES (S3 bucket organisation for FreshCart):
 
-s3://freshmart-data-lake/
+s3://freshcart-data-lake/
 ├── landing/              ← ZONE 1: Landing / Raw Ingestion
 │   ├── stripe/
 │   │   └── payments_20260317.json       (as received from API)
@@ -426,12 +444,10 @@ s3://freshmart-data-lake/
     ├── customer_ltv/
     │   └── date=2026-03-17/
     └── store_performance/
-        └── date=2026-03-17/
+        └── date=2026-03-17/`}</CodeBox>
 
-
-ZONE CHARACTERISTICS:
-
-ZONE 1 — LANDING (Raw Ingestion)
+        <SubSubTitle>Landing and Bronze — what belongs there, and the rules that keep them trustworthy</SubSubTitle>
+        <CodeBox label="Zone characteristics — Landing and Bronze">{`ZONE 1 — LANDING (Raw Ingestion)
   Purpose:     Exact copy of data as received from source
   Transform:   None — file written exactly as received
   Format:      Whatever the source sends (JSON, CSV, XML)
@@ -446,9 +462,10 @@ ZONE 2 — BRONZE (Raw Standardised)
   Format:      Parquet + Snappy/ZSTD compression, Hive-partitioned
   Retention:   1-3 years (raw data for reprocessing)
   Access:      Pipeline engineers, data scientists (raw exploration)
-  Key rule:    APPEND ONLY via CDC/incremental — preserve all history
+  Key rule:    APPEND ONLY via CDC/incremental — preserve all history`}</CodeBox>
 
-ZONE 3 — SILVER (Cleaned and Typed)
+        <SubSubTitle>Silver and Gold — where trust and business logic get added</SubSubTitle>
+        <CodeBox label="Zone characteristics — Silver and Gold">{`ZONE 3 — SILVER (Cleaned and Typed)
   Purpose:     Trusted, clean, validated data for analytical use
   Transform:   Type casting, deduplication, validation, NULL handling,
                normalisation, PII masking, business rule application
@@ -467,8 +484,8 @@ ZONE 4 — GOLD (Business-Ready Aggregates)
 
         <SubTitle>Access control by zone</SubTitle>
 
-        <CodeBox label="IAM policies per zone — who can read and write where">{`# S3 bucket policy zones — principle of least privilege
-
+        <SubSubTitle>AWS IAM roles per zone, and why landing/bronze must stay locked down</SubSubTitle>
+        <CodeBox label="IAM role structure per zone">{`# S3 bucket policy zones — principle of least privilege
 # Landing zone: write by ingestion pipelines only, read by bronze conversion
 # Bronze zone: write by format conversion, read by silver pipelines and data scientists
 # Silver zone: write by transformation pipelines, read by analysts and BI tools
@@ -486,9 +503,10 @@ ZONE 4 — GOLD (Business-Ready Aggregates)
 
 # CRITICAL: landing and bronze zones contain raw PII (emails, phone numbers)
 # Analysts and BI tools must NEVER have direct access to landing/bronze.
-# Only masked/anonymised Silver and Gold are accessible to analysts.
+# Only masked/anonymised Silver and Gold are accessible to analysts.`}</CodeBox>
 
-# Azure ADLS Gen2 equivalent:
+        <SubSubTitle>The same principle on Azure and in the warehouse layer</SubSubTitle>
+        <CodeBox label="Cross-platform access control — ADLS and Snowflake">{`# Azure ADLS Gen2 equivalent:
 # Use POSIX-style ACLs on container directories:
 # landing/: execute for pipeline-bronze service principal only
 # bronze/:  read for data-scientists, execute for pipeline-silver
@@ -500,6 +518,13 @@ ZONE 4 — GOLD (Business-Ready Aggregates)
 # GRANT SELECT ON SCHEMA gold   TO ROLE analyst;
 # REVOKE SELECT ON SCHEMA silver.customers_raw FROM ROLE analyst;
 # (raw PII tables blocked even within Silver)`}</CodeBox>
+
+        <TryThis>
+          Sketch the four zones for a dataset you work with, even loosely. For each
+          zone, write down who should be able to read it and who should be able to
+          write to it. If you find analysts with any access to a landing or raw
+          bronze path, that's the exact gap this Part warns against.
+        </TryThis>
       </section>
 
       <Divider />
@@ -519,7 +544,8 @@ ZONE 4 — GOLD (Business-Ready Aggregates)
 
         <SubTitle>How S3 works internally — what every DE must know</SubTitle>
 
-        <CodeBox label="S3 internals — the model that explains file design decisions">{`S3 OBJECT MODEL:
+        <SubSubTitle>The object model, and why "directories" are a UI fiction</SubSubTitle>
+        <CodeBox label="S3 object model and the listing implication">{`S3 OBJECT MODEL:
   Everything is an object. An object has:
     - Key:        the "path" — "bronze/orders/date=2026-03-17/part-001.parquet"
     - Value:      the bytes of the file
@@ -536,9 +562,10 @@ ZONE 4 — GOLD (Business-Ready Aggregates)
     s3://bucket/bronze/orders/ with 1,000,000 objects:
       → 1,000 API calls (1,000 objects per page)
       → Athena/Spark must list all keys to find relevant partitions
-      → Use Hive-style partitioning to reduce list scope
+      → Use Hive-style partitioning to reduce list scope`}</CodeBox>
 
-S3 CONSISTENCY MODEL (since Dec 2020):
+        <SubSubTitle>Consistency guarantees and the request-rate limits that shape partition design</SubSubTitle>
+        <CodeBox label="S3 consistency model and performance limits">{`S3 CONSISTENCY MODEL (since Dec 2020):
   S3 provides strong read-after-write consistency for all operations.
   After a PUT: the GET immediately returns the new object. ✓
   After a DELETE: the GET immediately returns 404. ✓
@@ -557,14 +584,10 @@ S3 PERFORMANCE:
   Multipart upload:
     Objects > 5 MB: use multipart upload (automatic in boto3/s3fs)
     Parts uploaded in parallel → fast for large files
-    Minimum part size: 5 MB (except last part)
-    Maximum object size: 5 TB
+    Minimum part size: 5 MB (except last part), maximum object size: 5 TB`}</CodeBox>
 
-  S3 Transfer Acceleration:
-    Routes uploads through CloudFront edge nodes
-    Use for: uploading from mobile devices or geographically distant sources
-
-S3 STORAGE CLASSES AND COST (US East, 2026 approximate):
+        <SubSubTitle>Storage classes, lifecycle transitions, and key-naming rules</SubSubTitle>
+        <CodeBox label="S3 storage classes, cost, and naming best practices">{`S3 STORAGE CLASSES AND COST (US East, 2026 approximate):
   Standard:            $0.023/GB/month  — frequently accessed
   Standard-IA:         $0.0125/GB/month — infrequently accessed, instant retrieval
   Glacier Instant:     $0.004/GB/month  — archive, instant retrieval
@@ -576,7 +599,7 @@ S3 STORAGE CLASSES AND COST (US East, 2026 approximate):
 
 S3 NAMING BEST PRACTICES:
   Use lowercase: S3 is case-sensitive but tools treat case inconsistently
-  Use hyphens not underscores in bucket names: freshmart-data-lake
+  Use hyphens not underscores in bucket names: freshcart-data-lake
   Use underscores in object keys for compatibility: date=2026-03-17
   Avoid special characters: only a-z, 0-9, /, -, _, .
   Never put credentials or PII in bucket names or object keys
@@ -584,9 +607,8 @@ S3 NAMING BEST PRACTICES:
 
         <SubTitle>ADLS Gen2 — how it differs from S3</SubTitle>
 
-        <CodeBox label="Azure Data Lake Storage Gen2 — key differences from S3">{`ADLS GEN2 vs S3:
-
-HIERARCHICAL NAMESPACE (HNS):
+        <SubSubTitle>A real hierarchical namespace, and finer-grained POSIX access control</SubSubTitle>
+        <CodeBox label="ADLS Gen2 — hierarchical namespace and access control">{`HIERARCHICAL NAMESPACE (HNS):
   ADLS Gen2 supports a true hierarchical namespace — directories are real,
   not just key prefixes. This has performance implications:
     - Rename a directory: atomic O(1) operation
@@ -598,19 +620,17 @@ HIERARCHICAL NAMESPACE (HNS):
 
 ACCESS CONTROL:
   ADLS supports POSIX-style ACLs on files and directories:
-    - Owner: full rwx
-    - Owning group: configurable rwx
-    - Other: configurable rwx
+    - Owner: full rwx, Owning group: configurable rwx, Other: configurable rwx
     - Named user/group ACLs (like Linux setfacl)
   This is finer-grained than S3's bucket policy + IAM combination.
-  Azure Active Directory integration: assign ADLS ACLs to AAD groups.
+  Azure Active Directory integration: assign ADLS ACLs to AAD groups.`}</CodeBox>
 
-PROTOCOL:
+        <SubSubTitle>Protocol choice, cost tiers, authentication, and how GCS compares</SubSubTitle>
+        <CodeBox label="ADLS protocol, cost, authentication, and GCS comparison">{`PROTOCOL:
   ADLS Gen2 supports both:
     - Blob storage API (https://account.blob.core.windows.net/container/blob)
     - DFS API (https://account.dfs.core.windows.net/filesystem/path)
   Use DFS API for hierarchical operations (rename, directory delete).
-  Use Blob API for compatibility with older tools that do not know DFS.
   In Spark: spark.read.parquet('abfss://container@account.dfs.core.windows.net/path')
 
 COST (2026 approximate):
@@ -619,19 +639,13 @@ COST (2026 approximate):
   GRS (Geo Redundant):      $0.036/GB/month
 
 AUTHENTICATION:
-  Service Principal (recommended for pipelines):
-    - Client ID + Client Secret → OAuth 2.0 token
-    - Assign Storage Blob Data Contributor role to service principal
-  Managed Identity (best for Azure VMs / AKS):
-    - No credentials needed — identity from the compute resource
-  Shared Access Signature (SAS):
-    - Time-limited URL with specific permissions
-    - Use for temporary external access
+  Service Principal (recommended for pipelines): Client ID + Secret → OAuth token
+  Managed Identity (best for Azure VMs / AKS): no credentials needed
+  Shared Access Signature (SAS): time-limited URL for temporary external access
 
 GCS (Google Cloud Storage) is similar to S3:
   - Eventually consistent (unlike S3's strong consistency since 2020)
-  - Similar object model, bucket-based
-  - gs:// URI scheme
+  - Similar object model, bucket-based, gs:// URI scheme
   - Strong integration with BigQuery (native external tables)`}</CodeBox>
       </section>
 
@@ -649,40 +663,35 @@ GCS (Google Cloud Storage) is similar to S3:
           consequences for how a data platform is designed, scaled, and costed.
         </Para>
 
-        <CodeBox label="Compute-storage separation — economic and operational implications">{`TRADITIONAL WAREHOUSE (coupled compute and storage):
-  ─────────────────────────────────────────────────────────────────────
+        <SubSubTitle>Coupled hardware vs decoupled storage and compute</SubSubTitle>
+        <CodeBox label="Traditional coupled warehouse vs a decoupled cloud data lake">{`TRADITIONAL WAREHOUSE (coupled compute and storage):
   Data stored ON the same machines that query it.
   Teradata: storage and CPU on the same proprietary blades.
   Redshift (original): storage and compute on the same EC2 instances.
-
   IMPLICATIONS:
     To add 10 TB storage: buy 10 TB of nodes (also adds ~10× compute).
     Peak CPU needs (end-of-month reports): must always have peak nodes running.
     Off-peak (2 AM): same nodes idle, same cost.
     Hardware utilisation: typically 10-30% of capacity.
-    Data growth → hardware growth → capital expense every 3-5 years.
 
 CLOUD DATA LAKE (decoupled compute and storage):
-  ─────────────────────────────────────────────────────────────────────
   Data stored on S3 (storage-only, no compute).
   Query engines (Spark, Athena, Presto) are separate compute resources.
-
   IMPLICATIONS:
     To add 10 TB storage: write more data to S3. Compute unchanged.
     Peak CPU needs: spin up a large Spark cluster for 4 hours. Terminate after.
-    Off-peak: S3 still holds data, zero compute running. Zero compute cost.
-    Data growth → storage cost growth. Compute cost tied to query volume only.
+    Off-peak: S3 still holds data, zero compute running. Zero compute cost.`}</CodeBox>
+        <Output>{`COST COMPARISON FOR A 100 TB DATA PLATFORM:
+  Storage: 100 TB × $23/TB/month = $2,300/month always-on
+  Compute: 20 Spark jobs/day × 10 r5.4xlarge × $1/hr × 1 hr = $200/day
+  Total:   $2,300 + ($200 × 30) = $8,300/month
 
-  COST COMPARISON FOR A 100 TB DATA PLATFORM:
-    Storage: 100 TB × $23/TB/month = $2,300/month always-on
-    Compute: 20 Spark jobs/day × 10 r5.4xlarge × $1/hr × 1 hr = $200/day
-    Total:   $2,300 + ($200 × 30) = $8,300/month
+  Traditional warehouse equivalent (Redshift):
+  dc2.8xlarge (16 nodes for 100 TB): $52,000/month
+  → Cloud lake is ~6× cheaper for the same data volume`}</Output>
 
-    Traditional warehouse equivalent (Redshift):
-    dc2.8xlarge (16 nodes for 100 TB): $52,000/month
-    → Cloud lake is ~6× cheaper for the same data volume
-
-THE TRADE-OFF:
+        <SubSubTitle>The trade-off: the network hop, and how modern warehouses hide it</SubSubTitle>
+        <CodeBox label="The trade-off, hybrid warehouses, and the S3 network performance gap">{`THE TRADE-OFF:
   Coupled: faster queries (data near compute, no network hop)
   Decoupled: more flexible, cheaper, scales each dimension independently
 
@@ -705,6 +714,13 @@ SPARK ON S3 — THE NETWORK PERFORMANCE GAP:
     5. S3 Express One Zone (new, 2023): 10× lower latency than standard S3
     6. Use Snowflake/BigQuery for interactive queries (they cache aggressively)
        Use Spark for batch processing where latency is acceptable`}</CodeBox>
+
+        <TryThis>
+          For a table you work with, estimate its storage cost on S3 ($23/TB/month)
+          versus what it would cost sitting inside a fully-provisioned warehouse
+          cluster sized to hold it permanently. The gap is usually the single
+          clearest argument for keeping raw and historical data in a lake.
+        </TryThis>
       </section>
 
       <Divider />
@@ -826,8 +842,9 @@ SPARK ON S3 — THE NETWORK PERFORMANCE GAP:
 
         <SubTitle>Delta Lake — the most widely adopted open table format</SubTitle>
 
-        <CodeBox label="Delta Lake internals — transaction log and ACID guarantees">{`DELTA LAKE TABLE STRUCTURE:
-  s3://freshmart-lake/silver/orders/
+        <SubSubTitle>The table on disk — Parquet files plus a JSON transaction log</SubSubTitle>
+        <CodeBox label="Delta Lake table structure and a transaction log entry">{`DELTA LAKE TABLE STRUCTURE:
+  s3://freshcart-lake/silver/orders/
   ├── _delta_log/
   │   ├── 00000000000000000000.json   ← commit 0 (table creation)
   │   ├── 00000000000000000001.json   ← commit 1 (first write)
@@ -863,9 +880,10 @@ TRANSACTION LOG ENTRY (00000000000000000042.json):
       "path": "date=2026-03-17/part-00001.parquet",
       "deletionTimestamp": 1710706472000
     }
-  }
+  }`}</CodeBox>
 
-HOW DELTA ACHIEVES ACID:
+        <SubSubTitle>How the log delivers ACID, and how time travel reads an old version</SubSubTitle>
+        <CodeBox label="How Delta achieves ACID, and time travel">{`HOW DELTA ACHIEVES ACID:
   Atomicity: a write either commits a new JSON log entry (visible)
              or does not (Parquet files written but not referenced)
   Consistency: schema validation at commit time
@@ -879,9 +897,10 @@ TIME TRAVEL:
     spark.read.format('delta').option('versionAsOf', 40).load(path)
     spark.read.format('delta').option('timestampAsOf', '2026-03-16').load(path)
   Useful for: debugging, auditing, recovering from bad writes
-  Retention: versions kept for 30 days by default (configurable)
+  Retention: versions kept for 30 days by default (configurable)`}</CodeBox>
 
-DELTA OPERATIONS:
+        <SubSubTitle>The maintenance operations every Delta table needs</SubSubTitle>
+        <CodeBox label="Delta operations — OPTIMIZE, VACUUM, Z-ORDER, RESTORE">{`DELTA OPERATIONS:
   OPTIMIZE:   compact small files into larger ones
   VACUUM:     remove files no longer referenced (respects retention)
   Z-ORDER:    co-locate related data by a column (improves skip rate)
@@ -889,8 +908,9 @@ DELTA OPERATIONS:
 
 -- Z-ORDER example (Databricks / Spark):
 OPTIMIZE silver.orders ZORDER BY (store_id, order_date);
--- Co-locates rows with same store_id and order_date in same files
--- Queries filtering by store_id + order_date skip ~80% of files`}</CodeBox>
+-- Co-locates rows with same store_id and order_date in same files`}</CodeBox>
+        <Output>{`Before Z-ORDER: queries filtering by store_id + order_date scan most files
+After ZORDER BY (store_id, order_date): same queries skip ~80% of files`}</Output>
 
         <SubTitle>Delta Lake vs Iceberg vs Hudi — choosing between the three</SubTitle>
 
@@ -922,6 +942,42 @@ OPTIMIZE silver.orders ZORDER BY (store_id, order_date);
           workloads (similar to Uber's origin use case). If you are building a
           new platform, Iceberg's portability makes it the lowest-lock-in choice.
         </Callout>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data Lakes</SectionTitle>
+
+        {[
+          {
+            wrong: '"A data lake is just an S3 bucket you dump files into"',
+            right: 'Part 04 draws the line precisely: an unorganised dump of files on S3 is a data swamp, not a data lake. A real data lake has zone-based organisation (landing/bronze/silver/gold), each zone with defined transformation rules, retention, and access control — that structure is what makes it queryable and trustworthy years later.',
+          },
+          {
+            wrong: '"Since a data lake is schema-on-read, you don\'t need to worry about schema at all"',
+            right: 'Part 02 and Part 04 both point to the same resolution: schema-on-read gives write-time flexibility in Landing and Bronze, but Part 04\'s Silver zone rule is schema-on-write in practice — Delta Lake enforces the Silver schema at MERGE time. Skipping enforcement entirely at every layer is exactly how a lake becomes the data swamp covered in Part 07.',
+          },
+          {
+            wrong: '"A data lake is always cheaper than a warehouse, so just put everything there"',
+            right: 'Part 06\'s cost comparison shows the lake\'s ~6× cost advantage is for storage plus ephemeral compute — but Part 06 also shows the trade-off is real: S3 reads run roughly 10× slower than local HDFS reads. For latency-sensitive interactive dashboards, Part 03\'s comparison table is explicit that a warehouse\'s columnar indexing and result caching still win on query speed.',
+          },
+          {
+            wrong: '"Delta Lake, Iceberg, and Hudi are basically the same thing with different names"',
+            right: 'Part 08\'s comparison table shows real, practical differences — Iceberg supports partition evolution without a data rewrite while Delta Lake requires one, and Hudi was purpose-built for high-velocity upserts in a way the other two were not. Picking the wrong one for your engine mix and ingestion pattern is a costly platform decision, not a cosmetic one.',
+          },
+          {
+            wrong: '"Once you adopt an open table format, ACID transactions mean you never have to think about concurrent writers again"',
+            right: 'Part 08\'s ACID explanation and this module\'s Error Library are both specific that Delta\'s optimistic concurrency detects conflicts and makes one writer retry — it does not prevent conflicts from happening. Two jobs writing the same table simultaneously will still see one succeed and one fail-and-retry; design pipelines (like Airflow\'s max_active_runs=1) to avoid the conflict in the first place.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -963,7 +1019,7 @@ OPTIMIZE silver.orders ZORDER BY (store_id, order_date);
   FreshCart is AWS-native (EC2, RDS, Lambda already on AWS).
   Decision: S3 — zero integration friction with existing AWS services.
   Bucket structure: one bucket per environment (dev/staging/prod).
-  prod: s3://freshmart-data-lake-prod/  (versioning on, default encryption)
+  prod: s3://freshcart-data-lake-prod/  (versioning on, default encryption)
 
 DECISION 2: Zone naming and organisation
   landing/ bronze/ silver/ gold/   — clear, industry-standard names
@@ -1012,15 +1068,15 @@ DECISION 8: Governance baseline (phase 1)
 
 RESULTING ARCHITECTURE:
   Sources → Kafka → Debezium → Kafka topics
-          → Lambda (API polling) → s3://freshmart-data-lake-prod/landing/
+          → Lambda (API polling) → s3://freshcart-data-lake-prod/landing/
 
-  landing/ → Spark (Databricks) → s3://freshmart-data-lake-prod/bronze/
+  landing/ → Spark (Databricks) → s3://freshcart-data-lake-prod/bronze/
            (format conversion, minimal typing, Hive partitioning)
 
-  bronze/ → dbt on Databricks SQL → s3://freshmart-data-lake-prod/silver/
+  bronze/ → dbt on Databricks SQL → s3://freshcart-data-lake-prod/silver/
            (Delta Lake, ACID, typed, validated, PII-masked)
 
-  silver/ → dbt on Databricks SQL → s3://freshmart-data-lake-prod/gold/
+  silver/ → dbt on Databricks SQL → s3://freshcart-data-lake-prod/gold/
            (Delta Lake, pre-computed metrics, business-ready)
 
   gold/ → Athena (self-service SQL) + Metabase (dashboards)`}</CodeBox>
@@ -1112,6 +1168,45 @@ For new projects in 2026, Iceberg is the most future-proof choice due to its eng
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Writing files directly into a bucket with no zone structure — "we\'ll organise it later"',
+            a: 'Part 04 is explicit that a raw dump of files is a data swamp, not a data lake, from day one — retrofitting zones onto years of ungoverned files is dramatically more expensive than starting with landing/bronze/silver/gold. Set up the zone structure and access policies before the first pipeline writes a single file.',
+          },
+          {
+            q: 'Giving analysts read access to the bronze or landing zone because "they need the raw data sometimes"',
+            a: 'Part 04\'s access control section and Part 07\'s governance pillars both flag this as the most common PII exposure path — landing and bronze retain data exactly as received, including unmasked emails and phone numbers. If analysts need raw-ish data, that need belongs in Silver after PII masking, not a landing/bronze grant.',
+          },
+          {
+            q: 'Treating Delta Lake\'s ACID guarantees as eliminating the need to think about concurrent writers',
+            a: 'This module\'s Error Library shows the ConcurrentModificationException that Delta throws precisely because two writers hit the same table at once — optimistic concurrency detects the conflict and fails one writer, it doesn\'t prevent the collision. Design pipelines (Airflow max_active_runs=1, or writes to separate partitions) so two jobs rarely contend for the same table version.',
+          },
+          {
+            q: 'Running Delta VACUUM with a shortened or disabled retention window to save storage cost',
+            a: 'This module\'s Error Library describes exactly this failure: disabling the 7-day retention safety check and running VACUUM with retention 0 deletes files a concurrent reader or time-travel query still needs, producing FileNotFoundException downstream. Run VACUUM weekly with the standard 168-hour retention instead of touching the safety threshold.',
+          },
+          {
+            q: 'Forgetting to register new partitions after a pipeline writes them, then wondering why Athena scans everything',
+            a: 'This module\'s Error Library shows this exact case: an Athena table with a partition filter but a stale Glue catalog scans the full 4.2 TB instead of pruning. Run MSCK REPAIR TABLE, add a Glue Crawler on a schedule, or register partitions programmatically right after the pipeline writes them — Part 05\'s note on S3 having no real directories is why this doesn\'t happen automatically.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1121,7 +1216,7 @@ For new projects in 2026, Iceberg is the most future-proof choice due to its eng
           {
             error: `Athena query scans 4.2 TB and takes 18 minutes — the table has a partition filter but partition pruning is not working`,
             cause: 'The Athena table was created with a partition column (date) but MSCK REPAIR TABLE was never run after new partitions were added. Glue Catalog does not know the new partitions exist. Athena lists all objects under the S3 prefix and scans everything because the catalog partition metadata is stale. Alternatively, the query filter uses a function on the partition column (CAST(date AS DATE)) which prevents Athena from using partition metadata for pruning.',
-            fix: 'Register new partitions: MSCK REPAIR TABLE freshmart_silver.orders will rediscover all Hive-style partitions and add them to the Glue catalog. For ongoing automation: add an AWS Glue Crawler on a schedule, or register partitions programmatically in the pipeline after writing: ALTER TABLE freshmart_silver.orders ADD PARTITION (date=\'2026-03-17\') LOCATION \'s3://bucket/silver/orders/date=2026-03-17/\'. Ensure the query filter uses the partition column directly without functions: WHERE date = \'2026-03-17\' not WHERE CAST(date AS DATE) = \'2026-03-17\'.',
+            fix: 'Register new partitions: MSCK REPAIR TABLE freshcart_silver.orders will rediscover all Hive-style partitions and add them to the Glue catalog. For ongoing automation: add an AWS Glue Crawler on a schedule, or register partitions programmatically in the pipeline after writing: ALTER TABLE freshcart_silver.orders ADD PARTITION (date=\'2026-03-17\') LOCATION \'s3://bucket/silver/orders/date=2026-03-17/\'. Ensure the query filter uses the partition column directly without functions: WHERE date = \'2026-03-17\' not WHERE CAST(date AS DATE) = \'2026-03-17\'.',
           },
           {
             error: `Delta Lake concurrent write error: ConcurrentModificationException — concurrent writers both attempted to commit to version 47`,
@@ -1139,7 +1234,7 @@ For new projects in 2026, Iceberg is the most future-proof choice due to its eng
             fix: 'Restore the table from a Delta backup or snapshot if available. Never run VACUUM with retention < 7 days (168 hours) in production. The 7-day minimum exists because Delta Lake\'s conflict detection algorithm requires files to be available for the window of any concurrent reader. If storage cost is a concern, run VACUUM weekly with 168-hour retention rather than reducing retention below the safety threshold. Add a process guard: always run VACUUM without disabling the retention check.',
           },
           {
-            error: `An analyst accidentally writes test data to s3://freshmart-data-lake-prod/silver/orders/ overwriting production data`,
+            error: `An analyst accidentally writes test data to s3://freshcart-data-lake-prod/silver/orders/ overwriting production data`,
             cause: 'The analyst\'s IAM role or service account has write permissions on the Silver zone. This violates the principle of least privilege — analysts should have read-only access to Silver and Gold. The accidental write was possible because the access control policy was not enforced correctly when the analyst role was created.',
             fix: 'Immediate: restore from the Delta transaction log — RESTORE TABLE silver.orders TO VERSION BEFORE UPDATE will recover the previous state. Long-term: review and fix IAM policies. Analysts should have s3:GetObject on silver/* and gold/* but never s3:PutObject on any production zone. For Snowflake: GRANT SELECT only, no INSERT/UPDATE. Audit all IAM roles with write access to production zones quarterly. Enable S3 Object Lock on production zones to make objects immutable for a retention period (prevents both accidental and malicious overwrites). Add CloudTrail alerting: alert when any s3:PutObject or s3:DeleteObject occurs on silver/* or gold/* from a non-pipeline role.',
           },
@@ -1186,7 +1281,7 @@ For new projects in 2026, Iceberg is the most future-proof choice due to its eng
         'VACUUM must never run with retention below 7 days (168 hours). The 7-day minimum protects concurrent readers and time travel users. Run VACUUM weekly with 168-hour retention. OPTIMIZE (compaction) should run daily on recently written partitions. Z-ORDER on the most common filter columns reduces data skipping overhead.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
