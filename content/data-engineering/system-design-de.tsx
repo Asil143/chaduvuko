@@ -38,6 +38,10 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
@@ -59,6 +63,45 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
     }}>
       <code>{children}</code>
     </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -157,7 +200,7 @@ export default function SystemDesignDEModule() {
       description="A complete framework for designing any data system from scratch — capacity estimation, storage selection, pipeline architecture, trade-off analysis, and five complete worked designs."
       section="Data Engineering — Module 46"
       readTime="80 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — What the Interviewer Is Actually Testing ───────── */}
@@ -365,11 +408,15 @@ export default function SystemDesignDEModule() {
 
         <SubTitle>A complete capacity estimation walkthrough</SubTitle>
 
-        <CodeBox label="capacity estimation — e-commerce order events">
-{`# Problem: Design a data pipeline for a US e-commerce company
-# Input: "We process about 5 million orders per day"
+        <Para>
+          Problem: design a data pipeline for a US e-commerce company. Input: "We
+          process about 5 million orders per day." Every number below is derived
+          from that one sentence — nothing else is assumed.
+        </Para>
 
-# ── Step 1: Convert to per-second rate ──────────────────────────────────────
+        <SubSubTitle>Steps 1–2 — rate and event size</SubSubTitle>
+        <CodeBox label="capacity estimation — peak rate and event size">
+{`# ── Step 1: Convert to per-second rate ──────────────────────────────────────
 daily_orders = 5_000_000
 seconds_per_day = 86_400
 avg_rate = daily_orders / seconds_per_day          # ≈ 58 orders/second
@@ -389,9 +436,12 @@ peak_rate = avg_rate * 10                          # ≈ 580 orders/second
 # - Timestamps, metadata                        ~80 bytes
 # - Total raw JSON                              ~350 bytes
 # - After snappy compression in Kafka           ~200 bytes
-event_size_bytes = 200
+event_size_bytes = 200`}
+        </CodeBox>
 
-# ── Step 3: Kafka topic throughput ──────────────────────────────────────────
+        <SubSubTitle>Steps 3–4 — Kafka throughput and raw storage</SubSubTitle>
+        <CodeBox label="capacity estimation — Kafka throughput and landing-zone storage">
+{`# ── Step 3: Kafka topic throughput ──────────────────────────────────────────
 peak_kafka_throughput = peak_rate * event_size_bytes  # 580 × 200 = 116 KB/s
 # With replication factor 3: 116 KB/s × 3 = 348 KB/s total broker write I/O
 # A modern Kafka broker handles 500 MB/s+ → single broker is fine
@@ -409,9 +459,12 @@ daily_raw_storage = daily_orders * raw_event_size_json  # 5M × 350B = 1.75 GB/d
 # In Parquet with snappy: ~350 MB/day (5x compression ratio)
 # With 30-day retention: 350 MB × 30 = ~10.5 GB
 # Negligible — object storage costs ~$0.02/GB/month → $0.21/month for 30 days
-# (Storage is almost never the constraint. Compute is.)
+# (Storage is almost never the constraint. Compute is.)`}
+        </CodeBox>
 
-# ── Step 5: Processing compute ───────────────────────────────────────────────
+        <SubSubTitle>Steps 5–6 — processing compute and serving layer</SubSubTitle>
+        <CodeBox label="capacity estimation — compute and serving-layer storage">
+{`# ── Step 5: Processing compute ───────────────────────────────────────────────
 # Streaming enrichment job: join orders with customer profile + store metadata
 # Each event: read from Kafka, look up customer (Redis cache hit ~0.5ms),
 #             look up store (in-memory, ~0μs), enrich, write to Delta Lake
@@ -435,6 +488,24 @@ daily_raw_storage = daily_orders * raw_event_size_json  # 5M × 350B = 1.75 GB/d
 # ~50 MB/year — any database handles this instantly
 # Conclusion: serving layer is not a scale problem here`}
         </CodeBox>
+
+        <Output>{`Peak rate:            ~580 orders/second (10x average)
+Kafka throughput:      116 KB/s peak — trivial for a single broker
+Partitions:            12 (parallelism-driven, not throughput-driven)
+Raw storage (30-day):  ~10.5 GB — negligible cost
+Processing:            2 consumer threads clears peak with headroom
+Batch aggregation:     completes in under 2 minutes on a small cluster
+Conclusion:            this is a compute-trivial, throughput-trivial workload —
+                       don't over-engineer it just because "5 million a day" sounds big`}</Output>
+
+        <TryThis>
+          Take a number you actually know from your own work or a public source
+          (daily active users, requests per day, rows in a table you query) and
+          run it through the same six steps — peak rate, event size, transport
+          throughput, raw storage, compute, and serving storage. Most students
+          skip straight to naming tools; forcing yourself through the arithmetic
+          first is the actual skill being tested in Part 01.
+        </TryThis>
 
         <Callout type="tip">
           In interviews, narrate your estimation out loud. The interviewer is
@@ -650,7 +721,9 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
         </CodeBox>
 
         <SubTitle>Architecture</SubTitle>
-        <CodeBox label="stripe ingestion — full architecture">
+
+        <SubSubTitle>Layers 1–3 — source, transport, and the two consumer paths</SubSubTitle>
+        <CodeBox label="stripe ingestion — source, Kafka, and the fraud + compliance consumers">
 {`# ── Layer 1: Source ──────────────────────────────────────────────────────────
 # Payment Gateway → produces payment.completed events to Kafka
 # Producer config: acks=all, enable.idempotence=true, retries=10
@@ -681,9 +754,12 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
 # Flushes Kafka topic to S3 every 5 minutes as Parquet files
 # Path: s3://stripe-compliance/raw/payments/year=2026/month=03/day=20/hour=14/
 # → Hive-compatible partitioning for Athena queries
-# S3 Lifecycle rule: Standard (0–90 days) → IA (90–365 days) → Glacier (1–7 years)
+# S3 Lifecycle rule: Standard (0–90 days) → IA (90–365 days) → Glacier (1–7 years)`}
+        </CodeBox>
 
-# ── Layer 4: Batch processing (daily analytics) ──────────────────────────────
+        <SubSubTitle>Layers 4–5 — daily batch processing and serving</SubSubTitle>
+        <CodeBox label="stripe ingestion — batch analytics and the serving layer">
+{`# ── Layer 4: Batch processing (daily analytics) ──────────────────────────────
 # Airflow DAG: runs at 2 AM, after all events for the day have landed in S3
 # Spark on EMR Serverless (no cluster management)
 # Reads from S3 raw Parquet → applies business logic → writes to S3 gold Parquet
@@ -695,10 +771,12 @@ seven_year_total_gb   = annual_parquet_gb * 7          # ≈ 1 TB over 7 years
 # ── Layer 5: Serving ──────────────────────────────────────────────────────────
 # Analytics team: Redshift Spectrum queries gold Parquet in S3 directly (no data copy)
 # Operations team: Grafana dashboard reading from DynamoDB fraud decisions
-# Compliance team: Athena ad-hoc queries against raw S3 Parquet (7-year archive)
+# Compliance team: Athena ad-hoc queries against raw S3 Parquet (7-year archive)`}
+        </CodeBox>
 
-# ── Hard problems addressed ───────────────────────────────────────────────────
-# 1. Schema evolution: Avro + schema registry. Backward-compatible changes allowed.
+        <SubSubTitle>Hard problems addressed</SubSubTitle>
+        <CodeBox label="stripe ingestion — hard problems addressed">
+{`# 1. Schema evolution: Avro + schema registry. Backward-compatible changes allowed.
 #    Breaking changes require new topic version (stripe.payments.v3).
 
 # 2. Deduplication: payment_id is globally unique. Fraud consumer uses DynamoDB
@@ -756,7 +834,9 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
         </CodeBox>
 
         <SubTitle>Architecture — the classic lakehouse pattern</SubTitle>
-        <CodeBox label="shopify warehouse — architecture">
+
+        <SubSubTitle>Ingestion and storage</SubSubTitle>
+        <CodeBox label="shopify warehouse — ingestion from three sources, Medallion storage">
 {`# ── Ingestion ─────────────────────────────────────────────────────────────────
 
 # Source 1: PostgreSQL → Fivetran CDC connector (change data capture)
@@ -784,10 +864,12 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
 # → Team of 15 has no one to manage Spark clusters or Redshift nodes
 # → Snowflake auto-suspends compute when idle → cost control for startup
 # → SQL-only interface — analysts already know SQL, no new tool learning
-# → dbt for transformations: version-controlled SQL, automatic lineage, tests
+# → dbt for transformations: version-controlled SQL, automatic lineage, tests`}
+        </CodeBox>
 
-# ── Transformation: dbt ───────────────────────────────────────────────────────
-# Models (in dependency order):
+        <SubSubTitle>Transformation with dbt</SubSubTitle>
+        <CodeBox label="shopify warehouse — dbt models, mart tables, and tests">
+{`# Models (in dependency order):
 # stg_orders          : raw orders → cleaned, typed, handle nulls, deduplicate
 # stg_users           : raw users → PII masked for dev/test, cleaned
 # stg_products        : raw MongoDB catalogue → normalised structure
@@ -811,9 +893,12 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
 #   - unique on primary keys
 #   - accepted_values on status fields
 #   - relationships between staging models
-#   - freshness checks: raw.orders updated within last 4 hours
+#   - freshness checks: raw.orders updated within last 4 hours`}
+        </CodeBox>
 
-# ── Serving ───────────────────────────────────────────────────────────────────
+        <SubSubTitle>Serving and the hard problems</SubSubTitle>
+        <CodeBox label="shopify warehouse — serving layer and hard problems">
+{`# ── Serving ───────────────────────────────────────────────────────────────────
 # Metabase (self-hosted) connected to Snowflake mart schema
 # Analysts write SQL against mart_ tables — no raw table access
 # Role-based access: analysts can only SELECT on mart_, not raw or staging
@@ -838,6 +923,14 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
 #    Snowflake dynamic data masking policy on email column
 #    Only privacy_admin role sees real values — analysts see user_XXXXXXXX@masked.dev`}
         </CodeBox>
+
+        <TryThis>
+          Pick any one source system you have access to (a database, an API, an
+          event stream) and sketch its own three-layer Medallion path — what does
+          RAW look like, what does STAGING clean up, and what single MART table
+          would a business stakeholder actually want to query? You don't need to
+          build it — the exercise is in deciding what belongs at each layer.
+        </TryThis>
       </section>
 
       <Divider />
@@ -863,11 +956,9 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
           different storage systems, keeping them in sync.
         </Para>
 
-        <CodeBox label="feature store — dual store architecture">
-{`# ── Feature definitions ───────────────────────────────────────────────────────
-# Features are defined once, shared across all ML projects
-
-feature_groups = {
+        <SubSubTitle>Feature definitions — shared once across every ML project</SubSubTitle>
+        <CodeBox label="feature store — feature group definitions">
+{`feature_groups = {
     "customer_stats": {
         "entity": "customer_id",
         "features": [
@@ -901,9 +992,12 @@ feature_groups = {
         "freshness_requirement": "10 seconds",
         "computation": "streaming"
     }
-}
+}`}
+        </CodeBox>
 
-# ── Offline store (training data) ─────────────────────────────────────────────
+        <SubSubTitle>Offline store and online store — two paths, kept in sync</SubSubTitle>
+        <CodeBox label="feature store — offline (training) and online (serving) stores">
+{`# ── Offline store (training data) ─────────────────────────────────────────────
 # Delta Lake on S3/ADLS
 # Append-only, timestamped feature values — point-in-time correct joins
 # For training: "give me feature values for customer C98765 as they existed
@@ -925,10 +1019,12 @@ feature_groups = {
 # TTL: 2 hours (customer_stats), 60 seconds (restaurant_real_time)
 
 # Batch feature pipeline → writes to BOTH Delta Lake AND Redis
-# Streaming feature pipeline (Kafka Streams / Flink) → writes to BOTH Delta Lake AND Redis
+# Streaming feature pipeline (Kafka Streams / Flink) → writes to BOTH Delta Lake AND Redis`}
+        </CodeBox>
 
-# ── Serving API ───────────────────────────────────────────────────────────────
-# Feature server: FastAPI, deployed as a Kubernetes service
+        <SubSubTitle>Serving API</SubSubTitle>
+        <CodeBox label="feature store — the serving API contract">
+{`# Feature server: FastAPI, deployed as a Kubernetes service
 # SLA: p99 < 5ms (Redis lookup is 0.5ms, overhead is HTTP + serialisation)
 
 # GET /features/batch
@@ -940,10 +1036,12 @@ feature_groups = {
 #     }
 # }
 # → pipelined Redis MGET for all feature keys → single round trip
-# → returns merged feature dict in ~1ms
+# → returns merged feature dict in ~1ms`}
+        </CodeBox>
 
-# ── Hard problems ─────────────────────────────────────────────────────────────
-# 1. Training-serving skew:
+        <SubSubTitle>Hard problems</SubSubTitle>
+        <CodeBox label="feature store — hard problems">
+{`# 1. Training-serving skew:
 #    Same feature computation logic must run in batch (PySpark) and streaming (Kafka)
 #    and serving (Python). Three implementations = three chances for bugs.
 #    Solution: Feature transforms defined as pure Python functions.
@@ -963,6 +1061,14 @@ feature_groups = {
 #    "customer_stats_v2:C98765" vs "customer_stats_v1:C98765"
 #    Model retrained on v2 features before v1 is deprecated.`}
         </CodeBox>
+
+        <TryThis>
+          Look at the three feature groups above and identify which one you'd
+          get wrong first if you were building this from scratch — most people
+          initially put a streaming-freshness feature (like queue depth) in the
+          batch path because it's simpler to build, and only discover the staleness
+          problem once the model starts making bad calls at busy hours.
+        </TryThis>
       </section>
 
       <Divider />
@@ -990,9 +1096,9 @@ feature_groups = {
           rearchitect.
         </Para>
 
-        <CodeBox label="backfill pipeline — design and execution">
-{`# ── Phase 1: Assess the scope ──────────────────────────────────────────────
-# Before writing code:
+        <SubSubTitle>Phase 1 — assess the scope before writing any code</SubSubTitle>
+        <CodeBox label="backfill — assess the scope">
+{`# Before writing code:
 # 1. Count rows per month for the 3-year period (orders table)
 #    SELECT DATE_TRUNC('month', created_at) AS month, COUNT(*) AS row_count
 #    FROM orders WHERE created_at >= '2023-01-01'
@@ -1005,17 +1111,18 @@ feature_groups = {
 
 # 3. Check what columns changed over 3 years
 #    → Does the orders table have the same schema today as in 2023?
-#    → Missing columns in old rows will appear as NULL — document this
+#    → Missing columns in old rows will appear as NULL — document this`}
+        </CodeBox>
 
-# ── Phase 2: Extraction strategy ───────────────────────────────────────────
-# NEVER do: SELECT * FROM orders WHERE created_at >= '2023-01-01'
+        <SubSubTitle>Phase 2 — extract in chunks, from a replica, never a single query</SubSubTitle>
+        <CodeBox label="backfill — chunked extraction function">
+{`# NEVER do: SELECT * FROM orders WHERE created_at >= '2023-01-01'
 # → Single query running for hours, holds locks, impacts production
 
 # DO: chunk by primary key or date, with rate limiting
 
 import psycopg2
-import time
-from datetime import date, timedelta
+from datetime import date
 
 def extract_month_chunk(year: int, month: int, conn_string: str) -> list[dict]:
     """Extract one month of orders using a date-bounded query with a read replica."""
@@ -1037,7 +1144,12 @@ def extract_month_chunk(year: int, month: int, conn_string: str) -> list[dict]:
         cursor.execute(query, [start, end])
         rows = cursor.fetchall()
         columns = [d[0] for d in cursor.description]
-        return [dict(zip(columns, row)) for row in rows]
+        return [dict(zip(columns, row)) for row in rows]`}
+        </CodeBox>
+
+        <SubSubTitle>Rate-limited extraction loop, made idempotent</SubSubTitle>
+        <CodeBox label="backfill — run the extraction and make it re-runnable">
+{`import time
 
 # Run on read replica, not production primary:
 # conn_string = "host=postgres-replica.internal port=5432 dbname=production ..."
@@ -1060,9 +1172,12 @@ s3 = boto3.client('s3')
 def chunk_already_extracted(year: int, month: int) -> bool:
     prefix = f"backfill/orders/year={year}/month={month:02d}/"
     response = s3.list_objects_v2(Bucket='amazon-datalake', Prefix=prefix, MaxKeys=1)
-    return response.get('KeyCount', 0) > 0
+    return response.get('KeyCount', 0) > 0`}
+        </CodeBox>
 
-# ── Phase 4: Load into warehouse ────────────────────────────────────────────
+        <SubSubTitle>Phase 4–5 — load with MERGE, then validate against the source</SubSubTitle>
+        <CodeBox label="backfill — load into the warehouse and validate">
+{`# ── Phase 4: Load into warehouse ────────────────────────────────────────────
 # Spark job reads all backfill Parquet from S3 and MERGES into warehouse orders table
 # Not INSERT — MERGE — because some rows may already exist (last 6 months)
 
@@ -1086,6 +1201,14 @@ spark.sql("""
 # Monthly GMV from warehouse should match known reported figures
 # If a month shows $0 GMV, something went wrong`}
         </CodeBox>
+
+        <TryThis>
+          Before you'd write a single line of extraction code for a real backfill,
+          list the three checks from Phase 1 for a table you actually have access
+          to — row count over time, table size, and whether the schema changed.
+          If you can't answer all three in under five minutes, that's the signal
+          you'd be backfilling blind.
+        </TryThis>
       </section>
 
       <Divider />
@@ -1103,7 +1226,8 @@ spark.sql("""
           serve 200 concurrent operations managers.
         </Para>
 
-        <CodeBox label="real-time dashboard — architecture">
+        <SubSubTitle>Requirements and the core approach</SubSubTitle>
+        <CodeBox label="real-time dashboard — requirements and pre-computation approach">
 {`# ── Requirements derived from the prompt ────────────────────────────────────
 # Data freshness: 10-second refresh → data must be at most 10 seconds stale
 # Read pattern: 200 concurrent users, each refreshing every 10 seconds
@@ -1117,9 +1241,12 @@ spark.sql("""
 #         → Snowflake credits consumed at $3.50/credit × thousands of queries/hour
 #
 # DO: stream processing job continuously updates pre-computed aggregation tables
-#     Dashboard reads pre-computed values — reads are sub-millisecond
+#     Dashboard reads pre-computed values — reads are sub-millisecond`}
+        </CodeBox>
 
-# ── Streaming aggregation job (Kafka Streams or Flink) ──────────────────────
+        <SubSubTitle>The streaming aggregation job and what it writes to Redis</SubSubTitle>
+        <CodeBox label="real-time dashboard — streaming aggregation output">
+{`# ── Streaming aggregation job (Kafka Streams or Flink) ──────────────────────
 # Reads from: doordash.orders.v2, doordash.deliveries.v2
 # Output: Redis hash with pre-computed aggregation values
 
@@ -1144,9 +1271,12 @@ spark.sql("""
 # Stored in Redis as:
 # key: "dashboard:ops:live"
 # value: the JSON above (full snapshot, ~5 KB)
-# TTL: 60 seconds (auto-expire if streaming job stops — dashboard shows stale warning)
+# TTL: 60 seconds (auto-expire if streaming job stops — dashboard shows stale warning)`}
+        </CodeBox>
 
-# ── Streaming job internals ──────────────────────────────────────────────────
+        <SubSubTitle>Streaming job internals and the dashboard API</SubSubTitle>
+        <CodeBox label="real-time dashboard — Kafka Streams topology and the read API">
+{`# ── Streaming job internals ──────────────────────────────────────────────────
 # Kafka Streams topology:
 # Stream<order_id, OrderEvent> orders = builder.stream("doordash.orders.v2")
 # KTable<city, Long> orders_1min = orders
@@ -1168,9 +1298,12 @@ spark.sql("""
 #                    .then(r => r.json())
 #                    .then(updateDashboard), 10000)
 # For lower latency: Server-Sent Events (SSE) or WebSockets — server pushes updates
-# For 200 users: SSE is simpler than WebSockets, sufficient for 10-second refresh
+# For 200 users: SSE is simpler than WebSockets, sufficient for 10-second refresh`}
+        </CodeBox>
 
-# ── Staleness indicator ───────────────────────────────────────────────────────
+        <SubSubTitle>Staleness UX and the hard problems</SubSubTitle>
+        <CodeBox label="real-time dashboard — staleness handling and hard problems">
+{`# ── Staleness indicator ───────────────────────────────────────────────────────
 # Dashboard shows: "Last updated: 3 seconds ago" based on updated_at field
 # If updated_at is > 30 seconds old: show yellow warning "Data may be delayed"
 # If updated_at is > 120 seconds old: show red warning "Live data unavailable"
@@ -1199,7 +1332,7 @@ spark.sql("""
       <Divider />
 
       {/* ── Part 11 — Common Mistakes ────────────────────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Part 11 — Anti-Patterns" />
         <SectionTitle>Seven Anti-Patterns That Fail Every Design Review</SectionTitle>
 
@@ -1251,8 +1384,44 @@ spark.sql("""
 
       <Divider />
 
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About System Design Interviews and Real Design Work</SectionTitle>
+
+        {[
+          {
+            wrong: '"A strong candidate should start drawing the architecture diagram within the first couple of minutes to show they know the tools"',
+            right: 'Part 01 is explicit that the opposite is true: a candidate who starts naming tools before asking a single clarifying question is demonstrating the absence of engineering judgment, not the presence of it. The right first move is a set of questions about volume, latency, and constraints — not a diagram.',
+          },
+          {
+            wrong: '"Capacity estimation is a formality you do quickly to get to the \'real\' design work"',
+            right: 'Part 03\'s entire walkthrough shows the opposite — the numbers are what justify every later decision. In Design 1 (Part 06), the capacity numbers are what proves Kafka is comfortably sufficient at 580 orders/second, not a guess. Skipping the arithmetic means every subsequent tool choice is unjustified.',
+          },
+          {
+            wrong: '"Streaming is the more advanced, more impressive choice, so it should be preferred when in doubt"',
+            right: 'Part 05\'s batch-vs-streaming trade-off is explicit that streaming should be used only when latency is a genuine business requirement, not because it sounds more sophisticated. Design 2 (Shopify\'s warehouse) deliberately uses daily batch loads for Firebase events precisely because the analytics team does not need sub-hour data — batch was the correct, not the lesser, choice.',
+          },
+          {
+            wrong: '"Once a design handles today\'s data volume comfortably, the design is done"',
+            right: 'Design 4\'s entire premise (Part 09) is that a pipeline architected only for incremental loads can fail completely when asked to backfill 3 years of history — many teams discover this the hard way. A design should be checked against backfill, replay, and 2x-growth scenarios, not just steady-state load.',
+          },
+          {
+            wrong: '"Feature stores exist mainly to make features faster to compute"',
+            right: 'Design 3 (Part 08) shows the primary reason is correctness, not speed: without a single source of truth for feature logic shared across batch, streaming, and serving paths, you get training-serving skew — a model behaving differently in production than it did in training, because the same-named feature was computed three different ways.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red,#ff4757)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Part 12 — What This Looks Like at Work ───────────────────── */}
-      <section style={{ marginBottom: 64 }}>
+      <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 12 — What This Looks Like at Work" />
         <SectionTitle>What This Looks Like on Day One</SectionTitle>
 
@@ -1300,6 +1469,49 @@ spark.sql("""
             failure modes — it prevents outages before they happen.
           </Para>
         </HighlightBox>
+      </section>
+
+      <Divider />
+
+      {/* ── Interview Prep ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="prep">
+        <SectionTag text="// Interview Prep" />
+        <SectionTitle>5 Meta-Questions About the System Design Round Itself</SectionTitle>
+
+        {[
+          {
+            q: 'Q1. You have 45 minutes and the prompt is deliberately vague — "design a data platform for a delivery company." How do you allocate your time?',
+            a: `I follow the same seven-step framework from Part 02, but time-box it deliberately. Roughly 8–10 minutes on requirements clarification — enough to convert the vague prompt into specific numbers for volume, latency, and consistency, per Part 01's four things a strong candidate demonstrates. Roughly 5 minutes on capacity estimation, narrated out loud per the Callout in Part 03 — I don't need precision, I need to show I know which numbers matter. Roughly 15 minutes on high-level architecture and component selection, justifying each tool choice as a trade-off (Part 05's seven trade-offs give me the vocabulary). The remaining 15–17 minutes go to 2–3 hard problems I proactively raise myself — schema evolution, idempotency, backfill — rather than waiting for the interviewer to probe. I'd rather cover the full framework at moderate depth than go deep on architecture and run out of time before discussing failure modes, since Part 01 is explicit that failure-mode awareness is one of the four things being evaluated.`,
+          },
+          {
+            q: 'Q2. The interviewer says "let\'s skip the requirements gathering, just start designing." What do you do?',
+            a: `I'd still ask 2–3 of the highest-leverage questions before drawing anything — at minimum, rough volume and the latency requirement — because those two numbers alone determine whether this is a batch or streaming design (Part 05, trade-off 1). I'd frame it briefly: "Quickly — are we talking thousands or millions of events a day, and does downstream need this in seconds or is next-day acceptable?" This isn't defying the interviewer's instruction, it's demonstrating that I understand these numbers are load-bearing for every choice that follows, per Part 01's framing that a design without numbers is a guess. If they insist on zero clarification, I'd state my assumptions explicitly and out loud before proceeding, so the reasoning is auditable even without a real answer.`,
+          },
+          {
+            q: 'Q3. You don\'t know the exact API of a tool you\'ve named (say, the precise Kafka Streams DSL used in Design 5, Part 10). How do you handle that in the interview?',
+            a: `I'd state the concept and the intent clearly, and be upfront that I'm approximating the exact syntax. Design 5's Kafka Streams topology in this module is a good model for this — it names the operations (filter, groupBy, windowedBy, count) and what they accomplish, without claiming production-perfect syntax. Interviewers are evaluating whether I understand what a windowed aggregation does and why it's the right tool for a 1-minute rolling count, not whether I have the Java API memorised. Pretending false precision is worse than admitting "the exact method signature might be slightly off, but conceptually this is a tumbling window aggregation grouped by city."`,
+          },
+          {
+            q: 'Q4. How is a system design interview actually different from a coding interview, in terms of what\'s being evaluated?',
+            a: `A coding interview evaluates whether you can produce a correct, working solution to a well-defined problem. A system design interview evaluates judgment under ambiguity — per Part 01, whether you ask the right questions, articulate trade-offs, and anticipate failure modes for a problem that is deliberately underspecified. There's rarely one "correct" architecture; Designs 1–5 in this module each name a specific set of requirements that justify a specific set of choices, and a different requirements profile would justify different tools entirely. The evaluation is on the reasoning chain from requirements to numbers to architecture to failure modes — not on whether you happened to name the same tools the interviewer had in mind.`,
+          },
+          {
+            q: 'Q5. What is the single biggest signal that separates a strong system design answer from a weak one, across all five designs in this module?',
+            a: `Proactive identification of hard problems, stated before the interviewer has to ask. Every one of the five designs in Parts 06–10 ends with a "Hard problems" section that the candidate would be expected to raise unprompted — deduplication in Design 1, PII masking in Design 2, training-serving skew in Design 3, idempotent backfill in Design 4, window accuracy in Design 5. A weak candidate presents a happy-path architecture and waits to be probed. A strong candidate says, essentially, "here is my design, and here are the two or three things I know will break it, and here is how I'd handle each" — without being asked. Part 01 calls this "failure mode awareness" and it is consistently the differentiator between candidates who pass and candidates who don't, more than any specific tool choice.`,
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>
+              {item.q}
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, whiteSpace: 'pre-line' }}>
+              {item.a}
+            </div>
+          </div>
+        ))}
       </section>
 
       <Divider />
