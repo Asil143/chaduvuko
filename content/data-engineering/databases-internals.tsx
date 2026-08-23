@@ -36,12 +36,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -60,6 +64,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -70,6 +95,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -135,7 +178,7 @@ export default function DatabasesInternalsModule() {
       description="Storage engines, B-trees, indexes, buffer pools, WAL — the inside story."
       section="Data Engineering — Module 09"
       readTime="65 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Internals Matter ───────────────────────────── */}
@@ -232,7 +275,8 @@ export default function DatabasesInternalsModule() {
           on the page is directly overwritten with the new value.
         </Para>
 
-        <CodeBox label="B-tree storage — how data pages are organised">{`B-tree page structure (PostgreSQL uses 8 KB pages):
+        <SubSubTitle>How the pages are organised into a tree</SubSubTitle>
+        <CodeBox label="B-tree page structure — root, internal, and leaf pages">{`B-tree page structure (PostgreSQL uses 8 KB pages):
 
   Root page (level 3)
     ├── Internal page A (level 2) — covers order_id 1–5,000,000
@@ -244,25 +288,25 @@ export default function DatabasesInternalsModule() {
     └── Internal page B (level 2) — covers 5,000,001–10,000,000
 
 Leaf pages contain the actual row data (or pointers to it).
-Internal pages contain only keys and child page pointers.
+Internal pages contain only keys and child page pointers.`}</CodeBox>
 
-What this means for operations:
-  READ by primary key (order_id = 9284751):
-    Root → Internal page → Leaf page → row found
-    = 3–4 page reads regardless of table size (O log n)
-    At 100M rows, still only 4 page reads. Fast.
+        <SubSubTitle>What this layout means for reads, scans, updates, and inserts</SubSubTitle>
+        <CodeBox label="B-tree operations — what's fast and what's slow">{`READ by primary key (order_id = 9284751):
+  Root → Internal page → Leaf page → row found
+  = 3–4 page reads regardless of table size (O log n)
+  At 100M rows, still only 4 page reads. Fast.
 
-  FULL TABLE SCAN (no WHERE clause or non-indexed column):
-    Must read ALL leaf pages sequentially
-    100M rows × 100 rows/page = 1M page reads. Slow.
+FULL TABLE SCAN (no WHERE clause or non-indexed column):
+  Must read ALL leaf pages sequentially
+  100M rows × 100 rows/page = 1M page reads. Slow.
 
-  UPDATE existing row:
-    Find the page (3–4 reads), modify the value in-place,
-    write the page back. Fast for individual updates.
+UPDATE existing row:
+  Find the page (3–4 reads), modify the value in-place,
+  write the page back. Fast for individual updates.
 
-  INSERT new row:
-    Find the correct leaf page, insert in sorted order.
-    If page is full → page split (expensive operation).`}</CodeBox>
+INSERT new row:
+  Find the correct leaf page, insert in sorted order.
+  If page is full → page split (expensive operation).`}</CodeBox>
 
         <SubTitle>LSM-tree based storage engines</SubTitle>
 
@@ -357,7 +401,8 @@ Best for: write-heavy workloads, time-series data, IoT streams, Kafka consumer s
           4 pages.
         </Para>
 
-        <CodeBox label="B-tree index — how a lookup works step by step">{`Table: orders (100 million rows)
+        <SubSubTitle>The index structure, and how a lookup navigates it</SubSubTitle>
+        <CodeBox label="B-tree index — structure and a step-by-step lookup">{`Table: orders (100 million rows)
 Index: idx_orders_city ON orders(city)
 
 INDEX STRUCTURE (simplified):
@@ -375,10 +420,11 @@ EXECUTION WITH INDEX:
   2. Read level-1 internal page → find leaf page range for New York
   3. Read first leaf page → find first New York entry + row pointer
   4. Follow row pointer → read actual table page for this row
-  5. Continue through leaf pages until city > 'New York'
+  5. Continue through leaf pages until city > 'New York'`}</CodeBox>
 
-  Total: ~4 index pages + N data pages (one per matching row)
-  For 50,000 New York orders in 100M rows: ~50,004 page reads
+        <SubSubTitle>The speedup versus a full scan, and why composite indexes help range queries</SubSubTitle>
+        <CodeBox label="Index scan vs full scan, and the composite-index benefit">{`Total: ~4 index pages + N data pages (one per matching row)
+For 50,000 New York orders in 100M rows: ~50,004 page reads
 
 QUERY WITHOUT INDEX:
   Full table scan: 100,000,000 rows / 100 rows per page = 1,000,000 page reads
@@ -484,6 +530,12 @@ RANGE QUERY benefit:
           For analytics, the answer is usually to query the data warehouse instead —
           not to add indexes to the OLTP source.
         </Callout>
+
+        <TryThis>
+          On a PostgreSQL table you have access to, run <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>SELECT indexrelname, idx_scan FROM pg_stat_user_indexes WHERE relname = 'your_table'</code>.
+          Any index with idx_scan near zero is pure write overhead — it's being
+          maintained on every insert but never used by a query.
+        </TryThis>
       </section>
 
       <Divider />
@@ -504,6 +556,7 @@ RANGE QUERY benefit:
 
         <SubTitle>How the buffer pool works</SubTitle>
 
+        <SubSubTitle>A cache hit and a cache miss, step by step</SubSubTitle>
         <CodeBox label="Buffer pool operation — cache hit vs cache miss">{`Buffer pool: 4 GB RAM allocated to PostgreSQL shared_buffers
 
 State before a query runs:
@@ -520,9 +573,10 @@ Step 2: Follow row pointer to data page (page_44219)
   → Read from disk: ~1 millisecond (10,000× slower than RAM)
   → Load page_44219 into buffer pool (evict least-recently-used page)
 
-Step 3: Return row data to client
+Step 3: Return row data to client`}</CodeBox>
 
-BUFFER POOL EVICTION (when cache is full):
+        <SubSubTitle>How eviction works, and why an analytical scan hurts the application afterward</SubSubTitle>
+        <CodeBox label="Buffer pool eviction, and the analytical-query-on-OLTP problem">{`BUFFER POOL EVICTION (when cache is full):
   PostgreSQL uses Clock Sweep (approximate LRU):
     Each page has a usage counter
     Pages used recently have higher counters
@@ -535,11 +589,10 @@ WHY THIS MATTERS FOR DATA ENGINEERS:
   it reads millions of pages from disk into the buffer pool.
   This EVICTS the hot pages that application queries use frequently.
   After your analytical query, every application query hits cache misses
-  until the buffer pool refills with hot pages.
-  
-  Result: you ran a "read-only" analytical query and slowed down
-  the production application for the next 10–30 minutes.
-  This is why analytical queries must NOT run on production databases.`}</CodeBox>
+  until the buffer pool refills with hot pages.`}</CodeBox>
+        <Output>{`Result: you ran a "read-only" analytical query and slowed down
+the production application for the next 10–30 minutes.
+This is why analytical queries must NOT run on production databases.`}</Output>
 
         <SubTitle>Buffer pool sizing — why it matters so much</SubTitle>
 
@@ -563,9 +616,8 @@ SELECT
         sum(heap_blks_hit)::numeric /
         NULLIF(sum(heap_blks_hit) + sum(heap_blks_read), 0) * 100, 2
     ) AS hit_ratio_pct
-FROM pg_statio_user_tables;
-
-Interpreting the result:
+FROM pg_statio_user_tables;`}</CodeBox>
+        <Output>{`Interpreting the result:
   > 99%  → Excellent. Frequently-accessed data is in memory.
   95–99% → Good. Some disk reads, acceptable for mixed workloads.
   90–95% → Warning. Significant disk I/O. Consider increasing shared_buffers.
@@ -576,7 +628,7 @@ Real impact of hit ratio on query latency:
   99% hit ratio:  average page read = 100ns×0.99 + 1ms×0.01 = ~10 μs
   95% hit ratio:  average page read = 100ns×0.95 + 1ms×0.05 = ~50 μs
   80% hit ratio:  average page read = 100ns×0.80 + 1ms×0.20 = ~200 μs
-  50% hit ratio:  average page read = 100ns×0.50 + 1ms×0.50 = ~500 μs`}</CodeBox>
+  50% hit ratio:  average page read = 100ns×0.50 + 1ms×0.50 = ~500 μs`}</Output>
       </section>
 
       <Divider />
@@ -638,14 +690,7 @@ WITH WAL (actual approach — PostgreSQL, MySQL, SQL Server):
   5. Return success to application ← WAL guarantees durability
 
   Data page will be written to disk LATER during checkpoint.
-  If crash before checkpoint: replay WAL at startup → data recovered.
-  WAL write is sequential → fast even under high write load.
-
-WAL record contains everything needed to reproduce or reverse a change:
-  - Transaction ID
-  - Table and page location
-  - Before image (old values) — used for rollback and MVCC
-  - After image (new values) — used for redo on crash recovery`}</CodeBox>
+  If crash before checkpoint: replay WAL at startup → data recovered.`}</CodeBox>
 
         <SubTitle>WAL as the source of replication</SubTitle>
 
@@ -669,40 +714,42 @@ WAL record contains everything needed to reproduce or reverse a change:
           without polling the source database repeatedly.
         </Para>
 
-        <CodeBox label="CDC from WAL — how Debezium turns WAL records into pipeline events">{`PostgreSQL WAL record (internal binary format):
+        <SubSubTitle>The raw WAL record and the Kafka event Debezium turns it into</SubSubTitle>
+        <CodeBox label="CDC from WAL — Debezium decodes a WAL record into a Kafka event">{`PostgreSQL WAL record (internal binary format):
   {lsn: 0/1A3F2B8, txn: 847291, op: UPDATE, rel: orders,
    old: {order_id:9284751, status:"confirmed"},
    new: {order_id:9284751, status:"delivered"}}
 
 Debezium decodes WAL → structured Kafka event:
 {
-  "before": {
-    "order_id": 9284751,
-    "status": "confirmed"
-  },
-  "after": {
-    "order_id": 9284751,
-    "status": "delivered"
-  },
+  "before": { "order_id": 9284751, "status": "confirmed" },
+  "after":  { "order_id": 9284751, "status": "delivered" },
   "op": "u",                    ← u=update, c=create, d=delete
   "ts_ms": 1710698072847,       ← timestamp of the change
   "source": {
-    "db": "production",
-    "table": "orders",
+    "db": "production", "table": "orders",
     "lsn": 28437128,            ← log sequence number (position in WAL)
     "txId": 847291
   }
-}
+}`}</CodeBox>
 
-This Kafka event is published to topic "production.public.orders"
+        <SubSubTitle>What consumes this event, and the latency you can expect</SubSubTitle>
+        <CodeBox label="Downstream consumers and end-to-end CDC latency">{`This Kafka event is published to topic "production.public.orders"
 Any consumer (data pipeline, search indexer, cache invalidator)
-can subscribe and react to every database change in near-real-time.
-
-Latency: change committed in PostgreSQL → Kafka event available
+can subscribe and react to every database change in near-real-time.`}</CodeBox>
+        <Output>{`Latency: change committed in PostgreSQL → Kafka event available
          typically 50–500 milliseconds
-         
+
 Key benefit for data engineers: your data lake sees every change
-within seconds, not the next morning's batch.`}</CodeBox>
+within seconds, not the next morning's batch.`}</Output>
+
+        <TryThis>
+          If you run or maintain a Debezium (or similar CDC) connector, find where its
+          replication-slot lag or consumer lag is exposed — a metrics endpoint, a
+          dashboard, or a direct query against pg_replication_slots. If you don't
+          know where to look, that's a real gap: WAL retention is finite, and a
+          connector that falls too far behind cannot resume without a full resnapshot.
+        </TryThis>
       </section>
 
       <Divider />
@@ -803,7 +850,8 @@ within seconds, not the next morning's batch.`}</CodeBox>
           a consistent snapshot of the data as it existed at a specific point in time.
         </Para>
 
-        <CodeBox label="MVCC — how multiple versions coexist in the database">{`PostgreSQL MVCC mechanism:
+        <SubSubTitle>Every update creates a new row version — the old ones don't disappear</SubSubTitle>
+        <CodeBox label="MVCC — three versions of the same row, all on disk at once">{`PostgreSQL MVCC mechanism:
 
 Every row has two hidden fields:
   xmin: transaction ID that created this row version
@@ -821,9 +869,10 @@ Timeline:
     OLD row: {id:9284751, status:'confirmed', xmin:200, xmax:300}  ← marked deleted
     NEW row: {id:9284751, status:'delivered', xmin:300, xmax:0}    ← current version
 
-  All three versions exist on disk simultaneously!
+  All three versions exist on disk simultaneously!`}</CodeBox>
 
-NOW: two concurrent queries run at T=250:
+        <SubSubTitle>Two concurrent readers, two different (both correct) answers — and cleanup via VACUUM</SubSubTitle>
+        <CodeBox label="Two concurrent queries see different snapshots, neither blocks">{`NOW: two concurrent queries run at T=250:
 
   QUERY A (analyst, started before txn 300):
     Snapshot: sees all transactions committed before T=250
@@ -872,7 +921,8 @@ VACUUM: old row versions are eventually cleaned up by the
           inefficient plans.
         </Para>
 
-        <CodeBox label="Query execution pipeline — from SQL string to result rows">{`SQL string: SELECT c.name, SUM(o.amount) as total
+        <SubSubTitle>Parsing, semantic analysis, and building the logical plan</SubSubTitle>
+        <CodeBox label="From SQL text to a logical plan">{`SQL string: SELECT c.name, SUM(o.amount) as total
             FROM orders o
             JOIN customers c ON o.customer_id = c.id
             WHERE o.created_at >= '2026-01-01'
@@ -898,20 +948,22 @@ STEP 3: LOGICAL PLAN
           Join(o.customer_id = c.id)
             Filter(o.created_at >= '2026-01-01')
               Scan(orders)
-            Scan(customers)
+            Scan(customers)`}</CodeBox>
 
-STEP 4: OPTIMISATION (the most important step)
+        <SubSubTitle>Optimisation — the step that actually decides how the query runs</SubSubTitle>
+        <CodeBox label="Query optimisation — rewriting the logical plan for efficiency">{`STEP 4: OPTIMISATION (the most important step)
   Query optimizer rewrites the logical plan for efficiency:
     - Push filters DOWN before joins (filter orders before joining customers)
     - Choose join algorithm: hash join? merge join? nested loop?
     - Choose index scans vs sequential scans based on statistics
     - Decide join order (smaller table first)
-  
+
   Statistics used: row counts, column cardinality, value distributions
   Optimizer estimates cost of each plan in abstract "cost units"
-  Chooses plan with lowest estimated cost
+  Chooses plan with lowest estimated cost`}</CodeBox>
 
-STEP 5: PHYSICAL PLAN
+        <SubSubTitle>The resulting physical plan, and how execution actually runs it</SubSubTitle>
+        <CodeBox label="Physical plan and execution">{`STEP 5: PHYSICAL PLAN
   Concrete execution plan with specific algorithms:
     Limit
       Sort (external sort — result too large for memory)
@@ -931,7 +983,8 @@ To see the plan PostgreSQL chose:
 
         <SubTitle>Reading EXPLAIN output — the most practical skill for query optimisation</SubTitle>
 
-        <CodeBox label="EXPLAIN ANALYZE output — how to read it">{`EXPLAIN ANALYZE
+        <SubSubTitle>A real EXPLAIN ANALYZE output, node by node</SubSubTitle>
+        <CodeBox label="EXPLAIN ANALYZE output — a Bitmap Heap Scan example">{`EXPLAIN ANALYZE
   SELECT * FROM orders WHERE city = 'Seattle' AND amount > 1000;
 
 Output:
@@ -945,9 +998,10 @@ Output:
                              (actual time=11.234..11.234 rows=41534 loops=1)
           Index Cond: (city = 'Seattle')
   Planning Time: 0.847 ms
-  Execution Time: 94.127 ms
+  Execution Time: 94.127 ms`}</CodeBox>
 
-HOW TO READ THIS:
+        <SubSubTitle>What each line means, and the fix this specific output points to</SubSubTitle>
+        <CodeBox label="Reading the output, and the composite-index fix it suggests">{`HOW TO READ THIS:
   "cost=892.14..4821.33" → estimated cost (startup..total) in arbitrary units
   "rows=12847"           → estimated number of rows (optimizer's guess)
   "actual time=12.847..89.234" → actual timing in milliseconds
@@ -957,7 +1011,7 @@ HOW TO READ THIS:
 KEY INSIGHT from this output:
   The index returned 41,534 rows for city='Seattle'
   But only 13,102 had amount > 1000 (filter removed 28,432)
-  
+
   This means a composite index on (city, amount) would be better:
   CREATE INDEX idx_orders_city_amount ON orders(city, amount);
   New plan would return only ~13,102 rows from the index directly,
@@ -965,6 +1019,13 @@ KEY INSIGHT from this output:
 
 Warning sign: estimated rows vs actual rows differ by 10×+
   Means statistics are stale → run ANALYZE to update them`}</CodeBox>
+
+        <TryThis>
+          Run EXPLAIN ANALYZE on your slowest recurring query. Compare the estimated
+          row count on each node to the actual row count. A gap of 10× or more on any
+          node means the planner is working from stale statistics — run ANALYZE on
+          that table before assuming the query itself needs rewriting.
+        </TryThis>
       </section>
 
       <Divider />
@@ -1012,6 +1073,42 @@ Warning sign: estimated rows vs actual rows differ by 10×+
           application transactions on OLAP systems (no row-level locks, no fast
           primary-key lookups, slow individual writes) is fundamental knowledge.
         </Para>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Database Internals</SectionTitle>
+
+        {[
+          {
+            wrong: '"Adding an index always makes queries faster, so add one to be safe"',
+            right: 'Part 03\'s index-cost Callout is explicit that every index adds write overhead — a table with 15 indexes performs 15 separate tree updates per INSERT. An unused index (idx_scan near zero, as this Part\'s TryThis checks for) is pure cost with no read benefit.',
+          },
+          {
+            wrong: '"The WAL is just a crash-recovery implementation detail — not something I need to think about"',
+            right: 'Part 05 is explicit that the WAL is the direct mechanism behind both database replication and Change Data Capture — Debezium reads the WAL itself to produce the Kafka events data pipelines depend on. Replication lag and CDC consumer lag are both, at root, WAL problems.',
+          },
+          {
+            wrong: '"MVCC means old row versions are cleaned up automatically the instant a transaction commits"',
+            right: 'Part 06 is specific that VACUUM can only reclaim a dead row version once no transaction can still see it — a single long-running transaction (the exact scenario in Part 09\'s Real World) blocks cleanup for every table it has touched, which is how table bloat builds up.',
+          },
+          {
+            wrong: '"A read-only analytical query is always safe to run on a production OLTP database, since it doesn\'t write anything"',
+            right: 'Part 04\'s buffer-pool eviction section and Part 08\'s OLTP-vs-OLAP summary both make the same point: the harm from a large analytical scan comes from evicting the hot pages the application relies on, not from writing data — a "read-only" query can degrade application latency for 10-30 minutes afterward.',
+          },
+          {
+            wrong: '"If EXPLAIN\'s estimated row count is way off from the actual count, that\'s a database bug"',
+            right: 'Part 07 is explicit that the estimate comes from the optimizer\'s statistics, not a guarantee — a large estimated-vs-actual gap is the standard signal that statistics are stale, fixed by running ANALYZE, not evidence of a planner defect.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1193,6 +1290,45 @@ The correct architecture: run a scheduled pipeline that copies data from the OLT
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Leaving an ad-hoc query\'s transaction open ("idle in transaction") instead of committing or rolling back',
+            a: 'Part 09\'s Real World scenario and Part 06\'s MVCC Callout both trace back to this exact habit: an abandoned open transaction holds locks and blocks VACUUM for every table it touched, sometimes for hours, until it stalls unrelated pipelines. Set idle_in_transaction_session_timeout on shared databases so a forgotten session can\'t do this silently.',
+          },
+          {
+            q: 'Adding indexes to a high-write OLTP table to speed up analytical queries',
+            a: 'Part 03\'s index-cost Callout and Part 08\'s OLTP-vs-OLAP comparison both point to the same fix: analytical query performance is a data-warehouse problem, not an OLTP-indexing problem. Indexing a write-heavy table for analytics slows down every application write while barely helping the occasional analytical query.',
+          },
+          {
+            q: 'Opening a new database connection per thread or per parallel task instead of using a connection pool',
+            a: 'This module\'s Error Library shows the direct consequence — "remaining connection slots are reserved," PostgreSQL\'s default max_connections (100) exhausted by a pipeline that never reused connections. Always route pipeline connections through a pool (SQLAlchemy\'s pool_size/max_overflow, or PgBouncer) rather than opening one per parallel task.',
+          },
+          {
+            q: 'Dismissing a large gap between EXPLAIN\'s estimated and actual row counts as normal variance',
+            a: 'Part 07 and this module\'s Error Library both treat a 10×+ estimate-vs-actual gap as a specific, actionable signal — stale statistics, fixed by running ANALYZE — not noise to ignore. Query plans built on stale statistics are exactly how a previously-fast query silently starts choosing a sequential scan.',
+          },
+          {
+            q: 'Running a CDC connector in production with no monitoring on its lag against WAL retention',
+            a: 'This module\'s Error Library shows what happens without it: a Debezium connector falls behind, PostgreSQL deletes WAL the connector still needed, and the only recovery is dropping the replication slot and re-snapshotting the source tables from scratch. Part 05\'s TryThis is exactly this check — know where your connector\'s lag is visible before it becomes an outage.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1267,7 +1403,7 @@ The correct architecture: run a scheduled pipeline that copies data from the OLT
         'The most practical database internals skills for a data engineer: reading EXPLAIN ANALYZE output, identifying and terminating blocking transactions with pg_stat_activity, monitoring buffer pool hit ratio, understanding why WAL is the source of CDC, and knowing when table bloat is causing slow queries.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
