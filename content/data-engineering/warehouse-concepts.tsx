@@ -34,12 +34,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -58,6 +62,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
   </div>
 )
 
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
 const Divider = () => (
   <div style={{ borderTop: '1px solid var(--border)', margin: '52px 0' }} />
 )
@@ -68,6 +93,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
     borderRadius: 12, padding: '24px 28px', marginBottom: 24,
   }}>
     {children}
+  </div>
+)
+
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
   </div>
 )
 
@@ -131,7 +174,7 @@ export default function WarehouseConceptsModule() {
       description="Columnar storage, query execution, result caching, virtual warehouses, cluster keys, and why Snowflake queries are fast."
       section="Data Engineering — Module 31"
       readTime="60 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why Internal Concepts Matter ────────────────────── */}
@@ -209,7 +252,8 @@ export default function WarehouseConceptsModule() {
 
         <SubTitle>Row storage vs column storage — the physical difference</SubTitle>
 
-        <CodeBox label="Row vs column storage — physical layout and query performance">{`SAMPLE DATA (orders table, 5 rows, 6 columns):
+        <SubSubTitle>The same table, laid out two different ways on disk</SubSubTitle>
+        <CodeBox label="Row vs column storage — physical layout">{`SAMPLE DATA (orders table, 5 rows, 6 columns):
   order_id  customer_id  store_id  amount   status     created_at
   ─────────────────────────────────────────────────────────────────
   9284751   4201938      ST001     380.00   delivered  2026-03-17
@@ -225,48 +269,46 @@ ROW STORAGE (PostgreSQL, MySQL, OLTP databases):
   [9284753][4201940][ST001][890.00][delivered][2026-03-17]
   ...
 
-  QUERY: SELECT SUM(amount) FROM orders WHERE status = 'delivered'
-  Must READ all 6 columns for all 5 rows to compute sum of 1 column.
-  For 500M rows × 6 columns × 8 bytes avg = 24 GB read from disk.
-  Most data read is thrown away (5 columns not needed, 2 rows not matching).
-
 COLUMN STORAGE (Snowflake, BigQuery, Redshift, Parquet):
   Disk layout — all values of one column stored together:
   amount column:    [380.00][245.00][890.00][125.00][460.00]
   status column:    [delivered][cancelled][delivered][placed][confirmed]
   customer_id col:  [4201938][4201939][4201940][4201941][4201938]
-  ...
+  ...`}</CodeBox>
 
-  QUERY: SELECT SUM(amount) FROM orders WHERE status = 'delivered'
+        <SubSubTitle>Running the same query against both layouts</SubSubTitle>
+        <CodeBox label="SELECT SUM(amount) FROM orders WHERE status = 'delivered'">{`ROW STORAGE:
+  Must READ all 6 columns for all 5 rows to compute sum of 1 column.
+  For 500M rows × 6 columns × 8 bytes avg = 24 GB read from disk.
+  Most data read is thrown away (5 columns not needed, 2 rows not matching).
+
+COLUMN STORAGE:
   Step 1: Read status column → find rows 1, 3 (delivered)
   Step 2: Read amount column → only rows 1, 3: [380.00][890.00]
   Step 3: Compute SUM = 1270.00
   For 500M rows × 2 columns × 8 bytes avg = 8 GB read (vs 24 GB)
-  → 3× less I/O for a 1-of-6-column query
 
-  MORE DRAMATIC EXAMPLE:
+MORE DRAMATIC EXAMPLE:
   Table has 200 columns. Query uses 3 columns.
   Row storage:    reads all 200 columns = 1.6 TB
-  Column storage: reads 3 columns       = 24 GB
-  → 66× less I/O
+  Column storage: reads 3 columns       = 24 GB`}</CodeBox>
+        <Output>{`orders (5-row sample): 24 GB read (row) vs 8 GB read (column) → 3× less I/O
+orders (200-column table): 1.6 TB read (row) vs 24 GB read (column) → 66× less I/O`}</Output>
 
-WHY COLUMN STORAGE ALSO COMPRESSES BETTER:
-  Columns store the same data type repeatedly.
-  status column:  [delivered][delivered][delivered][cancelled][cancelled]
-  Adjacent same values → run-length encoding compresses 5 values to 2.
-  Row storage: [delivered, 380.00, ST001] — mixed types, poor compression.
-  Column storage: all amounts together, all statuses together — high compression.
-
-  Real compression ratios on typical analytical data:
-  Row storage (PostgreSQL): 1.5-2× compression
-  Column storage (Parquet/Snowflake): 5-15× compression
-  → 5-10× less storage = 5-10× cheaper on S3/Snowflake`}</CodeBox>
+        <SubSubTitle>Why column storage also compresses better</SubSubTitle>
+        <CodeBox label="Compression from grouping same-type values together">{`Columns store the same data type repeatedly.
+status column:  [delivered][delivered][delivered][cancelled][cancelled]
+Adjacent same values → run-length encoding compresses 5 values to 2.
+Row storage: [delivered, 380.00, ST001] — mixed types, poor compression.
+Column storage: all amounts together, all statuses together — high compression.`}</CodeBox>
+        <Output>{`Row storage (PostgreSQL): 1.5-2× compression
+Column storage (Parquet/Snowflake): 5-15× compression
+→ 5-10× less storage = 5-10× cheaper on S3/Snowflake`}</Output>
 
         <SubTitle>Compression encoding per column type</SubTitle>
 
-        <CodeBox label="Column compression encodings — how each type compresses">{`COMPRESSION ENCODING TYPES — chosen automatically by the warehouse:
-
-RUN-LENGTH ENCODING (RLE):
+        <SubSubTitle>Run-length and dictionary encoding — for low-to-moderate cardinality</SubSubTitle>
+        <CodeBox label="RLE and dictionary encoding — chosen automatically by the warehouse">{`RUN-LENGTH ENCODING (RLE):
   Best for: low-cardinality columns with runs of identical values
   Example: status column sorted by status:
     CANCELLED × 8,432,  CONFIRMED × 12,847,  DELIVERED × 319,284
@@ -280,10 +322,12 @@ DICTIONARY ENCODING:
   Dictionary: {0: 'placed', 1: 'confirmed', 2: 'delivered', 3: 'cancelled', 4: 'refunded'}
   Column stored as: [2, 0, 1, 3, 2, 2, ...]   (1-byte integers not strings)
   vs storing 'delivered' × 500M = 4.5 GB
-  → Stored as: 500M × 1 byte = 500 MB   (9× compression)
-  Queries on status column compare integers, not strings → faster
+  Queries on status column compare integers, not strings → faster`}</CodeBox>
+        <Output>{`Dictionary-encoded status column: 500M rows × 1 byte = 500 MB (vs 4.5 GB as strings)
+→ 9× compression, plus faster comparisons (integer equality, not string equality)`}</Output>
 
-DELTA ENCODING:
+        <SubSubTitle>Delta encoding, bit packing, and letting Snowflake choose for you</SubSubTitle>
+        <CodeBox label="Delta encoding, bit packing, and automatic encoding selection">{`DELTA ENCODING:
   Best for: monotonically increasing numeric columns (IDs, timestamps)
   Example: order_id column:
     [9284751, 9284752, 9284753, 9284754, 9284755]
@@ -299,17 +343,14 @@ BIT PACKING:
 
 SNOWFLAKE AUTOMATIC ENCODING:
   Snowflake selects optimal encoding per column automatically.
-  No manual configuration needed.
-  During COPY INTO / INSERT: Snowflake samples data to determine encoding.
-  You can view the chosen encoding:
+  No manual configuration needed. During COPY INTO / INSERT: Snowflake
+  samples data to determine encoding. View the chosen encoding with:
     SELECT column_name, data_type, compression
     FROM information_schema.columns
     WHERE table_name = 'ORDERS';
 
 PRACTICAL IMPLICATION FOR DATA ENGINEERS:
   Choose data types correctly — they determine compression effectiveness.
-  VARCHAR(100) for a status with 5 short values: poor compression signal.
-  VARCHAR(20) for status: tells the warehouse the values are short.
   Numeric types for amounts (not VARCHAR): enables numeric encoding.
   TIMESTAMPTZ for timestamps: enables delta encoding.
   BOOLEAN for flags: bit packing.
@@ -333,9 +374,8 @@ PRACTICAL IMPLICATION FOR DATA ENGINEERS:
 
         <SubTitle>Snowflake's three-layer architecture</SubTitle>
 
-        <CodeBox label="Snowflake architecture — three layers and what each does">{`SNOWFLAKE THREE-LAYER ARCHITECTURE:
-
-LAYER 1: CLOUD SERVICES LAYER (always running)
+        <SubSubTitle>What each layer owns</SubSubTitle>
+        <CodeBox label="Snowflake architecture — three layers and what each does">{`LAYER 1: CLOUD SERVICES LAYER (always running)
   ─────────────────────────────────────────────────────────────────────
   • Query parser and optimizer
   • Metadata repository (table stats, partition info, access control)
@@ -343,26 +383,23 @@ LAYER 1: CLOUD SERVICES LAYER (always running)
   • Result cache (query results stored here, not in compute)
   • Runs 24/7 — always available even when warehouses are suspended
   • No per-query cost — included in Snowflake's base fee
-  • Single global metadata store for all virtual warehouses
 
 LAYER 2: QUERY PROCESSING LAYER (virtual warehouses)
   ─────────────────────────────────────────────────────────────────────
   • Virtual warehouse: a cluster of EC2 nodes (Snowflake manages them)
   • Each warehouse is independent — no resource sharing between warehouses
   • Local SSD disk cache (data reads from S3 are cached here)
-  • Scales up (larger node type) or out (multi-cluster) independently
   • Auto-suspend after idle time (no compute cost when idle)
-  • Auto-resume on query (takes 1-5 seconds)
 
 LAYER 3: STORAGE LAYER (micro-partitions on S3)
   ─────────────────────────────────────────────────────────────────────
   • All table data stored as encrypted Parquet files in Snowflake-managed S3
   • Organised into micro-partitions (50-500 MB compressed)
   • Each micro-partition has column-level metadata (min, max, count, null%)
-  • Metadata stored in cloud services layer — never requires data read
-  • Immutable: new writes create new micro-partitions, old ones marked deleted
+  • Immutable: new writes create new micro-partitions, old ones marked deleted`}</CodeBox>
 
-QUERY EXECUTION PATH:
+        <SubSubTitle>How a query moves through the three layers, and what it costs</SubSubTitle>
+        <CodeBox label="Query execution path and cost breakdown">{`QUERY EXECUTION PATH:
   1. Query submitted → Cloud Services parses and optimises
   2. Cloud Services checks RESULT CACHE
      → If cache hit: return cached result instantly (no warehouse needed)
@@ -382,15 +419,14 @@ COST BREAKDOWN:
 
         <SubTitle>Micro-partitions — Snowflake's storage unit</SubTitle>
 
-        <CodeBox label="Micro-partitions — how Snowflake stores and prunes data">{`MICRO-PARTITION PROPERTIES:
+        <SubSubTitle>How pruning decides which partitions to skip</SubSubTitle>
+        <CodeBox label="Micro-partition properties and pruning">{`MICRO-PARTITION PROPERTIES:
   Size:         50–500 MB compressed (16–512 MB uncompressed)
   Organisation: data written to micro-partitions in arrival order
                 (not sorted unless CLUSTER BY is configured)
   Metadata:     each micro-partition has column-level statistics:
-                  - min value per column
-                  - max value per column
-                  - null count per column
-                  - distinct count (approximate) per column
+                  - min value per column, max value per column
+                  - null count per column, distinct count (approximate)
 
 MICRO-PARTITION PRUNING:
   When a query has a WHERE clause, Snowflake compares it to micro-partition
@@ -403,12 +439,12 @@ MICRO-PARTITION PRUNING:
   Micro-partition B: min_order_date=2026-03-16, max_order_date=2026-03-18
     → KEEP: range includes 2026-03-17
   Micro-partition C: min_order_date=2026-03-18, max_order_date=2026-03-20
-    → PRUNE: min is after 2026-03-17
+    → PRUNE: min is after 2026-03-17`}</CodeBox>
+        <Output>{`If 99% of micro-partitions are pruned: 1% of data read — dramatic speedup.
+If data is randomly distributed: no pruning possible, full scan.`}</Output>
 
-  If 99% of micro-partitions are pruned: 1% of data read — dramatic speedup.
-  If data is randomly distributed: no pruning possible, full scan.
-
-WHEN PRUNING WORKS WELL:
+        <SubSubTitle>When pruning helps, when it silently doesn't, and how to check</SubSubTitle>
+        <CodeBox label="When pruning works, when it doesn't, and checking effectiveness">{`WHEN PRUNING WORKS WELL:
   ✓ Querying by order_date when data was loaded daily (natural ordering)
   ✓ Querying recent data when recent = last rows loaded
   ✓ Range filters on monotonically increasing columns (IDs, timestamps)
@@ -428,7 +464,8 @@ CHECKING PRUNING EFFECTIVENESS:
 
         <SubTitle>Cluster keys — forcing good pruning on any column</SubTitle>
 
-        <CodeBox label="CLUSTER BY — controlling micro-partition organisation">{`PROBLEM: orders table loaded daily, 500M rows, 10,000 micro-partitions
+        <SubSubTitle>A table with poor natural ordering for the column analysts actually filter on</SubSubTitle>
+        <CodeBox label="CLUSTER BY — the problem and the fix">{`PROBLEM: orders table loaded daily, 500M rows, 10,000 micro-partitions
   natural order = order in which rows arrived (mostly date-ordered by luck)
   Queries by order_date: good pruning (data is mostly date-ordered)
   Queries by store_id: poor pruning (stores randomly distributed)
@@ -443,17 +480,15 @@ SOLUTION: ALTER TABLE silver.orders CLUSTER BY (store_id, order_date);
   Snowflake runs a background reclustering process:
     Reads existing micro-partitions
     Re-sorts data by (store_id, order_date)
-    Writes new micro-partitions where each contains similar store_id values
-  After reclustering:
-    ST001 rows co-located in same micro-partitions
-    Partitions scanned for store_id='ST001': ~100 of 10,000 (1%)
+    Writes new micro-partitions where each contains similar store_id values`}</CodeBox>
+        <Output>{`Before CLUSTER BY: partitions scanned for store_id='ST001' → 10,000 of 10,000 (100%)
+After reclustering:  partitions scanned for store_id='ST001' → ~100 of 10,000 (1%)`}</Output>
 
-CLUSTER KEY SELECTION RULES:
+        <SubSubTitle>Choosing a cluster key, its ongoing cost, and monitoring depth</SubSubTitle>
+        <CodeBox label="Cluster key selection rules, cost, and checking depth">{`CLUSTER KEY SELECTION RULES:
   ✓ Columns most frequently used in WHERE clauses
   ✓ High-cardinality columns where equality or range queries are common
-  ✓ Typically: (most_common_filter, second_most_common_filter)
   ✓ For event tables: (tenant_id, event_date) or (store_id, order_date)
-
   ✗ Don't cluster by a timestamp to microsecond precision (too many distinct values)
   ✗ Don't cluster by a boolean (only 2 values — poor co-location)
   ✗ Don't cluster small tables (< 1 TB) — overhead exceeds benefit
@@ -472,6 +507,14 @@ CHECKING CLUSTER DEPTH:
   Returns: average_depth (lower = better co-location, 1.0 = perfect)
   Good: average_depth < 2
   Needs reclustering: average_depth > 5`}</CodeBox>
+
+        <TryThis>
+          Pick a table you query daily and run it through the checks in this Part: after
+          your next filtered SELECT, open the query profile and compare &quot;Partitions
+          scanned&quot; to &quot;Partitions total.&quot; If a heavily-filtered query is still
+          scanning more than 20% of partitions, that column is a real CLUSTER BY candidate —
+          confirm it with SYSTEM$CLUSTERING_INFORMATION before you commit to it.
+        </TryThis>
       </section>
 
       <Divider />
@@ -489,76 +532,75 @@ CHECKING CLUSTER DEPTH:
           execution times.
         </Para>
 
-        <CodeBox label="Snowflake's three caching layers — what each caches and for how long">{`CACHE LAYER 1: RESULT CACHE (cloud services layer)
-  ─────────────────────────────────────────────────────────────────────
-  What:     The complete result set of a query
-  Where:    Cloud services layer (not in the virtual warehouse)
-  Duration: 24 hours (reset to 24h on each access of the same result)
-  Scope:    Per user per query — exact SQL match required
-  Cost:     Zero compute — result cache queries do not use a warehouse
+        <SubTitle>Cache layer 1 — the result cache</SubTitle>
+        <CodeBox label="Result cache — cloud services layer">{`What:     The complete result set of a query
+Where:    Cloud services layer (not in the virtual warehouse)
+Duration: 24 hours (reset to 24h on each access of the same result)
+Scope:    Per user per query — exact SQL match required
+Cost:     Zero compute — result cache queries do not use a warehouse
 
-  WHEN RESULT CACHE HITS:
-    - Same exact SQL text (including whitespace and case)
-    - Same session parameters
-    - Underlying data has NOT changed since the result was cached
-    - User has the same access permissions
+WHEN RESULT CACHE HITS:
+  - Same exact SQL text (including whitespace and case)
+  - Same session parameters, same user access permissions
+  - Underlying data has NOT changed since the result was cached
 
-  INVALIDATION:
-    - Data in any referenced table changes (DML or new micro-partitions)
-    - 24-hour expiry without access
-    - Table structure changes (ALTER TABLE)
+INVALIDATION:
+  - Data in any referenced table changes (DML or new micro-partitions)
+  - 24-hour expiry without access, or table structure changes (ALTER TABLE)
 
-  CHECKING IF RESULT CACHE WAS USED:
-    In query history: look for "result cache" in execution details
-    Or: SELECT query_type, total_elapsed_time, result_from_cache
-        FROM snowflake.account_usage.query_history
-        WHERE query_text ILIKE '%SELECT%' LIMIT 20;
+CHECKING IF RESULT CACHE WAS USED:
+  SELECT query_type, total_elapsed_time, result_from_cache
+  FROM snowflake.account_usage.query_history
+  WHERE query_text ILIKE '%SELECT%' LIMIT 20;`}</CodeBox>
+        <Output>{`Daily analytics query, run at 8 AM and again at 9 AM:
+  8 AM run: 45 seconds (full execution)
+  9 AM run: < 1 second (result cache hit) — if no new data was loaded
+  If Silver pipeline ran at 8:30 AM: 9 AM run = 45 seconds (cache invalidated)`}</Output>
 
-  PRACTICAL IMPACT:
-    Daily analytics queries that run the same SELECT at 8 AM and 9 AM:
-    8 AM run: 45 seconds (full execution)
-    9 AM run: < 1 second (result cache hit) — if no new data was loaded
-    If Silver pipeline ran at 8:30 AM: 9 AM run = 45 seconds (cache invalidated)
+        <SubTitle>Cache layer 2 — the local disk cache</SubTitle>
+        <CodeBox label="Local disk cache — virtual warehouse layer">{`What:     Raw micro-partition data read from S3
+Where:    SSD disk on virtual warehouse nodes
+Duration: Until the warehouse is suspended (cache evicted on suspend)
+Scope:    Per virtual warehouse (all users on same warehouse benefit)
 
-CACHE LAYER 2: LOCAL DISK CACHE (virtual warehouse)
-  ─────────────────────────────────────────────────────────────────────
-  What:     Raw micro-partition data read from S3
-  Where:    SSD disk on virtual warehouse nodes
-  Duration: Until the warehouse is suspended (cache evicted on suspend)
-  Scope:    Per virtual warehouse (all users on same warehouse benefit)
+HOW IT WORKS:
+  First query reads micro-partitions from S3 → stores on local SSD
+  Subsequent queries needing same partitions: reads from SSD (10× faster)
+  Cache is managed with LRU (least recently used) eviction
 
-  HOW IT WORKS:
-    First query reads micro-partitions from S3 → stores on local SSD
-    Subsequent queries needing same partitions: reads from SSD (10× faster)
-    Cache is managed with LRU (least recently used) eviction
+IMPLICATION: do not suspend-and-resume too aggressively
+  Auto-suspend after 10 minutes: cache lost every 10 minutes
+  Cold queries take longer after resume (S3 reads, not SSD reads)
+  Balance: suspend when genuinely idle, but not after every single query`}</CodeBox>
 
-  IMPLICATION: do not suspend-and-resume too aggressively
-    Auto-suspend after 10 minutes: cache lost every 10 minutes
-    Cold queries take longer after resume (S3 reads, not SSD reads)
-    Balance: suspend when genuinely idle, but not after every single query
-
-CACHE LAYER 3: METADATA CACHE (cloud services layer)
-  ─────────────────────────────────────────────────────────────────────
+        <SubTitle>Cache layer 3 — the metadata cache, and designing around all three</SubTitle>
+        <CodeBox label="Metadata cache and architecting queries around caching">{`CACHE LAYER 3: METADATA CACHE (cloud services layer)
   What:     Table statistics and micro-partition metadata
-  Where:    Cloud services layer (persistent)
-  Duration: Always maintained — updated on every write
+  Where:    Cloud services layer (persistent), updated on every write
   Cost:     Included in storage fees
 
   WHAT IT ENABLES:
     SHOW TABLES, COUNT(*), MAX(id): answered from metadata alone
-    No warehouse needed for:
-      SELECT COUNT(*) FROM large_table  → returns instantly from metadata
-      SELECT MAX(updated_at) FROM silver.orders  → metadata-only query
-    These queries appear in query history with result_from_cache=TRUE
-    and total_elapsed_time < 100ms regardless of table size
+    SELECT COUNT(*) FROM large_table  → returns instantly from metadata
+    SELECT MAX(updated_at) FROM silver.orders  → metadata-only query
+    These appear with result_from_cache=TRUE and elapsed time < 100ms
+    regardless of table size
 
 ARCHITECT YOUR QUERIES AROUND CACHING:
-  BI tool scheduled refreshes: refresh at fixed intervals AFTER pipeline runs
+  BI tool scheduled refreshes: refresh at fixed intervals AFTER pipeline runs,
     not before — otherwise analysts get cached stale results
   Warm-up queries: some teams run a "warm-up" script after each pipeline run
     to pre-populate the disk cache for common dashboard queries
   Avoid cache busting: parameterised queries with user-specific WHERE clauses
     never hit the result cache — each user's variation is a different SQL text`}</CodeBox>
+
+        <TryThis>
+          Run the same non-trivial SELECT twice in a row in Snowflake, with no changes
+          to the underlying tables in between. Check <code>result_from_cache</code> in
+          query history for the second run — you should see near-zero elapsed time.
+          Now run a query that touches a table you know just received new rows, and
+          watch the cache miss instead.
+        </TryThis>
       </section>
 
       <Divider />
@@ -575,25 +617,26 @@ ARCHITECT YOUR QUERIES AROUND CACHING:
           problems and unexpectedly high Snowflake bills.
         </Para>
 
-        <SubTitle>Warehouse sizes and what they mean</SubTitle>
+        <SubTitle>Warehouse sizes, and scaling up vs scaling out</SubTitle>
 
-        <CodeBox label="Virtual warehouse sizes — credits, nodes, and when to size up">{`SNOWFLAKE WAREHOUSE SIZES:
-  Size      Credits/Hour  Nodes  Local Cache  Best for
-  ─────────────────────────────────────────────────────────────────────
-  X-Small   1             1      ~70 GB       Light queries, small tables, dev
-  Small     2             2      ~140 GB      Moderate queries, staging
-  Medium    4             4      ~280 GB      dbt production runs, typical analytics
-  Large     8             8      ~560 GB      Large dbt jobs, complex SQL
-  X-Large   16            16     ~1.1 TB      Very large joins, ML feature extraction
-  2X-Large  32            32     ~2.2 TB      Batch processing, largest datasets
-  3X-Large  64            64     ~4.4 TB      Extreme scale (rare — very expensive)
-  4X-Large  128           128    ~8.8 TB      Almost never needed
+        <SubSubTitle>The size table and what each credit buys</SubSubTitle>
+        <CodeBox label="Warehouse sizes — credits, nodes, and local cache">{`Size      Credits/Hour  Nodes  Local Cache  Best for
+─────────────────────────────────────────────────────────────────────
+X-Small   1             1      ~70 GB       Light queries, small tables, dev
+Small     2             2      ~140 GB      Moderate queries, staging
+Medium    4             4      ~280 GB      dbt production runs, typical analytics
+Large     8             8      ~560 GB      Large dbt jobs, complex SQL
+X-Large   16            16     ~1.1 TB      Very large joins, ML feature extraction
+2X-Large  32            32     ~2.2 TB      Batch processing, largest datasets
+3X-Large  64            64     ~4.4 TB      Extreme scale (rare — very expensive)
+4X-Large  128           128    ~8.8 TB      Almost never needed
 
-  Credit cost (US East, 2026 approximate): $2–$4/credit/hour depending on plan
-  X-Small running 1 hour: 1 credit × $2 = $2
-  2X-Large running 1 hour: 32 credits × $2 = $64
+Credit cost (US East, 2026 approximate): $2–$4/credit/hour depending on plan
+X-Small running 1 hour: 1 credit × $2 = $2
+2X-Large running 1 hour: 32 credits × $2 = $64`}</CodeBox>
 
-SCALE UP (larger warehouse): single-query performance
+        <SubSubTitle>Scale up for single-query performance, scale out for concurrency</SubSubTitle>
+        <CodeBox label="Scale up vs scale out">{`SCALE UP (larger warehouse): single-query performance
   A complex dbt model that spills to disk on Medium: run it on Large
   A join between two 10B-row tables: needs X-Large to fit in memory
   Useful for: single-job batch transformations, ML feature computation
@@ -609,9 +652,10 @@ SCALE OUT (multi-cluster warehouse): concurrency
       MAX_CLUSTER_COUNT = 5
       SCALING_POLICY = 'ECONOMY';  -- or 'STANDARD'
   ECONOMY: scale out only when existing clusters are fully loaded
-  STANDARD: scale out proactively when queue starts building
+  STANDARD: scale out proactively when queue starts building`}</CodeBox>
 
-AUTO-SUSPEND AND AUTO-RESUME:
+        <SubSubTitle>Auto-suspend defaults by warehouse purpose, and the sizing decision process</SubSubTitle>
+        <CodeBox label="Auto-suspend settings and the warehouse sizing decision process">{`AUTO-SUSPEND AND AUTO-RESUME:
   Auto-suspend: warehouse turns off after N minutes idle (no compute cost)
   Auto-resume: first query after suspend wakes the warehouse (1-5 second delay)
 
@@ -619,7 +663,6 @@ AUTO-SUSPEND AND AUTO-RESUME:
     dbt transformation warehouse:  AUTO_SUSPEND = 300  (5 min)
     Analyst self-service:          AUTO_SUSPEND = 600  (10 min, keep warm for users)
     Dashboard service account:     AUTO_SUSPEND = 60   (1 min, cache warms fast)
-    ML training warehouse:         AUTO_SUSPEND = 60   (rare large jobs)
     Dev/test warehouse:            AUTO_SUSPEND = 60   (minimise idle cost)
 
 WAREHOUSE SIZING DECISION PROCESS:
@@ -628,23 +671,21 @@ WAREHOUSE SIZING DECISION PROCESS:
      → Yes: memory is insufficient → size up to Large or X-Large
   3. Check partitions scanned: is it scanning all partitions?
      → Yes: cluster keys or query filter issue — sizing up won't help
-  4. Check bytes scanned per second: is CPU the bottleneck?
-     → Yes, and no spill: more nodes (scale out) may help for parallelism
-  5. Check queue time: are queries waiting for the warehouse?
+  4. Check queue time: are queries waiting for the warehouse?
      → Yes: scale out (multi-cluster) or separate workloads into dedicated warehouses`}</CodeBox>
 
         <SubTitle>Warehouse isolation — separating workloads</SubTitle>
 
-        <CodeBox label="Warehouse architecture — isolating workloads for performance and cost">{`# ANTI-PATTERN: one warehouse for everything
+        <SubSubTitle>One warehouse for everything vs dedicated warehouses per workload</SubSubTitle>
+        <CodeBox label="Anti-pattern vs correct pattern — dedicated warehouses">{`# ANTI-PATTERN: one warehouse for everything
 # All users, all pipelines, all dashboards share one COMPUTE_WH
 # dbt job runs 30-minute transformation → blocks analyst queries for 30 min
 # Analyst runs expensive ad-hoc query → slows down dashboard for 5 min
 # Result: unpredictable performance, no cost attribution, no isolation
 
-# CORRECT PATTERN: dedicated warehouses per workload type
-# Each has independent sizing, auto-suspend, and scaling policy
+# CORRECT PATTERN: dedicated warehouses per workload type,
+# each with independent sizing, auto-suspend, and scaling policy
 
--- Create warehouses for different workload types:
 CREATE WAREHOUSE dbt_pipeline_wh
     WAREHOUSE_SIZE = 'MEDIUM'
     AUTO_SUSPEND = 300
@@ -662,15 +703,10 @@ CREATE WAREHOUSE dashboard_wh
     WAREHOUSE_SIZE = 'X-SMALL'
     AUTO_SUSPEND = 60
     AUTO_RESUME = TRUE
-    COMMENT = 'Metabase/Tableau service account — small, frequently-used queries';
+    COMMENT = 'Metabase/Tableau service account — small, frequently-used queries';`}</CodeBox>
 
-CREATE WAREHOUSE ml_wh
-    WAREHOUSE_SIZE = 'X-LARGE'
-    AUTO_SUSPEND = 60
-    AUTO_RESUME = TRUE
-    COMMENT = 'ML feature extraction — rare, large, terminated after use';
-
--- Assign warehouses via roles:
+        <SubSubTitle>Granting access, and attributing cost back to each warehouse</SubSubTitle>
+        <CodeBox label="Granting access and attributing cost per warehouse">{`-- Assign warehouses via roles:
 GRANT USAGE ON WAREHOUSE dbt_pipeline_wh TO ROLE pipeline_role;
 GRANT USAGE ON WAREHOUSE analyst_wh       TO ROLE analyst_role;
 GRANT USAGE ON WAREHOUSE dashboard_wh     TO ROLE metabase_service_role;
@@ -680,8 +716,12 @@ SELECT warehouse_name, SUM(credits_used) AS total_credits
 FROM snowflake.account_usage.warehouse_metering_history
 WHERE start_time >= DATEADD('day', -30, CURRENT_DATE)
 GROUP BY 1
-ORDER BY 2 DESC;
--- Shows per-team compute cost clearly — enables chargeback to business units`}</CodeBox>
+ORDER BY 2 DESC;`}</CodeBox>
+        <Output>{`WAREHOUSE_NAME     TOTAL_CREDITS
+DBT_PIPELINE_WH    420
+ANALYST_WH         190
+DASHBOARD_WH        65
+→ per-team compute cost, clear enough to chargeback to business units`}</Output>
       </section>
 
       <Divider />
@@ -721,10 +761,8 @@ ORDER BY 2 DESC;
 
         <SubTitle>Redshift distribution keys and sort keys — the manual tuning that matters</SubTitle>
 
-        <CodeBox label="Redshift distribution and sort keys — the key tuning concepts">{`# Redshift distributes data across multiple nodes.
-# How data is distributed determines join performance.
-
-# DISTRIBUTION STYLES:
+        <SubSubTitle>Matching distribution keys so joins don't move data across the network</SubSubTitle>
+        <CodeBox label="Distribution styles and matching DISTKEYs">{`# DISTRIBUTION STYLES:
 # EVEN:   rows distributed round-robin across nodes — good default for small tables
 # KEY:    rows with same distribution key value go to same node — good for joins
 # ALL:    entire table copied to every node — for small dimension tables
@@ -750,9 +788,10 @@ CREATE TABLE silver.order_items (
 # WITHOUT MATCHING DISTKEYS:
 # JOIN between orders (node 1,2,3) and order_items (node 4,5,6):
 # Redshift must REDISTRIBUTE one table across the network before joining
-# This is the most expensive join operation — 10-100× slower than co-located
+# This is the most expensive join operation — 10-100× slower than co-located`}</CodeBox>
 
-# CHECKING QUERY DISTRIBUTION:
+        <SubSubTitle>Reading distribution in EXPLAIN, sort key types, and required maintenance</SubSubTitle>
+        <CodeBox label="Checking distribution, sort keys, and running VACUUM/ANALYZE">{`# CHECKING QUERY DISTRIBUTION:
 # In EXPLAIN output, look for:
 # DS_BCAST_INNER: broadcasting inner table to all nodes (expensive for large tables)
 # DS_DIST_BOTH:   redistributing both tables (most expensive)
@@ -787,7 +826,8 @@ ANALYZE silver.orders;   -- update table statistics for query optimizer
 
         <SubTitle>Snowflake query profile — what to look for</SubTitle>
 
-        <CodeBox label="Snowflake query profile — reading the execution graph">{`SNOWFLAKE QUERY PROFILE (accessed via UI after query runs):
+        <SubSubTitle>The operators you'll see, and the metrics attached to each</SubSubTitle>
+        <CodeBox label="Snowflake query profile — operators and metrics">{`SNOWFLAKE QUERY PROFILE (accessed via UI after query runs):
   Shows a node-by-node execution graph with time and data statistics.
 
 OPERATOR TYPES YOU WILL SEE:
@@ -797,89 +837,120 @@ OPERATOR TYPES YOU WILL SEE:
   Aggregate:       GROUP BY computation
   Sort:            ORDER BY
   WindowFunction:  OVER (PARTITION BY ... ORDER BY ...)
-  Result:          sending results to client
   Exchange:        redistributing data between nodes for parallel ops
 
 KEY METRICS PER OPERATOR:
   Time (ms):             how long this operator took
-  Rows:                  how many rows this operator processed
-  Bytes:                 how many bytes read/written
-  Partitions scanned:    (TableScan only) vs total partitions
+  Rows / Bytes:          how much data this operator processed
+  Partitions scanned:    (TableScan only) vs total partitions`}</CodeBox>
 
-BOTTLENECK PATTERNS AND FIXES:
-  1. TableScan reads most partitions:
-     Metric: "Partitions scanned: 9,800 / 10,000"
-     Cause:  No pruning — filter column not in cluster key
-     Fix:    ALTER TABLE CLUSTER BY (filter_column)
-             Or: check that filter uses column directly, not inside function
+        <SubSubTitle>Four bottleneck patterns and their fixes</SubSubTitle>
+        <CodeBox label="Bottleneck patterns and fixes">{`1. TableScan reads most partitions:
+   Metric: "Partitions scanned: 9,800 / 10,000"
+   Cause:  No pruning — filter column not in cluster key
+   Fix:    ALTER TABLE CLUSTER BY (filter_column)
+           Or: check that filter uses column directly, not inside function
 
-  2. Large HASH JOIN with spilling:
-     Metric: "Bytes written to local storage" > 0 (spill to disk)
-     Cause:  Join tables too large for memory at this warehouse size
-     Fix:    Size up the warehouse OR filter before joining to reduce size
-             Or: ensure smaller table is the build side of the hash join
+2. Large HASH JOIN with spilling:
+   Metric: "Bytes written to local storage" > 0 (spill to disk)
+   Cause:  Join tables too large for memory at this warehouse size
+   Fix:    Size up the warehouse OR filter before joining to reduce size
 
-  3. Slow Aggregate:
-     Metric: Aggregate node takes most of query time
-     Cause:  GROUP BY on many distinct values, many output rows
-     Fix:    Pre-aggregate in Silver/Gold dbt model if this runs frequently
-             Push down filters to reduce rows before aggregation
+3. Slow Aggregate:
+   Metric: Aggregate node takes most of query time
+   Cause:  GROUP BY on many distinct values, many output rows
+   Fix:    Pre-aggregate in Silver/Gold dbt model if this runs frequently
 
-  4. WindowFunction with many rows:
-     Metric: WindowFunction node is slow, large data volume
-     Cause:  OVER (PARTITION BY customer_id) when customer_id is unique
-             → window function has to keep all rows in memory
-     Fix:    Ensure PARTITION BY is on a selective column that groups rows
-
-PRACTICAL USAGE:
-  After any query that is slower than expected:
-  1. Click "Query ID" in Snowflake UI → "Query Profile"
-  2. Find the slowest node (highest % of total time)
-  3. Read the metrics on that node to diagnose the cause
-  4. Apply the appropriate fix above
-  Most query performance issues fall into one of three categories:
-  partition pruning not working, join order wrong, or warehouse too small.`}</CodeBox>
+4. WindowFunction with many rows:
+   Metric: WindowFunction node is slow, large data volume
+   Cause:  OVER (PARTITION BY customer_id) when customer_id is unique
+   Fix:    Ensure PARTITION BY is on a selective column that groups rows`}</CodeBox>
+        <Output>{`Most query performance issues fall into one of three categories:
+partition pruning not working, join order wrong, or warehouse too small.
+Diagnose which one before applying any fix.`}</Output>
 
         <SubTitle>EXPLAIN in PostgreSQL — reading row estimates and scan types</SubTitle>
 
-        <CodeBox label="PostgreSQL EXPLAIN ANALYZE — what each component means">{`EXPLAIN ANALYZE
+        <SubSubTitle>A Hash Join query and its full EXPLAIN ANALYZE output</SubSubTitle>
+        <CodeBox label="PostgreSQL EXPLAIN ANALYZE — a Hash Join query">{`EXPLAIN ANALYZE
 SELECT o.order_id, c.name, o.amount
 FROM silver.orders o
 JOIN silver.customers c ON o.customer_id = c.customer_id
-WHERE o.order_date = '2026-03-17';
+WHERE o.order_date = '2026-03-17';`}</CodeBox>
+        <Output>{`Hash Join  (cost=12847.00..98432.00 rows=48234 width=28)
+            (actual time=124ms..892ms rows=48109 loops=1)
+  Hash Cond: (o.customer_id = c.customer_id)
+  ->  Index Scan using idx_orders_date on orders o
+        (cost=0.44..48291.00 rows=48234 width=20)
+        (actual time=0.04ms..124ms rows=48234 loops=1)
+      Index Cond: (order_date = '2026-03-17'::date)
+  ->  Hash  (cost=7823.00..7823.00 rows=812345 width=16)
+        (actual time=98ms..98ms rows=812345 loops=1)
+        ->  Seq Scan on customers c
+              (cost=0.00..7823.00 rows=812345 width=16)
+              (actual time=0.03ms..54ms rows=812345 loops=1)
+Planning Time: 1.2 ms
+Execution Time: 897 ms`}</Output>
 
--- Sample output:
--- Hash Join  (cost=12847.00..98432.00 rows=48234 width=28)
---             (actual time=124ms..892ms rows=48109 loops=1)
---   Hash Cond: (o.customer_id = c.customer_id)
---   ->  Index Scan using idx_orders_date on orders o
---         (cost=0.44..48291.00 rows=48234 width=20)
---         (actual time=0.04ms..124ms rows=48234 loops=1)
---       Index Cond: (order_date = '2026-03-17'::date)
---   ->  Hash  (cost=7823.00..7823.00 rows=812345 width=16)
---         (actual time=98ms..98ms rows=812345 loops=1)
---         ->  Seq Scan on customers c
---               (cost=0.00..7823.00 rows=812345 width=16)
---               (actual time=0.03ms..54ms rows=812345 loops=1)
--- Planning Time: 1.2 ms
--- Execution Time: 897 ms
+        <SubSubTitle>What each line means, and the red flags to scan for</SubSubTitle>
+        <CodeBox label="Reading EXPLAIN output and red flags">{`WHAT TO READ:
+Index Scan (vs Seq Scan): orders is using an index on order_date ✓
+  → index was used for the WHERE filter — efficient
+Seq Scan on customers: full table scan — no index used
+  → 812,345 rows scanned just to build hash table — expected for large dim table
+Hash Join: one table (customers) loaded into hash table, other (orders) probed
+  → orders is the probe side (smaller matching set) — correct order ✓
+actual time vs cost: actual rows 48,109 vs estimated 48,234 — close ✓
+  if actual >> estimated: stale statistics, run ANALYZE
 
--- WHAT TO READ:
--- Index Scan (vs Seq Scan): orders is using an index on order_date ✓
---   → index was used for the WHERE filter — efficient
--- Seq Scan on customers: full table scan — no index used
---   → 812,345 rows scanned just to build hash table — expected for large dim table
--- Hash Join: one table (customers) loaded into hash table, other (orders) probed
---   → orders is the probe side (smaller matching set) — correct order ✓
--- actual time vs cost: actual rows 48,109 vs estimated 48,234 — close ✓
---   if actual >> estimated: stale statistics, run ANALYZE
--- Execution Time 897ms: reasonable for 48k rows joining to 812k rows
+RED FLAGS IN EXPLAIN OUTPUT:
+Seq Scan on large table with filter → missing index
+Hash Join with very different estimated vs actual rows → stale stats → ANALYZE
+Nested Loop with large outer table → wrong join type for this size → HashJoin needed
+Sort on large data set without index → ORDER BY without index → add index or avoid`}</CodeBox>
 
--- RED FLAGS IN EXPLAIN OUTPUT:
--- Seq Scan on large table with filter → missing index
--- Hash Join with very different estimated vs actual rows → stale stats → ANALYZE
--- Nested Loop with large outer table → wrong join type for this size → HashJoin needed
--- Sort on large data set without index → ORDER BY without index → add index or avoid`}</CodeBox>
+        <TryThis>
+          Take your slowest recurring query and open its Snowflake Query Profile (or run
+          EXPLAIN ANALYZE if it's Postgres/Redshift). Find the single most expensive
+          operator first, before changing anything — most engineers waste time optimizing
+          a step that was never the actual bottleneck.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Warehouse Internals</SectionTitle>
+
+        {[
+          {
+            wrong: '"Columnar storage is just better than row storage, full stop"',
+            right: 'Part 02 is explicit that this only holds for analytical queries reading a few columns from many rows. Row storage remains superior for OLTP workloads — a transactional UPDATE or a point lookup by primary key needs every column of one specific row, which row storage reads naturally and columnar storage has to reassemble.',
+          },
+          {
+            wrong: '"If a query is slow, the fix is always to size up the warehouse"',
+            right: 'Part 05\'s sizing decision process is explicit that sizing up only helps when the query profile shows spilling to disk — a memory problem. If Part 03\'s pruning check shows the query is scanning nearly every micro-partition, a bigger warehouse just scans the same 98% of data faster and more expensively; the fix is a cluster key, not more compute.',
+          },
+          {
+            wrong: '"The result cache means dashboard data is always current"',
+            right: 'Part 04 is specific about the opposite risk: the result cache serves a cached result for up to 24 hours as long as the underlying tables haven\'t changed and the SQL text matches exactly. A dashboard refresh scheduled before the pipeline finishes can silently serve yesterday\'s numbers — this exact scenario appears in this module\'s Error Library.',
+          },
+          {
+            wrong: '"CLUSTER BY works like an index — add it to any column you filter on"',
+            right: 'Part 03\'s cluster key selection rules explicitly warn against this: clustering a small table, a boolean, or a microsecond-precision timestamp adds ongoing reclustering compute cost for little or no pruning benefit. Unlike a free index in an OLTP database, a Snowflake cluster key is a background job that keeps running and keeps costing credits.',
+          },
+          {
+            wrong: '"Snowflake, BigQuery, and Redshift are interchangeable — it\'s all just SQL"',
+            right: 'Part 06\'s comparison table shows the compute and storage models are fundamentally different — Redshift\'s DISTKEY has no equivalent in Snowflake\'s micro-partition model, and treating the platforms as identical is exactly how teams end up with unmatched Redshift distribution keys and the expensive DS_DIST_BOTH joins covered in Part 06 and this module\'s Error Library.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1076,6 +1147,45 @@ Fifth, check if the result cache was invalidated more frequently. If the pipelin
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Wrapping the filter column in a function — WHERE YEAR(order_date) = 2026 — and being surprised pruning stopped working',
+            a: 'Part 03\'s pruning section and this module\'s Error Library both cover this exact anti-pattern: Snowflake\'s micro-partition metadata stores min/max on the raw column, not on the result of a function applied to it, so any function wrapping the filter column forces a full scan. Rewrite the filter as a direct range comparison on the column itself.',
+          },
+          {
+            q: 'Sizing a warehouse up whenever a query is slow, without checking why it\'s slow first',
+            a: 'Part 05\'s sizing decision process is explicit that a bigger warehouse only fixes a memory problem (spilling to disk). If the real cause is Part 03\'s missing pruning, a bigger warehouse just scans the same near-100% of partitions faster and more expensively — check the query profile before reaching for a size increase.',
+          },
+          {
+            q: 'Loading a large historical backfill in random or unsorted order, then being surprised query performance collapses afterward',
+            a: 'Part 03\'s cluster key section and this module\'s Error Library both describe this scenario: an out-of-order backfill interleaves old and new data across micro-partitions, destroying the natural date ordering that pruning depended on. Load historical data in chronological order, or recluster immediately after a large out-of-order load.',
+          },
+          {
+            q: 'Assuming a frequently-joined dimension table\'s distribution key doesn\'t matter because the table is "small"',
+            a: 'Part 06 is specific that DISTSTYLE ALL exists exactly for this case — a small dimension table copied to every node eliminates redistribution entirely. Leaving it on DISTSTYLE EVEN or an unrelated key forces Redshift to redistribute it across the network on every join, which is the DS_DIST_BOTH pattern covered in Part 06 and the Error Library.',
+          },
+          {
+            q: 'Never running VACUUM or ANALYZE after a large Redshift load, then blaming the query for a bad join plan',
+            a: 'Part 06 states plainly that Redshift does not auto-update table statistics — a large load without a follow-up ANALYZE leaves the query planner working from stale row counts, which produces exactly the kind of poor join-order and join-type decisions this module\'s Error Library shows for Redshift.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1150,7 +1260,7 @@ Fifth, check if the result cache was invalidated more frequently. If the pipelin
         'Read query profiles after any slow query. In Snowflake: check partitions scanned vs total (pruning), spill to disk (warehouse too small), and the slowest operator (bottleneck). In PostgreSQL EXPLAIN ANALYZE: check for Seq Scan where Index Scan is expected, large discrepancy between estimated and actual rows (stale statistics), and DS_DIST_BOTH in Redshift (wrong distribution keys).',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
