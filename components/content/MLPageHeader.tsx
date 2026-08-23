@@ -79,7 +79,7 @@ export default function MLPageHeader({ section, topic, completedTopics = [] }: P
             const href = t.slug === 'ml-interview-prep' ? `/learn/ai-ml/${t.slug}` : `/learn/ai-ml/${section}/${t.slug}`
             return (
               <Link key={t.slug} href={href} style={{ flex: 1, fontSize: 9, textAlign: 'center' as const, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, color: isDone ? '#00e676' : isActive ? color : 'var(--muted)', fontWeight: isActive ? 700 : 400, textDecoration: 'none', fontFamily: 'var(--font-mono)', opacity: isDone || isActive ? 1 : 0.6 }} title={t.title}>
-                {t.title.split(' ')[0]}
+                {t.title}
               </Link>
             )
           })}

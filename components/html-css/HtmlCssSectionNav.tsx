@@ -98,7 +98,7 @@ export default function HtmlCssSectionNav({ slug }: { slug: string }) {
                   opacity: isActive || isLive ? 1 : 0.5,
                 }}
               >
-                {m.title.split(' ')[0]}
+                {m.title}
               </Link>
             )
           })}
