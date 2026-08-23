@@ -36,12 +36,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -53,6 +57,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
       background: 'var(--bg2)', border: '1px solid var(--border)',
       borderRadius: 10, padding: '18px 22px', overflowX: 'auto',
       fontSize: 13, lineHeight: 1.9, color: 'var(--text)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
       fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
     }}>
       <code>{children}</code>
@@ -73,6 +98,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   </div>
 )
 
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
+)
+
 // ── Page ────────────────────────────────────────────────────────────────────
 
 export default function RolesComparisonModule() {
@@ -82,7 +125,7 @@ export default function RolesComparisonModule() {
       description="Clear permanent boundaries between the four most confused roles in tech."
       section="Data Engineering — Module 05"
       readTime="45 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why the Confusion Exists ───────────────────────── */}
@@ -151,6 +194,13 @@ export default function RolesComparisonModule() {
           These questions require different skills, different tools, and different kinds
           of thinking. They are not interchangeable.
         </Para>
+
+        <TryThis>
+          Pick a data-related task you or a teammate did this week. Match it to the one
+          "core question" above that it actually answers. If the task doesn't cleanly match
+          the role doing it — an engineer building a dashboard, an analyst maintaining a
+          pipeline — that's a real signal worth naming, not just an interesting exercise.
+        </TryThis>
       </section>
 
       <Divider />
@@ -619,7 +669,8 @@ SKILLS PROFILE:
           dimension compared across all four roles at once.
         </Para>
 
-        <CodeBox label="Four roles compared across every important dimension">{`DIMENSION          DATA ENGINEER    DATA ANALYST     DATA SCIENTIST   ML ENGINEER
+        <SubSubTitle>The core question, output, and skill each role centers on</SubSubTitle>
+        <CodeBox label="Four roles compared — question, output, primary skill, SQL and Python usage">{`DIMENSION          DATA ENGINEER    DATA ANALYST     DATA SCIENTIST   ML ENGINEER
 ─────────────────────────────────────────────────────────────────────────────────
 Core question      "Is data moving  "What happened   "What will       "How do predictions
                    reliably?"       and why?"        happen next?"    reach users at scale?"
@@ -633,8 +684,11 @@ Primary skill      Python +         SQL +            Python +         Python +
 SQL usage          Build models     Query for        Extract features Query for
                    that run daily   ad-hoc answers   for training     monitoring
 
-Python usage       Pipeline code    Basic scripts    Model training   APIs + infra
+Python usage       Pipeline code    Basic scripts    Model training   APIs + infra`}</CodeBox>
 
+        <SubSubTitle>What each role cares about, depends on, and gets blocked by</SubSubTitle>
+        <CodeBox label="Four roles compared — data quality focus, dependencies, and blockers">{`DIMENSION          DATA ENGINEER    DATA ANALYST     DATA SCIENTIST   ML ENGINEER
+─────────────────────────────────────────────────────────────────────────────────
 Cares about        Pipeline         Business logic   Statistical      Model latency,
 data quality for   correctness      correctness      quality of data  throughput, drift
 
@@ -664,6 +718,7 @@ Typical background CS, SWE, or      Business, econ,  Statistics,      SWE or DS 
           everyone downstream less effective.
         </Para>
 
+        <SubSubTitle>From raw data to production ML features</SubSubTitle>
         <CodeBox label="The dependency chain — who enables whom">{`Raw data in source systems
          │
          │  Ingestion, transformation, quality, reliability
@@ -693,9 +748,10 @@ planning                 Serves predictions in real-time
                               ▼
                          Production ML features
                          (recommendations, fraud scores,
-                          demand forecasts, rankings)
+                          demand forecasts, rankings)`}</CodeBox>
 
-Impact of DE failure:
+        <SubSubTitle>What breaks downstream when the data engineer's pipeline fails</SubSubTitle>
+        <CodeBox label="The cost of a DE failure, propagated through the chain">{`Impact of DE failure:
   If DE pipelines fail:
     → Analyst has no data to analyse → dashboard goes stale
     → Scientist has no training data → models cannot be retrained
@@ -805,6 +861,13 @@ Impact of DE failure:
           If you enjoy SQL data modelling more than pipeline infrastructure, this is an
           increasingly viable career path with strong demand in 2026.
         </Para>
+
+        <TryThis>
+          Identify which of the four company stages above your own team is closest to.
+          Then check whether your job title matches the actual mix of work you're doing —
+          per this Part's Callout, a title mismatch is worth naming and clarifying, not
+          just tolerating.
+        </TryThis>
       </section>
 
       <Divider />
@@ -929,6 +992,49 @@ ML Engineer        18–24 months   Requires strong software engineering first,
 
 These timelines assume 15–20 hours/week of focused study.
 Consistent daily practice beats intensive weekend sprints.`}</CodeBox>
+
+        <TryThis>
+          Answer the three self-assessment questions above as honestly as you can, without
+          trying to guess the "right" answer. See which role comes up most. Then compare
+          that against the role you're currently pursuing or studying for — if they
+          disagree, that's worth sitting with rather than dismissing.
+        </TryThis>
+      </section>
+
+      <Divider />
+
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About These Four Roles</SectionTitle>
+
+        {[
+          {
+            wrong: '"A \'Data Scientist\' job title always means the person does statistical modelling and ML"',
+            right: 'Part 07\'s company-stage breakdown and Interview Prep Q2 both say the opposite: at companies below Series B, "Data Scientist" often means "person who does all data work including engineering." The title is not a reliable description of the actual work — read the responsibilities, not the label.',
+          },
+          {
+            wrong: '"A data engineer and a data analyst are basically the same role since both use SQL heavily"',
+            right: 'Part 03\'s "key difference" section draws the real line: an analyst uses SQL to ask one-off questions, while an engineer uses SQL to build models that run automatically in production every day. Same language, fundamentally different relationship to that language.',
+          },
+          {
+            wrong: '"An ML engineer is just a data scientist who also happens to know how to code"',
+            right: 'Part 05\'s "how ML engineer differs from data scientist" section is explicit that they optimise for genuinely different things — a data scientist optimises for model accuracy, an ML engineer optimises for reliability, latency, and throughput at scale. It\'s a different job, not a superset of the same one.',
+          },
+          {
+            wrong: '"If a data scientist is stuck cleaning data all day, they just need to get faster at Python"',
+            right: 'Interview Prep Q3 and Q5 both point the other direction: 60–80% of time on data cleaning at a poorly-engineered company is a data engineering failure, not a personal skill gap. The fix is better Silver tables and quality checks upstream, not a faster analyst.',
+          },
+          {
+            wrong: '"The \'unicorn\' generalist who does all four roles is the ideal a growing data team should aim for"',
+            right: 'Part 07 frames the unicorn stage as something startups fall into out of necessity — covering all four roles "inadequately but acceptably for the business stage" — not an aspirational target. The module\'s whole progression through company stages shows specialisation, not generalism, as the sign of a maturing, more effective team.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
       </section>
 
       <Divider />
@@ -1139,6 +1245,45 @@ The broader principle: data engineering success is measured by whether downstrea
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Treating a metric mismatch between two teams as a pipeline bug before checking whether the definitions actually agree',
+            a: 'This module\'s Error Library shows the "numbers don\'t match my manual calculation" case: the pipeline and the analyst were counting different things (all orders vs delivered orders only), not producing a bug. Trace both calculations to the exact point of divergence before assuming either side is wrong.',
+          },
+          {
+            q: 'Letting ad-hoc "can you rebuild this today?" feature requests bypass any prioritisation process',
+            a: 'This module\'s Error Library shows the cost directly — without a request process, urgent asks interrupt pipeline maintenance and create scope creep. A short specification (what the feature is, how to compute it, which sources) before scheduling the work protects both the requester and the engineer\'s backlog.',
+          },
+          {
+            q: 'Maintaining batch training-feature logic and real-time serving-feature logic as two separately-written implementations',
+            a: 'This module\'s Error Library shows the training-serving skew that results — a model trained on one computation of a feature making predictions on a subtly different computation in production. Part 05\'s ML Engineer section is explicit that feature logic needs one source of truth (a feature store or shared library), not parallel implementations that can silently drift apart.',
+          },
+          {
+            q: 'Assuming two independently-computed business metrics (like "revenue" from two different teams) should naturally agree',
+            a: 'This module\'s Error Library shows a $4.2M vs $3.9M revenue disagreement between the data team and finance — the fix wasn\'t a pipeline patch but a governance conversation to define the metric unambiguously and consolidate to one authoritative table. Two independent calculations of the same-sounding metric are a governance gap waiting to surface, not a coincidence to hope for.',
+          },
+          {
+            q: 'Not setting up role-based data access before a new team member\'s first day',
+            a: 'This module\'s Error Library shows a new data scientist blocked from day one by a permission-denied error on the exact table they needed. Define a data access matrix per role in advance so onboarding is a role assignment, not an individual permissions investigation under time pressure.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 12, padding: '24px 28px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1215,7 +1360,7 @@ The broader principle: data engineering success is measured by whether downstrea
         'For non-IT background candidates, Data Analyst (4–6 months to first job with SQL) is the most accessible entry point. Data Engineer (6–9 months) is next. Data Science requires longer because of the statistics foundation needed.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
