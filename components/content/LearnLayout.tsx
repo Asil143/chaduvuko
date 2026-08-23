@@ -270,10 +270,6 @@ export function LearnLayout({ children, title, description, section, readTime, u
             }}>
             <div className="sticky top-16 overflow-y-auto py-6 px-4"
               style={{ maxHeight: 'calc(100vh - 64px)' }}>
-              <div className="text-xs font-mono uppercase tracking-widest mb-4 px-2"
-                style={{ color: 'var(--muted)' }}>
-                On this page
-              </div>
               <TableOfContents />
             </div>
           </aside>
