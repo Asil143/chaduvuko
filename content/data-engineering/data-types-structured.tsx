@@ -36,12 +36,16 @@ const SubTitle = ({ children }: { children: React.ReactNode }) => (
   }}>{children}</h3>
 )
 
+const SubSubTitle = ({ children }: { children: React.ReactNode }) => (
+  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>{children}</h4>
+)
+
 const Para = ({ children }: { children: React.ReactNode }) => (
   <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.9, marginBottom: 20 }}>{children}</p>
 )
 
 const CodeBox = ({ children, label }: { children: string; label?: string }) => (
-  <div style={{ marginBottom: 24 }}>
+  <div style={{ marginBottom: 16 }}>
     {label && (
       <div style={{
         fontSize: 11, fontWeight: 700, color: 'var(--muted)',
@@ -53,6 +57,27 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
       background: 'var(--bg2)', border: '1px solid var(--border)',
       borderRadius: 10, padding: '18px 22px', overflowX: 'auto',
       fontSize: 13, lineHeight: 1.9, color: 'var(--text)',
+      fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
+    }}>
+      <code>{children}</code>
+    </pre>
+  </div>
+)
+
+const Output = ({ children }: { children: string }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{
+      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+      letterSpacing: '.1em', textTransform: 'uppercase',
+      marginBottom: 6, fontFamily: 'var(--font-mono)',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}>
+      <span style={{ opacity: 0.6 }}>▸</span> output
+    </div>
+    <pre style={{
+      background: 'transparent', border: '1px dashed var(--border)',
+      borderRadius: 10, padding: '14px 22px', overflowX: 'auto',
+      fontSize: 13, lineHeight: 1.8, color: 'var(--muted)',
       fontFamily: 'var(--font-mono)', margin: 0, whiteSpace: 'pre-wrap',
     }}>
       <code>{children}</code>
@@ -73,6 +98,24 @@ const HighlightBox = ({ children }: { children: React.ReactNode }) => (
   </div>
 )
 
+const TryThis = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    background: 'rgba(123,97,255,0.06)', border: '1px solid rgba(123,97,255,0.25)',
+    borderRadius: 10, padding: '16px 20px', marginBottom: 24,
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+  }}>
+    <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.5 }}>⌨️</span>
+    <div>
+      <div style={{
+        fontSize: 10, fontWeight: 700, color: 'var(--accent2)',
+        letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 6,
+        fontFamily: 'var(--font-mono)',
+      }}>Try this yourself</div>
+      <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>{children}</div>
+    </div>
+  </div>
+)
+
 // ── Page ────────────────────────────────────────────────────────────────────
 
 export default function DataTypesStructuredModule() {
@@ -82,7 +125,7 @@ export default function DataTypesStructuredModule() {
       description="The three categories every data engineer works with — what each demands from your pipeline."
       section="Data Engineering — Module 07"
       readTime="45 min"
-      updatedAt="March 2026"
+      updatedAt="August 2026"
     >
 
       {/* ── Part 01 — Why the Categories Matter ──────────────────────── */}
@@ -163,6 +206,13 @@ export default function DataTypesStructuredModule() {
           the most time on structured and semi-structured data — but understanding
           unstructured data is increasingly critical as AI workloads grow.
         </Callout>
+
+        <TryThis>
+          Pick any five data sources you interact with regularly — an app, a
+          spreadsheet, an email inbox, a chat log, a database table — and sort
+          each into one of the three categories before reading further. Then
+          check your answers against Part 05&rsquo;s comparison table.
+        </TryThis>
       </section>
 
       <Divider />
@@ -192,7 +242,7 @@ export default function DataTypesStructuredModule() {
           reality does not fit neatly into rows and columns.
         </Para>
 
-        <SubTitle>What makes it "structured"</SubTitle>
+        <SubSubTitle>What makes it &ldquo;structured&rdquo;</SubSubTitle>
 
         <Para>
           Structure means: before you read a single row of data, you know exactly
@@ -215,19 +265,17 @@ Schema (the contract):
 
 Row 1: [9284751, 4201938, 7823, 380.00, 'delivered', '2026-03-17 20:14:32']
 Row 2: [9284752, 1092847, 2341, 220.00, 'cancelled', '2026-03-17 20:15:01']
-Row 3: [9284753, 8374621, 7823, 540.00, 'confirmed', '2026-03-17 20:15:12']
 
 Properties:
   ✓ Every row has exactly the same columns
   ✓ Each column has a fixed data type enforced by the database
   ✓ Invalid data is REJECTED — try inserting order_amount='abc' and it fails
-  ✓ NULL constraints prevent missing required fields
   ✓ CHECK constraints enforce business rules (valid status values)
 
 This predictability is what makes SQL queries fast and reliable.
 A query engine knows exactly where each field is without parsing.`}</CodeBox>
 
-        <SubTitle>Where structured data lives</SubTitle>
+        <SubSubTitle>Where structured data lives</SubSubTitle>
 
         <Para>
           Structured data primarily lives in relational databases — PostgreSQL, MySQL,
@@ -305,9 +353,6 @@ Reality of vendor-supplied CSV files:
   Row with encoding issue:
     9284757,4201938,380.00,délivré     ← accented character — what encoding?
 
-  Header row missing entirely:
-    9284758,4201938,540.00,confirmed   ← is row 1 data or headers?
-
 Pipeline rule: always validate CSV structure before processing.
 Never assume a CSV is well-formed because it came from a "reliable" source.`}</CodeBox>
       </section>
@@ -363,9 +408,9 @@ Never assume a CSV is well-formed because it came from a "reliable" source.`}</C
           is not optional.
         </Para>
 
-        <CodeBox label="JSON — structure, nesting, and the engineering challenges it creates">{`A single DoorDash order as JSON — what an API actually returns:
+        <SubSubTitle>A single order, as an API actually returns it</SubSubTitle>
 
-{
+        <CodeBox label="A single DoorDash-style order as JSON">{`{
   "order_id": 9284751,
   "created_at": "2026-03-17T20:14:32-07:00",
   "customer": {
@@ -375,51 +420,28 @@ Never assume a CSV is well-formed because it came from a "reliable" source.`}</C
     "address": {
       "unit": "4B",
       "building": "Skyline Lofts",
-      "area": "Capitol Hill",
       "city": "Seattle",
       "zip_code": "98122",
       "lat": 47.6231,
       "lng": -122.3141
     }
   },
-  "restaurant": {
-    "id": 7823,
-    "name": "Punjabi Dhaba",
-    "city": "Seattle"
-  },
+  "restaurant": { "id": 7823, "name": "Punjabi Dhaba", "city": "Seattle" },
   "items": [
-    {
-      "id": "MI-001",
-      "name": "Butter Chicken",
-      "quantity": 1,
-      "unit_price": 18.99,
-      "customisations": ["extra gravy"]
-    },
-    {
-      "id": "MI-002",
-      "name": "Garlic Naan",
-      "quantity": 2,
-      "unit_price": 4.50,
-      "customisations": []
-    }
+    { "id": "MI-001", "name": "Butter Chicken", "quantity": 1,
+      "unit_price": 18.99, "customisations": ["extra gravy"] },
+    { "id": "MI-002", "name": "Garlic Naan", "quantity": 2,
+      "unit_price": 4.50, "customisations": [] }
   ],
-  "payment": {
-    "method": "card",
-    "card_last4": "4242",
-    "amount": 27.99,
-    "status": "captured"
-  },
-  "delivery": {
-    "agent_id": 83921,
-    "estimated_time_mins": 35,
-    "actual_time_mins": 42
-  },
+  "payment": { "method": "card", "card_last4": "4242",
+               "amount": 27.99, "status": "captured" },
+  "delivery": { "agent_id": 83921, "estimated_time_mins": 35, "actual_time_mins": 42 },
   "promo_code": null
-}
+}`}</CodeBox>
 
-Engineering challenges this single JSON creates:
+        <SubSubTitle>The five engineering challenges this single JSON creates</SubSubTitle>
 
-1. NESTING — customer.address.city is 3 levels deep.
+        <CodeBox label="Nesting, arrays, optional fields, type inconsistency, and timestamp format">{`1. NESTING — customer.address.city is 3 levels deep.
    To get city into a flat table you must flatten the hierarchy.
    SQL: customer['address']['city'] or JSON_EXTRACT()
 
@@ -450,35 +472,31 @@ Engineering challenges this single JSON creates:
           tasks in data engineering.
         </Para>
 
-        <CodeBox label="Flattening a nested JSON order into relational tables">{`Input: 1 JSON order object (as shown above)
-
-Output: multiple flat table rows
-
-Table: orders (one row per order)
-  order_id | created_at          | customer_id | restaurant_id | total_amount | payment_method | promo_code
-  9284751  | 2026-03-17 20:14:32 | 4201938     | 7823          | 27.99        | card           | NULL
+        <CodeBox label="Flattening the nested JSON order into four relational tables">{`Table: orders (one row per order)
+  order_id | created_at          | customer_id | restaurant_id | total_amount | promo_code
+  9284751  | 2026-03-17 20:14:32 | 4201938     | 7823          | 27.99        | NULL
 
 Table: order_items (one row per item — EXPLODED from items array)
-  order_id | item_id | item_name      | quantity | unit_price | customisations
-  9284751  | MI-001  | Butter Chicken | 1        | 18.99      | extra gravy
-  9284751  | MI-002  | Garlic Naan    | 2        | 4.50       | (empty)
+  order_id | item_id | item_name      | quantity | unit_price
+  9284751  | MI-001  | Butter Chicken | 1        | 18.99
+  9284751  | MI-002  | Garlic Naan    | 2        | 4.50
 
 Table: customers (one row per customer — EXTRACTED from nested customer object)
-  customer_id | name        | phone            | city      | zip_code | lat      | lng
-  4201938     | Sarah Chen  | +1-206-555-0142  | Seattle | 98122   | 47.6231  | -122.3141
+  customer_id | name        | city    | zip_code | lat      | lng
+  4201938     | Sarah Chen  | Seattle | 98122    | 47.6231  | -122.3141
 
 Table: deliveries (one row per delivery)
   order_id | agent_id | estimated_mins | actual_mins
-  9284751  | 83921    | 35             | 42
+  9284751  | 83921    | 35             | 42`}</CodeBox>
 
-Key decision: how deep to flatten?
-  Deep flatten: extract every nested field into its own column
-    → Easy for analysts to query, but breaks when nested structure changes
-  Shallow flatten: keep some nesting as JSON column in warehouse
-    → More resilient to schema changes, but requires JSON functions to query
-  
+        <Output>{`Key decision: how deep to flatten?
+Deep flatten:    extract every nested field into its own column
+  → Easy for analysts to query, but breaks when nested structure changes
+Shallow flatten: keep some nesting as a JSON column in the warehouse
+  → More resilient to schema changes, but requires JSON functions to query
+
 Most teams use a hybrid: flatten the top-level fields you know you need,
-keep rarely-needed deep nesting as a JSON column for flexibility.`}</CodeBox>
+keep rarely-needed deep nesting as a JSON column for flexibility.`}</Output>
 
         <SubTitle>XML — the older semi-structured format</SubTitle>
 
@@ -490,45 +508,31 @@ keep rarely-needed deep nesting as a JSON column for flexibility.`}</CodeBox>
           or government data sources, you will encounter XML regularly.
         </Para>
 
-        <CodeBox label="The same order data in XML — more verbose, same engineering challenges">{`<?xml version="1.0" encoding="UTF-8"?>
+        <CodeBox label="The same order data in XML">{`<?xml version="1.0" encoding="UTF-8"?>
 <order id="9284751">
   <created_at>2026-03-17T20:14:32-07:00</created_at>
   <customer id="4201938">
     <name>Sarah Chen</name>
-    <address>
-      <city>Seattle</city>
-      <zip_code>98122</zip_code>
-    </address>
+    <address><city>Seattle</city><zip_code>98122</zip_code></address>
   </customer>
   <items>
-    <item id="MI-001">
-      <name>Butter Chicken</name>
-      <quantity>1</quantity>
-      <unit_price>18.99</unit_price>
-    </item>
-    <item id="MI-002">
-      <name>Garlic Naan</name>
-      <quantity>2</quantity>
-      <unit_price>4.50</unit_price>
-    </item>
+    <item id="MI-001"><name>Butter Chicken</name><quantity>1</quantity><unit_price>18.99</unit_price></item>
+    <item id="MI-002"><name>Garlic Naan</name><quantity>2</quantity><unit_price>4.50</unit_price></item>
   </items>
   <payment method="card" amount="27.99" status="captured"/>
-</order>
+</order>`}</CodeBox>
 
-XML-specific engineering challenges:
-  → Namespaces: <ns0:order xmlns:ns0="http://schema.example.com/orders">
-    Different XML documents use namespace prefixes differently.
-    Always strip or normalise namespaces before parsing.
-
-  → Attributes vs elements: both <amount>380</amount> and
-    <payment amount="380"/> are valid XML for the same data.
-    Your parser must handle both.
-
-  → CDATA sections: text content that may contain special characters
-    is wrapped in <![CDATA[...]]> — must be unwrapped before use.
-
-  → Large XML files cannot be loaded into memory entirely.
-    Use streaming parsers (SAX in Python) for files > a few MB.`}</CodeBox>
+        <Output>{`XML-specific engineering challenges:
+→ Namespaces: <ns0:order xmlns:ns0="http://schema.example.com/orders">
+  Different XML documents use namespace prefixes differently — always
+  strip or normalise namespaces before parsing.
+→ Attributes vs elements: both <amount>380</amount> and
+  <payment amount="380"/> are valid XML for the same data — your parser
+  must handle both.
+→ CDATA sections: text content that may contain special characters is
+  wrapped in <![CDATA[...]]> — must be unwrapped before use.
+→ Large XML files cannot be loaded into memory entirely — use streaming
+  parsers (SAX in Python) for files over a few MB.`}</Output>
 
         <SubTitle>Log files — semi-structured but barely</SubTitle>
 
@@ -536,28 +540,18 @@ XML-specific engineering challenges:
           Application log files are technically semi-structured — each line has a
           timestamp, a severity, and a message — but the structure is inconsistently
           applied and the message content is free text. Log files are the most
-          challenging form of semi-structured data because the "schema" is defined
+          challenging form of semi-structured data because the &ldquo;schema&rdquo; is defined
           by developers writing log statements, not by a formal specification.
         </Para>
 
         <CodeBox label="Log file — semi-structured but requiring careful parsing">{`Raw application log (what you receive):
 2026-03-17 20:14:32.847 INFO  [OrderService] Order 9284751 placed by customer 4201938
-2026-03-17 20:14:33.012 INFO  [PaymentService] Payment captured: $27.99 via card
-2026-03-17 20:14:33.241 DEBUG [RestaurantService] Notifying restaurant 7823
 2026-03-17 20:15:02.119 WARN  [OrderService] Delivery estimate exceeding threshold: order 9284751
 2026-03-17 20:16:41.003 ERROR [PaymentService] Refund failed for order 9284754: timeout after 3s
 
-Parsing this requires:
-  1. Regex to extract timestamp, level, service, message
-  2. Further parsing of message field to extract IDs and values
-  3. Handling log lines that span multiple lines (stack traces)
-  4. Handling encoding variations (currency symbols, accented characters)
-  5. Dealing with log rotation and multiple log files per hour
-
-Pattern:
-  ^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3})\s+
-  (INFO|DEBUG|WARN|ERROR)\s+
-  \[([^\]]+)\]\s+(.+)$
+Parsing this requires: regex to extract timestamp/level/service/message,
+further parsing of the message field for IDs and values, handling
+multi-line stack traces, encoding variations, and log rotation.
 
 Structured log (what modern applications emit — much easier):
   {"timestamp":"2026-03-17T20:14:32.847Z","level":"INFO",
@@ -696,64 +690,53 @@ always push for structured JSON logging. It eliminates regex.`}</CodeBox>
         <SubTitle>How data engineers handle unstructured data</SubTitle>
 
         <Para>
-          A data engineer's relationship with unstructured data has three distinct
+          A data engineer&rsquo;s relationship with unstructured data has three distinct
           responsibilities, each requiring different skills and tools.
         </Para>
 
-        <CodeBox label="The three DE responsibilities with unstructured data">{`RESPONSIBILITY 1: Store and Organise
-  Unstructured data must be stored in object storage (S3, ADLS, GCS)
-  with a clear organisation scheme so it can be found and processed.
+        <SubSubTitle>Responsibility 1-2 — store and organise, then extract metadata</SubSubTitle>
 
+        <CodeBox label="A clear storage scheme, and the metadata worth extracting before any ML runs">{`RESPONSIBILITY 1: Store and Organise
   Bad:  s3://company-data/uploads/file1.jpg
   Good: s3://company-data/raw/product-images/category=electronics/
           sku=SKU-00283741/2026-03-17/image_001.jpg
 
-  Good organisation includes:
-    → Meaningful key prefix (not random UUIDs)
-    → Partition by date for time-range access
-    → Partition by category/type for selective processing
-    → Consistent naming convention
+  Good organisation includes: meaningful key prefix (not random UUIDs),
+  partition by date for time-range access, partition by category/type
+  for selective processing, consistent naming convention.
 
 RESPONSIBILITY 2: Extract Metadata
   Even before ML processing, extract the metadata that IS structured:
-
-  For images:    file_size, format (JPEG/PNG), dimensions (width×height),
-                 creation_date, source_system, associated_entity_id
-  For audio:     file_size, format (MP3/WAV), duration_seconds, sample_rate,
-                 call_id, agent_id, customer_id, call_timestamp
-  For documents: file_size, page_count, creation_date, author (if available),
-                 document_type, associated_case_id
+  For images:    file_size, format, dimensions, creation_date, associated_entity_id
+  For audio:     file_size, format, duration_seconds, call_id, agent_id, customer_id
+  For documents: file_size, page_count, creation_date, document_type
 
   This metadata is structured and immediately useful for filtering,
-  capacity planning, and processing queue management.
+  capacity planning, and processing queue management.`}</CodeBox>
 
-RESPONSIBILITY 3: Build Processing Pipelines
-  Orchestrate the ML models or transformation tools that convert
-  unstructured content into structured signals.
+        <SubSubTitle>Responsibility 3 — build the processing pipelines</SubSubTitle>
 
-  Image pipeline:
-    Raw image → resize/normalise → ML model → structured output
-    {sku: "SKU-283741", category: "electronics", has_watermark: false,
-     background: "white", product_visible: true, quality_score: 0.94}
+        <CodeBox label="Orchestrating ML models that convert raw content into structured signals">{`Image pipeline:
+  Raw image → resize/normalise → ML model → structured output
+  {sku: "SKU-283741", category: "electronics", has_watermark: false,
+   background: "white", product_visible: true, quality_score: 0.94}
 
-  Customer review pipeline:
-    Raw text → clean/normalise → NLP model → structured output
-    {review_id: 8734, sentiment: "negative", score: 0.23,
-     topics: ["delivery", "packaging"], entities: ["Seattle"],
-     urgency: "high", requires_response: true}
+Customer review pipeline:
+  Raw text → clean/normalise → NLP model → structured output
+  {review_id: 8734, sentiment: "negative", score: 0.23,
+   topics: ["delivery", "packaging"], urgency: "high", requires_response: true}
 
-  Call recording pipeline:
-    Audio file → speech-to-text → transcript → NLP → structured output
-    {call_id: "CALL-83921", duration_secs: 247, transcript: "...",
-     sentiment_overall: "frustrated", resolution: "refund_initiated",
-     agent_empathy_score: 0.78}`}</CodeBox>
+Call recording pipeline:
+  Audio file → speech-to-text → transcript → NLP → structured output
+  {call_id: "CALL-83921", duration_secs: 247,
+   sentiment_overall: "frustrated", resolution: "refund_initiated"}`}</CodeBox>
 
         <SubTitle>The data lakehouse for unstructured data</SubTitle>
 
         <Para>
           Unstructured data cannot live in a data warehouse — warehouses store tables,
           not images or audio files. Object storage (S3, ADLS, GCS) is the only viable
-          storage at scale for unstructured data. The data engineer's job is to build
+          storage at scale for unstructured data. The data engineer&rsquo;s job is to build
           a metadata layer that makes the unstructured data discoverable and processable
           alongside the structured and semi-structured data.
         </Para>
@@ -1106,6 +1089,42 @@ RESPONSIBILITY 3: Build Processing Pipelines
 
       <Divider />
 
+      {/* ── Misconceptions ────────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="myth">
+        <SectionTag text="// Misconceptions" />
+        <SectionTitle>Five Misconceptions About Data Categories</SectionTitle>
+
+        {[
+          {
+            wrong: '"A CSV file with a header row is structured data, the same way a database table is"',
+            right: 'Part 02\'s CSV trap section is direct about this: a CSV\'s "structure" is a visual convention, not an enforced contract — nothing stops a wrong column count, a text value in a numeric field, or an ambiguous empty cell. This module\'s Error Library shows the exact failure this produces (ValueError converting a vendor\'s "N/A" to a float).',
+          },
+          {
+            wrong: '"If a JSON field was present in the last 10,000 records, it\'s safe to access it directly"',
+            right: 'Part 03 is explicit that semi-structured data can change its shape at any time with no warning at the source — this module\'s Error Library shows exactly this failure (a KeyError on a promo_code field that\'s optional, not guaranteed), which is why .get() with a default is the standing rule, not a defensive-coding nicety.',
+          },
+          {
+            wrong: '"Deeply flattening every nested JSON field into its own column is always the more analyst-friendly choice"',
+            right: 'Part 03\'s flattening section and Interview Prep Q5 both argue the opposite for fields that are rarely queried or whose source schema changes often — flattening those adds schema clutter and ongoing maintenance for a field nobody asks for, while keeping it as a JSON column stays resilient and is still queryable when someone does need it.',
+          },
+          {
+            wrong: '"Unstructured data can\'t really be analyzed until someone builds a custom ML pipeline for it"',
+            right: 'Part 04\'s three responsibilities show real value exists before any ML model runs — metadata extraction alone (file size, duration, page count, associated entity IDs) is fully structured and immediately useful for filtering and capacity planning, independent of whether sentiment or OCR processing ever gets built.',
+          },
+          {
+            wrong: '"Storing semi-structured data in a data warehouse\'s JSON/VARIANT column is basically the same as flattening it into columns"',
+            right: 'Part 06\'s storage comparison draws a real distinction here — a VARIANT column still requires JSON-aware functions to query and doesn\'t get the same indexing/pruning benefits as a native column, which is exactly why the flattening decision in Part 03 matters even when the destination technically supports semi-structured storage.',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--red)', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>✕ &quot;{item.wrong}&quot;</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{item.right}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Part 08 — Real World ─────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="story">
         <SectionTag text="// Part 08 — Real World" />
@@ -1133,11 +1152,11 @@ RESPONSIBILITY 3: Build Processing Pipelines
           </div>
 
           <Para>
-            Your manager gives you a task: "Build a pipeline that ingests all data
+            Your manager gives you a task: &ldquo;Build a pipeline that ingests all data
             from our new claim processing workflow and makes it available for
             analysis. The workflow generates a claim record in PostgreSQL, a
             JSON event payload from the mobile app, and a scanned PDF of the
-            supporting document."
+            supporting document.&rdquo;
           </Para>
 
           <Para>
@@ -1283,6 +1302,42 @@ Fourth, when storage cost of the repeated keys is a concern. JSON stores keys wi
 
       <Divider />
 
+      {/* ── Common Mistakes ───────────────────────────────────────────── */}
+      <section style={{ marginBottom: 64 }} data-toc-kind="plain">
+        <SectionTag text="// Common Mistakes" />
+        <SectionTitle>Mistakes Beginners Make Constantly</SectionTitle>
+
+        {[
+          {
+            q: 'Trusting a vendor CSV\'s header row and column count without validating the actual rows',
+            a: 'Part 02\'s CSV trap section shows the full range of what "looks structured" hides — wrong column counts, text where numbers are expected, ambiguous nulls, unquoted delimiters inside a field. This module\'s Error Library shows the concrete failure: a "N/A" null indicator crashing a float conversion nobody expected to fail.',
+          },
+          {
+            q: 'Using direct key access (dict[\'field\']) on JSON instead of .get() with a default',
+            a: 'Part 03 and this module\'s Error Library are explicit about why this is fragile — an optional field that\'s simply absent (not null, absent) raises a KeyError the moment one record doesn\'t include it, which is a when, not an if, for any real-world JSON API.',
+          },
+          {
+            q: 'Joining a semi-structured document store to a fact table without checking cardinality first',
+            a: 'This module\'s Error Library documents exactly this: joining orders to a product catalogue stored as one document per variant (not one per SKU) triples the row count silently, because nothing enforced that each product_id maps to exactly one catalogue row.',
+          },
+          {
+            q: 'Assuming OCR output is reliable text without checking a confidence score',
+            a: 'This module\'s Error Library shows garbled OCR output from a low-resolution or skewed scan being stored as if it were trustworthy data. Image pre-processing (deskew, contrast, upscaling) plus logging the confidence score alongside the extracted text is what lets downstream consumers know when to distrust a result.',
+          },
+          {
+            q: 'Storing unstructured data with no metadata extraction, planning to "deal with it later" once an ML pipeline exists',
+            a: 'Part 04\'s three responsibilities are sequential for a reason — file size, format, duration, and associated entity IDs are all extractable immediately and are useful for filtering and capacity planning long before any sentiment or OCR model gets built. Skipping this step means reprocessing the entire raw archive just to answer "how much of this do we even have."',
+          },
+        ].map((item, i) => (
+          <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '24px 28px', marginBottom: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', marginBottom: 14, lineHeight: 1.4 }}>{item.q}</div>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>{item.a}</div>
+          </div>
+        ))}
+      </section>
+
+      <Divider />
+
       {/* ── Error Library ────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }} data-toc-kind="plain">
         <SectionTag text="// Error Library" />
@@ -1359,7 +1414,7 @@ Fourth, when storage cost of the repeated keys is a concern. JSON stores keys wi
         'Real companies handle all three data types simultaneously. Amazon has structured order tables, semi-structured product catalogue JSON, and unstructured product images — all flowing through different pipeline paths that converge in the Gold layer. A data engineer must be fluent in all three.',
       ]} />
 
-    
+
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>
