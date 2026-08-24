@@ -653,7 +653,14 @@ export default function PlaygroundPage() {
 
   return (
     <>
-      <style>{`
+      {/* dangerouslySetInnerHTML, not a JSX text child — React HTML-escapes
+          normal text children (" -> &quot;, ' -> &#x27;) during SSR, but
+          browsers never decode entities inside raw-text elements like
+          <style>, so any literal quote in this CSS (e.g. the select-arrow
+          SVG data URI below) made the server's escaped text permanently
+          disagree with the client's unescaped one, forcing React to discard
+          SSR output and fully re-render this page client-side on every load. */}
+      <style dangerouslySetInnerHTML={{ __html: `
         :root {
           --bg: #080808;
           --surface: #161616;
@@ -1267,7 +1274,7 @@ export default function PlaygroundPage() {
           border-radius: 4px;
           padding: 1px 6px;
         }
-      `}</style>
+      ` }} />
       <div className="pg-root">
         {showWhatsappPopup && (
           <div className="wa-overlay" onClick={dismissWhatsappPopup}>
