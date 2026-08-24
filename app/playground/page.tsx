@@ -353,14 +353,37 @@ export default function PlaygroundPage() {
     setMentorError('');
     setMentorReply('');
     try {
+      // The Mentor otherwise has no idea a challenge is even being attempted,
+      // and — for SQL specifically — query results live in sqlResults, not
+      // output/stdout, so a successful query would send it nothing to react to.
+      let challengeContext: string | null = null;
+      if (selectedLang.value === 'sql' && activeSqlChallenge) {
+        challengeContext = `"${activeSqlChallenge.title}" (${activeSqlChallenge.difficulty})\n`
+          + `Prompt: ${activeSqlChallenge.prompt}\n`
+          + `Expected columns: ${activeSqlChallenge.expectedColumns.join(', ')}\n`
+          + `Expected rows (any order): ${JSON.stringify(activeSqlChallenge.expectedRows)}`;
+      } else if (selectedLang.value !== 'sql' && activeChallenge && activeChallengeMatchesLang) {
+        challengeContext = `"${activeChallenge.title}" (${activeChallenge.difficulty})\n`
+          + `Prompt: ${activeChallenge.prompt}\n`
+          + `Expected output exactly: ${activeChallenge.expectedOutput}`;
+      }
+
+      const sqlResultsText = selectedLang.value === 'sql' && sqlResults && sqlResults.length > 0
+        ? sqlResults.map((r, i) =>
+            `Result set ${i + 1}: columns [${r.columns.join(', ')}], ${r.rows.length} row(s):\n`
+            + r.rows.slice(0, 20).map(row => row.join(' | ')).join('\n')
+          ).join('\n\n')
+        : output;
+
       const res = await fetch('/api/playground-mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           code,
           language: selectedLang.value,
-          stdout: output,
+          stdout: sqlResultsText,
           stderr,
+          challengeContext,
         }),
       });
       const data = await res.json();
@@ -377,7 +400,7 @@ export default function PlaygroundPage() {
     } finally {
       setMentorLoading(false);
     }
-  }, [code, selectedLang, output, stderr]);
+  }, [code, selectedLang, output, stderr, sqlResults, activeSqlChallenge, activeChallenge, activeChallengeMatchesLang]);
 
   const handleCopyShareLink = useCallback(async () => {
     try {
