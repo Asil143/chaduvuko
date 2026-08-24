@@ -105,6 +105,8 @@ export default function PlaygroundPage() {
   const [code, setCode] = useState(STARTER_CODE['python']);
   const [output, setOutput] = useState('');
   const [stderr, setStderr] = useState('');
+  const [sqlResults, setSqlResults] = useState<{ columns: string[]; rows: string[][] }[] | null>(null);
+  const sqlEngineRef = useRef<any>(null);
   const [loading, setLoading] = useState(false);
   const [ran, setRan] = useState(false);
   const [showWhatsappPopup, setShowWhatsappPopup] = useState(false);
@@ -361,6 +363,7 @@ export default function PlaygroundPage() {
     setCode(nextCode);
     setOutput('');
     setStderr('');
+    setSqlResults(null);
     setRan(false);
     setMentorReply('');
     setMentorError('');
@@ -371,15 +374,46 @@ export default function PlaygroundPage() {
     setLoading(true);
     setOutput('');
     setStderr('');
+    setSqlResults(null);
     setRan(false);
     setMentorReply('');
     setMentorError('');
     setChallengeResult(null);
 
     if (selectedLang.value === 'sql') {
-      setOutput('SQL execution coming soon — we\'re building an in-browser SQL runner.');
-      setLoading(false);
-      setRan(true);
+      try {
+        if (!sqlEngineRef.current) {
+          const initSqlJs = (await import('sql.js')).default;
+          sqlEngineRef.current = await initSqlJs({ locateFile: () => '/sqljs/sql-wasm.wasm' });
+        }
+        // Fresh database per run — same "whole script runs from scratch" model
+        // as every other language here, so a stray CREATE TABLE from a
+        // previous run can never silently linger and confuse the next one.
+        const db = new sqlEngineRef.current.Database();
+        let results: any[];
+        try {
+          results = db.exec(code);
+        } finally {
+          db.close();
+        }
+
+        if (!results || results.length === 0) {
+          setOutput('Query ran successfully. No rows returned.');
+        } else {
+          setSqlResults(results.map(r => ({
+            columns: r.columns,
+            rows: (r.values as any[][]).map(row =>
+              row.map(cell => (cell === null || cell === undefined ? 'NULL' : String(cell)))
+            ),
+          })));
+        }
+        recordSuccessfulRun('sql');
+      } catch (err: unknown) {
+        setStderr(err instanceof Error ? err.message : 'Query failed');
+      } finally {
+        setLoading(false);
+        setRan(true);
+      }
       return;
     }
 
@@ -590,6 +624,21 @@ export default function PlaygroundPage() {
         .pg-stdout { color: var(--text); }
         .pg-stderr { color: var(--red); }
         .pg-placeholder { color: var(--muted); font-style: italic; font-family: inherit; font-size: 0.82rem; }
+        .pg-sql-result + .pg-sql-result { margin-top: 14px; }
+        .pg-sql-result-label {
+          font-size: 0.7rem; color: var(--muted); text-transform: uppercase;
+          letter-spacing: 0.06em; margin-bottom: 6px;
+        }
+        .pg-sql-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
+        .pg-sql-table { border-collapse: collapse; font-size: 0.78rem; white-space: nowrap; width: 100%; }
+        .pg-sql-table th {
+          text-align: left; padding: 6px 10px; color: #06b6d4; font-weight: 700;
+          background: rgba(6,182,212,0.08); border-bottom: 1px solid var(--border);
+          position: sticky; top: 0;
+        }
+        .pg-sql-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
+        .pg-sql-table tr:last-child td { border-bottom: none; }
+        .pg-sql-null { color: var(--muted); font-style: italic; }
         .spinner {
           width: 14px; height: 14px;
           border: 2px solid rgba(0,0,0,0.3);
@@ -1155,7 +1204,30 @@ export default function PlaygroundPage() {
               )}
               {ran && output && <span className="pg-stdout">{output}</span>}
               {ran && stderr && <span className="pg-stderr">{stderr}</span>}
-              {ran && !output && !stderr && (
+              {ran && sqlResults && sqlResults.map((res, ri) => (
+                <div key={ri} className="pg-sql-result">
+                  {sqlResults.length > 1 && (
+                    <div className="pg-sql-result-label">Result {ri + 1} of {sqlResults.length} · {res.rows.length} row{res.rows.length !== 1 ? 's' : ''}</div>
+                  )}
+                  <div className="pg-sql-table-wrap">
+                    <table className="pg-sql-table">
+                      <thead>
+                        <tr>{res.columns.map(col => <th key={col}>{col}</th>)}</tr>
+                      </thead>
+                      <tbody>
+                        {res.rows.map((row, rowI) => (
+                          <tr key={rowI}>
+                            {row.map((cell, cellI) => (
+                              <td key={cellI} className={cell === 'NULL' ? 'pg-sql-null' : ''}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+              {ran && !output && !stderr && !sqlResults && (
                 <span className="pg-placeholder">No output.</span>
               )}
               {mentorReply && (
