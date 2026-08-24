@@ -218,9 +218,9 @@ export default function CodePlayground({
         </div>
       </div>
 
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes cp-spin { to { transform: rotate(360deg); } }
-      `}</style>
+      ` }} />
     </div>
   );
 }

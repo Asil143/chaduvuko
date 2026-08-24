@@ -140,7 +140,7 @@ export default function ChatBot() {
 
   return (
     <>
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes chad-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
         @keyframes chad-pop { 0%{transform:scale(0.88) translateY(10px);opacity:0} 100%{transform:scale(1) translateY(0);opacity:1} }
         @keyframes chad-pulse { 0%{transform:scale(1);opacity:.7} 100%{transform:scale(1.65);opacity:0} }
@@ -163,7 +163,7 @@ export default function ChatBot() {
           .chad-float { bottom: 80px !important; right: 16px !important; }
           .chad-window { width: calc(100vw - 24px) !important; right: -8px !important; }
         }
-      `}</style>
+      ` }} />
 
       <div className="chad-float" style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 9999 }}>
         {hasNew && !open && (

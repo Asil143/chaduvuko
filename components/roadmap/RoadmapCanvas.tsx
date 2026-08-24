@@ -119,7 +119,7 @@ function InlineCard({
       position: 'relative',
       animation: 'slideDown 0.2s ease',
     }}>
-      <style>{`@keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+      <style dangerouslySetInnerHTML={{ __html: `@keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }` }} />
 
       {/* Arrow pointing up */}
       <div style={{

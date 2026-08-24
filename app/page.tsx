@@ -631,10 +631,10 @@ export default function HomePage() {
       </div>
 
       {/* ── CSS ANIMATIONS ── */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.2} }
         @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-      `}</style>
+      ` }} />
     </>
   )
 }

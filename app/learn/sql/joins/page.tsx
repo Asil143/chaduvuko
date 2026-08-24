@@ -135,7 +135,7 @@ export default function VisualJoinsPage() {
       readTime="Interactive"
       updatedAt="April 2026"
     >
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes fadeSlideUp {
           from { opacity: 0; transform: translateY(10px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -154,7 +154,7 @@ export default function VisualJoinsPage() {
         }
         .join-row-left:hover  { cursor: pointer; }
         .join-row-right:hover { cursor: pointer; }
-      `}</style>
+      ` }} />
 
       {/* ── Join type tabs ─────────────────────────────────────────────── */}
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 32 }}>

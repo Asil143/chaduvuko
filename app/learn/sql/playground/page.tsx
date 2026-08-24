@@ -107,12 +107,12 @@ export default function SQLPlaygroundPage() {
       readTime="Interactive"
       updatedAt="April 2026"
     >
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
         @keyframes statusPulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
         .challenge-card { transition: all 0.18s ease; }
         .challenge-card:hover { transform: translateY(-1px); }
-      `}</style>
+      ` }} />
 
       {/* ── Hero status bar ─────────────────────────────────────────────── */}
       <div style={{
