@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { drawCoderCard, type CoderCardData } from '@/lib/coderCard';
 import { registerPlaygroundCompletions } from '@/lib/playgroundCompletions';
 import { PLAYGROUND_CHALLENGES, type PlaygroundChallenge } from '@/data/playgroundChallenges';
+import { IDIOM_PLAYGROUND_CHALLENGES } from '@/data/idiomPlaygroundChallenges';
 import { SQL_PLAYGROUND_CHALLENGES, type SqlPlaygroundChallenge } from '@/data/sqlPlaygroundChallenges';
 import { PLAYGROUND_DATABASES } from '@/data/playground-databases';
 
@@ -166,6 +167,7 @@ export default function PlaygroundPage() {
   // once the student switches to SQL (or vice versa), even though both can
   // independently stay "active" in state so switching back restores it.
   const displayChallenge = selectedLang.value === 'sql' ? activeSqlChallenge : activeChallenge;
+  const idiomChallengesForLang = IDIOM_PLAYGROUND_CHALLENGES.filter(ch => ch.language === selectedLang.value);
 
   useEffect(() => {
     if (sessionStorage.getItem(WHATSAPP_POPUP_SESSION_KEY)) return;
@@ -1181,6 +1183,15 @@ export default function PlaygroundPage() {
           flex-direction: column;
           gap: 8px;
         }
+        .challenge-modal-section {
+          font-size: 0.68rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--muted);
+          margin: 4px 0 -2px;
+        }
+        .challenge-modal-section:first-child { margin-top: 0; }
         .challenge-item {
           display: flex;
           align-items: center;
@@ -1308,6 +1319,21 @@ export default function PlaygroundPage() {
                 </div>
               ) : (
                 <div className="challenge-modal-list">
+                  {idiomChallengesForLang.length > 0 && (
+                    <div className="challenge-modal-section">{selectedLang.label} Idioms</div>
+                  )}
+                  {idiomChallengesForLang.map(ch => (
+                    <button key={ch.id} className="challenge-item" onClick={() => selectChallenge(ch)}>
+                      <span className="challenge-item-title">
+                        {solvedChallenges.includes(ch.id) && '✅'} {ch.title}
+                        <span className="challenge-item-db">{ch.concept}</span>
+                      </span>
+                      <span className={`challenge-diff challenge-diff-${ch.difficulty}`}>{ch.difficulty}</span>
+                    </button>
+                  ))}
+                  {idiomChallengesForLang.length > 0 && (
+                    <div className="challenge-modal-section">General</div>
+                  )}
                   {PLAYGROUND_CHALLENGES.map(ch => (
                     <button key={ch.id} className="challenge-item" onClick={() => selectChallenge(ch)}>
                       <span className="challenge-item-title">
@@ -1381,6 +1407,9 @@ export default function PlaygroundPage() {
                     {PLAYGROUND_DATABASES.find(d => d.id === activeSqlChallenge.dbId)?.name.split(' — ')[0]}
                     {activeSqlChallenge.dbId !== selectedDbId && ' — switch database to match'}
                   </span>
+                )}
+                {activeChallenge && selectedLang.value !== 'sql' && 'concept' in activeChallenge && (
+                  <span className="challenge-item-db">{(activeChallenge as { concept: string }).concept}</span>
                 )}
                 {challengeResult === 'pass' && (
                   <span className="challenge-result-badge challenge-result-pass">✓ Solved</span>
