@@ -582,6 +582,14 @@ export default function PlaygroundPage() {
           padding-right: 32px;
         }
         .pg-select:focus { border-color: var(--green); }
+        .pg-select-group { display: flex; align-items: center; gap: 6px; }
+        .pg-select-tag {
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: var(--muted);
+          white-space: nowrap;
+        }
         .pg-run-btn {
           display: flex;
           align-items: center;
@@ -1200,25 +1208,31 @@ export default function PlaygroundPage() {
               {shareCopied ? <span className="share-copied-toast">Copied!</span> : '🔗 Share'}
             </button>
             {selectedLang.value === 'sql' && (
+              <div className="pg-select-group">
+                <span className="pg-select-tag">Database</span>
+                <select
+                  className="pg-select"
+                  value={selectedDbId}
+                  onChange={e => handleDbChange(e.target.value)}
+                >
+                  {PLAYGROUND_DATABASES.map(d => (
+                    <option key={d.id} value={d.id}>{d.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            <div className="pg-select-group">
+              {selectedLang.value === 'sql' && <span className="pg-select-tag">Language</span>}
               <select
                 className="pg-select"
-                value={selectedDbId}
-                onChange={e => handleDbChange(e.target.value)}
+                value={selectedLang.value}
+                onChange={e => handleLangChange(e.target.value)}
               >
-                {PLAYGROUND_DATABASES.map(d => (
-                  <option key={d.id} value={d.id}>{d.name}</option>
+                {LANGUAGES.map(l => (
+                  <option key={l.value} value={l.value}>{l.label}</option>
                 ))}
               </select>
-            )}
-            <select
-              className="pg-select"
-              value={selectedLang.value}
-              onChange={e => handleLangChange(e.target.value)}
-            >
-              {LANGUAGES.map(l => (
-                <option key={l.value} value={l.value}>{l.label}</option>
-              ))}
-            </select>
+            </div>
             <button className="pg-run-btn" onClick={handleRun} disabled={loading}>
               {loading ? <span className="spinner" /> : '▶'}
               {loading ? 'Running…' : 'Run'}
