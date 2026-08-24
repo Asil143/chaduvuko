@@ -409,7 +409,11 @@ export default function PlaygroundPage() {
     setChallengeResult(null);
   }, []);
 
-  const handleRun = useCallback(async () => {
+  // Takes the query text explicitly (rather than reading `code` state) so
+  // callers like previewTable() can set the editor AND execute in one go —
+  // calling handleRun() right after setCode() would still run the *previous*
+  // code, since state updates aren't visible until the next render.
+  const runSqlQuery = useCallback(async (queryText: string) => {
     setLoading(true);
     setOutput('');
     setStderr('');
@@ -419,44 +423,65 @@ export default function PlaygroundPage() {
     setMentorError('');
     setChallengeResult(null);
 
-    if (selectedLang.value === 'sql') {
-      try {
-        if (!sqlEngineRef.current) {
-          const initSqlJs = (await import('sql.js')).default;
-          sqlEngineRef.current = await initSqlJs({ locateFile: () => '/sqljs/sql-wasm.wasm' });
-        }
-        // Fresh database per run — same "whole script runs from scratch" model
-        // as every other language here, so a stray CREATE TABLE from a
-        // previous run can never silently linger and confuse the next one.
-        const db = new sqlEngineRef.current.Database();
-        let results: any[];
-        try {
-          if (selectedDb.schemaSql) db.exec(selectedDb.schemaSql);
-          if (selectedDb.seedSql) db.exec(selectedDb.seedSql);
-          results = db.exec(code);
-        } finally {
-          db.close();
-        }
-
-        if (!results || results.length === 0) {
-          setOutput('Query ran successfully. No rows returned.');
-        } else {
-          setSqlResults(results.map(r => ({
-            columns: r.columns,
-            rows: (r.values as any[][]).map(row =>
-              row.map(cell => (cell === null || cell === undefined ? 'NULL' : String(cell)))
-            ),
-          })));
-        }
-        recordSuccessfulRun('sql');
-      } catch (err: unknown) {
-        setStderr(err instanceof Error ? err.message : 'Query failed');
-      } finally {
-        setLoading(false);
-        setRan(true);
+    try {
+      if (!sqlEngineRef.current) {
+        const initSqlJs = (await import('sql.js')).default;
+        sqlEngineRef.current = await initSqlJs({ locateFile: () => '/sqljs/sql-wasm.wasm' });
       }
+      // Fresh database per run — same "whole script runs from scratch" model
+      // as every other language here, so a stray CREATE TABLE from a
+      // previous run can never silently linger and confuse the next one.
+      const db = new sqlEngineRef.current.Database();
+      let results: any[];
+      try {
+        if (selectedDb.schemaSql) db.exec(selectedDb.schemaSql);
+        if (selectedDb.seedSql) db.exec(selectedDb.seedSql);
+        results = db.exec(queryText);
+      } finally {
+        db.close();
+      }
+
+      if (!results || results.length === 0) {
+        setOutput('Query ran successfully. No rows returned.');
+      } else {
+        setSqlResults(results.map(r => ({
+          columns: r.columns,
+          rows: (r.values as any[][]).map(row =>
+            row.map(cell => (cell === null || cell === undefined ? 'NULL' : String(cell)))
+          ),
+        })));
+      }
+      recordSuccessfulRun('sql');
+    } catch (err: unknown) {
+      setStderr(err instanceof Error ? err.message : 'Query failed');
+    } finally {
+      setLoading(false);
+      setRan(true);
+    }
+  }, [selectedDb, recordSuccessfulRun]);
+
+  // Lets a student click a table in the schema panel to see its full
+  // contents immediately, without hand-typing SELECT * FROM ... themselves.
+  const previewTable = useCallback((tableName: string) => {
+    const query = `SELECT * FROM ${tableName};`;
+    setCode(query);
+    runSqlQuery(query);
+  }, [runSqlQuery]);
+
+  const handleRun = useCallback(async () => {
+    if (selectedLang.value === 'sql') {
+      await runSqlQuery(code);
       return;
     }
+
+    setLoading(true);
+    setOutput('');
+    setStderr('');
+    setSqlResults(null);
+    setRan(false);
+    setMentorReply('');
+    setMentorError('');
+    setChallengeResult(null);
 
     const pistonLanguage = selectedLang.pistonRuntime;
 
@@ -519,7 +544,7 @@ export default function PlaygroundPage() {
       setLoading(false);
       setRan(true);
     }
-  }, [code, selectedLang, recordSuccessfulRun, stdin, activeChallenge, selectedDb]);
+  }, [code, selectedLang, recordSuccessfulRun, stdin, activeChallenge, runSqlQuery]);
 
   return (
     <>
@@ -1044,6 +1069,20 @@ export default function PlaygroundPage() {
           justify-content: space-between;
         }
         .schema-table-count { font-size: 0.68rem; color: var(--muted); font-weight: 400; }
+        .schema-table-right { display: flex; align-items: center; gap: 8px; }
+        .schema-preview-btn {
+          font-family: inherit;
+          font-size: 0.68rem;
+          font-weight: 600;
+          color: var(--green);
+          background: transparent;
+          border: 1px solid var(--border);
+          border-radius: 4px;
+          padding: 2px 7px;
+          cursor: pointer;
+          white-space: nowrap;
+        }
+        .schema-preview-btn:hover { border-color: var(--green); }
         .schema-column {
           display: flex;
           align-items: baseline;
@@ -1309,7 +1348,16 @@ export default function PlaygroundPage() {
                       <div key={t.name} className="schema-table">
                         <div className="schema-table-name" style={{ borderLeftColor: t.color }}>
                           {t.name}
-                          <span className="schema-table-count">{t.rowCount} rows</span>
+                          <span className="schema-table-right">
+                            <span className="schema-table-count">{t.rowCount} rows</span>
+                            <button
+                              type="button"
+                              className="schema-preview-btn"
+                              onClick={() => previewTable(t.name)}
+                            >
+                              👁 View
+                            </button>
+                          </span>
                         </div>
                         {t.columns.map(c => (
                           <div key={c.name} className="schema-column">
