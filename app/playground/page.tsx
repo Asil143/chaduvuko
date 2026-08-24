@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { drawCoderCard, type CoderCardData } from '@/lib/coderCard';
 import { registerPlaygroundCompletions } from '@/lib/playgroundCompletions';
 import { PLAYGROUND_CHALLENGES, type PlaygroundChallenge } from '@/data/playgroundChallenges';
+import { SQL_PLAYGROUND_CHALLENGES, type SqlPlaygroundChallenge } from '@/data/sqlPlaygroundChallenges';
 import { PLAYGROUND_DATABASES } from '@/data/playground-databases';
 
 const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/KnPtWB3yzR3HM8CcQlHswD?s=cl&p=i&ilr=0';
@@ -28,6 +29,23 @@ function codeStorageKey(langValue: string, dbId: string) {
   return PG_KEY_CODE_PREFIX + (langValue === 'sql' ? `sql_${dbId}` : langValue);
 }
 const PG_KEY_CHALLENGES_SOLVED = 'chaduvuko_pg_challenges_solved';
+
+// Row order isn't guaranteed by SQL without an ORDER BY the student may not
+// have thought to add, so this checks the same rows are present (as a
+// multiset — duplicates still have to match in count) rather than requiring
+// the exact same order the reference solution happened to return.
+function sqlResultMatches(
+  actual: { columns: string[]; rows: string[][] },
+  expected: { columns: string[]; rows: string[][] }
+): boolean {
+  if (actual.columns.length !== expected.columns.length) return false;
+  if (actual.rows.length !== expected.rows.length) return false;
+  const SEP = String.fromCharCode(1);
+  const normalize = (rows: string[][]) => rows.map(r => r.join(SEP)).sort();
+  const a = normalize(actual.rows);
+  const e = normalize(expected.rows);
+  return a.every((v, i) => v === e[i]);
+}
 
 const PG_LEVELS: { min: number; label: string; icon: string }[] = [
   { min: 0,   label: 'Rookie',  icon: '🌱' },
@@ -136,12 +154,18 @@ export default function PlaygroundPage() {
   const [showStdinPanel, setShowStdinPanel] = useState(false);
 
   const [activeChallenge, setActiveChallenge] = useState<PlaygroundChallenge | null>(null);
+  const [activeSqlChallenge, setActiveSqlChallenge] = useState<SqlPlaygroundChallenge | null>(null);
   const [showChallengeModal, setShowChallengeModal] = useState(false);
   const [challengeResult, setChallengeResult] = useState<'pass' | 'fail' | null>(null);
   const [solvedChallenges, setSolvedChallenges] = useState<string[]>([]);
   const [shareCopied, setShareCopied] = useState(false);
 
   const selectedDb = PLAYGROUND_DATABASES.find(d => d.id === selectedDbId) ?? PLAYGROUND_DATABASES[0];
+  // Which challenge banner to show depends on the currently selected
+  // language — a Python challenge picked earlier shouldn't linger on screen
+  // once the student switches to SQL (or vice versa), even though both can
+  // independently stay "active" in state so switching back restores it.
+  const displayChallenge = selectedLang.value === 'sql' ? activeSqlChallenge : activeChallenge;
 
   useEffect(() => {
     if (sessionStorage.getItem(WHATSAPP_POPUP_SESSION_KEY)) return;
@@ -366,8 +390,27 @@ export default function PlaygroundPage() {
     setShowChallengeModal(false);
   }, []);
 
+  // SQL challenges are tied to a specific sample database, so picking one
+  // also switches selectedDbId (with a confirm if it would discard code the
+  // student already wrote) and clears the editor to a blank slate — starting
+  // from an unrelated example query would defeat the point of the exercise.
+  const selectSqlChallenge = useCallback((challenge: SqlPlaygroundChallenge) => {
+    if (challenge.dbId !== selectedDbId) {
+      setSelectedDbId(challenge.dbId);
+    }
+    setActiveSqlChallenge(challenge);
+    setChallengeResult(null);
+    setShowChallengeModal(false);
+    setCode('-- Write your query here\n');
+    setOutput('');
+    setStderr('');
+    setSqlResults(null);
+    setRan(false);
+  }, [selectedDbId]);
+
   const clearChallenge = useCallback(() => {
     setActiveChallenge(null);
+    setActiveSqlChallenge(null);
     setChallengeResult(null);
   }, []);
 
@@ -441,16 +484,35 @@ export default function PlaygroundPage() {
         db.close();
       }
 
-      if (!results || results.length === 0) {
+      const mapped = (results || []).map(r => ({
+        columns: r.columns as string[],
+        rows: (r.values as any[][]).map(row =>
+          row.map(cell => (cell === null || cell === undefined ? 'NULL' : String(cell)))
+        ) as string[][],
+      }));
+
+      if (mapped.length === 0) {
         setOutput('Query ran successfully. No rows returned.');
       } else {
-        setSqlResults(results.map(r => ({
-          columns: r.columns,
-          rows: (r.values as any[][]).map(row =>
-            row.map(cell => (cell === null || cell === undefined ? 'NULL' : String(cell)))
-          ),
-        })));
+        setSqlResults(mapped);
       }
+
+      if (activeSqlChallenge && activeSqlChallenge.dbId === selectedDb.id) {
+        const passed = mapped.length > 0 && sqlResultMatches(mapped[0], {
+          columns: activeSqlChallenge.expectedColumns,
+          rows: activeSqlChallenge.expectedRows,
+        });
+        setChallengeResult(passed ? 'pass' : 'fail');
+        if (passed) {
+          setSolvedChallenges(prev => {
+            if (prev.includes(activeSqlChallenge.id)) return prev;
+            const next = [...prev, activeSqlChallenge.id];
+            try { localStorage.setItem(PG_KEY_CHALLENGES_SOLVED, JSON.stringify(next)); } catch {}
+            return next;
+          });
+        }
+      }
+
       recordSuccessfulRun('sql');
     } catch (err: unknown) {
       setStderr(err instanceof Error ? err.message : 'Query failed');
@@ -458,7 +520,7 @@ export default function PlaygroundPage() {
       setLoading(false);
       setRan(true);
     }
-  }, [selectedDb, recordSuccessfulRun]);
+  }, [selectedDb, recordSuccessfulRun, activeSqlChallenge]);
 
   // Lets a student click a table in the schema panel to see its full
   // contents immediately, without hand-typing SELECT * FROM ... themselves.
@@ -1142,6 +1204,17 @@ export default function PlaygroundPage() {
           align-items: center;
           gap: 8px;
         }
+        .challenge-item-db {
+          font-size: 0.65rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+          color: var(--muted);
+          background: var(--bg2);
+          border: 1px solid var(--border);
+          border-radius: 4px;
+          padding: 1px 6px;
+        }
       `}</style>
       <div className="pg-root">
         {showWhatsappPopup && (
@@ -1219,16 +1292,32 @@ export default function PlaygroundPage() {
             <div className="card-modal challenge-modal" onClick={e => e.stopPropagation()}>
               <button className="wa-close" onClick={() => setShowChallengeModal(false)} aria-label="Close">✕</button>
               <div className="challenge-modal-title">🎯 Pick a Challenge</div>
-              <div className="challenge-modal-list">
-                {PLAYGROUND_CHALLENGES.map(ch => (
-                  <button key={ch.id} className="challenge-item" onClick={() => selectChallenge(ch)}>
-                    <span className="challenge-item-title">
-                      {solvedChallenges.includes(ch.id) && '✅'} {ch.title}
-                    </span>
-                    <span className={`challenge-diff challenge-diff-${ch.difficulty}`}>{ch.difficulty}</span>
-                  </button>
-                ))}
-              </div>
+              {selectedLang.value === 'sql' ? (
+                <div className="challenge-modal-list">
+                  {SQL_PLAYGROUND_CHALLENGES.map(ch => (
+                    <button key={ch.id} className="challenge-item" onClick={() => selectSqlChallenge(ch)}>
+                      <span className="challenge-item-title">
+                        {solvedChallenges.includes(ch.id) && '✅'} {ch.title}
+                        <span className="challenge-item-db">
+                          {PLAYGROUND_DATABASES.find(d => d.id === ch.dbId)?.name.split(' — ')[0]}
+                        </span>
+                      </span>
+                      <span className={`challenge-diff challenge-diff-${ch.difficulty}`}>{ch.difficulty}</span>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="challenge-modal-list">
+                  {PLAYGROUND_CHALLENGES.map(ch => (
+                    <button key={ch.id} className="challenge-item" onClick={() => selectChallenge(ch)}>
+                      <span className="challenge-item-title">
+                        {solvedChallenges.includes(ch.id) && '✅'} {ch.title}
+                      </span>
+                      <span className={`challenge-diff challenge-diff-${ch.difficulty}`}>{ch.difficulty}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -1279,14 +1368,20 @@ export default function PlaygroundPage() {
           </div>
         </header>
 
-        {activeChallenge && (
+        {displayChallenge && (
           <div className="challenge-banner">
             <div className="challenge-banner-main">
               <div className="challenge-banner-title-row">
-                <span className="challenge-banner-title">🎯 {activeChallenge.title}</span>
-                <span className={`challenge-diff challenge-diff-${activeChallenge.difficulty}`}>
-                  {activeChallenge.difficulty}
+                <span className="challenge-banner-title">🎯 {displayChallenge.title}</span>
+                <span className={`challenge-diff challenge-diff-${displayChallenge.difficulty}`}>
+                  {displayChallenge.difficulty}
                 </span>
+                {activeSqlChallenge && selectedLang.value === 'sql' && (
+                  <span className="challenge-item-db">
+                    {PLAYGROUND_DATABASES.find(d => d.id === activeSqlChallenge.dbId)?.name.split(' — ')[0]}
+                    {activeSqlChallenge.dbId !== selectedDbId && ' — switch database to match'}
+                  </span>
+                )}
                 {challengeResult === 'pass' && (
                   <span className="challenge-result-badge challenge-result-pass">✓ Solved</span>
                 )}
@@ -1294,7 +1389,7 @@ export default function PlaygroundPage() {
                   <span className="challenge-result-badge challenge-result-fail">Not quite — check output</span>
                 )}
               </div>
-              <div className="challenge-banner-prompt">{activeChallenge.prompt}</div>
+              <div className="challenge-banner-prompt">{displayChallenge.prompt}</div>
             </div>
             <button className="challenge-clear-btn" onClick={clearChallenge}>Clear</button>
           </div>

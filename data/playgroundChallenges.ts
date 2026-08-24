@@ -1,6 +1,10 @@
 // Language-agnostic coding challenges for /playground. Each challenge is
-// solvable in any of the playground's 15 languages — the problem only
-// specifies the expected stdout, not an implementation.
+// solvable in any of the playground's 14 general-purpose languages — the
+// problem only specifies the expected stdout, not an implementation.
+// SQL has its own separate, query-based challenge set — see
+// sqlPlaygroundChallenges.ts — since "print stdout" doesn't map onto SQL
+// and these algorithmic problems (FizzBuzz, binary search, ...) aren't
+// natural query exercises either.
 
 export type ChallengeDifficulty = 'Easy' | 'Medium' | 'Hard'
 
