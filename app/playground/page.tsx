@@ -166,7 +166,15 @@ export default function PlaygroundPage() {
   // language — a Python challenge picked earlier shouldn't linger on screen
   // once the student switches to SQL (or vice versa), even though both can
   // independently stay "active" in state so switching back restores it.
-  const displayChallenge = selectedLang.value === 'sql' ? activeSqlChallenge : activeChallenge;
+  // An idiom challenge (unlike a generic one) is tied to one specific
+  // language — if the student switches away from it, hide it entirely
+  // rather than confusingly validating output against an unrelated prompt.
+  const activeChallengeMatchesLang = !activeChallenge
+    || !('language' in activeChallenge)
+    || (activeChallenge as { language: string }).language === selectedLang.value;
+  const displayChallenge = selectedLang.value === 'sql'
+    ? activeSqlChallenge
+    : (activeChallengeMatchesLang ? activeChallenge : null);
   const idiomChallengesForLang = IDIOM_PLAYGROUND_CHALLENGES.filter(ch => ch.language === selectedLang.value);
 
   useEffect(() => {
@@ -386,10 +394,20 @@ export default function PlaygroundPage() {
 
   const openChallengeModal = useCallback(() => setShowChallengeModal(true), []);
 
+  // Clears the editor to a blank slate — leaving whatever was there before
+  // (often still the language's default starter code, e.g. Java's 5-line
+  // Hello World) meant a student could hit Run without ever writing a
+  // solution and get a confusing, silent "Not quite" against code they
+  // never touched.
   const selectChallenge = useCallback((challenge: PlaygroundChallenge) => {
     setActiveChallenge(challenge);
     setChallengeResult(null);
     setShowChallengeModal(false);
+    setCode('');
+    setOutput('');
+    setStderr('');
+    setSqlResults(null);
+    setRan(false);
   }, []);
 
   // SQL challenges are tied to a specific sample database, so picking one
@@ -590,7 +608,7 @@ export default function PlaygroundPage() {
         recordSuccessfulRun(selectedLang.value);
       }
 
-      if (activeChallenge) {
+      if (activeChallenge && activeChallengeMatchesLang) {
         const passed = cleanRun && String(result.stdout).trim() === activeChallenge.expectedOutput.trim();
         setChallengeResult(passed ? 'pass' : 'fail');
         if (passed) {
@@ -608,7 +626,7 @@ export default function PlaygroundPage() {
       setLoading(false);
       setRan(true);
     }
-  }, [code, selectedLang, recordSuccessfulRun, stdin, activeChallenge, runSqlQuery]);
+  }, [code, selectedLang, recordSuccessfulRun, stdin, activeChallenge, activeChallengeMatchesLang, runSqlQuery]);
 
   return (
     <>
