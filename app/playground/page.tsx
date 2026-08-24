@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { drawCoderCard, type CoderCardData } from '@/lib/coderCard';
 import { registerPlaygroundCompletions } from '@/lib/playgroundCompletions';
 import { PLAYGROUND_CHALLENGES, type PlaygroundChallenge } from '@/data/playgroundChallenges';
+import { PLAYGROUND_DATABASES } from '@/data/playground-databases';
 
 const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/KnPtWB3yzR3HM8CcQlHswD?s=cl&p=i&ilr=0';
 const WHATSAPP_POPUP_SESSION_KEY = 'chaduvuko_whatsapp_popup_shown';
@@ -18,6 +19,14 @@ const PG_KEY_FIRST_RUN = 'chaduvuko_pg_first_run_date';
 const PG_KEY_NAME = 'chaduvuko_pg_name';
 const PG_KEY_AI_USES = 'chaduvuko_pg_ai_uses';
 const PG_KEY_CODE_PREFIX = 'chaduvuko_pg_code_';
+const DEFAULT_SQL_DB_ID = 'freshcart';
+
+// SQL saves its code per-database (not just per-language) — otherwise switching
+// from FreshCart to TechCorp would silently overwrite whatever query the
+// student had written against the other one.
+function codeStorageKey(langValue: string, dbId: string) {
+  return PG_KEY_CODE_PREFIX + (langValue === 'sql' ? `sql_${dbId}` : langValue);
+}
 const PG_KEY_CHALLENGES_SOLVED = 'chaduvuko_pg_challenges_solved';
 
 const PG_LEVELS: { min: number; label: string; icon: string }[] = [
@@ -97,7 +106,6 @@ class Program {
         Console.WriteLine("Hello, World!");
     }
 }`,
-  sql: `SELECT 'Hello, World!' AS greeting;`,
 };
 
 export default function PlaygroundPage() {
@@ -107,6 +115,8 @@ export default function PlaygroundPage() {
   const [stderr, setStderr] = useState('');
   const [sqlResults, setSqlResults] = useState<{ columns: string[]; rows: string[][] }[] | null>(null);
   const sqlEngineRef = useRef<any>(null);
+  const [selectedDbId, setSelectedDbId] = useState(DEFAULT_SQL_DB_ID);
+  const [showSchemaPanel, setShowSchemaPanel] = useState(false);
   const [loading, setLoading] = useState(false);
   const [ran, setRan] = useState(false);
   const [showWhatsappPopup, setShowWhatsappPopup] = useState(false);
@@ -131,6 +141,8 @@ export default function PlaygroundPage() {
   const [solvedChallenges, setSolvedChallenges] = useState<string[]>([]);
   const [shareCopied, setShareCopied] = useState(false);
 
+  const selectedDb = PLAYGROUND_DATABASES.find(d => d.id === selectedDbId) ?? PLAYGROUND_DATABASES[0];
+
   useEffect(() => {
     if (sessionStorage.getItem(WHATSAPP_POPUP_SESSION_KEY)) return;
     setShowWhatsappPopup(true);
@@ -154,6 +166,10 @@ export default function PlaygroundPage() {
         if (lang && typeof decoded.code === 'string') {
           setSelectedLang(lang);
           setCode(decoded.code);
+          if (lang.value === 'sql' && typeof decoded.dbId === 'string'
+            && PLAYGROUND_DATABASES.some(d => d.id === decoded.dbId)) {
+            setSelectedDbId(decoded.dbId);
+          }
         }
         params.delete('share');
         const newUrl = window.location.pathname + (params.toString() ? `?${params}` : '');
@@ -169,13 +185,13 @@ export default function PlaygroundPage() {
     } catch {}
   }, []);
 
-  // Debounced auto-save of the current code, per language.
+  // Debounced auto-save of the current code, per language (and per database for SQL).
   useEffect(() => {
     const t = setTimeout(() => {
-      try { localStorage.setItem(PG_KEY_CODE_PREFIX + selectedLang.value, code); } catch {}
+      try { localStorage.setItem(codeStorageKey(selectedLang.value, selectedDbId), code); } catch {}
     }, 500);
     return () => clearTimeout(t);
-  }, [code, selectedLang.value]);
+  }, [code, selectedLang.value, selectedDbId]);
 
   const dismissWhatsappPopup = useCallback(() => setShowWhatsappPopup(false), []);
 
@@ -331,13 +347,16 @@ export default function PlaygroundPage() {
 
   const handleCopyShareLink = useCallback(async () => {
     try {
-      const payload = btoa(JSON.stringify({ lang: selectedLang.value, code }));
+      const payload = btoa(JSON.stringify({
+        lang: selectedLang.value, code,
+        ...(selectedLang.value === 'sql' ? { dbId: selectedDbId } : {}),
+      }));
       const url = `${window.location.origin}${window.location.pathname}?share=${encodeURIComponent(payload)}`;
       await navigator.clipboard.writeText(url);
       setShareCopied(true);
       setTimeout(() => setShareCopied(false), 2000);
     } catch {}
-  }, [selectedLang, code]);
+  }, [selectedLang, code, selectedDbId]);
 
   const openChallengeModal = useCallback(() => setShowChallengeModal(true), []);
 
@@ -355,9 +374,29 @@ export default function PlaygroundPage() {
   const handleLangChange = useCallback((value: string) => {
     const lang = LANGUAGES.find(l => l.value === value) ?? LANGUAGES[0];
     setSelectedLang(lang);
-    let nextCode = STARTER_CODE[value] ?? '';
+    let nextCode = value === 'sql'
+      ? (PLAYGROUND_DATABASES.find(d => d.id === selectedDbId) ?? PLAYGROUND_DATABASES[0]).exampleQuery
+      : (STARTER_CODE[value] ?? '');
     try {
-      const saved = localStorage.getItem(PG_KEY_CODE_PREFIX + value);
+      const saved = localStorage.getItem(codeStorageKey(value, selectedDbId));
+      if (saved) nextCode = saved;
+    } catch {}
+    setCode(nextCode);
+    setOutput('');
+    setStderr('');
+    setSqlResults(null);
+    setRan(false);
+    setMentorReply('');
+    setMentorError('');
+    setChallengeResult(null);
+  }, [selectedDbId]);
+
+  const handleDbChange = useCallback((dbId: string) => {
+    setSelectedDbId(dbId);
+    const db = PLAYGROUND_DATABASES.find(d => d.id === dbId) ?? PLAYGROUND_DATABASES[0];
+    let nextCode = db.exampleQuery;
+    try {
+      const saved = localStorage.getItem(codeStorageKey('sql', dbId));
       if (saved) nextCode = saved;
     } catch {}
     setCode(nextCode);
@@ -392,6 +431,8 @@ export default function PlaygroundPage() {
         const db = new sqlEngineRef.current.Database();
         let results: any[];
         try {
+          if (selectedDb.schemaSql) db.exec(selectedDb.schemaSql);
+          if (selectedDb.seedSql) db.exec(selectedDb.seedSql);
           results = db.exec(code);
         } finally {
           db.close();
@@ -478,7 +519,7 @@ export default function PlaygroundPage() {
       setLoading(false);
       setRan(true);
     }
-  }, [code, selectedLang, recordSuccessfulRun, stdin, activeChallenge]);
+  }, [code, selectedLang, recordSuccessfulRun, stdin, activeChallenge, selectedDb]);
 
   return (
     <>
@@ -944,6 +985,69 @@ export default function PlaygroundPage() {
           min-height: 60px;
           outline: none;
         }
+        .schema-panel {
+          border: 1px solid var(--border);
+          border-top: none;
+          background: var(--surface);
+          flex-shrink: 0;
+        }
+        .schema-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 6px 16px;
+          cursor: pointer;
+          user-select: none;
+        }
+        .schema-body {
+          border-top: 1px solid var(--border);
+          background: var(--bg);
+          padding: 12px 16px;
+          max-height: 260px;
+          overflow-y: auto;
+        }
+        .schema-description {
+          font-size: 0.78rem;
+          color: var(--muted);
+          line-height: 1.5;
+          margin: 0 0 12px;
+        }
+        .schema-tables {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+          gap: 10px;
+        }
+        .schema-table {
+          border: 1px solid var(--border);
+          border-radius: 6px;
+          overflow: hidden;
+          background: var(--surface);
+        }
+        .schema-table-name {
+          font-family: var(--font-mono, monospace);
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: var(--text);
+          padding: 6px 10px;
+          border-left: 3px solid var(--border);
+          background: rgba(255,255,255,0.03);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .schema-table-count { font-size: 0.68rem; color: var(--muted); font-weight: 400; }
+        .schema-column {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+          padding: 4px 10px;
+          border-top: 1px solid var(--border);
+          font-family: var(--font-mono, monospace);
+          font-size: 0.74rem;
+        }
+        .schema-col-name { color: var(--text); flex-shrink: 0; }
+        .schema-col-type { color: #06b6d4; flex-shrink: 0; }
+        .schema-col-note { color: var(--muted); font-size: 0.7rem; font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .share-copied-toast {
           font-size: 0.7rem;
           color: var(--green);
@@ -1095,6 +1199,17 @@ export default function PlaygroundPage() {
             <button className="card-trigger-btn" onClick={handleCopyShareLink}>
               {shareCopied ? <span className="share-copied-toast">Copied!</span> : '🔗 Share'}
             </button>
+            {selectedLang.value === 'sql' && (
+              <select
+                className="pg-select"
+                value={selectedDbId}
+                onChange={e => handleDbChange(e.target.value)}
+              >
+                {PLAYGROUND_DATABASES.map(d => (
+                  <option key={d.id} value={d.id}>{d.name}</option>
+                ))}
+              </select>
+            )}
             <select
               className="pg-select"
               value={selectedLang.value}
@@ -1165,6 +1280,37 @@ export default function PlaygroundPage() {
               }}
             />
           </div>
+
+          {selectedLang.value === 'sql' && selectedDb.tables.length > 0 && (
+            <div className="schema-panel">
+              <div className="schema-header" onClick={() => setShowSchemaPanel(v => !v)}>
+                <span className="stdin-label">📋 Schema — {selectedDb.name} ({selectedDb.tables.length} tables)</span>
+                <span className="stdin-chevron">{showSchemaPanel ? '▲' : '▼'}</span>
+              </div>
+              {showSchemaPanel && (
+                <div className="schema-body">
+                  <p className="schema-description">{selectedDb.description}</p>
+                  <div className="schema-tables">
+                    {selectedDb.tables.map(t => (
+                      <div key={t.name} className="schema-table">
+                        <div className="schema-table-name" style={{ borderLeftColor: t.color }}>
+                          {t.name}
+                          <span className="schema-table-count">{t.rowCount} rows</span>
+                        </div>
+                        {t.columns.map(c => (
+                          <div key={c.name} className="schema-column">
+                            <span className="schema-col-name">{c.name}</span>
+                            <span className="schema-col-type">{c.type}</span>
+                            {c.note && <span className="schema-col-note">{c.note}</span>}
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="stdin-panel">
             <div className="stdin-header" onClick={() => setShowStdinPanel(v => !v)}>
