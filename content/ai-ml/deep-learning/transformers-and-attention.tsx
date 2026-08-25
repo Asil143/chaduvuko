@@ -1023,7 +1023,170 @@ for epoch in range(1, 21):
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about attention and Transformers</h2>
+
+        <ConceptBox title="Myth: Attention automatically understands word order because it sees the whole sequence" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Self-attention computes Q·Kᵀ for every pair of tokens using only their content vectors —
+            there is nothing in the raw operation that depends on where a token sits in the sequence.
+            Shuffle "the cat sat on the mat" into "mat the on sat cat the" and, without positional
+            encoding, self-attention produces the exact same set of pairwise scores rearranged — it
+            is permutation-equivariant, not order-aware. That is precisely why every Transformer adds
+            a positional signal (sinusoidal in the original paper, learned in BERT and GPT) into the
+            token embedding before the first attention layer. "Sees everything" is not the same as
+            "knows the order of what it sees" — attention treats the input as a set until position is
+            injected explicitly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Multi-head attention gives the model more capacity than a single big attention head" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Multi-head attention with h heads and single-head attention with one d_model-sized head
+            use the same total number of parameters — the projection matrices are simply split into h
+            smaller pieces (d_k = d_model / h per head) instead of one large piece. Nothing about the
+            head count adds parameters or FLOPs to the QKV projections themselves. What multiple heads
+            buy you is not more capacity but more independent subspaces: head 1 might learn to track
+            subject-verb agreement while head 4 tracks coreference, each computing its own attention
+            pattern over the same tokens. A single head is mathematically forced to average all these
+            relationship types into one attention distribution per token — multi-head lets them
+            coexist.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: dividing by √d_k is a minor numerical-stability tweak, interchangeable with any normalisation trick" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The scaling solves a specific, provable problem: when Q and K entries are drawn from a
+            distribution with unit variance, the dot product Q·K summed over d_k dimensions has
+            variance proportional to d_k itself — so as d_k grows, raw attention scores grow with it.
+            Large scores push softmax into its saturated region, where the largest score gets a weight
+            near 1 and every other gets a weight near 0, and the gradient of softmax there is close to
+            zero everywhere. Dividing by √d_k exactly cancels the variance growth — a sum of d_k
+            independent unit-variance terms, divided by √d_k, has variance 1 regardless of d_k —
+            keeping softmax in a well-conditioned regime no matter how large the head dimension gets.
+            It is a derived correction, not an arbitrary constant.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: attention weights show what the model is 'really' paying attention to, in a human-interpretable, causal sense" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            An attention weight of 0.61 from "bank" to "river" tells you the softmax-normalised dot
+            product between those two vectors at that layer — it does not tell you that "river" caused
+            the model's downstream prediction, nor does it account for the value vectors those weights
+            multiply, the residual stream carrying information around attention entirely, or the many
+            other layers and heads contributing to the final output. Research on attention-as-explanation
+            has repeatedly found you can often edit attention weights substantially without changing the
+            model's output, and find alternative attention patterns that produce the same prediction —
+            the opposite of what a true causal explanation should allow. Treat attention weights as a
+            debugging signal and a useful visualisation, not a certified explanation of model behaviour.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: because self-attention is parallelisable, it's computationally cheaper than an RNN for long sequences" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Parallelisable and cheap are different properties. An RNN does O(n) sequential steps, each
+            O(1) relative to sequence length, for O(n) total compute and O(1) memory per step.
+            Self-attention computes a full (seq_len × seq_len) score matrix, which is O(n²) in both
+            compute and memory — for n=4096 that is 16 million score pairs before a single head's
+            output is even computed, and it scales quadratically from there. Attention wins on
+            wall-clock time because O(n²) work spread across thousands of GPU cores in parallel
+            finishes faster than O(n) work done one step at a time — but for long enough sequences, the
+            quadratic memory footprint of the attention matrix becomes the actual bottleneck, which is
+            exactly why Flash Attention, sparse attention, and linear-attention variants exist.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Transformers and attention — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why does attention need positional encoding when RNNs don't?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            An RNN processes tokens strictly in sequence — token 3's hidden state is computed from
+            token 2's hidden state, so the order tokens arrive in is baked into the computation itself;
+            you cannot get the same hidden state from a shuffled input. Self-attention has no such
+            mechanism: it computes Q·Kᵀ between every pair of tokens using only their content,
+            independent of position, so it is mathematically permutation-equivariant — reorder the
+            input tokens and you get the same set of pairwise scores in a different order, not a
+            different computation. To recover any notion of sequence order, the Transformer has to
+            inject it explicitly, adding a positional vector (sinusoidal, or a learned embedding per
+            position) to each token's representation before attention ever runs. Without it, "the dog
+            bit the man" and "the man bit the dog" would look identical to self-attention.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What's the actual computational complexity of self-attention, and why does it matter for long sequences?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Self-attention computes a full pairwise score matrix of shape (seq_len, seq_len), so both
+            compute and memory scale as O(n²) in sequence length — double the sequence and you
+            quadruple the cost, not double it. For short sequences (a few hundred tokens) this is a
+            non-issue and the massive parallelism across GPU cores makes attention far faster in
+            wall-clock time than an RNN's O(n) sequential steps. But for long-context use cases — long
+            documents, long codebases, long conversations — the quadratic term dominates: at 32k tokens
+            the score matrix alone has a billion entries per head. That's the direct motivation behind
+            Flash Attention (same math, tiled to avoid materialising the full matrix in memory),
+            sparse/local attention patterns, and linear-attention approximations — all attempts to get
+            attention's quality without paying the full O(n²) bill.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Explain multi-head attention — why not just use one big attention head?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A single attention head computes exactly one attention distribution per query token — one
+            weighted average over all the other tokens' values. But a sentence carries multiple
+            simultaneous relationship types at once: which word is the grammatical subject of which
+            verb, which pronoun refers to which noun, which words are simply near each other. Forcing
+            all of that into one softmax distribution means the model has to compromise — blend several
+            different relevance signals into a single weighting, which loses information. Multi-head
+            attention splits the d_model dimension into h smaller subspaces (d_k = d_model/h each) and
+            runs attention independently in each — same total parameter count and compute as one big
+            head, just partitioned — so different heads are free to specialise on different relationship
+            types, and their outputs are concatenated and linearly projected back to d_model at the end.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why do we scale the dot products by √d_k in scaled dot-product attention?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            As the key/query dimension d_k grows, the dot product Q·K — a sum of d_k terms — grows in
+            variance proportionally to d_k, assuming roughly unit-variance inputs. Without correction,
+            larger d_k produces larger-magnitude raw scores, and large scores push softmax toward a
+            near-one-hot output where one token gets almost all the weight and the rest get almost none.
+            In that saturated regime the softmax gradient is close to zero almost everywhere, which
+            stalls learning — the model can't smoothly adjust which tokens to attend to because the loss
+            landscape is nearly flat. Dividing by √d_k exactly compensates for the variance growth from
+            summing d_k terms, keeping the score distribution's variance roughly constant regardless of
+            head dimension, so softmax stays in a well-behaved, differentiable range no matter how wide
+            the attention heads are.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — What's the actual architectural difference between BERT and GPT, and why does it dictate what each is good at?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Both are built from the identical Transformer block — multi-head self-attention plus a
+            feedforward network, wrapped in residual connections and LayerNorm. The entire difference is
+            the attention mask and the resulting pretraining objective. BERT applies no mask, so every
+            token attends to every token in both directions — bidirectional context, ideal for
+            understanding tasks like classification or NER where you want the fullest possible context
+            before making a judgment. GPT applies a causal (upper-triangular) mask, so token i can only
+            attend to tokens ≤ i — a hard requirement for autoregressive generation, since predicting
+            token t+1 from tokens 1..t would leak the answer if the model could see token t+1 while
+            training. That single masking choice cascades into everything else: BERT is pretrained with
+            masked language modelling (fill in the blank, needs both directions), GPT with next-token
+            prediction (needs only the past) — the mask is the cause, the pretraining objective and
+            downstream use case are the effects.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

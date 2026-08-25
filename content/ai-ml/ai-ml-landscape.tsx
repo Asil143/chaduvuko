@@ -504,7 +504,7 @@ export default function AIMLLandscapePage() {
         <Callout type="info">
           Salary ranges are mid-level (3–6 years experience) at product companies
           in Seattle. Service companies (Accenture, Deloitte, KPMG) pay 30–40% less.
-          Startups vary wildly. FAANG/GCC roles pay 2–3× these numbers.
+          Startups vary wildly. FAANG roles pay 2–3× these numbers.
           Freshers start at roughly 50–60% of these figures.
         </Callout>
       </div>

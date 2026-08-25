@@ -971,7 +971,7 @@ for review, pred, proba in zip(new_reviews, predictions, probabilities):
     print()
 
 # ── Save model ────────────────────────────────────────────────────────
-joblib.dump(pipeline, '/tmp/swiggy_sentiment_nb.pkl')
+joblib.dump(pipeline, '/tmp/doordash_sentiment_nb.pkl')
 print("Model saved — ready for production deployment")`} />
       </div>
 

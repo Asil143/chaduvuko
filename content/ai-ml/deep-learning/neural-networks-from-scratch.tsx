@@ -1032,7 +1032,150 @@ print(f"  autograd → the chain rule applied automatically to any graph")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about neural networks built from scratch</h2>
+
+        <ConceptBox title="Myth: A 'neuron' in a neural network is a simplified simulation of a biological neuron" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The weighted-sum-plus-activation computation was loosely inspired by neuroscience in the
+            1940s and 1950s, but modern neural networks are not modelling how real neurons work — real
+            neurons spike in time, involve thousands of distinct neurotransmitter mechanisms, and do
+            not compute a single differentiable scalar. Treating the biological analogy as literal
+            leads people to expect properties (adaptability, energy efficiency, one-shot learning) that
+            artificial neurons simply do not have. The useful mental model is the one this module
+            actually uses: a neuron is z = Σwᵢxᵢ + b followed by a non-linearity — nothing more, nothing
+            biological required to reason about it correctly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Because the network learns its own features, architecture and preprocessing choices no longer matter" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            "Learns its own features" means the network does not need you to hand-craft what a feature
+            looks like — it does not mean every design decision is automatic. You still choose the
+            number of layers, the width of each layer, which activation to use where, how to
+            standardise inputs, how to initialise weights, and the batch size. Get any of these wrong —
+            as the errors section of this module shows with NaN losses and dead networks — and the
+            network learns nothing at all, no matter how good the raw data is. Feature learning
+            replaces manual feature engineering; it does not replace architecture and preprocessing
+            decisions.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The bias term is a minor detail — safe to leave out or initialise like the weights" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Without a bias term, every neuron's pre-activation z = Σwᵢxᵢ is forced to equal zero
+            whenever every input is zero — geometrically, the decision boundary of every layer is
+            forced to pass through the origin. For real data, where the useful separation between
+            classes is rarely centred exactly at the origin, this is a serious restriction, not a
+            cosmetic one. That is why this module initialises biases to zero but weights to a scaled
+            random distribution — the bias needs to be free to shift away from zero during training, it
+            just does not need a random starting point to break symmetry the way weights do.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A bigger network — more layers, more neurons — is always a better network" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            More capacity only helps if the dataset has enough signal to constrain it. This module's
+            own errors section shows the failure mode directly: a network with far more parameters
+            than training examples will memorise the training set and score much worse on unseen data —
+            the loss keeps dropping on training data while test performance gets worse. Model size has
+            to be matched to dataset size and problem complexity; the fix for "not learning enough" is
+            not always "add more layers," and the fix for overfitting is usually to shrink the network,
+            add regularisation, or get more data — not the reverse.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Gradient descent finds 'the' correct weights, the way solving an equation finds THE answer" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            There is no closed-form solution being solved here. Gradient descent takes small, iterative
+            steps downhill on a loss surface that is almost never convex for a real network — different
+            random initialisations, different mini-batch orderings, and different learning rates will
+            all converge to different sets of weights, often with similar but never identical loss. That
+            is precisely why this module trains with mini-batches over many epochs rather than solving
+            a system of equations once: there is no single correct answer to converge to, only a "good
+            enough" region of weight space reached through repeated, approximate steps.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Neural networks from scratch — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk through what happens in a single forward pass through a 2-hidden-layer network">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Starting from input X of shape (batch, n_features): layer 1 computes Z1 = X @ W1 + b1,
+            producing a (batch, n_hidden1) pre-activation, then applies an activation function
+            element-wise to get A1 — the actual output that becomes the input to the next layer. Layer
+            2 repeats this: Z2 = A1 @ W2 + b2, A2 = activation(Z2). The output layer does one more
+            linear step, Z3 = A2 @ W3 + b3, and either leaves it linear (regression) or applies
+            sigmoid/softmax (classification) depending on the task. Every intermediate value — X, Z1,
+            A1, Z2, A2 — has to be cached during this pass, because backpropagation needs all of them to
+            compute gradients afterward.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why does a network need a non-linear activation function at all?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Without one, stacking layers is mathematically pointless: a linear function of a linear
+            function is still just a linear function. If every layer only computed Z = A_prev @ W + b
+            with no activation in between, the whole network — regardless of depth — could be collapsed
+            algebraically into a single equivalent linear layer, no more expressive than plain linear
+            regression. The non-linearity inserted after each linear step (ReLU, sigmoid, tanh) is what
+            lets each additional layer actually add representational power, letting the network
+            approximate curved decision boundaries and complex functions instead of only straight lines
+            and hyperplanes.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Explain batch, stochastic, and mini-batch gradient descent, and why mini-batch is the standard">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Batch gradient descent computes the gradient over the entire dataset before taking one step
+            — exact, but far too slow to use on large datasets, and the whole dataset often does not
+            fit in memory. Stochastic gradient descent computes the gradient from a single example per
+            step — very fast per step but extremely noisy, with the gradient direction jumping around
+            from sample to sample. Mini-batch gradient descent, using batches of roughly 32 to 256
+            samples, is the practical compromise: it is stable enough to converge reliably, small enough
+            to fit in memory and run efficiently on a GPU, and it is what every production deep learning
+            framework defaults to.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why does weight initialisation matter — what breaks if you initialise every weight to zero?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            If every weight in a layer starts at exactly zero, every neuron in that layer computes the
+            exact same z, applies the exact same activation, and — critically — receives the exact same
+            gradient during backpropagation. Every neuron in the layer updates identically forever, so a
+            layer with 100 neurons behaves like a layer with 1 neuron repeated 100 times; the network
+            never breaks this symmetry on its own. Random initialisation (this module uses He
+            initialisation, scaling by √(2/n_inputs) for ReLU networks) breaks that symmetry so
+            different neurons learn different things, while also keeping the initial activations in a
+            numerically well-behaved range instead of vanishing or exploding.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Beyond convenience, what does PyTorch's autograd actually give you that is hard to hand-roll?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The NumPy version in this module works, but every time the architecture changes — a new
+            layer, a skip connection, a different activation — the backward() function has to be
+            rewritten by hand, and a single wrong transpose silently produces incorrect gradients with
+            no error thrown. Autograd builds a computational graph automatically during the forward pass
+            and derives the correct backward pass for that exact graph every time, for arbitrary
+            architectures, without anyone re-deriving the chain rule by hand. It also plugs into GPU
+            execution, mixed-precision training, and distributed training — infrastructure that would
+            take far more than "faster NumPy" to reimplement correctly from scratch.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

@@ -193,7 +193,7 @@ export default function EvaluationMetricsPage() {
           Stripe processes 5 million transactions per day.
           Only 1.5% are fraudulent — 75,000 transactions.
           A model that predicts "legitimate" for every transaction
-          achieves 98.5% accuracy without catching a single fraudulent rupee.
+          achieves 98.5% accuracy without catching a single fraudulent dollar.
           This model is completely useless, yet the accuracy number
           looks spectacular in a presentation.
         </p>

@@ -883,7 +883,170 @@ sql_model = PeftModel.from_pretrained(base, './lora-sql-adapter')
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about LoRA and PEFT</h2>
+
+        <ConceptBox title="Myth: LoRA is a compressed approximation of the full fine-tuning update" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This suggests LoRA first computes (or could compute) the full-rank weight update and
+            then squeezes it down to rank r — like a JPEG of a photo. That is backwards. LoRA never
+            computes a full-rank update at all; it constrains the trainable update to be low-rank
+            from the very first gradient step, based on the empirical observation (from the original
+            LoRA paper) that the useful update for adapting a pretrained model to a new task tends
+            to live in a low-dimensional subspace. There is nothing to compress because the full-rank
+            version is never formed. If the task genuinely needs a high-rank update, LoRA at low r
+            will underfit — not "lose information" the way compression does.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: a higher rank r always gives better fine-tuning quality" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Rank controls capacity, and more capacity sounds like it should always help — but in
+            practice most tasks saturate well before r=64, and pushing rank higher mostly adds
+            trainable parameters and compute without a measurable accuracy gain, since the intrinsic
+            rank of the needed update is a property of the task, not something you can buy more of.
+            Past that saturation point, a larger r increases the risk of overfitting on small
+            fine-tuning datasets and slows training for no return. The right instinct is to sweep
+            r across 4, 8, 16, and 32 on a validation set for your specific task, not to default to
+            the largest rank you can afford.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: LoRA adapters permanently add extra latency at inference, because they are 'extra layers'" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            During training this is true — the forward pass runs W×x and B@A×x as two separate
+            operations and adds them. But LoRA's defining trick is that B@A is just a matrix, the
+            same shape as W, so it can be added directly into W once training is done:
+            W_merged = W + (α/r)·B@A. After merge_and_unload(), the model has exactly the same
+            architecture and the same number of weight matrices as the original — no adapter, no
+            extra addition, no latency overhead at all. The "extra layer" framing only applies to a
+            few other PEFT methods (adapters, prefix tuning) that genuinely cannot be merged away
+            because they change the computation graph, not just the weights.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: LoRA gets you full fine-tuning quality on any task, so full fine-tuning is now obsolete" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            LoRA reliably reaches 90–95% of full fine-tuning quality for tasks that adapt the model's
+            style, format, or narrow behaviour — the update genuinely is low-rank there. It is a
+            worse fit when the task requires injecting large amounts of new factual knowledge or
+            substantially shifting the model's underlying capabilities (e.g. teaching a language
+            model an entirely new language it saw little of in pretraining) — that kind of change
+            often needs a higher-rank, more expressive update than LoRA can efficiently represent.
+            Full fine-tuning, continued pretraining, or RAG-for-knowledge remain the better tool in
+            those cases; LoRA did not replace them, it expanded the set of tasks where you no longer
+            need them.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: you can freely stack or sum multiple trained LoRA adapters to get a multi-task model" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Because each adapter is "just" a small B@A matrix, it is tempting to assume adding two of
+            them (or averaging their weights) gives you a model that is good at both tasks at once.
+            In practice, adapters trained independently occupy overlapping but different subspaces of
+            the weight space, and naively summing them causes destructive interference — the merged
+            behaviour is often worse at both tasks than either adapter alone. Serving multiple
+            tasks from one base model safely means keeping adapters separate and swapping which one
+            is active per request (exactly the pattern PeftModel.from_pretrained shown earlier
+            supports), or using purpose-built multi-adapter composition methods, not ad hoc addition.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>PEFT and LoRA — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why does LoRA work? What is the 'low intrinsic rank' hypothesis?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The hypothesis, backed empirically by the original LoRA paper (and earlier work on
+            intrinsic dimensionality of fine-tuning), is that the change a pretrained model needs
+            to specialise for a downstream task lives in a much lower-dimensional subspace than the
+            full weight matrix it is applied to — even though the base weight itself is high-rank and
+            uses its full capacity to encode broad pretraining knowledge. Concretely: adapting a
+            768×768 attention matrix to a new task does not require exploring all 589,824 independent
+            directions of change; a rank-8 or rank-16 subspace captures nearly all of the useful
+            signal. LoRA exploits this directly by parameterising the update as B@A with rank r,
+            training only 2×r×d parameters instead of d², and getting comparable task performance
+            because it was never necessary to search the full-rank space in the first place.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What do rank (r) and alpha actually control, and how do you choose values for them?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Rank r sets the dimensionality of the low-rank update — it is the actual capacity knob:
+            higher r means more trainable parameters and a richer space of representable updates, at
+            the cost of more compute and overfitting risk on small datasets. Alpha is a separate
+            scaling factor applied to the LoRA output as α/r, controlling how strongly the update
+            perturbs the frozen base weights relative to its own magnitude — it does not add capacity,
+            it tunes how aggressively that capacity is expressed. In practice most teams do not tune
+            them independently: a common heuristic is alpha = 2×r (so the effective scale stays
+            roughly constant as rank changes), then sweep r itself — typically 8 or 16 for
+            classification-style tasks and up to 32-64 for more complex generation tasks — against a
+            validation metric.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — LoRA vs full fine-tuning vs prompt tuning: how do you decide which to use?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The decision axis is how much you need to change the model versus how much compute and
+            data you have. Full fine-tuning updates every weight — highest ceiling on quality and the
+            only real option when the task requires deep, broad changes to the model's behaviour or
+            knowledge, but it needs the most GPU memory (model + gradients + optimiser states for
+            every parameter) and the most labelled data to avoid overfitting all those parameters.
+            LoRA sits in the middle: 90-95% of full fine-tuning quality at a fraction of the memory,
+            because it exploits the low-rank structure of most task adaptations, and it is the
+            default choice for the vast majority of production fine-tuning today. Prompt tuning goes
+            further — training only a handful of soft input tokens with no per-layer weight changes
+            at all — which underperforms LoRA at small-to-medium model scale but becomes surprisingly
+            competitive at 10B+ parameters, where the frozen base model is already so capable that a
+            small nudge to its input is enough to steer behaviour.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why can LoRA weights be merged back into the base weights for zero inference overhead? Walk through the math.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The forward pass during training is h = W×x + (α/r)·(B@A)×x, where W is frozen and A, B
+            are the only trainable matrices. Because matrix multiplication distributes over addition,
+            this is algebraically identical to h = (W + (α/r)·B@A)×x — a single matrix, the same
+            shape as W, multiplied once against x. So after training finishes, you compute
+            W_merged = W + (α/r)·B@A exactly once, write it back in place of W, and discard A and B
+            entirely. The resulting model has the identical architecture, weight shapes, and forward
+            pass as a model that was fully fine-tuned from scratch — there is no separate adapter
+            branch left to execute, so inference cost is exactly the same as the unmodified base
+            model. This only works for LoRA (and similar linear reparameterisations) specifically
+            because the adaptation is additive and linear in x; adapters and prefix tuning change the
+            computation graph itself and cannot be collapsed this way.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How does QLoRA make it possible to fine-tune a 7B model on a single consumer GPU, and what's the catch?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            QLoRA combines LoRA with 4-bit quantisation of the frozen base model weights (NF4 —
+            NormalFloat4 — plus double quantisation of the quantisation constants themselves), which
+            shrinks a 7B model's weight storage from roughly 14-28GB down to about 3.5GB. Because
+            only the small LoRA matrices are trained, gradients and optimiser states are computed and
+            stored only for those — a fraction of a percent of total parameters — so the two most
+            memory-hungry pieces of full fine-tuning (per-parameter gradients and per-parameter Adam
+            state) barely register. The catch is that 4-bit quantisation is inherently lossy: it
+            introduces small numerical errors into every frozen weight, which in principle could hurt
+            output quality. In practice, the QLoRA paper showed this loss is largely absorbed because
+            the LoRA adapter is trained on top of the quantised weights and learns to compensate —
+            but it does mean QLoRA models can be marginally less precise on tasks sensitive to exact
+            numerical behaviour, and it adds a dequantisation cost at inference unless you also merge
+            and requantise afterward.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

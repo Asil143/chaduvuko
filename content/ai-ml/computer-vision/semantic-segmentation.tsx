@@ -848,7 +848,162 @@ print(f"  'aux' key shape:  {tuple(out['aux'].shape)}  ← auxiliary loss head")
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about semantic segmentation</h2>
+
+        <ConceptBox title="Myth: Semantic segmentation is just object detection with pixel-accurate boxes" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Detection localises individual object instances — even improved to pixel precision, its
+            output is still "here is object #1, here is object #2." Semantic segmentation has no
+            concept of instances at all: it labels every pixel by class, so two cars standing next
+            to each other both get painted the same "vehicle" colour and merge into one region in
+            the mask. If you need to count how many cars are present or track a specific one, you
+            need instance segmentation (or panoptic segmentation, which combines both) — semantic
+            segmentation genuinely cannot answer "which one," only "what."
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If you could afford the compute, you'd skip downsampling entirely and keep full resolution throughout" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Downsampling in the encoder is not just a cost-saving shortcut — pooling is what lets
+            each successive layer's receptive field cover a larger area of the original image, which
+            is how the network builds up context about what it's looking at rather than just raw
+            local pixel patterns. A network that never downsampled would struggle to tell "this
+            patch of pixels is part of a road" from "this patch of pixels is part of a wall,"
+            because it would never see enough surrounding context. The actual problem downsampling
+            causes is losing precise spatial detail (where exactly the boundary is) — which is what
+            U-Net's skip connections are specifically designed to recover, rather than avoiding
+            downsampling altogether.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: U-Net's skip connections exist to fix vanishing gradients, the same reason ResNet has them" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They look similar — both copy information from an earlier layer forward — but they solve
+            different problems. ResNet's skip connections give gradients a shortcut path so very deep
+            classification networks stay trainable. U-Net's skip connections concatenate the
+            encoder's feature map directly into the decoder at the matching resolution, so the
+            decoder has access to the fine spatial detail (exact edges, precise boundaries) that
+            pooling destroyed on the way down. The bottleneck alone tells the decoder *what* is in
+            the image; the skip connections tell it *exactly where* the boundaries are. Removing them
+            doesn't primarily hurt training stability — it produces blurry, imprecise mask
+            boundaries.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Cross-entropy loss is a fine default for segmentation because it's a fine default for classification" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            In classification, class imbalance across the dataset is a data problem you can address
+            with resampling. In segmentation, the imbalance is baked into every single image — most
+            pixels in a road scene are background or road, and only a small fraction belong to the
+            object you actually care about (a pedestrian, a defect, a tumour). Plain cross-entropy
+            treats every pixel equally, so a model can achieve very low loss by getting the abundant
+            background pixels right and largely ignoring the rare foreground class. That's exactly
+            why segmentation commonly uses class-weighted cross-entropy, Dice loss, or a combination
+            of both — Dice directly measures overlap and isn't dominated by whichever class has the
+            most pixels.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: High pixel accuracy means the segmentation model is working well" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Pixel accuracy just counts what fraction of pixels got the right label, and with severe
+            class imbalance that number can be high for a model that has essentially learned
+            nothing useful. If 90% of an image's pixels are background, a model that predicts
+            "background" everywhere scores 90% pixel accuracy while completely failing at the task
+            — it never gets a single foreground pixel right. Mean IoU (mIoU), which averages IoU
+            per class rather than counting pixels in aggregate, exposes this immediately: the
+            all-background model scores near-zero IoU on every foreground class, which is why mIoU
+            (not pixel accuracy) is the metric that actually gets reported in segmentation papers and
+            production dashboards.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Semantic segmentation — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What's the difference between semantic, instance, and panoptic segmentation? Give an example of when you'd need each">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Semantic segmentation labels every pixel by class only — all cars share one colour, with
+            no distinction between individual cars. Instance segmentation goes further and gives
+            each object instance its own mask, so car #1 and car #2 are separate, but it typically
+            leaves background ("stuff" like sky and road) unlabelled. Panoptic segmentation combines
+            both: every pixel gets a class, and every "thing" (countable object) also gets an
+            instance ID. I'd use semantic segmentation for something like measuring total road
+            surface area, instance segmentation for counting or tracking individual objects (how
+            many vehicles, which one is which across frames), and panoptic segmentation when a
+            system needs complete scene understanding, like autonomous driving.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain the U-Net architecture: why encoder-decoder, and what do skip connections actually do?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The encoder progressively downsamples the image through pooling, which grows the
+            receptive field so the network can understand broad context — what kind of scene this
+            is, what objects are present. But pooling throws away precise spatial information along
+            the way. The decoder then upsamples back to the original resolution to produce a full
+            per-pixel mask. Skip connections concatenate each encoder stage's feature map directly
+            into the corresponding decoder stage at the same spatial resolution, handing the decoder
+            back the fine detail — exact edges, precise boundaries — that pooling removed. Without
+            skip connections, U-Net would still classify regions roughly correctly but produce
+            blurry, imprecise boundaries; the skip connections are what make its masks sharp.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why do we need IoU/Dice metrics instead of just pixel accuracy for segmentation?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Pixel accuracy is dominated by whichever class has the most pixels, which in most
+            real-world segmentation tasks is the background. A model that predicts background for
+            every pixel can score 90%+ pixel accuracy on a scene that's 90% background while
+            completely failing to segment the object that actually matters. IoU (intersection over
+            union between predicted and true regions) and Dice score both measure per-class overlap
+            directly, so a class with very few pixels still gets fairly evaluated — the all-background
+            model would score near zero on that class's IoU, immediately exposing the failure that
+            pixel accuracy hides. Reporting mean IoU across classes is the standard because it
+            weights every class's correctness equally rather than by pixel count.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How do you handle severe class imbalance, like background dominating foreground pixels, in a segmentation task?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A few complementary approaches, usually combined: weight the cross-entropy loss inversely
+            by class pixel frequency so rare classes contribute proportionally more to the loss; use
+            Dice loss (or a combined CrossEntropy + Dice loss), since Dice measures overlap directly
+            and isn't dominated by whichever class has the most pixels; and, at the data level,
+            oversample images that contain more of the rare class, or crop training patches centred
+            on foreground regions rather than random crops that are mostly background. I'd also
+            verify the fix worked by checking per-class IoU during training, not just the aggregate
+            loss — the loss curve looking fine can hide a model that has quietly given up on the rare
+            class.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — What would you actually do differently if fine-tuning a pretrained model like SegFormer versus training U-Net from scratch?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Training U-Net from scratch needs a reasonably sized labelled dataset because every
+            weight, including the low-level feature detectors, has to be learned from your data
+            alone — that's thousands of labelled masks in most real settings. Fine-tuning a
+            pretrained model like SegFormer or DeepLabV3+ reuses an ImageNet-pretrained backbone (and
+            often a segmentation head pretrained on ADE20K or Cityscapes), so I only need to adapt
+            the final classifier to my class set, which works with far fewer labelled images. In
+            practice: swap in the new number of output classes, use a much smaller learning rate on
+            the backbone than the head, and remember architecture-specific quirks — SegFormer, for
+            instance, outputs logits at 1/4 resolution, so I need to upsample before computing the
+            final per-pixel prediction or the loss.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

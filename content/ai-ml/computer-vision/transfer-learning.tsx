@@ -800,7 +800,163 @@ print("Exported: meesho_classifier.pt + meesho_classifier.onnx")`} />
 
       <Div />
 
-      {/* ══ SECTION 7 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about transfer learning</h2>
+
+        <ConceptBox title="Myth: Transfer learning always beats training from scratch, regardless of dataset size" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Transfer learning wins when your dataset is small-to-moderate relative to the task's
+            complexity, or when your domain is reasonably close to the pretraining domain — that's
+            most production vision problems, which is why it's the default recipe. But given a truly
+            large, well-labelled dataset (hundreds of thousands of images) in a domain far from
+            natural photographs, training from scratch — or fine-tuning so aggressively it's close
+            to starting over — can match or beat a lightly fine-tuned pretrained model, because the
+            model can learn representations specifically shaped by your data instead of inheriting
+            ImageNet's biases. The right call depends on both dataset size and domain distance, not
+            a blanket rule.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Freezing more layers is always the 'safer' choice, so you should default to freezing everything but the head" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Freezing everything except the head (pure feature extraction) protects you from
+            catastrophic forgetting, but it also caps how well the model can adapt — if your task
+            needs task-specific high-level features the frozen backbone never learned (because
+            ImageNet never needed them), no amount of head training will produce them. "Safer" here
+            just means "less likely to break," not "more likely to perform best." For a dataset of
+            meaningful size with any domain gap from ImageNet, selectively unfreezing later layers
+            with a small learning rate consistently outperforms full freezing — the risk of
+            forgetting is real but manageable, and the risk of under-adapting is often larger.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: As long as you use a 'reasonably small' learning rate, catastrophic forgetting won't happen" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            "Reasonably small" is relative to what the layer already knows, and early backbone layers
+            know a lot — a learning rate that seems conservative for a randomly initialised head
+            (1e-4, say) can still meaningfully disturb pretrained low-level filters over enough
+            epochs, especially without gradient clipping or warmup. Catastrophic forgetting isn't a
+            single threshold you cross; it's a matter of degree that compounds across training steps
+            and depends on how many layers are unfrozen, for how long, and at what relative rate to
+            the head. That's why the standard fix is differential learning rates *and* often gradual
+            unfreezing, not just picking one small number and hoping it's small enough.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: ImageNet-pretrained features are directly good for any image domain" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Early layers learn genuinely universal low-level patterns — edges, corners, colour
+            gradients — that transfer well almost everywhere. But "transfers well" degrades the
+            further the target domain sits from natural RGB photographs of everyday objects. Medical
+            imaging (X-rays, MRI slices), satellite imagery, and microscopy all have fundamentally
+            different structure, colour statistics, and scale than ImageNet's dog photos and street
+            scenes — a backbone's later layers, tuned specifically to recognise ImageNet-style
+            objects, offer far less of a head start there. In practice this means larger domain shift
+            calls for unfreezing more layers (or fine-tuning more aggressively) than a task that
+            closely resembles natural photography, and in extreme domain shift cases, transfer
+            learning's advantage can shrink to not much more than a decent weight initialisation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A more accurate ImageNet backbone (e.g. ViT-B/16) will always give better results after fine-tuning" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            ImageNet top-1 accuracy measures how well a backbone performs at ImageNet's own task and
+            scale — it does not directly predict how well its features transfer to your smaller,
+            different dataset. A large model like ViT-B/16 (86M parameters) generally needs more
+            fine-tuning data to avoid overfitting than a compact ResNet18 (11M parameters), so on a
+            genuinely small dataset the "worse" ImageNet model can win after fine-tuning simply
+            because it doesn't overfit as fast. Backbone choice has to weigh accuracy against your
+            actual dataset size, latency budget, and deployment constraints — "highest ImageNet
+            accuracy" is one input to that decision, not the answer to it.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Transfer learning — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — When would you choose transfer learning over training from scratch, and when would you not?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I'd default to transfer learning whenever labelled data is limited relative to the task
+            (roughly under tens of thousands of images) and the domain isn't wildly different from
+            natural photographs — which covers most production vision problems, since it gets you
+            most of ImageNet's learned representations essentially for free and trains in a fraction
+            of the time. I'd lean toward training from scratch, or very aggressive fine-tuning that's
+            effectively close to it, when I have a large, high-quality dataset in a domain far from
+            ImageNet — satellite imagery or microscopy, for example — where a from-scratch model can
+            learn representations actually shaped by the data instead of inheriting biases that don't
+            apply.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why do early layers of a CNN transfer better than later layers? Explain the intuition">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Early convolutional layers learn low-level, local patterns — edges, corners, colour
+            gradients, simple textures — which are useful for recognising essentially any visual
+            input, whether it's a shoe, an X-ray, or a satellite photo. Later layers combine those
+            low-level patterns into progressively more abstract, task-specific representations — by
+            the final layers, filters are effectively tuned to detect things like "dog snout" or
+            "car wheel," which are specific to what the network was trained to classify. That's why
+            the standard fine-tuning recipe freezes or barely touches early layers (their features are
+            already close to optimal for any vision task) while unfreezing later layers with a higher
+            learning rate so they can specialise toward the new task.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What is catastrophic forgetting in the context of fine-tuning, and how do you prevent it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It's when fine-tuning updates backbone weights aggressively enough, early enough, that
+            the useful pretrained representations get overwritten before the new head has learned
+            anything useful to build on — you end up with a model that's worse than either the
+            original pretrained backbone or a properly fine-tuned one. It typically comes from using
+            too high a learning rate on backbone layers, especially in the first few epochs while the
+            randomly initialised head is still producing large, noisy gradients that flow back into
+            the backbone. I prevent it with differential learning rates (much smaller lr on backbone
+            layers than the head), often combined with freezing the backbone entirely for the first
+            few epochs so the head stabilises first, and gradient clipping as a safety net.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — You're fine-tuning an ImageNet backbone for a medical imaging task and performance is far worse than expected. What's happening?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            My first suspicion is domain shift: ImageNet is natural RGB photographs of everyday
+            objects and scenes, and medical images (X-rays, MRI, histopathology slides) differ in
+            colour statistics, texture, and scale in ways that make the backbone's later, more
+            task-specific layers much less useful as a starting point than they'd be for, say,
+            product photos. I'd check whether normalisation statistics match what the backbone
+            expects, then try unfreezing more layers (or a larger portion of the network) than I
+            would for an in-domain task, since less of the pretrained representation transfers
+            cleanly here. I'd also sanity-check the data pipeline itself — grayscale medical images
+            forced into 3-channel RGB, or intensity ranges very different from natural images, are
+            common silent bugs that look exactly like a domain-shift problem.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Walk me through how you'd decide between feature extraction and fine-tuning, and how you'd set up differential learning rates">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I'd start with feature extraction as a fast baseline any time the dataset is small
+            (under a few hundred images) or very similar to ImageNet — freeze the entire backbone,
+            train only the new head, and see where accuracy lands. If I have a moderate-to-large
+            dataset or the domain differs meaningfully from ImageNet, I'd move to fine-tuning:
+            unfreeze the later backbone layers (and the head, obviously), keep the earliest layers
+            frozen since their features are already near-universal, and assign a much smaller
+            learning rate to unfrozen backbone layers than to the head — a common pattern is roughly
+            0.01× the head's learning rate for early unfrozen layers, scaling up toward the head. I'd
+            validate the setup by watching per-layer-group loss behaviour early in training, and
+            consider gradual unfreezing instead if the dataset is on the smaller side.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — WHAT'S NEXT ═════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

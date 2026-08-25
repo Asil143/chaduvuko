@@ -217,7 +217,7 @@ from groq import Groq
 client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
 
 # ── Define production Stripe agent tools ────────────────────────────
-RAZORPAY_TOOLS = [
+STRIPE_TOOLS = [
     {
         'type': 'function',
         'function': {
@@ -385,7 +385,7 @@ TOOL_FUNCTIONS = {
 }
 
 print("Tool schemas defined:")
-for tool in RAZORPAY_TOOLS:
+for tool in STRIPE_TOOLS:
     fn   = tool['function']
     req  = fn['parameters'].get('required', [])
     irr  = '⚠ IRREVERSIBLE' if fn['name'] in IRREVERSIBLE_TOOLS else ''
@@ -465,7 +465,7 @@ class ProductionAgent:
         for turn in range(self.max_calls):
             # Call LLM
             response = client.chat.completions.create(
-                model='llama-3.3-70b-versatile',
+                model='openai/gpt-oss-120b',
                 messages=state.messages,
                 tools=self.tools,
                 tool_choice='auto',
@@ -546,7 +546,7 @@ class ProductionAgent:
 
 # ── Initialise and run ─────────────────────────────────────────────────
 agent = ProductionAgent(
-    tools=RAZORPAY_TOOLS,
+    tools=STRIPE_TOOLS,
     tool_fns=TOOL_FUNCTIONS,
     irreversible=IRREVERSIBLE_TOOLS,
     max_calls=8,
@@ -763,7 +763,7 @@ Return JSON: {{"steps": [...]}}
 Task: {task_description}"""
 
     response = client.chat.completions.create(
-        model='llama-3.3-70b-versatile',
+        model='openai/gpt-oss-120b',
         messages=[{'role': 'user', 'content': planning_prompt}],
         temperature=0, max_tokens=600,
         response_format={'type': 'json_object'},

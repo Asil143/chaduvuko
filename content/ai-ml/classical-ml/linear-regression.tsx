@@ -529,8 +529,8 @@ print(f"Predicted delivery time: {predicted_time:.0f} minutes")
 
 import joblib
 
-joblib.dump(model, 'swiggy_eta_model.pkl')         # save model
-loaded_model = joblib.load('swiggy_eta_model.pkl') # load it later
+joblib.dump(model, 'doordash_eta_model.pkl')         # save model
+loaded_model = joblib.load('doordash_eta_model.pkl') # load it later
 
 # FastAPI endpoint (production pattern):
 # @app.post("/predict-eta")

@@ -780,7 +780,169 @@ print(f"\nDenormalised for display: {sample_display.shape}  dtype={sample_displa
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about image representation and preprocessing</h2>
+
+        <ConceptBox title="Myth: RGB is the 'real' image and other colour spaces are just visualisation tricks" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            RGB is simply the encoding a camera sensor and most display hardware happen to use —
+            it is not a more fundamental representation of the underlying scene than HSV or LAB.
+            Each colour space packages the same information differently for a different purpose:
+            HSV separates hue from brightness so you can find "red objects" regardless of lighting,
+            LAB separates luminance from colour and is perceptually uniform for medical imaging and
+            colour correction, greyscale discards colour entirely because tasks like document OCR
+            or X-ray analysis do not need it. Choosing RGB by default is correct for most deep
+            learning models because that is what they were trained on — not because RGB is a more
+            truthful representation of the image.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once an image is resized to the model's expected dimensions, it is 'ready'" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Shape is only one of three things a model expects to match: shape, dtype, and value
+            distribution. A (3, 224, 224) float32 tensor with values in [0, 1] has the correct
+            shape but the wrong distribution for any ImageNet-pretrained model, which expects
+            roughly zero mean and unit variance per channel. As this module's errors section shows,
+            skipping normalisation produces a model that predicts the same class for every input —
+            not a crash, which would be easy to catch, but silent, confident, wrong output. Resize
+            gets the geometry right; normalisation gets the statistics right, and a pretrained
+            model needs both.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Channels-first vs channels-last is a cosmetic formatting difference" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Both orderings describe the identical pixel data — the danger is exactly that they are
+            interchangeable in shape but not in meaning. A (3, 224, 224) tensor and a (224, 224, 3)
+            array can both pass a "is this a valid input shape" check while representing completely
+            different things: three 224×224 channel planes versus 224 rows of 224 pixels with 3
+            values each. Feed one where the other is expected and most code does not error — it
+            silently reinterprets 3 rows of a 224-wide image as 3 colour channels, or vice versa,
+            producing garbled input that still has a valid tensor shape. This is why the module
+            calls channel-order mismatches the single most common computer vision bug: it fails
+            silently rather than loudly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If a pretrained model accepts your tensor's shape, your preprocessing pipeline is correct" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A pretrained model's first layer only checks tensor shape — it has no way to verify
+            that your resize strategy, normalisation statistics, or train/validation transform
+            split match what the model was actually trained on. This module's errors section
+            covers a real case: applying RandomResizedCrop to a validation set instead of a
+            deterministic Resize plus CenterCrop still produces a correctly-shaped tensor, but
+            validation accuracy becomes inconsistent between runs because the input distribution
+            silently changed. Correct shape is necessary but nowhere near sufficient — the
+            preprocessing pipeline has to reproduce the exact statistics the model expects, not
+            just its input dimensions.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Storing an image as a 2D grid of pixels rather than a flat list of numbers is just for human viewing" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The 2D-plus-channels structure is not cosmetic — it is the specific property that lets
+            convolutional layers work at all. A convolution slides the same small filter across
+            every spatial location, detecting a feature like an edge or a curve regardless of where
+            it appears in the image; this only makes sense because neighbouring entries in the
+            (height, width) grid are actually neighbouring pixels in the real image. Flatten that
+            same image into a 1D vector of 150,528 numbers and a convolutional filter has nothing
+            meaningful to slide across — position information collapses, and two pixels that were
+            adjacent in the image can end up far apart in the vector. The array shape covered in
+            this module is not bookkeeping; it is the substrate that gives a CNN's translation
+            invariance its meaning.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Image fundamentals — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why does PyTorch use channels-first (C, H, W) while PIL and OpenCV use channels-last (H, W, C), and why doesn't mixing them throw an obvious error?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PyTorch's convolution kernels are implemented to expect the channel dimension first for
+            memory-layout and performance reasons on GPU; PIL and OpenCV inherited channels-last
+            from how image file formats and most C image libraries store pixel data, row by row
+            with interleaved channel values. Neither is more "correct" — they are different
+            conventions for the same information. Mixing them is dangerous specifically because a
+            transposed shape like (224, 224, 3) can be reinterpreted as (224 channels, 224 height,
+            3 width) by code that only validates tensor rank, not axis meaning — it doesn't crash,
+            it silently treats 224 rows as 224 channels. The fix is always an explicit
+            .permute(2, 0, 1) or .transpose when converting between the two, and checking shape
+            assumptions by name, not just by count.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk me through what happens numerically if you feed a pretrained ImageNet model an image normalised to [0, 1] instead of properly mean/std normalised.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The pretrained weights, especially in the first few layers, were learned assuming
+            inputs with roughly zero mean and unit standard deviation per channel — that is what
+            T.Normalize with the ImageNet statistics produces. An image left at [0, 1] has a mean
+            around 0.5 and a much smaller spread, so it lands in a different region of the input
+            space than the one the first convolutional filters were tuned to respond to. The
+            activations that follow are not necessarily huge or NaN — often they are just
+            systematically off — and because the shift compounds through every subsequent layer,
+            the final predictions collapse toward whichever class the model defaults to, which is
+            why the practical symptom is "the model predicts the same class for every image"
+            rather than an obvious crash.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What's the actual computational difference between a convolutional layer and a fully connected layer processing the same image?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A fully connected layer treats every pixel as an independent input feature: it learns a
+            separate weight connecting each pixel to each output neuron, with no assumption that
+            pixel (10, 10) and pixel (10, 11) are spatially related. A convolutional layer instead
+            learns one small filter — say 3×3 — and reuses those same few weights at every
+            position in the image, which is only meaningful because the image is stored as a
+            spatial grid where adjacent array entries really are adjacent pixels. That weight
+            sharing is what gives CNNs translation invariance: a filter that learns to detect an
+            edge detects that edge wherever it appears, using orders of magnitude fewer parameters
+            than a fully connected layer would need to learn the same pattern separately at every
+            location.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why must you use the same normalisation statistics at inference that you used during training, and when should you compute your own instead of using ImageNet stats?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Normalisation statistics define the input distribution the model's weights were
+            optimised against; changing them between training and inference — or between training
+            and validation — shifts every activation downstream in a way the model was never
+            trained to compensate for, even though nothing about the code raises an error. Use
+            ImageNet's mean and std whenever you are fine-tuning an ImageNet-pretrained model,
+            since that is the distribution its weights already expect. Compute your own statistics
+            over your training set when the domain is different enough that ImageNet's numbers no
+            longer describe your data well — medical scans, satellite imagery, or product photos
+            shot under unusual lighting are the common cases where recomputing mean and std
+            measurably helps.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Walk me through the preprocessing decisions you'd make setting up a new image classification pipeline from scratch.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, pick the colour space — RGB by default, unless the task is colour-irrelevant
+            (documents, X-rays) where greyscale saves memory and compute, or colour-based detection
+            where HSV is more robust to lighting. Second, pick a resize strategy matched to the use
+            case — deterministic Resize plus CenterCrop for validation and inference, so metrics
+            are reproducible, versus RandomResizedCrop for training, so the model sees the object
+            at varying scales and positions. Third, always convert to RGB explicitly on load to
+            handle RGBA PNGs and greyscale images consistently. Fourth, normalise with statistics
+            matched to the model — ImageNet stats for a pretrained backbone, custom-computed stats
+            for a sufficiently different domain. And finally, keep the training and validation
+            transform pipelines separate, differing only in which steps are random, so a
+            train/validation mismatch never becomes the reason accuracy numbers cannot be trusted.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

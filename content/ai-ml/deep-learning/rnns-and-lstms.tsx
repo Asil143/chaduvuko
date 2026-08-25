@@ -900,7 +900,166 @@ print(f"\nNaive baseline MAE: {naive_mae:.2f} units/hour")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about RNNs and LSTMs</h2>
+
+        <ConceptBox title="Myth: LSTMs completely solve the vanishing gradient problem" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            LSTMs dramatically mitigate vanishing gradients through the additive cell-state update
+            (C = f×C_prev + i×g), which lets gradients flow backward through many time steps without
+            being repeatedly multiplied through a squashing non-linearity — but "mitigate" is not
+            "eliminate." Extremely long sequences can still see gradient decay, since the forget gate
+            itself is a sigmoid that can push toward zero and cut the memory pathway, and exploding
+            gradients remain a live risk through the recurrent weight matrices regardless of gating.
+            That is exactly why gradient clipping is still considered mandatory, standard practice for
+            LSTM training, not an optional safety net — the gates reduce the severity of the problem,
+            they don't make gradient management unnecessary.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: the forget, input, and output gates act like independent on/off switches" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Each gate outputs a sigmoid value between 0 and 1 for every dimension of the hidden
+            state, which does make them "gate-like" in spirit, but they are continuously valued and
+            jointly computed from the same shared inputs, not independent binary decisions. A single
+            dimension might have a forget value of 0.3 (mostly, not fully, erase this memory slot)
+            combined with an input value of 0.6 (partially write new information into the same slot)
+            in the same time step — the gates blend old and new information smoothly rather than
+            switching cleanly between "keep everything" and "erase everything." Thinking of them as
+            binary flags misses exactly the mechanism that makes gating powerful: fine-grained,
+            differentiable control over what's remembered.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: GRUs and LSTMs are basically interchangeable, so it never really matters which one you pick" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A GRU merges the LSTM's separate hidden state and cell state into one, and uses two gates
+            (reset and update) instead of three, giving it noticeably fewer parameters and typically
+            faster training and inference per step. Empirically the two often perform comparably on
+            many mid-sized sequence tasks, which is where the "doesn't matter" intuition comes from —
+            but "often comparable" is not "always equivalent." LSTMs' explicit, separate cell-state
+            memory pathway tends to have an edge on tasks with longer-range dependencies, while GRUs'
+            smaller footprint is genuinely preferable when compute- or latency-constrained. Treat the
+            choice as an empirical question for your specific task, not an interchangeable default.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: RNNs and LSTMs are obsolete now that Transformers exist, so there's no good reason to reach for them" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Transformers dominate for tasks where you can afford to process the whole sequence at
+            once and attention's quadratic cost in sequence length is acceptable — but LSTMs remain
+            the better engineering choice in specific, common situations. For streaming or online
+            inference, an LSTM's hidden/cell state gives constant memory and compute per new token,
+            while a Transformer needs to manage a growing context window or KV cache. For very long
+            sequences — tens of thousands of steps, common in genomics or long-form sensor telemetry —
+            full self-attention's quadratic cost can be computationally infeasible where an LSTM's
+            linear cost is not. "Transformers won" for language modelling at scale; that is not a
+            blanket replacement for recurrent architectures in every setting.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: bidirectional LSTMs are strictly better because they see more context, so you should default to bidirectional" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A bidirectional LSTM runs one LSTM forward and a second backward over the sequence and
+            concatenates their hidden states — genuinely useful when the full sequence is available
+            upfront and you want each position informed by both what came before and after it. But
+            that requirement makes it structurally unusable for real-time, causal, or streaming
+            prediction: you cannot run the "backward" direction on future tokens that haven't happened
+            yet. For online tasks like next-token prediction, live user-session scoring, or
+            step-by-step time-series forecasting, only a unidirectional LSTM is a valid architecture
+            at all, regardless of any accuracy benefit bidirectionality might offer on paper.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>RNNs and LSTMs — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain why LSTMs handle long-range dependencies better than vanilla RNNs — what's the actual mechanism, not just 'they have gates'?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A vanilla RNN's hidden state is recomputed every step through a tanh non-linearity —
+            backpropagating through time means repeatedly multiplying by tanh's derivative (bounded
+            well under 1 in saturated regions) at every step, so the gradient shrinks exponentially
+            with sequence length. The LSTM's key structural change is the cell state, updated
+            additively — C = f×C_prev + i×g — rather than being pushed back through a squashing
+            function at every step. Because addition, unlike repeated multiplication by sub-1 values,
+            doesn't inherently shrink a gradient, gradients can flow backward through many time steps
+            along the cell-state pathway largely intact, as long as the forget gate stays close to 1
+            for the relevant span. The gates decide when to use that additive pathway versus when to
+            actually forget — but the additive update itself is what solves the underlying math
+            problem.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk through the exact tensor shapes involved in a PyTorch nn.LSTM call with batch_first=True, and explain why this is a common source of bugs.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            With batch_first=True, input is (batch, seq_len, input_size) — matching what a standard
+            DataLoader naturally produces. The call returns output, (h_n, c_n): output has shape
+            (batch, seq_len, hidden_size) and contains the hidden state at every single time step.
+            h_n and c_n, by contrast, are (num_layers, batch, hidden_size) — batch, not seq_len, is
+            not first here even with batch_first=True, because these represent only the final states,
+            indexed by layer rather than by time step. The two most common bugs are forgetting that
+            h_n's first dimension is num_layers, so h_n[-1] gives the last layer's final hidden state,
+            and conflating output[:, -1, :] with h_n[-1] — equal for a single-direction, single-layer
+            LSTM, but they diverge the moment you add layers or bidirectionality.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Transformers are dominant now — when in 2026 would you still choose an LSTM over a Transformer for a new project?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Three cases come up in practice. First, streaming or real-time inference where you need
+            to process a new data point as it arrives with constant per-step latency and memory — an
+            LSTM's hidden/cell state naturally supports this, while a Transformer needs a growing
+            context window or KV cache. Second, very long sequences — tens of thousands of time
+            steps, common in genomics or extended time series — where full self-attention's quadratic
+            cost becomes computationally prohibitive and an LSTM's linear cost is the pragmatic
+            choice. Third, resource-constrained deployment, where a small LSTM is simply cheaper to
+            run than even a modest Transformer. For most NLP and any task with abundant compute and
+            the full sequence available upfront, Transformers remain the default.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why is gradient clipping considered close to mandatory for RNN/LSTM training specifically, more so than for CNNs or MLPs?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A feedforward network's gradient flows through depth — a fixed, architecturally-bounded
+            number of layers. A recurrent network's gradient flows through both depth and time:
+            processing a sequence of length 100 is, from backprop's perspective, equivalent to a
+            100-layer-deep unrolled network, and that unrolled depth is determined by your data, not
+            a fixed architectural choice. This makes exploding gradients — where the same recurrent
+            weight matrix, applied repeatedly, amplifies the gradient each step — a much more common
+            and less predictable failure mode for RNNs/LSTMs than for a network with a handful of
+            fixed layers. Gradient clipping rescales the gradient vector when its norm exceeds a
+            threshold, cheap insurance applied by default in essentially every serious RNN/LSTM
+            training loop, independent of whether NaNs have actually been observed yet.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — What's the difference between h_n and output[:, -1, :], and when would using one instead of the other be a real bug?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For a single-layer, unidirectional LSTM, h_n[-1] and output[:, -1, :] contain identical
+            values — both are the hidden state at the final time step. They diverge the moment you
+            add multiple layers or bidirectionality. With multiple layers, output only ever reflects
+            the top layer's hidden state at each time step, while h_n contains the final hidden state
+            of every layer stacked — so h_n[-1] is what matches output[:, -1, :], and grabbing the
+            wrong index silently gives you an intermediate layer's representation instead. With
+            bidirectionality it's worse: h_n's last two entries are the final forward-direction and
+            final backward-direction states, and the backward direction's "final" state actually
+            corresponds to the first time step of the sequence — using output[:, -1, :] directly in
+            that setting mixes a real forward-final-step signal with the backward pass's very first
+            computed state, a substantive and easy-to-miss correctness bug.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

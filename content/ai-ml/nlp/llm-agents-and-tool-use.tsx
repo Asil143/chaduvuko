@@ -366,7 +366,7 @@ def run_agent(user_message: str, max_turns: int = 5) -> str:
 
     for turn in range(max_turns):
         response = client.chat.completions.create(
-            model='llama-3.3-70b-versatile',
+            model='openai/gpt-oss-120b',
             messages=messages,
             tools=TOOLS,
             tool_choice='auto',   # LLM decides when to call tools
@@ -508,7 +508,7 @@ class ConversationMemory:
             '\n'.join(f"{m['role']}: {m['content']}" for m in old_messages)
         )
         response = client.chat.completions.create(
-            model='llama-3.3-70b-versatile',
+            model='openai/gpt-oss-120b',
             messages=[{'role': 'user', 'content': summary_prompt}],
             max_tokens=200, temperature=0,
         )
@@ -542,7 +542,7 @@ Only extract genuinely useful facts (preferences, identity, recurring issues).
 Conversation:
 {conversation}"""
         response = client.chat.completions.create(
-            model='llama-3.3-70b-versatile',
+            model='openai/gpt-oss-120b',
             messages=[{'role': 'user', 'content': prompt}],
             max_tokens=300, temperature=0,
         )
@@ -572,7 +572,7 @@ print("Session 1:")
 for user_msg in turns:
     conv.add('user', user_msg)
     response = client.chat.completions.create(
-        model='llama-3.3-70b-versatile',
+        model='openai/gpt-oss-120b',
         messages=conv.get_messages(),
         max_tokens=100, temperature=0.3,
     )
@@ -663,7 +663,7 @@ class SpecialistAgent:
         ]
         for _ in range(5):
             response = client.chat.completions.create(
-                model='llama-3.3-70b-versatile',
+                model='openai/gpt-oss-120b',
                 messages=messages,
                 tools=self.tools if self.tools else None,
                 tool_choice='auto' if self.tools else None,
@@ -748,7 +748,7 @@ For this request, create a plan as JSON:
 Request: {request}"""
 
     plan_response = client.chat.completions.create(
-        model='llama-3.3-70b-versatile',
+        model='openai/gpt-oss-120b',
         messages=[{'role': 'user', 'content': plan_prompt}],
         temperature=0, max_tokens=300,
     )
@@ -783,7 +783,7 @@ Request: {request}"""
         + "\n\nSynthesise a clear, complete response:"
     )
     final = client.chat.completions.create(
-        model='llama-3.3-70b-versatile',
+        model='openai/gpt-oss-120b',
         messages=[{'role': 'user', 'content': synthesis_prompt}],
         temperature=0.2, max_tokens=400,
     )
@@ -908,7 +908,7 @@ class SafeAgent:
                 return f'Safety limit: max {self.max_calls} tool calls reached.'
 
             response = client.chat.completions.create(
-                model='llama-3.3-70b-versatile',
+                model='openai/gpt-oss-120b',
                 messages=messages,
                 tools=self.tools,
                 tool_choice='auto',
@@ -989,7 +989,165 @@ print("Layers: tool-level validation + confirmation + output validation")`} />
 
       <Div />
 
-      {/* ══ SECTION 7 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about LLM agents</h2>
+
+        <ConceptBox title="Myth: Any LLM call that uses a tool is 'an agent'" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A single request-response turn where the model calls one function and returns an
+            answer — what is the weather in Austin, followed by one weather-API lookup — is tool
+            use, not agency. What makes something an agent is a loop: the model observes a result,
+            decides what to do next based on that result, and keeps deciding across multiple steps
+            without a human choosing each step in advance. The Stripe dispute example in this
+            module — look up the transaction, then decide whether to check the deadline, then
+            decide whether to draft an email — is an agent because each decision depends on the
+            previous tool's output. One tool call bolted onto a chatbot is not.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Giving an agent more tools makes it more capable" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every additional tool is an additional way for the LLM to pick wrong. With three tools
+            (get_transaction, get_settlement_status, calculate_fee) the model rarely confuses
+            which one to call. With thirty overlapping tools — several that could plausibly answer
+            the same question — tool selection itself becomes a failure mode, and hallucinated
+            arguments get more likely because the model is juggling more schemas at once.
+            Production agents are usually more reliable with a small, sharply-scoped toolset than
+            a large general-purpose one; if an agent needs thirty capabilities, that is often a
+            sign it should be several specialist agents behind an orchestrator, not one agent with
+            thirty tools.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: ReAct is an outdated pattern now that native function calling exists" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            ReAct and function calling solve different problems. Function calling is the wire
+            format — how a tool call is represented and returned (structured JSON instead of text
+            you regex out). ReAct is the reasoning pattern — the model explicitly reasons through
+            what it knows, what it still needs, and which tool gets it there, before acting, then
+            observes the result and reasons again before the next action. You can, and in
+            production usually do, implement ReAct-style reasoning using native function calling
+            as the execution mechanism. Dropping the reasoning step entirely — jumping straight to
+            tool calls with no visible intermediate reasoning — is what actually causes agents to
+            call plausible-sounding tools that do not fit the actual task.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: An 'agent' and a 'workflow' are the same thing with different marketing names" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A workflow (or chain) has its control flow fixed by the developer ahead of time: step
+            one always runs, then step two, then step three, regardless of what step one returns —
+            the orchestrator code decides the sequence. An agent has its control flow decided by
+            the LLM at runtime: the multi-agent orchestrator in this module writes a plan and can
+            route to a different specialist, skip a step, or loop back depending on what a
+            previous specialist found. Workflows are more predictable and cheaper to run; agents
+            are more flexible but strictly less predictable, because the same input can
+            legitimately take a different path through the system on different runs. Choosing
+            between them is an engineering trade-off, not a matter of which sounds more impressive.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If a tool call goes wrong, the agent will self-correct on the next turn" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Nothing about the agent loop guarantees this. Left unmanaged, an LLM that gets an
+            error or an empty result from a tool frequently retries the identical call rather than
+            changing strategy — this module's errors section covers exactly this failure mode.
+            Self-correction only happens because you engineer it: tracking (tool_name, args) pairs
+            already tried, injecting an explicit message when a repeat is detected, returning
+            structured error types the model can reason about instead of opaque failures, and
+            capping max_turns so a stuck agent stops instead of burning cost indefinitely. Robust
+            agent behaviour is a designed property of the system around the LLM, not an emergent
+            property of the LLM itself.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>LLM agents — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What's the actual difference between an agent and a simple function-calling pipeline?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A simple function-calling pipeline executes one, or a fixed sequence of, tool calls
+            per request and returns an answer — the developer decides how many calls happen and in
+            what order. An agent runs a loop: after each tool result, the LLM itself decides
+            whether it has enough information to answer or needs to call another tool, and if so,
+            which one — that decision is made by the model at each step, not hardcoded by the
+            developer. The practical consequence is that an agent's number of steps and exact path
+            are not known in advance, which is exactly why production agents need max_turns caps,
+            loop detection, and cost budgets that a fixed pipeline does not need.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk me through why agent loops fail and how you'd catch it in production.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Two dominant failure modes: infinite or repeated tool calls, where the LLM retries the
+            same call after getting an error or null result instead of changing approach; and
+            hallucinated arguments, where the model invents plausible-sounding field names or
+            values that are not in the tool's schema. In production you catch the first by hashing
+            the tool name and arguments for every call in the current run and flagging repeats
+            back to the model with the prior result attached, plus a hard max_turns ceiling as a
+            backstop. You catch the second by making schemas strict — required fields listed
+            explicitly, additionalProperties set to false, enum constraints on categorical fields —
+            and validating every tool call against the schema before executing it, feeding
+            validation errors back to the model rather than letting a malformed call reach a real
+            system.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Explain the ReAct pattern. Is it still relevant now that APIs support native function calling?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            ReAct interleaves reasoning and acting: the model explicitly reasons about what it
+            knows and what it needs, takes an action (a tool call), observes the result, then
+            reasons again before the next action — as opposed to jumping straight from a question
+            to a tool call with no visible intermediate reasoning. It is still relevant because it
+            addresses a different layer than native function calling. Function calling is just the
+            transport — how a tool call is structured and returned. ReAct is about forcing the
+            model to think before each action, which measurably reduces wrong-tool selection and
+            hallucinated arguments on multi-step tasks. In practice you implement ReAct-style
+            reasoning on top of native function calling — they are complementary, not competing.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you bound the cost and autonomy of an agent before putting it in production?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Several layers, applied together: a hard max_turns and max_tool_calls ceiling so a
+            stuck agent stops instead of looping indefinitely; per-tool call-count limits so one
+            unreliable tool doesn't dominate the budget; classification of every tool as reversible
+            or irreversible, with irreversible actions — send email, process a refund, delete a
+            record — routed through an explicit human confirmation step rather than executed
+            automatically; a dry_run mode during development so tools log intended actions without
+            executing them; and output validation before acting on the agent's final answer,
+            checking for signals like hallucination phrases or malformed structured output. None of
+            these are optional extras — an agent that can take real-world actions without all of
+            them is not production-ready regardless of how good the underlying LLM is.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How do you decide whether a task should be a fixed workflow or an autonomous agent?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Ask whether the sequence of steps can be known ahead of time. If the task always
+            follows the same steps regardless of intermediate results — fetch data, transform it,
+            write it somewhere — a deterministic workflow is more reliable, cheaper, and easier to
+            debug than an agent, because its control flow doesn't depend on an LLM's per-step
+            judgment. Reach for an agent when the right next step genuinely depends on what a
+            previous step returned in a way you can't enumerate in advance — like the multi-agent
+            dispute system in this module, where whether compliance needs to flag risk depends on
+            what the transaction lookup actually found. The rule of thumb: use the least autonomous
+            architecture that gets the job done, since every increment of autonomy trades
+            predictability and cost control for flexibility.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

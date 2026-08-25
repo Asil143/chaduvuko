@@ -849,7 +849,159 @@ for group in optimizer_diff.param_groups:
 
       <Div />
 
-      {/* ══ SECTION 7 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about CNNs</h2>
+
+        <ConceptBox title="Myth: CNNs are translation invariant" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Convolution itself is translation equivariant, not invariant — shift the input image and
+            the resulting feature map shifts by the same amount rather than staying fixed. What gives
+            a CNN its practical robustness to small shifts is pooling and downsampling collapsing
+            spatial resolution layer by layer, which only approximates invariance, and imperfectly:
+            research on shift invariance (Zhang, 2019) showed standard strided pooling can alias and
+            actually break invariance in modern architectures, which is why anti-aliased pooling
+            variants exist. True invariance is something you approximate through architecture
+            choices, not a guarantee convolution hands you for free.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: a single large filter (e.g. 7×7) captures more useful context than several small filters, so bigger is simply better" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Stacking two 3×3 convolutional layers gives the exact same receptive field as one 5×5
+            layer, and three 3×3 layers match one 7×7 layer — but with fewer total parameters
+            (3×(3×3)=27 vs 7×7=49 weights per channel pair) and, critically, two or three ReLU
+            non-linearities inserted between them instead of one. This was the specific insight
+            behind VGGNet: depth with small filters is strictly more expressive per parameter than
+            shallow networks with large filters, which is why virtually every modern CNN backbone
+            uses stacks of 3×3 (or even 1×1) convolutions instead of large kernels.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: the filters a CNN learns are similar to hand-designed kernels like Sobel or Gaussian blur because that's how they're built" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            CNN filters start as small random matrices — there is no hand-engineering involved at
+            all. What's genuinely striking is that after training on real images, the very first
+            convolutional layer's filters frequently converge to something that looks like edge
+            detectors and colour-opponent blobs — visually similar to, but not copied from, classical
+            filters like Sobel — purely because gradient descent discovers these are the most useful
+            low-level features for the task. Deeper layers converge to increasingly abstract,
+            task-specific patterns with no classical analogue at all: textures, object parts, and
+            eventually whole-object detectors a human would never hand-design.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: transfer learning only works when your images look similar to ImageNet's photo categories" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The features learned by early and middle convolutional layers — edges, corners,
+            textures, colour gradients, simple shapes — are generic visual primitives, not specific
+            to any ImageNet category, and they transfer surprisingly well even to domains that look
+            nothing like natural photos: medical imaging, satellite imagery, and industrial defect
+            detection all see real gains from ImageNet-pretrained backbones. What actually needs to
+            match your domain is not the visual similarity of the images but your fine-tuning
+            strategy — the more your domain differs from natural photos, the more of the later,
+            task-specific layers you typically need to unfreeze and retrain rather than just
+            replacing the final classification head.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: a CNN architecture needs explicit MaxPool layers to downsample and work correctly" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MaxPool is one common way to reduce spatial dimensions, but it is not a structural
+            requirement — many strong modern architectures downsample using a strided convolution
+            instead, letting the same layer that extracts features also handle the resolution
+            reduction, or dispense with pooling until a single global-average-pool at the very end.
+            The "Striving for Simplicity" line of research demonstrated that replacing all pooling
+            with strided convolutions can match or beat traditional pooling-based architectures,
+            because pooling inherently discards spatial information (only the max or average
+            survives) that a learned strided convolution can partially preserve.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>CNNs — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why does a CNN need far fewer parameters than an MLP to process the same size image, and what specifically enables that?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Two properties, both baked into the convolution operation itself. First, local
+            connectivity — each output value only depends on a small local patch of the input (e.g.
+            3×3), not the entire image, unlike a fully connected layer where every input connects to
+            every output. Second, and more importantly, weight sharing — the exact same filter
+            weights are reused at every spatial position across the image rather than learning a
+            separate set of weights per position. A single 3×3 filter over a 3-channel image has only
+            27 weights plus bias regardless of whether the image is 32×32 or 1024×1024, because that
+            same filter simply slides across however many positions the image contains. This is what
+            makes CNNs both parameter-efficient and translation-equivariant.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk through the output size formula for a convolutional layer, and when would you choose 'same' vs 'valid' padding?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Output size = floor((H + 2×padding − kernel_size) / stride) + 1. With "valid" padding
+            (padding=0), the output shrinks every layer — a 3×3 filter with stride 1 on a 32×32 input
+            gives 30×30 — which compounds across many layers and eventually leaves too little spatial
+            resolution to keep stacking. With "same" padding (padding=(kernel_size−1)/2 for stride 1,
+            e.g. padding=1 for a 3×3 filter), the output stays the same spatial size as the input,
+            which is what lets you build very deep feature extractors without spatial dimensions
+            collapsing prematurely. In practice: use "same" padding through the feature-extraction
+            backbone so depth is a free architectural choice, and use pooling or strided convolutions
+            as the deliberate, controlled points where you reduce spatial resolution.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — You have 500 labelled images for a new product classification task. Would you use feature extraction or fine-tuning, and how would you decide?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            With only 500 images I would start with feature extraction — freeze the entire
+            pretrained backbone and train only a new classification head on top. With so little data,
+            unfreezing and updating millions of backbone parameters risks catastrophic forgetting of
+            useful pretrained features and overfitting almost immediately, since the backbone has far
+            more capacity than the dataset can constrain. If feature extraction plateaus below the
+            accuracy I need, I'd move to partial fine-tuning — unfreeze only the last block or two
+            (which hold more task-specific, less universal features) with a very small learning rate.
+            Full fine-tuning is usually reserved for datasets in the tens of thousands of images or
+            more, or when the target domain is visually very different from natural photos.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why does data augmentation matter specifically for CNNs, and what breaks if you accidentally apply it at validation or test time?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            CNNs are data-hungry and prone to overfitting on the exact pixel patterns of a small
+            training set — augmentation artificially expands the effective dataset and teaches the
+            network that these transformations shouldn't change the predicted label, directly
+            reinforcing translation and rotation robustness the raw architecture doesn't guarantee
+            for free. Applying augmentation at validation or test time is a real bug: it makes your
+            evaluation numbers noisy and non-reproducible, since accuracy varies run to run based on
+            random transforms, and more subtly it means you're evaluating on a shifted data
+            distribution rather than genuinely representative held-out data — you can end up over- or
+            under-estimating true generalisation performance.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — What's the difference between MaxPool and AdaptiveAvgPool, and why put AdaptiveAvgPool right before the classifier head instead of just flattening?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MaxPool2d(kernel_size, stride) reduces spatial size by a fixed ratio determined by its
+            kernel and stride — 2×2 with stride 2 always halves H and W — keeping the strongest
+            activation in each local window. AdaptiveAvgPool2d((h, w)) instead is told the exact
+            output size you want and figures out the pooling window itself to hit that target
+            regardless of the input's spatial size — this is what lets the same architecture accept
+            variable input image sizes and still produce a fixed-size feature vector for the
+            classifier head, since a plain Flatten would produce a different-length vector for every
+            different input resolution and break the fixed-size Linear layer that follows it. This is
+            exactly why architectures like ResNet end their feature extractor with
+            AdaptiveAvgPool2d((1,1)) rather than relying on a fixed input size.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

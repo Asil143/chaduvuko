@@ -988,7 +988,156 @@ print(f"Best val loss:  {best_val_loss:.6f}")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about Adam, BatchNorm, and Dropout</h2>
+
+        <ConceptBox title="Myth: Adam is strictly better than SGD, so there is never a reason to use plain SGD" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Adam usually converges faster and is far more forgiving of learning rate choice, which is
+            why it is the default in almost every tutorial. But a substantial body of empirical
+            results — especially in computer vision, where ResNets and other CNNs are still
+            frequently trained with SGD+momentum — shows plain SGD often finds flatter minima that
+            generalise slightly better on the test set, while Adam's per-parameter adaptive scaling
+            can settle into sharper minima that fit the training set very well but generalise worse.
+            Reach for Adam/AdamW for fast iteration and for transformers, but do not assume it
+            dominates SGD+momentum for every architecture and dataset.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: BatchNorm works by fixing 'internal covariate shift'" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is the original justification from the 2015 BatchNorm paper, and it is what most
+            tutorials repeat — but it turned out to be largely wrong. A widely cited 2018 study
+            (Santurkar et al.) showed BatchNorm's real benefit has little to do with stabilising the
+            distribution of layer inputs: networks with BatchNorm still show similar internal
+            covariate shift when noise is deliberately reintroduced, yet still train faster and more
+            stably. The actual mechanism appears to be that BatchNorm smooths the loss landscape,
+            letting you use larger learning rates safely. The practical guidance is unchanged, but
+            "fixes internal covariate shift" is the wrong mental model for why it works.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: BatchNorm and Dropout are interchangeable regularisers, so it doesn't matter how you combine them" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They solve different problems — BatchNorm stabilises the scale of activations between
+            layers, Dropout prevents neurons from co-adapting — and stacking them naively can
+            actively hurt training. If Dropout runs before BatchNorm, BatchNorm computes its batch
+            statistics from a randomly zeroed-out activation, and at test time (no dropout) those
+            statistics no longer match what the layer actually sees — a mismatch researchers call
+            variance shift. The safe, standard ordering is Linear → BatchNorm → Activation → Dropout,
+            keeping Dropout after normalisation so it cannot corrupt BatchNorm's running statistics.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: a higher dropout rate is always safer because it means more regularisation" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Dropout probability is not a dial you can crank up "to be safe" — push it too high
+            (0.7–0.8 in most hidden layers) and the network underfits: too few active neurons remain
+            each step to learn a useful representation at all, and training slows because the
+            gradient signal becomes noisy from the reduced effective batch of active units. It also
+            is not applied uniformly by layer type in practice: standard Dropout zeroes individual
+            activations, which works well for fully connected layers but is far less effective in
+            convolutional layers, where entire spatial regions need to be dropped together
+            (Dropout2d) since adjacent pixels are highly correlated and one zeroed pixel gives almost
+            no information loss.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: once you use Adam you no longer need a learning rate schedule, since Adam already 'adapts' the learning rate" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Adam's adaptivity is per-parameter and relative — it rescales each weight's step by that
+            weight's own gradient history, not a global decay over training time. It does nothing to
+            address the separate need for large exploratory steps early in training and small precise
+            steps near convergence. This is why virtually every state-of-the-art recipe pairs
+            Adam/AdamW with an explicit schedule (cosine annealing, ReduceLROnPlateau, warmup + decay)
+            on top of it — the two mechanisms solve different problems and stack rather than
+            substitute for each other.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Training techniques — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk me through exactly what changes in a BatchNorm layer between model.train() and model.eval()">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            During training, BatchNorm normalises each mini-batch using that batch's own mean and
+            variance, computed on the fly, and simultaneously updates a running exponential moving
+            average of the mean and variance it will need later. During evaluation, it stops
+            computing batch statistics altogether and instead normalises using those accumulated
+            running statistics — necessary because at inference you may see a single example at a
+            time, where a "batch mean and variance" would be meaningless. Forgetting model.eval()
+            before inference is one of the most common real PyTorch bugs: predictions become
+            non-deterministic and batch-size-dependent because BatchNorm is still using per-call
+            batch statistics instead of the stable learned ones.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why can Adam, BatchNorm, and Dropout sometimes hurt each other when combined naively, and how do you combine them correctly?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Each was designed and validated independently, and their interactions are not guaranteed
+            to be additive. The concrete failure mode is Dropout randomly zeroing activations right
+            before BatchNorm computes statistics on them — BatchNorm's running mean/variance during
+            training then reflect a "with holes" distribution that no longer matches the full,
+            dropout-free distribution seen at test time, producing a train/test mismatch called
+            variance shift. The fix is ordering: Linear → BatchNorm → Activation → Dropout, so
+            BatchNorm always normalises the true activations, and only afterward does Dropout
+            randomly zero some of them for regularisation. Since BatchNorm already stabilises
+            gradient scale, some architectures also need a lower Adam learning rate than a
+            BatchNorm-free equivalent to avoid overshooting.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — You're debugging a model that trained beautifully but gives wildly inconsistent predictions in production on the exact same input. What's your process?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First check the obvious: is model.eval() being called before inference? If the model has
+            Dropout or BatchNorm layers and eval mode was never set, Dropout will still randomly zero
+            neurons on every call by design, and BatchNorm will compute statistics from whatever
+            single example or small batch happens to be in front of it rather than the stable running
+            statistics — both produce exactly this symptom. Second, verify torch.no_grad() wraps
+            inference so no gradient state leaks in. Third, confirm the serving pipeline applies the
+            exact same normalisation and preprocessing used during training — a mismatched mean/std
+            standardisation looks identical to this failure mode from the outside.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What's the actual difference between Adam with weight_decay and AdamW, and why does it matter enough that AdamW became the default?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Standard Adam implements weight decay by adding the L2 penalty term directly to the
+            gradient before Adam's adaptive scaling is applied — so the effective decay strength ends
+            up divided by each parameter's own adaptive learning rate, meaning parameters with
+            historically large gradients get proportionally less regularisation than intended, an
+            interaction nobody wanted. AdamW decouples this: it applies weight decay directly to the
+            weights during the update step, after the adaptive gradient step, so every parameter gets
+            the same decay rate regardless of its gradient history. This matters enough in practice
+            (better generalisation, especially in transformers) that AdamW, not Adam, is now the
+            default optimiser in essentially every modern training recipe.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — For a new computer vision project, would you reach for SGD+momentum or AdamW as your default optimiser, and what would change your mind?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would usually start with AdamW for the initial working pipeline — it's far more
+            forgiving of learning rate choice and gets a model training end-to-end fastest, which
+            matters most while I'm still debugging the pipeline itself. Once it works and I'm
+            optimising for the best possible final accuracy on a well-understood CNN architecture,
+            I'd try SGD with momentum and a cosine or step schedule as a second pass, since this
+            combination often reaches slightly better generalisation on image classification
+            benchmarks than Adam-family optimisers, at the cost of being more sensitive to learning
+            rate and needing a longer schedule to converge.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

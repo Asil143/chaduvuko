@@ -960,7 +960,7 @@ def openai_rag(prompt: str, model='gpt-3.5-turbo') -> str:
     return "[OpenAI response]"
 
 # ── Option 2: Groq API (fast, free tier) ─────────────────────────────
-def groq_rag(prompt: str, model='llama-3.3-70b-versatile') -> str:
+def groq_rag(prompt: str, model='openai/gpt-oss-120b') -> str:
     """
     pip install groq
     Get free API key from console.groq.com
@@ -1097,7 +1097,160 @@ for s in result['sources']:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about RAG</h2>
+
+        <ConceptBox title="Myth: RAG eliminates hallucination" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            RAG reduces hallucination by grounding generation in retrieved text, but it does not make
+            hallucination structurally impossible. Two separate failure modes survive it: the LLM can
+            still blend retrieved context with its own training-time priors and state something not
+            actually in the context (the "LLM ignores retrieved context" error covered above), and if
+            retrieval itself returns the wrong chunks, the model can generate a perfectly
+            well-grounded, perfectly confident answer to the wrong information. Grounding instructions,
+            temperature=0, and citation tracking narrow the gap; none of them close it completely.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: RAG and fine-tuning are competing techniques — you pick one" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They solve different problems and are frequently used together. RAG supplies fresh,
+            private, or frequently-changing facts at query time without retraining — update the
+            documents and the answers update instantly. Fine-tuning changes the model's behaviour:
+            its output format, tone, task-following ability, or domain vocabulary — none of which
+            retrieval can fix, because injecting more context does not teach a model to reliably
+            output JSON or adopt a specific persona. A production support bot commonly does both: a
+            fine-tuned (or well-prompted) model for consistent tone and format, fed retrieved context
+            for the actual facts.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: bigger chunks (more context per chunk) always improve answer quality" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            More context sounds strictly safer, but oversized chunks dilute the signal the retriever
+            is trying to match on — a 2000-token chunk covering five topics gets a mediocre similarity
+            score against a query about any one of them, and even when it is retrieved, the specific
+            answer is buried in surrounding noise the LLM has to sift through. Chunking quality is
+            about matching chunk boundaries to semantic units — one chunk, one answerable concept —
+            not about maximising size. Overlap (10-20%) exists specifically to solve the opposite
+            problem (a fact split across a chunk boundary), not as a reason to make every chunk larger.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: if retrieved context contradicts the model's training knowledge, the model will always defer to the provided context" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is exactly what a strong grounding instruction is trying to force, but it is not
+            guaranteed behaviour — it is a tug-of-war between the prompt's instruction and the model's
+            parametric priors, and the priors can win, especially on topics the model has strong,
+            widely-corroborated training signal about. A model that "knows" a well-known public fact
+            may still surface it even when a retrieved chunk explicitly states your organisation's
+            different internal policy. This is precisely why production RAG systems test with
+            adversarial queries where the retrieved context deliberately conflicts with common
+            knowledge, and why citation tracking exists — to make it possible to catch, after the
+            fact, when the model answered from memory instead of from the sources it was given.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: semantic (vector) search alone is sufficient — keyword search is obsolete" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Embedding similarity captures topical and semantic closeness well, but it is weak on
+            exactly the things keyword/lexical search is strong at: exact identifiers, product SKUs,
+            error codes, numbers, negation ("not eligible" embeds close to "eligible"), and rare
+            domain jargon that the embedding model under-represents. This is why production retrieval
+            systems increasingly use hybrid search — combining a sparse method like BM25 with dense
+            vector search and merging the results (often with reciprocal rank fusion) — rather than
+            relying on vector similarity alone. "Garbage in, garbage out" applies here directly: no
+            amount of LLM quality compensates for a retriever that missed the one chunk with the exact
+            number the user asked about.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>RAG — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — RAG vs fine-tuning: when would you choose each, and could you use both?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Choose RAG when the model needs access to information that is private, large, or changes
+            frequently — a knowledge base, product catalogue, or policy document — because retrieval
+            lets you update the source documents and get updated answers with zero retraining. Choose
+            fine-tuning when the problem is about the model's behaviour: getting it to reliably
+            follow a specific output format, adopt a domain vocabulary, or perform a task pattern it
+            does not do well zero-shot — none of which more context in the prompt reliably fixes. In
+            practice the strongest systems combine both: a model fine-tuned (or carefully prompted)
+            for consistent tone, format, and refusal behaviour, fed retrieved context at query time for
+            the facts. I'd push back on a framing that treats them as alternatives — they operate on
+            different axes of the problem.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why does chunk size and overlap matter so much for RAG quality?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Chunk size sets a trade-off between two failure modes on either side of it. Too small and
+            a retrieved chunk lacks the surrounding context needed to make sense of it — you get back
+            a sentence fragment that is technically similar to the query but unusable on its own.
+            Too large and the chunk's embedding becomes an average over multiple unrelated ideas,
+            which both hurts retrieval precision (the chunk scores lower against any single specific
+            query) and, even when retrieved, buries the actual answer in surrounding text the LLM has
+            to parse through. Overlap exists to solve a third, orthogonal failure: a single answerable
+            fact sitting exactly on a chunk boundary and being split in half, so neither resulting
+            chunk contains the complete answer. 10-20% overlap costs some storage and redundancy but
+            meaningfully reduces boundary-split failures.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Explain 'garbage in, garbage out' for RAG — how does retrieval quality bound generation quality?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The LLM in a RAG system only sees what retrieval hands it — it has no independent channel
+            back to the source documents to double-check or search further on its own. If the
+            retriever returns the wrong chunks (wrong topic, outdated version, or simply missed the
+            one relevant passage), the generation step is working from bad input no matter how capable
+            the underlying model is; a stronger LLM will produce a more fluent and confident wrong
+            answer, not a correct one. This is why, when a RAG system misbehaves, the very first
+            debugging step should always be printing what was actually retrieved for that query,
+            before looking at the generation step at all — in my experience the large majority of RAG
+            failures are retrieval failures wearing a generation-failure costume.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What happens when retrieved context contradicts the model's parametric knowledge, and how do you handle it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            There is no hard guarantee the model defers to the retrieved context — it is a
+            probabilistic contest between the prompt's grounding instruction and whatever the model
+            learned during pretraining, and strongly-held training priors (widely known facts) can win
+            even against an explicit "use only the context below" instruction. You mitigate this at
+            multiple levels: a strong, unambiguous grounding instruction and temperature=0 as the
+            baseline; testing the system specifically with adversarial cases where retrieved context
+            intentionally conflicts with common knowledge, to measure how often it fails; and citation
+            tracking in production, so that when the model's claim doesn't match any cited source you
+            can flag it automatically rather than trusting the answer at face value.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A RAG system is giving wrong answers. Where do you look first, and why?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Retrieval, before generation, essentially every time. Print the actual chunks that were
+            retrieved for the failing query and their similarity scores — often the answer is
+            immediately visible: the right chunk wasn't in the top-k, the embedding model used for the
+            query differs from the one used at indexing time, or the chunk exists but is missing the
+            specific detail because of a bad chunk boundary. Only once you've confirmed the correct
+            information was actually retrieved and handed to the model does it make sense to suspect
+            the generation step — a weak grounding instruction, too high a temperature, or the model
+            blending in its own priors. Debugging generation first, before verifying retrieval, is the
+            most common wasted-effort mistake I see people make on RAG systems.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

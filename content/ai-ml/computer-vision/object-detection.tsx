@@ -869,7 +869,155 @@ print(f"mAP@0.5:0.95: {map_coco:.4f}  ← COCO standard (harder)")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about object detection</h2>
+
+        <ConceptBox title="Myth: Object detection is just classification with a box bolted on" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Classification always outputs exactly one label for a fixed-size input. Detection has
+            to solve a problem classification never faces: the number of objects in an image is
+            unknown and variable — zero, one, or forty — and each one sits at an unknown location
+            and scale. That is why detection needed its own architectural ideas (a grid of
+            simultaneous predictors, anchor boxes, NMS to clean up duplicates) rather than just
+            classification with extra output neurons. Sliding a classifier over every possible
+            window and scale would technically work, but it is combinatorially too slow — YOLO's
+            single-pass grid exists specifically to avoid that search.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A higher IoU threshold always means a 'more accurate' detector" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The IoU threshold is an evaluation choice, not a property of the model — it decides how
+            strictly a predicted box must overlap the ground truth to count as correct. Raising it
+            from 0.5 to 0.9 does not make a model better; it makes the bar for "correct" harder to
+            clear, so the same model reports a lower mAP. This is exactly why COCO's mAP@0.5:0.95
+            exists — it is deliberately more demanding than Pascal VOC's mAP@0.5 — and why comparing
+            two models' mAP numbers is meaningless unless they were evaluated at the same
+            threshold(s).
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: One-stage detectors like YOLO are strictly worse than two-stage detectors like Faster R-CNN" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            "Faster" was never the only axis. Two-stage detectors first propose candidate regions
+            then classify each one — more compute, but historically better localisation on small
+            or densely packed objects because the region proposal step gets a second dedicated look
+            at each candidate. One-stage detectors predict everything in a single forward pass,
+            trading some of that per-region refinement for speed. Modern one-stage models (YOLOv8
+            and later) have closed most of the accuracy gap through multi-scale detection and better
+            training tricks, but the underlying tradeoff — a dedicated proposal-refinement stage
+            versus a single unified pass — is still real and still shows up on small-object-heavy
+            datasets.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The NMS IoU threshold should be set as low as possible to remove every duplicate" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A lower threshold suppresses more aggressively, but "more aggressive" is not free —
+            NMS cannot tell the difference between two boxes on the same object and two boxes on
+            two different objects that happen to be standing close together. Push the threshold too
+            low (say, 0.2) in a crowd scene or a shelf of tightly packed products, and legitimate
+            neighbouring objects get merged into one detection. The right threshold is a tuned
+            tradeoff against your specific data's object density, not a knob to minimise.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Anchor boxes mean the model can only detect objects shaped like one of its predefined boxes" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Anchor boxes are starting references, not a fixed catalog the model must pick from
+            verbatim. At each grid location the model predicts *offsets* — how much to shift and
+            resize a given anchor to match the actual object — so a tall anchor can still stretch to
+            cover a wide object if the regression pushes it there. Anchors exist to give the
+            regression a sane starting point (matched to typical object shapes in the training data
+            via clustering) so training converges faster, not to hard-constrain what shapes are
+            detectable. Anchor-free detectors like YOLOv8 drop this mechanism entirely and predict
+            box dimensions directly, which is a separate design choice, not proof that anchors were
+            ever a hard constraint.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Object detection — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk me through what happens inside YOLO for a single image, end to end">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The image is divided into an S×S grid and passed through the backbone in one forward
+            pass. Each grid cell predicts a fixed number of bounding boxes (as offsets from anchor
+            boxes or, in anchor-free versions, directly), a confidence score for each box, and class
+            probabilities. The cell "responsible" for an object is the one containing that object's
+            centre. This produces hundreds of raw candidate boxes, most low-confidence or
+            duplicates. Boxes below a confidence threshold (e.g. 0.25) are discarded, then
+            Non-Maximum Suppression removes duplicate boxes on the same object, keeping only the
+            highest-confidence box per cluster. What remains is the final detection list — boxes,
+            classes, and scores.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What is IoU, and why does the threshold choice matter for evaluation?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            IoU is intersection area divided by union area between a predicted box and the ground
+            truth box — it quantifies how well two boxes overlap, from 0 (no overlap) to 1 (perfect
+            match). It matters for evaluation because it is the criterion that decides whether a
+            prediction counts as a True Positive: IoU ≥ threshold means correct, below it means the
+            prediction is a False Positive even if the class label was right. The threshold you pick
+            changes the reported score without changing the model — Pascal VOC's mAP@0.5 is lenient,
+            COCO's mAP@0.5:0.95 averages across ten thresholds from 0.5 to 0.95 and is much harder to
+            score well on, which is why COCO numbers are always lower than VOC-style numbers for the
+            same model.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Explain Non-Maximum Suppression: why is it needed and how does it work?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A detector typically produces many overlapping candidate boxes around the same real
+            object — without cleanup you would report the same car ten times. NMS removes the
+            duplicates: sort all boxes by confidence score, take the highest-scoring box and add it
+            to the final output, then remove every remaining box whose IoU with that box exceeds a
+            threshold (commonly 0.45). Repeat with whatever boxes are left until none remain. The
+            IoU threshold controls aggressiveness — too low and it merges genuinely distinct nearby
+            objects, too high and duplicate boxes survive.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What's the real difference between one-stage and two-stage detectors, and when would you pick each?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Two-stage detectors (Faster R-CNN) first generate candidate regions likely to contain an
+            object, then run a second network to classify and refine each region — more compute per
+            image but historically stronger localisation, especially on small or crowded objects,
+            because each candidate gets dedicated attention. One-stage detectors (YOLO, SSD) skip
+            the proposal step and predict boxes and classes directly from the full image in one
+            pass — much faster, which is why YOLO is the standard choice for real-time video at
+            30+ fps. I'd pick two-stage when accuracy on small/dense objects matters more than
+            latency (offline batch analysis of satellite imagery, for example) and one-stage for
+            anything real-time (live camera feeds, robotics, mobile deployment).
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Your model has strong mAP on the validation set but performs poorly in production. How do you debug it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First suspect a distribution mismatch between validation and production data — training
+            images are often cleaner (studio lighting, no motion blur) than what the camera actually
+            captures in the field, so I'd pull real production frames and manually inspect
+            detections on them. Second, check whether the confidence threshold used to compute mAP
+            (often very low, like 0.001, to build the full precision-recall curve) matches the
+            threshold actually used at inference time (often 0.5) — a high mAP built at a permissive
+            threshold does not guarantee good precision at the stricter threshold you deploy with.
+            Third, verify the NMS and confidence settings are identical between evaluation and the
+            production inference code — a silent mismatch there is a common and easy-to-miss bug.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

@@ -837,7 +837,7 @@ for concept, detail in concepts:
 # In production: files live in a feature_repo/ directory
 
 FEATURE_STORE_YAML = """
-project: swiggy_ml
+project: doordash_ml
 registry: data/registry.db
 provider: local
 online_store:

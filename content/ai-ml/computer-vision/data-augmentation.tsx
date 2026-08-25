@@ -795,7 +795,163 @@ for i, t in enumerate(tensors):
 
       <Div />
 
-      {/* ══ SECTION 7 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about data augmentation</h2>
+
+        <ConceptBox title="Myth: Data augmentation is a substitute for collecting more real data" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Augmentation recombines and perturbs the information already present in your dataset —
+            it cannot introduce information your images never captured in the first place. Flipping,
+            cropping, and colour-jittering 1,000 kurta photos teaches the model that orientation,
+            position, and lighting do not change the category, but if none of those 1,000 photos
+            were taken at night or against a cluttered background, no amount of augmentation
+            manufactures that missing condition. Augmentation is the right tool for teaching known
+            invariances cheaply; genuinely new data is the only tool for covering conditions your
+            existing images never represented at all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Standard augmentations like flip, rotate, and crop are safe to apply to any image dataset" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            As this module's geometric augmentations section notes, a horizontal flip is only
+            label-preserving when left-right orientation genuinely does not matter for the task.
+            It silently corrupts labels for text-containing images, since flipped text is
+            unreadable and a model trained on it learns nothing useful about real text. It is
+            worse than useless for medical images where laterality carries clinical meaning — a
+            chest X-ray flipped left-to-right can turn a real finding on the correct side into
+            training data that teaches the model the wrong side. None of these failures throw an
+            error; the pipeline runs, the loss goes down, and the model quietly learns an
+            invariance that is false for the actual task.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: More augmentation is always better regularisation" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Past a certain point, aggressive augmentation stops teaching invariance and starts
+            destroying the training signal — this module's errors section shows RandomResizedCrop
+            with scale=(0.05, 1.0) sometimes handing the model 5% of a product photo as its entire
+            input, which is not enough to learn from. There is a second, subtler failure: a model
+            can effectively overfit to the augmentation pipeline itself, picking up on artifacts a
+            specific resize interpolation or a particular colour-jitter implementation introduces,
+            rather than becoming genuinely more robust. Augmentation strength is a hyperparameter to
+            tune against validation performance, not a dial that only helps as you turn it up.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Because augmentation only happens at training time, it has no role at inference" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This module's callout that augmentation is applied only during training refers to
+            avoiding random transforms on the validation set so metrics stay comparable between
+            runs — it is not the whole story about augmentation and inference. Test-time
+            augmentation (TTA) applies several augmented views of the same input image at
+            prediction time — the original plus a horizontal flip plus a few crops, say — runs all
+            of them through the trained model, and averages the resulting predictions. This is
+            reproducible run to run, because the exact set of views is fixed rather than randomly
+            resampled, and it typically buys a small but real accuracy improvement at the cost of
+            several times more inference compute per prediction.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once you pick the right augmentation policy, it stays right regardless of dataset size" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The augmentation strategy section of this module is explicit that the right policy
+            scales inversely with how much data you have. Under 1,000 images, heavy augmentation
+            is close to mandatory — it is the main defence against overfitting when there simply
+            are not enough unique examples. Past 100,000 images, that same heavy policy actively
+            slows convergence without improving generalisation, because the real data already
+            provides the variation augmentation would otherwise manufacture. A policy tuned for a
+            1,000-image proof of concept is very likely wrong once the dataset has grown two
+            orders of magnitude — it needs to be revisited, not carried forward unchanged.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Data augmentation — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — When would you reach for data augmentation versus collecting more labeled data?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Augmentation is the cheap first line of defence against overfitting when you already
+            have a reasonably representative dataset but not a large one — it multiplies the
+            effective training signal by teaching invariances (position, scale, lighting) the
+            model would otherwise have to infer from too few examples. It stops being sufficient
+            when the gap is not "not enough examples of what I have" but "missing conditions
+            entirely" — a product category never photographed, a lighting condition never
+            captured, a demographic never represented. Augmentation reshuffles existing
+            information; it cannot manufacture information the dataset never contained, so a
+            validation failure mode tied to a genuinely unseen condition needs new data, not a
+            stronger transform pipeline.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Give an example of a 'standard' augmentation silently corrupting labels, and how you'd catch it before it costs you a training run.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Horizontal flip is the clearest case: applied to a dataset of receipts or screenshots
+            for OCR, it turns every piece of text unreadable while the image still looks like a
+            perfectly valid training example to any pipeline that just checks shape and dtype.
+            Applied to chest X-rays where laterality is clinically meaningful, it can flip a
+            genuine finding onto the wrong side without any code raising an error. The way to catch
+            this before it costs a training run is to manually inspect a batch of actually augmented
+            images, not just the raw source images, before training starts, and to ask explicitly
+            for every transform in the pipeline: does this operation still produce a label the
+            image genuinely shows, for this specific task?
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What is test-time augmentation, and how does it differ from training augmentation?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Training augmentation randomly perturbs each image differently every epoch so the model
+            never sees the exact same input twice, which is what teaches invariance. Test-time
+            augmentation (TTA) instead generates a small, fixed set of augmented views of one input
+            image at prediction time — say the original, a horizontal flip, and a couple of crops —
+            runs all of them through the already-trained model, and averages the predictions or
+            logits. The two solve different problems: training augmentation shapes what the model
+            learns, TTA squeezes a bit more accuracy out of a model that is already trained, at the
+            cost of running inference several times per prediction instead of once. TTA does not
+            retrain anything; it is purely an inference-time technique.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How do you decide the right augmentation strength for a new project, and what are the failure signals when you've gone too far?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Start from dataset size as the first-order signal — heavy augmentation for datasets
+            under a few thousand images, progressively lighter as the dataset grows past tens and
+            then hundreds of thousands — and then tune against validation performance rather than
+            trusting the starting point blindly. The clearest failure signal is training loss that
+            oscillates and never smoothly decreases, which usually means a transform like
+            RandomResizedCrop's scale range or ColorJitter's magnitude is destroying too much of
+            the actual training signal per image. A second, subtler signal is a large gap where
+            training loss looks fine but validation accuracy stalls or regresses — worth checking
+            whether the model is picking up on artifacts specific to the augmentation pipeline
+            rather than becoming more robust.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Why do MixUp and CutMix need soft labels instead of standard cross-entropy, and what breaks if you get this wrong?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Both techniques produce a training image that is genuinely a blend of two classes — a
+            weighted pixel combination for MixUp, a pasted region for CutMix — so the ground truth
+            for that image is honestly a mixture, not a single hard label. Standard
+            nn.CrossEntropyLoss expects one correct class index and pushes the model to be
+            confident about it; applying it to a 70/30 blended image as if it were 100% one class
+            sends a misleading gradient that fights against the very regularisation MixUp and
+            CutMix are meant to provide. The fix is cross-entropy computed against the mixed
+            soft-label vector directly — the negative sum of the mixed label times the log
+            softmax — so the loss reflects that the model's output should also be an honest blend
+            proportional to the mixing ratio.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

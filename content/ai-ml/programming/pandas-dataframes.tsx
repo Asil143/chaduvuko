@@ -435,12 +435,12 @@ wrong_dist = np.random.choice(n, size=30, replace=False)
 df_raw.loc[wrong_dist, 'distance_km'] = -1.0   # data entry errors
 
 # Save to CSV
-df_raw.to_csv('/tmp/swiggy_orders.csv', index=False)
+df_raw.to_csv('/tmp/doordash_orders.csv', index=False)
 print(f"Dataset created: {df_raw.shape}")
 
 # ── Reading from CSV ──────────────────────────────────────────────────
 df = pd.read_csv(
-    '/tmp/swiggy_orders.csv',
+    '/tmp/doordash_orders.csv',
     dtype={
         'order_id':      str,
         'traffic_score': np.int32,
@@ -466,7 +466,7 @@ print(f"Parquet loaded: {df_parq.shape}")
 
 # SQL (with SQLite)
 import sqlite3
-conn = sqlite3.connect('/tmp/swiggy.db')
+conn = sqlite3.connect('/tmp/doordash.db')
 df_raw.head(1000).to_sql('orders', conn, if_exists='replace', index=False)
 df_sql = pd.read_sql("SELECT * FROM orders WHERE delivery_time < 30", conn)
 print(f"SQL query returned: {len(df_sql)} fast deliveries")`} />
@@ -488,7 +488,7 @@ print(f"SQL query returned: {len(df_sql)} fast deliveries")`} />
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_orders.csv')
+df = pd.read_csv('/tmp/doordash_orders.csv')
 
 # ── 1. head() — see what the data looks like ───────────────────────────
 print("=== head() ===")
@@ -603,7 +603,7 @@ print(f"Numeric columns: {num_cols}")`} />
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_orders.csv')
+df = pd.read_csv('/tmp/doordash_orders.csv')
 
 # ── Column selection ─────────────────────────────────────────────────
 dist      = df['distance_km']                          # Series
@@ -620,8 +620,8 @@ subset = df.loc[0:4, ['distance_km', 'delivery_time', 'star_rating']]
 print(subset)
 
 # Boolean condition inside .loc
-bangalore = df.loc[df['city'] == 'Seattle']
-print(f"\\nSeattle orders: {len(bangalore):,}")
+seattle_orders = df.loc[df['city'] == 'Seattle']
+print(f"\\nSeattle orders: {len(seattle_orders):,}")
 
 # Compound condition
 evening_far = df.loc[
@@ -718,7 +718,7 @@ print(f"Moderate distance, good rating: {len(moderate):,}")`} />
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_orders.csv')
+df = pd.read_csv('/tmp/doordash_orders.csv')
 
 # ── Detecting missing values ───────────────────────────────────────────
 print("Missing values per column:")
@@ -812,7 +812,7 @@ print(f"\\nAfter SimpleImputer: NaN count = {np.isnan(X_imp).sum()}")`} />
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_orders.csv')
+df = pd.read_csv('/tmp/doordash_orders.csv')
 df = df.dropna(subset=['star_rating','restaurant_prep'])
 
 # ── Vectorised operations — ALWAYS try this first ────────────────────
@@ -910,7 +910,7 @@ df['efficiency_score_fast'] = (
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_orders.csv')
+df = pd.read_csv('/tmp/doordash_orders.csv')
 df = df.dropna(subset=['star_rating','restaurant_prep'])
 
 # ── Basic groupby — split, apply, combine ─────────────────────────────
@@ -1012,7 +1012,7 @@ print(f"\\nOrders from restaurants with 500+ orders: {len(active_restaurants):,}
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_orders.csv')
+df = pd.read_csv('/tmp/doordash_orders.csv')
 
 # ── Create supplementary tables to join ───────────────────────────────
 
@@ -1098,7 +1098,7 @@ print(f"Combined features: {combined_features.shape}")`} />
         <CodeBlock code={`import pandas as pd
 import numpy as np
 
-df = pd.read_csv('/tmp/swiggy_orders.csv')
+df = pd.read_csv('/tmp/doordash_orders.csv')
 
 # ── .str accessor — vectorised string operations ──────────────────────
 
@@ -1269,7 +1269,7 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LinearRegression
 
-df = pd.read_csv('/tmp/swiggy_orders.csv')
+df = pd.read_csv('/tmp/doordash_orders.csv')
 df = df.dropna(subset=['star_rating','restaurant_prep'])
 df = df[df['distance_km'] > 0]   # remove negative distance errors
 
@@ -1336,7 +1336,7 @@ print(f"\\nPipeline Test R²: {pipe.score(X_test, y_test):.4f}")
 # ── Saving the prepared dataset ────────────────────────────────────────
 feature_df = pd.DataFrame(X_train, columns=FEATURES)
 feature_df['target'] = y_train
-feature_df.to_parquet('/tmp/swiggy_ml_ready.parquet', index=False)
+feature_df.to_parquet('/tmp/doordash_ml_ready.parquet', index=False)
 print(f"\\nSaved ML-ready dataset: {feature_df.shape}")`} />
       </div>
 

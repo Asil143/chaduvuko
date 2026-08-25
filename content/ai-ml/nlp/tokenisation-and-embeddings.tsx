@@ -884,7 +884,181 @@ for i in range(len(labels)):
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about tokenisation and embeddings</h2>
+
+        <ConceptBox title="Myth: BPE merges correspond to real linguistic morphemes" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            BPE's merge rule is purely statistical: at every step it merges whichever adjacent pair of
+            symbols occurs most frequently in the training corpus, with no notion of prefixes,
+            suffixes, or roots. It sometimes produces splits that happen to line up with real
+            morphology — "run" + "##ning" looks like a linguist's segmentation — but that is a
+            byproduct of frequency, not a design goal. Feed it a corpus where "ing" almost never
+            follows "runn" but "runni" is extremely common for some other reason, and BPE will happily
+            merge "runni" instead, producing a split no linguist would ever propose. Treat subword
+            tokens as a frequency-driven compression scheme, not a linguistically grounded
+            morphological analysis.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: tokenisation and embeddings are basically the same step" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Tokenisation and embedding are two entirely separate operations that happen to run back to
+            back. Tokenisation is deterministic and discrete: given a fixed vocabulary and merge rules,
+            the same input text always produces the exact same sequence of integer IDs, with no
+            learning involved after the vocabulary is built. Embedding is a learned, continuous lookup:
+            the token ID indexes into a trainable weight matrix, and that matrix's values are updated
+            by gradient descent during training just like any other parameter. You can swap a model's
+            embedding table entirely (freeze it, replace it with GloVe vectors, fine-tune it) without
+            touching the tokeniser, and swap the tokeniser without changing how embeddings work — they
+            are independent stages of the pipeline, not one fused step.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: subword tokenisation eliminates the out-of-vocabulary problem" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Subword tokenisation eliminates the literal [UNK] token for text expressible in the base
+            character or byte alphabet — any string can eventually be broken down to individual
+            characters or bytes, which are always in vocabulary. But that is not the same as
+            eliminating the practical OOV problem. A domain term the tokeniser never saw during
+            training — "thrombocytopenia," a rare API name, code in an unfamiliar language — gets
+            fragmented into many small subword pieces instead of one clean token. The model then has to
+            reconstruct the term's meaning from scratch, token by token, every time it appears, which
+            measurably hurts performance even though no [UNK] ever shows up. The fix for a domain-heavy
+            corpus is still to retrain or extend the tokeniser on domain data, not to rely on subwords
+            alone.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: king − man + woman ≈ queen shows Word2Vec's embedding space has a clean, general linear structure" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is one of the most widely repeated results in NLP, and it is real — but it is also a
+            carefully chosen example from a space that mostly does not behave this cleanly. Systematic
+            evaluation of Word2Vec analogies shows the arithmetic works reliably for a narrow set of
+            relationship types (gender, some capital-city pairs) and degrades quickly outside them; many
+            "obvious" analogies (bigger : big :: colder : cold, for instance) do not hold nearly as
+            cleanly, and the result is sensitive to the exact training corpus and hyperparameters used.
+            The honest takeaway is that embedding spaces capture some linear regularities as a side
+            effect of the training objective, not that vector arithmetic is a dependable general-purpose
+            reasoning tool over word meaning.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: contextual embeddings mean BERT doesn't need a fixed vocabulary or tokeniser step" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            "Contextual" describes what happens to the vector after tokenisation — the same token ID
+            produces a different final embedding depending on its surrounding tokens, because
+            self-attention mixes information across the whole sequence before the representation is
+            read out. It says nothing about the tokenisation step itself, which is exactly as fixed and
+            deterministic for BERT as it is for Word2Vec: BERT ships with a static ~30,000-token
+            WordPiece vocabulary built once during pretraining, and every input still has to be
+            tokenised into IDs from that fixed vocabulary before anything contextual happens. Swap
+            BERT's tokeniser for a different vocabulary and the model breaks entirely — contextuality
+            lives in the encoder, not in the tokenisation stage.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Tokenisation and embeddings — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What's the difference between tokenisation and embeddings? Walk through the full pipeline from raw text to model input.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Raw text first goes through the tokeniser, a fixed, deterministic algorithm (BPE,
+            WordPiece, or similar) that splits text into subword pieces and maps each piece to an
+            integer ID using a vocabulary built once ahead of time — this step involves no learning at
+            inference time and always produces the same IDs for the same text. Those integer IDs are
+            then used to index into the embedding table, nn.Embedding(vocab_size, d_model) — a learned
+            weight matrix where row i is the dense vector for token ID i. That lookup is the actual
+            entry point into the neural network; everything downstream (attention, feedforward layers)
+            operates on those dense vectors, never on the raw text or the token IDs themselves. Getting
+            this pipeline wrong — mismatched vocab sizes between tokeniser and embedding table, or using
+            a different tokeniser than the one a pretrained model was trained with — silently produces
+            garbage, because token ID 500 from one vocabulary means something completely different from
+            token ID 500 in another.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain how BPE works — walk through the algorithm and why frequency-based merging is used.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            BPE starts by treating every word as a sequence of individual characters, with an
+            end-of-word marker to distinguish, say, "low" from the "low" inside "lower." It then
+            repeatedly finds the most frequent adjacent pair of symbols across the entire corpus and
+            merges that pair into a single new symbol — merge "l" and "o" into "lo" if that pair is the
+            most common, then in the next iteration "lo" might merge with "w" into "low," and so on.
+            After k merges, the vocabulary contains the original characters plus k learned
+            multi-character tokens, and the same ordered list of merge rules is replayed at inference
+            time to tokenise any new text — including words the tokeniser never saw, which just fall
+            back further down the merge chain toward individual characters. It's frequency-based
+            because the entire goal is compression efficiency and shared representations for common
+            patterns: merging what's common first means the most frequent subwords get the shortest
+            token sequences, and structurally similar words (running, runs, runner) end up sharing
+            subword pieces even without any linguistic annotation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why do modern LLMs use subword tokenisation instead of word-level or character-level tokenisation?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Word-level tokenisation needs a vocabulary entry for every distinct word form — "run,"
+            "runs," "running," "ran" are four unrelated vocabulary slots with no shared representation,
+            and any word not seen during vocabulary construction becomes an unrecoverable [UNK]. That
+            forces either a huge vocabulary (hundreds of thousands of entries, most rarely used) or a
+            severe OOV problem. Character-level tokenisation solves OOV completely — any string can be
+            spelled out — but produces very long token sequences for the same text, which is expensive
+            given attention's O(n²) cost, and forces the model to learn word-level meaning entirely from
+            character sequences rather than getting any of that structure for free. Subword tokenisation
+            is the practical middle ground: common words stay as a single token (cheap, like
+            word-level), rare or unseen words decompose into a handful of known subword pieces (robust,
+            like character-level), and the vocabulary size (tens of thousands) stays manageable — which
+            is why every major LLM (GPT's BPE, BERT's WordPiece, SentencePiece elsewhere) converged on
+            this approach independently.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What's the difference between static embeddings like Word2Vec or GloVe and contextual embeddings like BERT's, and when would you use each?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A static embedding assigns exactly one fixed vector per vocabulary entry, computed once
+            during training and never changed at inference time — "bank" has the same vector whether
+            the sentence is about a river or a loan, because the lookup has no way to know which
+            sentence it's in. A contextual embedding computes a different vector for the same token
+            depending on the tokens around it, because the model runs the whole sequence through
+            self-attention layers before producing the final representation for each position — "bank"
+            near "river" and "bank" near "transfer" get measurably different vectors. Static embeddings
+            are cheap, fast to look up, and fine for simple similarity tasks or as an initialisation when
+            you have very little labelled data; contextual embeddings cost a full forward pass through a
+            Transformer but capture polysemy and context-dependent meaning, and they almost always win
+            on any task where meaning genuinely shifts with context, at the cost of far more compute per
+            token.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — You're building a model for a domain with a lot of out-of-vocabulary terms — medical text, legal contracts, or source code. What would you actually do about tokenisation?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, check what a general-purpose tokeniser (GPT's or BERT's default) actually does to
+            your domain text — run a sample through it and measure the average tokens-per-word; if
+            domain terms are getting fragmented into many small pieces, that's the concrete symptom of a
+            tokeniser mismatch, not a vague guess. From there, the two real options are: use or
+            fine-tune a domain-pretrained model that shipped with its own tokeniser trained on similar
+            data (BioBERT/PubMedBERT for medical text, LegalBERT for contracts, a code-specific
+            tokeniser for source code) — the fastest path if one exists for your domain — or train a new
+            BPE/WordPiece vocabulary directly on a representative corpus of your domain text and either
+            train from scratch or carefully extend an existing model's vocabulary with the new merge
+            rules. What you should not do is assume the default tokeniser is "good enough" just because
+            it never emits a literal [UNK] — fragmentation without [UNK] is still a real, measurable
+            cost to model quality.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

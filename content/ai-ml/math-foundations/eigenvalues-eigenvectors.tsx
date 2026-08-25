@@ -604,7 +604,7 @@ X = np.column_stack([order_freq, avg_value, delivery_dist,
 
 # ── Step 1: Standardise the data (zero mean, unit variance) ───────────
 # This is CRITICAL before computing eigenvalues
-# Without it, features with larger values (like avg_value in rupees)
+# Without it, features with larger values (like avg_value in dollars)
 # will dominate simply because their numbers are bigger
 X_mean = X.mean(axis=0)
 X_std  = X.std(axis=0)
@@ -982,7 +982,7 @@ print(f"  Spectral Clustering:       {sc_accuracy:.1%}  ← succeeds via eigenve
 
         <ErrorBlock
           error="PCA components explain only 20% of variance — something is wrong"
-          cause="You forgot to standardise your data before PCA. A feature with values in the thousands (like price in rupees) has a variance millions of times larger than a feature between 0 and 1 (like a proportion). The covariance matrix is dominated by the high-variance feature, and all principal components end up aligned with that one feature."
+          cause="You forgot to standardise your data before PCA. A feature with values in the thousands (like price in dollars) has a variance millions of times larger than a feature between 0 and 1 (like a proportion). The covariance matrix is dominated by the high-variance feature, and all principal components end up aligned with that one feature."
           fix="Always apply StandardScaler before PCA: scaler = StandardScaler(); X_scaled = scaler.fit_transform(X). Or use PCA with whiten=True which standardises automatically. Standardisation ensures every feature contributes equally to the covariance structure, so eigenvalues reflect genuine data patterns rather than unit differences."
         />
 

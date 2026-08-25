@@ -941,7 +941,178 @@ def tokenise_and_align(examples, tokenizer, label2id):
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about BERT and the encoder family</h2>
+
+        <ConceptBox title="Myth: Next Sentence Prediction was essential to BERT's success" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            NSP was one of BERT's two original pretraining objectives, alongside masked language
+            modelling, and it was presented as necessary for tasks that require understanding
+            relationships between sentences (like question answering). RoBERTa's 2019 ablation directly
+            tested this by removing NSP entirely and training MLM alone for longer on more data — and
+            matched or exceeded original BERT's results across the board. The actual reason NSP looked
+            useful in the original BERT paper wasn't the objective itself; it was that the NSP-trained
+            runs happened to also get more training data and time. Once that confound was controlled
+            for, NSP contributed nothing and was dropped from essentially every BERT successor since.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: the [CLS] token is inherently a 'summary' representation because of how it's positioned" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            [CLS] is just a special token prepended to every input sequence at position 0 — there is
+            nothing architecturally different about how attention treats it compared to any other
+            token; it attends to and is attended to exactly like every other position. Its final hidden
+            state only becomes a useful sentence-level summary because it is explicitly trained to be
+            one — during pretraining, [CLS]'s output feeds the NSP classifier, and during fine-tuning it
+            feeds whatever task-specific head you attach for classification. In a hypothetical BERT with
+            random, untrained weights, [CLS]'s hidden state is exactly as meaningless as any other
+            token's — the "summary" property is a learned behaviour from the training objective, not a
+            structural guarantee from where the token sits in the sequence.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: the 15% masking in MLM pretraining exactly matches how the model is actually used afterward" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is precisely the problem the 80/10/10 rule exists to fix. If every masked position
+            were simply replaced with the literal [MASK] token, the model would only ever need to
+            predict from context around [MASK] tokens — but [MASK] never appears in real fine-tuning or
+            inference data, which creates a mismatch between what the model practiced on and what it
+            will actually see in production. The 80/10/10 split — 80% of selected tokens become [MASK],
+            10% become a random token, 10% stay unchanged — forces the model to keep a robust,
+            context-sensitive representation for every token, not just the ones that happen to be
+            masked, because it can never be sure whether the token in front of it is genuine, corrupted,
+            or masked without checking context regardless.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: a bigger or more complex BERT variant always performs better than a smaller one" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            DistilBERT is roughly 40% smaller than BERT-base by parameter count and retains about 97%
+            of its performance on standard benchmarks — for many production classification and NER
+            tasks, that gap is invisible relative to the 60% latency improvement it buys. On small
+            labelled datasets (a few hundred examples), even simpler non-Transformer baselines like
+            TF-IDF plus logistic regression can outperform a fully fine-tuned BERT, because BERT has
+            enough parameters to overfit before it ever benefits from its pretrained knowledge. Model
+            size is one variable among several — data size, domain match, latency budget, and
+            overfitting risk usually matter more than raw parameter count when picking which
+            encoder-family model to actually deploy.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: BERT's bidirectionality makes it a strictly more powerful architecture than GPT's causal design" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Bidirectional attention and causal attention are not a strictly-better-vs-strictly-worse
+            pair — they are a direct architectural trade-off. Bidirectionality is exactly what makes
+            BERT unable to generate text autoregressively: if every token could already see every
+            future token during training, predicting the next token would be trivial and would leak the
+            answer, which is why BERT cannot be used for open-ended generation without substantial
+            modification. GPT's causal mask sacrifices access to future context specifically so that
+            next-token prediction remains a genuine prediction problem, which is what makes
+            autoregressive generation possible at all. Each architecture is specialised for what its
+            masking allows it to do — understanding tasks that benefit from full context versus
+            generation tasks that require the model to only ever see the past — neither one dominates
+            the other in general.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>BERT and the encoder family — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why can't BERT use next-token prediction as its pretraining objective the way GPT does?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Next-token prediction requires that the model, when predicting token t+1, only has access
+            to tokens 1 through t — otherwise the "prediction" is trivial, since the answer is sitting
+            right there in the input. That requirement forces a causal mask, which is exactly what
+            makes GPT unidirectional: each token can only attend to what came before it. BERT's whole
+            design goal is the opposite — every token should attend to every other token in both
+            directions, because that full context is what makes it strong at understanding tasks.
+            Applying a causal mask to get next-token prediction working would directly contradict
+            BERT's bidirectional design, so it needs an objective that can be computed with full
+            bidirectional context without leaking the answer — which is exactly what masked language
+            modelling provides: hide 15% of tokens, let the model see everything else in both
+            directions, and predict only the hidden ones.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain the 80/10/10 masking rule in MLM — why not just always replace the selected tokens with [MASK]?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            If masking always meant literally inserting the [MASK] token, the model would learn a
+            representation that is only ever exercised at [MASK] positions — but at fine-tuning and
+            inference time, [MASK] never appears in real input, so the model's representations for
+            ordinary, non-masked tokens would never get the same training pressure to be
+            context-aware. The 80/10/10 split forces every token's representation to stay robust
+            regardless of what it turns out to be: of the 15% of tokens selected for the MLM task, 80%
+            are replaced with [MASK] (learn to predict from context), 10% are replaced with a random
+            wrong token (learn to notice when a token doesn't fit and correct it using context, not just
+            copy it), and 10% are left unchanged (learn to still use context even when the input token
+            is already correct, since the model can't tell this case apart from the other two). The net
+            effect: BERT can't develop a shortcut of "just copy whatever token is in front of me,"
+            because 20% of the time that would be wrong.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What's the difference between BERT's three embeddings — token, segment, and position — and why does BERT need segment embeddings when GPT doesn't?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The token embedding is the standard WordPiece lookup table, one vector per vocabulary
+            entry. The position embedding is a learned vector per sequence position (0 through 511),
+            added so the model can distinguish token order despite attention being
+            permutation-equivariant on its own — same reason every Transformer needs positional
+            information, GPT included. The segment embedding is BERT-specific: it's a binary signal
+            (sentence A vs sentence B) added to every token, needed because BERT was designed from the
+            start to take two-sentence inputs for tasks like question answering (question + context) or
+            the original NSP objective (sentence A + sentence B), and the model needs an explicit signal
+            for which sentence each token belongs to since bidirectional attention alone can't infer a
+            sentence boundary from [SEP] tokens reliably at every layer. GPT never needs this because it
+            processes a single continuous stream of tokens for autoregressive generation — there's no
+            fixed two-segment input structure to disambiguate.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — RoBERTa removed NSP entirely and got better results. What does that tell you about how to evaluate whether a training component is actually helping?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It's a direct lesson in controlling for confounds before crediting a specific design
+            choice. The original BERT paper presented MLM and NSP together as a package, so it looked
+            like NSP was contributing to BERT's strong results. RoBERTa isolated the variable: same
+            architecture, same MLM objective, NSP removed, but trained for longer on substantially more
+            data — and it matched or beat BERT anyway. That means the original NSP-included runs'
+            apparent success was confounded with the additional data and training time, not evidence
+            that NSP itself was doing useful work. The broader interview-relevant point: when someone
+            claims a specific training component is "necessary" based on a paper that changed several
+            things at once, the right instinct is to ask what was actually ablated — a single change
+            tested in isolation is much stronger evidence than a bundle of changes that all shipped
+            together and happened to work.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you fine-tune BERT for token classification (NER) versus sequence classification? What's different at the architecture level, and what could go wrong?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Sequence classification uses only the final hidden state at the [CLS] position — a single
+            768-dimensional vector — fed into a linear layer that outputs class logits for the whole
+            input; the rest of the sequence's hidden states are simply discarded at the head. Token
+            classification (NER) instead uses every token's final hidden state independently, each fed
+            through the same linear layer to produce a label per token — the model is predicting a tag
+            for every position, not one tag for the whole sequence. The architecture-level difference is
+            just where you attach the head (one position vs all positions) — the pretrained encoder
+            underneath is identical. What commonly goes wrong is label alignment: WordPiece splits a
+            single annotated word into multiple subword tokens ("Stripe" becomes "St" + "##ripe"), so
+            you can't naively assign your word-level label to each resulting token — you have to use the
+            tokeniser's word_ids() to give the real label only to a word's first subword and mask out
+            continuation subwords with label -100 so they're ignored in the loss, otherwise the model is
+            trained on silently corrupted labels.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

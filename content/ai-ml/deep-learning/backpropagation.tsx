@@ -896,7 +896,141 @@ print("  But for standard training: always call zero_grad() before backward()")`
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about backpropagation</h2>
+
+        <ConceptBox title="Myth: Backprop and gradient descent are the same algorithm" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They solve two different problems that happen to run back to back. Backprop answers
+            "how much does each weight contribute to the error?" — it computes gradients, nothing
+            more. Gradient descent answers "given these gradients, how should I update the
+            weights?" You could compute gradients with backprop and then update weights with a
+            completely different optimiser (Adam, RMSprop, SGD with momentum) — backprop does not
+            change. It is the gradient-computation half of training, not the whole thing.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Deeper networks always learn better because backprop can handle any depth" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Mathematically backprop works at any depth — the chain rule does not care how many
+            layers there are. Practically, depth is exactly what breaks it: each layer's derivative
+            gets multiplied into the gradient, and with sigmoid/tanh those derivatives are
+            consistently below 1, so a 20-layer network can vanish the gradient to numerical zero
+            before it reaches the early layers. Every major deep learning breakthrough since
+            2015 — ResNets' skip connections, batch normalisation, careful initialisation — exists
+            specifically to keep very deep networks trainable despite this, not because backprop
+            "handles" depth for free.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Backpropagation finds the best possible weights" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Backprop only supplies a direction (the gradient); gradient descent then takes a step
+            in that direction. Neural network loss surfaces are highly non-convex, so this process
+            is only guaranteed to reach *a* local minimum, never provably the global one. In
+            practice, modern research suggests that in large, overparameterised networks most
+            local minima found this way perform comparably — but that is an empirical observation
+            about the loss landscape, not a guarantee backprop itself provides.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: You need to hand-derive backprop to use PyTorch or TensorFlow" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Autograd computes every gradient for you — you will rarely, if ever, write dW = A_prev.T
+            @ dZ by hand in production code. But "rarely write it" is not "never need to understand
+            it": every one of the errors in this module (dead ReLUs, NaN losses, gradient
+            explosions) is invisible to autograd itself — it faithfully computes whatever gradient
+            the math produces, including a completely broken one. Debugging those requires knowing
+            what backprop is actually doing under the hood, which is exactly why this module exists
+            even though nobody hand-codes it day to day.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The chain rule in backprop is special 'neural network math'" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is the identical multivariable chain rule from a calculus course — nothing about it
+            is neural-network-specific. What backprop contributes is an efficient *algorithm* for
+            applying that chain rule to a deeply nested composition of functions: instead of
+            re-deriving the derivative of the whole network with respect to every weight from
+            scratch (which would recompute the same intermediate terms over and over), it caches
+            intermediate gradients during a single backward pass — the same idea as dynamic
+            programming applied to calculus.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Backpropagation — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain backpropagation to a non-technical stakeholder">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A good answer avoids equations entirely: "The network makes a prediction, we measure
+            how wrong it was, and backpropagation is the process of tracing that error backward
+            through the network to figure out exactly how much each individual connection
+            contributed to the mistake — like assigning blame after a failed project by tracing the
+            decision chain back to its source. Once we know each connection's share of the blame,
+            we nudge it slightly to make that mistake less likely next time."
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why do vanishing gradients happen, and how do you fix them?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They happen because the chain rule multiplies each layer's local derivative into the
+            gradient flowing backward, and sigmoid/tanh derivatives are bounded well below 1 (sigmoid
+            tops out at 0.25) — across many layers that product shrinks toward zero, so early
+            layers effectively stop learning. Fixes: switch to ReLU-family activations (derivative
+            is exactly 1 for positive inputs, so nothing shrinks), add residual/skip connections so
+            gradients have a direct path around the multiplication, and use batch or layer
+            normalisation to keep activations in a well-behaved range at every layer.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What's the actual difference between backprop and gradient descent?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Backprop is a gradient-computation algorithm: given the network and the loss, it
+            produces ∂L/∂W for every weight, using the chain rule and a single backward pass.
+            Gradient descent is an optimisation algorithm: given those gradients, it decides how to
+            update the weights (W ← W − learning_rate × gradient), and there are many variants
+            (SGD, Adam, RMSprop) that all consume the same backprop-computed gradients differently.
+            Conflating them is the single most common mix-up on this topic.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why does PyTorch require optimizer.zero_grad() before backward()?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PyTorch accumulates gradients into .grad by default instead of overwriting them —
+            useful on purpose for cases like gradient accumulation across several mini-batches
+            (simulating a larger batch size than fits in memory) or RNNs where you sometimes want
+            gradients to add up across time steps. But for standard training, forgetting
+            zero_grad() means each step's gradient gets added on top of the previous step's
+            leftover gradient, silently corrupting every update after the first — one of the most
+            common real bugs in PyTorch code, and worth mentioning unprompted in an interview.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you verify a custom backward pass is implemented correctly?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Gradient checking: compute the gradient two independent ways and compare them. The
+            analytical gradient comes from your backprop implementation. The numerical gradient
+            comes from the definition of a derivative directly — nudge one parameter by a tiny
+            epsilon (e.g. 1e-7), rerun the forward pass, and measure how much the loss changed:
+            (loss(w+ε) − loss(w−ε)) / (2ε). Compute the relative error between the two gradients;
+            below roughly 1e-5–1e-7 means the implementation is correct. This should be done once
+            per new architecture, on a small toy network, then removed — it is far too slow to run
+            during actual training.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

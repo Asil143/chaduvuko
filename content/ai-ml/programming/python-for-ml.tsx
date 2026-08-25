@@ -252,7 +252,7 @@ lr          = 1e-3          # scientific notation: 0.001
 
 # 3. str — feature names, file paths, model names, column names
 feature     = 'distance_km'
-model_path  = '/models/swiggy_v2.pkl'
+model_path  = '/models/doordash_v2.pkl'
 
 # 4. list — sequences of anything, batch of samples, feature lists
 features    = ['distance_km', 'traffic_score', 'prep_time', 'time_of_day']
@@ -1321,7 +1321,7 @@ from pathlib import Path
 models_dir = Path('/tmp') / 'models'
 models_dir.mkdir(parents=True, exist_ok=True)   # create if doesn't exist
 
-model_path = models_dir / 'swiggy_rf_v2.pkl'
+model_path = models_dir / 'doordash_rf_v2.pkl'
 joblib.dump(scaler, model_path)
 
 # Check existence before loading
@@ -1431,8 +1431,8 @@ def load_labels(source: Union[str, List[int], np.ndarray]) -> np.ndarray:
 #   pip install -r requirements.txt
 
 # ── Using conda ────────────────────────────────────────────────────────
-# Create:      conda create -n swiggy-ml python=3.11
-# Activate:    conda activate swiggy-ml
+# Create:      conda create -n doordash-ml python=3.11
+# Activate:    conda activate doordash-ml
 # Install:     conda install numpy pandas scikit-learn
 # Export:      conda env export > environment.yml
 # Restore:     conda env create -f environment.yml

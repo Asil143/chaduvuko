@@ -1005,7 +1005,7 @@ for leaf in [5, 10, 30, 50, 100]:
 
         <ErrorBlock
           error="KNN accuracy is terrible — barely better than random guessing"
-          cause="Almost always caused by not scaling features. KNN computes Euclidean distance. A feature with values 0–5000 (like price in rupees) contributes 5000² = 25 million to the squared distance. A feature with values 0–1 contributes at most 1. The large-scale feature completely dominates distance calculations and the model ignores everything else."
+          cause="Almost always caused by not scaling features. KNN computes Euclidean distance. A feature with values 0–5000 (like price in dollars) contributes 5000² = 25 million to the squared distance. A feature with values 0–1 contributes at most 1. The large-scale feature completely dominates distance calculations and the model ignores everything else."
           fix="Always put StandardScaler inside a Pipeline before KNeighborsClassifier or KNeighborsRegressor. After scaling, every feature has mean=0 and std=1 — they all contribute equally to distances. This single fix often improves KNN accuracy by 20–40% on mixed-scale datasets."
         />
 

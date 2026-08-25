@@ -265,7 +265,7 @@ export default function PCAPage() {
               {
                 step: '1',
                 title: 'Standardise the data',
-                detail: 'Subtract the mean and divide by standard deviation for each feature. Without this, a feature measured in rupees (0–50,000) dominates over one measured as a proportion (0–1). Standardisation puts all features on equal footing so the covariance matrix reflects genuine relationships, not unit differences.',
+                detail: 'Subtract the mean and divide by standard deviation for each feature. Without this, a feature measured in dollars (0–50,000) dominates over one measured as a proportion (0–1). Standardisation puts all features on equal footing so the covariance matrix reflects genuine relationships, not unit differences.',
                 formula: 'x_std = (x − mean) / std',
                 color: '#7F77DD',
               },
@@ -1088,17 +1088,17 @@ bundle = {
     'n_components_pca':    k_95,
     'version':   'v1.0',
 }
-joblib.dump(bundle, '/tmp/flipkart_pca_segments.pkl')
+joblib.dump(bundle, '/tmp/amazon_pca_segments.pkl')
 
 # Assign new customer to a segment
 new_customer = np.random.normal(0, 1, (1, 50))
-bundle_loaded = joblib.load('/tmp/flipkart_pca_segments.pkl')
+bundle_loaded = joblib.load('/tmp/amazon_pca_segments.pkl')
 X_new_sc  = bundle_loaded['scaler'].transform(new_customer)
 X_new_pca = bundle_loaded['pca'].transform(X_new_sc)
 segment   = bundle_loaded['kmeans'].predict(X_new_pca)[0]
 print(f"\nNew customer → Segment {segment}")
 
-print("\nProduction bundle saved: /tmp/flipkart_pca_segments.pkl")`} />
+print("\nProduction bundle saved: /tmp/amazon_pca_segments.pkl")`} />
       </div>
 
       <Div />
@@ -1198,7 +1198,7 @@ print("\nProduction bundle saved: /tmp/flipkart_pca_segments.pkl")`} />
       <KeyTakeaways
         items={[
           'PCA finds the directions of maximum variance in high-dimensional data (principal components) and projects the data onto the top k of them. The result is a lower-dimensional representation that preserves most of the information. It is built on the eigendecomposition of the covariance matrix from Module 06.',
-          'Always standardise before PCA. Features with large absolute values (like price in rupees) dominate the covariance matrix and hijack all principal components. StandardScaler before PCA is mandatory, not optional.',
+          'Always standardise before PCA. Features with large absolute values (like price in dollars) dominate the covariance matrix and hijack all principal components. StandardScaler before PCA is mandatory, not optional.',
           'Explained variance ratio is the key output. Each component has a fraction of total variance it captures. Sum them cumulatively and stop at 95% — that is how many components to keep. Use PCA(n_components=0.95) to let sklearn pick k automatically.',
           'PCA must be fit inside each cross-validation fold. Fitting on the full dataset before splitting leaks test set information into the covariance matrix. Always use Pipeline([("scaler", StandardScaler()), ("pca", PCA()), ("model", model)]) and pass the whole pipeline to cross_val_score.',
           'Do not use PCA before tree models (Random Forest, XGBoost, LightGBM). They handle correlated features natively and do not benefit from dimensionality reduction. PCA genuinely helps distance-based algorithms (KNN, K-Means, SVM) and linear models with correlated features.',

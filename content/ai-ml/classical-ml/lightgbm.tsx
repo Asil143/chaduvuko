@@ -980,7 +980,7 @@ bundle = {
     'feature_names': feat_names,
     'version':      'v1.0',
 }
-joblib.dump(bundle, '/tmp/flipkart_demand_lgbm.pkl')
+joblib.dump(bundle, '/tmp/amazon_demand_lgbm.pkl')
 print("\nProduction bundle saved.")`} />
       </div>
 

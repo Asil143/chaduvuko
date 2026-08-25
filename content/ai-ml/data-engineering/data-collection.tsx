@@ -917,7 +917,7 @@ query = """
         AVG(delivery_time_minutes)    AS avg_delivery_min,
         COUNTIF(is_late = TRUE)       AS late_orders,
         COUNT(*)                      AS total_orders
-    FROM \`your-project.swiggy_dataset.orders\`
+    FROM \`your-project.doordash_dataset.orders\`
     WHERE DATE(created_at) >= DATE_SUB(CURRENT_DATE(), INTERVAL 90 DAY)
     GROUP BY 1, 2
     ORDER BY 2 DESC, 1
@@ -936,7 +936,7 @@ import os
 
 conn_rs = redshift_connector.connect(
     host=os.environ['REDSHIFT_HOST'],
-    database='swiggy_dw',
+    database='doordash_dw',
     user=os.environ['REDSHIFT_USER'],
     password=os.environ['REDSHIFT_PASSWORD'],
     port=5439,
@@ -971,7 +971,7 @@ conn_sf = snowflake.connector.connect(
     user      = os.environ['SNOWFLAKE_USER'],
     password  = os.environ['SNOWFLAKE_PASSWORD'],
     warehouse = 'COMPUTE_WH',
-    database  = 'SWIGGY_DB',
+    database  = 'DOORDASH_DB',
     schema    = 'PUBLIC',
     role      = 'ML_READER',   # use least-privilege role
 )

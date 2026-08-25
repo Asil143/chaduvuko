@@ -282,7 +282,7 @@ class DeliveryPredictionRequest(BaseModel):
     is_peak_hour:    int    = Field(..., ge=0, le=1,
                                      description="1 if 7-9 PM or 12-2 PM else 0")
     order_value:     float  = Field(..., ge=0.0,
-                                     description="Order total in INR")
+                                     description="Order total in USD")
     # Features fetched from feature store at runtime
     restaurant_avg_delivery_time: Optional[float] = None
     driver_avg_delivery_time:     Optional[float] = None
@@ -1049,7 +1049,7 @@ for metric, target, desc in slos:
         <ErrorBlock
           error="Docker image is 4GB — slow to pull on new nodes, long cold starts"
           cause="The base image includes development tools (gcc, g++, cmake) that are only needed to build Python packages, not to run them. Or the model artifact itself is included in the image — a 2GB PyTorch model baked into the image means every code change requires rebuilding and pushing a 2GB image. Or requirements.txt includes unnecessary packages (Jupyter, matplotlib, seaborn)."
-          fix="Use a multi-stage build: install packages in a builder stage with gcc, copy only the installed packages to a slim runtime stage. Use python:3.11-slim not python:3.11 (saves 800MB). Never bake the model artifact into the image — load it at startup from S3/GCS via the MODEL_PATH env var, or mount it as a Kubernetes PerforceVolume. Keep requirements.txt minimal — separate dev-requirements.txt (Jupyter, matplotlib) from production requirements.txt."
+          fix="Use a multi-stage build: install packages in a builder stage with gcc, copy only the installed packages to a slim runtime stage. Use python:3.11-slim not python:3.11 (saves 800MB). Never bake the model artifact into the image — load it at startup from S3/GCS via the MODEL_PATH env var, or mount it as a Kubernetes PersistentVolume. Keep requirements.txt minimal — separate dev-requirements.txt (Jupyter, matplotlib) from production requirements.txt."
         />
       </div>
 

@@ -816,7 +816,146 @@ print(f"Multi-class (CrossEntropyLoss): accuracy = {acc_mc:.4f}")`} />
 
       <Div />
 
-      {/* ══ SECTION 7 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about activation and loss functions</h2>
+
+        <ConceptBox title="Myth: ReLU is objectively the best activation function, so hidden layers never need anything else" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            ReLU is a strong default, not a universal winner. Transformers — BERT, GPT, and effectively
+            every modern large language model — use GELU by default because its smoothness (it is
+            differentiable everywhere, unlike ReLU's hard kink at zero) measurably helps optimisation at
+            that scale. LeakyReLU exists specifically because plain ReLU can permanently zero out
+            neurons. RNNs and LSTMs still lean on tanh internally for zero-centred activations. "Default
+            choice for hidden layers" is exactly right, but defaults get overridden the moment the
+            architecture or task gives a reason to.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Softmax outputs are the model's true confidence — calibrated probabilities you can trust at face value" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Softmax guarantees the outputs are non-negative and sum to 1 — that is a mathematical
+            property of the formula, not a guarantee that a 0.97 output means the model is right 97% of
+            the time. Modern, overparameterised networks are frequently overconfident: cross-entropy
+            training pushes logits toward extreme values even after the network has already learned to
+            classify correctly, inflating softmax outputs toward 0 or 1 well beyond what the true error
+            rate justifies. Getting genuinely calibrated probabilities out of a classifier usually needs
+            an explicit extra step, such as temperature scaling or Platt scaling, applied after training.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: MSE is a safe, general-purpose loss — it always measures 'how wrong' a prediction is, so it works for any task" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MSE measures squared distance from a target value, which is the right question for
+            regression and the wrong question for classification. As this module's errors section
+            shows directly: MSE on a binary problem is minimised by outputting the class mean (say 0.3
+            for a 30% positive rate) for every single input, because that constant genuinely minimises
+            average squared error — the loss trains successfully by every metric except the one that
+            actually matters. Cross-entropy is not an arbitrary alternative; it is the loss whose
+            gradient actually pushes the network to separate classes.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: BCEWithLogitsLoss and Sigmoid() + BCELoss() compute the same thing, so switching is just a speed optimisation" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            In exact real-number arithmetic they are mathematically identical — but neural networks run
+            in 32-bit floating point, where sigmoid(large logit) rounds to exactly 1.0 or 0.0 before
+            log() ever sees it, producing log(0), which is negative infinity, which becomes NaN the
+            instant it is combined with anything else. BCEWithLogitsLoss avoids this entirely by using
+            the log-sum-exp identity to compute the same mathematical quantity without ever taking
+            log(0) along the way. This is a correctness fix for a real failure mode, not a performance
+            tweak — the naive version can silently produce wrong or NaN losses in production.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once you've chosen a 'good' activation function, the loss function is a secondary detail" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The two choices are coupled, not independent — this module's entire decision-guide table
+            exists because getting one right without the other still breaks training. Using GELU in
+            every hidden layer does nothing to fix a classifier trained with MSELoss; using the correct
+            CrossEntropyLoss does nothing to fix a network that saturates because its output layer
+            applies softmax before the loss instead of passing raw logits. The output layer's
+            activation (or lack of one) and the loss function have to be chosen as a matched pair for
+            the specific task — regression, binary, multi-class, or multi-label — not picked separately.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Activation and loss functions — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What's the difference between Softmax and Sigmoid, and when would you use each at an output layer?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Sigmoid squashes a single value independently to (0, 1) — appropriate for binary
+            classification (one logit, one probability) or multi-label problems where each of several
+            outputs is an independent yes/no decision. Softmax takes a whole vector of scores and
+            converts them jointly into a probability distribution that sums to exactly 1 across all
+            classes — appropriate when exactly one class is correct out of several. A binary problem
+            can technically be modelled as 2-class softmax instead of 1-unit sigmoid, and the two are
+            mathematically equivalent in that special case, but sigmoid with a single output is simpler
+            and is what BCEWithLogitsLoss expects.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why does Sigmoid() followed by BCELoss() risk NaN losses, and what does BCEWithLogitsLoss do differently?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            If a logit is large (say 100), sigmoid(100) rounds to exactly 1.0 in float32 due to limited
+            precision. BCELoss then needs log(1 − 1.0) = log(0), which is negative infinity, and that
+            propagates as NaN through the rest of training. BCEWithLogitsLoss avoids ever computing
+            sigmoid and log as separate operations — it uses the log-sum-exp trick to compute the
+            mathematically equivalent quantity in a form that never requires taking the log of exactly
+            zero, regardless of how large or small the logit is. That is why PyTorch's own
+            documentation recommends it over the two-step version unconditionally.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — A classifier trained with MSELoss ends up predicting nearly the same value for every input. What's the likely cause?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MSE is being used for a classification task. MSE is minimised, for a fixed input
+            distribution, by outputting something close to the mean of the targets — for a class-
+            imbalanced binary problem that constant is close to the positive rate itself, and the model
+            can get quite low average loss without ever learning to separate the classes. The fix is to
+            switch to BCEWithLogitsLoss for binary or CrossEntropyLoss for multi-class — losses whose
+            gradients specifically reward pushing predicted probabilities toward the correct class,
+            rather than just minimising average squared distance.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — When would you reach for Huber loss instead of MSE or MAE for a regression problem?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            When the data has real outliers you do not want to ignore but also do not want to dominate
+            training. MSE squares the error, so one wildly off prediction contributes disproportionately
+            to the total loss and can drag the whole model toward accommodating that single point. MAE
+            treats every error proportionally regardless of size, which is robust to outliers but has a
+            constant-magnitude gradient that can cause oscillation right at convergence. Huber loss
+            behaves like MSE for small errors — smooth gradients near the optimum — and like MAE for
+            large errors beyond the delta threshold, giving outlier robustness without sacrificing
+            smooth convergence.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you handle a binary classification problem where the positive class is 1% of the data?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Start with weighted BCEWithLogitsLoss using pos_weight set to roughly the negative-to-
+            positive ratio (about 99 here) — this makes a missed positive example cost proportionally
+            more than a missed negative, counteracting the model's natural tendency to default toward
+            the majority class. If that is not enough, focal loss goes further by explicitly
+            downweighting easy, already-well-classified examples so the gradient signal concentrates on
+            the hard, informative ones. Either way, accuracy stops being a meaningful metric at this
+            imbalance — a model predicting "negative" for everything scores 99% accuracy while being
+            useless, so evaluation should shift to precision, recall, and PR-AUC instead.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

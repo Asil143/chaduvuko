@@ -903,7 +903,150 @@ for name in ['sgd', 'adam', 'adamw']:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about optimisers</h2>
+
+        <ConceptBox title="Myth: Adam converges faster than SGD, so there is no real downside to always using it" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Faster convergence and better final performance are different properties, and this module's
+            own comparison section shows them diverging: on large-scale image classification and some
+            NLP tasks, SGD with momentum reaches worse training loss more slowly but ends up
+            generalising better, because Adam's adaptive per-weight steps tend to settle into sharp,
+            narrow minima while SGD's noisier trajectory tends to find flatter ones. "Always use Adam"
+            is a reasonable starting default, not a universal law — the right answer depends on the
+            architecture and how much the task rewards generalisation over raw convergence speed.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Momentum in SGD and the 'moment' terms in Adam are basically the same idea" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They share a name and half a mechanism, not the whole idea. SGD's momentum is only a first
+            moment — an exponential moving average of the gradient direction — used to smooth out noise
+            and build speed in consistent directions, but every weight still gets the same learning
+            rate. Adam adds a second moment — an exponential moving average of the squared gradient —
+            and divides the step by its square root, giving each individual weight its own adaptive
+            effective learning rate based on how large its gradients have historically been. Momentum
+            changes the direction of the step; Adam's second moment changes the size of the step,
+            per parameter, independently of direction.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Weight decay and L2 regularisation are just two names for the same thing, regardless of optimiser" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They are mathematically equivalent under plain SGD, which is exactly why the terms get used
+            interchangeably — but that equivalence breaks under Adam. Adding an L2 penalty to the loss
+            in Adam means the resulting gradient term λW gets divided by the same adaptive √v̂ as every
+            other gradient, so weights with a history of large gradients receive weaker effective decay
+            than weights with small gradients — an uncontrolled, per-weight regularisation strength
+            nobody actually intended. AdamW exists specifically to restore the "same fraction shrinks
+            every weight equally" behaviour that L2 and weight decay share under plain SGD but silently
+            lose under Adam.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If training feels slow, raising the learning rate is a safe way to speed it up" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Past a certain threshold, a higher learning rate does not train faster — it stops training
+            at all. As this module's errors section shows, too-large a step causes updates to overshoot
+            the minimum and bounce between opposite sides of the loss valley, producing a loss that
+            oscillates indefinitely rather than converging, sometimes even diverging to NaN. The
+            actual fix for "training feels slow" is usually a schedule — a higher rate early for fast
+            exploration, decayed down for precise convergence later — not a single higher static value
+            applied for the whole run.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Learning rate warmup and schedules are optional polish you can skip when getting started" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For Adam-family optimisers specifically, warmup addresses a real instability, not a
+            refinement. In the first few steps the second moment estimate v is still close to zero, so
+            its bias-corrected version v̂ is small, which makes the effective step size lr/√v̂ very
+            large right when the network's weights are least trained and most sensitive to a bad update.
+            Warmup starts the learning rate near zero and ramps it up over the first steps specifically
+            to avoid this early-training instability — skipping it is a common, hard-to-diagnose cause
+            of runs that diverge or perform erratically in exactly the first few hundred steps.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Optimisers — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk through the difference between SGD, SGD with momentum, and Adam — what problem does each addition solve?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Plain SGD subtracts learning_rate × gradient every step — simple, but every weight gets the
+            same step size, and noisy mini-batch gradients cause the update direction to wobble.
+            Momentum adds an exponential moving average of past gradients (velocity) and updates from
+            that instead of the raw gradient — this smooths out the noise and builds speed in
+            consistent directions, addressing the wobble problem. Adam goes further by also tracking a
+            second moment — a moving average of squared gradients — and dividing the step by its square
+            root, so each individual weight gets its own adaptive effective learning rate: large,
+            frequently-updated gradients get smaller steps, and rare, small gradients get larger ones.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why was AdamW introduced when Adam already had a weight_decay parameter?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Because in Adam, weight_decay is implemented as an L2 penalty folded directly into the
+            gradient before the adaptive division by √v̂ — which means the "decay" ends up scaled
+            unevenly per weight, exactly like any other gradient term, rather than shrinking every
+            weight by the same intended fraction. AdamW decouples the two steps: it applies weight
+            decay directly to the weight (W = W − lr×λ×W) separately from the adaptive gradient update,
+            restoring the property that every weight decays by the same proportion regardless of its
+            gradient history. This was identified by Loshchilov and Hutter in 2019, and AdamW has
+            since replaced Adam as the practical default almost everywhere.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What is bias correction in Adam, and why is it only needed in the early steps of training?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Adam's moment estimates m and v are both initialised to zero and updated as exponential
+            moving averages, which means in the very first steps they are biased heavily toward zero —
+            far below the true gradient magnitude, since there has not been enough history yet to
+            average over. Bias correction divides each estimate by (1 − βᵗ), a factor that is small
+            early on (correcting the underestimate strongly) and approaches 1 as t grows, so the
+            correction fades out naturally once enough steps have accumulated real history. Without it,
+            the first updates would be artificially tiny, slowing down early training for no good
+            reason.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why might a model trained with SGD+momentum generalise better than one trained with Adam, even though Adam converges faster?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is an empirically observed property of the loss landscape, not a bug in Adam. Adam's
+            per-weight adaptive steps tend to converge into sharp minima — narrow valleys where the
+            training loss is very low but small perturbations to the weights (which happen naturally
+            when the data distribution shifts even slightly at test time) cause the loss to spike.
+            SGD's noisier, non-adaptive trajectory tends to settle into flatter minima, which are more
+            robust to those perturbations and therefore generalise better on unseen data. This is
+            especially pronounced on large-scale image classification, which is why ImageNet-scale CNNs
+            are still frequently trained with SGD+momentum rather than Adam.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Why is warmup particularly important for Adam-family optimisers, and how does it interact with bias correction?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Bias correction fixes the fact that m and v start at zero, but it does not fix the fact that
+            v itself is estimated from only a handful of gradient samples in the first few steps — a
+            small, noisy sample of squared gradients can make v̂ artificially small, which makes the
+            effective step size lr/√v̂ artificially large right when the network is least trained and
+            most vulnerable to a bad update. Warmup adds a second, independent safeguard on top of bias
+            correction: it explicitly scales the learning rate from near-zero up to its target value
+            over the first several hundred steps, giving the second-moment estimate time to stabilise
+            before the optimiser is allowed to take full-sized steps.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

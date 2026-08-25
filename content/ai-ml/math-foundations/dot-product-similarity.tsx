@@ -1058,7 +1058,7 @@ print("  Step 4: return top-k most similar products")`} />
 
         <ErrorBlock
           error="Similarity scores are unexpectedly low — similar items score below 0.3"
-          cause="Features are on very different scales and you have not normalised the vectors. A feature with values in the thousands (like price in rupees) will dominate the dot product completely, making all other features irrelevant. The direction of the vector is completely distorted by the large-scale feature."
+          cause="Features are on very different scales and you have not normalised the vectors. A feature with values in the thousands (like price in dollars) will dominate the dot product completely, making all other features irrelevant. The direction of the vector is completely distorted by the large-scale feature."
           fix="Always normalise or standardise your feature vectors before computing similarity. Use sklearn's normalize(X, norm='l2') to convert to unit vectors, or StandardScaler() to bring all features to zero mean and unit variance. This is exactly why Module 17 (Feature Scaling) comes before similarity-based algorithms."
         />
       </div>
@@ -1125,7 +1125,7 @@ print("  Step 4: return top-k most similar products")`} />
           'Cosine similarity fixes the magnitude problem by dividing the dot product by the lengths of both vectors. The result is always between −1 and +1, measuring direction only. Two vectors pointing the same direction give cosine similarity of +1.0 regardless of length.',
           'The dot product is the core computation in three major ML operations: the forward pass in every neural network layer (inputs · weights), the attention mechanism in Transformers (Query · Key), and embedding similarity search in recommendation systems.',
           'Euclidean distance measures actual spatial distance between points — good for KNN and K-Means. Cosine similarity measures angle — good for text, embeddings, and recommendation systems where magnitude should not affect the comparison.',
-          'Always normalise feature vectors before computing cosine similarity. Features on different scales (price in rupees vs distance in km) distort the direction of the vector, making similarity scores meaningless.',
+          'Always normalise feature vectors before computing cosine similarity. Features on different scales (price in dollars vs distance in km) distort the direction of the vector, making similarity scores meaningless.',
         ]}
       />
     </LearnLayout>
