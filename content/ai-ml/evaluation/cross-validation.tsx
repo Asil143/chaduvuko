@@ -911,7 +911,164 @@ print("  Nested CV is slower (k_outer × k_inner × n_param_combos) but honest."
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about cross-validation</h2>
+
+        <ConceptBox title="Myth: Using cross-validation automatically prevents data leakage" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            CV only protects you if every data-dependent step happens inside the fold loop. If you
+            call scaler.fit_transform(X_all) or run feature selection on the entire dataset before
+            handing folds to cross_val_score, every fold's "held-out" test data already influenced
+            the transformation that was applied to it — the leakage happened before CV ever saw the
+            data, and CV has no way to detect or undo it. Cross-validation is a splitting strategy,
+            not a leakage firewall; the firewall is wrapping every fitted transformer (scaler, PCA,
+            feature selector, imputer) inside a Pipeline so it refits fresh on each fold's training
+            portion only.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A strong cross-validation score is a guarantee of production performance" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            CV estimates performance on data drawn from the same distribution as your training set,
+            evaluated at the same point in time. It cannot detect distribution shift that hasn't
+            happened yet — new fraud patterns, a changed customer base, a macroeconomic shift — nor
+            can it catch leakage that is baked identically into both the training and test folds
+            (like a feature computed using information that would not exist at prediction time in
+            production, e.g. a "final account balance" column). A CV score is an honest estimate of
+            past-and-present performance under stated assumptions, never a forward-looking
+            guarantee. Production monitoring exists precisely because CV cannot see the future.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Plain KFold and StratifiedKFold give basically the same result, so it doesn't matter which you pick" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            On an imbalanced classification problem, plain KFold splits by row count only — with a
+            1.5% positive rate and 5 folds, random chance alone can put noticeably different
+            numbers of positives in each fold, occasionally leaving a fold with almost none. That
+            produces AUC or F1 scores that swing wildly between folds not because the model is
+            unstable, but because the folds themselves have inconsistent class balance —
+            inflating the variance of your estimate for a reason that has nothing to do with model
+            quality. StratifiedKFold fixes this by preserving the overall class ratio in every
+            fold. For any classification task with meaningful imbalance, it should be the default,
+            not an occasional upgrade.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Turning off shuffling in KFold makes it safe for time-series data" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Disabling shuffle keeps each fold as a contiguous chronological block, but standard
+            KFold still rotates which block is "test" — meaning folds 2 through 5 are trained on
+            data that includes chunks from later in time than the test block itself. Any fold where
+            the test block sits earlier than some of the training blocks lets the model learn from
+            the future to predict the past, which is exactly the leakage you're trying to avoid.
+            The only fix is a forward-chaining split — TimeSeriesSplit or a manual walk-forward
+            scheme — where every training set consists exclusively of data that occurred strictly
+            before its corresponding test set, every single fold.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Higher k (or Leave-One-Out) is always the more accurate choice" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Increasing k reduces bias in the performance estimate — each training set is closer in
+            size to the full dataset — but it does not straightforwardly reduce variance, and often
+            increases it in practice: with k=n (Leave-One-Out), the n training sets overlap almost
+            completely, so the n resulting models are highly correlated with each other, and for
+            unstable models a single influential outlier can swing many of those near-identical
+            folds in the same direction. LOOCV is also n times more expensive to compute than 5-fold
+            CV, for an estimate whose variance properties are not clearly superior. In practice
+            5-fold or 10-fold CV, or RepeatedStratifiedKFold for extra stability, is the better
+            default — LOOCV is reserved for genuinely tiny datasets where every training sample is
+            too precious to exclude even one at a time in a normal k-fold scheme.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Cross-validation — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk me through how k-fold cross-validation works and why it beats a single train/test split">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The dataset is split into k equal folds. In each of k rounds, one fold is held out as
+            the test set and the model is trained from scratch on the remaining k−1 folds, then
+            scored on the held-out fold. After k rounds, every sample has served as test data
+            exactly once, giving k independent scores instead of one. A single train/test split is
+            essentially a sample of size one from the distribution of possible splits — its score
+            depends heavily on which particular samples the random seed happened to place in the
+            test set. Averaging k scores gives a mean that is far less sensitive to that
+            randomness, and the standard deviation across folds tells you how much to trust that
+            mean — something a single split literally cannot report.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why must preprocessing like scaling or feature selection happen inside the CV loop, not before it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Any transformer that is *fit* on data — a StandardScaler learning a mean and standard
+            deviation, a feature selector learning which columns correlate with the target, a PCA
+            learning principal components — is learning statistics from that data. If you fit it on
+            the full dataset before splitting into folds, every fold's "held-out" test portion
+            already contributed to those statistics, so the test score is contaminated by
+            information it should never have seen — this is data leakage, and it makes CV scores
+            optimistically biased relative to true held-out performance. The fix is to wrap the
+            scaler/selector/model together in an sklearn Pipeline and pass the whole pipeline to
+            cross_val_score — sklearn then refits every transformer from scratch on each fold's
+            training data alone.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — When would you use StratifiedKFold vs GroupKFold vs TimeSeriesSplit?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            StratifiedKFold is the default for any classification task, especially with class
+            imbalance — it keeps the same positive/negative ratio in every fold instead of letting
+            it vary by chance. GroupKFold is for data with a natural grouping where samples from
+            the same entity must never be split across train and test — all of one customer's
+            transactions, all of one patient's visits — otherwise the model can partially memorise
+            entity-specific patterns and the score is inflated by identity leakage rather than
+            genuine generalisation. TimeSeriesSplit is mandatory for any chronologically ordered
+            data — it only ever trains on the past and tests on the immediate future, which
+            prevents the model from learning from information that would not have existed yet at
+            prediction time.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Does a strong cross-validation score guarantee good performance once the model is in production?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            No — CV only estimates performance on data that looks like your training set, evaluated
+            as if the world stays the same. It can't detect problems that are baked identically
+            into every fold, like a feature that leaks future information in a way that also exists
+            in production data at training time. And it says nothing about distribution shift that
+            happens after deployment — new fraud tactics, seasonal changes in customer behaviour, a
+            change in the sensor hardware feeding your features. A high CV score means "this model
+            generalises well to unseen data drawn from the same distribution as my training set,
+            right now" — which is exactly why production monitoring, not just a good offline CV
+            number, is required before and after shipping a model.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Is Leave-One-Out cross-validation always the most accurate evaluation method?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            No, and this is a common misconception. LOOCV does reduce bias, since each training set
+            uses n−1 of n samples — about as close to the full dataset as you can get. But the n
+            resulting models are trained on nearly identical data and are therefore highly
+            correlated with each other, so the variance of the overall estimate isn't necessarily
+            better than k-fold, and for models sensitive to individual data points a single outlier
+            can distort many of the n folds simultaneously in a correlated way. It's also n times
+            more expensive to run than 5-fold CV. In practice, 5- or 10-fold (or repeated k-fold for
+            extra stability) is the standard choice, and LOOCV is reserved for genuinely small
+            datasets — a few hundred samples or fewer — where standard k-fold would leave too little
+            training data per fold.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

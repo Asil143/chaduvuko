@@ -108,6 +108,28 @@ function VisualBox({ children, label }: { children: React.ReactNode; label: stri
   )
 }
 
+function ConceptBox({ title, children, color = '#378ADD' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: string }) {
   return (
     <div style={{
@@ -1079,7 +1101,171 @@ for i, (r, d) in enumerate(zip(risk, decision)):
 
       <Div />
 
-      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — MISCONCEPTIONS ════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about Random Forest</h2>
+
+        <ConceptBox title="Myth: More trees always make Random Forest better — just set n_estimators as high as you can afford" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is true that adding trees never increases overfitting risk — each tree trains on an
+            independent bootstrap sample, so more trees just average the ensemble more thoroughly.
+            But the improvement follows a curve of diminishing returns, not a straight line. Going
+            from 10 to 100 trees usually buys a real AUC jump; going from 300 to 3,000 usually buys
+            almost nothing while multiplying training time, memory, and inference latency linearly.
+            For the Instacart stock-out model, 300 trees might already capture 99% of the achievable
+            OOB AUC that 3,000 trees provide, while a request serving 3,000 trees is far slower to
+            score. The right practice is exactly what this module's tuning section showed: plot OOB
+            error against n_estimators and stop near the elbow, not add trees indefinitely because
+            "more can't hurt."
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Bagging reduces both variance and bias — that's why ensembles are 'just better'" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Bagging, and the extra feature randomisation Random Forest adds on top, is a
+            variance-reduction technique, full stop. Averaging many independent, unbiased-but-noisy
+            trees cancels out their independent errors. But if every individual tree is systematically
+            biased — all trees too shallow to capture a real nonlinear pattern, or a genuinely
+            predictive feature missing from the dataset entirely — averaging 500 identically biased
+            trees still gives you that same bias. You cannot average away a mistake every tree is
+            making the same way. This is why Random Forest, even with 1,000 trees, cannot fix
+            underfitting the way boosting can — boosting attacks bias directly, bagging attacks
+            variance directly, and conflating the two is a common conceptual slip.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Feature importance tells you which features are truly predictive of the outcome" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This module already covered one bias — MDI favours high-cardinality features. There is a
+            second bias that trips people up even after switching to permutation importance:
+            correlated features split credit unpredictably. If days_of_stock and avg_daily_sale are
+            correlated, the forest can split on either at any node — whichever gets picked first
+            "steals" importance from the other, and removing just one barely changes the model
+            because it leans harder on its correlated twin instead. Low importance does not always
+            mean "not predictive" — it can mean "predictive, but a correlated feature already gets the
+            credit." Always check correlations among top features before concluding an unimportant
+            one is safe to drop.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: OOB score is a free substitute for a held-out test set" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            OOB evaluation is a legitimately useful, no-extra-cost estimate of generalisation — but it
+            is not a universal replacement for a real test set. It assumes rows are i.i.d, with no
+            time-based leakage or repeated entities spanning bootstrap samples in a way that
+            correlates the "unseen" points with the training ones. More importantly: if OOB score
+            itself drives model selection — trying twenty hyperparameter combinations and picking
+            whichever produces the best OOB number — you are implicitly fitting to that score the same
+            way repeatedly checking a validation set overfits to it. You still need a genuinely
+            untouched test set to confirm the winner generalises, exactly why this module's own
+            pipeline keeps a separate X_test even with oob_score=True enabled.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Random Forest can extrapolate to values outside its training range because it's flexible and nonlinear" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A Random Forest prediction is always an average of leaf values seen during training — a
+            tree can never output a number larger than the largest target value in its training
+            leaves, or smaller than the smallest. If days_of_stock in training only ever ranged from
+            0 to 60, a new product arriving with 90 days of stock will not get a proportionally higher
+            prediction — the forest caps out near whatever the highest training examples produced,
+            because no leaf reflects anything beyond that. This is fundamentally different from linear
+            regression, which does extrapolate, sometimes badly but at least directionally. Any
+            deployment where the feature distribution can drift — new suppliers, new price ranges, a
+            demand spike beyond anything seen before — needs monitoring for out-of-range inputs,
+            because Random Forest silently returns a flat, capped, wrong answer instead of an error.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Random Forest — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain Random Forest to someone with no ML background">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A good answer avoids jargon: "Imagine asking 500 people to independently guess whether a
+            product will run out of stock, where each person only sees a random slice of the data and
+            a random subset of the available information — some will guess wrong, but their mistakes
+            tend to differ from each other. Average all 500 guesses and the individual errors mostly
+            cancel out, leaving a far more reliable answer than any one guesser alone could give.
+            That's a Random Forest: many decision trees, each trained slightly differently, whose
+            combined vote is much more stable than any single tree's." A strong answer also connects
+            this to why a single decision tree is unstable in the first place — small changes to the
+            training data produce a very different tree, and averaging hundreds of them smooths that
+            instability away.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why does Random Forest overfit less than a single, fully-grown decision tree?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Two mechanisms combine. Bagging: each tree trains on a different bootstrap sample, so each
+            overfits to different noise, and averaging their predictions cancels most of that noise
+            out. And, specific to Random Forest rather than plain bagging: restricting each split to a
+            random subset of features forces trees to disagree with each other even when one feature
+            is dominant — without this, every tree would put the single strongest feature at the root
+            and the trees would end up highly correlated, and averaging correlated errors does not
+            cancel them out nearly as well as averaging independent ones. Bootstrap rows plus random
+            feature subsets per split is what decorrelates the trees enough that averaging genuinely
+            reduces variance rather than just producing 500 near-identical copies of the same overfit
+            tree.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Walk me through how you'd tune a Random Forest for a new tabular problem">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Start with generous defaults and oob_score=True so every fit gives a free validation
+            signal. Tune in order of impact: first n_estimators — plot OOB error against tree count
+            and stop at the elbow, since more trees beyond that cost training and inference time for
+            negligible gain. Second, and most impactful, max_features — try "sqrt", "log2", and a
+            couple of fractional values, since this single parameter controls the tradeoff between
+            decorrelated-but-weaker trees and correlated-but-stronger trees. Third, min_samples_leaf —
+            increase it if OOB and training accuracy diverge, a sign individual trees are memorising
+            noise. Only after those three would I reach for a broader RandomizedSearchCV sweep, and
+            I'd always confirm the final choice against a genuinely held-out test set, not just the
+            OOB score, since a long tuning search can overfit to OOB the same way it can to a
+            validation set.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What's the difference between MDI and permutation feature importance, and when does each mislead you?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MDI is computed for free during training — it sums how much each feature reduced Gini
+            impurity across every split where it was used. It's fast but structurally biased toward
+            features with many unique values, because more possible split points give the tree more
+            chances to find a locally good split purely by luck. Permutation importance instead
+            measures the actual drop in a real scoring metric when a feature's values are shuffled —
+            unbiased with respect to cardinality, but it can still underrate features that are highly
+            correlated with another feature the model already relies on, since shuffling one of two
+            redundant features barely hurts performance if the model leans on its twin. In practice:
+            use MDI only for a fast first look, use permutation importance before any real
+            feature-selection decision, and check both against a correlation matrix of the top
+            features.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — When would you pick Random Forest over XGBoost, and when the reverse?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Random Forest wins on time-to-first-good-model, tuning friction, and operational
+            simplicity — it trains trees in parallel and independently, is far more forgiving of
+            default hyperparameters, and is harder to accidentally overfit badly since bagging is a
+            gentler variance-reduction mechanism than sequential boosting. XGBoost usually wins on raw
+            predictive performance once you're willing to tune it — its native missing-value handling
+            and stronger regularisation let it push accuracy further than RF typically can. The
+            practical rule: reach for Random Forest first as a fast, low-risk baseline; move to
+            XGBoost when the last few points of AUC materially matter for the business and there is
+            engineering time to tune and monitor it properly in production.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 13 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

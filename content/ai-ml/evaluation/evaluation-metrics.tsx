@@ -1053,7 +1053,149 @@ for name, f1, count in zip(class_names, per_class_f1, class_counts):
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about evaluation metrics</h2>
+
+        <ConceptBox title="Myth: Accuracy is a bad metric and should never be reported" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Accuracy itself is not flawed — it is a perfectly good summary when classes are
+            roughly balanced and errors cost about the same in both directions. What breaks it is
+            imbalance: predicting the majority class every time can score 98 percent or higher
+            while catching none of the minority class. The real rule is not "never use accuracy"
+            but "check the class balance and the cost of each error type before trusting any
+            single number" — for a roughly balanced classification problem with symmetric costs,
+            accuracy is often the simplest metric that tells you exactly what you need.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A good model lets you maximize precision and recall at the same time" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For a fixed, already-trained model, precision and recall move in opposite directions
+            as you slide the classification threshold — there is no threshold that maximizes both
+            simultaneously, because raising it to cut false alarms always costs you some true
+            positives, and lowering it to catch more positives always lets in more false alarms.
+            What can genuinely improve is the model itself: a better model shifts the entire
+            precision-recall curve upward, so at the same recall you get higher precision than
+            before. So "improve the model" and "pick the threshold" are two different jobs — the
+            first can raise both, the second always trades one for the other.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: F1 score is the fair, unbiased way to combine precision and recall" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            F1 looks neutral because it is a symmetric formula, but that symmetry itself is a
+            hidden assumption — it is the harmonic mean of precision and recall weighted equally,
+            which silently assumes a false positive and a false negative cost the business the
+            same amount. That is rarely true: at Stripe a missed fraud transaction costs thousands
+            of dollars while a false alarm costs a support ticket, so equal weighting understates
+            how much recall actually matters there. The honest tool for asymmetric costs is the
+            F-beta score, where beta lets you state explicitly how many times more costly one
+            error type is than the other.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: There is a single best metric for classification problems, and once you find it you are done" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every metric encodes a different set of priorities baked into its formula, so "best"
+            only makes sense relative to a specific cost structure and a specific deployment
+            context — the metric that is right for a fraud model (recall-heavy, because missed
+            fraud is expensive) is often wrong for a spam filter (precision-heavy, because wrongly
+            blocking a real email is worse than letting one spam message through). Reaching for
+            the same default metric — usually accuracy or F1 — on every project skips the step
+            that actually matters: writing down what each type of error costs before choosing how
+            to measure success.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A strong score on the held-out test set guarantees strong performance in production" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The test set only tells you how the model performs on data drawn from the same
+            distribution it was trained and evaluated on — it says nothing about tomorrow's data
+            if that distribution shifts. Fraud patterns evolve as fraudsters adapt, customer
+            behavior changes seasonally, and the mix of transaction types drifts over time; a 0.94
+            ROC-AUC measured in March can quietly become 0.80 by August without any change to the
+            model itself. Trusting a single offline number without ongoing production monitoring
+            is one of the most common ways a "validated" model quietly stops working.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Evaluation metrics — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Your model reports 99 percent accuracy. Would you deploy it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Not without more information. The first question is the class balance: on a dataset
+            where the positive class is rare, 99 percent accuracy can be achieved by a model that
+            never predicts the positive class at all — as happened with the 98.5 percent
+            "always predict legitimate" fraud model. I would ask for the confusion matrix first,
+            then precision and recall on the positive class specifically, then ROC-AUC or PR-AUC
+            depending on how imbalanced the data is. Only after seeing those would I have an
+            informed opinion about whether the model does anything useful.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk me through precision and recall, and give an example of when you would optimize for each">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Precision asks, of everything the model flagged as positive, how many actually were;
+            recall asks, of everything that was actually positive, how many the model caught. You
+            optimize for precision when a false positive is the expensive error — a spam filter
+            that wrongly blocks a real business email causes real harm, so you would rather let a
+            few spam messages through than risk that. You optimize for recall when a false
+            negative is the expensive error — missing an actual fraud transaction costs far more
+            than the friction of one extra manual review, so a fraud model should lean toward
+            flagging more and accepting a lower precision.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — When would you report F1 instead of precision and recall separately, and what is the risk of doing that?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            F1 is useful as a single ranking number when comparing many models or many
+            hyperparameter settings quickly, since sorting by one number is easier than eyeballing
+            two. The risk is that F1 hides which of the two errors is actually being made — two
+            models can have the same F1 while one has high precision and low recall and the other
+            has the opposite profile, and F1 alone will not tell you that. In practice I would use
+            F1 to narrow down candidates, then go back to the full precision/recall breakdown, or
+            an explicit F-beta score matching the real cost ratio, before making the final call.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you decide which metric to optimize for a brand-new classification problem?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start by writing down, in dollars if possible, what a false positive costs and
+            what a false negative costs — that ratio drives everything else. If the costs are
+            roughly symmetric and the classes are balanced, accuracy or F1 is fine. If the classes
+            are imbalanced, I would move to ROC-AUC for overall ranking quality and PR-AUC if the
+            positive class is rare, then pick a threshold using the actual cost ratio rather than
+            the default of 0.5. I would also confirm what happens downstream of each prediction —
+            a false positive that triggers an automatic account block is a much bigger deal than
+            one that triggers a single review, and that changes the metric choice too.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A model scored well on your test set but performance dropped after deployment. How do you investigate?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First I would rule out a pipeline bug — confirm the production feature computation
+            matches training exactly, since train-serve skew is one of the most common causes and
+            is easy to overlook. Next I would check for distribution shift by comparing the
+            statistical profile of production inputs against the training data — a change in the
+            mix of transaction types or a new fraud pattern the model never saw would show up
+            here. Finally I would set up ongoing shadow evaluation against labelled outcomes so a
+            drop like this gets caught within days instead of being discovered after damage is
+            done, and treat a meaningful metric drop as an automatic trigger for retraining.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

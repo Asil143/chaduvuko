@@ -1018,7 +1018,166 @@ print("\nProduction bundle saved.")`} />
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — MISCONCEPTIONS ════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about LightGBM</h2>
+
+        <ConceptBox title="Myth: A bigger num_leaves is always safe — LightGBM regularises itself" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Leaf-wise growth always splits whichever single leaf in the entire tree would reduce loss
+            the most, regardless of where that leaf sits or how deep the tree already is. On a small
+            dataset — a few thousand rows, where a handful of points can look like a strong pattern —
+            that unconstrained best-first search happily carves leaves around noise, reaching very deep,
+            asymmetric trees far faster than a level-wise tree covering the same leaf count would.
+            XGBoost's level-wise default grows every node at the current depth before going deeper, which
+            acts as a natural brake that leaf-wise growth simply does not have. This is exactly why
+            num_leaves needs to be tuned down (well below the 31 default) on small datasets, while
+            max_depth alone gives XGBoost a gentler, self-limiting complexity dial.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A higher max_bin is always the safer, more accurate choice" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Histogram binning is a deliberate speed-for-precision trade, not a free approximation to
+            avoid. XGBoost's exact-greedy split search considers every unique value of a feature as a
+            candidate threshold; LightGBM first buckets each feature into a fixed number of bins (255 by
+            default) and only considers the boundaries between bins as candidate splits, which shrinks
+            the number of thresholds evaluated per feature from potentially millions down to a small
+            constant. Pushing max_bin far higher moves the algorithm back toward exact-greedy's cost
+            without necessarily buying much accuracy, and on a small dataset more bins also means a
+            higher chance that a bin boundary lines up with noise rather than signal. The 255 default is
+            a genuine sweet spot for most tabular data, not a conservative placeholder waiting to be
+            raised.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: LightGBM's native categorical support is just automatic one-hot encoding under the hood" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is neither one-hot nor ordinal encoding running behind the scenes. LightGBM searches for
+            the best grouping of category values on each side of a split directly — a many-to-many
+            partition, such as "these six warehouse names go left, the rest go right" in a single split —
+            rather than testing one category against the rest (one-hot's implicit split shape) or
+            treating arbitrarily assigned integers as if they had a numeric order (ordinal encoding's
+            hidden assumption). That is a genuinely different, more expressive split type, which is why
+            it typically needs fewer splits to capture the same pattern and does not inflate the feature
+            count the way one-hot encoding does on high-cardinality columns.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: LightGBM is just XGBoost with faster default settings" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The core difference is the tree-building algorithm itself, not a speed knob layered on top of
+            an identical process. Leaf-wise (best-first) growth and level-wise (breadth-first) growth are
+            two different search strategies over which node gets split next, and they produce
+            differently shaped trees for the same leaf budget — this cannot be reproduced by tweaking
+            XGBoost's parameters, nor can XGBoost's behaviour be reproduced by tweaking LightGBM's.
+            Histogram binning, GOSS, and EFB are three further independent algorithmic changes to what
+            candidate splits, samples, and features the model ever considers during training — not
+            settings that make an otherwise identical algorithm run faster.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: GOSS and EFB just make training faster without changing what the model learns" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Both genuinely change the training data the model sees, not merely the clock time to process
+            it. GOSS keeps every large-gradient sample but randomly drops a chosen fraction of
+            small-gradient ones each iteration, reweighting the ones it keeps to compensate — so the
+            model is literally training on a different, smaller sample than a full-data method would
+            see, with the assumption that easy-to-predict rows carry little information about the next
+            split anyway. EFB merges sparse, mutually exclusive features into fewer bundled features
+            before training even starts, so the model's actual feature space is not the one you handed
+            it. Both are principled approximations that usually cost very little accuracy — but they are
+            approximations with a real, if small, statistical cost, not simply parallelism or caching
+            tricks.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>LightGBM — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk me through the core structural difference between how LightGBM and XGBoost build a tree">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            XGBoost's default grows level-wise (breadth-first): it splits every node at the current depth
+            before moving to the next depth, which keeps the tree balanced and lets max_depth act as a
+            straightforward complexity limit. LightGBM grows leaf-wise (best-first): at each step it scans
+            every current leaf across the whole tree and splits only the single one that would reduce
+            loss the most, which produces a tree that is deeper on the branches that matter and shallower
+            elsewhere for the same total leaf count. Because a leaf-wise tree's shape is not tied to a
+            uniform depth, num_leaves — not max_depth — is the parameter that actually controls its
+            complexity, and that is the first thing to reach for when tuning either overfitting or
+            underfitting in LightGBM.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why can LightGBM overfit more easily than XGBoost on a small dataset, and how would you handle it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Leaf-wise growth always chases the single best split available anywhere in the current tree,
+            with no requirement to finish out a level first. On a small dataset, where a handful of
+            points can look like a real pattern purely by chance, that unconstrained best-first search
+            will happily carve leaves around noise rather than signal, and it does so faster than a
+            level-wise tree covering the same number of leaves would. Practically: start with num_leaves
+            well below the 31 default and tune it down further for datasets under roughly ten thousand
+            rows, raise min_child_samples so a leaf needs a meaningful number of observations to justify
+            a split, use early stopping against a genuine validation set, and watch the train-versus-
+            validation gap directly rather than trusting training-set metrics alone.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Explain GOSS. Why isn't it just random subsampling?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            GOSS keeps all — or the top fraction of — samples with large gradients, since those are the
+            ones the model is currently predicting badly and therefore the most informative for choosing
+            the next split. It then randomly samples a smaller fraction of the remaining small-gradient
+            samples, and reweights the ones it keeps by a compensating factor so the overall gradient
+            sum stays approximately unbiased. The key idea is that gradient magnitude, not randomness,
+            decides who gets dropped: a sample the model already predicts well contributes little
+            information about where the next split should go, so removing a share of those barely
+            changes which split gets picked, while keeping every large-error sample keeps the next tree
+            focused on the biggest remaining mistakes. Plain random subsampling would drop large-gradient
+            rows just as often as small-gradient ones, throwing away exactly the samples that matter
+            most.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How does LightGBM handle a high-cardinality categorical feature differently from one-hot encoding it yourself, and why might that be better?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            One-hot encoding a feature with hundreds of unique values explodes the effective
+            dimensionality of the dataset and forces the tree to make one binary decision at a time about
+            a single category versus everything else — a fragile split type that dilutes the information
+            in any one split and typically buries the feature in low importance scores. LightGBM's native
+            categorical handling instead searches for the best grouping of category values directly, so
+            it can express something like a handful of specific warehouse names going one way and the
+            rest going the other in a single split, using far fewer splits and adding no extra columns.
+            It requires no encoding step at all — just declaring the column as a pandas category dtype or
+            passing it through categorical_feature.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — When would you pick XGBoost over LightGBM even though LightGBM is usually faster?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            On small-to-medium datasets, where the overfitting risk from leaf-wise growth outweighs the
+            speed benefit and XGBoost's level-wise default with a modest max_depth is a gentler, more
+            forgiving complexity dial. When exact-greedy split precision matters more than the histogram
+            approximation's speed, for instance with a small number of high-stakes candidate thresholds
+            where the binning approximation could plausibly miss the truly optimal split. When a team is
+            already standardised on XGBoost's tooling, monitoring, or explainability pipeline, and
+            switching libraries costs more organisationally than the training-time savings are worth. And
+            in general, whenever the dataset is not large enough for LightGBM's core advantages —
+            histogram binning, GOSS, and EFB — to actually pay off, since all three specifically earn
+            their keep as row count and dimensionality grow.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

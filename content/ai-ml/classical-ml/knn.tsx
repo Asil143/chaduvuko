@@ -1030,7 +1030,173 @@ for leaf in [5, 10, 30, 50, 100]:
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about KNN</h2>
+
+        <ConceptBox title="Myth: KNN has no cost at all since it skips training" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Calling KNN a lazy learner is true only about training — fitting a model means nothing
+            more than storing the training set in memory, which is essentially free. But that cost
+            has to go somewhere, and it goes entirely into prediction: every single query has to
+            compute its distance to some or all of the training points before it can produce an
+            answer. On a large training set with brute-force search that is an O(n) computation per
+            prediction, which can dominate a latency budget in exactly the situations where fast
+            predictions matter most — real-time serving at scale. Tree-based indexes like a ball
+            tree or KD-tree, or approximate nearest-neighbor libraries like FAISS, exist specifically
+            because no training cost does not mean no cost.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: KNN just memorizes the training data instead of really learning" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            That is only true in the extreme case of k=1, where every prediction is literally the
+            label of the single nearest training point, which does produce perfect training accuracy
+            and a jagged, overfit decision surface. For any k greater than one, KNN is averaging or
+            voting across a local neighborhood of points, which is a genuine form of generalization —
+            it smooths out individual noisy examples in favor of what the local region as a whole
+            suggests. The size of k directly controls how much smoothing happens, from essentially no
+            generalization at k=1 to heavy generalization as k grows toward the size of the dataset,
+            which is the same bias-variance trade-off every other model faces, just made unusually
+            visible.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Feature scaling is just a generic best practice you apply everywhere, KNN included" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For KNN, scaling is not a generic best practice, it is a mathematical necessity created
+            directly by how the algorithm computes distance. Euclidean distance sums squared
+            differences across every feature, so a feature measured in the thousands contributes
+            overwhelmingly more to that sum than a feature measured between zero and one, and the
+            nearest neighbor the algorithm finds ends up determined almost entirely by whichever
+            feature happens to have the largest raw scale. Contrast this with a decision tree, which
+            splits on a per-feature threshold and never combines features into a single distance
+            calculation — multiplying every value of one feature by a thousand changes nothing about
+            which splits a tree chooses. KNN's need for scaling comes from its specific mechanism, not
+            from a general rule that applies equally to every algorithm.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A larger k is always the safer choice since it averages out more noise" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Larger k does reduce variance by averaging over more neighbors, but that is only half of
+            the bias-variance trade-off — it also increases bias by pulling in points that are
+            farther away and less representative of the query point's actual local neighborhood.
+            Pushed far enough, a very large k washes out real local structure entirely and the model
+            starts to resemble one that just predicts the global average or majority class
+            regardless of the input, which is a form of underfitting just as damaging as k=1's
+            overfitting. There is no universally safe direction to move k in — the right value
+            depends on the noise level and structure of the specific dataset, which is why it should
+            be chosen by cross-validation rather than by a rule of thumb.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: More features can only help KNN, since it has more information to measure similarity with" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every additional feature adds another term to the distance calculation, and in
+            high-dimensional space this backfires: as dimensions increase, the ratio between the
+            closest and farthest neighbor's distance shrinks toward one, meaning every point starts
+            to look approximately equidistant from every other point. Once that happens, "nearest
+            neighbor" stops carrying real information, and predictions degrade toward random guessing
+            regardless of how much genuinely predictive signal is buried in a subset of those
+            features. Irrelevant or redundant features are actively harmful to KNN in a way they are
+            not for models that can learn to downweight them, which is why reducing dimensionality
+            with PCA, or doing feature selection first, often improves KNN more than adding data does.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>K-Nearest Neighbours — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What does it mean that KNN is a 'lazy learner', and what's the real trade-off?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A lazy learner defers essentially all computation from training time to prediction time.
+            Fitting a KNN model means storing the training set in memory — no weights are learned, no
+            boundary is computed, so training is effectively instantaneous. The cost shows up on the
+            other side: every prediction has to search for the nearest neighbors among the stored
+            training points, which is an O(n) operation per query with brute-force search. This is
+            the opposite trade-off from something like a neural network, which spends heavy
+            computation upfront during training so that prediction is a fast forward pass. In
+            production, that means KNN can be a poor fit for high-throughput, low-latency serving
+            unless you invest in an indexing structure like a ball tree, KD-tree, or an approximate
+            nearest-neighbor library, precisely to move some of that deferred cost back out of the
+            request path.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why is feature scaling mandatory for KNN when it isn't for something like a decision tree?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It comes down to how each model actually uses feature values. KNN computes distance by
+            summing squared differences across all features simultaneously, so a feature on a scale
+            of thousands will dominate that sum and effectively decide which points count as "near,"
+            regardless of how informative the smaller-scale features actually are. A decision tree
+            instead picks a threshold on one feature at a time — it asks whether a value is above or
+            below some cutoff — and that decision doesn't change if you multiply the entire feature
+            by a constant, because the relative ordering of values within that feature is unaffected.
+            So scaling isn't a blanket rule that all algorithms need; it's specifically required by
+            any algorithm, like KNN, whose core computation combines raw feature magnitudes across
+            dimensions.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How do you choose k, and what happens at the extremes?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            k directly controls the bias-variance trade-off. At k=1, the model has zero bias and
+            maximum variance — every prediction is just the single nearest training point's label,
+            which produces perfect training accuracy but a decision surface that has memorized noise
+            and generalizes poorly. At the other extreme, k equal to the size of the dataset has
+            maximum bias and zero variance — every prediction collapses to the global average or
+            majority class, ignoring the query point's actual location entirely. In practice I'd
+            start from a rule of thumb like k equal to the square root of the training set size, then
+            tune it properly with cross-validation across a range of odd values for binary
+            classification to avoid tie votes, picking whichever k minimizes cross-validated error
+            rather than training error.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is the curse of dimensionality, and why does it hit KNN especially hard?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            As the number of features grows, the volume of the space grows exponentially, but the
+            amount of data you have stays fixed, so the data becomes exponentially sparser relative
+            to the space it lives in. The concrete symptom for KNN is that distances stop being
+            discriminative — the ratio between the nearest neighbor's distance and the farthest
+            point's distance approaches one as dimensions increase, meaning every point starts to
+            look roughly equidistant from every other point. Since KNN's entire mechanism depends on
+            "nearest" being a meaningful concept, this hits it harder than most algorithms — a
+            tree-based model can simply ignore an uninformative feature by never splitting on it, but
+            KNN's distance calculation folds every feature in by default. The practical fix is
+            dimensionality reduction, like PCA, or feature selection, before fitting KNN on anything
+            with more than roughly twenty features.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you deploy KNN in a system that needs fast predictions at scale?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would not use brute-force search in production if latency matters — I'd start with a
+            tree-based index like a ball tree or KD-tree, which reduces average query cost from O(n)
+            to roughly O(log n) for low-to-moderate dimensional data. If the dataset is very large or
+            dimensionality is too high for tree indexes to help, I'd move to an approximate
+            nearest-neighbor library like FAISS or Annoy, which trade a small amount of accuracy for
+            order-of-magnitude speedups by not guaranteeing the exact nearest neighbors. I'd also
+            push to reduce dimensionality first with PCA both for the curse-of-dimensionality reason
+            and because lower-dimensional data makes tree-based indexes far more effective. And I'd
+            reconsider whether KNN is the right algorithm at all — if the latency requirement is
+            strict, a model that shifts computation to training time, like a gradient-boosted tree or
+            a neural network, often fits the constraint better than any way of speeding up KNN
+            itself.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

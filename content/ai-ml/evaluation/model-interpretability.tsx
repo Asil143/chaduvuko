@@ -1004,7 +1004,169 @@ for i, applicant in enumerate(new_applications):
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about model interpretability</h2>
+
+        <ConceptBox title="Myth: A feature with a large SHAP value caused the outcome" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            SHAP measures how much a feature moved the model's prediction — a statistical
+            attribution within the model, not a causal claim about the world. If city_tier is
+            correlated with the true driver of default risk (say, local economic conditions the
+            model never sees directly), city_tier can receive a large SHAP value even though
+            changing an applicant's city_tier alone, in reality, would not change their true default
+            risk. SHAP answers "what did the model rely on," which is essential for debugging and
+            compliance — but "what the model relied on" and "what actually causes the outcome" are
+            different questions, and only the second one needs a causal method (e.g. a randomised
+            experiment or a causal graph) to answer.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A local SHAP explanation for one prediction tells you how the model behaves generally" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A local explanation is only valid in the immediate neighbourhood of that one applicant's
+            feature values — tree-based and other non-linear models routinely have interaction
+            effects where a feature's contribution flips sign in a different region of the input
+            space. High employment_yrs might reduce default risk for applicants with strong credit
+            scores but barely matter for applicants with weak ones. Generalising from one applicant's
+            SHAP breakdown to "this is how the model treats employment_yrs" is exactly the mistake
+            this module's global-vs-local distinction exists to prevent — global patterns require
+            aggregating many local explanations (mean |SHAP| across the dataset), not extrapolating
+            from a single one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Interpretable models and accurate models are fundamentally in tension" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For many structured, tabular problems — exactly the loan-default and credit-scoring
+            examples used throughout this module — well-regularised logistic regression, shallow
+            trees, or generalised additive models often perform within a percentage point or two of
+            a tuned gradient boosting model. The accuracy gap that people attribute to "black box
+            models are just better" is frequently attributable to something else entirely: better
+            feature engineering, more training data, or a genuinely non-linear relationship that a
+            slightly more expressive interpretable model (a GAM, not just plain linear regression)
+            could also capture. The tradeoff is real in some domains (image and text especially), but
+            it is not a law of nature — it should be measured per problem, not assumed.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A black-box model is entirely uninterpretable, full stop" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            "Black box" describes how the model computes its output, not whether any insight into
+            that computation is available. SHAP's TreeExplainer gives exact, not approximate,
+            per-prediction attributions for XGBoost and LightGBM despite them being ensembles of
+            hundreds of trees no human could read directly. KernelExplainer and LIME extend this to
+            SVMs and neural networks by fitting a local surrogate model. Even for deep networks,
+            attention weights and DeepExplainer provide partial windows into what the model is
+            weighting. None of these give you the same transparency as reading a 5-line decision
+            rule — but "harder to interpret directly" and "impossible to interpret at all" are very
+            different claims, and this entire module is built on tools that only exist because the
+            second claim is false.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: There is one correct way to explain a model's decision" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The right explanation depends entirely on who is asking. A regulator enforcing ECOA
+            needs specific, individually adverse reason codes tied to this applicant's rejection —
+            exactly the top-3-risk-factors output this module's production pipeline generates. A
+            data scientist debugging a systematic error needs global SHAP importance and
+            interaction analysis to find patterns across thousands of predictions. A rejected
+            applicant needs one or two plain-English sentences, not a table of SHAP values in
+            log-odds units. Building "the" explanation and handing it to all three audiences
+            unchanged satisfies none of them well — production interpretability systems typically
+            generate multiple views from the same underlying SHAP values, not one universal report.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Model interpretability — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain SHAP to a business stakeholder who isn't technical">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A good answer skips the game theory entirely: "For any prediction the model makes, SHAP
+            tells you exactly how much each piece of information pushed that prediction up or down,
+            and the contributions add up to the full difference between this prediction and our
+            average prediction. Think of it like a hiring committee scoring a candidate — SHAP tells
+            you how many points each factor added or subtracted, so you can see precisely why this
+            candidate scored the way they did, not just the final number." The key thing to convey
+            is that SHAP explanations are exact and additive, not a rough approximation — that's why
+            they hold up under regulatory scrutiny.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why is permutation importance misleading with correlated features, and does SHAP fix that?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Permutation importance shuffles one feature at a time and measures the performance drop
+            — but if two features are correlated (income and income_monthly, say), shuffling just
+            one of them barely hurts performance because the model can still lean on the other,
+            unshuffled, correlated feature. Both features end up looking individually unimportant
+            even though together they matter a great deal — the importance gets split between them
+            rather than measured per feature. SHAP does not eliminate this issue entirely — it still
+            has to divide credit between correlated features in some principled way — but it does so
+            using Shapley values' symmetry axiom, which guarantees two equally-contributing features
+            get identical, consistent credit rather than the somewhat arbitrary split permutation
+            importance produces. It's a more principled answer to the same underlying difficulty,
+            not a magic fix for correlation itself.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Your model has AUC 0.94, but a regulator asks why applicant X was denied. Walk me through what you'd show them">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, compute the local SHAP explanation for that specific applicant using
+            TreeExplainer (assuming a tree-based model), which gives the exact contribution of each
+            feature to their individual predicted default probability. Rank those contributions by
+            magnitude and translate the top 3 into plain-English reason codes using a feature
+            description mapping — "existing monthly debt payments are high relative to income"
+            rather than "existing_emis SHAP = +0.14." This satisfies ECOA's requirement for
+            specific, individualised adverse-action reasons rather than a vague "the algorithm
+            decided." I'd also keep the underlying SHAP values and the model's expected_value (base
+            rate) on file in case the audit needs to verify the numbers behind the plain-English
+            reasons.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — When would you pick LIME over SHAP, and what's the tradeoff?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            LIME is the right choice when SHAP's exact explainers don't apply well to your model
+            type — image classifiers, text models, or any model where KernelExplainer would be
+            prohibitively slow — because LIME's local-surrogate approach is model-agnostic and often
+            faster in those cases, and its rule-based output ("income under 25000") is intuitive for
+            non-technical audiences. The tradeoff is that LIME is stochastic: it generates random
+            synthetic samples in the neighbourhood of the prediction, so two runs on the same
+            prediction can give meaningfully different explanations, especially in high-dimensional
+            or sparse feature spaces. For anything where consistency matters — regulatory reporting,
+            repeatable audits — that instability is a real cost, and SHAP's determinism (for tree
+            and linear models) makes it the safer default whenever it's available.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Does high feature importance mean the feature causes the outcome? How would you check?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            No — feature importance and SHAP both measure the feature's association with the
+            model's output, which is not the same as the feature causing the real-world outcome. A
+            feature can be highly predictive because it's correlated with the true cause without
+            being the cause itself. To actually establish causality you need a different toolkit
+            entirely: a randomised experiment (change the feature, hold everything else fixed,
+            measure the real outcome), a causal graph with domain assumptions made explicit so you
+            can reason about confounders, or quasi-experimental methods like instrumental variables
+            or difference-in-differences when a true experiment isn't feasible. SHAP is the right
+            tool for "what is the model doing" — it was never designed to answer "what does this
+            variable do in reality," and treating it as if it does is a common and serious mistake,
+            especially in regulated and policy-relevant applications.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

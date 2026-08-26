@@ -81,11 +81,34 @@ const sec: React.CSSProperties = { paddingBottom: 56, marginBottom: 56, borderBo
 const tag: React.CSSProperties = { fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', fontFamily: 'var(--font-mono)', display: 'block', marginBottom: 10 }
 const h2: React.CSSProperties = { fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: 900, letterSpacing: '-1.2px', color: 'var(--text)', marginBottom: 16, lineHeight: 1.15 }
 const p: React.CSSProperties = { fontSize: 15, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 16 }
+const ps: React.CSSProperties = { fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 10 }
 
 function Highlight({ children, color }: { children: React.ReactNode; color?: string }) {
   return (
     <div style={{ padding: '14px 18px', background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: `3px solid ${color ?? 'var(--accent)'}`, borderRadius: 8, margin: '20px 0' }}>
       <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{children}</div>
+    </div>
+  )
+}
+
+function ConceptBox({ title, children, color = '#7b61ff' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
     </div>
   )
 }
@@ -792,6 +815,186 @@ print(f"Multiple LR R²: {r2_score(y_te, y_pred_multi):.3f}")      # ~0.92`} />
           2 days. This is always the ratio. Data engineering is not a prerequisite you get past — it is
           half the job, every week.
         </Highlight>
+      </div>
+
+      {/* ── SECTION 9: Misconceptions ──────────────────────────────────────── */}
+      <div style={sec}>
+        <span style={tag}>Misconceptions</span>
+        <h2 style={h2}>Five things people get wrong about Linear Regression</h2>
+
+        <ConceptBox title="Myth: checking linearity, outliers, and multicollinearity covers every assumption" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            Two more assumptions get silently violated far more often than the ones on this page's
+            assumptions table: homoscedasticity (residual variance stays roughly constant across the
+            range of predictions) and normality of the residuals. Homoscedasticity is checked with the
+            same residual-versus-predicted plot from Step 7 above — look specifically for a fan or cone
+            shape, spread widening as predictions grow, which shows up constantly in real-world data
+            where absolute error naturally scales with the size of the thing being predicted, like larger
+            orders having proportionally larger errors. Normality of residuals is checked with a Q-Q plot
+            comparing residual quantiles to a theoretical normal distribution, and it mainly affects
+            whether confidence intervals and p-values on the coefficients can be trusted, not the
+            accuracy of the point predictions themselves. Both drift in gradually and are easy to miss
+            unless you deliberately plot for them.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: an R squared close to 1 means the model is correct, or that the relationship is causal" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            R squared only measures how much of this particular sample's variance in the target the
+            fitted line accounts for — it says nothing about whether the model's assumptions hold,
+            whether it will generalise to new orders, or why the relationship exists. The Multiple Linear
+            Regression example earlier on this page reaches an R squared around 0.92 by adding
+            traffic_score and restaurant_prep; that number looks identical whether traffic genuinely
+            slows deliveries or whether traffic simply happens to be measured at the same times as some
+            other unmodelled cause of delay. A high R squared earned on training data specifically can
+            also just mean the model memorised patterns that will not hold on the held-out test set,
+            which is exactly why this page insists on splitting the data before ever looking at R squared
+            at all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: multicollinearity between features makes a model's predictions unreliable" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            Multicollinearity mainly damages your ability to interpret individual coefficients, not the
+            accuracy of the combined prediction. If distance_km and an estimated_travel_time feature are
+            highly correlated, the model can split credit between them almost arbitrarily — one fit might
+            give most of the weight to distance and a little to travel time, another equally valid fit
+            might reverse that split — while the combined contribution to any given prediction stays
+            nearly the same either way. That instability is a real problem if the goal is explaining
+            which feature drives delivery time, but if the only goal is minimising prediction error on
+            data that resembles the training distribution, a collinear model can predict just as well as
+            one with a redundant feature removed. The real danger shows up later: if the correlation
+            between those features shifts in production away from what training data showed, a model
+            that leaned on that correlation can degrade sharply.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: adding more features can only help, or at worst not hurt, R squared" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            Ordinary Least Squares fits parameters by minimising squared error on whatever training data
+            it is given, and handing it one more column — even a genuinely useless one, like a random
+            number generator's output — gives the optimiser strictly more freedom to reduce that training
+            error further. R squared on the training set is mathematically guaranteed to only increase or
+            stay flat as features are added; it can never go down. That is exactly why adjusted R squared
+            exists: it subtracts a penalty that grows with the number of predictors relative to the
+            sample size, so a feature that is not pulling its weight can push adjusted R squared down
+            even while plain R squared ticks up. Comparing models with different feature counts using
+            plain R squared instead of the adjusted version, or instead of test set performance, is one of
+            the most common ways beginners convince themselves a bigger model is a better one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: a large, significant coefficient means that feature causes the outcome" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            A fitted coefficient captures the association between a feature and the target after
+            accounting for whatever other features happen to be in the model, on this particular
+            dataset — it is a correlational quantity, not a causal one, no matter how large or stable it
+            looks. If a restaurant_popularity feature came out with a large positive coefficient on
+            delivery time, the honest read is only that popular restaurants and long delivery times moved
+            together in this data; a very plausible alternative story is that popular restaurants get
+            overwhelmed with orders and understaff their kitchen during exactly those busy hours — a
+            confounder, not an effect of popularity itself. Distance is the rare feature on this page
+            where correlation and causation likely do line up, since physically travelling further
+            mechanically takes more time, but that confidence comes from reasoning about how delivery
+            works in the real world, not from anything the regression itself proved. Establishing
+            causation in general needs a controlled experiment or a dedicated causal-inference method,
+            never a coefficient by itself.
+          </p>
+        </ConceptBox>
+      </div>
+
+      {/* ── SECTION 10: Interview prep ─────────────────────────────────────── */}
+      <div style={sec}>
+        <span style={tag}>Interview prep</span>
+        <h2 style={h2}>Linear Regression — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — How would you actually check whether the assumptions of linear regression hold for a given dataset?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            I would check each one with a specific diagnostic rather than assuming from a scatter plot.
+            Linearity and homoscedasticity both show up in a residuals-versus-predicted-values plot: a
+            random cloud centred on zero with roughly constant spread supports both, a curved pattern
+            means the true relationship is not linear, and a fan or cone shape means variance is not
+            constant. Normality of residuals is checked with a Q-Q plot comparing residual quantiles to a
+            theoretical normal distribution, and it mainly affects whether confidence intervals and
+            p-values on the coefficients can be trusted, not the point predictions themselves.
+            Independence of errors is checked by plotting residuals against time, order, or any variable
+            outside the model — a pattern there means a systematic effect is missing from the model.
+            Multicollinearity is checked with a correlation matrix or, more precisely, Variance Inflation
+            Factor. I would emphasise that violated assumptions in ordinary least squares mostly threaten
+            how much you can trust the model's inference — its confidence intervals, its p-values, how
+            interpretable individual coefficients are — while the point predictions themselves can often
+            still be reasonably useful even under a moderate violation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Your model gets an R squared of 0.95 on evaluation. Does that mean it's a good model?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            R squared alone does not answer that, and I would ask a few things before trusting it. First,
+            is 0.95 measured on a held-out test set or on the training data — a strong score on training
+            data alone says almost nothing about generalisation, and the gap between training and test R
+            squared is often more informative than either number alone. Second, how does it compare to a
+            naive baseline, such as always predicting the mean — a workflow like the DoorDash example on
+            this page always computes that baseline MAE first specifically so a strong-looking metric can
+            be judged against a floor. Third, a high R squared does not validate the model's assumptions
+            or imply the relationships found are causal; it is entirely possible to reach a high R squared
+            with a leaked feature that is only available because the outcome already happened, or with a
+            relationship that will not hold once the underlying data distribution shifts. I would want to
+            see the baseline comparison, the train-versus-test gap, and a residual plot before calling
+            0.95 good rather than lucky or leaky.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What's the difference between R squared and adjusted R squared, and why does the adjusted version exist?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            R squared can only increase or stay the same as you add features to an Ordinary Least Squares
+            model, because the optimiser is minimising training error and an extra column — even a
+            useless one — gives it strictly more freedom to reduce that error further; there is no
+            mechanism by which adding a feature can make training R squared go down. Adjusted R squared
+            fixes this by including a penalty term that grows with the number of predictors relative to
+            the number of observations, so a feature that does not meaningfully reduce error can cause
+            adjusted R squared to fall even while plain R squared rises slightly. In practice I use
+            adjusted R squared, or better, held-out test performance, whenever I am comparing two models
+            with different numbers of features, since plain R squared is always biased toward the larger
+            model regardless of whether the extra features are genuinely useful.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Two of your features are highly correlated. What actually goes wrong, and does it matter for a production model?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            The core issue is that the model can no longer cleanly separate how much each of the two
+            correlated features individually contributes, because many different splits of coefficient
+            weight between them produce almost the same combined prediction — that makes individual
+            coefficients unstable and their standard errors unreliable, so a statement like "feature A
+            matters twice as much as feature B" cannot be trusted when the two are highly collinear.
+            Whether it matters in production depends on the goal: if the job is explaining which factor
+            drives the outcome, this is a real problem, and I would drop one of the redundant features,
+            combine them, or use a regularised model like Ridge regression, which handles correlated
+            features more gracefully by shrinking coefficients instead of letting them swing to extreme,
+            unstable values. If the job is purely predictive accuracy on data that resembles the training
+            distribution, collinearity by itself often does not hurt performance much, since the model
+            still captures the combined effect correctly — the real danger is that if the correlation
+            between those features breaks down in future data in a way it never did during training, a
+            model that leaned on that correlation can degrade sharply.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Your model finds distance_km has a coefficient of about 7.3 minutes per kilometre. Can you say distance causes the delivery time increase?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            A coefficient from a fitted regression is an association conditional on whatever other
+            features happen to be in the model, on this particular dataset — by itself it is not proof of
+            causation, no matter how large, stable, or statistically significant it looks. The honest
+            process is to ask whether a plausible confounder could produce the same pattern without a
+            causal link, and in general that is a real risk: a feature like restaurant popularity
+            correlating with delivery time could easily be driven by understaffed kitchens during that
+            restaurant's busiest hours rather than popularity itself causing delay. Distance is actually
+            one of the more defensible cases for a near-causal read, since travelling a longer physical
+            distance mechanically takes more time regardless of any other variable, and that mechanical
+            story exists independently of the regression. But that confidence comes from domain reasoning
+            about how delivery physically works, not from the coefficient itself — to establish causation
+            rigorously in the general case, you would want a randomised experiment or a dedicated causal
+            inference method, not just a large coefficient in an observational dataset.
+          </p>
+        </ConceptBox>
       </div>
 
       {/* ── KEY TAKEAWAYS ─────────────────────────────────────────────────── */}

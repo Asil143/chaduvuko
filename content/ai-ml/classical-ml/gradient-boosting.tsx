@@ -1116,7 +1116,148 @@ for i, (_, row) in enumerate(new_orders.iterrows()):
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about gradient boosting</h2>
+
+        <ConceptBox title="Myth: 'Gradient' boosting means each tree literally predicts a gradient, whatever that is" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is not just branding — "gradient" refers to a specific, precise quantity: the negative
+            gradient of the loss function with respect to the current prediction. For MSE loss this
+            negative gradient happens to equal the plain residual (y − ŷ), which is why Section 2 could
+            get away with saying "each tree predicts the residual." But swap in log-loss for
+            classification, and the tree is fitting the gradient of log-loss (a probability residual,
+            y − sigmoid(ŷ)) — not a literal label difference. The "residual" framing is a special case of
+            the gradient framing that only looks identical because MSE's gradient is unusually simple.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: a lower learning rate is strictly better — just add more trees to compensate" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Lower learning rate paired with more trees does generally improve test performance, but it is
+            not a free lunch — it is a straight trade of training compute for a small accuracy gain, with
+            diminishing returns. The learning-rate sweep earlier in this module needed 2,000 trees at
+            lr=0.01 to match what 50 trees did at lr=0.3 — a 40× increase in training cost for a modest
+            MAE improvement. Past some point, additional trees stop helping regardless of how small the
+            learning rate is, which is exactly why you tune both together with cross-validation and let
+            early stopping — not intuition — decide where to stop.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: boosting overfits less than bagging because it corrects its own errors" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is usually the opposite. Random Forest averages many independent trees trained on
+            bootstrap samples — that averaging cancels out noise by construction, whether you regularise
+            it or not. Gradient boosting has no such built-in safety net: each new tree is explicitly
+            optimising away whatever error remains, including error that is just noise in the training
+            labels. Left unconstrained, later trees will happily fit that noise. This is exactly why
+            gradient boosting needs the four regularisation levers from Section 4 (shallow trees,
+            subsampling, min_samples_leaf, feature sampling) tuned deliberately — Random Forest gets
+            comparable protection almost for free from its bagging mechanism.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: gradient boosting always beats Random Forest and bagging" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It wins on most tabular benchmarks, which is why it dominates competitions — but "most" is not
+            "always." On small or noisy-labelled datasets, an untuned Random Forest is often more robust
+            out of the box, because bagging's variance-cancelling averaging degrades gracefully with poor
+            hyperparameters, whereas an untuned gradient boosting model (high learning rate, no
+            regularisation) can overfit badly and underperform a default Random Forest. Gradient boosting
+            earns its accuracy advantage only when you invest the tuning time — an untuned comparison is
+            not a fair one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: you can parallelise gradient boosting across trees the way you parallelise Random Forest" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Random Forest trees are trained completely independently, so building 500 of them across 500
+            cores is trivial. Gradient boosting cannot do this: tree i+1 needs the residuals produced by
+            the ensemble through tree i, so trees must be built one after another — there is a hard
+            sequential dependency between boosting rounds. What XGBoost and LightGBM actually parallelise
+            is the work *inside* each tree — histogram construction and split-finding across features run
+            on multiple threads — but the 500 rounds themselves still happen in sequence. This is why
+            gradient boosting training time scales roughly linearly with n_estimators almost regardless of
+            core count, unlike Random Forest which genuinely speeds up with more parallel hardware.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Gradient boosting — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk me through how gradient boosting trains a model, step by step">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Start with a single constant prediction — the mean of the target for regression. Compute the
+            residual for every training point: actual value minus the current ensemble's prediction. Fit a
+            new, shallow tree whose target is that residual, not the original label. Scale that tree's
+            output by the learning rate and add it to the running ensemble prediction. Repeat for
+            n_estimators rounds — each new tree is trained specifically to correct whatever error is left
+            after every previous tree. The final prediction is the initial constant plus the learning rate
+            times the sum of every tree's output.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why is it called 'gradient' boosting — what is actually being computed?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For MSE loss, the residual (y − ŷ) is exactly the negative gradient of the loss with respect
+            to the current prediction, so fitting a tree on the residual is mathematically the same as
+            taking one step of gradient descent — except the "step" is an entire decision tree function
+            instead of a fixed numeric update. This generalises beyond MSE: for any differentiable loss
+            (log-loss for classification, a custom ranking loss), you compute the negative gradient — the
+            pseudo-residual — at every point and fit the next tree on that. XGBoost goes one step further
+            and also uses the second derivative (the Hessian) for a more accurate Newton-style update.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How do learning rate and n_estimators interact, and how would you tune them?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Learning rate scales down each tree's contribution; a smaller value means gentler, more
+            conservative corrections that require more trees to converge but generalise better because no
+            single tree can dominate the ensemble. A reliable rule of thumb is that halving the learning
+            rate while doubling n_estimators tends to improve test performance. In practice you rarely
+            hand-tune n_estimators directly — set it very high (thousands) with a small learning rate
+            (0.01–0.05), then use early stopping against a validation set so training automatically halts
+            at the point where validation error stops improving, regardless of the learning rate chosen.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — When would you choose Random Forest over gradient boosting?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Random Forest trains trees independently on bootstrap samples and averages them — that is
+            inherently robust, needs very little hyperparameter tuning to get a strong baseline, trains in
+            parallel across cores, and tends to tolerate noisy labels better because errors get averaged
+            away rather than explicitly chased. Gradient boosting, especially with a high learning rate or
+            too many trees, can overfit noisy data because later trees are built specifically to reduce
+            whatever training residual remains, noise included. I would reach for Random Forest when I
+            need a fast, low-maintenance baseline or I'm working with a small/noisy dataset, and reach for
+            gradient boosting when I have the time budget to tune it properly and want the best possible
+            accuracy on structured tabular data.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you diagnose and fix overfitting in a gradient boosting model?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First symptom: a large gap between training and validation/test error — near-perfect training
+            score with much worse held-out score is the classic signature. Fix it using the four
+            regularisation levers together, not just one: lower the learning rate and correspondingly
+            raise n_estimators with early stopping enabled; keep max_depth shallow (3–5, since gradient
+            boosting trees are meant to be weak learners, unlike Random Forest's often-unconstrained
+            trees); add subsample below 1.0 so each tree only sees a random fraction of rows (stochastic
+            gradient boosting); and raise min_samples_leaf so trees can't carve out single-sample leaves.
+            Tune all of this with cross-validation, never by reading training score alone.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

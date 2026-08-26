@@ -966,7 +966,158 @@ for k, v in s3.best_params.items():
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about hyperparameter tuning</h2>
+
+        <ConceptBox title="Myth: Grid search guarantees you find the best hyperparameters" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Grid search guarantees the best combination within the grid you specified — nothing
+            more. If you searched learning_rate in {'{0.05, 0.1, 0.2}'} and the true optimum is
+            0.07, grid search will never find it; it only ever evaluates the discrete points you
+            listed. This is a genuine blind spot, not a minor approximation — the discretisation
+            decision (which values to include, how coarse the spacing is) silently caps how good a
+            result grid search can ever return, no matter how many folds or how much compute you
+            throw at it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Random search is inferior to grid search because it is 'unsystematic'" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is backwards for most real search spaces. Bergstra and Bengio's 2012 result shows
+            that when only a few hyperparameters actually matter (nearly always true — max_depth
+            might dominate while min_samples_leaf barely moves the score), grid search wastes a
+            huge fraction of its budget varying unimportant parameters while barely varying the
+            important ones across their range. Random search, by contrast, samples every parameter
+            independently on every trial, so it explores far more distinct values of the parameters
+            that matter, for the same total budget. This is not "sometimes true" — it is the
+            expected outcome whenever hyperparameter importance is uneven.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Bayesian optimisation (Optuna) always beats random search" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            TPE's advantage comes from learning across trials, which requires trials to run mostly
+            sequentially — each new suggestion depends on the results so far. If you have massive
+            parallel compute (say, 500 machines) and a cheap objective function, running 500 random
+            trials at once often finds a comparably good result faster in wall-clock time than
+            running Optuna's mostly-sequential search, because Optuna's benefit from smarter
+            sampling doesn't outweigh the parallelism it gives up. Bayesian optimisation wins on
+            sample efficiency (fewer trials for the same quality), not on being universally faster
+            or better in every deployment scenario.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If Optuna's CV score keeps improving, the model is genuinely getting better" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every trial that reuses the same CV folds is effectively another look at the same
+            finite validation data, and Optuna is explicitly searching for whatever configuration
+            scores best on it — including configurations that happen to fit noise in those specific
+            folds rather than genuine signal. This is hyperparameter overfitting, and it happens
+            without ever touching the test set: more trials on a small dataset with few folds
+            increases the chance that the "best" hyperparameters found were the luckiest on this
+            particular split, not the best in general. This module's own error section shows CV AUC
+            of 0.94 collapsing to test AUC of 0.81 for exactly this reason.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: More hyperparameter tuning fixes a mediocre model" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Tuning searches for the best configuration of a fixed model family and a fixed set of
+            features — it cannot manufacture signal that isn't in the data, and it cannot make a
+            fundamentally unsuitable algorithm suddenly capture a relationship it structurally
+            cannot represent. A linear model tuned across every regularisation strength available
+            still cannot fit a strongly non-linear relationship; 500 Optuna trials on a feature set
+            missing the one variable that actually explains the target will not out-tune that
+            missing feature. Tuning is the last 5–10% of model quality, applied after the model
+            family and features are already validated as reasonable — not a substitute for getting
+            those right first.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Hyperparameter tuning — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why would you choose Optuna over GridSearchCV for a model with 6 hyperparameters?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            With 6 hyperparameters, even 4 values each is 4⁶ = 4,096 combinations — combinatorial
+            explosion makes grid search computationally infeasible well before you'd want to stop.
+            Optuna uses Bayesian optimisation (TPE by default): after each trial it builds a
+            probabilistic surrogate model of which regions of the search space score well, and
+            chooses the next trial to focus on promising regions instead of blindly covering the
+            whole grid. In practice 30–50 Optuna trials routinely match or beat 200+ grid search
+            combinations, because Optuna spends its budget where it is likely to pay off instead of
+            spreading it uniformly, including over regions already known to be bad.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain why random search can outperform grid search, even though it seems less systematic">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Grid search's systematic coverage is actually its weakness when hyperparameters have
+            unequal importance, which is the normal case. Say learning_rate matters a lot and
+            min_samples_leaf barely matters at all — a 3×3 grid only tries 3 distinct learning
+            rates no matter how many min_samples_leaf values you add, wasting evaluations varying a
+            parameter that doesn't move the score. Random search samples every parameter
+            independently on every trial, so for the same 9 trials it tries 9 distinct learning
+            rates. For the same budget, random search covers the important dimensions more densely
+            — this is Bergstra and Bengio's core argument, and it's a structural property of how the
+            two methods spend budget, not an occasional fluke.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — You ran Optuna for 500 trials on 800 rows and got CV AUC 0.95, but test AUC is 0.79. What happened?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is hyperparameter overfitting: 500 trials searched an enormous space of
+            configurations against the same small set of CV folds, and with only 800 rows some
+            configuration was bound to fit the noise in those specific folds unusually well by
+            chance — that configuration doesn't generalise, hence the 16-point drop on the untouched
+            test set. Fixes: cap n_trials relative to dataset size (30–50 trials for a dataset this
+            small is plenty), use more folds or RepeatedStratifiedKFold so each trial's score is
+            harder to get lucky on, and use nested cross-validation so the hyperparameter search
+            itself is evaluated out-of-sample rather than just the final model. The test set must
+            never be seen during the Optuna study, only for the final, one-time check.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What's the difference between a sampler and a pruner in Optuna, and why use both?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They solve independent problems. The sampler (e.g. TPESampler) decides which
+            hyperparameter values to try next, based on a surrogate model of previous results — it
+            controls where in the search space you look. The pruner (e.g. MedianPruner) decides
+            whether to abandon a trial that is already running, based on its intermediate results —
+            for example, stopping a cross-validation fold early if the score after fold 2 is already
+            worse than the median of completed trials. You want both because they save different
+            kinds of waste: a good sampler avoids wasting whole trials on unpromising regions, while
+            a good pruner avoids wasting compute finishing a trial that's already clearly bad partway
+            through. Combined, they can cut total compute 30–50% with no loss in final quality.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — If you had unlimited compute, would grid search eventually become as good as Bayesian optimisation?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            With unlimited compute and an arbitrarily fine grid, grid search's coverage does
+            approach exhaustive search over the space, so in the limit it would find configurations
+            at least as good as anything Optuna finds. But "unlimited compute" is doing a lot of
+            work in that question — grid size grows exponentially with each additional
+                        hyperparameter (a finer grid on 6 parameters multiplies trials by that
+            factor across all 6 dimensions simultaneously), so the compute required to make grid
+            search competitive grows far faster than Optuna's requirement for the same quality.
+            The honest answer is: grid search's ceiling is real, but the compute needed to reach it
+            makes it impractical exactly in the high-dimensional cases where Optuna's sample
+            efficiency matters most.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

@@ -987,7 +987,156 @@ print(f"\nTransaction decision: {decision}  (P(fraud)={prob:.3f})")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about XGBoost</h2>
+
+        <ConceptBox title="Myth: Gradient boosting always beats random forest, so there is no reason to try both" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            XGBoost tends to win on clean, well-structured tabular data where squeezing out the last
+            few points of accuracy matters and there is time to tune it properly. But on noisy
+            datasets, with mislabelled examples or heavy outliers, boosting's sequential
+            error-correction can actually amplify the model's attention onto those bad labels,
+            hurting generalisation — while random forest's averaging over many independent
+            bootstrapped trees is naturally more robust to that noise. Random forest is also far
+            more forgiving of default hyperparameters and trains in parallel from the start, making
+            it a genuinely reasonable first model under time pressure. Which one wins is an
+            empirical question for the specific dataset, not a settled default.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The only thing controlling overfitting in XGBoost is max_depth" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            max_depth matters, but XGBoost layers an entire regularisation system on top of the base
+            gradient boosting idea, and it is often more powerful. reg_alpha and reg_lambda directly
+            penalise leaf weight magnitude inside the loss function itself. gamma sets a minimum
+            loss reduction required before a split is even made, pruning away splits that do not
+            meaningfully help. subsample and colsample_bytree add randomness the same way random
+            forest does, decorrelating trees. Treating max_depth as the only lever leaves most of
+            XGBoost's actual overfitting defences untouched — a well-regularised model at
+            max_depth=6 can generalise better than a shallow one with everything else left at
+            defaults.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Just pick a large fixed number of boosting rounds and you are covered" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A fixed n_estimators is a guess that is almost always wrong in one direction or the
+            other — too few rounds and the model underfits, too many and it keeps fitting the
+            training set's noise long after validation performance has peaked and started
+            declining. Early stopping replaces that guess with a direct measurement: it holds out a
+            validation set, tracks validation score after every added tree, and stops once that
+            score has not improved for a set number of rounds, automatically restoring the best
+            iteration. It is not just a training-time convenience — it is how the right number of
+            trees for a given learning rate is actually determined, rather than assumed in advance.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Gradient boosting trains just as parallelisable as random forest, since both use decision trees" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Random forest's trees are independent of one another — every tree can be grown at the
+            same time on a different CPU core, because none of them depends on any other tree's
+            output. Gradient boosting's trees are built sequentially by design: each new tree is fit
+            specifically to the residual errors left by the ensemble of every previous tree, so tree
+            k+1 cannot begin until tree k finishes. XGBoost does parallelise aggressively within the
+            construction of a single tree, across features and data blocks when finding the best
+            split, which is why it stays fast in practice — but the boosting rounds themselves remain
+            an inherently sequential chain, unlike random forest's fully independent trees.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: XGBoost handles noisy or mislabelled data about as gracefully as random forest does" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Because each new tree specifically targets the residual error of previous trees, a
+            handful of mislabelled or extreme outlier points can end up receiving outsized attention
+            across many boosting rounds — the model keeps trying harder to fit exactly those hard,
+            possibly wrong, examples. Random forest's bagging approach averages many trees trained
+            on different random samples, so any individual mislabelled point only influences a
+            fraction of the trees and gets diluted in the final average. This is a real practical
+            reason to audit label quality more carefully before trusting a boosted model, and part
+            of why gamma, reg_lambda, and subsample all exist — they are partly there to keep
+            boosting from chasing noise too aggressively.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>XGBoost — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Compare XGBoost and Random Forest in your own words. When does each win?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Both are ensembles of decision trees, but they combine them in opposite ways. Random
+            forest builds many independent trees on bootstrapped samples and averages their
+            predictions — variance reduction through independence, trained fully in parallel.
+            XGBoost builds trees sequentially, where each new tree specifically corrects the
+            residual errors of the ensemble built so far — bias reduction through targeted
+            correction, trained one tree at a time. XGBoost usually wins on clean tabular data with
+            time available to tune it. Random forest tends to win, or at least tie, when labels are
+            noisy, the team needs a fast and forgiving baseline, or fully parallel training time
+            matters more than squeezing out the last bit of accuracy.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain early stopping in XGBoost. Why not just cross-validate n_estimators directly?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Early stopping holds out a validation set, evaluates it after every tree is added during
+            a single training run, and stops once the validation score has not improved for a set
+            number of rounds — then restores the model from its best iteration. Cross-validating
+            n_estimators as a hyperparameter would mean training many separate full models end to
+            end for a grid of candidate values, which is far more expensive and still only checks a
+            handful of discrete values. Early stopping effectively searches every possible tree count
+            in one training run and finds the exact best one, which is both cheaper and more precise.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What role does the Hessian, the second-order gradient, play in XGBoost versus classic gradient boosting?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Classic gradient boosting fits each new tree to the first-order gradient of the loss —
+            essentially the residual, or direction of steepest descent. XGBoost also uses the
+            second-order gradient, the Hessian, which captures the curvature of the loss around the
+            current prediction. Using both gives XGBoost a Newton-style update: it does not just
+            know which direction to move a leaf's prediction, it has a better estimate of how far to
+            move it, since the Hessian tells it how quickly the loss is changing. In practice this
+            produces more accurate trees in fewer boosting rounds than using the gradient alone.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you diagnose whether an XGBoost model is overfitting, and what would you change first?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would compare training AUC against validation AUC — a large and growing gap as trees
+            are added is the clearest sign of overfitting, and a training curve from eval_set makes
+            this visible directly. If I see that gap, I would first reduce max_depth and increase
+            min_child_weight, since deep, low-support splits are usually the biggest overfitting
+            source. Next I would raise gamma so weak splits get pruned, and add or lower subsample
+            and colsample_bytree for more randomness between trees. Finally I would lower the
+            learning rate while raising n_estimators and relying on early stopping, which tends to
+            generalise better than a high learning rate with few trees.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Why is gradient boosting harder to parallelise than random forest, and how does XGBoost work around that?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Gradient boosting trees have a hard sequential dependency: tree k+1 is fit to the
+            residual errors left by the ensemble through tree k, so it cannot be built until tree k
+            is done — unlike random forest's trees, which share no dependency and can all be built
+            at once. XGBoost cannot remove that sequential chain between boosting rounds, but it
+            parallelises heavily within each individual tree's construction: it pre-sorts and blocks
+            the data so that finding the best split across every feature happens concurrently across
+            threads or even on a GPU. That is why XGBoost stays fast in practice despite the
+            sequential structure, even though it can never build five hundred trees concurrently the
+            way random forest can.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

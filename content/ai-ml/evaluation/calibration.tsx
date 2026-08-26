@@ -985,7 +985,158 @@ print("  5. Monitor ECE weekly — recalibrate monthly or on drift alert")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about calibration</h2>
+
+        <ConceptBox title="Myth: A model with high accuracy or ROC-AUC must be well-calibrated" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Accuracy and ROC-AUC measure discrimination — can the model rank positives above
+            negatives? Calibration measures something orthogonal — do the actual probability
+            numbers mean what they say? A Random Forest with AUC = 0.93 routinely has predictions
+            of 0.9 that are actually right only 70% of the time, because RF probabilities are vote
+            fractions across trees, not maximum-likelihood estimates trained to match observed
+            frequencies. You can have excellent ranking and badly wrong probability values at the
+            same time — they are two separate properties, and one gives you no information about
+            the other.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A well-calibrated model must be a good model" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is the same error in reverse. A model that always predicts the base rate — say
+            0.12 for every single applicant, regardless of their features — is perfectly
+            calibrated: among all predictions of 0.12, exactly 12% are positive, because that's
+            everyone. Its reliability diagram is a single dot sitting exactly on the diagonal. But
+            its Brier score equals base_rate × (1 − base_rate), no better than guessing, and it has
+            zero discriminative power — it cannot tell a safe applicant from a risky one. Good
+            calibration is necessary for trustworthy probabilities but says nothing about whether
+            the model has learned anything useful. You need both calibration and discrimination,
+            and they must be checked independently.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Isotonic regression is strictly better than Platt scaling since it's more flexible" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            More flexible only helps if you have enough data to estimate that flexibility reliably.
+            Isotonic regression fits an arbitrary non-decreasing step function with potentially
+            thousands of steps — with a calibration set under roughly 1,000–5,000 samples, it
+            overfits to the exact scores it saw and generalises poorly to new data. Platt scaling
+            fits only 2 parameters (a sigmoid's slope and intercept), so it is far more
+            data-efficient and safer on small calibration sets, even though it can only correct
+            sigmoid-shaped miscalibration. The right choice is a function of calibration-set size
+            and the shape of the miscalibration, not a blanket "more flexible wins."
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: You can fit the calibrator on the same data the model was trained on" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            If the base model has already seen and fit to those labels, its scores on that data are
+            artificially confident — the calibrator then learns a mapping between "scores this
+            model happens to nail" and the true labels, which does not hold on unseen data. This
+            produces a calibrator that looks flawless on paper and is measurably worse than no
+            calibration at all in production. The fix is a genuinely held-out calibration set (a
+            three-way train/calibrate/test split) or CalibratedClassifierCV(cv=5), which handles
+            the held-out split internally via cross-validation — never cv='prefit' with training
+            data.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Calibration matters the same amount for every ML use case" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It matters enormously when the probability's numeric value drives a downstream
+            calculation — credit risk pricing, expected-loss reserves, medical treatment
+            probabilities, insurance premiums — because someone is doing arithmetic with that exact
+            number. It matters far less for search ranking, recommendation systems, or "top-k"
+            fraud triage, where only the relative order of scores determines the outcome and the
+            absolute value of 0.73 vs 0.68 is never read by a human or used in a formula. Spending
+            calibration effort on a pure ranking system is often wasted engineering time that would
+            be better spent improving discrimination (AUC) instead.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Calibration — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What is calibration, and why can a highly accurate model still be poorly calibrated?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Calibration means that among all the times a model predicts probability p, roughly p
+            fraction of those cases are actually positive — if it says 80% a hundred times, about
+            80 of them should be true. Accuracy and AUC only measure whether the model separates
+            positives from negatives correctly in relative terms, which is a completely different
+            property from whether the absolute probability values are meaningful. A model can rank
+            perfectly — every fraud case scored above every legit one — while its actual numbers
+            are systematically too extreme or too conservative, because nothing in a typical
+            training objective (like accuracy) forces the raw output to match observed frequencies.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — How would you check whether a model's probabilities are well calibrated?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Two complementary tools. First, a reliability diagram: bin predictions by predicted
+            probability, plot the actual fraction of positives per bin against the predicted mean
+            per bin, and look for deviation from the diagonal — an S-curve below it means
+            overconfidence, above it means underconfidence. Second, a single summary number: the
+            Brier score, the mean squared error between predicted probabilities and actual labels,
+            compared against the baseline of always predicting the base rate. I'd also compute
+            Expected Calibration Error (ECE), which weights the reliability-diagram gap by how many
+            samples fall in each bin, so it isn't skewed by a handful of underpopulated bins.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Platt scaling vs isotonic regression — how do you choose between them?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It comes down to calibration-set size and the shape of the miscalibration. Platt
+            scaling fits a 2-parameter sigmoid, so it's robust on small calibration sets (a few
+            hundred to a couple thousand samples) but can only correct sigmoid-shaped
+            miscalibration — it's the right default for models like SVMs or gradient boosting that
+            tend to be overconfident in a roughly sigmoidal way. Isotonic regression fits an
+            arbitrary monotonic step function, so it can correct any monotonic miscalibration
+            pattern, including the underconfident S-curve typical of Random Forests, but it needs
+            5,000+ calibration samples to avoid overfitting the step function to noise. When in
+            doubt, CalibratedClassifierCV(cv=5) with either method sidesteps a lot of this by
+            calibrating inside cross-validation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why is it wrong to calibrate on the same data the base model was trained on?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Because the base model's outputs on its own training data are optimistically biased —
+            it has already fit those exact labels, so its scores on that set are more confident and
+            more "correct-looking" than its scores will be on genuinely new data. A calibrator fit
+            on that inflated relationship learns a mapping that undoes calibration rather than
+            fixing it — it looks perfect on the training set and is measurably worse than doing
+            nothing once deployed. The fix is a strict three-way split — train the base model on
+            one partition, fit the calibrator on a second partition the base model never saw, and
+            evaluate Brier score and the reliability diagram only on a third, held-out test
+            partition.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Give an example where calibration matters a lot, and one where it barely matters at all.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Calibration matters enormously in credit risk scoring: if a model says a loan applicant
+            has a 15% default probability, that number often feeds directly into an interest-rate
+            or expected-loss formula, so if the true rate is actually 40%, the business
+            systematically underprices risk and loses money — the absolute value of the number is
+            load-bearing. It matters far less in a search or recommendation ranking system, where
+            the product only ever surfaces the top-k highest-scoring items — swapping 0.91 and 0.88
+            for two items changes nothing about the user experience as long as their relative order
+            stays correct. I'd invest calibration effort proportional to how directly the raw
+            probability number is consumed downstream, not spend it uniformly across every model.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

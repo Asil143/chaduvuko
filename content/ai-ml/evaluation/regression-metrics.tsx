@@ -818,7 +818,159 @@ for idx in worst_idx:
 
       <Div />
 
-      {/* ══ SECTION 7 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about regression metrics</h2>
+
+        <ConceptBox title="Myth: RMSE is the 'better' metric because competitions and papers default to it" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            RMSE's quadratic penalty on large errors is a modelling choice, not a universal
+            improvement — it only makes sense when large errors genuinely cost more than
+            proportionally, like DoorDash's 45-minute delay triggering a refund. If your business
+            cost is truly linear in the size of the error — being off by 10 minutes is exactly twice
+            as bad as being off by 5, no more — MAE matches that cost structure honestly, and it is
+            also far more robust to a handful of outliers dominating the reported number. Defaulting
+            to RMSE because it's the convention, without checking whether your error costs are
+            actually quadratic, means optimising and reporting against the wrong objective.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A high R² means the model's predictions are accurate in absolute terms" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            R² is relative to the variance of the target, not to any absolute error tolerance. A
+            model with R²=0.92 on delivery times ranging from 10 to 120 minutes is explaining 92% of
+            a large variance — but the remaining 8% unexplained can still translate into an MAE of 8
+            minutes, which may be operationally unacceptable even though the R² number looks
+            excellent. This module's own guidance is explicit about this: report MAE or RMSE in the
+            target's real units alongside R², because R² alone tells you nothing about whether the
+            typical error is 30 seconds or 30 minutes.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: RMSE and MAE values are directly comparable across different targets or datasets" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Being in the same units does not mean being on the same scale. An RMSE of 5 minutes for
+            delivery-time predictions is not comparable to an RMSE of 5 dollars for price
+            predictions, and even within the same problem, an RMSE of 5 minutes on a dataset
+            averaging 30-minute deliveries is a much larger relative error than an RMSE of 5 minutes
+            on a dataset averaging 90-minute deliveries. RMSE and MAE are scale-dependent by
+            construction — comparing them meaningfully across datasets or targets requires
+            normalising first, whether that's dividing by the mean, reporting MAPE instead, or
+            using a normalised RMSE (RMSE / range or RMSE / mean).
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A low overall error metric means the model is accurate for everyone" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            An aggregate MAE or RMSE is an average across every prediction, and averages hide
+            systematic bias by construction. A model can post an excellent overall MAE of 4.2
+            minutes while being consistently 15 minutes late specifically for long-distance orders,
+            or systematically biased for one customer segment — the aggregate number simply blends
+            the good predictions with the bad ones. This is exactly why this module's residual
+            analysis section exists: checking the mean residual, MAE by distance bucket, and MAE by
+            delivery-time bucket separately is the only way to catch a model that looks fine in
+            aggregate but is quietly failing a subgroup that never shows up in the headline metric.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: MAPE is a safe default because it's scale-independent and intuitive" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MAPE divides by the actual value, so it breaks down — sometimes to infinity — whenever
+            true values are zero or very close to zero, which is common in demand forecasting for
+            low-volume products. It is also asymmetric in a way that's easy to miss: a prediction of
+            twice the actual value produces a 100% error, but a prediction of half the actual value
+            is capped at a 50% error, so MAPE structurally punishes overestimates more harshly than
+            underestimates of the same relative size. It is genuinely useful for comparing errors
+            across targets of very different scales, but "scale-independent" is not the same as
+            "safe to use everywhere" — it should be avoided whenever the target can be zero or near
+            zero.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Regression metrics — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — When would you choose MAE over RMSE, and vice versa?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The decision should follow the actual cost structure of your errors, not convention.
+            Choose MAE when every unit of error costs proportionally the same — being off by 10 is
+            exactly twice as bad as being off by 5, nothing more — and when you want a metric that
+            isn't dominated by a handful of outliers. Choose RMSE when large errors are
+            disproportionately costly in the real world, because squaring the error before averaging
+            means a 10-minute miss contributes 4× more than a 5-minute miss, not 2×. A good answer
+            also mentions checking the RMSE/MAE ratio in practice: a ratio near 1.0 means errors are
+            fairly uniform and either metric tells a similar story; a ratio above 2.0 signals a few
+            large outliers are inflating RMSE and worth investigating directly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Your model has R² = 0.91. Is that good?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It depends on three things I'd check before answering. First, compared to what baseline
+            — R²=0.91 sounds strong, but if a naive model (always predict the mean) already gets
+            R²=0.85 on this target because the target itself is easy to predict, the real lift from
+            the model is much smaller than 0.91 suggests. Second, what does that translate to in
+            absolute error — R²=0.91 on a target with huge variance can still leave a large MAE in
+            real units, which matters more operationally than the R² number itself. Third, is it
+            measured on a held-out set with the same distribution as production — R² computed on
+            training data or on a leaked split is not trustworthy at all. I wouldn't call any single
+            R² value "good" without that context.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What does it mean when R² is negative, and what would you check?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Negative R² means the model's squared errors are larger than they would be if you'd just
+            predicted the mean of the target for every example — the model is actively worse than
+            the simplest possible baseline. That's a strong signal something is broken, not just
+            underperforming. I'd check, in order: whether train and test come from the same
+            distribution (compare y_train.mean() and y_test.mean() — a big gap points to a bad
+            split); whether the target was transformed during training (e.g. predicting log(y)) but
+            evaluated without un-transforming the predictions back to y's scale; and whether the
+            features used at inference time actually match what the model was trained on. Negative
+            R² is rarely a subtle modelling issue — it's almost always a pipeline bug.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why might MAPE be a poor choice for a demand-forecasting problem with many low-volume SKUs?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MAPE divides each error by the actual value, so for SKUs with true demand near zero — a
+            product that sells 1 or 2 units a day — a small absolute error like being off by 3 units
+            produces a triple-digit or even undefined percentage error. Those low-volume SKUs then
+            dominate the averaged MAPE even though their absolute business impact is tiny, while
+            high-volume SKUs where the forecast actually matters most get comparatively little
+            weight in the metric. A better choice here is often a weighted MAE (weighted by revenue
+            or volume) or WAPE (weighted absolute percentage error, which divides the sum of absolute
+            errors by the sum of actuals rather than averaging per-item ratios), because both avoid
+            the near-zero-denominator blowup that plain MAPE is vulnerable to.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Your model's aggregate MAE looks great, but the business says predictions are bad for one customer segment. How do you investigate?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I'd start with residual analysis rather than trusting the aggregate number. First check
+            whether the mean residual is near zero overall — if it's shifted, the model has a global
+            bias, not just a segment-specific one. Then break MAE down by the segment in question
+            (and a few related cuts — by prediction range, by a key input feature) to see if that
+            segment's error is meaningfully higher than the rest, and check the sign of its mean
+            residual to see whether the model over- or under-predicts for that group specifically.
+            An aggregate metric is a weighted average across every prediction, so a model can look
+            excellent overall while being consistently wrong for a segment that's simply outnumbered
+            by the rest of the data — the fix is always to disaggregate before concluding the model
+            is fine.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

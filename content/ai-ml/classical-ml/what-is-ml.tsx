@@ -45,6 +45,13 @@ const p: React.CSSProperties = {
   marginBottom: 16,
 }
 
+const ps: React.CSSProperties = {
+  fontSize: 13,
+  color: 'var(--muted)',
+  lineHeight: 1.8,
+  marginBottom: 10,
+}
+
 function Highlight({ children, color }: { children: React.ReactNode; color?: string }) {
   return (
     <div style={{
@@ -56,6 +63,28 @@ function Highlight({ children, color }: { children: React.ReactNode; color?: str
       margin: '20px 0',
     }}>
       <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{children}</div>
+    </div>
+  )
+}
+
+function ConceptBox({ title, children, color = '#7b61ff' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
     </div>
   )
 }
@@ -553,7 +582,153 @@ if restaurant == "popular_restaurant":
         </Highlight>
       </div>
 
-      {/* ── SECTION 7: What comes next ────────────────────────────────────── */}
+      {/* ── SECTION 7: Misconceptions ──────────────────────────────────────── */}
+      <div style={sec}>
+        <span style={tag}>Misconceptions</span>
+        <h2 style={h2}>Five things people get wrong about Machine Learning</h2>
+
+        <ConceptBox title="Myth: AI, Machine Learning, and Deep Learning are three separate technologies" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            They are nested, not parallel. AI is the broad goal — building systems that behave
+            intelligently, by whatever means. ML is one strategy for reaching that goal: instead
+            of a person writing the rules (the failed if distance &lt; 2km / elif approach from the
+            top of this page), the system learns them from labelled examples. Deep Learning is a
+            specific family of ML models — multi-layer neural networks — that happens to dominate
+            unstructured data like images and text. Every deep learning model is ML; not every ML
+            model is deep learning; and plenty of genuinely useful AI (that original hand-coded
+            rules engine included) has no learning in it at all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: More data always beats a better algorithm" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            More data helps only when it is relevant, correctly labelled, and representative of
+            what the model will see in production — irrelevant or mislabelled rows dilute signal
+            rather than adding it. Look at the seven-step DoorDash workflow above: the accuracy
+            jump that actually mattered, from 79% to 91% of predictions within five minutes, came
+            from switching algorithms (Linear Regression to XGBoost) and adding three specific
+            engineered features in step 6 — not from gathering more historical orders. Past a
+            certain point, a better algorithm and better features routinely move the needle more
+            than raw data volume does.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Supervised, unsupervised, and reinforcement learning are three clean boxes and every project fits one" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            The three-way split earlier on this page is a teaching device based on what kind of
+            feedback an algorithm consumes — it is not a rule that a whole production system must
+            obey. Real systems blend all three routinely: a model can be pre-trained in an
+            unsupervised or self-supervised way and then fine-tuned with supervised labels, and
+            techniques like RLHF layer reinforcement learning on top of an already-supervised base
+            model. Knowing the three types tells you what signal a given algorithm needs — it does
+            not mean a project must commit to exactly one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A trained ML model tells you what causes the outcome" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            The DoorDash predictor learns correlational patterns from historical orders, not
+            causal ones. Its training data associates the &quot;popular_restaurant&quot; flag with
+            longer delivery times, but that link could just as easily be caused by kitchens being
+            understaffed during that restaurant&apos;s peak-popularity windows, not by popularity
+            itself. Acting on the wrong causal read — for example, deprioritising popular
+            restaurants&apos; orders to &quot;fix&quot; the correlation — could make outcomes worse, not
+            better. Establishing genuine causation needs a controlled experiment (an A/B test) or a
+            dedicated causal-inference method; a supervised model alone cannot supply it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Machine Learning is just statistics with extra steps" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            There is real overlap — both fields fit models to data — but the goals diverge.
+            Classical statistics emphasises inference: confidence intervals, hypothesis tests, and
+            explaining why a relationship holds. ML optimises overwhelmingly for predictive
+            accuracy on data it has not seen, frequently using models like tree ensembles that make
+            no distributional assumptions and offer little of the interpretability statisticians
+            value. And the DoorDash example&apos;s final state — 3 million predictions served per
+            day, a live monitoring dashboard, automated weekly retraining — points at an entire
+            engineering discipline around deployment and drift detection that a statistics course
+            never has to cover.
+          </p>
+        </ConceptBox>
+      </div>
+
+      {/* ── SECTION 8: Interview prep ─────────────────────────────────────── */}
+      <div style={sec}>
+        <span style={tag}>Interview prep</span>
+        <h2 style={h2}>What is Machine Learning — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What's the actual difference between AI, Machine Learning, and Deep Learning?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            They form a hierarchy, not three competing options: AI ⊃ ML ⊃ Deep Learning. AI is the
+            overall goal of building systems that behave intelligently, by any method, including
+            hand-written rules. ML is the approach of learning those rules from labelled examples
+            instead of writing them by hand — exactly the shift this page opens with, from a hard
+            coded DoorDash rules engine to a model trained on 500,000 completed orders. Deep
+            Learning is the subset of ML that uses multi-layer neural networks, and it particularly
+            excels on unstructured data like images and text — though for tabular data like the
+            DoorDash order table, tree-based models such as XGBoost frequently beat it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk me through supervised, unsupervised, and reinforcement learning, each with a concrete example">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            The distinguishing factor is what feedback the algorithm gets. Supervised learning
+            trains on labelled pairs — the DoorDash delivery time model, where every historical
+            order comes with its actual delivery time as the label. Unsupervised learning has no
+            labels and finds structure on its own — segmenting 300 million Amazon customers by
+            behaviour with no predefined groups. Reinforcement learning has no static labelled
+            dataset at all — an agent takes actions in an environment and learns from a reward
+            signal over time, like a routing agent that learns which delivery routes minimise total
+            time across all riders purely through trial, error, and reward. I would flag that real
+            systems increasingly combine more than one of these rather than picking a single box.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why do we hold out a test set, and what breaks if we skip it?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            Training data measures fit; test data measures generalisation. Without a held-out set,
+            all you know is how well the model memorised data it has already seen — you have no
+            honest read on how it will behave on a new order. A model with enough capacity can hit
+            near-zero training error by memorising noise, like learning that one specific
+            restaurant &quot;always&quot; takes 47 minutes purely because that happened to be true in
+            the training window — a coincidence, not a pattern, and it will not hold up on new
+            orders. The seven-step workflow on this page keeps 20% of the data untouched through
+            training specifically so this gets caught at evaluation time rather than in production.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What's the practical difference between overfitting and underfitting, and how do you tell them apart from metrics alone?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            Look at train and test performance together, not in isolation. Overfitting shows a
+            large gap: strong training score, materially worse test score — the model memorised
+            noise instead of learning signal. Underfitting shows both scores bad and close together
+            — the model was never complex enough to capture the real pattern in the first place, so
+            there is no gap to reveal. The fixes point in opposite directions: underfitting needs
+            more model capacity or better features, exactly what step 6 of the DoorDash workflow
+            does by moving from Linear Regression to XGBoost and adding three new engineered
+            features, dropping MAE from 4.2 to 2.8 minutes. Overfitting instead needs less capacity,
+            more training data relative to capacity, or regularisation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you explain machine learning to a non-technical stakeholder who keeps asking 'but how does it actually decide?'">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            I would ground it in a concrete before-and-after rather than a definition. We first
+            tried writing down every rule ourselves — if distance is under 2km, add this many
+            minutes, if it's raining add this many more — and it failed because the real
+            relationship between dozens of factors is too complex for a person to hand-enumerate.
+            Instead we show the system hundreds of thousands of past examples, each one an order and
+            how long it actually took, and let it find the pattern itself. It is not reasoning like
+            a person and it is not magic — it is finding statistical regularities in what already
+            happened and applying them to new, similar situations. I would also flag the honest
+            limitation upfront: it will be wrong on genuinely novel situations unlike anything in
+            its training history, which is exactly why we monitor it continuously after deployment.
+          </p>
+        </ConceptBox>
+      </div>
+
+      {/* ── SECTION 9: What comes next ────────────────────────────────────── */}
       <div style={{ paddingBottom: 0, marginBottom: 32 }}>
         <span style={tag}>What comes next</span>
         <h2 style={h2}>You&apos;re ready for the first algorithm</h2>

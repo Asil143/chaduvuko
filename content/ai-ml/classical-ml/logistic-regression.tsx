@@ -173,6 +173,28 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
   )
 }
 
+function ConceptBox({ title, children, color = '#7b61ff' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function LogisticRegressionPage() {
   return (
     <LearnLayout
@@ -1487,7 +1509,156 @@ print(f"\nNew order prediction: {pred} (P(late)={p_late:.3f})")`} />
 
       <Div />
 
-      {/* ══ SECTION 13 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 13 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about logistic regression</h2>
+
+        <ConceptBox title="Myth: Logistic regression is just linear regression with a sigmoid slapped on top" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Swapping in the sigmoid is not a decorative final step — the entire loss function had
+            to change to make the combination well-behaved. Minimising squared error through a
+            sigmoid produces a non-convex, multi-modal loss surface that gradient descent can get
+            stuck in. Logistic regression instead pairs the sigmoid with cross-entropy loss
+            specifically because that combination is provably convex, guaranteeing gradient descent
+            finds the global minimum. The sigmoid is not bolted onto linear regression's loss; the
+            loss itself had to change for the model to work reliably.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The model's coefficients are the probabilities" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Coefficients live in log-odds space, not probability space. A coefficient of 1.5 does
+            not mean "adds 1.5 to the probability" — it means a one-unit increase in that feature
+            multiplies the odds of the positive class by e^1.5, about 4.5x. Odds and probability are
+            related but different things (odds equals p divided by one minus p), and turning a
+            coefficient into an actual probability change requires running the whole linear
+            combination back through the sigmoid. The effect of one feature on probability also
+            depends on the values of every other feature — it is not a constant additive effect the
+            way it would be in ordinary linear regression.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Logistic regression makes no assumptions about the data, unlike linear regression" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It trades one set of assumptions for a different, still-real set. Instead of assuming a
+            linear relationship between features and the outcome directly, it assumes a linear
+            relationship between features and the log-odds of the outcome — meaning the decision
+            boundary it can draw is still a straight line, or hyperplane, in feature space, just
+            wrapped in a sigmoid. It still assumes independent observations, needs the absence of
+            severe multicollinearity for stable coefficients, and wants a reasonably large sample
+            per feature to avoid unstable estimates. Fewer assumptions is not the same thing as no
+            assumptions.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: L1 and L2 regularisation do the same thing, so pick whichever" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They solve different problems. L2 shrinks every coefficient toward zero but essentially
+            never sets one to exactly zero — the right choice when most features probably carry
+            some real signal and the goal is just to tame their magnitude. L1 can drive coefficients
+            to exactly zero, performing automatic feature selection — better when many features are
+            suspected to be pure noise and a sparse, interpretable model is preferred. Picking the
+            wrong one either leaves noisy features in the model at full strength (L2 on a noisy
+            feature set) or arbitrarily discards useful correlated features (L1 tends to keep one
+            from a correlated group and zero out the rest).
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: 0.5 is the correct threshold for turning a probability into a decision" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            0.5 is only correct when a false positive and a false negative cost exactly the same,
+            which is rare in practice. A fraud model where missing real fraud is far more costly
+            than a false alarm should use a lower threshold, flagging more transactions to catch
+            more fraud while accepting more false alarms. A screening test with expensive or
+            invasive follow-ups might want a higher threshold instead. The threshold is a business
+            decision made by weighing the cost of each error type, not a property the model hands
+            you — that is exactly why ROC and precision-recall curves exist: to let that point be
+            chosen deliberately.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 14 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Logistic regression — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why does logistic regression use cross-entropy loss instead of mean squared error?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MSE paired with a sigmoid produces a non-convex loss surface — because the sigmoid
+            itself is non-linear, squaring the error re-introduces multiple local minima that
+            gradient descent can get stuck in, with no guarantee of finding the best fit.
+            Cross-entropy, paired with sigmoid, produces a convex loss surface, so gradient descent
+            is guaranteed to converge to the global minimum. There is also a modelling reason:
+            cross-entropy penalises confident wrong predictions far more harshly (predicting 0.99
+            when the true label is 0 costs about 4.6, versus MSE's roughly 0.98), which teaches the
+            model to only be confident when it is actually likely to be correct — exactly the
+            behaviour you want from a probability estimator.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — A fitted model has a coefficient of 0.7 on standardised income. What can you actually say about that?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A one standard deviation increase in income multiplies the odds of the positive outcome
+            by e^0.7, roughly 2.0x, holding every other feature constant. I would not say it
+            increases the probability by 70%, or by any fixed amount — the actual probability shift
+            depends on where you start on the sigmoid curve: near the middle, around probability
+            0.5, a coefficient like this shifts probability substantially; near the tails, close to 0
+            or 1, the same coefficient barely moves probability at all because the sigmoid
+            saturates there. I would also check whether income was actually standardised, since the
+            coefficient is only comparable to the others if every feature shares the same scale.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Your logistic regression is deployed for fraud detection where fraud is 2% of transactions. What goes wrong, and how would you fix it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Left at defaults, the model can hit 98% accuracy by predicting "not fraud" for every
+            single transaction, since that already matches the base rate — the loss function has
+            little incentive to fit the rare class well. I would stop trusting accuracy entirely and
+            evaluate with precision, recall, and ROC-AUC or PR-AUC instead. For the training itself,
+            I would use class_weight='balanced' so errors on the minority class are weighted more
+            heavily in the loss, or oversample or undersample as an alternative. Just as important, I
+            would not leave the decision threshold at 0.5 — I would pick a threshold on a validation
+            set that reflects the real cost of missing fraud against the cost of a false alarm,
+            since that is usually a bigger lever than the model architecture itself.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is the difference between an odds ratio and a probability, and why does logistic regression work in terms of the former?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Probability is bounded between 0 and 1 and is what most people intuitively reason about.
+            Odds is probability divided by one minus probability, ranging from 0 up to infinity —
+            unbounded on the upper end. Logistic regression's linear component can output any real
+            number, and the log of the odds is the one transformation of probability that also
+            ranges over every real number, which is exactly why the model is linear in log-odds
+            space rather than linear in probability space directly. Coefficients are reported as
+            effects on log-odds, or on odds after exponentiating, because that is the space where
+            the model's math is genuinely linear; reporting them as probability effects would be
+            misleading, since that relationship is neither linear nor constant.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — When would you NOT reach for logistic regression, even for a simple binary classification problem?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            When the true decision boundary is clearly non-linear even in log-odds space — say the
+            relationship between a feature and the outcome is U-shaped — plain logistic regression
+            will underfit unless polynomial or interaction terms are hand-engineered in. I would
+            also avoid it when I need complex feature interactions captured automatically, since
+            tree-based models like XGBoost pick those up natively while logistic regression requires
+            them to be specified by hand. And if calibrated probabilities are not actually needed,
+            gradient boosting methods usually beat logistic regression on raw predictive accuracy for
+            complex tabular data out of the box. I would still often start with logistic regression
+            anyway, though, as a fast, interpretable baseline before reaching for something heavier.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 15 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

@@ -1135,7 +1135,163 @@ print("\nProduction bundle saved: /tmp/amazon_pca_segments.pkl")`} />
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about PCA</h2>
+
+        <ConceptBox title="Myth: Each principal component corresponds to one original feature" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A principal component is a weighted combination of every original feature, not a
+            stand-in for any single one. PC1 might be 0.6×avg_spend + 0.4×order_freq −
+            0.3×return_rate + small contributions from every other column. It is not
+            "avg_spend, renamed." This is exactly why the loadings matrix exists — you have to
+            look at which features load heavily on a component to give it a human label like
+            "purchasing intensity," and even then it is an approximation, not an identity. Feed
+            PCA output into a model and you get strong predictions but zero built-in
+            interpretability at the individual-feature level — that trade is the price of
+            compression, not a bug.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If PCA finds structure, that structure is linear because the data 'is' linear" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PCA does not detect whether your data has linear or nonlinear structure — it simply
+            assumes linear structure and projects onto the best linear approximation it can find,
+            whether or not that assumption is true. Feed it data shaped like two concentric rings
+            or a Swiss roll and PCA will still confidently return two components — it just will
+            not separate the classes, because no straight-line projection can unroll a curved
+            manifold. That failure mode is precisely why t-SNE, UMAP, and Kernel PCA exist: they
+            model nonlinear neighborhood structure that a linear projection structurally cannot
+            represent. A low reconstruction error or a clean scree plot only ever tells you that
+            *linear* redundancy was compressed well, never that the underlying structure was linear.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: PCA for dimensionality reduction and PCA for visualisation are the same task" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They share an algorithm but not a goal. For dimensionality reduction before a model,
+            you choose k to retain a target amount of variance (typically 90–95%) because the
+            objective is preserving predictive signal — k is often 10, 20, or more. For
+            visualisation, you are constrained to k=2 or k=3 regardless of how much variance that
+            retains, because a human can only look at 2 or 3 axes — that projection might capture
+            only 35% of total variance and still be the only option. A 2D PCA scatter plot that
+            shows overlapping clusters does not necessarily mean the classes are inseparable; it
+            may just mean the separating signal lives in components 3 through 10, which the plot
+            discarded. Never conclude "no structure" from a 2D PCA plot alone.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Standardising before PCA is a nice-to-have, not a requirement" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PCA maximises variance, and variance is not scale-invariant — a feature measured in
+            dollars (variance in the millions) will mathematically dominate a feature measured as
+            a proportion (variance under 1) regardless of which one is more informative. Without
+            standardisation, PC1 is not "the direction of maximum meaningful variation" — it is
+            frequently just "the feature with the largest units," which has nothing to do with
+            correlation structure. This is not a minor accuracy loss; it can make the entire
+            eigendecomposition reflect measurement units instead of genuine relationships in the
+            data, silently invalidating everything downstream — the scree plot, the loadings, the
+            reduced dataset.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Retaining more explained variance always means a better result" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Explained variance measures how much of the *original data's spread* you kept, not how
+            much *useful signal* you kept. The components with the smallest eigenvalues are often
+            dominated by measurement noise rather than meaningful variation — this is exactly why
+            reconstruction-error anomaly detection works: those low-variance directions are largely
+            noise, so a point that violates them looks anomalous. Chasing 99% instead of 95%
+            explained variance can mean keeping components that are mostly noise, which can add
+            variance to your inputs without adding predictive value, and in some cases hurts
+            downstream model performance by re-introducing the very redundancy and noise PCA was
+            supposed to remove. More retained variance is not synonymous with a better dataset.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>PCA — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain PCA to someone who understands statistics but not machine learning">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            "You have many correlated variables and want to summarise them with fewer numbers
+            without throwing away information. PCA finds new axes — linear combinations of your
+            original variables — ordered so the first axis captures as much of the total variance
+            as possible, the second captures the most variance left over after removing the first
+            (and is uncorrelated with it), and so on. Mathematically these axes are the
+            eigenvectors of the covariance matrix, and their eigenvalues tell you how much variance
+            each one captures. You keep the first k axes and discard the rest, trading a small,
+            controlled amount of information loss for a much lower-dimensional dataset."
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why is standardising features mandatory before PCA, and what actually breaks if you skip it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PCA finds the directions of maximum variance, and variance scales with the square of a
+            feature's units — so a feature measured in dollars (thousands of units of spread) will
+            swamp a feature measured as a 0–1 ratio in the covariance matrix, regardless of which
+            one actually correlates more meaningfully with everything else. Skip standardisation
+            and your first principal component often just tracks whichever raw feature happens to
+            have the largest numeric range, not the direction with the richest correlation
+            structure. StandardScaler before PCA (mean 0, variance 1 per feature) puts every
+            feature on equal footing so the eigendecomposition reflects genuine relationships
+            instead of arbitrary units of measurement.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How do you decide how many principal components to keep in a real pipeline?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Start with the cumulative explained-variance curve: fit PCA with no component limit,
+            look at the scree plot, and find where the curve elbows or crosses a threshold like
+            90–95% — sklearn's PCA(n_components=0.95) does this automatically. But I would not stop
+            there for a supervised task — I'd wrap PCA and the downstream model in a Pipeline and
+            cross-validate the actual metric I care about (AUC, RMSE) across a few candidate values
+            of k, because variance retained and predictive performance retained are correlated but
+            not identical. For a visualisation use case, k is fixed at 2 or 3 regardless of the
+            variance curve, since the deliverable is a plot a human can look at, not a model input.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — When would you specifically avoid using PCA, and what would you use instead?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Three cases: tree-based models (Random Forest, XGBoost) already handle correlated
+            features natively via their split logic and don't benefit from PCA's rotation — it can
+            even hurt them by destroying the original, interpretable split boundaries. Situations
+            requiring feature-level interpretability or regulatory explainability — a compliance
+            team cannot act on "component 3 increased," they need "credit score decreased." And
+            genuinely nonlinear data, where I'd reach for Kernel PCA, t-SNE, or UMAP instead, since
+            standard PCA can only ever find linear projections. I'd also skip it for naturally
+            sparse data like one-hot encodings or text — TruncatedSVD avoids PCA's mean-centering
+            step, which would otherwise destroy the sparsity and blow up memory.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — What's the actual difference between PCA and t-SNE/UMAP, and could PCA do the same visualisation job?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PCA is a linear, deterministic, globally-variance-maximising projection — it preserves
+            large-scale distances but has no way to represent nonlinear structure like clusters
+            that curve around each other. t-SNE and UMAP are nonlinear methods that instead
+            optimise to preserve local neighborhood relationships — points close together in the
+            original space stay close in the projection — which is exactly what makes them good at
+            revealing cluster structure that PCA's straight-line projection would flatten or
+            overlap. The trade-off: t-SNE/UMAP distances between distant clusters are not
+            meaningful and results vary between runs (stochastic optimisation, hyperparameter
+            sensitive), whereas PCA is reproducible and its axes have an actual mathematical
+            meaning (variance explained). In practice I'd use PCA first as a fast, cheap sanity
+            check, and reach for UMAP when PCA's 2D plot shows a blob with no visible separation.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

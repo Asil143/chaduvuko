@@ -144,6 +144,28 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
   )
 }
 
+function ConceptBox({ title, children, color = '#7b61ff' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 const PROGRESS_TOPICS = [
   { label: 'What',      href: '/learn/ai-ml/classical-ml/what-is-ml',          title: 'What is Machine Learning?',    active: false },
   { label: 'Linear',    href: '/learn/ai-ml/classical-ml/linear-regression',   title: 'Linear Regression',            active: false },
@@ -1189,7 +1211,159 @@ print("\nModel and decision rules saved for compliance audit.")`} />
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — MISCONCEPTIONS ════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about decision trees</h2>
+
+        <ConceptBox title="Myth: A deeper tree is always a more accurate tree" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The depth sweep earlier in this module shows exactly why this fails: accuracy improves
+            as depth grows from 1 to around 4–5, then reverses — depth=10 hits 99% training
+            accuracy but only 83% test accuracy, and an unconstrained tree (depth=None) hits 100%
+            training accuracy while test accuracy actually drops to 79%. Past the point where the
+            tree has captured the real signal, every additional split is fitting noise specific to
+            the training rows — a scenario built for memorising exceptions, not generalising to new
+            applicants. Depth is a capacity dial, and more capacity only helps up to where the true
+            pattern is fully captured.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Choosing Gini vs entropy is an important modelling decision" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The code comparison earlier in this module makes the actual answer explicit: "Both
+            criteria select the same split — just different scales." Gini ranges 0–0.5 for binary
+            classification, entropy ranges 0–1 bit, but they rank candidate splits almost
+            identically in practice. sklearn defaults to Gini because it skips a logarithm and is
+            marginally faster to compute — not because it produces better trees. If you are
+            spending tuning time on this instead of max_depth, min_samples_leaf, or ccp_alpha, you
+            are optimising the wrong hyperparameter.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A decision tree is fully interpretable — a human can always follow exactly why it decided" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            True for a shallow tree with a handful of splits, which is exactly why Capital One
+            wanted one over logistic regression in the first place. It stops being true once
+            max_depth grows past 6–8: the tree now has dozens of splits and hundreds of leaves, and
+            "interpretable" degrades into a rulebook too large for a regulator or customer to
+            meaningfully audit, even though every individual rule is still printable with
+            export_text. There is also a subtler limit even in a shallow tree: the printed threshold
+            (credit_score &lt;= 650) is whichever value happened to minimise weighted Gini on this
+            training sample — a few points either side can be an arbitrary artifact of the data
+            rather than a meaningful business cutoff.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Random Forest and XGBoost exist mainly to squeeze out a few extra accuracy points over a single tree" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The module explicitly frames the actual motivation as instability, not marginal
+            accuracy: "A single tree overfits. It is also unstable — small changes in the training
+            data produce dramatically different trees." That instability is the formal definition
+            of high variance — swap out a handful of borderline applicants near a split boundary
+            and the chosen feature or threshold can change, cascading into a differently-shaped tree
+            downstream. Random Forest's bagging specifically targets this variance by averaging many
+            trees trained on different random samples; the accuracy improvement is a side effect of
+            fixing the instability, not the primary goal.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Low feature importance means a feature isn't predictive" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Feature importance measures how much impurity reduction this specific tree credited to
+            a feature across the splits where it was greedily chosen — not how predictive that
+            feature fundamentally is. If two features are correlated (loan_amount and
+            loan_to_income both encode overlapping information here), the tree picks whichever one
+            narrowly wins the Gini comparison at the first opportunity and credits it with all the
+            importance, while the other can show near-zero importance despite carrying comparable
+            signal. This is exactly the leakage-detection trap flagged in the errors section above
+            — always check correlated feature groups together, and prefer permutation importance
+            or Random Forest's averaged importance (computed across many trees seeing different
+            feature subsets) over a single tree's numbers.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Decision trees — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — How does a decision tree decide which feature and threshold to split on?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            At every node the tree evaluates every feature and every candidate threshold on that
+            feature, computes the weighted Gini impurity (or entropy) of the two resulting child
+            groups for each candidate, and greedily picks whichever single split produces the
+            lowest weighted impurity — equivalently, the largest reduction from the parent node's
+            impurity. It then repeats this process recursively and independently inside each child,
+            continuing until a stopping condition is met: max depth reached, too few samples to
+            split further, or a node is already pure. It is a greedy, locally-optimal algorithm at
+            every step — it never looks ahead to see if a worse split now would enable a better one
+            two levels down.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why does an unconstrained decision tree overfit, and how do you fix it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Left unconstrained, the tree keeps splitting until every leaf is pure — in the extreme,
+            one training sample per leaf — which drives training accuracy to 100% by memorising
+            individual rows, including noise like one applicant approved despite a 400 credit score
+            purely because the analyst had an inconsistent day. That memorised noise does not
+            generalise. The fix is controlling tree capacity: pre-pruning parameters like max_depth
+            (start at 3–5), min_samples_leaf, and min_samples_split stop the tree from growing that
+            deep in the first place, while post-pruning with ccp_alpha grows the full tree first and
+            then removes branches whose removal doesn't meaningfully hurt impurity, with the right
+            alpha chosen via cross-validation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Gini impurity vs information gain — how do you choose, and does it matter?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            In practice, barely. Gini impurity (1 − Σpᵢ²) and entropy-based information gain
+            almost always select the same splits — they're just on different numeric scales (Gini
+            tops out at 0.5 for binary classes, entropy at 1 bit). Gini is marginally cheaper to
+            compute since it avoids a logarithm, which is why sklearn defaults to it; entropy can
+            occasionally favour a very slightly more balanced split. I'd spend tuning effort on
+            max_depth, min_samples_leaf, and ccp_alpha before ever touching this — those control
+            overfitting directly, while the splitting criterion barely changes the resulting tree.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why are single decision trees described as high-variance models, and how does that motivate Random Forest?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            High variance means small changes to the training data produce large changes in the
+            fitted model. A tree is a clear example: change which handful of borderline applicants
+            near a split threshold happened to land in the training set, and the chosen feature or
+            threshold at that node can flip, which cascades into a differently structured tree below
+            it. Random Forest directly targets this: train many trees, each on a bootstrapped sample
+            of rows and a random subset of features, so their individual errors are decorrelated,
+            then average their predictions. Averaging over many high-variance, low-bias trees
+            cancels out the instability while keeping the low bias — which is exactly why the
+            ensemble generalises far better than any one tree in it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — If a feature shows near-zero importance in your trained tree, does that mean it isn't predictive?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Not necessarily, and this is a common trap. Feature importance in a single tree only
+            reflects how much impurity reduction got credited to a feature at the specific splits
+            where the greedy algorithm happened to choose it. If two features are correlated, the
+            tree picks whichever one narrowly wins the impurity comparison first and gives it all
+            the credit — the other can look completely uninformative despite carrying comparable
+            signal, and this is also a classic symptom to check for label leakage. I'd validate
+            with permutation importance, which measures the actual performance drop from shuffling
+            a feature rather than relying on a single greedy tree's internal bookkeeping, and I'd
+            prefer Random Forest's importance, averaged across many trees that each see different
+            feature subsets, over any single tree's numbers.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

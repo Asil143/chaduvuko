@@ -988,7 +988,166 @@ print(f"\nNew restaurant (47.58°N, -122.31°W) → Zone {zone_id}")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about K-Means clustering</h2>
+
+        <ConceptBox title="Myth: K-Means finds the 'true' clusters hiding in your data" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            K-Means does not discover ground-truth groups — it partitions data into k roughly
+            spherical, similarly-sized regions no matter what the actual structure looks like. Feed
+            it three ellipsoidal blobs of very different sizes and it will still draw straight-line
+            (Voronoi) boundaries between them, happily producing three confident-looking clusters
+            even when the real structure is two overlapping groups and one outlier cloud. There is
+            no labeled ground truth to check the answer against, so "the clusters look reasonable"
+            is often the only validation you get — which is exactly why silhouette scores, domain
+            review, and sanity-checking against business logic all matter more here than in
+            supervised learning.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The elbow method tells you the correct number of clusters" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The elbow method is a visual heuristic, not a computation with one right answer. Real
+            inertia curves rarely have a single obvious bend — they often decline smoothly, or show
+            two or three plausible elbows depending on how hard you squint. Two analysts looking at
+            the same curve can reasonably pick different k values. Treat the elbow as one input
+            among several: pair it with silhouette score, Davies-Bouldin, and — most importantly —
+            whether the resulting groups are actually useful for the business question you are
+            trying to answer. If no k produces clusters anyone can act on, the right takeaway is
+            that clustering itself may not be the right tool.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: K-Means always finds the best possible clustering for a given k" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            K-Means converges to a local minimum of inertia, not the global one, and which local
+            minimum it lands in depends heavily on where the centroids started. A single unlucky
+            random initialization can produce noticeably worse clusters than a good one, on the
+            exact same data with the exact same k. This is precisely why K-Means++ exists — it
+            spreads the initial centroids apart deliberately instead of picking them uniformly at
+            random — and why scikit-learn runs the whole algorithm multiple times (n_init) and keeps
+            only the lowest-inertia result. Skipping this and running with one random start is one
+            of the most common ways to get an unstable, hard-to-reproduce clustering.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Adding more features gives K-Means more signal to separate groups with" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every extra feature adds another dimension to the Euclidean distance calculation, and in
+            high-dimensional space distances behave strangely — the gap between the nearest and
+            farthest point shrinks toward zero as dimensions grow, so eventually every point looks
+            roughly equidistant from every other point. At that point "closest centroid" stops being
+            a meaningful concept and the clustering degrades toward noise. More features only help
+            if they carry real separating signal; irrelevant or redundant ones dilute the useful
+            dimensions and actively hurt the result. This is why K-Means is often run after PCA on
+            high-dimensional data rather than on the raw feature set.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Clustering is just classification without needing labels" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Classification has an answer key — you can compute accuracy because the true label for
+            every point is known. Clustering has no such thing: there is no ground-truth "correct"
+            cluster assignment to check predictions against, because the groups are not observed,
+            they are invented by the algorithm. Metrics like inertia and silhouette score measure
+            internal consistency (are points close to their own centroid and far from others), which
+            is a different question from "did we find the right groups" — a clustering can score
+            well internally while being practically useless, or vice versa. This is why cluster
+            interpretation always needs a human sanity check against domain knowledge, in a way that
+            classification accuracy usually does not.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>K-Means — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk me through exactly what happens when K-Means fits a dataset">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Start by picking k initial centroids (ideally with K-Means++, which spreads them out
+            rather than choosing uniformly at random). Then repeat two steps until nothing changes:
+            assignment, where every point is assigned to its nearest centroid by Euclidean distance;
+            and update, where each centroid moves to the mean of the points currently assigned to
+            it. Convergence happens when assignments stop changing between iterations, which usually
+            takes somewhere between ten and a few hundred iterations. The final output is a set of k
+            centroids and a label for every point saying which centroid it belongs to. I would
+            mention that the objective being minimized throughout is inertia — the sum of squared
+            distances from each point to its assigned centroid — and that this process only
+            guarantees a local minimum of that objective, not a global one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why is scaling features before K-Means so important, and what happens if you skip it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            K-Means clusters purely by Euclidean distance, and Euclidean distance is just a sum of
+            squared differences across features. If one feature ranges into the thousands (like
+            annual spend) and another ranges from zero to one (like a return rate), the large-scale
+            feature contributes orders of magnitude more to every distance calculation, so the
+            clustering ends up driven almost entirely by that one feature and effectively ignores
+            the rest. Standardizing every feature to mean zero and standard deviation one before
+            fitting puts them on equal footing so each one actually contributes to the distance
+            calculation. This is different from tree-based models, where splits are based on
+            per-feature thresholds and scale does not change which split is chosen.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How do you actually choose k in a real project?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would not rely on a single method. Start with the elbow method — plot inertia against
+            a range of k values and look for where the curve stops dropping sharply — but treat it
+            as a rough guide since the bend is often ambiguous. Cross-check with silhouette score
+            across the same range of k, which quantifies how well-separated the clusters are rather
+            than just how tight they are. Then, critically, look at the actual clusters that come
+            out for the top two or three candidate k values: do they correspond to groups a
+            stakeholder could name and act on? If k=4 gives an elbow-approved, high-silhouette
+            clustering that nobody can interpret or use, and k=3 gives slightly worse metrics but
+            clean, actionable segments, I would pick k=3. The metrics narrow the search; domain
+            judgment picks the final answer.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What does K-Means++ actually change, and why does initialization matter so much?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Standard K-Means picks its k starting centroids uniformly at random from the data, which
+            means two starting points can land right next to each other by chance, wasting one
+            cluster's worth of representation and biasing the final result toward a bad local
+            minimum. K-Means++ instead picks the first centroid randomly, then picks each subsequent
+            centroid with probability proportional to its squared distance from the nearest centroid
+            already chosen — so points far from existing centroids are much more likely to be picked
+            next. That spreads the initial centroids across the actual spread of the data, which
+            empirically leads to faster convergence and a lower final inertia on average. It is the
+            default initialization in scikit-learn's KMeans for exactly this reason, and even with
+            it, running multiple initializations (n_init) and keeping the best result is still
+            standard practice.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — K-Means is giving strange results on a real dataset — how do you debug it, and when would you switch algorithms?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First I would check the basics: are features scaled, is k reasonable given the elbow and
+            silhouette analysis, and did I set n_init high enough to avoid a bad random start. Then I
+            would visualize the clusters, or a PCA projection of them if there are many dimensions,
+            to see if the shapes look like something K-Means could represent at all — since it can
+            only ever produce roughly convex, similarly-sized partitions. If the true structure is
+            ring-shaped, crescent-shaped, or has clusters of wildly different density, no amount of
+            tuning k will fix it, because the algorithm's fundamental assumption about cluster shape
+            is wrong for that data. In that case I would switch to DBSCAN for arbitrary-shaped,
+            density-based clusters, or a Gaussian Mixture Model if clusters have different sizes and
+            orientations but are still roughly elliptical. Outliers pulling centroids off-center
+            would push me toward K-Medoids instead.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

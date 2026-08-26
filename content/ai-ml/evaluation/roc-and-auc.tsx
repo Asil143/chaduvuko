@@ -862,7 +862,150 @@ print(f"  weighted: weight by support — use for overall performance summary")`
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about ROC and AUC</h2>
+
+        <ConceptBox title="Myth: Since AUC is threshold-independent, you never have to think about thresholds" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            AUC deliberately ignores thresholds so it can summarize a model's underlying ranking
+            ability in one number, but that is a property of the evaluation, not of deployment. In
+            production the model still has to output a single yes-or-no decision for every
+            prediction, which means someone still has to pick one specific threshold before the
+            model can be used. AUC tells you whether the model is capable of separating the
+            classes well across the board; it never tells you which threshold to actually deploy —
+            that is always a separate decision, driven by the real costs of false positives and
+            false negatives.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A high AUC means the model performs well everywhere you might operate it" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            AUC is an average taken across every possible threshold, including many that nobody
+            would ever use in production. A model can post an excellent overall AUC while
+            performing quite badly in the specific region of the curve where you actually need to
+            operate — for example, at the high-recall end where precision matters most for a fraud
+            team's review queue. A single aggregate number can hide a weak stretch in exactly the
+            operating range that matters, which is why you should always inspect the curve, or
+            precision at your target recall, rather than trusting the summary statistic alone.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: An AUC around 0.5 means the model is 'half right' or weakly useful" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            An AUC of 0.5 has a precise meaning that has nothing to do with being half correct — it
+            means the model's scores contain no usable signal for ranking positives above
+            negatives, equivalent to guessing at random. This is a common mix-up with accuracy,
+            where 50 percent genuinely does mean getting half of the predictions right. An AUC of
+            0.5 is not "somewhat helpful"; it says the model could be replaced with a coin flip and
+            perform identically, which is a much stronger and more useful statement than "half
+            correct."
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: AUC is misleading only when it looks suspiciously perfect" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The dangerous case is not a suspiciously high AUC from leakage — that at least tends to
+            get double-checked. The quieter trap is a perfectly plausible, honestly-earned high AUC
+            on a severely imbalanced dataset, where a huge pool of true negatives makes the false
+            positive rate look tiny even while the model is generating large numbers of false
+            positives in absolute terms. A model can post a legitimate, high ROC-AUC while its
+            precision-recall curve tells a much worse story, with precision collapsing at any
+            recall level worth operating at. This is exactly why PR-AUC exists as a second check
+            specifically for imbalanced problems.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: An AUC of 0.85 on one dataset is directly comparable to an AUC of 0.85 on another" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            AUC depends on how separable the two classes are in a given population, which is itself
+            a property of the dataset, not just the model — a task with a rare, very distinctive
+            positive class can be easy to achieve a high AUC on, while a task with subtle or
+            overlapping classes may cap out well below that even for a strong model. Comparing AUC
+            across different datasets, different populations, or even the same problem measured in
+            different time periods treats two different exams as if they were the same exam. AUC is
+            only a fair comparison between models evaluated on the exact same test set and
+            population.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>ROC and AUC — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What does an AUC of 0.5 actually mean, and what would an AUC of 0 mean?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            An AUC of 0.5 means the model's scores carry no information that separates the two
+            classes — it is mathematically equivalent to ranking transactions at random, the same
+            performance you would get from a coin flip. An AUC of 0 is actually more informative
+            than it sounds: it means the model consistently ranks every negative above every
+            positive, a perfectly inverted ranking. In practice, an AUC near 0 is a strong signal
+            of a bug, most often flipped labels or an inverted score, not a hopeless model —
+            flipping the prediction (or the label encoding) turns an AUC of 0 into an AUC of 1.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain what AUC measures to someone with no machine learning background">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would skip the formula entirely and describe the experiment it corresponds to: pick
+            one random example the model should have flagged and one random example it should not
+            have, and ask the model to score both. AUC is simply the probability the model gives
+            the one that should have been flagged a higher score. An AUC of 0.9 means that if you
+            ran that experiment many times, the model would get the ranking right 90 percent of the
+            time. That framing makes it clear why AUC needs no threshold to be meaningful — it is
+            purely about whether the model's relative ordering of the two groups is correct.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Model A gets an AUC of 0.95 on a balanced dataset, Model B gets an AUC of 0.95 on a dataset that is 1 percent positive. Are they equally good?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Not necessarily, and this is a common trap. AUC reflects how separable the classes are
+            in that specific population as much as how good the model is, so the same AUC number
+            can represent a much easier or much harder task depending on the class balance and how
+            distinctive the positive class is. Before calling them equally good I would look at the
+            precision-recall curve for both, especially Model B's, since PR-AUC is far more
+            sensitive to what is actually happening on the rare positive class — it is entirely
+            possible for Model B to have excellent ROC-AUC and mediocre precision at any usable
+            recall level.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — When would you prefer PR-AUC over ROC-AUC, with a concrete example?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Whenever the positive class is a small minority of the data, because ROC-AUC's false
+            positive rate is calculated against a huge pool of true negatives, which makes it look
+            forgiving even when the model produces a large absolute number of false positives. A
+            concrete case: a fraud dataset with a very low fraud rate can show an excellent
+            ROC-AUC around 0.97 while its PR-AUC is only around 0.41, revealing that precision
+            collapses badly at any recall level a review team could actually operate at. PR-AUC
+            ignores true negatives entirely, so it reflects that reality directly instead of
+            averaging it away.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — If AUC does not depend on a threshold, why do you still need to choose one before shipping the model?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Because AUC evaluates the model as a ranking system across every possible cutoff, but a
+            production system has to make one concrete decision — flag this transaction or do
+            not — for every single prediction, and that requires exactly one threshold. I would
+            pick it using whichever method fits the situation: the Youden index when there is no
+            cost information and both error types are equally bad, a cost-minimizing threshold when
+            I know the dollar cost of a false positive versus a false negative, or a fixed-recall
+            constraint when a regulator or the business has set a minimum catch rate. AUC tells you
+            the model is worth deploying at all; choosing the threshold is the separate step that
+            turns it into an actual decision-making system.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

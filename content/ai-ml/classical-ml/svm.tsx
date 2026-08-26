@@ -897,7 +897,152 @@ print(f"\nCalibrated SVM ROC-AUC: {roc_auc_score(y_test, y_calib):.4f}")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about SVMs</h2>
+
+        <ConceptBox title="Myth: SVM training always finds the globally optimal boundary, so there is no risk of a bad fit" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The classic SVM training problem — a quadratic program with linear constraints — really
+            is convex, and for a fixed kernel and C, solvers genuinely guarantee the global optimum.
+            But that "global optimum" is only global with respect to the choices you already handed
+            the solver. Switch the kernel from linear to RBF, or change gamma, and you get an
+            entirely different convex problem with a different, possibly worse, global optimum.
+            Model quality is not automatically solved by convexity; you still have to search over
+            kernel and hyperparameter choices, and a perfectly optimal fit for a badly chosen kernel
+            can lose to a mediocre fit for a well-chosen one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The kernel trick literally projects the data into an infinite-dimensional space and computes there" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Nothing is ever projected into that space in memory. The kernel trick is an algebraic
+            shortcut: it computes what the dot product between two points would be if they had been
+            projected into a higher, even infinite, dimensional space, without ever performing or
+            storing that projection. The RBF kernel formula is just a number computed directly from
+            the original low-dimensional inputs — no infinite-dimensional vector is ever created.
+            This is exactly why SVM with an RBF kernel is not more memory-hungry than one with a
+            linear kernel: the computation happens entirely inside the kernel function, never in
+            some conjured high-dimensional space.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A small C means a weak model, so you should generally push C as high as possible" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            C controls a real tradeoff, not a dial to crank up for better performance. A high C
+            tells the optimiser to penalise margin violations heavily, producing a narrow margin
+            that hugs the training data closely — this can raise training accuracy while hurting
+            generalisation, since the boundary becomes sensitive to individual points, including
+            outliers. A low C allows more violations in exchange for a wider, more robust margin.
+            The best C is whichever value generalises best on held-out data, found through
+            cross-validation — not the largest value that fits the training set most tightly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: SVMs are a safe general-purpose default that scales fine to any dataset size" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Standard kernel SVM training scales roughly quadratically to cubically in the number of
+            training samples, because it works with a kernel matrix comparing every pair of points.
+            At fifty thousand rows that is already a matrix with billions of entries. Past roughly a
+            hundred thousand rows, SVM training routinely becomes impractically slow or
+            memory-heavy, in a way logistic regression or gradient boosting simply do not. Where SVM
+            genuinely wins is on small to medium, high-dimensional datasets — it is not a safe
+            general default the way it is sometimes treated, and reaching for it on a large dataset
+            without checking runtime first is a common practical misstep.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Every training point contributes to where the decision boundary ends up" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Strictly, only the support vectors — the points closest to, or violating, the margin —
+            determine the final position of the boundary. Every other training point could be
+            removed entirely, the model retrained, and the boundary would land in exactly the same
+            place. This is exactly why SVM predictions only require storing the support vectors,
+            often a small fraction of the training set, rather than the whole dataset — a genuine
+            memory advantage at inference time. It also means the model is somewhat blind to the
+            bulk distribution of "obvious" points that sit far from the boundary, unlike a model
+            such as logistic regression whose loss is shaped by every single point.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═══════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>SVM — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain the kernel trick to another engineer who has never seen it">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Some datasets cannot be separated by any straight line in their original feature space
+            — circles nested inside a ring is the classic example. Projecting the data into a
+            higher-dimensional space can make a linear separator exist there, but explicitly
+            computing that projection for every point would be expensive, or in some cases
+            impossible if the target space is infinite-dimensional. The kernel trick sidesteps this:
+            it uses a kernel function that returns exactly the dot product two points would have had
+            if you had projected them first, computed directly from the original inputs. You get all
+            the separating power of the higher dimension without ever visiting it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What is the difference between a hard margin and a soft margin SVM, and why would you use one over the other?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A hard margin SVM requires the two classes to be perfectly separable, with no training
+            point allowed inside the margin or on the wrong side of the boundary — that only works
+            on data that is cleanly separable, which real-world data rarely is. A soft margin SVM
+            introduces slack variables that allow some violations, each penalised in the objective,
+            with the C parameter controlling how harshly those violations are punished. In practice
+            the soft margin formulation is the default: it degrades gracefully on noisy or
+            overlapping classes instead of failing to find any solution at all, which is what a hard
+            margin would do if the data is not perfectly separable.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why does SVM need feature scaling so badly, more so than a tree-based model?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            SVM's entire notion of a margin is a distance concept — it is measured in Euclidean
+            terms, and kernels like RBF are explicit functions of the distance between two points.
+            A feature with a much larger numeric range than the others dominates that distance
+            calculation and effectively decides the boundary on its own, ignoring the rest. A
+            tree-based model like random forest or XGBoost instead splits on one feature at a time
+            using a threshold — whether that threshold is 5 or 5,000 does not change which side of
+            the split a point falls on, so the split logic is invariant to scale in a way SVM's
+            geometry simply is not.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Someone suggests using SVM on a dataset of two million rows. What do you say?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would push back before committing to it. Kernel SVM training scales roughly
+            quadratically to cubically in the number of rows, so two million rows means a kernel
+            matrix computation that is likely infeasible in reasonable time or memory. I would
+            suggest either LinearSVC, which uses a solver that scales closer to linearly for a
+            linear-kernel approximation, SGDClassifier with a hinge loss for a stochastic
+            approximation of the same boundary, or moving to gradient boosting or a neural network
+            if the data genuinely needs non-linear separation at that scale. Full kernel SVM is
+            realistically a small-to-medium-dataset tool.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you choose between a linear kernel and an RBF kernel in practice?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start with a linear kernel if the number of features is very large relative to
+            the number of samples, as with text data represented by TF-IDF, since a linear boundary
+            in that many dimensions is often already expressive enough, and RBF's extra flexibility
+            mainly risks overfitting while slowing training down. If a linear kernel clearly
+            underperforms and the dataset is small to medium in size, I would try RBF next and tune
+            gamma and C together through cross-validation, watching for a growing gap between
+            training and validation accuracy as a signal that gamma is too high and the boundary is
+            overfitting to individual points.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

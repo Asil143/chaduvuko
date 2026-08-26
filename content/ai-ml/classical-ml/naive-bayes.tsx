@@ -1009,7 +1009,173 @@ print("Model saved — ready for production deployment")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about Naive Bayes</h2>
+
+        <ConceptBox title="Myth: Since the independence assumption is false, Naive Bayes must be a weak classifier" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The assumption — that every feature is conditionally independent given the class — is
+            almost never literally true, and yet Naive Bayes routinely performs competitively on
+            text classification. The reason is that classification only needs the model to rank the
+            correct class highest, not to estimate the exact probability correctly. Correlated
+            features get counted multiple times by the naive model, which distorts the magnitude of
+            the posterior probability, but that distortion is often applied roughly equally across
+            classes, so the ordering of which class scores highest survives even though the
+            probabilities themselves are off. In practice this means Naive Bayes can make the right
+            prediction while reporting a probability that is badly wrong — a subtlety worth stating
+            explicitly rather than assuming a wrong assumption means a wrong answer.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Naive Bayes gives you trustworthy probability estimates" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Because Naive Bayes multiplies per-feature likelihoods together, correlated features
+            effectively get counted more than once, which systematically pushes the winning class's
+            posterior probability toward the extremes — predictions cluster near 0.99 or 0.01 even
+            when the model's actual class-ranking confidence is much more modest. This is a
+            calibration problem, not an accuracy problem: the predicted class is often correct, but
+            the probability attached to it should not be read literally as "how likely this is." Any
+            use case that depends on the probability value itself — risk scoring, ranking by
+            confidence, deciding a threshold based on expected cost — needs a calibration step like
+            CalibratedClassifierCV before those numbers can be trusted.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Laplace smoothing is a minor tuning detail you can skip for a quick baseline" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Without smoothing, any word that never appeared in a class during training gets an
+            estimated likelihood of exactly zero for that class. Because Naive Bayes multiplies
+            likelihoods together across every feature, one zero anywhere in that product makes the
+            whole product zero — no matter how strongly every other word in the message points to
+            that class. A single unseen word in a test example can silently make an entire class
+            impossible to predict, which is a much bigger failure than a small accuracy hit. Laplace
+            (additive) smoothing adds a small count to every possible feature value specifically to
+            prevent this, which makes it closer to a mandatory correctness fix than an optional
+            hyperparameter.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Naive Bayes is a strong general-purpose baseline for any kind of data" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Naive Bayes earned its reputation on text — high-dimensional, sparse, mostly-independent
+            word-count features are exactly the setting where the independence assumption does the
+            least damage. On tabular numeric data with a handful of strongly correlated features, the
+            same assumption causes real problems: correlated features get double-counted, and
+            algorithms that model feature interactions directly, like logistic regression or
+            gradient-boosted trees, usually win by a wide margin. The right lesson is not "Naive
+            Bayes is good" or "Naive Bayes is bad" in general, but that its strength is tied to a
+            specific data shape, and it should be picked for that reason rather than reached for by
+            default.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Naive Bayes and Logistic Regression are basically the same model, just simpler" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They belong to two different families of models entirely. Naive Bayes is generative — it
+            models how the data is produced, learning P(features given class) and P(class)
+            separately and combining them with Bayes' theorem to get a prediction. Logistic
+            Regression is discriminative — it skips modeling the data distribution altogether and
+            directly learns P(class given features). This difference has real consequences: Naive
+            Bayes needs less data to reach its typically higher asymptotic error rate because it
+            makes stronger assumptions, which is why it can outperform Logistic Regression on small
+            datasets and lose to it as data grows. A generative model can also do things a
+            discriminative one cannot, like generate plausible synthetic examples of each class,
+            because it actually models what the data looks like rather than only the decision
+            boundary between classes.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Naive Bayes — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain how Naive Bayes classifies a new example, in terms of Bayes' theorem">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For a new example, I want the class that maximizes P(class given features). Bayes'
+            theorem rewrites that as P(features given class) times P(class), divided by P(features)
+            — and since P(features) is the same for every class being compared, I can ignore it and
+            just compare P(features given class) times P(class) across classes. The naive part is
+            assuming the features are conditionally independent given the class, which lets
+            P(features given class) collapse into a simple product of individual per-feature
+            likelihoods, each of which is easy to estimate from training data by counting. In
+            practice I compute this in log space — summing log-likelihoods instead of multiplying
+            raw probabilities — to avoid numerical underflow from multiplying many small numbers
+            together, then pick whichever class has the highest total.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — The independence assumption is clearly false for real data. Why does Naive Bayes still work well?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Classification is a ranking problem, not a probability-estimation problem — the model
+            only needs to put the correct class ahead of the others, not report the exact right
+            probability. Violating independence distorts the magnitude of the computed posterior,
+            often pushing it toward more extreme values than it should be, but that distortion tends
+            to apply in a similar direction across classes, so the relative ordering — and therefore
+            the predicted class — often survives even when the reported confidence does not. This is
+            also why Naive Bayes does especially well on text: word features in a document are
+            numerous, individually weak, and only mildly correlated with each other, which is close
+            to the best-case scenario for this assumption to be a tolerable approximation rather than
+            a fatal one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What is Laplace smoothing and why is it necessary rather than optional?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Laplace, or additive, smoothing adds a small constant, usually one, to every feature
+            count before computing probabilities, and adds a corresponding amount to the normalizing
+            total so everything still sums to one. Without it, any feature value that never appeared
+            for a given class during training gets a likelihood of exactly zero, and because Naive
+            Bayes multiplies likelihoods across all features, a single zero anywhere collapses the
+            entire product to zero regardless of how much other evidence supports that class. That is
+            not a small accuracy cost, it is a correctness bug — it means the model can never predict
+            a class if the test example happens to contain even one word it did not see paired with
+            that class during training. Smoothing is typically treated as a hyperparameter to tune
+            with cross-validation, but some nonzero amount of it is required for the model to behave
+            sensibly at all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What's the difference between a generative model like Naive Bayes and a discriminative model like Logistic Regression?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A generative model learns the joint distribution of features and labels — effectively,
+            what data from each class tends to look like — and derives the classification decision
+            from that using Bayes' theorem. A discriminative model skips modeling the data
+            distribution and directly learns the decision boundary, the conditional probability of
+            the label given the features. The practical trade-off is a bias-variance one: Naive
+            Bayes makes a strong independence assumption, which gives it higher bias but lower
+            variance, so it tends to need less data to reach a decent error rate and can outperform
+            Logistic Regression when training data is scarce. Logistic Regression makes fewer
+            assumptions and can model feature interactions and correlations that Naive Bayes cannot,
+            so it typically overtakes Naive Bayes in accuracy as the training set grows large enough
+            for that flexibility to pay off.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — When would you deliberately not use Naive Bayes, and what would you reach for instead?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would avoid it whenever features are strongly correlated and the correlation itself
+            carries predictive signal — think tabular business data where features like income and
+            credit limit move together in ways that matter to the outcome. Naive Bayes will
+            double-count that correlated evidence and typically underperforms Logistic Regression or
+            a tree ensemble like Random Forest or XGBoost in that setting. I would also avoid it if I
+            needed well-calibrated probabilities out of the box, since Naive Bayes' probability
+            estimates skew toward extreme values without a calibration step. Where I would still
+            reach for it: high-dimensional sparse text or count data, situations needing a fast,
+            cheap, easily-retrained baseline, or genuinely small training sets where its stronger
+            assumptions help rather than hurt.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
