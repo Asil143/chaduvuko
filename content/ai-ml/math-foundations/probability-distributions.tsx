@@ -138,6 +138,28 @@ function MathBox({ children, label }: { children: React.ReactNode; label: string
   )
 }
 
+function ConceptBox({ title, children, color = '#7F77DD' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function ProbabilityDistributionsPage() {
   return (
     <LearnLayout
@@ -1292,7 +1314,256 @@ for name, pred in [("pred_A", pred_A), ("pred_B", pred_B)]:
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Choosing a distribution is a design decision, not a stats-homework step</h2>
+
+        <p style={S.p}>
+          This module's ideas show up under a few very specific job titles:
+          data scientists running experimentation platforms who need to decide
+          whether an A/B test result is real or noise, ML engineers picking a
+          loss function for a new model, and applied scientists building
+          uncertainty-aware systems — fraud scoring, ad-bidding, medical risk —
+          where a wrong probability is more expensive than a wrong point
+          prediction. In all three, the distribution you pick is not a
+          formality; it's an assumption baked directly into the math that
+          decides.
+        </p>
+
+        <ConceptBox title="A decision framework — which distribution do I reach for?">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { q: 'Is the outcome binary — did the thing happen or not?', a: 'Bernoulli. One transaction, one email, one click. p is your one parameter.' },
+              { q: 'Is it a count of successes out of a fixed number of trials?', a: 'Binomial. "How many of these 100 transactions are fraud" — this is Bernoulli repeated n times.' },
+              { q: 'Is it a count of rare events over a fixed window of time or space?', a: 'Poisson. Orders per minute, server errors per hour, defects per batch — no fixed upper bound on the count.' },
+              { q: 'Is it a continuous measurement, roughly symmetric around a centre?', a: 'Normal. Delivery times, sensor readings, model residuals — justified by the Central Limit Theorem when it is a sum of many small effects.' },
+              { q: 'Do you genuinely know nothing except the range of possible values?', a: 'Uniform. Random initialisation, random hyperparameter search — the "maximum entropy, no assumptions" choice.' },
+            ].map((row) => (
+              <div key={row.q} style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>
+                  {row.q}
+                </span>
+                <span style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6 }}>→ {row.a}</span>
+              </div>
+            ))}
+          </div>
+        </ConceptBox>
+
+        <p style={S.p}>
+          One production technique that combines Bayes theorem with a
+          distribution not covered above — the Beta distribution — is Bayesian
+          A/B testing, used at companies like Airbnb and Booking.com instead of
+          classical significance testing. Instead of a single p-value, it gives
+          you a full posterior distribution over "how much better is variant B,"
+          which is what a product manager actually wants to know before shipping.
+        </p>
+
+        <CodeBlock code={`import numpy as np
+from scipy import stats
+
+np.random.seed(42)
+
+# ── Bayesian A/B test: new checkout flow vs old checkout flow ──────────
+# Beta distribution is the conjugate prior for a Bernoulli/Binomial —
+# after observing conversions, the posterior is ALSO a Beta distribution,
+# updated in closed form. No p-values, no multiple-testing correction needed.
+
+# Prior: before any data, assume a weak belief centred around a 5% conversion rate
+prior_alpha, prior_beta = 5, 95   # Beta(5, 95) has mean 5/(5+95) = 0.05
+
+# Observed data from the experiment
+control_conversions,  control_visitors  = 480, 10000   # old checkout: 4.8%
+variant_conversions,  variant_visitors  = 540, 10000   # new checkout: 5.4%
+
+# Posterior update — this is Bayes theorem, in closed form for Beta-Bernoulli:
+# posterior_alpha = prior_alpha + successes
+# posterior_beta  = prior_beta  + failures
+control_posterior = stats.beta(
+    prior_alpha + control_conversions,
+    prior_beta + (control_visitors - control_conversions),
+)
+variant_posterior = stats.beta(
+    prior_alpha + variant_conversions,
+    prior_beta + (variant_visitors - variant_conversions),
+)
+
+# Monte Carlo: sample both posteriors many times, compare directly
+n_samples = 200_000
+control_samples = control_posterior.rvs(n_samples)
+variant_samples = variant_posterior.rvs(n_samples)
+
+prob_variant_better = (variant_samples > control_samples).mean()
+lift = (variant_samples / control_samples - 1)
+
+print(f"Control posterior mean conversion:  {control_posterior.mean():.4f}")
+print(f"Variant posterior mean conversion:  {variant_posterior.mean():.4f}")
+print(f"\\nP(variant is better than control) = {prob_variant_better:.4f}")
+print(f"Expected lift: {lift.mean()*100:.2f}%  "
+      f"(90% credible interval: [{np.percentile(lift,5)*100:.2f}%, {np.percentile(lift,95)*100:.2f}%])")
+
+# This is the answer a product manager actually wants — not "p < 0.05,
+# reject the null" but "there's a 97% chance the new checkout is better,
+# and the expected improvement is between X% and Y%."`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about probability in ML</h2>
+
+        <ConceptBox title="Myth: Probability distributions are a stats-class abstraction with no direct role in training a model" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every standard loss function in ML is a distributional assumption
+            wearing a different name. MSE is not "just a reasonable-sounding
+            formula" — it is the negative log-likelihood of assuming your
+            errors are Gaussian. Binary cross-entropy is the negative
+            log-likelihood of a Bernoulli assumption. Choosing a loss function
+            and choosing a probability distribution for your data are, precisely
+            and mathematically, the same decision — there is no gap between
+            "the theory" and "the code" here.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A model that outputs 0.83 is claiming that 83% is the true frequency of the event" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Raw sigmoid or softmax outputs are not automatically calibrated
+            probabilities — they are whatever number minimises the training
+            loss, which can be systematically over- or under-confident
+            depending on the model and the data. A model can output 0.83 on
+            examples that are actually correct only 60% of the time. Trusting
+            an uncalibrated score as a literal probability is a common mistake;
+            checking calibration (via a reliability diagram or Platt
+            scaling/isotonic regression) is a separate step, not something
+            softmax gives you for free.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: MSE is the safe, default loss for any regression problem" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MSE is only the mathematically correct choice under the assumption
+            that your errors are Gaussian — symmetric and without heavy tails.
+            If your target has real outliers (fraud amounts, latency spikes,
+            delivery delays caused by rare severe events), MSE will let those
+            outliers dominate the loss and drag predictions toward them, because
+            squaring the error massively amplifies large residuals. MAE
+            (implicitly assuming a Laplace distribution) or Huber loss is more
+            robust in exactly those cases — the "right" loss depends on what you
+            believe about your errors, not on convention.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Bayes theorem is a toy topic for medical-testing homework problems" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Bayes theorem is running underneath spam filters (Naïve Bayes),
+            fraud detection systems interpreting a flag's real precision,
+            Bayesian A/B testing platforms used at real companies instead of
+            classical significance tests, and Bayesian optimisation used to
+            tune hyperparameters efficiently. The "positive test, rare disease"
+            example is a teaching tool for the base rate fallacy — the actual
+            underlying reasoning shows up any time you need to update a belief
+            using a signal that isn't perfectly reliable, which in ML is nearly
+            every time.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A rare event with a low prior probability barely matters statistically" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The opposite is true — a low prior probability is exactly what
+            causes the base rate fallacy, where a 95%-sensitive fraud detector
+            still turns out to flag mostly legitimate transactions, because
+            fraud is so rare (0.1%) that even a small false-positive rate
+            produces more false alarms than true ones. Ignoring the prior and
+            reasoning only from a detector's sensitivity is one of the most
+            common real mistakes in evaluating classifiers for rare, high-stakes
+            events — it consistently overstates how trustworthy a positive
+            prediction actually is.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Probability and Bayes theorem — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why does using MSE loss implicitly assume your errors are Gaussian, and when does that assumption break down?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            If you assume each observed target is drawn from a Gaussian centred
+            on the model's prediction, maximising the likelihood of the observed
+            data reduces algebraically to minimising the sum of squared errors —
+            that derivation is exactly why MSE is the "correct" loss under a
+            Gaussian assumption, not an arbitrary convenient formula. It breaks
+            down when errors have heavy tails or real outliers, since squaring
+            those large residuals lets a handful of extreme points dominate the
+            loss; MAE (a Laplace assumption) or Huber loss handles that case
+            more robustly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain Bayes theorem and walk through the base rate fallacy with a concrete example">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Bayes theorem says P(A|B) = P(B|A) × P(A) / P(B) — it updates a
+            prior belief P(A) using how likely the evidence B would be under
+            that belief. Concretely: if fraud is 0.1% of transactions, a
+            detector is 95% sensitive, and it has a 2% false-positive rate, then
+            of every 10,000 transactions only about 10 are true fraud (9.5
+            caught) while roughly 200 legitimate transactions get falsely
+            flagged — so only around 4.5% of flagged transactions are actually
+            fraud. The tiny prior, not the detector's accuracy, dominates the
+            result — that's the base rate fallacy.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What's the difference between Maximum Likelihood Estimation and Maximum A Posteriori estimation?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            MLE finds the parameters that maximise P(data | parameters) —
+            it only cares about explaining the observed data as well as
+            possible. MAP finds the parameters that maximise
+            P(parameters | data), which by Bayes theorem is proportional to
+            P(data | parameters) × P(parameters) — it adds a prior belief about
+            the parameters themselves. In practice, L2 regularisation
+            (weight decay) is exactly MAP estimation under a Gaussian prior
+            centred at zero on the weights — "prefer smaller weights unless the
+            data strongly justifies otherwise" is the prior talking.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — If someone says a classifier is 90% confident on this image, what does that actually mean, and can you trust it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It means the model's softmax output assigned 0.90 probability to
+            that class — but softmax outputs are not automatically calibrated,
+            so 0.90 does not necessarily mean the model is right 90% of the
+            time on similar examples. Modern deep networks in particular tend to
+            be overconfident. Before trusting the number as a real probability,
+            I'd check calibration on held-out data — a reliability diagram, or a
+            calibration method like temperature scaling or isotonic regression —
+            rather than assume the raw score is meaningful on its own.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you decide whether to model a variable as Poisson vs Binomial vs Normal?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I'd start from what the variable actually represents. A count of
+            successes out of a known, fixed number of trials is Binomial — "how
+            many of these 500 emails are spam." A count of events with no fixed
+            upper bound, over a window of time or space, is Poisson — "how many
+            orders arrive in the next minute." A continuous measurement that
+            results from summing many small independent effects is reasonably
+            modelled as Normal, by the Central Limit Theorem. Getting this
+            choice right matters because it directly determines which loss
+            function and which variance behaviour is appropriate for the model.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>The math foundations are complete.</h2>

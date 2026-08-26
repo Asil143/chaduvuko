@@ -108,6 +108,28 @@ function VisualBox({ children, label }: { children: React.ReactNode; label: stri
   )
 }
 
+function ConceptBox({ title, children, color = '#888888' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: string }) {
   return (
     <div style={{
@@ -1593,7 +1615,229 @@ fast_distances = euclidean_distances(X_norm)  # vectorised → 100× faster`} />
 
       <Div />
 
-      {/* ══ SECTION 13 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 13 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>The Python skills that actually get used daily are not the fancy ones</h2>
+
+        <p style={S.p}>
+          Ask a working ML engineer what Python skill they use most on a typical
+          day and almost none of them say decorators, metaclasses, or clever
+          one-liners. The honest answer is closer to: reading someone else's
+          pandas chain and figuring out what it computes, tracing a stack trace
+          three function calls deep to find where a KeyError actually
+          originated, and writing a small, boring script to reshape one team's
+          output into the format another team's pipeline expects. The patterns
+          in this module — comprehensions, generators, a clean class, a
+          decorator — matter because you will read them constantly in other
+          people's code, not because you will invent something clever with
+          them every day yourself.
+        </p>
+
+        <p style={S.p}>
+          A concrete example of what that actually looks like: a teammate's
+          pull request adds a feature using a chain of groupby and transform
+          calls. Understanding it well enough to review it — not just skim it —
+          means being able to mentally execute what each step produces, spot
+          that a transform was applied before a filter and will therefore
+          include rows that should have been excluded, and say so in a comment.
+          That is a Python reading skill, not a Python writing skill, and it is
+          exercised far more often than any pattern in this module is written
+          from scratch.
+        </p>
+
+        <CodeBlock code={`# ── What "debugging someone else's pipeline" actually looks like ──────
+# You are handed this traceback with no other context:
+#
+#   Traceback (most recent call last):
+#     File "pipeline.py", line 142, in build_features
+#       df['late_rate'] = df.groupby('restaurant')['is_late'].transform('mean')
+#     File "pandas/core/groupby/groupby.py", line 1855, in transform
+#       ...
+#   KeyError: 'is_late'
+#
+# The instinct of a beginner is to stare at the groupby call itself.
+# The actual skill is localising the failure by walking backwards:
+
+import pandas as pd
+
+def build_features(df: pd.DataFrame) -> pd.DataFrame:
+    # Add a defensive check right where the assumption is made,
+    # instead of guessing from the traceback alone
+    required = ['restaurant', 'is_late']
+    missing = [c for c in required if c not in df.columns]
+    if missing:
+        raise KeyError(
+            f"build_features expected columns {required}, "
+            f"missing: {missing}. Got: {df.columns.tolist()}"
+        )
+    df = df.copy()
+    df['late_rate'] = df.groupby('restaurant')['is_late'].transform('mean')
+    return df
+
+# Running this immediately tells you WHY 'is_late' is missing —
+# usually because an earlier step in the pipeline silently dropped or
+# renamed the column, which the original traceback could not tell you.
+# This — narrowing down where an assumption broke, one small assertion
+# at a time — is the debugging skill this module is actually building
+# toward, far more than any single language feature.`} />
+
+        <p style={S.p}>
+          This is also why the module leaned so heavily on readability over
+          cleverness — no obscure one-liners, explicit variable names,
+          comments explaining why a line exists rather than what it does. On a
+          real team, code is read by other people far more often than it is
+          written by you, and the code that gets shipped fastest is usually
+          the code a reviewer can understand in one pass, not the code that
+          shows off the most advanced feature of the language.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 14 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about Python for ML</h2>
+
+        <ConceptBox title="Myth: You need to master obscure Python features to be taken seriously on an ML team" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Production ML codebases mostly reward boring, readable Python — clear function
+            signatures, type hints, small functions that do one thing. The features that actually
+            show up constantly are the ones covered in this module: comprehensions, generators,
+            decorators, a clean class with an underscore-suffixed learned attribute. Metaclasses,
+            descriptor protocols, and multiple-inheritance tricks show up occasionally inside
+            library internals, almost never in the feature-engineering and modelling code most ML
+            engineers write day to day. Knowing obscure trivia is not what gets features shipped.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Everything in an ML codebase should be wrapped in a class, because that is how sklearn does it" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            sklearn uses classes because an estimator has to hold learned state between .fit() and
+            .predict() — the weights, the scaler's mean, the tree structure. A large share of real
+            ML code — a one-off data-cleaning script, a quick correlation check, a batch
+            reformatting job — has no state to carry between calls and gets nothing from being
+            wrapped in a class beyond ceremony. The right signal for reaching for a class is having
+            state to persist across method calls, as Section 5 shows with DoorDashDeliveryPredictor
+            — not "this is ML code, therefore it needs a class."
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If you are not vectorising everything, your code is bad and does not belong in a real pipeline" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Vectorisation matters on the hot path — code that runs over millions of rows, inside a
+            training loop, or on every request to a live service. A one-time script processing two
+            hundred config entries, or a debugging snippet run once in a notebook, does not need
+            it, and forcing an awkward NumPy trick onto something that reads more clearly as a
+            plain for loop trades away readability for a speedup nobody will ever notice. The
+            profiling habit from this module's own section on performance — measure before
+            optimising — exists precisely so this decision is based on evidence, not a blanket rule.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Because Python is slow, serious ML computation has to be hand-optimised in pure Python" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The actual fix for slow numerical code is almost never clever pure-Python
+            micro-optimisation — it is calling into NumPy, pandas, or PyTorch, all of which run
+            their heavy loops in compiled C or CUDA underneath a thin Python interface. As the
+            profiling section of this module shows directly, a Python loop that took hundreds of
+            milliseconds became a fraction of a millisecond once rewritten as a single NumPy
+            expression — not because the Python was hand-tuned, but because the loop moved into
+            compiled code entirely. Profiling first, as taught here, usually finds a Python loop
+            that should be replaced, not micro-optimised.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If someone else's ML code is confusing, the code is automatically badly written" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Some real pipeline code is dense because it is genuinely doing several non-obvious
+            things at once — config-driven branching, feature-flag gating, edge cases specific to
+            one business rule that only makes sense with context the reader does not yet have.
+            Being able to read and untangle that kind of code — not just write clean, isolated
+            examples from scratch — is the actual day-to-day skill this module has been building
+            toward, and it is a different skill from writing clean code yourself. Confusion is
+            sometimes a signal to ask a question, not a verdict on the code's quality.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 15 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Python for ML — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What role does Python actually play in a production ML system, versus the numerical libraries it calls into?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Python is almost always the orchestration and glue layer, not where the heavy
+            computation itself happens. The training loop, the data loader, the API endpoint are
+            written in Python, but the actual matrix multiplications, gradient computations, and
+            groupby aggregations execute in compiled C, CUDA, or Fortran underneath NumPy, PyTorch,
+            or pandas. This is exactly why "Python is slow" is not the blocker it sounds like for
+            ML: performance-sensitive work is delegated to these libraries, and Python's job is to
+            wire the pieces together readably, handle configuration, and manage control flow.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What are the most common Python pitfalls you have seen cause real bugs in ML code?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Mutable default arguments are the classic one — a function defined with a default of
+            an empty list or dict reuses the exact same object across every call, silently
+            accumulating state across unrelated invocations, which this module covers directly in
+            Section 3. Floating-point comparison is another: checking if a computed value equals
+            an expected float exactly, instead of checking whether the difference is below a small
+            tolerance, causes intermittent failures that depend on the exact order operations were
+            performed in. A third is comparing to None with a double-equals check instead of "is
+            None", which can behave unexpectedly once NumPy arrays are involved in the comparison.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — When would you reach for something other than pure Python, like NumPy, Cython, Rust, or Spark, instead of writing a loop yourself?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would reach for NumPy or pandas vectorisation first, as soon as profiling shows a
+            Python-level loop over array elements is the bottleneck — this covers the large
+            majority of real slowdowns and requires no new tooling. If the operation genuinely
+            cannot be vectorised (complex sequential logic, custom C-level performance needs),
+            Cython or a small Rust extension becomes worth the added build complexity. If the
+            data itself no longer fits on one machine, the bottleneck stops being Python's speed
+            entirely and becomes a distributed-computing problem, which is when Spark or a similar
+            distributed framework enters the picture instead of any single-machine optimisation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Walk me through how you would debug a pipeline that produces different results on two machines despite using the same random seed.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A shared seed only guarantees identical results if every source of randomness is
+            actually controlled and everything else about the computation is identical. I would
+            check, in order: whether all relevant seeds are set (Python's random module, NumPy,
+            and any ML framework each keep separate random state), whether operations that are
+            run in parallel across threads can execute in a different order on each machine and
+            therefore accumulate floating-point rounding differently, and whether library versions
+            genuinely match, since some numerical routines changed their exact floating-point
+            behaviour across versions. Floating-point arithmetic is not perfectly associative, so
+            summing the same numbers in a different order can produce a tiny but real difference.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — What is the difference between a generator and a list comprehension, and why would a data loader use one over the other?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A list comprehension builds the entire result in memory immediately — useful when you
+            need random access to elements or need the full collection more than once. A generator
+            expression, or a function using yield, produces one value at a time and only when
+            asked for it, so memory use stays flat no matter how large the underlying sequence is.
+            A data loader for a dataset far larger than available RAM has to be a generator for
+            exactly this reason — as Section 6 shows with the batch generator pattern that mirrors
+            PyTorch's DataLoader — building the full dataset as a list first would defeat the
+            entire point of batching.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 16 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>You now write Python the way ML engineers write it.</h2>

@@ -1070,7 +1070,267 @@ for n in [500, 5_000, 50_000]:
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>How splitting actually goes wrong in production — beyond the textbook case</h2>
+
+        <p style={S.p}>
+          The leakage table earlier in this module covers the mechanics. In practice, the two
+          failure modes that show up over and over on real teams are group leakage and
+          splitting after feature engineering — both are easy to miss because the code runs
+          without any error, the metrics look great, and the problem only surfaces weeks
+          later when production performance does not match what development promised.
+        </p>
+
+        <p style={S.p}>
+          Group leakage happens whenever more than one row in your dataset comes from the
+          same underlying entity. A churn model built on customer order history has many rows
+          per customer — one per order. Split those rows randomly and a customer's orders from
+          January land in training while that same customer's orders from March land in test.
+          The model does not have to generalise to a new customer to score well on that test
+          row — it can partially recognise the customer from other orders it already saw in
+          training, which is a much easier and much less useful thing to have learned. The
+          same problem shows up with patients across multiple hospital visits, devices across
+          multiple sensor readings, and users across multiple sessions — anywhere a single
+          entity contributes more than one row.
+        </p>
+
+        <p style={S.p}>
+          Splitting after feature engineering is the second recurring failure, and it is
+          subtler than the "scaler fit before split" case this module already covers. A team
+          computes a rolling 30-day average or a cumulative count directly on the full,
+          chronologically sorted dataframe — before ever calling a split function — and only
+          then splits train and test out of the result. Every "past" feature for a row near
+          the train/test boundary was computed using a window that quietly extends into what
+          is now the test period, or a cumulative count includes rows that have not happened
+          yet relative to that row's own timestamp. The split function itself is completely
+          correct; the leakage was already baked into the features before the split ever ran.
+        </p>
+
+        <CodeBlock code={`import numpy as np
+import pandas as pd
+from sklearn.model_selection import GroupShuffleSplit, GroupKFold
+
+np.random.seed(42)
+
+# ── Group leakage — many orders per customer ───────────────────────────
+n_customers = 400
+orders_per_customer = np.random.randint(3, 15, n_customers)
+customer_id = np.repeat(np.arange(n_customers), orders_per_customer)
+n = len(customer_id)
+
+distance = np.abs(np.random.normal(4.0, 2.0, n)).clip(0.5, 15)
+delivery = (8.6 + 7.3 * distance + np.random.normal(0, 4, n)).clip(10, 120)
+X = distance.reshape(-1, 1)
+y = delivery
+
+# WRONG: random split ignores that the same customer appears many times
+from sklearn.model_selection import train_test_split
+X_tr_wrong, X_te_wrong, y_tr_wrong, y_te_wrong, cust_tr, cust_te = train_test_split(
+    X, y, customer_id, test_size=0.2, random_state=42
+)
+overlap_customers = set(cust_tr) & set(cust_te)
+print(f"Random split — customers appearing in BOTH train and test: {len(overlap_customers)}")
+
+# CORRECT: GroupShuffleSplit keeps every row for a given customer on one side
+gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+train_idx, test_idx = next(gss.split(X, y, groups=customer_id))
+cust_tr_g, cust_te_g = customer_id[train_idx], customer_id[test_idx]
+overlap_g = set(cust_tr_g) & set(cust_te_g)
+print(f"GroupShuffleSplit — customers appearing in BOTH sets: {len(overlap_g)}")
+
+# GroupKFold — the cross-validation equivalent, for hyperparameter tuning
+gkf = GroupKFold(n_splits=5)
+print("\nGroupKFold — no customer ever appears in both train and val for any fold:")
+for fold, (tr_idx, va_idx) in enumerate(gkf.split(X, y, groups=customer_id), 1):
+    fold_overlap = set(customer_id[tr_idx]) & set(customer_id[va_idx])
+    print(f"  Fold {fold}: overlap = {len(fold_overlap)} customers")
+
+# ── Splitting after feature engineering — the subtler leak ─────────────
+dates = pd.date_range('2024-01-01', periods=200, freq='D')
+orders = pd.Series(np.random.normal(1000, 100, 200), index=dates)
+
+# WRONG: rolling average computed BEFORE the train/test boundary is chosen
+# A row near the boundary can "see" a window that reaches into test days
+rolling_wrong = orders.rolling(window=14).mean()
+split_point = dates[160]
+train_feature_wrong = rolling_wrong[:split_point]   # looks fine, but...
+# the LAST few rows of this training feature were computed using a window
+# that included days beyond split_point if the split happens later than here
+
+# CORRECT: compute the split boundary FIRST, then compute rolling
+# features using only data available up to and including that boundary
+train_orders = orders[:split_point]
+test_orders  = orders[split_point:]
+rolling_train_correct = train_orders.rolling(window=14).mean()
+# Test-period rolling features are computed by extending the window
+# using only train + already-elapsed test data — never future test data
+print(f"\nTrain period: {train_orders.index[0].date()} to {train_orders.index[-1].date()}")
+print(f"Test period:  {test_orders.index[0].date()} to {test_orders.index[-1].date()}")`} />
+
+        <p style={S.p}>
+          The practical habit that prevents both of these: decide your split — by time, by
+          group, or both — before writing a single line of feature engineering code, and treat
+          the split boundary as a hard constraint that every subsequent computation has to
+          respect, rather than something you bolt on at the end once the features already
+          exist.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about train/val/test splitting</h2>
+
+        <ConceptBox title="Myth: Random splitting is always the correct default no matter what your data looks like" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Random splitting assumes every row is independent and exchangeable with every other
+            row — swap any two rows between train and test and nothing about the underlying
+            problem changes. That assumption breaks for time-ordered data, where a row's
+            position in time matters, and it breaks for grouped data, where multiple rows
+            share an underlying entity like a customer or patient. In both cases a random split
+            can leak information across the train/test boundary even though nothing in the
+            code looks wrong. "Split randomly" is the right default only once you have checked
+            that your rows really are independent of each other.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A single train/test split is sufficient for reliably choosing between models or hyperparameters" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A single split gives you one sample of "how well did this model do on unseen
+            data," and that sample has its own randomness — a slightly different split could
+            easily rank two similar models the other way around, especially on a small
+            dataset. Using that one score to choose between several hyperparameter settings
+            or model families is effectively tuning to the noise in that particular split, not
+            to genuine generalisation ability. Cross-validation, which averages performance
+            across several different splits, gives a materially more reliable basis for model
+            selection than any single holdout can.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The validation set matters only for hyperparameter tuning — once you've picked your final settings, its job is done" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Hyperparameter tuning is its most common use, but far from its only one. Validation
+            performance is also how you decide when to stop training a neural network (early
+            stopping), how you compare entirely different model families against each other,
+            and how you catch overfitting during development before it ever reaches the test
+            set. Treating it purely as a tuning knob undersells how much of routine model
+            development — architecture choices, feature additions, preprocessing changes — is
+            actually validated against this set, not the training set and not the sealed test
+            set.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If test accuracy looks good, the split process must have been done correctly" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A good test score is consistent with a correct split, but it is equally consistent
+            with several kinds of leakage that make the score look better than it should.
+            Preprocessing fit on the full dataset, a target-encoded feature computed before
+            cross-validation, or the same customer appearing in both train and test can all
+            inflate test performance without producing any error or warning. A high test score
+            tells you the evaluation is optimistic or accurate — it cannot by itself tell you
+            which one, which is exactly why auditing the pipeline for leakage has to happen
+            regardless of how good the numbers look.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Leakage only happens when you deliberately do something wrong, like literally including the label in the features" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every leakage example in this module — a scaler fit before splitting, a rolling
+            feature computed across the split boundary, a customer's rows scattered across
+            train and test — happens without anyone including the label anywhere in X. Leakage
+            is usually a statistical dependency introduced by the order operations happen in,
+            not a deliberate shortcut. That is exactly why it is dangerous: it survives a
+            visual code review that only checks "is the target column present in the
+            features," and requires actually tracing when each preprocessing step was fit
+            relative to when the split happened.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Train/val/test splitting — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why is random splitting wrong for time-series data, and what would you use instead?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A random split scatters test samples throughout the timeline, which means some
+            training rows come from dates after some test rows — the model ends up learning
+            from the future to predict the past, a situation that can never occur at actual
+            prediction time. I would instead use a chronological split, where every training
+            row comes strictly before every validation and test row, or TimeSeriesSplit for
+            cross-validation, which performs walk-forward validation: train on an expanding
+            window of the past, validate on the period immediately following it, and repeat.
+            This simulates exactly what the model faces in production — predicting a future it
+            has never seen.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What is group leakage, and how would you prevent it when multiple rows belong to the same entity (customer, patient, device)?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Group leakage happens when a single entity contributes multiple rows to the
+            dataset and a random split scatters that entity's rows across both train and test.
+            The model can then partially recognise the entity from rows it already saw in
+            training, which inflates test performance without the model having learned
+            anything that generalises to a genuinely new entity. I would use GroupShuffleSplit
+            or GroupKFold, passing the entity ID as the groups parameter, which guarantees
+            every row belonging to the same entity ends up entirely in one split or entirely in
+            the other, never split across both.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why must the test set be touched exactly once, and what's the practical harm of 'just checking' it during development?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The test set's entire value is that it gives an honest, unbiased estimate of
+            production performance — but that only holds if no decision during development was
+            ever influenced by its score. The moment you check the test score and use it to
+            choose a hyperparameter, pick a model, or decide whether to keep a feature, the
+            test set has effectively become a second validation set, and every subsequent
+            "improvement" is partly tuned to that specific holdout rather than to the
+            underlying problem. Repeated peeking accumulates: each individual check feels
+            harmless, but across many experiments it silently overfits your final reported
+            number to that one test set.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — You inherit a project where the reported test accuracy seems too good to be true. How would you audit the pipeline for leakage?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would trace the order of operations from raw data to final metric. First, I
+            would check whether any preprocessing — scaling, imputation, encoding, feature
+            selection — was fit before the train/test split rather than after. Second, I would
+            check whether any feature was engineered using the full dataset's chronology or
+            full-dataset aggregates before the split existed, such as a rolling window or a
+            groupby computed pre-split. Third, I would check whether the data has a natural
+            grouping (customers, sessions, devices) and whether the split respected it. Finally
+            I would check the project history for any hyperparameter decision that was made by
+            directly consulting the test score rather than a validation score.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How do you decide on split proportions and whether to use a single holdout versus k-fold cross-validation?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It mostly comes down to dataset size. Under a few thousand rows, a single holdout
+            test set is too small to trust — I would use cross-validation for tuning and
+            evaluation, since it uses the data far more efficiently. In the tens of thousands
+            of rows range, a three-way 70/15/15 split becomes reliable enough to use directly.
+            Above roughly a hundred thousand rows, I would shrink the validation and test
+            proportions further, since even five or ten percent of a very large dataset is
+            statistically enough to give a stable estimate, and it leaves more data available
+            for training. Time-series or grouped data changes the method, not this general
+            sizing logic.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

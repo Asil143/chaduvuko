@@ -944,7 +944,237 @@ except ValueError as e:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Experiment tracking as CI policy — how it actually gets enforced at scale</h2>
+
+        <p style={S.p}>
+          On a two-person team, experiment tracking can be a personal habit —
+          remembering to call mlflow.start_run() before a training script.
+          On a team of twenty, running dozens of retraining jobs a week across
+          several models, it has to become policy enforced by the pipeline
+          itself, not a habit any individual engineer maintains. The most
+          common way this happens in practice: training runs are triggered by
+          CI/CD, not by anyone running a script from their laptop, and the CI
+          job itself is what logs the run.
+        </p>
+
+        <p style={S.p}>
+          A typical setup looks like this. A pull request that touches model
+          training code or feature logic triggers a CI job that spins up a
+          clean, ephemeral container, runs the training script inside it, and
+          logs every parameter, metric, and artifact to the shared MLflow or
+          W&B server automatically as a side effect of that container running —
+          not because the engineer remembered to. The CI job then posts the
+          resulting run's metrics, and a link to the full run, back onto the
+          pull request itself. A merge gate can even require the new run to
+          match or beat the current production model's metric before the PR
+          is mergeable at all.
+        </p>
+
+        <p style={S.p}>
+          This buys two things a habit-based approach cannot. First,
+          reproducibility becomes structural rather than aspirational — because
+          the run happened inside a clean, versioned container image, the
+          environment is captured automatically alongside the code version (the
+          PR's commit hash) and the parameters, without anyone hand-logging
+          requirements.txt. Second, in regulated industries — fintech,
+          healthcare, insurance — this CI-enforced logging is often the actual
+          compliance answer to 'show us exactly how this production model was
+          produced and prove you can reproduce it,' an audit question that an
+          untracked notebook simply cannot answer.
+        </p>
+
+        <CodeBlock code={`# ── CI-triggered training run — the pattern behind "tracking as policy" ──
+# .github/workflows/train-and-gate.yml (abridged)
+
+name: train-and-gate
+on:
+  pull_request:
+    paths: ['model_training/**', 'features/**']
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    container: ml-platform/training-image:pinned-v14   # pinned env — reproducibility
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run training with tracking
+        env:
+          MLFLOW_TRACKING_URI: https://mlflow.internal.company.com
+        run: |
+          python train.py \\
+            --experiment "fraud-detection" \\
+            --run-name "pr-\${{ github.event.number }}-\${{ github.sha }}" \\
+            --git-commit "\${{ github.sha }}"
+          # train.py logs params/metrics/model via mlflow as a normal side
+          # effect of running — nobody has to remember to track anything
+
+      - name: Gate on champion metric
+        run: |
+          python compare_to_production.py \\
+            --new-run-tag "\${{ github.sha }}" \\
+            --metric val_mae --require-improvement 0.0
+          # Fails the CI check (blocks merge) if the new run does not
+          # match or beat the current Production-stage model's metric
+
+      - name: Post run link to PR
+        run: python post_pr_comment.py --run-tag "\${{ github.sha }}"
+          # Comments the MLflow run URL + metric diff directly on the PR
+          # so reviewers see experiment results without leaving GitHub`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about experiment tracking</h2>
+
+        <ConceptBox title="Myth: Experiment tracking just means logging metrics like accuracy over time" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A metric number by itself is close to useless — 'val_mae was 5.8' tells you nothing
+            actionable unless it is paired with exactly what produced it: the hyperparameters, the
+            model type, the data version, and ideally the code version. The four categories this
+            module opened with — parameters, metrics, artifacts, tags — exist together specifically
+            because metrics alone cannot answer the question that actually matters: what should
+            change to get a better number next time. A tracking setup that logs only metrics has
+            built a scoreboard, not an experiment record.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once you have MLflow or W&B, you no longer need Git for your training code" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Tracking and version control solve different problems and neither substitutes for the
+            other. Git records how the training code itself evolved over time — every change, who
+            made it, and why. An experiment tracking run records what happened in one specific
+            execution of that code — which parameters, which metrics, which resulting artifact. A run
+            is only actually reproducible if it also logged which git commit produced it, which is why
+            the standardised wrapper pattern in this module logs git_commit as a tag on every run.
+            Skip that link and a perfectly detailed MLflow run becomes unreproducible the moment the
+            training script changes again.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If the parameters and metrics match, the experiment is reproducible" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Matching parameters and metrics is necessary but not sufficient. True reproducibility also
+            depends on the exact data snapshot used (not just 'dataset_version=v3' as a label, but the
+            actual rows, which can drift if the underlying table is mutable), the library versions in
+            the environment (a scikit-learn point release can change a default and shift results
+            slightly), every random seed across NumPy, the framework, and the language's own random
+            module, and sometimes hardware-level non-determinism in GPU operations. Logging only
+            hyperparameters and a final metric captures the easy twenty percent of what reproducibility
+            actually requires.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: An experiment tracking server is a nice-to-have dashboard, not a real requirement" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For a team past a couple of people, the tracking server is often the only shared source of
+            truth for what has already been tried — without it, two engineers routinely burn compute
+            re-running an experiment a teammate already tried and rejected three weeks earlier, because
+            that knowledge lived only in their head or a Slack message nobody can find again. In
+            regulated industries it is stronger than a convenience: being able to show exactly which
+            data, code, and parameters produced a production model on demand is frequently an actual
+            compliance requirement, not an engineering nicety a team can choose to skip under deadline
+            pressure.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A higher metric on the tracking dashboard means that run is the better model to promote" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A metric is only comparable across runs if the evaluation conditions were actually the
+            same — the same test split, the same preprocessing, the same evaluation window of data. A
+            run that scores better because it was accidentally evaluated on an easier slice of data, an
+            older test set before a distribution shift, or with subtle data leakage in its features will
+            show a higher number on the dashboard while being a genuinely worse model in production.
+            Comparing experiments fairly means checking that the comparison itself is apples to apples
+            before trusting the ranking, not just sorting the experiment table by the metric column and
+            promoting whichever run sits on top.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Experiment tracking — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What actually needs to be logged for an experiment to be reproducible six months later?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            More than hyperparameters and a final metric. You need the exact data version or snapshot
+            used (ideally a hash or a pointer to an immutable dataset version, not a mutable table
+            name), the code version — a git commit hash logged as a tag — the full library and
+            environment versions the run executed under, and every random seed involved across NumPy,
+            the deep learning framework, and Python's own random module. Miss the data version and the
+            'same' training code can silently train on different rows six months later; miss the
+            environment version and a library's changed default can shift results even with identical
+            code and data.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — How do you fairly compare two experiments, especially ones run weeks apart or by different people?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, confirm they were evaluated under identical conditions — same test split, same
+            preprocessing pipeline, same evaluation window of data — because a metric computed on a
+            different slice is not actually comparable no matter how similar the number looks. Second,
+            standardise what gets logged across the team (the required-params-and-tags pattern this
+            module covers) so every run records dataset_version and feature_set consistently, making it
+            possible to filter to only genuinely comparable runs in the first place. Third, look beyond
+            the single headline metric — cross-validation standard deviation, overfitting gap between
+            train and validation, and inference latency all matter for a real promotion decision, not
+            just whichever run has the lowest MAE on the dashboard.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why isn't logging hyperparameters and the final metric enough for real reproducibility?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Because a model is a function of far more than its hyperparameters — it is also a function
+            of exactly which data rows it saw, in what order, under which library versions, and with
+            which random seeds. Two runs with identical logged hyperparameters can produce meaningfully
+            different models if the underlying data table was mutated between them, if a dependency was
+            silently upgraded, or if a seed was never set for one of several independent random number
+            generators a typical training script touches. Genuine reproducibility means treating data
+            version and environment version as first-class logged fields, the same as any hyperparameter,
+            not as background assumptions that are 'probably fine.'
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you wire experiment tracking into a CI/CD pipeline for automated retraining?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The training job itself runs inside CI, triggered by a pull request or a schedule, inside a
+            pinned container image so the environment is captured by construction rather than logged
+            after the fact. The training script logs to the shared tracking server as a normal part of
+            running, tagged with the triggering commit hash. A comparison step then checks the new run's
+            key metric against the current Production-stage model and can block the merge or the deploy
+            if it does not improve or at least hold steady. The result is that every model that ever
+            reaches production has a CI-generated tracking run behind it automatically, with no reliance
+            on an engineer remembering to log anything by hand.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Your team has 200 untracked ad-hoc notebook experiments before adopting MLflow. How do you roll this out without killing velocity?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would not try to retroactively log the 200 old runs — that effort rarely pays for itself.
+            Instead I would start requiring tracking only for new work going forward, beginning with a
+            lightweight shared wrapper that enforces a small set of required tags and params so adoption
+            has almost no friction on day one. I would pick one active, valuable experiment stream to
+            migrate first as a proof of the workflow, then wire the CI gate in once the team trusts the
+            tooling rather than mandating it everywhere at once. The goal is making tracking the path of
+            least resistance — logging a run should be easier than not logging one — rather than treating
+            it as an audit requirement bolted on top of how the team already works.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

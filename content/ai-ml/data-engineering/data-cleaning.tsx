@@ -144,6 +144,28 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
   )
 }
 
+function ConceptBox({ title, children, color = '#1D9E75' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function DataCleaningPage() {
   return (
     <LearnLayout
@@ -1756,7 +1778,222 @@ print("Saved to /tmp/doordash_clean.parquet")`} />
 
       <Div />
 
-      {/* ══ SECTION 14 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 14 — WHAT THIS LOOKS LIKE AT WORK ════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where cleaning actually happens in the pipeline — and who owns it</h2>
+
+        <p style={S.p}>
+          In a tutorial, one person writes a script that both cleans the data and trains the model
+          five minutes later. In a real company, cleaning is split across an organisational boundary
+          that most tutorials never show, and knowing which side of that boundary you are standing on
+          changes what "cleaning" even means for the code you are about to write.
+        </p>
+
+        <p style={S.p}>
+          Many data teams organise pipelines around a layered model — often called bronze, silver, and
+          gold, or raw, validated, and curated. Data engineering typically owns the boundary between
+          bronze and silver: enforcing schema, deduplicating on the business key, coercing types, and
+          catching schema drift, exactly like the SchemaValidator and drift detector built earlier in
+          this module. That layer is deliberately model-agnostic — the same validated orders table
+          feeds the ETA model, the fraud model, and a quarterly business dashboard, so it cannot bake
+          in decisions specific to any one of them.
+        </p>
+
+        <p style={S.p}>
+          ML engineering typically owns the boundary between silver and gold: the outlier treatment
+          decisions, the choice of which rows to drop versus clip versus flag, and anything that
+          depends on what a specific model needs rather than what is universally true about the data.
+          Whether a 90-minute delivery gets clipped to the 99th percentile or kept as a genuine
+          signal is a modeling decision, not a data engineering one — it depends on what the ETA model
+          is trying to learn, and a different model consuming the same silver table might make the
+          opposite choice.
+        </p>
+
+        <VisualBox label="The cleaning boundary — bronze / silver / gold, and who owns each step">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { stage: 'Bronze — raw ingested data', color: '#D85A30', owner: 'Data engineering', desc: 'Whatever the source system sent, unmodified. Duplicates, wrong types, and schema drift are all still present.' },
+              { stage: 'Silver — validated, deduplicated, typed', color: '#378ADD', owner: 'Data engineering', desc: 'Schema enforced, business-key duplicates removed, types coerced, drift monitored. Model-agnostic — usable by any downstream consumer.' },
+              { stage: 'Gold — model-ready features', color: '#1D9E75', owner: 'ML engineering', desc: 'Outlier treatment, capping/flagging decisions, and feature transforms specific to what this particular model needs to learn.' },
+            ].map((item) => (
+              <div key={item.stage} style={{
+                display: 'grid', gridTemplateColumns: '230px 160px 1fr', gap: 14,
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 7, padding: '10px 14px', borderLeft: `3px solid ${item.color}`,
+              }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)' }}>
+                  {item.stage}
+                </span>
+                <span style={{ fontSize: 11, color: item.color, fontFamily: 'var(--font-mono)' }}>
+                  {item.owner}
+                </span>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <ConceptBox title="Where the DoorDashDataCleaner class in this module actually sits">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Looking back at the cleaner class built earlier in this module: coerce_types,
+            deduplicate, and clean_strings are silver-layer work — model-agnostic, correct regardless
+            of which model eventually consumes the table. handle_outliers and drop_unusable are
+            gold-layer decisions — the specific percentile chosen, and the specific columns required
+            to be non-null, both depend on what the downstream model needs. In a real team these two
+            halves are often literally two different pipelines, owned by two different people, with a
+            validated silver table as the contract between them.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 15 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about data cleaning</h2>
+
+        <ConceptBox title="Myth: Cleaning is a one-time preprocessing step you do once before training" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A model trained on a cleaned snapshot from three months ago is being fed fresh, uncleaned
+            data every time it scores a new prediction in production. The whole point of building
+            cleaning as a validation framework — the SchemaValidator, the DoorDashDataCleaner class,
+            the schema drift detector — rather than a one-off notebook cell is that the same checks
+            need to run automatically on every new batch, indefinitely, for as long as the model
+            stays in production. Treating cleaning as a step you finish once is exactly how a silent
+            upstream schema change goes unnoticed for weeks.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Automated cleaning tools like Great Expectations catch everything, so manual review is unnecessary" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Great Expectations and similar frameworks only catch what you told them to check for.
+            They will faithfully verify that delivery_time stays under 180 minutes forever, but they
+            will not notice that a genuinely new, legitimate delivery pattern (say, a new long-distance
+            delivery tier the business just launched) is quietly failing that same expectation every
+            day because nobody updated the range after the product changed. Automated validation is
+            excellent at catching known failure modes reliably and cheaply — it is not a substitute
+            for a human periodically asking whether the expectations themselves are still correct.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Cleaning is a distinctly separate step from feature engineering, with a clean boundary" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The boundary is far blurrier in practice than the two-module structure of this track
+            suggests. Deciding whether to clip an outlier to the 99th percentile or leave it, and
+            deciding whether to add an is_outlier flag column, are simultaneously a cleaning decision
+            and the creation of a new feature. Target encoding a cleaned categorical column, or
+            computing a group aggregate on cleaned data, blends directly into feature engineering with
+            no hard line between where one stops and the other starts. Thinking of them as two
+            genuinely separate phases, rather than one continuous spectrum of data transformation
+            decisions, tends to produce pipelines with duplicated logic on both sides of an artificial
+            divide.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If a value looks like a statistical outlier, the safe move is to remove it" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            IQR and Z-score outlier detection identify statistically unusual values — they say nothing
+            about whether those values are errors or genuine rare events. A 90-minute delivery during
+            a snowstorm is a real, informative data point about how the system behaves under stress; a
+            negative distance or a zero-minute delivery time is a provable data entry error. Treating
+            every statistical outlier as automatically safe to remove throws away exactly the tail
+            behaviour a model most needs to learn to avoid being blindsided by it in production.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A column with a high null rate is essentially useless and should be dropped" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Whether a value is missing is frequently itself informative — a star_rating that is null
+            because the customer never left a review is a meaningfully different situation from a
+            customer who rated the order 1 star, and a model can benefit from an explicit
+            "was_missing" indicator column even when the underlying value cannot be recovered.
+            Dropping a 40 percent-null column outright discards that signal along with the missing
+            values; imputing it silently can be just as costly if the missingness itself correlates
+            with the target. The right response depends on why the value is missing, not on the null
+            percentage alone.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 16 — INTERVIEW PREP ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Data cleaning — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — A column has 30 percent missing values. Walk me through how you'd decide what to do with it">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would first find out why the values are missing, since that changes the right strategy
+            more than the percentage does. If missing is random and unrelated to the target, median or
+            mean imputation combined with a boolean was_missing flag is usually safe and preserves the
+            fact that imputation happened. If missingness itself correlates with the outcome — for
+            example, star ratings are disproportionately missing for orders customers never bothered
+            to review because they were unremarkable — imputing to the mean would actively erase that
+            signal, and I would prefer to keep the missing indicator as a feature in its own right, or
+            in tree-based models let the missingness be handled natively rather than filled at all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — How do you tell the difference between an outlier that is an error and one that is a legitimate rare event?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I start from domain plausibility rather than statistics alone: a negative distance or a
+            zero-minute delivery time is provably impossible regardless of how rare it is, so it gets
+            treated as an error unconditionally. A 90-minute delivery during a known weather event, by
+            contrast, is statistically unusual but physically possible, so I would not remove it — I
+            would clip it if its magnitude alone would destabilise a linear model, but I would add a
+            flag column so the information that this was an extreme case is not lost. The statistical
+            outlier tests (IQR, Z-score, isolation forest) are useful for finding candidates to
+            investigate; they should never be the sole basis for the remove-or-keep decision.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — When would you flag-and-keep a data quality issue instead of cleaning it away?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I flag-and-keep whenever the underlying value might carry real signal and I am not
+            confident the row is actually wrong — extreme-but-plausible values, categories with very
+            low frequency, or missingness that might be informative. I clean away or correct only
+            values that are provably impossible given the domain, like a negative distance or a
+            5-star boundary violated by a rating of 7. The general principle: cleaning should remove
+            information that is definitely noise, and flagging should preserve information that might
+            be signal — when genuinely unsure which case applies, flagging is the safer default because
+            it is reversible and the model can learn to weight the flag appropriately, whereas deleting
+            a row is not reversible.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How do you decide whether a data quality issue should fail the pipeline loudly versus just get logged?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I tie the severity of the response to the blast radius of being wrong. A schema violation
+            on a required, non-nullable column, or a swing in null rate on a feature the model depends
+            on heavily, should hard-fail the pipeline the way the SchemaValidator and drift detector in
+            this module do — better to block training on bad data than silently ship a degraded model.
+            A small number of rows violating a soft consistency rule, like a handful of rows where
+            delivery_time is slightly below restaurant_prep, is worth logging and monitoring as a trend
+            but rarely worth blocking an entire pipeline run over, since the cost of a false alarm at
+            that severity outweighs the benefit.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Tell me about how you'd systematically fix inconsistent categorical values, like a city column with five spellings of the same city">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would avoid fixing spellings one at a time as I discover them, since that never actually
+            terminates. Instead I would normalise case and whitespace first, then build an explicit
+            canonical mapping from the observed variants to the correct value, and run fuzzy matching
+            as a fallback only for whatever the explicit mapping does not cover — logging anything
+            fuzzy matching still cannot resolve confidently rather than silently guessing. Critically, I
+            would keep that mapping as a reusable, versioned piece of code, not a one-off notebook fix,
+            since the same typos and variants reliably reappear in every new batch of data from the
+            same upstream source.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 17 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

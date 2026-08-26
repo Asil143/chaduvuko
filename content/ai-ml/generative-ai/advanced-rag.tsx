@@ -985,7 +985,254 @@ for q in test_questions:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Production RAG architecture beyond a single retrieval call</h2>
+
+        <p style={S.p}>
+          A knowledge-base assistant that only ever runs one retrieval call per question hits a
+          hard ceiling the moment a real user asks something that needs synthesis — "which
+          enterprise customers who signed up this quarter also had a refund dispute over a
+          thousand dollars?" No single chunk in the knowledge base answers that; it requires
+          finding the signup-timing information, finding the dispute records, and combining them.
+          Production systems handle this with iterative, multi-hop retrieval: the system retrieves
+          an initial set of chunks, has the LLM decide whether it has enough information or needs
+          to issue a follow-up retrieval for a sub-question, and repeats until it can answer or
+          gives up and says so. This is the same retrieve-then-read loop that shows up again, in a
+          more general form, once you get to agents that call tools autonomously.
+        </p>
+
+        <p style={S.p}>
+          The infrastructure choices matter as much as the algorithm. Teams pick a vector store —
+          Pinecone or Weaviate as managed services, pgvector when the data already lives in
+          Postgres and a separate system is not worth the operational overhead — paired with
+          OpenSearch or Elasticsearch for the BM25 half of hybrid search. Embedding model version
+          pinning is a real operational headache: switching embedding models means every vector in
+          the index is now in a different geometric space, so upgrading requires re-embedding the
+          entire corpus and running both indexes in parallel during the cutover, not a quick config
+          change. Once a pipeline has hybrid search, reranking, and multi-hop retrieval in it,
+          teams add tracing tools — LangSmith, Arize Phoenix, or an internal equivalent — because
+          debugging "why did the answer miss this fact" by eye across four separate retrieval and
+          reranking stages is no longer feasible without seeing exactly what each stage returned.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(0,230,118,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#00e676', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Advanced patterns earn their cost here ✓
+            </div>
+            {[
+              'High query volume where a 10-25% quality bump from reranking is worth the latency',
+              'Corpora with technical jargon, error codes, or exact terms — hybrid search territory',
+              'Questions that require combining facts from more than one document',
+              'Regulated or high-stakes domains where faithfulness must be measured, not assumed',
+              'Large, fast-changing corpora (10k+ chunks) where dense-only search misses recall',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(255,71,87,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#ff4757', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Naive RAG is still the right call here ✗
+            </div>
+            {[
+              'A small, static, well-organised corpus (a few hundred FAQ entries)',
+              'Low query volume where reranking latency is not worth the engineering',
+              'Prototypes and internal tools where perfect recall is not the goal yet',
+              'Single-fact lookup questions the corpus already answers in one chunk',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <ConceptBox title="The ticket you would actually get" color="#7b61ff">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Slack message from support ops: "The assistant told a customer their refund would
+            arrive in two to three days, but the actual policy for their payment method is five to
+            seven. Someone needs to look at this today." Pulling the trace shows the retrieval
+            step correctly found both the ACH refund timeline and the credit card refund timeline
+            in its top chunks — context recall was fine. The reranker, trained on general web
+            search data, scored the ACH chunk higher because it happened to share more surface
+            wording with the question, even though the customer's payment method was a credit
+            card. The fix is not "add more chunks" — it is tightening the prompt to require the
+            model to identify the payment method before answering, and evaluating whether the
+            reranker needs domain fine-tuning on exactly this kind of near-duplicate,
+            policy-variant content.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about advanced RAG</h2>
+
+        <ConceptBox title="Myth: Retrieving more context is always better than retrieving less" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Past a certain point, adding more retrieved chunks makes answers worse, not better.
+            Every additional chunk is more text competing for the LLM's attention, and irrelevant
+            or tangentially related chunks measurably increase the chance the model blends in
+            something that does not belong in the answer — a direct hit to faithfulness. Retrieved
+            context also costs money and latency per token whether or not it helped. The right
+            target is the smallest set of chunks that actually contains the answer, which is
+            exactly what reranking is for — narrowing a broad, high-recall candidate set down to a
+            small, high-precision one, rather than simply raising the top-k number and hoping the
+            LLM sorts it out.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Naive RAG — embed the query, take the top-k chunks by cosine similarity — is good enough for most production apps" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Naive RAG is good enough for demos, where queries are hand-picked to work well, and
+            for small, low-stakes internal tools. It reliably breaks on the failure modes this
+            whole module exists to fix: missing exact keyword matches like error codes, retrieving
+            chunks that are semantically similar but do not actually answer the question, and
+            giving the team no objective way to know whether a change made things better or worse.
+            The gap between a naive RAG demo and a production RAG system is not a matter of scale —
+            it shows up on day one with any real, adversarial user base, which is exactly why
+            hybrid search, reranking, and evaluation are treated as standard components, not
+            optional extras, on any RAG system serving real users.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Chunking strategy is a minor implementation detail — fixed-size chunks work fine everywhere" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Chunk size and boundaries directly determine what can possibly be retrieved: a chunk
+            boundary that splits a table in half, or separates an error code from its explanation,
+            makes the correct answer unretrievable no matter how good the embedding model or
+            reranker is downstream. Fixed-size chunking with no regard for document structure is
+            the default because it is easy to implement, not because it performs best. Parent-child
+            chunking, semantic or structure-aware splitting, and per-document-type chunking rules
+            all exist because the "right" chunk size and boundary genuinely depends on the content —
+            an FAQ entry, a legal contract clause, and an API reference table need different
+            chunking logic to stay retrievable and coherent.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: RAG eliminates hallucination because the model is just reading from retrieved documents" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            RAG reduces hallucination by giving the model relevant context to ground its answer in,
+            but it does not force the model to use that context. As this module's error section
+            covers, an LLM with strong prior knowledge on a topic will readily blend its own
+            training-time beliefs with the retrieved context, or ignore the context outright, unless
+            the prompt explicitly and strongly instructs it to answer only from what was retrieved.
+            This is precisely why faithfulness is measured as its own separate metric from context
+            recall — a RAG system can have perfect retrieval and still produce an unfaithful,
+            hallucinated answer if the generation step is not held to the context.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Hybrid search and reranking solve the same problem, so a production system only needs one" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They solve different stages of the same pipeline. Hybrid search is about recall at the
+            first, cheap retrieval stage — making sure the correct chunk is somewhere in a
+            reasonably sized candidate set by combining semantic and exact-keyword signals, since
+            dense retrieval alone can miss exact terms and BM25 alone can miss paraphrases.
+            Reranking is about precision at the second stage — given that broader candidate set, a
+            cross-encoder scores each one far more accurately than either retrieval method could,
+            to find the true top few. Skipping hybrid search means the correct chunk may never
+            reach the reranker to be found in the first place; skipping reranking means a correct
+            chunk that made it into the candidate set may still not surface at the very top.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Advanced RAG — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What role does reranking play, and why not just retrieve more documents with the bi-encoder directly?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A bi-encoder embeds the query and each document independently, which is what makes it
+            fast enough to search millions of documents, but that independence means it can never
+            model the specific interaction between a query term and a document term — it can only
+            compare two fixed vectors. A cross-encoder reranker takes the query and a candidate
+            document together as one input and scores their actual joint relevance, which is far
+            more accurate but too slow to run over an entire corpus. Simply retrieving more
+            documents with the bi-encoder does not fix this — it just hands the LLM a larger set of
+            imprecisely ranked candidates. Reranking is what turns a fast, approximate top-100 into
+            an accurate top-3.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — How would you handle a question that requires synthesising information across multiple documents?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A single retrieval call assumes the answer lives in one place, which breaks down on
+            genuinely multi-hop questions. I would use query decomposition to split the question
+            into sub-questions that are individually answerable, retrieve and answer each one
+            separately, then have the LLM combine the sub-answers into a final response — or, for
+            more open-ended multi-hop cases, run an iterative retrieve-then-read loop where the
+            model reads an initial retrieval, decides what information is still missing, issues a
+            follow-up retrieval for that gap, and repeats until it has enough to answer or
+            explicitly reports that it cannot. Either approach needs its own evaluation, because
+            standard single-hop context recall does not capture whether all the needed sub-facts
+            were actually retrieved.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Walk through how you would evaluate RAG quality — retrieval metrics versus generation metrics">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would separate the pipeline into two things that can independently fail. Retrieval
+            quality is measured with context recall — do the retrieved chunks actually contain the
+            information needed to answer the question — which isolates whether the search and
+            reranking stages are doing their job. Generation quality is measured with faithfulness
+            — is every claim in the answer actually supported by the retrieved context — and
+            answer relevance — does the answer address what was actually asked. Separating these
+            matters for debugging: low context recall means the fix is in retrieval, chunking, or
+            search strategy, while high context recall with low faithfulness means the fix is in
+            the prompt or the generation step, not in retrieval at all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you decide on chunk size and overlap for a new corpus?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start from the structure of the documents rather than picking an arbitrary
+            token count — an FAQ entry, a paragraph of a policy document, and a row of an API
+            reference table all have a natural unit that should not be split mid-thought. From
+            there I would test a small range of chunk sizes against a hand-labelled evaluation set,
+            measuring context recall at each size, since chunks that are too small lose surrounding
+            context and chunks that are too large dilute relevance and hurt reranker precision. For
+            content with an important internal hierarchy, like a document with sections and
+            subsections, I would use parent-child chunking so retrieval can stay precise on small
+            chunks while the LLM still receives the larger parent for full context.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A stakeholder says 'just retrieve the top 20 chunks instead of top 3 so we don't miss anything' — how do you respond?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would explain that this trades one failure mode for a worse one: retrieving 20
+            chunks does raise the odds the right information is somewhere in the context, but it
+            also means many more irrelevant or tangential chunks compete for the model's attention,
+            which measurably increases hallucination risk and directly increases cost and latency
+            on every single call. The fix for "we might be missing relevant chunks" is to widen the
+            first-stage retrieval — increase the coarse candidate set to something like the top 20
+            or 50 — and then let a cross-encoder reranker narrow that back down to a precise top 3
+            for the actual prompt. That gets the safety margin the stakeholder wants without paying
+            the attention-dilution and cost penalty of stuffing 20 chunks directly into the LLM.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

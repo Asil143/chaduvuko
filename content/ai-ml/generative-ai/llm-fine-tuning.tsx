@@ -873,7 +873,241 @@ Production monitoring checklist:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>How teams actually arrive at "yes, fine-tune it"</h2>
+
+        <p style={S.p}>
+          In practice, the decision in Section 2 is not made once in a meeting — it is arrived
+          at through a cheap, sequenced experiment. A team ships a prompted feature first because
+          it costs an afternoon, not a sprint. They watch two numbers: accuracy against a hand
+          labelled sample, and dollar cost per thousand calls at current volume. If accuracy is
+          the problem and it is a knowledge gap, they add RAG next — a one-to-two week investment.
+          Only when volume is high enough that per-call API cost is a real budget line item, and
+          the failure mode is clearly about consistency of behaviour rather than missing facts,
+          does fine-tuning enter the conversation at all. Most LLM features at most companies
+          never reach that third stage, and that is the intended outcome of a good decision
+          process, not a failure to be ambitious.
+        </p>
+
+        <p style={S.p}>
+          When a team does cross that threshold, they rarely stand up their own GPU training
+          infrastructure first. Hosted fine-tuning products — OpenAI's fine-tuning API, Together
+          AI, Fireworks AI, and Amazon Bedrock's custom model import — let a small team upload a
+          dataset and get back a hosted fine-tuned endpoint without owning a training cluster.
+          Self-hosted, open-weight fine-tuning with QLoRA on a rented GPU only becomes worth the
+          extra engineering once the volume is large enough that inference cost, not training
+          cost, dominates the budget — self-hosting an open model can be an order of magnitude
+          cheaper per call than a hosted proprietary model once volume is high enough to amortise
+          the fixed setup cost.
+        </p>
+
+        <div style={{ overflowX: 'auto' as const, marginBottom: 24 }}>
+          <table style={{ borderCollapse: 'collapse' as const, width: '100%', fontSize: 12 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                {['Path', 'Who owns it', 'Setup time', 'Best fit'].map(h => (
+                  <th key={h} style={{
+                    padding: '8px 12px', textAlign: 'left' as const,
+                    fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+                    fontFamily: 'var(--font-mono)',
+                  }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['Hosted fine-tuning API', 'One ML engineer, no infra team', 'Days', 'Validating the idea, moderate volume'],
+                ['Self-hosted QLoRA (open weights)', 'ML engineer + MLOps/platform', '2–4 weeks', 'High volume, cost-sensitive, data-sensitive'],
+                ['Full fine-tuning / foundation model', 'Dedicated research + infra org', 'Months', 'Building a genuine domain foundation model'],
+              ].map((row, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                  {row.map((cell, j) => (
+                    <td key={j} style={{ padding: '7px 12px', color: j === 0 ? '#7b61ff' : 'var(--muted)', fontFamily: j === 0 ? 'var(--font-mono)' : 'inherit' }}>
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <ConceptBox title="The ticket you would actually get" color="#7b61ff">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Slack message from the PM, three months after the prompted classifier shipped:
+            "We're at 40,000 dispute classifications a day now and the GPT-4 bill is becoming a
+            real line item. Support says accuracy is fine but slow at peak load. Can we bring the
+            cost down without hurting quality?" That is the actual trigger for fine-tuning in most
+            organisations — not a technical ceiling on what prompting can do, but a volume and
+            cost inflection point. The response is rarely "train from scratch": it is "export three
+            months of logged predictions and corrections as training data, fine-tune an
+            open-weight model with QLoRA, and put it behind the same API contract so nothing else
+            in the product has to change."
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about LLM fine-tuning</h2>
+
+        <ConceptBox title="Myth: Fine-tuning is a reliable way to teach a model new facts" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Fine-tuning is genuinely reliable at teaching behaviour — output format, tone, exact
+            label names, task-specific style — because those are patterns repeated consistently
+            across the training examples. Teaching a model a large number of new declarative facts
+            is a different problem: a fact seen a handful of times during fine-tuning gets blended
+            statistically with everything else the model already believes, the model cannot cite
+            where a fine-tuned fact came from, and there is no way to update or remove a single
+            fact without retraining. This is exactly why RAG, not fine-tuning, is the standard
+            answer whenever the need is specific, current, or citable knowledge — fine-tuning and
+            knowledge injection solve different problems even though both sound like "the model
+            learned something new."
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: LoRA is a weaker, watered-down substitute you settle for when full fine-tuning is too expensive" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            LoRA is not a compromise forced by limited compute — it is built on the empirical
+            observation that the weight update needed to adapt a large pretrained model to a new
+            task is itself low-rank, meaning most of the update can be captured by a small number
+            of trainable parameters without meaningfully sacrificing quality. In practice LoRA
+            reaches quality close to full fine-tuning on the overwhelming majority of real tasks,
+            while producing a small, portable adapter file that is far easier to version, combine
+            with other adapters, and roll back. Reaching for full fine-tuning by default, treating
+            LoRA as the fallback, gets the actual trade-off backwards for almost every production
+            use case.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Catastrophic forgetting only happens with full fine-tuning — LoRA is immune to it" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            LoRA freezing the base weights reduces the risk of catastrophic forgetting, it does
+            not eliminate it. A high LoRA rank, too many training epochs on a small dataset, or a
+            learning rate that is too aggressive can still push the adapted model to lose general
+            capabilities it had before fine-tuning, especially on tasks unrelated to the fine-tuning
+            data. The overfitting error covered earlier in this module — training loss collapsing
+            while validation loss rises — is a direct symptom of this same failure mode. Always
+            evaluate a fine-tuned model on general capability benchmarks, not just the target task,
+            to catch this regardless of which fine-tuning method was used.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once you decide to fine-tune, RAG and prompt engineering are no longer needed" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Production LLM systems almost always combine all three rather than picking one and
+            discarding the others. A fine-tuned model still needs a system prompt to set context
+            for the specific deployment, still benefits from RAG for any information that changes
+            after the fine-tuning snapshot was taken, and the fine-tuning itself is usually
+            targeted narrowly at consistent behaviour — like producing an exact label format —
+            rather than trying to internalise the entire knowledge base. Treating fine-tuning as a
+            replacement for the other two techniques, instead of one more layer alongside them,
+            is a common design mistake that leads to a model that is confidently wrong about
+            anything that changed after training.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: You need thousands of examples before fine-tuning is worth attempting" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            As this module's data preparation section covers, 500 high-quality, diverse examples
+            routinely outperform 5,000 mediocre ones — the quality and diversity of examples
+            matters far more than raw count. LoRA in particular, with its small number of trainable
+            parameters, can show meaningful task-specific improvement from a few hundred carefully
+            chosen examples, especially for a narrow task like consistent classification labels.
+            Waiting to "collect enough data" by volume alone, without checking whether the existing
+            smaller set is clean, diverse, and correctly labelled, routinely delays a fine-tuning
+            effort that would already have worked.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>LLM fine-tuning — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — When does fine-tuning genuinely beat RAG for a given use case?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Fine-tuning wins when the problem is about consistent behaviour rather than missing
+            knowledge — enforcing an exact output format or label set that a downstream system
+            depends on, matching a specific tone or style reliably across thousands of calls, or
+            reducing per-call cost at high volume by moving from an expensive hosted model to a
+            smaller self-hosted one. RAG wins when the problem is that the model does not have
+            access to specific, current, or citable information — content that changes often,
+            proprietary documents, or anything where the answer needs a traceable source. If the
+            failure mode is "the model does not know X," that is a RAG problem; if it is "the
+            model knows how to do this but will not do it the exact way we need every time," that
+            is a fine-tuning problem.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — How much data do you actually need to fine-tune effectively?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            There is no fixed universal number, but a reasonable starting point for LoRA on a
+            narrow task is a few hundred to a couple thousand examples, and quality matters more
+            than quantity at any scale. I would rather have 500 examples that are correctly
+            labelled, diverse in phrasing, and cover the edge cases the model actually sees in
+            production, than 5,000 examples generated quickly or scraped from a single source. In
+            practice I would start by manually reading a random sample of the available data
+            before committing to a training run — labelling inconsistencies found there are almost
+            always more valuable to fix first than adding more raw volume.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How would you evaluate whether a fine-tuned model is actually better than the alternatives?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would build a held-out test set the model never saw during training, and compare
+            against at least three baselines on the same set: the base model with no prompt
+            engineering, the base model with an optimised prompt, and a stronger proprietary model
+            with an optimised prompt. The metric has to match the task — exact match accuracy for
+            classification, something like ROUGE for summarisation, execution success rate for
+            code. If the fine-tuned model does not clearly beat the optimised-prompt baseline by a
+            meaningful margin, that is a sign the investment was not worth it, and I would ship
+            the simpler prompting or RAG approach instead rather than defend the fine-tune out of
+            sunk cost.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is the actual difference between full fine-tuning and LoRA, and when would you pick full fine-tuning?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Full fine-tuning updates every parameter in the model, requiring memory and compute
+            proportional to the entire model size and carrying the highest risk of catastrophic
+            forgetting. LoRA freezes the base weights and trains a small pair of low-rank matrices
+            injected into specific layers, updating a tiny fraction of total parameters while
+            reaching comparable quality on most tasks. I would only reach for full fine-tuning when
+            the goal is building a genuine foundation model for a domain so specialised that the
+            base model's existing knowledge is closer to random than useful — something like
+            BloombergGPT trained on decades of financial documents — which is a fundamentally
+            different scale of investment than adapting an existing capable model to a specific
+            application.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How do you prevent, and how would you detect, catastrophic forgetting during fine-tuning?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Prevention starts with the training setup: use a lower LoRA rank and fewer target
+            modules when the dataset is small, limit training to one or two epochs, add dropout,
+            and always select the checkpoint by validation loss rather than training loss.
+            Detection requires evaluating on more than just the fine-tuning task — I would run the
+            fine-tuned model against a general capability benchmark or a handful of unrelated
+            prompts it should still answer well, and compare that against the base model's
+            performance on the same prompts before and after fine-tuning. A model that improved on
+            the target task but visibly degraded on unrelated general prompts is showing
+            catastrophic forgetting, even if the target-task metric alone looks like a clean win.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

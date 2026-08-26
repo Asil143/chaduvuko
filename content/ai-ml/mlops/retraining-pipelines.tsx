@@ -964,7 +964,268 @@ print(f"Traffic: {promo.split.challenger_pct:.0%} challenger / "
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Retraining cadence is a business decision as much as a technical one</h2>
+
+        <p style={S.p}>
+          In practice, few teams run retraining as a single fully-automatic
+          pipeline from trigger straight through to production. What actually
+          happens is a mix: a scheduled cadence (nightly or weekly, depending on
+          how fast the model's world changes) runs alongside the drift- and
+          performance-triggered retraining from Module 72, and the final
+          promotion step almost always includes a human checkpoint for anything
+          with real business or safety stakes — a credit model, a fraud model, a
+          medical triage model. A low-stakes recommendation model might genuinely
+          retrain and promote itself end to end with no human in the loop, gated
+          only by the offline and shadow checks earlier in this module. A model
+          that decides who gets a loan does not get that same trust, no matter how
+          good its automated gates look, because the cost of a bad promotion is
+          not symmetric with the cost of a slightly stale model.
+        </p>
+
+        <p style={S.p}>
+          Rollback safety in production leans on a model registry — MLflow's
+          Model Registry and SageMaker's Model Registry are the two most common —
+          that keeps every previously promoted model version instantly available,
+          not just the current one. The actual "swap" at serving time is usually a
+          routing-layer change rather than a redeploy: a feature flag or a config
+          value that tells the serving layer which model version is active, so a
+          rollback is a config change and a few seconds, not a rebuild-and-ship
+          cycle. After any rollback, the team writes a short incident review —
+          what triggered it, what the gates missed, what threshold or check needs
+          to change — and that review is what actually improves the pipeline over
+          time, not the pipeline code itself.
+        </p>
+
+        <VisualBox label="How retraining actually gets triggered, and what review it gets before promotion">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              {
+                trigger: 'Scheduled (nightly / weekly)',
+                color: '#1D9E75',
+                typical: 'High-volume, lower-stakes models — recommendations, ranking, delivery time estimates.',
+                review: 'Automated gates only (offline + shadow). Human review only if a gate fails.',
+              },
+              {
+                trigger: 'Drift-triggered',
+                color: '#378ADD',
+                typical: 'Models exposed to seasonal or behavioural shift — fraud, delivery time, demand forecasting.',
+                review: 'Automated gates plus a Slack notification to the owning team before promotion proceeds.',
+              },
+              {
+                trigger: 'Performance-triggered (critical threshold breached)',
+                color: '#D85A30',
+                typical: 'Any model where realised accuracy has measurably dropped against a defined baseline.',
+                review: 'Mandatory human sign-off before promotion — often the on-call ML engineer, sometimes paged.',
+              },
+              {
+                trigger: 'Manual / ad-hoc (new feature, business rule change)',
+                color: '#7b61ff',
+                typical: 'A deliberate change to the model, not a reaction to drift or a schedule.',
+                review: 'Full pipeline run start to finish with review — never silently automated, since a human made the change.',
+              },
+            ].map((row) => (
+              <div key={row.trigger} style={{
+                background: 'var(--surface)', border: `1px solid ${row.color}25`,
+                borderRadius: 7, padding: '10px 14px',
+                borderLeft: `4px solid ${row.color}`,
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: row.color, marginBottom: 6 }}>{row.trigger}</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <p style={{ ...S.ps, marginBottom: 0 }}>{row.typical}</p>
+                  <p style={{ ...S.ps, marginBottom: 0, color: row.color }}>{row.review}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          The practical upshot: choosing a retraining cadence is not primarily a
+          statistics question. It is a question of how much a bad promotion would
+          cost this specific model, how quickly this specific model's world
+          changes, and how much engineering effort the team can afford to spend
+          reviewing promotions manually. The five-stage pipeline in this module
+          is the same regardless of the answer — what changes is how much of it
+          runs unattended.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about retraining pipelines</h2>
+
+        <ConceptBox title="Myth: Retraining more often is always better" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every retrain has a real cost beyond compute: a new model version means
+            a new set of quirks to debug if something goes wrong, and it becomes
+            harder to tell which of several recent changes caused a regression when
+            the model underneath keeps shifting weekly or daily. Retraining on a
+            schedule that outpaces how fast the underlying world actually changes
+            mostly means chasing statistical noise in the training data rather than
+            real drift. A model that is stable and well-validated is often worth
+            more than one that is marginally fresher but has been swapped five
+            times this month — freshness is a means to better predictions, not a
+            goal by itself.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If the automated retraining pipeline runs successfully, it is safe to promote" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A pipeline finishing without throwing an exception only confirms the
+            training job did not crash — it says nothing at all about whether the
+            resulting model is any good. A model trained on corrupted, leaked, or
+            simply worse data will complete training successfully and produce a
+            confident-looking artifact that is quietly wrong. That is exactly why
+            this module's five stages exist as separate checks after training
+            completes: the offline quality gate, the shadow deployment comparison,
+            and the champion-challenger A/B test all evaluate something the
+            training job itself cannot see — whether the new model is actually
+            better, not just whether it finished running.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Passing the offline test set means it is safe to promote to all traffic" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A held-out test set is a fixed snapshot from whenever it was created,
+            and production traffic keeps moving further from that snapshot every
+            day it is not refreshed. A challenger can beat the champion cleanly on
+            that stale test set and still perform worse on the live distribution,
+            because the test set no longer represents what today's traffic
+            actually looks like. This is precisely why the pipeline does not stop
+            at the offline gate — shadow deployment checks the challenger against
+            real live traffic before any user sees its prediction, and gradual
+            promotion limits the blast radius even after that, instead of trusting
+            one offline number to justify a full instant cutover.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Retraining can fix a fundamentally wrong feature set" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Retraining adjusts the weights a model assigns to the features it
+            already has — it cannot invent a signal that was never captured in the
+            first place. If the features genuinely lack the information needed to
+            predict the target, or the one feature that actually matters was
+            dropped or never collected, no cadence of retraining closes that gap;
+            more frequent retraining on the same insufficient features just
+            produces a new model that is confidently wrong in a slightly different
+            way. That is a feature engineering and data collection problem, and it
+            gets solved by adding or fixing features, not by running the same
+            pipeline more often.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A rollback is just re-deploying the previous model file" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A model promotion often ships alongside other changes — an updated
+            feature schema, a new feature-store column, a changed preprocessing
+            step, a config value the new model depends on. Reverting only the
+            model artifact while those dependent changes stay in place can leave
+            the old model receiving inputs it was never trained to handle, which
+            is sometimes worse than the failure the rollback was meant to fix. A
+            safe rollback plan accounts for everything that shipped together, not
+            just the model file, which is exactly why keeping the previous
+            deployment fully intact (rather than deleting it) until the new version
+            is proven is worth the extra resource cost during promotion.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Retraining pipelines — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — How would you choose a retraining cadence for a given model?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start from how quickly the model's world actually changes and
+            how costly a stale prediction is, not from an arbitrary schedule. A
+            demand or delivery-time model exposed to strong seasonality needs a
+            tighter cadence or drift-based triggers, while a model whose
+            relationships are fairly stable might only need monthly retraining. I
+            would also weigh the cost of a bad promotion: for a low-stakes ranking
+            model, a fast, largely automated cadence gated by offline and shadow
+            checks is reasonable; for a lending or fraud model, I would favour a
+            slower cadence with mandatory human review, since the cost of
+            promoting a subtly worse model there is much higher than the cost of a
+            few extra days of staleness.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk me through how you would safely validate a retrained model before it fully replaces the current one">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would run it through staged gates rather than trusting any single
+            check. First, an offline quality gate comparing the challenger to the
+            champion on a fixed, recently-refreshed held-out test set. Second,
+            shadow deployment — running the challenger on live traffic in parallel
+            with zero user impact, to catch cases where production data has
+            drifted away from the test set. Third, a champion-challenger A/B test
+            that sends a small percentage of real traffic to the challenger and
+            requires a statistically significant improvement, not just a
+            favourable-looking average. Only after all three pass would I begin a
+            gradual traffic ramp with automated rollback triggers watching latency
+            and error metrics at every step.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — When should you not auto-retrain, even if your pipeline technically supports it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would avoid full automatic retrain-and-promote when the model is
+            high-stakes enough that a bad version reaching all traffic would be
+            costly or hard to reverse quickly — regulated domains like credit or
+            healthcare are the clearest examples. I would also hold off on
+            auto-retraining when the trigger itself is ambiguous, such as drift
+            that might just be a temporary seasonal blip rather than a genuine
+            permanent shift — retraining on a fluke can bake noise into the new
+            model. And I would not auto-retrain immediately after a major upstream
+            change, like a new feature pipeline or a business rule change, until a
+            human has confirmed the new data is actually correct, since a pipeline
+            bug upstream would otherwise get trained into the model silently.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is the difference between an offline quality gate and a shadow deployment gate, and why do you need both?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The offline gate compares the challenger to the champion on a fixed
+            held-out test set that never changes — fast, cheap, and a reasonable
+            first filter, but only as representative of production as that test
+            set currently is. The shadow deployment gate compares the two models
+            on live, current production traffic instead, catching cases where the
+            test set's distribution has quietly diverged from what the system is
+            actually seeing today. Relying only on the offline gate risks
+            promoting a model that looks great on old data and mediocre on
+            today's; relying only on shadow deployment means waiting longer and
+            spending more compute before catching an obviously bad candidate that
+            the cheap offline gate would have rejected immediately.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A retrained model looks better on every offline metric, but the team is nervous about promoting it. What questions would you ask?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, I would ask when the held-out test set was last refreshed —
+            metrics that look "too good" are a classic signal of a stale test set
+            or, worse, temporal leakage where the model saw information from after
+            the prediction point during training. Second, I would ask whether it
+            has been run through shadow deployment on live traffic yet, since an
+            offline win does not guarantee a live one. Third, I would ask what
+            actually changed between the two models — new features, more training
+            data, a different architecture — because "better on paper" for the
+            wrong reason (a subtle leak) looks identical to "better for the right
+            reason" until you dig into why the numbers moved.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

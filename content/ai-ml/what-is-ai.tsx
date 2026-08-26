@@ -44,6 +44,13 @@ const p: React.CSSProperties = {
   marginBottom: 16,
 }
 
+const ps: React.CSSProperties = {
+  fontSize: 13,
+  color: 'var(--muted)',
+  lineHeight: 1.8,
+  marginBottom: 10,
+}
+
 function Highlight({ children, color }: { children: React.ReactNode; color?: string }) {
   return (
     <div style={{
@@ -55,6 +62,28 @@ function Highlight({ children, color }: { children: React.ReactNode; color?: str
       margin: '20px 0',
     }}>
       <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{children}</p>
+    </div>
+  )
+}
+
+function ConceptBox({ title, children, color = '#7b61ff' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
     </div>
   )
 }
@@ -483,7 +512,197 @@ IF email contains "invoice" AND sender matches company_domain
         </div>
       </div>
 
-      {/* ── SECTION 9: Your path ───────────────────────────────────────────── */}
+      {/* ── SECTION 9: What this looks like at work ────────────────────────── */}
+      <div style={sec}>
+        <span style={tag}>What this looks like at work</span>
+        <h2 style={h2}>Choosing the right layer is a real design decision, made before a line of code is written</h2>
+        <p style={p}>
+          Nobody opens a laptop and asks &quot;should I use AI?&quot; A senior engineer or tech
+          lead is handed a problem, and the first real decision — usually written into a short
+          design doc before any modelling starts — is which layer of this hierarchy actually
+          fits. Reach too far up the stack (GenAI for something a five-line rule would solve) and
+          you have paid for latency, cost, and unpredictability you did not need. Reach too far
+          down (hard-coded rules for something that needs pattern recognition from millions of
+          examples) and the system will not scale.
+        </p>
+
+        <div style={{ overflowX: 'auto', margin: '20px 0' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead>
+              <tr>
+                {['If the problem looks like…', 'Reach for', 'Why'].map((h) => (
+                  <th key={h} style={{
+                    padding: '9px 12px', borderBottom: '1px solid var(--border)',
+                    color: 'var(--muted)', textAlign: 'left', fontWeight: 700, fontSize: 11,
+                    textTransform: 'uppercase' as const, letterSpacing: '0.06em',
+                    fontFamily: 'var(--font-mono)',
+                  }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['A small, fixed set of conditions that rarely change (tax brackets, eligibility cutoffs)', 'Rule-based logic', 'Rules are knowable, finite, and easy to audit — a model would be slower and harder to explain to a regulator'],
+                ['A structured table of numeric and categorical features, with a clear labelled outcome', 'Classical ML (XGBoost, etc.)', 'Trains in minutes on modest hardware, is far more interpretable, and usually matches or beats deep learning on tabular data'],
+                ['Raw pixels, audio, or free-form text where nobody can hand-write the relevant features', 'Deep Learning', 'The network needs to learn its own features — that is precisely the problem DL was built to solve'],
+                ['The output itself needs to be new content — a reply, an image, a summary — not a label', 'Generative AI', 'Only this layer is built to produce novel content rather than judge existing content'],
+              ].map((row, i) => (
+                <tr key={i} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
+                  {row.map((cell, j) => (
+                    <td key={j} style={{
+                      padding: '9px 12px', borderBottom: '1px solid var(--border)',
+                      color: j === 0 ? 'var(--text)' : 'var(--muted)',
+                      fontWeight: j === 1 ? 700 : 400,
+                    }}>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <Highlight color="#1D9E75">
+          <strong style={{ color: 'var(--text)' }}>What this looks like in a real Slack thread: </strong>
+          a PM posts &quot;can we auto-summarise every support ticket for the weekly review?&quot;
+          The engineer&apos;s first reply is rarely code — it is a clarifying question about the
+          four rows above: how many tickets, is a summary a fixed template or genuinely novel
+          text, and what happens if it is wrong 5% of the time. That one exchange decides which
+          layer of this page gets built, before anyone opens an editor.
+        </Highlight>
+      </div>
+
+      {/* ── SECTION 10: Misconceptions ──────────────────────────────────────── */}
+      <div style={sec} data-toc-kind="myth">
+        <span style={tag}>Misconceptions</span>
+        <h2 style={h2}>Five things people get wrong about AI, ML, DL, and GenAI</h2>
+
+        <ConceptBox title="Myth: AI is basically just a synonym for ChatGPT or GenAI" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            GenAI is the newest and narrowest layer of the hierarchy on this page, not a stand-in
+            for the whole field. The DoorDash-style delivery predictor, Stripe's fraud model, and
+            Amazon's recommendation engine are all AI systems in daily production use, and none of
+            them generate text or images. Popular media latched onto GenAI because it is the
+            layer people can literally talk to — but three of the four layers on this page were
+            doing real, valuable work for years before a chatbot ever shipped.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Deep learning is a strict upgrade over classical ML — always use the deeper option" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            The DL section on this page already flags the counter-example: for structured,
+            tabular data, algorithms like XGBoost and Random Forests routinely beat deep learning
+            while training faster and needing far less data. Deep learning earns its keep
+            specifically on unstructured data — images, audio, raw text — where nobody can
+            hand-engineer the relevant features. Reach for it based on the shape of the data, not
+            because it sounds more advanced.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If it is not a neural network, it does not really count as AI" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            The rule-based spam filter at the top of this page, a chess engine's evaluation
+            function, and the traffic-light logic mentioned in the callout are all legitimately AI
+            by the field's own definition — a system built to perform a task that normally needs
+            human intelligence. Neural networks are one route to that goal, an increasingly
+            dominant one, but the goal itself does not require them. Plenty of production systems
+            quietly running today are AI with zero learning in them at all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Because an LLM writes fluent, confident text, it understands what it is saying the way a person does" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            Mechanically, the model is predicting the next token given everything before it,
+            repeated billions of times — that is the entire operation, as this page states
+            directly. Coherent, confident-sounding text is what that prediction process produces
+            at scale; it is not evidence of a mental model of truth underneath. This is exactly
+            why LLMs can state something fluent and completely wrong with identical confidence to
+            something fluent and correct — the mechanism does not distinguish between the two.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Neural networks and deep learning are a recent invention that arrived alongside the GenAI boom" color="#ff4757">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            The timeline on this page traces backpropagation back to the 1980s, decades before
+            AlexNet or ChatGPT existed. What changed by 2012 was not the core idea — it was the
+            arrival of enough labelled data (ImageNet's 14 million images), enough parallel
+            compute (GPUs), and a handful of training tricks that finally let those decades-old
+            ideas scale. The concept is old. The ingredients that made it work arrived much later.
+          </p>
+        </ConceptBox>
+      </div>
+
+      {/* ── SECTION 11: Interview prep ──────────────────────────────────────── */}
+      <div style={sec} data-toc-kind="prep">
+        <span style={tag}>Interview prep</span>
+        <h2 style={h2}>What is AI — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What's the actual relationship between AI, ML, Deep Learning, and GenAI?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            They are nested, not four competing technologies: AI is the broad goal of building
+            systems that behave intelligently, by any method including hand-written rules. ML is
+            the specific approach of learning those rules from labelled data instead of writing
+            them by hand. Deep Learning is the subset of ML that uses many-layered neural
+            networks and can learn its own features directly from raw, unstructured data.
+            Generative AI is the subset of deep learning that creates new content rather than
+            judging existing content. Every GenAI model is a deep learning model; every deep
+            learning model is an ML model; not every AI system uses ML at all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Neural networks existed since the 1980s. Why did deep learning only take off around 2012?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            Three things had to arrive together, and none of them were purely algorithmic.
+            Datasets reached the necessary scale — ImageNet alone provided 14 million labelled
+            images, far beyond what earlier networks ever trained on. GPUs, originally built for
+            rendering video games, turned out to be well suited to the parallel matrix operations
+            neural networks need. And a handful of training tricks — ReLU activations, dropout,
+            batch normalisation — each solved a specific failure mode that had blocked networks
+            from training reliably at depth. AlexNet's 2012 ImageNet win is usually cited as the
+            moment all three converged.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Is a rule-based expert system 'AI'? Justify your answer.">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            Yes, by the field's own working definition: a system built to perform a task that
+            normally requires human intelligence, regardless of the technique used to build it.
+            Rule-based systems were the dominant approach to AI for decades before machine
+            learning existed, and plenty of production systems today — traffic light logic,
+            certain fraud rule engines, chess evaluation functions — still run this way. The
+            limitation isn't that rule-based systems are not 'real' AI; it is that they stop
+            scaling once the underlying rules become too complex, too numerous, or too
+            fast-changing for a person to hand-write and maintain.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What did the Transformer architecture change, and why did it unlock modern LLMs?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            Earlier sequence models processed text one token at a time in strict order, which
+            made training slow and made it hard to capture relationships between distant words in
+            a long passage. The 2017 'Attention Is All You Need' paper introduced an architecture
+            that processes an entire sequence in parallel, using an attention mechanism to let
+            every token directly weigh its relationship to every other token regardless of
+            distance. That parallelism is what made training on hundreds of billions of tokens
+            computationally feasible, and it became the foundation for every major LLM that
+            followed, including GPT and Claude.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A stakeholder says: 'Let's just use GenAI for everything, it's the most advanced.' How do you respond?">
+          <p style={{ ...ps, marginBottom: 0 }}>
+            I would separate 'most advanced' from 'most appropriate.' GenAI is the newest layer,
+            but it is also the most expensive per prediction, the hardest to make fully
+            predictable, and it solves a different kind of problem — producing new content — than
+            most business problems actually ask for. If the task is really a classification or a
+            number (will this transaction be fraudulent, how long will this delivery take), a
+            classical ML or deep learning model will be cheaper, faster, and easier to monitor and
+            debug. I would walk through the decision framework on this page with them before
+            committing to an architecture.
+          </p>
+        </ConceptBox>
+      </div>
+
+      {/* ── SECTION 12: Your path ───────────────────────────────────────────── */}
       <div style={{ ...sec, borderBottom: 'none', marginBottom: 0, paddingBottom: 0 }}>
         <span style={tag}>Your path</span>
         <h2 style={h2}>Which one should you learn?</h2>

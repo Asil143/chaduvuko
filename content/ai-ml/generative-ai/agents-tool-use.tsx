@@ -94,6 +94,28 @@ function AnalogyBox({ children }: { children: React.ReactNode }) {
 }
 
 
+function ConceptBox({ title, children, color = '#7b61ff' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: string }) {
   return (
     <div style={{
@@ -1065,7 +1087,255 @@ for k, v in metrics.report().items():
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Graduated autonomy — how production teams decide what an agent is allowed to do on its own</h2>
+
+        <p style={S.p}>
+          No serious engineering team ships an agent with full autonomy on day
+          one. The universal rollout pattern is a ladder: an agent earns more
+          autonomy as its track record on real traffic accumulates, and every
+          rung on the ladder is tied to how reversible the action is and how
+          expensive a mistake would be — not to how capable the underlying
+          model seems in a demo.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+          {[
+            {
+              level: 'Level 0 — Shadow mode',
+              color: '#888',
+              desc: 'Agent runs on real traffic but every action is logged, never executed. Engineers compare what it would have done against what a human actually did. Runs for weeks before anyone trusts the numbers.',
+            },
+            {
+              level: 'Level 1 — Read-only autonomy',
+              color: '#378ADD',
+              desc: 'Tools that only fetch data (get_transaction, search_knowledge_base) execute automatically. Nothing the agent does can change any system of record, so mistakes cost a wrong answer, not a wrong action.',
+            },
+            {
+              level: 'Level 2 — Reversible writes, confirmed irreversible actions',
+              color: '#BA7517',
+              desc: 'Low-risk writes (create_support_ticket) execute automatically. Anything irreversible (initiate_refund, send an email to a customer) still stops the loop and requires an explicit human confirmation before it runs.',
+            },
+            {
+              level: 'Level 3 — Bounded full autonomy',
+              color: '#1D9E75',
+              desc: 'Irreversible actions execute without a human in the loop, but only within a hard budget: a capped dollar amount per action, a capped number of actions per session, and a capped blast radius (for example, refunds under $50 only).',
+            },
+          ].map((item) => (
+            <div key={item.level} style={{
+              background: 'var(--surface)', border: `1px solid ${item.color}25`,
+              borderRadius: 7, padding: '10px 14px',
+              borderLeft: `3px solid ${item.color}`,
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)', marginBottom: 4 }}>
+                {item.level}
+              </div>
+              <p style={{ ...S.ps, marginBottom: 0 }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <p style={S.p}>
+          Stripe's dispute agent, Intercom's Fin, and GitHub's Copilot Workspace
+          all follow some version of this ladder publicly. The reason is not
+          caution for its own sake — it is that agent failures are usually not
+          dramatic, they are quiet and cumulative. A support agent that
+          occasionally sends a slightly-too-generous refund does not trigger an
+          outage page; it shows up three weeks later as a line item in a
+          finance review. The ladder exists to catch that kind of failure while
+          it is still cheap.
+        </p>
+
+        <CodeBlock code={`# ── Autonomy gate — the actual code that enforces the ladder ───────────
+from dataclasses import dataclass
+
+@dataclass
+class AutonomyBudget:
+    """Enforced per session, independent of what the LLM 'decides' to do."""
+    max_actions_per_session:    int   = 8
+    max_irreversible_per_session: int = 1
+    max_dollar_value_per_action: float = 50.0
+    autonomy_level:              int   = 2   # see ladder above
+
+def gate_irreversible_action(tool_name: str, args: dict,
+                              budget: AutonomyBudget,
+                              session_state: dict) -> tuple[bool, str]:
+    """Returns (allowed, reason). Runs BEFORE any irreversible tool call."""
+    if budget.autonomy_level < 3:
+        return False, 'requires_human_confirmation'
+
+    if session_state['irreversible_count'] >= budget.max_irreversible_per_session:
+        return False, 'irreversible_budget_exhausted'
+
+    amount = args.get('amount', 0)
+    if amount > budget.max_dollar_value_per_action:
+        return False, f'exceeds_per_action_limit(\${budget.max_dollar_value_per_action})'
+
+    return True, 'within_budget'
+
+# On-call reality: what actually gets paged when this fails
+# Slack alert your on-call rotation will see at 2am if the gate is missing:
+#
+#   [PagerDuty] agent-fraud-review: 47 refunds initiated in 6 minutes
+#   by session sess_8f2a — total exposure $12,400 — investigate before
+#   the next batch job runs.
+#
+# The gate above is the difference between that page happening or not.`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about agents and tool use</h2>
+
+        <ConceptBox title="Myth: An 'agent' is fundamentally different technology from function calling" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Mechanically, an agent is the same structured tool-calling API this module opened with,
+            called repeatedly inside a loop that feeds each tool's result back in as context for the
+            next decision. Nothing about the underlying model changes between 'a chatbot that calls
+            one function' and 'an agent that resolves an eight-step dispute.' What actually
+            distinguishes a production agent is the engineering wrapped around that loop — state
+            tracking across turns, loop detection, retry logic, confirmation gates, and budget
+            enforcement. Calling it a different kind of AI obscures the fact that the reliability
+            work is ordinary software engineering, not a smarter model.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: More autonomy makes an agent strictly more useful" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Autonomy and reliability trade against each other, they do not both increase together. An
+            agent that can act without any confirmation gate resolves simple cases faster, but it
+            also executes its mistakes just as fast — an incorrect refund amount or a wrongly closed
+            ticket happens instantly instead of being caught by a human glancing at a proposed action
+            first. The right amount of autonomy is not the maximum available; it is whatever amount
+            matches how reversible the action is and how expensive a mistake would be. A ticket
+            creation and a wire transfer do not deserve the same autonomy level even if the same
+            model is choosing both.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: An agent that writes out 'Thought: ... Action: ...' step by step is actually reasoning the way a human would" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The ReAct-style thought text is still next-token generation, conditioned to look like
+            reasoning because that format was reinforced during training — it is not a guarantee the
+            underlying decision process is logically sound, only that the output resembles a chain of
+            reasoning. A model can produce a perfectly coherent-sounding 'Thought:' that leads to
+            calling the wrong tool, and it can arrive at a correct action with a thought paragraph
+            that does not actually justify it. The reliability of a production agent comes from
+            validating outcomes and gating risky actions in code, not from trusting that fluent
+            intermediate reasoning implies a correct final decision.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Hashing tool calls and capping max_calls fully solves the infinite-loop risk" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Identical-call loop detection, shown earlier in this module, only catches the exact same
+            (tool, arguments) pair repeating — it does nothing about a semantic loop, where the agent
+            cycles through slightly different but equally unproductive calls (searching the knowledge
+            base with five different phrasings of the same question, for instance). A hard max_calls
+            ceiling stops the runaway cost eventually, but by then the session has already burned
+            through its full budget without making progress. Real loop protection needs a second
+            signal beyond exact-match hashing: is the agent's state actually changing between calls,
+            or is it just varying its inputs while making zero forward progress on the task.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Giving an agent more tools makes it strictly more capable" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Tool selection accuracy degrades as the number of available tools grows, especially when
+            several tools have overlapping or ambiguous descriptions — the model has to pick correctly
+            from a longer, more confusing menu on every single turn, and each wrong pick either wastes
+            a call or produces a wrong answer. A twenty-tool agent is not automatically more capable
+            than a six-tool agent covering the same use case; it is often less reliable, because the
+            LLM's tool-selection step is itself a classification problem that gets harder as the
+            number of plausible-looking options increases. Curating a small, clearly-distinguished
+            tool set usually beats exposing everything the backend can technically do.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Agents and tool use — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain the ReAct pattern and how it differs from a single function-calling turn">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            ReAct interleaves reasoning and acting in a loop: the model generates a short thought
+            about what it needs to find out, takes an action (a tool call), observes the result, and
+            repeats until it has enough information to answer. A single function-calling turn is just
+            one iteration of that loop — the model decides once whether to call a tool, gets a result,
+            and answers. ReAct is what turns that one-shot capability into something that can handle a
+            multi-step task: look something up, decide the next step based on what it learned, look up
+            something else, and only answer once the accumulated observations actually support a
+            conclusion.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — How do you bound the cost and autonomy of an agent running in production?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Several layers, enforced in code rather than left to the model's judgment: a hard cap on
+            tool calls per session so a stuck agent cannot loop indefinitely, a classification of every
+            tool as reversible or irreversible with irreversible actions gated behind explicit human
+            confirmation, a per-action and per-session dollar or resource budget for anything that
+            spends money or changes state, and rate limiting on both the LLM calls and the downstream
+            tools it invokes. None of these live inside the prompt — a prompt instruction like 'do not
+            call this more than 3 times' is a suggestion the model can ignore under the wrong
+            conditions; the budget has to be enforced by the code executing the tool calls.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How would you evaluate whether an agent is reliable enough to ship?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Start with an offline evaluation set built from real production-style queries, not
+            synthetic ones, scored on task success rate, not just whether it produced an answer. Track
+            secondary signals: how many turns it took to resolve, how often it escalated to a human
+            ticket instead of resolving, and how often loop detection or a confirmation gate fired.
+            Before full rollout, run it in shadow mode against live traffic so its proposed actions can
+            be compared to what a human actually did, without it executing anything. Once live, sample
+            a percentage of real sessions for human review every week, and treat any case where a
+            confirmation gate blocked a mistaken irreversible action as a near-miss worth analysing,
+            not just a system working as intended.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Design a confirmation gate for an irreversible action like a refund. What does it actually need to do?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It needs to stop the agent loop entirely before the tool executes, surface the exact
+            parameters of the planned action to the user in plain language — the transaction, the
+            amount, the reason — and require an explicit confirming response in the next human turn,
+            not an inference from the LLM about whether the user seemed to agree. Critically, the
+            enforcement has to live in the code path that executes the tool, checking a boolean that
+            was only set by a genuine human turn, not inside the prompt asking the model to 'confirm
+            before acting' — a model can be talked out of that instruction by an adversarial or
+            just oddly-phrased user message, but a code-level gate cannot be talked out of anything.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A stakeholder asks why the agent took a specific action last week. How do you answer that?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is only answerable if every tool call was logged with its inputs, its result, the
+            reasoning turn that preceded it, and a session identifier — which is why comprehensive
+            logging is treated as a first-class production requirement, not optional observability.
+            I would pull the full message history and tool call log for that session, reconstruct the
+            sequence of decisions, and check whether any gate (loop detection, confirmation, budget)
+            fired along the way. If the logs show the action was reasonable given what the agent knew
+            at the time, the fix is usually a tool description or system prompt change; if the logs
+            show a gate should have caught it and did not, that is a code bug in the scaffolding, not a
+            model problem.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>Section 10 complete</span>
         <h2 style={S.h2}>

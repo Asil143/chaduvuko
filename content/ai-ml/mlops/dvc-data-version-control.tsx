@@ -871,7 +871,256 @@ for cmd, desc in cmd_ref:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — AT WORK ════════════════════════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>How data versioning actually plays out on an ML team</h2>
+
+        <p style={S.p}>
+          In practice, DVC rarely versions the raw firehose of events. At a company
+          like DoorDash or Stripe, raw orders, transactions, and clickstream events
+          live in a warehouse (Snowflake, BigQuery, Redshift) that already has its
+          own retention and query history. What actually goes through DVC is the
+          extracted, feature-engineered training snapshot — the parquet file a data
+          engineer produces by querying the warehouse as of a specific date, that a
+          training job then reads directly. That snapshot is the artifact whose
+          exact bytes need to be reproducible, auditable, and tied to a Git commit —
+          which is precisely the problem DVC is built to solve.
+        </p>
+
+        <p style={S.p}>
+          The day-to-day workflow splits across roles. A data or ML engineer owns
+          the extraction script and runs dvc add after it produces a new snapshot.
+          Code reviewers on the pull request look at the diff of the .dvc file
+          itself — a changed MD5 hash and a changed row count are usually the only
+          signal a reviewer needs to ask why the data changed, and whether it was
+          intentional. CI does not re-download every historical dataset version on
+          every PR; it runs dvc pull to fetch only the version pinned by that
+          branch's commit, then dvc repro to confirm the pipeline still produces
+          the same metrics on that exact data.
+        </p>
+
+        <VisualBox label="Who touches what during a typical data update">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              {
+                role: 'Data / ML engineer',
+                color: '#378ADD',
+                does: 'Runs the extraction job, dvc add on the new snapshot, writes the commit message explaining what changed in the data and why.',
+              },
+              {
+                role: 'PR reviewer',
+                color: '#7b61ff',
+                does: 'Reviews the .dvc pointer diff (hash, size) and the pipeline code — rarely inspects the raw data itself, but questions any unexplained hash change.',
+              },
+              {
+                role: 'CI pipeline',
+                color: '#1D9E75',
+                does: 'Runs dvc pull to fetch the exact pinned data version, then dvc repro, then asserts metrics against a threshold before allowing merge.',
+              },
+              {
+                role: 'On-call / incident responder',
+                color: '#D85A30',
+                does: 'During a postmortem, uses the model version to look up the Git commit, then the .dvc hash, to answer what data trained the model that made this prediction.',
+              },
+            ].map((item) => (
+              <div key={item.role} style={{
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 7, padding: '10px 12px',
+                borderLeft: `3px solid ${item.color}`,
+                display: 'grid', gridTemplateColumns: '200px 1fr', gap: 12,
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: item.color }}>{item.role}</div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.does}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <CodeBlock code={`# ── Lineage lookup used during an incident postmortem ─────────────────
+# "A bad prediction went out last Tuesday. What data trained that model?"
+
+# 1. Find which model version was serving in production at that time
+#    (from the model registry / deployment log)
+MODEL_VERSION="v2.3.1"
+
+# 2. Find the Git commit that built that model version
+git log --all --grep="model: build v2.3.1" --format="%H %s"
+# → a1b2c3d  "model: build v2.3.1 — train_mae=4.21"
+
+# 3. Check out that commit and inspect the .dvc pointer for the training data
+git checkout a1b2c3d -- data/processed/train.parquet.dvc
+cat data/processed/train.parquet.dvc
+# outs:
+# - md5: 9f8e7d6c5b4a...
+#   size: 184320112
+#   path: train.parquet
+
+# 4. Pull that exact data version to inspect it locally
+dvc pull data/processed/train.parquet
+# Now you have the EXACT bytes that trained the model in production —
+# not "roughly the data from that week," the literal file.
+
+# 5. Confirm which raw source rows fed the snapshot (params.yaml, dvc.lock)
+dvc dag --outs      # shows: raw.csv → prepare_data → train.parquet → model.pkl
+cat dvc.lock         # shows exact hash of raw.csv used to build train.parquet
+
+# Answer: "The model was trained on train.parquet (hash 9f8e7d6c...),
+# built from raw.csv (hash 3a2b1c0d...) with a cutoff_date of 2026-03-01."`} label="bash" />
+
+        <p style={S.p}>
+          This is the entire point of the setup: a postmortem question that would
+          otherwise be answered with "we think it was probably the March data,
+          roughly" becomes a five-command lookup with an exact answer. Teams that
+          skip this — relying on shared drives and file naming conventions like
+          data_v3_final — cannot answer this question at all once enough time has
+          passed and enough people have touched the folder.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about data version control</h2>
+
+        <ConceptBox title="Myth: zipping the data folder and dropping it in a shared drive is version control" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A zip file with a date in its name records that a version existed, but not what changed
+            between versions, which code commit used it, or how to get back to it programmatically.
+            DVC's pointer file ties a specific data hash to a specific Git commit automatically —
+            checking out an old commit and running dvc checkout restores the exact matching data
+            without anyone needing to remember which zip file went with which experiment. The zip
+            folder approach also duplicates the full dataset for every version; DVC's content-addressable
+            cache stores each unique chunk of data once, no matter how many versions reference it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Git LFS is basically the same thing as DVC for ML datasets" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Both move large files out of the Git object database, but that is where the similarity
+            ends. Git LFS still requires a Git remote that understands LFS pointers and has no concept
+            of a data pipeline — it cannot express "rerun this stage only if this specific dependency
+            changed." DVC adds pipeline stages (dvc.yaml), parameter tracking, metrics tracked across
+            commits, and an experiment-comparison layer (dvc exp show) on top of the same
+            content-addressable storage idea. Choosing Git LFS over DVC for an ML project usually
+            means rebuilding all of that tooling yourself later, badly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: data versioning is optional if you already have backups or snapshots" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A backup answers whether you can recover this file if it is deleted. It does not answer
+            which version of this file trained the model that is in production right now, because
+            backups are not linked to the code commit or model artifact that consumed them. Versioning
+            is a linkage problem, not a durability problem — you can have perfect nightly backups of
+            every dataset that ever existed and still have no way to say which one a given model saw.
+            DVC solves the linkage: the .dvc pointer committed alongside the training code is the
+            permanent record of exactly which snapshot produced exactly which model.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: DVC is a replacement for a data warehouse or feature store" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            DVC versions files, not queryable tables — it has no notion of point-in-time correctness,
+            no SQL interface, and no low-latency lookups for online serving. A feature store (Module
+            69) solves a different problem: serving consistent, point-in-time-correct feature values
+            to both training and real-time inference. In practice the two work together — the feature
+            store produces a training snapshot, and DVC versions that snapshot as a file so it can be
+            reproduced later. Neither tool replaces the other.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: once data is tracked in DVC, the pipeline is automatically reproducible" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            DVC guarantees that the same input files are available for a given commit — it does not
+            guarantee the code that processes them is deterministic. A training script with an
+            unseeded random split, a model that depends on library versions not pinned in
+            requirements.txt, or a feature computation that calls an external API for live values
+            will still produce different results on rerun even with byte-identical data. DVC removes
+            one major source of irreproducibility; seeding randomness and pinning dependencies remove
+            the others, and all three are required together.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>DVC and data versioning — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why does data versioning actually matter for reproducibility?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A model is a function of three things: the code that trained it, the hyperparameters, and
+            the data. Git already versions the first two. Without versioning the data too, reproducing
+            an experiment from six months ago is impossible even with the exact code and params
+            checked out, because the underlying dataset has likely been overwritten, appended to, or
+            regenerated since. Data versioning closes that gap: given a Git commit, you can recover
+            the exact data that commit was trained and evaluated against, which is what makes a past
+            result auditable, debuggable, and legally defensible in regulated domains like lending
+            or healthcare.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What's the actual difference between DVC and Git LFS?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Git LFS solves storage — it keeps large binary files out of the Git object database while
+            still tracking them with Git-like commands. DVC solves storage the same way, using its own
+            remote rather than a Git-LFS-aware host, but it also adds a pipeline layer on top: stages
+            with explicit dependencies and outputs (dvc.yaml), a lockfile that lets dvc repro skip
+            unchanged stages, tracked metrics and parameters comparable across commits, and a
+            lightweight experiment-tracking mode (dvc exp) that runs variations without creating a Git
+            commit for each one. Git LFS is a storage backend; DVC is a storage backend plus an ML
+            workflow tool built on top of it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How would you tie a deployed model back to the exact data it was trained on?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every model artifact should be tagged with the Git commit hash that produced it, ideally
+            embedded directly in the model file or its accompanying metadata. From that commit, git
+            show or git checkout on the .dvc pointer file reveals the MD5 hash and size of every
+            dataset used to build it, and dvc pull retrieves the exact matching bytes from remote
+            storage. In practice I would automate this into a model registry: every model version
+            record stores its Git commit, and a single lookup — commit to .dvc hash to dvc pull —
+            recovers the training data in a couple of commands, which is invaluable during an incident
+            when someone needs to know exactly what a model saw.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How does DVC avoid duplicating storage across many similar dataset versions?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            DVC uses content-addressable storage: every file is stored in the cache under a path
+            derived from its MD5 hash, not its filename. If a new dataset version changes 5 percent of
+            rows and DVC tracks it as a single file, the whole file gets a new hash and is stored in
+            full — DVC does not do byte-level diffing within a file. The real savings come from
+            identical files being stored exactly once: if two branches or two experiments happen to
+            produce byte-identical outputs, or if a file reverts to a previous exact state, DVC
+            recognizes the matching hash and reuses the existing cached copy instead of storing it
+            again.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A teammate committed a 2GB CSV directly to Git instead of using DVC. What do you do?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, stop it from getting worse — do not let that commit get merged or pushed further if
+            it can still be avoided, since a large binary blob committed to Git history is expensive to
+            remove later and bloats every future clone. If it has already been pushed, the fix is to
+            run dvc add on the file to move it into DVC-managed storage, commit the resulting small
+            .dvc pointer in place of the raw file, and then rewrite history to strip the large blob
+            from earlier commits using something like git filter-repo, coordinating with the team
+            since that rewrites shared history. Long term, I would add a pre-commit hook or CI check
+            that rejects commits containing files above a size threshold that are not tracked by DVC.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

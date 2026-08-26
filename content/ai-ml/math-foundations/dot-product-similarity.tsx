@@ -1065,7 +1065,148 @@ print("  Step 4: return top-k most similar products")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ═════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about dot product and similarity</h2>
+
+        <ConceptBox title="Myth: Cosine similarity and the dot product are basically interchangeable" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They agree in exactly one case: when both vectors are already unit length (norm equal to 1).
+            Many embedding APIs — sentence-transformers, OpenAI's embedding endpoint, most production
+            recommendation systems — deliberately output unit-normalised vectors precisely so that a raw
+            dot product doubles as cosine similarity, skipping the division step entirely. But that is a
+            deliberate design choice made by the model, not a mathematical law. Feed the dot product two
+            un-normalised vectors — raw term-frequency counts, unscaled user activity vectors — and it
+            reverts to being dominated by magnitude, exactly the active-vs-casual-user problem covered
+            earlier in this module.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A high similarity score means the two things actually mean the same thing" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Similarity is a proxy for meaning, not a guarantee of it. Two sentences can land close together
+            in embedding space because they share sentence structure, length, domain vocabulary, or
+            formatting — not because they agree in meaning. 'I love this product' and 'I hate this product'
+            can score surprisingly close in some embedding spaces because both are short first-person
+            opinion statements about a product, and the model was never specifically trained to separate
+            them along the sentiment axis. Treat a similarity threshold as something to validate against
+            real examples for your specific model and domain, never as a universal cutoff.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: You should always normalise vectors before comparing them" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Normalising is a deliberate choice to discard magnitude, and sometimes magnitude is exactly the
+            signal you need. A document's raw term-frequency vector encodes how strongly it discusses a
+            topic — a document mentioning 'kubernetes' forty times is plausibly more about Kubernetes than
+            one mentioning it twice, even though cosine similarity would treat both the same after
+            normalising away the count. Anywhere magnitude carries real information — activity level,
+            confidence, intensity, raw counts — normalising before comparing throws that information away
+            on purpose. Decide based on what magnitude means in your feature space, not by default habit.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Geometric intuition from two or three dimensions carries over cleanly to a 768-dimensional embedding space" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            In high dimensions, random vectors behave counterintuitively: pick two random directions in a
+            space with hundreds of dimensions and their angle concentrates very close to ninety degrees —
+            almost everything looks almost equally unrelated to everything else. This is the curse of
+            dimensionality showing up in similarity search. Learned embeddings are not random — training
+            pulls semantically related items together and pushes unrelated ones apart, which is what makes
+            similarity search work at all — but the margin between 'related' and 'unrelated' scores is
+            usually much smaller than two or three-dimensional intuition would suggest, which is exactly why
+            production systems validate similarity thresholds empirically instead of guessing.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Similarity search stays fast no matter how many vectors you are comparing against" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A single dot product is cheap — the cost problem is doing it against every stored vector.
+            Brute-force search compares a query against all n stored embeddings, at a cost that grows
+            directly with both n and the embedding dimension. That is fine at thousands of vectors and
+            becomes untenable at hundreds of millions. Real vector databases (FAISS, Pinecone, Milvus) do
+            not make the dot product itself faster — they build approximate nearest neighbour indexes
+            (HNSW graphs, inverted-file plus product quantisation) that skip comparing against most of the
+            vectors entirely, trading a small amount of recall for orders-of-magnitude faster lookups.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Dot product and similarity — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — When would you use cosine similarity instead of Euclidean distance, and why?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Cosine similarity when only direction should matter and magnitude is noise — text embeddings,
+            recommendation profiles, anywhere two items with the same 'shape' of preferences should count
+            as similar regardless of scale. Euclidean distance when actual spatial closeness is the thing
+            you care about — K-Means and KNN on properly scaled features, physical measurements. One useful
+            detail worth mentioning unprompted: if every vector is already unit-normalised, cosine
+            similarity, the raw dot product, and squared Euclidean distance all produce the exact same
+            ranking of nearest neighbours — they are monotonic transforms of each other in that special
+            case, which is part of why so many embedding models normalise their output by default.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What does the dot product actually measure, geometrically?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            a times b equals the length of a, times the length of b, times the cosine of the angle between
+            them. Multiplying matching components and summing them is just the computational recipe for
+            that same geometric quantity — you never have to compute an angle directly to get the effect of
+            comparing directions. That is why the dot product of two vectors pointing the same way is large
+            and positive, two perpendicular vectors give zero, and two opposite vectors give a large
+            negative number — the formula is silently encoding the cosine of the angle the whole time.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why do so many embedding models output unit-normalised vectors by default?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Normalising at generation time means downstream consumers can use a plain dot product and get
+            cosine similarity for free, skipping the extra division at query time — which matters when
+            you're running that comparison across millions of stored vectors per query. It also unlocks
+            faster index structures built specifically for inner-product search, like FAISS's
+            IndexFlatIP or IVF variants tuned for dot product, rather than needing a more general distance
+            metric at search time. The normalisation cost is paid once, at write time, instead of on every
+            single query.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you implement nearest-neighbour search over a billion embeddings in production?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Brute-force comparison against every stored vector does not scale to that size — the cost grows
+            with both the number of vectors and their dimension, and a billion of them makes that
+            prohibitive per query. In practice you reach for an approximate nearest neighbour index:
+            an HNSW graph that lets you navigate toward close neighbours without visiting most of the
+            dataset, or an inverted-file index combined with product quantisation (the FAISS IVF-PQ
+            approach) that clusters vectors and compresses them to shrink both memory and search time.
+            Both trade a small, tunable amount of recall for a large improvement in latency — the right
+            tradeoff depends on how much a missed near-neighbour actually costs the product.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Two product descriptions score 0.95 cosine similarity, but a human reviewer says they are unrelated. What happened?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A few likely culprits. First, embedding spaces are often anisotropic — embeddings cluster inside
+            a narrow cone of the full space rather than spreading out evenly, which inflates the baseline
+            similarity between almost any two items from that model, so 0.95 might not be nearly as extreme
+            relative to that model's typical score distribution as it looks in isolation. Second, the model
+            may be keying off surface features it was trained to encode strongly — shared formatting,
+            domain jargon, sentence length — rather than the semantic content a human reader cares about.
+            The fix in both cases is the same: look at the distribution of similarity scores for your
+            specific model and domain and calibrate a threshold against labelled examples, instead of
+            trusting a raw absolute cosine value.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ═════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

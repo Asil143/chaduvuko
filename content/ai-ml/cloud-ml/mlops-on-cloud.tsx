@@ -1135,7 +1135,213 @@ if __name__ == '__main__':
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>A real MLOps stack is assembled, not bought — managed services glued together with custom orchestration</h2>
+
+        <p style={S.p}>
+          Cloud vendors sell MLOps as a single coherent product — SageMaker, Vertex AI, Azure ML —
+          each with a pipelines feature, a model registry, an endpoint service, and a monitoring
+          dashboard. In practice almost no team runs the vendor's full stack end to end. A typical
+          production setup at a mid-size company pulls training compute from one vendor service,
+          orchestration from a separate tool the data team already runs, CI/CD from GitHub Actions
+          because that is what the rest of engineering uses, and monitoring from Datadog or Grafana
+          because the on-call rotation already lives there. MLOps in practice is integration work
+          across tools that were never designed to talk to each other, held together by scripts like
+          the ones in this module.
+        </p>
+
+        <p style={S.p}>
+          The reason this happens is organisational, not technical. The data engineering team
+          standardised on Airflow years before the ML team existed, and migrating hundreds of
+          existing DAGs to a vendor's pipeline format is not worth it just so three ML pipelines fit
+          one ecosystem. The security team mandates a specific secrets manager and audit log format
+          that the cloud vendor's native tooling does not speak natively. The on-call rotation
+          already pages through PagerDuty. Every one of these constraints pulls the real stack away
+          from "one platform does everything" and toward "one platform trains the model, everything
+          else is glue code."
+        </p>
+
+        <VisualBox label="A typical assembled MLOps stack — one layer per row, rarely one vendor per row">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { layer: 'Orchestration / scheduling', color: '#378ADD', typical: 'Airflow, Dagster, or GitHub Actions cron — chosen for what the data team already runs, not what the cloud ML platform ships' },
+              { layer: 'Training compute', color: '#7b61ff', typical: 'SageMaker Training Jobs, Azure ML compute clusters, or Vertex custom jobs — this layer usually IS the vendor service, since reinventing distributed training infrastructure rarely pays off' },
+              { layer: 'Model registry', color: '#1D9E75', typical: 'Vendor registry (MLflow, SageMaker Model Registry) when the team is single-cloud; a thin custom wrapper when multi-cloud or when audit requirements exceed what the vendor exposes' },
+              { layer: 'CI/CD', color: '#D85A30', typical: 'GitHub Actions or GitLab CI almost universally — teams rarely adopt a separate ML-specific CI tool just because the workload is ML' },
+              { layer: 'Serving / endpoints', color: '#BA7517', typical: 'Vendor managed endpoints for simple cases; a custom FastAPI service behind the existing API gateway when latency, batching, or multi-model routing needs do not fit the vendor shape' },
+              { layer: 'Monitoring / drift', color: '#ff4757', typical: 'Datadog, Grafana, or a custom drift job reading from the existing metrics pipeline — rarely the vendor dashboard alone, because on-call already lives elsewhere' },
+            ].map((item) => (
+              <div key={item.layer} style={{
+                display: 'grid', gridTemplateColumns: '220px 1fr', gap: 14,
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 7, padding: '10px 14px', borderLeft: `3px solid ${item.color}`,
+              }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)' }}>
+                  {item.layer}
+                </span>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.typical}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          The practical skill this teaches is not "learn SageMaker" or "learn Vertex" — it is
+          learning to write the adapter layer this module's cloud_adapter.py demonstrates, so the
+          orchestration, CI, and monitoring choices your organisation already made can sit on top of
+          whichever vendor training service you use underneath, and so a change in cloud vendor is a
+          swapped adapter, not a rewritten pipeline.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about MLOps on the cloud</h2>
+
+        <ConceptBox title="Myth: A single cloud ML platform is a complete MLOps solution once you turn it on" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            SageMaker, Vertex AI, and Azure ML each cover training, a registry, and deployment — the
+            pieces vendors demo. What they rarely cover well is the orchestration that already runs
+            your organisation's other data pipelines, the CI system the rest of engineering uses, the
+            incident-response tooling on-call already lives in, and the specific audit or secrets
+            requirements security already mandated. Real stacks end up using the vendor platform for
+            the piece it is genuinely good at — usually training compute and the registry — and
+            gluing everything else on top with the organisation's existing tools, exactly the pattern
+            the CloudMLAdapter interface in this module is built to support.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: MLOps is a tool you buy, not a set of practices your team builds" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Buying a platform gets you compute, a registry API, and a dashboard — none of which, by
+            themselves, decide what quality gate a challenger model must clear, how much traffic
+            shifts to it on day one, or who gets paged when the gate fails. Those decisions are
+            organisational practice, encoded as the specific tolerance values, promotion rules, and
+            rollback thresholds in this module's CI workflows. Two teams running the identical
+            SageMaker setup can have completely different MLOps maturity depending on whether those
+            practices exist, are enforced automatically, and are actually followed under deadline
+            pressure.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Running training on two clouds automatically buys you more reliability, with no real downside" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Multi-cloud MLOps trades one risk for several others: every pipeline script now needs an
+            adapter per platform (as cloud_adapter.py shows), every engineer needs at least working
+            familiarity with two sets of IAM, networking, and quota systems, and every incident now
+            has two places to check instead of one. It can be the right call when a single vendor's
+            outage history, pricing, or GPU availability genuinely threatens the business — but that
+            is a deliberate tradeoff against real added operational complexity, not a free upgrade to
+            reliability.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once a pipeline auto-promotes a model that passes its quality gate, no human needs to look at it again" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The four-stage pipeline in this module gates on metrics it was told to check — MAE within
+            tolerance, p99 latency, error rate. It cannot catch a challenger that is numerically better
+            but has learned a new, unintended bias, or one trained on a data window that quietly
+            excluded a whole customer segment. That is exactly why production-promote in this module's
+            workflow example runs against a GitHub environment that can require manual approval —
+            automating the mechanical checks frees humans to spend their attention on the judgment
+            calls the pipeline cannot make, it does not remove the need for that judgment.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: MLOps tooling is mainly about the deployment step — data and feature pipelines are a separate concern" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The retraining workflow in this module triggers on a schedule or a drift alert precisely
+            because the data feeding the model changes continuously, and a deployment-only view of
+            MLOps would have no mechanism to notice that. In practice, the data collection and
+            cleaning pipelines from earlier modules are just as much a part of the MLOps surface as
+            the CI/CD workflow — a schema change upstream or a silent drop in feature freshness breaks
+            the model just as thoroughly as a bad deployment, and neither shows up if monitoring only
+            watches the serving endpoint.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>MLOps on cloud — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — How do you decide what to build in-house versus use a managed service for, in an MLOps stack?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I default to the managed service for anything that is genuinely hard infrastructure with
+            no product-specific value in owning it — distributed training compute, GPU scheduling,
+            managed endpoints for simple serving. I build in-house, or adapt an existing internal
+            tool, for anything that encodes organisation-specific practice: promotion rules, quality
+            gates, alerting thresholds, and the orchestration that ties training to the rest of the
+            data platform. The dividing line is roughly: undifferentiated heavy lifting goes to the
+            vendor, decisions that reflect how this specific team wants to operate stay in code the
+            team owns.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What are the real tradeoffs of committing to a single cloud vendor's ML platform?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The upside is real: one IAM model, one billing relationship, native integration between
+            training, registry, and serving, and less adapter code to maintain. The cost is lock-in —
+            migrating off SageMaker-specific pipeline definitions or Vertex-specific feature store
+            APIs later is expensive, pricing negotiating leverage drops once switching is painful, and
+            a regional outage on that vendor takes down the entire ML stack with no fallback. I would
+            frame the decision around how much the organisation's other infrastructure is already
+            committed to that cloud — going single-vendor on ML while everything else is multi-cloud
+            is a different risk profile than going all-in on one vendor everywhere.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — You're advising a 3-person ML team with a tight budget. What's the minimal viable MLOps stack?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would resist standing up a full four-stage pipeline on day one. Minimal viable looks
+            like: training jobs submitted through whichever cloud SDK is cheapest for the team's
+            compute needs, a single GitHub Actions workflow that runs unit tests and a smoke test on
+            every PR, model versions tracked in something as simple as MLflow or even a naming
+            convention in cloud storage, and one manual approval step before anything reaches
+            production. The full automated four-stage pipeline in this module is worth building once
+            retraining happens often enough that manual promotion is the actual bottleneck — not
+            before.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What's the biggest operational risk in a pipeline that auto-promotes models to production, and how do you mitigate it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The biggest risk is a challenger that passes every automated metric gate but is wrong in a
+            way the gates were never told to check for — a subtle new bias, a data window that
+            silently dropped a segment, a metric that looks better only because the evaluation set
+            itself drifted. I mitigate this with gradual traffic promotion instead of an instant
+            switch (10 percent, then 50, then 100, as this module's production-promote stage does),
+            automatic rollback on any latency or error regression, and a required manual approval gate
+            on the production environment so a human reviews the comparison numbers before the last
+            step, even though every earlier step is fully automated.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you decide between a managed pipeline orchestrator, like SageMaker Pipelines, and something like Airflow?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would look at what already runs the rest of the company's data workflows. If Airflow
+            already orchestrates the data warehouse loads and feature pipelines, adding ML training as
+            another set of Airflow DAGs keeps one orchestration system, one on-call rotation, and one
+            place to see the whole data lineage — worth more than the tighter native integration a
+            vendor's own orchestrator offers. I would lean toward the vendor's managed orchestrator
+            only for a team with no existing orchestration investment, where the tighter coupling to
+            that one cloud's training and registry APIs is a net simplification rather than one more
+            system to learn.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>Section 12 and the full track — complete</span>
         <h2 style={S.h2}>

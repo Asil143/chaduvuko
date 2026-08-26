@@ -971,7 +971,285 @@ def check_photo_quality(image_path, model, processor) -> dict:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Two-stage retrieval — how multimodal systems actually get built in production</h2>
+
+        <p style={S.p}>
+          Almost nobody puts a single multimodal model in front of every request.
+          CLIP-style embeddings are cheap — a few milliseconds per image, a
+          fraction of a cent per million comparisons — but they can only score
+          similarity, not reason. LLaVA, GPT-4o Vision, and Gemini Vision can
+          reason about an image in detail, but each call costs real money and
+          multiple seconds of latency. Production systems combine both:
+          a fast embedding model narrows millions of candidates down to a
+          handful, and a slower reasoning model is only invoked on that
+          narrowed set, where its cost is easy to justify.
+        </p>
+
+        <p style={S.p}>
+          Pinterest's visual search, Google Lens, and Shopify's product
+          discovery all run this way: a CLIP-family encoder embeds every
+          catalogue image once, offline, into a vector index (usually FAISS
+          or a managed vector database). A user's photo or text query gets
+          embedded at request time and matched against the index in single-digit
+          milliseconds, even across tens of millions of items. Nothing
+          generative touches the hot path — generation is reserved for cases
+          that genuinely need it.
+        </p>
+
+        <p style={S.p}>
+          Insurance claims processing is a clean example of where the
+          second stage earns its cost. A claims team photographs thousands of
+          vehicle damage submissions daily. A CLIP-style classifier does the
+          first pass — bumper scratch, cracked windshield, total loss, fraud
+          flag — for a fraction of a cent per image. Only the claims that land
+          in the ambiguous or high-value buckets get escalated to a VLM that
+          writes an actual adjuster-style report: what is damaged, how severely,
+          whether the described accident story matches what the photo shows.
+          Running the expensive model on every submission would be
+          both slower and unnecessary for the ninety percent of clearly
+          routine cases.
+        </p>
+
+        <p style={S.p}>
+          Video is the same pattern one level removed. Nobody runs a
+          vision-language model on every frame of a video — that is thousands
+          of expensive calls for a single upload. Instead, systems sample
+          keyframes (one every second, or at scene-cut boundaries), embed
+          each sampled frame with CLIP, and index the video as a bag of frame
+          embeddings. Search and moderation both operate on that lightweight
+          index first; a generative model is only called on the small number
+          of frames that actually need a written description or a policy
+          decision.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(55,138,221,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#378ADD', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              CLIP-only is enough when
+            </div>
+            {[
+              'The task is ranking or retrieval, not description',
+              'You need millisecond latency at high query volume',
+              'Categories can be expressed as short text prompts',
+              'Cost per request has to stay near zero at scale',
+              'Approximate similarity is an acceptable answer',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(123,97,255,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#7b61ff', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Add a VLM stage when
+            </div>
+            {[
+              'The output needs to be a written explanation, not a score',
+              'The decision is high-value enough to absorb seconds of latency',
+              'Reasoning about relationships between objects matters',
+              'Only a small, pre-filtered subset needs the expensive call',
+              'A human downstream needs a readable rationale, not a number',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <CodeBlock code={`# ── Two-stage multimodal pipeline — the pattern behind most production systems ──
+
+# Stage 1: CLIP narrows millions of candidates to a handful (cheap, fast)
+def stage_one_filter(query_embedding, image_index, top_k=20):
+    """~5-15ms even against a 5M-image FAISS index."""
+    scores = image_index.search(query_embedding, top_k)
+    return scores  # candidate set, not a final answer
+
+# Stage 2: VLM only runs on the narrowed candidate set (slow, expensive)
+def stage_two_verify(candidates, user_query, vlm_model):
+    """
+    ~2-5s PER CALL — only ever called on stage_one's small output,
+    never on the full catalogue. This is what keeps VLM cost bounded:
+    cost scales with candidates reviewed, not with catalogue size.
+    """
+    verified = []
+    for candidate in candidates:
+        result = vlm_model.answer(candidate.image, user_query)
+        verified.append({'candidate': candidate, 'reasoning': result})
+    return verified
+
+# Rough production cost/latency budget for a search feature at scale:
+#   Stage 1 (CLIP + ANN index):  ~10ms,  ~$0.0000001 per query
+#   Stage 2 (VLM, top 20 only):  ~3s,    ~$0.02-0.05 per query
+#   Running stage 2 on ALL candidates instead of top 20 would be
+#   250,000x more VLM calls for the same traffic — this is the
+#   entire economic argument for the two-stage design.`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about multimodal models</h2>
+
+        <ConceptBox title="Myth: 'Multimodal' just means bolting a vision model onto a language model" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Simply feeding image captions into an LLM's text input is not what CLIP or LLaVA do,
+            and it is not what makes a model genuinely multimodal. CLIP trains its image and text
+            encoders jointly, in the same contrastive objective, so both learn to land in a shared
+            geometric space. LLaVA's projection layer is trained specifically so the LLM can attend
+            to visual tokens the same way it attends to text tokens. The defining feature is a shared
+            representation learned end to end for both modalities together, not two independent
+            models stapled at the API boundary with a text description passed between them.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once you have millions of paired images and captions, alignment between modalities happens automatically" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Scale helps, but alignment is an explicit training objective, not a side effect of data
+            volume. CLIP's contrastive loss is specifically engineered to pull matching pairs
+            together and push non-matching pairs apart across the whole batch — without that
+            objective, an image encoder and a text encoder trained separately would produce vector
+            spaces that are not comparable at all, even on billions of examples. Getting alignment
+            right also depends on caption quality (noisy web alt-text weakens it measurably), batch
+            size (more negatives per batch produces a harder, more informative training signal), and
+            temperature tuning. None of that is automatic.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Image and text embeddings live in one truly unified, symmetric space" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            In practice, CLIP-style embeddings show a measurable 'modality gap' — image embeddings
+            and text embeddings cluster in separate regions of the shared space rather than fully
+            overlapping, even for well-matched pairs. Cosine similarity across modalities still works
+            because relative distances are preserved, but treating the space as if an image and its
+            perfect caption should land at literally the same point is not how these models actually
+            behave. This is measurable, has been studied directly, and matters in practice: pooling
+            image and text embeddings together naively (for example averaging them into a single
+            index) tends to underperform keeping the comparison directional.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If a model describes an image accurately in fluent detail, it understands the image" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Fluent, accurate-sounding descriptions and genuine understanding are not the same
+            capability, and VLMs reliably demonstrate the gap. The hallucination failure mode
+            documented earlier in this module — confidently describing details that are not in the
+            image at all — happens precisely because the language model component is doing what
+            language models do: generating plausible next tokens conditioned on the visual features
+            it was given, not verifying claims against ground truth. A model can nail the general
+            gist of a photo while inventing a specific brand name, a count of objects, or an exact
+            piece of text that was never actually visible.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A bigger, more capable vision-language model is always the better choice" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For pure retrieval and classification tasks, a well-tuned CLIP embedding index regularly
+            beats routing every request through a large generative VLM — it is faster by roughly
+            three orders of magnitude, costs a small fraction as much, and a similarity score is
+            often literally all the task needs. Reaching for GPT-4o Vision or Gemini Vision on every
+            request regardless of whether the task calls for free-form reasoning is a common and
+            expensive default. The right model choice depends on what the output actually needs to
+            be — a score, a category, or a written explanation — not on which model scores highest
+            on a general benchmark.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Multimodal models — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What are the main ways to fuse vision and language, and how does LLaVA's approach differ from cross-attention fusion?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            There are roughly three families. Dual-encoder fusion, what CLIP does, keeps the two
+            encoders entirely separate and only compares their outputs at the end via a similarity
+            score — cheap, but limited to retrieval and classification, no generation. Cross-attention
+            fusion, used by models like Flamingo, interleaves dedicated cross-attention layers into
+            the language model so text tokens can attend directly to visual features at multiple
+            depths of the network — more expressive, more expensive, and requires custom
+            architecture changes. LLaVA takes a third, much cheaper path: a small trainable
+            projection MLP maps vision features into the same embedding space the LLM already uses
+            for text tokens, then simply concatenates them as if they were additional text tokens —
+            the frozen LLM's existing self-attention does the fusion work it already knows how to do,
+            with almost no new architecture required.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk through CLIP's contrastive pretraining objective and why it works">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For a batch of N image-text pairs, CLIP computes the cosine similarity between every
+            image and every text embedding, producing an N by N matrix. The N correct pairs sit on
+            the diagonal; everything off the diagonal is a negative. The loss is symmetric
+            cross-entropy applied twice — once treating each image as a classification problem over
+            the N texts (which text matches this image), once treating each text as a classification
+            problem over the N images — and the two are averaged. This works because it never needs
+            explicit class labels, only naturally occurring (image, caption) pairs scraped from the
+            web, and because larger batches supply more negative examples per step, which makes the
+            discrimination task harder and produces a sharper, more useful embedding space.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why is aligning two different modalities a genuinely hard problem, not just an engineering detail?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Images and text carry information at fundamentally different densities and structures. A
+            single photo contains far more raw information than its one-sentence caption captures —
+            the caption is a lossy, human-chosen summary, so the same image could pair correctly with
+            many different valid captions, and the same caption could plausibly match many different
+            images. The model has to learn which parts of that huge visual signal actually correspond
+            to the sparse textual signal, with no direct supervision pointing at which pixels matter.
+            That many-to-many, unequal-information-density relationship is why naive approaches (like
+            just averaging pixel and word embeddings) fail, and why it took a specifically designed
+            contrastive objective at very large scale to make the alignment work well.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Someone reports CLIP zero-shot classification giving unreliable results. What would you check?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, the text prompts — CLIP was trained on natural image captions, so a bare category
+            word like 'jacket' underperforms a full sentence like 'a photo of a leather jacket on a
+            white background' by a wide margin; prompt ensembling (averaging embeddings across
+            several prompt templates per class) usually helps further. Second, preprocessing — image
+            resizing and normalisation have to match exactly what the model was trained with, or
+            embeddings come out meaningless. Third, whether the domain is even one CLIP saw much of
+            during pretraining — general web images are well covered, but narrow domains like
+            specific fashion catalogues or medical imagery often need fine-tuning on a small labelled
+            set before zero-shot performance becomes reliable.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A team wants to add 'visual search' to their product. How do you decide between CLIP alone and a full VLM?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start by asking what the output actually needs to be. If the feature is 'find
+            products that look like this photo' or 'search products by description,' that is
+            retrieval — a CLIP embedding index against a vector database gives millisecond latency at
+            a tiny fraction of the cost, and a generative model would add nothing but latency. If the
+            feature needs to produce a written explanation — 'why did you flag this listing,' 'what
+            is wrong with this product photo' — that requires actual generation, which means a VLM.
+            In most real systems the answer is both: CLIP handles the high-volume narrowing step, and
+            a VLM is reserved for the much smaller set of cases that need a generated explanation,
+            which keeps the expensive model's cost bounded and justified.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

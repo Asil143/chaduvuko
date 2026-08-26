@@ -144,6 +144,28 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
   )
 }
 
+function ConceptBox({ title, children, color = '#378ADD' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function NumpyArraysPage() {
   return (
     <LearnLayout
@@ -1409,7 +1431,276 @@ print(f"\nSplit: train={len(X_tr)} val={len(X_v)} test={len(X_te)}")`} />
 
       <Div />
 
-      {/* ══ SECTION 12 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 12 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where raw NumPy still matters, even after pandas and PyTorch take over</h2>
+
+        <p style={S.p}>
+          Pandas, PyTorch, TensorFlow, and sklearn all sit on top of NumPy and hide most of
+          its details behind higher-level operations. That does not make NumPy a stepping
+          stone you leave behind — it means the places where you drop back down to raw NumPy
+          directly, in real production code, are specific and predictable, and every one of
+          them relies on exactly the skills built in this module: vectorisation, broadcasting,
+          and knowing when an array is a view versus a copy.
+        </p>
+
+        <p style={S.p}>
+          The clearest case is the hot path of a low-latency serving endpoint. A fraud-scoring
+          or ad-ranking API that has to respond in single-digit milliseconds cannot afford to
+          construct a pandas DataFrame for one incoming request — building an index, inferring
+          dtypes, and tracking column metadata for a single row is real overhead compared to
+          assembling a plain NumPy array directly. Feature assembly code inside a serving
+          function is routinely written in raw NumPy specifically because pandas is built for
+          convenience on batches of data, not for the tightest possible latency on one request
+          at a time.
+        </p>
+
+        <p style={S.p}>
+          The second recurring case is anything that happens outside a deep learning
+          framework's differentiable computational graph. Once a PyTorch or TensorFlow model
+          produces its raw output, converting that tensor to a NumPy array
+          (<span style={S.code as React.CSSProperties}>.detach().cpu().numpy()</span> in
+          PyTorch) is the standard move for any postprocessing step that is not itself part of
+          training — non-max suppression on object detection boxes, beam search decoding,
+          custom evaluation metrics, business-logic thresholds applied to a model's score.
+          These operations do not need gradients, so there is no reason to keep them inside
+          the framework's graph, and they are usually easier to write, test, and reason about
+          as plain vectorised NumPy.
+        </p>
+
+        <CodeBlock code={`import numpy as np
+import time
+
+# ── 1. Real-time feature assembly — why not just use pandas here? ─────
+# A fraud-scoring API needs to build a feature vector for ONE incoming
+# transaction in well under a millisecond. Constructing a pandas
+# DataFrame for a single row carries real overhead — index construction,
+# dtype inference, column bookkeeping — that raw NumPy simply skips.
+
+def build_feature_vector(transaction: dict) -> np.ndarray:
+    """Assemble a single request's feature vector directly with NumPy —
+    no DataFrame construction, no per-call pandas overhead."""
+    return np.array([
+        transaction['amount'],
+        transaction['merchant_risk_score'],
+        transaction['time_since_last_tx_minutes'],
+        transaction['device_age_days'],
+        transaction['tx_count_24h'],
+    ], dtype=np.float32).reshape(1, -1)   # shape (1, 5) — model expects a batch
+
+transaction = {'amount': 214.5, 'merchant_risk_score': 0.62,
+               'time_since_last_tx_minutes': 12.0, 'device_age_days': 340,
+               'tx_count_24h': 4}
+
+t0 = time.perf_counter()
+for _ in range(10_000):
+    build_feature_vector(transaction)
+numpy_time = time.perf_counter() - t0
+print(f"NumPy feature assembly: {numpy_time*1000:.2f}ms for 10,000 calls")
+print(f"Per-request: {numpy_time/10_000*1e6:.1f} microseconds — comfortably inside a latency budget")
+
+# ── 2. Vectorised non-max suppression — postprocessing outside the graph ──
+# An object detector outputs hundreds of overlapping candidate boxes.
+# Non-max suppression keeps only the best box per object. This runs
+# AFTER the neural network, on plain NumPy arrays — it is not a
+# differentiable operation, so it lives outside the framework entirely,
+# hand-written and vectorised for speed.
+
+def iou(box, boxes):
+    """Vectorised intersection-over-union: one box against many at once."""
+    x1 = np.maximum(box[0], boxes[:, 0])
+    y1 = np.maximum(box[1], boxes[:, 1])
+    x2 = np.minimum(box[2], boxes[:, 2])
+    y2 = np.minimum(box[3], boxes[:, 3])
+    inter     = np.maximum(0, x2 - x1) * np.maximum(0, y2 - y1)
+    area_box  = (box[2] - box[0]) * (box[3] - box[1])
+    area_all  = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
+    return inter / (area_box + area_all - inter + 1e-9)
+
+def non_max_suppression(boxes: np.ndarray, scores: np.ndarray, iou_threshold=0.5):
+    order = scores.argsort()[::-1]     # highest confidence first
+    keep  = []
+    while len(order) > 0:
+        current = order[0]
+        keep.append(current)
+        if len(order) == 1:
+            break
+        overlaps = iou(boxes[current], boxes[order[1:]])
+        order = order[1:][overlaps < iou_threshold]   # drop overlapping boxes
+    return np.array(keep)
+
+boxes  = np.array([[10,10,50,50], [12,12,52,52], [100,100,140,140], [11,9,49,51]], dtype=float)
+scores = np.array([0.95, 0.80, 0.90, 0.60])
+kept   = non_max_suppression(boxes, scores)
+print(f"\nKept box indices after NMS: {kept}")   # overlapping duplicate boxes removed`} />
+
+        <p style={S.p}>
+          Neither example needed a for loop, and neither needed pandas or a framework
+          tensor op — both are ordinary NumPy vectorisation and broadcasting, applied at the
+          exact point in a production system where the higher-level tools either cost too much
+          latency or simply do not apply. Recognising that pattern — "this is postprocessing,
+          not training, so it belongs in plain NumPy" — is a habit that shows up in almost
+          every serving codebase you will work in.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 13 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about NumPy</h2>
+
+        <ConceptBox title="Myth: NumPy is a beginner tool you graduate away from once you start using PyTorch or TensorFlow in production" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PyTorch tensors and TensorFlow tensors deliberately mirror NumPy's indexing,
+            broadcasting rules, and aggregation API almost exactly, precisely so that NumPy
+            experience transfers directly. In real production code, raw NumPy keeps showing
+            up in the places a framework's differentiable graph does not reach — assembling
+            features for a low-latency request, postprocessing a model's raw output,
+            computing custom evaluation metrics. Moving to a deep learning framework does not
+            retire NumPy; it adds a layer on top of it for the parts of the pipeline that need
+            automatic differentiation and GPU acceleration.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Any loop can be vectorised in NumPy with about the same amount of effort" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Simple element-wise operations vectorise almost for free — replace the loop body
+            with an array expression and you are done. Loops with data-dependent control flow
+            (a different computation path depending on a value seen partway through), loops
+            that build up a result of varying size per iteration, or algorithms that are
+            inherently sequential (each step depends on the previous step's output, as in some
+            recurrent computations) are often genuinely hard to vectorise, and sometimes not
+            worth vectorising at all compared to a small, well-optimised loop or a tool built
+            for exactly that pattern. Vectorisation is a skill with real technique behind it,
+            not a mechanical find-and-replace.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A NumPy array and a Python list of the same length perform about the same, since they both just 'store numbers'" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A Python list stores a separate full Python object for every element, each with
+            its own type tag, reference count, and memory allocation scattered around in
+            memory. A NumPy array stores raw values of one fixed type packed contiguously,
+            with no per-element object overhead, which is what lets operations run as tight
+            compiled loops using SIMD instructions instead of visiting Python objects one at a
+            time. The performance gap is not marginal — for large arrays it is routinely two
+            to four orders of magnitude, which is the entire reason NumPy exists as a separate
+            library rather than everyone simply using Python lists with a for loop.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Vectorised NumPy code always uses less memory than the equivalent explicit loop" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Vectorised code is almost always faster, but it frequently uses more memory, not
+            less, because it often has to materialise an intermediate array holding every
+            element of a computation at once, rather than processing one element at a time and
+            discarding it. The pairwise-distance broadcasting pattern in this module is a
+            direct example: expanding two arrays to compute all pairwise differences at once
+            creates a full three-dimensional intermediate array, which can be enormous for
+            large inputs even though the final result is comparatively small. Vectorisation
+            trades memory for speed far more often than people expect, and that trade-off is
+            exactly what forces the batching seen in the MemoryError fix earlier in this
+            module.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: NumPy will always raise an error or warning when a calculation silently loses precision or overflows" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            By default NumPy is deliberately quiet about a wide range of numerically dangerous
+            situations: integer overflow silently wraps around instead of raising an error,
+            and a float32 array casts down from float64 by truncating precision without any
+            warning at all. Even the NaN-producing operations covered in this module's errors
+            section only emit a RuntimeWarning, not an exception, and warnings are easy to miss
+            in a busy training log. Catching these problems requires deliberately opting in —
+            checking with np.isnan(arr).any(), watching dtype ranges explicitly, or using
+            np.errstate to promote warnings to real exceptions during development.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 14 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>NumPy — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why is a vectorised NumPy operation so much faster than the equivalent Python for loop, mechanically?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A Python for loop over array elements has to unpack each element into a full
+            Python object, dispatch through Python's interpreter for every arithmetic
+            operation, and repackage the result — repeating that overhead once per element. A
+            vectorised NumPy operation instead calls a single compiled C function once for the
+            entire array, operating on a contiguous block of same-typed memory using SIMD CPU
+            instructions that process several elements per clock cycle. The speedup comes from
+            eliminating per-element Python overhead entirely, not from the underlying
+            arithmetic being fundamentally different.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain NumPy's broadcasting rule in your own words, and walk through a shape mismatch error you'd expect to see">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Broadcasting compares two array shapes dimension by dimension, starting from the
+            rightmost dimension and working left. Two dimensions are compatible if they are
+            equal, or if one of them is exactly 1, in which case the size-1 dimension is
+            conceptually stretched to match. If neither condition holds for some dimension,
+            NumPy raises a ValueError rather than guessing what you meant. A concrete example:
+            subtracting a shape (1000,) array from a shape (1000, 4) array fails, because the
+            rightmost dimensions being compared are 4 and 1000, which are neither equal nor is
+            either one 1 — the fix is reshaping the 1D array to (1000, 1) so it broadcasts
+            against the column dimension instead.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What's the difference between a view and a copy in NumPy, and why does it matter for a data preprocessing pipeline?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A view shares the same underlying memory as the array it was created from — basic
+            slicing, reshaping, and transposing all return views by default, so modifying a
+            view modifies the original array too. A copy is a fully independent array with its
+            own memory; fancy indexing, boolean indexing, and explicit calls to .copy() all
+            produce copies. In a preprocessing pipeline this matters because it is easy to
+            slice out a subset of your training data, modify it in place assuming it is
+            separate, and silently corrupt the original dataset because the slice was actually
+            a view. The safe habit is calling .copy() explicitly any time you intend to modify
+            a subset while keeping the original untouched.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Someone hands you a function with a NumPy shape error inside a broadcasting operation. How do you debug it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start by printing the .shape of every array involved in the failing
+            expression, since NumPy's error message already tells you the two shapes it could
+            not reconcile — the debugging work is figuring out which dimension was supposed to
+            align with which. A common cause is an aggregation like .mean(axis=0) that dropped
+            a dimension instead of keeping it, so I would check whether keepdims=True was
+            needed, or whether a 1D array needed an explicit reshape(-1, 1) to become a column
+            vector rather than being implicitly treated as a row vector. Reasoning through the
+            right-to-left dimension alignment by hand, with the actual shapes in front of me,
+            almost always locates the mismatch quickly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Are there situations where you'd choose not to vectorise a NumPy computation, or reach for another tool entirely?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Yes — when vectorising would require materialising an intermediate array too large
+            to fit in memory, such as a full pairwise distance matrix for hundreds of thousands
+            of points, I would process the computation in batches instead, trading some
+            vectorisation for a bounded memory footprint. When the computation has genuinely
+            sequential dependencies, where each step needs the previous step's result, plain
+            NumPy vectorisation often does not apply cleanly at all, and I would either accept
+            a modest loop, reach for a just-in-time compiler like Numba, or restructure the
+            algorithm. The goal is always the fastest correct result within the available
+            memory, not vectorisation as an end in itself.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 15 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>You now think in arrays, not loops.</h2>

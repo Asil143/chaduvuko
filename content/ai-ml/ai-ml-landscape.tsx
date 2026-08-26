@@ -43,6 +43,28 @@ function HBox({ children, color = 'var(--accent)' }: { children: React.ReactNode
   )
 }
 
+function ConceptBox({ title, children, color = '#7b61ff' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 const tools = [
   {
     category: 'Data & Preprocessing',
@@ -671,7 +693,214 @@ export default function AIMLLandscapePage() {
 
       <Div />
 
-      {/* ══ SECTION 6 — THE ONE THING ══════════════════════════════════════════ */}
+      {/* ══ SECTION 6 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>The same request lands on different desks — here's how it actually gets routed</h2>
+
+        <p style={S.p}>
+          Job titles look clean on a slide. In practice, the same piece of work gets picked up
+          by different roles depending on company size, team maturity, and who happens to be
+          free. What stays constant is the shape of the request. Once you can recognise the
+          shape, you can predict who owns it — and what you'd need to know to be that person.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+          {[
+            {
+              ask: '"Can we flag orders likely to be returned before we ship them?"',
+              owner: 'ML Engineer (or Data Scientist prototyping first)',
+              color: '#378ADD',
+              why: 'Clear supervised classification problem with an existing production pipeline to plug into. Someone has to own the model going live and staying live.',
+            },
+            {
+              ask: '"Why did conversion drop 4% in the Ohio region last month?"',
+              owner: 'Data Scientist',
+              color: '#1D9E75',
+              why: 'No model to ship — this is investigation, hypothesis testing, and a clear explanation for stakeholders. A regression coefficient explained in a slide, not an API.',
+            },
+            {
+              ask: '"Our fraud model retrains fine locally but keeps failing in the nightly pipeline."',
+              owner: 'MLOps / ML Platform Engineer',
+              color: '#639922',
+              why: 'The modelling is already done. The problem is infrastructure — scheduling, environment drift, data versioning. A different skill set entirely.',
+            },
+            {
+              ask: '"Can support tickets get auto-drafted replies using our policy docs?"',
+              owner: 'GenAI / LLM Engineer',
+              color: '#D85A30',
+              why: 'A RAG pipeline connecting an LLM to internal documents. Barely resembles the classification work above even though both get called "AI."',
+            },
+            {
+              ask: '"Is there a smarter way to route delivery riders than what we do today?"',
+              owner: 'Applied Scientist, handed to ML Engineer for production',
+              color: '#7F77DD',
+              why: 'Open-ended enough to need real research — possibly a new optimisation or RL approach — before anyone commits to shipping it.',
+            },
+          ].map((row, i) => (
+            <div key={i} style={{
+              background: 'var(--surface)', border: '1px solid var(--border)',
+              borderLeft: `3px solid ${row.color}`, borderRadius: 8, padding: '13px 16px',
+            }}>
+              <div style={{ fontSize: 13, fontStyle: 'italic', color: 'var(--text)', marginBottom: 6, lineHeight: 1.5 }}>
+                {row.ask}
+              </div>
+              <div style={{
+                fontSize: 11, fontWeight: 700, color: row.color, fontFamily: 'var(--font-mono)',
+                marginBottom: 6, textTransform: 'uppercase' as const, letterSpacing: '0.06em',
+              }}>
+                Usually lands with: {row.owner}
+              </div>
+              <p style={{ ...S.ps, marginBottom: 0 }}>{row.why}</p>
+            </div>
+          ))}
+        </div>
+
+        <HBox color="#378ADD">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            <span style={{ color: 'var(--text)', fontWeight: 700 }}>At a small startup: </span>
+            one person does all five of the tickets above in the same week. At a company the
+            size of Amazon or Uber, each one belongs to a different team, and the hardest part
+            of the job is knowing which team to hand off to — not doing the ML itself.
+          </p>
+        </HBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 7 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about the AI/ML job market</h2>
+
+        <ConceptBox title="Myth: You need to master every tool on this page before you're job-ready" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The tools section above lists roughly two dozen names across six categories, and the
+            callout right after it says the quiet part out loud: a working ML engineer uses five
+            to eight tools regularly. Job descriptions that list fifteen technologies are
+            describing the team's collective stack over several years, not a checklist one
+            candidate is expected to already know. Depth in the core learning path — NumPy
+            through FastAPI and Docker — beats shallow exposure to everything on the list.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Data Scientist and ML Engineer are interchangeable titles that mean the same job everywhere" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The roles section above says this directly: one company's Data Scientist does
+            another company's ML Engineer job, and vice versa. Titles are set by whoever wrote
+            the job posting, not by an industry standard. The only reliable way to know what a
+            specific role actually involves is to read the day-to-day bullet points in the
+            posting itself, or ask directly in an interview — never assume the title alone tells
+            you what you would be doing.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Applied/Research Scientist is strictly a better role than ML Engineer because it pays more" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Higher pay reflects a narrower talent pool and different demands, not a strict
+            upgrade path. Applied Scientist work means reading and implementing research papers,
+            running open-ended experiments, and frequently requires a Masters or PhD — a
+            genuinely different day-to-day than shipping and maintaining production systems.
+            Plenty of engineers who would find research work tedious thrive as ML Engineers and
+            have no interest in trading that role away for a bigger number on a pay band.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: GenAI/LLM Engineer is a shortcut role that skips needing classical ML fundamentals" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The day-to-day bullets for this role above still include evaluating providers for
+            quality, fine-tuning models, and building agents with tool use — every one of those
+            requires understanding what a model actually is, how it is evaluated, and where it
+            fails, which is exactly the classical ML foundation the rest of this track builds
+            first. The entry bar looks lower because the tooling (LangChain, hosted APIs) hides
+            more complexity, not because the underlying job needs less understanding of how
+            models behave.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once you land your first ML role, the tool-learning is done" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The tools section above is already a snapshot that will look dated within a couple
+            of years — LightGBM and CatBoost did not exist when XGBoost first dominated, and
+            GenAI tooling like LangChain barely existed before 2023. Every role on this page
+            lists tools that are themselves only a few years old. The skill that actually stays
+            constant across a career is not any specific tool — it is the underlying workflow
+            from Module 01 and the judgement to evaluate whether a new tool is worth adopting.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Career and role questions — 5 you'll actually get asked</h2>
+
+        <ConceptBox title="Q1 — How would you describe the difference between a Data Scientist and an ML Engineer?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I'd frame it by what each role is accountable for rather than the tools they touch,
+            since both may use Python and similar libraries. A Data Scientist is accountable for
+            the answer — finding a pattern, running an experiment, explaining a result to
+            stakeholders — and their work often ends at a notebook or a slide. An ML Engineer is
+            accountable for the system — the model has to keep running correctly in production,
+            on a schedule, at scale, monitored and retrained automatically. Many people do both;
+            the distinction is about ownership, not raw skill level.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why do you want to be an ML Engineer instead of a Data Scientist (or vice versa)?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A strong answer is specific about the day-to-day, not the salary. For ML Engineer: I
+            want to own something that runs in production and see the direct engineering
+            consequences of my decisions — pipeline reliability, latency, retraining schedules.
+            For Data Scientist: I'm motivated by open-ended questions and communicating a clear
+            answer to people who are not technical, more than by shipping infrastructure. Naming
+            the actual daily tasks from a role description shows you understand the distinction
+            rather than picking a title because it sounds impressive.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What's your learning path and tool stack, and can you justify the order you learned things in?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The defensible order mirrors the workflow itself: NumPy and Pandas first because
+            every later tool assumes you can already manipulate arrays and tables, scikit-learn
+            next because classical ML is still the foundation and the majority of production
+            tabular models, then XGBoost once the fundamentals are solid, then PyTorch for deep
+            learning, then FastAPI and Docker to actually ship something. Being able to explain
+            why each tool came after the one before it — not just naming them — is what
+            separates a real learning path from a resume keyword list.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How do you decide which cloud ML platform or MLOps tool to use for a given company's scale?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I'd start from constraints, not preference: what cloud is the company already
+            committed to (Azure ML, SageMaker, and Vertex AI each lock you into their own
+            ecosystem), how much of the team is ML-focused versus general engineering, and
+            whether the priority is speed of iteration or long-term cost control. A five-person
+            startup often does better with a hosted platform's defaults than building custom
+            MLflow and Kubernetes infrastructure from scratch — that infrastructure earns its
+            cost once retraining and monitoring happen often enough to need it, not before.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Someone says 'I want to become a GenAI engineer without learning classical ML first.' What's the risk?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The risk is being able to wire together an API call but not being able to explain why
+            the output is wrong, evaluate whether a model change actually improved anything, or
+            reason about cost and latency trade-offs — all classical ML-adjacent skills that
+            GenAI tooling does not remove, it just hides one layer down. LangChain and hosted LLM
+            APIs make it easy to ship a demo without touching model evaluation at all; the gap
+            shows up the first time that demo needs to become a reliable production feature with
+            measurable quality.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — THE ONE THING ══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What to do next</span>
         <h2 style={S.h2}>Pick your role. Start the track.</h2>

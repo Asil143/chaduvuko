@@ -1001,7 +1001,286 @@ print(f"  Spectral Clustering:       {sc_accuracy:.1%}  ← succeeds via eigenve
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>When to actually reach for eigenvalues — and when a neural net is the better call</h2>
+
+        <p style={S.p}>
+          Section 6 above already walked through PCA, spectral clustering, and
+          PageRank as production algorithms built on eigenvalues. What that
+          section didn't cover is the judgment call: data scientists and ML
+          engineers hit this decision constantly during feature engineering and
+          model debugging, and eigen-decomposition is not always the right tool
+          even when dimensionality is the problem. Here is the framework for
+          making that call, plus the incident that shows up most often in
+          practice — an unstable recurrent model traced back to eigenvalues of
+          its own weight matrix.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(0,230,118,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#00e676', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Reach for eigen-decomposition when ✓
+            </div>
+            {[
+              'You need a linear, interpretable transformation (PCA loadings map back to real features)',
+              'The data fits in memory and is at most a few thousand features wide',
+              'You need explained variance to justify how many dimensions to keep',
+              'The structure you are after is genuinely linear (correlated features, linear separability)',
+              'You need a deterministic, reproducible result for a report or a regulator',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(255,71,87,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#ff4757', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Reach for something else when ✗
+            </div>
+            {[
+              'The structure is non-linear — an autoencoder or UMAP will separate it, PCA will not',
+              'The matrix is huge and sparse (millions of features) — use randomized SVD or truncated SVD',
+              'You need visualisation quality, not variance preservation — t-SNE/UMAP look better for that',
+              'You just want "fewer features, roughly" and interpretability does not matter — feature hashing is cheaper',
+              'The data streams in continuously — full eigendecomposition requires the whole matrix at once',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <ConceptBox title="The 2am page — 'the model's loss just went to NaN after 40,000 steps'" color="#D85A30">
+          <p style={{ ...S.p, marginBottom: 8 }}>
+            An RNN or a deep network trains fine for hours, then the loss
+            spikes to NaN with no obvious cause in the data. One of the first
+            things an experienced engineer checks: the eigenvalues of the
+            recurrent weight matrix (or, for very deep feedforward nets, the
+            spectral norm of consecutive weight matrices). If the largest
+            eigenvalue's magnitude is consistently above 1, the network is
+            multiplying activations by a factor greater than 1 at every time
+            step or layer — the exact mechanism behind exploding gradients.
+            If it's consistently below 1, you get vanishing gradients instead.
+          </p>
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is the same A·e = λ·e relationship from Section 2, just applied
+            to a weight matrix instead of a covariance matrix — the eigenvalues
+            tell you how much repeated multiplication by that matrix stretches
+            or shrinks a signal, which is exactly what happens to gradients
+            flowing backward through many time steps or many layers.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import numpy as np
+
+np.random.seed(42)
+
+# ── Diagnosing RNN instability via the eigenvalues of the recurrent weight ──
+# This is the check an ML engineer runs when a recurrent model trains fine
+# for a while, then the loss suddenly explodes to NaN
+
+def check_recurrent_stability(W_hidden):
+    """
+    W_hidden: the hidden-to-hidden weight matrix in a vanilla RNN cell.
+    Its eigenvalues determine whether repeated multiplication (one per
+    time step) makes signals grow, shrink, or stay roughly stable.
+    """
+    eigenvalues = np.linalg.eigvals(W_hidden)
+    magnitudes  = np.abs(eigenvalues)
+    spectral_radius = magnitudes.max()   # largest |eigenvalue|
+
+    print(f"Spectral radius (max |λ|): {spectral_radius:.4f}")
+    if spectral_radius > 1.05:
+        print("  ⚠ > 1 — repeated multiplication over time steps will EXPLODE")
+        print("     fix: gradient clipping, or switch to LSTM/GRU gating")
+    elif spectral_radius < 0.95:
+        print("  ⚠ < 1 — repeated multiplication over time steps will VANISH")
+        print("     fix: orthogonal initialisation, or switch to LSTM/GRU")
+    else:
+        print("  ✓ ≈ 1 — signal magnitude roughly preserved across time steps")
+    return spectral_radius
+
+# A poorly initialised recurrent weight — this is what causes the 2am page
+W_unstable = np.random.randn(64, 64) * 0.5   # random scale, no care taken
+check_recurrent_stability(W_unstable)
+
+# A properly initialised recurrent weight — orthogonal initialisation
+# guarantees every eigenvalue has magnitude exactly 1
+from scipy.stats import ortho_group
+W_orthogonal = ortho_group.rvs(64, random_state=42)
+print()
+check_recurrent_stability(W_orthogonal)
+
+# This is exactly why orthogonal initialisation (nn.init.orthogonal_ in
+# PyTorch) is a standard recommendation for vanilla RNNs — it directly
+# controls the eigenvalues of the recurrent weight matrix at the start
+# of training, before anything has had a chance to explode or vanish.`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about eigenvalues and eigenvectors</h2>
+
+        <ConceptBox title="Myth: Eigenvalues and eigenvectors are basically a PCA-only concept" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PCA is the most commonly taught example, but it's one of at least
+            half a dozen production uses: spectral clustering (graph Laplacian
+            eigenvectors), PageRank (principal eigenvector of a link matrix),
+            recommender systems (matrix factorisation is built on eigen/singular
+            decomposition), and stability analysis of recurrent and very deep
+            networks, where the eigenvalues of a weight matrix directly predict
+            exploding or vanishing gradients. Treating this as "the PCA math"
+            makes every one of those other appearances look unrelated when
+            they're the exact same underlying tool.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Every square matrix has a full set of eigenvectors" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Some matrices — called defective matrices — do not have enough
+            independent eigenvectors to form a full basis for their dimension,
+            which breaks algorithms that assume diagonalisability. The reason
+            covariance matrices are so convenient is the spectral theorem: every
+            real symmetric matrix is guaranteed to have a full set of real
+            eigenvalues and orthogonal eigenvectors. That guarantee is precisely
+            why np.linalg.eigh (for symmetric matrices) is both safer and faster
+            than the general-purpose np.linalg.eig — it can rely on a property
+            that doesn't hold for arbitrary matrices.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: You should always keep however many components explain 'enough' variance, like a fixed 95% rule" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Explained variance is a useful heuristic, not a universal rule.
+            The right number of components depends on the downstream task: for
+            visualisation you often want exactly 2 or 3 regardless of variance
+            captured, and for anomaly detection the small-eigenvalue directions
+            that a 95%-variance cutoff would discard are sometimes exactly where
+            anomalies show up, since anomalies are often defined as points that
+            violate the low-variance structure of normal data. Picking a
+            threshold without checking it against actual downstream performance
+            is a common way PCA preprocessing quietly hurts a model.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A matrix's eigenvectors are unique and fixed" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Eigenvectors are only defined up to sign and scale — if e is an
+            eigenvector, so is −e and so is 5e, all satisfying A·e = λ·e equally
+            well. Worse, when a matrix has a repeated eigenvalue, any vector in
+            the entire subspace spanned by the eigenvectors for that eigenvalue
+            is a valid eigenvector, so there is no single "correct" choice at
+            all — just a convention. This is exactly why PCA results can flip
+            sign between library versions or random seeds without being wrong;
+            it's a documented consequence of the math, not a bug to chase down.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Computing eigenvalues is cheap, so it scales fine to any dataset size" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A full eigendecomposition of an n×n matrix costs roughly O(n³) —
+            fine for a 50-feature covariance matrix, prohibitive for a
+            50,000-dimensional one. This is exactly why production systems
+            almost never call np.linalg.eig directly on large matrices: they use
+            randomized SVD, truncated SVD, or iterative methods like the power
+            method or Lanczos algorithm, which approximate only the top few
+            eigenvalues/eigenvectors needed without ever forming or
+            decomposing the full matrix. sklearn's PCA switches to a randomized
+            solver automatically once the data gets large enough.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Eigenvalues and eigenvectors — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain what an eigenvector is to someone with no linear algebra background">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Most vectors change direction when you multiply them by a matrix —
+            the matrix rotates and stretches them at the same time. An
+            eigenvector is one of the special directions a specific matrix
+            doesn't rotate at all; it only stretches or shrinks it, by a factor
+            called the eigenvalue. Every square matrix has its own small set of
+            these special directions, and they describe the "natural axes" the
+            matrix operates along — which is why finding them tells you
+            something fundamental about what the matrix does to any input.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why do we compute eigenvectors of the covariance matrix in PCA, and what do the eigenvalues tell us?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The covariance matrix encodes how every pair of features varies
+            together. Its eigenvectors point in the directions along which the
+            data spreads out the most — the directions of maximum variance —
+            and its eigenvalues tell you exactly how much variance each of those
+            directions captures. Sorting by eigenvalue and keeping the top few
+            eigenvectors gives you a lower-dimensional representation that
+            preserves as much of the original variation as possible for the
+            number of dimensions you're willing to keep.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What's the difference between np.linalg.eig and np.linalg.eigh, and when would you use each?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            eigh assumes the input is symmetric (or Hermitian) and exploits that
+            guarantee to return real eigenvalues, use a numerically more stable
+            algorithm, and run faster. eig makes no such assumption and can
+            return complex eigenvalues even from a matrix that's supposed to be
+            symmetric but has tiny floating-point asymmetries. In practice: use
+            eigh for covariance matrices, graph Laplacians, and anything you
+            know is symmetric by construction; use eig only for genuinely
+            asymmetric matrices, like a Markov transition matrix in PageRank.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How does PageRank use eigenvectors to rank web pages?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PageRank models the web as a transition matrix — each entry is the
+            probability of moving from one page to another by following a link.
+            A page's long-run importance is the stationary distribution of a
+            random walk over this graph, and that stationary distribution is
+            exactly the eigenvector of the transition matrix with eigenvalue 1.
+            Pages that many important pages link to accumulate more of that
+            eigenvector's weight, which is why PageRank captures something
+            closer to "importance" than simply counting incoming links.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — You're training an RNN and the loss explodes after a few hundred steps. How do eigenvalues relate to this, and what would you check?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            An RNN applies the same recurrent weight matrix repeatedly, once per
+            time step, so a signal (or a gradient flowing backward) gets
+            multiplied by that matrix over and over. The eigenvalues of that
+            matrix determine what happens under repeated multiplication: if the
+            largest eigenvalue's magnitude is above 1, the signal grows
+            exponentially with sequence length and eventually overflows to NaN;
+            if it's below 1, the signal vanishes instead. I'd check the spectral
+            radius of the recurrent weight directly, and consider orthogonal
+            initialisation, gradient clipping, or switching to an LSTM/GRU,
+            whose gating mechanisms are specifically designed to control this.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

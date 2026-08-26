@@ -144,6 +144,28 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
   )
 }
 
+function ConceptBox({ title, children, color = '#1D9E75' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function EncodingCategoricalFeaturesPage() {
   return (
     <LearnLayout
@@ -1232,7 +1254,248 @@ print(f"  Unique values remaining: {X_train_coll['restaurant'].nunique()}")`} />
 
       <Div />
 
-      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 12 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Encoding decisions at scale — cardinality growth and unseen categories</h2>
+
+        <p style={S.p}>
+          Every encoding technique in this module assumes a fixed, known set of categories.
+          Production categorical features rarely stay fixed. A restaurant column that had 8
+          values in this module's dataset looks very different as
+          <span style={S.code as React.CSSProperties}> restaurant_id</span> in a real
+          delivery platform — tens of thousands of restaurants at launch, growing by hundreds
+          a week as the platform expands into new cities. The encoding choice that worked
+          cleanly at 8 categories has to keep working at 50,000, and it has to keep working
+          the day a brand-new restaurant signs up and appears in a request before anyone has
+          retrained the model.
+        </p>
+
+        <p style={S.p}>
+          This is exactly why one-hot encoding, which is the safe teaching default, quietly
+          falls apart in a lot of real systems: a feature store cannot cheaply add a new
+          column to a live model every time a new category appears, and a one-hot vector with
+          fifty thousand mostly-zero entries is expensive to store and move around at request
+          time. Large-scale recommendation and ad-ranking systems typically replace one-hot
+          encoding with a learned <strong style={{ color: '#1D9E75' }}>embedding table</strong> —
+          each category (a user ID, a product ID, a restaurant ID) is mapped to a fixed-size
+          dense vector that is learned jointly with the rest of the neural network, which
+          scales to millions of categories without the column count exploding, and naturally
+          places similar categories near each other in the embedding space.
+        </p>
+
+        <p style={S.p}>
+          The unseen-category problem shows up constantly, and it is handled at a different
+          layer than most people expect. Rather than every model deciding for itself what to
+          do with an unfamiliar category, many companies maintain a centralised
+          <strong style={{ color: '#378ADD' }}> category vocabulary service</strong> — it
+          assigns a stable ID to every known category, reserves a dedicated out-of-vocabulary
+          bucket for anything new, and every model that consumes that feature encodes against
+          the same shared vocabulary. That is the production equivalent of
+          handle_unknown='ignore', just implemented once, centrally, instead of separately
+          inside every model's preprocessing code.
+        </p>
+
+        <CodeBlock code={`import joblib
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.linear_model import Ridge
+
+NUM_COLS = ['distance_km', 'traffic_score', 'restaurant_prep', 'order_value']
+CAT_COLS = ['restaurant', 'city', 'time_slot']
+
+pipeline = Pipeline([
+    ('prep', ColumnTransformer([
+        ('num', StandardScaler(), NUM_COLS),
+        ('cat', OneHotEncoder(handle_unknown='ignore', drop='first'), CAT_COLS),
+    ])),
+    ('model', Ridge(alpha=1.0)),
+])
+pipeline.fit(X_train, y_train)
+
+# The fitted encoder's category list is frozen the moment fit() returns —
+# persist encoder + model together, exactly like the scaler in Module 12
+joblib.dump(pipeline, 'delivery_model_v9.joblib')
+
+# ── Six months later — the platform has added 40 new restaurants ──────
+# None of them existed when this pipeline was fit. Loading the OLD
+# pipeline and scoring a request for one of the new restaurants still
+# works, because handle_unknown='ignore' maps it to an all-zero row:
+loaded = joblib.load('delivery_model_v9.joblib')
+new_restaurant_order = [[3.2, 7.0, 15.0, 210.0, 'Cloud Kitchen 47', 'Austin', 'lunch']]
+# The model does not error out — it silently falls back to treating this
+# order as if no specific restaurant were known, which is SAFE but is
+# also a real loss of signal for every one of those 40 new restaurants.
+# This is exactly why growing platforms retrain on a schedule rather
+# than waiting for accuracy to visibly degrade — every day between
+# retraining runs, the newest restaurants get the least informative
+# encoding the model has available.`} />
+
+        <p style={S.p}>
+          The practical lesson is that an encoding choice is never final — it is a decision
+          that has to be revisited as cardinality grows. A column that starts at 8 unique
+          values and is one-hot encoded today may need to move to frequency encoding, target
+          encoding, or an embedding table well before it reaches the hundreds-of-thousands
+          range, and the retraining cadence for that feature needs to track how quickly new
+          categories actually appear in the business, not an arbitrary calendar schedule.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 13 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about encoding categorical features</h2>
+
+        <ConceptBox title="Myth: One-hot encoding is always the safe default choice for categorical features" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            One-hot encoding is safe specifically for low-cardinality nominal features feeding
+            a linear model, SVM, or neural network — that is a narrower claim than "always
+            safe." At high cardinality it produces a huge, mostly-empty feature matrix that
+            slows training, gives rare categories almost no data to learn from, and in some
+            production systems is simply too expensive to serve. It is also unnecessary
+            overhead for tree-based models, which can consume integer-encoded categories
+            directly. "Safe default" describes a specific, common situation, not a universal
+            rule for every categorical column you will ever encounter.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Label encoding (assigning arbitrary integers) is fine for any model type, not just trees" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Label encoding is fine for tree-based models because a tree only ever asks
+            "is this value above or below a threshold," and it can learn to carve out any
+            arbitrary subset of integers it needs regardless of the order you assigned them
+            in. A linear model, an SVM, or a neural network instead treats the encoded integer
+            as a literal number in an equation — it implicitly assumes that a category coded
+            as 6 is "more" of something than a category coded as 2, and will learn a
+            relationship based on that false ordering. The same encoding that is harmless for
+            one model family actively teaches wrong relationships to another.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Target encoding is leakage-free as long as you don't literally include the target column in X" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The leakage in target encoding is far more subtle than accidentally including the
+            label column. If you compute each category's mean target value using the entire
+            training set and then use that mean as a feature for every row in that category —
+            including the very rows whose own target values were used to compute it — each
+            row's encoded feature contains a sliver of information about its own label. No
+            column named "delivery_time" appears in X, but the leakage is there anyway. Safe
+            target encoding requires cross-fold computation (or sklearn's built-in
+            TargetEncoder), not just visually checking that the target column is absent.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: handle_unknown='ignore' in OneHotEncoder fully solves the unseen-category problem in production" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It solves the crash — without it, a genuinely new category value raises an error
+            and the request fails outright, which is worse. But handle_unknown='ignore'
+            encodes an unseen category as all zeros, which the model interprets as "none of
+            the categories I know about," effectively discarding that feature's information
+            for that row. That is a safe fallback, not a correct one: a brand-new restaurant
+            or a first-time customer gets treated as generically as possible precisely when
+            more specific information might matter most. Preventing a crash and preserving
+            signal are two different problems, and this only solves the first one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A categorical feature with hundreds of thousands of unique values just needs 'a bigger' one-hot encoding" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Scaling up one-hot encoding is not a matter of throwing more compute at the same
+            approach — it changes the nature of the problem. At extreme cardinality, most
+            categories appear in only a handful of training rows, so their corresponding
+            one-hot column has almost no signal to learn a weight from, and the resulting
+            feature matrix becomes enormous and overwhelmingly sparse for very little benefit.
+            The right response at that scale is usually a completely different technique —
+            frequency encoding, target encoding, hashing, or a learned embedding — not a
+            larger version of the same one-hot approach that worked at low cardinality.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 14 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Encoding categorical features — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — A categorical feature gets a brand-new category value in production that never appeared during training. Walk through what happens with each encoder and how you would prevent a crash or bad prediction">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Without any handling, OneHotEncoder and OrdinalEncoder both raise an error by
+            default the moment they see a category they were not fit on, which takes down the
+            request. Setting handle_unknown='ignore' on OneHotEncoder maps the unseen category
+            to an all-zero row instead of crashing; OrdinalEncoder can be configured with
+            unknown_value=-1 to give tree models an explicit "unknown" signal to split on. For
+            target encoding, the safe fallback is the global target mean. I would set one of
+            these fallbacks explicitly rather than relying on defaults, and I would also track
+            how often unknown categories actually occur in production as a signal for when the
+            model needs retraining.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — When would you choose target encoding over one-hot encoding, and what is the biggest risk you have to manage?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would reach for target encoding when the categorical feature has high cardinality
+            and a strong, genuine relationship with the target — one-hot encoding at that
+            cardinality produces a huge sparse matrix with too little data per category, while
+            target encoding compresses each category into a single, highly informative number.
+            The risk is leakage: if the encoding for a row uses that row's own target value in
+            computing its category's mean, the model partially memorises training labels
+            instead of learning a generalisable pattern, which looks great in training and
+            falls apart in production. The fix is cross-fold encoding or sklearn's built-in
+            TargetEncoder, never a plain groupby-mean computed on the full training set.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — You have a categorical feature with 200,000 unique values, such as product_id. One-hot encoding would create 200,000 columns. What would you do instead?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would rule out plain one-hot encoding immediately — a 200,000-column sparse
+            matrix is both computationally expensive and starves most categories of enough
+            data to learn anything reliable. For a linear or tree-based model, I would reach
+            for frequency encoding as a cheap, leakage-free baseline, or cross-fold target
+            encoding if the feature has a strong relationship with the target and I can afford
+            the leakage-prevention machinery. For a neural network, I would instead use a
+            learned embedding table, mapping each product ID to a small dense vector trained
+            jointly with the rest of the model — this is the standard approach in
+            recommendation and ranking systems with IDs at this scale.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Explain why label encoding a nominal (non-ordered) feature can hurt a linear model but often doesn't hurt a tree-based model">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A linear model multiplies the encoded integer by a learned coefficient, so it is
+            implicitly assuming the numeric value is meaningful — that a category encoded as 6
+            contributes twice as much as a category encoded as 3. For a nominal feature with no
+            real order, that assumption is simply false, and the model learns a spurious
+            relationship baked in by the arbitrary integer assignment. A tree-based model
+            instead only ever asks whether a value is above or below some threshold at each
+            split, and can carve out any subset of category codes it needs regardless of their
+            numeric order, so an arbitrary integer assignment costs it nothing.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you safely implement target encoding to avoid leakage, and how would you verify it worked?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would compute each category's encoded value using k-fold cross-validation: for
+            every row, the category mean used to encode it comes only from the folds that row
+            is not part of, never from a mean that includes its own target value. For unseen
+            categories or those with very few samples, I would blend the category mean with the
+            global mean (smoothing) so a category with three noisy samples does not get
+            encoded as if those three samples were a reliable estimate. To verify it worked, I
+            would check that cross-validation performance and holdout test performance are
+            close to each other — a big gap where training performance looks great but
+            validation performance is much worse is the classic signature that leakage crept
+            back in.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 15 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

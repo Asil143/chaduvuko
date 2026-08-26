@@ -1099,7 +1099,221 @@ print("""
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where Vertex AI actually earns its keep — BigQuery-native teams and Google's own models</h2>
+
+        <p style={S.p}>
+          Vertex AI shows up hardest at companies whose data already lives in BigQuery — ad-tech,
+          gaming, delivery and marketplace platforms, media and streaming — where the ML team's daily
+          loop is mostly SQL against the warehouse before it is anything else. For these teams, Vertex
+          AI Pipelines and CustomTrainingJob let training stay inside the same ecosystem the analytics
+          dashboards already run on, instead of exporting tables to an equivalent of S3 or Snowflake
+          first. A recommendation model retrains directly off the same clickstream tables that power
+          the company's own product dashboards, with no separate bridge pipeline between the analytics
+          warehouse and the ML platform.
+        </p>
+
+        <p style={S.p}>
+          BigQuery ML is the sharpest version of that advantage. An analyst who has never written a
+          line of Python can train a real model — logistic regression, boosted trees, k-means,
+          ARIMA_PLUS for forecasting — with a single CREATE MODEL statement run in the same SQL
+          console used for everyday reporting. Neither Azure ML's Designer nor SageMaker has a
+          SQL-native training path this tightly wired into the warehouse itself; a marketing analyst
+          building a first-pass churn model genuinely does not need to leave BigQuery to do it.
+        </p>
+
+        <CodeBlock label="sql" code={`-- BigQuery ML — train and evaluate directly in SQL, no Python required
+-- This is the actual workflow an analyst embedded in the growth team runs
+
+CREATE OR REPLACE MODEL \`freshmart.churn_model\`
+OPTIONS(
+  model_type = 'BOOSTED_TREE_CLASSIFIER',
+  input_label_cols = ['churned'],
+  max_iterations = 50
+) AS
+SELECT
+  days_since_last_order,
+  avg_order_value_90d,
+  support_tickets_90d,
+  app_sessions_30d,
+  churned
+FROM
+  \`freshmart.customer_features\`
+WHERE
+  feature_date < '2026-06-01';
+
+-- Evaluate — same SQL session, no separate evaluation script needed
+SELECT *
+FROM ML.EVALUATE(MODEL \`freshmart.churn_model\`);
+
+-- Predict directly against the warehouse — no export or import round trip
+SELECT
+  customer_id,
+  predicted_churned,
+  predicted_churned_probs
+FROM
+  ML.PREDICT(
+    MODEL \`freshmart.churn_model\`,
+    (SELECT * FROM \`freshmart.customer_features_current\`)
+  );`} />
+
+        <p style={S.p}>
+          Model Garden extends the same pull. Teams often start a generative AI initiative there
+          simply because it already sits inside the same console, IAM, and networking boundary as the
+          rest of the data platform — Gemini-family models and popular open-source models like Llama
+          or Mistral deploy in the same workflow as the company's own custom models, with no separate
+          vendor relationship to stand up. TPU access is a real draw too, for teams doing heavier
+          training or fine-tuning runs where a TPU v5e's cost per training run can beat GPU cost on
+          workloads that are already written in a TPU-friendly style, typically TensorFlow or JAX
+          compiled through XLA.
+        </p>
+
+        <p style={S.p}>
+          The honest caveat: teams whose data lives elsewhere — Snowflake on AWS, an on-premise Oracle
+          warehouse — get much less of this. Without BigQuery as the warehouse of record, Vertex AI
+          is mostly just Cloud Storage and compute like any other cloud, and the integration payoff
+          that makes it worth choosing over Azure ML or SageMaker largely does not materialize.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ════════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about Vertex AI</h2>
+
+        <ConceptBox title="Myth: Vertex AI is basically just Google's AutoML product with a new name" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            AutoML is one corner of Vertex AI. The platform also includes custom training through
+            CustomTrainingJob, Vertex Pipelines built on Kubeflow, the Feature Store, Model Garden
+            with Google's own foundation models and popular open-source models, Matching Engine for
+            vector search, and Workbench notebooks. Reducing Vertex AI to "the AutoML thing" misses
+            most of what production teams actually build on top of it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once you adopt Vertex AI and BigQuery, you are permanently locked in with no way out" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            There is real friction to leaving, but it is not absolute. Custom-trained models saved as
+            standard scikit-learn, XGBoost, TensorFlow, or PyTorch artifacts are portable to any
+            serving stack. BigQuery data exports cleanly to Parquet or Avro. Vertex Pipelines are
+            defined in the open-source Kubeflow Pipelines format, which can run on any
+            Kubeflow-compatible cluster, not only Vertex. The genuinely non-portable pieces are
+            narrower than "everything" — mainly Feature Store schemas, AutoML-produced model formats,
+            and Matching Engine indexes.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: As long as you stick to open formats somewhere in the stack, cloud lock-in is basically a non-issue" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Portability does not happen automatically just because open formats exist somewhere in
+            the pipeline. Teams that build their feature logic directly against the Feature Store's
+            API, route inference through Matching Engine, or depend on Vertex Pipelines' managed
+            metadata history for lineage have created real dependencies that need deliberate
+            re-architecture to remove. Lock-in risk has to be actively designed against — isolating
+            cloud-specific calls behind small adapter layers — not assumed away because the model
+            weights happen to sit in a standard format.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: BigQuery ML lets a company replace its ML team with analysts writing SQL" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            BQML is genuinely powerful for the class of problems it targets — logistic regression,
+            boosted trees, k-means, ARIMA_PLUS forecasting — trained with a single CREATE MODEL
+            statement an analyst can write without touching Python. It does not cover custom
+            architectures, deep learning at meaningful scale, complex multi-source feature
+            engineering, or the experiment tracking and governance a production ML function still
+            owns. BQML expands who can train a first-pass model; it does not eliminate the need for
+            an ML team.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Since Vertex AI gives you TPU access, TPUs are simply faster than GPUs for any deep learning workload" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            TPUs win specifically on large-batch, matrix-heavy training compiled through XLA, which
+            favors TensorFlow and JAX code written in a TPU-friendly style. A lot of real-world
+            PyTorch training, anything relying on custom CUDA kernels, or workloads with small batch
+            sizes and heavy branching logic often runs better, and is frequently only practical, on
+            GPUs. Whether TPUs help is a per-workload question that needs checking against your actual
+            framework and code, not a blanket assumption.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Vertex AI — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What are Vertex AI's biggest integration advantages over Azure ML and SageMaker?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Training scripts can query BigQuery directly with no export step to object storage first;
+            the Feature Store is widely regarded as the most production-ready managed feature store
+            across the three major clouds; TPU access is unique to GCP; Model Garden offers one-click
+            deployment of both Google's own foundation models and popular open-source models inside
+            the same IAM and networking boundary as the rest of the platform; and Vertex Pipelines is
+            built on the open-source Kubeflow Pipelines spec rather than a fully proprietary format.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — When would you reach for AutoML versus writing a custom training job on Vertex AI?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            AutoML for a fast, strong baseline on standard tabular, vision, or text problems,
+            especially early on when you do not yet know whether the problem is solvable with the
+            available features. Custom training when you need a specific architecture, a custom loss
+            function, unusual preprocessing, explainability that AutoML's more opaque models do not
+            provide well, or tighter control over serving latency and cost. AutoML's node-hour billing
+            can also exceed the cost of a well-tuned custom job once you already know roughly what
+            architecture works.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How would you decide between Azure ML, SageMaker, and Vertex AI for a new project at a startup with no existing cloud commitment?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Mostly by where the data will actually live and what the rest of engineering is already
+            using — Postgres and general-purpose services argue for AWS and SageMaker, a
+            BigQuery-centric analytics stack argues for Vertex AI, a Microsoft-heavy enterprise sales
+            motion argues for Azure ML — plus the team's existing cloud expertise and the real cost of
+            introducing a second cloud vendor purely for machine learning if the rest of the company
+            is already committed elsewhere.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Explain how Vertex AI's Feature Store addresses training-serving skew.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Features are defined once per entity type and computed once, rather than being
+            recomputed slightly differently by the training pipeline and the serving path. BigQuery
+            acts as the point-in-time-correct offline store used to build training sets, so a feature
+            value is exactly what was known as of each historical event's timestamp, with no future
+            information leaking backward. The same feature definitions are materialized into an
+            online store for low-latency lookup at inference time, so the model sees identical
+            feature logic in production to what it saw during training.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Is cloud lock-in with Vertex AI a real concern, and how would you mitigate it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Partially. Models trained through CustomTrainingJob in standard formats like
+            scikit-learn, XGBoost, TensorFlow, or PyTorch remain portable, and Kubeflow Pipeline
+            definitions can run outside Vertex on any Kubeflow-compatible cluster. The genuinely
+            sticky parts are Feature Store schemas, AutoML-produced model artifacts, and Matching
+            Engine indexes. Mitigate it by keeping training code framework-native and cloud-agnostic,
+            isolating GCP-specific calls such as BigQuery access and Feature Store lookups behind
+            small adapter modules, and exporting critical feature and training data to open formats on
+            a schedule so a migration becomes a re-plumbing exercise rather than a rewrite from
+            scratch.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

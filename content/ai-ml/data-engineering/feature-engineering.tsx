@@ -144,6 +144,28 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
   )
 }
 
+function ConceptBox({ title, children, color = '#1D9E75' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function FeatureEngineeringPage() {
   return (
     <LearnLayout
@@ -1635,7 +1657,224 @@ print(f"Columns: {X_from_store.columns.tolist()}")`} />
 
       <Div />
 
-      {/* ══ SECTION 13 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 13 — WHAT THIS LOOKS LIKE AT WORK ════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>How feature engineering actually happens on a team — feature stores, reuse, and ownership</h2>
+
+        <p style={S.p}>
+          The SimpleFeatureStore built earlier in this module is a toy, but the problem it solves is
+          entirely real. Once a company has more than one model — an ETA model, a fraud model, a
+          restaurant ranking model — several of them end up wanting the exact same underlying
+          signal: "how does this restaurant typically perform." Without a shared feature store, three
+          teams independently write three slightly different versions of a restaurant average
+          delivery time feature, computed on three different time windows, with three different
+          null-handling choices. When the fraud model and the ETA model disagree about a restaurant's
+          risk profile, nobody can tell whether that is a real signal or just three inconsistent
+          implementations of what was supposed to be the same feature.
+        </p>
+
+        <p style={S.p}>
+          Production feature stores — Feast, Tecton, Hopsworks, or a company's internal equivalent —
+          solve a harder version of the problem this module's SimpleFeatureStore only gestures at:
+          keeping an offline store (used for training, computed in batch over historical data) and an
+          online store (used for real-time serving, needing sub-10-millisecond lookups) consistent
+          with each other. A feature computed one way during training and a slightly different way
+          during serving — "training-serving skew" — is one of the most common causes of a model that
+          performs well offline and poorly in production, and it is exactly the kind of bug that a
+          shared, versioned feature definition is designed to prevent.
+        </p>
+
+        <VisualBox label="What a real feature store adds beyond this module's SimpleFeatureStore">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { concern: 'Offline / online consistency', color: '#378ADD', desc: 'The exact same feature definition must produce the same value whether computed in a nightly batch job (training) or a live lookup at request time (serving) — this is the hardest engineering problem a feature store solves.' },
+              { concern: 'Point-in-time correctness', color: '#7b61ff', desc: 'When building a training set from historical data, a feature must reflect what was known at that historical moment, not what is true today — otherwise training features silently leak future information.' },
+              { concern: 'Freshness SLAs', color: '#D85A30', desc: 'Each feature group declares how stale its values are allowed to get (restaurant stats refreshed hourly, city traffic refreshed every 5 minutes) — models depending on stale features fail silently without this.' },
+              { concern: 'Ownership and discovery', color: '#1D9E75', desc: 'A feature registry lets a new model reuse an existing, already-validated feature instead of re-deriving it — the single biggest practical benefit, and the reason feature stores exist at all.' },
+            ].map((item) => (
+              <div key={item.concern} style={{
+                display: 'grid', gridTemplateColumns: '210px 1fr', gap: 14,
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 7, padding: '10px 14px', borderLeft: `3px solid ${item.color}`,
+              }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)' }}>
+                  {item.concern}
+                </span>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <ConceptBox title="Feature ownership in practice">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            On a mature ML team, a feature group like restaurant_features from this module's example
+            has a named owner responsible for its correctness, its freshness SLA, and reviewing
+            changes to its definition — the same way a shared library has a maintainer. A model team
+            that wants a new feature typically requests it from that owner or contributes the
+            definition through a review process, rather than quietly recomputing a slightly different
+            version inside their own training script. That discipline is what makes "reuse across
+            models" actually work in practice, rather than becoming another source of silent
+            inconsistency.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 14 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about feature engineering</h2>
+
+        <ConceptBox title="Myth: Deep learning eliminates the need for feature engineering" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is roughly true for images, audio, and raw text, where deep networks learn their own
+            representations from pixels or tokens and hand-crafted features actively get in the way.
+            It is not true for tabular data of the kind this entire module works with. Gradient
+            boosted trees and well-engineered features on structured columns — distance, order value,
+            restaurant history — still consistently beat deep networks on tabular problems in both
+            research benchmarks and industry practice, because tabular columns do not have the
+            spatial or sequential structure that makes deep learning's automatic feature learning so
+            effective in the first place. The "no feature engineering needed" claim is domain-specific,
+            not universal.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: More features always help, or at worst, don't hurt" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every additional feature adds a dimension a model can overfit to, particularly with a
+            fixed amount of training data — this is exactly why the feature selection section of this
+            module exists. A weakly correlated or purely noisy feature can degrade a linear model's
+            generalisation, slow down training, and in high dimensions actively hurt distance-based
+            methods through the curse of dimensionality. Polynomial feature expansion makes this
+            concrete: going from 50 to 200 input columns under degree-2 polynomial features produces
+            over 20,000 output features, most of which add nothing but noise and compute cost.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Feature engineering is a purely statistical exercise, separate from domain knowledge" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The single highest-leverage feature in this module's DoorDash example — distance times
+            traffic times prep time as a combined "slow delivery" indicator — did not come from a
+            statistical test. It came from understanding, as a person who has ordered food delivery,
+            that these three factors compound rather than add. The statistical techniques in this
+            module (log transforms, target encoding, aggregate statistics) are the mechanism for
+            expressing a domain insight as a number a model can use — they are not a substitute for
+            having the insight in the first place. The best feature engineers on any team are usually
+            the ones who understand the business as well as they understand pandas.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A feature store is just a database with a few extra columns bolted on" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Storage is the easy 10 percent. The hard problems a real feature store solves are keeping
+            an offline batch computation and an online real-time lookup numerically consistent for
+            the same feature, guaranteeing point-in-time correctness so training features never
+            leak information from after the historical moment they represent, and tracking freshness
+            and ownership across dozens of feature groups shared by multiple teams. A plain database
+            table with extra columns solves none of these — it is the same problem the
+            SimpleFeatureStore in this module intentionally simplifies away for teaching purposes.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If a new feature improves cross-validation score, it is safe to ship" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A cross-validation improvement is necessary but not sufficient — the leakage section of
+            this module exists precisely because a feature can look like a genuine improvement in CV
+            while actually encoding information that will not exist at prediction time in production.
+            A feature derived from a groupby aggregate that was computed on the full dataset instead
+            of training folds only, or a feature that is a proxy for the target because of how it was
+            defined, both inflate CV scores while quietly guaranteeing the model will underperform
+            once deployed. A CV improvement should prompt an audit of exactly how the feature was
+            computed, not an automatic green light to ship it.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 15 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Feature engineering — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — How does feature engineering differ between tabular models and deep learning models?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For tabular models like gradient boosted trees or linear models, feature engineering is
+            where most of the modeling leverage actually lives — log transforms for skew, explicit
+            interaction terms, target and frequency encoding for categoricals, and group aggregates all
+            directly determine what the model can learn, since trees split on raw feature values and
+            linear models can only combine features the way you hand them. For deep learning on
+            unstructured data like images or text, the network learns its own internal
+            representations from raw pixels or tokens, so hand-crafted features are less central —
+            effort shifts toward architecture and representation learning instead. For deep learning
+            on tabular data specifically, feature engineering still matters nearly as much as it does
+            for trees, since the tabular structure itself does not give the network much to learn from
+            automatically.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — How do you avoid data leakage while creating new features?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The rule I follow is: split the data first, then compute every statistic — means, target
+            encodings, frequency counts, scaler parameters — using training data only, and apply those
+            already-fitted statistics to validation and test data without recomputing them. For target
+            encoding specifically, I use cross-fold encoding, where each training row's own target
+            value is never used to compute its own encoded feature. For time series, I always shift
+            before any rolling window computation and use temporal cross-validation instead of random
+            KFold, since a feature computed with access to future rows is invisible leakage that will
+            not surface until production. Wrapping all of this inside an sklearn Pipeline makes most of
+            these mistakes structurally impossible rather than relying on discipline alone.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How do you evaluate whether a new feature actually helps the model?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I add the feature and compare cross-validated performance against a baseline without it,
+            using the same folds for both so the comparison is fair. If it helps, I check feature
+            importance or permutation importance to confirm the model is actually using it rather than
+            the improvement being noise from a different random seed. I also specifically audit how the
+            feature was computed for leakage, since an implausibly large improvement is more often a
+            leakage bug than a genuinely powerful feature. Only after both checks pass — a real,
+            leakage-free improvement that the model is measurably relying on — would I consider the
+            feature validated enough to ship.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you design a feature store for a team with several models sharing the same underlying features?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start by identifying which features are genuinely shared — like per-restaurant or
+            per-city aggregate statistics — versus features specific to a single model, and only put
+            the shared ones into the store. Each feature group would have a named owner, a documented
+            definition, and a freshness SLA, following exactly the registry pattern in this module's
+            SimpleFeatureStore. The harder engineering problem I would prioritise early is offline and
+            online consistency — making sure the batch computation used for training and the real-time
+            lookup used for serving are guaranteed to produce the same value for the same feature,
+            since inconsistency there causes training-serving skew that is very difficult to debug
+            after the fact.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A feature is computed one way in your offline training pipeline and a slightly different way in your real-time serving path. How do you find and fix this?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would look for a growing gap between offline evaluation metrics and live production
+            metrics as the first symptom — training-serving skew usually shows up exactly that way,
+            since the model was validated against features computed one way but scores against
+            features computed subtly differently. To find the specific feature, I would log feature
+            values from both the training pipeline and the serving path for the same set of real
+            requests and diff them directly, rather than guessing. The fix is almost always to
+            consolidate both paths onto one shared feature definition — the same function or the same
+            feature store computation — instead of maintaining parallel batch and real-time
+            implementations that can silently drift apart from each other over time.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 16 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

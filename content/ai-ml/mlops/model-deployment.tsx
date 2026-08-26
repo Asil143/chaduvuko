@@ -1055,7 +1055,280 @@ for metric, target, desc in slos:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Deployment is a hand-off between teams, not a single click</h2>
+
+        <p style={S.p}>
+          At most companies running ML in production, no single engineer owns the
+          entire path from trained model to serving traffic. The model code and the
+          FastAPI contract belong to the ML engineer or data scientist who built the
+          model — they decide what the request and response schemas look like, what
+          features the endpoint needs, and what a "healthy" prediction looks like.
+          Everything below that — the Dockerfile, the Kubernetes manifests, the
+          autoscaling policy, the on-call rotation that gets paged at 3 AM — is
+          usually owned by a platform, infra, or SRE team. A dedicated "ML platform"
+          team often sits in between, providing the paved-road tooling (a shared
+          base image, a standard Helm chart, a deployment pipeline) so the ML
+          engineer never has to hand-write raw Kubernetes YAML from scratch.
+        </p>
+
+        <p style={S.p}>
+          The actual release process at a company like DoorDash or Stripe looks
+          less like "run a script" and more like a pipeline with checkpoints. A
+          merged pull request triggers CI, which runs unit tests, builds the Docker
+          image, and pushes it to a container registry. The image deploys first to
+          a staging cluster where integration tests hit real endpoints. From there
+          it goes to a canary — a small slice of production traffic, often in a
+          single region or availability zone — while dashboards are watched for
+          latency, error rate, and (for a new model version) prediction drift
+          against the previous version. Tools like Argo Rollouts, Flagger, or
+          Netflix's Kayenta automate this comparison and can auto-promote or
+          auto-abort the canary based on metric thresholds, without a human
+          manually eyeballing a dashboard for thirty minutes.
+        </p>
+
+        <VisualBox label="Who actually owns each layer of the deployment stack">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              {
+                layer: 'Model code + FastAPI contract',
+                owner: 'ML engineer / data scientist',
+                color: '#7b61ff',
+                note: 'Decides request/response schema, feature requirements, prediction validity checks.',
+              },
+              {
+                layer: 'Docker image + base image security patching',
+                owner: 'Platform / DevOps',
+                color: '#378ADD',
+                note: 'Maintains the shared base image, dependency pinning, vulnerability scanning.',
+              },
+              {
+                layer: 'Kubernetes manifests + autoscaling policy',
+                owner: 'Platform / SRE',
+                color: '#1D9E75',
+                note: 'Owns resource requests/limits, HPA thresholds, probe configuration, cluster capacity.',
+              },
+              {
+                layer: 'Canary analysis + rollback decision',
+                owner: 'Joint — often automated',
+                color: '#D85A30',
+                note: 'Codified as a gate (Kayenta/Argo Rollouts metric checks) so no single person has to decide under pressure.',
+              },
+              {
+                layer: 'On-call rotation for a 3 AM incident',
+                owner: 'SRE primary, ML engineer secondary',
+                color: '#BA7517',
+                note: 'SRE handles infra symptoms (crashloop, latency). ML engineer gets paged if the issue is prediction quality, not uptime.',
+              },
+            ].map((row) => (
+              <div key={row.layer} style={{
+                display: 'grid', gridTemplateColumns: '260px 200px 1fr',
+                gap: 12, alignItems: 'start',
+                background: 'var(--surface)', border: `1px solid ${row.color}25`,
+                borderRadius: 7, padding: '10px 14px',
+                borderLeft: `3px solid ${row.color}`,
+              }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: row.color }}>{row.layer}</span>
+                <span style={{ fontSize: 11, color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{row.owner}</span>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{row.note}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          One more distinction that trips up new hires: a deployment can be
+          perfectly healthy from an infra standpoint — no crashes, no latency
+          spikes, all probes green — while quietly serving worse predictions.
+          Kubernetes and its rollout tooling only know about HTTP status codes
+          and resource usage. They have no idea whether the delivery-time model
+          is now underestimating every order by ten minutes. That is exactly why
+          canary analysis for an ML deployment checks prediction-level metrics
+          (drift versus the previous version, distribution of outputs) in
+          addition to the standard infra metrics — an ML rollout that only
+          checks "is the pod up" is not actually a safe rollout.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about model deployment</h2>
+
+        <ConceptBox title="Myth: Deployment means pip install and run the script on a server" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Running a Python script that loads a model and prints a prediction is a
+            demo, not a deployment. Production deployment means the model is behind
+            an API contract that other services can depend on without breaking,
+            survives a crashed process by restarting automatically, handles many
+            concurrent requests without falling over, can be updated without taking
+            the service offline, and exposes health signals so an orchestrator knows
+            when it is broken. Every one of those properties is infrastructure work
+            that has nothing to do with the model itself — it is the same work
+            whether the model is a linear regression or a neural network.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A model that works well in a notebook is production-ready" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A notebook has no latency budget, no concurrent users, and features
+            computed leisurely from a clean, already-joined dataframe. Production
+            has none of those luxuries: features must be fetched from a live
+            feature store in single-digit milliseconds, malformed input has to be
+            rejected instead of crashing the process, and the exact same
+            preprocessing that ran during training has to run identically on a
+            single incoming request. Training-serving skew — where the notebook's
+            feature computation subtly differs from the API's — is one of the most
+            common causes of a model that scored well offline and performs badly
+            in production, and it is invisible until you actually deploy and check.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Batch and real-time serving are interchangeable — just call predict() either way" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The two are different systems with different failure modes, not the
+            same predict call on a different schedule. Batch prediction runs on a
+            schedule over a warehouse table, has no per-request latency budget, and
+            can retry an entire failed run overnight. Real-time serving answers a
+            single request synchronously inside a strict latency budget, needs an
+            online feature store for fresh values, and a single slow dependency can
+            take down the whole request path. A model built assuming batch-style
+            feature freshness (daily aggregates) often cannot simply be dropped into
+            a real-time endpoint — the features it needs may not exist yet at
+            request time with the freshness the model was trained on.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Docker guarantees the model behaves identically everywhere it runs" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Docker guarantees the software environment is reproducible — same
+            Python version, same pinned package versions, same OS libraries. It
+            says nothing about the data flowing into that environment. A model can
+            run inside the exact same container in staging and production and still
+            produce different predictions if the feature store returns different
+            values, if a categorical encoder sees a category it never saw during
+            training, or if an upstream data pipeline change silently altered a
+            feature's scale. Reproducible software is necessary but is a completely
+            separate problem from reproducible data.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A Kubernetes rolling update by itself is a safe way to ship a new model version" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A rolling update guarantees the service stays up while pods are
+            replaced — it says absolutely nothing about whether the new model's
+            predictions are any good. Kubernetes has no concept of prediction
+            quality; it only checks HTTP health endpoints and resource usage. A
+            model that returns a plausible-looking number for every request but is
+            systematically wrong will sail through a rolling update with every
+            probe green. That is exactly why canary releases and shadow deployment
+            exist as separate concerns from the rolling update mechanism — they
+            check whether the new version's outputs are trustworthy, which is a
+            question infrastructure tooling cannot answer on its own.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Model deployment — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What is the difference between canary and shadow deployment, and when would you choose each?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A canary release sends a small slice of real user traffic to the new
+            version and those users receive its actual predictions — if the new
+            version is bad, a small number of real users are affected before you
+            catch it and roll back. A shadow deployment sends a copy of every
+            request to the new version as well, but its prediction is only logged,
+            never returned to the user — zero user impact, at the cost of running
+            the new model's compute twice for every request. I would reach for
+            shadow deployment first, before any user is exposed at all, to validate
+            the new model on real live traffic distribution. Once shadow results
+            look good, I would move to a canary to validate real-world business
+            outcomes, since some effects (actual conversion, actual delivery
+            accuracy) only show up when the model's prediction is the one acted on.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk me through the latency and throughput tradeoffs when deciding how to serve a model">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Latency is how long one request takes; throughput is how many requests
+            the system handles per second — and improving one can hurt the other.
+            A larger, more accurate model usually has higher per-request latency,
+            so hitting a strict latency budget might mean choosing a smaller model,
+            adding a result cache for repeat inputs, or batching several requests
+            together on the server side to use hardware more efficiently — but
+            batching trades a little latency (waiting to fill the batch) for a lot
+            more throughput. I would start from the actual product requirement —
+            a fraud check blocking a checkout needs sub-100-millisecond p99 latency,
+            while a nightly recommendation batch job cares only about total
+            throughput and can trade individual-request latency freely for it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — A newly deployed model is producing bad predictions in production. Walk me through your rollback strategy.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, stop the bleeding: if it was a gradual rollout (canary or
+            staged traffic shift), immediately shift traffic back to zero percent
+            on the new version — kubectl rollout undo, or flipping the Service
+            selector back to the previous deployment if it was blue-green, either
+            of which should take seconds, not minutes. Second, confirm the rollback
+            actually restored good predictions by watching the same dashboards that
+            flagged the problem. Only after production is stable would I
+            investigate root cause — was it a genuinely worse model, a feature
+            pipeline bug, or a data issue upstream — because debugging under live
+            production pressure risks making the incident worse. I would also
+            check whether anything besides the model artifact shipped alongside it
+            (a feature schema change, a new dependency) that also needs reverting.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is the difference between a Kubernetes liveness probe and a readiness probe, and why does an ML service need both?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A liveness probe answers "is this process alive or should it be
+            restarted" — if it fails repeatedly, Kubernetes kills and restarts the
+            pod. A readiness probe answers "should this pod currently receive
+            traffic" — if it fails, the pod is pulled out of the load balancer
+            rotation but is not restarted. ML services need both because loading a
+            model into memory can take anywhere from a few seconds to a couple of
+            minutes, and during that window the process is alive and healthy but
+            not yet able to serve a correct prediction. Without a separate
+            readiness probe, Kubernetes would either send traffic to a pod whose
+            model has not finished loading, or the liveness probe's timeout would
+            need to be set so generously that a genuinely hung process would take
+            far too long to get restarted.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — When would you choose batch prediction over real-time serving for a given use case?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would choose batch when the prediction does not need to reflect
+            something that just happened — a weekly churn-risk score, a nightly
+            recommendation refresh, a monthly credit-limit recalculation. Batch is
+            simpler to operate (no always-on API, no per-request latency budget, no
+            online feature store), cheaper per prediction at high volume, and
+            failures can simply be retried on the next scheduled run. I would choose
+            real-time serving when the prediction depends on something that just
+            happened in this exact request — a fraud check at checkout, a delivery
+            time estimate for the order being placed right now — where the value of
+            the prediction depends entirely on it reflecting the current moment.
+            Some systems genuinely need both: a nightly batch job scores every user
+            for a baseline, and a real-time endpoint adjusts that score with
+            in-session signals.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

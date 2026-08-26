@@ -665,7 +665,232 @@ import torch
 
       <Div />
 
-      {/* ══ SECTION 6 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 6 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>The jobs built on top of generative AI — and how they actually divide the work</h2>
+
+        <p style={S.p}>
+          Almost nobody at a normal company trains a generative model from scratch anymore —
+          that is the job of a handful of labs with enormous compute budgets. What has exploded
+          instead is the layer of roles built on top of foundation models: people who take a
+          pretrained GPT, LLaMA, or Stable Diffusion checkpoint and turn it into a working product
+          feature. Three roles show up again and again in job postings, and interviewers expect
+          you to know which one you are actually being hired for.
+        </p>
+
+        <VisualBox label="Three roles built on foundation models — what each one actually owns">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              {
+                role: 'Prompt / AI product engineer',
+                color: '#1D9E75',
+                owns: 'Prompt design, few-shot examples, output parsing, guardrails, and the evaluation harnesses that catch regressions when a prompt or model version changes.',
+                tools: 'Model APIs (OpenAI, Anthropic, Groq), LangChain/LlamaIndex-style orchestration, eval frameworks — no GPU training involved.',
+                notDoing: 'Not touching model weights, not writing training loops. Success is measured in task accuracy and latency/cost per request, not loss curves.',
+              },
+              {
+                role: 'ML engineer (fine-tuning / RAG)',
+                color: '#378ADD',
+                owns: 'Retrieval pipelines (chunking, embeddings, vector search), LoRA/QLoRA fine-tunes on a base model, serving infrastructure, latency and cost optimisation at scale.',
+                tools: 'Embedding models, vector databases (FAISS, Pinecone), PyTorch for lightweight fine-tuning, quantisation for cheaper inference.',
+                notDoing: 'Rarely pretrains a model from random weights — almost always adapts an existing foundation model rather than building a new one.',
+              },
+              {
+                role: 'Applied / research scientist',
+                color: '#7b61ff',
+                owns: 'Novel architecture work, pretraining decisions, alignment research (RLHF, DPO) — the small number of teams actually training foundation models from scratch.',
+                tools: 'Large-scale distributed training, custom CUDA kernels, research papers as primary source material.',
+                notDoing: 'This is the smallest of the three groups by headcount — most companies do not have, and do not need, this role at all.',
+              },
+            ].map((item) => (
+              <div key={item.role} style={{
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 8, padding: '13px 16px', borderLeft: `4px solid ${item.color}`,
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: item.color, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
+                  {item.role}
+                </div>
+                <p style={{ ...S.ps, marginBottom: 6 }}><strong style={{ color: 'var(--text)' }}>Owns:</strong> {item.owns}</p>
+                <p style={{ ...S.ps, marginBottom: 6 }}><strong style={{ color: 'var(--text)' }}>Tools:</strong> {item.tools}</p>
+                <p style={{ ...S.ps, marginBottom: 0 }}><strong style={{ color: 'var(--text)' }}>Not doing:</strong> {item.notDoing}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          The build-versus-buy decision behind all three roles is usually the first real
+          conversation on a generative AI project. Do you call an API (fastest to ship, most
+          expensive per call, zero infrastructure), fine-tune an open model (slower to ship,
+          cheaper at volume, requires ML engineering time), or pretrain something new (a decision
+          that, realistically, only a small number of companies on Earth should ever make)?
+        </p>
+
+        <ConceptBox title="The build-vs-buy framework interviewers expect you to reason through">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { q: 'Prompt an API (GPT-4, Claude)', when: 'Prototype fast, low request volume, task changes often, no dedicated ML team available', color: '#1D9E75' },
+              { q: 'Fine-tune an open model', when: 'High request volume where API cost dominates, need a narrow task done consistently, can tolerate weeks not days to ship', color: '#378ADD' },
+              { q: 'Pretrain from scratch', when: 'Almost never the right call for a product team — reserved for labs with hundred-million-dollar compute budgets', color: '#7b61ff' },
+            ].map((row) => (
+              <div key={row.q} style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 12 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: row.color, fontFamily: 'var(--font-mono)' }}>{row.q}</span>
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>{row.when}</span>
+              </div>
+            ))}
+          </div>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 7 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about generative AI</h2>
+
+        <ConceptBox title="Myth: Generative AI is a completely different kind of technology than traditional ML" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Underneath, it is still the same machinery covered throughout this track — gradient
+            descent, backpropagation, loss functions, the dot products from Module 05. What actually
+            changes is the training objective (learning P(data) instead of P(label given data)) and
+            the scale (billions of parameters instead of thousands). A transformer-based LLM and a
+            logistic regression model are trained with the same core optimisation loop; generative
+            models did not throw out the fundamentals, they scaled them up and pointed them at a
+            different target.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: LLMs are just autocomplete, and that fully explains what they can and cannot do" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The mechanical claim is true — the training objective really is next-token prediction,
+            nothing more exotic than that. But 'just' undersells what emerges from doing that at
+            enormous scale: multi-step reasoning, following novel instructions never seen in training,
+            writing working code — none of these were explicitly supervised, they emerged from scaling
+            the same simple objective. At the same time, 'it's just autocomplete' gets used to wave
+            away real capability limits, like hallucination, as if naming the mechanism settles what
+            the system can reliably be trusted to do. Both the dismissal and the hype skip past the
+            same nuance: the training objective is simple, the resulting behaviour is not fully
+            predictable from that simplicity alone.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Hallucination is a bug that will eventually be patched like a normal software defect" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Hallucination is a structural consequence of how these models generate text, not a stray
+            bug in an otherwise correct implementation. An LLM samples from a learned probability
+            distribution over what token is likely to come next — it is producing what is statistically
+            plausible, not looking up what is verified true, because it has no built-in fact store to
+            check against. Even a model trained flawlessly on its objective will occasionally produce a
+            fluent, confident, wrong statement when nothing grounds the answer in a retrieved or
+            verified source. Retrieval-augmented generation, tool use, and citations reduce the problem
+            by giving the model something to ground against — they do not eliminate it, because the
+            underlying generation mechanism never changes.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Creativity and hallucination are opposite behaviours the model can be tuned to tell apart" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Both come from exactly the same sampling process — drawing the next token from a learned
+            probability distribution, with temperature controlling how much the model deviates from
+            its single most likely choice. What we call 'creative' is ungrounded generation in a
+            context where that is desired (a poem, a brainstormed idea); what we call 'hallucination'
+            is the identical mechanism in a context where groundedness was expected (a factual claim,
+            a citation). A model that could never generate anything ungrounded would also be
+            incapable of genuine creative generation — the tension is inherent to sampling, not a
+            separate failure mode that can be independently switched off.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A newer or larger generative model is strictly better for any given task" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Task fit dominates raw scale far more often than marketing suggests. A GAN still wins for
+            latency-sensitive single-pass image generation that a diffusion model's multi-step
+            denoising cannot match. A VAE's smooth latent space is still the right tool for anomaly
+            detection and molecule generation, tasks where a GAN or diffusion model's strengths are
+            irrelevant. A small model fine-tuned on a narrow task routinely beats a much larger
+            general-purpose one on that task, at a fraction of the latency and cost. 'Generative AI'
+            names a family of architectures, not one model — picking the wrong family for your
+            constraints is a common, avoidable mistake.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Generative AI — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What is the mathematical difference between a discriminative and a generative model?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A discriminative model learns P(label given data) directly — it models the decision
+            boundary and nothing about how the data itself was produced. A generative model learns
+            P(data), or the joint P(data, label), the full distribution the data came from, which lets
+            you sample new data from it. Worth adding unprompted: some classic generative models, like
+            Naive Bayes, are still used for classification — they learn P(data given label) for each
+            class and use Bayes' rule to get a decision at inference time. That shows 'generative'
+            describes what the model represents, not necessarily how it gets used at prediction time.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What does the word 'generative' actually mean mathematically, separate from the marketing usage?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It means the model defines, or approximates, a probability distribution over the data (or
+            over data conditioned on some input), and 'generating' something means drawing a sample
+            from that distribution. The output is not retrieved from storage or copied from training
+            data — it is a fresh draw from a learned distribution, which is why the same prompt or
+            noise vector can produce different outputs on different runs, and why evaluating these
+            models requires distributional metrics like FID instead of accuracy against one correct
+            answer.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Compare GANs, VAEs, diffusion, and LLMs at a level that shows real understanding, not just the buzzwords">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            GANs pit a generator against a discriminator in an adversarial game and produce sharp
+            images in a single forward pass, but training is unstable and prone to mode collapse. VAEs
+            encode data to a regularised probability distribution and decode back, optimising the ELBO —
+            reconstruction plus a KL term — giving stable training and a smooth latent space at the cost
+            of blurrier outputs. Diffusion models learn to reverse a gradual noising process, generating
+            through many small denoising steps, trading slow inference for the best image quality and
+            diversity available today. LLMs autoregressively predict the next token given everything
+            before it, and generation is repeated sampling from that predicted distribution one token at
+            a time.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why do LLMs hallucinate, and is this actually fixable?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They hallucinate because generation is sampling from a learned distribution over plausible
+            next tokens, not a lookup against verified facts — there is no ground truth store the model
+            consults before answering. Grounding techniques (retrieval-augmented generation, tool use,
+            requiring citations, RLHF calibration toward saying 'I don't know') substantially reduce the
+            rate in practice. But being honest about the mechanism: none of these fully fix it, because
+            the underlying generation process — sampling the statistically likely continuation — never
+            changes. The realistic framing in an interview is 'substantially mitigated, not eliminated.'
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you decide which generative architecture to use for a new product feature?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Start from modality and constraints, not from whatever is trending. Text generation almost
+            always means an LLM. Open-ended image generation from a text prompt means diffusion. A
+            latency-critical, single-pass image task (a live filter, a real-time avatar) points toward a
+            GAN because diffusion's iterative denoising is too slow for that budget. Anomaly detection or
+            a task that needs a smooth, interpolatable latent space points toward a VAE. Layered on top of
+            all of that is the build-vs-buy question from earlier in this module: whether prompting an
+            existing API, fine-tuning an open model, or — almost never — pretraining from scratch is the
+            right level of investment for the constraint you are actually solving for.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

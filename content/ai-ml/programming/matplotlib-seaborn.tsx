@@ -108,6 +108,28 @@ function VisualBox({ children, label }: { children: React.ReactNode; label: stri
   )
 }
 
+function ConceptBox({ title, children, color = '#378ADD' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: string }) {
   return (
     <div style={{
@@ -1402,7 +1424,224 @@ print("\\nSaved multi-page PDF report to /tmp/eda_report.pdf")`} />
 
       <Div />
 
-      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where plotting earns its keep in an ML workflow — and where it disappears entirely</h2>
+
+        <p style={S.p}>
+          Visualisation shows up heavily at two specific points in a real ML project
+          and is almost completely absent at a third. It shows up during EDA — the
+          histograms, correlation heatmaps, and boxplots from Sections 4 and 5, run
+          in a notebook before a single line of modelling code is written, to catch
+          skew, outliers, and multicollinearity while they are still cheap to fix.
+          It shows up again immediately after training — residual plots, confusion
+          matrices, learning curves — because a single R² or accuracy number cannot
+          tell you whether a model is systematically wrong on one segment, or
+          whether it is overfitting. Both of these are diagnostic work an engineer
+          does for themselves, not for anyone else to see.
+        </p>
+
+        <p style={S.p}>
+          The third place plotting shows up is different in kind: a launch review,
+          a weekly metrics update, a slide for a non-technical stakeholder. Here the
+          audience has not seen the notebook, does not know what a residual is, and
+          will make a decision based on one chart with ten seconds of attention.
+          That chart needs a single message, a title that states the conclusion
+          instead of describing the axes, and none of the exploratory clutter
+          (multiple overlapping series, a dozen tick labels, a legend with codenames)
+          that is perfectly fine in a private notebook.
+        </p>
+
+        <CodeBlock code={`import matplotlib.pyplot as plt
+import numpy as np
+
+# ── The same result, two audiences ────────────────────────────────────
+
+# Diagnostic version — for you, while debugging the model
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.scatter(y_test, y_pred, alpha=0.3, s=12, color=BLUE, edgecolors='none')
+ax.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()],
+        color=ACCENT, linewidth=1.5)
+ax.set_xlabel('Actual delivery time (min)')
+ax.set_ylabel('Predicted delivery time (min)')
+ax.set_title(f'Predicted vs Actual — R²={r2_score(y_test, y_pred):.3f}, '
+             f'MAE={mean_absolute_error(y_test, y_pred):.1f} min')
+plt.tight_layout()
+plt.savefig('/tmp/diagnostic_scatter.png', dpi=150, bbox_inches='tight')
+
+# Stakeholder version — one message, no jargon, built to be read once
+fig, ax = plt.subplots(figsize=(7, 4))
+mae = mean_absolute_error(y_test, y_pred)
+ax.hist(np.abs(y_test - y_pred), bins=30, color=BLUE, alpha=0.85, edgecolor='none')
+ax.axvline(mae, color=ACCENT, linewidth=2)
+ax.set_title(f'New model: typical prediction is off by {mae:.0f} minutes',
+             fontsize=13, fontweight='bold')
+ax.set_xlabel('Prediction error (minutes)')
+ax.set_yticks([])   # the exact count on the y-axis is not the point
+for spine in ['left', 'top', 'right']:
+    ax.spines[spine].set_visible(False)
+plt.tight_layout()
+plt.savefig('/tmp/stakeholder_chart.png', dpi=150, bbox_inches='tight')
+# Same underlying numbers as the diagnostic version — a completely
+# different chart, because the audience and the decision being made differ`} />
+
+        <p style={S.p}>
+          And then there is production inference itself — a service scoring
+          transactions or predicting delivery times in real time — where
+          matplotlib essentially never appears at all. That code path returns a
+          number or a class over an API in milliseconds; there is nothing to
+          render and nowhere to render it to. Model monitoring dashboards that
+          track live metrics use tools built for continuously updating,
+          shareable, queryable views — Grafana, Datadog, a BI tool reading from
+          a metrics table — not static matplotlib images regenerated on a
+          schedule. Matplotlib and seaborn are exploration and reporting tools,
+          not production infrastructure, and knowing that boundary is itself
+          part of using them well.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about ML visualisation</h2>
+
+        <ConceptBox title="Myth: Plotting is presentation work — something you do at the end, for a slide" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            As Section 1 of this module argues directly, most of the plotting an ML engineer does
+            never reaches a slide at all. It happens during EDA, before a model is even chosen,
+            and again immediately after training as a diagnostic step. If the only plots in a
+            project are the ones prepared for a final deck, the diagnostic step that catches
+            leakage, skew, and systematic errors before they cost a week of debugging was skipped
+            entirely — the plotting that matters most is usually the plotting nobody else sees.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Seaborn has replaced matplotlib — there is no real reason to learn matplotlib directly" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Seaborn is built on top of matplotlib, and every seaborn plotting function hands back
+            a matplotlib Axes object. The moment you need pixel-level control — repositioning a
+            legend, annotating a specific point, composing several plots into one custom layout,
+            controlling exactly how a figure is saved — you are calling matplotlib methods
+            directly on the object seaborn gave you, as this module does constantly (ax.set_title,
+            ax.axvline, ax.legend after a seaborn call). Seaborn changes where you start for
+            statistical plots; it does not remove the need for matplotlib underneath.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A more colourful chart, or a fancier palette, is automatically a more informative one" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Colour should encode something — a category, a sign, a magnitude — or it should not be
+            there at all. Adding colour purely for visual interest, or using a rainbow colormap on
+            a continuous variable, actively misleads about ordering and magnitude, and breaks
+            completely if the chart is ever printed in grayscale. The correlation heatmap in
+            Section 5 deliberately uses a diverging red/blue palette centred at zero for exactly
+            this reason: the colour choice encodes sign and strength, nothing more, and a busier
+            palette would only obscure that.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A confusion matrix, or an ROC curve, is basically a complete evaluation on its own" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A single plot hides failure modes that a second, differently-framed plot exposes. A
+            confusion matrix shown only in raw counts can hide severe class imbalance that the
+            row-normalised version reveals immediately. An ROC curve can look strong on an
+            imbalanced dataset even when precision is unusable in practice — which a
+            precision-recall curve exposes and ROC does not. This is exactly why Section 8 pairs raw
+            and normalised confusion matrices, and ROC with precision-recall, rather than relying
+            on any single plot to tell the whole story.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once a plot looks right in a notebook, it is ready to share as-is" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A notebook plot inherits whatever default styling, dark or light background, and font
+            size happen to be configured for that session — none of which was chosen with another
+            audience in mind. Anything meant to leave the notebook needs a deliberate second pass:
+            larger fonts, a title that states the conclusion, clutter removed, and the figure saved
+            explicitly with bbox_inches='tight' and a controlled dpi, as shown throughout Section 9.
+            The jump from exploratory plot to shareable chart is a real extra step, not something
+            that happens automatically because the plot rendered without errors.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 13 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Data visualisation — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — How do you decide which plot type to use for a given feature or relationship?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It follows from the data types involved. A single continuous variable gets a histogram
+            or KDE to see its shape. Two continuous variables get a scatter plot, optionally with a
+            fitted line. A continuous variable split across a categorical one gets a boxplot or
+            violin plot for a quick comparison across groups. Two categorical variables get a
+            grouped bar chart or a heatmap of counts. I choose the plot based on what question is
+            being asked — distribution, relationship, or comparison across groups — rather than
+            defaulting to whichever chart type is most familiar.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk me through how you would diagnose a regression model using residual plots. What patterns would concern you?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start with predicted versus actual to see overall calibration, then residuals
+            versus predicted value, which should look like random scatter centred on zero with
+            no visible pattern. A funnel shape — residual spread growing as the prediction grows —
+            signals heteroscedasticity, meaning the model's error is not uniform across the range
+            and a transformation like a log target might help. A curve in that same plot signals
+            the model missed a non-linear relationship the features actually contain. Finally I
+            would check the residual distribution itself for a strong skew or heavy tails, which
+            points to outliers the model is not handling well.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How would you explain a model's performance to a non-technical stakeholder without showing them a ROC curve?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would translate the metric into the unit the business already thinks in, not into a
+            statistical curve they have never seen. Instead of AUC, I would say something like
+            "the new model catches this many more fraudulent orders per week while flagging
+            roughly the same number of legitimate ones for review" — grounded in a single simple
+            chart, like a bar comparing the old and new model on that one number. The goal is one
+            chart, one sentence, one decision-relevant number, not a comprehensive technical
+            summary the audience has no way to evaluate.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why is it important to sample before creating a scatter plot on a large dataset, and what would you use instead at scale?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Matplotlib draws every point individually, so a scatter plot of a million rows both
+            takes a long time to render and produces an unreadable solid blob once points start
+            overlapping — the pattern in the data actually becomes harder to see, not easier, as
+            more data is added. Sampling a representative few thousand points, as this module does
+            throughout, keeps the plot both fast and legible. For cases where I genuinely need
+            every point's density represented, I would use hexbin or a 2D histogram instead, which
+            aggregate points into bins and encode density with colour rather than rendering each
+            point separately.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — What is the difference between a boxplot and a violin plot, and when would you pick one over the other?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A boxplot summarises a distribution with five numbers — the median, the two quartiles,
+            and the whisker bounds — plus individual outlier points beyond that. A violin plot
+            adds the full estimated density shape on each side, which a boxplot's five-number
+            summary cannot show at all. I default to boxplots when comparing many groups at once,
+            since they stay compact and readable even with a dozen categories side by side. I
+            switch to violin plots specifically when I suspect a distribution might be bimodal or
+            unusually shaped, since a boxplot would summarise two separate clusters as one
+            misleading box and give no hint that they exist.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 14 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

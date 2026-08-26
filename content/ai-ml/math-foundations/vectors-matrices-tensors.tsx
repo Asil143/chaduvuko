@@ -108,6 +108,28 @@ function VisualBox({ children, label }: { children: React.ReactNode; label: stri
   )
 }
 
+function ConceptBox({ title, children, color = '#7b61ff' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 function MatrixGrid({ data, color = '#378ADD', label }: { data: string[][]; color?: string; label?: string }) {
   return (
     <div style={{ display: 'inline-flex', flexDirection: 'column', gap: 4, alignItems: 'center' }}>
@@ -862,7 +884,204 @@ print(X_norm.std(axis=0))  # [~1, ~1, ~1, ~1] ← stds now near one
 
       <Div />
 
-      {/* ══ SECTION 5 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 5 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>You don't do this math by hand at work — but you read shapes constantly</h2>
+
+        <p style={S.p}>
+          No production ML job asks you to multiply matrices with a pencil. What it asks
+          constantly is to read a shape, know what it represents, and spot the moment it stops
+          making sense. This is one of the few skills from this page that shows up in literally
+          every ML-adjacent role, not just one.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+          {[
+            { role: 'ML Engineer', color: '#378ADD', scenario: "Debugging why a training job crashed overnight — nine times out of ten the traceback ends in a shape mismatch between the feature matrix and the model's expected input." },
+            { role: 'Data Scientist', color: '#1D9E75', scenario: 'Reshaping a raw pull from the warehouse — one row per order, one column per feature — into the (n_samples, n_features) matrix every sklearn model expects.' },
+            { role: 'Applied / Research Scientist', color: '#7F77DD', scenario: 'Reading a paper\'s architecture diagram and translating "hidden dimension 512" directly into the shape of a weight matrix before writing a single line of code.' },
+            { role: 'GenAI / LLM Engineer', color: '#D85A30', scenario: 'Choosing an embedding model and immediately needing to know whether it produces a 384-number vector or a 1536-number one, because that shape has to match everywhere it gets stored and compared.' },
+          ].map((row, i) => (
+            <div key={i} style={{
+              background: 'var(--surface)', border: '1px solid var(--border)',
+              borderLeft: `3px solid ${row.color}`, borderRadius: 8, padding: '13px 16px',
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: row.color, fontFamily: 'var(--font-mono)', marginBottom: 6 }}>
+                {row.role}
+              </div>
+              <p style={{ ...S.ps, marginBottom: 0 }}>{row.scenario}</p>
+            </div>
+          ))}
+        </div>
+
+        <CodeBlock code={`# What a real code review comment on this topic looks like
+# PR: "Add prep-time feature to delivery model"
+
+# Reviewer comment:
+# "X_train.shape is (48000, 5) but you appended the new feature as
+#  a separate array -- did you mean to np.column_stack it back into X
+#  before calling model.fit()? Right now this line silently trains
+#  on the OLD 4-feature matrix and the new column is never used."
+
+import numpy as np
+
+X_train = np.random.randn(48000, 4)          # existing 4 features
+prep_time_feature = np.random.randn(48000)   # new column, shape (48000,)
+
+# Wrong -- new feature never reaches the model
+# model.fit(X_train, y_train)
+
+# Right -- combine into one (48000, 5) matrix first
+X_train_v2 = np.column_stack([X_train, prep_time_feature])
+print(X_train_v2.shape)   # (48000, 5)  <- now the model actually sees it`} />
+
+        <Callout type="tip">
+          That exact bug — a new feature computed correctly but never actually joined into the
+          training matrix — is one of the most common silent errors in real ML pull requests.
+          The code runs. Nothing crashes. The model just quietly never uses the column someone
+          spent a day engineering. Reading shapes catches it in seconds; nothing else will.
+        </Callout>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 6 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about vectors, matrices, and tensors</h2>
+
+        <ConceptBox title="Myth: You need to be a math genius to work with vectors and matrices in ML" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Everything on this page reduces to four operations — dot product, matrix multiply,
+            transpose, and broadcasting — and NumPy or PyTorch executes every one of them for
+            you. What separates a productive ML engineer from a stuck one is not the ability to
+            multiply matrices by hand; it is the habit of knowing what a shape like (1000, 4)
+            represents and noticing immediately when a shape stops making sense. That is a
+            reading skill, not a calculation skill, and it is entirely learnable without a math
+            degree.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A tensor is some exotic object invented specifically for deep learning" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A tensor is just the general word for an array with any number of dimensions — a
+            scalar is a 0-dimensional tensor, a vector is 1-dimensional, a matrix is
+            2-dimensional, and 'tensor' is simply what people call it once you go past two.
+            PyTorch and TensorFlow named their core data type 'Tensor' because it is the one word
+            that covers every case above without needing a different name for each dimension
+            count — not because the underlying object is mathematically exotic.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Working in higher dimensions means writing more nested loops" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            In raw Python, yes — a 4D array would mean four nested loops to touch every element.
+            NumPy and PyTorch exist specifically so you almost never write that loop.
+            Broadcasting, the colon-slicing shown throughout this page, and vectorised operations
+            let you write one line — X.mean(axis=0), X @ W — that operates across every dimension
+            at once, at C or GPU speed instead of Python speed. Reaching for a manual loop over
+            array elements is usually the sign something is being done the slow, wrong way.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: This is textbook material that does not show up in real production code" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every row in a training table is a vector. Every dataset fed to model.fit() is a
+            matrix. Every batch of images or token sequence a transformer processes is a tensor.
+            There is no layer of the ML stack — from a scikit-learn script to a
+            trillion-parameter LLM — where this structure is optional or theoretical. The
+            vocabulary might disappear behind a library call, but the data underneath it never
+            stops being exactly this.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If you're using a high-level API like Keras or sklearn, you can skip understanding shapes" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            High-level APIs hide the matrix multiplication, not the shape requirements.
+            model.fit(X, y) will still raise an error the moment X and y disagree on the number
+            of rows, or a Dense layer will still fail the moment its input dimension does not
+            match the previous layer's output. This page's own closing rule holds regardless of
+            which library sits on top: the large majority of ML bugs people hit are shape
+            mismatches, and the fix is always the same — print the shape and look.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 7 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Vectors, matrices, and tensors — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What is the difference between a vector, a matrix, and a tensor?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They are the same idea extended by one dimension each time. A scalar is a single
+            number with zero dimensions. A vector is a one-dimensional list of numbers — one
+            training example, or one word embedding. A matrix is a two-dimensional grid — rows
+            and columns, like an entire training dataset where each row is an example and each
+            column is a feature. A tensor is the general term for any of these — people
+            specifically use the word 'tensor' once you go beyond two dimensions, like a batch of
+            images with shape (batch, height, width, channels).
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why does an image get represented as a 3D or 4D tensor in a deep learning pipeline?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A single colour image is not just a flat grid of pixels — it has a colour channel
+            dimension on top of height and width, typically red, green, and blue, so one image
+            alone is already 3-dimensional: (height, width, channels). Training almost never
+            happens on one image at a time; a batch of, say, 32 images adds a fourth dimension in
+            front, giving a shape like (32, 224, 224, 3). The extra dimensions are not decorative
+            — they are exactly what lets a GPU process 32 images with one matrix operation
+            instead of 32 separate ones.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Explain broadcasting and why it matters for performance">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Broadcasting lets NumPy or PyTorch apply an operation between arrays of different
+            shapes by conceptually stretching the smaller one to match the larger one, without
+            ever actually copying that data in memory. The classic example is normalising a
+            dataset: subtracting a (n_features,) mean vector from an (n_samples, n_features)
+            matrix in a single line, instead of writing a loop that repeats the subtraction once
+            per row. It matters for performance because that single vectorised line runs as
+            compiled, often parallelised code, while the equivalent Python loop would run orders
+            of magnitude slower.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — You get a shape mismatch error during matrix multiplication. Walk me through how you'd debug it">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, print both shapes directly — print(A.shape, B.shape) — because the error
+            message alone rarely tells you which of the two operands is wrong. Then apply the
+            shape rule: for A @ B to work, A's number of columns must equal B's number of rows,
+            and the result takes A's row count and B's column count. If the inner dimensions
+            don't match, the fix is almost always either transposing one operand with .T or
+            checking further upstream for where that array's shape was built incorrectly in the
+            first place — a reshape, a concatenation, or a feature that got appended as a
+            separate array instead of joined into the matrix.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Why do embeddings represent things like words or users as vectors, and what does distance between vectors mean there?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Representing an entity as a vector of, say, 768 numbers lets a model encode many
+            aspects of meaning simultaneously — direction and magnitude in that 768-dimensional
+            space becomes a stand-in for semantic similarity. Two words with similar meanings end
+            up with vectors that point in similar directions, so distance metrics like cosine
+            similarity or Euclidean distance between two embedding vectors give a numeric measure
+            of how related two things are — which is exactly the mechanism behind recommendation
+            systems suggesting similar products and search engines matching a query to
+            semantically related documents, not just exact keyword matches.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>You can now read ML code without getting lost.</h2>

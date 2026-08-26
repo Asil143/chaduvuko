@@ -953,7 +953,254 @@ Weakest but fastest — good for simple style transfer.
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where diffusion models actually run in production</h2>
+
+        <p style={S.p}>
+          Almost every consumer-facing "generate an image" feature shipped since 2022 is a
+          diffusion model behind an API, not a raw prompt box. Shopify merchants generate
+          product variations and lifestyle shots from a single hero photo. Adobe Firefly powers
+          Generative Fill inside Photoshop — select a region, describe what should be there,
+          and a latent diffusion model inpaints it consistent with lighting and perspective.
+          Canva's Magic Media and Amazon's advertising creative tools generate dozens of ad
+          variations per SKU overnight so a marketing team can A/B test creative instead of
+          commissioning a photoshoot for every size and background colour. Game studios use
+          fine-tuned diffusion pipelines for concept art and texture generation — not to ship
+          final assets untouched, but to compress a week of concept iteration into an afternoon.
+        </p>
+
+        <p style={S.p}>
+          Video generation is the newest frontier built on the same core idea. Runway Gen-3,
+          Pika, Luma, and OpenAI's Sora extend the denoising U-Net (or a Transformer backbone
+          doing the equivalent job) along a temporal axis — instead of denoising one image, the
+          model denoises a whole clip of correlated frames at once, with extra attention layers
+          that keep objects and motion coherent from frame to frame. This is dramatically more
+          expensive than image diffusion: a five-second clip at even a modest frame rate is
+          effectively dozens of images that all have to stay consistent with each other, which is
+          why production video diffusion still runs on large GPU clusters rather than a single
+          consumer card.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(0,230,118,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#00e676', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Diffusion dominates here ✓
+            </div>
+            {[
+              'Product photography variation and background swaps at catalog scale',
+              'Ad creative generation — many sizes/styles per SKU, generated overnight',
+              'Concept art, texture, and material generation for games and VFX',
+              'Inpainting/outpainting inside editing tools (Generative Fill, Magic Eraser)',
+              'Photo restoration and detail-preserving upscaling',
+              'Style-consistent brand imagery via a fine-tuned LoRA layered on a base model',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(255,71,87,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#ff4757', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Still weak spots ✗
+            </div>
+            {[
+              'Reliable text rendering inside images without a specialised model',
+              'Exact object counts or precise spatial layout without ControlNet guidance',
+              'True real-time interactive generation without heavy step-distillation',
+              'Long, character-consistent video generation across tens of seconds',
+              'Full-quality on-device inference on a phone without a distilled/quantised model',
+              'Guaranteeing outputs are free of visual artifacts on hands, text, and reflections',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <ConceptBox title="The ticket you would actually get" color="#7b61ff">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Slack message from the growth team: "We are launching 60 new denim SKUs next week.
+            Can we get 8 lifestyle images per SKU — different backgrounds, different models,
+            same product — by Thursday?" That is 480 images with a Thursday deadline, not a
+            research problem. The real work is pipeline engineering: a LoRA fine-tuned on the
+            brand's existing catalog for visual consistency, a ControlNet conditioned on each
+            product's silhouette so the garment shape never distorts, a queue that batches
+            prompts across a small GPU fleet using DPM-Solver++ at around 20 steps for
+            throughput, a safety/NSFW classifier and a brand-compliance check on every output
+            before it reaches a human reviewer, and a fallback path to a real photoshoot for the
+            handful of images that fail review. The model call is a small fraction of the actual
+            engineering effort.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about diffusion models</h2>
+
+        <ConceptBox title="Myth: The forward noising process is something the model learns" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The forward process is fixed before training even starts — it is entirely determined
+            by the noise schedule (the sequence of beta values), with no trainable parameters
+            anywhere in it. The only learned component is the reverse process: the U-Net that
+            predicts what noise was added at a given timestep. This is why you can swap the
+            sampler (DDPM to DDIM to DPM-Solver++) or change the number of inference steps
+            without retraining anything — none of that logic lives in the trained weights, it
+            lives entirely in how you choose to run the fixed forward process backwards.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Diffusion models generate an image in one pass, the way a GAN does" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A GAN's generator produces a full image in a single forward pass. A diffusion model
+            necessarily runs many forward passes through the same network, each one removing a
+            little more noise from an evolving canvas — even the fast samplers still take
+            roughly 20 to 50 steps, not one. This iterative structure is not an implementation
+            detail that could be optimised away without changing the model; it is the mechanism
+            that makes diffusion training so much more stable than adversarial training, at the
+            direct cost of slower generation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Diffusion models are just fancy denoising autoencoders" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The training objective does look exactly like denoising — predict the noise that was
+            added to a real image. But a plain denoising autoencoder, run once, could never turn
+            pure random static into a photorealistic image; it only knows how to clean up an
+            already-mostly-correct input. What makes diffusion generative is that the network is
+            trained across every noise level at once and then chained, at generation time, into a
+            multi-step process that starts from pure noise rather than a corrupted real image.
+            That chained reverse process is effectively performing iterative score-based sampling —
+            repeatedly nudging a sample toward regions of higher data likelihood — which is a
+            fundamentally different job than one-shot denoising.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Diffusion beat GANs because it is simply better in every respect" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Diffusion is not faster at inference — a GAN's single forward pass will always beat a
+            20-to-50-step diffusion sampler on raw generation speed, and well-tuned GANs remain
+            competitive on narrow, single-domain tasks like face generation. What diffusion
+            actually won on is training stability (no adversarial balancing act, no mode collapse
+            to fight), sample diversity, and faithfulness on complex, multi-object, prompt-driven
+            generation at scale — the exact properties that matter for a general-purpose
+            text-to-image system serving arbitrary prompts. It is a better foundation for that
+            specific job, not an unconditional upgrade on every axis.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: More denoising steps always produce a better image" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Quality gains from additional steps flatten out sharply past roughly 30 to 50 steps
+            with a good sampler like DPM-Solver++ — beyond that point you are mostly spending
+            compute for an image nearly indistinguishable from a few steps earlier. Distilled
+            models like LCM and SDXL-Turbo make this explicit: they train a student network to
+            jump what would normally take many denoising steps in as few as one to four, trading
+            a small, often barely perceptible quality cost for near real-time generation. Step
+            count is a tunable engineering knob you trade against latency, not a fixed law that
+            ties more computation directly to better output.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Diffusion models — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What is the noise schedule, and why does the choice of schedule matter?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The noise schedule is the sequence of beta values that controls how much Gaussian
+            noise gets added at each of the T forward timesteps, and its cumulative product
+            (alpha-bar) determines the signal-to-noise ratio at every point along the chain. A
+            linear schedule, used in the original DDPM paper, spends a lot of the early timesteps
+            barely perturbing the image and then destroys it very quickly near the end. A cosine
+            schedule spreads the destruction more evenly, preserving more usable signal through
+            the middle and late timesteps, which the Improved DDPM paper showed measurably
+            improves perceptual sample quality. In short: the schedule determines what fraction of
+            training effectively happens at "easy" versus "hard" noise levels, and a poorly chosen
+            one wastes model capacity on noise levels that do not matter much for final quality.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why is sampling slow, and how do DDIM and distillation speed it up?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Reverse diffusion is inherently sequential: producing the image at step t minus one
+            requires the output already computed at step t, so you cannot parallelise across
+            timesteps the way you can across a batch during training. DDIM reformulates the
+            reverse process as a non-Markovian, deterministic mapping that solves the same
+            underlying differential equation but allows skipping directly from one timestep to a
+            much earlier one, cutting a thousand sequential steps down to roughly twenty to fifty
+            with little quality loss. Distillation goes further: a student network is trained to
+            directly predict what several steps of the full teacher process would have produced,
+            eventually collapsing the entire chain to as few as one to four steps, which is how
+            models like LCM achieve near real-time generation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What is classifier-free guidance, and why is it preferred over classifier guidance?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Classifier-free guidance runs the same U-Net twice per step — once conditioned on the
+            text prompt, once with the prompt dropped — and pushes the final prediction further in
+            the direction the conditioned pass diverges from the unconditioned one, scaled by the
+            guidance_scale parameter. The older alternative, classifier guidance, required training
+            a separate classifier on noisy images at every noise level and using its gradient to
+            steer sampling — expensive to train, tied to whatever labels that classifier was built
+            for, and numerically fragile. Classifier-free guidance needs no second model: the same
+            diffusion model is simply trained with prompt conditioning randomly dropped some
+            fraction of the time, so one set of weights can do both the conditioned and
+            unconditioned forward pass needed for guidance.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Why does Stable Diffusion run diffusion in latent space instead of pixel space?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A pretrained VAE compresses a 512-by-512 pixel image down to a much smaller latent
+            tensor before diffusion ever touches it, so every one of the many denoising steps
+            operates on roughly forty-eight times fewer values. That compression is handled once,
+            by a separate frozen network trained specifically for perceptual compression, which
+            frees the diffusion U-Net's entire capacity for modelling semantic content rather than
+            spending iterations removing noise from raw pixels. The VAE decoder restores full
+            resolution only once, at the very end, after the expensive iterative part is already
+            finished — which is the difference between Stable Diffusion running on a consumer GPU
+            and needing a data-centre-scale setup for the same output quality.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you decide between full fine-tuning, DreamBooth, LoRA, and textual inversion for teaching a model a new visual concept?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It comes down to how much data you have and how much you need to preserve the model's
+            general knowledge. With only five to ten images of a single subject, textual inversion
+            or DreamBooth with prior preservation loss is the right call — DreamBooth updates more
+            of the network so it captures the subject better, at higher risk of catastrophic
+            forgetting without prior preservation. For a broader style or a specific product line
+            with more examples, LoRA is usually the right default: it trains a small fraction of
+            parameters, produces a compact adapter file that is easy to version, swap, and combine
+            with other LoRAs, and is much less prone to overwriting the base model's general
+            capability. Full fine-tuning of the entire U-Net is rarely justified for an application
+            team — it is expensive, slow to iterate on, and LoRA reaches comparable quality for a
+            fraction of the cost in the vast majority of real product use cases.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

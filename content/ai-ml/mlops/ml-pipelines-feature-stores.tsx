@@ -1011,7 +1011,262 @@ print("""
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Why feature stores exist — the skew problem that made platform teams build them</h2>
+
+        <p style={S.p}>
+          Feature stores were not invented because they sounded architecturally
+          elegant. Uber built Michelangelo Palette, Airbnb built Zipline, and
+          Twitter and Shopify adopted Feast for the same blunt reason: teams
+          kept shipping models that scored well in evaluation and then quietly
+          underperformed in production, and the root cause traced back to the
+          same place almost every time — the feature computed in the training
+          notebook was not exactly the feature computed in the serving path.
+          A feature store is the fix a platform team builds once, so every
+          model team stops re-discovering the same bug independently.
+        </p>
+
+        <p style={S.p}>
+          In practice this usually shows up as an internal platform, not a
+          library any one model team owns. A central ML platform team runs the
+          feature store as a product: they own the offline/online sync job,
+          the schema registry, and the on-call rotation for materialisation
+          failures. Model teams are customers — they define feature views,
+          consume features by name, and never touch the underlying
+          infrastructure. That separation is what actually prevents skew at
+          scale: nobody can quietly reimplement a feature differently in their
+          own notebook, because the feature store is the only sanctioned way
+          to get it.
+        </p>
+
+        <p style={S.p}>
+          The offline/online split is also a real infrastructure decision with
+          real tradeoffs, not a diagram convention. The offline store — S3,
+          BigQuery, Snowflake — is optimised for scanning huge historical
+          ranges cheaply, exactly what training needs, but a single lookup is
+          far too slow for a live request. The online store — Redis,
+          DynamoDB, Cassandra — is optimised for the opposite: single-key
+          lookups in low single-digit milliseconds, but it is expensive to
+          store the full history there and nobody tries to. Every production
+          feature store is really two databases plus a materialisation job
+          that keeps promoting fresh values from one to the other on a
+          schedule.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+          {[
+            {
+              store: 'Offline store (S3 / BigQuery / Snowflake)',
+              color: '#378ADD',
+              latency: 'Seconds to minutes per query',
+              cost: 'Cheap per GB stored, cheap to scan in bulk',
+              usedFor: 'Training — full history, point-in-time joins, backfills',
+            },
+            {
+              store: 'Online store (Redis / DynamoDB)',
+              color: '#1D9E75',
+              latency: '~1–5ms per key lookup',
+              cost: 'Expensive per GB, priced for low-latency access, not bulk scans',
+              usedFor: 'Real-time inference — only the latest value per entity',
+            },
+          ].map((item) => (
+            <div key={item.store} style={{
+              background: 'var(--surface)', border: `1px solid ${item.color}25`,
+              borderRadius: 7, padding: '10px 14px',
+              borderLeft: `3px solid ${item.color}`,
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)', marginBottom: 4 }}>
+                {item.store}
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>Latency: {item.latency}</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>Cost profile: {item.cost}</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)' }}>Used for: {item.usedFor}</div>
+            </div>
+          ))}
+        </div>
+
+        <CodeBlock code={`# ── The decision most teams actually face before adopting a feature store ──
+#
+# "Do we need a feature store, or is a shared feature library enough?"
+#
+# A shared Python library (import compute_restaurant_features from a
+# common package, call it in both the training notebook and the serving
+# API) solves training/serving skew just as well AS LONG AS:
+#   - one team owns both the training and serving code paths
+#   - features do not need to be reused across other teams' models
+#   - low-latency online lookups are not required (batch scoring is fine)
+#
+# A feature store earns its operational overhead once ANY of these hold:
+#   - multiple teams want to reuse the same features (restaurant stats
+#     used by the delivery-time model AND the fraud model AND the
+#     recommendation model)
+#   - real-time serving needs sub-10ms feature lookups
+#   - feature definitions need a central registry so a change to one
+#     feature doesn't silently break three other teams' models
+#
+# Most companies get the first cut wrong in one direction: adopting a
+# full feature store platform for a single model with one consumer, or
+# refusing to adopt one long after three teams are already hand-copying
+# the same feature computation into three different notebooks.`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about ML pipelines and feature stores</h2>
+
+        <ConceptBox title="Myth: A feature store is just a database with a different name" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A plain database gives you storage and lookups; it does not give you the specific
+            capabilities that make a feature store worth building. Point-in-time correct joins for
+            training data, a synchronised pair of an offline store and an online store that agree on
+            values, a schema registry so feature definitions are shared rather than reinvented per
+            team, and a materialisation pipeline that keeps the online copy fresh — none of that comes
+            for free from Postgres or S3 alone. The feature store is the system built around a
+            database (often two databases) specifically to solve training-serving consistency, which a
+            database on its own has no concept of.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once features are stored with timestamps, point-in-time correctness happens automatically" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Having a timestamp column does not by itself prevent leakage — the join logic has to
+            actually use it correctly, and it is easy to get subtly wrong. A common mistake is joining
+            on the feature's created_timestamp instead of the event's event_timestamp, or forgetting
+            that a feature's time-to-live means a value from ninety days ago should not be joined
+            against a training event today. Real point-in-time correctness requires an as-of join that
+            explicitly asks 'what was true at time T for this entity,' implemented deliberately —
+            Feast's get_historical_features() does this work, but a manual pandas merge on entity ID
+            alone, even with timestamps sitting right there in the columns, will silently leak future
+            values if the join does not filter on them.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once a feature is in the store, reusing it across models is free" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Reuse saves engineering time but creates a real coupling cost: every model that consumes a
+            shared feature is now depending on its exact definition staying stable. Change how
+            restaurant_avg_delivery_time is computed to fix a bug for the delivery-time model, and the
+            fraud model and the recommendation model that also consume it can silently degrade without
+            anyone on those teams touching a line of their own code. This is an ownership and
+            versioning problem as much as a technical one — production feature stores need change
+            review and consumer visibility (who depends on this feature) precisely because reuse is
+            not the free lunch it looks like at the point of definition.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Features in an online store are automatically fast to serve" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            An online store being low-latency in principle does not mean every lookup against it is
+            fast in practice. A cold-start entity that has not been materialised yet returns nothing or
+            a stale default. Fetching many features across many entities in one request without
+            batching the lookups turns a single 1ms Redis call into dozens of round trips. Connection
+            pool exhaustion under load can turn a normally-fast store into the slowest part of the
+            request. Treating 'it is in the online store' as equivalent to 'it will be fast' skips the
+            actual engineering work of batching lookups, warming caches, and monitoring materialisation
+            freshness that production latency budgets depend on.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The offline and online stores just need to hold 'the same data'" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            What actually needs to match is the transformation logic that produces the values, not
+            just the values that happen to be sitting in each store today. If the offline feature is
+            computed by a nightly batch Spark job and the online feature is computed independently by a
+            separate streaming job written by a different engineer, small differences in windowing,
+            null handling, or aggregation order will produce different numbers for what is supposedly
+            'the same feature' — and this happens even inside systems that are correctly labelled a
+            feature store. The materialisation pattern (compute once offline, copy the same values to
+            the online store) exists specifically to close this gap; maintaining two independent
+            computation paths for one feature reopens exactly the skew problem the feature store was
+            built to prevent.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>ML pipelines and feature stores — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What causes training-serving skew, and how do you prevent it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It happens whenever the code path that computes a feature for training diverges from the
+            code path that computes it for serving — different aggregation windows, different null
+            handling, different library versions, or simply two engineers implementing the 'same'
+            feature independently in a notebook and in a serving API. Prevention means removing the
+            duplication entirely: define each feature once, in one place, and have both training and
+            serving read from that single definition — which is exactly what a feature store provides
+            structurally. Where a full feature store is not yet in place, the minimum fix is a shared
+            feature-computation library imported by both pipelines, never two independent
+            implementations of the same logic.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain point-in-time correct joins and why they matter for training data">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A point-in-time join retrieves, for each training example at its own event timestamp, only
+            the feature values that were actually available at that moment — not the latest values as
+            of today. Without this, a training row from January can get joined against a feature value
+            computed from March data, which means the model is trained on information that would not
+            have existed yet at prediction time. The model looks excellent in offline evaluation
+            because it is effectively looking at the future, then performs far worse in production
+            once only present-moment features are available. Feast and similar tools implement this as
+            an as-of join keyed on event_timestamp specifically to prevent that class of data leakage.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why do you need both an online and an offline feature store instead of just one?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They are optimised for opposite access patterns. Training needs to scan large historical
+            ranges across millions of rows, which is what columnar formats like Parquet or warehouses
+            like BigQuery are built for, but a single key lookup against them can take seconds. Serving
+            needs the opposite: a single entity's latest feature values in low single-digit
+            milliseconds, which is what an in-memory or key-value store like Redis is built for, but
+            storing years of history there is prohibitively expensive per gigabyte. Using one store for
+            both jobs means being bad at one of them; the split exists purely to match each access
+            pattern to the storage technology that is actually good at it, with a materialisation job
+            syncing values from offline to online on a schedule.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you design a feature store for a new ML platform from scratch?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start with the entities the organisation actually predicts about (restaurant,
+            driver, user) and define feature views per entity with an explicit schema and a
+            time-to-live. I would pick an offline store that matches where the raw data already lives
+            (often the existing warehouse) and an online store optimised for low-latency key lookups,
+            then build a materialisation job — scheduled through the same orchestrator already running
+            the training pipelines — that copies fresh values from offline to online on a fixed cadence.
+            Critically, I would build the point-in-time query path for training before worrying about
+            anything else, since that is the capability a shared feature library cannot easily replicate
+            and the reason most teams adopt a real feature store instead of one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How do you change a feature's definition without breaking the models already depending on it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, know who depends on it — a feature registry should make it possible to list every
+            model consuming a given feature view before touching its definition. Then version it rather
+            than mutating it in place: register the changed logic as a new feature view or a new
+            version of the existing one, backfill it into the offline store, and let consuming teams
+            migrate on their own schedule instead of finding out from a production incident. Only
+            retire the old definition once every consumer has confirmed the migration. Silently
+            changing a shared feature's computation in place is exactly the kind of hidden coupling
+            that makes 'free' feature reuse expensive later.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

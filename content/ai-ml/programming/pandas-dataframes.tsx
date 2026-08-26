@@ -108,6 +108,28 @@ function VisualBox({ children, label }: { children: React.ReactNode; label: stri
   )
 }
 
+function ConceptBox({ title, children, color = '#1D9E75' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: string }) {
   return (
     <div style={{
@@ -1380,7 +1402,258 @@ print(f"\\nSaved ML-ready dataset: {feature_df.shape}")`} />
 
       <Div />
 
-      {/* ══ SECTION 14 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 14 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Pandas is the bridge between raw data and a model — not the destination</h2>
+
+        <p style={S.p}>
+          On a real ML team, nobody trains a model directly against a SQL table
+          or a folder of Parquet files. There is always a pandas layer in between.
+          A data scientist pulls a slice of data into a notebook, runs the same
+          five exploration commands from Module 2, then spends the bulk of the
+          project time in <span style={S.code as React.CSSProperties}>groupby</span>,
+          <span style={S.code as React.CSSProperties}> merge</span>, and
+          <span style={S.code as React.CSSProperties}> transform</span> calls —
+          computing exactly the kind of group aggregates and rolling features
+          you saw in Sections 8 and 9. Only once those features exist as clean
+          numeric columns does the data leave pandas and become a NumPy array
+          for sklearn or a tensor for PyTorch.
+        </p>
+
+        <p style={S.p}>
+          This is why pandas fluency is graded so heavily in ML interviews and
+          take-home exercises: it is the tool every practitioner touches on
+          every single project, regardless of whether the eventual model is a
+          logistic regression or a transformer. The modelling library changes
+          from project to project. The pandas step in front of it does not.
+        </p>
+
+        <CodeBlock code={`import pandas as pd
+import numpy as np
+
+# ── What a real feature-engineering notebook actually looks like ──────
+# Pull data, explore, engineer group-level features, hand off to the model.
+
+df = pd.read_parquet('/tmp/orders.parquet')
+
+# Step 1 — always start here (Module 2's five commands)
+print(df.shape)
+print(df.isnull().mean().round(3))
+
+# Step 2 — feature engineering: group aggregates and a rolling window,
+# exactly the kind of feature a delivery-time or fraud model consumes
+df['restaurant_avg_prep']    = df.groupby('restaurant')['restaurant_prep'].transform('mean')
+df['restaurant_order_count'] = df.groupby('restaurant')['order_id'].transform('count')
+
+df = df.sort_values('order_time')
+df['rolling_7d_avg_delivery'] = (
+    df.groupby('restaurant')['delivery_time']
+      .transform(lambda s: s.rolling(7, min_periods=1).mean())
+)
+
+# Step 3 — hand off: pandas' job in the pipeline ends at this line
+FEATURES = ['distance_km', 'restaurant_avg_prep',
+            'restaurant_order_count', 'rolling_7d_avg_delivery']
+X = df[FEATURES].to_numpy()
+y = df['delivery_time'].to_numpy()
+# From here on it is sklearn's problem, not pandas' — the model never
+# sees a DataFrame, a restaurant name, or a groupby call.`} />
+
+        <p style={S.p}>
+          Pandas also has a real, well-known ceiling — and knowing where it is
+          matters as much as knowing the API. Pandas is single-threaded for
+          most operations and holds the entire DataFrame in memory. On a
+          typical laptop or a mid-size cloud instance, that comfortably covers
+          datasets from a few thousand rows up to tens of millions of rows —
+          which is the overwhelming majority of feature-engineering workloads
+          at most companies. Past that, two things start to hurt: a
+          <span style={S.code as React.CSSProperties}> groupby</span> or
+          <span style={S.code as React.CSSProperties}> merge</span> that used
+          to take a second starts taking minutes, and the DataFrame itself no
+          longer fits in RAM.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 8 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(0,230,118,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#00e676', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Pandas is the right tool when
+            </div>
+            {[
+              'Data fits comfortably in RAM (roughly single-digit GB to low tens of GB)',
+              'You are exploring, cleaning, or engineering features interactively',
+              'The pipeline runs on one machine, on a schedule, not continuously',
+              'You need the enormous surface area of string/datetime/groupby helpers',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(255,71,87,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#ff4757', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Teams move on when
+            </div>
+            {[
+              'The raw dataset itself no longer fits in one machine’s memory',
+              'Polars — a multi-threaded DataFrame library with a similar API — becomes faster with almost no code rewrite',
+              'The dataset is distributed across a cluster, so Spark is needed for joins and aggregations',
+              'The same feature pipeline has to run identically in streaming and batch — pandas alone was not built for that',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 15 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about Pandas</h2>
+
+        <ConceptBox title="Myth: Pandas is just for small, toy datasets — real ML work happens elsewhere" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Pandas comfortably handles datasets from a few thousand rows up to tens of millions
+            of rows, and from a few megabytes up to low tens of gigabytes, on a single reasonably
+            resourced machine. That range covers the overwhelming majority of real
+            feature-engineering work at most companies. It is not a toy library you graduate out
+            of — it is the default tool at nearly every ML team for anything that fits in memory,
+            which is most things.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Chained indexing always works — the SettingWithCopyWarning is just noise you can ignore" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The warning exists because pandas genuinely cannot always tell whether the
+            intermediate object your chain produced is a view into the original data or an
+            independent copy. That means an assignment like df[mask]['col'] equals value may
+            silently modify the original DataFrame, may silently do nothing at all, or may work
+            today and break after an unrelated pandas version upgrade. It is not a style nit —
+            it is a real correctness bug waiting to happen, and the fix (df.loc[mask, 'col'] =
+            value) costs nothing.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Copy-vs-view confusion is a rare edge case you will basically never hit" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is one of the single most common real-world pandas bugs, not an edge case.
+            It happens constantly in ordinary code: filter a DataFrame with a boolean mask,
+            then try to add or modify a column on the result. Whether that result is a view or a
+            copy depends on internal details of how the filter was executed, not on anything
+            visible in your code. The reliable fix is a habit, not a rare-case check: call
+            .copy() explicitly the moment you intend to modify a filtered subset.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: .apply() is basically as fast as a vectorised operation because it is still pandas" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            .apply() with axis=1 is a Python-level loop over rows under the hood, no different in
+            spirit from a manual for loop — pandas is just managing the bookkeeping for you. A
+            true vectorised operation instead calls into compiled C code that processes the whole
+            column at once. On a dataset of a few hundred rows the difference is invisible; on a
+            few million rows, apply(axis=1) can be fifty to a hundred times slower. Reach for it
+            only when a vectorised or .map() alternative genuinely does not exist.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Pandas scales forever — just move to a bigger machine when it gets slow" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A bigger machine helps with memory pressure, but pandas is single-threaded for most
+            operations — a groupby or merge that is compute-bound will not run meaningfully faster
+            just because the machine has more cores sitting idle. Past a certain data size, teams
+            do not keep scaling pandas vertically; they switch to Polars (multi-threaded, a very
+            similar API, often a near drop-in replacement) or to Spark (distributed across many
+            machines) specifically because pandas itself was never built to use more than one
+            core for its core operations.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 16 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Pandas — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What causes SettingWithCopyWarning, and how do you get rid of it for good?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It appears whenever pandas cannot guarantee that the object you are about to modify
+            is the original DataFrame rather than a temporary view or copy produced by a previous
+            selection. The classic trigger is chained indexing: df[df['city'] == 'Seattle']['rating']
+            = value, where the first bracket produces an intermediate object of ambiguous
+            origin. The permanent fix is to never chain: use df.loc[mask, 'rating'] = value to
+            modify the original directly, or call .copy() explicitly right after filtering if you
+            intend to work with an independent subset instead.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — When would you use .apply() instead of a vectorised operation, and why is vectorisation so much faster?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Vectorised operations push the loop down into compiled C code that operates on an
+            entire NumPy-backed column at once; .apply(), especially with axis=1, is still a
+            Python-level loop calling your function once per row, with all the interpreter
+            overhead that implies. I would reach for .apply() only when the row-wise logic
+            genuinely cannot be expressed as column-level arithmetic or a small set of vectorised
+            conditions — for example, calling an external function per row, or logic with many
+            interacting business rules. Whenever a vectorised or pd.cut / np.where alternative
+            exists, that is almost always the better choice, especially at scale.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — A DataFrame is causing memory errors. How would you reduce its footprint without dropping rows?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First I would check dtypes with df.info(memory_usage='deep') — object columns
+            and float64 are usually the biggest offenders. Concretely: downcast numeric columns
+            with pd.to_numeric(..., downcast equals 'float' or 'integer'), convert low-cardinality
+            string columns to the category dtype (which stores each unique value once instead of
+            repeating it per row), and read only the columns actually needed with usecols at load
+            time rather than dropping them afterward. If the dataset still does not fit, I would
+            switch to chunked reading with chunksize, or move to Polars or a columnar format like
+            Parquet that only decompresses the columns you touch.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Walk me through how you would detect and handle missing data in a dataset you have never seen before.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start with df.isnull().sum() and the percentage version to see which columns
+            are affected and how badly. Then I would check whether the missingness looks random
+            or patterned — for example, grouping by another column and comparing missing rates,
+            the same check shown in Section 6 of this module. Only after understanding the
+            pattern would I choose a fix: drop for MCAR columns with very low missing rates,
+            group-based imputation for MAR columns, and a much more careful, domain-informed
+            approach for MNAR columns, since naive imputation there actively introduces bias
+            rather than removing it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — What is the difference between merge, join, and concat, and when would you use each?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            merge() is pandas' general-purpose SQL-style join — it combines two DataFrames on one
+            or more key columns and supports inner, left, right, and outer joins explicitly.
+            .join() is a convenience wrapper around merge that combines on the index by default,
+            which is useful when two DataFrames already share a meaningful index but is otherwise
+            just merge with different defaults. concat() does not match on keys at all — it stacks
+            DataFrames either vertically (combining rows from multiple files with identical
+            columns) or, less commonly, horizontally. I use merge for combining related tables on
+            a key, and concat for stacking multiple extracts of the same shape.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 17 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

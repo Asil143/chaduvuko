@@ -144,6 +144,28 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
   )
 }
 
+function ConceptBox({ title, children, color = '#378ADD' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function FeatureScalingPage() {
   return (
     <LearnLayout
@@ -1245,7 +1267,247 @@ print("     Fix: always scale y when using neural networks")`} />
 
       <Div />
 
-      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 12 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Scaling in a real pipeline — not a one-off fit_transform in a notebook</h2>
+
+        <p style={S.p}>
+          In a notebook, scaling is one line: fit_transform, done. In production it is a
+          versioned artifact that has to travel with the model and be reproduced exactly,
+          every single time, for every single request. A fitted StandardScaler stores a mean
+          and a standard deviation for each feature — those numbers are frozen the moment
+          training ends, and every prediction the model ever makes, in batch or in real time,
+          has to be scaled using those exact frozen numbers, not numbers recomputed from
+          whatever data happens to be around at the time.
+        </p>
+
+        <p style={S.p}>
+          The distance-based-versus-tree-based distinction from this module shows up
+          constantly in how teams design a pipeline. A team that only ever ships gradient
+          boosted trees can often skip scaling entirely and simplify their feature pipeline.
+          A team that swaps between linear models, SVMs, and trees during experimentation
+          usually scales everything by default anyway — it costs almost nothing for a tree
+          model to receive scaled input, but it is a correctness requirement for the others,
+          so standardising the pipeline avoids a class of "why did the model get worse when
+          we swapped algorithms" bugs.
+        </p>
+
+        <p style={S.p}>
+          The single most common production bug involving scaling is not a math mistake —
+          it is <strong style={{ color: '#D85A30' }}>train/serve skew</strong>: the offline
+          training pipeline and the online serving path compute the "same" feature slightly
+          differently. A distance feature computed in kilometres during offline training but
+          delivered in miles by a real-time feature store will silently feed the scaler
+          numbers it never expected — the model still returns a confident prediction, it is
+          just quietly wrong, and nothing crashes to tell anyone.
+        </p>
+
+        <CodeBlock code={`import joblib
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import Ridge
+
+# ── Training job — runs once, produces a versioned artifact ───────────
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('model',  Ridge(alpha=1.0)),
+])
+pipeline.fit(X_train, y_train)
+
+# The scaler's mean_ and scale_ are frozen the moment fit() returns.
+# Persist scaler + model TOGETHER — they are one artifact, not two.
+joblib.dump(pipeline, 'delivery_model_v12.joblib')
+print(f"Frozen scaling stats: mean={pipeline.named_steps['scaler'].mean_.round(3)}")
+
+# ── Serving process — a different machine, hours or days later ────────
+loaded_pipeline = joblib.load('delivery_model_v12.joblib')
+
+# A single incoming request is transformed with the EXACT frozen stats
+# from training — never refit, never recomputed from live traffic
+incoming_order = [[3.2, 7.0, 15.0, 210.0]]
+prediction = loaded_pipeline.predict(incoming_order)
+print(f"Prediction for live request: {prediction[0]:.1f} min")
+
+# ── The train/serve skew bug — the failure mode that actually ships ───
+# Offline training pipeline (batch job, pandas): distance_km computed in kilometres
+# Online feature store (a separate service, owned by a different team):
+#   computes "distance" in miles because that's what the mobile app sends
+# The scaler was fit assuming kilometres. A live request in miles is off
+# by a factor of about 1.6x on that feature — every prediction downstream
+# is subtly wrong, model metrics degrade over days or weeks, and nothing
+# in the code throws an error. This is why feature definitions need a
+# single source of truth (a feature store schema, a shared feature
+# computation library) rather than being reimplemented per team.`} />
+
+        <p style={S.p}>
+          This is also why scaler statistics get monitored the same way model predictions
+          do. Teams track the distribution of each incoming feature against the distribution
+          the scaler was fit on — if the live mean for order value drifts far from the
+          training-time mean, that is an early warning that either the business has changed
+          (prices went up) or a feature is broken upstream, and either way the model likely
+          needs retraining before its accuracy visibly degrades.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 13 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about feature scaling</h2>
+
+        <ConceptBox title="Myth: You should always scale every feature before training, no matter which model you use" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Scaling is a fix for a specific failure mode: algorithms whose math directly
+            depends on the numeric magnitude of a feature, through a distance calculation, a
+            dot product, or a gradient step. Tree-based models split on a threshold value one
+            feature at a time — whether that threshold sits at 3.5 or 3,500 does not change
+            which side of the split a row falls on, so scaling a feature before feeding it to
+            a random forest or XGBoost changes nothing about the model it learns. Scaling
+            everything by habit is harmless, but treating it as a universal requirement
+            misses why it works, which matters the moment someone asks you to justify skipping
+            it for a tree-based pipeline.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: StandardScaler and MinMaxScaler are interchangeable — just pick whichever is convenient" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They make different assumptions and produce genuinely different distributions.
+            StandardScaler centres data at zero with unit variance and preserves a roughly
+            Gaussian shape, but the output is unbounded — an outlier still produces a very
+            large scaled value. MinMaxScaler guarantees every training value lands in a fixed
+            range, which is exactly what some algorithms and some hardware paths require (a
+            neural network with a bounded activation, a distance metric that assumes bounded
+            inputs), but a single outlier in training compresses every other value into a tiny
+            sliver of that range. Choosing between them is a decision about your data's
+            distribution and your downstream algorithm's assumptions, not a coin flip.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: It is safe to recompute a scaler's mean and standard deviation at inference time from the incoming batch" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A scaler fit at inference time is fit on whatever traffic happens to arrive in
+            that batch — a handful of unusually large or small orders, or a single request in
+            an online setting, which cannot even produce a meaningful mean or standard
+            deviation on its own. The entire point of freezing the scaler's statistics during
+            training is that every future prediction is measured against the same fixed
+            reference frame the model was trained on. Recomputing those statistics at
+            inference time silently changes that reference frame per batch, and the model
+            starts seeing input that no longer means what it meant during training.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If your model uses gradient descent, scaling is optional as long as you train for enough epochs" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Given enough epochs and a small enough learning rate, gradient descent on
+            unscaled features can eventually converge to a similar solution — but "eventually"
+            is doing a lot of work in that sentence. An elongated, badly scaled loss surface
+            forces gradient descent to zigzag rather than move directly toward the minimum,
+            which in practice means far more iterations, a learning rate that has to be
+            tuned much more carefully to avoid diverging, and training runs that are simply
+            more expensive for no benefit. Scaling is not a correctness requirement for
+            convergence in the limit; it is a practical requirement for training in a
+            reasonable amount of time and compute budget.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If you scale your input features X, you should also always scale the target variable y" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For linear regression and tree-based models, the model simply adjusts its bias
+            term or its leaf values to match whatever scale y happens to be on — scaling y
+            changes nothing about the model's predictive accuracy, it just makes the
+            coefficients look different. Scaling y earns its keep specifically for neural
+            networks, where a target with a very large range can force the output layer into
+            large weights and cause unstable training. Applying it everywhere by default,
+            and then forgetting to inverse-transform predictions back to the original units
+            before reporting an error metric, is a much more common bug than skipping it.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 14 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Feature scaling — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why doesn't a random forest or XGBoost model need feature scaling, when linear regression does?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Linear regression's coefficients and gradient descent updates are directly
+            sensitive to the numeric magnitude of each feature — a feature with a much larger
+            range dominates both the loss surface's shape and the size of its own coefficient,
+            purely because of units, not because it is more predictive. Tree-based models
+            instead pick a threshold and split the data on one feature at a time; whether that
+            threshold happens to be 3.5 or 3,500 changes nothing about which rows end up on
+            which side of the split or how pure the resulting leaves are. The split-finding
+            logic is invariant to monotonic rescaling, so scaling has no effect on what the
+            tree learns.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Explain how fitting a scaler before splitting your data causes leakage, and how you would catch it in a code review">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            If you call fit on the scaler using the full dataset and only split into train and
+            test afterward, the mean and standard deviation baked into the scaler were computed
+            using test-set values. The training data is then scaled using statistics that
+            partly describe data the model is supposed to have never seen, so evaluation
+            metrics come out slightly optimistic — a subtle form of the model indirectly
+            benefiting from test information. In a code review, the tell is the order of
+            operations: look for any call to fit or fit_transform on a preprocessing step that
+            happens before train_test_split, or any use of cross_val_score where the scaler
+            was fit outside the cross-validation loop rather than wrapped inside a Pipeline.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — When would you choose StandardScaler over MinMaxScaler, and vice versa?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would default to StandardScaler when the feature is roughly normally
+            distributed and the algorithm cares about comparable coefficient magnitudes —
+            linear and logistic regression, SVMs, PCA — since it preserves the shape of the
+            distribution while centring and rescaling it. I would reach for MinMaxScaler
+            specifically when I need values bounded to a known range: feeding a neural network
+            with a sigmoid or tanh activation, computing a similarity metric that assumes
+            bounded inputs, or working with data like image pixels that is naturally bounded
+            already. The deciding factor is usually whether downstream math requires a fixed
+            range or just comparable scale.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — A production model's accuracy degrades gradually over a few weeks after launch, but nobody changed the code. How would feature scaling be involved in your investigation?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Scaling assumes the live data still resembles the training distribution the
+            scaler's mean and standard deviation were computed from. A gradual degradation
+            with no code change is the classic signature of data drift — order values creep
+            up with inflation, a marketing push changes the mix of delivery distances, a
+            partner team quietly changes units upstream. I would compare the live distribution
+            of each input feature against the distribution the scaler was fit on, specifically
+            checking whether the live mean has drifted meaningfully from the frozen training
+            mean, since that would mean the model is now seeing scaled values that no longer
+            correspond to what it learned during training — and the fix is retraining, not
+            patching the scaler in place.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Why do Ridge and Lasso specifically break down on unscaled features, even when plain linear regression predictions still look reasonable?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Ridge and Lasso add a penalty term based directly on the size of each
+            coefficient — Ridge penalises the sum of squared coefficients, Lasso the sum of
+            absolute coefficients. A feature measured in a small-magnitude unit naturally gets
+            a larger coefficient to produce the same effect on the prediction, and that larger
+            coefficient then gets penalised more heavily purely because of its unit, not
+            because it is less important. Unscaled features make the regularisation penalty
+            unfair across features, shrinking some coefficients far more than others for
+            reasons that have nothing to do with predictive value — scaling first is what
+            makes the penalty apply comparably to every feature.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 15 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

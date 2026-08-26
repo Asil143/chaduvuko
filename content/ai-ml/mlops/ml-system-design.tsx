@@ -818,7 +818,227 @@ for mistake, why in mistakes:
 
       <Div />
 
-      {/* ══ SECTION 7 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Inside a real system design interview — and the design review meeting it rehearses</h2>
+
+        <p style={S.p}>
+          Everything above is the finished framework. What actually happens in the
+          room is messier and more interactive than a checklist suggests — the
+          interviewer interrupts, redirects, and grades you on the questions you
+          ask as much as the architecture you eventually draw. This back-and-forth
+          is not an artificial interview construct. It is a compressed version of
+          the design review meeting that happens before any real ML system ships.
+        </p>
+
+        <VisualBox label="A 45-minute interview, condensed — redirects in red">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { who: 'Interviewer', color: '#D85A30', text: 'Design a system that predicts which support tickets will escalate into a refund request.' },
+              { who: 'Candidate', color: '#378ADD', text: 'I would fine-tune a BERT model on the ticket text to classify escalation risk...' },
+              { who: 'Redirect', color: '#ff4757', text: 'Before the model — what does escalate mean precisely, and how do you get a label for it?' },
+              { who: 'Candidate', color: '#378ADD', text: 'Fair. Escalate means a human agent issues a refund within 48 hours of the ticket. Labels come from the refund system, delayed 48 hours. What is the latency budget and expected volume?' },
+              { who: 'Interviewer', color: '#D85A30', text: 'Assume 200 tickets a minute, and you need a decision within 2 seconds of ticket creation.' },
+              { who: 'Candidate', color: '#378ADD', text: 'That rules out a large model in the hot path. I would start with a simple baseline — keyword and order-value rules — then a small gradient boosting model, using BERT embeddings as one input rather than the whole model.' },
+              { who: 'Redirect', color: '#ff4757', text: 'What happens when the model is unavailable?' },
+              { who: 'Candidate', color: '#378ADD', text: 'Route to the default human triage queue — the same behaviour as before this model existed. Never block ticket handling on model availability.' },
+              { who: 'Redirect', color: '#ff4757', text: 'How would you know, a month after launch, whether this is actually working?' },
+              { who: 'Candidate', color: '#378ADD', text: 'Track predicted-escalation rate daily as a leading indicator, since the true label lags 48 hours. Retrain weekly, and alert if the predicted rate drifts from its historical baseline.' },
+            ].map((row, i) => (
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 10 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: row.color, fontFamily: 'var(--font-mono)' }}>{row.who}</span>
+                <span style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{row.text}</span>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          Notice that the interviewer never lets the candidate stay on model
+          architecture for more than a sentence. That redirect is deliberate —
+          it is exactly what a staff engineer does in an actual design review
+          before a system is allowed to move to implementation.
+        </p>
+
+        <p style={S.p}>
+          At an actual company this conversation happens as a written design
+          document circulated before code is written, reviewed in a meeting with
+          a senior or staff engineer plus stakeholders from data engineering, and
+          — for anything touching payments or health data — legal and compliance.
+          The reviewer asks the same eight questions in the same order, and the
+          document gets sent back for another pass if data, cold start, or a
+          failure mode was skipped, no matter how elegant the model section
+          reads. Rehearsing the interview version of this conversation is, in a
+          very literal sense, rehearsing the actual job: defending a design
+          against exactly these questions before anyone commits engineering
+          time to building it.
+        </p>
+
+        <ConceptBox title="What separates a senior answer from a junior one in this room" color="#1D9E75">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is rarely knowledge of a fancier model. It is asking about label
+            strategy and failure modes unprompted, before the interviewer has to
+            drag it out of you — the same behaviour a staff engineer expects to
+            see in a design document review, where an author who anticipates the
+            hard questions is trusted with more scope than one who has to be
+            walked through them.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about ML system design</h2>
+
+        <ConceptBox title="Myth: ML system design is just picking the best model" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Model selection is one of eight equally necessary questions, and the
+            scoring rubric in the previous section weights data and system
+            design far higher than model selection alone. Most real systems fail
+            from a data quality gap, a missing cold-start plan, or no fallback
+            when the model is unavailable — not from choosing the second-best
+            model family. A LightGBM baseline with solid data and monitoring
+            beats a state-of-the-art model with no failure plan every time.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: ML system design is only about model architecture" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is about the entire lifecycle end to end: how labels are
+            obtained, how features reach the model consistently at both
+            training time and serving time, what happens when the model is
+            unavailable, and how drift gets detected. The model is one box in a
+            diagram that also contains a feature store, a fallback path, and a
+            monitoring dashboard — and in a well-drawn diagram, the data flow
+            usually takes up more space than the model box itself.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: there is one right architecture for a given problem" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Multiple architectures can satisfy the same constraints — online
+            versus batch serving, one global model versus per-segment models —
+            and reasonable engineers land in different places depending on team
+            size, existing infrastructure, and risk tolerance. What is actually
+            being evaluated is whether the chosen tradeoff is justified given
+            the stated constraints, not whether the answer matches a fixed key.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: reaching for the most sophisticated technique demonstrates strength" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Reaching for complexity the problem does not need is graded down,
+            not up, in both interviews and real design reviews. It signals that
+            the actual constraint — usually latency, data volume, or an
+            explainability requirement — was never identified. Both interviewers
+            and real staff engineers are more impressed by "I considered a
+            transformer, but the latency budget rules it out, so I would start
+            with gradient boosting" than by simply naming the newest model.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: once the initial design is presented, the system design is finished" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Real ML systems keep hitting the monitoring and failure-modes
+            questions long after the first architecture ships — drift, a new
+            fraud pattern, a data pipeline outage — so the design keeps getting
+            revisited. This is exactly why interviewers spend the last five to
+            ten minutes on "what would you do differently at ten times scale" —
+            a design that only ever gets defended once, at kickoff, was never
+            actually a complete design.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>ML system design — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — How would you structure your answer from the first minute?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Resist the urge to start drawing an architecture immediately. Spend
+            the first three to five minutes purely on clarifying questions
+            covering scale, latency, and the business metric, then explicitly
+            state the ML task type and label definition before touching data or
+            model. Say the structure out loud — problem framing, then data,
+            features, model, serving, scale, monitoring, failure modes — so the
+            interviewer can redirect you toward whichever area they care about
+            most. Announcing the structure signals more seniority than any
+            single model choice.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What is the tradeoff between batch and real-time serving, and how do you decide?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Batch serving pre-computes predictions for every entity on a
+            schedule and looks them up at request time — cheap and simple, but
+            stale, and infeasible when there are too many context combinations
+            to precompute, like a fraud score that depends on the exact
+            transaction amount and merchant at that instant. Online serving
+            computes the prediction at request time using live features,
+            required whenever the prediction depends on information only
+            available at request time, at the cost of a tighter latency budget
+            and supporting infrastructure. Decide by asking whether the
+            prediction depends on real-time context: if yes, online; if the
+            entity list is fixed and small enough to enumerate, batch is
+            dramatically cheaper.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How do you handle cold start for a brand-new user, restaurant, or product?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Fall back to a coarser aggregate that does have data — a city or
+            category average instead of entity-specific features, a
+            popularity-based recommendation instead of a personalised one, or a
+            simple rule instead of a learned estimate — and explicitly flag the
+            entity as cold so the fallback is a deliberate choice, not missing
+            data silently treated as zero. As the entity accumulates
+            interactions, blend from the coarse fallback toward the
+            entity-specific model. Mention this proactively — cold start is a
+            near-universal follow-up question if you do not raise it first.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How do you decide between one global model and separate models per segment?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Start with a single global model — it pools data, is simpler to
+            maintain, and avoids duplicating monitoring and retraining work
+            across many models. Split into per-segment models only when there
+            is evidence the global model materially underperforms on a specific
+            segment, that segment has enough data to support its own model, and
+            the business impact justifies the ongoing maintenance of several
+            models instead of one. Segmenting too early is a common
+            overengineering mistake that adds operational burden without
+            adding accuracy.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — What do you do when asked what you would change at ten times scale?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Treat it as a chance to show you understand where your design's
+            current assumptions break, not a chance to redesign from scratch.
+            Name the first concrete thing that breaks — a feature store lookup
+            pattern fine at hundreds of requests per second becomes a
+            bottleneck at thousands, a single model trained daily may need to
+            become segment-specific once there is enough data per segment, a
+            rule-based fallback that handled rare outages may need real
+            redundancy once outages become frequent enough to matter. This
+            question tests whether your original design had implicit
+            assumptions you can now name.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>Section 11 complete</span>
         <h2 style={S.h2}>

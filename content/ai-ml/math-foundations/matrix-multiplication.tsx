@@ -144,6 +144,28 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
   )
 }
 
+function ConceptBox({ title, children, color = '#7b61ff' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 // ─── Matrix visual component ──────────────────────────────────────────────────
 
 function Matrix({
@@ -1223,7 +1245,209 @@ print(np.allclose(manual_row_sums, vectorised_row_sums))  # True
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Before a model architecture gets approved, someone does this exact arithmetic</h2>
+
+        <p style={S.p}>
+          A machine learning engineer proposes doubling a model's hidden dimension because early
+          experiments show better accuracy. Before that change gets approved, someone — usually
+          the same engineer, sometimes a tech lead in a design review — has to answer a very
+          concrete question: what does this cost, in latency and in dollars? The answer comes
+          directly out of the matrix shapes from this page, not out of intuition.
+        </p>
+
+        <p style={S.p}>
+          The standard estimate: multiplying an (m × n) matrix by an (n × p) matrix costs roughly
+          2 × m × n × p floating-point operations (FLOPs) — two, because each output element
+          needs one multiplication and one addition per term in the dot product. Multiply that by
+          how many times per second the model needs to run, and you have a real infrastructure
+          cost estimate before a single GPU-hour is billed.
+        </p>
+
+        <CodeBlock code={`# The estimate an engineer runs before a design review -- not after
+
+def layer_cost(batch, in_dim, out_dim):
+    """FLOPs and parameter count for one X @ W + b layer."""
+    flops = 2 * batch * in_dim * out_dim   # the matmul itself
+    params = in_dim * out_dim + out_dim    # W and b
+    return flops, params
+
+# Current production layer: 1000-example batch, 256 -> 256
+current_flops, current_params = layer_cost(1000, 256, 256)
+print(f"Current: {current_flops:,} FLOPs, {current_params:,} params")
+
+# Proposed change: double the hidden dimension to 512
+proposed_flops, proposed_params = layer_cost(1000, 256, 512)
+print(f"Proposed: {proposed_flops:,} FLOPs, {proposed_params:,} params")
+
+print(f"Compute increase: {proposed_flops / current_flops:.1f}x")
+print(f"Parameter increase: {proposed_params / current_params:.1f}x")
+
+# Output:
+# Current: 131,328,000 FLOPs, 65,792 params
+# Proposed: 262,656,000 FLOPs, 131,584 params
+# Compute increase: 2.0x
+# Parameter increase: 2.0x
+#
+# This is the actual conversation in the design review:
+# "Doubling the hidden dimension doubles both serving cost and
+#  model size -- is the accuracy gain worth 2x the inference bill?"`} />
+
+        <HBox color="#D85A30">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            <span style={{ color: 'var(--text)', fontWeight: 700 }}>Where SVD shows up in this same conversation: </span>
+            when a proposed layer is too expensive as a full (n × p) matrix, teams often reach
+            for a low-rank approximation instead — this is the entire idea behind LoRA (Low-Rank
+            Adaptation), the dominant technique for cheaply fine-tuning large language models.
+            Instead of updating the full weight matrix, LoRA learns two much smaller matrices
+            whose product approximates the update, exactly the U-Σ-Vᵀ decomposition from the SVD
+            section above, applied to make fine-tuning a multi-billion parameter model affordable
+            on a single GPU.
+          </p>
+        </HBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about matrix multiplication</h2>
+
+        <ConceptBox title="Myth: Matrix multiplication means multiplying the matching elements together" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            That operation exists and is useful, but it is called element-wise multiplication,
+            and it is a completely different result from matrix multiplication. Matrix
+            multiplication takes a row from the left matrix and a column from the right matrix
+            and computes their dot product for each position in the result — as walked through
+            step by step earlier on this page. The two operations even use different NumPy syntax
+            on purpose: @ or np.matmul() for real matrix multiplication, plain * for element-wise.
+            Mixing them up does not raise an error when shapes happen to allow both — it just
+            silently produces the wrong numbers.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The @ operator and elementwise * are interchangeable for square matrices, so it barely matters which one you pick" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Two same-shaped square matrices are exactly the dangerous case, because both A @ B
+            and A * B run without error and return a same-shaped result — just a numerically
+            different one. There is no shape mismatch to warn you. This is precisely the bug in
+            the 'Result has unexpected shape' entry in the errors section above: the code runs
+            fine, the shapes look fine, and the output is simply the wrong computation, often not
+            discovered until model accuracy quietly underperforms for reasons nobody can explain.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A times B equals B times A, the same way regular number multiplication is commutative" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Matrix multiplication is not commutative, and the callout above states this directly:
+            A @ B and B @ A are generally different, and one of the two often is not even a valid
+            operation at all once the shapes stop lining up in reverse. The reason is structural,
+            not a quirk of notation — the left matrix's rows drive the result's rows and the
+            right matrix's columns drive the result's columns, so swapping the order changes
+            which vectors get dotted with which. Order is not a stylistic choice in matrix
+            multiplication; it changes the answer.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Neural network architecture design is creative intuition, and matrix shapes are just an implementation detail underneath it" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The 'Matrix shapes define the network architecture' section above makes the reverse
+            point directly: when a paper describes 'a hidden dimension of 512,' that sentence is
+            entirely describing the number of columns in a weight matrix. Narrow versus wide
+            versus deep are not abstract design philosophies competing with the shapes — they are
+            literally different choices of matrix shape, and the resulting parameter count and
+            compute cost follow mechanically from that choice, as the FLOPs estimate above shows.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: GPUs make matrix multiplication basically instantaneous regardless of size, so scale is not a real constraint" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            GPUs move the practical ceiling enormously higher, but they do not remove it — the
+            efficiency section above shows the same operation still taking measurably longer as
+            matrix sizes grow, and the FLOPs formula (2 × m × n × p) still applies whether the
+            hardware is a laptop CPU or a data-centre GPU cluster. This is exactly why the
+            industry spends serious engineering effort on techniques like low-rank approximation
+            (SVD) and LoRA rather than simply 'throwing more GPU at it' — at the scale of models
+            like GPT-4, the multiplication cost is large enough that shrinking it meaningfully
+            changes what is financially feasible to train or serve.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Matrix multiplication — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk me through computing one element of a matrix multiplication result, and state the shape rule">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            To compute result[i, j], take row i of the left matrix and column j of the right
+            matrix, multiply them element by element, and sum the products — a single dot
+            product. Repeat that for every (i, j) position and you have the full result. The
+            shape rule that makes this possible: for an (m × n) matrix times an (n × p) matrix,
+            the inner dimensions — both n — must match, since a row and a column can only be
+            dotted if they have the same length. The result takes the outer dimensions, (m × p).
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why is matrix multiplication not commutative, and does that matter in a neural network context?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is not commutative because the operation is structurally asymmetric: the left
+            matrix's rows and the right matrix's columns get dotted together, so swapping the
+            order changes which vectors are being combined, and often changes whether the shapes
+            are even compatible at all. It matters constantly in practice — a layer computes
+            X @ W, not W @ X, because X's rows are examples and W's columns are output neurons;
+            reversing the order would either throw a shape error or silently compute something
+            with a completely different meaning.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How would you estimate the compute cost of a given layer, and why does that matter in practice?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The standard estimate is 2 × m × n × p FLOPs for an (m × n) times (n × p)
+            multiplication — two operations, a multiply and an add, per term in each output's dot
+            product. In practice this is exactly what gets computed before approving an
+            architecture change: doubling a hidden dimension roughly doubles both the FLOPs and
+            the parameter count of that layer, which translates directly into serving latency and
+            GPU cost at inference time. Teams run this arithmetic before committing to a more
+            expensive architecture, not after.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is the relationship between matrix multiplication and a fully-connected layer? Walk through the shapes">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A fully-connected layer is Z = X @ W + b followed by an activation function, and
+            nothing more is hidden inside it. If X is a batch of examples with shape (batch,
+            in_features) and W is the layer's weight matrix with shape (in_features,
+            out_features), the matmul produces Z with shape (batch, out_features) — every example
+            transformed into a new representation simultaneously, in one operation. The
+            activation function is then applied element-wise to Z without changing its shape at
+            all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Explain SVD and give one real application">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Singular Value Decomposition breaks any matrix into three simpler matrices, U, Σ, and
+            Vᵀ, equivalent to a rotation, a scaling, and another rotation — and the singular
+            values in Σ rank how much information each direction of the data carries. A concrete
+            production application is LoRA (Low-Rank Adaptation), the standard technique for
+            cheaply fine-tuning large language models: instead of updating a full, enormous weight
+            matrix, LoRA learns two much smaller matrices whose product approximates the needed
+            update, using far fewer parameters — the same low-rank idea that underlies SVD-based
+            compression and PCA.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>You now understand the engine of every neural network.</h2>

@@ -875,7 +875,215 @@ with torch.no_grad():
 
       <Div />
 
-      {/* ══ SECTION 7 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where GANs still win in production — and where diffusion has taken over</h2>
+
+        <p style={S.p}>
+          GANs lost the "best image quality" crown to diffusion models around 2021–2022, and most
+          new text-to-image products are built on diffusion. That does not mean GANs disappeared from
+          production — single-forward-pass generation is a genuine advantage that diffusion's
+          iterative denoising cannot match, and entire categories of shipped products still run on
+          GAN architectures for exactly that reason.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(0,230,118,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#00e676', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              GANs still win ✓
+            </div>
+            {[
+              'Real-time / interactive generation — live video filters, avatar animation (single forward pass, ~10ms on GPU vs 20–1000 denoising steps)',
+              'Super-resolution and upscaling — Real-ESRGAN, GFPGAN face restoration remain GAN-based and competitive',
+              'Narrow, data-rich domains — StyleGAN for faces still dominates when the target distribution is well-defined',
+              'Voice conversion and audio style transfer under tight latency budgets',
+              'Anywhere inference cost at massive scale matters more than best-in-class diversity',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(123,97,255,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#7b61ff', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Diffusion has taken over ✗ (for GANs)
+            </div>
+            {[
+              'Open-ended text-to-image generation — Stable Diffusion, DALL-E, Midjourney',
+              'Any task where output diversity matters more than raw speed',
+              'Teams without deep GAN-specific tuning expertise — diffusion training is far more forgiving',
+              'Video generation models (Sora-style), built on diffusion backbones with 3D attention',
+              'Anywhere mode collapse would be unacceptable — diffusion has no equivalent failure mode',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <ConceptBox title="The two lines of work are converging, not staying separate">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The GAN-vs-diffusion split is already blurring. Consistency models and adversarial
+            diffusion distillation (the technique behind SDXL Turbo) train a fast, few-step or
+            single-step generator to match a slow diffusion model's output — borrowing GAN-style
+            single-pass speed while keeping diffusion-level training stability and quality. If you are
+            asked in an interview whether GANs are "dead," the accurate answer is that their core
+            insight — a fast single-pass generator — got absorbed into the diffusion toolchain rather
+            than discarded.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about GANs</h2>
+
+        <ConceptBox title="Myth: Mode collapse means the Generator has stopped learning" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Mode collapse is a diversity failure, not a convergence failure — the Generator's weights
+            are still updating, and it can even be fooling the Discriminator quite successfully. What
+            has happened is that it found a narrow region of the output space that reliably scores
+            well and stopped exploring the rest of the data distribution. The loss curves can look
+            completely healthy while every generated sample looks nearly identical, which is exactly
+            why loss values alone cannot diagnose GAN health — you have to directly inspect a batch of
+            generated samples for diversity.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: GAN training is inherently unstable, and nothing can be done to fix that" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Much of GAN's reputation for instability traces back to the original 2014 formulation with
+            naive hyperparameters, not to anything unavoidable about adversarial training itself. DCGAN's
+            architectural rules, WGAN-GP's Wasserstein objective, spectral normalisation, and label
+            smoothing collectively make training dramatically more reliable — this module exists
+            specifically because the field spent years engineering these stabilisation techniques and
+            they work. Instability was a largely solvable problem, not a permanent property of the
+            minimax game.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Diffusion models have made GANs completely obsolete" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            As the production landscape above shows, GANs remain the practical choice anywhere
+            single-forward-pass speed matters — real-time filters, upscaling, narrow-domain face
+            generation. It is also worth knowing that modern fast diffusion variants (consistency
+            models, adversarial diffusion distillation) borrow GAN-style objectives to get GAN-like
+            speed out of a diffusion-trained model — the two approaches have converged rather than one
+            cleanly replacing the other.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A Discriminator that reaches near-perfect accuracy telling real from fake means training is going well" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It is close to the opposite. A Discriminator that classifies everything correctly gives the
+            Generator essentially zero useful gradient — the vanishing-gradient failure mode covered
+            earlier in this module. Healthy GAN training deliberately keeps the Discriminator somewhat
+            "confused," typically D(x) around 0.6–0.8 rather than 1.0. This runs against the instinct
+            that a more accurate classifier is always a better sign, which is exactly why it trips
+            people up the first time they read GAN training logs.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The minimax framing means the Generator and Discriminator have no shared incentive" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The objective function is adversarial — one network's gain is written as the other's loss —
+            but in practice healthy training behaves more like a cooperative arms race than a zero-sum
+            fight. Each network needs the other to keep improving in order to keep receiving useful
+            learning signal itself: if either one "wins" outright and stops providing a meaningful
+            gradient to the other, both stop improving. Balance, not victory, is the actual target — the
+            forger-and-detective analogy earlier in this module is making exactly this point.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>GANs — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Explain the GAN minimax objective in your own words, including why it is called minimax">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The Discriminator tries to maximise its ability to tell real data from the Generator's
+            fakes; the Generator tries to minimise that same quantity — it wants the Discriminator's
+            job to be as hard as possible. Training alternates between a step that moves the
+            Discriminator toward its maximum and a step that moves the Generator toward its minimum of
+            the same expression, which is exactly the "min over G, max over D" formulation the name
+            describes. At the theoretical equilibrium, the Generator's distribution matches the real
+            data distribution closely enough that the Discriminator cannot do better than random
+            guessing.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why is GAN training notoriously unstable, and name two concrete mitigations">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Two networks are each other's moving target — unlike standard supervised learning where the
+            loss surface is fixed, here the Generator's loss landscape shifts every time the
+            Discriminator updates and vice versa, so there is no static optimum either one is climbing
+            toward. On top of that, if the Discriminator gets too strong, the Generator's gradient
+            vanishes entirely. Two concrete fixes: switch to a Wasserstein objective with gradient
+            penalty (WGAN-GP), which provides meaningful gradients even when the real and fake
+            distributions barely overlap, and follow the DCGAN architectural guidelines (strided
+            convolutions, batch norm placement, matched learning rates and momentum) that were
+            specifically found to reduce oscillation.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What problem does WGAN actually solve, and how does the Wasserstein distance fix it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The original GAN objective is based on Jensen-Shannon divergence, which saturates and
+            provides essentially no usable gradient when the real and generated distributions do not
+            meaningfully overlap — a common situation early in training, exactly when the Generator most
+            needs signal. The Wasserstein (Earth Mover's) distance stays smooth and informative even
+            when two distributions are disjoint, because it measures the cost of literally moving
+            probability mass from one distribution to the other rather than a divergence that collapses
+            to a constant. WGAN implements this by removing the Discriminator's Sigmoid (making it a
+            Critic outputting an unbounded score) and enforcing a Lipschitz constraint, originally via
+            weight clipping and later, more stably, via a gradient penalty on interpolated points.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is mode collapse, and how would you actually detect it in practice?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Mode collapse is when the Generator converges to producing a narrow set of outputs —
+            sometimes nearly identical images — regardless of the input noise, because it found a small
+            region that reliably fools the current Discriminator. In practice, loss curves alone will
+            not reveal this, since both networks can look like they are training normally. What actually
+            catches it: sample a large batch from the Generator and check output diversity directly, or
+            compute FID against a diverse validation set — a Generator producing low-variance,
+            repetitive samples will show a poor FID despite individual samples looking sharp, because
+            FID specifically penalises a collapsed distribution shape, not just per-image quality.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Someone wants to add GAN-based generation to a real-time mobile video filter. Would you recommend it over diffusion?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Yes, and the reasoning is entirely about latency. A GAN generates an image in a single
+            forward pass — on the order of 10ms on a mobile GPU — while a standard diffusion model needs
+            tens to hundreds of denoising steps to produce comparable quality, which is far too slow for
+            a live video frame rate. If diffusion-level quality is genuinely required, distilled or
+            consistency-model variants of diffusion can get closer to single-step speed, but for a hard
+            real-time constraint like a live filter, a GAN remains the reasonable default rather than a
+            legacy choice.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

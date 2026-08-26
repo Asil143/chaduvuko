@@ -138,6 +138,28 @@ function MathBox({ children, label }: { children: React.ReactNode; label: string
   )
 }
 
+function ConceptBox({ title, children, color = '#7F77DD' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function InformationTheoryPage() {
   return (
     <LearnLayout
@@ -1526,7 +1548,253 @@ for imp in implications:
 
       <Div />
 
-      {/* ══ SECTION 12 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 12 — WHAT THIS LOOKS LIKE AT WORK ═════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>The 2am page: "production accuracy dropped but nothing changed in the code"</h2>
+
+        <p style={S.p}>
+          Section 11 above listed five practical applications of information
+          theory. Here's what one of them — drift detection — actually looks
+          like when it's the reason you're paged, and who ends up owning it.
+          This is squarely MLOps and ML engineering territory: the model
+          hasn't been touched, the code hasn't been touched, but the metric
+          dashboard shows accuracy sliding down over the last two weeks.
+          Information theory is how you tell "the world changed" from
+          "something is broken."
+        </p>
+
+        <ConceptBox title="The incident, step by step">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { step: '1. The alert', desc: 'Model accuracy on production predictions dropped from 91% to 84% over 10 days. No deploys happened in that window.' },
+              { step: '2. Rule out a pipeline bug first', desc: 'Check the feature pipeline for silent schema changes, null spikes, or a broken join — this is the boring, common cause and should be eliminated before blaming "drift."' },
+              { step: '3. Compare distributions, not just accuracy', desc: 'Pull the feature distributions from this week and from the training set. Compute KL divergence (or the bounded, symmetric Jensen-Shannon divergence) between them, feature by feature.' },
+              { step: '4. Find the culprit feature', desc: 'One feature — say, "average order value" — shows JSD far above its historical baseline. Everything else is flat. That is the signal, not noise.' },
+              { step: '5. Explain why, not just that', desc: 'A pricing change three weeks ago shifted the real-world distribution of order values. The model was trained on the old distribution — it is now confidently wrong on a segment it has never seen.' },
+            ].map((row) => (
+              <div key={row.step} style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>
+                  {row.step}
+                </span>
+                <span style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6 }}>{row.desc}</span>
+              </div>
+            ))}
+          </div>
+        </ConceptBox>
+
+        <p style={S.p}>
+          Here's the actual monitoring check — the kind of thing that runs as a
+          nightly job and pages someone when a feature's distribution has
+          drifted too far from what the model was trained on.
+        </p>
+
+        <CodeBlock code={`import numpy as np
+from scipy.spatial.distance import jensenshannon
+
+np.random.seed(42)
+
+def feature_drift_report(train_values, prod_values, feature_name, n_bins=20, alert_threshold=0.1):
+    """
+    Bin a continuous feature into a histogram for both training and
+    production data, then measure how much the distributions have
+    diverged using Jensen-Shannon divergence (bounded 0 to ln(2),
+    unlike KL, so a single threshold works across every feature).
+    """
+    combined_min = min(train_values.min(), prod_values.min())
+    combined_max = max(train_values.max(), prod_values.max())
+    bins = np.linspace(combined_min, combined_max, n_bins + 1)
+
+    train_hist, _ = np.histogram(train_values, bins=bins, density=False)
+    prod_hist,  _ = np.histogram(prod_values,  bins=bins, density=False)
+
+    # Convert counts to probability distributions (add epsilon to avoid zeros)
+    eps = 1e-10
+    p = train_hist / train_hist.sum() + eps
+    q = prod_hist  / prod_hist.sum()  + eps
+    p, q = p / p.sum(), q / q.sum()
+
+    jsd = jensenshannon(p, q) ** 2   # scipy returns sqrt(JSD); square it back
+    status = "🚨 DRIFT DETECTED" if jsd > alert_threshold else "✓ stable"
+    print(f"  {feature_name:<22}: JSD={jsd:.4f}  {status}")
+    return jsd
+
+# Training-time distribution of order value ($)
+train_order_value = np.random.gamma(shape=3, scale=15, size=5000)
+
+# Production distribution — most features unchanged, one has drifted
+# after a pricing change three weeks ago
+prod_order_value_stable  = np.random.gamma(shape=3, scale=15, size=2000)   # unchanged
+prod_order_value_drifted = np.random.gamma(shape=3, scale=28, size=2000)   # shifted up
+
+print("Nightly feature-drift report:")
+feature_drift_report(train_order_value, prod_order_value_stable,  "order_value (stable)")
+feature_drift_report(train_order_value, prod_order_value_drifted, "order_value (drifted)")
+
+# This is exactly the check tools like Evidently, WhyLabs, and Arize run
+# under the hood — the same Jensen-Shannon divergence this module derives
+# from first principles, just wired into a dashboard and an alert.`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 13 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about information theory in ML</h2>
+
+        <ConceptBox title="Myth: Low entropy on a model's predictions means the model has learned something correct" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Entropy measures how confident a distribution is, not whether that
+            confidence is justified. A model can output [0.98, 0.01, 0.01] —
+            very low entropy, very confident — while being completely wrong
+            about which class is correct. This is exactly the "confident but
+            wrong" scenario this module walks through with model_wrong: low
+            entropy tells you the model committed strongly to an answer; it
+            tells you nothing about whether that answer is the right one.
+            Confidence and correctness are measured by entropy and accuracy
+            respectively, and conflating them is a common evaluation mistake.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: KL divergence is a distance between two distributions, like Euclidean distance between points" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A true distance metric has to be symmetric and satisfy the triangle
+            inequality — KL divergence satisfies neither. D_KL(P∥Q) and
+            D_KL(Q∥P) are generally different numbers with different meanings
+            (forward KL is zero-avoiding, reverse KL is zero-forcing), and there
+            is no guarantee that "P to Q" plus "Q to R" bounds "P to R." When
+            you genuinely need a symmetric, bounded, always-finite measure —
+            comparing production data to training data, for instance —
+            Jensen-Shannon divergence is the tool built for that, precisely
+            because plain KL divergence does not have those properties.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Cross-entropy loss and log loss are two different things you might see in different libraries" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They are the same quantity under two different names — "log loss"
+            is the name that shows up in classical statistics and scikit-learn
+            documentation, "cross-entropy loss" is the name that shows up in
+            deep learning frameworks, and both compute exactly
+            −Σ p(x) log q(x) for the same reason: it is the negative
+            log-likelihood of the labels under the model's predicted
+            distribution. Seeing both names used interchangeably in the same
+            codebase, or the same paper, is normal — it is not a sign that two
+            different loss functions are being discussed.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Perplexity numbers are directly comparable across any two language models" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Perplexity is computed per token, and what counts as "one token"
+            depends entirely on the tokenizer and vocabulary a model uses — a
+            model with a larger vocabulary or a different subword scheme
+            segments the same sentence into a different number of tokens, which
+            changes the perplexity even if the two models are equally good at
+            predicting the actual words. Comparing raw perplexity across models
+            with different tokenizers, or across datasets with different
+            language distributions, without normalising for this is a common
+            source of misleading benchmark claims.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Information theory is theoretical machinery with no role in day-to-day feature engineering" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Mutual information is a practical, model-agnostic feature-selection
+            filter available in one line via sklearn's mutual_info_classif —
+            unlike Pearson correlation, it catches non-linear relationships
+            (like the quadratic example in Section 5) that a linear correlation
+            check would completely miss and silently drop a genuinely useful
+            feature. Combined with KL/JSD-based drift monitoring running in
+            production dashboards today, information theory is some of the most
+            operationally used math in this entire track, not the most
+            abstract.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 14 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Information theory — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What's the difference between entropy and cross-entropy, in plain terms?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Entropy H(P) measures the inherent uncertainty in a single true
+            distribution — how surprised you'd be, on average, observing
+            outcomes drawn from it. Cross-entropy H(P, Q) measures how well a
+            different, predicted distribution Q explains outcomes that actually
+            come from P — it's always at least as large as H(P), and the gap
+            between them is exactly the KL divergence. In ML, P is the true
+            label distribution and Q is the model's prediction, so minimising
+            cross-entropy during training is directly minimising how wrong the
+            model's predicted distribution is relative to the truth.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why is KL divergence not a true distance metric, and what do you use instead when you need a symmetric measure?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            KL divergence is asymmetric — D_KL(P∥Q) generally does not equal
+            D_KL(Q∥P), and it can go to infinity when one distribution assigns
+            probability where the other assigns none, so it fails both
+            requirements of a real metric. Jensen-Shannon divergence fixes this:
+            it's defined as the average KL divergence from each distribution to
+            their midpoint mixture, which makes it symmetric by construction,
+            always finite, and bounded between 0 and ln(2) — its square root is
+            even a proper metric satisfying the triangle inequality.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — A teammate says their model has 'lower entropy so it's a better model.' How do you respond?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I'd ask whether it's also more accurate, because those are two
+            separate claims. Low entropy just means the model's predictions are
+            confident — concentrated on one class — which is desirable only if
+            that confidence is correct. A model can become more confident
+            without becoming more accurate, for instance by overfitting to
+            training data or by miscalibration, and in both cases entropy would
+            drop while real-world performance stays flat or gets worse. I'd want
+            to see accuracy, calibration, and entropy together before calling
+            it "better."
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you use information theory to detect that your production data has drifted from your training data?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For each feature, I'd bin the training distribution and the recent
+            production distribution into histograms and compute the
+            Jensen-Shannon divergence between them — JSD rather than raw KL
+            because it's symmetric, bounded, and stays finite even if a bin
+            that had data during training has none in production right now.
+            A JSD meaningfully above its historical baseline for a given
+            feature is the signal that the real-world distribution has shifted
+            away from what the model was trained on, which is a strong
+            candidate explanation for silent accuracy degradation with no code
+            changes involved.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Explain perplexity to someone evaluating a language model for the first time">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Perplexity is just cross-entropy translated into a more intuitive
+            unit — it's 2 raised to the cross-entropy in bits, or equivalently
+            the exponential of the cross-entropy in nats. A perplexity of 5
+            means the model is, on average, as uncertain about the next word as
+            if it had to guess uniformly among 5 equally likely options at each
+            step — lower is always better, and a perfect model that always
+            assigns probability 1 to the correct word has a perplexity of
+            exactly 1. It's the standard way to compare language models on
+            held-out text without needing task-specific accuracy labels.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 15 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>Math foundations complete. Time to write code.</h2>

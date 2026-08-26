@@ -1093,7 +1093,249 @@ print(f"  Best CV MAE: {-random_search.best_score_:.2f} min")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Why the unified interface exists — it is what makes a production pipeline one shippable object</h2>
+
+        <p style={S.p}>
+          The fit/transform/predict convention is not just a teaching convenience —
+          it is the reason sklearn code can be trusted in production at all.
+          A real training job at a company like DoorDash does not run once in a
+          notebook; it runs on a schedule, every week, against fresh data, on a
+          different machine than the one it was written on. What gets version
+          controlled, serialised, and deployed is not a loose script of separate
+          scaler and encoder objects — it is one Pipeline object, because
+          Pipeline is itself just another estimator with the same
+          <span style={S.code as React.CSSProperties}> .fit()</span> and
+          <span style={S.code as React.CSSProperties}> .predict()</span> methods.
+        </p>
+
+        <p style={S.p}>
+          This has a direct, practical consequence: because the entire
+          preprocessing chain and the model live inside one object, saving and
+          loading it is a single line, and there is no way for the scoring
+          service to accidentally use a different scaler than the one training
+          produced — a very common real bug in pipelines that were not built
+          this way.
+        </p>
+
+        <CodeBlock code={`import numpy as np
+import pandas as pd
+import joblib
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.ensemble import RandomForestRegressor
+
+np.random.seed(42)
+n = 2000
+df = pd.DataFrame({
+    'distance_km':     np.abs(np.random.normal(4, 2, n)).clip(0.5, 15),
+    'traffic_score':   np.random.randint(1, 11, n).astype(float),
+    'restaurant_prep': np.abs(np.random.normal(15, 5, n)).clip(5, 35),
+    'order_value':     np.abs(np.random.normal(350, 150, n)).clip(50, 1200),
+    'restaurant':      np.random.choice(['Pizza Hut', 'KFC', 'Dominos'], n),
+    'city':            np.random.choice(['Seattle', 'Denver', 'Boston'], n),
+})
+y = (8.6 + 7.3*df['distance_km'] + 0.8*df['restaurant_prep']
+     + 1.5*df['traffic_score'] + np.random.normal(0, 4, n)).clip(10, 120)
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
+
+# ── Training job — runs on a schedule, e.g. every Monday morning ──────
+NUM_COLS = ['distance_km', 'traffic_score', 'restaurant_prep', 'order_value']
+CAT_COLS = ['restaurant', 'city']
+
+preprocessor = ColumnTransformer([
+    ('num', Pipeline([('imp', SimpleImputer(strategy='median')),
+                      ('sc',  StandardScaler())]), NUM_COLS),
+    ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), CAT_COLS),
+])
+
+pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('model', RandomForestRegressor(n_estimators=200, random_state=42, n_jobs=-1)),
+])
+
+pipeline.fit(X_train, y_train)   # fits imputer, scaler, encoder AND model together
+
+# ── The entire chain — preprocessing steps AND model — is one artifact ─
+joblib.dump(pipeline, '/tmp/models/delivery_time_v14.pkl')
+
+# ── Inference service — a completely different process, possibly ─────
+# ── a different machine, days or weeks later ──────────────────────────
+loaded_pipeline = joblib.load('/tmp/models/delivery_time_v14.pkl')
+
+# One call handles imputation, scaling, one-hot encoding, AND prediction —
+# using the EXACT statistics learned during the training job above.
+# There is no separate scaler.pkl and encoder.pkl to keep in sync,
+# and no way to accidentally call .fit() on live traffic by mistake —
+# the inference code only ever calls .predict(), never .fit().
+new_order_df = X_test.iloc[[0]]   # one incoming order, same columns as training
+prediction = loaded_pipeline.predict(new_order_df)`} />
+
+        <p style={S.p}>
+          The same property is what makes hyperparameter search and
+          cross-validation trustworthy rather than merely convenient. Because
+          <span style={S.code as React.CSSProperties}> cross_val_score</span> and
+          <span style={S.code as React.CSSProperties}> GridSearchCV</span> both
+          treat the Pipeline as a single estimator, every fold refits the entire
+          preprocessing chain from scratch on only that fold's training data —
+          which is exactly the guarantee that keeps a reported cross-validation
+          score honest. Teams that skip Pipeline and instead scale the full
+          dataset once before splitting are not saving real effort; they are
+          quietly building in the leakage this interface exists specifically to
+          prevent.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about the sklearn interface</h2>
+
+        <ConceptBox title="Myth: Since every estimator shares fit and predict, any model can be swapped in for any other with zero other changes" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The method names are identical, but the assumptions behind them are not. Swapping a
+            scaled linear model for a tree ensemble often means scaling is no longer necessary at
+            all, since trees split on raw thresholds regardless of feature magnitude. Swapping in
+            a model that supports class_weight opens up an imbalance-handling option a previous
+            model did not have. The unified interface means less code has to change when you swap
+            algorithms — as Section 4 demonstrates directly — not that literally nothing about the
+            surrounding pipeline needs reconsidering.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Calling fit_transform on the test set is fine, since it is the same method you used correctly on train" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            fit_transform() does not just apply a transformation — the fit half genuinely learns
+            new statistics from whatever data it is called on. Calling it on test data recomputes
+            mean, standard deviation, or category lists directly from the test set, which both
+            leaks test information into what is supposed to be an unbiased evaluation and can
+            silently produce different scaling entirely if the test distribution differs even
+            slightly from training. Test data must only ever see .transform(), which reuses the
+            statistics fit() already learned from training data — never its own fit_transform() call.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Writing a custom sklearn transformer is an advanced, rare thing you will basically never need on the job" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Almost every real feature-engineering step that is not a plain column-level
+            transformation — a business-specific ratio, a domain-informed outlier clip like the
+            OutlierClipper pattern in the Python-for-ML module, target encoding that needs careful
+            cross-fitting to avoid leakage — ends up as a small BaseEstimator and TransformerMixin
+            subclass specifically so it can live inside a Pipeline. That gets it the same
+            leakage protection, the same get_params()/set_params() support GridSearchCV relies on,
+            and the same serialisation behaviour as every built-in transformer, for a few lines of
+            extra code.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Pipeline is mostly a coding-style convenience — doing the same steps manually gives identical behaviour" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Manual step-by-step code is exactly what creates the classic leakage bug: a scaler
+            fit once on the full dataset before the train/test split, or accidentally refit on
+            validation data inside a cross-validation loop written by hand. Pipeline's real job is
+            removing that opportunity structurally — inside cross_val_score(pipeline, ...), every
+            fold refits the entire chain from scratch using only that fold's training portion, which
+            manually-sequenced code has to painstakingly reproduce and very often does not.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: .score() means the same thing for every estimator, so the number alone lets you compare across model types" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The method name is identical everywhere, but what it computes depends entirely on the
+            estimator type: for a regressor .score() returns R², for a classifier it returns plain
+            accuracy. Accuracy alone is close to meaningless on an imbalanced classification
+            problem — a model that always predicts the majority class can score above 90 percent
+            while being useless. Knowing what a specific estimator's default .score() actually
+            measures, and reaching for precision, recall, or AUC when accuracy would mislead, is
+            part of using the interface correctly rather than trusting the number by name alone.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Scikit-learn interface — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Why does wrapping preprocessing in a Pipeline prevent data leakage, when doing the same steps manually does not?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Because a Pipeline is itself a single estimator, tools like cross_val_score and
+            GridSearchCV treat it as one unit and refit the entire thing — imputer, scaler,
+            encoder, and model — from scratch on only each fold's training portion. Manual code
+            that scales the full dataset once before splitting, or that reuses one fitted scaler
+            across every fold, lets statistics from validation or test data quietly influence
+            training. Pipeline does not add a new capability so much as remove the opportunity to
+            make that mistake, by making "fit only on this fold's training data" the only thing
+            that happens automatically.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk me through implementing a custom sklearn transformer. What do you need to inherit and implement?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would inherit from BaseEstimator, which gives get_params() and set_params() for free
+            so the transformer works with GridSearchCV, and from TransformerMixin, which gives a
+            default fit_transform() implementation for free. Then I implement three methods
+            myself: __init__ to store hyperparameters only, fit(X, y=None) to compute and store
+            any statistics needed from the training data — using a trailing underscore naming
+            convention for what gets learned — and transform(X) to apply those stored statistics
+            to new data. The OutlierClipper example in the Python-for-ML module is exactly this
+            pattern in nine lines.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — What is the actual difference between fit(), transform(), and fit_transform(), and when is each one the wrong call?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            fit() only learns and stores statistics from the data it is given — it changes
+            nothing and returns no transformed output. transform() applies previously stored
+            statistics to data without learning anything new from it. fit_transform() is a
+            convenience that does both in one call, sometimes with a small performance benefit,
+            but only for the data the model should learn from. fit() and fit_transform() are the
+            wrong call on test or validation data every time, because both would learn new
+            statistics from data that is supposed to be evaluated, not trained on — transform()
+            is the only correct call there.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — You have a ColumnTransformer with numeric and categorical sub-pipelines inside a full Pipeline. How would you access the fitted StandardScaler's learned mean?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would navigate through the named steps: pipeline.named_steps['preprocessor'] gets
+            the ColumnTransformer, .named_transformers_['num'] gets the numeric sub-pipeline by
+            the name it was registered under, and .named_steps['scaler'] gets the actual
+            StandardScaler instance inside that sub-pipeline. From there .mean_ is the learned
+            attribute. The general pattern — chaining named_steps and named_transformers_ — works
+            for inspecting or debugging any nested step inside a fitted Pipeline, which comes up
+            constantly when something inside a production pipeline needs to be audited.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Someone wants to add a business-specific feature, like order value per kilometre, inside the training pipeline instead of before the train/test split. Why does that placement matter?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            If the feature is a simple deterministic function of columns already present in a
+            single row — like dividing one column by another — placement usually does not
+            introduce leakage, since no information from other rows is involved. But the same
+            question matters enormously for anything that involves an aggregate: a feature like
+            "average order value for this restaurant" must be computed only from training data and
+            supplied via transform() at prediction time, never recomputed including the test row
+            itself, or the model gets to see a statistic that secretly includes its own answer.
+            Building it as a pipeline step forces that computation to happen correctly, fold by
+            fold, instead of once over the whole dataset by habit.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

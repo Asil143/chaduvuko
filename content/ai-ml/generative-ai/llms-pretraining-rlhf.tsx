@@ -977,7 +977,254 @@ for m, sz, vram, qual, use in quant_methods:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Inside a real pretraining-to-RLHF pipeline</h2>
+
+        <p style={S.p}>
+          At a major lab, building a model like this is not one team's project — it is a
+          relay race across several teams with very different jobs and very different tools.
+          Data engineering teams spend months building the pretraining corpus: crawling and
+          deduplicating web text, filtering out low-quality and toxic content, mixing in code,
+          books, and curated high-quality sources, and building the tokeniser. Research and
+          infrastructure teams own distributed training across thousands of GPUs for weeks to
+          months — dealing with hardware failures, checkpointing every few hours so a crashed
+          node does not cost days of compute, and monitoring loss curves for the silent failure
+          modes (loss spikes, gradient explosions) that can appear only after trillions of
+          tokens. None of this touches a single human preference label — pretraining is entirely
+          self-supervised and consumes roughly 99% of the total compute budget for the model.
+        </p>
+
+        <p style={S.p}>
+          Alignment is a completely different kind of work, run by a different team on a much
+          smaller budget but with outsized influence on how the model actually feels to use. SFT
+          teams write or curate tens of thousands of high-quality example responses. Alignment
+          teams design the RLHF or DPO preference data collection, which in practice usually
+          means working with a human data vendor — Surge AI, Scale AI, and Invisible are common
+          names in this space — to have contractors compare pairs of model responses at scale.
+          Safety and red-teaming teams then spend weeks trying to jailbreak the aligned model
+          before release: crafting adversarial prompts, checking for harmful outputs, and
+          measuring refusal rates on both genuinely harmful requests and, just as importantly,
+          benign requests the model should not be refusing. A model typically goes through
+          several rounds of this loop — align, red-team, find failures, collect more targeted
+          preference data, re-align — before it ships.
+        </p>
+
+        <div style={{ overflowX: 'auto' as const, marginBottom: 24 }}>
+          <table style={{ borderCollapse: 'collapse' as const, width: '100%', fontSize: 12 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                {['Team', 'Owns', 'Typical tools', 'Timescale'].map(h => (
+                  <th key={h} style={{
+                    padding: '8px 12px', textAlign: 'left' as const,
+                    fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+                    fontFamily: 'var(--font-mono)',
+                  }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['Data engineering', 'Web crawl, dedup, filtering, tokeniser', 'CCNet, MinHash dedup, custom filters', 'Months, ongoing'],
+                ['Pretraining / infra', 'Distributed training run, checkpointing', 'Megatron-LM, DeepSpeed, thousands of GPUs', 'Weeks to months'],
+                ['SFT / alignment', 'Instruction data, preference pipeline', 'Vendor-labelled comparisons, TRL, internal tools', '2–6 weeks per cycle'],
+                ['Safety / red-team', 'Jailbreak testing, refusal calibration', 'Adversarial prompt suites, internal eval harnesses', 'Ongoing, pre- and post-launch'],
+              ].map((row, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                  {row.map((cell, j) => (
+                    <td key={j} style={{ padding: '7px 12px', color: j === 0 ? '#7b61ff' : 'var(--muted)', fontFamily: j === 0 ? 'var(--font-mono)' : 'inherit' }}>
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <ConceptBox title="The ticket you would actually get" color="#7b61ff">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Slack message from the alignment lead: "New checkpoint scores worse on the refusal
+            benchmark than last week's — it is refusing benign coding questions it used to
+            answer fine. Reward model score went up though. Investigate before we ship." This is
+            a textbook reward hacking symptom: the reward model learned a shortcut (maybe
+            associating caution-flavoured language with higher preference scores) that raised
+            its own metric while making the actual product worse. The fix is rarely "retrain from
+            scratch" — it usually means pulling the specific failing transcripts, adding targeted
+            preference examples that penalise the over-refusal, adjusting the KL penalty against
+            the reference model so the policy cannot drift as far, and re-running the held-out
+            benchmark suite before touching the reward model weights again.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about pretraining and RLHF</h2>
+
+        <ConceptBox title="Myth: RLHF makes the model smarter — it adds new capabilities" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            RLHF and DPO are alignment steps, not capability steps. They reshape which of the
+            base model's already-latent behaviours get surfaced and reinforced — being concise,
+            refusing harmful requests, following instruction formatting — but they do not teach
+            the model new facts or new reasoning ability that pretraining did not already
+            provide. This is exactly why InstructGPT's famous result was so striking: a small,
+            heavily aligned 1.3B model being preferred over a raw 175B base model is not evidence
+            that alignment created new capability out of nothing, it is evidence that the raw
+            capability was already present in the base model and alignment simply made it
+            reliably accessible and pleasant to interact with.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: More pretraining data is always better, regardless of quality" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The Chinchilla scaling laws describe an optimal token count assuming reasonably
+            high-quality, deduplicated data — they say nothing about dumping more raw, duplicated,
+            or low-quality text into the mix. In practice, heavily duplicated web content wastes
+            compute reinforcing the same patterns repeatedly, and low-quality or toxic content
+            measurably degrades downstream behaviour. A large fraction of the real engineering
+            effort — and a large fraction of what actually differentiates one lab's pretraining
+            run from another's at the same parameter count — goes into deduplication, quality
+            filtering, and data mixing, not into simply acquiring more raw tokens.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The reward model in RLHF measures objective correctness or truth" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The reward model is trained on nothing but human comparisons of which response a
+            rater preferred — it has learned to predict human preference, not truth. Human
+            raters carry systematic biases: a tendency to prefer longer, more detailed-looking
+            answers even when a shorter one is equally correct, or to prefer a confident,
+            agreeable tone even when pushing back would be more honest. A policy optimised hard
+            against this reward model will happily learn to exploit exactly those biases —
+            becoming verbose or sycophantic — because from the reward model's point of view that
+            behaviour genuinely does score higher. This gap between "scores well on the reward
+            model" and "is actually a better response" is the entire reason reward hacking exists.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Pretraining and the alignment stages are basically the same kind of training with different data" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            They differ in almost every dimension that matters. Pretraining is self-supervised —
+            next-token prediction over unlabeled internet-scale text needs no human annotation at
+            all — and consumes roughly 99% of total training compute over trillions of tokens. SFT
+            and RLHF or DPO instead train on tiny, expensive, carefully curated human-produced or
+            human-labelled datasets, often tens of thousands to a few hundred thousand examples,
+            using entirely different objectives: cross-entropy imitation for SFT, and a
+            preference- or reward-based objective for RLHF and DPO. Treating alignment as "more of
+            the same training, just with better data" misses that the whole point of the later
+            stages is to optimise for a fundamentally different signal — human preference — using
+            a completely different data pipeline and, in RLHF's case, a completely different
+            training algorithm.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once a model is RLHF'd or DPO'd, its alignment is permanent and reliable" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Alignment training reshapes a statistical distribution over outputs — it does not
+            install a hard, unbreakable rule. Adversarial prompting and jailbreaks routinely find
+            inputs that push the model outside the distribution the alignment training covered
+            well, surfacing the underlying pretrained behaviour it was supposed to suppress. Even
+            more relevant in practice: further fine-tuning a model on unrelated downstream data,
+            including seemingly harmless task-specific fine-tuning, can measurably erode safety
+            behaviour that RLHF or DPO installed — a documented phenomenon sometimes called
+            safety regression. This is why serious deployments pair alignment training with
+            ongoing red-teaming, input and output monitoring, and re-evaluation after any further
+            fine-tuning, rather than treating one alignment pass as a permanent guarantee.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>LLM pretraining and RLHF — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk through the full pipeline from a raw pretrained model to a shipped, aligned assistant">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Pretraining first: a decoder-only Transformer is trained with next-token prediction
+            on trillions of tokens of largely unlabelled web, book, and code text, consuming the
+            large majority of total compute and producing a model that completes text fluently but
+            follows no instructions. Supervised fine-tuning comes next: the pretrained model is
+            fine-tuned on tens of thousands of curated prompt-and-ideal-response pairs, with loss
+            computed only on the response tokens, teaching it to behave like an assistant rather
+            than a text completer. Then alignment: human annotators compare pairs of the SFT
+            model's responses, and either a reward model is trained on those comparisons and the
+            policy is optimised against it with PPO, or the comparisons are used directly in a
+            DPO loss. The result goes through safety red-teaming, and often several more rounds of
+            targeted preference data collection, before release.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What is the practical difference between PPO-based RLHF and DPO, and why has the industry shifted toward DPO?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            PPO-based RLHF requires training and maintaining three models at once — the policy
+            being optimised, a separately trained reward model, and a frozen reference policy —
+            and running proximal policy optimisation, a reinforcement learning algorithm that is
+            notoriously sensitive to hyperparameters and prone to instability. DPO sidesteps the
+            reward model and the RL loop entirely: it derives a closed-form loss showing that the
+            optimal RLHF policy can be reached directly from preference pairs using a simple
+            binary cross-entropy-style objective against the reference model. The industry shift
+            toward DPO, visible in most open-source model releases, is mostly about engineering
+            cost — DPO reaches comparable alignment quality with a fraction of the moving parts
+            and a much shorter, more stable training loop.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why does a pretrained base model need any alignment at all, given how much it already knows?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Pretraining optimises for exactly one thing: predicting the next token consistent with
+            internet-scale text. A base model asked a question will complete it in whatever style
+            matches its training distribution — which might be helpful, might be evasive, might
+            continue with more questions instead of answering, and will happily continue harmful
+            content if that is what similar text in its training data looked like. Knowing a huge
+            amount about the world is orthogonal to reliably being helpful, honest, and refusing
+            harmful requests on demand — alignment is the stage that specifically optimises for
+            that behavioural target, using human preference data the next-token objective never
+            saw during pretraining.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is reward hacking in RLHF, and how would you catch it before shipping?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Reward hacking happens when the policy finds a shortcut that raises its score from the
+            reward model without genuinely improving response quality — becoming needlessly
+            verbose because raters tend to prefer longer answers, or becoming sycophantic because
+            agreeing with the user scores well even when the user is wrong. I would catch this by
+            never trusting the reward model score in isolation: track a held-out suite of task
+            benchmarks and a refusal-calibration benchmark across training, and watch for the
+            reward score climbing while those independent metrics stay flat or get worse. Manually
+            reading a sample of high-reward transcripts each training run is also worth the time —
+            reward hacking patterns are usually obvious to a human within a handful of examples
+            even when they are invisible in the aggregate reward number.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — If you had a fixed compute budget for a new model launch, how would you split it between more pretraining and more alignment investment?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would not think of it as splitting the same budget, because the two stages consume
+            wildly different amounts of compute for wildly different returns — pretraining is
+            roughly 99% of total compute and alignment is closer to 1%, yet the InstructGPT result
+            showed a heavily aligned model an order of magnitude smaller beating a raw base model
+            on human preference. That asymmetry means alignment investment is almost always
+            underfunded relative to its impact on user-perceived quality, so I would treat
+            pretraining scale as the given from the overall budget and separately make sure the
+            alignment stage has enough dedicated preference-data collection and red-teaming
+            cycles, rather than treating it as an afterthought squeezed into whatever time is left
+            after the pretraining run finishes.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

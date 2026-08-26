@@ -832,7 +832,214 @@ for use, b, reason in use_cases:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where VAEs show up in production — as the headline model, and hidden inside bigger ones</h2>
+
+        <p style={S.p}>
+          VAEs never had a "GANs vs diffusion"-style spotlight moment, which makes it easy to
+          assume they quietly disappeared. In practice they show up constantly in production —
+          sometimes as the model a team explicitly chose, and, more often than people realise, as an
+          uncredited component wired inside a system whose headline architecture is something else
+          entirely.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(0,230,118,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#00e676', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              A standalone VAE still wins ✓
+            </div>
+            {[
+              'Manufacturing quality control — reconstruction-error anomaly detection needs no labelled defects, only images of good units',
+              'Fraud and intrusion detection — score transactions or logs by how poorly they reconstruct against a model trained only on normal behaviour',
+              'Drug candidate generation — a smooth, continuous molecular latent space enables gradient-based optimisation over chemical properties',
+              'Collaborative-filtering recommenders — Mult-VAE-style models are a real, deployed technique for recommendation, not just a research curiosity',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(123,97,255,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#7b61ff', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              A VAE hidden inside something bigger
+            </div>
+            {[
+              'Stable Diffusion and every other latent diffusion model — a VAE encoder compresses pixels into a small latent grid, the diffusion U-Net denoises there, a VAE decoder expands back to pixels',
+              'Audio codecs and TTS pipelines that use a VAE-style bottleneck to compress a waveform before a separate generation stage',
+              'Representation-learning pretraining stages, where the VAE objective regularises a backbone before it is reused elsewhere',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <Callout type="tip">
+          The Slack message that actually starts most VAE projects: "Can we flag defective units on
+          the line without labelled defect examples? We only have photos of good ones." That sentence
+          is a VAE anomaly-detection project stated in plain English — train only on images of normal
+          units, then flag anything the decoder struggles to reconstruct.
+        </Callout>
+
+        <p style={S.p}>
+          The Stable Diffusion fact is worth remembering specifically because it resolves the
+          "VAE vs GAN vs diffusion, pick one" framing this module started with: a huge share of
+          people using diffusion models in production are running a VAE on every single image they
+          generate, without necessarily knowing it — it is doing the unglamorous job of making
+          diffusion computationally affordable in the first place.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about VAEs</h2>
+
+        <ConceptBox title="Myth: The reparameterisation trick makes the sampling operation itself differentiable" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Sampling from a distribution stays a fundamentally stochastic operation — no trick turns
+            randomness itself into something differentiable. What the reparameterisation trick actually
+            does is move the randomness out of the path that needs a gradient: instead of sampling z
+            directly from N(mu, sigma squared), it samples an independent epsilon from N(0, I) and
+            computes z as a deterministic function of mu, sigma, and epsilon. Gradients flow cleanly
+            through that deterministic function with respect to mu and sigma; the random part is
+            sidestepped, not made differentiable.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: VAEs produce blurry images because the architecture is fundamentally weaker than a GAN's" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Blurriness is a predictable mathematical consequence of the objective, not evidence of a
+            weaker architecture. Pixel-wise reconstruction loss (binary cross-entropy or MSE) is
+            minimised by outputting the average of plausible values whenever the decoder is uncertain
+            between them, and an average of several sharp options looks smeared. This is fixable without
+            abandoning the VAE framework — adding a perceptual loss, adding an adversarial loss on top
+            of the ELBO (as in VQ-GAN-style hybrids), or moving to a discrete latent space (VQ-VAE) all
+            address the same root cause directly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The KL divergence term's job is to help the decoder reconstruct better" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The KL term has nothing to do with reconstruction quality — its entire job is regularising
+            the shape of the encoder's output distribution to stay close to a standard normal, which is
+            what makes the latent space continuous and sample-able in the first place. It actually
+            competes with reconstruction rather than assisting it, which is the whole tension the ELBO
+            is built to balance. Turning the KL weight up, as in beta-VAE, deliberately trades away some
+            reconstruction fidelity in exchange for a more organised, disentangled latent space — proof
+            that the two terms pull in different directions, not the same one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Posterior collapse means the whole model has failed to train" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Posterior collapse is a specific, diagnosable failure — the encoder gives up and outputs
+            close to N(0, I) for every input regardless of content, and the decoder compensates by
+            learning to generate a generic average output that ignores z entirely. The overall loss can
+            look like it is decreasing the whole time, which is exactly what makes it deceptive to spot
+            from the training curve alone. It is a symptom of the latent code being ignored, not the
+            network failing to learn anything, and it is fixed with known techniques — KL annealing,
+            free bits, reducing decoder capacity — rather than being a sign the VAE approach itself is
+            wrong for the data.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A project has to choose between a VAE, a GAN, or a diffusion model as mutually exclusive options" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            As the production examples above show, a VAE is frequently a component living inside a
+            diffusion pipeline rather than a competing headline architecture — latent diffusion models
+            like Stable Diffusion use a VAE as their compression stage. Hybrids combining a VAE encoder
+            with a GAN-style discriminator loss on top of the ELBO exist too. Treating these three as
+            three separate competing tools you must pick exactly one of obscures how often real
+            production systems combine them instead.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>VAEs — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Derive or explain the ELBO, and describe what each term is actually doing">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The ELBO is a lower bound on the log likelihood of the data, and maximising it splits into
+            two terms. The reconstruction term, E of log p(x given z), measures how well the decoder
+            reproduces the input from a sampled latent code — maximising it pushes the decoder toward
+            accurate reconstructions. The KL divergence term measures how far the encoder's distribution
+            q(z given x) sits from the prior p(z), a standard normal — minimising it keeps the latent
+            space smooth and centred instead of letting the encoder scatter arbitrary codes anywhere.
+            These two terms are in direct tension, and that tension is what produces a latent space that
+            is both informative and navigable.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Why does the reparameterisation trick matter — what actually breaks without it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Without it, z is sampled directly from a distribution parameterised by mu and sigma, and
+            sampling is not a differentiable operation with respect to those parameters — gradients
+            cannot flow backward through a random draw, so the encoder could never be trained end to end
+            with standard backpropagation. The reparameterisation trick rewrites the sample as a
+            deterministic function of mu, sigma, and an independent noise term epsilon drawn from N(0,
+            I). Since epsilon carries no learnable parameters, gradients flow cleanly through the mu and
+            sigma paths, and the whole network trains with ordinary backprop.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why are VAE-generated images typically blurrier than GAN or diffusion outputs?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The pixel-wise reconstruction loss is minimised by predicting the average of plausible pixel
+            values whenever the model is uncertain, and an average of several sharp possibilities reads
+            as blur. A GAN sidesteps this because its loss comes from a discriminator judging overall
+            realism rather than penalising each pixel independently, so it has no incentive to average.
+            Diffusion sidesteps it differently — by refining the image gradually over many steps rather
+            than committing to a single-shot reconstruction, it never has to resolve all its uncertainty
+            in one averaged guess.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is posterior collapse, why does it happen, and how would you fix it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Posterior collapse is when the encoder stops encoding useful information and outputs close to
+            the prior, N(0, I), for every input, while the decoder learns to reconstruct a generic
+            average output without actually using z. It typically happens when the KL term dominates too
+            early in training — before the reconstruction signal has had a chance to teach the encoder
+            anything worth preserving — or when the decoder is powerful enough to reconstruct reasonably
+            well without relying on the latent code at all. The standard fix is KL annealing: start
+            training with the KL weight at zero and ramp it up over the first several epochs, so the
+            encoder learns to encode meaningful structure before the regularisation pressure kicks in.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Why does linear interpolation between two points in a VAE's latent space produce a smooth, meaningful transition, when it typically does not for a plain autoencoder?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A plain autoencoder's latent space is never regularised to be continuous — the model is only
+            ever trained to correctly decode the exact codes it assigned to training examples, so the
+            empty space between two encoded points can decode to something meaningless. A VAE's KL term
+            forces every encoded distribution to overlap with the same standard normal prior, which
+            packs the whole space with meaningfully decodable regions rather than leaving gaps. That is
+            precisely why walking a straight line between two encoded means and decoding along the way
+            produces a smooth, semantically sensible transition instead of noise.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

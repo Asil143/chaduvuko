@@ -821,6 +821,233 @@ ft_predictor.delete_endpoint()`} />
 
       <Div />
 
+      {/* ══ SECTION 9 — WHAT THIS LOOKS LIKE AT WORK ════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>SageMaker, raw EC2, or somewhere else entirely — how teams actually decide</h2>
+
+        <p style={S.p}>
+          SageMaker rarely wins a team over on individual feature merit alone.
+          The decision usually comes down to what a team already runs and what
+          the alternative would cost in engineering time, not a checklist
+          comparison of managed services.
+        </p>
+
+        <VisualBox label="Four real team profiles and what they typically pick">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              {
+                profile: 'Small team, 1-3 ML engineers, no infra team',
+                pick: 'SageMaker',
+                color: '#00e676',
+                why: 'Building your own scheduling, tracking, and autoscaling from scratch is a multi-month distraction from shipping models. Managed compute plus Pipelines gets a team to production in weeks.',
+              },
+              {
+                profile: 'Existing Kubernetes platform team on AWS',
+                pick: 'Self-managed (EKS + MLflow + KServe)',
+                color: '#FF9900',
+                why: 'SageMaker becomes a second operational surface next to the cluster they already run and pay engineers to maintain. Extending the existing cluster is usually cheaper than paying for a parallel managed stack.',
+              },
+              {
+                profile: 'Company already heavy on Azure or GCP elsewhere',
+                pick: 'That other cloud\'s ML platform',
+                color: '#378ADD',
+                why: 'Cross-cloud data egress and a second security review usually outweigh SageMaker\'s individual merits when the rest of the org already lives on a different cloud.',
+              },
+              {
+                profile: 'Large regulated org with a dedicated MLOps platform team',
+                pick: 'Fully custom infra on raw EC2/Kubernetes',
+                color: '#ff4757',
+                why: 'SageMaker\'s opinionated defaults sometimes do not satisfy a hard compliance requirement — a specific network isolation setup, a custom lineage audit format — and the org has headcount to absorb building it themselves.',
+              },
+            ].map((item) => (
+              <div key={item.profile} style={{
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 7, padding: '10px 12px', borderLeft: `3px solid ${item.color}`,
+              }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'baseline', marginBottom: 5, flexWrap: 'wrap' as const }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{item.profile}</span>
+                  <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: item.color }}>→ {item.pick}</span>
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.why}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <CodeBlock code={`# ── Rough monthly cost comparison: SageMaker vs self-managed EC2 ──────
+# Scenario: 20 training jobs/month, each on an equivalent instance for 2 hours
+
+sagemaker_price_per_hr = 0.23    # ml.m5.xlarge, SageMaker managed training
+ec2_price_per_hr       = 0.192   # equivalent on-demand EC2 instance
+jobs_per_month = 20
+hours_per_job  = 2
+
+sagemaker_compute_cost = sagemaker_price_per_hr * hours_per_job * jobs_per_month
+ec2_compute_cost       = ec2_price_per_hr * hours_per_job * jobs_per_month
+
+print(f"SageMaker compute:  \${sagemaker_compute_cost:.2f}/month")
+print(f"Raw EC2 compute:    \${ec2_compute_cost:.2f}/month")
+print(f"SageMaker premium:  \${sagemaker_compute_cost - ec2_compute_cost:.2f}/month for managed provisioning")
+
+# But raw EC2 does not include, out of the box:
+#  - Job scheduling and queueing        (someone builds this)
+#  - Experiment tracking                (someone runs MLflow)
+#  - Auto-shutdown on idle              (someone writes this, or pays for idle time)
+#  - Endpoint autoscaling               (someone configures it)
+#
+# Engineering time to build and maintain that stack: typically 0.25-0.5 FTE ongoing.
+# At a loaded engineer cost of roughly $150k/year, 0.25 FTE is about $3,125/month —
+# which dwarfs the tiny managed premium at this job volume.
+
+print("\\nAt low job volume, the managed premium is negligible next to the")
+print("engineering time it saves. At very high, steady-state volume — hundreds")
+print("of long-running jobs a month — the premium compounds, and self-managed")
+print("infra can become cheaper. The crossover point depends on job volume AND")
+print("how much of the surrounding MLOps stack you would otherwise build.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about SageMaker</h2>
+
+        <ConceptBox title="Myth: SageMaker is required to run ML on AWS" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Nothing stops you from running training scripts on raw EC2
+            instances, or on self-managed Kubernetes with open-source MLflow,
+            Airflow, and KServe. SageMaker is a convenience layer bundling those
+            tools as a managed service — it is optional. Plenty of AWS-based ML
+            teams, especially ones that already run Kubernetes for their main
+            product, never touch SageMaker at all.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: managed services eliminate all operational work" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            SageMaker removes server provisioning and patching, but you still
+            own IAM role scoping, cost monitoring — a forgotten endpoint keeps
+            billing whether or not it receives traffic — quota management (GPU
+            instance types need an explicit quota request), pipeline debugging,
+            and model quality. None of that is automated away. Managed narrows
+            the operational surface; it does not remove it.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: SageMaker is always cheaper than self-managed infrastructure" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            SageMaker's per-second managed compute pricing carries a premium
+            over the identical raw EC2 instance type, and that premium
+            compounds at high, sustained volume. It usually wins for teams that
+            would otherwise spend engineering time building scheduling,
+            tracking, and autoscaling from scratch — but for an org already
+            running that infrastructure for other workloads, adding SageMaker
+            on top can mean paying for infrastructure twice.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: you must adopt the entire SageMaker suite together, or not at all" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Every SageMaker component is independently addressable. Plenty of
+            teams use only Training Jobs for managed compute and keep their
+            existing MLflow tracking, Airflow scheduling, and custom feature
+            pipeline exactly as they were. Treating SageMaker as an all-or-
+            nothing platform migration is a self-imposed constraint, not a
+            technical one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: a JumpStart or AutoML model is production-ready the moment it deploys" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            JumpStart and AutoML remove the work of writing training code and
+            picking an architecture, not the work of evaluating whether the
+            resulting model is actually good enough, unbiased, and safe for
+            your specific data and use case. Clarify's bias and explainability
+            reports exist precisely because a model that trained without
+            errors is not the same thing as a model that is fit to ship.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>AWS SageMaker — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What does SageMaker actually add on top of raw EC2 and open-source tools?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Managed provisioning — request a training job, get an instance,
+            pay per second, the instance terminates automatically with no idle
+            server — a built-in experiment tracking and model registry
+            integrated with the console, pipeline orchestration with
+            step-level caching, and Model Monitor and Clarify for drift and
+            bias detection without standing up your own Evidently or SHAP
+            pipeline. None of these are capabilities you cannot build yourself
+            — the value is not having to re-engineer and maintain them.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — When does self-managed infrastructure make more sense than SageMaker?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            When a team already runs Kubernetes for its core product with a
+            platform team maintaining it — adding SageMaker means a second
+            operational surface instead of extending the one already paid for.
+            Also when there is a hard compliance requirement SageMaker's
+            managed defaults do not satisfy, or when job volume is high and
+            steady enough that the managed compute premium meaningfully
+            exceeds the engineering cost of running it yourself.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How would you optimise costs for a team already using SageMaker heavily?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Use Managed Spot Training for jobs that can tolerate interruption —
+            up to 90 percent off the on-demand price, with SageMaker
+            automatically resuming from the last checkpoint. Set short
+            max_run limits so a bug cannot leave a job running for days.
+            Right-size instance types by profiling actual CPU and memory usage
+            instead of guessing large. Check whether Serverless Inference or a
+            smaller endpoint instance covers a low-traffic model instead of an
+            always-on instance. Delete idle endpoints — a forgotten real-time
+            endpoint bills continuously whether or not it receives traffic.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — A team already runs Airflow and MLflow on Kubernetes and wants to add SageMaker Pipelines for a new project. What do you push back on?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would ask what specific gap the existing stack has before adding
+            a second orchestrator. Pipelines' step caching and visual DAG are
+            genuinely nice, but running two orchestration systems means two
+            places to debug when a retraining job fails, two credential
+            surfaces, and no shared history across old and new pipelines.
+            Unless there is a concrete reason the existing stack cannot meet,
+            extending the existing Airflow and MLflow setup usually costs less
+            than standing up and maintaining a parallel one.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How do you avoid getting locked into AWS while still using SageMaker's managed conveniences?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Keep training and inference code framework-native — plain
+            scikit-learn or PyTorch scripts, not code that calls
+            SageMaker-specific APIs inside the model logic — so the same
+            script runs unchanged on EC2, on-prem, or another cloud's
+            equivalent service. SageMaker's SDK wraps the script rather than
+            replacing it, which is exactly why the training scripts in this
+            module look identical to local development. Keep model artifacts
+            in open formats rather than a proprietary one, and treat Feature
+            Store and Pipelines as replaceable orchestration layers around
+            portable code, not as the source of truth for your ML logic.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
       {/* ══ KEY TAKEAWAYS ════════════════════════════════════════════════════════ */}
       <KeyTakeaways items={[
         'SageMaker Training Jobs provision compute on demand — you pay per second and the instance terminates automatically when done.',

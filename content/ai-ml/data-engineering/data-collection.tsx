@@ -144,6 +144,28 @@ function ErrorBlock({ error, cause, fix }: { error: string; cause: string; fix: 
   )
 }
 
+function ConceptBox({ title, children, color = '#1D9E75' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function DataCollectionPage() {
   return (
     <LearnLayout
@@ -1668,7 +1690,209 @@ if df_weather is not None:
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — WHAT THIS LOOKS LIKE AT WORK ═════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Production data collection is four separate systems, not one script</h2>
+
+        <p style={S.p}>
+          Everything in this module — pagination, retry logic, chunked SQL reads, scraping — is the
+          mechanics. In a real company, those mechanics get wired into four distinct collection
+          systems that rarely share code, because they solve different problems on different
+          timelines. Understanding which system a given dataset comes from tells you what kind of
+          data quality problems to expect before you have even opened the file.
+        </p>
+
+        <VisualBox label="Four collection systems that feed a typical ML pipeline">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { system: 'Event logging (app instrumentation)', color: '#378ADD', desc: 'Product and mobile engineers fire events (order_placed, screen_viewed) through a client SDK into Kafka or Segment. The ML team does not own this instrumentation — a renamed event field upstream silently breaks a feature pipeline downstream with no warning.' },
+              { system: 'Third-party APIs', color: '#7b61ff', desc: 'Weather, payments, mapping, and enrichment vendors (Stripe, Google Maps, credit bureaus). These come with rate limits, paid tiers, and API versions that change on the vendor’s schedule, not yours — the retry and pagination code in this module exists mainly for this category.' },
+              { system: 'Labeling vendors', color: '#1D9E75', desc: 'For supervised tasks without a natural label (fraud review outcomes, content moderation categories), companies send raw examples to Scale AI, Labelbox, or an internal annotation team and get labels back days or weeks later — on a completely different cadence than the raw data collection.' },
+              { system: 'Internal warehouse / lake queries', color: '#D85A30', desc: 'SQL against the production replica or a warehouse table someone else’s pipeline populated. This is the "easy" source, but it inherits every upstream data quality problem invisibly — you are trusting a pipeline you did not build and often cannot see.' },
+            ].map((item) => (
+              <div key={item.system} style={{
+                display: 'grid', gridTemplateColumns: '230px 1fr', gap: 14,
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 7, padding: '10px 14px', borderLeft: `3px solid ${item.color}`,
+              }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)' }}>
+                  {item.system}
+                </span>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          The other thing that differs sharply from a tutorial is where validation happens. A
+          tutorial collects data, then cleans it. A production ingestion pipeline puts a quality gate
+          directly at the point of collection — before a single row lands in the warehouse — checking
+          that the response schema matches what was expected, that row counts are within a normal
+          range of the last run, and that no field's null rate jumped overnight. Catching a broken
+          upstream event schema at ingestion, within minutes, is the difference between losing one
+          day of data and silently training on three weeks of corrupted labels before anyone notices.
+        </p>
+
+        <ConceptBox title="Who actually owns data collection on an ML team">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            On most teams, no single person owns all four systems above. Event logging is usually
+            owned by product/backend engineering, with the ML or data engineering team as a consumer
+            who requests new events and reviews schemas. Third-party API integrations are typically
+            owned directly by whichever data engineer built the pipeline, since they carry the retry
+            and rate-limit logic. Labeling vendor relationships are frequently owned by a dedicated
+            data operations or annotation team, not by ML engineers at all. The skill this module
+            teaches — reliable pagination, retries, and validation — is what lets one ML engineer
+            safely consume data from all four without needing to own any of them end to end.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about data collection</h2>
+
+        <ConceptBox title="Myth: More data is always better for the model" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            More rows only help if they are drawn from the same distribution the model will actually
+            see in production and are collected with reasonably consistent quality. Doubling a
+            training set by scraping a source with a very different population, or by including years
+            of data from before a product redesign changed user behaviour entirely, can make a model
+            worse, not better, because it dilutes the signal that matches current reality with signal
+            that does not. The right question is never "how much data" in isolation — it is whether
+            this additional data is representative of what the model needs to predict.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Data collection is a one-time task you complete before modeling starts" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A model trained once on a static export is already stale the moment user behaviour,
+            pricing, or the product itself changes. Every pipeline in this module — the pagination
+            loops, the retry logic, the DataCollector class with checkpointing — is built to run
+            repeatedly on a schedule, not once. Production data collection is closer to a standing
+            service than a script: it runs daily or hourly, indefinitely, for as long as the model it
+            feeds stays in production.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: All data sources are equally trustworthy once they land in your warehouse" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A SQL table looks identical whether it was populated by a rigorously tested internal
+            pipeline or by a one-off script someone wrote for a demo two years ago and never revisited.
+            The warehouse gives every table the same clean tabular appearance regardless of how
+            reliable its upstream source actually is. Before trusting a table, it is worth finding out
+            who owns the pipeline that fills it, how often it runs, and whether anyone monitors it —
+            the same question this module asks about your own collection code applies just as much to
+            data someone else already collected for you.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once an API integration works in testing, it keeps working in production without maintenance" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Third-party APIs change response schemas, deprecate fields, tighten rate limits, and
+            occasionally shut down entirely, usually with a changelog email nobody on the ML team is
+            subscribed to. The retry and error-handling code in this module protects against transient
+            failures — a dropped connection, a momentary 500 — but it does nothing against a vendor
+            silently renaming a field or changing units. That requires an explicit validation step
+            that checks the shape of what came back, not just whether the request succeeded.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Web scraping is a free, risk-free way to get more data" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Scraping carries real costs that a "free" API-less data source hides at first glance:
+            legal and terms-of-service risk if the target site prohibits it, an ongoing maintenance
+            burden every time the site's HTML structure changes and silently breaks your selectors,
+            and an ethical obligation to scrape at a pace that does not degrade the target site for
+            its actual users. It is a legitimate last resort when no API exists, not a default choice
+            to prefer over a documented, rate-limited, officially supported API.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Data collection — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — Walk me through how you would design a data collection pipeline for a new ML feature">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would start by identifying the source type — internal database, third-party API, event
+            stream, or a source with no API at all — since that decides the whole shape of the
+            pipeline. For an API source, I would build in pagination and retry with exponential
+            backoff from day one, not as an afterthought, because transient failures are the norm at
+            any real volume. I would add a validation step immediately after collection that checks
+            schema and row-count sanity before the data reaches storage, and wrap the whole thing in a
+            class with logging and checkpointing so a failure partway through a large pull does not
+            require starting over from zero. Finally I would schedule it to run repeatedly, since
+            almost no real collection pipeline is a one-time job.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — How do you handle a dataset you suspect was collected in a biased or incomplete way?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First I would try to characterise the bias concretely rather than treat it as a vague
+            worry — compare the collected population against a known ground truth, like overall
+            traffic logs, to see which segments are over- or under-represented. If the gap traces back
+            to the collection mechanism itself, such as an API that only surfaces recent records or a
+            scraper that only reaches paginated results up to a vendor-imposed limit, I would look for
+            a way to close that gap directly, for example by adding a second collection path for the
+            missing segment. If closing the gap is not feasible, I would document the known bias
+            explicitly for whoever trains on the data next, rather than let it get treated as a
+            neutral, representative dataset.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How do you decide how much to invest in collection reliability versus how much data you actually need?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I treat this as a cost curve rather than an all-or-nothing decision. Early on, a simple
+            script with basic retry logic is enough to validate whether a data source is even useful
+            for the model. Once a source proves valuable and the pipeline is expected to run
+            indefinitely, the calculus changes: the cost of an unnoticed silent failure — training on
+            three weeks of corrupted or missing data before anyone catches it — usually dwarfs the
+            engineering cost of adding proper validation, alerting, and checkpointing. I would invest
+            reliability engineering in proportion to how expensive a silent failure would actually be,
+            not apply the same bar to every source uniformly.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — Would you build a custom data collection pipeline or use an existing tool, and how do you decide?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            For well-understood source types — SQL databases, common cloud storage formats, standard
+            REST APIs — I lean toward existing, well-tested libraries like SQLAlchemy, boto3, or
+            requests with a retry adapter rather than writing bespoke connection handling. I reserve
+            custom code for the parts that are genuinely specific to the business: the pagination
+            style of one particular internal API, the exact validation rules for this dataset, or the
+            checkpointing and logging structure that fits the team's existing pipeline conventions.
+            The goal is to spend engineering effort on the 10 percent that is actually unique, not
+            reinvent the 90 percent that a mature library already solved.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A third-party API you depend on silently changed its response schema. How do you find out, and what do you do?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Ideally I find out from an automated schema check that runs immediately after every
+            collection run and fails loudly the moment a field disappears, a type changes, or values
+            fall outside an expected range — the same principle as the response validation shown in
+            this module's retry logic, extended to check structure, not just HTTP status. Without that
+            check in place, the realistic failure mode is discovering it downstream when a training
+            job crashes or a feature is unexpectedly null. Once caught, I would pin the pipeline to
+            whatever version of the API contract still works, patch the parsing code, and use the
+            incident to justify adding the schema check that should have caught it automatically the
+            first time.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

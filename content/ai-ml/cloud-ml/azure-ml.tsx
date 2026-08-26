@@ -1012,7 +1012,210 @@ print("""
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where Azure ML actually shows up — regulated industries and Microsoft-stack shops</h2>
+
+        <p style={S.p}>
+          Azure ML rarely gets adopted because a team benchmarked all three clouds and Azure won on
+          technical merit. It shows up because the company was already an Azure shop for reasons
+          that have nothing to do with machine learning — Active Directory for identity, Office 365
+          and Dynamics for the business side, an enterprise agreement procurement negotiated years
+          before the ML team existed. Once most of the company's data already lives in Azure SQL or
+          Synapse and the entire security review process is built around Azure Active Directory,
+          introducing a second cloud vendor purely for machine learning is a bigger organizational
+          cost than working within whatever gaps Azure ML has compared to SageMaker or Vertex AI.
+        </p>
+
+        <p style={S.p}>
+          That pattern concentrates in a specific set of industries. Banks and insurers building
+          credit risk or fraud models need to satisfy model risk management review — an auditor
+          asking "show me exactly which data, code version, and environment produced this model in
+          production." Azure ML's model registry, job lineage, and Responsible AI dashboard (fairness
+          metrics, error analysis, interpretability reports) map directly onto that documentation
+          requirement, which is a large part of why banking and insurance ML teams end up here rather
+          than assembling the equivalent from open-source pieces themselves. Government contractors
+          face a harder version of the same constraint: Azure Government (FedRAMP High, DoD Impact
+          Level 5) is frequently a contractual requirement, and a firm already running its other
+          Microsoft workloads there has no reason to stand up a second compliance boundary on a
+          different cloud just for the ML team.
+        </p>
+
+        <VisualBox label="Industries where Azure ML shows up — and the concrete reason why">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { industry: 'Banking / financial services', reason: 'Data already sits in Azure SQL or Synapse. Model risk management audits need registry lineage tying a deployed model back to the run that produced it.' },
+              { industry: 'Insurance', reason: 'Actuarial and underwriting teams are historically Excel and Power BI heavy. The Responsible AI dashboard covers fairness review requirements directly, in the same workspace.' },
+              { industry: 'Government and public-sector contractors', reason: 'Azure Government (FedRAMP High, DoD IL5) is often a contract requirement the rest of the agency already runs on.' },
+              { industry: 'Manufacturing and industrial IoT', reason: 'Predictive maintenance pipelines already sit on Azure IoT Hub and Digital Twins — Azure ML is the natural neighbor, one subscription.' },
+              { industry: 'Retail on Dynamics 365', reason: 'Customer data flows from Dynamics to Synapse to Azure ML to Power BI — one procurement relationship end to end.' },
+            ].map((row) => (
+              <div key={row.industry} style={{
+                background: 'var(--surface)', border: '1px solid rgba(0,120,212,0.2)',
+                borderRadius: 7, padding: '10px 12px', display: 'grid',
+                gridTemplateColumns: '220px 1fr', gap: 12, alignItems: 'start',
+              }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: '#0078d4', fontFamily: 'var(--font-mono)' }}>{row.industry}</span>
+                <span style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{row.reason}</span>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          The day-to-day friction at these companies rarely comes from the ML tooling itself. It
+          comes from not owning the subscription. A platform or cloud-security team provisions the
+          workspace through Bicep or Terraform, locks it behind a private endpoint with no public
+          internet access, and hands the ML team a scoped role instead of subscription-owner access.
+          A new hire's first week is usually spent getting the right RBAC role assigned and
+          confirming the workspace can actually reach the storage account over the private network
+          path — not fighting with AutoML syntax or pipeline definitions.
+        </p>
+
+        <CodeBlock label="bash" code={`# What a platform team actually runs to provision a compliant workspace —
+# the ML team then gets a scoped role assignment, never subscription-owner access
+
+az ml workspace create --name ws-riskml-prod --resource-group rg-ml-prod --location eastus2 --public-network-access Disabled
+
+# Private endpoint — the workspace has no public internet exposure at all
+az network private-endpoint create --name pe-ws-riskml --resource-group rg-ml-prod --vnet-name vnet-ml-prod --subnet snet-ml-private --group-id amlworkspace --connection-name conn-ws-riskml
+
+# The ML engineer gets a scoped data-scientist role, not admin over the subscription
+az role assignment create --role "AzureML Data Scientist" --assignee alice@freshmart.com --scope /subscriptions/00000000/resourceGroups/rg-ml-prod/providers/Microsoft.MachineLearningServices/workspaces/ws-riskml-prod`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ════════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about Azure ML</h2>
+
+        <ConceptBox title="Myth: Azure ML, SageMaker, and Vertex AI are basically interchangeable — pick whichever, the concepts transfer one to one" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The high-level mental model does transfer — workspace, compute, job, registry, endpoint —
+            but the mechanics underneath are different enough that porting a real pipeline between
+            clouds is a genuine rewrite. Azure ML's VNet injection and private endpoints are not the
+            same shape as SageMaker's VPC configuration or Vertex AI's service accounts, and
+            workspace-scoped managed identity is a different auth model than an IAM execution role.
+            Expect a multi-week rewrite of networking, auth, and SDK calls, not a configuration toggle.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Azure ML is just SageMaker with Microsoft branding" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Several differences are not cosmetic. AutoML is tightly coupled to the Responsible AI
+            dashboard — fairness metrics, error analysis, interpretability — inside the same
+            workspace rather than a separate bolted-on product. The compute instance model, one
+            dedicated per-user VM for interactive development, differs from SageMaker Studio's shared
+            kernel gateway. And Azure ML treats the workspace itself as the single top-level resource
+            that owns everything beneath it, a materially different resource hierarchy than
+            SageMaker's flatter per-resource model.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Because Azure ML has a drag-and-drop Designer, professional engineers can skip the SDK entirely" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Designer is real and genuinely useful for prototyping and for citizen data scientists
+            embedded in business teams, but it is limited to prebuilt modules. Any pipeline with
+            custom feature engineering, a custom container, or non-standard training logic ends up in
+            SDK v2 or CLI v2. Designer is a front door for people who are not professional ML
+            engineers — it is not the backbone of a serious production MLOps setup at any company
+            actually running Azure ML at scale.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If a company already runs Azure for IT, Azure ML is automatically the right platform for the ML team too" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Plenty of organizations that are Azure shops for Active Directory and Office 365 still
+            run their data warehouse on Snowflake hosted on AWS, or do GPU-heavy training on whichever
+            cloud has available capacity and pricing that quarter. The decision should follow where
+            the training data and compute actually live and what the workload actually needs, not
+            simply which vendor holds the corporate IT contract.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: AutoML in Azure ML always beats a hand-tuned model, so manual training skills are not worth learning" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            AutoML is a genuinely fast way to get a strong baseline on standard tabular problems, but
+            it does not invent novel feature engineering, does not support domain-specific loss
+            functions or custom architectures, and does not exercise the judgment needed to notice
+            when the metric it optimized for is the wrong metric for the business problem. Every Azure
+            ML team still needs people who can write, debug, and reason about a command job by hand.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Azure ML — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What actually distinguishes Azure ML from SageMaker and Vertex AI?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Deep Active Directory integration for authentication and RBAC, a Responsible AI dashboard
+            built into the same workspace rather than a separate product, first-class support for
+            Azure Government and FedRAMP-regulated workloads, native MLflow-compatible tracking rather
+            than a proprietary format, a Designer no-code option genuinely used by non-engineers, and
+            tight integration with Synapse and Power BI so a model's output can land directly in a
+            business dashboard without a separate data pipeline.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — When would you actually recommend Azure ML for a brand-new project over AWS or GCP?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            When the company's data warehouse, identity provider, and existing procurement
+            relationship are already Azure — Synapse or Azure SQL for data, Azure AD for identity, an
+            enterprise agreement already negotiated — Azure ML minimizes integration friction and
+            compliance overhead compared to standing up a second cloud vendor. If the workload
+            specifically needs BigQuery-native analytics, TPUs, or an AWS-managed data service with no
+            Azure equivalent, that argues for GCP or AWS instead regardless of the rest of the
+            company's IT stack.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Walk me through how you would set up MLOps for a model on Azure.">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            GitHub Actions or Azure DevOps triggers on a push to main, submits an AML pipeline job
+            that runs training then evaluation against a held-out set, and only registers the
+            resulting model to the Model Registry if it clears a quality gate on the evaluation
+            metric. A subsequent stage updates the Managed Online Endpoint's traffic split to shift a
+            small percentage of traffic to the new model version, watches Azure Monitor and
+            Application Insights for latency and drift signals, then promotes to full traffic or rolls
+            back automatically if those signals look wrong.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What is the actual difference between an Azure ML compute instance and a compute cluster?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A compute instance is a single dedicated VM assigned to one user for interactive
+            development — running a notebook or a remote VS Code session — and it is billed
+            continuously while it is running, whether or not anyone is actively using it. A compute
+            cluster, AmlCompute, is a pool of VMs meant for job and pipeline submission, shared across
+            the team, and it autoscales down to zero nodes when idle. Interactive coding belongs on a
+            compute instance; training and pipeline jobs belong on a compute cluster.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — A stakeholder wants to reuse their exact SageMaker workflow on Azure ML. How do you respond?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The high-level mental model really does transfer — workspace, compute, job, registry, and
+            endpoint map fairly directly onto SageMaker's equivalents — but the actual code and
+            configuration do not port as-is. Azure AD and RBAC replace IAM roles, Blob Storage or ADLS
+            Gen2 paths replace S3 URIs, Azure ML's command job definitions replace the SageMaker
+            Estimator API, and VNet plus private endpoint configuration replaces SageMaker's VPC
+            config. Expect a real redesign of the auth, storage path, and networking layers, not a
+            copy-paste migration.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

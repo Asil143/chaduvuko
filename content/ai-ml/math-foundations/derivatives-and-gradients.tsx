@@ -138,6 +138,28 @@ function MathBox({ children, label }: { children: React.ReactNode; label: string
   )
 }
 
+function ConceptBox({ title, children, color = '#7F77DD' }: {
+  title: string; children: React.ReactNode; color?: string
+}) {
+  return (
+    <div style={{
+      background: 'var(--surface)',
+      border: `1px solid ${color}30`,
+      borderLeft: `4px solid ${color}`,
+      borderRadius: 8, padding: '16px 20px', marginBottom: 20,
+    }}>
+      <div style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        textTransform: 'uppercase' as const, color,
+        fontFamily: 'var(--font-mono)', marginBottom: 10,
+      }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
 export default function DerivativesGradientsPage() {
   return (
     <LearnLayout
@@ -1324,7 +1346,254 @@ if gradient_norm > max_norm:
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Nobody hand-derives gradients on the job — but everyone debugs them</h2>
+
+        <p style={S.p}>
+          Once autograd exists, an ML engineer almost never writes
+          <span style={S.code as React.CSSProperties}> dL_dw = 2 * error * x </span>
+          by hand in production code. So where does this module actually show up
+          in a job? Not in writing derivatives — in reading them, when something
+          about training goes wrong and the only way to understand why is to know
+          what the optimizer is computing under the hood.
+        </p>
+
+        <p style={S.p}>
+          This comes up constantly for anyone who trains models day to day:
+          ML engineers debugging a training run that refuses to converge,
+          applied scientists implementing a custom loss function or a custom
+          layer that needs its own backward pass, and MLOps engineers who get
+          paged when a model that trained fine last month suddenly produces
+          NaN losses after a data schema change. In every one of those cases,
+          the fix comes from understanding gradients, not from recomputing them.
+        </p>
+
+        <ConceptBox title="A concrete decision framework — 'training loss is not moving'">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { step: '1. Check the gradient magnitude first', desc: 'print(param.grad.abs().mean()) right after loss.backward(). If it is exactly zero, no gradient is flowing — dead ReLUs, a detached tensor, or a frozen layer that should be trainable.' },
+              { step: '2. Check the loss value itself', desc: 'If loss is NaN or inf, the forward pass overflowed before backprop even ran — check for log(0), division by zero, or unclipped exponentials, not the gradient code.' },
+              { step: '3. Check the learning rate', desc: 'A loss that oscillates wildly (not steadily decreasing) usually means the learning rate is too large — the gradient direction is right, the step size is wrong.' },
+              { step: '4. Check the gradient magnitude by layer', desc: 'In deep networks, print the gradient norm per layer. A magnitude that shrinks by 10x with every layer closer to the input is vanishing gradients — the textbook case Module 07 explains.' },
+              { step: '5. Only then suspect the math', desc: 'If none of the above explains it and you wrote a custom backward pass, gradient-check it against a numerical derivative before assuming the model architecture is wrong.' },
+            ].map((row) => (
+              <div key={row.step} style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>
+                  {row.step}
+                </span>
+                <span style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6 }}>{row.desc}</span>
+              </div>
+            ))}
+          </div>
+        </ConceptBox>
+
+        <p style={S.p}>
+          Here is what that debugging actually looks like in code — a production
+          training loop for a DoorDash-style ETA model instrumented to answer
+          "is the gradient doing what I expect" instead of guessing.
+        </p>
+
+        <CodeBlock code={`import torch
+import torch.nn as nn
+
+torch.manual_seed(42)
+
+model = nn.Sequential(
+    nn.Linear(12, 64), nn.ReLU(),
+    nn.Linear(64, 32), nn.ReLU(),
+    nn.Linear(32, 1),
+)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+loss_fn   = nn.MSELoss()
+
+X = torch.randn(256, 12)
+y = torch.randn(256, 1) * 10 + 35   # simulated delivery-time targets
+
+for step in range(200):
+    optimizer.zero_grad()
+    pred = model(X)
+    loss = loss_fn(pred, y)
+    loss.backward()
+
+    # ── The instrumentation an ML engineer actually adds when debugging ──
+    if step % 50 == 0:
+        grad_norms = {
+            name: p.grad.norm().item()
+            for name, p in model.named_parameters() if p.grad is not None
+        }
+        max_norm = max(grad_norms.values())
+        min_norm = min(grad_norms.values())
+        ratio    = max_norm / (min_norm + 1e-12)
+
+        print(f"step {step:3d} | loss={loss.item():.4f} | "
+              f"grad range=[{min_norm:.2e}, {max_norm:.2e}] | ratio={ratio:.1f}x")
+
+        # A ratio in the thousands across layers is the early warning sign
+        # of vanishing gradients — worth catching before loss ever plateaus
+        if ratio > 1e4:
+            print("  ⚠ gradient magnitudes vary wildly across layers — "
+                  "check activation choice and initialisation")
+
+    optimizer.step()
+
+# This is the same information a monitoring dashboard (Weights & Biases,
+# MLflow) would plot as "gradient norm per layer over time" — the exact
+# same partial derivatives this module teaches, just watched instead
+# of computed by hand.`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about derivatives and gradients</h2>
+
+        <ConceptBox title="Myth: Derivatives are abstract calculus with no direct role in ML code" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            This is about as far from true as it gets — the derivative is not an
+            analogy for what training does, it is literally the number every
+            optimizer computes and subtracts from every weight, on every step,
+            for every model ever trained. When PyTorch prints a loss curve going
+            down, that curve is the direct, mechanical consequence of derivatives
+            being computed correctly thousands of times per second. There is no
+            layer of abstraction between "calculus" and "how the model learns" —
+            they are the same thing described at different levels of detail.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: You need to hand-derive gradients to build real models" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            In day-to-day work this is backwards: autograd computes every gradient
+            for you, and hand-deriving one for a standard layer would be a waste
+            of time, not a sign of rigor. But "you don't need to derive it" is not
+            the same as "you don't need to understand it." Every debugging session
+            in the section above — dead gradients, exploding losses, mismatched
+            layer scales — requires reasoning about what the derivative should be
+            doing, even though nobody is computing it by hand. Skipping the
+            intuition means every one of those bugs looks like unexplainable magic.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: The gradient points toward lower loss, so you follow it" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The gradient points in the direction of steepest increase in the loss
+            — uphill, not downhill. This is why every weight update subtracts the
+            gradient rather than adding it: w_new = w − learning_rate × gradient.
+            Getting the sign backwards is one of the most common bugs when
+            implementing gradient descent from scratch, and it produces a very
+            specific symptom — the loss increases every step instead of
+            decreasing, since the model is confidently walking uphill.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: A model has one gradient, the way it has one loss value" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The loss is a single number, but the gradient is a vector with one
+            entry per parameter — a modern network with a hundred million
+            weights has a hundred million partial derivatives computed on every
+            single backward pass, each one answering "how much does this specific
+            weight, and only this weight, need to change?" Treating "the
+            gradient" as one quantity instead of one-per-parameter is why people
+            get confused reading gradient-norm logs that report several numbers
+            instead of a single value.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: If the gradients are computed correctly, training will converge to a good model" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Correct gradients only guarantee that each step moves in a direction
+            that locally reduces the loss — they say nothing about the learning
+            rate, the batch size, the initialisation, or whether the loss surface
+            even has a good minimum reachable from where training started.
+            Mathematically perfect gradients with a learning rate that is 100x
+            too large will still diverge, and perfectly correct gradients on a
+            poorly designed model will still converge to a mediocre result.
+            Gradient correctness is necessary but nowhere close to sufficient.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Derivatives and gradients — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — What is a gradient, and how does it differ from a derivative?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A derivative measures how one output changes with respect to one
+            input — a single number. A gradient is the natural extension to a
+            function with many inputs: it is a vector containing the partial
+            derivative of the output with respect to every input independently,
+            holding the others fixed. In ML, the "output" is the loss and the
+            "inputs" are every weight in the model, so the gradient is a vector
+            with one entry per weight — direction and magnitude for the entire
+            parameter space at once, not just one number.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — Walk me through what happens numerically during one step of gradient descent">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            First, a forward pass computes a prediction and a loss value from the
+            current weights. Second, backpropagation applies the chain rule
+            backwards through the computation graph to compute the partial
+            derivative of the loss with respect to every weight — the gradient.
+            Third, every weight is updated by subtracting the learning rate times
+            its corresponding gradient entry: w ← w − lr × ∂L/∂w. That single
+            update is repeated for every mini-batch, for potentially millions of
+            steps, and the loss trends downward as weights settle near a minimum.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — Why do we subtract the gradient instead of adding it?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The gradient points in the direction of steepest ascent — the
+            direction that increases the loss fastest. Since the goal is to
+            minimise the loss, we move in exactly the opposite direction, which
+            means subtracting a scaled version of the gradient from the current
+            weights. Adding the gradient instead would reliably make the loss
+            worse every step, which is a useful mental check when debugging: if
+            loss climbs steadily instead of falling, the update's sign is
+            probably flipped somewhere.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — What causes vanishing gradients, and how would you fix them?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The chain rule multiplies a local derivative at every layer to get
+            the gradient at an earlier layer. If those local derivatives are
+            consistently below 1 — sigmoid's derivative tops out at 0.25 — the
+            product shrinks exponentially with depth, so early layers in a deep
+            network receive a gradient close to zero and effectively stop
+            learning. Fixes: switch to ReLU-family activations whose derivative
+            is 1 for positive inputs, add residual/skip connections so gradients
+            have a path that bypasses the multiplication, and use batch or layer
+            normalisation to keep intermediate activations in a stable range.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — How would you verify that a custom gradient computation is correct?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Gradient checking: compute the same gradient two independent ways and
+            compare them. The analytical gradient comes from your implementation
+            of the derivative rules. The numerical gradient comes from the raw
+            definition of a derivative — nudge one parameter by a small epsilon
+            in both directions and measure how much the loss changes:
+            (loss(w+ε) − loss(w−ε)) / (2ε). If the relative error between the two
+            is below roughly 1e-5 to 1e-7, the analytical implementation is
+            correct. This is done once on a small toy example when writing a new
+            custom layer, then removed — it is far too slow for actual training.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

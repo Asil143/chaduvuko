@@ -982,7 +982,276 @@ for scenario in test_scenarios:
 
       <Div />
 
-      {/* ══ SECTION 8 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Dashboards, alert routing, and who actually gets paged</h2>
+
+        <p style={S.p}>
+          In production, model monitoring is rarely one system — it is a stack.
+          Infrastructure metrics (request latency, error rate, pod CPU and memory)
+          flow into Prometheus or Datadog and get graphed in Grafana, exactly like
+          any other backend service. Statistical drift metrics — the PSI and KS
+          test results from earlier in this module — are usually computed on a
+          schedule (an Airflow DAG running nightly or every few hours) rather than
+          per-request, then written to the same metrics store so they show up
+          alongside infra metrics on one dashboard. Business KPIs — fraud dollars
+          lost, delivery complaints, conversion rate — get pulled from the
+          warehouse into a separate executive-facing dashboard, often reviewed
+          weekly in a recurring "model health review" meeting rather than watched
+          in real time.
+        </p>
+
+        <p style={S.p}>
+          Who gets paged depends entirely on what broke. An infra symptom — the
+          serving endpoint's p99 latency spikes, or the drift job itself crashes —
+          pages the on-call engineer the same way any other service outage would,
+          usually through PagerDuty, regardless of whether that engineer knows
+          anything about the model. A drift alert on a specific feature is
+          different: it routes to the ML engineer or data scientist who owns that
+          model, usually as a Slack notification rather than a page, because
+          drift alone is not an emergency — it is a signal that something needs
+          investigating, not that something is on fire. A confirmed performance
+          regression against ground truth (accuracy or MAE clearly worse than
+          baseline) is treated with more urgency and can escalate to a page if it
+          crosses a severity threshold. A business KPI regression — fraud losses
+          suddenly climbing, complaint rate spiking — is the most cross-functional
+          case: it usually triggers an incident channel involving product, data
+          science, and sometimes support, because by the time a business metric
+          has moved, real money or real users have already been affected.
+        </p>
+
+        <VisualBox label="Signal type, who is notified, and how urgently">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              {
+                signal: 'Infra symptom (latency, error rate, crash)',
+                color: '#D85A30',
+                who: 'SRE on-call',
+                channel: 'PagerDuty — immediate',
+                note: 'Same severity as any backend outage. Does not require ML expertise to triage the first response.',
+              },
+              {
+                signal: 'Feature/data drift on scheduled report',
+                color: '#7b61ff',
+                who: 'ML engineer owning the model',
+                channel: 'Slack — same day, non-urgent',
+                note: 'Escalates to a page only if drift share crosses a high severity threshold (e.g. most features drifted at once).',
+              },
+              {
+                signal: 'Confirmed performance drop vs ground truth',
+                color: '#BA7517',
+                who: 'ML engineer + eng manager',
+                channel: 'Slack/email digest, page if severe',
+                note: 'A 25%+ MAE regression is usually treated as critical and can page even without an infra symptom.',
+              },
+              {
+                signal: 'Business KPI regression (fraud $, complaints, conversion)',
+                color: '#ff4757',
+                who: 'Product + data science + on-call ML',
+                channel: 'Incident channel — immediate',
+                note: 'Cross-functional by default — a moved business metric usually means real users or real money were already affected.',
+              },
+            ].map((row) => (
+              <div key={row.signal} style={{
+                background: 'var(--surface)', border: `1px solid ${row.color}25`,
+                borderRadius: 7, padding: '10px 14px',
+                borderLeft: `4px solid ${row.color}`,
+              }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 220px', gap: 10, alignItems: 'start' }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: row.color }}>{row.signal}</span>
+                  <span style={{ fontSize: 11, color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{row.who}</span>
+                  <span style={{ fontSize: 11, color: row.color, fontFamily: 'var(--font-mono)' }}>{row.channel}</span>
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0, marginTop: 6 }}>{row.note}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          Notice what actually gets monitored day to day is broader than "check
+          accuracy": data drift and feature skew catch problems before labels ever
+          arrive, prediction drift catches upstream pipeline bugs even when the
+          input features look fine, and business KPIs catch the cases where the
+          model is statistically unremarkable but the real-world impact is not —
+          a small accuracy dip in a high-volume fraud model can still mean a large
+          dollar loss. No single metric covers all three; production monitoring
+          means running all of them side by side and knowing which one to trust
+          for which kind of problem.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="myth">
+        <span style={S.tag}>Misconceptions</span>
+        <h2 style={S.h2}>Five things people get wrong about model monitoring</h2>
+
+        <ConceptBox title="Myth: Monitoring means checking accuracy" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Accuracy requires a ground truth label, and for most production models
+            labels arrive late (delivery time: thirty to sixty minutes; fraud
+            chargebacks: a week to a month) or in some cases never arrive at scale
+            at all. If monitoring only meant tracking accuracy, a model could be
+            silently broken for weeks before anyone noticed, simply because the
+            labels needed to compute accuracy had not shown up yet. Real monitoring
+            leans on leading indicators that need no labels — input feature drift,
+            prediction distribution shift — precisely so problems surface before
+            the lagging, label-dependent metric ever catches up.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Drift detection is automatic and free once it is set up" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Running a statistical test costs nothing computationally, but making
+            its output useful is ongoing work. Thresholds need tuning against real
+            production noise or every model gets flooded with false alarms. The
+            reference distribution the current data is compared against goes stale
+            and needs periodic refreshing, or the test starts flagging drift
+            against a world that no longer resembles today's baseline anyway. New
+            features added to the model later have to be deliberately wired into
+            the monitoring job — they do not appear there automatically just
+            because they exist in the model. None of that is a one-time cost.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: Once monitoring is set up, it is done" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A monitoring configuration that was well-tuned at launch degrades on
+            its own as the business changes: normal seasonal patterns look like
+            drift to a threshold set before the team had seen a full year of data;
+            a model retrain shifts what "normal" prediction output even looks like,
+            so the old baseline is now wrong; a new feature or a new market segment
+            needs its own reference distribution before monitoring can say anything
+            useful about it. Treating the initial monitoring setup as finished work
+            is exactly how a monitoring system quietly stops being trustworthy
+            without anyone deciding that it should.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: No data drift means the model must still be performing well" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Data drift only checks whether the input feature distributions have
+            moved. Concept drift — where the relationship between the same
+            features and the correct outcome has changed — can happen with the
+            input distribution looking completely unchanged. A fraud model can see
+            the exact same feature ranges it always has while an entirely new fraud
+            scheme, invisible to those features, is bypassing it undetected. Data
+            drift monitoring alone would report a perfectly clean, stable-looking
+            dashboard the entire time this is happening, which is precisely why
+            performance monitoring against delayed ground truth cannot be skipped
+            just because the drift dashboard looks calm.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Myth: More alerts means better monitoring" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A monitoring system that fires constantly trains its own team to stop
+            reading it — alert fatigue is a real failure mode, not a minor
+            annoyance. Statistical significance is sensitive to sample size, so at
+            high production volume even a practically meaningless shift can produce
+            a technically significant p-value and trigger an alert every single
+            day. A smaller number of well-calibrated alerts, routed to the right
+            person at the right urgency, catches real problems faster than a
+            dashboard so noisy that a genuine critical alert gets lost in the same
+            channel as twenty routine ones from that week.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      <div style={S.sec} data-toc-kind="prep">
+        <span style={S.tag}>Interview prep</span>
+        <h2 style={S.h2}>Model monitoring — 5 questions interviewers actually ask</h2>
+
+        <ConceptBox title="Q1 — How do you distinguish data drift from concept drift, and why does the distinction matter operationally?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Data drift is a shift in the input feature distribution — it is
+            detectable immediately, without any ground truth label, using
+            statistical tests like KS or PSI directly on incoming features.
+            Concept drift is a change in the relationship between those features
+            and the correct outcome — the inputs can look completely unchanged
+            while the correct prediction for them has shifted, and detecting it
+            requires ground truth labels, which are usually delayed. The
+            distinction matters operationally because it determines what tooling
+            can even see the problem: a monitoring stack that only watches feature
+            distributions will report a clean bill of health during a concept
+            drift event, so performance monitoring against delayed labels has to
+            run in parallel, not as a replacement.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q2 — What should trigger an alert versus just being logged for later review?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would alert on anything that is both statistically meaningful and
+            actionable right now — a confirmed performance regression past a
+            defined threshold, a majority of features drifting at once, or a
+            business KPI moving in the wrong direction. I would only log, not
+            alert, on individual feature drift below a severity threshold, small
+            fluctuations that fall within normal week-to-week noise, or anything
+            that requires a human to gather more context before it is even clear
+            whether action is needed. The test I would apply to any candidate
+            alert: if this fired right now, is there a specific person who should
+            do something today, or does it just want an audit trail in case it
+            becomes relevant later?
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q3 — How do you monitor a model's performance when ground truth labels take days or weeks to arrive?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would rely on leading indicators that need no labels at all in the
+            interim: input feature drift, prediction distribution shift, and for a
+            classification model, the distribution of predicted confidence scores
+            — a sudden rise in low-confidence predictions is often an early sign
+            of trouble long before labels confirm it. I would also set up a small
+            label-sampling programme where a subset of predictions gets manually
+            reviewed or fast-tracked to a confirmed outcome within a day, giving an
+            early, lower-volume performance signal well before the full delayed
+            label set arrives at scale. Neither approach replaces eventual ground
+            truth evaluation — they buy time to react sooner.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q4 — How would you choose between a KS test, PSI, and a chi-squared test for a given feature?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            It comes down to the feature's type and how the result needs to be
+            interpreted. For a continuous feature I would default to the KS test
+            when I want a clean statistical significance answer with a p-value,
+            since it directly compares empirical distributions with no binning
+            decisions to second-guess. I would use PSI when I want a single
+            interpretable severity score with industry-standard thresholds — it is
+            the default in credit risk and fraud teams specifically because
+            everyone already agrees on what a PSI above 0.2 means. For a
+            categorical feature, neither KS nor PSI directly applies the same way,
+            so chi-squared, which compares observed to expected category
+            frequencies, is the natural choice.
+          </p>
+        </ConceptBox>
+
+        <ConceptBox title="Q5 — Your drift dashboard is firing dozens of alerts a week and the team has started ignoring them. What do you do?">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            I would treat this as a monitoring design problem, not a data problem.
+            First, I would switch from pure statistical significance to effect-size
+            thresholds — requiring a KS statistic above a meaningful cutoff, not
+            just a p-value below 0.05, since large sample sizes make almost any
+            tiny shift statistically significant. Second, I would require drift to
+            persist across several consecutive checks before alerting, to filter
+            out single-day noise. Third, I would re-route by severity so only
+            genuinely critical signals reach a page, with the rest going to a
+            digest a human actually has time to read. The underlying goal is
+            restoring trust in the alerts that do fire, since a monitoring system
+            nobody reads is equivalent to having no monitoring at all.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
