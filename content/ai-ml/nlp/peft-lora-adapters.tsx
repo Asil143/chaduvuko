@@ -883,7 +883,150 @@ sql_model = PeftModel.from_pretrained(base, './lora-sql-adapter')
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Multi-tenant LoRA serving — one GPU, hundreds of customer-specific models</h2>
+
+        <p style={S.p}>
+          A B2B SaaS company offering an LLM-powered feature to a thousand customers faces a
+          scaling problem full fine-tuning cannot solve economically: full fine-tuning one 7B
+          model per customer means a thousand copies of a 14GB model, a thousand GPUs (or a
+          thousand cold-loads competing for a shared pool), and a thousand full retraining runs
+          every time the base model or a customer's data updates. Most of those thousand models
+          differ from the base model by less than one percent of their parameters. LoRA is what
+          makes serving this economically possible: one shared base model in GPU memory, and a
+          few megabytes of adapter weights per customer, loaded and swapped per request.
+        </p>
+
+        <p style={S.p}>
+          This is a materially different problem from the training-side LoRA workflow covered
+          earlier in this module. Training produces one adapter. Production serving has to keep
+          hundreds or thousands of trained adapters on hand and route each incoming request to
+          the right one, without paying the cost of a full model reload per customer and without
+          one customer's traffic starving another's latency.
+        </p>
+
+        <VisualBox label="Adapter-serving architecture — one base model, per-tenant adapters">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{
+              background: 'rgba(123,97,255,0.1)', border: '2px solid #7b61ff',
+              borderRadius: 8, padding: '10px 14px', textAlign: 'center' as const,
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#7b61ff', fontFamily: 'var(--font-mono)' }}>
+                SHARED BASE MODEL — loaded once, kept resident in GPU memory
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
+                Mistral-7B or LLaMA-3-8B, quantised or fp16 — the expensive part, paid for exactly once
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', color: '#555', fontSize: 16 }}>↓ request arrives with tenant_id ↓</div>
+            <div style={{
+              background: 'var(--surface)', border: '1px solid var(--border)',
+              borderRadius: 8, padding: '10px 14px',
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#378ADD', fontFamily: 'var(--font-mono)', marginBottom: 4 }}>
+                ADAPTER ROUTER
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+                Looks up tenant_id to adapter path. Loads the small A/B matrices (a few MB, milliseconds)
+                if not already cached in GPU memory. Evicts least-recently-used adapters under memory pressure.
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', color: '#555', fontSize: 16 }}>↓ batched with other requests using the same adapter ↓</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+              {[
+                { name: 'Customer A adapter', color: '#1D9E75', size: '~18 MB' },
+                { name: 'Customer B adapter', color: '#D85A30', size: '~18 MB' },
+                { name: 'Customer C adapter', color: '#BA7517', size: '~18 MB' },
+              ].map((a) => (
+                <div key={a.name} style={{
+                  background: `${a.color}10`, border: `1px solid ${a.color}30`,
+                  borderRadius: 7, padding: '10px 10px', textAlign: 'center' as const,
+                }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: a.color, fontFamily: 'var(--font-mono)' }}>{a.name}</div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 3 }}>{a.size}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p style={{ ...S.ps, marginBottom: 0, marginTop: 12 }}>
+            Frameworks built for exactly this pattern — S-LoRA, Punica, and vLLM's multi-LoRA
+            serving — batch requests for different adapters together on the same GPU by computing
+            the shared base-model matrix multiplication once per batch and adding each request's
+            own low-rank update separately, instead of running one forward pass per adapter.
+          </p>
+        </VisualBox>
+
+        <CodeBlock code={`# vLLM multi-LoRA serving — one base model process, many tenant adapters
+# pip install vllm
+
+from vllm import LLM, SamplingParams
+from vllm.lora.request import LoRARequest
+
+# ── Load the shared base model once ───────────────────────────────────
+llm = LLM(
+    model='mistralai/Mistral-7B-v0.3',
+    enable_lora=True,
+    max_loras=8,            # how many adapters can be resident in GPU memory at once
+    max_lora_rank=16,
+)
+
+# ── Adapter registry — maps tenant_id to a saved LoRA adapter path ────
+TENANT_ADAPTERS = {
+    'acme_corp':   './adapters/acme_corp-v3',
+    'globex_inc':  './adapters/globex_inc-v1',
+    'initech_llc': './adapters/initech_llc-v2',
+}
+
+def serve_request(tenant_id: str, prompt: str) -> str:
+    adapter_path = TENANT_ADAPTERS.get(tenant_id)
+    if adapter_path is None:
+        raise ValueError(f"No adapter registered for tenant {tenant_id}")
+
+    # LoRARequest tells vLLM which adapter to apply for this request —
+    # vLLM handles loading, caching, and eviction internally
+    lora_request = LoRARequest(
+        lora_name=tenant_id,
+        lora_int_id=hash(tenant_id) % 100000,
+        lora_local_path=adapter_path,
+    )
+
+    outputs = llm.generate(
+        [prompt],
+        SamplingParams(temperature=0, max_tokens=200),
+        lora_request=lora_request,
+    )
+    return outputs[0].outputs[0].text
+
+# ── Requests for three different tenants, same GPU, same base model ───
+print(serve_request('acme_corp',   "Summarise this support ticket: ..."))
+print(serve_request('globex_inc',  "Summarise this support ticket: ..."))
+print(serve_request('initech_llc', "Summarise this support ticket: ..."))
+
+# ── Rough cost comparison this architecture is chasing ─────────────────
+print("""
+1,000 customers, full fine-tuning:
+  1,000 x 14GB fp16 models = 14TB of model storage
+  Realistically needs its own GPU pool per active customer to avoid reload latency
+
+1,000 customers, shared base + LoRA adapters:
+  1 x 14GB base model (loaded once)
+  1,000 x ~18MB adapters = ~18GB total adapter storage
+  A handful of GPUs serving all tenants, adapters swapped in milliseconds
+""")`} />
+
+        <p style={S.p}>
+          Adapter versioning matters as much as adapter serving. Each retrain of a customer's
+          adapter gets a new version tag (acme_corp-v3 above), the previous version stays
+          available, and a bad retrain can be rolled back by pointing the router at the prior
+          version — no base-model redeploy required, because the base model never changed.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about LoRA and PEFT</h2>
@@ -957,7 +1100,7 @@ sql_model = PeftModel.from_pretrained(base, './lora-sql-adapter')
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>PEFT and LoRA — 5 questions interviewers actually ask</h2>
@@ -1046,7 +1189,7 @@ sql_model = PeftModel.from_pretrained(base, './lora-sql-adapter')
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

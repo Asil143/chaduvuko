@@ -1030,7 +1030,145 @@ for leaf in [5, 10, 30, 50, 100]:
 
       <Div />
 
-      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where KNN survives in production — and where FAISS takes over</h2>
+
+        <p style={S.p}>
+          Nobody runs sklearn's KNeighborsClassifier against a training set
+          of ten million rows in a live request path. But "nearest neighbour
+          search" as an idea is everywhere in production ML — recommendation
+          engines, fraud review queues, and visual search are all, underneath,
+          asking the same question KNN asks: what is this new thing most
+          similar to? The part that changes at scale is not the idea, it is
+          the data structure used to answer it.
+        </p>
+
+        <VisualBox label="Three real production patterns built on nearest-neighbour search">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              {
+                name: 'Fraud review — small curated reference set',
+                color: '#1D9E75',
+                detail: 'A trust and safety team keeps a few thousand hand-labelled past cases (confirmed fraud, confirmed legitimate). A new flagged transaction is compared against this reference set with plain scikit-learn KNN, and the analyst is shown the 5 most similar historical cases alongside the prediction. The set is small enough that brute-force search runs in milliseconds, and analysts trust "here are 5 similar past cases" far more than an opaque score.',
+              },
+              {
+                name: 'Recommendation retrieval — embeddings at scale',
+                color: '#378ADD',
+                detail: 'A "customers who bought this also bought" feature is built from user or item embeddings, then the nearest-neighbour lookup at request time runs against tens of millions of vectors. Brute-force KNN would take seconds per request. Production systems index the embeddings in FAISS (or ScaNN, or an HNSW-based store) ahead of time and query that index instead — same underlying idea, a fundamentally different data structure to make it fast.',
+              },
+              {
+                name: 'Visual similarity search',
+                color: '#D85A30',
+                detail: 'A "shop this look" or reverse-image-search feature embeds a product photo with a CNN, then finds the closest embeddings among millions of catalogue images. This is architecturally identical to the recommendation case — an ANN index sits between the embedding model and the results the user sees.',
+              },
+            ].map((item) => (
+              <div key={item.name} style={{
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 8, padding: '12px 14px',
+                borderLeft: `3px solid ${item.color}`,
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-display)', marginBottom: 5 }}>
+                  {item.name}
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <ConceptBox title="A decision framework — exact KNN or an ANN index?">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              'Reference set under roughly 50,000 points and a request latency budget of tens of milliseconds — plain KNN with a ball tree or KD-tree is simplest and exact. No reason to add FAISS as a dependency.',
+              'Reference set in the millions, or a request latency budget under about 10ms — move to an approximate nearest neighbour index. Exact brute-force search over millions of vectors cannot hit that latency no matter which language it is written in.',
+              'The result needs to be explainable or auditable (compliance review, fraud case comparison) — prefer exact KNN even if it means running slower or offline in batch, since ANN indexes trade a small amount of recall for speed and can occasionally miss the true nearest neighbour.',
+              'The embedding set changes constantly (new items added hourly) — prefer an ANN structure that supports incremental inserts (HNSW) over one that needs a full index rebuild for every batch of new vectors (IVF-based FAISS indexes).',
+            ].map((rule, i) => (
+              <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                <div style={{
+                  width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                  background: 'rgba(55,138,221,0.15)', border: '1px solid #378ADD50',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 11, fontWeight: 700, color: '#378ADD', fontFamily: 'var(--font-mono)',
+                }}>
+                  {i + 1}
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{rule}</p>
+              </div>
+            ))}
+          </div>
+        </ConceptBox>
+
+        <CodeBlock code={`import numpy as np
+import time
+from sklearn.neighbors import NearestNeighbors
+
+np.random.seed(42)
+
+# ── Simulate an embedding catalogue — 1 million 128-dim product vectors ──
+n_items, dim = 1_000_000, 128
+catalogue = np.random.randn(n_items, dim).astype('float32')
+query     = np.random.randn(1, dim).astype('float32')
+
+# ── Exact KNN (sklearn, brute force) — the naive approach at this scale ──
+sk_knn = NearestNeighbors(n_neighbors=10, algorithm='brute', metric='euclidean')
+sk_knn.fit(catalogue)
+
+t0 = time.time()
+distances, indices = sk_knn.kneighbors(query)
+sklearn_time = time.time() - t0
+print(f"sklearn brute-force KNN over {n_items:,} items: {sklearn_time*1000:.1f} ms per query")
+
+# ── Approximate nearest neighbour (FAISS) — what production actually uses ──
+try:
+    import faiss
+
+    index = faiss.IndexFlatL2(dim)          # exact index, for comparison
+    index.add(catalogue)
+
+    t0 = time.time()
+    D, I = index.search(query, 10)
+    faiss_exact_time = time.time() - t0
+    print(f"FAISS exact (IndexFlatL2):          {faiss_exact_time*1000:.1f} ms per query")
+
+    # IVF index — clusters the space first, only searches nearby clusters
+    # This is the approximate step: faster, occasionally misses the true nearest neighbour
+    quantizer = faiss.IndexFlatL2(dim)
+    ivf_index = faiss.IndexIVFFlat(quantizer, dim, 100)  # 100 clusters
+    ivf_index.train(catalogue)
+    ivf_index.add(catalogue)
+    ivf_index.nprobe = 8   # how many clusters to search — speed/recall tradeoff
+
+    t0 = time.time()
+    D_approx, I_approx = ivf_index.search(query, 10)
+    faiss_ivf_time = time.time() - t0
+    print(f"FAISS approximate (IVF, nprobe=8):   {faiss_ivf_time*1000:.1f} ms per query")
+
+    # Recall check — how many of the approximate results match the exact ones
+    overlap = len(set(I[0]) & set(I_approx[0]))
+    print(f"Recall vs exact search: {overlap}/10 neighbours matched")
+
+except ImportError:
+    print("\nFAISS not installed: pip install faiss-cpu")
+    print("At this scale (1M+ vectors), brute-force KNN is the wrong tool —")
+    print("an ANN index is not an optimisation, it is a requirement.")`} />
+
+        <Callout type="tip">
+          The FAISS example above trades a small amount of recall — it may
+          occasionally return the 11th-closest item instead of the true
+          10th-closest — for a large speed gain. That tradeoff is invisible
+          in a demo and very visible in an incident review if nobody signed
+          off on it. Any team adopting an ANN index should measure recall
+          against exact search on a held-out sample before shipping it,
+          not assume the default parameters are good enough.
+        </Callout>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about KNN</h2>
@@ -1109,7 +1247,7 @@ for leaf in [5, 10, 30, 50, 100]:
 
       <Div />
 
-      {/* ══ SECTION 10 — INTERVIEW PREP ════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — INTERVIEW PREP ════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>K-Nearest Neighbours — 5 questions interviewers actually ask</h2>
@@ -1196,7 +1334,7 @@ for leaf in [5, 10, 30, 50, 100]:
 
       <Div />
 
-      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 12 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

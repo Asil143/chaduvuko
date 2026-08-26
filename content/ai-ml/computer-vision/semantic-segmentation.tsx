@@ -848,7 +848,124 @@ print(f"  'aux' key shape:  {tuple(out['aux'].shape)}  ← auxiliary loss head")
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where segmentation ships in production — and the mask cleanup step every deployment needs</h2>
+
+        <p style={S.p}>
+          The three practical examples from the start of this module —
+          medical imaging, satellite and aerial imagery, and autonomous
+          driving — sit at very different points on the speed-versus-accuracy
+          spectrum, and that difference drives almost every architecture
+          and deployment decision a team makes.
+        </p>
+
+        <VisualBox label="Same task, three very different deployment constraints">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              {
+                name: 'Medical imaging',
+                color: '#1D9E75',
+                detail: 'A radiologist reviewing a segmented tumour boundary is working offline, one scan at a time, and accuracy is the only thing that matters — a few extra seconds of inference time is irrelevant next to getting the boundary right. Teams here favour heavier architectures, ensembles of several trained models, and test-time augmentation, all of which would be unacceptable in a real-time system.',
+              },
+              {
+                name: 'Satellite and aerial imagery',
+                color: '#378ADD',
+                detail: "A single satellite image is far larger than any segmentation model's input size, so it gets processed offline in overlapping tiles that are stitched back together afterward. This is a batch job, not a live request, so the same accuracy-first tradeoff as medical imaging applies — the actual engineering problem is tiling and stitching cleanly, not inference speed.",
+              },
+              {
+                name: 'Autonomous driving — road and lane segmentation',
+                color: '#D85A30',
+                detail: 'Here the constraint flips entirely: predictions have to arrive at 30 or more frames per second with a latency budget of tens of milliseconds, so a full U-Net or DeepLabV3 is often too slow. Production systems favour lightweight architectures purpose-built for real-time segmentation and accept a real accuracy cost for the speed, because a segmentation mask that arrives too late is worse than a slightly less precise one that arrives on time.',
+              },
+            ].map((item) => (
+              <div key={item.name} style={{
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 8, padding: '12px 14px',
+                borderLeft: `3px solid ${item.color}`,
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-display)', marginBottom: 5 }}>
+                  {item.name}
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          A raw model output is rarely the mask that actually ships,
+          regardless of which of these three settings it runs in.
+          Every production segmentation pipeline includes a post-processing
+          step that cleans up the per-pixel argmax before anyone — a
+          radiologist, a downstream planning module, an analytics
+          dashboard — ever sees it.
+        </p>
+
+        <CodeBlock code={`import numpy as np
+from scipy import ndimage
+
+def clean_segmentation_mask(raw_mask: np.ndarray,
+                             min_region_size: int = 50) -> np.ndarray:
+    """
+    Post-process a raw per-pixel argmax prediction before it ships.
+    A model's raw output is almost never this clean — it typically has
+    small, spurious blobs of the wrong class scattered across the image,
+    one or two pixels of noise at every real boundary, and small holes
+    inside otherwise-solid regions.
+    """
+    cleaned = raw_mask.copy()
+
+    for class_id in np.unique(raw_mask):
+        if class_id == 0:   # skip background
+            continue
+
+        class_mask = (raw_mask == class_id)
+
+        # Label each separate connected blob of this class
+        labelled, n_blobs = ndimage.label(class_mask)
+
+        # Drop any blob smaller than min_region_size — this removes the
+        # scattered single-pixel and few-pixel noise a raw model produces
+        # without touching the real, large regions
+        sizes = ndimage.sum(class_mask, labelled, range(1, n_blobs + 1))
+        for blob_id, size in enumerate(sizes, start=1):
+            if size < min_region_size:
+                cleaned[labelled == blob_id] = 0
+
+        # Fill small holes inside otherwise-solid regions of this class
+        filled = ndimage.binary_fill_holes(cleaned == class_id)
+        cleaned[filled] = class_id
+
+    return cleaned
+
+# ── Simulate a noisy raw prediction ───────────────────────────────────
+np.random.seed(42)
+H, W = 128, 128
+raw = np.zeros((H, W), dtype=np.int64)
+raw[H//2:, :] = 1                       # road region
+
+# Scatter small spurious "vehicle" blobs — the kind of noise a real
+# model produces at low-confidence pixels near boundaries
+noise_points = np.random.randint(0, H, (40, 2))
+for y, x in noise_points:
+    raw[max(0,y-1):y+1, max(0,x-1):x+1] = 2
+
+n_blobs_before = ndimage.label(raw == 2)[1]
+cleaned = clean_segmentation_mask(raw, min_region_size=50)
+n_blobs_after = ndimage.label(cleaned == 2)[1]
+
+print(f"Spurious 'vehicle' blobs before cleanup: {n_blobs_before}")
+print(f"Spurious 'vehicle' blobs after cleanup:  {n_blobs_after}")
+print("The mask that actually ships to a downstream system is the")
+print("cleaned one — connected-component filtering and hole-filling are")
+print("standard, near-universal steps between model output and production use.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about semantic segmentation</h2>
@@ -924,7 +1041,7 @@ print(f"  'aux' key shape:  {tuple(out['aux'].shape)}  ← auxiliary loss head")
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Semantic segmentation — 5 questions interviewers actually ask</h2>
@@ -1003,7 +1120,7 @@ print(f"  'aux' key shape:  {tuple(out['aux'].shape)}  ← auxiliary loss head")
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

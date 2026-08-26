@@ -896,7 +896,116 @@ print("  But for standard training: always call zero_grad() before backward()")`
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>
+          Nobody hand-codes backprop in production. Here is where understanding it earns its keep anyway.
+        </h2>
+
+        <p style={S.p}>
+          Every production model calls loss.backward() once and lets autograd handle the
+          chain rule end to end. That does not make this module optional — it means the
+          moments where backprop understanding actually matters are concentrated into a
+          few specific, recurring situations instead of spread across every line of code.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, marginBottom: 24 }}>
+          {[
+            {
+              color: '#D85A30',
+              title: 'Reading a broken loss curve',
+              desc: 'Loss plateaus at a suspiciously round number, decreases then suddenly spikes to NaN, or early layers barely move while the last layer overfits fast. Each pattern maps to a specific point in the backward pass — dead activations, exploding gradients, or a vanishing signal that never reaches the early layers.',
+            },
+            {
+              color: '#1D9E75',
+              title: 'Diagnosing vanishing or exploding gradients',
+              desc: 'A network trains fine at 10 layers but stalls at 40. The fix — residual connections, normalisation, better initialisation — only makes sense once you can picture the chain rule multiplying a derivative at every one of those 40 layers.',
+            },
+            {
+              color: '#7b61ff',
+              title: 'Writing a custom autograd.Function',
+              desc: 'Quantisation-aware training, custom losses with numerically tricky gradients, or research code implementing a method from a paper all require a hand-written backward pass. Autograd cannot infer one for you.',
+            },
+          ].map((item) => (
+            <div key={item.title} style={{
+              background: 'var(--surface)', border: '1px solid var(--border)',
+              borderTop: `2px solid ${item.color}`, borderRadius: 8, padding: '14px 16px',
+            }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: item.color, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
+                {item.title}
+              </div>
+              <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.65, margin: 0 }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <ConceptBox title="Checklist — diagnosing a suspicious training run in under 5 minutes">
+          <p style={{ ...S.ps, marginBottom: 8 }}>
+            1. Print the gradient norm of every layer's weights right after one
+            backward() call — iterate model.named_parameters() and print each
+            parameter's grad norm.
+          </p>
+          <p style={{ ...S.ps, marginBottom: 8 }}>
+            2. Compare the first layer's norm to the last layer's. A ratio smaller than
+            roughly 1e-3 points to vanishing gradients. A ratio larger than roughly 1e3,
+            or any norm in the thousands, points to exploding gradients.
+          </p>
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            3. If gradients look healthy at every layer but the loss still will not
+            move, the problem is almost never backprop itself — check the learning
+            rate, the loss function choice, and whether labels are shaped and typed
+            correctly.
+          </p>
+        </ConceptBox>
+
+        <p style={S.p}>
+          The custom autograd.Function case is worth seeing in code, because it is the
+          one situation where "PyTorch handles it automatically" stops being true.
+          Quantisation-aware training rounds activations to a fixed set of levels during
+          the forward pass — but rounding has zero derivative almost everywhere, so
+          plain autograd would report that every upstream weight had exactly zero effect
+          on the loss. Teams shipping quantised models write a custom backward pass
+          specifically to work around this, using exactly the chain-rule mechanics this
+          module covers.
+        </p>
+
+        <CodeBlock code={`import torch
+
+# ── A custom autograd.Function — the one place backprop is hand-written ─
+# Real use case: quantisation-aware training. round() has zero gradient
+# almost everywhere, so naive autograd would silently zero out every
+# upstream gradient. The "straight-through estimator" fixes this by
+# treating round() as the identity function purely for backward purposes.
+
+class StraightThroughRound(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, x):
+        return torch.round(x)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        # Pass the incoming gradient straight through, unchanged —
+        # pretend the forward op were the identity function.
+        return grad_output
+
+ste_round = StraightThroughRound.apply
+
+x = torch.tensor([1.2, 2.7, 3.5], requires_grad=True)
+y = ste_round(x)
+loss = (y - torch.tensor([1.0, 3.0, 4.0])).pow(2).sum()
+loss.backward()
+
+print(f"Forward pass (rounded values): {y.tolist()}")
+print(f"Gradient w.r.t. input:         {x.grad.tolist()}")
+print("\nWithout the custom backward(), x.grad would be all zeros —")
+print("torch.round() has zero derivative almost everywhere, and plain")
+print("autograd would faithfully, and unhelpfully, report exactly that.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about backpropagation</h2>
@@ -963,7 +1072,7 @@ print("  But for standard training: always call zero_grad() before backward()")`
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Backpropagation — 5 questions interviewers actually ask</h2>
@@ -1030,7 +1139,7 @@ print("  But for standard training: always call zero_grad() before backward()")`
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

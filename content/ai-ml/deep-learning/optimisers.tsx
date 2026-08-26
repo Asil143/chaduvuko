@@ -903,7 +903,98 @@ for name in ['sgd', 'adam', 'adamw']:
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>The optimiser line almost nobody rewrites — and the schedule bug that does real damage</h2>
+
+        <p style={S.p}>
+          Open the training script for almost any production deep learning project —
+          a HuggingFace Trainer config, a PyTorch Lightning module, an internal training
+          framework at a mid-size company — and the optimiser line is nearly always
+          the same: AdamW, a learning rate somewhere between 1e-5 and 1e-3 depending on
+          whether the run is pretraining or fine-tuning, weight_decay around 0.01, paired
+          with a warmup-then-decay schedule. This is not laziness. AdamW's adaptive,
+          per-weight step sizes make it forgiving of imperfect learning rate choices
+          across a huge range of architectures and datasets, so teams standardise on it
+          and spend their tuning effort on data, architecture, and regularisation instead
+          of relitigating the optimiser choice on every new project.
+        </p>
+
+        <p style={S.p}>
+          SGD with momentum still gets deliberately chosen in a narrower set of cases —
+          mainly teams training large vision backbones from scratch on ImageNet-scale
+          data, where the flatter minima it tends to find translate into a real
+          generalisation advantage worth the slower convergence and extra learning-rate
+          tuning. Outside of large-scale vision pretraining, reaching for SGD instead of
+          AdamW as a default is unusual enough that it should have a specific reason
+          behind it, not habit.
+        </p>
+
+        <ConceptBox title="A real debugging scenario — the plateau that was not a capacity ceiling" color="#D85A30">
+          <p style={{ ...S.ps, marginBottom: 10 }}>
+            A team training a fraud model watches validation loss improve steadily for
+            twenty-five epochs, then go completely flat for the next fifteen. The
+            instinctive read is "the model has hit its capacity — time to add layers or
+            more features." Before touching the architecture, a more experienced
+            engineer asks a cheaper question first: what did the learning rate actually
+            do during those fifteen flat epochs?
+          </p>
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The scheduler was a StepLR configured to halve the learning rate every ten
+            epochs — but scheduler.step() had been placed inside the batch loop instead
+            of the epoch loop. With roughly two hundred batches per epoch, ten "steps"
+            of decay happened before the first epoch even finished. By epoch fifteen the
+            effective learning rate had been halved dozens of times over and was
+            effectively zero. The model had not run out of capacity — it had simply
+            stopped being allowed to move.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import torch
+import torch.nn as nn
+import torch.optim as optim
+
+# ── The bug — scheduler.step() one indentation level too deep ─────────
+model     = nn.Linear(10, 1)
+optimizer = optim.AdamW(model.parameters(), lr=1e-3)
+scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.5)
+
+# WRONG: called once per batch — decays far faster than intended
+def train_epoch_buggy(loader):
+    for Xb, yb in loader:
+        optimizer.zero_grad()
+        loss = nn.functional.mse_loss(model(Xb), yb)
+        loss.backward()
+        optimizer.step()
+        scheduler.step()          # ← bug: inside the batch loop
+
+# CORRECT: called once per epoch
+def train_epoch_fixed(loader):
+    for Xb, yb in loader:
+        optimizer.zero_grad()
+        loss = nn.functional.mse_loss(model(Xb), yb)
+        loss.backward()
+        optimizer.step()
+    scheduler.step()              # ← fix: after the loader is exhausted
+
+# ── The diagnostic that catches this class of bug in general ──────────
+# Log the actual learning rate every epoch — not just the loss.
+# A schedule bug is invisible in the loss curve until it is severe;
+# it is immediately visible in the learning-rate curve.
+def log_lr(optimizer, epoch):
+    current_lr = optimizer.param_groups[0]['lr']
+    print(f"  epoch {epoch:3d}: lr = {current_lr:.8f}")
+
+print("Always plot or log optimizer.param_groups[0]['lr'] per epoch.")
+print("A plateau that lines up with the learning rate collapsing to")
+print("near-zero is a scheduler bug, not a capacity problem — and it")
+print("costs nothing to check before reaching for a bigger model.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about optimisers</h2>
@@ -973,7 +1064,7 @@ for name in ['sgd', 'adam', 'adamw']:
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Optimisers — 5 questions interviewers actually ask</h2>
@@ -1046,7 +1137,7 @@ for name in ['sgd', 'adam', 'adamw']:
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

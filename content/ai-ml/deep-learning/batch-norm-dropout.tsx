@@ -988,7 +988,132 @@ print(f"Best val loss:  {best_val_loss:.6f}")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>
+          The bug almost every team hits once: a model that scores perfectly offline and randomly in production
+        </h2>
+
+        <p style={S.p}>
+          A fraud-scoring service pages the on-call engineer: the same transaction,
+          scored twice within a second of each other, comes back with two different
+          fraud probabilities. The model behaved perfectly in every offline evaluation
+          notebook. Nothing about the model itself changed between training and
+          deployment. The cause, once found, is one missing line: the serving code never
+          called model.eval().
+        </p>
+
+        <p style={S.p}>
+          With Dropout still active, every forward call randomly zeroes a different 30
+          percent of neurons — the exact same input genuinely produces a different
+          output every time, by design. With BatchNorm still in training mode, each call
+          also normalises using whatever small batch happened to arrive with that
+          request instead of the stable running statistics learned during training. Both
+          bugs look identical from the outside: non-deterministic, batch-size-dependent
+          predictions that pass every offline test, because offline evaluation almost
+          always happens with eval() already set, even by accident.
+        </p>
+
+        <CodeBlock code={`import torch
+import torch.nn as nn
+
+# ── The pattern that prevents the "forgot model.eval()" incident ───────
+# Real incident: a fraud-scoring service returned a different score for
+# the exact same transaction on every request. Root cause: the model was
+# loaded once at startup and reused across requests, but nothing ever
+# called model.eval() — so Dropout stayed active in "production" mode,
+# silently randomising every prediction downstream teams depended on.
+
+class FraudScorer(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(12, 64), nn.BatchNorm1d(64), nn.ReLU(), nn.Dropout(0.3),
+            nn.Linear(64, 32), nn.BatchNorm1d(32), nn.ReLU(), nn.Dropout(0.3),
+            nn.Linear(32, 1),
+        )
+    def forward(self, x):
+        return self.net(x)
+
+def load_for_serving(checkpoint_path: str) -> nn.Module:
+    """The fix: load, THEN force eval mode, THEN assert it stuck."""
+    model = FraudScorer()
+    # model.load_state_dict(torch.load(checkpoint_path))   # real checkpoint load
+    model.eval()
+    assert not model.training, "model must be in eval mode before serving"
+    return model
+
+model = load_for_serving('fraud_scorer.pt')
+
+torch.manual_seed(0)
+same_transaction = torch.randn(1, 12)
+
+# Same input, called three times — must return the SAME score every time
+scores = [model(same_transaction).item() for _ in range(3)]
+print(f"Scores for the identical transaction, three separate calls: {scores}")
+print("Identical every time, because model.eval() disabled Dropout and")
+print("switched BatchNorm over to its stored running statistics.")
+
+print("\nWithout load_for_serving()'s model.eval() call, the three scores")
+print("above would differ from each other — Dropout would zero a different")
+print("random 30% of neurons on every single call, exactly reproducing the")
+print("incident that paged the on-call engineer in the first place.")`} />
+
+        <p style={S.p}>
+          Once the train/eval bug is fixed, the remaining production decisions are about
+          where BatchNorm and Dropout go and how strong to make them — and both answers
+          depend heavily on what kind of model and batch size you actually have.
+        </p>
+
+        <VisualBox label="BatchNorm is not universal — what production teams swap in by domain">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { domain: 'Tabular / MLP (batch 32-256)', norm: 'BatchNorm1d', color: '#1D9E75', why: 'The case this module covers — batch statistics are stable and meaningful at these batch sizes.' },
+              { domain: 'Object detection / segmentation (large images, batch 2-8 per GPU)', norm: 'GroupNorm or SyncBatchNorm', color: '#D85A30', why: 'GPU memory limits batch size so much that per-GPU batch statistics become noisy and unstable. GroupNorm normalises within groups of channels instead, independent of batch size.' },
+              { domain: 'Transformers / sequence models', norm: 'LayerNorm', color: '#7b61ff', why: 'Sequences have variable length and no meaningful shared batch statistic per position — LayerNorm normalises across the feature dimension per token instead.' },
+              { domain: 'Style transfer / image generation', norm: 'InstanceNorm', color: '#378ADD', why: 'Normalises per-sample, per-channel, ignoring the batch entirely — batch statistics would otherwise leak style information between unrelated images in the same batch.' },
+            ].map((row) => (
+              <div key={row.domain} style={{
+                background: 'var(--surface)', border: `1px solid ${row.color}25`,
+                borderLeft: `4px solid ${row.color}`, borderRadius: 8, padding: '11px 14px',
+              }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 5, flexWrap: 'wrap' as const }}>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>{row.domain}</span>
+                  <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: row.color, background: `${row.color}15`, padding: '2px 7px', borderRadius: 4 }}>
+                    {row.norm}
+                  </span>
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{row.why}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <ConceptBox title="Dropout rates production teams actually default to, by position">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              ['Input layer', 'Rarely used, 0.0-0.1 at most', 'Too aggressive here destroys raw signal before the network has done anything with it.'],
+              ['Early / middle hidden layers (MLP)', '0.2-0.3', 'The default this module trains with — enough regularisation without starving the network of capacity.'],
+              ['Layer right before the output', '0.4-0.5', 'The most overfitting-prone junction, closest to memorising training examples directly.'],
+              ['Conv layers (CNN feature extractor)', 'Often skipped, or Dropout2d if used', 'Most CNNs lean on BatchNorm plus data augmentation instead. Plain Dropout zeroes individual pixels, which barely changes a spatially correlated feature map — Dropout2d zeroes whole channels instead.'],
+              ['Transformer blocks (attention + FFN)', 'Flat 0.1', 'The exact default from the original Attention Is All You Need paper, still used by most transformer implementations today.'],
+            ].map(([pos, rate, why]) => (
+              <div key={pos} style={{ background: 'var(--bg2)', borderRadius: 6, padding: '9px 12px' }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap' as const, marginBottom: 4 }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{pos}</span>
+                  <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: '#7b61ff' }}>{rate}</span>
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{why}</p>
+              </div>
+            ))}
+          </div>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about Adam, BatchNorm, and Dropout</h2>
@@ -1060,7 +1185,7 @@ print(f"Best val loss:  {best_val_loss:.6f}")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Training techniques — 5 questions interviewers actually ask</h2>
@@ -1137,7 +1262,7 @@ print(f"Best val loss:  {best_val_loss:.6f}")`} />
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

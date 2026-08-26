@@ -1097,7 +1097,141 @@ for s in result['sources']:
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Running RAG in production — re-indexing pipelines, embedding versions, and quality drift</h2>
+
+        <p style={S.p}>
+          The RAG pipeline built in this module runs once: load documents, embed, index, query.
+          A production knowledge base changes constantly — new support articles, edited pricing
+          pages, deprecated policies — and the index has to keep up without ever serving a query
+          against a stale or partially-rebuilt index. The two problems that dominate a real RAG
+          deployment are keeping the index fresh without downtime, and knowing when retrieval
+          quality has quietly degraded, because nothing in the pipeline itself raises an alarm
+          when it starts returning worse chunks.
+        </p>
+
+        <VisualBox label="Blue-green re-indexing — never serve queries against a half-updated index">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { step: '1. Documentation changes', detail: 'A support article is edited or added in the source system (CMS, Notion, internal wiki).', color: '#888' },
+              { step: '2. Re-index into a fresh index', detail: 'A new vector index is built from scratch in the background — the live index keeps serving traffic unaffected.', color: '#378ADD' },
+              { step: '3. Validate before switching', detail: 'The new index is checked against a fixed eval set of known query-to-expected-chunk pairs before it goes live.', color: '#1D9E75' },
+              { step: '4. Atomic swap', detail: 'Traffic is pointed at the new index only after it passes validation — the old index is kept around for instant rollback.', color: '#D85A30' },
+            ].map((item, i) => (
+              <div key={i} style={{
+                display: 'flex', gap: 10, background: 'var(--surface)',
+                borderRadius: 5, padding: '8px 12px',
+                border: `1px solid ${item.color}20`,
+              }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)', minWidth: 160 }}>{item.step}</span>
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>{item.detail}</span>
+              </div>
+            ))}
+          </div>
+          <p style={{ ...S.ps, marginBottom: 0, marginTop: 10 }}>
+            This is the same blue-green deployment pattern used for any production database
+            migration — never mutate the live index in place, always build the replacement
+            alongside it and cut over atomically.
+          </p>
+        </VisualBox>
+
+        <p style={S.p}>
+          Embedding model version mismatches are the single most common way a re-index pipeline
+          silently breaks retrieval. Every chunk in the vector store has to be embedded by the
+          exact same model version as the one embedding incoming queries — a cosine similarity
+          computed between a vector from embedding model version A and a vector from version B
+          is meaningless, even if both models have the same output dimension, because each
+          model's vector space encodes similarity differently. Teams that upgrade an embedding
+          model without re-embedding the entire existing index get a RAG system that still runs
+          without errors and just quietly returns worse and worse retrieval results.
+        </p>
+
+        <CodeBlock code={`from datetime import datetime
+
+# ── Tag every stored vector with the embedding model that produced it ──
+# This is what actually prevents the version-mismatch failure mode above.
+
+EMBEDDING_MODEL_VERSION = 'all-MiniLM-L6-v2@v2024.1'
+
+def embed_and_tag(embedder, chunks: list) -> list:
+    texts = [c['text'] for c in chunks]
+    vectors = embedder.encode(texts, normalize_embeddings=True)
+    tagged = []
+    for chunk, vec in zip(chunks, vectors):
+        tagged.append({
+            **chunk,
+            'vector':            vec,
+            'embedding_version': EMBEDDING_MODEL_VERSION,
+            'indexed_at':        datetime.utcnow().isoformat(),
+        })
+    return tagged
+
+def query_with_version_check(query_embedder, query_text: str, index_version: str):
+    """Refuse to search if the query embedder doesn't match the index's embedding version."""
+    current_version = EMBEDDING_MODEL_VERSION
+    if current_version != index_version:
+        raise RuntimeError(
+            f"Embedding version mismatch: index was built with '{index_version}', "
+            f"query embedder is '{current_version}'. Re-index required before serving queries."
+        )
+    return query_embedder.encode([query_text], normalize_embeddings=True)
+
+# ── Retrieval quality monitoring — catch drift before users complain ──
+class RetrievalQualityMonitor:
+    def __init__(self, eval_queries: list):
+        # eval_queries: [{'query': ..., 'expected_chunk_id': ...}, ...] — a fixed labelled set
+        self.eval_queries    = eval_queries
+        self.daily_recall    = {}   # date -> recall@k on the eval set
+        self.daily_avg_score = {}   # date -> average top-1 similarity score on live traffic
+
+    def run_daily_eval(self, retrieve_fn, k: int = 5) -> float:
+        hits = 0
+        for case in self.eval_queries:
+            results = retrieve_fn(case['query'], k=k)
+            retrieved_ids = [r['id'] for r in results]
+            if case['expected_chunk_id'] in retrieved_ids:
+                hits += 1
+        recall = hits / len(self.eval_queries)
+        today = datetime.utcnow().date().isoformat()
+        self.daily_recall[today] = recall
+        return recall
+
+    def log_live_query_score(self, top_score: float):
+        today = datetime.utcnow().date().isoformat()
+        self.daily_avg_score.setdefault(today, []).append(top_score)
+
+    def check_for_drift(self, window_days: int = 7, drop_threshold: float = 0.1) -> bool:
+        """Flag if recall@k has dropped meaningfully vs the trailing window."""
+        dates = sorted(self.daily_recall.keys())
+        if len(dates) < window_days + 1:
+            return False
+        baseline = sum(self.daily_recall[d] for d in dates[-window_days-1:-1]) / window_days
+        today_recall = self.daily_recall[dates[-1]]
+        dropped = (baseline - today_recall) > drop_threshold
+        if dropped:
+            print(f"DRIFT ALERT: recall@k dropped from {baseline:.3f} to {today_recall:.3f} "
+                  f"— check for a bad re-index, stale documents, or an embedding version mismatch")
+        return dropped
+
+print("RetrievalQualityMonitor: runs the fixed eval set daily, tracks recall@k over time,")
+print("and alerts when retrieval quality drops — catching drift before it shows up as")
+print("customer-visible wrong answers.")`} />
+
+        <p style={S.p}>
+          Live traffic monitoring closes the gap a fixed eval set cannot: real user queries are
+          messier and more varied than any hand-built eval set, so production RAG systems also
+          track the raw similarity score of the top retrieved chunk across all live queries, not
+          just the labelled ones. A sustained drop in average top-1 score — even with no code
+          change and no re-index — is often the first signal that the underlying document
+          corpus has drifted away from what the index actually contains.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about RAG</h2>
@@ -1170,7 +1304,7 @@ for s in result['sources']:
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>RAG — 5 questions interviewers actually ask</h2>
@@ -1250,7 +1384,7 @@ for s in result['sources']:
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

@@ -818,7 +818,120 @@ for idx in worst_idx:
 
       <Div />
 
-      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Two production regressors, two different error philosophies</h2>
+
+        <p style={S.p}>
+          The metric choice for a regression model is written into the design doc before training
+          starts, driven by what a wrong prediction actually costs downstream — not by whichever
+          metric is easiest to compute or looks best in a demo. Two models that both output a plain
+          number, evaluated with completely different philosophies, make this concrete.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(55,138,221,0.3)',
+            borderLeft: '4px solid #378ADD', borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#378ADD', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              DoorDash delivery-time prediction — the tail matters more than the average
+            </div>
+            <p style={{ ...S.ps, marginBottom: 0 }}>
+              The business promise shown to the customer is not "we are off by four minutes on
+              average" — it is "your order arrives within the estimated window most of the time."
+              The team reports MAE as the headline number because it is easy to explain, but the
+              metric that actually gates a launch is a hit-rate against a threshold: the percentage
+              of deliveries within the promised window. RMSE gets tracked alongside MAE specifically
+              because a widening gap between the two signals that a small number of deliveries are
+              going badly wrong — the exact failure mode that triggers refunds and one-star reviews,
+              even while the average error still looks fine.
+            </p>
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(29,158,117,0.3)',
+            borderLeft: '4px solid #1D9E75', borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#1D9E75', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Price / valuation prediction — the scale of the error is the whole story
+            </div>
+            <p style={{ ...S.ps, marginBottom: 0 }}>
+              A pricing model — a marketplace listing price, a real-estate valuation, an ad-auction
+              bid estimate — spans items worth ten dollars and items worth a hundred thousand
+              dollars in the same training set. An absolute error of ten dollars means something
+              completely different depending on which item it lands on, so the team reports MAPE or,
+              more often, a revenue-weighted percentage error rather than plain MAE. Plain MAPE has
+              its own trap here: it treats a ten-dollar error on a fifty-dollar item the same as a
+              ten-dollar error on a five-thousand-dollar item, so teams weight the error by the
+              actual transaction value, because a five percent error on a large transaction costs
+              far more than a five percent error on a small one.
+            </p>
+          </div>
+        </div>
+
+        <ConceptBox title="The metric you evaluate with often becomes the loss you train with">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Once a team settles on what "good" means, that definition frequently gets built directly
+            into training, not just left for evaluation afterward. A delivery-time model whose real
+            business metric is a percentile hit-rate is sometimes trained with quantile loss aimed
+            directly at the ninetieth percentile, rather than the mean-squared-error loss that comes
+            with sklearn's default regressor — training the model to be precisely accurate at the
+            percentile that actually gates the SLA, instead of hoping that minimising average error
+            happens to also fix the tail. A pricing model that cares about large errors on
+            high-value items but does not want a handful of outliers to dominate training entirely
+            might use a Huber loss, which behaves like squared error for small residuals and like
+            absolute error for large ones — a training-time compromise that mirrors the same
+            MAE-versus-RMSE tradeoff this module covers for evaluation.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import numpy as np
+
+# ── Delivery-time model: an SLA hit-rate, not just MAE ─────────────────
+# The business promise is "arrives within the estimate," which is a
+# threshold-based hit-rate, not an average.
+def delivery_sla_report(y_true, y_pred, sla_minutes=10):
+    abs_error   = np.abs(y_true - y_pred)
+    within_sla  = (abs_error <= sla_minutes).mean()
+    p90_error   = np.percentile(abs_error, 90)
+    return {
+        'mae': abs_error.mean(),
+        'within_sla_pct': within_sla * 100,
+        'p90_error_min': p90_error,
+    }
+
+# ── Price model: revenue-weighted error, not plain MAPE ────────────────
+# A cheap item's percentage error should not carry the same weight
+# as an expensive item's percentage error in the business's eyes.
+def price_wape_report(y_true, y_pred):
+    abs_error  = np.abs(y_true - y_pred)
+    wape       = abs_error.sum() / y_true.sum() * 100    # weighted by actual value
+    plain_mape = (abs_error / y_true).mean() * 100        # unweighted, for comparison
+    return {'wape_pct': wape, 'plain_mape_pct': plain_mape}
+
+np.random.seed(42)
+delivery_actual = np.random.normal(32, 8, 5000).clip(10, 90)
+delivery_pred   = delivery_actual + np.random.normal(0, 4, 5000)
+print("Delivery-time SLA report:")
+for k, v in delivery_sla_report(delivery_actual, delivery_pred).items():
+    print(f"  {k:<18}: {v:.2f}")
+
+price_actual = np.concatenate([
+    np.random.uniform(10, 200, 4000),        # everyday items
+    np.random.uniform(5000, 100_000, 200),    # high-value items
+])
+price_pred = price_actual * np.random.normal(1.0, 0.06, len(price_actual))
+print("\\nPrice model report:")
+for k, v in price_wape_report(price_actual, price_pred).items():
+    print(f"  {k:<18}: {v:.2f}")
+print("\\nNotice: WAPE and plain MAPE diverge whenever error rates differ")
+print("between cheap, high-volume items and rare, high-value ones.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about regression metrics</h2>
@@ -891,7 +1004,7 @@ for idx in worst_idx:
 
       <Div />
 
-      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Regression metrics — 5 questions interviewers actually ask</h2>
@@ -970,7 +1083,7 @@ for idx in worst_idx:
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

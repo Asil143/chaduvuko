@@ -1032,7 +1032,126 @@ print(f"  autograd → the chain rule applied automatically to any graph")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Why 'implement backprop from scratch' is still a real interview question</h2>
+
+        <p style={S.p}>
+          No production ML team writes a neural network in raw NumPy. Every real
+          training job runs through PyTorch, JAX, or TensorFlow, and nobody hand-codes
+          a backward pass for a model going into production. So it surprises a lot of
+          candidates that "build a two-layer network and backpropagation from scratch"
+          is still a live interview question at companies with mature ML platforms.
+          The reason is simple: calling loss.backward() correctly and understanding
+          what it computes are two different skills, and only one of them is testable
+          by watching someone use a framework fluently.
+        </p>
+
+        <p style={S.p}>
+          A candidate who has only ever called framework methods can usually get a
+          model training. What the from-scratch exercise actually probes is whether
+          they can reason about the system underneath those calls: can they predict
+          the shape of a gradient without running the code, do they understand that a
+          gradient is a sensitivity, not just "the number the optimiser subtracts," and
+          can they spot a subtly wrong result with no error message attached to it.
+          Framework bugs almost never raise exceptions — a transposed weight matrix, a
+          wrong reduction, a mismatched activation derivative all train "successfully"
+          while quietly computing the wrong thing. That is exactly the failure mode
+          this module's numerical gradient check exists to catch, and it is exactly
+          what interviewers are checking a candidate can reason about by hand.
+        </p>
+
+        <ConceptBox title="What the exercise actually verifies, beyond 'can you code'">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              {
+                skill: 'Shape reasoning',
+                desc: 'Can you say, before running anything, what shape dW2 has to be given A1 and dZ2 — without printing .shape and guessing from the error.',
+              },
+              {
+                skill: 'What a gradient means',
+                desc: 'Do you understand ∂Loss/∂W as "how much this weight is responsible for the current error," not just as an opaque number the optimiser consumes.',
+              },
+              {
+                skill: 'Debugging without a stack trace',
+                desc: 'Given a network that trains but underperforms, can you narrow down whether the bug is in the forward pass, the loss, or the backward pass by reasoning about intermediate values.',
+              },
+            ].map((row) => (
+              <div key={row.skill} style={{
+                background: 'var(--bg2)', borderRadius: 6, padding: '10px 12px',
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#7b61ff', fontFamily: 'var(--font-mono)', marginBottom: 4 }}>
+                  {row.skill}
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{row.desc}</p>
+              </div>
+            ))}
+          </div>
+        </ConceptBox>
+
+        <p style={S.p}>
+          The same skill shows up directly in production debugging, not just interviews.
+          Any team that ships a custom loss function, a custom autograd operation, or a
+          hand-written CUDA kernel for performance reasons runs into exactly the
+          from-scratch problem this module teaches: PyTorch's autograd only computes
+          the correct gradient automatically for operations it already knows about.
+          The moment you write a custom backward method, you are back to being
+          responsible for the chain rule yourself — and a wrong custom gradient will
+          often still let the model train, just worse, with no error to point at the cause.
+        </p>
+
+        <CodeBlock code={`import torch
+
+# ── A custom loss for imbalanced return prediction ─────────────────────
+# Production scenario: a retailer's return-prediction model needs a
+# custom weighted loss so false negatives (missed returns) cost more
+# than false positives. An engineer writes a custom autograd.Function
+# for speed instead of relying on autograd to differentiate a Python loop.
+
+class WeightedBCE(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, logits, targets, pos_weight):
+        probs = torch.sigmoid(logits)
+        ctx.save_for_backward(probs, targets, pos_weight)
+        loss = -(pos_weight * targets * torch.log(probs + 1e-8)
+                  + (1 - targets) * torch.log(1 - probs + 1e-8))
+        return loss.mean()
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        probs, targets, pos_weight = ctx.saved_tensors
+        # Gradient of weighted BCE w.r.t. the logits (not the probabilities!)
+        # A common bug: differentiating w.r.t. probs and forgetting the
+        # extra sigmoid-derivative term needed to get back to the logits.
+        n = targets.numel()
+        grad_logits = (pos_weight * targets * (probs - 1)
+                       + (1 - targets) * probs) / n
+        return grad_output * grad_logits, None, None
+
+# ── Exactly the check this module teaches, run on the real op ─────────
+torch.manual_seed(0)
+logits  = torch.randn(8, dtype=torch.float64, requires_grad=True)
+targets = torch.randint(0, 2, (8,), dtype=torch.float64)
+weight  = torch.tensor(3.0, dtype=torch.float64)
+
+# gradcheck compares the custom backward() to a numerical finite-difference
+# gradient — the exact same idea as this module's numerical_gradient(),
+# just wrapped as a standard PyTorch utility teams run before shipping
+# any custom autograd.Function.
+ok = torch.autograd.gradcheck(
+    lambda l: WeightedBCE.apply(l, targets, weight),
+    (logits,),
+    eps=1e-6, atol=1e-4,
+)
+print(f"Custom backward matches numerical gradient: {ok}")
+print("If this were False, the model would still train — just on a")
+print("silently wrong gradient, degrading accuracy with no error raised.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about neural networks built from scratch</h2>
@@ -1102,7 +1221,7 @@ print(f"  autograd → the chain rule applied automatically to any graph")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Neural networks from scratch — 5 questions interviewers actually ask</h2>
@@ -1175,7 +1294,7 @@ print(f"  autograd → the chain rule applied automatically to any graph")`} />
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

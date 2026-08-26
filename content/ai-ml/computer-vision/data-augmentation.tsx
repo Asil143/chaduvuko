@@ -795,7 +795,92 @@ for i, t in enumerate(tensors):
 
       <Div />
 
-      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>How augmentation pipelines actually get built, versioned, and reviewed</h2>
+
+        <p style={S.p}>
+          For plain image classification, torchvision.transforms.Compose is
+          genuinely enough — every example above in this module uses it.
+          The moment a task has structured labels attached to the image —
+          bounding boxes for detection, masks for segmentation, keypoints
+          for pose estimation — torchvision's transforms stop being enough,
+          because they only know how to transform the image tensor. Crop
+          the image and the box coordinates you had before the crop are
+          now pointing at the wrong region — nothing raises an error,
+          the label is just quietly wrong from that point on.
+        </p>
+
+        <p style={S.p}>
+          This is why most production computer vision teams working with
+          detection or segmentation reach for Albumentations instead.
+          It treats bounding boxes, masks, and keypoints as first-class
+          citizens of the pipeline — one call to the same transform
+          updates the image and every associated label together,
+          consistently, so a crop or a flip cannot desynchronise them.
+        </p>
+
+        <CodeBlock code={`import albumentations as A
+from albumentations.pytorch import ToTensorV2
+import numpy as np
+
+# ── Albumentations pipeline — image AND bounding boxes transformed together ──
+# bbox_params tells Albumentations the box format and which field holds
+# the class label, so every geometric transform below also updates the boxes.
+train_transform = A.Compose([
+    A.RandomResizedCrop(height=640, width=640, scale=(0.5, 1.0)),
+    A.HorizontalFlip(p=0.5),
+    A.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.1, p=0.7),
+    A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ToTensorV2(),
+], bbox_params=A.BboxParams(format='pascal_voc', label_fields=['class_labels']))
+
+# ── Simulated defect-detection image with two bounding boxes ─────────────
+image = np.random.randint(0, 256, (720, 1280, 3), dtype=np.uint8)
+boxes = [[100, 150, 300, 400], [600, 200, 900, 500]]   # [x_min, y_min, x_max, y_max]
+labels = ['scratch', 'dent']
+
+result = train_transform(image=image, bboxes=boxes, class_labels=labels)
+print(f"Transformed image shape: {tuple(result['image'].shape)}")
+print(f"Transformed boxes:       {result['bboxes']}")
+print(f"Labels (unchanged):      {result['class_labels']}")
+print("The crop above moved and resized the boxes to match — this is the")
+print("entire reason to use bbox_params instead of a plain torchvision Compose.")
+
+# ── What silently breaks without bbox_params ──────────────────────────
+# If you instead crop the image with a plain transform and leave the
+# original box coordinates untouched, the pipeline still runs without
+# error. Training loss still decreases, because the model is learning
+# to fit boxes to whatever region of the image now happens to be there —
+# it just is no longer the scratch or the dent. This kind of bug does
+# not crash anything. It quietly caps the model's accuracy for the
+# entire length of a training run, and the only way to catch it before
+# burning GPU hours is to look at a handful of augmented examples with
+# their boxes drawn on top, before training starts.`} />
+
+        <ConceptBox title="The review step most teams add before trusting a new augmentation config">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Before a training run starts on a changed augmentation pipeline,
+            run a small fixed set of representative images through it —
+            a dozen or so, chosen to cover edge cases like small objects,
+            objects near the image border, and dense clusters — and render
+            the results with boxes or masks drawn on top. A person looks at
+            those dozen images for under a minute. That single manual check
+            catches misaligned boxes, masks that got flipped without their
+            image, or crops that cut an object in half, all of which run
+            perfectly cleanly through training and only show up later as
+            an unexplained accuracy ceiling. The augmentation config itself
+            is saved alongside the model checkpoint — treated as a versioned
+            part of the experiment, not a detail that lives only in whichever
+            training script happened to be checked out that day.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about data augmentation</h2>
@@ -870,7 +955,7 @@ for i, t in enumerate(tensors):
 
       <Div />
 
-      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Data augmentation — 5 questions interviewers actually ask</h2>
@@ -951,7 +1036,7 @@ for i, t in enumerate(tensors):
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

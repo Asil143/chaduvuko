@@ -862,7 +862,110 @@ print(f"  weighted: weight by support — use for overall performance summary")`
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>AUC in a real evaluation report — and picking a threshold from a capacity budget</h2>
+
+        <p style={S.p}>
+          AUC shows up in exactly the places this module already mentioned in passing: the model
+          card, the slide deck for the launch review, the compliance audit report for a regulated
+          model like credit scoring or medical screening. The most common misuse is not a
+          mathematical error — it is quoting a single AUC number as if it settles the question of
+          whether a model is good enough to ship, with no confidence interval and no breakdown by
+          segment. A model can post a strong overall AUC while performing meaningfully worse for
+          one region, one device type, or one customer tier — and an aggregate number computed
+          across the whole population will not surface that on its own.
+        </p>
+
+        <p style={S.p}>
+          A real evaluation report usually contains more than the headline number: the overall AUC
+          with a bootstrapped confidence interval (so a reviewer can tell whether a reported
+          improvement is real or just noise from the particular test split), AUC broken down by the
+          segments that matter for fairness or business risk, the ROC curve itself as a plot rather
+          than a single statistic, and — critically — the specific operating threshold chosen for
+          production along with the precision and recall actually achieved at that threshold.
+        </p>
+
+        <ConceptBox title="A concrete threshold decision — a fixed review-capacity constraint">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Instead of starting from a cost ratio, some teams start from an operational limit: a
+            fraud review team can manually check only a small, fixed share of daily transaction
+            volume, no matter how good the model looks on paper. That caps the acceptable false
+            positive rate directly — the threshold is not chosen to minimise cost or hit a target
+            recall, it is chosen to be the least restrictive threshold that still keeps the false
+            positive rate within the review team's actual staffing capacity. Read straight off the
+            ROC curve: among every threshold whose false positive rate fits inside that capacity
+            budget, pick the one with the highest true positive rate.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import numpy as np
+from sklearn.metrics import roc_curve, roc_auc_score
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+import warnings
+warnings.filterwarnings('ignore')
+
+np.random.seed(42)
+n = 10_000
+amount        = np.abs(np.random.normal(1200, 2000, n)).clip(10, 50_000)
+merchant_risk = np.random.uniform(0, 1, n)
+n_tx_hour     = np.random.randint(0, 20, n).astype(float)
+fraud_score   = (amount/50_000)*0.30 + merchant_risk*0.35 + (n_tx_hour/20)*0.25 + np.random.randn(n)*0.05
+y             = (fraud_score > 0.55).astype(int)
+X             = np.column_stack([amount, merchant_risk, n_tx_hour])
+
+X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+sc = StandardScaler()
+model = GradientBoostingClassifier(n_estimators=200, learning_rate=0.1, max_depth=3, random_state=42)
+model.fit(sc.fit_transform(X_tr), y_tr)
+val_prob = model.predict_proba(sc.transform(X_val))[:, 1]
+
+# ── Real evaluation reports rarely stop at a single AUC number ────────
+# Capacity constraint: the review team can manually check at most 2%
+# of daily transaction volume, no matter how good the model looks.
+fpr, tpr, thresholds = roc_curve(y_val, val_prob)
+
+max_fpr_capacity = 0.02
+eligible   = np.where(fpr <= max_fpr_capacity)[0]
+best_idx   = eligible[np.argmax(tpr[eligible])]   # highest recall within capacity
+t_capacity = thresholds[best_idx]
+
+print(f"Capacity-constrained threshold: {t_capacity:.3f}")
+print(f"  Achieved recall at this threshold: {tpr[best_idx]:.3f}")
+print(f"  Achieved FPR (within capacity):    {fpr[best_idx]:.3f}")
+
+# ── Bootstrap confidence interval on AUC — a single point estimate
+#    is not enough on its own to greenlight a launch ──────────────────
+def bootstrap_auc(y_true, y_score, n_boot=500):
+    n = len(y_true)
+    aucs = []
+    for _ in range(n_boot):
+        idx = np.random.randint(0, n, n)
+        if len(np.unique(y_true[idx])) < 2:
+            continue
+        aucs.append(roc_auc_score(y_true[idx], y_score[idx]))
+    return np.percentile(aucs, [2.5, 50, 97.5])
+
+lo, mid, hi = bootstrap_auc(y_val, val_prob)
+print(f"\\nAUC 95% CI: {lo:.3f} to {hi:.3f}  (median {mid:.3f})")
+print("A report showing only the point estimate hides how much that")
+print("number could move on a different sample of the same population.")`} />
+
+        <p style={S.p}>
+          The escalation pattern — flag confident negatives, act on confident positives, route only
+          the genuinely uncertain cases to a human reviewer or a slower, more expensive model — is
+          the same pattern that shows up across fraud review, content moderation, and medical
+          triage. The ROC curve and its capacity-driven threshold are what decide the boundary of
+          that uncertain middle band in the first place.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about ROC and AUC</h2>
@@ -933,7 +1036,7 @@ print(f"  weighted: weight by support — use for overall performance summary")`
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>ROC and AUC — 5 questions interviewers actually ask</h2>
@@ -1005,7 +1108,7 @@ print(f"  weighted: weight by support — use for overall performance summary")`
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

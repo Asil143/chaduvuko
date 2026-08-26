@@ -800,7 +800,136 @@ print("Exported: meesho_classifier.pt + meesho_classifier.onnx")`} />
 
       <Div />
 
-      {/* ══ SECTION 7 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>The real decision: how much data do you have, and how far is your domain from ImageNet?</h2>
+
+        <p style={S.p}>
+          Every transfer learning project on a real team starts with the same two
+          questions, answered before a single line of training code gets written: how
+          many labelled images do we actually have, and how close is our domain to
+          natural photographs? The answer to those two questions — not a blanket
+          preference for "fine-tune everything" or "freeze everything" — is what decides
+          how many layers get unfrozen and how aggressive the learning rates are.
+        </p>
+
+        <VisualBox label="The decision teams actually make — dataset size × domain distance">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              {
+                data: '< 1,000 images', domain: 'Close to ImageNet (products, everyday objects)',
+                strategy: 'Feature extraction — freeze the whole backbone',
+                color: '#378ADD',
+                real: 'A home goods marketplace with 300 photos per new product line ships a working classifier the same afternoon at roughly 88% accuracy.',
+              },
+              {
+                data: '1,000–50,000 images', domain: 'Close to ImageNet',
+                strategy: 'Partial fine-tuning — unfreeze layer3/layer4, differential lr',
+                color: '#1D9E75',
+                real: 'The Shopify product classifier built earlier in this module — 2,400 labelled images across 6 categories, the standard production recipe.',
+              },
+              {
+                data: 'Any size', domain: 'Far from ImageNet (medical, satellite, microscopy)',
+                strategy: 'Unfreeze aggressively regardless of dataset size, or use a domain-pretrained backbone instead of ImageNet',
+                color: '#D85A30',
+                real: 'A chest X-ray classifier — see the case study below.',
+              },
+              {
+                data: '100,000+ images', domain: 'Any domain',
+                strategy: 'Full fine-tuning, or train from scratch if the domain is far enough from ImageNet',
+                color: '#7b61ff',
+                real: 'Large, well-funded vision teams with enough labelled data that ImageNet initialisation becomes a minor head start rather than a necessity.',
+              },
+            ].map((row) => (
+              <div key={row.data} style={{
+                background: 'var(--surface)', border: `1px solid ${row.color}25`,
+                borderLeft: `4px solid ${row.color}`, borderRadius: 8, padding: '11px 14px',
+              }}>
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' as const, marginBottom: 6 }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: row.color, fontFamily: 'var(--font-mono)' }}>{row.data}</span>
+                  <span style={{ fontSize: 11, color: 'var(--muted)' }}>{row.domain}</span>
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--text)', fontWeight: 600, marginBottom: 6 }}>{row.strategy}</div>
+                <p style={{ ...S.ps, marginBottom: 0, fontStyle: 'italic' }}>{row.real}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <ConceptBox title="Case study — when ImageNet features do not transfer: a chest X-ray classifier" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 10 }}>
+            A health-tech team building an abnormality classifier for chest X-rays reused
+            the exact recipe that had worked well for a product-photo classifier: ResNet50
+            pretrained on ImageNet, backbone entirely frozen, fine-tune only a new head,
+            4,000 labelled X-rays. It shipped at 61 percent accuracy on the held-out test
+            set — barely above the 58 percent majority-class baseline.
+          </p>
+          <p style={{ ...S.ps, marginBottom: 10 }}>
+            The cause was domain shift, not a bug. X-rays are single-channel grayscale
+            images forced into 3 identical channels to match ResNet's input shape, their
+            intensity statistics look nothing like natural photographs, and ImageNet's
+            later layers are tuned to recognise things like fur, fabric weave, and wheel
+            spokes — visual cues that simply do not exist in a lung radiograph. The frozen
+            backbone's later layers were producing near-meaningless features for this
+            input distribution, and no amount of head training could recover information
+            that was never extracted in the first place.
+          </p>
+          <p style={{ ...S.ps, marginBottom: 0, color: '#00e676' }}>
+            The fix: unfreeze layer2 through layer4 with a small learning rate instead of
+            just the head, so the network could re-learn its higher-level features on
+            real X-ray statistics. Accuracy rose to 84 percent. The team later swapped the
+            backbone entirely for one pretrained on radiology images instead of ImageNet,
+            and gained a few more points — evidence that for domains this far from
+            natural photographs, the pretraining dataset matters as much as the
+            fine-tuning strategy.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import torch
+import torch.nn as nn
+import torchvision.models as models
+
+# ── Diagnose domain shift BEFORE a full training run ───────────────────
+# Compare frozen-backbone feature statistics on your data vs natural
+# photos. Catches "these features won't transfer" early, before you
+# burn GPU hours training a head that has nothing useful to work with.
+
+backbone = models.resnet50(weights='IMAGENET1K_V2')
+backbone.fc = nn.Identity()   # expose the pooled 2048-d feature vector
+backbone.eval()
+
+def feature_stats(images: torch.Tensor):
+    """images: (N, 3, 224, 224), already ImageNet-normalised."""
+    with torch.no_grad():
+        feats = backbone(images)   # (N, 2048)
+    dead_frac = (feats == 0).float().mean().item()
+    return feats.mean().item(), feats.std().item(), dead_frac
+
+torch.manual_seed(42)
+
+# Reference: activations on natural-photo-like inputs
+natural = torch.randn(32, 3, 224, 224) * 0.3 + 0.1
+mean_n, std_n, dead_n = feature_stats(natural)
+
+# Your data: chest X-rays, grayscale forced into 3 channels
+xray = torch.randn(32, 3, 224, 224) * 0.05 + 0.02
+mean_x, std_x, dead_x = feature_stats(xray)
+
+print(f"{'Input distribution':<22} {'feat mean':>10} {'feat std':>10} {'dead units':>12}")
+print("─" * 58)
+print(f"  {'Natural photos':<20} {mean_n:>10.4f} {std_n:>10.4f} {dead_n*100:>10.1f}%")
+print(f"  {'Chest X-rays':<20} {mean_x:>10.4f} {std_x:>10.4f} {dead_x*100:>10.1f}%")
+
+print("\nRule of thumb: a much higher dead-unit fraction on your data than")
+print("on natural photos means a large part of the pretrained backbone is")
+print("not firing at all on your domain — unfreeze more layers than you")
+print("would for an in-domain task, not just the classification head.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about transfer learning</h2>
@@ -876,7 +1005,7 @@ print("Exported: meesho_classifier.pt + meesho_classifier.onnx")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Transfer learning — 5 questions interviewers actually ask</h2>
@@ -956,7 +1085,7 @@ print("Exported: meesho_classifier.pt + meesho_classifier.onnx")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ═════════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — WHAT'S NEXT ═════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

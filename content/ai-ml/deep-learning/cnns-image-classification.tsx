@@ -849,7 +849,113 @@ for group in optimizer_diff.param_groups:
 
       <Div />
 
-      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Shipping a CNN to a phone is a different engineering problem than shipping one to a GPU server</h2>
+
+        <p style={S.p}>
+          Every backbone comparison earlier in this module ranked architectures by
+          accuracy. In production that ranking gets a second axis: does the model
+          actually fit the device it needs to run on. A model that scores highest on a
+          validation set is worthless if it is 98MB and takes 340 milliseconds per frame
+          on the hardware that has to run it.
+        </p>
+
+        <VisualBox label="Backbone choice by deployment target — not just by accuracy">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { target: 'Cloud GPU, batch inference', budget: '10-50ms per image, size rarely matters', pick: 'ResNet50, EfficientNet-B3, or ViT-B/16', color: '#378ADD', exp: 'ONNX or TensorRT' },
+              { target: 'Mobile app, on-device (phone CPU/NPU)', budget: '5-15ms per frame, under roughly 20MB', pick: 'MobileNetV3 or EfficientNet-Lite', color: '#1D9E75', exp: 'TFLite or Core ML, usually int8 quantised' },
+              { target: 'Embedded / IoT camera (microcontroller-class)', budget: 'under 5ms, under roughly 1MB', pick: 'Width-reduced MobileNetV2 (0.35x) or a custom tiny CNN', color: '#D85A30', exp: 'TFLite Micro, aggressive int8 quantisation and often pruning' },
+            ].map((row) => (
+              <div key={row.target} style={{
+                background: 'var(--surface)', border: `1px solid ${row.color}25`,
+                borderLeft: `4px solid ${row.color}`, borderRadius: 8, padding: '11px 14px',
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: row.color, marginBottom: 5 }}>{row.target}</div>
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4 }}>Budget: {row.budget}</div>
+                <div style={{ fontSize: 11, color: 'var(--text)', marginBottom: 4 }}>Typical pick: {row.pick}</div>
+                <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: row.color }}>{row.exp}</div>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <ConceptBox title="Case study — fitting a shelf-monitoring model onto in-store camera hardware" color="#D85A30">
+          <p style={{ ...S.ps, marginBottom: 10 }}>
+            A retail team built a model to detect out-of-stock shelves from in-store
+            camera frames. The first version, a fine-tuned ResNet50, hit 94 percent
+            accuracy in validation. On the actual in-store hardware — a low-power
+            ARM-based camera unit, not a GPU — it took 340 milliseconds per frame and the
+            98MB checkpoint barely fit in available memory alongside the camera's own
+            firmware. It could not ship as built.
+          </p>
+          <p style={{ ...S.ps, marginBottom: 0, color: '#00e676' }}>
+            The team switched the backbone to MobileNetV3-Small, applied post-training
+            int8 quantisation, and pruned the classification head. The final model was
+            4.2MB and ran in 12 milliseconds per frame on the same hardware. Accuracy
+            dropped from 94 percent to 91 percent — a trade the team accepted without
+            much debate, since the alternative was a model the device could not run at
+            all.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import torch
+import torch.nn as nn
+import torchvision.models as models
+import time, os
+
+# ── The production question: does this model fit the deployment target? ─
+# Accuracy is necessary but not sufficient — an edge camera app needs a
+# model under roughly 5MB and 15ms per frame, not just a high top-1 score.
+
+def model_size_mb(m: nn.Module) -> float:
+    torch.save(m.state_dict(), '/tmp/_tmp_model.pt')
+    size = os.path.getsize('/tmp/_tmp_model.pt') / 1e6
+    os.remove('/tmp/_tmp_model.pt')
+    return size
+
+def benchmark_latency(m: nn.Module, input_size=(1, 3, 224, 224), n=50) -> float:
+    m.eval()
+    dummy = torch.randn(*input_size)
+    with torch.no_grad():
+        for _ in range(5): _ = m(dummy)          # warmup
+        start = time.time()
+        for _ in range(n): _ = m(dummy)
+        return (time.time() - start) / n * 1000  # ms
+
+candidates = {
+    'resnet50':           models.resnet50(weights=None),
+    'mobilenet_v3_small': models.mobilenet_v3_small(weights=None),
+    'mobilenet_v3_large': models.mobilenet_v3_large(weights=None),
+    'efficientnet_b0':    models.efficientnet_b0(weights=None),
+}
+
+print(f"{'Backbone':<20} {'Size (MB)':>10} {'Latency (ms)':>13}")
+print("─" * 46)
+for name, model in candidates.items():
+    size_mb = model_size_mb(model)
+    latency = benchmark_latency(model)
+    fit     = '  fits edge budget' if size_mb < 10 and latency < 20 else ''
+    print(f"  {name:<18} {size_mb:>10.1f} {latency:>13.2f}{fit}")
+
+# ── Quantisation — the standard final step before edge deployment ──────
+# Post-training dynamic quantisation shrinks Linear-layer weights from
+# float32 to int8, roughly a 4x size reduction with minor accuracy loss.
+small_model = models.mobilenet_v3_small(weights=None)
+quantized   = torch.quantization.quantize_dynamic(
+    small_model, {nn.Linear}, dtype=torch.qint8,
+)
+print(f"\nmobilenet_v3_small — float32 classifier head:     "
+      f"{model_size_mb(small_model):.1f} MB")
+print(f"mobilenet_v3_small — int8-quantised (Linear layers): "
+      f"{model_size_mb(quantized):.1f} MB")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about CNNs</h2>
@@ -922,7 +1028,7 @@ for group in optimizer_diff.param_groups:
 
       <Div />
 
-      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>CNNs — 5 questions interviewers actually ask</h2>
@@ -1001,7 +1107,7 @@ for group in optimizer_diff.param_groups:
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

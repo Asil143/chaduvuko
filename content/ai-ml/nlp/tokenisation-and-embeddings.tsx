@@ -884,7 +884,138 @@ for i in range(len(labels)):
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where tokenisation choices show up on the bill and in the bug tracker</h2>
+
+        <p style={S.p}>
+          Tokenisation looks like a preprocessing detail until it starts showing up in three
+          places production teams actually care about: the API bill, the fairness of the
+          product across languages, and mysterious similarity-search regressions that have
+          nothing to do with the model itself.
+        </p>
+
+        <p style={S.p}>
+          Every commercial LLM API bills by token count, not by character or word count — and
+          BPE-style tokenisers are trained on corpora dominated by English text. The direct
+          consequence: the same sentence, carrying the same meaning, costs different numbers of
+          tokens depending on what language it is written in, because the tokeniser's learned
+          merge rules favour subword patterns that are common in the training corpus. A sentence
+          that is 20 tokens in English can easily be 40 to 60 tokens in Hindi, Arabic, or Amharic
+          under a tokeniser trained mostly on English and European-language text — meaning a
+          non-English user pays roughly two to three times more per equivalent request, and
+          burns through a fixed context window two to three times faster for the same amount of
+          actual content.
+        </p>
+
+        <VisualBox label="Token cost is not language-neutral — same meaning, different token count">
+          <div style={{ overflowX: 'auto' as const }}>
+            <table style={{ borderCollapse: 'collapse' as const, width: '100%', fontSize: 12 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['Language', 'Approx. tokens for an equivalent 20-word sentence', 'Relative cost vs English'].map(h => (
+                    <th key={h} style={{
+                      padding: '8px 12px', textAlign: 'left' as const,
+                      fontSize: 10, fontWeight: 700, color: 'var(--muted)',
+                      fontFamily: 'var(--font-mono)',
+                    }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['English', '~26 tokens', '1.0x', '#1D9E75'],
+                  ['Spanish', '~32 tokens', '1.2x', '#378ADD'],
+                  ['Hindi',   '~55 tokens', '2.1x', '#D85A30'],
+                  ['Arabic',  '~60 tokens', '2.3x', '#BA7517'],
+                  ['Amharic', '~78 tokens', '3.0x', '#ff4757'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '7px 12px', fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: row[3] as string }}>{row[0]}</td>
+                    <td style={{ padding: '7px 12px', color: 'var(--muted)' }}>{row[1]}</td>
+                    <td style={{ padding: '7px 12px', color: row[3] as string, fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ ...S.ps, marginBottom: 0, marginTop: 12, fontSize: 11 }}>
+            Illustrative ratios based on widely reported BPE tokenisation-efficiency studies across
+            major LLM tokenisers. Exact ratios vary by tokeniser and script, but the direction is
+            consistent: scripts under-represented in training data cost more tokens per unit of meaning.
+          </p>
+        </VisualBox>
+
+        <p style={S.p}>
+          This is not just a cost problem — it is a product fairness problem. A support chatbot
+          with a fixed per-conversation token budget effectively gives non-English speakers a
+          shorter conversation before hitting the same limit, and a document summarisation tool
+          truncating at a fixed token count silently drops more of the original non-English
+          document than the equivalent English one. Teams building multilingual products
+          increasingly measure and report tokens-per-word by language during evaluation
+          specifically to catch this before it reaches users, not just tokens-per-dollar overall.
+        </p>
+
+        <CodeBlock code={`# pip install tiktoken
+
+import tiktoken
+
+# ── Token-count-based cost estimation before making an API call ───────
+# Billed by token count, not characters — this is the check production
+# systems run before sending a request, to estimate cost and enforce budgets.
+
+encoder = tiktoken.get_encoding('cl100k_base')   # GPT-3.5/4-family tokeniser
+
+PRICE_PER_1K_INPUT_TOKENS = 0.0015   # example rate, varies by model/provider
+
+def estimate_cost(text: str) -> dict:
+    token_count = len(encoder.encode(text))
+    cost_usd    = (token_count / 1000) * PRICE_PER_1K_INPUT_TOKENS
+    return {'tokens': token_count, 'estimated_cost_usd': round(cost_usd, 6)}
+
+samples = {
+    'english': "Your payment could not be processed. Please check your card details and try again.",
+    'hindi':   "आपका भुगतान संसाधित नहीं हो सका। कृपया अपने कार्ड का विवरण जांचें और पुनः प्रयास करें।",
+}
+
+for lang, text in samples.items():
+    result = estimate_cost(text)
+    print(f"{lang:<8}: {result['tokens']:>4} tokens  ->  approx \${result['estimated_cost_usd']:.6f}")
+
+# ── Truncation must be token-aware, not character-aware ────────────────
+def truncate_to_token_budget(text: str, max_tokens: int) -> str:
+    tokens = encoder.encode(text)
+    if len(tokens) <= max_tokens:
+        return text
+    return encoder.decode(tokens[:max_tokens])
+
+# A character-based truncation (text[:500]) can cut a non-English document
+# much earlier in its actual content than the same character limit would
+# for English, because non-English text packs less meaning per token.
+print("\nToken-aware truncation avoids the character-count trap:")
+print("  Budget: 15 tokens")
+print(f"  English truncated: '{truncate_to_token_budget(samples['english'], 15)}'")`} />
+
+        <p style={S.p}>
+          Embedding model version mismatches are the second recurring production failure, and
+          they hit similarity search rather than the LLM itself. A search or recommendation
+          system that swaps its embedding model — upgrading from one sentence-transformer
+          version to a newer one, or switching providers — without re-embedding every existing
+          vector in the index ends up comparing vectors from two different, incompatible
+          coordinate systems. The similarity scores it returns are not meaningfully wrong in an
+          obvious way; they simply degrade quietly, because nothing about a cosine similarity
+          calculation throws an error when the two vectors came from different models. The fix
+          is always the same and always expensive: re-embed the entire corpus with the new model
+          version before letting any query use it, and tag every stored vector with the exact
+          model version that produced it so a future mismatch is caught before it ships rather
+          than discovered from a support ticket.
+        </p>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about tokenisation and embeddings</h2>
@@ -963,7 +1094,7 @@ for i in range(len(labels)):
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Tokenisation and embeddings — 5 questions interviewers actually ask</h2>
@@ -1058,7 +1189,7 @@ for i in range(len(labels)):
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

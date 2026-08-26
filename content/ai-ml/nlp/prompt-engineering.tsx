@@ -895,7 +895,150 @@ print(f"\nGenerated prompt:\n{prompt}")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Prompts as production code — versioning, evaluation gates, and A/B rollout</h2>
+
+        <p style={S.p}>
+          Every prompt in this module was written and tested by hand, in a notebook, against a
+          handful of example inputs. That is how prompt engineering starts on every team — and
+          it is exactly the workflow that breaks once a prompt is serving real traffic. A prompt
+          edited directly in application code, with no version history and no evaluation before
+          shipping, means a one-line wording change can silently regress accuracy on 5% of
+          inputs and nobody notices until a customer complains. Teams running LLMs in production
+          treat prompts the same way they treat any other code that affects behaviour: versioned,
+          evaluated before merge, and rolled out gradually.
+        </p>
+
+        <ConceptBox title="A versioned prompt registry — the pattern that replaces editing strings in code">
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2.0 }}>
+            <div style={{ color: '#888', marginBottom: 4 }}>Prompt template, stored separately from code:</div>
+            <div style={{ color: '#7b61ff', paddingLeft: 12, marginBottom: 8 }}>
+              complaint_classifier / v4 / prod → eval_score: 0.91 → approved 2026-03-11
+            </div>
+            <div style={{ color: '#888', marginBottom: 4 }}>Candidate under review, not yet serving traffic:</div>
+            <div style={{ color: '#D85A30', paddingLeft: 12, marginBottom: 8 }}>
+              complaint_classifier / v5-candidate → eval_score: 0.94 → pending A/B test
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+              The application code references a template name and a channel ("prod"), never a raw
+              string. Swapping which version serves "prod" is a config change, not a code deploy —
+              and it is instantly reversible if the new version underperforms.
+            </div>
+          </div>
+        </ConceptBox>
+
+        <CodeBlock code={`import json, hashlib
+from dataclasses import dataclass, field
+from datetime import datetime
+
+# ── A minimal versioned prompt registry with an eval gate ─────────────
+# In production this is usually backed by a database or a tool like
+# PromptLayer / LangSmith / Humanloop — the mechanics are the same.
+
+@dataclass
+class PromptVersion:
+    name:        str
+    version:     str
+    template:    str
+    eval_score:  float = None
+    approved:    bool = False
+    created_at:  str = field(default_factory=lambda: datetime.utcnow().isoformat())
+
+class PromptRegistry:
+    def __init__(self):
+        self.versions = {}   # dict[str, PromptVersion]
+        self.channels = {}   # e.g. {'complaint_classifier:prod': 'v4'}
+
+    def register(self, name: str, version: str, template: str) -> PromptVersion:
+        key = f"{name}:{version}"
+        pv  = PromptVersion(name=name, version=version, template=template)
+        self.versions[key] = pv
+        return pv
+
+    def run_eval(self, name: str, version: str, eval_set: list, score_fn) -> float:
+        """Run the eval set through the candidate prompt and store the score."""
+        key = f"{name}:{version}"
+        pv  = self.versions[key]
+        scores = [score_fn(pv.template, case) for case in eval_set]
+        pv.eval_score = sum(scores) / len(scores)
+        return pv.eval_score
+
+    def promote(self, name: str, version: str, channel: str, min_score: float = 0.85):
+        """Point a channel (e.g. 'prod') at a version — only if it clears the eval bar."""
+        key = f"{name}:{version}"
+        pv  = self.versions[key]
+        if pv.eval_score is None or pv.eval_score < min_score:
+            raise ValueError(
+                f"Refusing to promote {key}: eval_score={pv.eval_score} below min_score={min_score}"
+            )
+        pv.approved = True
+        self.channels[f"{name}:{channel}"] = version
+        print(f"Promoted {key} -> serving channel '{channel}' (eval_score={pv.eval_score:.3f})")
+
+    def get(self, name: str, channel: str = 'prod') -> str:
+        version = self.channels.get(f"{name}:{channel}")
+        return self.versions[f"{name}:{version}"].template
+
+# ── Example: a candidate prompt must clear the eval bar before it can serve prod ──
+registry = PromptRegistry()
+
+registry.register('complaint_classifier', 'v4', template=(
+    "Classify complaint severity. Use ONLY P1/P2/P3.\n"
+    "P1 = safety risk or complete order failure\nP2 = significant quality/delay issue\nP3 = minor inconvenience\n"
+    "Now classify:\nInput: {complaint}\nOutput:"
+))
+registry.register('complaint_classifier', 'v5-candidate', template=(
+    "Classify complaint severity as P1, P2, or P3.\n"
+    "P1 = safety issue or complete failure. P2 = significant quality/service issue. P3 = minor issue.\n"
+    "Examples:\nFound glass in food -> P1\nArrived 45 min late, lukewarm -> P2\nPackaging slightly damaged -> P3\n"
+    "Now classify:\nInput: {complaint}\nOutput:"
+))
+
+def fake_score_fn(template, case):
+    # Stand-in for: call the LLM with this template, compare output to case['expected']
+    return case['known_accuracy_for_this_template_version']
+
+eval_set = [{'complaint': '...', 'known_accuracy_for_this_template_version': 0.94}] * 20
+
+registry.promote('complaint_classifier', 'v4', channel='prod', min_score=0.85)
+registry.run_eval('complaint_classifier', 'v5-candidate', eval_set, fake_score_fn)
+registry.promote('complaint_classifier', 'v5-candidate', channel='prod', min_score=0.85)
+
+print(f"\nCurrently serving prod: {registry.channels['complaint_classifier:prod']}")`} />
+
+        <p style={S.p}>
+          A/B testing a prompt change works the same way it does for any other product change:
+          split live traffic between the current version and the candidate, hold everything else
+          constant, and compare a real business metric — not just an offline eval score — before
+          fully rolling out. A support-classification prompt might be A/B tested on downstream
+          ticket re-open rate, not just classification accuracy against a static eval set, because
+          the eval set can miss failure modes that only show up against live traffic.
+        </p>
+
+        <ConceptBox title="Prompt injection defence, concretely — not just a warning in the system prompt" color="#D85A30">
+          <p style={{ ...S.ps, marginBottom: 10 }}>
+            The misconceptions section of this module explains why prompt injection is a real
+            production risk, not a theoretical jailbreak demo. In practice, teams defend against
+            it in layers, applied together rather than any single one alone:
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {[
+              'Wrap untrusted content (retrieved documents, tool output, user uploads) in explicit delimiters, and tell the model everything between those delimiters is data to process, never instructions to follow.',
+              'Restate the critical constraint near the untrusted content itself, not only once at the top of the system prompt — models weight nearby instructions more heavily than ones many tokens away.',
+              'Give any agent that acts on untrusted content the minimum tool scope possible — a summarisation agent reading support tickets should not also hold a send_email tool.',
+              'Scan model output for signals that an injection succeeded (the model quoting its own system prompt, or an unexpected tool call following untrusted input) and log those cases for review rather than assuming the defence held.',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>• {item}</div>
+            ))}
+          </div>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about prompt engineering</h2>
@@ -972,7 +1115,7 @@ print(f"\nGenerated prompt:\n{prompt}")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Prompt engineering — 5 questions interviewers actually ask</h2>
@@ -1058,7 +1201,7 @@ print(f"\nGenerated prompt:\n{prompt}")`} />
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

@@ -911,7 +911,120 @@ print("  Nested CV is slower (k_outer × k_inner × n_param_combos) but honest."
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>How much cross-validation a real team runs depends entirely on data scale</h2>
+
+        <p style={S.p}>
+          The textbook default — five or ten folds, sometimes repeated, sometimes
+          nested — is mostly a small-to-medium-data practice. As the dataset gets
+          larger, the reasoning behind heavy cross-validation weakens on its own: a
+          single holdout split's variance shrinks as the sample size grows, so a huge
+          dataset needs less repeated splitting to get a trustworthy estimate, while the
+          cost of repeating an expensive training run k times stays exactly as large as
+          it was before. At some point those two curves cross, and the standard
+          practice flips from "always cross-validate" to "a single well-chosen holdout
+          is enough."
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+          {[
+            {
+              scale: 'Small — hundreds to low thousands of rows',
+              color: '#D85A30',
+              practice: 'Heavy CV: RepeatedStratifiedKFold or nested CV. A single split’s variance is large relative to the signal, so the extra compute is worth paying.',
+            },
+            {
+              scale: 'Medium — tens of thousands to a few million rows',
+              color: '#378ADD',
+              practice: 'Standard 5- or 10-fold CV — the textbook default this module teaches, and the right trade-off for most applied ML work.',
+            },
+            {
+              scale: 'Huge — tens of millions of rows and up',
+              color: '#1D9E75',
+              practice: 'A single holdout split, often time-based, is common. Refitting a large model k times for a marginal reduction in an already-tiny standard error is rarely worth it; teams lean on live shadow traffic and canary rollouts as the real validation instead.',
+            },
+          ].map((item) => (
+            <div key={item.scale} style={{
+              background: 'var(--surface)', border: `1px solid ${item.color}25`,
+              borderRadius: 8, padding: '11px 14px',
+              borderLeft: `3px solid ${item.color}`,
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: item.color, marginBottom: 4 }}>
+                {item.scale}
+              </div>
+              <p style={{ ...S.ps, marginBottom: 0 }}>{item.practice}</p>
+            </div>
+          ))}
+        </div>
+
+        <p style={S.p}>
+          Careful CV setup also catches leakage that would otherwise ship straight to
+          production. At a subscription company, a churn model's cross-validation AUC
+          came back at 0.97 — implausibly high for a churn problem, where anything
+          above the low 0.90s is already excellent. A suspiciously perfect score turned
+          out to be the useful signal, not the training win it first looked like.
+        </p>
+
+        <ConceptBox title="The leak a too-good CV score exposed" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 10 }}>
+            The feature days_since_last_support_ticket was computed as today's date
+            minus the date of the customer's last ticket — where "today" meant the date
+            the feature pipeline happened to run, not the historical labelling date each
+            training row actually belonged to. For a row labelled six months ago, the
+            feature was silently computed using six months of hindsight the model would
+            never have at real prediction time.
+          </p>
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The fix was to compute every time-based feature relative to a stored
+            snapshot_date column carried alongside each row, matching the moment that
+            row's label was actually decided, and to assert in the pipeline that no
+            feature ever references a date later than its own row's snapshot. Once
+            fixed, CV AUC dropped to a far more believable 0.81 — a worse-looking number
+            that was, for the first time, an honest one.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import pandas as pd
+
+# ── The leakage assertion — catch this class of bug before CV ever runs ──
+def build_time_feature(df, ticket_date_col, snapshot_date_col):
+    """
+    Compute days-since-last-ticket relative to each row's OWN snapshot
+    date, never relative to "today". This is what makes the feature
+    valid to compute identically in training and in production.
+    """
+    days_since = (df[snapshot_date_col] - df[ticket_date_col]).dt.days
+
+    # The assertion that would have caught the original bug immediately:
+    # a time-based feature must never look past its own row's snapshot.
+    assert (df[ticket_date_col] <= df[snapshot_date_col]).all(), (
+        "Leakage: a support ticket date falls after its row's snapshot date"
+    )
+    return days_since
+
+data = pd.DataFrame({
+    'ticket_date':   pd.to_datetime(['2025-01-10', '2025-06-01']),
+    'snapshot_date': pd.to_datetime(['2025-01-15', '2025-05-20']),
+})
+
+try:
+    data['days_since_last_ticket'] = build_time_feature(
+        data, 'ticket_date', 'snapshot_date'
+    )
+except AssertionError as e:
+    print(f"Caught before CV even ran: {e}")
+
+print("\nRule of thumb: a cross-validation score that looks too good for")
+print("the problem is a reason to audit the feature pipeline, not a")
+print("reason to celebrate -- CV can only be honest about data that was")
+print("already honest before it got there.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about cross-validation</h2>
@@ -987,7 +1100,7 @@ print("  Nested CV is slower (k_outer × k_inner × n_param_combos) but honest."
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Cross-validation — 5 questions interviewers actually ask</h2>
@@ -1068,7 +1181,7 @@ print("  Nested CV is slower (k_outer × k_inner × n_param_combos) but honest."
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

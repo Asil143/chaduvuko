@@ -1023,7 +1023,78 @@ for epoch in range(1, 21):
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>How attention's cost curve turns into an actual infrastructure decision</h2>
+
+        <p style={S.p}>
+          Everything this module derives mathematically — attention's quadratic cost in
+          sequence length, the memory that a full attention matrix consumes — shows up
+          in production not as theory but as a line item in a capacity-planning
+          spreadsheet. When a team building a support-ticket classifier or a chat
+          product picks a maximum context length, they are not setting an abstract
+          hyperparameter. They are choosing a GPU memory budget, a cost-per-request, and
+          a latency target, all at once, because doubling the context length roughly
+          quadruples the attention compute and memory for every layer that processes it.
+        </p>
+
+        <CodeBlock code={`# ── A capacity-planning calculator, not a bug report ───────────────────
+# For a batch of requests at a given context length, roughly how much
+# memory does the attention matrix alone require? This is the kind of
+# back-of-envelope math an infra team runs before committing to a
+# maximum context length in a product spec.
+
+def attention_matrix_gb(batch_size, n_heads, seq_len, bytes_per_val=4):
+    # One (seq_len x seq_len) score matrix per head, per batch item
+    cells = batch_size * n_heads * seq_len * seq_len
+    return cells * bytes_per_val / (1024 ** 3)
+
+print(f"{'Context length':>15} {'Attention memory (batch=8, 8 heads)':>38}")
+print("-" * 56)
+for seq_len in [512, 2_048, 8_192, 32_768, 131_072]:
+    mem_gb = attention_matrix_gb(batch_size=8, n_heads=8, seq_len=seq_len)
+    print(f"  {seq_len:>13,}  {mem_gb:>36.2f} GB")
+
+print()
+print("Going from 2,048 to 8,192 tokens is a 4x jump in sequence length")
+print("and a 16x jump in attention memory alone -- before weights,")
+print("activations, or gradients. This is exactly why 'just raise the")
+print("context window' is a GPU-tier and cost decision for an infra")
+print("team, not a one-line config change.")`} />
+
+        <p style={S.p}>
+          This is also why almost no production team trains a Transformer from scratch.
+          Public estimates put the compute cost of pretraining a GPT-3-scale model in
+          the range of several million dollars, before counting the curated training
+          corpus and the distributed training infrastructure required to run it at all.
+          Almost no company needs to make that investment: the standard production
+          pattern is to start from an open pretrained model — Llama, Mistral, or a
+          hosted model behind an API — and adapt it with prompting, parameter-efficient
+          fine-tuning such as LoRA, or full fine-tuning on a much smaller labelled
+          dataset, for a tiny fraction of the cost and in days rather than months.
+          Full pretraining from scratch is realistically reserved for the handful of
+          labs whose entire business is building foundation models.
+        </p>
+
+        <ConceptBox title="A realistic decision order for a new NLP product" color="#1D9E75">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            Try prompting a hosted pretrained model first — no training at all. If
+            accuracy or format control is not good enough, fine-tune a small open
+            pretrained model on task-specific labelled data, often with LoRA to keep the
+            cost and turnaround low. If long documents need to be handled, evaluate
+            retrieval-augmented generation against simply widening the context window
+            before assuming more context is the answer — retrieval is frequently both
+            cheaper and more accurate, since it avoids paying attention's quadratic cost
+            for context the model will not actually need on most requests. Training a
+            Transformer from scratch is essentially never the first option evaluated.
+          </p>
+        </ConceptBox>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about attention and Transformers</h2>
@@ -1101,7 +1172,7 @@ for epoch in range(1, 21):
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Transformers and attention — 5 questions interviewers actually ask</h2>
@@ -1186,7 +1257,7 @@ for epoch in range(1, 21):
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

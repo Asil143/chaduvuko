@@ -780,7 +780,114 @@ print(f"\nDenormalised for display: {sample_display.shape}  dtype={sample_displa
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>The bug report you actually get: training and serving disagree on what a pixel means</h2>
+
+        <p style={S.p}>
+          Every concept in this module — channel order, colour space,
+          normalisation statistics — sounds like a one-time setup detail
+          you get right in a Jupyter notebook and never think about again.
+          In production it is not one pipeline, it is two: the training
+          pipeline, written in Python and owned by the ML team, and the
+          serving pipeline, which frequently gets re-implemented in a
+          different language by a different team — a mobile app decoding
+          a photo on-device, or a backend service written in Go or Java
+          handling uploads. Those two pipelines drift apart silently,
+          and the model has no way to tell you when they have.
+        </p>
+
+        <p style={S.p}>
+          A realistic version of this: the training pipeline loads images
+          with PIL, which decodes to RGB and quietly respects the EXIF
+          orientation tag most phone cameras write into the file. The
+          serving path was built later by a mobile team using a native
+          image decoder that does not apply that same EXIF rotation.
+          Every photo taken with the phone held sideways now arrives at
+          the model rotated ninety degrees relative to how equivalent
+          training images looked. Nothing crashes. The tensor shape is
+          correct, the dtype is correct, the value range is correct —
+          accuracy just quietly drops for a slice of real-world traffic,
+          and it can take weeks to trace the drop back to a decoder
+          library nobody on the ML team ever looked at.
+        </p>
+
+        <ConceptBox title="Preprocessing parity — the check that actually catches this">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The fix is not "be more careful" — it is a concrete, automatable
+            test: run the exact same input image through the training-side
+            preprocessing function and the serving-side preprocessing
+            function, and assert the resulting tensors match within a
+            tight numerical tolerance. This is normally added as a check
+            in CI for the serving code, run against a small fixed set of
+            real sample images every time either pipeline changes,
+            precisely because a rotation, a channel swap, or a wrong
+            normalisation constant all pass every existing test that only
+            checks tensor shape and dtype.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import numpy as np
+from PIL import Image, ImageOps
+import torchvision.transforms as T
+
+IMAGENET_MEAN = [0.485, 0.456, 0.406]
+IMAGENET_STD  = [0.229, 0.224, 0.225]
+
+def training_preprocess(path: str):
+    """
+    The pipeline the ML team actually trains with.
+    PIL respects EXIF orientation automatically via exif_transpose.
+    """
+    img = Image.open(path)
+    img = ImageOps.exif_transpose(img)     # apply the camera's rotation tag
+    img = img.convert('RGB')
+    transform = T.Compose([
+        T.Resize(256), T.CenterCrop(224), T.ToTensor(),
+        T.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
+    ])
+    return transform(img)
+
+def serving_preprocess_buggy(path: str):
+    """
+    A simplified stand-in for a re-implemented serving-side decoder that
+    forgets the EXIF step — this is the realistic failure mode, not a
+    contrived one. Everything else about it looks correct.
+    """
+    img = Image.open(path)               # no exif_transpose call
+    img = img.convert('RGB')
+    transform = T.Compose([
+        T.Resize(256), T.CenterCrop(224), T.ToTensor(),
+        T.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
+    ])
+    return transform(img)
+
+def preprocessing_parity_check(path: str, tolerance: float = 1e-3) -> bool:
+    """
+    Run both pipelines on the same real image, compare the output tensors.
+    This is the test that belongs in CI — not a visual inspection, an
+    automated numerical assertion that runs on every deploy.
+    """
+    train_tensor  = training_preprocess(path)
+    serve_tensor  = serving_preprocess_buggy(path)
+
+    max_diff = (train_tensor - serve_tensor).abs().max().item()
+    matches  = max_diff < tolerance
+
+    print(f"Max pixel-value difference: {max_diff:.4f}")
+    print(f"Parity check: {'PASS' if matches else 'FAIL — pipelines disagree'}")
+    return matches
+
+# In CI: run this against a small fixed set of real photos, including at
+# least one taken with the phone held sideways or upside down — the exact
+# case that a shape-and-dtype-only test will never catch.
+# preprocessing_parity_check('sample_images/sideways_phone_photo.jpg')`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about image representation and preprocessing</h2>
@@ -858,7 +965,7 @@ print(f"\nDenormalised for display: {sample_display.shape}  dtype={sample_displa
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Image fundamentals — 5 questions interviewers actually ask</h2>
@@ -942,7 +1049,7 @@ print(f"\nDenormalised for display: {sample_display.shape}  dtype={sample_displa
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

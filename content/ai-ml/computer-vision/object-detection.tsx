@@ -869,7 +869,103 @@ print(f"mAP@0.5:0.95: {map_coco:.4f}  ← COCO standard (harder)")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Real detection deployments — and the tradeoff every one of them makes</h2>
+
+        <p style={S.p}>
+          Every production object detection system is solving the same
+          underlying tradeoff: bigger models detect more accurately but
+          run slower and cost more to deploy, and where the system runs
+          decides how much of that cost you can actually afford to pay.
+          A cloud GPU serving batch requests can absorb a slower, larger
+          model. A camera bolted to a warehouse ceiling running on
+          embedded hardware cannot.
+        </p>
+
+        <VisualBox label="Three real deployments, three different points on the same tradeoff">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              {
+                name: 'Retail shelf monitoring',
+                color: '#1D9E75',
+                detail: 'Cameras mounted above store aisles detect out-of-stock gaps and planogram compliance. Hundreds of cameras per store chain, running continuously, on inexpensive edge hardware per camera — cost per unit dominates the decision. A nano or small YOLO variant running on-device at a few frames per second is standard; nobody needs 60fps for a shelf that changes over minutes, not milliseconds.',
+              },
+              {
+                name: 'Autonomous driving perception',
+                color: '#378ADD',
+                detail: 'Pedestrian, vehicle, and cyclist detection from an onboard camera feed, running at 30 or more frames per second with a latency budget measured in tens of milliseconds end to end. A missed detection is a safety incident, not a metrics dip, so these systems typically run multiple model scales together and validate extensively on rare, safety-critical classes rather than optimising average mAP alone.',
+              },
+              {
+                name: 'Manufacturing quality inspection',
+                color: '#D85A30',
+                detail: 'A camera above a conveyor belt detects scratches, dents, or missing components before a product ships. The latency budget is set by the belt speed, not by human perception — often hundreds of milliseconds to a few seconds per item — which is comfortable enough to run a larger, more accurate model and even test-time augmentation, since a false pass here means a defective unit reaches a customer.',
+              },
+            ].map((item) => (
+              <div key={item.name} style={{
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 8, padding: '12px 14px',
+                borderLeft: `3px solid ${item.color}`,
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-display)', marginBottom: 5 }}>
+                  {item.name}
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <CodeBlock code={`# A simplified version of the decision most detection teams actually make:
+# given a latency budget and an accuracy floor, which model size fits?
+
+model_options = [
+    # name,         params_M, latency_ms_edge, mAP50_95, deploy_target
+    ('yolov8n', 3.2,   8,  37.3, 'edge / embedded'),
+    ('yolov8s', 11.2, 15,  44.9, 'edge GPU / Jetson'),
+    ('yolov8m', 25.9, 30,  50.2, 'cloud GPU, moderate latency'),
+    ('yolov8l', 43.7, 48,  52.9, 'cloud GPU, batch or offline'),
+    ('yolov8x', 68.2, 70,  53.9, 'offline / max accuracy'),
+]
+
+def pick_model(latency_budget_ms: float, min_map: float):
+    """
+    Return every model that fits within both constraints, cheapest first.
+    This is the actual shape of the decision — not "which model is best"
+    but "which is the cheapest model that clears the bar we need."
+    """
+    candidates = [
+        m for m in model_options
+        if m[2] <= latency_budget_ms and m[3] >= min_map
+    ]
+    return sorted(candidates, key=lambda m: m[1])   # cheapest (fewest params) first
+
+print("Retail shelf monitor — edge hardware, latency budget 20ms, mAP floor 35:")
+for m in pick_model(latency_budget_ms=20, min_map=35.0):
+    print(f"  {m[0]:<10} {m[1]:>6.1f}M params  {m[2]:>4}ms  mAP50-95={m[3]}  ({m[4]})")
+
+print("\nQuality inspection — belt speed allows 100ms, mAP floor 50:")
+for m in pick_model(latency_budget_ms=100, min_map=50.0):
+    print(f"  {m[0]:<10} {m[1]:>6.1f}M params  {m[2]:>4}ms  mAP50-95={m[3]}  ({m[4]})")
+
+# Note: the "right" model is rarely the most accurate one available —
+# it is the cheapest model that still clears the accuracy and latency
+# bar the actual use case sets.`} />
+
+        <Callout type="tip">
+          Model size versus accuracy is the tradeoff every tutorial covers.
+          The tradeoff production teams spend more time on is model size
+          versus deployment cost at scale — a 2% mAP improvement rarely
+          justifies doubling the GPU fleet needed to serve millions of
+          camera frames a day, even though it looks like an easy win on
+          a benchmark table.
+        </Callout>
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about object detection</h2>
@@ -941,7 +1037,7 @@ print(f"mAP@0.5:0.95: {map_coco:.4f}  ← COCO standard (harder)")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Object detection — 5 questions interviewers actually ask</h2>
@@ -1017,7 +1113,7 @@ print(f"mAP@0.5:0.95: {map_coco:.4f}  ← COCO standard (harder)")`} />
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

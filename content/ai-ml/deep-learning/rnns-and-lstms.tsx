@@ -900,7 +900,122 @@ print(f"\nNaive baseline MAE: {naive_mae:.2f} units/hour")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where LSTMs still run in production despite Transformers winning almost everywhere else</h2>
+
+        <p style={S.p}>
+          For new NLP work — chat, document understanding, code generation, translation
+          — nobody starts a 2026 project with an LSTM. Transformers won that category
+          completely, and reaching for a recurrent architecture there would need a
+          specific justification. But "Transformers won for language" is not the same
+          claim as "LSTMs are obsolete," and a handful of production domains still
+          reach for a recurrent architecture on purpose, for reasons that have nothing
+          to do with which model scores higher on a language benchmark.
+        </p>
+
+        <p style={S.p}>
+          The common thread across the domains where LSTMs persist is that they trade
+          raw modelling power for a property Transformers do not have by default:
+          constant memory and compute per new input, regardless of how long the stream
+          has already run. A Transformer's attention has to look back across its full
+          context window for every new token, so serving it for a long-running stream
+          means managing a growing key-value cache. An LSTM just carries forward a
+          fixed-size hidden state and cell state — the thousandth step costs exactly
+          what the first step cost.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(29,158,117,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#1D9E75', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Still LSTM/GRU by choice
+            </div>
+            {[
+              'On-device wake-word and keyword spotting — constant, tiny memory footprint on hardware with no GPU',
+              'Real-time sensor anomaly detection — the model runs forever on a live stream, never reprocessing history',
+              'Time-series demand and financial forecasting with limited history — small parameter count avoids overfitting a few thousand points',
+              'Live user-session scoring where a request must be answered in milliseconds without managing a growing context',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(123,97,255,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#7b61ff', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Fully replaced by Transformers
+            </div>
+            {[
+              'Machine translation and text generation — every serious system is Transformer-based now',
+              'Document classification and information extraction with the full document available upfront',
+              'Chat and instruction-following — every major assistant is a decoder-only Transformer',
+              'Any task with abundant compute and the full sequence available at inference time',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <CodeBlock code={`import numpy as np
+
+# ── Why a live anomaly detector reaches for an LSTM, not a Transformer ──
+# A sensor feed emits a reading every second and never stops. The model
+# must score each new reading using history, forever, without unbounded
+# memory growth. An LSTM's hidden and cell state do exactly this.
+
+class StreamingLSTMScorer:
+    def __init__(self, input_size, hidden_size):
+        scale = np.sqrt(1.0 / hidden_size)
+        concat = hidden_size + input_size
+        self.Wf = np.random.randn(hidden_size, concat) * scale
+        self.Wi = np.random.randn(hidden_size, concat) * scale
+        self.Wg = np.random.randn(hidden_size, concat) * scale
+        self.Wo = np.random.randn(hidden_size, concat) * scale
+        self.h  = np.zeros(hidden_size)
+        self.C  = np.zeros(hidden_size)     # fixed size — never grows
+
+    def sigmoid(self, z): return 1 / (1 + np.exp(-np.clip(z, -500, 500)))
+
+    def step(self, x_reading):
+        combined = np.concatenate([self.h, x_reading])
+        f = self.sigmoid(self.Wf @ combined)
+        i = self.sigmoid(self.Wi @ combined)
+        g = np.tanh(self.Wg @ combined)
+        o = self.sigmoid(self.Wo @ combined)
+        self.C = f * self.C + i * g
+        self.h = o * np.tanh(self.C)
+        return np.linalg.norm(self.h)        # anomaly score for this reading
+
+np.random.seed(42)
+scorer = StreamingLSTMScorer(input_size=4, hidden_size=16)
+
+# Simulate a sensor stream running for a very long time — memory used
+# to hold state (self.h, self.C) never grows, no matter how many
+# readings have already been processed.
+for reading_number in [1, 100, 10_000, 1_000_000]:
+    reading = np.random.randn(4)
+    score = scorer.step(reading)
+    state_size = scorer.h.nbytes + scorer.C.nbytes
+    print(f"  reading #{reading_number:>9,}: score={score:.4f}  "
+          f"state size held in memory = {state_size} bytes (constant)")
+
+print("\nA Transformer scoring the same stream would need to grow its")
+print("attended context (or manage a KV cache) as the stream gets")
+print("longer — an LSTM's state size here never changes.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about RNNs and LSTMs</h2>
@@ -976,7 +1091,7 @@ print(f"\nNaive baseline MAE: {naive_mae:.2f} units/hour")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>RNNs and LSTMs — 5 questions interviewers actually ask</h2>
@@ -1059,7 +1174,7 @@ print(f"\nNaive baseline MAE: {naive_mae:.2f} units/hour")`} />
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

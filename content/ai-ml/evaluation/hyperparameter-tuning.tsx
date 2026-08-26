@@ -966,7 +966,144 @@ for k, v in s3.best_params.items():
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>How tuning actually happens on a real ML team — not 200 trials on a laptop</h2>
+
+        <p style={S.p}>
+          Every code example in this module so far runs in a notebook and finishes in a few minutes.
+          On a real team, tuning is a scheduled job, not something an engineer babysits interactively
+          until they get bored of watching numbers scroll by. It runs inside the training pipeline,
+          triggered nightly or weekly, against a fixed compute budget approved in advance — usually
+          expressed as "n_trials, or six hours of GPU time, whichever comes first" rather than
+          "however many the engineer is willing to wait for."
+        </p>
+
+        <p style={S.p}>
+          For anything larger than a single-GPU sklearn or LightGBM model — fine-tuning a
+          transformer, tuning a two-tower recommendation model — Optuna alone is not enough,
+          because a single study running on one machine cannot use twenty GPUs at once.
+          Teams reach for <strong style={{ color: '#1D9E75' }}>Ray Tune</strong>, which distributes
+          trials across a cluster and adds early-stopping schedulers like ASHA that kill the
+          worst-performing half of trials at each checkpoint instead of letting every trial run
+          to completion. Every trial — whichever tool ran it — gets logged automatically to an
+          experiment tracker (MLflow or Weights and Biases), because "best_params printed to
+          stdout" does not survive a container restart.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginBottom: 24 }}>
+          {[
+            {
+              label: 'Where it runs',
+              tutorial: 'A notebook cell, run interactively, restarted whenever the kernel dies.',
+              production: 'A scheduled CI job on a shared cluster, triggered nightly or on a retraining cadence.',
+            },
+            {
+              label: 'Search tool',
+              tutorial: 'GridSearchCV or a single Optuna study, in-memory, no persistence.',
+              production: 'Optuna with a Postgres-backed study, or Ray Tune with ASHA across many GPUs at once.',
+            },
+            {
+              label: 'Budget',
+              tutorial: '"However many trials I feel like waiting for."',
+              production: 'A fixed, approved budget — n_trials or wall-clock time, because GPU-hours cost real money.',
+            },
+            {
+              label: 'Resilience',
+              tutorial: 'If the process dies, the study is gone. Start over.',
+              production: 'Persistent storage means a preempted spot-instance job resumes the same study the next night.',
+            },
+            {
+              label: 'Result handling',
+              tutorial: 'best_params printed to the console, copy-pasted into the next cell.',
+              production: 'Logged to an experiment tracker, versioned, and promoted to a model registry if it beats the incumbent.',
+            },
+          ].map((row) => (
+            <div key={row.label} style={{
+              display: 'grid', gridTemplateColumns: '110px 1fr 1fr', gap: 14,
+              padding: '10px 0', borderBottom: '1px solid var(--border)',
+              alignItems: 'start',
+            }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>
+                {row.label}
+              </div>
+              <p style={{ ...S.ps, marginBottom: 0, fontSize: 12 }}>{row.tutorial}</p>
+              <p style={{ ...S.ps, marginBottom: 0, fontSize: 12, color: '#1D9E75' }}>{row.production}</p>
+            </div>
+          ))}
+          <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', gap: 14, paddingTop: 10 }}>
+            <div />
+            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' as const }}>
+              Tutorial approach
+            </div>
+            <div style={{ fontSize: 10, fontWeight: 700, color: '#1D9E75', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' as const }}>
+              Production approach
+            </div>
+          </div>
+        </div>
+
+        <ConceptBox title="The compute budget shapes the search space before Optuna ever runs">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            In practice, search ranges are rarely as wide as a tutorial's first attempt. A team that
+            has run a hundred studies on similar gradient boosting models already knows learning_rate
+            below 0.005 never wins and max_depth above seven consistently overfits on their data — so
+            the next study's search space starts narrower, warm-started from what past studies already
+            learned. Pruning stops being optional once a single trial costs real money: fine-tuning a
+            transformer for one trial can take hours, not seconds, so a scheduler like ASHA or
+            Optuna's MedianPruner that kills a clearly-losing trial after the first checkpoint is the
+            difference between a nightly job finishing on time and one that blows through its budget
+            without ever reaching its planned number of trials.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import optuna
+
+# ── A nightly CI job — budgeted by time, not by a fixed trial count ────
+# If the cluster preempts this job halfway through, tomorrow night's
+# run resumes the same study instead of starting from zero.
+
+study = optuna.create_study(
+    study_name="ranking_model_v14",
+    storage="postgresql://tuning-db.internal/optuna",
+    direction="maximize",
+    load_if_exists=True,
+)
+
+study.optimize(objective, timeout=6 * 60 * 60, n_trials=200)
+# whichever limit is hit first — six hours of shared GPU time, or 200 trials
+
+print(f"Trials completed this run: {len(study.trials)}")
+print(f"Best value so far across all runs: {study.best_value:.4f}")`} />
+
+        <CodeBlock code={`from ray import tune
+from ray.tune.schedulers import ASHAScheduler
+
+# A recommendation team distributing 200 trials across 20 GPUs at once.
+# ASHA kills the worst-performing half of trials at each checkpoint
+# instead of waiting for every trial to finish training end to end.
+scheduler = ASHAScheduler(
+    metric="val_auc", mode="max",
+    max_t=30,          # max epochs any single trial is allowed
+    grace_period=5,    # every trial gets at least 5 epochs before it can be pruned
+    reduction_factor=2,
+)
+
+analysis = tune.run(
+    train_two_tower_model,
+    config=search_space,
+    scheduler=scheduler,
+    num_samples=200,
+    resources_per_trial={"gpu": 1},
+)
+
+best_config = analysis.get_best_config(metric="val_auc", mode="max")
+print("Best config across the distributed sweep:", best_config)`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about hyperparameter tuning</h2>
@@ -1039,7 +1176,7 @@ for k, v in s3.best_params.items():
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Hyperparameter tuning — 5 questions interviewers actually ask</h2>
@@ -1117,7 +1254,7 @@ for k, v in s3.best_params.items():
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

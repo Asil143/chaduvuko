@@ -989,7 +989,148 @@ print("Layers: tool-level validation + confirmation + output validation")`} />
 
       <Div />
 
-      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ════════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Production agent deployments — what actually ships, and what stops it from breaking things</h2>
+
+        <p style={S.p}>
+          Teams that ship agents to production rarely start with full autonomy. A support
+          triage agent typically launches read-only — it can look up orders, transactions,
+          and account history, draft a response, and hand it to a human to send. Write access
+          (sending the email, issuing the refund) is added weeks later, after the read-only
+          version has run long enough to build confidence in its judgment. Coding agents follow
+          the same arc: propose a diff and a pull request first, merge-on-approval only, direct
+          commit access last and often never. The common pattern across every real deployment
+          is that autonomy is earned incrementally, gated by evidence, not granted on day one
+          because the demo looked impressive.
+        </p>
+
+        <p style={S.p}>
+          The engineering effort in a production agent is disproportionately spent on the parts
+          that are not the LLM call. A team that spends a week wiring up function calling
+          typically spends a month building the guardrail, monitoring, and cost-control layer
+          around it — the part that decides an agent is stuck, spending too much, or about to
+          do something it should not do alone.
+        </p>
+
+        <VisualBox label="The production controls stacked around every shipped agent">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              {
+                control: 'Per-session rate limiting',
+                color: '#7b61ff',
+                detail: 'Cap tool calls and LLM turns per user session (not just per API key) — a single confused conversation should not be able to burn an unbounded number of turns even if the account-level quota has room left.',
+              },
+              {
+                control: 'Spend budget per run',
+                color: '#378ADD',
+                detail: "A dollar ceiling per agent invocation, tracked from the first token. Once a run crosses it, the agent is forced to conclude with whatever it has rather than keep calling tools — this is the guardrail that actually caps a runaway loop's cost, independent of turn count.",
+              },
+              {
+                control: 'Human-in-the-loop approval queue',
+                color: '#D85A30',
+                detail: 'Irreversible actions (send email, issue refund, delete record, push to production) are written to a queue instead of executed. A human approves or rejects asynchronously. This is the single most common gate separating a demo agent from a production one.',
+              },
+              {
+                control: 'Loop and stall detection',
+                color: '#1D9E75',
+                detail: "A monitor watching for the same tool called with the same arguments repeatedly, or a run sitting at the same step for too long, kills the run and alerts on-call — separate from the agent's own max_turns cap, because a bug can bypass the agent's internal counter.",
+              },
+              {
+                control: 'Full audit log per run',
+                color: '#BA7517',
+                detail: 'Every tool call, argument, and result is logged with the run ID it belongs to, kept independent of the conversation transcript. When something goes wrong in production, this is what gets replayed to understand exactly what the agent saw and decided at each step.',
+              },
+            ].map((item) => (
+              <div key={item.control} style={{
+                background: 'var(--surface)', border: `1px solid ${item.color}25`,
+                borderRadius: 8, padding: '11px 14px',
+                borderLeft: `3px solid ${item.color}`,
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)', marginBottom: 4 }}>
+                  {item.control}
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <p style={S.p}>
+          None of these controls are visible in the ReAct-style demo code earlier in this
+          module — they live in a separate layer that wraps the agent loop, usually built once
+          per company and reused across every agent the company ships, rather than
+          reimplemented per project. A cost-tracking and circuit-breaker layer like the one
+          below is typical of what that shared layer looks like in practice.
+        </p>
+
+        <CodeBlock code={`import time
+import logging
+from dataclasses import dataclass, field
+
+logger = logging.getLogger(__name__)
+
+# ── Per-run cost and loop monitor — the layer that sits around the agent ──
+# In production this wraps every agent run, regardless of which agent or task.
+# Groq/OpenAI-compatible pricing example: $0.15 per 1M input tokens, $0.75 per 1M output tokens
+INPUT_COST_PER_TOKEN  = 0.15 / 1_000_000
+OUTPUT_COST_PER_TOKEN = 0.75 / 1_000_000
+
+@dataclass
+class RunMonitor:
+    run_id:          str
+    max_usd:         float = 0.50        # hard spend ceiling per run
+    max_seconds:     float = 45.0        # wall-clock ceiling per run
+    started_at:      float = field(default_factory=time.time)
+    spent_usd:       float = 0.0
+    tool_call_log:   list  = field(default_factory=list)   # (tool_name, args_hash) pairs
+
+    def record_llm_call(self, input_tokens: int, output_tokens: int):
+        cost = input_tokens * INPUT_COST_PER_TOKEN + output_tokens * OUTPUT_COST_PER_TOKEN
+        self.spent_usd += cost
+        if self.spent_usd > self.max_usd:
+            raise RuntimeError(
+                f"Run {self.run_id}: spend budget exceeded "
+                f"(\${self.spent_usd:.4f} > \${self.max_usd:.2f}) — forcing early stop"
+            )
+        if time.time() - self.started_at > self.max_seconds:
+            raise RuntimeError(f"Run {self.run_id}: wall-clock budget exceeded — forcing early stop")
+
+    def record_tool_call(self, tool_name: str, args: dict):
+        signature = (tool_name, tuple(sorted(args.items())))
+        repeat_count = self.tool_call_log.count(signature)
+        self.tool_call_log.append(signature)
+        if repeat_count >= 2:
+            # Same tool, same arguments, three times in one run — almost always a stuck loop
+            raise RuntimeError(
+                f"Run {self.run_id}: {tool_name}({args}) repeated {repeat_count + 1} times — "
+                f"likely stuck, killing run and alerting on-call"
+            )
+        logger.info(f"Run {self.run_id}: tool call #{len(self.tool_call_log)} — {tool_name}({args})  "
+                    f"spend so far: \${self.spent_usd:.4f}")
+
+# ── Usage inside the agent loop ────────────────────────────────────────
+monitor = RunMonitor(run_id='run_8f21ac', max_usd=0.50, max_seconds=45.0)
+
+def guarded_tool_call(monitor, tool_name, args, tool_fn):
+    monitor.record_tool_call(tool_name, args)   # raises if this looks like a stuck loop
+    return tool_fn(**args)
+
+def guarded_llm_call(monitor, response):
+    usage = response.usage   # Groq/OpenAI-compatible responses include token usage
+    monitor.record_llm_call(usage.prompt_tokens, usage.completion_tokens)
+    return response
+
+print("RunMonitor: wraps every LLM call and tool call in an agent run")
+print(f"  Hard spend ceiling: \${monitor.max_usd} per run")
+print(f"  Wall-clock ceiling: {monitor.max_seconds}s per run")
+print("  Repeated identical tool call (3x) → run killed, on-call alerted")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about LLM agents</h2>
@@ -1066,7 +1207,7 @@ print("Layers: tool-level validation + confirmation + output validation")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>LLM agents — 5 questions interviewers actually ask</h2>
@@ -1147,7 +1288,7 @@ print("Layers: tool-level validation + confirmation + output validation")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

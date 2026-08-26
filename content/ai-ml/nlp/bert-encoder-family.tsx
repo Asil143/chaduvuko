@@ -941,7 +941,115 @@ def tokenise_and_align(examples, tokenizer, label2id):
 
       <Div />
 
-      {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      {/* ══ SECTION 8 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Where encoder-only models still win in production — and where generative LLMs took over</h2>
+
+        <p style={S.p}>
+          Since large generative models became commodity, many teams reach for a prompt instead of
+          a fine-tuned classifier for the first version of almost anything. But encoder-only models
+          — BERT, RoBERTa, DeBERTa, and their smaller relatives like DistilBERT — remain the default
+          in three categories of production system: high-throughput classification and moderation,
+          search and retrieval, and structured entity extraction at scale. In all three, the reason
+          is not that encoders are more capable in isolation. It is latency and cost, multiplied by
+          volume.
+        </p>
+
+        <p style={S.p}>
+          A fine-tuned DistilBERT classification call runs in single-digit to low-double-digit
+          milliseconds on a small GPU and costs a small fraction of a cent per call. A comparable
+          call to a generative model through an API takes hundreds of milliseconds to multiple
+          seconds and costs orders of magnitude more per call. At ten calls a day the difference is
+          invisible. At fifty million messages a day — a realistic volume for content moderation at
+          a large platform — that difference compounds into a genuinely different infrastructure
+          bill and a genuinely different latency budget, which is why almost every large-scale
+          moderation, spam-filtering, and search-ranking pipeline still runs an encoder model even
+          well into the generative-LLM era.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(29,158,117,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#1D9E75', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Still encoder territory ✓
+            </div>
+            {[
+              'Real-time content moderation and spam filtering at high queries-per-second',
+              'Semantic search — bi-encoder embeddings for retrieval, cross-encoders for re-ranking',
+              'Named entity recognition and structured field extraction run at scale',
+              'Any task with a large existing labelled dataset — ten thousand-plus examples',
+              'Cost-sensitive classification running on every request, every transaction, every message',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(123,97,255,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#7b61ff', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Now mostly generative-LLM territory ✓
+            </div>
+            {[
+              'Few-shot or zero-shot classification with no labelled dataset yet',
+              'Tasks that need multi-step reasoning, summarisation, or open-ended generation',
+              'Rapid prototyping before a team has invested in collecting labels',
+              'Low-volume, latency-insensitive internal tools and one-off analyses',
+              'Escalated, genuinely ambiguous cases that a cheaper first-pass model flagged as uncertain',
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 5, lineHeight: 1.5 }}>
+                • {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <ConceptBox title="A concrete cost comparison at fifty million messages a day">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            A content moderation team routing every message through even a cheap generative API call
+            at a fraction of a cent and a few hundred milliseconds of latency each would face tens of
+            thousands of dollars a day in inference cost alone, plus a moderation queue with far more
+            latency than the product can tolerate. The same volume through a fine-tuned DistilBERT
+            model, running on a modest, fixed number of GPUs, costs a small fraction of that and
+            responds in single-digit milliseconds. This is why many teams land on a two-stage
+            architecture instead of picking one approach exclusively: an encoder model handles the
+            full volume as a cheap first pass, and only the small share of genuinely ambiguous cases
+            — where the encoder's own confidence sits near the decision boundary — get escalated to
+            a slower, more expensive generative model for a judgment call.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`# ── A common production pattern: encoder-first, LLM-on-escalation ─────
+# Full volume goes through a cheap, fast, fine-tuned encoder.
+# Only the genuinely ambiguous cases pay the latency and cost of a
+# generative model call.
+
+CONFIDENCE_ESCALATION_BAND = (0.35, 0.65)   # near the decision boundary
+
+def moderate_message(text, encoder_model, llm_client):
+    probs = encoder_model.predict_proba([text])[0]
+    confidence = probs.max()
+
+    if CONFIDENCE_ESCALATION_BAND[0] < confidence < CONFIDENCE_ESCALATION_BAND[1]:
+        # Ambiguous — worth the extra cost and latency of a generative judgment
+        return llm_client.classify(text)
+
+    # Confident — the cheap encoder call is the final answer
+    return probs.argmax()
+
+# In practice this cuts LLM calls to a small fraction of total volume —
+# often under 5-10% — while keeping the accuracy benefit of a generative
+# model exactly where the encoder alone would have been unreliable.`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about BERT and the encoder family</h2>
@@ -1020,7 +1128,7 @@ def tokenise_and_align(examples, tokenizer, label2id):
 
       <Div />
 
-      {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — INTERVIEW PREP ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>BERT and the encoder family — 5 questions interviewers actually ask</h2>
@@ -1112,7 +1220,7 @@ def tokenise_and_align(examples, tokenizer, label2id):
 
       <Div />
 
-      {/* ══ SECTION 10 — WHAT'S NEXT ═══════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — WHAT'S NEXT ═══════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

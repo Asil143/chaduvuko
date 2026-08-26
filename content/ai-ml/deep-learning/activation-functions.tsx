@@ -816,7 +816,119 @@ print(f"Multi-class (CrossEntropyLoss): accuracy = {acc_mc:.4f}")`} />
 
       <Div />
 
-      {/* ══ SECTION 7 — MISCONCEPTIONS ═════════════════════════════════════════ */}
+      {/* ══ SECTION 7 — WHAT THIS LOOKS LIKE AT WORK ═══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>What production teams actually pick by default — and how dead neurons get caught before launch</h2>
+
+        <p style={S.p}>
+          In practice almost nobody picks an activation function from first principles
+          for every new model. Teams inherit a default from whatever architecture family
+          they are building on, and that default differs sharply depending on whether the
+          model is a CNN, a transformer, or a small tabular MLP.
+        </p>
+
+        <VisualBox label="The default activation, by architecture family — what actually ships">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { arch: 'CNNs / ResNets (vision)', act: 'ReLU', color: '#1D9E75', why: 'Cheap, fast, and decades of tooling and initialisation schemes (He init) assume it. Rarely reconsidered unless dying neurons show up in monitoring.' },
+              { arch: 'Transformers (BERT, GPT-family, ViT)', act: 'GELU', color: '#7b61ff', why: 'BERT shipped with it in 2018 and it stuck — smoother gradients measurably help optimisation at transformer scale. Now the default the moment you use a standard transformer block.' },
+              { arch: 'Mobile / edge architectures (EfficientNet, MobileNetV3)', act: 'SiLU / hard-swish', color: '#D85A30', why: 'A small accuracy gain over ReLU; hard-swish variants stay cheap enough to matter on phone-class hardware where every millisecond of inference is budgeted.' },
+              { arch: 'RNNs and LSTMs', act: 'tanh (gates: sigmoid)', color: '#378ADD', why: 'Zero-centred activations still matter for a recurrent hidden state carried across many time steps — an older architectural constraint that has not gone away.' },
+              { arch: 'GAN discriminators', act: 'LeakyReLU', color: '#ff4757', why: 'Adversarial training is unusually sensitive to dead neurons — a discriminator that stops producing gradient anywhere can silently break the whole training dynamic.' },
+            ].map((row) => (
+              <div key={row.arch} style={{
+                background: 'var(--surface)', border: `1px solid ${row.color}25`,
+                borderLeft: `4px solid ${row.color}`, borderRadius: 8, padding: '11px 14px',
+              }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 5, flexWrap: 'wrap' as const }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{row.arch}</span>
+                  <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: row.color, background: `${row.color}15`, padding: '2px 7px', borderRadius: 4 }}>
+                    {row.act}
+                  </span>
+                </div>
+                <p style={{ ...S.ps, marginBottom: 0 }}>{row.why}</p>
+              </div>
+            ))}
+          </div>
+        </VisualBox>
+
+        <ConceptBox title="Debugging case — a validation AUC plateau traced back to dead ReLUs" color="#ff4757">
+          <p style={{ ...S.ps, marginBottom: 10 }}>
+            Three weeks into training a fraud-scoring MLP, validation AUC plateaus well
+            below where a similar model performed on a previous dataset. Loss is still
+            decreasing, slowly, and nothing in the training logs looks obviously broken.
+            An engineer adds forward hooks that log the fraction of each ReLU layer's
+            outputs that are exactly zero, on every batch, and plots it over training.
+          </p>
+          <p style={{ ...S.ps, marginBottom: 10 }}>
+            Layer 2's dead-unit fraction starts around 8 percent at initialisation and
+            climbs steadily to 46 percent by epoch 20 — and it is still rising. Nearly
+            half the neurons in that layer produce zero output, and therefore zero
+            gradient, for every single input. The root cause: a learning rate of 0.01
+            combined with a large negative bias initialisation pushed many
+            pre-activations permanently negative in the first few hundred steps, and
+            ReLU's zero gradient for negative inputs meant those neurons could never
+            recover on their own.
+          </p>
+          <p style={{ ...S.ps, marginBottom: 0, color: '#00e676' }}>
+            The fix was two changes, not one: switch that layer to LeakyReLU so a small
+            gradient always flows even for negative pre-activations, and lower the
+            learning rate from 0.01 to 0.003. Dead-unit tracking stayed in the training
+            pipeline permanently afterward — logged as a metric alongside loss and
+            accuracy, because by the time AUC visibly plateaus, the dead units have
+            usually been accumulating for many epochs already.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import torch
+import torch.nn as nn
+
+# ── Dead ReLU monitoring — a hook real teams bolt onto training ────────
+# Attach to every ReLU layer, log the fraction of zero outputs per batch.
+# A silently rising dead-unit fraction is the earliest warning sign of a
+# training run that will plateau well below its real ceiling.
+
+dead_fraction_log = {}
+
+def make_relu_hook(name):
+    def hook(module, layer_input, layer_output):
+        dead = (layer_output == 0).float().mean().item()
+        dead_fraction_log.setdefault(name, []).append(dead)
+    return hook
+
+model = nn.Sequential(
+    nn.Linear(20, 128), nn.ReLU(),
+    nn.Linear(128, 64), nn.ReLU(),
+    nn.Linear(64, 1),
+)
+
+for name, layer in model.named_modules():
+    if isinstance(layer, nn.ReLU):
+        layer.register_forward_hook(make_relu_hook(name))
+
+torch.manual_seed(42)
+X = torch.randn(256, 20)
+
+# Simulate several epochs of forward passes (training loop omitted)
+for epoch in range(5):
+    _ = model(X)
+
+print(f"{'ReLU layer':<12} {'dead units (last batch)':>24}")
+print("─" * 38)
+for name, history in dead_fraction_log.items():
+    print(f"  {name:<10} {history[-1]*100:>22.1f}%")
+
+print("\nRule of thumb used on real teams: more than roughly 30-40% dead")
+print("units in any hidden layer, especially if the fraction is still")
+print("climbing epoch over epoch, is worth investigating before training")
+print("finishes — it rarely self-corrects, and it means the effective")
+print("network capacity is much smaller than the parameter count suggests.")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about activation and loss functions</h2>
@@ -884,7 +996,7 @@ print(f"Multi-class (CrossEntropyLoss): accuracy = {acc_mc:.4f}")`} />
 
       <Div />
 
-      {/* ══ SECTION 8 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Activation and loss functions — 5 questions interviewers actually ask</h2>
@@ -955,7 +1067,7 @@ print(f"Multi-class (CrossEntropyLoss): accuracy = {acc_mc:.4f}")`} />
 
       <Div />
 
-      {/* ══ SECTION 9 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 10 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>

@@ -1053,7 +1053,135 @@ for name, f1, count in zip(class_names, per_class_f1, class_counts):
 
       <Div />
 
-      {/* ══ SECTION 9 — MISCONCEPTIONS ══════════════════════════════════════════ */}
+      {/* ══ SECTION 9 — WHAT THIS LOOKS LIKE AT WORK ══════════════════════════ */}
+      <div style={S.sec}>
+        <span style={S.tag}>What this looks like at work</span>
+        <h2 style={S.h2}>Choosing a metric is a business decision made once — not a modelling afterthought</h2>
+
+        <p style={S.p}>
+          On a real ML team the metric conversation happens before any model gets trained, not after.
+          Someone — usually a mix of the ML engineer, the product owner, and whoever owns the budget
+          for the affected process — writes down, in actual dollars or in some comparable unit,
+          what a false positive costs and what a false negative costs. That ratio gets baked into
+          three separate places: the training loss (class weights or a custom objective), the
+          threshold chosen on the validation set, and the metric that shows up on the production
+          monitoring dashboard. Nobody re-derives the cost ratio every sprint — it gets revisited
+          only when the business context genuinely changes.
+        </p>
+
+        <p style={S.p}>
+          The clearest way to see why this matters is to compare two domains with opposite risk
+          tolerances, built on the exact same underlying tools: a binary classifier, a threshold,
+          precision and recall.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(29,158,117,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#1D9E75', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Fraud detection (Stripe) — asymmetric, but not unlimited
+            </div>
+            <p style={{ ...S.ps, marginBottom: 8 }}>
+              A missed fraud transaction costs real money directly — the average loss runs into the
+              thousands of dollars. A false alarm costs a support ticket and a moment of customer
+              friction, roughly fifty dollars in handling cost. The team optimises heavily toward
+              recall, but there is still a precision floor: past a certain false-alarm rate,
+              legitimate customers start abandoning checkout entirely, a cost that only shows up
+              once you track precision alongside recall.
+            </p>
+            <p style={{ ...S.ps, marginBottom: 0, fontStyle: 'italic' }}>
+              Primary offline metric: PR-AUC. Deployed threshold: chosen by minimising total dollar
+              cost, not by maximising F1. Production dashboard: dollars protected per week, and
+              precision at the live threshold — both tracked, neither alone.
+            </p>
+          </div>
+          <div style={{
+            background: 'var(--surface)', border: '1px solid rgba(216,90,48,0.3)',
+            borderRadius: 8, padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#D85A30', fontFamily: 'var(--font-mono)', marginBottom: 8 }}>
+              Medical screening — recall dominates almost completely
+            </div>
+            <p style={{ ...S.ps, marginBottom: 8 }}>
+              A missed cancer diagnosis at the screening stage can cost a life — there is effectively
+              no dollar amount that makes that error acceptable. A false alarm costs a follow-up
+              biopsy: real money and real patient anxiety, but recoverable. Screening models are
+              deliberately tuned to extremely high recall, often ninety-five percent or higher,
+              even though that means accepting a large number of follow-up tests that turn out
+              negative.
+            </p>
+            <p style={{ ...S.ps, marginBottom: 0, fontStyle: 'italic' }}>
+              Primary offline metric: recall against a fixed, clinically mandated minimum, with
+              precision reported but not optimised. Deployed threshold: set well below the default
+              midpoint, sometimes by regulation rather than by cross-validation. Production
+              dashboard: recall on retrospective confirmed cases, tracked monthly against the floor.
+            </p>
+          </div>
+        </div>
+
+        <ConceptBox title="The metric a model ships with is rarely the metric that stays on the dashboard">
+          <p style={{ ...S.ps, marginBottom: 0 }}>
+            The offline metric used to pick the winning model during development — PR-AUC, F2,
+            whatever balances precision and recall for that cost ratio — is usually not what gets
+            watched in production. Production dashboards translate the same confusion matrix into
+            numbers a non-technical stakeholder can act on: dollars protected per week for a fraud
+            model, confirmed cases per thousand screened for a medical model, tickets deflected per
+            day for a support-routing model. A model whose PR-AUC quietly drops over a month is
+            invisible to most executives; the same drop showing up as "twelve thousand fewer
+            dollars protected this week" gets a message within the hour. Translating the abstract
+            metric into a business number is part of the job, not an afterthought once the model
+            ships.
+          </p>
+        </ConceptBox>
+
+        <CodeBlock code={`import numpy as np
+
+# ── Production monitoring: same formula, opposite cost ratios ─────────
+# Every week, recompute the confusion matrix on newly labelled outcomes
+# and translate it into whatever number the business actually watches.
+
+def weekly_fraud_report(tp, fp, fn, tn, fraud_value=2500, alarm_cost=50):
+    dollars_protected = tp * fraud_value
+    dollars_lost       = fn * fraud_value
+    friction_cost       = fp * alarm_cost
+    net_value           = dollars_protected - dollars_lost - friction_cost
+    precision           = tp / (tp + fp)
+    recall              = tp / (tp + fn)
+    return {
+        'net_value': net_value,
+        'precision_at_threshold': precision,
+        'recall_at_threshold': recall,
+    }
+
+def weekly_screening_report(tp, fp, fn, tn, recall_floor=0.95):
+    recall    = tp / (tp + fn)
+    precision = tp / (tp + fp)
+    breach    = recall < recall_floor
+    return {
+        'recall': recall,
+        'precision': precision,
+        'below_mandated_floor': breach,   # this triggers an incident, not a shrug
+    }
+
+# Same shapes, same formulas — the only difference is which number
+# is allowed to move and which number is a hard floor.
+fraud_week     = weekly_fraud_report(tp=612, fp=1840, fn=203, tn=97_345)
+screening_week = weekly_screening_report(tp=142, fp=880, fn=6, tn=8_972)
+
+print("Fraud team weekly report:")
+for k, v in fraud_week.items():
+    print(f"  {k:<24}: {v:,.2f}" if isinstance(v, float) else f"  {k:<24}: {v}")
+
+print("\\nScreening team weekly report:")
+for k, v in screening_week.items():
+    print(f"  {k:<24}: {v:.4f}" if isinstance(v, float) else f"  {k:<24}: {v}")`} />
+      </div>
+
+      <Div />
+
+      {/* ══ SECTION 10 — MISCONCEPTIONS ══════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about evaluation metrics</h2>
@@ -1124,7 +1252,7 @@ for name, f1, count in zip(class_names, per_class_f1, class_counts):
 
       <Div />
 
-      {/* ══ SECTION 10 — INTERVIEW PREP ═════════════════════════════════════════ */}
+      {/* ══ SECTION 11 — INTERVIEW PREP ═════════════════════════════════════════ */}
       <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Evaluation metrics — 5 questions interviewers actually ask</h2>
@@ -1195,7 +1323,7 @@ for name, f1, count in zip(class_names, per_class_f1, class_counts):
 
       <Div />
 
-      {/* ══ SECTION 11 — WHAT'S NEXT ════════════════════════════════════════════ */}
+      {/* ══ SECTION 12 — WHAT'S NEXT ════════════════════════════════════════════ */}
       <div style={{ paddingBottom: 48, paddingTop: 8 }}>
         <span style={S.tag}>What comes next</span>
         <h2 style={S.h2}>
