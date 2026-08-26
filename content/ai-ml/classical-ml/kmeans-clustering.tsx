@@ -989,7 +989,7 @@ print(f"\nNew restaurant (47.58°N, -122.31°W) → Zone {zone_id}")`} />
       <Div />
 
       {/* ══ SECTION 9 — MISCONCEPTIONS ═════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about K-Means clustering</h2>
 
@@ -1064,7 +1064,7 @@ print(f"\nNew restaurant (47.58°N, -122.31°W) → Zone {zone_id}")`} />
       <Div />
 
       {/* ══ SECTION 10 — INTERVIEW PREP ════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>K-Means — 5 questions interviewers actually ask</h2>
 

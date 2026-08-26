@@ -863,7 +863,7 @@ print(f"  weighted: weight by support — use for overall performance summary")`
       <Div />
 
       {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about ROC and AUC</h2>
 
@@ -934,7 +934,7 @@ print(f"  weighted: weight by support — use for overall performance summary")`
       <Div />
 
       {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>ROC and AUC — 5 questions interviewers actually ask</h2>
 

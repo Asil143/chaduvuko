@@ -942,7 +942,7 @@ def tokenise_and_align(examples, tokenizer, label2id):
       <Div />
 
       {/* ══ SECTION 8 — MISCONCEPTIONS ══════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about BERT and the encoder family</h2>
 
@@ -1021,7 +1021,7 @@ def tokenise_and_align(examples, tokenizer, label2id):
       <Div />
 
       {/* ══ SECTION 9 — INTERVIEW PREP ══════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>BERT and the encoder family — 5 questions interviewers actually ask</h2>
 

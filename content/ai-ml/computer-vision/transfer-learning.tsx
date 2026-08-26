@@ -801,7 +801,7 @@ print("Exported: meesho_classifier.pt + meesho_classifier.onnx")`} />
       <Div />
 
       {/* ══ SECTION 7 — MISCONCEPTIONS ══════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about transfer learning</h2>
 
@@ -877,7 +877,7 @@ print("Exported: meesho_classifier.pt + meesho_classifier.onnx")`} />
       <Div />
 
       {/* ══ SECTION 8 — INTERVIEW PREP ══════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Transfer learning — 5 questions interviewers actually ask</h2>
 

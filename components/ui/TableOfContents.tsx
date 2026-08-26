@@ -41,6 +41,19 @@ function classifyByText(text: string): Kind {
   return 'part'
 }
 
+// Second fallback: AI/ML wraps sections in <div> (not <section>), so data-toc-kind
+// never matches there, and its h2 titles are custom per-file rather than following a
+// fixed prefix. It does consistently render a small uppercase "eyebrow" <span> right
+// before each h2 (e.g. "Misconceptions", "Interview prep") — key off that instead.
+function classifyByTag(tagText: string): Kind | null {
+  const t = tagText.trim()
+  if (/^Misconceptions/i.test(t)) return 'myth'
+  if (/^Interview\s*prep/i.test(t)) return 'prep'
+  if (/^Errors you will hit/i.test(t)) return 'plain'
+  if (/^What this looks like at work/i.test(t)) return 'story'
+  return null
+}
+
 export function TableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([])
   const [active, setActive]     = useState<string>('')
@@ -59,7 +72,9 @@ export function TableOfContents() {
         mainIndex++
         const text = el.textContent || ''
         const kindAttr = el.closest('section')?.getAttribute('data-toc-kind') as Kind | null
-        const kind: Kind = kindAttr ?? classifyByText(text)
+        const prevEl = el.previousElementSibling
+        const tagText = prevEl?.tagName === 'SPAN' ? (prevEl.textContent || '') : ''
+        const kind: Kind = kindAttr ?? classifyByTag(tagText) ?? classifyByText(text)
         const partNum = kind === 'part' ? ++partCount : null
         return { id: el.id, text, level: 2, kind, partNum, mainIndex }
       }

@@ -1033,7 +1033,7 @@ print(f"  autograd → the chain rule applied automatically to any graph")`} />
       <Div />
 
       {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about neural networks built from scratch</h2>
 
@@ -1103,7 +1103,7 @@ print(f"  autograd → the chain rule applied automatically to any graph")`} />
       <Div />
 
       {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Neural networks from scratch — 5 questions interviewers actually ask</h2>
 

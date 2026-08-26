@@ -818,7 +818,7 @@ print(f"Multiple LR R²: {r2_score(y_te, y_pred_multi):.3f}")      # ~0.92`} />
       </div>
 
       {/* ── SECTION 9: Misconceptions ──────────────────────────────────────── */}
-      <div style={sec}>
+      <div style={sec} data-toc-kind="myth">
         <span style={tag}>Misconceptions</span>
         <h2 style={h2}>Five things people get wrong about Linear Regression</h2>
 
@@ -904,7 +904,7 @@ print(f"Multiple LR R²: {r2_score(y_te, y_pred_multi):.3f}")      # ~0.92`} />
       </div>
 
       {/* ── SECTION 10: Interview prep ─────────────────────────────────────── */}
-      <div style={sec}>
+      <div style={sec} data-toc-kind="prep">
         <span style={tag}>Interview prep</span>
         <h2 style={h2}>Linear Regression — 5 questions interviewers actually ask</h2>
 

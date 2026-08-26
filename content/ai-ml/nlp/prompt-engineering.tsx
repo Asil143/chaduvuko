@@ -896,7 +896,7 @@ print(f"\nGenerated prompt:\n{prompt}")`} />
       <Div />
 
       {/* ══ SECTION 8 — MISCONCEPTIONS ═════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about prompt engineering</h2>
 
@@ -973,7 +973,7 @@ print(f"\nGenerated prompt:\n{prompt}")`} />
       <Div />
 
       {/* ══ SECTION 9 — INTERVIEW PREP ═════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>Prompt engineering — 5 questions interviewers actually ask</h2>
 

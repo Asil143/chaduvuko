@@ -898,7 +898,7 @@ print(f"\nCalibrated SVM ROC-AUC: {roc_auc_score(y_test, y_calib):.4f}")`} />
       <Div />
 
       {/* ══ SECTION 8 — MISCONCEPTIONS ═══════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about SVMs</h2>
 
@@ -970,7 +970,7 @@ print(f"\nCalibrated SVM ROC-AUC: {roc_auc_score(y_test, y_calib):.4f}")`} />
       <Div />
 
       {/* ══ SECTION 9 — INTERVIEW PREP ═══════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>SVM — 5 questions interviewers actually ask</h2>
 

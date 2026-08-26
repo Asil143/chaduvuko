@@ -583,7 +583,7 @@ if restaurant == "popular_restaurant":
       </div>
 
       {/* ── SECTION 7: Misconceptions ──────────────────────────────────────── */}
-      <div style={sec}>
+      <div style={sec} data-toc-kind="myth">
         <span style={tag}>Misconceptions</span>
         <h2 style={h2}>Five things people get wrong about Machine Learning</h2>
 
@@ -654,7 +654,7 @@ if restaurant == "popular_restaurant":
       </div>
 
       {/* ── SECTION 8: Interview prep ─────────────────────────────────────── */}
-      <div style={sec}>
+      <div style={sec} data-toc-kind="prep">
         <span style={tag}>Interview prep</span>
         <h2 style={h2}>What is Machine Learning — 5 questions interviewers actually ask</h2>
 

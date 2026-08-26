@@ -1136,7 +1136,7 @@ print("\nProduction bundle saved: /tmp/amazon_pca_segments.pkl")`} />
       <Div />
 
       {/* ══ SECTION 10 — MISCONCEPTIONS ═════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="myth">
         <span style={S.tag}>Misconceptions</span>
         <h2 style={S.h2}>Five things people get wrong about PCA</h2>
 
@@ -1214,7 +1214,7 @@ print("\nProduction bundle saved: /tmp/amazon_pca_segments.pkl")`} />
       <Div />
 
       {/* ══ SECTION 11 — INTERVIEW PREP ══════════════════════════════════════════ */}
-      <div style={S.sec}>
+      <div style={S.sec} data-toc-kind="prep">
         <span style={S.tag}>Interview prep</span>
         <h2 style={S.h2}>PCA — 5 questions interviewers actually ask</h2>
 
