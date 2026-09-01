@@ -318,6 +318,9 @@ BEGIN;
 
   INSERT INTO order_items (order_id, product_id, quantity, line_total)
   VALUES (currval('orders_order_id_seq'), 99, 2, 1250.00);
+  -- ↑ currval() is PostgreSQL-specific (reads the sequence's last value
+  --   generated in this session). SQLite has no sequences — the closest
+  --   analog is last_insert_rowid(), though its semantics aren't identical
   -- ↑ if product_id 99 doesn't exist → FK violation
 
   -- If the order_items insert failed:
@@ -370,10 +373,10 @@ stock_check AS (
   JOIN target_order AS t ON oi.order_id = t.order_id
 )
 -- Show what each savepoint step would validate
-SELECT 'Order check' AS step, order_id::TEXT AS detail, order_status AS status
+SELECT 'Order check' AS step, CAST(order_id AS TEXT) AS detail, order_status AS status
 FROM target_order
 UNION ALL
-SELECT 'Customer check', customer_id::TEXT, loyalty_tier FROM customer_check
+SELECT 'Customer check', CAST(customer_id AS TEXT), loyalty_tier FROM customer_check
 UNION ALL
 SELECT 'Stock check', product_name, stock_status FROM stock_check;`}
         height={290}
@@ -505,7 +508,11 @@ SHOW autocommit;        -- shows current setting
 BEGIN;
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
   UPDATE products SET in_stock = false WHERE product_id = 55;
-  -- Other transactions trying to read product 55 may wait or see conflicts
+  -- Other transactions can still plain-SELECT product 55 (MVCC snapshot,
+  -- never blocked). A concurrent transaction that both reads and writes
+  -- overlapping data may instead be aborted with a serialization
+  -- failure when IT commits — SERIALIZABLE adds conflict detection,
+  -- not extra blocking of reads.
 COMMIT;
 
 -- Set for the current session (all subsequent transactions use this level)
@@ -521,13 +528,21 @@ SHOW transaction_isolation;
 -- Oracle: READ COMMITTED`}
       />
 
-      <SQLPlayground
-        initialQuery={`-- Show current isolation level and transaction state in DuckDB
+      <CodeBlock
+        label="Checking isolation level — PostgreSQL syntax (SQLite has no equivalent)"
+        code={`-- PostgreSQL: show current isolation level and transaction state
 SELECT
   current_setting('transaction_isolation')    AS isolation_level,
-  current_setting('transaction_read_only')    AS read_only;`}
-        height={120}
-        showSchema={false}
+  current_setting('transaction_read_only')    AS read_only;
+
+-- SQLite doesn't expose isolation levels this way — it has no
+-- current_setting() function and no configurable isolation levels
+-- like PostgreSQL's SERIALIZABLE / REPEATABLE READ / READ COMMITTED.
+-- A SQLite connection is effectively serializable through its file
+-- locking model (one writer at a time; a writer blocks other writers
+-- and, in the default rollback-journal mode, blocks readers too).
+-- WAL mode relaxes this to allow readers to proceed concurrently
+-- with a single writer.`}
       />
 
       <HR />
@@ -550,7 +565,11 @@ SELECT * FROM orders WHERE order_id = 1 FOR SHARE;
 
 -- EXCLUSIVE LOCK (X-lock): acquired for writes
 -- Only one transaction can hold an exclusive lock on a row at a time
--- Blocks all other reads (at SERIALIZABLE) or writes (at READ COMMITTED)
+-- Blocks other WRITERS and locking reads (FOR UPDATE / FOR SHARE) —
+-- NOT plain SELECT. PostgreSQL uses MVCC: a plain SELECT always reads
+-- a consistent snapshot and never waits on another transaction's
+-- exclusive lock, at ANY isolation level (including SERIALIZABLE,
+-- which detects conflicts via SSI rather than blocking readers)
 SELECT * FROM orders WHERE order_id = 1 FOR UPDATE;
 -- Now locked exclusively — other transactions trying to UPDATE/DELETE this row
 -- must WAIT until your transaction commits or rolls back

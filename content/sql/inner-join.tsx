@@ -271,7 +271,7 @@ ORDER BY monthly_payroll DESC;`}
       {/* ── PART 04 ── */}
       <Part n="04" title="Four-Table INNER JOIN — The FreshCart Master Query" />
 
-      <P>The full FreshCart order detail query joins all four core tables: orders, customers, stores, order_items, and products. This five-table join (treating order_items as the bridge between orders and products) is the foundation for almost every sales and customer report.</P>
+      <P>The full FreshCart order detail query joins all five core tables: orders, customers, stores, order_items, and products. This five-table join (treating order_items as the bridge between orders and products) is the foundation for almost every sales and customer report.</P>
 
       <SQLPlayground
         initialQuery={`-- FreshCart master join — full order line detail
@@ -332,14 +332,14 @@ ORDER BY c.city, revenue DESC;`}
 
       <CodeBlock
         label="Range join — ON with BETWEEN"
-        code={`-- Classify orders into salary bands defined in a reference table
--- salary_bands(band_name, min_amount, max_amount)
+        code={`-- Classify orders into value bands defined in a reference table
+-- order_value_bands(band_name, min_amount, max_amount)
 SELECT
   o.order_id,
   o.total_amount,
   sb.band_name
 FROM orders AS o
-JOIN salary_bands AS sb
+JOIN order_value_bands AS sb
   ON o.total_amount BETWEEN sb.min_amount AND sb.max_amount;
 
 -- This is a range join: no single equality condition
@@ -527,10 +527,11 @@ LIMIT 10;`}
       {/* ── PART 08 ── */}
       <Part n="08" title="INNER JOIN with CTEs — Readable Multi-Step Queries" />
 
-      <P>CTEs (Common Table Expressions) define named intermediate results that can be joined like regular tables. For complex multi-step analytics, CTEs make the logic readable and maintainable — each step builds on the previous.</P>
+      <P>CTEs (Common Table Expressions) define named intermediate results that can be joined like regular tables. For complex multi-step analytics, CTEs make the logic readable and maintainable — each step builds on the previous. This is your first use of the <Hl>WITH</Hl> keyword in this track — CTEs are covered in full depth in Module 55; for now, read each one as a temporary named result you can SELECT from and JOIN like any other table. The example below also uses a window function (<Hl>ROW_NUMBER() OVER (...)</Hl>), covered in full depth in Module 52 — the inline comment explains just enough to follow along.</P>
 
       <SQLPlayground
         initialQuery={`-- CTE-based: top customers per loyalty tier
+-- WITH defines a CTE: a named temporary result you can query like a table (full depth in Module 55)
 WITH customer_spend AS (
   -- Step 1: compute total spend per customer
   SELECT
@@ -550,6 +551,7 @@ ranked AS (
     c.city,
     cs.order_count,
     cs.total_spend,
+    -- Window function: numbers rows 1, 2, 3... within each PARTITION BY group (full depth in Module 52)
     ROW_NUMBER() OVER (
       PARTITION BY c.loyalty_tier
       ORDER BY cs.total_spend DESC
@@ -823,17 +825,27 @@ WITH store_summary AS (
   GROUP BY s.store_id, s.store_name, s.city, s.monthly_target
 ),
 top_category AS (
-  SELECT DISTINCT ON (o.store_id)
-    o.store_id,
-    p.category                          AS top_category,
-    SUM(oi.line_total) OVER (
-      PARTITION BY o.store_id, p.category
-    )                                   AS category_revenue
-  FROM orders      AS o
-  JOIN order_items AS oi ON o.order_id    = oi.order_id
-  JOIN products    AS p  ON oi.product_id = p.product_id
-  WHERE o.order_status = 'Delivered'
-  ORDER BY o.store_id, category_revenue DESC
+  -- SQLite has no DISTINCT ON (that is PostgreSQL-only syntax) — use
+  -- ROW_NUMBER() OVER (PARTITION BY ...) to rank categories within each
+  -- store, then keep only rn = 1 (the window function pattern from Part 08,
+  -- full depth in Module 52)
+  SELECT store_id, top_category, category_revenue
+  FROM (
+    SELECT
+      o.store_id,
+      p.category           AS top_category,
+      SUM(oi.line_total)    AS category_revenue,
+      ROW_NUMBER() OVER (
+        PARTITION BY o.store_id
+        ORDER BY SUM(oi.line_total) DESC
+      )                     AS rn
+    FROM orders      AS o
+    JOIN order_items AS oi ON o.order_id    = oi.order_id
+    JOIN products    AS p  ON oi.product_id = p.product_id
+    WHERE o.order_status = 'Delivered'
+    GROUP BY o.store_id, p.category
+  )
+  WHERE rn = 1
 )
 SELECT
   ss.store_id,
@@ -848,7 +860,7 @@ SELECT
 FROM store_summary AS ss
 JOIN top_category  AS tc ON ss.store_id = tc.store_id
 ORDER BY ss.total_revenue DESC;`}
-        height={340}
+        height={390}
         showSchema={false}
       />
 
@@ -892,7 +904,7 @@ ORDER BY ss.total_revenue DESC;`}
       <IQ q="How would you find the top-selling product for each store using INNER JOIN?">
         <p style={{ margin: '0 0 14px' }}>Finding the top seller per store is a "top N per group" problem. The approach requires computing revenue per (store, product) combination, then selecting the product with the highest revenue within each store group.</p>
         <p style={{ margin: '0 0 14px' }}>Step 1 — compute revenue per store per product: SELECT o.store_id, p.product_id, p.product_name, SUM(oi.line_total) AS revenue FROM orders AS o JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id WHERE o.order_status = 'Delivered' GROUP BY o.store_id, p.product_id, p.product_name. This gives one row per (store, product) pair with total revenue.</p>
-        <p style={{ margin: 0 }}>Step 2 — select the top product per store. The cleanest approach uses ROW_NUMBER() window function: wrap Step 1 in a CTE or subquery, add ROW_NUMBER() OVER (PARTITION BY store_id ORDER BY revenue DESC) AS rn, then filter WHERE rn = 1 in the outer query. This assigns rank 1 to the highest-revenue product within each store and returns only those. An alternative without window functions: join the Step 1 result to a subquery that finds MAX(revenue) per store, matching on both store_id and revenue = max_revenue. The ROW_NUMBER approach is cleaner and handles ties more explicitly (ROW_NUMBER picks one; DENSE_RANK preserves ties). Window functions are covered in depth in Module 45.</p>
+        <p style={{ margin: 0 }}>Step 2 — select the top product per store. The cleanest approach uses ROW_NUMBER() window function: wrap Step 1 in a CTE or subquery, add ROW_NUMBER() OVER (PARTITION BY store_id ORDER BY revenue DESC) AS rn, then filter WHERE rn = 1 in the outer query. This assigns rank 1 to the highest-revenue product within each store and returns only those. An alternative without window functions: join the Step 1 result to a subquery that finds MAX(revenue) per store, matching on both store_id and revenue = max_revenue. The ROW_NUMBER approach is cleaner and handles ties more explicitly (ROW_NUMBER picks one; DENSE_RANK preserves ties). Window functions are covered in depth in Module 52.</p>
       </IQ>
 
       <HR />
@@ -935,7 +947,7 @@ ORDER BY ss.total_revenue DESC;`}
       {/* ── Try It ── */}
       <TryItChallenge
         question="Write a query that produces a category performance report — one row per product category. Show: category, number of distinct products in that category, number of distinct orders that contained at least one product from that category, total units sold, total revenue (from order_items.line_total, rounded to 2 decimal places), average selling price (rounded to 2 decimal places), and the category's share of total delivered revenue as a percentage (rounded to 1 decimal place). Only include delivered orders. Sort by total revenue descending."
-        hint="JOIN products → order_items → orders. WHERE order_status = 'Delivered'. GROUP BY category. For the revenue share percentage: SUM(line_total) / SUM(SUM(line_total)) OVER () * 100 — a window function over the GROUP BY result. COUNT(DISTINCT product_id) and COUNT(DISTINCT order_id) for the distinct counts."
+        hint="JOIN products → order_items → orders. WHERE order_status = 'Delivered'. GROUP BY category. For the revenue share percentage, you need each category's SUM(line_total) divided by the grand total across ALL delivered revenue — compute that grand total with a separate scalar subquery, the same subquery-in-a-calculated-expression technique from Part 07: SUM(oi.line_total) / (SELECT SUM(oi2.line_total) FROM order_items AS oi2 JOIN orders AS o2 ON oi2.order_id = o2.order_id WHERE o2.order_status = 'Delivered') * 100. COUNT(DISTINCT product_id) and COUNT(DISTINCT order_id) for the distinct counts."
         answer={`SELECT
   p.category,
   COUNT(DISTINCT p.product_id)                          AS distinct_products,
@@ -945,7 +957,12 @@ ORDER BY ss.total_revenue DESC;`}
   ROUND(AVG(oi.unit_price), 2)                          AS avg_selling_price,
   ROUND(
     SUM(oi.line_total)
-    / SUM(SUM(oi.line_total)) OVER () * 100
+    / (
+      SELECT SUM(oi2.line_total)
+      FROM order_items AS oi2
+      JOIN orders       AS o2 ON oi2.order_id = o2.order_id
+      WHERE o2.order_status = 'Delivered'
+    ) * 100
   , 1)                                                  AS revenue_share_pct
 FROM products    AS p
 JOIN order_items AS oi ON p.product_id = oi.product_id
@@ -953,7 +970,7 @@ JOIN orders      AS o  ON oi.order_id  = o.order_id
 WHERE o.order_status = 'Delivered'
 GROUP BY p.category
 ORDER BY total_revenue DESC;`}
-        explanation="The three-table chain joins products to order_items (each item has a product) then to orders (each item belongs to an order). WHERE filters before grouping — only delivered order rows participate. GROUP BY category collapses all items within each category. COUNT(DISTINCT p.product_id) counts unique products in the category that were actually sold — not all products in the category. COUNT(DISTINCT o.order_id) counts distinct orders containing this category — not item rows. SUM(oi.line_total) is the correct revenue aggregate — summing item-level line totals, not the order-level total_amount which would fan-out. The revenue_share_pct uses a window function: SUM(SUM(oi.line_total)) OVER () computes the grand total across all categories after GROUP BY, letting us divide each category's total by the overall total without a separate subquery."
+        explanation="The three-table chain joins products to order_items (each item has a product) then to orders (each item belongs to an order). WHERE filters before grouping — only delivered order rows participate. GROUP BY category collapses all items within each category. COUNT(DISTINCT p.product_id) counts unique products in the category that were actually sold — not all products in the category. COUNT(DISTINCT o.order_id) counts distinct orders containing this category — not item rows. SUM(oi.line_total) is the correct revenue aggregate — summing item-level line totals, not the order-level total_amount which would fan-out. The revenue_share_pct uses a scalar subquery: (SELECT SUM(oi2.line_total) FROM order_items AS oi2 JOIN orders AS o2 ON oi2.order_id = o2.order_id WHERE o2.order_status = 'Delivered') runs once, independent of the outer GROUP BY, and returns the single grand-total number for all delivered revenue — every category row then divides by that same fixed total. This is the subquery-in-a-calculated-expression pattern from Part 07, applied here instead of a window function. A window function like SUM(...) OVER () can do this same 'percent of total' calculation more concisely, but it is not covered until Module 52 — the scalar subquery gets you the identical result with what you already know."
       />
 
       <HR />

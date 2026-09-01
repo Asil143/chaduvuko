@@ -550,7 +550,7 @@ SELECT
   END                         AS procedure_outcome,
   -- Simulated order total for quantity = 2
   CASE WHEN p.in_stock
-    THEN ROUND(p.unit_price * 2, 2)::TEXT
+    THEN CAST(ROUND(p.unit_price * 2, 2) AS TEXT)
     ELSE 'N/A'
   END                         AS simulated_order_total
 FROM products AS p
@@ -761,7 +761,7 @@ JOIN stores AS s ON s.store_id = 'ST001';`}
         initialQuery={`-- Simulate fn_store_report('ST001') inline
 SELECT
   order_date,
-  COUNT(*)::INTEGER                    AS order_count,
+  CAST(COUNT(*) AS INTEGER)            AS order_count,
   ROUND(SUM(total_amount), 2)          AS daily_revenue,
   ROUND(AVG(total_amount), 2)          AS avg_order
 FROM orders
@@ -821,8 +821,11 @@ GRANT EXECUTE ON PROCEDURE sp_upgrade_loyalty_tier(INTEGER) TO app_role;
 REVOKE EXECUTE ON PROCEDURE sp_upgrade_loyalty_tier(INTEGER) FROM PUBLIC;`}
       />
 
-      <SQLPlayground
-        initialQuery={`-- List all routines in the FreshCart database
+      <P>SQLite has no stored procedures or user-defined routines at the SQL level at all — there is nothing for a playground to introspect, and <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontSize: '0.9em' }}>information_schema.routines</code> does not exist in SQLite. The query below is a static PostgreSQL example rather than a live, runnable one — this applies to every "live" demonstration of CREATE PROCEDURE / CALL in this module: the browser playground can only simulate what a procedure would compute with plain SELECTs, never actually create or call one.</P>
+
+      <CodeBlock
+        label="Illustrative PostgreSQL only — SQLite has no stored procedures to list"
+        code={`-- List all routines in the FreshCart database
 SELECT
   routine_name,
   routine_type,
@@ -832,8 +835,6 @@ FROM information_schema.routines
 WHERE routine_schema NOT IN ('pg_catalog', 'information_schema')
 ORDER BY routine_type, routine_name
 LIMIT 15;`}
-        height={160}
-        showSchema={false}
       />
 
       <HR />
@@ -1124,6 +1125,7 @@ BEGIN
       store_revenue,
       avg_order_value,
       category                                AS best_category,
+      -- This uses a window function (OVER (...)) — covered fully in Module 52
       RANK() OVER (
         PARTITION BY store_id
         ORDER BY category_revenue DESC

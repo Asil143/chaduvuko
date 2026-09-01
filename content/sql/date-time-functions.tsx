@@ -110,7 +110,7 @@ export default function DateTimeFunctions() {
               ['DATE', 'Calendar date only — no time', '2024-01-15', 'Order dates, birthdays, hire dates'],
               ['TIME', 'Time of day only — no date', '14:30:00', 'Store hours, shift times'],
               ['TIMESTAMP', 'Date + time, no timezone', '2024-01-15 14:30:00', 'Event logs, created_at, updated_at'],
-              ['TIMESTAMPTZ', 'Date + time + timezone offset', '2024-01-15 14:30:00+05:30', 'Multi-region events, audit logs'],
+              ['TIMESTAMPTZ', 'Date + time + timezone offset', '2024-01-15 14:30:00-05:00', 'Multi-region events, audit logs'],
             ].map(([type, stores, ex, use], i) => (
               <tr key={type} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
                 <td style={{ padding: '10px 14px', fontFamily: 'var(--font-mono)', fontSize: 12, color: C, borderBottom: '1px solid var(--border)', fontWeight: 700 }}>{type}</td>
@@ -148,12 +148,12 @@ CURRENT_DATE                    -- 2024-02-15 (SQL standard)
 CURDATE()                       -- MySQL equivalent
 
 -- Current timestamp (date + time)
-CURRENT_TIMESTAMP               -- 2024-02-15 09:30:00+05:30 (SQL standard)
+CURRENT_TIMESTAMP               -- 2024-02-15 09:30:00-05:00 (SQL standard)
 NOW()                           -- same as CURRENT_TIMESTAMP (widely supported)
 LOCALTIMESTAMP                  -- current timestamp without timezone
 
 -- Current time only
-CURRENT_TIME                    -- 09:30:00+05:30
+CURRENT_TIME                    -- 09:30:00-05:00
 
 -- DuckDB specific:
 TODAY()                         -- current date
@@ -165,6 +165,10 @@ GET_CURRENT_TIMESTAMP()         -- current timestamp
 -- For date comparisons, CURRENT_DATE is cleaner
 -- For audit trails and event logging, NOW() or CURRENT_TIMESTAMP`}
       />
+
+      <Callout type="info">
+        julianday() converts a date to a Julian day number (days since a fixed reference point) — subtracting two of them gives you the number of days between two dates. You'll see this pattern throughout this module.
+      </Callout>
 
       <SQLPlayground
         initialQuery={`-- Days since each order was placed
@@ -490,10 +494,10 @@ LIMIT 8;`}
       {/* ── PART 07 ── */}
       <Part n="07" title="Date Formatting — TO_CHAR and strftime" />
 
-      <P>Date formatting converts a date or timestamp into a human-readable string for display. PostgreSQL uses TO_CHAR. DuckDB (this playground) uses strftime. Both follow format codes where letters represent date parts.</P>
+      <P>Date formatting converts a date or timestamp into a human-readable string for display. PostgreSQL uses TO_CHAR. SQLite (this playground) uses strftime. Both follow format codes where letters represent date parts.</P>
 
       <CodeBlock
-        label="Format codes — TO_CHAR (PostgreSQL) and strftime (DuckDB)"
+        label="Format codes — TO_CHAR (PostgreSQL) and strftime (SQLite)"
         code={`-- PostgreSQL TO_CHAR:
 TO_CHAR(date_col, 'format_string')
 TO_CHAR(order_date, 'DD Mon YYYY')      -- '15 Jan 2024'
@@ -502,18 +506,16 @@ TO_CHAR(order_date, 'YYYY-MM-DD')       -- '2024-01-15'
 TO_CHAR(order_date, 'Day')              -- 'Tuesday  '
 TO_CHAR(timestamp, 'HH24:MI:SS')        -- '14:30:00'
 
--- DuckDB strftime:
-strftime(date_col, 'format_string')
-strftime(order_date, '%d %b %Y')        -- '15 Jan 2024'
-strftime(order_date, '%B %d, %Y')       -- 'January 15, 2024'
-strftime(order_date, '%Y-%m-%d')        -- '2024-01-15'
-strftime(order_date, '%A')              -- 'Tuesday'
-strftime(order_date, '%H:%M:%S')        -- '14:30:00'
+-- SQLite strftime — format string comes FIRST, then the date:
+strftime('format_string', date_col)
+strftime('%Y-%m-%d', order_date)        -- '2024-01-15'
+strftime('%d/%m/%Y', order_date)        -- '15/01/2024'
+strftime('%H:%M:%S', order_date)        -- '14:30:00'
 
 -- Common format codes (strftime style):
 -- %Y = 4-digit year    %m = month (01-12)    %d = day (01-31)
--- %B = full month name  %b = abbreviated month  %A = full weekday name
--- %H = hour 24h (00-23) %I = hour 12h (01-12)  %M = minutes  %S = seconds`}
+-- %w = day of week (0=Sun)    %H = hour 24h (00-23)    %M = minutes    %S = seconds
+-- SQLite has no %B/%A/%b (month/weekday names) — build them with CASE, shown next`}
       />
 
       <SQLPlayground
@@ -630,6 +632,10 @@ LIMIT 8;`}
       <P>Date functions are the engine of time-series analytics. The patterns in this part — period-over-period comparison, rolling windows, cohort dating, and gap detection — appear in almost every analytical dashboard.</P>
 
       <H>Month-over-month growth</H>
+
+      <Callout type="info">
+        LAG(revenue) OVER (ORDER BY month_start) is a window function — covered fully in Module 52. For now: LAG reaches back to the previous row's value (here, last month's revenue) without a self-join.
+      </Callout>
 
       <SQLPlayground
         initialQuery={`-- Month-over-month revenue growth

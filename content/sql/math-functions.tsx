@@ -294,18 +294,22 @@ LIMIT 10;`}
       <FnCard fn="CBRT" syntax="CBRT(number)" returns="cube root" note="CBRT(27) = 3. CBRT(8) = 2. Available in PostgreSQL and DuckDB. Used in volume calculations." />
       <FnCard fn="EXP" syntax="EXP(number)" returns="e^number" note="EXP(1) = 2.71828 (Euler's number). EXP(0) = 1. Used for exponential growth models and log-scale transformations." />
 
+      <Callout type="info">
+        You'll learn the WITH clause (CTEs) formally in Module 55 — for now, just know it names a subquery so you can reference it by name later in the same query.
+      </Callout>
+
       <SQLPlayground
         initialQuery={`-- Compound Annual Growth Rate (CAGR) calculation
 -- CAGR = (end_value / start_value)^(1/years) - 1
 -- Using Jan vs Feb revenue as a simplified example
 WITH monthly_rev AS (
   SELECT
-    EXTRACT(MONTH FROM order_date)::INT   AS mo,
-    ROUND(SUM(total_amount), 2)           AS revenue
+    CAST(strftime('%m', order_date) AS INTEGER)   AS mo,
+    ROUND(SUM(total_amount), 2)                   AS revenue
   FROM orders
   WHERE order_status = 'Delivered'
-    AND EXTRACT(YEAR FROM order_date) = 2024
-  GROUP BY EXTRACT(MONTH FROM order_date)
+    AND strftime('%Y', order_date) = '2024'
+  GROUP BY strftime('%m', order_date)
 )
 SELECT
   jan.revenue                             AS jan_revenue,
@@ -321,6 +325,10 @@ WHERE jan.mo = 1 AND feb.mo = 2;`}
         height={265}
         showSchema={true}
       />
+
+      <Callout type="info">
+        This is a window function (OVER (...)) — covered fully in Module 52. For now: it computes an aggregate per group without collapsing the rows, unlike GROUP BY.
+      </Callout>
 
       <SQLPlayground
         initialQuery={`-- SQRT in statistical calculation: standard deviation manually
@@ -733,7 +741,7 @@ FROM orders;`}
               ['LOG(b, n)', 'Logarithm base b of n', 'LOG(2, 1024) → 10'],
               ['SIGN(n)', 'Sign of n: -1, 0, or 1', 'SIGN(-42) → -1'],
               ['PI()', 'Value of π', 'PI() → 3.14159...'],
-              ['RANDOM()', 'Random float 0 ≤ x < 1', 'RANDOM() → 0.73421...'],
+              ['RANDOM()', "SQLite: large signed integer, roughly -9223372036854775808 to 9223372036854775807 — not a float. (PostgreSQL's RANDOM() is the one that returns a 0–1 float — don't conflate the two.)", 'RANDOM() → -4988573206658340870'],
               ['WIDTH_BUCKET(v, lo, hi, n)', 'Uniform bucket number for v', 'WIDTH_BUCKET(350, 0, 1000, 10) → 4'],
               ['NULLIF(a, b)', 'NULL if a=b, else a', 'NULLIF(0, 0) → NULL'],
               ['STDDEV(col)', 'Sample standard deviation', 'STDDEV(salary) → 12450.3'],
@@ -766,7 +774,7 @@ FROM orders;`}
         initialQuery={`-- Monthly P&L summary using math functions
 WITH monthly_stats AS (
   SELECT
-    DATE_TRUNC('month', o.order_date)::DATE           AS month_start,
+    strftime('%Y-%m-01', o.order_date)                AS month_start,
     -- Revenue
     ROUND(SUM(o.total_amount), 2)                     AS revenue,
     -- COGS (sum of cost_price × quantity)
@@ -783,7 +791,7 @@ WITH monthly_stats AS (
   JOIN order_items AS oi ON o.order_id    = oi.order_id
   JOIN products    AS p  ON oi.product_id = p.product_id
   WHERE o.order_status = 'Delivered'
-  GROUP BY DATE_TRUNC('month', o.order_date)
+  GROUP BY strftime('%Y-%m-01', o.order_date)
 )
 SELECT
   month_start,
@@ -813,15 +821,15 @@ ORDER BY month_start;`}
         initialQuery={`-- Flag individual outlier orders beyond 2 standard deviations
 WITH monthly_benchmarks AS (
   SELECT
-    DATE_TRUNC('month', order_date)::DATE  AS month_start,
+    strftime('%Y-%m-01', order_date)       AS month_start,
     AVG(total_amount)                      AS mean_val,
     STDDEV(total_amount)                   AS std_val
   FROM orders WHERE order_status = 'Delivered'
-  GROUP BY DATE_TRUNC('month', order_date)
+  GROUP BY strftime('%Y-%m-01', order_date)
 )
 SELECT
   o.order_id,
-  DATE_TRUNC('month', o.order_date)::DATE   AS month,
+  strftime('%Y-%m-01', o.order_date)        AS month,
   o.store_id,
   o.total_amount,
   ROUND(mb.mean_val, 2)                     AS month_mean,
@@ -837,7 +845,7 @@ SELECT
   END                                       AS flag
 FROM orders AS o
 JOIN monthly_benchmarks AS mb
-  ON DATE_TRUNC('month', o.order_date)::DATE = mb.month_start
+  ON strftime('%Y-%m-01', o.order_date) = mb.month_start
 WHERE o.order_status = 'Delivered'
 ORDER BY z_score DESC
 LIMIT 8;`}

@@ -196,9 +196,11 @@ Execution Time: 1.893 ms
         ))}
       </div>
 
+      <P>The annotated plan above is PostgreSQL's <Hl>EXPLAIN ANALYZE</Hl> output — the cost/row-estimate tree you will see against a real production Postgres database. The playground below runs on <Hl>SQLite</Hl> (via sql.js, in your browser), which has no such tree. SQLite's plan-only statement is <Hl>EXPLAIN QUERY PLAN</Hl>, and its output is much flatter: one row per table access, reading either <Hl>SCAN table</Hl> (a full table scan) or <Hl>SEARCH table USING INDEX ...</Hl> / <Hl>USING INTEGER PRIMARY KEY (rowid=?)</Hl> (an index-assisted lookup) — no cost units, no row estimates, no actual-time numbers. It is a much shorter read than the Postgres tree, but it answers the exact same question every plan is trying to answer: is the engine reading everything, or using an index to jump straight to matching rows?</P>
+
       <SQLPlayground
-        initialQuery={`-- Read the plan for a multi-table query
-EXPLAIN
+        initialQuery={`-- Read the plan for a multi-table query (SQLite: EXPLAIN QUERY PLAN)
+EXPLAIN QUERY PLAN
 SELECT
   o.order_id,
   o.order_date,
@@ -215,6 +217,8 @@ LIMIT 10;`}
         height={210}
         showSchema={true}
       />
+
+      <P>Expect a <Hl>SCAN o</Hl> row — orders has no index on order_status or total_amount, so that table is read in full — alongside <Hl>SEARCH c USING INTEGER PRIMARY KEY (rowid=?)</Hl> and <Hl>SEARCH s USING INDEX ... (store_id=?)</Hl> for the joins, since customer_id and store_id are each the primary key of their own table. You will also likely see a <Hl>USE TEMP B-TREE FOR ORDER BY</Hl> row — total_amount has no index, so SQLite builds a temporary sort structure to satisfy the ORDER BY.</P>
 
       <HR />
 
@@ -320,8 +324,8 @@ EXPLAIN ANALYZE <same query>;
       />
 
       <SQLPlayground
-        initialQuery={`-- Step 1: baseline plan for a multi-condition query
-EXPLAIN
+        initialQuery={`-- Step 1: baseline plan for a multi-condition query (SQLite: EXPLAIN QUERY PLAN)
+EXPLAIN QUERY PLAN
 SELECT
   o.order_id,
   o.store_id,
@@ -337,6 +341,8 @@ ORDER BY o.total_amount DESC;`}
         showSchema={true}
       />
 
+      <P>No index exists yet on order_status, order_date, or total_amount, so expect <Hl>SCAN o</Hl> plus a <Hl>USE TEMP B-TREE FOR ORDER BY</Hl> row — the same "read everything, then sort" signature as PostgreSQL's Seq Scan + Sort, just described in SQLite's flatter SCAN/SEARCH vocabulary instead of a cost tree.</P>
+
       <SQLPlayground
         initialQuery={`-- Step 2: check what percentage of rows the filter removes
 -- High removal ratio = good index candidate
@@ -346,9 +352,9 @@ SELECT
     AND order_date >= '2024-01-01'
     AND total_amount > 300)                         AS matching_rows,
   ROUND(
-    COUNT(*) FILTER (WHERE order_status = 'Delivered'
+    CAST(COUNT(*) FILTER (WHERE order_status = 'Delivered'
       AND order_date >= '2024-01-01'
-      AND total_amount > 300)::NUMERIC
+      AND total_amount > 300) AS REAL)
     / COUNT(*) * 100
   , 1)                                              AS match_pct
 FROM orders;
@@ -403,21 +409,21 @@ ALTER TABLE orders ALTER COLUMN order_status SET STATISTICS 500;
 -- for skewed data. Run ANALYZE after changing.`}
       />
 
-      <SQLPlayground
-        initialQuery={`-- Inspect current statistics for FreshCart tables
-SELECT
+      <P>The query below reads PostgreSQL's <Hl>pg_stats</Hl> system view — column-level histograms, distinct-value counts, and sort correlation that the Postgres planner uses to estimate selectivity. SQLite has no equivalent exposed to a browser-embedded engine like sql.js: even where SQLite keeps its own internal statistics (<Hl>sqlite_stat1</Hl>, populated by running ANALYZE), it stores them as a single opaque text blob per index, not queryable columns like n_distinct or most_common_vals. The closest SQLite gets to introspection is <Hl>PRAGMA table_info(table)</Hl> (column names and types) and <Hl>PRAGMA index_list(table)</Hl> (which indexes exist) — schema shape, not data distribution. So this one is illustrative only: it shows the real PostgreSQL query, not something this playground can run.</P>
+
+      <CodeBlock
+        label="PostgreSQL only — inspecting column statistics via pg_stats (no SQLite equivalent, not runnable here)"
+        code={`SELECT
   tablename,
   attname                                    AS column_name,
   n_distinct,
-  ROUND(correlation::NUMERIC, 3)             AS sort_correlation,
-  most_common_vals::TEXT                     AS top_values,
-  most_common_freqs::TEXT                    AS top_frequencies
+  ROUND(CAST(correlation AS NUMERIC), 3)     AS sort_correlation,
+  CAST(most_common_vals AS TEXT)             AS top_values,
+  CAST(most_common_freqs AS TEXT)            AS top_frequencies
 FROM pg_stats
 WHERE tablename IN ('orders', 'customers', 'products')
   AND attname IN ('order_status', 'loyalty_tier', 'category', 'store_id')
 ORDER BY tablename, attname;`}
-        height={185}
-        showSchema={false}
       />
 
       <HR />
@@ -434,7 +440,7 @@ WHERE LOWER(email) = 'user@example.com'        -- index on email NOT used
 WHERE YEAR(order_date) = 2024                  -- index on order_date NOT used
 WHERE DATE_TRUNC('month', order_date) = '2024-01-01'  -- NOT used
 WHERE CAST(customer_id AS TEXT) = '42'         -- NOT used
-WHERE total_amount::INTEGER = 500              -- NOT used
+WHERE CAST(total_amount AS INTEGER) = 500      -- NOT used
 
 -- ✅ FAST: rewrite to compare raw column — index IS used
 WHERE email = 'user@example.com'              -- case-sensitive (use functional idx for CI)
@@ -545,8 +551,8 @@ JOIN customers ON customers.customer_id = recent.customer_id;
       />
 
       <SQLPlayground
-        initialQuery={`-- Inspect the join strategy on a 3-table query
-EXPLAIN
+        initialQuery={`-- Inspect the join strategy on a 3-table query (SQLite: EXPLAIN QUERY PLAN)
+EXPLAIN QUERY PLAN
 SELECT
   o.order_id,
   c.loyalty_tier,
@@ -564,6 +570,8 @@ LIMIT 10;`}
         height={215}
         showSchema={true}
       />
+
+      <P>Watch the join to order_items in particular: order_items.order_id has no index (it is only a plain column, not a primary key), so expect <Hl>SCAN oi</Hl> for that table on every outer row — the "missing FK index" problem described above, visible directly in SQLite's plan output as a SCAN where you would want a SEARCH.</P>
 
       <HR />
 
@@ -742,11 +750,12 @@ COMMIT;
 -- 10 concurrent sessions × 5 nodes each × 256MB = 12.8 GB — can OOM the server`}
       />
 
-      <SQLPlayground
-        initialQuery={`-- Check current work_mem setting
-SHOW work_mem;`}
-        height={100}
-        showSchema={false}
+      <P>work_mem is a PostgreSQL-specific setting — <Hl>SHOW work_mem;</Hl> is not valid SQLite syntax and would error in this playground, so it stays a static example rather than a live one. SQLite (via sql.js) manages sort and hash memory internally and does not expose a comparable per-query tunable to a browser-embedded database — there is no SQLite PRAGMA that plays the same role as work_mem, so there is nothing to demonstrate live here. The concept still transfers: any engine doing a sort or hash join has to hold intermediate results somewhere, and when that somewhere is disk instead of RAM, the operation gets dramatically slower. PostgreSQL just happens to be the engine that lets you see and tune that boundary directly.</P>
+
+      <CodeBlock
+        label="PostgreSQL only — checking the current work_mem setting (not runnable here)"
+        code={`SHOW work_mem;
+-- default: 4MB`}
       />
 
       <HR />
@@ -761,16 +770,16 @@ SHOW work_mem;`}
       </TimeBlock>
 
       <TimeBlock time="7:35 AM" label="Step 1 — run EXPLAIN ANALYZE on the slow query">
-        Adapted for FreshCart: the equivalent is a revenue reconciliation across orders, stores, and customers.
+        Adapted for FreshCart: the equivalent is a revenue reconciliation across orders, stores, and customers. The playground below runs on SQLite, so it uses EXPLAIN QUERY PLAN instead — a simpler SCAN/SEARCH readout than the Postgres cost tree described in this walkthrough, but it points at the same bottleneck.
       </TimeBlock>
 
       <SQLPlayground
-        initialQuery={`-- Baseline plan for the settlement-style report
-EXPLAIN
+        initialQuery={`-- Baseline plan for the settlement-style report (SQLite: EXPLAIN QUERY PLAN)
+EXPLAIN QUERY PLAN
 SELECT
   s.city,
   c.loyalty_tier,
-  DATE_TRUNC('month', o.order_date)::DATE    AS month_start,
+  strftime('%Y-%m-01', o.order_date)         AS month_start,
   COUNT(DISTINCT o.order_id)                 AS order_count,
   COUNT(DISTINCT o.customer_id)              AS unique_customers,
   ROUND(SUM(o.total_amount), 2)              AS gross_revenue,
@@ -782,14 +791,14 @@ JOIN stores      AS s  ON o.store_id    = s.store_id
 JOIN order_items AS oi ON o.order_id    = oi.order_id
 WHERE o.order_status = 'Delivered'
   AND o.order_date >= '2024-01-01'
-GROUP BY s.city, c.loyalty_tier, DATE_TRUNC('month', o.order_date)
+GROUP BY s.city, c.loyalty_tier, strftime('%Y-%m-01', o.order_date)
 ORDER BY month_start, s.city;`}
         height={255}
         showSchema={true}
       />
 
       <TimeBlock time="7:38 AM" label="Step 2 — identify the bottleneck">
-        EXPLAIN shows Seq Scan on orders with Rows Removed by Filter: 820,000. No index on order_status + order_date. Also shows estimated rows = 50 vs actual = 48,000 — stale statistics.
+        EXPLAIN ANALYZE on the real Stripe/Postgres query shows Seq Scan on orders with Rows Removed by Filter: 820,000. No index on order_status + order_date. Also shows estimated rows = 50 vs actual = 48,000 — stale statistics. On the FreshCart playground above, the same root cause shows up as SCAN o in the SQLite plan — no index on order_status or order_date means the engine reads every row in orders to satisfy the WHERE clause.
       </TimeBlock>
 
       <TimeBlock time="7:42 AM" label="Step 3 — fix statistics first, then add composite index">
@@ -826,8 +835,8 @@ EXPLAIN ANALYZE <same query>;
         initialQuery={`-- Verify the fix by checking selectivity — what % of orders are Delivered?
 SELECT
   order_status,
-  COUNT(*)                                           AS row_count,
-  ROUND(COUNT(*)::NUMERIC / SUM(COUNT(*)) OVER () * 100, 1) AS pct
+  COUNT(*)                                                AS row_count,
+  ROUND(CAST(COUNT(*) AS REAL) / SUM(COUNT(*)) OVER () * 100, 1) AS pct
 FROM orders
 GROUP BY order_status
 ORDER BY row_count DESC;

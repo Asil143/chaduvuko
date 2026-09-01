@@ -109,7 +109,7 @@ SELECT
   cost_price,
   unit_price - cost_price                              AS profit,
   ROUND((unit_price - cost_price) / unit_price * 100, 1) AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                          AS price_with_tax
+  ROUND(unit_price * 1.08, 2)                          AS price_with_tax
 FROM products
 LIMIT 5;`}
         height={170}
@@ -136,7 +136,7 @@ LIMIT 5;`}
             {[
               ['+', 'Addition',       '100 + 50',   '150',   'unit_price + tax_amount'],
               ['-', 'Subtraction',    '100 - 30',   '70',    'unit_price - cost_price (profit)'],
-              ['*', 'Multiplication', '100 * 1.18', '118',   'unit_price * quantity (line total)'],
+              ['*', 'Multiplication', '100 * 1.08', '108',   'unit_price * quantity (line total)'],
               ['/', 'Division',       '100 / 4',    '25',    '(profit / unit_price) * 100 (margin %)'],
               ['%', 'Modulo',         '10 % 3',     '1',     'order_id % 2 (split into even/odd batches)'],
             ].map(([op, name, example, result, use], i) => (
@@ -168,12 +168,12 @@ ORDER BY profit_per_unit DESC;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Tax-inclusive price: add 18% sales tax to the base price
+        initialQuery={`-- Tax-inclusive price: add 8% sales tax to the base price
 SELECT
   product_name,
   unit_price                          AS base_price,
-  ROUND(unit_price * 0.18, 2)         AS tax_amount,
-  ROUND(unit_price + unit_price * 0.18, 2)  AS price_with_tax
+  ROUND(unit_price * 0.08, 2)         AS tax_amount,
+  ROUND(unit_price + unit_price * 0.08, 2)  AS price_with_tax
 FROM products
 ORDER BY unit_price DESC
 LIMIT 8;`}
@@ -214,6 +214,10 @@ ORDER BY margin_pct DESC;`}
         height={160}
         showSchema={false}
       />
+
+      <Callout type="info">
+        This uses CASE WHEN, covered formally in Module 16 — for now, just know it evaluates conditions in order and returns the value tied to the first one that matches, like an if/else chain.
+      </Callout>
 
       <SQLPlayground
         initialQuery={`-- Modulo: split orders into two processing batches
@@ -297,13 +301,13 @@ LIMIT 5;`}
       <P>This is one of the most dangerous arithmetic bugs in SQL and it produces no error — just wrong answers. When you divide two integers in PostgreSQL and MySQL, the result is also an integer — the decimal part is silently discarded (truncated, not rounded).</P>
 
       <SQLPlayground
-        initialQuery={`-- Integer division in action — DuckDB (this playground) returns decimal
--- But PostgreSQL and MySQL would return 0 for 1/3
+        initialQuery={`-- Integer division in action — SQLite (this playground) truncates too,
+-- exactly like PostgreSQL and MySQL
 SELECT
-  1 / 3        AS int_division,      -- 0 in PostgreSQL/MySQL, 0.333 in DuckDB
-  1.0 / 3      AS decimal_division,  -- 0.333 everywhere
-  1 / 3.0      AS also_decimal,      -- 0.333 everywhere
-  CAST(1 AS DECIMAL) / 3  AS cast_decimal; -- 0.333 everywhere`}
+  1 / 3                    AS int_division,      -- 0 — the fractional part is discarded
+  1.0 / 3                  AS decimal_division,   -- 0.333... — a decimal literal forces real math
+  1 / 3.0                  AS also_decimal,       -- 0.333... — works on either side
+  CAST(1 AS REAL) / 3      AS cast_decimal;       -- 0.333... — CAST AS REAL forces real math`}
         height={130}
         showSchema={false}
       />
@@ -338,8 +342,11 @@ LIMIT 5;`}
 -- Method 2: use a decimal literal
 (unit_price - cost_price) / 1.0 / unit_price * 100
 
--- Method 3: CAST to DECIMAL explicitly (most explicit, recommended)
-CAST(unit_price - cost_price AS DECIMAL) / unit_price * 100
+-- Method 3: CAST to REAL explicitly (most explicit, recommended)
+-- In SQLite, CAST(... AS DECIMAL) does NOT force decimal division —
+-- SQLite has no true DECIMAL type, so it falls back to NUMERIC affinity
+-- and can still behave like an integer. CAST AS REAL is the reliable fix.
+CAST(unit_price - cost_price AS REAL) / unit_price * 100
 
 -- Method 4: ROUND() also forces decimal in some databases
 ROUND((unit_price - cost_price) / unit_price, 4) * 100`}
@@ -347,13 +354,13 @@ ROUND((unit_price - cost_price) / unit_price, 4) * 100`}
 
       <SQLPlayground
         initialQuery={`-- Safe margin calculation that works on INTEGER columns too
--- CAST ensures no integer division truncation
+-- CAST AS REAL ensures no integer division truncation
 SELECT
   product_name,
   unit_price,
   cost_price,
   ROUND(
-    CAST(unit_price - cost_price AS DECIMAL) / unit_price * 100
+    CAST(unit_price - cost_price AS REAL) / unit_price * 100
   , 1)   AS margin_pct
 FROM products
 ORDER BY margin_pct DESC;`}
@@ -387,7 +394,7 @@ SELECT
   product_name,
   unit_price,
   ROUND((unit_price - cost_price) / unit_price * 100, 1)  AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                             AS tax_price
+  ROUND(unit_price * 1.08, 2)                             AS tax_price
 FROM products
 ORDER BY margin_pct DESC
 LIMIT 8;`}
@@ -454,6 +461,10 @@ ABS(-3.14)  -- 3.14
 -- Common use: distance between values, deviation from target`}
       />
 
+      <Callout type="info">
+        AVG(unit_price) OVER () is a window function — covered fully in Module 52. For now: it computes the average across all rows without collapsing them into one row, unlike a plain GROUP BY aggregate.
+      </Callout>
+
       <SQLPlayground
         initialQuery={`-- ABS for deviation from average price
 -- How far is each product from the average price?
@@ -508,6 +519,10 @@ ORDER BY total_amount DESC;`}
         showSchema={false}
       />
 
+      <Callout type="info">
+        (SELECT MIN(salary) FROM employees) is a subquery — covered fully in Module 36. For now: it's a query nested inside another query, run first, whose single result is used like a value in the outer query.
+      </Callout>
+
       <SQLPlayground
         initialQuery={`-- Employees whose salary is more than 1.5x the minimum salary
 SELECT
@@ -522,7 +537,7 @@ ORDER BY salary DESC;`}
       />
 
       <Callout type="warning">
-        Arithmetic on column values in WHERE prevents index usage — the same way function calls do. WHERE unit_price * 1.18 {'>'} 200 forces the database to calculate unit_price * 1.18 for every row before comparing. Rewrite as WHERE unit_price {'>'} 200 / 1.18 to put the arithmetic on the literal side — this lets the database use an index on unit_price. Move calculations to the value side of comparisons whenever possible.
+        Arithmetic on column values in WHERE prevents index usage — the same way function calls do. WHERE unit_price * 1.08 {'>'} 200 forces the database to calculate unit_price * 1.08 for every row before comparing. Rewrite as WHERE unit_price {'>'} 200 / 1.08 to put the arithmetic on the literal side — this lets the database use an index on unit_price. Move calculations to the value side of comparisons whenever possible.
       </Callout>
 
       <HR />
@@ -618,7 +633,7 @@ SELECT
   cost_price,
   unit_price - cost_price                                       AS profit_per_unit,
   ROUND((unit_price - cost_price) / unit_price * 100, 1)        AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                                   AS price_with_tax,
+  ROUND(unit_price * 1.08, 2)                                   AS price_with_tax,
   CASE
     WHEN (unit_price - cost_price) / unit_price >= 0.40 THEN 'High Margin'
     WHEN (unit_price - cost_price) / unit_price >= 0.25 THEN 'Medium Margin'
@@ -640,8 +655,8 @@ SELECT
   order_date,
   total_amount,
   ROUND(total_amount * 0.02, 2)                        AS platform_fee_2pct,
-  ROUND(total_amount * 0.18, 2)                        AS tax_18pct,
-  ROUND(total_amount + total_amount * 0.18, 2)         AS total_with_tax,
+  ROUND(total_amount * 0.08, 2)                        AS tax_8pct,
+  ROUND(total_amount + total_amount * 0.08, 2)         AS total_with_tax,
   CASE
     WHEN total_amount >= 2000 THEN 'Premium'
     WHEN total_amount >= 800  THEN 'Standard'
@@ -658,15 +673,16 @@ ORDER BY total_amount DESC;`}
 
       <SQLPlayground
         initialQuery={`-- Employee salary analysis with percentages
+-- salary is stored as an annual figure, so monthly_pay divides it down
 SELECT
   first_name || ' ' || last_name                        AS employee,
   role,
   salary,
-  ROUND(salary * 12, 0)                                 AS annual_ctc,
+  ROUND(salary / 12, 0)                                 AS monthly_pay,
   ROUND(salary / (SELECT MAX(salary) FROM employees) * 100, 1)
                                                          AS pct_of_max_salary,
   ROUND(salary - AVG(salary) OVER (), 2)                AS diff_from_avg,
-  ROUND(salary * 0.12, 2)                               AS pf_contribution
+  ROUND(salary * 0.06, 2)                               AS retirement_401k
 FROM employees
 ORDER BY salary DESC;`}
         height={190}
@@ -708,10 +724,10 @@ ORDER BY gross_profit DESC;`}
       {/* ── PART 10 ── */}
       <Part n="10" title="What This Looks Like at Work" />
 
-      <P>You are a business analyst at Sephora. The category management team wants a weekly SKU-level profitability report that their buyers use to make restocking decisions. The report needs to show each product's margin, tax-inclusive price, a margin band category, and a restock recommendation based on stock status and margin.</P>
+      <P>You are a business analyst on FreshCart's own analytics team. The category management team wants a weekly SKU-level profitability report that their buyers use to make restocking decisions. The report needs to show each product's margin, tax-inclusive price, a margin band category, and a restock recommendation based on stock status and margin.</P>
 
       <TimeBlock time="2:00 PM" label="Requirements briefing">
-        The buyer explains: show all products with their margin percentage, tax-inclusive price (18% added), a margin band (Premium above 40%, Standard 25–40%, Review below 25%), and a restocking flag — restock immediately if margin is above 30% and item is out of stock, otherwise normal replenishment.
+        The buyer explains: show all products with their margin percentage, tax-inclusive price (8% added), a margin band (Premium above 40%, Standard 25–40%, Review below 25%), and a restocking flag — restock immediately if margin is above 30% and item is out of stock, otherwise normal replenishment.
       </TimeBlock>
 
       <TimeBlock time="2:20 PM" label="You build the query">
@@ -729,7 +745,7 @@ SELECT
   in_stock,
   -- Calculated columns
   ROUND((unit_price - cost_price) / unit_price * 100, 1)   AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                              AS tax_price,
+  ROUND(unit_price * 1.08, 2)                              AS tax_price,
   CASE
     WHEN (unit_price - cost_price) / unit_price >= 0.40 THEN 'Premium'
     WHEN (unit_price - cost_price) / unit_price >= 0.25 THEN 'Standard'
@@ -779,8 +795,8 @@ ORDER BY margin_pct DESC;`}
       </IQ>
 
       <IQ q="Why is it more efficient to put arithmetic on the literal side of a WHERE comparison rather than the column side?">
-        <p style={{ margin: '0 0 14px' }}>When arithmetic is applied to a column in a WHERE condition — WHERE unit_price * 1.18 {'>'}200 — the database must calculate unit_price * 1.18 for every single row in the table before it can determine whether the row qualifies. This prevents the database from using an index on unit_price, because the index stores raw unit_price values, not the result of unit_price * 1.18. The result is a full table scan even when the unit_price column has an index.</p>
-        <p style={{ margin: '0 0 14px' }}>When the arithmetic is moved to the literal side — WHERE unit_price {'>'} 200 / 1.18 — the database evaluates 200 / 1.18 once (it is a constant, independent of any row), producing approximately 169.49. The WHERE condition becomes WHERE unit_price {'>'} 169.49, which the database can evaluate using an index on unit_price directly. Instead of a full table scan, the database does an index range scan — a dramatically more efficient operation on large tables.</p>
+        <p style={{ margin: '0 0 14px' }}>When arithmetic is applied to a column in a WHERE condition — WHERE unit_price * 1.08 {'>'}200 — the database must calculate unit_price * 1.08 for every single row in the table before it can determine whether the row qualifies. This prevents the database from using an index on unit_price, because the index stores raw unit_price values, not the result of unit_price * 1.08. The result is a full table scan even when the unit_price column has an index.</p>
+        <p style={{ margin: '0 0 14px' }}>When the arithmetic is moved to the literal side — WHERE unit_price {'>'} 200 / 1.08 — the database evaluates 200 / 1.08 once (it is a constant, independent of any row), producing approximately 185.19. The WHERE condition becomes WHERE unit_price {'>'} 185.19, which the database can evaluate using an index on unit_price directly. Instead of a full table scan, the database does an index range scan — a dramatically more efficient operation on large tables.</p>
         <p style={{ margin: 0 }}>This principle is called SARGability (Search ARGument Ability). A WHERE condition is SARGable if the database can use an index to satisfy it. Conditions that apply functions or arithmetic to columns are not SARGable. Conditions that compare raw column values to constants (even computed constants) are SARGable. The rule: whenever possible, isolate the column in the WHERE condition — put all transformations on the literal side. This applies to arithmetic, functions (LOWER, YEAR, MONTH), and any other operation that wraps a column value.</p>
       </IQ>
 
@@ -829,7 +845,7 @@ ORDER BY margin_pct DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart procurement team needs a reorder priority report. Write a query on the products table that returns: product_name, category, unit_price, cost_price, a profit column (unit_price minus cost_price), a margin_pct column (profit as a percentage of unit_price, rounded to 1 decimal), a tax_price column (unit_price multiplied by 1.18, rounded to 2 decimal places), and a priority column using CASE: 'Urgent Restock' if out of stock and margin above 25%, 'Restock' if out of stock and margin 25% or below, 'OK' if in stock. Sort by margin_pct descending."
+        question="The FreshCart procurement team needs a reorder priority report. Write a query on the products table that returns: product_name, category, unit_price, cost_price, a profit column (unit_price minus cost_price), a margin_pct column (profit as a percentage of unit_price, rounded to 1 decimal), a tax_price column (unit_price multiplied by 1.08, rounded to 2 decimal places), and a priority column using CASE: 'Urgent Restock' if out of stock and margin above 25%, 'Restock' if out of stock and margin 25% or below, 'OK' if in stock. Sort by margin_pct descending."
         hint="Use (unit_price - cost_price) for profit. Use ROUND((unit_price - cost_price) / unit_price * 100, 1) for margin_pct. The CASE needs to check in_stock = false first, then branch on the margin condition."
         answer={`SELECT
   product_name,
@@ -838,7 +854,7 @@ ORDER BY margin_pct DESC;`}
   cost_price,
   unit_price - cost_price                                    AS profit,
   ROUND((unit_price - cost_price) / unit_price * 100, 1)    AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                               AS tax_price,
+  ROUND(unit_price * 1.08, 2)                               AS tax_price,
   CASE
     WHEN in_stock = false
      AND (unit_price - cost_price) / unit_price > 0.25
@@ -862,7 +878,7 @@ ORDER BY margin_pct DESC;`}
           'Integer division truncates the decimal portion silently — 7/2 returns 3, not 3.5, in PostgreSQL and MySQL. Force decimal division with CAST(value AS DECIMAL), multiply by 1.0, or use a decimal literal.',
           'NULL propagates through arithmetic — any expression involving NULL returns NULL. Use COALESCE to substitute defaults before calculations: COALESCE(discount_pct, 0).',
           'ROUND(number, places) rounds to N decimal places. CEIL always rounds up. FLOOR always rounds down. ABS returns the absolute value (removes negative sign).',
-          'Arithmetic in WHERE works but applying calculations to the column side (WHERE col * 1.18 > 200) prevents index usage. Move calculations to the literal side (WHERE col > 200 / 1.18) to keep queries SARGable.',
+          'Arithmetic in WHERE works but applying calculations to the column side (WHERE col * 1.08 > 200) prevents index usage. Move calculations to the literal side (WHERE col > 200 / 1.08) to keep queries SARGable.',
           'Date subtraction returns days between two dates in PostgreSQL/DuckDB. Use DATEDIFF in MySQL. Use INTERVAL for calendar-aware month/year arithmetic — adding 30 days is not the same as adding one month.',
           'Division by zero raises an error in PostgreSQL. Prevent it with NULLIF on the denominator: value / NULLIF(denominator, 0) — returns NULL instead of crashing when the denominator is zero.',
           'Always use DECIMAL data types for monetary values — never FLOAT or DOUBLE. Floating-point representation errors in ROUND() accumulate into accounting discrepancies at scale.',

@@ -189,7 +189,7 @@ WHERE order_status = 'Delivered' AND order_date = '...'  -- still no store_id
 -- Query 1: equality + range (composite order matters)
 SELECT
   COUNT(*)                                AS matching_rows,
-  ROUND(COUNT(*)::NUMERIC / (SELECT COUNT(*) FROM orders) * 100, 1) AS selectivity_pct
+  ROUND(CAST(COUNT(*) AS REAL) / (SELECT COUNT(*) FROM orders) * 100, 1) AS selectivity_pct
 FROM orders
 WHERE store_id = 'ST001'
   AND order_date BETWEEN '2024-01-01' AND '2024-01-31';
@@ -216,11 +216,11 @@ WHERE order_date >= '2024-01-15';`}
 
 -- Check column selectivity (distinct values / total rows):
 SELECT
-  'store_id'     AS col, COUNT(DISTINCT store_id)::NUMERIC / COUNT(*) AS selectivity FROM orders
+  'store_id'     AS col, CAST(COUNT(DISTINCT store_id) AS REAL) / COUNT(*) AS selectivity FROM orders
 UNION ALL
-SELECT 'order_status', COUNT(DISTINCT order_status)::NUMERIC / COUNT(*) FROM orders
+SELECT 'order_status', CAST(COUNT(DISTINCT order_status) AS REAL) / COUNT(*) FROM orders
 UNION ALL
-SELECT 'customer_id',  COUNT(DISTINCT customer_id)::NUMERIC / COUNT(*) FROM orders;
+SELECT 'customer_id',  CAST(COUNT(DISTINCT customer_id) AS REAL) / COUNT(*) FROM orders;
 
 -- Example results:
 -- store_id:     0.067  (10 stores / 150 orders)
@@ -241,22 +241,22 @@ SELECT
   'orders.store_id'     AS column_name,
   COUNT(DISTINCT store_id)   AS distinct_vals,
   COUNT(*)                   AS total_rows,
-  ROUND(COUNT(DISTINCT store_id)::NUMERIC / COUNT(*), 4) AS selectivity
+  ROUND(CAST(COUNT(DISTINCT store_id) AS REAL) / COUNT(*), 4) AS selectivity
 FROM orders
 UNION ALL
 SELECT 'orders.order_status',
   COUNT(DISTINCT order_status), COUNT(*),
-  ROUND(COUNT(DISTINCT order_status)::NUMERIC / COUNT(*), 4)
+  ROUND(CAST(COUNT(DISTINCT order_status) AS REAL) / COUNT(*), 4)
 FROM orders
 UNION ALL
 SELECT 'orders.customer_id',
   COUNT(DISTINCT customer_id), COUNT(*),
-  ROUND(COUNT(DISTINCT customer_id)::NUMERIC / COUNT(*), 4)
+  ROUND(CAST(COUNT(DISTINCT customer_id) AS REAL) / COUNT(*), 4)
 FROM orders
 UNION ALL
 SELECT 'products.category',
   COUNT(DISTINCT category), COUNT(*),
-  ROUND(COUNT(DISTINCT category)::NUMERIC / COUNT(*), 4)
+  ROUND(CAST(COUNT(DISTINCT category) AS REAL) / COUNT(*), 4)
 FROM products
 ORDER BY selectivity DESC;`}
         height={235}
@@ -323,19 +323,25 @@ GROUP BY store_id;
         showSchema={false}
       />
 
-      <H>Verifying Index Only Scan in EXPLAIN</H>
+      <H>Verifying Index Only Scan — SQLite's EXPLAIN QUERY PLAN</H>
+
+      <P>PostgreSQL's EXPLAIN ANALYZE names this node "Index Only Scan." SQLite's EXPLAIN QUERY PLAN calls the same idea <Hl>SEARCH ... USING COVERING INDEX ...</Hl> — every column the query needs (filter and SELECT columns alike) lives inside the index, so the engine never touches the table. Plain <Hl>SEARCH ... USING INDEX ...</Hl> (no "COVERING") means the index narrowed the search but the engine still fetched some columns from the table. <Hl>SCAN</Hl> means no index was used at all.</P>
 
       <SQLPlayground
-        initialQuery={`-- Check if queries are using Index Only Scans
-EXPLAIN
+        initialQuery={`-- No index exists yet on orders, so this plan shows a full SCAN.
+-- Uncomment the CREATE INDEX line and re-run to see the plan change to
+-- "SEARCH orders USING COVERING INDEX ..." — zero table access.
+-- CREATE INDEX idx_orders_status_covering ON orders (order_status, store_id, total_amount);
+
+EXPLAIN QUERY PLAN
 SELECT store_id, COUNT(*), ROUND(SUM(total_amount), 2) AS revenue
 FROM orders
 WHERE order_status = 'Delivered'
 GROUP BY store_id;
--- Look for "Index Only Scan" in the output — means no heap fetch
--- "Index Scan" means the index was used but heap was also read
--- "Seq Scan" means no index was used at all`}
-        height={160}
+-- "SEARCH ... USING COVERING INDEX" — every needed column is in the index, no table access
+-- "SEARCH ... USING INDEX"          — index narrowed the search, but the table was still read
+-- "SCAN orders"                     — no index was used at all`}
+        height={185}
         showSchema={false}
       />
 
@@ -384,8 +390,8 @@ CREATE UNIQUE INDEX idx_customers_active_email
         initialQuery={`-- Verify partial index benefit: how much smaller would it be?
 SELECT
   order_status,
-  COUNT(*)                                                     AS row_count,
-  ROUND(COUNT(*)::NUMERIC / SUM(COUNT(*)) OVER () * 100, 1)   AS pct_of_table
+  COUNT(*)                                                          AS row_count,
+  ROUND(CAST(COUNT(*) AS REAL) / SUM(COUNT(*)) OVER () * 100, 1)   AS pct_of_table
 FROM orders
 GROUP BY order_status
 ORDER BY row_count DESC;
@@ -403,7 +409,7 @@ SELECT
   COUNT(*) FILTER (WHERE total_amount > 500)   AS high_value_orders,
   COUNT(*)                                     AS total_orders,
   ROUND(
-    COUNT(*) FILTER (WHERE total_amount > 500)::NUMERIC
+    CAST(COUNT(*) FILTER (WHERE total_amount > 500) AS REAL)
     / COUNT(*) * 100
   , 1)                                         AS pct_high_value
 FROM orders
@@ -494,7 +500,7 @@ SELECT
   pg_size_pretty(pg_relation_size(schemaname || '.' || indexname)) AS index_size
 FROM pg_indexes
 WHERE tablename IN ('orders', 'order_items', 'customers')
-  AND schemaname = 'main'
+  AND schemaname = 'public'
 ORDER BY tablename, pg_relation_size(schemaname || '.' || indexname) DESC;
 
 -- Check index usage stats (has this index been used recently?)
@@ -507,7 +513,7 @@ SELECT
   pg_size_pretty(pg_relation_size(indexrelid)) AS index_size
 FROM pg_stat_user_indexes
 JOIN pg_index USING (indexrelid)
-WHERE schemaname = 'main'
+WHERE schemaname = 'public'
 ORDER BY idx_scan ASC;           -- sort by usage ascending → unused at top
 
 -- Red flags:
@@ -591,7 +597,7 @@ SELECT
   t.relname   AS table_name,
   pg_size_pretty(pg_table_size(t.oid))           AS table_size,
   pg_size_pretty(pg_indexes_size(t.oid))         AS all_indexes_size,
-  ROUND(pg_indexes_size(t.oid)::NUMERIC /
+  ROUND(CAST(pg_indexes_size(t.oid) AS NUMERIC) /
     NULLIF(pg_table_size(t.oid), 0) * 100, 0)    AS index_to_table_pct
 FROM pg_class AS t
 WHERE t.relkind = 'r'
@@ -610,31 +616,37 @@ ORDER BY idx_scan DESC
 LIMIT 20;`}
       />
 
+      <P>PostgreSQL's index inventory lives in <Hl>pg_indexes</Hl>. SQLite has no such view — every table, index, view, and trigger in a SQLite database lives in one system table, <Hl>sqlite_master</Hl>, filterable by <Hl>type</Hl>.</P>
+
       <SQLPlayground
-        initialQuery={`-- Audit FreshCart indexes: size vs usage
+        initialQuery={`-- Audit FreshCart indexes: sqlite_master lists every index that exists
 SELECT
-  tablename,
-  indexname,
-  pg_size_pretty(pg_relation_size(schemaname || '.' || indexname)) AS index_size
-FROM pg_indexes
-WHERE schemaname = 'main'
-ORDER BY tablename, indexname;`}
-        height={160}
+  tbl_name  AS table_name,
+  name      AS index_name,
+  sql       AS index_definition
+FROM sqlite_master
+WHERE type = 'index'
+ORDER BY tbl_name, name;
+-- Only "sqlite_autoindex_stores_1" shows up — the FreshCart schema has no
+-- explicit CREATE INDEX statements, only the auto-index SQLite generates
+-- for a non-integer PRIMARY KEY (stores.store_id). A NULL index_definition
+-- means SQLite created that index automatically, not from a CREATE INDEX.`}
+        height={185}
         showSchema={false}
       />
 
-      <SQLPlayground
-        initialQuery={`-- Check index usage statistics for FreshCart tables
-SELECT
+      <P>Index <Hl>usage</Hl> counts are a different story. PostgreSQL's <Hl>pg_stat_user_indexes.idx_scan</Hl> tracks exactly how many times each index has been used since the last statistics reset — the number the rest of this module's "drop unused indexes" workflow depends on. SQLite keeps no such counter anywhere queryable: it does not track per-index scan counts, in sql.js or otherwise. There is no working SQLite rewrite for this one — it stays PostgreSQL-only, shown here for reference.</P>
+
+      <CodeBlock
+        label="PostgreSQL only — index usage stats via pg_stat_user_indexes (no SQLite equivalent, not runnable here)"
+        code={`SELECT
   relname       AS table_name,
   indexrelname  AS index_name,
   idx_scan      AS times_scanned,
   idx_tup_read  AS tuples_read
 FROM pg_stat_user_indexes
-WHERE schemaname = 'main'
+WHERE schemaname = 'public'
 ORDER BY idx_scan DESC;`}
-        height={155}
-        showSchema={false}
       />
 
       <HR />
@@ -673,13 +685,15 @@ ALTER TABLE orders
        autovacuum_analyze_scale_factor = 0.02);  -- refresh stats at 2% changes`}
       />
 
-      <SQLPlayground
-        initialQuery={`-- Check table and index health statistics
-SELECT
+      <P>Dead-tuple tracking is a PostgreSQL MVCC concept: every UPDATE and DELETE leaves the old row version behind until VACUUM reclaims it, and <Hl>pg_stat_user_tables</Hl> exposes exactly how many dead rows are piling up per table. SQLite does not use MVCC the same way and keeps no queryable dead-row counter — its own VACUUM simply rebuilds the whole database file rather than reclaiming space table by table. So this stays illustrative only.</P>
+
+      <CodeBlock
+        label="PostgreSQL only — table and index health via pg_stat_user_tables (no SQLite equivalent, not runnable here)"
+        code={`SELECT
   relname                                AS table_name,
   n_live_tup                             AS live_rows,
   n_dead_tup                             AS dead_rows,
-  ROUND(n_dead_tup::NUMERIC /
+  ROUND(CAST(n_dead_tup AS NUMERIC) /
     NULLIF(n_live_tup + n_dead_tup, 0) * 100, 1) AS dead_pct,
   last_vacuum,
   last_autovacuum,
@@ -688,8 +702,6 @@ SELECT
 FROM pg_stat_user_tables
 WHERE relname IN ('orders', 'customers', 'products', 'order_items')
 ORDER BY dead_pct DESC NULLS LAST;`}
-        height={185}
-        showSchema={false}
       />
 
       <HR />
@@ -836,13 +848,15 @@ CREATE INDEX idx_orders_store_month
       <SQLPlayground
         initialQuery={`-- Simulate the impact: how many INSERTs per day on orders?
 -- (approximation from the data spread)
+-- order_date is stored as TEXT, so date subtraction needs julianday() —
+-- plain "MAX(order_date) - MIN(order_date)" would try to subtract text values
 SELECT
   MIN(order_date)                          AS first_order,
   MAX(order_date)                          AS last_order,
   COUNT(*)                                 AS total_orders,
-  MAX(order_date) - MIN(order_date)        AS days_span,
-  ROUND(COUNT(*)::NUMERIC /
-    NULLIF(MAX(order_date) - MIN(order_date), 0), 1) AS avg_orders_per_day
+  CAST(julianday(MAX(order_date)) - julianday(MIN(order_date)) AS INTEGER) AS days_span,
+  ROUND(CAST(COUNT(*) AS REAL) /
+    NULLIF(CAST(julianday(MAX(order_date)) - julianday(MIN(order_date)) AS INTEGER), 0), 1) AS avg_orders_per_day
 FROM orders;
 -- At scale: 50,000 orders/day × 11 removed indexes = 550,000 fewer index writes/day`}
         height={185}

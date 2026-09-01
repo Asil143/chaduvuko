@@ -188,8 +188,11 @@ CREATE TRIGGER trg_orders_after_status_change
   FOR EACH ROW EXECUTE FUNCTION tgf_log_status_change();
 -- tgf inserts into order_status_log when status changes
 
--- Cannot use BEFORE to log — the row might be rejected by a constraint
--- after the BEFORE trigger runs. Log in AFTER to guarantee the row landed.
+-- Logging in BEFORE will not leave a stray "orphan" audit row if the write
+-- is later rejected — the whole statement, including the BEFORE trigger's
+-- own audit INSERT, rolls back atomically. The real risk of logging in
+-- BEFORE: a failure inside that audit INSERT itself would abort an
+-- otherwise-valid write. AFTER avoids this — constraints already passed.
 
 -- Cannot use AFTER to change the row being inserted — it's already written.
 -- Change data in BEFORE, react to data in AFTER.`}
@@ -238,13 +241,13 @@ CREATE TRIGGER trg_statement_level
         initialQuery={`-- Visualise what BEFORE vs AFTER triggers see
 -- Simulating the NEW and OLD records for various events
 
--- For an UPDATE on order_id = 1 changing status to 'Delivered':
+-- For an UPDATE on order_id = 1001 changing status to 'Delivered':
 SELECT
   'OLD record (before update)' AS context,
   order_id,
   order_status,
   delivery_date
-FROM orders WHERE order_id = 1
+FROM orders WHERE order_id = 1001
 
 UNION ALL
 
@@ -254,7 +257,7 @@ SELECT
   order_id,
   'Delivered'               AS order_status,   -- what NEW.order_status would be
   CURRENT_DATE              AS delivery_date   -- what NEW.delivery_date would be
-FROM orders WHERE order_id = 1;`}
+FROM orders WHERE order_id = 1001;`}
         height={200}
         showSchema={true}
       />
@@ -337,7 +340,7 @@ SELECT
   1                   AS order_id,
   'Processing'        AS old_status,
   'Delivered'         AS new_status,
-  NOW()               AS changed_at,
+  datetime('now')     AS changed_at,
   'app_user'          AS changed_by,
   -- Only log if status actually changed (the IF condition)
   CASE WHEN 'Processing' != 'Delivered'
@@ -419,16 +422,18 @@ CREATE TRIGGER trg_audit_orders
       <SQLPlayground
         initialQuery={`-- Simulate the audit log entries that would be created
 -- for a series of operations on orders
+-- (SQLite has no ::cast syntax, ARRAY[], or INTERVAL — plain literals
+-- and datetime('now', '+N days') stand in for those PostgreSQL forms)
 
 -- Entry 1: INSERT of a new order
 SELECT
   1                                     AS order_id,
   'INSERT'                              AS operation,
-  NULL::TEXT                            AS old_data,
-  '{"order_id":1,"status":"Processing","total":850.00}'::TEXT AS new_data,
-  NULL::TEXT[]                          AS changed_cols,
+  NULL                                  AS old_data,
+  '{"order_id":1,"status":"Processing","total":850.00}' AS new_data,
+  NULL                                  AS changed_cols,
   'app_user'                            AS changed_by,
-  NOW()                                 AS changed_at
+  datetime('now')                       AS changed_at
 
 UNION ALL
 
@@ -438,9 +443,9 @@ SELECT
   'UPDATE',
   '{"order_id":1,"status":"Processing","total":850.00}',
   '{"order_id":1,"status":"Delivered","total":850.00}',
-  ARRAY['order_status','delivery_date'],
+  'order_status,delivery_date',
   'app_user',
-  NOW() + INTERVAL '2 days'
+  datetime('now', '+2 days')
 
 UNION ALL
 
@@ -452,7 +457,7 @@ SELECT
   'INSERT = ''INSERT'', UPDATE = ''UPDATE''' AS new_data,
   NULL,
   'PostgreSQL special var',
-  NOW();`}
+  datetime('now');`}
         height={265}
         showSchema={false}
       />
@@ -528,20 +533,21 @@ CREATE TRIGGER trg_orders_protect_created_at
       <SQLPlayground
         initialQuery={`-- Simulate tgf_normalise_customer_data on raw input
 -- Shows what the trigger would store after normalisation
+-- (SQLite has no INITCAP — built manually: first letter upper, rest lower)
 SELECT
   -- Raw inputs (as an app might submit them)
-  '  sofia  '            AS raw_first_name,
-  '  RAMIREZ '            AS raw_last_name,
-  'Sofia.Ramirez@GMAIL.COM' AS raw_email,
-  'BANGALORE'            AS raw_city,
-  NULL                   AS raw_loyalty_tier,
+  '  sofia  '               AS raw_first_name,
+  '  RAMIREZ '               AS raw_last_name,
+  'Sofia.Ramirez@GMAIL.COM'  AS raw_email,
+  '  seattle '               AS raw_city,
+  NULL                       AS raw_loyalty_tier,
 
   -- What BEFORE INSERT trigger would store:
-  INITCAP(LOWER(TRIM('  sofia  ')))              AS stored_first_name,
-  INITCAP(LOWER(TRIM('  RAMIREZ ')))              AS stored_last_name,
-  LOWER(TRIM('Sofia.Ramirez@GMAIL.COM'))          AS stored_email,
-  INITCAP(LOWER(TRIM('BANGALORE')))              AS stored_city,
-  COALESCE(NULL, 'Bronze')                       AS stored_loyalty_tier;`}
+  UPPER(SUBSTR(TRIM('  sofia  '),1,1)) || LOWER(SUBSTR(TRIM('  sofia  '),2))   AS stored_first_name,
+  UPPER(SUBSTR(TRIM('  RAMIREZ '),1,1)) || LOWER(SUBSTR(TRIM('  RAMIREZ '),2)) AS stored_last_name,
+  LOWER(TRIM('Sofia.Ramirez@GMAIL.COM'))                                       AS stored_email,
+  UPPER(SUBSTR(TRIM('  seattle '),1,1)) || LOWER(SUBSTR(TRIM('  seattle '),2)) AS stored_city,
+  COALESCE(NULL, 'Bronze')                                                     AS stored_loyalty_tier;`}
         height={215}
         showSchema={false}
       />
@@ -876,15 +882,16 @@ DROP FUNCTION IF EXISTS tgf_audit_orders();`}
 
       <SQLPlayground
         initialQuery={`-- List all triggers in the FreshCart database
+-- SQLite has no information_schema — triggers live in sqlite_master,
+-- with columns: type, name, tbl_name, rootpage, sql
 SELECT
-  trigger_name,
-  event_manipulation      AS event,
-  event_object_table      AS table_name,
-  action_timing           AS timing,
-  action_orientation      AS level
-FROM information_schema.triggers
-WHERE trigger_schema NOT IN ('pg_catalog','information_schema')
-ORDER BY event_object_table, trigger_name, event;`}
+  name        AS trigger_name,
+  tbl_name    AS table_name,
+  type        AS object_type,
+  sql         AS trigger_definition
+FROM sqlite_master
+WHERE type = 'trigger'
+ORDER BY tbl_name, name;`}
         height={165}
         showSchema={false}
       />
@@ -1037,22 +1044,17 @@ CREATE TRIGGER trg_audit_customers
       <SQLPlayground
         initialQuery={`-- Simulate the audit entries for a series of customer operations
 -- Shows exactly what the trigger would record
-SELECT
-  entry_num,
-  customer_id,
-  operation,
-  old_loyalty_tier,
-  new_loyalty_tier,
-  changed_cols,
-  db_user,
-  occurred_at
-FROM (VALUES
-  (1, 3, 'INSERT',  NULL,       'Bronze',   NULL,                      'app_user', NOW()),
-  (2, 3, 'UPDATE',  'Bronze',   'Silver',   ARRAY['loyalty_tier'],     'app_user', NOW() + INTERVAL '10 days'),
-  (3, 3, 'UPDATE',  'Silver',   'Gold',     ARRAY['loyalty_tier'],     'batch_job', NOW() + INTERVAL '30 days'),
-  (4, 3, 'DELETE',  'Gold',     NULL,       NULL,                      'admin_user', NOW() + INTERVAL '60 days')
-) AS t(entry_num, customer_id, operation, old_loyalty_tier, new_loyalty_tier, changed_cols, db_user, occurred_at)
-ORDER BY entry_num;`}
+-- (SQLite doesn't allow a column-name list on a VALUES-derived table's
+-- alias, and has no ARRAY[] or INTERVAL — a named CTE plus datetime()
+-- offsets stand in for those PostgreSQL forms)
+WITH t(entry_num, customer_id, operation, old_loyalty_tier, new_loyalty_tier, changed_cols, db_user, occurred_at) AS (
+  VALUES
+    (1, 3, 'INSERT', NULL,     'Bronze', NULL,           'app_user',   datetime('now')),
+    (2, 3, 'UPDATE', 'Bronze', 'Silver', 'loyalty_tier', 'app_user',   datetime('now', '+10 days')),
+    (3, 3, 'UPDATE', 'Silver', 'Gold',   'loyalty_tier', 'batch_job',  datetime('now', '+30 days')),
+    (4, 3, 'DELETE', 'Gold',   NULL,     NULL,           'admin_user', datetime('now', '+60 days'))
+)
+SELECT * FROM t ORDER BY entry_num;`}
         height={225}
         showSchema={false}
       />
@@ -1062,7 +1064,7 @@ ORDER BY entry_num;`}
       </TimeBlock>
 
       <ProTip>
-        For compliance audit trails, always use AFTER triggers — not BEFORE. BEFORE triggers fire before constraints are checked, so a row might be modified by the BEFORE trigger and then rejected by a constraint. If you logged the change in BEFORE, you would have an audit entry for a change that never actually happened. AFTER triggers fire only when the row has successfully landed in the table — the audit entry always corresponds to a real committed change.
+        For compliance audit trails, always use AFTER triggers — not BEFORE. This isn't because a BEFORE trigger's audit write can survive as an "orphan" row when the main INSERT is later rejected — it can't: a statement and everything its triggers do, including a BEFORE trigger's own audit INSERT, commit or roll back together as one atomic unit, so a rejected row never leaves a stray audit entry behind. The real reason is ordering: BEFORE triggers run before constraints are checked, so any failure during the BEFORE stage — including inside the audit INSERT itself — aborts a write that would otherwise have succeeded. AFTER triggers run only once every constraint has already passed, so they log the row that is actually about to commit without ever risking the main write.
       </ProTip>
 
       <HR />
@@ -1079,7 +1081,7 @@ ORDER BY entry_num;`}
       <IQ q="What is the difference between BEFORE and AFTER triggers?">
         <p style={{ margin: '0 0 14px' }}>A BEFORE trigger fires before the row is written to the table. The trigger function can modify the NEW record — any changes to NEW are what actually gets stored. BEFORE triggers can also cancel the DML entirely by returning NULL (for row-level triggers) or raising an exception. BEFORE triggers are used for: auto-populating columns (set NEW.created_at, NEW.updated_at, normalise NEW.email before storage), validating and rejecting data (RETURN NULL or RAISE EXCEPTION to prevent the row from landing), and modifying input data before it is committed.</p>
         <p style={{ margin: '0 0 14px' }}>An AFTER trigger fires after the row has been successfully written and constraints have been checked. NEW and OLD are read-only — the row is already in the table and cannot be changed by the trigger. AFTER triggers can INSERT/UPDATE other tables. They are used for: audit logging (log only when the change is confirmed — not if it will be rejected by a constraint), cascading updates to related tables (update a parent table's total when a child row changes), sending notifications, and maintaining denormalised data.</p>
-        <p style={{ margin: 0 }}>The practical choice: BEFORE for changing or validating the incoming data. AFTER for reacting to confirmed data changes. A critical distinction: audit logging should always use AFTER triggers. A BEFORE trigger fires before constraint checking — if you log in BEFORE and the row is subsequently rejected by a NOT NULL or UNIQUE constraint, you have an audit entry for a change that never actually happened. AFTER triggers fire only when the write is committed to the table, guaranteeing the audit log matches reality. For auto-populating columns (timestamps, defaults), BEFORE is correct — you need to set the value before storage.</p>
+        <p style={{ margin: 0 }}>The practical choice: BEFORE for changing or validating the incoming data. AFTER for reacting to confirmed data changes. A critical distinction: audit logging should always use AFTER triggers — but not because a BEFORE trigger's audit write can survive as an orphan row if the change is later rejected. It can't: a statement and everything its triggers do, including a BEFORE trigger's own audit INSERT, commit or roll back together as one atomic unit. The real reason to prefer AFTER: a BEFORE trigger runs before constraints are checked, so any failure during the BEFORE stage — including inside the audit INSERT itself — aborts a write that would otherwise have succeeded. AFTER triggers run only once every constraint has already passed, so the audit table can enforce its own strict constraints without ever risking the main write. For auto-populating columns (timestamps, defaults), BEFORE is correct — you need to set the value before storage.</p>
       </IQ>
 
       <IQ q="What are NEW and OLD and how are they used in trigger functions?">
@@ -1112,9 +1114,9 @@ ORDER BY entry_num;`}
       />
 
       <Err
-        msg="INSERT succeeds but audit log has no entry — BEFORE trigger logged a row that was later rejected"
-        cause="An audit log trigger was implemented as BEFORE instead of AFTER. The BEFORE trigger fires and logs the intended change, but then a constraint violation (NOT NULL, UNIQUE, FK) rejects the row — the row never reaches the table. The audit entry exists for a write that never happened."
-        fix="Change the trigger to AFTER: CREATE TRIGGER trg_audit ... AFTER INSERT OR UPDATE OR DELETE ON table ... An AFTER trigger only fires when the row has been successfully written and all constraints have passed. This guarantees every audit entry corresponds to a real committed change. Also ensure the audit table itself has no constraints that could cause the audit INSERT to fail — if the audit trigger function raises an error, the entire original transaction rolls back."
+        msg="Valid INSERT into orders fails — caused by a constraint violation inside a BEFORE audit trigger"
+        cause="Audit logging was implemented in a BEFORE trigger instead of AFTER. A single statement and everything its triggers do commit or roll back together as one atomic unit — so when the BEFORE trigger's own audit INSERT hits a constraint (a NOT NULL column, a duplicate key, a bad FK on the audit table), the entire statement aborts, including the otherwise-valid row that was about to land in orders. There is no scenario where a rolled-back statement leaves behind a surviving audit row from its own BEFORE trigger — trigger side effects roll back with the statement that triggered them, every time."
+        fix="Move audit logging to an AFTER trigger: CREATE TRIGGER trg_audit ... AFTER INSERT OR UPDATE OR DELETE ON table ... This isn't because BEFORE triggers 'leak' orphan audit rows — they don't, atomicity prevents that. It's because BEFORE triggers run before constraints are checked, so any failure during the BEFORE stage — including inside the audit INSERT itself — blocks a write that would otherwise have succeeded. Reserve BEFORE triggers for logic that should genuinely gate the write (validation, RAISE EXCEPTION, or rely on CHECK/FK constraints instead). AFTER triggers log the row that is actually about to commit — by the time they run, every constraint has already passed, so the audit table can carry its own strict constraints without ever risking the main write."
       />
 
       <Err

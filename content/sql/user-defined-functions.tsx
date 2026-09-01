@@ -288,8 +288,9 @@ SELECT
     WHEN unit_price < 300 THEN 'Premium'
     ELSE 'Luxury'
   END                                                                  AS price_band,
-  -- fn_format_usd inline:
-  '$' || TO_CHAR(unit_price, 'FM999,999,990.00')                      AS display_price
+  -- fn_format_usd inline (PostgreSQL's TO_CHAR has no SQLite equivalent —
+  -- printf() with a comma-grouping format is the SQLite-compatible swap):
+  '$' || printf('%,.2f', unit_price)                                  AS display_price
 FROM products
 ORDER BY margin_pct DESC
 LIMIT 10;`}
@@ -315,11 +316,11 @@ LANGUAGE sql IMMUTABLE AS $$
   SELECT COALESCE(p_email, '') ~ '^[^@]+@[^@]+\.[^@]+$'
 $$;
 
--- Valid zip_code: exactly 6 digits
-CREATE OR REPLACE FUNCTION fn_is_valid_zip_code(p_pin TEXT)
+-- Valid US ZIP code: 5 digits, optionally followed by -4 (ZIP+4)
+CREATE OR REPLACE FUNCTION fn_is_valid_zip_code(p_zip TEXT)
 RETURNS BOOLEAN
 LANGUAGE sql IMMUTABLE AS $$
-  SELECT COALESCE(p_pin, '') ~ '^[0-9]{6}$'
+  SELECT COALESCE(p_zip, '') ~ '^[0-9]{5}(-[0-9]{4})?$'
 $$;
 
 -- Usage in a data quality audit:
@@ -334,8 +335,11 @@ WHERE NOT fn_is_valid_email(email)
    OR NOT fn_is_valid_mobile(phone);`}
       />
 
-      <SQLPlayground
-        initialQuery={`-- Data quality audit using validation function logic inline
+      <P>Regex-based validation (<code style={{ fontFamily: 'var(--font-mono)', background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontSize: '0.9em' }}>~</code> and <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontSize: '0.9em' }}>REGEXP_REPLACE</code>) is a genuinely PostgreSQL-specific technique — SQLite has no regex operator or function built in, and the browser playground doesn't load a regex extension. The audit below is shown as a static PostgreSQL example rather than a live, runnable query.</P>
+
+      <CodeBlock
+        label="Data quality audit — PostgreSQL syntax (no SQLite equivalent in this playground)"
+        code={`-- Data quality audit using validation function logic inline
 SELECT
   customer_id,
   first_name,
@@ -350,8 +354,6 @@ SELECT
 FROM customers
 ORDER BY customer_id
 LIMIT 10;`}
-        height={205}
-        showSchema={true}
       />
 
       <HR />
@@ -390,6 +392,7 @@ BEGIN
       ROUND(AVG(o.total_amount), 2)       AS avg_val,
       p.category,
       ROUND(SUM(oi.line_total), 2)        AS cat_rev,
+      -- This uses a window function (OVER (...)) — covered fully in Module 52
       RANK() OVER (
         PARTITION BY o.order_date
         ORDER BY SUM(oi.line_total) DESC
@@ -435,6 +438,7 @@ WITH daily AS (
     ROUND(AVG(o.total_amount), 2)         AS avg_order,
     p.category,
     ROUND(SUM(oi.line_total), 2)          AS cat_rev,
+    -- This uses a window function (OVER (...)) — covered fully in Module 52
     RANK() OVER (
       PARTITION BY o.order_date
       ORDER BY SUM(oi.line_total) DESC
@@ -594,10 +598,13 @@ SELECT
   ROUND((unit_price - cost_price) / NULLIF(unit_price, 0) * 100, 1) AS margin_pct,
 
   -- STABLE: reads current data — consistent within this query
-  EXTRACT(MONTH FROM CURRENT_DATE)::INT   AS current_month,
+  CAST(strftime('%m', 'now') AS INTEGER)  AS current_month,
 
-  -- VOLATILE: different every row (use RANDOM() carefully)
-  ROUND(RANDOM() * 10 + 5, 0)            AS random_discount_pct
+  -- VOLATILE: different every row (use RANDOM() carefully).
+  -- SQLite's RANDOM() returns a huge signed 64-bit integer (roughly
+  -- -9.2e18 to 9.2e18), NOT a 0-1 float like PostgreSQL's — so scale
+  -- it into 0-1 first, then into a 5-25% discount range
+  ROUND(5 + ABS(RANDOM() % 1000000) / 1000000.0 * 20, 1) AS random_discount_pct
 
 FROM products
 ORDER BY margin_pct DESC
@@ -792,15 +799,19 @@ SELECT * FROM customers;           -- ERROR: permission denied
         initialQuery={`-- Simulate what SECURITY DEFINER enables:
 -- A masked, restricted view of customer data
 -- (equivalent to what a SECURITY DEFINER function would expose)
+-- Note: PostgreSQL's LEFT() and SPLIT_PART() have no SQLite equivalent —
+-- rewritten below using SUBSTR()/INSTR(), which SQLite does support.
+-- SUBSTR(email, INSTR(email, '@') + 1) returns everything after the
+-- @ sign, which is what SPLIT_PART(email, '@', 2) does here.
 SELECT
   customer_id,
   -- Only expose loyalty_tier — not email, phone, or full name
   loyalty_tier,
   city,
   -- Mask name to first name + last initial
-  first_name || ' ' || LEFT(last_name, 1) || '.'  AS display_name,
+  first_name || ' ' || SUBSTR(last_name, 1, 1) || '.'  AS display_name,
   -- Mask email
-  LEFT(email, 3) || '***@' || SPLIT_PART(email, '@', 2) AS masked_email
+  SUBSTR(email, 1, 3) || '***@' || SUBSTR(email, INSTR(email, '@') + 1) AS masked_email
 FROM customers
 WHERE customer_id = 1;   -- fn_get_loyalty_tier(1) equivalent`}
         height={195}
@@ -913,9 +924,10 @@ SELECT
     WHEN p.unit_price < 300 THEN 'Premium'
     ELSE 'Luxury'
   END                                                                        AS price_band,
-  -- fn_format_usd:
-  '$' || TO_CHAR(p.unit_price, 'FM999,999,990.00')                          AS display_price,
-  -- fn_safe_pct (% of category):
+  -- fn_format_usd (TO_CHAR has no SQLite equivalent — printf() swaps in):
+  '$' || printf('%,.2f', p.unit_price)                                      AS display_price,
+  -- fn_safe_pct (% of category). This uses a window function
+  -- (OVER (...)) — covered fully in Module 52:
   ROUND(p.unit_price / NULLIF(
     SUM(p.unit_price) OVER (PARTITION BY p.category)
   , 0) * 100, 1)                                                             AS pct_of_category_total
@@ -953,7 +965,11 @@ WITH customer_metrics AS (
     COALESCE(ROUND(SUM(o.total_amount), 2), 0) AS lifetime_value,
     COUNT(o.order_id)                        AS order_count,
     MAX(o.order_date)                        AS last_order_date,
-    CURRENT_DATE - MAX(o.order_date)         AS days_since_last_order
+    -- PostgreSQL: CURRENT_DATE - MAX(o.order_date) subtracts dates directly.
+    -- SQLite stores dates as TEXT, so plain "-" on two date strings
+    -- coerces both to 0 and silently returns 0 for every row — julianday()
+    -- converts each side to a real day-count first, which "-" can subtract:
+    CAST(julianday('now') - julianday(MAX(o.order_date)) AS INTEGER) AS days_since_last_order
   FROM customers AS c
   LEFT JOIN orders AS o
     ON c.customer_id   = o.customer_id
@@ -984,8 +1000,8 @@ SELECT
     WHEN days_since_last_order <= 180  THEN 'Lapsing'
     ELSE 'Churned'
   END                                        AS recency_segment,
-  -- fn_format_usd inline:
-  '$' || TO_CHAR(lifetime_value, 'FM999,999,990.00') AS formatted_ltv
+  -- fn_format_usd inline (TO_CHAR has no SQLite equivalent — printf() swaps in):
+  '$' || printf('%,.2f', lifetime_value) AS formatted_ltv
 FROM customer_metrics
 ORDER BY lifetime_value DESC NULLS LAST
 LIMIT 12;`}

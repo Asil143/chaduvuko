@@ -46,6 +46,7 @@ export default function SQLPlayground({
         const initSqlJs = (await import('sql.js')).default;
         const SQL = await initSqlJs({ locateFile: () => '/sqljs/sql-wasm.wasm' });
         const db = new SQL.Database();
+        db.run('PRAGMA foreign_keys = ON;');
         db.run(FRESHCART_SCHEMA_SQL);
         db.run(FRESHCART_SEED_SQL);
 

@@ -118,7 +118,8 @@ export default function StringFunctions() {
 -- MySQL and most databases: CONCAT() function
 CONCAT('Hello', ' ', 'World') -- result: 'Hello World'
 
--- Both work in DuckDB (this playground)
+-- Both work in this playground's SQLite engine — || is standard SQL,
+-- and CONCAT() was added as a built-in SQLite function in 3.44+
 -- NULL propagation: NULL || 'anything' = NULL
 -- CONCAT handles NULLs differently in MySQL (treats as empty string)
 
@@ -128,11 +129,12 @@ COALESCE(first_name, '') || ' ' || COALESCE(last_name, '')`}
 
       <SQLPlayground
         initialQuery={`-- Build full names, store labels, and email displays
+-- (SQLite has no LEFT() — SUBSTR(str, 1, n) does the same job)
 SELECT
-  first_name || ' ' || last_name                    AS full_name,
-  UPPER(LEFT(first_name, 1)) || '. ' || last_name   AS abbreviated,
-  city || ', ' || state                             AS location,
-  first_name || ' <' || email || '>'               AS email_display
+  first_name || ' ' || last_name                       AS full_name,
+  UPPER(SUBSTR(first_name, 1, 1)) || '. ' || last_name  AS abbreviated,
+  city || ', ' || state                                AS location,
+  first_name || ' <' || email || '>'                  AS email_display
 FROM customers
 ORDER BY last_name, first_name
 LIMIT 8;`}
@@ -159,19 +161,40 @@ ORDER BY store_id;`}
       {/* ── PART 03 ── */}
       <Part n="03" title="Case Functions — UPPER, LOWER, INITCAP" />
 
+      <CodeBlock
+        label="INITCAP — PostgreSQL / DuckDB only (no SQLite equivalent)"
+        code={`-- INITCAP: Title Case — capitalises the first letter of EVERY word
+INITCAP('hello world')            -- 'Hello World'
+INITCAP(LOWER('MORTON SALT'))     -- 'Morton Salt'
+
+-- Practical: normalise product names to Title Case for display
+INITCAP(LOWER(product_name))      -- 'organic whole milk' → 'Organic Whole Milk'
+
+-- SQLite has no INITCAP and no built-in multi-word title-case function.
+-- The closest single-expression trick only capitalises the FIRST letter
+-- of the whole string:
+UPPER(SUBSTR(LOWER(x), 1, 1)) || SUBSTR(LOWER(x), 2)
+-- 'ORGANIC MILK' → 'Organic milk'   (only word 1 is capitalised — not
+--                                    'Organic Milk')
+-- True multi-word Title Case in SQLite needs a recursive CTE or a
+-- transform in the application layer, not a single SQL expression.`}
+      />
+
       <SQLPlayground
         initialQuery={`-- Case normalisation — essential for joins and comparisons
+-- SQLite has no INITCAP; the SUBSTR trick below only capitalises the
+-- FIRST letter of the whole string, not each word (see note above)
 SELECT
   product_name,
   UPPER(product_name)       AS upper_name,
   LOWER(product_name)       AS lower_name,
   LOWER(brand)              AS normalised_brand,
-  -- INITCAP: Title Case (first letter of each word capitalised)
-  INITCAP(LOWER(product_name)) AS title_case
+  UPPER(SUBSTR(LOWER(product_name), 1, 1)) || SUBSTR(LOWER(product_name), 2)
+                             AS first_letter_cap
 FROM products
 ORDER BY category
 LIMIT 10;`}
-        height={195}
+        height={210}
         showSchema={true}
       />
 
@@ -269,8 +292,9 @@ SELECT
   TRIM('  Horizon Butter  ')                 AS trimmed,
   LENGTH('  Horizon Butter  ')              AS raw_length,
   LENGTH(TRIM('  Horizon Butter  '))         AS trimmed_length,
-  -- Practical: trim and normalise product names
-  INITCAP(LOWER(TRIM(product_name)))      AS clean_name,
+  -- Practical: trim, then capitalise the first letter (no INITCAP in SQLite)
+  UPPER(SUBSTR(LOWER(TRIM(product_name)),1,1)) || SUBSTR(LOWER(TRIM(product_name)),2)
+                                             AS clean_name,
   LENGTH(product_name) - LENGTH(TRIM(product_name)) AS whitespace_count
 FROM products
 LIMIT 6;`}
@@ -301,71 +325,76 @@ ORDER BY customer_id;`}
       <FnCard
         fn="SUBSTRING / SUBSTR"
         returns="portion of string"
-        syntax="SUBSTRING(str, start_pos, length)  -- 1-indexed"
-        note="Extract a portion starting at start_pos for length characters. Negative start not supported in standard SQL."
+        syntax="SUBSTR(str, start_pos, length)  -- 1-indexed"
+        note="Extract a portion starting at start_pos for length characters. In SQLite (this playground), a negative start_pos counts from the END of the string — SUBSTR('ST001', -3) = '001'. Standard SQL does not define this."
       />
       <FnCard
         fn="LEFT"
         returns="first N characters"
-        syntax="LEFT(str, n)"
-        note="Returns the first n characters. LEFT('Seattle', 3) = 'Ban'"
+        syntax="LEFT(str, n)  -- not built into SQLite"
+        note="Returns the first n characters. LEFT('Seattle', 3) = 'Sea'. Not available in this playground — use SUBSTR(str, 1, n) instead."
       />
       <FnCard
         fn="RIGHT"
         returns="last N characters"
-        syntax="RIGHT(str, n)"
-        note="Returns the last n characters. RIGHT('ST001', 3) = '001'"
+        syntax="RIGHT(str, n)  -- not built into SQLite"
+        note="Returns the last n characters. RIGHT('ST001', 3) = '001'. Not available in this playground — use SUBSTR(str, -n) instead (negative start counts from the end)."
       />
       <FnCard
         fn="SPLIT_PART"
         returns="Nth segment after splitting"
         syntax="SPLIT_PART(str, delimiter, n)  -- 1-indexed"
-        note="Splits by delimiter and returns the Nth segment. SPLIT_PART('a,b,c', ',', 2) = 'b'"
+        note="PostgreSQL / DuckDB only. Splits by delimiter and returns the Nth segment. SPLIT_PART('a,b,c', ',', 2) = 'b'. SQLite has no equivalent — use INSTR + SUBSTR for a specific delimiter (see Part 07)."
       />
 
       <SQLPlayground
         initialQuery={`-- Extracting parts of store IDs and product codes
+-- SQLite has no LEFT()/RIGHT() — SUBSTR(str, 1, n) and SUBSTR(str, -n)
+-- do the same job (negative start counts from the end)
 SELECT
   store_id,
-  LEFT(store_id, 2)                         AS prefix,
-  RIGHT(store_id, 3)                        AS store_number,
+  SUBSTR(store_id, 1, 2)                    AS prefix,
+  SUBSTR(store_id, -3)                      AS store_number,
   SUBSTRING(store_id, 3)                    AS number_part,
   -- Extract first letter of each word for initials
-  LEFT(store_name, 1)                       AS first_letter,
+  SUBSTR(store_name, 1, 1)                  AS first_letter,
   city
 FROM stores
 ORDER BY store_id;`}
-        height={185}
+        height={195}
         showSchema={true}
       />
 
-      <SQLPlayground
-        initialQuery={`-- SPLIT_PART: extract parts of compound strings
-SELECT
+      <CodeBlock
+        label="SPLIT_PART — PostgreSQL / DuckDB only (no SQLite equivalent)"
+        code={`SELECT
   email,
   SPLIT_PART(email, '@', 1)              AS username,
   SPLIT_PART(email, '@', 2)              AS domain,
   SPLIT_PART(SPLIT_PART(email, '@', 2), '.', 1) AS domain_name
 FROM customers
 ORDER BY domain
-LIMIT 8;`}
-        height={175}
-        showSchema={false}
+LIMIT 8;
+
+-- SQLite has no SPLIT_PART. For a single, known delimiter like '@',
+-- INSTR + SUBSTR reproduce the same result — see the live example
+-- in Part 07 (String Search) just below.`}
       />
 
       <SQLPlayground
         initialQuery={`-- Build customer initials and short codes
+-- SQLite: no LEFT() → SUBSTR(str, 1, n). No :: cast → CAST(x AS TEXT).
 SELECT
   customer_id,
   first_name,
   last_name,
-  LEFT(first_name, 1) || LEFT(last_name, 1)  AS initials,
+  SUBSTR(first_name, 1, 1) || SUBSTR(last_name, 1, 1)  AS initials,
   -- Short code: first 3 chars of last name + customer_id
-  UPPER(LEFT(last_name, 3)) || customer_id::TEXT  AS short_code
+  UPPER(SUBSTR(last_name, 1, 3)) || CAST(customer_id AS TEXT) AS short_code
 FROM customers
 ORDER BY last_name
 LIMIT 8;`}
-        height={175}
+        height={185}
         showSchema={false}
       />
 
@@ -392,17 +421,18 @@ SUBSTRING(email, POSITION('@' IN email) + 1)      -- domain after @`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Use POSITION to extract email parts without SPLIT_PART
+        initialQuery={`-- Use INSTR (SQLite's equivalent of POSITION) to extract email parts
+-- without SPLIT_PART — POSITION('@' IN email) is not valid SQLite syntax
 SELECT
   email,
   -- Username: everything before @
-  SUBSTRING(email, 1, POSITION('@' IN email) - 1)   AS username,
+  SUBSTRING(email, 1, INSTR(email, '@') - 1)   AS username,
   -- Domain: everything after @
-  SUBSTRING(email, POSITION('@' IN email) + 1)       AS domain,
+  SUBSTRING(email, INSTR(email, '@') + 1)       AS domain,
   -- Position of the @ sign
-  POSITION('@' IN email)                              AS at_position
+  INSTR(email, '@')                              AS at_position
 FROM customers
-WHERE POSITION('@' IN email) > 0   -- only valid emails with @
+WHERE INSTR(email, '@') > 0   -- only valid emails with @
 ORDER BY domain
 LIMIT 8;`}
         height={195}
@@ -419,9 +449,7 @@ LIMIT 8;`}
 SELECT
   product_name,
   REPLACE(product_name, ' ', '_')           AS underscored,
-  REPLACE(LOWER(product_name), ' ', '-')    AS url_slug,
-  -- Remove specific characters
-  REPLACE(REPLACE(phone, ' ', ''), '-', '') AS cleaned_phone
+  REPLACE(LOWER(product_name), ' ', '-')    AS url_slug
 FROM products
 LIMIT 6;`}
         height={170}
@@ -446,7 +474,7 @@ LIMIT 8;`}
       />
 
       <CodeBlock
-        label="TRANSLATE — character-by-character substitution"
+        label="TRANSLATE — PostgreSQL / DuckDB only (no SQLite equivalent)"
         code={`-- TRANSLATE: replace each character in the FROM set with the corresponding
 -- character in the TO set — one-to-one character mapping
 TRANSLATE('Hello World', 'aeiou', '12345')  -- 'H2ll4 W4rld'
@@ -457,21 +485,25 @@ TRANSLATE('ST-001/A', '-/', '')             -- 'ST001A' (removes - and /)
 
 -- Practical: clean phone numbers (remove all non-digit characters)
 TRANSLATE(phone, '()-+ ', '')              -- removes (), -, +, space
--- Much cleaner than chaining multiple REPLACE calls`}
+-- Much cleaner than chaining multiple REPLACE calls — but SQLite has no
+-- TRANSLATE function at all, so the live example below chains REPLACE
+-- instead (the technique the note above says TRANSLATE avoids)`}
       />
 
       <SQLPlayground
-        initialQuery={`-- TRANSLATE for efficient multi-character cleaning
+        initialQuery={`-- SQLite has no TRANSLATE — chain REPLACE calls for the same result
 SELECT
   store_id,
   -- Remove all vowels from store names (illustrative)
-  TRANSLATE(LOWER(store_name), 'aeiou', '')    AS consonants_only,
+  REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+    LOWER(store_name), 'a', ''), 'e', ''), 'i', ''), 'o', ''), 'u', '')
+                                                AS consonants_only,
   -- Normalise store codes: remove non-alphanumeric
-  TRANSLATE(store_id, '-/', '')                AS clean_code,
+  REPLACE(REPLACE(store_id, '-', ''), '/', '') AS clean_code,
   city
 FROM stores
 ORDER BY store_id;`}
-        height={175}
+        height={195}
         showSchema={false}
       />
 
@@ -482,17 +514,30 @@ ORDER BY store_id;`}
 
       <P>Padding adds characters to reach a target length — essential for generating fixed-width codes, formatting report columns for alignment, and generating zero-padded IDs.</P>
 
+      <CodeBlock
+        label="LPAD / RPAD — PostgreSQL / DuckDB only (no SQLite equivalent)"
+        code={`LPAD(customer_id::TEXT, 6, '0')      -- zero-pad to 6 digits: '000042'
+RPAD(name, 25, ' ')                  -- right-pad name to 25 chars for reports
+
+-- SQLite has no LPAD/RPAD, but printf() format specifiers cover the same
+-- ground for the common cases used in this lesson:
+printf('%06d', customer_id)          -- zero-padded integer: '000042'
+printf('%-25s', name)                -- left-justify (RPAD) in a 25-char field
+printf('%10.2f', total_amount)       -- right-justify (LPAD) a rounded float`}
+      />
+
       <SQLPlayground
-        initialQuery={`-- LPAD: pad on the left. RPAD: pad on the right
+        initialQuery={`-- printf() format specifiers replace LPAD/RPAD in SQLite
 SELECT
-  customer_id,
+  c.customer_id,
   -- Zero-padded ID: ensure 6 digits
-  LPAD(customer_id::TEXT, 6, '0')           AS padded_id,
+  printf('%06d', c.customer_id)             AS padded_id,
   first_name,
-  -- Right-pad name for fixed-width report columns
-  RPAD(first_name || ' ' || last_name, 25, ' ') || ' |' AS fixed_width_name,
-  -- Left-pad order amounts with spaces for alignment
-  LPAD(ROUND(total_amount::NUMERIC, 2)::TEXT, 10, ' ') AS aligned_amount
+  -- Left-justify name for fixed-width report columns (RPAD equivalent)
+  printf('%-25s', first_name || ' ' || last_name) || '|' AS fixed_width_name,
+  -- Right-justify order amounts for alignment (LPAD equivalent) — printf
+  -- rounds to 2dp and pads to width 10 in one call
+  printf('%10.2f', total_amount)            AS aligned_amount
 FROM customers AS c
 LEFT JOIN (
   SELECT customer_id, MAX(total_amount) AS total_amount
@@ -507,13 +552,15 @@ LIMIT 8;`}
 
       <SQLPlayground
         initialQuery={`-- Generate fixed-format store codes and report headers
+-- %-Ns left-justifies (RPAD) in an N-character field
 SELECT
   store_id,
   -- Fixed-width store display
-  '[' || RPAD(store_id, 6) || '] ' || RPAD(city, 12) || RPAD(store_name, 25) AS report_row
+  '[' || printf('%-6s', store_id) || '] '
+       || printf('%-12s', city) || printf('%-25s', store_name) AS report_row
 FROM stores
 ORDER BY store_id;`}
-        height={155}
+        height={165}
         showSchema={false}
       />
 
@@ -560,18 +607,25 @@ ORDER BY brand, product_name;`}
         showSchema={true}
       />
 
+      <Callout type="tip">
+        ILIKE is PostgreSQL/DuckDB syntax and is not valid in this playground's SQLite engine. SQLite's own LIKE is already case-insensitive for ASCII letters by default (unlike PostgreSQL), so WHERE email LIKE '%GMAIL%' already matches 'gmail.com' here. Wrapping both sides in LOWER() below is not strictly required in SQLite, but it is the portable pattern that also works on databases where LIKE is case-sensitive.
+      </Callout>
+
       <SQLPlayground
-        initialQuery={`-- ILIKE: case-insensitive LIKE (PostgreSQL / DuckDB)
+        initialQuery={`-- SQLite has no ILIKE — and its own LIKE is already case-insensitive
+-- for ASCII by default (unlike PostgreSQL's case-sensitive LIKE).
+-- LOWER()-wrapping both sides makes the intent explicit and stays
+-- portable to databases where LIKE IS case-sensitive.
 SELECT
   customer_id,
   first_name,
   last_name,
   email
 FROM customers
-WHERE email ILIKE '%gmail%'             -- any case gmail addresses
-   OR first_name ILIKE 'a%'            -- names starting with A (any case)
+WHERE LOWER(email) LIKE LOWER('%gmail%')      -- any case gmail addresses
+   OR LOWER(first_name) LIKE LOWER('a%')      -- names starting with A (any case)
 ORDER BY first_name;`}
-        height={175}
+        height={185}
         showSchema={false}
       />
 
@@ -622,8 +676,10 @@ REGEXP_REPLACE(string, pattern, replacement)
 REGEXP_REPLACE(phone, '[^0-9]', '', 'g')  -- 'g' = global (all occurrences)`}
       />
 
-      <SQLPlayground
-        initialQuery={`-- Regex-based data validation
+      <CodeBlock
+        label="Regex validation — PostgreSQL / DuckDB only (not supported in this playground)"
+        code={`-- SQLite has no built-in regex engine (no loadable extension is
+-- available in the browser playground), so ~ and !~ error here
 SELECT
   customer_id,
   email,
@@ -638,13 +694,32 @@ SELECT
 FROM customers
 ORDER BY customer_id
 LIMIT 8;`}
-        height={225}
+      />
+
+      <P>Without a regex engine, GLOB is the closest thing SQLite offers — it supports character classes like <Hl>[0-9]</Hl> but has no <Hl>{'{n}'}</Hl> repeat-count syntax, so each digit position has to be spelled out.</P>
+
+      <SQLPlayground
+        initialQuery={`-- GLOB approximates a simple regex check: character classes, no {n} counts
+SELECT
+  customer_id,
+  phone,
+  REPLACE(REPLACE(REPLACE(REPLACE(
+    phone, ' ', ''), '-', ''), '(', ''), ')', '')          AS digits_only,
+  -- Valid US mobile: 10 digits starting with 2-9 (one [class] per digit)
+  CASE WHEN REPLACE(REPLACE(REPLACE(REPLACE(
+              phone, ' ', ''), '-', ''), '(', ''), ')', '')
+            GLOB '[2-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+       THEN '✓ Valid' ELSE '✗ Check' END                    AS phone_status
+FROM customers
+ORDER BY customer_id
+LIMIT 8;`}
+        height={195}
         showSchema={true}
       />
 
-      <SQLPlayground
-        initialQuery={`-- REGEXP_REPLACE: clean phone numbers using regex
--- Remove everything that is not a digit
+      <CodeBlock
+        label="REGEXP_REPLACE — PostgreSQL / DuckDB only (not supported in this playground)"
+        code={`-- Remove everything that is not a digit
 SELECT
   customer_id,
   phone                                                AS raw_phone,
@@ -652,9 +727,11 @@ SELECT
   LENGTH(REGEXP_REPLACE(COALESCE(phone, ''), '[^0-9]', '', 'g')) AS digit_count
 FROM customers
 ORDER BY customer_id
-LIMIT 8;`}
-        height={180}
-        showSchema={false}
+LIMIT 8;
+
+-- SQLite equivalent: no regex, so chain REPLACE for each character to
+-- strip instead (see Part 08 for the full REPLACE-chaining pattern) —
+REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(phone,''), ' ', ''), '-', ''), '(', ''), ')', '')`}
       />
 
       <HR />
@@ -665,14 +742,14 @@ LIMIT 8;`}
       <P>Standard aggregates collapse values to a single number. STRING_AGG collapses multiple string values into a single concatenated string — essential for building comma-separated lists, generating labels, and creating readable summaries.</P>
 
       <SQLPlayground
-        initialQuery={`-- STRING_AGG: combine multiple values into one string
--- Syntax: STRING_AGG(column, separator ORDER BY col)
+        initialQuery={`-- GROUP_CONCAT is SQLite's STRING_AGG (PostgreSQL/DuckDB name — not
+-- valid here). Syntax: GROUP_CONCAT(column, separator ORDER BY col)
 SELECT
   o.order_id,
   o.total_amount,
   -- List all products in this order as a comma-separated string
-  STRING_AGG(p.product_name, ', ' ORDER BY p.product_name) AS products_in_order,
-  COUNT(oi.item_id)                                        AS item_count
+  GROUP_CONCAT(p.product_name, ', ' ORDER BY p.product_name) AS products_in_order,
+  COUNT(oi.item_id)                                          AS item_count
 FROM orders AS o
 JOIN order_items AS oi ON o.order_id   = oi.order_id
 JOIN products    AS p  ON oi.product_id = p.product_id
@@ -686,21 +763,32 @@ LIMIT 6;`}
 
       <SQLPlayground
         initialQuery={`-- Customer-level product preferences
+-- SQLite's GROUP_CONCAT cannot combine DISTINCT with a custom separator
+-- or ORDER BY in one call, so de-duplicate the categories in a CTE first,
+-- then GROUP_CONCAT the already-distinct rows with separator + ORDER BY
+WITH cust_categories AS (
+  SELECT DISTINCT
+    c.customer_id,
+    c.first_name || ' ' || c.last_name  AS customer,
+    c.loyalty_tier,
+    p.category
+  FROM customers AS c
+  JOIN orders      AS o  ON c.customer_id  = o.customer_id
+  JOIN order_items AS oi ON o.order_id     = oi.order_id
+  JOIN products    AS p  ON oi.product_id  = p.product_id
+  WHERE o.order_status = 'Delivered'
+)
 SELECT
-  c.customer_id,
-  c.first_name || ' ' || c.last_name                            AS customer,
-  c.loyalty_tier,
-  STRING_AGG(DISTINCT p.category, ' | ' ORDER BY p.category)   AS categories_ordered,
-  COUNT(DISTINCT p.category)                                    AS category_count
-FROM customers AS c
-JOIN orders      AS o  ON c.customer_id  = o.customer_id
-JOIN order_items AS oi ON o.order_id     = oi.order_id
-JOIN products    AS p  ON oi.product_id  = p.product_id
-WHERE o.order_status = 'Delivered'
-GROUP BY c.customer_id, c.first_name, c.last_name, c.loyalty_tier
+  customer_id,
+  customer,
+  loyalty_tier,
+  GROUP_CONCAT(category, ' | ' ORDER BY category) AS categories_ordered,
+  COUNT(category)                                  AS category_count
+FROM cust_categories
+GROUP BY customer_id, customer, loyalty_tier
 ORDER BY category_count DESC
 LIMIT 8;`}
-        height={225}
+        height={290}
         showSchema={false}
       />
 
@@ -713,22 +801,29 @@ LIMIT 8;`}
 
       <SQLPlayground
         initialQuery={`-- Complete data cleaning pipeline for customer records
+-- SQLite has no INITCAP (first-letter-cap via SUBSTR instead — fine
+-- here since first/last names are single words) and no :: cast or
+-- LPAD (CAST(...AS TEXT) and printf() cover both)
 SELECT
   customer_id,
 
-  -- Name: trim whitespace, title case
-  INITCAP(LOWER(TRIM(first_name)))                 AS clean_first_name,
-  INITCAP(LOWER(TRIM(last_name)))                  AS clean_last_name,
+  -- Name: trim whitespace, first-letter cap
+  UPPER(SUBSTR(LOWER(TRIM(first_name)),1,1)) || SUBSTR(LOWER(TRIM(first_name)),2)
+                                                    AS clean_first_name,
+  UPPER(SUBSTR(LOWER(TRIM(last_name)),1,1)) || SUBSTR(LOWER(TRIM(last_name)),2)
+                                                    AS clean_last_name,
 
   -- Full name formatted consistently
-  INITCAP(LOWER(TRIM(first_name))) || ' '
-  || INITCAP(LOWER(TRIM(last_name)))               AS clean_full_name,
+  UPPER(SUBSTR(LOWER(TRIM(first_name)),1,1)) || SUBSTR(LOWER(TRIM(first_name)),2) || ' '
+  || UPPER(SUBSTR(LOWER(TRIM(last_name)),1,1)) || SUBSTR(LOWER(TRIM(last_name)),2)
+                                                    AS clean_full_name,
 
   -- Email: lowercase, trim
   LOWER(TRIM(email))                               AS clean_email,
 
-  -- City: title case, trim
-  INITCAP(LOWER(TRIM(city)))                       AS clean_city,
+  -- City: first-letter cap, trim (most FreshCart cities are one word)
+  UPPER(SUBSTR(LOWER(TRIM(city)),1,1)) || SUBSTR(LOWER(TRIM(city)),2)
+                                                    AS clean_city,
 
   -- Generate a URL-safe customer slug
   LOWER(
@@ -736,35 +831,40 @@ SELECT
       TRIM(first_name) || '-' || TRIM(last_name),
       ' ', '-'
     )
-  ) || '-' || customer_id::TEXT                    AS customer_slug,
+  ) || '-' || CAST(customer_id AS TEXT)             AS customer_slug,
 
   -- Zero-padded customer ID for display
-  'CUST-' || LPAD(customer_id::TEXT, 6, '0')       AS display_id
+  'CUST-' || printf('%06d', customer_id)           AS display_id
 
 FROM customers
 ORDER BY customer_id
 LIMIT 8;`}
-        height={290}
+        height={320}
         showSchema={true}
       />
 
       <SQLPlayground
         initialQuery={`-- Product name standardisation and code generation
+-- SQLite: no INITCAP (first-letter-cap via SUBSTR — product_name is
+-- multi-word here, so this only capitalises the first word, e.g.
+-- 'jasmine rice' → 'Jasmine rice', not 'Jasmine Rice'), no regex
+-- (REPLACE handles the one-character case), no LEFT/LPAD/:: cast
 SELECT
   product_id,
   product_name,
 
-  -- Clean and standardise
-  INITCAP(LOWER(TRIM(product_name)))               AS standard_name,
+  -- Clean and standardise (first-letter cap only — see note above)
+  UPPER(SUBSTR(LOWER(TRIM(product_name)),1,1)) || SUBSTR(LOWER(TRIM(product_name)),2)
+                                                    AS standard_name,
 
-  -- URL slug for product pages
-  LOWER(REGEXP_REPLACE(TRIM(product_name), '[^a-zA-Z0-9]', '-', 'g')) AS url_slug,
+  -- URL slug for product pages: lowercase, spaces to hyphens
+  LOWER(REPLACE(TRIM(product_name), ' ', '-'))     AS url_slug,
 
   -- Product code: category prefix + zero-padded ID
-  UPPER(LEFT(category, 3)) || '-' || LPAD(product_id::TEXT, 4, '0') AS product_code,
+  UPPER(SUBSTR(category, 1, 3)) || '-' || printf('%04d', product_id) AS product_code,
 
   -- Short description: first 30 chars of name + category
-  LEFT(product_name, 30) ||
+  SUBSTR(product_name, 1, 30) ||
   CASE WHEN LENGTH(product_name) > 30 THEN '…' ELSE '' END AS short_name,
 
   category,
@@ -773,7 +873,7 @@ SELECT
 FROM products
 ORDER BY category, product_name
 LIMIT 10;`}
-        height={270}
+        height={300}
         showSchema={false}
       />
 
@@ -785,7 +885,7 @@ LIMIT 10;`}
       <P>You are a data engineer at Shopify. A partner has delivered a CSV of 50,000 seller records — names are in inconsistent case, phone numbers have various formats, city names have typos and whitespace, and emails are uncleaned. Before loading into the sellers table, you write a cleaning query that standardises every string field.</P>
 
       <TimeBlock time="9:00 AM" label="Raw data sample arrives">
-        Sample shows: 'RAHUL sharma', ' New York ', 'rahul@GMAIL.COM', '91-98765-43210' — every field needs cleaning.
+        Sample shows: 'JASON miller', ' New York ', 'jason@GMAIL.COM', '206.555.0142' — every field needs cleaning.
       </TimeBlock>
 
       <TimeBlock time="9:20 AM" label="Build the cleaning pipeline">
@@ -795,17 +895,24 @@ LIMIT 10;`}
       <SQLPlayground
         initialQuery={`-- Simulated seller data cleaning pipeline
 -- Using FreshCart employees as stand-in for seller records
+-- SQLite: no INITCAP (first-letter-cap via SUBSTR — fine for these
+-- single-word fields), no :: cast or LPAD (CAST + printf instead),
+-- no TO_CHAR for number formatting (printf's ',' flag adds the commas)
 SELECT
   employee_id                                        AS seller_id,
 
   -- Name cleaning
-  INITCAP(LOWER(TRIM(first_name)))                   AS clean_first_name,
-  INITCAP(LOWER(TRIM(last_name)))                    AS clean_last_name,
-  INITCAP(LOWER(TRIM(first_name))) || ' '
-    || INITCAP(LOWER(TRIM(last_name)))               AS full_name,
+  UPPER(SUBSTR(LOWER(TRIM(first_name)),1,1)) || SUBSTR(LOWER(TRIM(first_name)),2)
+                                                      AS clean_first_name,
+  UPPER(SUBSTR(LOWER(TRIM(last_name)),1,1)) || SUBSTR(LOWER(TRIM(last_name)),2)
+                                                      AS clean_last_name,
+  UPPER(SUBSTR(LOWER(TRIM(first_name)),1,1)) || SUBSTR(LOWER(TRIM(first_name)),2) || ' '
+    || UPPER(SUBSTR(LOWER(TRIM(last_name)),1,1)) || SUBSTR(LOWER(TRIM(last_name)),2)
+                                                      AS full_name,
 
   -- Role standardisation
-  INITCAP(LOWER(TRIM(role)))                         AS clean_role,
+  UPPER(SUBSTR(LOWER(TRIM(role)),1,1)) || SUBSTR(LOWER(TRIM(role)),2)
+                                                      AS clean_role,
   UPPER(TRIM(department))                            AS clean_department,
 
   -- Generate seller handle: firstname.lastname (lowercase, no spaces)
@@ -813,15 +920,15 @@ SELECT
     || LOWER(REPLACE(TRIM(last_name), ' ', ''))      AS seller_handle,
 
   -- Display ID with prefix
-  'SELL-' || LPAD(employee_id::TEXT, 5, '0')         AS display_id,
+  'SELL-' || printf('%05d', employee_id)             AS display_id,
 
-  -- Salary formatted with currency symbol
-  '$' || TO_CHAR(salary, 'FM999,999')                AS formatted_salary
+  -- Salary formatted with currency symbol and thousands separator
+  '$' || printf('%,d', salary)                       AS formatted_salary
 
 FROM employees
 ORDER BY department, last_name
 LIMIT 10;`}
-        height={285}
+        height={315}
         showSchema={true}
       />
 
@@ -858,7 +965,7 @@ LIMIT 10;`}
 
       <IQ q="What does STRING_AGG do and how is it different from GROUP_CONCAT in MySQL?">
         <p style={{ margin: '0 0 14px' }}>STRING_AGG is an aggregate function that concatenates string values from multiple rows into a single string, with a specified separator between each value. It is the PostgreSQL and DuckDB syntax. STRING_AGG(product_name, ', ' ORDER BY product_name) collects all product_name values in the group, sorts them alphabetically, and joins them with ', '. The result is one string per group — for a GROUP BY store_id, each store gets one string listing all its products.</p>
-        <p style={{ margin: '0 0 14px' }}>GROUP_CONCAT is the MySQL equivalent: GROUP_CONCAT(product_name ORDER BY product_name SEPARATOR ', '). The functionality is identical — both aggregate string values from multiple rows into one concatenated string with a separator. The syntax differs: STRING_AGG uses standard SQL aggregate function syntax with the separator as the second argument; GROUP_CONCAT uses MySQL's non-standard keyword syntax with SEPARATOR.</p>
+        <p style={{ margin: '0 0 14px' }}>GROUP_CONCAT is the MySQL and SQLite equivalent (SQLite's playground engine in this course — SQLite's syntax is GROUP_CONCAT(product_name, ', ' ORDER BY product_name), argument order rather than a SEPARATOR keyword). The functionality is identical — both aggregate string values from multiple rows into one concatenated string with a separator. The syntax differs: STRING_AGG uses standard SQL aggregate function syntax with the separator as the second argument; GROUP_CONCAT uses MySQL's non-standard keyword syntax with SEPARATOR.</p>
         <p style={{ margin: 0 }}>Important differences: STRING_AGG returns NULL when there are no rows in the group (consistent with SUM/AVG behaviour). GROUP_CONCAT returns NULL in the same case. STRING_AGG in PostgreSQL has a strict type requirement — the column must be text or castable to text. STRING_AGG supports ORDER BY inside the function to control the concatenation order. Both support DISTINCT to deduplicate values before aggregating: STRING_AGG(DISTINCT category, ', ') produces a deduplicated list. Both have length limits (PostgreSQL default 1GB; MySQL default 1024 bytes configurable with group_concat_max_len). For large result sets, consider whether aggregating to a string is the right approach or whether a separate rows-based result would be cleaner.</p>
       </IQ>
 
@@ -908,32 +1015,34 @@ LIMIT 10;`}
       {/* ── Try It ── */}
       <TryItChallenge
         question="Write a query that generates a clean customer directory from FreshCart's customers table. Each row should show: a display_id (format: 'CUST-' followed by zero-padded 6-digit customer_id), clean_name (first + last name in Title Case, trimmed), username (everything before @ in email, lowercased), domain (everything after @ in email, lowercased), city_display (city in Title Case), a customer_slug (lowercase first name + '.' + lowercase last name + '-' + customer_id, all spaces replaced with hyphens), and a short_label (first initial + '. ' + last name, e.g. 'A. Khan'). Order by clean_name. Only include customers whose email contains an @ symbol."
-        hint="LPAD for zero-padding, INITCAP(LOWER(TRIM())) for Title Case, SPLIT_PART for email parts, LOWER + REPLACE for slug, LEFT(first_name,1) for initial. WHERE email LIKE '%@%'."
+        hint="printf('%06d', customer_id) for zero-padding (no LPAD in SQLite). UPPER(SUBSTR(LOWER(x),1,1)) || SUBSTR(LOWER(x),2) for a Title Case approximation (no INITCAP). INSTR + SUBSTR for email parts (no SPLIT_PART). LOWER + REPLACE for the slug. SUBSTR(first_name,1,1) for the initial (no LEFT). WHERE email LIKE '%@%'."
         answer={`SELECT
-  'CUST-' || LPAD(customer_id::TEXT, 6, '0')          AS display_id,
+  'CUST-' || printf('%06d', customer_id)              AS display_id,
 
-  INITCAP(LOWER(TRIM(first_name))) || ' '
-    || INITCAP(LOWER(TRIM(last_name)))                 AS clean_name,
+  UPPER(SUBSTR(LOWER(TRIM(first_name)),1,1)) || SUBSTR(LOWER(TRIM(first_name)),2) || ' '
+    || UPPER(SUBSTR(LOWER(TRIM(last_name)),1,1)) || SUBSTR(LOWER(TRIM(last_name)),2)
+                                                        AS clean_name,
 
-  LOWER(SPLIT_PART(TRIM(email), '@', 1))               AS username,
-  LOWER(SPLIT_PART(TRIM(email), '@', 2))               AS domain,
+  LOWER(SUBSTR(TRIM(email), 1, INSTR(TRIM(email), '@') - 1)) AS username,
+  LOWER(SUBSTR(TRIM(email), INSTR(TRIM(email), '@') + 1))    AS domain,
 
-  INITCAP(LOWER(TRIM(city)))                           AS city_display,
+  UPPER(SUBSTR(LOWER(TRIM(city)),1,1)) || SUBSTR(LOWER(TRIM(city)),2) AS city_display,
 
   LOWER(
     REPLACE(TRIM(first_name), ' ', '-')
     || '.' ||
     REPLACE(TRIM(last_name), ' ', '-')
-    || '-' || customer_id::TEXT
+    || '-' || CAST(customer_id AS TEXT)
   )                                                    AS customer_slug,
 
-  LEFT(TRIM(first_name), 1) || '. '
-    || INITCAP(LOWER(TRIM(last_name)))                 AS short_label
+  UPPER(SUBSTR(TRIM(first_name), 1, 1)) || '. '
+    || UPPER(SUBSTR(LOWER(TRIM(last_name)),1,1)) || SUBSTR(LOWER(TRIM(last_name)),2)
+                                                        AS short_label
 
 FROM customers
 WHERE email LIKE '%@%'
 ORDER BY clean_name;`}
-        explanation="LPAD(customer_id::TEXT, 6, '0') zero-pads the numeric ID to 6 digits after casting to text. INITCAP(LOWER(TRIM())) is the standard three-function chain for Title Case cleaning — TRIM removes whitespace, LOWER forces all-lowercase, INITCAP capitalises first letters. SPLIT_PART(email, '@', 1) and SPLIT_PART(email, '@', 2) cleanly extract the username and domain without needing POSITION arithmetic. The slug uses REPLACE to swap spaces for hyphens in both name parts before joining with a dot separator. LEFT(first_name, 1) extracts just the first character for the initial. WHERE email LIKE '%@%' ensures only valid emails with an @ are processed — without this guard, SPLIT_PART on a NULL or malformed email could return unexpected results."
+        explanation="printf('%06d', customer_id) zero-pads the numeric ID to 6 digits directly — SQLite has no LPAD, but printf's format specifiers handle numeric formatting and padding in one call. UPPER(SUBSTR(LOWER(x),1,1)) || SUBSTR(LOWER(x),2) is SQLite's substitute for INITCAP/Title Case on a single word — TRIM/LOWER normalise first, then the first character is uppercased and reattached to the (lowercased) remainder. SQLite has no SPLIT_PART, so username/domain use INSTR to find the '@' position and SUBSTR to slice around it — INSTR(str, '@') returns the same 1-indexed position POSITION('@' IN str) would in PostgreSQL. The slug uses REPLACE to swap spaces for hyphens in both name parts before joining with a dot separator, with CAST(customer_id AS TEXT) — not the PostgreSQL-only :: shorthand, which SQLite does not parse — appending the numeric ID. SUBSTR(first_name, 1, 1) extracts just the first character for the initial (SQLite has no LEFT). WHERE email LIKE '%@%' ensures only valid emails with an @ are processed — without this guard, INSTR returning 0 for a malformed email would shift every SUBSTR position and produce garbage output."
       />
 
       <HR />
@@ -949,7 +1058,7 @@ ORDER BY clean_name;`}
           'SQL strings are 1-indexed: SUBSTRING(str, 1, 3) returns the first 3 characters. SPLIT_PART(str, delimiter, n) returns the nth segment (1-indexed).',
           'LIKE uses % (any characters) and _ (one character). ILIKE is the case-insensitive variant. Applying LIKE/LOWER on indexed columns prevents index use — create functional indexes for frequent case-insensitive searches.',
           'STRING_AGG(column, separator ORDER BY col) aggregates multiple rows into one concatenated string — essential for building comma-separated lists and human-readable summaries.',
-          'The standard cleaning chain: INITCAP(LOWER(TRIM(column))) produces consistently formatted Title Case from any input regardless of original capitalisation or whitespace.',
+          'The standard cleaning chain in PostgreSQL/DuckDB: INITCAP(LOWER(TRIM(column))) produces consistently formatted Title Case from any input. SQLite has no INITCAP — UPPER(SUBSTR(LOWER(x),1,1)) || SUBSTR(LOWER(x),2) capitalises just the first letter of the whole string instead.',
           'Build cleaning pipelines as SELECT first, verify with spot checks on 20+ rows, then wrap in INSERT. Cleaning bugs caught in SELECT cost nothing. Bugs found after INSERT require DELETE + reclean + reinsert.',
         ]}
       />

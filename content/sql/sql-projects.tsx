@@ -894,7 +894,68 @@ ORDER BY name;`}
 
       <SQLPlayground
         initialQuery={`-- Step 4: Create indexes justified by access patterns
--- (Run after Step 3 to ensure tables exist)
+-- Re-create tables first (in case this playground hasn't run Step 3 —
+-- each playground is independent, so nothing carries over between blocks)
+CREATE TABLE IF NOT EXISTS delivery_partners (
+  partner_id    INTEGER PRIMARY KEY,
+  partner_name  TEXT    NOT NULL,
+  phone         TEXT    NOT NULL UNIQUE,          -- one phone per partner
+  home_zone     TEXT    NOT NULL,
+  vehicle_type  TEXT    NOT NULL
+                CHECK (vehicle_type IN ('bike','scooter','car','van')),
+  is_active     INTEGER NOT NULL DEFAULT 1
+                CHECK (is_active IN (0, 1)),
+  joined_at     TEXT    NOT NULL DEFAULT (date('now'))
+);
+
+CREATE TABLE IF NOT EXISTS sla_policies (
+  policy_id            INTEGER PRIMARY KEY,
+  store_id             TEXT    NOT NULL REFERENCES stores(store_id)
+                                ON DELETE RESTRICT,
+  zone_name            TEXT    NOT NULL,
+  sla_minutes          INTEGER NOT NULL CHECK (sla_minutes > 0),
+  breach_credit_amount REAL    NOT NULL CHECK (breach_credit_amount >= 0),
+  valid_from           TEXT    NOT NULL DEFAULT (date('now')),
+  valid_until          TEXT,   -- NULL means currently active
+  UNIQUE (store_id, zone_name, valid_from) -- one policy per store-zone per period
+);
+
+CREATE TABLE IF NOT EXISTS deliveries (
+  delivery_id    INTEGER PRIMARY KEY,
+  order_id       INTEGER NOT NULL UNIQUE              -- one delivery per order
+                         REFERENCES orders(order_id) ON DELETE RESTRICT,
+  partner_id     INTEGER NOT NULL
+                         REFERENCES delivery_partners(partner_id) ON DELETE RESTRICT,
+  policy_id      INTEGER NOT NULL
+                         REFERENCES sla_policies(policy_id) ON DELETE RESTRICT,
+  dispatched_at  TEXT    NOT NULL,                   -- ISO 8601 timestamp
+  pickup_at      TEXT,                               -- NULL until picked up
+  delivered_at   TEXT,                               -- NULL until delivered
+  distance_km    REAL    CHECK (distance_km > 0),
+  CHECK (pickup_at IS NULL OR pickup_at >= dispatched_at),
+  CHECK (delivered_at IS NULL OR delivered_at >= dispatched_at)
+);
+
+CREATE TABLE IF NOT EXISTS sla_breaches (
+  breach_id      INTEGER PRIMARY KEY,
+  delivery_id    INTEGER NOT NULL UNIQUE              -- one breach per delivery max
+                         REFERENCES deliveries(delivery_id) ON DELETE RESTRICT,
+  expected_by    TEXT    NOT NULL,                   -- computed SLA deadline
+  actual_at      TEXT    NOT NULL,                   -- when actually delivered
+  minutes_late   REAL    NOT NULL CHECK (minutes_late > 0)
+);
+
+CREATE TABLE IF NOT EXISTS customer_credits (
+  credit_id    INTEGER PRIMARY KEY,
+  customer_id  INTEGER NOT NULL
+               REFERENCES customers(customer_id) ON DELETE RESTRICT,
+  breach_id    INTEGER NOT NULL UNIQUE              -- one credit per breach
+               REFERENCES sla_breaches(breach_id) ON DELETE RESTRICT,
+  amount       REAL    NOT NULL CHECK (amount > 0),
+  issued_at    TEXT    NOT NULL DEFAULT (datetime('now')),
+  redeemed_at  TEXT,                               -- NULL until used
+  CHECK (redeemed_at IS NULL OR redeemed_at >= issued_at)
+);
 
 -- FK columns: SQLite does not auto-index these (PostgreSQL does)
 -- Without these, every JOIN on these FKs = full table scan
@@ -933,7 +994,7 @@ FROM sqlite_master
 WHERE type = 'index'
   AND tbl_name IN ('deliveries','sla_breaches','customer_credits')
 ORDER BY tbl_name, name;`}
-        height={320}
+        height={640}
         showSchema={false}
       />
 
@@ -1014,7 +1075,57 @@ LEFT JOIN sla_breaches AS b ON b.delivery_id = d.delivery_id;`}
 
       <SQLPlayground
         initialQuery={`-- ANALYTICAL QUERY 2: Delivery time distribution by partner
--- (Run after Step 5 seed query above)
+-- Re-create tables + seed data (each playground is independent — this one
+-- does not share state with the Step 5 seed query above)
+CREATE TABLE IF NOT EXISTS delivery_partners (
+  partner_id INTEGER PRIMARY KEY, partner_name TEXT NOT NULL,
+  phone TEXT NOT NULL UNIQUE, home_zone TEXT NOT NULL,
+  vehicle_type TEXT NOT NULL CHECK (vehicle_type IN ('bike','scooter','car','van')),
+  is_active INTEGER NOT NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS sla_policies (
+  policy_id INTEGER PRIMARY KEY, store_id TEXT NOT NULL,
+  zone_name TEXT NOT NULL, sla_minutes INTEGER NOT NULL CHECK (sla_minutes > 0),
+  breach_credit_amount REAL NOT NULL CHECK (breach_credit_amount >= 0)
+);
+CREATE TABLE IF NOT EXISTS deliveries (
+  delivery_id INTEGER PRIMARY KEY,
+  order_id INTEGER NOT NULL UNIQUE,
+  partner_id INTEGER NOT NULL, policy_id INTEGER NOT NULL,
+  dispatched_at TEXT NOT NULL, pickup_at TEXT, delivered_at TEXT
+);
+CREATE TABLE IF NOT EXISTS sla_breaches (
+  breach_id INTEGER PRIMARY KEY, delivery_id INTEGER NOT NULL UNIQUE,
+  expected_by TEXT NOT NULL, actual_at TEXT NOT NULL,
+  minutes_late REAL NOT NULL CHECK (minutes_late > 0)
+);
+CREATE TABLE IF NOT EXISTS customer_credits (
+  credit_id INTEGER PRIMARY KEY, customer_id INTEGER NOT NULL,
+  breach_id INTEGER NOT NULL UNIQUE,
+  amount REAL NOT NULL CHECK (amount > 0),
+  issued_at TEXT NOT NULL DEFAULT (datetime('now')), redeemed_at TEXT
+);
+
+INSERT OR IGNORE INTO delivery_partners VALUES
+  (1,'Emma Johnson',  '9900000001','New York Central','bike',   1),
+  (2,'Jasmine Rodriguez', '9900000002','New York South',  'scooter',1);
+
+INSERT OR IGNORE INTO sla_policies VALUES
+  (1,'ST001','New York Central',120,100.00);
+
+INSERT OR IGNORE INTO deliveries VALUES
+  (1,1,1,1,'2024-03-15 10:00','2024-03-15 10:20','2024-03-15 11:45'), -- on time (105 min)
+  (2,2,2,1,'2024-03-15 11:00','2024-03-15 11:25','2024-03-15 13:15'), -- BREACH (135 min, +15 late)
+  (3,3,1,1,'2024-03-15 14:00','2024-03-15 14:18','2024-03-15 15:50'); -- on time (110 min)
+
+INSERT OR IGNORE INTO sla_breaches VALUES
+  (1,2,'2024-03-15 13:00','2024-03-15 13:15',15.0);
+
+INSERT OR IGNORE INTO customer_credits
+  SELECT 1, o.customer_id, 1, 100.00, datetime('now'), NULL
+  FROM orders AS o WHERE o.order_id = 2;
+
+-- Delivery time distribution by partner
 SELECT
   dp.partner_name,
   COUNT(d.delivery_id)                    AS deliveries,
@@ -1036,7 +1147,7 @@ LEFT JOIN sla_breaches AS b  ON b.delivery_id   = d.delivery_id
 WHERE d.delivered_at IS NOT NULL
 GROUP BY dp.partner_id, dp.partner_name
 ORDER BY breach_rate_pct DESC;`}
-        height={230}
+        height={480}
         showSchema={false}
       />
 
