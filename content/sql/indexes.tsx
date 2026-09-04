@@ -391,15 +391,18 @@ CREATE INDEX idx_orders_delivered_date
 -- Index only specific status:      WHERE order_status = 'Pending'
 -- Index only non-NULL values:      WHERE email IS NOT NULL
 
--- Size benefit: if only 10% of orders are 'Delivered',
--- the partial index is 10% the size of a full index on order_date`}
+-- Size benefit (illustrative, not FreshCart-specific): if only 10% of rows
+-- match the partial index's WHERE condition, the partial index is roughly
+-- 10% the size of a full index on the same column`}
       />
 
       <SQLPlayground
         initialQuery={`-- Partial index benefit example:
 -- Most operational queries only care about 'Delivered' orders
--- A partial index on order_date WHERE order_status = 'Delivered'
--- would be ~half the size of a full index and faster to scan
+-- In FreshCart's real seed data, ~77% of orders are 'Delivered' —
+-- so a partial index on order_date WHERE order_status = 'Delivered'
+-- is only modestly smaller than a full index (not a dramatic size cut,
+-- since 'Delivered' is the majority status here, not a rare subset)
 
 -- Query 1: would use the partial index (status filter matches)
 SELECT order_id, order_date, total_amount
@@ -460,7 +463,7 @@ SELECT
   last_name,
   email
 FROM customers
-WHERE LOWER(email) = LOWER('priya.sharma@gmail.com')
+WHERE LOWER(email) = LOWER('jason.miller@gmail.com')
    OR LOWER(email) LIKE '%gmail%';
 -- Without functional index on LOWER(email):
 -- every row must have LOWER() applied before comparison = full scan
@@ -523,8 +526,9 @@ LIMIT 10;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- EXPLAIN QUERY PLAN executes the query AND shows the plan
--- (safe for SELECT — avoid on INSERT/UPDATE/DELETE without ROLLBACK)
+        initialQuery={`-- EXPLAIN QUERY PLAN also does NOT execute the statement
+-- It shows SQLite's query plan (SCAN/SEARCH steps) without running it —
+-- same non-executing behavior as plain EXPLAIN, just simpler, friendlier output
 EXPLAIN QUERY PLAN
 SELECT
   store_id,
@@ -618,7 +622,7 @@ WHERE customer_id = '42'                      -- '42' is TEXT, customer_id is IN
         initialQuery={`-- Demonstrate: these queries reach the same rows but may have different plans
 -- Query A: function on column (likely full scan without functional index)
 SELECT COUNT(*) FROM customers
-WHERE LOWER(city) = 'bangalore';
+WHERE LOWER(city) = 'chicago';
 
 -- Query B: normalised column comparison (uses index on city if it exists)
 SELECT COUNT(*) FROM customers
@@ -769,7 +773,9 @@ ORDER BY month, o.store_id, revenue DESC;`}
 CREATE INDEX CONCURRENTLY idx_orders_status_date
   ON orders(order_status, order_date)
   WHERE order_status = 'Delivered';   -- partial: only delivered orders
--- Index is ~40% smaller than full index on both columns
+-- Index is roughly 23% smaller than a full index on both columns
+-- (FreshCart's 'Delivered' orders are ~77% of the table — the majority,
+-- not a rare subset, so the size savings here are modest)
 
 -- Fix 2: order_items.order_id for the JOIN (likely already exists as FK)
 CREATE INDEX CONCURRENTLY idx_order_items_order_id
@@ -865,7 +871,7 @@ CREATE INDEX CONCURRENTLY idx_order_items_product_id
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Design an indexing strategy for FreshCart's most critical queries. Write the CREATE INDEX statements (with appropriate types — partial, composite, functional, covering) for each scenario, and explain your choice. Scenarios: (1) The orders table is queried thousands of times per day with WHERE order_status = 'Delivered' AND order_date >= some_date — this is the most common query pattern. (2) Customer login authenticates by looking up LOWER(email) — case-insensitive email search happens on every login. (3) The analytics team runs store performance reports that GROUP BY store_id and aggregate total_amount — they always filter WHERE order_status = 'Delivered'. (4) Product search uses WHERE product_name ILIKE 'amul%' (prefix match, case-insensitive). (5) The order_items table is joined to orders via order_id on every order detail query. Then write a diagnostic query that shows all indexes on the orders and order_items tables."
+        question="Design an indexing strategy for FreshCart's most critical queries. Write the CREATE INDEX statements (with appropriate types — partial, composite, functional, covering) for each scenario, and explain your choice. Scenarios: (1) The orders table is queried thousands of times per day with WHERE order_status = 'Delivered' AND order_date >= some_date — this is the most common query pattern. (2) Customer login authenticates by looking up LOWER(email) — case-insensitive email search happens on every login. (3) The analytics team runs store performance reports that GROUP BY store_id and aggregate total_amount — they always filter WHERE order_status = 'Delivered'. (4) Product search uses WHERE product_name ILIKE 'horizon%' (prefix match, case-insensitive). (5) The order_items table is joined to orders via order_id on every order detail query. Then write a diagnostic query that shows all indexes on the orders and order_items tables."
         hint="Scenario 1: partial composite (status in WHERE, date range). Scenario 2: functional on LOWER(email). Scenario 3: partial composite with INCLUDE for covering. Scenario 4: functional on LOWER(product_name) for ILIKE prefix. Scenario 5: FK index on order_items(order_id). Diagnostic: pg_indexes WHERE tablename IN (...)."
         answer={`-- Scenario 1: Most common query — delivered orders by date
 -- Partial: status filter baked into index (smaller index)
@@ -873,7 +879,10 @@ CREATE INDEX CONCURRENTLY idx_order_items_product_id
 CREATE INDEX IF NOT EXISTS idx_orders_delivered_date
   ON orders(order_date)
   WHERE order_status = 'Delivered';
--- Rationale: partial index contains only Delivered rows (~40-60% of table)
+-- Rationale: partial index contains only Delivered rows
+-- (~77% of FreshCart's orders — the majority status, so the size
+-- savings vs. a full index are modest here, though it still avoids
+-- indexing Processing/Cancelled/Returned rows for this query pattern)
 -- Range scan on order_date within that subset is fast
 -- Queries without status filter use a separate full index on order_date
 
@@ -898,8 +907,8 @@ CREATE INDEX IF NOT EXISTS idx_orders_store_revenue_covering
 -- Functional index on LOWER(product_name) for LIKE 'prefix%'
 CREATE INDEX IF NOT EXISTS idx_products_name_lower
   ON products(LOWER(product_name));
--- Rationale: WHERE LOWER(product_name) LIKE 'amul%' uses B-tree prefix scan
--- LIKE 'amul%' with LOWER() rewrite: the functional index covers this pattern
+-- Rationale: WHERE LOWER(product_name) LIKE 'horizon%' uses B-tree prefix scan
+-- LIKE 'horizon%' with LOWER() rewrite: the functional index covers this pattern
 -- Leading wildcard LIKE '%milk%' still cannot use this index
 
 -- Scenario 5: FK index on order_items for JOIN to orders

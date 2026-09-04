@@ -752,7 +752,7 @@ LIMIT 10;`}
       />
 
       <Callout type="warning">
-        LAST_VALUE requires an explicit frame of ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING. Without it, the default frame is ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW — making LAST_VALUE return the current row's value (because the current row IS the last row in the default frame). This is the most common window function gotcha in production code.
+        LAST_VALUE requires an explicit frame of ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING. Without it, the default frame is RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW — making LAST_VALUE return the current row's value (because the current row IS the last row in the default frame). This is the most common window function gotcha in production code.
       </Callout>
 
       <HR />
@@ -935,7 +935,7 @@ ORDER BY store_id, order_date;`}
 
       <Err
         msg="LAST_VALUE returns the current row's value instead of the partition's last value"
-        cause="The default window frame when ORDER BY is present is ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW. For LAST_VALUE, the last row in this frame IS the current row — so LAST_VALUE always returns the current row's own value, not the final row of the partition. This is the most common window function bug in production."
+        cause="The default window frame when ORDER BY is present is RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW. For LAST_VALUE, the last row in this frame IS the current row — so LAST_VALUE always returns the current row's own value, not the final row of the partition. This is the most common window function bug in production."
         fix="Explicitly specify the full partition frame: LAST_VALUE(col) OVER (PARTITION BY grp ORDER BY ord ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING). This makes the frame span the entire partition — the last row in the frame is genuinely the last row of the partition. Alternatively, use FIRST_VALUE with ORDER BY in reverse: FIRST_VALUE(col) OVER (PARTITION BY grp ORDER BY ord DESC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) — this reorders the partition so the last value is now the first."
       />
 

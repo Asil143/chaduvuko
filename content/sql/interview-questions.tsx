@@ -101,7 +101,10 @@ FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id;
 -- FULL OUTER: all customers + all orders
 SELECT c.first_name, o.order_id
 FROM customers c FULL OUTER JOIN orders o ON c.customer_id = o.customer_id;
--- SQLite: simulate with LEFT JOIN UNION ALL RIGHT JOIN equivalent`}</Code>
+-- Modern SQLite (3.39+, released 2022 — what this playground runs) supports
+-- FULL OUTER JOIN natively, so the query above runs as-is.
+-- The LEFT JOIN + UNION ALL + RIGHT JOIN workaround is only needed on
+-- pre-3.39 SQLite, or on other engines that never added it (e.g. older MySQL).`}</Code>
         <p style={{ margin: '10px 0 0', color: 'var(--muted)', fontSize: 13 }}><strong style={{ color: C }}>Trap: </strong>The interviewer may ask "find customers who have never placed an order." Correct answer: LEFT JOIN + WHERE o.order_id IS NULL, or NOT EXISTS. Wrong answer: WHERE o.order_id = 0 or WHERE o.order_id IS NOT NULL.</p>
       </Q>
 
@@ -381,7 +384,7 @@ SELECT
   COUNT(CASE WHEN order_status = 'Delivered'   THEN 1 END) AS delivered,
   COUNT(CASE WHEN order_status = 'Processing'  THEN 1 END) AS processing,
   COUNT(CASE WHEN order_status = 'Cancelled'   THEN 1 END) AS cancelled,
-  COUNT(CASE WHEN order_status = 'Shipped'     THEN 1 END) AS shipped
+  COUNT(CASE WHEN order_status = 'Returned'    THEN 1 END) AS returned
 FROM orders
 GROUP BY store_id
 ORDER BY store_id;`}</Code>
@@ -435,18 +438,21 @@ WHERE d.spent > 1000;`}</Code>
       <Q num={22} q="Write a recursive CTE to traverse a hierarchy" difficulty="Hard" topic="Recursive CTEs">
         <Code>{`-- Recursive CTE pattern: employee-manager hierarchy
 -- (or category tree, org chart, bill of materials)
+-- employees has first_name/last_name, not a single 'name' column —
+-- build the display name with first_name || ' ' || last_name
 WITH RECURSIVE hierarchy AS (
   -- Anchor: start from the root (no manager)
-  SELECT employee_id, name, manager_id, 1 AS depth, name AS path
+  SELECT employee_id, first_name || ' ' || last_name AS name, manager_id,
+    1 AS depth, first_name || ' ' || last_name AS path
   FROM employees
   WHERE manager_id IS NULL
 
   UNION ALL
 
   -- Recursive: join each employee to their manager
-  SELECT e.employee_id, e.name, e.manager_id,
+  SELECT e.employee_id, e.first_name || ' ' || e.last_name, e.manager_id,
     h.depth + 1,
-    h.path || ' > ' || e.name
+    h.path || ' > ' || e.first_name || ' ' || e.last_name
   FROM employees AS e
   JOIN hierarchy AS h ON h.employee_id = e.manager_id
 )
@@ -534,7 +540,7 @@ CREATE INDEX idx_orders_status_date ON orders(order_status, order_date);
       </Q>
 
       <Q num={29} q="What causes a query to not use an index?" difficulty="Medium" topic="Performance">
-        <p style={{ margin: '0 0 10px' }}>Five main causes: (1) function applied to indexed column (WHERE UPPER(city) = 'MUMBAI' — move function to the value side); (2) leading wildcard LIKE ('%milk%' — no index on the substring); (3) implicit type coercion (comparing a TEXT column to an INTEGER literal); (4) low selectivity — if 80% of rows match, a full scan is faster than an index; (5) table is too small — the planner may prefer a full scan for tiny tables.</p>
+        <p style={{ margin: '0 0 10px' }}>Five main causes: (1) function applied to indexed column (WHERE UPPER(city) = 'SEATTLE' — move function to the value side); (2) leading wildcard LIKE ('%milk%' — no index on the substring); (3) implicit type coercion (comparing a TEXT column to an INTEGER literal); (4) low selectivity — if 80% of rows match, a full scan is faster than an index; (5) table is too small — the planner may prefer a full scan for tiny tables. All five are about SARGability (SARGable — Search ARGument ABLE — meaning the condition can use an index rather than forcing a full table scan).</p>
         <Code>{`-- Non-SARGable: kills index on order_date
 WHERE strftime('%Y', order_date) = '2024'
 
@@ -568,7 +574,7 @@ WHERE o.order_status = 'Delivered'
       </Q>
 
       <Q num={32} q="What is a deadlock and how do you prevent it?" difficulty="Medium" topic="Transactions">
-        <p style={{ margin: '0 0 10px' }}>A deadlock occurs when Transaction A holds a lock Row 1 needs by B, and B holds a lock Row 2 needs by A — circular wait. The database detects and rolls back one. Prevention: always acquire locks in the same order; keep transactions short; use SKIP LOCKED for queues.</p>
+        <p style={{ margin: '0 0 10px' }}>Transaction A holds a lock on Row 1 that Transaction B needs, while Transaction B holds a lock on Row 2 that Transaction A needs — neither can proceed, and without a deadlock detector, both would wait forever. This circular wait is a deadlock. The database detects it and rolls back one transaction. Prevention: always acquire locks in the same order; keep transactions short; use SKIP LOCKED for queues.</p>
       </Q>
 
       <Q num={33} q="What is normalization and what are 1NF, 2NF, 3NF?" difficulty="Medium" topic="Database Design">
@@ -653,11 +659,12 @@ WHERE rn IN ((cnt + 1) / 2, (cnt + 2) / 2);
 
       <Q num={43} q="Find employees who earn more than their manager" difficulty="Medium" topic="Self Join">
         <Code>{`-- Self-join on employees table
+-- employees has first_name/last_name, not a single 'name' column
 SELECT
-  e.name     AS employee,
-  e.salary   AS emp_salary,
-  m.name     AS manager,
-  m.salary   AS mgr_salary
+  e.first_name || ' ' || e.last_name  AS employee,
+  e.salary                            AS emp_salary,
+  m.first_name || ' ' || m.last_name  AS manager,
+  m.salary                            AS mgr_salary
 FROM employees AS e
 JOIN employees AS m ON m.employee_id = e.manager_id
 WHERE e.salary > m.salary;`}</Code>

@@ -968,13 +968,16 @@ ORDER BY revenue DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Design three views for FreshCart's reporting layer. Write the CREATE VIEW statements AND the verification SELECT queries for each. (1) vw_product_catalogue — a clean product view showing product_id, product_name (Title Case), category, brand, unit_price, cost_price, margin_amount (unit_price - cost_price), margin_pct (rounded to 1dp), price_band ('Budget' <50, 'Standard' <150, 'Premium' <300, 'Luxury' otherwise), and in_stock. (2) vw_customer_segments — customer_id, full_name, city, loyalty_tier, lifetime_value (sum of delivered orders, 0 if none), order_count, last_order_date, and a segment: 'Champion' if lifetime_value > 1500, 'Loyal' if > 500, 'Promising' if order_count > 0, 'New/Inactive' otherwise. (3) vw_daily_sales — order_date, order_count, total_revenue, avg_order_value, unique_customers, and unique_products_sold — for delivered orders only. Then write one query that JOINs vw_product_catalogue to show the top 3 products by margin_pct in each price_band."
-        hint="View 1: INITCAP(LOWER()) for title case, ROUND for margin_pct, CASE for price_band. View 2: LEFT JOIN customers to aggregated orders, CASE on lifetime_value and order_count. View 3: GROUP BY order_date. JOIN query: use RANK() OVER (PARTITION BY price_band ORDER BY margin_pct DESC)."
+        question="Design three views for FreshCart's reporting layer. Write the CREATE VIEW statements AND the verification SELECT queries for each. (1) vw_product_catalogue — a clean product view showing product_id, product_name (cleaned: trimmed, first letter capitalized and the rest lower-cased — SQLite has no per-word INITCAP, so this is sentence-case, not full multi-word Title Case), category, brand, unit_price, cost_price, margin_amount (unit_price - cost_price), margin_pct (rounded to 1dp), price_band ('Budget' <50, 'Standard' <150, 'Premium' <300, 'Luxury' otherwise), and in_stock. (2) vw_customer_segments — customer_id, full_name, city, loyalty_tier, lifetime_value (sum of delivered orders, 0 if none), order_count, last_order_date, and a segment: 'Champion' if lifetime_value > 1500, 'Loyal' if > 500, 'Promising' if order_count > 0, 'New/Inactive' otherwise. (3) vw_daily_sales — order_date, order_count, total_revenue, avg_order_value, unique_customers, and unique_products_sold — for delivered orders only. Then write one query that JOINs vw_product_catalogue to show the top 3 products by margin_pct in each price_band."
+        hint="View 1: SQLite has no INITCAP — build UPPER(SUBSTR(TRIM(product_name),1,1)) || LOWER(SUBSTR(TRIM(product_name),2)) to capitalize just the first letter, ROUND for margin_pct, CASE for price_band. View 2: LEFT JOIN customers to aggregated orders, CASE on lifetime_value and order_count. View 3: GROUP BY order_date. JOIN query: use RANK() OVER (PARTITION BY price_band ORDER BY margin_pct DESC)."
         answer={`-- View 1: Clean product catalogue
+-- SQLite has no INITCAP — capitalize the first letter and lower-case the
+-- rest (sentence-case; a genuine per-word Title Case needs a word-by-word
+-- approach SQLite doesn't support directly)
 CREATE VIEW vw_product_catalogue AS
 SELECT
   product_id,
-  product_name,
+  UPPER(SUBSTR(TRIM(product_name), 1, 1)) || LOWER(SUBSTR(TRIM(product_name), 2)) AS product_name,
   category,
   brand,
   unit_price,
@@ -1043,7 +1046,7 @@ GROUP BY o.order_date;
 WITH vw_product_catalogue AS (
   SELECT
     product_id,
-    product_name,
+    UPPER(SUBSTR(TRIM(product_name), 1, 1)) || LOWER(SUBSTR(TRIM(product_name), 2)) AS product_name,
     category, brand, unit_price, cost_price,
     ROUND(unit_price - cost_price, 2)               AS margin_amount,
     ROUND((unit_price - cost_price)
@@ -1067,7 +1070,7 @@ FROM (
 ) AS ranked
 WHERE rnk <= 3
 ORDER BY price_band, rnk;`}
-        explanation="View 1 encapsulates all product display logic — INITCAP(LOWER(TRIM())) for consistent name formatting, NULLIF on unit_price for the margin percentage division, and a CASE for the price_band classification. Any query needing product data queries this view rather than the base table. View 2 uses LEFT JOIN to preserve customers with no delivered orders (segment = 'New/Inactive'). COALESCE(SUM(), 0) handles the NULL that LEFT JOIN produces for unmatched customers. The CASE evaluates lifetime_value (the aggregate) in precedence order — Champions first so a high-value customer is not labelled 'Promising'. View 3 aggregates to order_date using COUNT(DISTINCT) to avoid fan-out — orders has one row per order but join to order_items produces multiple rows per order, so COUNT(DISTINCT o.order_id) correctly counts orders. The top-3 query wraps vw_product_catalogue in a window function — RANK() OVER (PARTITION BY price_band ORDER BY margin_pct DESC) — and filters WHERE rnk <= 3. Window functions cannot be used in WHERE directly so the derived table wrapper is required."
+        explanation="View 1 encapsulates all product display logic — SQLite has no INITCAP, so UPPER(SUBSTR(TRIM(product_name),1,1)) || LOWER(SUBSTR(TRIM(product_name),2)) trims the name, capitalizes its first letter, and lower-cases the rest (sentence-case, not full per-word Title Case — SQLite would need a word-by-word split for that), NULLIF on unit_price for the margin percentage division, and a CASE for the price_band classification. Any query needing product data queries this view rather than the base table. View 2 uses LEFT JOIN to preserve customers with no delivered orders (segment = 'New/Inactive'). COALESCE(SUM(), 0) handles the NULL that LEFT JOIN produces for unmatched customers. The CASE evaluates lifetime_value (the aggregate) in precedence order — Champions first so a high-value customer is not labelled 'Promising'. View 3 aggregates to order_date using COUNT(DISTINCT) to avoid fan-out — orders has one row per order but join to order_items produces multiple rows per order, so COUNT(DISTINCT o.order_id) correctly counts orders. The top-3 query wraps vw_product_catalogue in a window function — RANK() OVER (PARTITION BY price_band ORDER BY margin_pct DESC) — and filters WHERE rnk <= 3. Window functions cannot be used in WHERE directly so the derived table wrapper is required."
       />
 
       <HR />

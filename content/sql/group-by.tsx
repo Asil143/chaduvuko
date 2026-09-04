@@ -729,7 +729,10 @@ SELECT
   c.first_name || ' ' || c.last_name         AS customer,
   c.loyalty_tier,
   MAX(o.order_date)                           AS last_order_date,
-  CURRENT_DATE - MAX(o.order_date)            AS days_since_last_order,
+  -- julianday() converts a date to a Julian day number — subtracting two
+  -- of them gives the number of days between two dates
+  CAST(julianday(CURRENT_DATE) - julianday(MAX(o.order_date)) AS INTEGER)
+                                               AS days_since_last_order,
   COUNT(o.order_id)                           AS order_frequency,
   ROUND(SUM(o.total_amount), 2)               AS total_spend,
   ROUND(AVG(o.total_amount), 2)               AS avg_order_value

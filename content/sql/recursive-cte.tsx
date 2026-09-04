@@ -163,7 +163,7 @@ SELECT * FROM cte_name ORDER BY depth;
       />
 
       <Callout type="warning">
-        Always include a termination condition in the recursive member — either a WHERE depth &lt; N guard or a WHERE NOT EXISTS cycle check. Without it, a cycle in the data (A → B → A) causes infinite recursion. PostgreSQL enforces a maximum recursion depth (default 100) but hitting it raises an error rather than returning partial results.
+        Always include a termination condition in the recursive member — either a WHERE depth &lt; N guard or a WHERE NOT EXISTS cycle check. Without it, a cycle in the data (A → B → A) causes infinite recursion. SQL Server has a built-in safety net for this — OPTION (MAXRECURSION n), which defaults to 100 and raises a clean error the moment it is hit. PostgreSQL has no such built-in cap: an unguarded recursive CTE with a cycle will keep running, consuming memory and disk, until you manually cancel it or the server runs out of resources. On Postgres, the termination guard you write in the recursive member is the only thing preventing a runaway query.
       </Callout>
 
       <HR />
@@ -306,6 +306,9 @@ ORDER BY id_path;`}
 -- Starting from the employee and walking UP to the root
 WITH RECURSIVE management_chain AS (
   -- Anchor: start at the target employee
+  -- employee_id 3 = Amanda Foster, a Cashier — picked because she has two
+  -- levels of management above her (an Assistant Manager, then a Store
+  -- Manager), so the upward walk is visible across multiple iterations
   SELECT
     employee_id,
     first_name || ' ' || last_name   AS full_name,
@@ -313,12 +316,7 @@ WITH RECURSIVE management_chain AS (
     manager_id,
     0                                AS levels_above
   FROM employees
-  WHERE employee_id = (
-    SELECT employee_id FROM employees
-    WHERE manager_id IS NOT NULL
-    ORDER BY employee_id DESC
-    LIMIT 1
-  )
+  WHERE employee_id = 3
 
   UNION ALL
 
@@ -498,6 +496,10 @@ ORDER BY sort_key;`}
 
       <P>Recursive CTEs can traverse graph structures — tables where rows represent edges (connections between nodes). The classic application is finding paths between stores, delivery waypoints, or network nodes. The recursive member builds paths by adding one edge per iteration.</P>
 
+      <Callout type="info">
+        This example introduces PostgreSQL's ARRAY type: ARRAY[from_node, to_node] creates a list of values in a single column. On arrays, the || operator means <Hl>append an element</Hl> — visited || new_node adds new_node to the end of the array — which is a different meaning from the string-concatenation || used elsewhere in this file (e.g. path || ' → ' || name). Watch for that overload. WHERE r.to_node = ANY(p.visited_nodes) tests whether the left value equals any element already in the array — combined with NOT, it is exactly how the cycle guard below checks "has this node already been visited?"
+      </Callout>
+
       <CodeBlock
         label="Graph traversal — path finding between nodes"
         code={`-- Delivery route graph:
@@ -665,7 +667,7 @@ WITH bom(parent_id, child_id, component_name, quantity, unit_cost) AS (
   VALUES
     -- Gift basket (ID 0) contains:
     (0, 1, 'Horizon Butter 500g',   2, 55.00),
-    (0, 2, 'Britannia Bread',    1, 35.00),
+    (0, 2, 'Sara Lee Bread',    1, 35.00),
     (0, 3, 'Juice Pack',         3, 40.00),
     (0, 4, 'Packaging',          1, 25.00),
     -- Juice Pack (ID 3) is itself made of:
@@ -721,7 +723,7 @@ ORDER BY path;`}
 WITH bom(parent_id, child_id, component_name, quantity, unit_cost) AS (
   VALUES
     (0, 1, 'Horizon Butter 500g',   2, 55.00),
-    (0, 2, 'Britannia Bread',    1, 35.00),
+    (0, 2, 'Sara Lee Bread',    1, 35.00),
     (0, 3, 'Juice Pack',         3, 40.00),
     (0, 4, 'Packaging',          1, 25.00),
     (3, 5, 'Juice Bottle 200ml', 3, 12.00),
@@ -934,7 +936,7 @@ basket_id(id) AS (VALUES (0)),   -- change this to any product
 bom(parent_id, child_id, component_name, qty_per_parent, unit_cost) AS (
   VALUES
     (0, 1, 'Horizon Butter 500g',     2, 55.00),
-    (0, 2, 'Britannia Bread',      1, 35.00),
+    (0, 2, 'Sara Lee Bread',      1, 35.00),
     (0, 3, 'Juice Pack x3',        1, 40.00),
     (0, 4, 'Gift Packaging',       1, 25.00),
     (3, 5, 'Juice Bottle 200ml',   3, 12.00),
@@ -997,7 +999,7 @@ WITH
 bom(parent_id, child_id, component_name, qty_per_parent, unit_cost) AS (
   VALUES
     (0, 1, 'Horizon Butter 500g',     2, 55.00),
-    (0, 2, 'Britannia Bread',      1, 35.00),
+    (0, 2, 'Sara Lee Bread',      1, 35.00),
     (0, 3, 'Juice Pack x3',        1, 40.00),
     (0, 4, 'Gift Packaging',       1, 25.00),
     (3, 5, 'Juice Bottle 200ml',   3, 12.00),
@@ -1060,7 +1062,7 @@ ORDER BY depth;`}
       </IQ>
 
       <IQ q="How do you prevent infinite recursion in a recursive CTE?">
-        <p style={{ margin: '0 0 14px' }}>Infinite recursion occurs when following parent-child links leads back to a node already visited (a cycle: A → B → C → A) or when the termination condition is never satisfied. Without protection, the recursive member keeps producing rows forever — PostgreSQL enforces a default max_recursion_depth of 100 and raises an error when hit, but the error is less useful than intentional termination.</p>
+        <p style={{ margin: '0 0 14px' }}>Infinite recursion occurs when following parent-child links leads back to a node already visited (a cycle: A → B → C → A) or when the termination condition is never satisfied. Without protection, the recursive member keeps producing rows forever — and the behaviour differs by database. SQL Server has a built-in guard, OPTION (MAXRECURSION n), which defaults to 100 and raises "The maximum recursion 100 has been exhausted before statement completion" when hit (0 disables the limit entirely). PostgreSQL has no equivalent built-in cap — an unguarded recursive CTE with a cycle simply keeps running, consuming memory and disk, until you cancel the query or the server runs out of resources. On Postgres there is no default safety net to fall back on, so you must build your own termination guard.</p>
         <p style={{ margin: '0 0 14px' }}>Two protection mechanisms. Method 1: depth limit — add a depth counter to the anchor (0 AS depth) and increment it in the recursive member (depth + 1). Add WHERE depth &lt; N to the recursive member. The recursion stops after N iterations regardless of data. Simple and cheap, but N must be chosen carefully — too low and valid deep hierarchies are cut off, too high and cycles spin for N iterations before stopping. For most org charts N = 10–20 is safe; for BOMs N = 5–8 is typical.</p>
         <p style={{ margin: 0 }}>Method 2: visited array — maintain an array of node IDs seen in the current path. In the anchor, initialise it with ARRAY[id]. In the recursive member, append the new node's ID and add WHERE NOT (new_id = ANY(visited_array)). This stops the moment a cycle is detected, at exactly the right point regardless of depth. Cost: the array grows with depth and IS DISTINCT FROM comparisons are slightly more expensive than integer comparison. For production code on data that might have cycles, use both: the visited array for correctness and a depth limit as a safety backstop.</p>
       </IQ>
@@ -1089,9 +1091,9 @@ ORDER BY depth;`}
       />
 
       <Err
-        msg="ERROR: maximum recursion depth exceeded (100)"
-        cause="The recursive CTE ran 100 iterations without the recursive member producing zero rows. Either the data contains a cycle (A is parent of B, B is parent of A), there is no termination condition in the WHERE clause of the recursive member, or the hierarchy is genuinely deeper than 100 levels."
-        fix="Add a depth counter and termination condition: 0 AS depth in the anchor, depth + 1 in the recursive member, and WHERE depth &lt; 50 in the recursive member's WHERE clause. For cycle detection, add a visited array: ARRAY[id] in the anchor, visited || new_id in the recursive member, and WHERE NOT (new_id = ANY(visited)) in the WHERE clause. To increase the limit temporarily (not recommended for production): SET max_recursion_depth = 200. Always prefer fixing the data or adding a proper termination condition over raising the limit."
+        msg="Msg 530: The maximum recursion 100 has been exhausted before statement completion (SQL Server)"
+        cause="This is a SQL Server-specific error, not a PostgreSQL one. SQL Server enforces OPTION (MAXRECURSION n) with a default of n = 100, and raises this exact error once a recursive CTE runs 100 iterations without the recursive member producing zero rows — either the data contains a cycle (A is parent of B, B is parent of A), there is no termination condition in the WHERE clause of the recursive member, or the hierarchy is genuinely deeper than 100 levels. PostgreSQL has no equivalent built-in limit and will never raise this error — an unguarded recursive CTE with a cycle on Postgres just keeps running until it exhausts memory/disk or you cancel it manually."
+        fix="Add a depth counter and termination condition: 0 AS depth in the anchor, depth + 1 in the recursive member, and WHERE depth &lt; 50 in the recursive member's WHERE clause. For cycle detection, add a visited array: ARRAY[id] in the anchor, visited || new_id in the recursive member, and WHERE NOT (new_id = ANY(visited)) in the WHERE clause. On SQL Server you can also raise or disable the built-in limit with OPTION (MAXRECURSION 200) or OPTION (MAXRECURSION 0) for unlimited — but always prefer fixing the data or adding a proper termination condition over raising the limit. On PostgreSQL there is no limit to raise or lower — the termination guard inside your own query is the only protection that exists."
       />
 
       <Err
@@ -1216,7 +1218,7 @@ ORDER BY sort_key;`}
           'BOM explosion: cumulative quantity must multiply through every level — child.cumulative_qty = parent.cumulative_qty × child.qty_per_parent. Not just qty_per_parent alone.',
           'Cycle prevention with visited array: ARRAY[id] in anchor, visited || new_id in recursive member, WHERE NOT (new_id = ANY(visited)) to stop. Use UNION (not UNION ALL) for DAGs where a node can have multiple parents.',
           'Recursive CTEs replace chains of self-joins for hierarchical data. Self-joins require knowing the depth in advance; recursive CTEs handle any depth with the same query.',
-          'PostgreSQL default max_recursion_depth is 100. Hit it by accident means a cycle or missing termination condition — fix the query, not the limit. SET max_recursion_depth is a last resort.',
+          'SQL Server enforces OPTION (MAXRECURSION n), default 100, and raises a clean error the moment it is exceeded. PostgreSQL has no equivalent built-in cap — an unguarded recursive CTE with a cycle just runs unbounded until it exhausts memory/disk. Never rely on a default limit that may not exist — always add your own termination guard.',
         ]}
       />
 

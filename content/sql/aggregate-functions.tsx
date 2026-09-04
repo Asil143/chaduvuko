@@ -344,10 +344,12 @@ WHERE order_status = 'Delivered';`}
 
       <SQLPlayground
         initialQuery={`-- Average delivery time in days
+-- julianday() converts a date to a Julian day number — subtracting two
+-- of them gives the number of days between two dates
 SELECT
-  ROUND(AVG(delivery_date - order_date), 1)  AS avg_delivery_days,
-  MIN(delivery_date - order_date)            AS fastest_delivery,
-  MAX(delivery_date - order_date)            AS slowest_delivery
+  ROUND(AVG(julianday(delivery_date) - julianday(order_date)), 1)  AS avg_delivery_days,
+  MIN(julianday(delivery_date) - julianday(order_date))            AS fastest_delivery,
+  MAX(julianday(delivery_date) - julianday(order_date))            AS slowest_delivery
 FROM orders
 WHERE delivery_date IS NOT NULL;`}
         height={120}
@@ -378,9 +380,9 @@ ORDER BY avg_price DESC;`}
 SELECT
   COUNT(*)                                        AS total_orders,
   COUNT(delivery_date)                            AS delivered,
-  ROUND(AVG(delivery_date - order_date), 1)       AS avg_days_delivered_only,
+  ROUND(AVG(julianday(delivery_date) - julianday(order_date)), 1)       AS avg_days_delivered_only,
   -- If we wanted to include undelivered as 0:
-  ROUND(AVG(COALESCE(delivery_date - order_date, 0)), 1) AS avg_including_pending_as_0
+  ROUND(AVG(COALESCE(julianday(delivery_date) - julianday(order_date), 0)), 1) AS avg_including_pending_as_0
 FROM orders;`}
         height={165}
         showSchema={false}
@@ -407,7 +409,7 @@ FROM products;`}
 SELECT
   MIN(order_date)   AS first_order_date,
   MAX(order_date)   AS most_recent_order,
-  MAX(order_date) - MIN(order_date) AS days_of_data
+  CAST(julianday(MAX(order_date)) - julianday(MIN(order_date)) AS INTEGER) AS days_of_data
 FROM orders;`}
         height={115}
         showSchema={false}
@@ -534,9 +536,9 @@ SELECT
   COUNT(*)                                    AS total_rows,
   COUNT(delivery_date)                        AS non_null_dates,
   -- AVG ignores NULL: only averages delivered orders
-  ROUND(AVG(delivery_date - order_date), 1)   AS avg_days_excl_nulls,
+  ROUND(AVG(julianday(delivery_date) - julianday(order_date)), 1)   AS avg_days_excl_nulls,
   -- COALESCE treats undelivered as 0: averages all orders
-  ROUND(AVG(COALESCE(delivery_date - order_date, 0)), 1) AS avg_days_incl_zeros,
+  ROUND(AVG(COALESCE(julianday(delivery_date) - julianday(order_date), 0)), 1) AS avg_days_incl_zeros,
   -- The two numbers answer DIFFERENT questions
   -- Which is "correct" depends on the business question
   '---' AS separator,
@@ -747,9 +749,9 @@ LIMIT 5;`}
 SELECT
   c.loyalty_tier,
   COUNT(o.order_id)                                   AS delivered_orders,
-  ROUND(AVG(o.delivery_date - o.order_date), 1)       AS avg_delivery_days,
-  MIN(o.delivery_date - o.order_date)                 AS fastest,
-  MAX(o.delivery_date - o.order_date)                 AS slowest,
+  ROUND(AVG(julianday(o.delivery_date) - julianday(o.order_date)), 1)       AS avg_delivery_days,
+  MIN(julianday(o.delivery_date) - julianday(o.order_date))                 AS fastest,
+  MAX(julianday(o.delivery_date) - julianday(o.order_date))                 AS slowest,
   ROUND(AVG(o.total_amount), 2)                       AS avg_order_value
 FROM orders AS o
 JOIN customers AS c ON o.customer_id = c.customer_id

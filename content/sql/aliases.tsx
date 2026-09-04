@@ -534,7 +534,10 @@ SELECT
   c.state,
   c.loyalty_tier                        AS tier,
   c.joined_date                         AS member_since,
-  CURRENT_DATE - c.joined_date          AS days_as_member
+  -- julianday() converts a date to a Julian day number — subtracting two
+  -- of them gives the number of days between two dates
+  CAST(julianday(CURRENT_DATE) - julianday(c.joined_date) AS INTEGER)
+                                         AS days_as_member
 FROM customers AS c
 ORDER BY days_as_member DESC;`}
         height={190}
@@ -575,10 +578,12 @@ SELECT
   o.order_status                                             AS status,
   o.payment_method                                           AS paid_via,
   o.total_amount                                             AS amount,
-  COALESCE(o.delivery_date - o.order_date, -1)              AS days_to_deliver,
+  COALESCE(
+    CAST(julianday(o.delivery_date) - julianday(o.order_date) AS INTEGER), -1
+  )                                                          AS days_to_deliver,
   CASE
     WHEN o.delivery_date IS NULL THEN 'Pending'
-    WHEN o.delivery_date - o.order_date <= 2 THEN 'Fast'
+    WHEN julianday(o.delivery_date) - julianday(o.order_date) <= 2 THEN 'Fast'
     ELSE 'Standard'
   END                                                        AS delivery_speed
 FROM orders AS o

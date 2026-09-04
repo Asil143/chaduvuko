@@ -207,15 +207,9 @@ ALTER TABLE customers ALTER COLUMN phone SET NOT NULL;
       />
 
       <SQLPlayground
-        initialQuery={`-- Check which FreshCart columns are nullable
-SELECT
-  column_name,
-  is_nullable,
-  data_type,
-  column_default
-FROM information_schema.columns
-WHERE table_name = 'customers'
-ORDER BY ordinal_position;`}
+        initialQuery={`-- SQLite has no information_schema — use PRAGMA table_info(table) instead
+-- Columns returned: cid, name, type, notnull (1 = NOT NULL), dflt_value, pk (primary key)
+PRAGMA table_info(customers);`}
         height={160}
         showSchema={true}
       />
@@ -225,7 +219,7 @@ ORDER BY ordinal_position;`}
       {/* ── PART 04 ── */}
       <Part n="04" title="UNIQUE — Preventing Duplicate Values" />
 
-      <P>UNIQUE ensures no two rows share the same value in the specified column or combination of columns. The database creates an index to efficiently enforce this constraint. Unlike PRIMARY KEY, UNIQUE allows NULL — multiple rows can have NULL in a UNIQUE column because NULL ≠ NULL in SQL's three-valued logic.</P>
+      <P>UNIQUE ensures no two rows share the same value in the specified column or combination of columns. The database creates an index to efficiently enforce this constraint. Unlike PRIMARY KEY, UNIQUE allows NULL — multiple rows can have NULL in a UNIQUE column because NULL ≠ NULL in SQL's three-valued logic. NULL represents an <Hl>unknown</Hl> value, and SQL never treats two unknown values as equal to each other — so a uniqueness check has nothing definite to compare and cannot flag two NULLs as duplicates.</P>
 
       <H>Single-column UNIQUE</H>
 
@@ -423,15 +417,16 @@ CREATE TABLE order_items (
       />
 
       <SQLPlayground
-        initialQuery={`-- See primary keys across FreshCart tables
-SELECT
-  table_name,
-  column_name,
-  data_type
-FROM information_schema.columns
-WHERE table_name IN ('customers','orders','products','stores','order_items')
-  AND column_name IN ('customer_id','order_id','product_id','store_id','item_id')
-ORDER BY table_name, ordinal_position;`}
+        initialQuery={`-- SQLite has no information_schema — use PRAGMA table_info(table) per table instead
+-- 'pk' column: 0 = not part of the primary key, 1 = primary key
+-- (or 1st column of a composite key, 2 = 2nd column, etc.)
+PRAGMA table_info(customers);
+PRAGMA table_info(orders);
+PRAGMA table_info(products);
+PRAGMA table_info(stores);
+PRAGMA table_info(order_items);
+-- Note: only the first statement's result table renders above —
+-- reorder the PRAGMA lines (or run them one at a time) to inspect a different table`}
         height={175}
         showSchema={true}
       />
@@ -487,8 +482,8 @@ CREATE TABLE employees (
 );
 -- Now you can insert an employee before their manager:
 BEGIN;
-INSERT INTO employees VALUES (1, 2);  -- manager 2 doesn't exist yet
-INSERT INTO employees VALUES (2, 1);  -- now manager 2 exists
+INSERT INTO employees (employee_id, manager_id) VALUES (1, 2);  -- manager 2 doesn't exist yet
+INSERT INTO employees (employee_id, manager_id) VALUES (2, 1);  -- now manager 2 exists
 COMMIT;  -- FK checked here — both rows now exist, no violation`}
       />
 
@@ -627,20 +622,19 @@ CONSTRAINT chk_delivery_after_order  CHECK (delivery_date IS NULL OR delivery_da
 
       <P>Here is the FreshCart schema with every constraint fully named and annotated. This is the production-quality standard for constraint design.</P>
 
+      <P>SQLite has no <Hl>information_schema</Hl> — that is a PostgreSQL/MySQL-specific system catalog, and querying it in SQLite fails. SQLite's real introspection tools are <Hl>PRAGMA table_info(table)</Hl> (columns, types, NOT NULL, default, primary key), <Hl>PRAGMA foreign_key_list(table)</Hl> (foreign keys), and reading the constraint definitions straight out of the stored CREATE TABLE text with <Hl>SELECT sql FROM sqlite_master</Hl> — SQLite has no direct way to list CHECK or named UNIQUE constraints the way information_schema does, so the raw SQL text is the closest equivalent.</P>
+
       <SQLPlayground
-        initialQuery={`-- Verify FreshCart's existing constraints using information_schema
-SELECT
-  tc.table_name,
-  tc.constraint_name,
-  tc.constraint_type,
-  kcu.column_name
-FROM information_schema.table_constraints AS tc
-JOIN information_schema.key_column_usage AS kcu
-  ON tc.constraint_name = kcu.constraint_name
-  AND tc.table_schema = kcu.table_schema
-WHERE tc.table_name IN ('customers','orders','products','order_items','stores','employees')
-  AND tc.constraint_type IN ('PRIMARY KEY','UNIQUE','FOREIGN KEY')
-ORDER BY tc.table_name, tc.constraint_type, kcu.column_name;`}
+        initialQuery={`-- SQLite has no information_schema — inspect constraints with PRAGMA and sqlite_master instead
+
+-- 1) Column info: NOT NULL, DEFAULT, and PRIMARY KEY per column
+PRAGMA table_info(orders);
+
+-- 2) Foreign keys defined on a table
+PRAGMA foreign_key_list(orders);
+
+-- 3) The exact CREATE TABLE text — CHECK and UNIQUE constraints live here
+SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'orders';`}
         height={200}
         showSchema={true}
       />

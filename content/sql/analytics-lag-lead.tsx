@@ -129,10 +129,14 @@ SELECT
     ORDER BY order_date, order_id
   )                                           AS next_order_date,
   -- Days since previous order
-  order_date - LAG(order_date) OVER (
-    PARTITION BY customer_id
-    ORDER BY order_date, order_id
-  )                                           AS days_since_prev
+  -- julianday() converts a date to a Julian day number — subtracting two
+  -- of them gives the number of days between two dates
+  CAST(
+    julianday(order_date) - julianday(LAG(order_date) OVER (
+      PARTITION BY customer_id
+      ORDER BY order_date, order_id
+    ))
+  AS INTEGER)                                 AS days_since_prev
 FROM orders
 WHERE order_status = 'Delivered'
 ORDER BY customer_id, order_date
@@ -274,21 +278,23 @@ SELECT
     ORDER BY o.order_date, o.order_id
   )                                                AS next_order_date,
   -- Gap in days
-  LEAD(o.order_date) OVER (
-    PARTITION BY o.customer_id
-    ORDER BY o.order_date, o.order_id
-  ) - o.order_date                                 AS days_to_next_order,
+  CAST(
+    julianday(LEAD(o.order_date) OVER (
+      PARTITION BY o.customer_id
+      ORDER BY o.order_date, o.order_id
+    )) - julianday(o.order_date)
+  AS INTEGER)                                       AS days_to_next_order,
   -- Classify the gap
   CASE
     WHEN LEAD(o.order_date) OVER (
       PARTITION BY o.customer_id ORDER BY o.order_date, o.order_id
     ) IS NULL THEN 'No next order yet'
-    WHEN LEAD(o.order_date) OVER (
+    WHEN julianday(LEAD(o.order_date) OVER (
       PARTITION BY o.customer_id ORDER BY o.order_date, o.order_id
-    ) - o.order_date <= 7  THEN 'Returned within a week'
-    WHEN LEAD(o.order_date) OVER (
+    )) - julianday(o.order_date) <= 7  THEN 'Returned within a week'
+    WHEN julianday(LEAD(o.order_date) OVER (
       PARTITION BY o.customer_id ORDER BY o.order_date, o.order_id
-    ) - o.order_date <= 30 THEN 'Returned within a month'
+    )) - julianday(o.order_date) <= 30 THEN 'Returned within a month'
     ELSE 'Long gap before return'
   END                                              AS return_pattern
 FROM orders AS o
@@ -366,10 +372,12 @@ WITH store_order_sequence AS (
       PARTITION BY store_id
       ORDER BY order_date, order_id
     )                                              AS prev_order_date,
-    order_date - LAG(order_date) OVER (
-      PARTITION BY store_id
-      ORDER BY order_date, order_id
-    )                                              AS days_since_prev
+    CAST(
+      julianday(order_date) - julianday(LAG(order_date) OVER (
+        PARTITION BY store_id
+        ORDER BY order_date, order_id
+      ))
+    AS INTEGER)                                    AS days_since_prev
   FROM orders
   WHERE order_status = 'Delivered'
 )
@@ -400,14 +408,18 @@ WITH customer_gaps AS (
   SELECT
     customer_id,
     order_date,
-    order_date - LAG(order_date) OVER (
-      PARTITION BY customer_id
-      ORDER BY order_date, order_id
-    )                                              AS gap_days,
-    LAG(order_date - LAG(order_date) OVER (
-      PARTITION BY customer_id
-      ORDER BY order_date, order_id
-    )) OVER (
+    CAST(
+      julianday(order_date) - julianday(LAG(order_date) OVER (
+        PARTITION BY customer_id
+        ORDER BY order_date, order_id
+      ))
+    AS INTEGER)                                    AS gap_days,
+    LAG(CAST(
+      julianday(order_date) - julianday(LAG(order_date) OVER (
+        PARTITION BY customer_id
+        ORDER BY order_date, order_id
+      ))
+    AS INTEGER)) OVER (
       PARTITION BY customer_id
       ORDER BY order_date, order_id
     )                                              AS prev_gap_days,
@@ -542,10 +554,12 @@ SELECT
     ''
   )                                                AS is_transition,
   -- Time spent in previous status
-  status_date - LAG(status_date) OVER (
-    PARTITION BY order_id
-    ORDER BY status_date
-  )                                                AS days_in_prev_status
+  CAST(
+    julianday(status_date) - julianday(LAG(status_date) OVER (
+      PARTITION BY order_id
+      ORDER BY status_date
+    ))
+  AS INTEGER)                                      AS days_in_prev_status
 FROM order_status_log
 ORDER BY order_id, status_date
 LIMIT 10;`}
@@ -648,7 +662,7 @@ WITH order_funnel AS (
   SELECT 3, 'Delivered on time (≤ 3 days)',
     COUNT(*) FROM orders
     WHERE order_status = 'Delivered'
-      AND delivery_date - order_date <= 3
+      AND julianday(delivery_date) - julianday(order_date) <= 3
   UNION ALL
   SELECT 4, 'High value delivered (> $500)',
     COUNT(*) FROM orders
@@ -794,15 +808,17 @@ with_gaps AS (
     store_id,
     active_date,
     -- Gap from previous active day
-    active_date - LAG(active_date) OVER (
-      PARTITION BY store_id
-      ORDER BY active_date
-    )                                              AS days_gap,
+    CAST(
+      julianday(active_date) - julianday(LAG(active_date) OVER (
+        PARTITION BY store_id
+        ORDER BY active_date
+      ))
+    AS INTEGER)                                    AS days_gap,
     -- A new island starts when gap > 1 (non-consecutive)
     CASE
-      WHEN active_date - LAG(active_date) OVER (
+      WHEN julianday(active_date) - julianday(LAG(active_date) OVER (
         PARTITION BY store_id ORDER BY active_date
-      ) > 1 OR LAG(active_date) OVER (
+      )) > 1 OR LAG(active_date) OVER (
         PARTITION BY store_id ORDER BY active_date
       ) IS NULL
       THEN 1 ELSE 0
@@ -827,7 +843,7 @@ SELECT
   MIN(active_date)                                 AS island_start,
   MAX(active_date)                                 AS island_end,
   COUNT(*)                                         AS consecutive_days,
-  MAX(active_date) - MIN(active_date) + 1          AS span_days
+  CAST(julianday(MAX(active_date)) - julianday(MIN(active_date)) AS INTEGER) + 1 AS span_days
 FROM island_labels
 GROUP BY store_id, island_num
 ORDER BY store_id, island_start;`}
@@ -863,10 +879,12 @@ WITH order_gaps AS (
     o.order_date,
     o.total_amount,
     -- Gap from previous order
-    o.order_date - LAG(o.order_date) OVER (
-      PARTITION BY o.customer_id
-      ORDER BY o.order_date, o.order_id
-    )                                              AS gap_days,
+    CAST(
+      julianday(o.order_date) - julianday(LAG(o.order_date) OVER (
+        PARTITION BY o.customer_id
+        ORDER BY o.order_date, o.order_id
+      ))
+    AS INTEGER)                                    AS gap_days,
     ROW_NUMBER() OVER (
       PARTITION BY o.customer_id
       ORDER BY o.order_date DESC, o.order_id DESC
@@ -896,7 +914,8 @@ SELECT
   c.loyalty_tier,
   cc.total_orders,
   cc.last_order_date,
-  CURRENT_DATE - cc.last_order_date               AS days_since_last,
+  CAST(julianday(CURRENT_DATE) - julianday(cc.last_order_date) AS INTEGER)
+                                                   AS days_since_last,
   cc.avg_gap_days,
   cc.latest_gap,
   cc.total_spend,

@@ -690,11 +690,40 @@ SELECT * FROM table1, table2;  -- comma-separated = CROSS JOIN
       {/* ── PART 11 ── */}
       <Part n="11" title="Joining on Multiple Columns — Composite Keys" />
 
-      <P>Some tables have composite primary keys — where two or more columns together uniquely identify a row. Joining on composite keys requires matching all key columns in the ON clause.</P>
+      <P>Some schemas use composite keys — two or more columns that together uniquely identify a row, or together form a foreign key back to another table. Joining on a composite key means every column in the composite must match, ANDed together in a single ON clause: ON t1.col_a = t2.col_a AND t1.col_b = t2.col_b. Matching on only one of the columns would pair rows that share that one value but disagree on the other — a silent, wrong result.</P>
+
+      <P>FreshCart's own schema does not need this: every table here uses a single-column surrogate key (order_id, product_id, customer_id, item_id), so every JOIN you have written so far — including the multi-table chains earlier in this module — matches on exactly one column per JOIN. Here is what a genuine composite-key ON clause looks like, illustrated with a hypothetical table:</P>
+
+      <CodeBlock
+        label="A genuine composite-key JOIN — illustrative, not FreshCart's real schema"
+        code={`-- Suppose order_items used (order_id, product_id) as its actual
+-- composite PRIMARY KEY (instead of the surrogate item_id it really has)
+-- and a promotions table recorded a discount per line item:
+--   CREATE TABLE line_item_promos (
+--     order_id   INTEGER,
+--     product_id INTEGER,
+--     promo_code VARCHAR,
+--     PRIMARY KEY (order_id, product_id)
+--   );
+
+-- Both columns must be matched together — ANDed in one ON clause:
+SELECT oi.order_id, oi.product_id, oi.line_total, promo.promo_code
+FROM order_items AS oi
+JOIN line_item_promos AS promo
+  ON  oi.order_id   = promo.order_id     -- first key column
+  AND oi.product_id = promo.product_id;  -- second key column
+
+-- WRONG — matching on only one column of the composite key:
+-- ON oi.order_id = promo.order_id
+-- This pairs EVERY line item in an order with EVERY promo row for
+-- that order, regardless of which product the promo was actually for`}
+      />
+
+      <P>Chaining several single-column JOINs — one JOIN per table, each on its own foreign key — is the far more common real-world pattern, and it is exactly what the query below does: three JOINs, each matching one column, not one JOIN matching two columns together.</P>
 
       <SQLPlayground
-        initialQuery={`-- order_items has a composite key: (order_id, product_id)
--- Join on both columns to get exact matches
+        initialQuery={`-- Three single-column JOINs chained together
+-- (not a composite-key join — each JOIN below matches on one column)
 SELECT
   oi.order_id,
   oi.product_id,

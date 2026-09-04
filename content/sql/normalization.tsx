@@ -121,7 +121,7 @@ export default function Normalization() {
               ['1001', 'Sofia Ramirez', 'sofia@gmail.com', 'Seattle', 'Horizon Butter', 'Dairy', 'Horizon', '2', '56.00', 'Seattle', 'David Chen'],
               ['1001', 'Sofia Ramirez', 'sofia@gmail.com', 'Seattle', 'Morton Salt', 'Staples', 'Morton', '1', '22.00', 'Seattle', 'David Chen'],
               ['1002', 'Marcus Bennett', 'marcus@gmail.com', 'New York', 'Horizon Butter', 'Dairy', 'Horizon', '3', '56.00', 'New York', 'Olivia Brown'],
-              ['1003', 'Sofia Ramirez', 'sofia@gmail.com', 'Seattle', 'Maggi Noodles', 'Staples', 'Nestle', '5', '15.00', 'Seattle', 'David Chen'],
+              ['1003', 'Sofia Ramirez', 'sofia@gmail.com', 'Seattle', 'Barilla Pasta', 'Staples', 'Barilla', '5', '15.00', 'Seattle', 'David Chen'],
             ].map((row, i) => (
               <tr key={i} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
                 {row.map((cell, j) => (
@@ -257,6 +257,8 @@ CREATE TABLE customers (
 );
 -- Each address component queryable independently`}
       />
+
+      <P>This query uses <Hl>JOIN</Hl> to combine rows from related tables — you'll learn JOIN fully in Modules 30-31. For now: JOIN combines rows from related tables using a matching key column (here, order_id and product_id link the three tables together).</P>
 
       <SQLPlayground
         initialQuery={`-- FreshCart is already in 1NF
@@ -742,13 +744,24 @@ CREATE TABLE supply_contracts (
   start_date     DATE           NOT NULL,
   end_date       DATE,
   is_preferred   BOOLEAN        NOT NULL DEFAULT false,
-  PRIMARY KEY (supplier_id, product_id),
-  -- A product can only have one preferred supplier
-  CONSTRAINT uq_preferred_supplier
-    UNIQUE (product_id, is_preferred)
-    -- Note: in practice this constraint is complex to implement
-    -- as UNIQUE allows multiple FALSE values but only one TRUE
+  PRIMARY KEY (supplier_id, product_id)
 );
+
+-- Business rule: at most one preferred supplier per product,
+-- but any number of non-preferred suppliers for that product.
+-- A standard UNIQUE (product_id, is_preferred) does NOT achieve this —
+-- a multi-column UNIQUE blocks ANY duplicate (product_id, is_preferred)
+-- pair, including two rows with the SAME product_id and is_preferred =
+-- FALSE (two non-preferred suppliers for one product would incorrectly
+-- be rejected). It does not special-case boolean values.
+-- The correct tool is a PARTIAL / FILTERED unique index — it indexes
+-- only rows where the WHERE condition is true, so uniqueness is
+-- enforced on that subset alone (PostgreSQL and SQLite both support this):
+CREATE UNIQUE INDEX uq_one_preferred_supplier
+  ON supply_contracts(product_id)
+  WHERE is_preferred = true;
+-- Now: at most one is_preferred = true row can exist per product_id,
+-- while any number of is_preferred = false rows are still allowed
 
 -- This is 3NF because:
 -- All supplier attributes depend directly on supplier_id
