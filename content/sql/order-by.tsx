@@ -525,6 +525,8 @@ ORDER BY salary DESC;`}
       <CodeBlock
         label="Top categories by revenue (adapted for FreshCart)"
         code={`-- Category revenue ranked highest to lowest
+-- Uses JOIN and GROUP BY/aggregates ahead of the curriculum here —
+-- covered fully in Modules 27-30, just follow the ORDER BY for now
 SELECT
   category,
   COUNT(oi.item_id)        AS total_items_sold,

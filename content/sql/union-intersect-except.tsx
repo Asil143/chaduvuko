@@ -678,6 +678,8 @@ ORDER BY availability, revenue DESC;`}
 
       <H>Full UNION pipeline report — all order statuses in one view</H>
 
+      <P>The query below opens with a <Hl>CTE</Hl> (the WITH clause) — you'll learn CTEs properly in Module 55; for now, just know it names a subquery so it can be referenced by name later in the query.</P>
+
       <SQLPlayground
         initialQuery={`-- Complete order status summary — one row per status
 -- with percentage of total

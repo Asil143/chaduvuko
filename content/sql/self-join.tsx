@@ -400,6 +400,8 @@ ORDER BY a.role, a.salary;`}
 
       <H>Compare each order to the customer's previous order</H>
 
+      <P>The subquery inside the ON clause below references curr.customer_id and curr.order_date from the outer query — that makes it a <Hl>correlated</Hl> subquery, covered properly in Module 37; for now, read it as "look up this specific customer's previous order date."</P>
+
       <SQLPlayground
         initialQuery={`-- Each customer's order compared to their immediately previous order
 -- Shows order-to-order growth/decline per customer
@@ -513,6 +515,8 @@ ORDER BY salary_gap DESC;`}
 
       <H>Customers who share the same loyalty tier and city</H>
 
+      <P>COUNT(*) OVER (PARTITION BY ...) below is a <Hl>window function</Hl> — those are taught properly in Module 52; for now, just read it as a running count per city/tier group that does not collapse the rows the way GROUP BY would.</P>
+
       <SQLPlayground
         initialQuery={`-- Customer peer groups: same loyalty tier AND same city
 -- Groups customers who could be targeted with identical campaigns
@@ -571,6 +575,8 @@ ORDER BY orders_together DESC;`}
       <TimeBlock time="2:20 PM" label="You break it into two parts">
         Part 1: three-alias self join for employee + manager + senior manager. Part 2: peer count subquery or aggregation. Combine with CTE.
       </TimeBlock>
+
+      <P>The query below opens with a <Hl>CTE</Hl> (the WITH clause) — you'll learn CTEs properly in Module 55; for now, just know it names a subquery so it can be referenced by name later in the query.</P>
 
       <SQLPlayground
         initialQuery={`-- Full org chart report: employee, manager, senior manager,

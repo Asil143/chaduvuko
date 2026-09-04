@@ -577,6 +577,8 @@ ORDER BY p.category, p.unit_price DESC;`}
         showSchema={false}
       />
 
+      <P>AVG(unit_price) OVER (PARTITION BY category) below is a <Hl>window function</Hl> — window functions are taught properly in Module 52; for now, just read OVER (PARTITION BY category) as "compute this aggregate per category, without collapsing the rows the way GROUP BY does."</P>
+
       <SQLPlayground
         initialQuery={`-- FASTEST at scale: window function (single pass, no join)
 -- AVG() OVER (PARTITION BY category) computes category avg alongside each row

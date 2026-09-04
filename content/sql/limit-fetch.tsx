@@ -605,6 +605,8 @@ SELECT
 FROM products
 WHERE in_stock = true
   AND (:category IS NULL OR category = :category)
+-- CASE WHEN picks which column/direction to sort by based on :sort_by —
+-- CASE WHEN itself is covered fully in Module 16
 ORDER BY
   CASE WHEN :sort_by = 'price_asc'  THEN unit_price END ASC,
   CASE WHEN :sort_by = 'price_desc' THEN unit_price END DESC

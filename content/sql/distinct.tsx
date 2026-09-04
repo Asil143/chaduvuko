@@ -288,7 +288,7 @@ ORDER BY category;`}
       {/* ── PART 06 ── */}
       <Part n="06" title="COUNT DISTINCT — Counting Unique Values" />
 
-      <P>One of the most common analytical questions is not "what are the unique values?" but "how many unique values are there?" For this, SQL provides <Hl>COUNT(DISTINCT column)</Hl> — it counts the number of distinct non-null values in a column.</P>
+      <P>One of the most common analytical questions is not "what are the unique values?" but "how many unique values are there?" For this, SQL provides <Hl>COUNT(DISTINCT column)</Hl> — it counts the number of distinct non-null values in a column. COUNT() is an aggregate function — it collapses many rows into a single summary value, a fundamentally different kind of query from anything you've written so far; aggregate functions are covered fully in Module 27, but this one is simple enough to use now.</P>
 
       <SQLPlayground
         initialQuery={`-- How many distinct cities do our customers come from?

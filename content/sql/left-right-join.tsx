@@ -741,6 +741,8 @@ ORDER BY c.customer_id;`}
 
       <H>Method 2 — NOT EXISTS</H>
 
+      <P>The subquery below references the outer query's c.customer_id, which makes it a <Hl>correlated</Hl> subquery — covered properly in Module 37; for now, just read it as "check per customer."</P>
+
       <SQLPlayground
         initialQuery={`-- Method 2: NOT EXISTS
 -- Correlated subquery: for each customer, check if any order exists

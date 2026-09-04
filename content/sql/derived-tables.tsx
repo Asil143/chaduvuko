@@ -408,6 +408,8 @@ ORDER BY order_revenue DESC;`}
 
       <P>Derived tables that use window functions to compute rankings can then be filtered in the outer query — the classic "filter by rank" pattern. This is how you find the top-N per group cleanly.</P>
 
+      <P>RANK() OVER (PARTITION BY ...) below is a <Hl>window function</Hl> — window functions get their own deep dive in Module 52; for now, just read PARTITION BY as "restart the ranking for each store" and ORDER BY as "rank within that group by this column."</P>
+
       <SQLPlayground
         initialQuery={`-- Top 2 orders by value per store
 -- Inner derived table: rank orders within each store

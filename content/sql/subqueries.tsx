@@ -435,6 +435,8 @@ FROM (
         showSchema={false}
       />
 
+      <P>The query below uses PERCENTILE_CONT(...) WITHIN GROUP (ORDER BY ...) — an <Hl>ordered-set aggregate</Hl> that returns the value at a given percentile (here, the 75th) across the ordered column. You don't need this syntax yet; just read it as "the spend amount at the 75th percentile."</P>
+
       <SQLPlayground
         initialQuery={`-- Customer segments: high-value customers (top 25% by spend)
 -- Step 1: compute each customer's total spend (inner query)
@@ -686,6 +688,8 @@ ORDER BY p.category, p.unit_price DESC;`}
       <Part n="09" title="Subquery vs JOIN vs CTE — When to Use Each" />
 
       <P>Subqueries, JOINs, and CTEs often produce the same result. Choosing between them is about readability, performance, and reuse.</P>
+
+      <P>CTEs (the WITH clause) get their own deep dive in Module 55 — for now, just know a CTE names a subquery so it can be referenced by name later in the query, similar to a derived table.</P>
 
       <div style={{ overflowX: 'auto', margin: '20px 0 32px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
