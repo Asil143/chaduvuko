@@ -107,7 +107,7 @@ export default function SettingUp() {
       {/* ── PART 01 ── */}
       <Part n="01" title="You Already Have a Working SQL Environment" />
 
-      <P>Before going any further — you already have a fully functional SQL environment running in your browser. The playground on every page of this course uses <Hl>DuckDB-WASM</Hl> — a real, production-grade database engine that runs entirely in your browser with the complete FreshCart database preloaded. Every query you write here is real SQL. Every concept you learn here works identically in MySQL and PostgreSQL.</P>
+      <P>Before going any further — you already have a fully functional SQL environment running in your browser. The playground on every page of this course uses <Hl>SQLite (via sql.js)</Hl> — a real, production-grade database engine that runs entirely in your browser with the complete FreshCart database preloaded. Every query you write here is real SQL. Every concept you learn here works identically in MySQL and PostgreSQL.</P>
 
       <P>This module is for when you want to go further — when you want a local installation that you can use for your own projects, connect to from your code, or use in job interviews where they ask you to run queries on their database. A local installation is not required to complete any module in this course. If you just want to write SQL, skip to Module 05 right now.</P>
 
@@ -510,7 +510,7 @@ CREATE TABLE orders (
                   CHECK (order_status IN
                     ('Delivered','Processing','Cancelled','Returned')),
   payment_method  VARCHAR(20)   NOT NULL
-                  CHECK (payment_method IN ('Zelle','Card','COD','NetBanking')),
+                  CHECK (payment_method IN ('Credit Card','Debit Card','Apple Pay','Cash')),
   total_amount    DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0)
 );
 
@@ -614,7 +614,7 @@ CREATE TABLE order_items (
       />
 
       <Callout type="info">
-        The data INSERT statements (all 208 rows of FreshCart data) are in the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>data/sql-freshcart.ts</code> file in the Chaduvuko GitHub repository. Copy the SQL from the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>FRESHCART_SEED_SQL</code> constant and run it after the CREATE TABLE statements above.
+        The data INSERT statements (all 218 rows of FreshCart data) are in the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>data/sql-freshcart.ts</code> file in the Chaduvuko GitHub repository. Copy the SQL from the <code style={{ fontFamily: 'var(--font-mono)', background: 'var(--surface)', padding: '2px 6px', borderRadius: 4 }}>FRESHCART_SEED_SQL</code> constant and run it after the CREATE TABLE statements above.
       </Callout>
 
       <HR />
@@ -832,7 +832,7 @@ FROM pragma_table_info('orders');`}
       {/* ── Key Takeaways ── */}
       <KeyTakeaways
         items={[
-          'The browser playground on every module page is a full SQL environment using DuckDB-WASM. It is sufficient to complete every module in this course without any local installation.',
+          'The browser playground on every module page is a full SQL environment using SQLite (via sql.js). It is sufficient to complete every module in this course without any local installation.',
           'PostgreSQL is the recommended local database for US tech careers in 2026 — used by Stripe, Brex, Robinhood, Acorns, and most high-growth startups.',
           'MySQL is the alternative with easier initial setup — used by DoorDash, Sephora, and many consumer web companies.',
           'SQLite is the simplest option with zero server setup — runs from a single file. Not used in production web backends but excellent for learning and mobile development.',

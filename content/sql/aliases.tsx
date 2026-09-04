@@ -314,7 +314,7 @@ ORDER BY margin_pct DESC;   -- works: ORDER BY runs after SELECT`}
       />
 
       <H>GROUP BY — database-dependent</H>
-      <P>GROUP BY executes before SELECT in the logical order, so technically aliases should not be available. However, MySQL and DuckDB (this playground) allow GROUP BY to reference SELECT aliases as a convenience extension. PostgreSQL follows the standard strictly — GROUP BY cannot use SELECT aliases. Always repeat the expression in GROUP BY for cross-database compatibility.</P>
+      <P>GROUP BY executes before SELECT in the logical order, so technically aliases should not be available. However, MySQL and SQLite (this playground) allow GROUP BY to reference SELECT aliases as a convenience extension. PostgreSQL follows the standard strictly — GROUP BY cannot use SELECT aliases. Always repeat the expression in GROUP BY for cross-database compatibility. (GROUP BY itself is taught properly in Module 28 — the point here is only how it interacts with aliases.)</P>
 
       <CodeBlock
         label="GROUP BY — safe cross-database approach"
@@ -340,7 +340,7 @@ ORDER BY order_month;`}
       {/* ── PART 05 ── */}
       <Part n="05" title="Table Aliases — Shorter Names for Tables" />
 
-      <P>Aliases are not just for columns — you can also alias <Hl>tables</Hl>. Table aliases give a table a short name for the duration of the query. This is most useful in JOIN queries where you reference the same table multiple times, or when table names are long and repetitive.</P>
+      <P>Aliases are not just for columns — you can also alias <Hl>tables</Hl>. Table aliases give a table a short name for the duration of the query. This is most useful in JOIN queries where you reference the same table multiple times, or when table names are long and repetitive. (You'll learn JOIN properly in Module 30 — for now, just notice the alias syntax, AS c and AS o, which is what matters here.)</P>
 
       <CodeBlock
         label="Table alias syntax"
@@ -439,6 +439,8 @@ FROM (
 )                              -- ERROR: subquery must have an alias
 WHERE order_count > 2;`}
       />
+
+      <P>Look closely at that WHERE order_count &gt; 2 line — order_count looks exactly like the SELECT alias that Part 04 said WHERE cannot use. It is not a contradiction. That rule applies <Hl>within a single SELECT statement</Hl>, where WHERE and SELECT are two clauses of the same query and WHERE runs before the alias is defined. Here, the inner SELECT is wrapped in parentheses and given its own alias, customer_orders — once the database materialises that subquery as a derived table, order_count stops being a same-level SELECT alias and becomes a <Hl>real column name</Hl> of the table customer_orders. The outer WHERE is filtering an already-computed table by an actual column, exactly like filtering any ordinary column — a fundamentally different situation from referencing an alias defined in the very SELECT statement containing the WHERE.</P>
 
       <SQLPlayground
         initialQuery={`-- Subquery alias in practice

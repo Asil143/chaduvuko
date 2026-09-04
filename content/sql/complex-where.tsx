@@ -640,7 +640,7 @@ WHERE order_status = 'Delivered'
       {/* ── PART 09 ── */}
       <Part n="09" title="Short-Circuit Evaluation and Performance" />
 
-      <P>SQL databases use <Hl>short-circuit evaluation</Hl> for WHERE conditions — once the result of an expression is determined, remaining conditions may not be evaluated. This has performance implications for complex WHERE clauses.</P>
+      <P>Many SQL engines apply <Hl>short-circuit evaluation</Hl> for WHERE conditions — once the result of an expression is determined, remaining conditions may not need to be evaluated. This is common in practice, but it is not a hard guarantee of the SQL standard the way short-circuiting is guaranteed in most procedural languages — treat it as "usually true," not a rule to design your query around.</P>
 
       <H>AND short-circuit — FALSE stops evaluation</H>
       <P>For AND conditions, if any condition is FALSE, the entire AND expression is FALSE — remaining conditions do not need to be evaluated. The database typically evaluates the cheapest or most selective condition first (when conditions are independent), using query optimiser statistics to determine which condition eliminates the most rows.</P>
@@ -648,8 +648,12 @@ WHERE order_status = 'Delivered'
       <H>OR short-circuit — TRUE stops evaluation</H>
       <P>For OR conditions, if any condition is TRUE, the entire OR expression is TRUE — remaining conditions are skipped. Put the most commonly satisfied condition first in an OR chain.</P>
 
-      <H>Ordering conditions for performance</H>
-      <P>While the query optimiser handles most reordering automatically, these manual guidelines help when the optimiser cannot reorder (due to side effects or complex expressions):</P>
+      <Callout type="info">
+        Before reordering anything by hand: modern query optimisers (PostgreSQL, MySQL) automatically reorder independent WHERE conditions for optimal performance based on table statistics — the query planner decides most of this, not the order you happen to type conditions in. Manual ordering only matters for conditions the optimiser cannot reorder — those with side effects, functions that cannot be pushed down, or an expensive user-defined function/calculation it cannot statistically evaluate. When in doubt, write conditions in the order that is most readable, and use EXPLAIN ANALYZE to verify the actual execution plan.
+      </Callout>
+
+      <H>Ordering conditions for performance — for the cases the optimiser can't handle</H>
+      <P>These manual guidelines apply specifically to the exception cases above — conditions with side effects or expensive computed expressions the optimiser cannot freely reorder:</P>
 
       <CodeBlock
         label="Condition ordering for performance"
@@ -670,10 +674,6 @@ WHERE order_status = 'Delivered'   -- ~60% of rows (most common → check first)
 WHERE customer_id = 42            -- index lookup, cheap (FIRST)
   AND ROUND(salary / 12.0, 2) > 5000  -- calculation, slightly more expensive (AFTER)`}
       />
-
-      <Callout type="info">
-        Modern query optimisers (PostgreSQL, MySQL) automatically reorder independent WHERE conditions for optimal performance based on table statistics. Manual ordering matters most for conditions that cannot be reordered — those with side effects, functions that cannot be pushed down, or when you are writing conditions the optimiser cannot statistically evaluate. When in doubt, write conditions in the order that is most readable, and use EXPLAIN ANALYZE to verify the actual execution plan.
-      </Callout>
 
       <HR />
 
@@ -955,7 +955,7 @@ ORDER BY
     ELSE               3
   END,
   total_amount DESC;`}
-        explanation="This query demonstrates the full complex WHERE toolkit. Three OR groups each with internal AND conditions — parentheses are essential to prevent AND from stealing conditions from adjacent OR branches. The CASE WHEN in SELECT mirrors the OR groups exactly — each branch matches one group's conditions. ORDER BY uses a CASE to convert the text priority label into a sortable number (1, 2, 3). Note that the CASE in ORDER BY cannot reference the 'priority' SELECT alias — the CASE must be repeated because ORDER BY, despite running after SELECT, cannot always use computed column aliases inside expressions. Alternatively, you could wrap the entire query in a CTE and ORDER BY the alias in the outer query."
+        explanation="This query demonstrates the full complex WHERE toolkit. Three OR groups each with internal AND conditions — parentheses are essential to prevent AND from stealing conditions from adjacent OR branches. The CASE WHEN in SELECT mirrors the OR groups exactly — each branch matches one group's conditions. ORDER BY uses a CASE to convert the text priority label into a sortable number (1, 2, 3). Note that ORDER BY CAN reference a SELECT alias — including inside an expression like this CASE — in SQLite, PostgreSQL, and MySQL, because ORDER BY is logically evaluated after SELECT. That is exactly what CASE priority WHEN ... does here: it reuses the 'priority' alias defined above rather than repeating the full condition logic a second time."
       />
 
       <HR />

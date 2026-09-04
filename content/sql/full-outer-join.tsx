@@ -506,7 +506,7 @@ ORDER BY customer_id NULLS LAST, order_id NULLS LAST;`}
       />
 
       <Callout type="info">
-        DuckDB (this playground) and PostgreSQL both support FULL OUTER JOIN natively. MySQL added limited FULL JOIN support only recently — for production MySQL queries, the UNION ALL approach is safer and more portable across MySQL versions.
+        SQLite (this playground) and PostgreSQL both support FULL OUTER JOIN natively — SQLite added native support in version 3.39 (2022). MySQL does not support FULL OUTER JOIN natively; for production MySQL queries, use the UNION ALL workaround shown above.
       </Callout>
 
       <HR />
@@ -634,9 +634,9 @@ LIMIT 15;`}
       </IQ>
 
       <IQ q="How do you simulate FULL OUTER JOIN in MySQL, which does not support it natively?">
-        <p style={{ margin: '0 0 14px' }}>MySQL does not support FULL OUTER JOIN syntax (or supported it only very limitedly in older versions). The standard workaround is to combine a LEFT JOIN and the right-only portion of a RIGHT JOIN using UNION ALL.</p>
+        <p style={{ margin: '0 0 14px' }}>MySQL does not support FULL OUTER JOIN syntax natively. The standard workaround is to combine a LEFT JOIN and the right-only portion of a RIGHT JOIN using UNION ALL.</p>
         <p style={{ margin: '0 0 14px' }}>The pattern: Part 1 — LEFT JOIN gives all left rows and matched right rows (left-only + matched). Part 2 — RIGHT JOIN with WHERE left.key IS NULL gives only the right rows that had no left match (right-only). UNION ALL combines both parts. Together: left-only + matched + right-only = FULL OUTER JOIN.</p>
-        <p style={{ margin: 0 }}>The critical detail: use UNION ALL not UNION. UNION deduplicates rows, which can incorrectly remove legitimate duplicate rows. UNION ALL preserves all rows from both parts — the two parts are designed to be disjoint (Part 1 has no right-only rows, Part 2 has only right-only rows) so deduplication is unnecessary and harmful. The resulting query is slightly more verbose than FULL OUTER JOIN but produces identical results and works on all MySQL versions. In PostgreSQL, DuckDB, SQL Server, and Oracle, FULL OUTER JOIN is directly supported and the UNION ALL workaround is unnecessary.</p>
+        <p style={{ margin: 0 }}>The critical detail: use UNION ALL not UNION. UNION deduplicates rows, which can incorrectly remove legitimate duplicate rows. UNION ALL preserves all rows from both parts — the two parts are designed to be disjoint (Part 1 has no right-only rows, Part 2 has only right-only rows) so deduplication is unnecessary and harmful. The resulting query is slightly more verbose than FULL OUTER JOIN but produces identical results and works on all MySQL versions. In PostgreSQL, SQLite (3.39+), DuckDB, SQL Server, and Oracle, FULL OUTER JOIN is directly supported and the UNION ALL workaround is unnecessary.</p>
       </IQ>
 
       <IQ q="What is the symmetric difference in SQL and how do you find it?">
@@ -670,8 +670,8 @@ LIMIT 15;`}
 
       <Err
         msg="FULL OUTER JOIN not supported — syntax error in MySQL"
-        cause="MySQL does not support FULL OUTER JOIN (or has very limited support in older versions). Writing FULL OUTER JOIN in MySQL produces a syntax error: 'You have an error in your SQL syntax near FULL OUTER JOIN'."
-        fix="Use the UNION ALL workaround: combine LEFT JOIN (all left rows + matched right rows) with a second query using RIGHT JOIN WHERE left.key IS NULL (right-only rows). The two parts together are disjoint and cover all three cases of FULL OUTER JOIN. Use UNION ALL not UNION to avoid deduplication. For PostgreSQL, DuckDB, SQL Server, and Oracle, FULL OUTER JOIN is supported natively."
+        cause="MySQL does not support FULL OUTER JOIN natively. Writing FULL OUTER JOIN in MySQL produces a syntax error: 'You have an error in your SQL syntax near FULL OUTER JOIN'."
+        fix="Use the UNION ALL workaround: combine LEFT JOIN (all left rows + matched right rows) with a second query using RIGHT JOIN WHERE left.key IS NULL (right-only rows). The two parts together are disjoint and cover all three cases of FULL OUTER JOIN. Use UNION ALL not UNION to avoid deduplication. For PostgreSQL, SQLite, DuckDB, SQL Server, and Oracle, FULL OUTER JOIN is supported natively."
       />
 
       <Err

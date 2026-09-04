@@ -206,10 +206,10 @@ WHERE unit LIKE '%kg';`}
       <H>Contains — %pattern%</H>
 
       <SQLPlayground
-        initialQuery={`-- Stores in cities containing 'bad' (Ahmedabad, Austin)
+        initialQuery={`-- Stores in cities ending with 'ago' (Chicago)
 SELECT store_id, store_name, city
 FROM stores
-WHERE city LIKE '%bad';`}
+WHERE city LIKE '%ago';`}
         height={110}
         showSchema={false}
       />
@@ -236,10 +236,10 @@ ORDER BY salary DESC;`}
       <H>% at both ends — anywhere in the string</H>
 
       <SQLPlayground
-        initialQuery={`-- Stores whose name contains 'Powai' anywhere
+        initialQuery={`-- Stores whose name contains 'Hill' anywhere
 SELECT store_id, store_name, city
 FROM stores
-WHERE store_name LIKE '%Powai%';`}
+WHERE store_name LIKE '%Hill%';`}
         height={100}
         showSchema={false}
       />
@@ -394,8 +394,8 @@ ORDER BY city;`}
             {[
               ['MySQL', 'Case-insensitive by default (uses collation)', "LIKE works — 'horizon%' matches 'Horizon Butter'"],
               ['PostgreSQL', "Case-sensitive - 'horizon%' does NOT match 'Horizon Butter'", "Use ILIKE for case-insensitive: WHERE name ILIKE 'horizon%'"],
-              ['DuckDB (playground)', 'Case-sensitive like PostgreSQL', "Use ILIKE or LOWER(): WHERE LOWER(name) LIKE 'horizon%'"],
-              ['SQLite', 'Case-insensitive for ASCII characters only', "Works for a-z/A-Z but not for non-ASCII (ñ, é, etc.)"],
+              ['DuckDB', 'Case-sensitive like PostgreSQL', "Use ILIKE or LOWER(): WHERE LOWER(name) LIKE 'horizon%'"],
+              ['SQLite (this playground)', 'Case-insensitive for ASCII characters only — no ILIKE needed', "Works for a-z/A-Z by default; use LOWER() for non-ASCII (ñ, é, etc.)"],
               ['SQL Server', 'Depends on collation (usually case-insensitive)', "Use COLLATE for explicit control"],
             ].map(([db, behaviour, option], i) => (
               <tr key={db} style={{ background: i % 2 === 0 ? 'transparent' : 'var(--surface)' }}>
@@ -410,19 +410,35 @@ ORDER BY city;`}
 
       <H>ILIKE — case-insensitive LIKE in PostgreSQL</H>
 
+      <P>ILIKE is PostgreSQL's dedicated case-insensitive version of LIKE (DuckDB also supports it). It does not exist in MySQL, SQL Server, or SQLite. SQLite has no ILIKE keyword at all — and it does not need one, because SQLite's LIKE is already case-insensitive for ASCII letters by default. The two live queries below prove this: they use plain LIKE against title-cased data and still match, because of SQLite's default behaviour, not because of any ILIKE-like keyword.</P>
+
+      <CodeBlock
+        label="ILIKE syntax — PostgreSQL only, not supported in SQLite"
+        code={`-- PostgreSQL: ILIKE performs case-insensitive pattern matching
+SELECT product_name, brand
+FROM products
+WHERE product_name ILIKE 'horizon%';
+-- Matches 'Horizon Butter', 'HORIZON MILK', 'horizon organic', etc.
+
+-- Running ILIKE against SQLite (this playground) raises a syntax error —
+-- SQLite simply has no ILIKE operator to call`}
+      />
+
       <SQLPlayground
-        initialQuery={`-- SQLite LIKE is already case-insensitive for ASCII letters
--- 'horizon%' matches 'Horizon Butter', 'HORIZON MILK', 'horizon organic' etc.
+        initialQuery={`-- This playground runs SQLite, not PostgreSQL
+-- SQLite's LIKE is already case-insensitive for ASCII letters by default,
+-- so plain LIKE finds 'Horizon Butter' here with no ILIKE needed at all
+-- (on PostgreSQL, this same query would need ILIKE instead of LIKE)
 SELECT product_name, brand
 FROM products
 WHERE product_name LIKE 'horizon%';`}
-        height={110}
+        height={120}
         showSchema={false}
       />
 
       <SQLPlayground
-        initialQuery={`-- LIKE vs LOWER()+LIKE — both work in SQLite
--- SQLite LIKE is case-insensitive for ASCII by default
+        initialQuery={`-- Proof: LIKE and LOWER()+LIKE return identical matches in SQLite
+-- because SQLite's LIKE is already case-insensitive for ASCII
 SELECT product_name, brand,
   CASE WHEN product_name LIKE 'horizon%' THEN 'matched' ELSE 'missed' END AS like_result,
   CASE WHEN LOWER(product_name) LIKE 'horizon%' THEN 'matched' ELSE 'missed' END AS lower_like_result
@@ -431,6 +447,8 @@ WHERE product_name LIKE 'horizon%';`}
         height={140}
         showSchema={false}
       />
+
+      <P>This is a genuine cross-engine difference, not a contradiction: the exact same query behaves differently depending on which database runs it. On PostgreSQL or DuckDB, WHERE product_name LIKE 'horizon%' would silently miss 'Horizon Butter' unless you switched to ILIKE. On SQLite, plain LIKE already works because of its case-insensitive default. If you ever move an application from SQLite to PostgreSQL, do not assume your LIKE conditions keep behaving the same way — case sensitivity is one of the first things to re-test on the new engine.</P>
 
       <H>Cross-database case-insensitive pattern — LOWER()</H>
       <P>For code that must run on both MySQL and PostgreSQL, wrap the column in LOWER() and use a lowercase pattern. This works everywhere but prevents index usage on the column (same trade-off as all function-on-column conditions).</P>
@@ -720,15 +738,15 @@ ORDER BY brand;`}
       />
 
       <TimeBlock time="10:35 AM" label="Store search for a delivery partner">
-        A delivery partner application is looking for FreshCart stores in cities ending with "bad" — Austin and Ahmedabad specifically.
+        A delivery partner application is looking for FreshCart stores in cities ending with "ago" — Chicago specifically.
       </TimeBlock>
 
       <SQLPlayground
-        initialQuery={`-- Stores in cities ending with 'bad'
--- Austin and Ahmedabad both match
+        initialQuery={`-- Stores in cities ending with 'ago'
+-- Chicago matches (2 stores)
 SELECT store_id, store_name, city, manager_name
 FROM stores
-WHERE city LIKE '%bad'
+WHERE city LIKE '%ago'
 ORDER BY city;`}
         height={120}
         showSchema={false}
@@ -750,9 +768,9 @@ ORDER BY city;`}
       </IQ>
 
       <IQ q="What is the difference between LIKE and ILIKE?">
-        <p style={{ margin: '0 0 14px' }}>LIKE performs case-sensitive pattern matching in PostgreSQL, DuckDB, and SQLite — the pattern must match the case of the stored value exactly. LIKE 'horizon%' does not match 'Horizon Butter' in PostgreSQL because 'a' does not equal 'A'. LIKE 'Horizon%' matches 'Horizon Butter' correctly.</p>
-        <p style={{ margin: '0 0 14px' }}>ILIKE is a PostgreSQL-specific operator that performs case-insensitive pattern matching. ILIKE 'horizon%' matches 'Horizon Butter', 'HORIZON MILK', 'horizon ghee', and any other variation of case. ILIKE 'HORIZON%' also matches all the same values — the pattern and the data are both treated as if they were lowercase before comparison.</p>
-        <p style={{ margin: 0 }}>MySQL's LIKE is case-insensitive by default (controlled by the collation), so MySQL LIKE behaves like PostgreSQL ILIKE for standard ASCII characters. SQL Server's case sensitivity also depends on the database collation. For cross-database compatible case-insensitive pattern matching, use LOWER() on both the column and pattern: WHERE LOWER(column) LIKE LOWER('pattern%'). This works identically on all databases but prevents index usage on the column. The recommendation: use ILIKE in PostgreSQL for case-insensitive searches, and use LOWER() only when writing SQL that must run on multiple database systems.</p>
+        <p style={{ margin: '0 0 14px' }}>LIKE performs case-sensitive pattern matching in PostgreSQL and DuckDB — the pattern must match the case of the stored value exactly. LIKE 'horizon%' does not match 'Horizon Butter' in PostgreSQL because 'a' does not equal 'A'. LIKE 'Horizon%' matches 'Horizon Butter' correctly. SQLite is the exception: its LIKE is case-insensitive for ASCII letters by default, so LIKE 'horizon%' does match 'Horizon Butter' in SQLite with no special syntax required.</p>
+        <p style={{ margin: '0 0 14px' }}>ILIKE is a PostgreSQL-specific operator that performs case-insensitive pattern matching (DuckDB also supports it). ILIKE 'horizon%' matches 'Horizon Butter', 'HORIZON MILK', 'horizon ghee', and any other variation of case. ILIKE 'HORIZON%' also matches all the same values — the pattern and the data are both treated as if they were lowercase before comparison. SQLite has no ILIKE keyword at all — it does not need one, since plain LIKE already behaves this way there by default.</p>
+        <p style={{ margin: 0 }}>MySQL's LIKE is case-insensitive by default (controlled by the collation), so MySQL LIKE behaves like PostgreSQL ILIKE for standard ASCII characters — and SQLite's default matches MySQL's behaviour here, not PostgreSQL's. SQL Server's case sensitivity also depends on the database collation. For cross-database compatible case-insensitive pattern matching, use LOWER() on both the column and pattern: WHERE LOWER(column) LIKE LOWER('pattern%'). This works identically on all databases but prevents index usage on the column. The recommendation: use ILIKE in PostgreSQL or DuckDB for case-insensitive searches, and use LOWER() when writing SQL that must run on multiple database systems — including SQLite, where LOWER() is still needed for non-ASCII characters even though plain LIKE already handles ASCII case for you.</p>
       </IQ>
 
       <IQ q="Why is LIKE '%pattern%' slow and what are the alternatives?">
@@ -779,9 +797,9 @@ ORDER BY city;`}
       <Part n="13" title="Errors You Will Hit — And Exactly Why They Happen" />
 
       <Err
-        msg="LIKE returns zero rows — WHERE name LIKE 'horizon%' finds nothing"
-        cause="Case sensitivity mismatch. In PostgreSQL and DuckDB (this playground), LIKE is case-sensitive. The pattern 'horizon%' does not match 'Horizon Butter' because 'a' ≠ 'A'. The stored values use title case (first letter capitalised) but the pattern uses lowercase. No error is thrown — the query simply returns zero rows."
-        fix="Use ILIKE instead of LIKE for case-insensitive matching in PostgreSQL and DuckDB: WHERE name ILIKE 'horizon%'. For cross-database compatibility, use LOWER(): WHERE LOWER(name) LIKE 'horizon%'. Always run SELECT DISTINCT column FROM table to see the actual stored values before writing a LIKE condition — this immediately reveals case and spacing issues that would cause LIKE to miss rows."
+        msg="LIKE returns zero rows on other databases — WHERE name LIKE 'horizon%' finds nothing"
+        cause="Case sensitivity mismatch — but only on some databases. In PostgreSQL and DuckDB, LIKE is case-sensitive, so the pattern 'horizon%' would not match 'Horizon Butter' (because 'a' ≠ 'A') and the query would silently return zero rows. This playground runs on SQLite, though, and SQLite's LIKE is case-insensitive for ASCII letters by default — so 'horizon%' DOES match 'Horizon Butter' here. If you ever migrate this exact query to PostgreSQL or DuckDB, it can suddenly return nothing, purely because of the engine's case-sensitivity default, with no error thrown either way."
+        fix="On PostgreSQL or DuckDB, use ILIKE instead of LIKE for case-insensitive matching: WHERE name ILIKE 'horizon%'. For cross-database compatibility (including SQLite, which is only case-insensitive for ASCII), use LOWER() on both sides: WHERE LOWER(name) LIKE LOWER('horizon%'). Always run SELECT DISTINCT column FROM table to see the actual stored values, and test on the actual target engine before assuming LIKE's case behaviour — it varies more than most people expect."
       />
 
       <Err
@@ -812,9 +830,9 @@ ORDER BY city;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart marketing team is running a campaign targeting: (1) customers whose email is from a non-Gmail provider AND who live in cities ending with 'abad' or 'abad' variant — specifically Austin or Ahmedabad. (2) Separately, find all products from brands whose name is exactly 5 characters long. Write both queries."
-        hint="Query 1: email NOT LIKE '%@gmail.com' AND (city LIKE '%abad' OR city LIKE 'Austin'). Query 2: brand LIKE '_____ ' — five underscores for exactly five characters. Use SELECT DISTINCT brand to verify first."
-        answer={`-- Query 1: Non-Gmail customers in Austin or Ahmedabad
+        question="The FreshCart marketing team is running a campaign targeting: (1) customers whose email is from a non-Gmail provider AND who live in a city ending in 'ago' — specifically Chicago. (2) Separately, find all products from brands whose name is exactly 5 characters long. Write both queries."
+        hint="Query 1: email NOT LIKE '%@gmail.com' AND city LIKE '%ago'. Query 2: brand LIKE '_____' — five underscores for exactly five characters. Use SELECT DISTINCT brand to verify first."
+        answer={`-- Query 1: Non-Gmail customers in a city ending in 'ago' (Chicago)
 SELECT
   first_name || ' ' || last_name  AS customer,
   email,
@@ -822,7 +840,7 @@ SELECT
   loyalty_tier
 FROM customers
 WHERE email NOT LIKE '%@gmail.com'
-  AND (city LIKE '%Austin' OR city LIKE '%Ahmedabad')
+  AND city LIKE '%ago'
 ORDER BY city, last_name;
 
 -- Query 2: Products from brands with exactly 5-character names
@@ -836,7 +854,7 @@ SELECT product_name, brand, category, unit_price
 FROM products
 WHERE brand LIKE '_____'
 ORDER BY brand, unit_price;`}
-        explanation="Query 1 combines NOT LIKE with OR-grouped LIKE conditions. The parentheses around the city OR are essential — without them, AND has higher precedence and would bind 'email NOT LIKE' with only 'city LIKE Austin', producing wrong results. Query 2 uses five underscores to match exactly 5-character brand names — each _ matches exactly one character, so _____ requires exactly 5. Run SELECT DISTINCT brand FROM products first to see which brands have 5-character names and verify the count matches your expectation. The five-underscore count is easy to get wrong — always double-check by counting manually."
+        explanation="Query 1 combines NOT LIKE for the email condition with a single LIKE pattern for the city — no OR/parentheses needed here since there is only one city pattern to match. Every non-Gmail customer in this dataset happens to live in Chicago, so the two conditions together narrow cleanly to that group. Query 2 uses five underscores to match exactly 5-character brand names — each _ matches exactly one character, so _____ requires exactly 5. Run SELECT DISTINCT brand FROM products first to see which brands have 5-character names and verify the count matches your expectation. The five-underscore count is easy to get wrong — always double-check by counting manually."
       />
 
       <HR />
@@ -846,7 +864,7 @@ ORDER BY brand, unit_price;`}
         items={[
           'LIKE is a WHERE operator that matches strings against a pattern rather than an exact value. It uses two wildcards: % (any sequence of zero or more characters) and _ (exactly one character).',
           'Pattern position controls what is matched: prefix% = starts with, %suffix = ends with, %contains% = contains anywhere, prefix%suffix = starts and ends with specific values.',
-          'LIKE is case-sensitive in PostgreSQL and DuckDB. Use ILIKE (PostgreSQL/DuckDB) for case-insensitive matching. Use LOWER(column) LIKE LOWER(pattern) for cross-database compatibility.',
+          'LIKE is case-sensitive in PostgreSQL and DuckDB, but SQLite (this playground) is case-insensitive for ASCII letters by default — no ILIKE needed here. Use ILIKE (PostgreSQL/DuckDB) for case-insensitive matching on those engines, or LOWER(column) LIKE LOWER(pattern) for cross-database compatibility.',
           'NOT LIKE excludes matching rows. Like all NOT conditions, it silently excludes NULL rows — add OR column IS NULL if you need NULL rows in the result.',
           'Starts-with patterns (LIKE \'prefix%\') can use B-tree indexes — fast on large tables. Leading wildcard patterns (LIKE \'%pattern\') always require full table scans — slow on large tables.',
           'To search for a literal % or _ character, use the ESCAPE clause: WHERE value LIKE \'100\\%%\' ESCAPE \'\\\'.',

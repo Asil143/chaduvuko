@@ -276,6 +276,8 @@ ORDER BY category, in_stock DESC;`}
 
       <H>The key rule — every non-aggregate SELECT column must be in GROUP BY</H>
 
+      <P>Here is why: once GROUP BY runs, every group of source rows collapses into a single output row. A column that is not wrapped in an aggregate function — like store_name below — can hold different values across the rows inside a group, and the database has no rule for picking just one of them to display. So it refuses the query outright. Every SELECT column must either appear in GROUP BY (guaranteeing it is identical for every row in the group) or be wrapped in an aggregate function (which reduces the whole group to one computed value). (The JOIN below previews syntax taught properly in Module 30 — for now, just follow how the rule applies to store_name.)</P>
+
       <CodeBlock
         label="The GROUP BY rule — every non-aggregate must be grouped"
         code={`-- WRONG: store_name is in SELECT but not in GROUP BY
@@ -366,30 +368,33 @@ ORDER BY department, avg_salary DESC;`}
 
       <SQLPlayground
         initialQuery={`-- Orders per month — group by the month extracted from order_date
+-- SQLite has no EXTRACT() — strftime() pulls the date part as text
 SELECT
-  EXTRACT(YEAR  FROM order_date)  AS year,
-  EXTRACT(MONTH FROM order_date)  AS month,
+  CAST(strftime('%Y', order_date) AS INTEGER)  AS year,
+  CAST(strftime('%m', order_date) AS INTEGER)  AS month,
   COUNT(*)                        AS order_count,
   ROUND(SUM(total_amount), 2)     AS monthly_revenue,
   ROUND(AVG(total_amount), 2)     AS avg_order_value
 FROM orders
 WHERE order_status = 'Delivered'
 GROUP BY
-  EXTRACT(YEAR  FROM order_date),
-  EXTRACT(MONTH FROM order_date)
+  CAST(strftime('%Y', order_date) AS INTEGER),
+  CAST(strftime('%m', order_date) AS INTEGER)
 ORDER BY year, month;`}
         height={205}
         showSchema={true}
       />
 
+      <P>SQLite has no EXTRACT() function — the standard SQL date-part extractor used by PostgreSQL and MySQL. Its equivalent is strftime('%Y', order_date), strftime('%m', order_date), and similar format codes, which return the date part as <Hl>text</Hl> ('2024', '03'). Wrapping the result in CAST(... AS INTEGER) converts it to a real number, so it sorts and compares the way you'd expect.</P>
+
       <SQLPlayground
-        initialQuery={`-- Orders per day of week (1=Sunday...7=Saturday in DuckDB)
+        initialQuery={`-- Orders per day of week (0=Sunday...6=Saturday — SQLite's strftime('%w') convention)
 SELECT
-  EXTRACT(DOW FROM order_date)    AS day_of_week,
+  CAST(strftime('%w', order_date) AS INTEGER)  AS day_of_week,
   COUNT(*)                        AS order_count,
   ROUND(AVG(total_amount), 2)     AS avg_order_value
 FROM orders
-GROUP BY EXTRACT(DOW FROM order_date)
+GROUP BY CAST(strftime('%w', order_date) AS INTEGER)
 ORDER BY day_of_week;`}
         height={155}
         showSchema={false}
@@ -448,7 +453,7 @@ ORDER BY avg_salary DESC;`}
       />
 
       <Callout type="info">
-        In MySQL and DuckDB (this playground), you can use a SELECT alias in GROUP BY: GROUP BY order_tier. In PostgreSQL, this is not allowed — the standard requires repeating the full expression. For portability, always repeat the expression in GROUP BY. If the expression is very long and repetition feels painful, use a CTE or subquery to define the group column first.
+        In MySQL and SQLite (this playground), you can use a SELECT alias in GROUP BY: GROUP BY order_tier. In PostgreSQL, this is not allowed — the standard requires repeating the full expression. For portability, always repeat the expression in GROUP BY. If the expression is very long and repetition feels painful, use a CTE or subquery to define the group column first.
       </Callout>
 
       <HR />
@@ -505,7 +510,7 @@ SELECT
   COUNT(o.order_id)               AS total_orders,
   ROUND(SUM(o.total_amount), 2)   AS total_revenue,
   ROUND(AVG(o.total_amount), 2)   AS avg_order_value,
-  ROUND(COUNT(o.order_id)::DECIMAL
+  ROUND(CAST(COUNT(o.order_id) AS REAL)
         / COUNT(DISTINCT c.customer_id), 1) AS orders_per_customer
 FROM customers AS c
 LEFT JOIN orders AS o
@@ -522,6 +527,8 @@ ORDER BY
         height={240}
         showSchema={false}
       />
+
+      <P>The CAST(... AS REAL) around COUNT(o.order_id) is not optional decoration. Both COUNT(o.order_id) and COUNT(DISTINCT c.customer_id) are integers, and SQLite performs integer division when both operands are integers — 7 / 2 silently truncates to 3, not 3.5. Casting one side to REAL forces floating-point division so the result keeps its decimal precision. (Note: CAST(x AS DECIMAL) would <Hl>not</Hl> fix this — SQLite has no true DECIMAL type, so DECIMAL keeps NUMERIC affinity and an already-integer value passes through unchanged. REAL is the cast that actually forces floating-point math.)</P>
 
       <HR />
 
@@ -668,9 +675,10 @@ GROUP BY customer_id;`}
 
       <SQLPlayground
         initialQuery={`-- Month-by-month revenue trend with growth metrics
+-- SQLite equivalent of EXTRACT: strftime() + CAST to INTEGER
 SELECT
-  EXTRACT(YEAR  FROM order_date)              AS year,
-  EXTRACT(MONTH FROM order_date)              AS month,
+  CAST(strftime('%Y', order_date) AS INTEGER) AS year,
+  CAST(strftime('%m', order_date) AS INTEGER) AS month,
   COUNT(*)                                    AS orders,
   ROUND(SUM(total_amount), 2)                 AS revenue,
   ROUND(AVG(total_amount), 2)                 AS avg_order,
@@ -678,8 +686,8 @@ SELECT
 FROM orders
 WHERE order_status = 'Delivered'
 GROUP BY
-  EXTRACT(YEAR  FROM order_date),
-  EXTRACT(MONTH FROM order_date)
+  CAST(strftime('%Y', order_date) AS INTEGER),
+  CAST(strftime('%m', order_date) AS INTEGER)
 ORDER BY year, month;`}
         height={210}
         showSchema={true}
@@ -774,6 +782,8 @@ ORDER BY p.category, order_count DESC;`}
         showSchema={true}
       />
 
+      <P>SUM(COUNT(DISTINCT o.order_id)) OVER () in the last column is a window function — it totals order counts across every group in the result without collapsing them into a single row, which is what makes a per-row percentage-of-grand-total calculation possible. Window functions are taught properly in Module 52; for now, just recognise the pattern: OVER () with nothing inside the parentheses means "compute across all rows in the result."</P>
+
       <TimeBlock time="2:40 PM" label="Report delivered">
         The product manager immediately spots that COD (Cash on Delivery) is disproportionately high for Staples orders — customers trust FreshCart enough to pay digitally for premium products but default to COD for everyday groceries. This insight drives a new COD-to-digital conversion campaign targeting staple product orders.
       </TimeBlock>
@@ -814,7 +824,7 @@ ORDER BY p.category, order_count DESC;`}
       <IQ q="You need to find the top-selling product in each category. How do you approach this with GROUP BY?">
         <p style={{ margin: '0 0 14px' }}>A basic GROUP BY can find the maximum sales value per category: SELECT category, MAX(units_sold) FROM product_sales GROUP BY category. But this only returns the maximum value — not which product achieved it. To find the specific product name alongside the maximum, you need to join the GROUP BY result back to the original data or use a different approach.</p>
         <p style={{ margin: '0 0 14px' }}>Approach 1 — subquery: SELECT p.category, p.product_name, ps.units_sold FROM product_sales ps JOIN products p ON ... WHERE (p.category, ps.units_sold) IN (SELECT p2.category, MAX(ps2.units_sold) FROM product_sales ps2 JOIN products p2 ON ... GROUP BY p2.category). This finds the product where the (category, units_sold) pair matches the maximum units_sold for that category.</p>
-        <p style={{ margin: 0 }}>Approach 2 — window functions (the modern approach): SELECT DISTINCT ON (category) category, product_name, units_sold FROM product_sales ORDER BY category, units_sold DESC. In PostgreSQL, DISTINCT ON returns the first row per category after sorting by units_sold descending — effectively the top product per category. The even cleaner approach using ROW_NUMBER(): SELECT category, product_name, units_sold FROM (SELECT category, product_name, units_sold, ROW_NUMBER() OVER (PARTITION BY category ORDER BY units_sold DESC) AS rn FROM product_sales) ranked WHERE rn = 1. This ranks products within each category and selects only rank 1 — the top seller. Window functions (Module 45) are the professional solution for "top N per group" queries.</p>
+        <p style={{ margin: 0 }}>Approach 2 — window functions (the modern approach): SELECT DISTINCT ON (category) category, product_name, units_sold FROM product_sales ORDER BY category, units_sold DESC. In PostgreSQL, DISTINCT ON returns the first row per category after sorting by units_sold descending — effectively the top product per category. The even cleaner approach using ROW_NUMBER(): SELECT category, product_name, units_sold FROM (SELECT category, product_name, units_sold, ROW_NUMBER() OVER (PARTITION BY category ORDER BY units_sold DESC) AS rn FROM product_sales) ranked WHERE rn = 1. This ranks products within each category and selects only rank 1 — the top seller. Window functions (Module 52) are the professional solution for "top N per group" queries.</p>
       </IQ>
 
       <HR />

@@ -108,6 +108,8 @@ export default function WhatIsADatabase() {
 
       <P><Hl>"Committed data survives any crash"</Hl> — the moment your credit card payment shows "Approved," that record is permanent. Even if the bank's server loses power one millisecond later, the transaction is not lost. The database writes to a log on disk before confirming success — if it crashes, it replays the log on restart. This is called durability.</P>
 
+      <P>The database also never lets a write leave the data in a state that breaks its own rules — this is called <Hl>consistency</Hl>. Say FreshCart's orders table requires payment_method to be one of 'Credit Card', 'Debit Card', 'Apple Pay', or 'Cash', and requires customer_id to reference a real row in the customers table. If a checkout bug tries to insert an order with payment_method = 'Zelle' or customer_id = 9999 — a customer who does not exist — the database rejects the entire insert before a single byte is written. Atomicity guarantees the write happens completely or not at all; consistency guarantees that whichever way it lands, the data never violates the rules you defined for it.</P>
+
       <P>Together these four guarantees are called <Hl>ACID</Hl> — Atomicity, Consistency, Isolation, Durability. You will learn them deeply in Module 47. For now, know this: every reliable software system you have ever used runs on a database because of these four guarantees. Nothing else provides them.</P>
 
       <HR />
@@ -195,7 +197,7 @@ export default function WhatIsADatabase() {
       <P>Primary keys are almost always integers that auto-increment — the database generates 1, 2, 3, 4... automatically every time a new row is inserted. You never type a primary key value manually. The database does it for you. This means every customer, every order, every product always has a unique identifier you can refer to precisely — no ambiguity, no duplicates.</P>
 
       <H>Foreign Keys — How Tables Connect to Each Other</H>
-      <P>The power of a relational database comes from linking tables. The orders table has a column called customer_id. This is a <Hl>Foreign Key</Hl> — it stores the primary key value of a row in another table, creating an enforced link between them. Order 1001 has customer_id = 1. That 1 means Sofia Ramirez placed this order. The database enforces this link: you cannot insert an order with customer_id = 999 if no customer with id 999 exists. This prevents orphaned records — orders that point to nobody.</P>
+      <P>The power of a relational database comes from linking tables. The orders table has a column called customer_id. This is a <Hl>Foreign Key</Hl> — it stores the primary key value of a row in another table, creating an enforced link between them. Order 1001 has customer_id = 1. That 1 means Emma Johnson placed this order. The database enforces this link: you cannot insert an order with customer_id = 999 if no customer with id 999 exists. This prevents orphaned records — orders that point to nobody.</P>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 20px', margin: '20px 0 32px', fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2 }}>
         <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 12 }}>How FreshCart's 6 tables are linked</div>
@@ -367,7 +369,7 @@ ORDER BY revenue DESC;`}
       </TimeBlock>
 
       <TimeBlock time="9:15 AM — 10:15 AM" label="Write the analysis query">
-        You open the database client. You know the transactions table has merchant_id, city_tier, amount, and transaction_date. You write a CTE that calculates each merchant's January total and February total, then filters for those where February is less than 80% of January, joined to the merchants table for their names and city. The query runs in 4 seconds over 18 million rows. You export the result — 47 merchants — to a Google Sheet.
+        You open the database client. You know the transactions table has merchant_id, city_tier, amount, and transaction_date. You write a CTE (a way to name a subquery) that calculates each merchant's January total and February total, then filters for those where February is less than 80% of January, joined to the merchants table for their names and city. The query runs in 4 seconds over 18 million rows. You export the result — 47 merchants — to a Google Sheet.
       </TimeBlock>
 
       <TimeBlock time="10:30 AM" label="Deliver — 30 minutes early">

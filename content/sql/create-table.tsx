@@ -228,7 +228,7 @@ CREATE TABLE customers (
       />
 
       <H>Auto-incrementing primary keys</H>
-      <P>Primary key values should be generated automatically — you should never manually assign IDs. Each database has its own syntax for this:</P>
+      <P>Primary key values should be generated automatically — you should never manually assign IDs yourself. If application code instead reads the current max ID and inserts max + 1, two concurrent clients can read the same max before either one commits, and both try to insert the same "next" value — one fails with a duplicate-key error, or worse, silently overwrites data if there is no uniqueness check at all. Letting the database hand out each value atomically as part of the insert avoids this race entirely. Each database has its own syntax for this:</P>
 
       <CodeBlock
         label="Auto-increment syntax across databases"
@@ -252,7 +252,7 @@ CREATE TABLE customers (
   first_name   VARCHAR(100)   NOT NULL
 );
 
--- DuckDB (this playground) — SEQUENCE or auto-generated
+-- DuckDB — SEQUENCE or auto-generated
 CREATE SEQUENCE IF NOT EXISTS customer_id_seq;
 CREATE TABLE customers (
   customer_id  INTEGER        PRIMARY KEY DEFAULT nextval('customer_id_seq'),

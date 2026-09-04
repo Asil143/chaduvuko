@@ -207,7 +207,7 @@ WHERE delivery_date IS NOT NULL;`}
       />
 
       <Callout type="warning">
-        NULL = NULL is NULL, not TRUE. This is the most surprising behaviour in SQL and the source of countless bugs. The only correct way to test for NULL is IS NULL and IS NOT NULL. Never use = NULL or {'<>'} NULL â€” they silently return no rows.
+        NULL = NULL is NULL, not TRUE. This is the most surprising behaviour in SQL and the source of countless bugs. The only correct way to test for NULL is IS NULL and IS NOT NULL. Never use = NULL or {'<>'} NULL — they silently return no rows.
       </Callout>
 
       <HR />
@@ -416,6 +416,8 @@ COALESCE(NULL, NULL, NULL)        -- returns NULL`}
 
       <H>COALESCE for displaying NULL as a readable value</H>
 
+      <P>Note the CAST(delivery_date AS VARCHAR) inside the COALESCE below — COALESCE requires all its arguments to be a compatible type, so the date column must be cast to text before it can be combined with a text fallback like 'Not yet delivered'.</P>
+
       <SQLPlayground
         initialQuery={`-- Replace NULL delivery_date with a readable message
 -- Instead of showing NULL, show 'Not yet delivered'
@@ -553,7 +555,7 @@ ORDER BY delivery_date ASC NULLS LAST;`}
       />
 
       <H>NULL in GROUP BY</H>
-      <P>NULL is treated as a distinct grouping value in GROUP BY — all NULL rows are grouped together into a single NULL group. This is one of the few places where NULL = NULL is TRUE in SQL's practical behaviour.</P>
+      <P>NULL is treated as a distinct grouping value in GROUP BY — all NULL rows are grouped together into a single NULL group. This is not the = operator suddenly returning TRUE for NULL = NULL — it never does, even here. GROUP BY uses its own separate grouping/distinctness check that treats all NULLs as equivalent to each other for the purpose of forming groups, which is a completely different mechanism from the = operator ever evaluating to TRUE. DISTINCT (covered next) works the same way.</P>
 
       <SQLPlayground
         initialQuery={`-- GROUP BY treats all NULL delivery_dates as one group
@@ -726,7 +728,7 @@ SELECT
   COUNT(annual_income)                       AS with_income,
   COUNT(*) - COUNT(annual_income)            AS null_income_count,
   ROUND(
-    (COUNT(*) - COUNT(annual_income))::DECIMAL
+    CAST((COUNT(*) - COUNT(annual_income)) AS DECIMAL)
     / COUNT(*) * 100, 2
   )                                          AS null_pct
 FROM loan_applications;`}

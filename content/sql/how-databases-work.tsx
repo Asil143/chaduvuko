@@ -449,7 +449,7 @@ LIMIT 10;`}
       </TimeBlock>
 
       <TimeBlock time="10:30 AM" label="You spot the second problem">
-        The amount column is defined as FLOAT. You have been warned about this in Module 03 of your SQL course. Floating point arithmetic will introduce rounding errors on financial data. You add a comment: "Change to DECIMAL(12,2). FLOAT is wrong for money — you will eventually get 199.99999999998 instead of 200."
+        The amount column is defined as FLOAT. You have been warned about this earlier in this module — in the "money mistake" section. Floating point arithmetic will introduce rounding errors on financial data. You add a comment: "Change to DECIMAL(12,2). FLOAT is wrong for money — you will eventually get 199.99999999998 instead of 200."
       </TimeBlock>
 
       <TimeBlock time="10:45 AM" label="Third problem — missing constraints">

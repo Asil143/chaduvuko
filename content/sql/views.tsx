@@ -498,14 +498,14 @@ WHERE store_id = current_setting('app.current_store_id');
 -- current_setting() reads a session variable set at login
 
 -- Or for a specific store (simpler, single-tenant):
-CREATE VIEW vw_bangalore_orders AS
+CREATE VIEW vw_seattle_orders AS
 SELECT o.*
 FROM orders AS o
 JOIN stores AS s ON o.store_id = s.store_id
 WHERE s.city = 'Seattle';
 
 -- Staff in Seattle only have access to this view:
--- SELECT * FROM vw_bangalore_orders
+-- SELECT * FROM vw_seattle_orders
 -- They cannot query orders for other cities`}
       />
 
@@ -809,7 +809,7 @@ WITH CHECK OPTION;   -- INSERT/UPDATE must satisfy the view's WHERE condition
       {/* ── PART 11 ── */}
       <Part n="11" title="What This Looks Like at Work" />
 
-      <P>You are a senior data engineer at BigBasket. The analytics team runs 15 different reports — all of which need the same "delivered order with product details" JOIN across four tables. Currently every analyst copies and pastes the same 20-line JOIN query into their reports. When the schema changes (a new column, a renamed table), every one of those 15 reports breaks and needs updating manually.</P>
+      <P>You are a senior data engineer at Instacart. The analytics team runs 15 different reports — all of which need the same "delivered order with product details" JOIN across four tables. Currently every analyst copies and pastes the same 20-line JOIN query into their reports. When the schema changes (a new column, a renamed table), every one of those 15 reports breaks and needs updating manually.</P>
 
       <TimeBlock time="10:00 AM" label="The problem is identified">
         15 reports all share the same base JOIN. Any schema change breaks all 15. The fix: create a view that encapsulates the join logic. All 15 reports reference the view. Future schema changes update the view definition once and all reports are fixed.

@@ -551,12 +551,14 @@ ORDER BY salary DESC;`}
 
       <SQLPlayground
         initialQuery={`-- Days between order date and delivery date
--- NULL for undelivered orders (delivery_date - order_date where delivery_date IS NULL = NULL)
+-- SQLite stores DATE columns as plain TEXT ('YYYY-MM-DD'), so plain
+-- subtraction does NOT return a day count — julianday() converts each
+-- date to a day-number first, so the subtraction is meaningful
 SELECT
   order_id,
   order_date,
   delivery_date,
-  delivery_date - order_date   AS days_to_deliver
+  CAST(julianday(delivery_date) - julianday(order_date) AS INTEGER)  AS days_to_deliver
 FROM orders
 WHERE delivery_date IS NOT NULL
 ORDER BY days_to_deliver DESC;`}
@@ -567,9 +569,9 @@ ORDER BY days_to_deliver DESC;`}
       <SQLPlayground
         initialQuery={`-- Average delivery time across all delivered orders
 SELECT
-  ROUND(AVG(delivery_date - order_date), 1)   AS avg_days_to_deliver,
-  MIN(delivery_date - order_date)              AS fastest_delivery,
-  MAX(delivery_date - order_date)              AS slowest_delivery
+  ROUND(AVG(julianday(delivery_date) - julianday(order_date)), 1)   AS avg_days_to_deliver,
+  MIN(julianday(delivery_date) - julianday(order_date))              AS fastest_delivery,
+  MAX(julianday(delivery_date) - julianday(order_date))              AS slowest_delivery
 FROM orders
 WHERE delivery_date IS NOT NULL;`}
         height={130}
@@ -578,12 +580,13 @@ WHERE delivery_date IS NOT NULL;`}
 
       <SQLPlayground
         initialQuery={`-- Days since each customer joined FreshCart
--- CURRENT_DATE is today's date in the database
+-- CURRENT_DATE is today's date; julianday() converts both sides to
+-- day-numbers so the subtraction returns real days, not a text diff
 SELECT
   first_name || ' ' || last_name         AS customer,
   joined_date,
-  CURRENT_DATE - joined_date             AS days_since_joined,
-  ROUND((CURRENT_DATE - joined_date) / 365.0, 1)  AS years_since_joined
+  CAST(julianday(CURRENT_DATE) - julianday(joined_date) AS INTEGER)  AS days_since_joined,
+  ROUND((julianday(CURRENT_DATE) - julianday(joined_date)) / 365.0, 1)  AS years_since_joined
 FROM customers
 ORDER BY days_since_joined DESC;`}
         height={160}
@@ -594,9 +597,17 @@ ORDER BY days_since_joined DESC;`}
 
       <CodeBlock
         label="Date arithmetic across databases"
-        code={`-- PostgreSQL and DuckDB (this playground):
+        code={`-- PostgreSQL and DuckDB:
 -- Subtracting two DATE columns returns an integer (number of days)
 delivery_date - order_date       -- returns integer days
+
+-- SQLite (this playground):
+-- SQLite has no true DATE type — dates are stored as plain TEXT.
+-- Plain subtraction does NOT return a day count (it silently runs
+-- numeric-prefix arithmetic on the leading digits instead). Use
+-- julianday() to convert each date to a day-number first:
+julianday(delivery_date) - julianday(order_date)                      -- days, as a REAL
+CAST(julianday(delivery_date) - julianday(order_date) AS INTEGER)     -- whole days
 
 -- MySQL:
 -- Use DATEDIFF() function
@@ -606,6 +617,9 @@ DATEDIFF(delivery_date, order_date)  -- returns integer days
 -- PostgreSQL: date + INTEGER  or  date + INTERVAL '7 days'
 order_date + 7                       -- PostgreSQL: adds 7 days
 order_date + INTERVAL '7 days'       -- more explicit
+
+-- SQLite: use date() with a modifier
+date(order_date, '+7 days')          -- returns 'YYYY-MM-DD' text, 7 days later
 
 -- MySQL:
 DATE_ADD(order_date, INTERVAL 7 DAY)
@@ -802,7 +816,7 @@ ORDER BY margin_pct DESC;`}
 
       <IQ q="How does date arithmetic work in SQL and where do the dialects differ?">
         <p style={{ margin: '0 0 14px' }}>Date arithmetic in SQL calculates intervals between dates or adds/subtracts time from a date. The concept is universal — every SQL database supports it — but the syntax differs significantly across databases, which is one of the most common portability issues when moving SQL between systems.</p>
-        <p style={{ margin: '0 0 14px' }}>In PostgreSQL and DuckDB (used in this playground), subtracting two DATE values returns an integer representing the number of days: delivery_date - order_date returns 2 if delivery was 2 days after the order. Adding an integer to a date adds that many days: order_date + 7 returns the date 7 days later. PostgreSQL also supports INTERVAL arithmetic: order_date + INTERVAL '1 month' adds exactly one month. In MySQL, date subtraction is done with the DATEDIFF function: DATEDIFF(delivery_date, order_date). Date addition uses DATE_ADD: DATE_ADD(order_date, INTERVAL 7 DAY). In SQL Server, DATEDIFF(day, order_date, delivery_date) for difference and DATEADD(day, 7, order_date) for addition.</p>
+        <p style={{ margin: '0 0 14px' }}>In PostgreSQL and DuckDB, subtracting two DATE values returns an integer representing the number of days: delivery_date - order_date returns 2 if delivery was 2 days after the order. Adding an integer to a date adds that many days: order_date + 7 returns the date 7 days later. PostgreSQL also supports INTERVAL arithmetic: order_date + INTERVAL '1 month' adds exactly one month. SQLite (used in this playground) has no true DATE type — dates are stored as plain TEXT, so a direct subtraction does not return a day count; use julianday(delivery_date) - julianday(order_date) instead, and date(order_date, '+7 days') to add days. In MySQL, date subtraction is done with the DATEDIFF function: DATEDIFF(delivery_date, order_date). Date addition uses DATE_ADD: DATE_ADD(order_date, INTERVAL 7 DAY). In SQL Server, DATEDIFF(day, order_date, delivery_date) for difference and DATEADD(day, 7, order_date) for addition.</p>
         <p style={{ margin: 0 }}>The safest cross-database approach is to use explicit functions rather than operator overloading. DATEDIFF is supported in MySQL and SQL Server (with different argument order). PostgreSQL's date subtraction operator is elegant but PostgreSQL-specific. When writing SQL that must run on multiple database types, document which database it targets or use a database abstraction layer that normalises these differences. In practice, most organisations standardise on one database per workload, making dialect differences a concern primarily when migrating systems or working with multiple clients on different stacks.</p>
       </IQ>
 
@@ -879,7 +893,7 @@ ORDER BY margin_pct DESC;`}
           'NULL propagates through arithmetic — any expression involving NULL returns NULL. Use COALESCE to substitute defaults before calculations: COALESCE(discount_pct, 0).',
           'ROUND(number, places) rounds to N decimal places. CEIL always rounds up. FLOOR always rounds down. ABS returns the absolute value (removes negative sign).',
           'Arithmetic in WHERE works but applying calculations to the column side (WHERE col * 1.08 > 200) prevents index usage. Move calculations to the literal side (WHERE col > 200 / 1.08) to keep queries SARGable.',
-          'Date subtraction returns days between two dates in PostgreSQL/DuckDB. Use DATEDIFF in MySQL. Use INTERVAL for calendar-aware month/year arithmetic — adding 30 days is not the same as adding one month.',
+          'Date subtraction returns days between two dates in PostgreSQL/DuckDB. SQLite has no true DATE type, so plain subtraction does not — use julianday(date2) - julianday(date1) instead. Use DATEDIFF in MySQL. Use INTERVAL for calendar-aware month/year arithmetic — adding 30 days is not the same as adding one month.',
           'Division by zero raises an error in PostgreSQL. Prevent it with NULLIF on the denominator: value / NULLIF(denominator, 0) — returns NULL instead of crashing when the denominator is zero.',
           'Always use DECIMAL data types for monetary values — never FLOAT or DOUBLE. Floating-point representation errors in ROUND() accumulate into accounting discrepancies at scale.',
           'Computed columns in SQL are reproducible, documentable, and reviewable. They are always preferable to post-export Excel calculations for business reporting.',

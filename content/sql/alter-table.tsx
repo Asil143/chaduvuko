@@ -93,7 +93,7 @@ export default function AlterTable() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, margin: '20px 0 32px' }}>
         {[
           { issue: 'Table locks', desc: 'Some ALTER TABLE operations acquire a full table lock — blocking all reads and writes for the duration. On a 100-million-row table, this can mean minutes of downtime.' },
-          { issue: 'Data rewrites', desc: 'Changing a column type from VARCHAR(100) to VARCHAR(200) may require rewriting every row on disk — expensive proportional to table size.' },
+          { issue: 'Data rewrites', desc: 'Changing a column type from VARCHAR to INTEGER — or narrowing VARCHAR(200) down to VARCHAR(50) — may require rewriting every row on disk to validate and convert existing data — expensive proportional to table size.' },
           { issue: 'Dependency cascade', desc: 'Renaming a column breaks any view, stored procedure, trigger, or application query that references the old name — silently, with no compile-time error.' },
           { issue: 'Constraint validation', desc: 'Adding NOT NULL or a CHECK constraint validates against all existing rows — fails if any row violates the new rule.' },
         ].map(item => (
@@ -172,7 +172,10 @@ ALTER TABLE customers ADD COLUMN loyalty_points INTEGER NOT NULL;
 -- ERROR: column "loyalty_points" of relation "customers" contains null values
 
 -- RIGHT: three-step safe approach
--- Step 1: add as nullable with a default
+-- Step 1: add as NOT NULL with a DEFAULT — safe in PostgreSQL 11+
+-- because the default is stored as metadata and applied to existing
+-- rows without rewriting them (older Postgres would need a
+-- nullable-then-backfill-then-NOT-NULL approach instead)
 ALTER TABLE customers
 ADD COLUMN loyalty_points INTEGER NOT NULL DEFAULT 0;
 
@@ -626,12 +629,12 @@ ALTER TABLE customers DROP COLUMN IF EXISTS loyalty_points;`}
           </thead>
           <tbody>
             {[
-              ['Add column', 'ALTER TABLE t ADD COLUMN c TYPE', 'ALTER TABLE t ADD COLUMN c TYPE'],
+              ['Add column', 'ALTER TABLE t ADD COLUMN c data_type', 'ALTER TABLE t ADD COLUMN c data_type'],
               ['Drop column', 'ALTER TABLE t DROP COLUMN c', 'ALTER TABLE t DROP COLUMN c'],
-              ['Rename column', 'ALTER TABLE t RENAME COLUMN old TO new', 'ALTER TABLE t RENAME COLUMN old TO new (8.0+)\nALTER TABLE t CHANGE COLUMN old new TYPE (older)'],
-              ['Change type', 'ALTER TABLE t ALTER COLUMN c TYPE newtype', 'ALTER TABLE t MODIFY COLUMN c newtype'],
-              ['Set NOT NULL', 'ALTER TABLE t ALTER COLUMN c SET NOT NULL', 'ALTER TABLE t MODIFY COLUMN c TYPE NOT NULL'],
-              ['Drop NOT NULL', 'ALTER TABLE t ALTER COLUMN c DROP NOT NULL', 'ALTER TABLE t MODIFY COLUMN c TYPE NULL'],
+              ['Rename column', 'ALTER TABLE t RENAME COLUMN old TO new', 'ALTER TABLE t RENAME COLUMN old TO new (8.0+)\nALTER TABLE t CHANGE COLUMN old new data_type (older)'],
+              ['Change type', 'ALTER TABLE t ALTER COLUMN c TYPE new_type', 'ALTER TABLE t MODIFY COLUMN c new_type'],
+              ['Set NOT NULL', 'ALTER TABLE t ALTER COLUMN c SET NOT NULL', 'ALTER TABLE t MODIFY COLUMN c data_type NOT NULL'],
+              ['Drop NOT NULL', 'ALTER TABLE t ALTER COLUMN c DROP NOT NULL', 'ALTER TABLE t MODIFY COLUMN c data_type NULL'],
               ['Set DEFAULT', 'ALTER TABLE t ALTER COLUMN c SET DEFAULT v', 'ALTER TABLE t ALTER COLUMN c SET DEFAULT v'],
               ['Drop DEFAULT', 'ALTER TABLE t ALTER COLUMN c DROP DEFAULT', 'ALTER TABLE t ALTER COLUMN c DROP DEFAULT'],
               ['Rename table', 'ALTER TABLE old RENAME TO new', 'RENAME TABLE old TO new'],
@@ -697,7 +700,7 @@ DROP COLUMN IF EXISTS rating_count;`}
       </TimeBlock>
 
       <TimeBlock time="2:05 AM" label="VALIDATE runs during low traffic">
-        You run the VALIDATE step from the production database. It takes 4 minutes to scan 8 million rows — but because it only takes a ShareLock (not an ExclusiveLock), the application continues serving 50,000 queries per minute throughout. Zero downtime achieved.
+        You run the VALIDATE step from the production database. It takes 4 minutes to scan 8 million rows — but because it only takes a ShareLock, not an ExclusiveLock (a ShareLock allows other reads to continue; an ExclusiveLock blocks everything else on that table), the application continues serving 50,000 queries per minute throughout. Zero downtime achieved.
       </TimeBlock>
 
       <ProTip>

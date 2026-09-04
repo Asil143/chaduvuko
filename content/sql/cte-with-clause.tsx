@@ -788,7 +788,7 @@ ORDER BY lifetime_value DESC NULLS LAST;`}
       <Err
         msg="ERROR: syntax error at or near 'WITH' — CTE not recognised"
         cause="CTE syntax is not supported in the database version being used, or the WITH keyword is in the wrong position. MySQL added CTE support in version 8.0 — versions before MySQL 8.0 do not support WITH. Also, if WITH appears inside a subquery in some database configurations, it may not be recognised (standard SQL requires WITH at the outermost level, though PostgreSQL allows it in subqueries)."
-        fix="Check MySQL version: SELECT VERSION() — if below 8.0, upgrade or rewrite using derived tables (inline subqueries in FROM). For subquery-level CTEs, move the WITH to the outermost query level and use derived tables or additional CTEs for the inner logic. PostgreSQL 8.4+ and SQL Server 2005+ fully support CTEs. DuckDB (this playground) fully supports CTEs."
+        fix="Check MySQL version: SELECT VERSION() — if below 8.0, upgrade or rewrite using derived tables (inline subqueries in FROM). For subquery-level CTEs, move the WITH to the outermost query level and use derived tables or additional CTEs for the inner logic. PostgreSQL 8.4+ and SQL Server 2005+ fully support CTEs. SQLite (this playground) fully supports CTEs, including recursive ones, since version 3.8.3 (2014)."
       />
 
       <Err
@@ -906,10 +906,10 @@ ORDER BY target_achievement_pct DESC NULLS LAST;`}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>
         <p style={{ fontSize: 10, color: 'var(--muted)', letterSpacing: '.12em', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 10px' }}>What comes next</p>
         <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 20px' }}>
-          In <strong>Module 42</strong>, you learn string functions — CONCAT, SUBSTRING, TRIM, UPPER, LOWER, REPLACE, LIKE pattern matching, REGEXP, and every text manipulation tool you need for real data cleaning and formatting.
+          In <strong>Module 56</strong>, you learn Recursive CTEs — using WITH RECURSIVE to query hierarchical and graph data of unknown depth: org charts, category trees, bill-of-materials, and path-finding, without writing a brittle fixed-depth chain of self-joins.
         </p>
-        <Link href="/learn/sql/string-functions" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
-          Module 42 → String Functions
+        <Link href="/learn/sql/recursive-cte" style={{ background: C, color: '#000', padding: '11px 24px', borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-block' }}>
+          Module 56 → Recursive CTEs
         </Link>
       </div>
 
