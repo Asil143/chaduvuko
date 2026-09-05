@@ -720,7 +720,7 @@ WHERE EXISTS (
 -- SLOW: EXISTS without index on join column
 WHERE EXISTS (
   SELECT 1 FROM orders AS o
-  WHERE o.payment_method = 'COD'        -- payment_method may not be indexed
+  WHERE o.payment_method = 'Cash'        -- payment_method may not be indexed
     AND o.customer_id = c.customer_id
 )
 -- For each customer: index lookup on customer_id, then filter payment_method
@@ -941,8 +941,8 @@ ORDER BY c.joined_date DESC;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="Write three queries using EXISTS and NOT EXISTS: (1) Find all stores that have at least one employee AND at least one delivered order worth more than $800. Show store_id, city, and store_name. (2) Find all customers who have placed at least one delivered order but have NEVER used COD (Cash on Delivery) as a payment method. Show customer_id, full name, city, and loyalty_tier. (3) Find all products that exist in the products table but have never appeared in any delivered order. Then also find products that appear in delivered orders but have a unit_price below $30 AND have been ordered more than once. Combine both using UNION ALL with a 'reason' column labelling each set."
-        hint="Query 1: EXISTS for employees AND EXISTS for large orders — two separate EXISTS. Query 2: EXISTS for any delivered order AND NOT EXISTS for COD delivered orders. Query 3: NOT EXISTS for no delivered orders; EXISTS with HAVING for low-price frequent products. UNION ALL with literal reason strings."
+        question="Write three queries using EXISTS and NOT EXISTS: (1) Find all stores that have at least one employee AND at least one delivered order worth more than $800. Show store_id, city, and store_name. (2) Find all customers who have placed at least one delivered order but have NEVER used Cash as a payment method. Show customer_id, full name, city, and loyalty_tier. (3) Find all products that exist in the products table but have never appeared in any delivered order. Then also find products that appear in delivered orders but have a unit_price below $30 AND have been ordered more than once. Combine both using UNION ALL with a 'reason' column labelling each set."
+        hint="Query 1: EXISTS for employees AND EXISTS for large orders — two separate EXISTS. Query 2: EXISTS for any delivered order AND NOT EXISTS for Cash delivered orders. Query 3: NOT EXISTS for no delivered orders; EXISTS with HAVING for low-price frequent products. UNION ALL with literal reason strings."
         answer={`-- Query 1: Stores with employees AND large orders
 SELECT
   s.store_id,
@@ -961,7 +961,7 @@ AND EXISTS (
 )
 ORDER BY s.city;
 
--- Query 2: Customers who ordered but never used COD
+-- Query 2: Customers who ordered but never used Cash
 SELECT
   c.customer_id,
   c.first_name || ' ' || c.last_name  AS full_name,
@@ -977,7 +977,7 @@ AND NOT EXISTS (
   SELECT 1 FROM orders AS o
   WHERE o.customer_id   = c.customer_id
     AND o.order_status  = 'Delivered'
-    AND o.payment_method = 'COD'
+    AND o.payment_method = 'Cash'
 )
 ORDER BY c.loyalty_tier, c.customer_id;
 
@@ -1017,7 +1017,7 @@ WHERE p.unit_price < 30
     HAVING COUNT(DISTINCT o.order_id) > 1
   )
 ORDER BY reason, category, unit_price;`}
-        explanation="Query 1 uses two separate EXISTS conditions connected with AND — both must be TRUE for a store to qualify. Each EXISTS independently checks a different relationship (employees vs orders). Query 2 is the EXISTS + NOT EXISTS compound pattern: EXISTS confirms the customer has delivered orders, NOT EXISTS confirms they have never used COD. Both use the same correlated column (customer_id) but different filter conditions. Query 3 combines NOT EXISTS (for never-delivered products) with EXISTS + HAVING (for low-price frequent products) using UNION ALL. The EXISTS with HAVING uses GROUP BY inside the subquery to count distinct orders — a valid pattern that checks whether an aggregate condition is satisfied for the correlated row. The literal string 'reason' column labels each set. UNION ALL (not UNION) is correct here — the two sets are logically distinct and there should be no overlap between 'never ordered' and 'frequently ordered' products."
+        explanation="Query 1 uses two separate EXISTS conditions connected with AND — both must be TRUE for a store to qualify. Each EXISTS independently checks a different relationship (employees vs orders). Query 2 is the EXISTS + NOT EXISTS compound pattern: EXISTS confirms the customer has delivered orders, NOT EXISTS confirms they have never used Cash. Both use the same correlated column (customer_id) but different filter conditions. Query 3 combines NOT EXISTS (for never-delivered products) with EXISTS + HAVING (for low-price frequent products) using UNION ALL. The EXISTS with HAVING uses GROUP BY inside the subquery to count distinct orders — a valid pattern that checks whether an aggregate condition is satisfied for the correlated row. The literal string 'reason' column labels each set. UNION ALL (not UNION) is correct here — the two sets are logically distinct and there should be no overlap between 'never ordered' and 'frequently ordered' products."
       />
 
       <HR />

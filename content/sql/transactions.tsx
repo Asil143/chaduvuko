@@ -949,7 +949,7 @@ SELECT
   CURRENT_DATE,               -- order_date
   'Processing',               -- order_status
   2 * unit_price,             -- total_amount: qty × price
-  'Zelle'                     -- payment_method
+  'Apple Pay'                     -- payment_method
 FROM products
 WHERE product_id = 1;
 

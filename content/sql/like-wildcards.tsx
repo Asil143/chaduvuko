@@ -245,10 +245,10 @@ WHERE store_name LIKE '%Hill%';`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Orders paid through any method containing 'Ban' (NetBanking)
+        initialQuery={`-- Orders paid through any method containing 'bit' (Debit Card)
 SELECT order_id, payment_method, total_amount, order_status
 FROM orders
-WHERE payment_method LIKE '%Ban%'
+WHERE payment_method LIKE '%bit%'
 ORDER BY total_amount DESC;`}
         height={120}
         showSchema={false}

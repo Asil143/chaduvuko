@@ -267,7 +267,7 @@ WHERE total_amount > '1000' -- string comparison, not numeric`}
 WHERE city = 'Seattle'
 WHERE order_status = 'Delivered'
 WHERE loyalty_tier = 'Platinum'
-WHERE payment_method = 'Zelle'
+WHERE payment_method = 'Apple Pay'
 
 -- Wrong — double quotes are for identifiers, not values
 WHERE city = "Seattle"     -- error in PostgreSQL, might work in MySQL
@@ -275,19 +275,19 @@ WHERE city = Seattle       -- error: Seattle treated as column name`}
       />
 
       <H>String comparison is case-sensitive</H>
-      <P>In PostgreSQL (and DuckDB, which the playground uses), string comparisons are <Hl>case-sensitive</Hl>. 'Seattle' is not the same as 'bangalore' or 'BANGALORE'. The WHERE condition will only return rows where the value matches exactly — including case.</P>
+      <P>In PostgreSQL (and DuckDB, which the playground uses), string comparisons are <Hl>case-sensitive</Hl>. 'Seattle' is not the same as 'seattle' or 'SEATTLE'. The WHERE condition will only return rows where the value matches exactly — including case.</P>
 
       <SQLPlayground
-        initialQuery={`-- 'Seattle' (capital B) finds rows
+        initialQuery={`-- 'Seattle' (capital S) finds rows
 SELECT first_name, city FROM customers WHERE city = 'Seattle';`}
         height={100}
         showSchema={false}
       />
 
       <SQLPlayground
-        initialQuery={`-- 'bangalore' (lowercase) finds nothing in PostgreSQL
--- Because the actual stored values have capital B
-SELECT first_name, city FROM customers WHERE city = 'bangalore';`}
+        initialQuery={`-- 'seattle' (lowercase) finds nothing in PostgreSQL
+-- Because the actual stored values have capital S
+SELECT first_name, city FROM customers WHERE city = 'seattle';`}
         height={100}
         showSchema={false}
       />
@@ -299,7 +299,7 @@ SELECT first_name, city FROM customers WHERE city = 'bangalore';`}
 -- Works in PostgreSQL, MySQL, and DuckDB
 SELECT first_name, city
 FROM customers
-WHERE LOWER(city) = 'bangalore';`}
+WHERE LOWER(city) = 'seattle';`}
         height={110}
         showSchema={false}
       />
@@ -674,7 +674,7 @@ HAVING COUNT(*) > 2;               -- then filter groups`}
         code={`-- SLOW: function on the column side — cannot use index on order_date
 WHERE YEAR(order_date) = 2024
 WHERE MONTH(order_date) = 1
-WHERE UPPER(city) = 'BANGALORE'
+WHERE UPPER(city) = 'SEATTLE'
 
 -- FAST: equivalent conditions that CAN use the index
 WHERE order_date >= '2024-01-01' AND order_date < '2025-01-01'
@@ -786,13 +786,13 @@ ORDER BY delivery_date DESC;`}
       <IQ q="What is a full table scan and how does the WHERE clause affect it?">
         <p style={{ margin: '0 0 14px' }}>A full table scan is when the database reads every page of a table from start to finish to find rows that match a WHERE condition. On a small table this is fine. On a table with 500 million rows stored across thousands of disk pages, a full table scan can take minutes or longer — and blocks other queries from running efficiently.</p>
         <p style={{ margin: '0 0 14px' }}>Whether WHERE causes a full table scan depends on whether the filtered column has an index. If the column has a B-tree index, the database uses the index to jump directly to the matching rows without reading the whole table — an index lookup. This turns a minutes-long full scan into a sub-millisecond operation. If the column has no index, the database has no choice but to read every row.</p>
-        <p style={{ margin: 0 }}>WHERE conditions that prevent index usage include: applying a function to the column (WHERE UPPER(city) = 'BANGALORE' cannot use an index on city), using OR conditions across different columns without a composite index, and using leading wildcards in LIKE (WHERE email LIKE '%gmail.com' cannot use an index because the prefix is unknown). The solution for function-wrapped columns is to rewrite the condition: WHERE city = 'Seattle' (case-sensitive, uses index) or add a functional index on UPPER(city). Understanding when WHERE triggers a full scan versus an index lookup is the foundation of query optimisation.</p>
+        <p style={{ margin: 0 }}>WHERE conditions that prevent index usage include: applying a function to the column (WHERE UPPER(city) = 'SEATTLE' cannot use an index on city), using OR conditions across different columns without a composite index, and using leading wildcards in LIKE (WHERE email LIKE '%gmail.com' cannot use an index because the prefix is unknown). The solution for function-wrapped columns is to rewrite the condition: WHERE city = 'Seattle' (case-sensitive, uses index) or add a functional index on UPPER(city). Understanding when WHERE triggers a full scan versus an index lookup is the foundation of query optimisation.</p>
       </IQ>
 
       <IQ q="How does string comparison work in WHERE? Give an example of a case-sensitivity issue.">
-        <p style={{ margin: '0 0 14px' }}>String comparison in WHERE checks whether a column value matches a specified string. In PostgreSQL, SQLite, and DuckDB (used in the Chaduvuko playground), string comparisons are case-sensitive by default — the exact characters must match including capitalisation. 'Seattle' does not equal 'bangalore' or 'BANGALORE'. In MySQL, string comparisons are case-insensitive by default because MySQL's default collation (utf8mb4_general_ci, where ci stands for case-insensitive) treats uppercase and lowercase as equivalent.</p>
-        <p style={{ margin: '0 0 14px' }}>A real example of a case-sensitivity issue: an analyst queries WHERE city = 'bangalore' on a PostgreSQL database where cities are stored as 'Seattle' (capital B). The query returns zero rows — not because there are no customers in Seattle, but because 'bangalore' and 'Seattle' are treated as different strings. The analyst might incorrectly conclude the data is missing.</p>
-        <p style={{ margin: 0 }}>Solutions for case-insensitive matching: use LOWER(city) = 'bangalore' to convert both sides to lowercase before comparing — this works in all databases but prevents index usage on city. In PostgreSQL, use the ILIKE operator (case-insensitive LIKE) as an alternative: WHERE city ILIKE 'bangalore'. For production systems where case-insensitive search is frequent, create a functional index on LOWER(city) so that WHERE LOWER(city) = 'bangalore' can use the index. The safest long-term practice is to standardise data capitalisation on insert — store all cities as 'Seattle' consistently, then case-sensitive comparison is always correct and fast.</p>
+        <p style={{ margin: '0 0 14px' }}>String comparison in WHERE checks whether a column value matches a specified string. In PostgreSQL, SQLite, and DuckDB (used in the Chaduvuko playground), string comparisons are case-sensitive by default — the exact characters must match including capitalisation. 'Seattle' does not equal 'seattle' or 'SEATTLE'. In MySQL, string comparisons are case-insensitive by default because MySQL's default collation (utf8mb4_general_ci, where ci stands for case-insensitive) treats uppercase and lowercase as equivalent.</p>
+        <p style={{ margin: '0 0 14px' }}>A real example of a case-sensitivity issue: an analyst queries WHERE city = 'seattle' on a PostgreSQL database where cities are stored as 'Seattle' (capital S). The query returns zero rows — not because there are no customers in Seattle, but because 'seattle' and 'Seattle' are treated as different strings. The analyst might incorrectly conclude the data is missing.</p>
+        <p style={{ margin: 0 }}>Solutions for case-insensitive matching: use LOWER(city) = 'seattle' to convert both sides to lowercase before comparing — this works in all databases but prevents index usage on city. In PostgreSQL, use the ILIKE operator (case-insensitive LIKE) as an alternative: WHERE city ILIKE 'seattle'. For production systems where case-insensitive search is frequent, create a functional index on LOWER(city) so that WHERE LOWER(city) = 'seattle' can use the index. The safest long-term practice is to standardise data capitalisation on insert — store all cities as 'Seattle' consistently, then case-sensitive comparison is always correct and fast.</p>
       </IQ>
 
       <HR />
@@ -814,7 +814,7 @@ ORDER BY delivery_date DESC;`}
 
       <Err
         msg="Query returns 0 rows — expected to find data"
-        cause="This is not a database error but a logic error — your WHERE condition does not match any rows even though you expect it to. Most common causes: string value is wrong case (WHERE city = 'bangalore' but data stores 'Seattle'), extra whitespace in the stored value (WHERE email = 'aisha@gmail.com' but stored as ' aisha@gmail.com' with a leading space), using = NULL instead of IS NULL, or the value genuinely does not exist in the table."
+        cause="This is not a database error but a logic error — your WHERE condition does not match any rows even though you expect it to. Most common causes: string value is wrong case (WHERE city = 'seattle' but data stores 'Seattle'), extra whitespace in the stored value (WHERE email = 'aisha@gmail.com' but stored as ' aisha@gmail.com' with a leading space), using = NULL instead of IS NULL, or the value genuinely does not exist in the table."
         fix="Debug systematically. First, run SELECT * FROM table LIMIT 10 to see actual stored values. Check case and whitespace carefully. If checking for NULL, use IS NULL not = NULL. Use LOWER() on both sides to rule out case issues: WHERE LOWER(city) = LOWER('Seattle'). Use TRIM() to rule out whitespace: WHERE TRIM(email) = 'aisha@gmail.com'. Once you find the exact stored value, update your WHERE condition to match it precisely."
       />
 
@@ -860,7 +860,7 @@ ORDER BY total_amount DESC;`}
           'WHERE executes before SELECT in the logical execution order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT. This is why SELECT aliases cannot be used in WHERE.',
           'The six comparison operators: = (equal), <> or != (not equal), > (greater than), < (less than), >= (greater than or equal), <= (less than or equal). All work on numbers, text, and dates.',
           'Numbers in WHERE have no quotes: WHERE salary > 50000. Text values always use single quotes: WHERE city = \'Seattle\'. Dates use single quotes in YYYY-MM-DD format: WHERE order_date >= \'2024-01-01\'.',
-          'String comparison is case-sensitive in PostgreSQL and DuckDB. WHERE city = \'bangalore\' finds nothing if values are stored as \'Seattle\'. Use LOWER() or ILIKE for case-insensitive matching.',
+          'String comparison is case-sensitive in PostgreSQL and DuckDB. WHERE city = \'seattle\' finds nothing if values are stored as \'Seattle\'. Use LOWER() or ILIKE for case-insensitive matching.',
           'You cannot use = NULL to check for NULL values — any comparison involving NULL returns NULL, not TRUE. Always use IS NULL and IS NOT NULL instead.',
           'WHERE filters rows. HAVING filters groups after GROUP BY. You cannot use aggregate functions (COUNT, SUM, AVG) in WHERE — use HAVING for that.',
           'WHERE on an indexed column triggers a fast index lookup. WHERE on an unindexed column triggers a slow full table scan. Avoid applying functions to the column side of WHERE conditions — it prevents index usage.',

@@ -788,7 +788,7 @@ ORDER BY p.category, order_count DESC;`}
       <P>SUM(COUNT(DISTINCT o.order_id)) OVER () in the last column is a window function — it totals order counts across every group in the result without collapsing them into a single row, which is what makes a per-row percentage-of-grand-total calculation possible. Window functions are taught properly in Module 52; for now, just recognise the pattern: OVER () with nothing inside the parentheses means "compute across all rows in the result."</P>
 
       <TimeBlock time="2:40 PM" label="Report delivered">
-        The product manager immediately spots that COD (Cash on Delivery) is disproportionately high for Staples orders — customers trust FreshCart enough to pay digitally for premium products but default to COD for everyday groceries. This insight drives a new COD-to-digital conversion campaign targeting staple product orders.
+        The product manager immediately spots that Cash payments are disproportionately high for Staples orders — customers trust FreshCart enough to pay digitally for premium products but default to cash for everyday groceries. This insight drives a new cash-to-digital conversion campaign targeting staple product orders.
       </TimeBlock>
 
       <ProTip>

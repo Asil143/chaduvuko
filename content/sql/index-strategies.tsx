@@ -468,7 +468,7 @@ CREATE INDEX idx_events_user_id
 -- Pattern 1: case-insensitive name search
 SELECT customer_id, first_name, last_name, email
 FROM customers
-WHERE LOWER(first_name) = LOWER('priya');
+WHERE LOWER(first_name) = LOWER('emma');
 -- Without functional index on LOWER(first_name): Seq Scan every time
 
 -- Pattern 2: find products with margin above threshold

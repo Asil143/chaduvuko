@@ -468,7 +468,7 @@ WHERE email = 'emily.carter@gmail.com';`}
         label="Transaction wrapping related INSERTs"
         code={`-- WRONG: two separate inserts — if the second fails, the first stays
 INSERT INTO orders (customer_id, store_id, order_date, payment_method, total_amount)
-VALUES (5, 'ST001', '2024-04-10', 'Zelle', 856.00);
+VALUES (5, 'ST001', '2024-04-10', 'Apple Pay', 856.00);
 
 INSERT INTO order_items (order_id, product_id, quantity, unit_price, line_total)
 VALUES (31, 3, 2, 428.00, 856.00);
@@ -477,7 +477,7 @@ VALUES (31, 3, 2, 428.00, 856.00);
 -- RIGHT: wrap in a transaction
 BEGIN;
   INSERT INTO orders (customer_id, store_id, order_date, payment_method, total_amount)
-  VALUES (5, 'ST001', '2024-04-10', 'Zelle', 856.00)
+  VALUES (5, 'ST001', '2024-04-10', 'Apple Pay', 856.00)
   RETURNING order_id;  -- capture the generated order_id
 
   INSERT INTO order_items (order_id, product_id, quantity, unit_price, line_total)
@@ -554,7 +554,7 @@ WHERE import_batch = '2024-04-10';`}
         label="INSERT with functions and expressions"
         code={`-- CURRENT_DATE and NOW() as values
 INSERT INTO orders (customer_id, store_id, order_date, payment_method, total_amount)
-VALUES (5, 'ST001', CURRENT_DATE, 'Zelle', 856.00);
+VALUES (5, 'ST001', CURRENT_DATE, 'Apple Pay', 856.00);
 -- order_date gets today's date automatically
 
 -- DEFAULT keyword — use the column's DEFAULT value explicitly
@@ -571,10 +571,10 @@ VALUES (31, 5, 3, 56.00, 3 * 56.00);
 -- Expression from another query
 INSERT INTO orders (customer_id, store_id, order_date, payment_method, total_amount)
 VALUES (
-  (SELECT customer_id FROM customers WHERE email = 'rahul@gmail.com'),
+  (SELECT customer_id FROM customers WHERE email = 'jason@gmail.com'),
   'ST001',
   CURRENT_DATE,
-  'Zelle',
+  'Apple Pay',
   1200.00
 );`}
       />
@@ -591,7 +591,7 @@ VALUES (
   'ST003',     -- existing store
   CURRENT_DATE,
   'Processing',
-  'Zelle',
+  'Apple Pay',
   1456.50
 )
 RETURNING order_id, customer_id, order_date, order_status, total_amount;`}

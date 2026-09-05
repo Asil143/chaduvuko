@@ -449,7 +449,7 @@ CREATE TABLE orders (
     CHECK (order_status IN ('Processing','Delivered','Cancelled','Returned')),
   payment_method VARCHAR(20)   NOT NULL
     CONSTRAINT chk_payment_method
-    CHECK (payment_method IN ('Zelle','Card','COD','NetBanking')),
+    CHECK (payment_method IN ('Apple Pay','Credit Card','Cash','Debit Card')),
   loyalty_tier   VARCHAR(20)   NOT NULL DEFAULT 'Bronze'
     CONSTRAINT chk_loyalty_tier
     CHECK (loyalty_tier IN ('Bronze','Silver','Gold','Platinum'))
@@ -664,7 +664,7 @@ CREATE TABLE IF NOT EXISTS customers (...);
                   CHECK (order_status IN
                     ('Delivered','Processing','Cancelled','Returned')),
   payment_method  VARCHAR(20)    NOT NULL
-                  CHECK (payment_method IN ('Zelle','Card','COD','NetBanking')),
+                  CHECK (payment_method IN ('Apple Pay','Credit Card','Cash','Debit Card')),
   total_amount    DECIMAL(10, 2) NOT NULL
                   CHECK (total_amount >= 0),
   CONSTRAINT chk_delivery_after_order

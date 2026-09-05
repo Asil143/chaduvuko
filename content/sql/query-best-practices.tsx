@@ -158,11 +158,11 @@ LIMIT 5;`}
 -- Full scan even with index on order_date
 WHERE strftime('%Y', order_date) = '2024'
 
-WHERE UPPER(city) = 'MUMBAI'
+WHERE UPPER(city) = 'SEATTLE'
 
 WHERE LENGTH(product_name) > 10
 
-WHERE total_amount * 1.18 > 1000`}
+WHERE total_amount * 1.08 > 1000`}
         good={`-- SARGable: transform the literal, not the column
 -- Index on order_date can be used
 WHERE order_date >= '2024-01-01'
@@ -172,7 +172,7 @@ WHERE city = 'New York'   -- or store consistently-cased data
 
 WHERE product_name > ''  -- different logic needed
 
-WHERE total_amount > 847.46  -- pre-compute: 1000 / 1.18`}
+WHERE total_amount > 925.93  -- pre-compute: 1000 / 1.08`}
       />
 
       <GoodBad
@@ -183,7 +183,7 @@ WHERE product_name LIKE '%milk%'
 WHERE email LIKE '%@gmail.com'`}
         good={`-- Index usable: trailing wildcard only
 WHERE product_name LIKE 'Horizon%'
-WHERE email LIKE 'rahul%'
+WHERE email LIKE 'jason%'
 -- For contains-search: use full-text indexes`}
       />
 
@@ -594,7 +594,7 @@ ORDER BY c.loyalty_tier DESC, c.first_name;`}
 
       <IQ q="What is SARGability and why does it matter?">
         <p style={{ margin: '0 0 12px' }}>SARGable (Search ARGument Able) describes a WHERE clause condition that allows the database engine to use an index to satisfy it. A condition is SARGable when the indexed column appears alone on one side of the comparison, without any function or transformation applied to it. The database can walk the sorted index to find matching rows rather than scanning the full table.</p>
-        <p style={{ margin: '0 0 12px' }}>A condition becomes non-SARGable when a function is applied to the indexed column: WHERE YEAR(order_date) = 2024, WHERE UPPER(city) = 'MUMBAI', or WHERE total_amount * 1.18 {'>'} 1000. The database cannot use the index on order_date for the first example because the index stores raw dates, not YEAR-extracted integers. The engine must compute YEAR() for every row and compare — a full table scan.</p>
+        <p style={{ margin: '0 0 12px' }}>A condition becomes non-SARGable when a function is applied to the indexed column: WHERE YEAR(order_date) = 2024, WHERE UPPER(city) = 'SEATTLE', or WHERE total_amount * 1.08 {'>'} 1000. The database cannot use the index on order_date for the first example because the index stores raw dates, not YEAR-extracted integers. The engine must compute YEAR() for every row and compare — a full table scan.</p>
         <p style={{ margin: 0 }}>Fix: transform the comparison value instead of the column. Replace WHERE YEAR(order_date) = 2024 with WHERE order_date {'>'} '2024-01-01' AND order_date {'<'} '2025-01-01'. The column appears unmodified, the index can be used. SARGability matters because on tables with millions of rows, the difference between an index seek and a full scan is measured in seconds vs. milliseconds. Always check EXPLAIN QUERY PLAN to verify index usage.</p>
       </IQ>
 

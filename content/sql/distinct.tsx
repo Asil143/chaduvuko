@@ -470,7 +470,7 @@ ORDER BY brand;`}
 -- Distinct stores, filtered by payment method
 SELECT DISTINCT store_id
 FROM orders
-WHERE payment_method = 'Zelle'
+WHERE payment_method = 'Apple Pay'
 ORDER BY store_id;`}
         height={110}
         showSchema={false}

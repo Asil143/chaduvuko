@@ -584,14 +584,14 @@ FROM orders;`}
       <SQLPlayground
         initialQuery={`-- Order counts by payment method and status
 SELECT
-  SUM(CASE WHEN payment_method = 'Zelle'      THEN 1 ELSE 0 END) AS zelle_orders,
-  SUM(CASE WHEN payment_method = 'Card'       THEN 1 ELSE 0 END) AS card_orders,
-  SUM(CASE WHEN payment_method = 'COD'        THEN 1 ELSE 0 END) AS cod_orders,
-  SUM(CASE WHEN payment_method = 'NetBanking' THEN 1 ELSE 0 END) AS netbanking_orders,
+  SUM(CASE WHEN payment_method = 'Apple Pay'   THEN 1 ELSE 0 END) AS apple_pay_orders,
+  SUM(CASE WHEN payment_method = 'Credit Card' THEN 1 ELSE 0 END) AS credit_card_orders,
+  SUM(CASE WHEN payment_method = 'Cash'        THEN 1 ELSE 0 END) AS cash_orders,
+  SUM(CASE WHEN payment_method = 'Debit Card'  THEN 1 ELSE 0 END) AS debit_card_orders,
   COUNT(*)                                                        AS total_orders,
-  -- Percentage Zelle adoption
-  ROUND(SUM(CASE WHEN payment_method = 'Zelle' THEN 1.0 ELSE 0 END)
-        / COUNT(*) * 100, 1)                                     AS zelle_pct
+  -- Percentage Apple Pay adoption
+  ROUND(SUM(CASE WHEN payment_method = 'Apple Pay' THEN 1.0 ELSE 0 END)
+        / COUNT(*) * 100, 1)                                     AS apple_pay_pct
 FROM orders
 WHERE order_status = 'Delivered';`}
         height={215}
@@ -837,8 +837,8 @@ ORDER BY
 
       <Err
         msg="COUNT(DISTINCT column) returns a larger number than expected"
-        cause="The column has more unique values than expected — possibly due to case sensitivity, whitespace, or formatting inconsistencies. 'Seattle' and 'bangalore' and 'Seattle ' (trailing space) are three distinct values in PostgreSQL's case-sensitive comparison. COUNT(DISTINCT city) returns 3 for what you might consider the same city."
-        fix="Normalise the values before counting: COUNT(DISTINCT LOWER(TRIM(city))) counts distinct cities after converting to lowercase and removing whitespace — treating 'Seattle', 'bangalore', and 'Seattle ' as the same value. To investigate inconsistencies: SELECT DISTINCT city FROM customers ORDER BY city — examine the result for near-duplicates. Fix at the data level (UPDATE to canonical forms) for a permanent solution."
+        cause="The column has more unique values than expected — possibly due to case sensitivity, whitespace, or formatting inconsistencies. 'Seattle' and 'seattle' and 'Seattle ' (trailing space) are three distinct values in PostgreSQL's case-sensitive comparison. COUNT(DISTINCT city) returns 3 for what you might consider the same city."
+        fix="Normalise the values before counting: COUNT(DISTINCT LOWER(TRIM(city))) counts distinct cities after converting to lowercase and removing whitespace — treating 'Seattle', 'seattle', and 'Seattle ' as the same value. To investigate inconsistencies: SELECT DISTINCT city FROM customers ORDER BY city — examine the result for near-duplicates. Fix at the data level (UPDATE to canonical forms) for a permanent solution."
       />
 
       <Err

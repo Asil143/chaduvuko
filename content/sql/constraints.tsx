@@ -491,7 +491,7 @@ COMMIT;  -- FK checked here — both rows now exist, no violation`}
         initialQuery={`-- Demonstrate FK enforcement
 -- Try to insert an order for a non-existent customer
 INSERT INTO orders (customer_id, store_id, order_date, order_status, payment_method, total_amount)
-VALUES (9999, 'ST001', '2024-04-10', 'Processing', 'Zelle', 500.00);
+VALUES (9999, 'ST001', '2024-04-10', 'Processing', 'Apple Pay', 500.00);
 -- Expected: ERROR — customer_id 9999 does not exist in customers`}
         height={120}
         showSchema={false}
@@ -500,7 +500,7 @@ VALUES (9999, 'ST001', '2024-04-10', 'Processing', 'Zelle', 500.00);
       <SQLPlayground
         initialQuery={`-- Try to use a non-existent store
 INSERT INTO orders (customer_id, store_id, order_date, order_status, payment_method, total_amount)
-VALUES (1, 'ST999', '2024-04-10', 'Processing', 'Zelle', 500.00);
+VALUES (1, 'ST999', '2024-04-10', 'Processing', 'Apple Pay', 500.00);
 -- Expected: ERROR — store_id 'ST999' does not exist in stores`}
         height={110}
         showSchema={false}
@@ -676,7 +676,7 @@ CREATE TABLE orders (
   CONSTRAINT chk_orders_status      CHECK (order_status IN
     ('Delivered','Processing','Cancelled','Returned')),
   CONSTRAINT chk_orders_payment     CHECK (payment_method IN
-    ('Zelle','Card','COD','NetBanking')),
+    ('Apple Pay','Credit Card','Cash','Debit Card')),
   CONSTRAINT chk_orders_amount      CHECK (total_amount >= 0),
   CONSTRAINT chk_delivery_after_order CHECK
     (delivery_date IS NULL OR delivery_date >= order_date)
@@ -691,7 +691,7 @@ CREATE TABLE orders (
       <P>You are reviewing a pull request at a Seattle fintech startup. A junior engineer has written a migration that adds a new payments table. You are doing the schema review before it goes to production.</P>
 
       <TimeBlock time="10:00 AM" label="Schema arrives for review">
-        The migration creates a payments table for tracking Zelle and card transactions.
+        The migration creates a payments table for tracking Apple Pay and card transactions.
       </TimeBlock>
 
       <CodeBlock
@@ -723,7 +723,7 @@ CREATE TABLE payments (
                CONSTRAINT chk_payments_amount_positive CHECK (amount > 0),
   method       VARCHAR(20)    NOT NULL
                CONSTRAINT chk_payments_method CHECK
-                 (method IN ('Zelle','Card','NetBanking','Wallet')),
+                 (method IN ('Apple Pay','Credit Card','Debit Card','Cash')),
   status       VARCHAR(20)    NOT NULL DEFAULT 'Pending'
                CONSTRAINT chk_payments_status CHECK
                  (status IN ('Pending','Success','Failed','Refunded')),

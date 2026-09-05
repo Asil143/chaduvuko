@@ -361,7 +361,7 @@ LIMIT 5;`}
 
       <P><Hl>Table and column names depend on the database.</Hl> In PostgreSQL, table and column names are case-insensitive unless you quote them with double quotes. In MySQL, table names are case-sensitive on Linux (because file names are case-sensitive on Linux) but case-insensitive on Windows. The safest practice: always use lowercase for table and column names (as FreshCart does) and write them the same way every time.</P>
 
-      <P><Hl>String values are case-sensitive.</Hl> The value 'Seattle' is not the same as 'bangalore' or 'BANGALORE' in a WHERE clause. String comparisons respect exact case — you will see this in Module 06 when learning WHERE.</P>
+      <P><Hl>String values are case-sensitive.</Hl> The value 'Seattle' is not the same as 'seattle' or 'SEATTLE' in a WHERE clause. String comparisons respect exact case — you will see this in Module 06 when learning WHERE.</P>
 
       <CodeBlock
         label="All of these are identical — SQL keywords are case-insensitive"

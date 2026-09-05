@@ -192,12 +192,12 @@ ORDER BY loyalty_tier;`}
       <SQLPlayground
         initialQuery={`-- Two groups connected by AND:
 -- Group 1: store is ST001 OR ST005
--- Group 2: payment method is Zelle OR Card
+-- Group 2: payment method is Apple Pay OR Credit Card
 -- Both groups must be satisfied
 SELECT order_id, store_id, payment_method, total_amount
 FROM orders
 WHERE (store_id = 'ST001' OR store_id = 'ST005')
-  AND (payment_method = 'Zelle' OR payment_method = 'Card')
+  AND (payment_method = 'Apple Pay' OR payment_method = 'Credit Card')
 ORDER BY store_id, total_amount DESC;`}
         height={145}
         showSchema={true}
@@ -240,12 +240,12 @@ ORDER BY city;`}
 
       <SQLPlayground
         initialQuery={`-- Three-group complex filter:
--- (High-value delivered) OR (any cancelled above $300) OR (Zelle orders from ST001)
+-- (High-value delivered) OR (any cancelled above $300) OR (Apple Pay orders from ST001)
 SELECT order_id, store_id, order_status, payment_method, total_amount
 FROM orders
 WHERE (order_status = 'Delivered' AND total_amount > 1000)
    OR (order_status = 'Cancelled' AND total_amount > 300)
-   OR (store_id = 'ST001' AND payment_method = 'Zelle')
+   OR (store_id = 'ST001' AND payment_method = 'Apple Pay')
 ORDER BY total_amount DESC;`}
         height={155}
         showSchema={false}
@@ -282,17 +282,17 @@ WHERE order_status = 'Delivered';`}
       />
 
       <SQLPlayground
-        initialQuery={`SELECT COUNT(*) AS delivered_zelle FROM orders
+        initialQuery={`SELECT COUNT(*) AS delivered_apple_pay FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'Zelle';`}
+  AND payment_method = 'Apple Pay';`}
         height={90}
         showSchema={false}
       />
 
       <SQLPlayground
-        initialQuery={`SELECT COUNT(*) AS delivered_zelle_high FROM orders
+        initialQuery={`SELECT COUNT(*) AS delivered_apple_pay_high FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'Zelle'
+  AND payment_method = 'Apple Pay'
   AND total_amount > 500;
 -- Each AND reduces the count further`}
         height={100}
@@ -405,9 +405,9 @@ WHERE city NOT IN ('Seattle', 'New York');
 
       <div style={{ background: 'var(--surface)', border: `1px solid ${C}20`, borderRadius: 10, padding: '20px 24px', margin: '20px 0 24px' }}>
         <p style={{ fontSize: 11, color: C, fontFamily: 'var(--font-mono)', fontWeight: 700, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Business Rule 01</p>
-        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find all delivered orders paid by Zelle OR Card, where the total is above $500, placed in January or February 2024."</p>
+        <p style={{ fontSize: 14, color: 'var(--text)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 14px' }}>"Find all delivered orders paid by Apple Pay OR Credit Card, where the total is above $500, placed in January or February 2024."</p>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
-          Groups: (Zelle OR Card) AND total &gt; 500 AND (Jan OR Feb 2024)
+          Groups: (Apple Pay OR Credit Card) AND total &gt; 500 AND (Jan OR Feb 2024)
         </p>
       </div>
 
@@ -415,7 +415,7 @@ WHERE city NOT IN ('Seattle', 'New York');
         initialQuery={`SELECT order_id, order_date, payment_method, total_amount
 FROM orders
 WHERE order_status = 'Delivered'
-  AND (payment_method = 'Zelle' OR payment_method = 'Card')
+  AND (payment_method = 'Apple Pay' OR payment_method = 'Credit Card')
   AND total_amount > 500
   AND (
     (order_date >= '2024-01-01' AND order_date < '2024-02-01')
@@ -495,7 +495,7 @@ ORDER BY e.salary DESC;`}
         code={`-- Convention 1: AND/OR at the START of each line
 -- Makes it easy to comment out individual conditions
 WHERE order_status = 'Delivered'
-  AND payment_method = 'Zelle'
+  AND payment_method = 'Apple Pay'
   AND total_amount > 500
 
 -- Convention 2: Indent grouped conditions
@@ -526,7 +526,7 @@ WHERE order_status = 'Delivered'
 
       <CodeBlock
         label="Before — correct but unreadable"
-        code={`SELECT * FROM orders WHERE order_status='Delivered' AND payment_method IN ('Zelle','Card') AND total_amount>500 AND store_id IN ('ST001','ST005','ST008') OR order_status='Processing' AND total_amount>200 ORDER BY total_amount DESC;`}
+        code={`SELECT * FROM orders WHERE order_status='Delivered' AND payment_method IN ('Apple Pay','Credit Card') AND total_amount>500 AND store_id IN ('ST001','ST005','ST008') OR order_status='Processing' AND total_amount>200 ORDER BY total_amount DESC;`}
       />
 
       <CodeBlock
@@ -537,7 +537,7 @@ SELECT *
 FROM orders
 WHERE (
     order_status = 'Delivered'
-    AND payment_method IN ('Zelle', 'Card')
+    AND payment_method IN ('Apple Pay', 'Credit Card')
     AND total_amount > 500
     AND store_id IN ('ST001', 'ST005', 'ST008')
   )
@@ -566,11 +566,11 @@ ORDER BY total_amount DESC;`}
       <SQLPlayground
         initialQuery={`-- Debugging technique: test each group separately
 
--- Group 1 alone: how many delivered Zelle orders?
+-- Group 1 alone: how many delivered Apple Pay orders?
 SELECT COUNT(*) AS group1
 FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'Zelle';`}
+  AND payment_method = 'Apple Pay';`}
         height={110}
         showSchema={true}
       />
@@ -590,7 +590,7 @@ WHERE order_status = 'Cancelled'
 -- But might differ if rows satisfy BOTH conditions
 SELECT COUNT(*) AS combined
 FROM orders
-WHERE (order_status = 'Delivered' AND payment_method = 'Zelle')
+WHERE (order_status = 'Delivered' AND payment_method = 'Apple Pay')
    OR (order_status = 'Cancelled' AND total_amount > 500);`}
         height={110}
         showSchema={false}
@@ -615,7 +615,7 @@ WHERE order_status = 'Delivered';`}
         initialQuery={`-- Step 2: add AND (count should decrease or stay same)
 SELECT COUNT(*) AS step2 FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'Zelle';`}
+  AND payment_method = 'Apple Pay';`}
         height={90}
         showSchema={false}
       />
@@ -624,7 +624,7 @@ WHERE order_status = 'Delivered'
         initialQuery={`-- Step 3: add AND (count should decrease or stay same)
 SELECT COUNT(*) AS step3 FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'Zelle'
+  AND payment_method = 'Apple Pay'
   AND total_amount > 800;
 -- If count goes UP between steps, you accidentally wrote OR instead of AND`}
         height={100}
@@ -686,7 +686,7 @@ WHERE customer_id = 42            -- index lookup, cheap (FIRST)
 
       <SQLPlayground
         initialQuery={`-- Orders that match a fraud pattern:
--- High value COD orders from the same customer in a short window
+-- High value Cash orders from the same customer in a short window
 -- OR cancelled orders that were previously refunded (returned)
 SELECT
   o.order_id,
@@ -698,7 +698,7 @@ SELECT
   o.total_amount
 FROM orders AS o
 WHERE (
-    o.payment_method = 'COD'
+    o.payment_method = 'Cash'
     AND o.total_amount > 1500
     AND o.order_status IN ('Cancelled', 'Returned')
   )
@@ -797,7 +797,7 @@ ORDER BY in_stock, margin_pct;`}
 
       <SQLPlayground
         initialQuery={`-- Adapted fraud pattern for FreshCart orders:
--- Group 1: Very high value COD orders (cash fraud risk)
+-- Group 1: Very high value Cash orders (cash fraud risk)
 -- Group 2: Multiple orders from same customer in same day
 -- Group 3: New customers with large first orders
 
@@ -809,8 +809,8 @@ SELECT
   o.total_amount,
   o.order_status,
   CASE
-    WHEN o.payment_method = 'COD' AND o.total_amount > 1500
-      THEN 'High-Value COD'
+    WHEN o.payment_method = 'Cash' AND o.total_amount > 1500
+      THEN 'High-Value Cash'
     WHEN o.total_amount BETWEEN 500 AND 1500
      AND o.order_status IN ('Cancelled','Returned')
       THEN 'Mid-Value Problem'
@@ -819,7 +819,7 @@ SELECT
 FROM orders AS o
 JOIN customers AS c ON o.customer_id = c.customer_id
 WHERE (
-    o.payment_method = 'COD'
+    o.payment_method = 'Cash'
     AND o.total_amount > 1500
   )
   OR (
@@ -864,7 +864,7 @@ ORDER BY o.total_amount DESC;`}
       </IQ>
 
       <IQ q="How do you debug a WHERE clause that returns the wrong number of rows?">
-        <p style={{ margin: '0 0 14px' }}>The systematic debugging process starts with establishing the expected count. Before declaring the result wrong, calculate what you expect: "This table has 30 orders. About 18 are delivered. Of those, maybe 8 were paid by Zelle. Of those, maybe 4 were above $500." If the query returns 12 instead of 4, the filter is too broad.</p>
+        <p style={{ margin: '0 0 14px' }}>The systematic debugging process starts with establishing the expected count. Before declaring the result wrong, calculate what you expect: "This table has 30 orders. About 18 are delivered. Of those, maybe 8 were paid by Apple Pay. Of those, maybe 4 were above $500." If the query returns 12 instead of 4, the filter is too broad.</p>
         <p style={{ margin: '0 0 14px' }}>Next, test each condition group in isolation. Replace the full WHERE with just the first group and run COUNT(*). Then test the second group alone. Then combine them. For AND chains, each added condition should reduce or maintain the count. If adding a condition increases the count, you accidentally wrote OR. For OR chains, each added alternative should increase or maintain the count. If adding an OR alternative reduces the count, you have a precedence issue where AND is stealing from your OR group.</p>
         <p style={{ margin: 0 }}>The most effective visual debugging technique: SELECT * from the full query (remove LIMIT) and scan the results for any row that obviously should not be there. A Gold customer from Denver in a "Platinum Seattle customers" result immediately identifies a missing parenthesis around the loyalty tier OR condition. One wrong row tells you more than a count discrepancy because you can see exactly which condition failed for that specific row. Once identified, fix the condition, rerun, and verify the count matches the expectation before closing the debug session.</p>
       </IQ>
@@ -906,15 +906,15 @@ ORDER BY o.total_amount DESC;`}
 
       <Err
         msg="Query is slow after adding multiple OR conditions — execution time jumps from 0.1s to 45s"
-        cause="OR conditions prevent index optimisation across the full condition. With a single condition WHERE status = 'Delivered', the database uses an index on status. With multiple OR conditions across different columns — WHERE status = 'Delivered' OR payment_method = 'Zelle' OR store_id = 'ST001' — the database cannot use a single index to satisfy all three alternatives and may resort to a full table scan for each OR branch or the entire condition."
-        fix="Several approaches depending on the data size: (1) UNION ALL: run each OR branch as a separate query and combine results — each sub-query can use its own index. SELECT * FROM orders WHERE status = 'Delivered' UNION ALL SELECT * FROM orders WHERE payment_method = 'Zelle' UNION ALL SELECT * FROM orders WHERE store_id = 'ST001'. (2) Add a composite index that covers the most common combination. (3) Analyse with EXPLAIN ANALYZE to confirm which conditions are causing the scan and whether indexes exist on those columns. OR-based queries are inherently harder to optimise than AND-based queries — the query optimiser has fewer options."
+        cause="OR conditions prevent index optimisation across the full condition. With a single condition WHERE status = 'Delivered', the database uses an index on status. With multiple OR conditions across different columns — WHERE status = 'Delivered' OR payment_method = 'Apple Pay' OR store_id = 'ST001' — the database cannot use a single index to satisfy all three alternatives and may resort to a full table scan for each OR branch or the entire condition."
+        fix="Several approaches depending on the data size: (1) UNION ALL: run each OR branch as a separate query and combine results — each sub-query can use its own index. SELECT * FROM orders WHERE status = 'Delivered' UNION ALL SELECT * FROM orders WHERE payment_method = 'Apple Pay' UNION ALL SELECT * FROM orders WHERE store_id = 'ST001'. (2) Add a composite index that covers the most common combination. (3) Analyse with EXPLAIN ANALYZE to confirm which conditions are causing the scan and whether indexes exist on those columns. OR-based queries are inherently harder to optimise than AND-based queries — the query optimiser has fewer options."
       />
 
       <HR />
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart operations director needs a priority order list with three tiers. Write a single query that returns orders matching ANY of these three conditions: (1) High-priority: Cancelled or Returned orders above $800 from stores ST001, ST005, or ST009. (2) Medium-priority: Processing orders older than order_id 1010 with Zelle payment. (3) Low-priority: Delivered orders in January 2024 with total above $1,200. Show order_id, store_id, order_date, order_status, payment_method, total_amount, and a priority column using CASE WHEN. Sort by priority ascending then total_amount descending."
+        question="The FreshCart operations director needs a priority order list with three tiers. Write a single query that returns orders matching ANY of these three conditions: (1) High-priority: Cancelled or Returned orders above $800 from stores ST001, ST005, or ST009. (2) Medium-priority: Processing orders older than order_id 1010 with Apple Pay payment. (3) Low-priority: Delivered orders in January 2024 with total above $1,200. Show order_id, store_id, order_date, order_status, payment_method, total_amount, and a priority column using CASE WHEN. Sort by priority ascending then total_amount descending."
         hint="Three OR groups each with internal AND conditions. CASE WHEN for priority labelling. The CASE for priority should mirror the three OR groups. Order by CASE WHEN priority THEN 1/2/3 END for the sort."
         answer={`SELECT
   order_id,
@@ -929,7 +929,7 @@ ORDER BY o.total_amount DESC;`}
      AND store_id IN ('ST001','ST005','ST009')    THEN 'High'
     WHEN order_status = 'Processing'
      AND order_id > 1010
-     AND payment_method = 'Zelle'                   THEN 'Medium'
+     AND payment_method = 'Apple Pay'                THEN 'Medium'
     ELSE                                               'Low'
   END  AS priority
 FROM orders
@@ -941,7 +941,7 @@ WHERE (
   OR (
     order_status = 'Processing'
     AND order_id > 1010
-    AND payment_method = 'Zelle'
+    AND payment_method = 'Apple Pay'
   )
   OR (
     order_status = 'Delivered'

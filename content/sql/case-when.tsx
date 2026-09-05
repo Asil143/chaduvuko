@@ -131,15 +131,15 @@ END
 
 -- Real example:
 CASE payment_method
-  WHEN 'Zelle'      THEN 'Digital Wallet'
-  WHEN 'Card'       THEN 'Card Payment'
-  WHEN 'NetBanking' THEN 'Bank Transfer'
-  WHEN 'COD'        THEN 'Cash on Delivery'
+  WHEN 'Apple Pay'   THEN 'Digital Wallet'
+  WHEN 'Credit Card' THEN 'Card Payment'
+  WHEN 'Debit Card'  THEN 'Bank Transfer'
+  WHEN 'Cash'        THEN 'Cash Payment'
   ELSE 'Unknown'
 END  AS payment_category`}
       />
 
-      <P>The simple CASE is syntactic sugar for the searched CASE — CASE payment_method WHEN 'Zelle' THEN ... is identical to CASE WHEN payment_method = 'Zelle' THEN .... Use whichever reads more clearly for the specific situation. The searched CASE handles everything the simple CASE can, plus complex conditions that go beyond simple equality.</P>
+      <P>The simple CASE is syntactic sugar for the searched CASE — CASE payment_method WHEN 'Apple Pay' THEN ... is identical to CASE WHEN payment_method = 'Apple Pay' THEN .... Use whichever reads more clearly for the specific situation. The searched CASE handles everything the simple CASE can, plus complex conditions that go beyond simple equality.</P>
 
       <HR />
 
@@ -272,9 +272,9 @@ SELECT
   order_id,
   payment_method,
   CASE payment_method
-    WHEN 'Zelle' THEN 'Digital'
-    WHEN 'Card' THEN 'Digital'
-    -- No ELSE: 'COD' and 'NetBanking' return NULL
+    WHEN 'Apple Pay' THEN 'Digital'
+    WHEN 'Credit Card' THEN 'Digital'
+    -- No ELSE: 'Cash' and 'Debit Card' return NULL
   END   AS payment_type
 FROM orders
 ORDER BY payment_type NULLS LAST;`}
@@ -288,10 +288,10 @@ SELECT
   order_id,
   payment_method,
   CASE payment_method
-    WHEN 'Zelle'      THEN 'Digital'
-    WHEN 'Card'       THEN 'Digital'
-    WHEN 'NetBanking' THEN 'Digital'
-    ELSE                   'Non-Digital'   -- catches COD and anything else
+    WHEN 'Apple Pay'   THEN 'Digital'
+    WHEN 'Credit Card' THEN 'Digital'
+    WHEN 'Debit Card'  THEN 'Digital'
+    ELSE                    'Non-Digital'   -- catches Cash and anything else
   END   AS payment_type
 FROM orders
 ORDER BY payment_type;`}
@@ -450,10 +450,10 @@ FROM customers;`}
 SELECT
   store_id,
   SUM(total_amount)                                                  AS total_revenue,
-  SUM(CASE WHEN payment_method = 'Zelle'      THEN total_amount ELSE 0 END) AS zelle_revenue,
-  SUM(CASE WHEN payment_method = 'Card'       THEN total_amount ELSE 0 END) AS card_revenue,
-  SUM(CASE WHEN payment_method = 'COD'        THEN total_amount ELSE 0 END) AS cod_revenue,
-  SUM(CASE WHEN payment_method = 'NetBanking' THEN total_amount ELSE 0 END) AS netbanking_revenue
+  SUM(CASE WHEN payment_method = 'Apple Pay'   THEN total_amount ELSE 0 END) AS apple_pay_revenue,
+  SUM(CASE WHEN payment_method = 'Credit Card' THEN total_amount ELSE 0 END) AS credit_card_revenue,
+  SUM(CASE WHEN payment_method = 'Cash'        THEN total_amount ELSE 0 END) AS cash_revenue,
+  SUM(CASE WHEN payment_method = 'Debit Card'  THEN total_amount ELSE 0 END) AS debit_card_revenue
 FROM orders
 WHERE order_status = 'Delivered'
 GROUP BY store_id
@@ -522,9 +522,9 @@ SELECT
   order_id,
   payment_method,
   CASE payment_method
-    WHEN 'Zelle' THEN 'Digital — Instant'
-    WHEN 'Card' THEN 'Digital — T+1'
-    -- No ELSE: COD and NetBanking return NULL
+    WHEN 'Apple Pay' THEN 'Digital — Instant'
+    WHEN 'Credit Card' THEN 'Digital — T+1'
+    -- No ELSE: Cash and Debit Card return NULL
   END   AS settlement_type
 FROM orders
 ORDER BY settlement_type NULLS LAST;`}
@@ -540,8 +540,8 @@ ORDER BY settlement_type NULLS LAST;`}
         code={`-- Instead of relying on ELSE, use COALESCE as a safety net
 COALESCE(
   CASE payment_method
-    WHEN 'Zelle' THEN 'Digital — Instant'
-    WHEN 'Card' THEN 'Digital — T+1'
+    WHEN 'Apple Pay' THEN 'Digital — Instant'
+    WHEN 'Credit Card' THEN 'Digital — T+1'
   END,
   'Other'     -- COALESCE replaces NULL with 'Other'
 ) AS settlement_type
@@ -701,10 +701,10 @@ SELECT
   ROUND(SUM(CASE WHEN o.total_amount < 500   THEN o.total_amount ELSE 0 END), 2)
                                                                    AS basic_gmv,
   -- Payment split
-  ROUND(SUM(CASE WHEN o.payment_method IN ('Zelle','Card','NetBanking')
+  ROUND(SUM(CASE WHEN o.payment_method IN ('Apple Pay','Credit Card','Debit Card')
                  THEN o.total_amount ELSE 0 END), 2)               AS digital_gmv,
-  ROUND(SUM(CASE WHEN o.payment_method = 'COD'
-                 THEN o.total_amount ELSE 0 END), 2)               AS cod_gmv,
+  ROUND(SUM(CASE WHEN o.payment_method = 'Cash'
+                 THEN o.total_amount ELSE 0 END), 2)               AS cash_gmv,
   -- Delivery performance
   ROUND(
     SUM(CASE WHEN o.delivery_date - o.order_date <= 3 THEN 1 ELSE 0 END) * 100.0
@@ -735,7 +735,7 @@ ORDER BY total_gmv DESC;`}
       <IQ q="What is CASE WHEN and what are its two forms?">
         <p style={{ margin: '0 0 14px' }}>CASE WHEN is SQL's conditional expression — equivalent to an if-else statement in programming languages. It evaluates a series of conditions in order and returns the result for the first condition that evaluates to TRUE. If no condition matches and there is an ELSE clause, the ELSE result is returned. If no condition matches and there is no ELSE, the expression returns NULL.</p>
         <p style={{ margin: '0 0 14px' }}>The searched CASE form evaluates arbitrary conditions for each WHEN: CASE WHEN condition1 THEN result1 WHEN condition2 THEN result2 ELSE default END. Each condition can be any Boolean expression — comparisons, range checks, IS NULL, BETWEEN, IN, even subqueries. This is the most flexible and commonly used form.</p>
-        <p style={{ margin: 0 }}>The simple CASE form compares one expression against multiple equality values: CASE expression WHEN value1 THEN result1 WHEN value2 THEN result2 ELSE default END. CASE payment_method WHEN 'Zelle' THEN 'Digital' WHEN 'COD' THEN 'Cash' END is cleaner than CASE WHEN payment_method = 'Zelle' THEN 'Digital' WHEN payment_method = 'COD' THEN 'Cash' END. The simple form is syntactic sugar — it is always equivalent to the searched form with equality conditions, but reads more cleanly when all conditions are simple equality checks on the same column.</p>
+        <p style={{ margin: 0 }}>The simple CASE form compares one expression against multiple equality values: CASE expression WHEN value1 THEN result1 WHEN value2 THEN result2 ELSE default END. CASE payment_method WHEN 'Apple Pay' THEN 'Digital' WHEN 'Cash' THEN 'Non-Digital' END is cleaner than CASE WHEN payment_method = 'Apple Pay' THEN 'Digital' WHEN payment_method = 'Cash' THEN 'Non-Digital' END. The simple form is syntactic sugar — it is always equivalent to the searched form with equality conditions, but reads more cleanly when all conditions are simple equality checks on the same column.</p>
       </IQ>
 
       <IQ q="In what order does CASE WHEN evaluate its conditions and why does this matter?">

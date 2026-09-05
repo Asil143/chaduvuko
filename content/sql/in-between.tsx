@@ -665,7 +665,7 @@ ORDER BY total_revenue DESC;`}
       />
 
       <TimeBlock time="2:20 PM" label="Report 2 — Active payment methods excluding cash">
-        The product team wants to know which digital payment methods are used for high-value orders — specifically Zelle, Card, and NetBanking (not COD) for orders above $800.
+        The product team wants to know which digital payment methods are used for high-value orders — specifically Apple Pay, Credit Card, and Debit Card (not Cash) for orders above $800.
       </TimeBlock>
 
       <SQLPlayground
@@ -676,7 +676,7 @@ SELECT
   ROUND(AVG(total_amount), 2) AS avg_order_value,
   SUM(total_amount)          AS total_revenue
 FROM orders
-WHERE payment_method IN ('Zelle', 'Card', 'NetBanking')
+WHERE payment_method IN ('Apple Pay', 'Credit Card', 'Debit Card')
   AND total_amount > 800
   AND order_status = 'Delivered'
 GROUP BY payment_method

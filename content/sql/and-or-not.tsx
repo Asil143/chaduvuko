@@ -121,7 +121,7 @@ export default function AndOrNot() {
         <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '.08em' }}>Real questions from real teams</div>
         {[
           { team: 'Growth', q: '"Show me Gold and Platinum customers from Seattle who joined after January 2022."' },
-          { team: 'Finance', q: '"Find all Zelle orders above $1,000 that are either Cancelled or Returned."' },
+          { team: 'Finance', q: '"Find all Apple Pay orders above $1,000 that are either Cancelled or Returned."' },
           { team: 'Ops', q: '"Which products are out of stock AND priced above $200?"' },
           { team: 'HR', q: '"Employees in the Management department earning above $50,000 OR any Store Manager regardless of salary."' },
         ].map(item => (
@@ -172,13 +172,13 @@ WHERE loyalty_tier = 'Gold'
       />
 
       <SQLPlayground
-        initialQuery={`-- Delivered orders paid by Zelle above $500
+        initialQuery={`-- Delivered orders paid by Apple Pay above $500
 -- Three conditions — all must be true
 SELECT order_id, customer_id, order_date,
        payment_method, total_amount, order_status
 FROM orders
 WHERE order_status = 'Delivered'
-  AND payment_method = 'Zelle'
+  AND payment_method = 'Apple Pay'
   AND total_amount > 500
 ORDER BY total_amount DESC;`}
         height={160}
@@ -331,12 +331,12 @@ ORDER BY category;`}
       />
 
       <SQLPlayground
-        initialQuery={`-- Delivered orders that did NOT use Zelle
--- Finding orders paid by Card, COD, or NetBanking
+        initialQuery={`-- Delivered orders that did NOT use Apple Pay
+-- Finding orders paid by Credit Card, Cash, or Debit Card
 SELECT order_id, order_date, payment_method, total_amount
 FROM orders
 WHERE order_status = 'Delivered'
-  AND NOT payment_method = 'Zelle'
+  AND NOT payment_method = 'Apple Pay'
 ORDER BY total_amount DESC;`}
         height={130}
         showSchema={false}
@@ -551,9 +551,9 @@ ORDER BY role;`}
 
 SELECT *
 FROM orders
-WHERE order_status = 'Delivered'    -- primary filter
-  AND payment_method = 'Zelle'      -- secondary filter
-  AND total_amount > 1000           -- threshold filter
+WHERE order_status = 'Delivered'      -- primary filter
+  AND payment_method = 'Apple Pay'     -- secondary filter
+  AND total_amount > 1000              -- threshold filter
   AND order_date >= '2024-01-01';   -- date filter
 
 -- When mixing AND and OR — always use parentheses
@@ -603,16 +603,16 @@ ORDER BY loyalty_tier, joined_date DESC;`}
         showSchema={true}
       />
 
-      <H>Finance team — Zelle orders that failed</H>
+      <H>Finance team — Apple Pay orders that failed</H>
 
       <SQLPlayground
-        initialQuery={`-- "All Zelle orders above $1,000 that are Cancelled or Returned"
+        initialQuery={`-- "All Apple Pay orders above $1,000 that are Cancelled or Returned"
 SELECT
   order_id, customer_id,
   order_date, order_status,
   payment_method, total_amount
 FROM orders
-WHERE payment_method = 'Zelle'
+WHERE payment_method = 'Apple Pay'
   AND total_amount > 1000
   AND (order_status = 'Cancelled' OR order_status = 'Returned')
 ORDER BY total_amount DESC;`}
@@ -705,7 +705,7 @@ ORDER BY c.city;`}
 
       <IQ q="What is the difference between AND and OR? When would you use each?">
         <p style={{ margin: '0 0 14px' }}>AND returns TRUE only when both conditions are true — it narrows results by requiring all conditions to be satisfied simultaneously. Every additional AND condition makes the filter more restrictive. OR returns TRUE when at least one condition is true — it broadens results by accepting rows that satisfy any of the conditions. Every additional OR condition makes the filter more permissive.</p>
-        <p style={{ margin: '0 0 14px' }}>Use AND when you need rows that satisfy multiple criteria simultaneously: orders that are both delivered AND paid by Zelle AND above $1,000. All three characteristics must be present in the same row. Use OR when you need rows that match any of several alternative criteria: customers from Seattle OR Austin OR New York. A customer matching any one city qualifies.</p>
+        <p style={{ margin: '0 0 14px' }}>Use AND when you need rows that satisfy multiple criteria simultaneously: orders that are both delivered AND paid by Apple Pay AND above $1,000. All three characteristics must be present in the same row. Use OR when you need rows that match any of several alternative criteria: customers from Seattle OR Austin OR New York. A customer matching any one city qualifies.</p>
         <p style={{ margin: 0 }}>A practical test: if you read the question with "AND" and "OR" literally, the answer is usually correct. "Give me customers from Seattle AND with Gold tier" — AND. "Give me customers from Seattle OR Austin" — OR. "Give me Gold or Platinum customers from Seattle" — the "or" applies to tier, so OR for tier, then AND for the city: WHERE (tier = 'Gold' OR tier = 'Platinum') AND city = 'Seattle'.</p>
       </IQ>
 
@@ -751,9 +751,9 @@ ORDER BY c.city;`}
       />
 
       <Err
-        msg="Query is correct but very slow — WHERE LOWER(city) = 'bangalore' OR LOWER(city) = 'hyderabad'"
+        msg="Query is correct but very slow — WHERE LOWER(city) = 'seattle' OR LOWER(city) = 'austin'"
         cause="Applying a function to the column side of OR conditions (LOWER(city)) prevents the database from using an index on the city column. The index stores raw city values ('Seattle', 'Austin') — not their lowercase equivalents. When LOWER() is applied, the database cannot use the index and must scan every row, applying LOWER() to each one. On a table with millions of rows, this causes a full table scan that is orders of magnitude slower than an index lookup."
-        fix="Two approaches. First, standardise data at insertion time — store all city values in consistent case ('Seattle' not 'bangalore') and use case-sensitive comparison: WHERE city = 'Seattle' OR city = 'Austin'. This allows index usage. Second, if consistent casing cannot be guaranteed, create a functional index on LOWER(city): CREATE INDEX idx_customers_city_lower ON customers (LOWER(city)); — then WHERE LOWER(city) = 'bangalore' OR LOWER(city) = 'hyderabad' can use this index. For performance-critical queries, always check whether index usage is possible with EXPLAIN ANALYZE (covered in Module 57)."
+        fix="Two approaches. First, standardise data at insertion time — store all city values in consistent case ('Seattle' not 'seattle') and use case-sensitive comparison: WHERE city = 'Seattle' OR city = 'Austin'. This allows index usage. Second, if consistent casing cannot be guaranteed, create a functional index on LOWER(city): CREATE INDEX idx_customers_city_lower ON customers (LOWER(city)); — then WHERE LOWER(city) = 'seattle' OR LOWER(city) = 'austin' can use this index. For performance-critical queries, always check whether index usage is possible with EXPLAIN ANALYZE (covered in Module 57)."
       />
 
       <Err
@@ -766,15 +766,15 @@ ORDER BY c.city;`}
 
       {/* ── Try It ── */}
       <TryItChallenge
-        question="The FreshCart finance team needs two separate reports. Report 1: All orders from store ST001 OR ST008 that were delivered AND paid by either Card or NetBanking — sorted by total_amount descending. Report 2: All orders that are NOT delivered (any other status) AND have a total_amount above $400. Write both queries."
+        question="The FreshCart finance team needs two separate reports. Report 1: All orders from store ST001 OR ST008 that were delivered AND paid by either Credit Card or Debit Card — sorted by total_amount descending. Report 2: All orders that are NOT delivered (any other status) AND have a total_amount above $400. Write both queries."
         hint="Report 1 needs parentheses for the store OR and the payment method OR, then AND for the status and connecting the groups. Report 2 uses order_status <> 'Delivered' (or NOT order_status = 'Delivered') AND total_amount > 400."
-        answer={`-- Report 1: Specific stores, delivered, card/netbanking
+        answer={`-- Report 1: Specific stores, delivered, credit card/debit card
 SELECT order_id, store_id, order_date,
        payment_method, total_amount
 FROM orders
 WHERE (store_id = 'ST001' OR store_id = 'ST008')
   AND order_status = 'Delivered'
-  AND (payment_method = 'Card' OR payment_method = 'NetBanking')
+  AND (payment_method = 'Credit Card' OR payment_method = 'Debit Card')
 ORDER BY total_amount DESC;
 
 -- Report 2: Non-delivered orders above $400
@@ -799,7 +799,7 @@ ORDER BY total_amount DESC;`}
           'Always use parentheses when mixing AND and OR — even when precedence would give the correct result. Explicit parentheses prevent bugs and make intent clear.',
           'The classic precedence bug: WHERE tier = \'Gold\' OR tier = \'Platinum\' AND city = \'Seattle\' is not "Gold or Platinum customers from Seattle." AND binds first, making it: Gold (any city) OR (Platinum AND Seattle). Fix: (tier = \'Gold\' OR tier = \'Platinum\') AND city = \'Seattle\'.',
           'NOT IN returns zero rows if the list or the column contains any NULL values — because any comparison with NULL returns NULL, not FALSE. Use NOT EXISTS or add IS NOT NULL explicitly when NULL rows are possible.',
-          'Applying functions to the column side of conditions (LOWER(city) = \'bangalore\') prevents index usage — a full table scan results. Standardise data on insert and use direct comparison instead.',
+          'Applying functions to the column side of conditions (LOWER(city) = \'seattle\') prevents index usage — a full table scan results. Standardise data on insert and use direct comparison instead.',
           'When a NOT condition must include NULL rows, explicitly add OR column IS NULL: WHERE (city <> \'Seattle\' OR city IS NULL).',
           'Format multi-condition WHERE clauses with one condition per line, AND/OR at the start of each line. This makes commenting out individual conditions easy during debugging.',
         ]}

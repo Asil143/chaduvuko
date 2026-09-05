@@ -763,7 +763,7 @@ COMMIT;`}
       <Err
         msg="UPDATE 0 rows affected — expected to update several rows"
         cause="The WHERE clause matched zero rows. The UPDATE ran successfully but found no rows matching the condition. Common causes: the filter value does not match what is stored (wrong case, extra whitespace, wrong ID), the row was already deleted or updated by another process, a date range that excludes all rows, or a typo in the WHERE column name that PostgreSQL treated as a literal string comparison."
-        fix="Run the equivalent SELECT: SELECT * FROM table WHERE [same WHERE condition]. If it returns 0 rows, investigate why. Check the actual stored values: SELECT DISTINCT column FROM table LIMIT 10 to see what values exist. Check for case sensitivity: WHERE LOWER(city) = LOWER('bangalore'). Check for whitespace: WHERE TRIM(email) = 'value'. Once you understand why the WHERE matched nothing, correct the condition and retry."
+        fix="Run the equivalent SELECT: SELECT * FROM table WHERE [same WHERE condition]. If it returns 0 rows, investigate why. Check the actual stored values: SELECT DISTINCT column FROM table LIMIT 10 to see what values exist. Check for case sensitivity: WHERE LOWER(city) = LOWER('seattle'). Check for whitespace: WHERE TRIM(email) = 'value'. Once you understand why the WHERE matched nothing, correct the condition and retry."
       />
 
       <Err

@@ -310,11 +310,11 @@ LIMIT 8;`}
         initialQuery={`-- Simulating text-stored amounts (common after CSV import)
 SELECT
   CAST('1250.50' AS REAL)                               AS parsed_amount,
-  ROUND(CAST('1250.50' AS REAL) * 1.18, 2)              AS with_gst,
+  ROUND(CAST('1250.50' AS REAL) * 1.08, 2)              AS with_tax,
   -- Safe pattern: trim whitespace before casting
   TRIM('  1250.50  ')                                   AS dirty_input,
   -- Real-world: clean then cast (remove symbol and comma first)
-  CAST(REPLACE(REPLACE(TRIM('1,250.50'), ',', ''), ' ', '') AS REAL) AS cleaned_numeric,
+  CAST(REPLACE(REPLACE(REPLACE(TRIM('$1,250.50'), '$', ''), ',', ''), ' ', '') AS REAL) AS cleaned_numeric,
   -- Integer from text
   CAST('42' AS INTEGER) + 8                             AS text_int_arithmetic;`}
         height={195}
@@ -608,10 +608,10 @@ SELECT
   SUBSTR('15/01/2024', 4, 2) || '-' ||
   SUBSTR('15/01/2024', 1, 2)                    AS parsed_ddmmyyyy,
   -- Current date formatted
-  strftime('%d/%m/%Y', 'now')                   AS indian_format,
+  strftime('%d/%m/%Y', 'now')                   AS dd_mm_yyyy_format,
   strftime('%Y', 'now') || '-W' || strftime('%W', 'now') AS week_label,
   -- Real order dates from data
-  strftime('%d/%m/%Y', order_date)              AS order_indian_fmt
+  strftime('%d/%m/%Y', order_date)              AS order_dd_mm_yyyy_fmt
 FROM orders
 ORDER BY order_date DESC
 LIMIT 5;`}
@@ -641,9 +641,9 @@ SELECT
   raw.seller_id,
 
   -- Revenue: strip symbol and commas, then cast to REAL
-  CAST(REPLACE(REPLACE(raw.revenue, 'Rs', ''), ',', '') AS REAL) AS revenue_numeric,
+  CAST(REPLACE(REPLACE(raw.revenue, '$', ''), ',', '') AS REAL) AS revenue_numeric,
   ROUND(
-    CAST(REPLACE(REPLACE(raw.revenue, 'Rs', ''), ',', '') AS REAL)
+    CAST(REPLACE(REPLACE(raw.revenue, '$', ''), ',', '') AS REAL)
   , 2)                                                       AS revenue_clean,
 
   -- Boolean: 'Y'/'N' → 1/0
@@ -809,6 +809,7 @@ FROM (VALUES
     - CAST(total_amount AS INTEGER)                     AS round_vs_trunc_diff,
 
   -- Percentage of max order — NULLIF protects divide by zero
+  -- This uses a window function (OVER (...)) — covered fully in Module 52.
   ROUND(
     CAST(total_amount AS REAL)
     / NULLIF(MAX(CAST(total_amount AS REAL)) OVER (), 0) * 100

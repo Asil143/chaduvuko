@@ -183,7 +183,7 @@ SELECT
   cost_price,
   unit_price - cost_price                                    AS profit,
   ROUND((unit_price - cost_price) / unit_price * 100, 1)    AS margin_pct,
-  ROUND(unit_price * 1.18, 2)                               AS gst_price,
+  ROUND(unit_price * 1.08, 2)                               AS price_incl_tax,
   CASE
     WHEN in_stock = true THEN 'Available'
     ELSE 'Out of Stock'
@@ -214,7 +214,7 @@ ORDER BY margin_pct DESC;`}
             {[
               ['No spaces (unquoted)', 'margin_pct', 'margin pct', 'Use underscore instead of space'],
               ['No reserved words (unquoted)', 'order_count', 'count', '"count" needs quotes — COUNT is a SQL function'],
-              ['No special chars (unquoted)', 'gst_price', 'gst-price', 'Hyphen is interpreted as subtraction'],
+              ['No special chars (unquoted)', 'sale_price', 'sale-price', 'Hyphen is interpreted as subtraction'],
               ['Start with letter or underscore', '_total, total', '123total', 'Cannot start with a digit'],
               ['Quoted aliases — anything goes', '"Margin %"', '', 'Double quotes allow spaces, special chars, reserved words'],
               ['Case sensitivity', 'Margin, margin, MARGIN', '', 'Unquoted aliases are case-insensitive in most databases'],
@@ -558,7 +558,7 @@ SELECT
   ROUND(p.unit_price - p.cost_price, 2)                     AS profit,
   ROUND((p.unit_price - p.cost_price) / p.unit_price * 100, 1)
                                                              AS margin_pct,
-  ROUND(p.unit_price * 1.18, 2)                             AS mrp,
+  ROUND(p.unit_price * 1.08, 2)                             AS price_incl_tax,
   CASE WHEN p.in_stock THEN 'In Stock' ELSE 'Out of Stock' END
                                                              AS availability
 FROM products AS p
@@ -609,7 +609,7 @@ ORDER BY o.total_amount DESC;`}
         code={`SELECT product_name, unit_price, cost_price,
 unit_price - cost_price,
 ROUND((unit_price - cost_price) / unit_price * 100, 1),
-ROUND(unit_price * 1.18, 2),
+ROUND(unit_price * 1.08, 2),
 CASE WHEN in_stock = true THEN 'Available' ELSE 'Unavailable' END
 FROM products
 ORDER BY ROUND((unit_price - cost_price) / unit_price * 100, 1) DESC;`}
@@ -628,7 +628,7 @@ SELECT
   p.unit_price - p.cost_price                               AS profit,
   ROUND((p.unit_price - p.cost_price) / p.unit_price * 100, 1)
                                                              AS margin_pct,
-  ROUND(p.unit_price * 1.18, 2)                             AS mrp_incl_gst,
+  ROUND(p.unit_price * 1.08, 2)                             AS price_incl_tax,
   CASE WHEN p.in_stock THEN 'Available' ELSE 'Unavailable' END
                                                              AS stock_status
 FROM products AS p
@@ -638,7 +638,7 @@ ORDER BY margin_pct DESC;`}
       />
 
       <TimeBlock time="9:30 AM" label="Impact is immediate">
-        The dashboard team replaces their hardcoded column index references (column[3], column[4]) with named references (margin_pct, mrp_incl_gst). A new analyst can read the query and understand every column without asking you. When the product manager asks "what does column 5 mean?" — that question never comes again.
+        The dashboard team replaces their hardcoded column index references (column[3], column[4]) with named references (margin_pct, price_incl_tax). A new analyst can read the query and understand every column without asking you. When the product manager asks "what does column 5 mean?" — that question never comes again.
       </TimeBlock>
 
       <ProTip>
