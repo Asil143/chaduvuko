@@ -247,7 +247,9 @@ jobs:
       PR_NUMBER: \${{ github.event.pull_request.number }}
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }   # needed for dbt --select state:modified
+        with: { fetch-depth: 0 }   # full git history isn't what drives dbt's state
+                                    # comparison — that uses prod_artifacts/manifest.json
+                                    # pulled from S3 a few steps below
       - uses: actions/setup-python@v5
         with: { python-version: '3.11', cache: pip }
       - run: pip install dbt-snowflake==1.8.0 dbt-utils
@@ -372,7 +374,7 @@ jobs:
 
         <SubSubTitle>Strategy 2 — blue-green, for high-risk Gold changes</SubSubTitle>
 
-        <CodeBox label="Build in a shadow schema, validate, then atomically swap">{`def blue_green_deploy_gold_model(model_name: str, run_date: str):
+        <CodeBox label="Build in a shadow schema, validate, then swap (no false promise of atomicity)">{`def blue_green_deploy_gold_model(model_name: str, run_date: str):
     # Step 1: build in a shadow schema — not live to analysts yet
     subprocess.run(['dbt', 'run', '--target', 'prod', '--select', model_name,
         '--vars', json.dumps({'run_date': run_date, 'target_schema': 'gold_shadow'})], check=True)
@@ -381,11 +383,18 @@ jobs:
     subprocess.run(['dbt', 'test', '--target', 'prod', '--select', model_name,
         '--vars', json.dumps({'target_schema': 'gold_shadow'})], check=True)
 
-    # Step 3: atomic swap — analysts see the new version immediately
-    conn.execute("BEGIN;")
+    # Step 3: swap — NOT atomic. Snowflake DDL auto-commits: each ALTER SCHEMA
+    # commits itself the instant it runs, so wrapping these in BEGIN/COMMIT would
+    # do nothing — there is a real (normally sub-second) window between the two
+    # renames where no schema is named 'gold'.
     conn.execute("ALTER SCHEMA freshcart_prod.gold RENAME TO freshcart_prod.gold_old_20260317;")
     conn.execute("ALTER SCHEMA freshcart_prod.gold_shadow RENAME TO freshcart_prod.gold;")
-    conn.execute("COMMIT;")   # both renames atomic — never a window with no 'gold' schema
+
+    # Step 3b: mitigate the window instead of pretending it doesn't exist —
+    # verify the second rename landed, and roll back immediately if it didn't.
+    if not schema_exists('freshcart_prod.gold'):
+        conn.execute("ALTER SCHEMA freshcart_prod.gold_old_20260317 RENAME TO freshcart_prod.gold;")
+        raise RuntimeError('Gold swap failed partway through — rolled back to the pre-swap schema')
 
     # Step 4: keep the old schema for 24h, then drop it
     schedule_schema_drop('gold_old_20260317', delay_hours=24)`}</CodeBox>
@@ -609,7 +618,7 @@ test_morning_pipeline_e2e PASSED
           },
           {
             wrong: '"A blue-green schema swap is basically instant, so it doesn\'t need the same care as a slow migration"',
-            right: 'This module\'s Error Library documents exactly the failure: an unwrapped two-step rename where the connection drops between the two ALTER statements leaves production with no gold schema at all for 5 minutes. "Fast" and "atomic" are different properties — Part 04\'s BEGIN/COMMIT wrapping is what actually makes the swap atomic.',
+            right: 'This module\'s Error Library documents exactly the failure: the connection drops between the two ALTER statements and production is left with no gold schema at all for 5 minutes. "Fast" and "atomic" are different properties — and Snowflake DDL auto-commits, so wrapping the two renames in BEGIN/COMMIT would not have made this atomic anyway. Part 04\'s actual fix is to verify the swap landed and roll back immediately if it didn\'t, not to rely on a transaction Snowflake DDL can\'t participate in.',
           },
           {
             wrong: '"Renaming a column is a simple, low-risk change since the data itself doesn\'t change"',
@@ -792,8 +801,8 @@ The goal is not process for its own sake — it is making the data platform trus
             a: 'Slim CI\'s state:modified+ selection is only correct if the reference manifest reflects the actual last production deploy — this module\'s Error Library shows a stale manifest causing CI to (wrongly) treat all 150 models as changed, defeating the entire point of slim CI. The S3 manifest upload has to run as part of every successful prod deployment, not as an occasional manual step.',
           },
           {
-            q: 'Running a two-step schema rename without wrapping it in a transaction',
-            a: 'Between the two ALTER SCHEMA RENAME statements, there is a real window where the target schema name doesn\'t exist at all — this module\'s Error Library documents exactly this causing 5 minutes of production outage from a dropped connection mid-swap. Wrap both renames in BEGIN/COMMIT.',
+            q: 'Assuming a two-step schema rename can be made atomic by wrapping it in BEGIN/COMMIT',
+            a: 'Snowflake DDL statements auto-commit — each ALTER SCHEMA commits itself the instant it runs, transaction block or not. Between the two renames there is a real window where the target schema name doesn\'t exist at all, and this module\'s Error Library documents exactly this causing 5 minutes of production outage from a dropped connection mid-swap. The actual mitigation is verifying the swap landed and rolling back immediately if it didn\'t — not a BEGIN/COMMIT wrapper that Snowflake ignores for DDL.',
           },
           {
             q: 'Testing a new required column against an incremental CI run instead of a full refresh',
@@ -837,7 +846,7 @@ The goal is not process for its own sake — it is making the data platform trus
           {
             error: `Blue-green deployment left production inaccessible for 5 minutes — the schema rename failed partway through and both old and new schemas existed simultaneously with broken names`,
             cause: 'The two-step schema rename (rename gold → gold_old, rename gold_shadow → gold) is not atomic in Snowflake. If the first rename succeeds but the Snowflake connection fails before the second rename, there is no schema named gold in production for 5 minutes. Analysts querying gold.daily_revenue get a "schema not found" error during the gap.',
-            fix: 'Use a transaction to wrap both renames: BEGIN; ALTER SCHEMA gold RENAME TO gold_old; ALTER SCHEMA gold_shadow RENAME TO gold; COMMIT;. Snowflake supports DDL in transactions. The transaction is atomic — either both renames succeed or neither does. Alternatively, use Snowflake\'s stream-based approach: create a view in the gold schema that reads from gold_shadow, which allows zero-downtime switching. Or use dbt\'s built-in table swap mechanism (available in some dbt adapters) which handles the atomic swap internally.',
+            fix: 'Wrapping the two renames in BEGIN/COMMIT does not fix this — Snowflake DDL statements auto-commit and cannot participate in a user-managed transaction, so each ALTER SCHEMA commits itself regardless of any surrounding BEGIN/COMMIT. True atomicity for a schema rename isn\'t achievable this way in Snowflake. The realistic fix is to shrink and monitor the window instead: run the two renames back-to-back with nothing else in between, immediately verify that freshcart_prod.gold exists after the second rename, and automatically rename gold_old back to gold if it doesn\'t. Where the object being swapped is a table or view rather than a schema, use Snowflake\'s ALTER TABLE ... SWAP WITH ..., which genuinely is atomic — schemas have no equivalent single-statement swap.',
           },
           {
             error: `CI passes for a PR that adds a new required column to Silver — production deployment fails because existing rows have NULL for the new column`,
@@ -867,7 +876,7 @@ The goal is not process for its own sake — it is making the data platform trus
         'Slim CI uses --select state:modified+ to run only changed models and their downstream dependents. The --defer flag uses production data for upstream models not in the CI selection. Together: CI runs 4-8 minutes instead of 45+ minutes. The prod_artifacts/manifest.json (updated after every successful prod run) provides the reference state for change detection.',
         'Schema change detection compares the current manifest to the production manifest and fails CI if any Gold column was removed or renamed. This is the most important CI check for preventing broken dashboards. A column rename must go through a deprecation cycle: add the new name, keep the old name as an alias, notify consumers, remove the old name only after all consumers migrate.',
         'Airflow DAG CI: compile with py_compile (syntax), import with DagBag (catches missing modules), assert DAG structure (expected task IDs, correct dependency order, catchup=False, schedule not None), validate connections exist. Run against the same Docker image as production — a package installed in CI but not production causes the DAG to disappear from the UI after deployment.',
-        'Blue-green deployment for high-risk Gold changes: build the new version in a shadow schema, run tests against it, then atomically swap shadow → production using a transaction. The old schema is preserved for 24 hours as a rollback option. Wrap the schema rename in a BEGIN/COMMIT transaction to make it atomic — non-atomic renames leave a window where no schema exists.',
+        'Blue-green deployment for high-risk Gold changes: build the new version in a shadow schema, run tests against it, then swap shadow → production with two back-to-back ALTER SCHEMA RENAME statements. The old schema is preserved for 24 hours as a rollback option. Snowflake DDL auto-commits, so BEGIN/COMMIT around the renames does NOT make the swap atomic — there is a brief real window with no gold schema, so verify the swap landed and have an automatic rollback ready rather than relying on a transaction that can\'t provide atomicity here.',
         'Rollback strategies: git revert + redeploy (safe and clean, takes 5-10 min), Delta Lake time travel (RESTORE TABLE to a previous version — fast data recovery), blue-green swap back (immediate, no recompute — only if blue-green was used). Choose based on the nature of the problem: logic error → git revert, large data corruption → Delta time travel.',
         'The data testing pyramid is inverted. Integration tests (dbt tests against real data in CI) provide more value than unit tests because most bugs occur at the boundary between SQL and data. Unit tests are valuable for pure Python logic (validators, hash functions). End-to-end tests validate the full pipeline output against known business invariants.',
         'The PR process and CI gates are an investment in trust. Analysts who have been burned by wrong data distrust every number. Analysts who trust the data use it confidently and make better decisions. The minutes spent in CI are returned many times over in analyst confidence, fewer post-incident investigations, and stakeholder trust in the data platform.',

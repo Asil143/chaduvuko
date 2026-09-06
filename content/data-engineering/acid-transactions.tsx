@@ -992,14 +992,14 @@ THE SAFEST RULE:
             {
               sys: 'Snowflake',
               a: '✓ Full — multi-statement transactions',
-              c: '⚠ Partial — constraints defined but NOT enforced at runtime',
+              c: '⚠ Partial — PK/UNIQUE/FK defined but not enforced; NOT NULL is enforced',
               i: '✓ Snapshot isolation — Serializable available',
               d: '✓ Full — multi-copy cloud storage',
             },
             {
               sys: 'BigQuery',
               a: '✓ Per-statement atomicity only — no multi-statement transactions in standard DML',
-              c: '⚠ Partial — no enforced FK/PK/UNIQUE at runtime',
+              c: '⚠ Partial — FK/PK/UNIQUE not enforced at runtime; NOT NULL is enforced',
               i: '✓ Snapshot isolation per query',
               d: '✓ Full — Colossus distributed storage',
             },
@@ -1030,10 +1030,12 @@ THE SAFEST RULE:
         <Callout type="warning">
           <strong>The warehouse consistency trap:</strong> Snowflake, BigQuery, and
           Redshift define PRIMARY KEY, UNIQUE, and FOREIGN KEY constraints in their
-          DDL — but do not enforce them. You can insert duplicate primary keys,
-          NULL values in NOT NULL columns, and orphaned foreign keys without any
-          error. This is by design (enforcement adds overhead at warehouse scale)
-          but means your data quality cannot be guaranteed by the database. It must
+          DDL — but do not enforce them. You can insert duplicate primary keys
+          and orphaned foreign keys without any error. NOT NULL is the exception:
+          all three warehouses DO enforce it at runtime, so an INSERT that would
+          put a NULL into a NOT NULL column fails immediately. This is by design
+          (enforcing PK/UNIQUE/FK adds overhead at warehouse scale) but means your
+          data quality cannot be fully guaranteed by the database. The rest must
           be guaranteed by your pipeline code and dbt tests. Every data engineer
           working with cloud warehouses must internalise this.
         </Callout>
@@ -1326,11 +1328,11 @@ The third is out-of-order delivery. Events written to Cassandra by a distributed
 
 Snowflake provides atomicity at the transaction and statement level — a multi-statement transaction either commits fully or rolls back. It provides durability through multi-copy cloud storage. It provides snapshot isolation through its time travel and multi-cluster concurrency model. These three are genuine and reliable.
 
-What Snowflake does not do is enforce consistency constraints at runtime. Snowflake allows you to define PRIMARY KEY, UNIQUE, and FOREIGN KEY constraints in your DDL, and even marks them as RELY (trusted by the optimizer) — but it does not validate them when data is inserted. You can INSERT duplicate primary keys into a Snowflake table and it will succeed without error. You can INSERT rows with customer_id values that have no corresponding row in the customers table. You can INSERT NULLs into columns you defined as NOT NULL. Snowflake will accept all of them.
+What Snowflake does not do is enforce PRIMARY KEY, UNIQUE, and FOREIGN KEY constraints at runtime. Snowflake allows you to define them in your DDL, and even marks them as RELY (trusted by the optimizer) — but it does not validate them when data is inserted. You can INSERT duplicate primary keys into a Snowflake table and it will succeed without error. You can INSERT rows with customer_id values that have no corresponding row in the customers table. NOT NULL is the one exception: Snowflake does enforce it at runtime, so an INSERT that would put a NULL into a NOT NULL column fails immediately, exactly as PostgreSQL would reject it.
 
-This means the C in ACID — Consistency — is only partially provided by Snowflake. The database schema is descriptive, not prescriptive. The enforcement burden shifts entirely to the data engineering team.
+This means the C in ACID — Consistency — is only partially provided by Snowflake. Referential and uniqueness constraints are descriptive, not prescriptive. The enforcement burden for those shifts entirely to the data engineering team.
 
-This is exactly what dbt tests are for. A unique test on order_id catches the duplicate primary keys Snowflake allows. A not_null test on customer_id catches the NULLs Snowflake accepts. A relationships test verifies that every customer_id in orders exists in customers. These tests provide the consistency enforcement that the warehouse engine deliberately delegates to the application layer. Removing them does not make the data trustworthy — it just means the errors are discovered later, by analysts, after they have already influenced decisions.`,
+This is exactly what dbt tests are for. A unique test on order_id catches the duplicate primary keys Snowflake allows. A relationships test verifies that every customer_id in orders exists in customers — the foreign key check Snowflake defines but never runs. A not_null test on customer_id is redundant with what Snowflake already enforces, but it still earns its place: it fails fast in CI, before a row ever reaches the warehouse, and keeps the assertion visible and versioned alongside the other tests. These tests provide the consistency enforcement that the warehouse engine deliberately delegates to the application layer for PK/UNIQUE/FK — removing them does not make the data trustworthy, it just means the errors that remain (duplicates, orphaned foreign keys) are discovered later, by analysts, after they have already influenced decisions.`,
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1457,7 +1459,7 @@ This is exactly what dbt tests are for. A unique test on order_id catches the du
         'Durability guarantees that committed data survives crashes. Implemented via WAL fsync — the commit response is only sent after the WAL is on durable storage. Every committed transaction can be recovered on restart by replaying the WAL.',
         'Transactions must be correctly sized for pipelines. One million rows in one transaction holds locks for the entire duration, wastes all work on failure, and consumes enormous WAL space. Batch into 10,000–100,000 row transactions with checkpoint tracking for resumability.',
         'Autocommit is ON by default in most SQL clients — every statement is its own transaction. In Python psycopg2 it is OFF — you must call conn.commit() explicitly. Understand your client\'s default and always use explicit transaction control for pipeline code.',
-        'Cloud data warehouses (Snowflake, BigQuery, Redshift) provide atomicity, isolation, and durability — but do NOT enforce consistency constraints (PRIMARY KEY, UNIQUE, FOREIGN KEY, NOT NULL) at runtime. Your dbt tests are the consistency enforcement layer for warehouse data.',
+        'Cloud data warehouses (Snowflake, BigQuery, Redshift) provide atomicity, isolation, and durability — but do NOT enforce PRIMARY KEY, UNIQUE, or FOREIGN KEY constraints at runtime. NOT NULL is the exception — it IS enforced. Your dbt tests are the consistency enforcement layer for the constraints the warehouse leaves unchecked.',
         'BASE (Basically Available, Soft State, Eventually Consistent) is the alternative to ACID used by Cassandra, DynamoDB, and other AP NoSQL systems. BASE systems trade consistency for availability. Always deduplicate data extracted from BASE systems — at-least-once delivery means duplicates are expected.',
         'The most common ACID violation in production data pipelines is not a theoretical failure — it is missing explicit transaction boundaries on batch writes combined with missing UNIQUE constraints on business keys. These two omissions together turn a routine connection timeout into a financial data discrepancy.',
       ]} />

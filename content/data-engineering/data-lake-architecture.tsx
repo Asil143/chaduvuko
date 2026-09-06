@@ -446,6 +446,15 @@ s3://freshcart-data-lake/
     └── store_performance/
         └── date=2026-03-17/`}</CodeBox>
 
+        <Para>
+          The prefixes above are not just naming convention — each one is a
+          contract. A pipeline reading from <code>bronze/</code> can assume the
+          data has already been format-converted and partitioned; a pipeline
+          reading from <code>landing/</code> must assume nothing has been
+          validated at all. The rules below define exactly what that contract
+          guarantees at each zone.
+        </Para>
+
         <SubSubTitle>Landing and Bronze — what belongs there, and the rules that keep them trustworthy</SubSubTitle>
         <CodeBox label="Zone characteristics — Landing and Bronze">{`ZONE 1 — LANDING (Raw Ingestion)
   Purpose:     Exact copy of data as received from source
@@ -564,6 +573,13 @@ ZONE 4 — GOLD (Business-Ready Aggregates)
       → Athena/Spark must list all keys to find relevant partitions
       → Use Hive-style partitioning to reduce list scope`}</CodeBox>
 
+        <Para>
+          Because a "directory" is just a filter on key strings, two properties
+          that come for free in a real filesystem — knowing a write is visible,
+          and knowing how much traffic one part of the bucket can absorb — are
+          not automatic on S3. Both are governed by explicit rules, covered next.
+        </Para>
+
         <SubSubTitle>Consistency guarantees and the request-rate limits that shape partition design</SubSubTitle>
         <CodeBox label="S3 consistency model and performance limits">{`S3 CONSISTENCY MODEL (since Dec 2020):
   S3 provides strong read-after-write consistency for all operations.
@@ -644,7 +660,8 @@ AUTHENTICATION:
   Shared Access Signature (SAS): time-limited URL for temporary external access
 
 GCS (Google Cloud Storage) is similar to S3:
-  - Eventually consistent (unlike S3's strong consistency since 2020)
+  - Strong read-after-write consistency since launch — GCS never had the
+    eventually-consistent behaviour S3 had before Dec 2020 (see above)
   - Similar object model, bucket-based, gs:// URI scheme
   - Strong integration with BigQuery (native external tables)`}</CodeBox>
       </section>
@@ -689,6 +706,14 @@ CLOUD DATA LAKE (decoupled compute and storage):
   Traditional warehouse equivalent (Redshift):
   dc2.8xlarge (16 nodes for 100 TB): $52,000/month
   → Cloud lake is ~6× cheaper for the same data volume`}</Output>
+
+        <Para>
+          That ~6× cost gap is the headline number, but it is not free — it is
+          bought by giving up the physical proximity between compute and data
+          that a coupled warehouse has by default. The next box makes that
+          trade-off, and how modern warehouses claw some of the speed back
+          with caching, explicit.
+        </Para>
 
         <SubSubTitle>The trade-off: the network hop, and how modern warehouses hide it</SubSubTitle>
         <CodeBox label="The trade-off, hybrid warehouses, and the S3 network performance gap">{`THE TRADE-OFF:

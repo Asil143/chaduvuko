@@ -413,7 +413,11 @@ LAYER 3: STORAGE LAYER (micro-partitions on S3)
 
 COST BREAKDOWN:
   Idle warehouse (auto-suspended): $0/hour compute
-  Active warehouse: $2-$16/credit × warehouse credits/hour
+  Active warehouse: each credit costs roughly $2-$4 depending on your
+    Snowflake plan tier (Standard/Enterprise/Business-Critical) and cloud
+    provider/region. A running warehouse consumes credits based on its size
+    — e.g. an X-Small consumes 1 credit/hour, a Medium consumes 4
+    credits/hour (see Part 05 for the full size-to-credit table).
   Storage: ~$40/TB/month (compressed)
   Cloud services queries (metadata only): included in storage cost`}</CodeBox>
 
@@ -631,7 +635,8 @@ X-Large   16            16     ~1.1 TB      Very large joins, ML feature extract
 3X-Large  64            64     ~4.4 TB      Extreme scale (rare — very expensive)
 4X-Large  128           128    ~8.8 TB      Almost never needed
 
-Credit cost (US East, 2026 approximate): $2–$4/credit/hour depending on plan
+Credit cost (US East, 2026 approximate): $2–$4/credit, depending on plan
+tier (Standard/Enterprise/Business-Critical) and cloud provider/region
 X-Small running 1 hour: 1 credit × $2 = $2
 2X-Large running 1 hour: 32 credits × $2 = $64`}</CodeBox>
 

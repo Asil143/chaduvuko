@@ -206,7 +206,7 @@ export default function WhatIsDataModule() {
         <SectionTitle>Binary — How Computers Actually Think</SectionTitle>
 
         <Para>
-          Every computer on earth — your phone, a Amazon server in Austin, the satellite
+          Every computer on earth — your phone, an Amazon server in Austin, the satellite
           orbiting 36,000 kilometres above you — stores and processes everything using the same
           two values. Zero and one. That is it. The entire digital world is built on two states.
         </Para>
@@ -406,9 +406,16 @@ Examples of what fits in 1 byte:
 16-bit integer  = 2 bytes  = values from 0 to 65,535
                            Use case: port numbers, small IDs
 
-32-bit integer  = 4 bytes  = values from 0 to ~4.3 billion
+32-bit integer  = 4 bytes  = unsigned: 0 to ~4.3 billion
+                             signed:   -2.1 billion to +2.1 billion
                            Use case: most IDs, counts, quantities
-                           Danger zone: DoorDash order IDs exceeded 2B in 2023
+                           Danger zone: auto-increment ID columns are usually
+                           declared as SIGNED 32-bit, so they overflow past
+                           ~2.1 billion, not 4.3 billion. This is a real
+                           failure mode — auto-incrementing ID columns
+                           implemented as signed 32-bit integers have hit
+                           this ceiling at several real companies as their
+                           row counts grew past ~2 billion
 
 64-bit integer  = 8 bytes  = values from 0 to ~18.4 quintillion
                            Use case: timestamps (Unix epoch in milliseconds),
@@ -551,7 +558,7 @@ barely notices. The file is smaller; some data is lost.`}</CodeBox>
                 <div style={{ marginBottom: 6 }}>🐢 Slow — microseconds to milliseconds per read</div>
                 <div style={{ marginBottom: 6 }}>🔗 Accessed via I/O controller</div>
                 <div style={{ marginBottom: 6 }}>💰 Cheap per GB</div>
-                <div style={{ marginBottom: 6 }}>💾 Perforce — data survives power loss</div>
+                <div style={{ marginBottom: 6 }}>💾 Persistent — data survives power loss</div>
                 <div style={{ marginBottom: 6 }}>📦 Large capacity (500 GB to many TB)</div>
                 <div>🎯 Used for: stored files, databases, everything that must survive a restart</div>
               </div>
@@ -562,7 +569,7 @@ barely notices. The file is smaller; some data is lost.`}</CodeBox>
         <SubTitle>The speed gap is enormous — and it shapes everything</SubTitle>
 
         <Para>
-          RAM is roughly 100,000 times faster than a traditional hard disk, and about 10–100 times
+          RAM is roughly 100,000 times faster than a traditional hard disk, and roughly 1,000 times
           faster than an SSD. This gap explains almost every performance decision in data
           engineering.
         </Para>
@@ -1087,7 +1094,7 @@ Practically, this means: preserving source timestamps so analysts know when even
           },
           {
             q: 'Choosing an integer type (or not thinking about it at all) without checking whether the values could exceed its range',
-            a: 'Part 04\'s integer storage table shows exactly this failure mode by name — the Error Library\'s "Python int too large to convert to C long" entry and the DoorDash order-ID example both point to the same fix: default to 64-bit for any ID or counter that could plausibly grow past 2 billion, rather than assuming 32-bit is always enough.',
+            a: 'Part 04\'s integer storage table shows exactly this failure mode by name — the Error Library\'s "Python int too large to convert to C long" entry and the signed-32-bit danger zone example both point to the same fix: default to 64-bit for any ID or counter that could plausibly grow past 2 billion, rather than assuming 32-bit is always enough.',
           },
           {
             q: 'Storing or computing money as a float because it "seemed to work" in testing',

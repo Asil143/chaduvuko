@@ -393,7 +393,7 @@ row = {
       <Table
         headers={['Type', 'Examples', 'Risk level']}
         rows={[
-          ['Direct identifiers', 'Full name, SSN number, PAN, passport, phone, email', 'High — identifies person directly'],
+          ['Direct identifiers', 'Full name, SSN number, driver\'s license number, passport, phone, email', 'High — identifies person directly'],
           ['Quasi-identifiers', 'Zip Code + birthdate + gender (can re-identify when combined)', 'Medium — risky in combination'],
           ['Sensitive personal data (CCPA / GDPR)', 'Health data, financial data, biometrics, precise geolocation, race, religion, sexual orientation', 'Very high — stricter rules apply'],
           ['Derived data', 'Credit score, location history, behaviour profile built from raw data', 'High — still personal data even if derived'],

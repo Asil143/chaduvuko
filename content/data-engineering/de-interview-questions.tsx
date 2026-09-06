@@ -1501,7 +1501,7 @@ schema_v2 = {
           these impacts one by one as consumers complain. Second, incident
           debugging — "why is this dashboard showing wrong numbers?" is answered
           in minutes with lineage (trace back to the source of corruption)
-          vs hours without it. Third, regulatory compliance — GDPR and DPDP
+          vs hours without it. Third, regulatory compliance — GDPR and CCPA
           require proving where personal data flows. Lineage is that proof.
         </Para>
       </QA>
@@ -1662,7 +1662,7 @@ default_args = {
     'retries':          2,
     'retry_delay':      timedelta(minutes=5),
     'email_on_failure': True,
-    'email':            ['data-alerts@freshcart.in'],
+    'email':            ['data-alerts@freshcart.com'],
 }
 
 with DAG(
@@ -1739,13 +1739,13 @@ volume_query = """
     SELECT
         order_date,
         COUNT(*)                                      AS row_count,
-        SUM(total_cents) / 1e7                        AS total_revenue_million
+        SUM(total_cents) / 1e8                        AS total_revenue_million
     FROM gold.daily_store_stats
     WHERE order_date = CURRENT_DATE - 1
 """
 # Alert: row_count < 8 (we expect 10 stores — if < 8, something is missing)
-# Alert: total_revenue_million < 50 (business floor — if below, likely a bug)
-# Alert: total_revenue_million > 500 (business ceiling — if above, likely a duplicate)`}
+# Alert: total_revenue_million < 5 (business floor — if below, likely a bug)
+# Alert: total_revenue_million > 50 (business ceiling — if above, likely a duplicate)`}
         </CodeBox>
         <CodeBox label="pipeline monitoring — schema, latency, and the monitoring stack">
 {`# 3. SCHEMA — did the source schema change unexpectedly?
@@ -1838,7 +1838,7 @@ df.filter(...).cache()   # forces materialisation — breaks lazy optimisation
 # Skewed: most tasks finish in 30s, one takes 45 minutes
 
 # Common causes:
-# 1. JOIN key with dominant value (Brex: one large enterprise customer)
+# 1. JOIN key with a dominant value (e.g. one enterprise customer responsible for 40% of all orders)
 # 2. NULL join key (all NULLs hash to the same partition)
 # 3. Partition key = low-cardinality column (payment_method: card = 80%)
 
@@ -2224,7 +2224,7 @@ spark.conf.set("spark.sql.adaptive.enabled", "true")
         <CodeBox label="surrogate key — purpose and implementation">
 {`-- Natural key: the business identifier from the source system
 -- customer_id = 'C98765' (assigned by the CRM)
--- product_id  = 'SKU-BIRYANI-1KG' (assigned by inventory system)
+-- product_id  = 'SKU-PASTA-1KG' (assigned by inventory system)
 
 -- Problems with natural keys in a warehouse:
 -- 1. Source systems can reuse IDs (customer deleted and recreated with same ID = collision)
@@ -2383,8 +2383,10 @@ FROM order_fact   -- average order value: derived from two additive facts ✓
       <QA n={46} q="What is Snowflake's architecture and why is it different from traditional data warehouses?">
         <Para>
           Snowflake uses a multi-cluster shared data architecture. Storage and
-          compute are completely separated — data lives in S3 (in Snowflake's
-          managed cloud storage), and compute is provided by Virtual Warehouses
+          compute are completely separated — data lives in cloud object storage
+          (S3, Azure Blob, or GCS depending on which cloud Snowflake is deployed
+          on) in Snowflake's managed cloud storage, and compute is provided by
+          Virtual Warehouses
           (independently scalable clusters of compute nodes). Multiple virtual
           warehouses can query the same data simultaneously without contending
           for storage I/O. A virtual warehouse can be suspended (no running cost)
@@ -2565,12 +2567,32 @@ from asyncio import Semaphore
 class RateLimitedFetcher:
     def __init__(self, requests_per_minute: int = 100):
         self.rate = requests_per_minute
-        self.semaphore = Semaphore(requests_per_minute)
+        self.semaphore = Semaphore(requests_per_minute)   # bounds CONCURRENCY, not throughput
         self.tokens_per_second = requests_per_minute / 60.0
+        self._tokens = float(requests_per_minute)   # token bucket, starts full
+        self._last_refill = time.monotonic()
+        self._lock = asyncio.Lock()
+
+    async def _acquire_token(self) -> None:
+        """Block until a token is available. This is what actually enforces
+        requests_per_minute over time — the semaphore alone only bounds how many
+        requests can be in flight at once, not how many complete per minute."""
+        while True:
+            async with self._lock:
+                now = time.monotonic()
+                elapsed = now - self._last_refill
+                self._last_refill = now
+                self._tokens = min(self.rate, self._tokens + elapsed * self.tokens_per_second)
+                if self._tokens >= 1:
+                    self._tokens -= 1
+                    return
+                wait_time = (1 - self._tokens) / self.tokens_per_second
+            await asyncio.sleep(wait_time)   # release the lock while waiting for a refill
 
     async def fetch(self, session: aiohttp.ClientSession, url: str, entity_id: str) -> dict:
         """Fetch one entity with rate limiting, retry, and error handling."""
         async with self.semaphore:   # at most N concurrent requests
+            await self._acquire_token()   # at most rate requests per minute, over time
             for attempt in range(3):
                 try:
                     async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:

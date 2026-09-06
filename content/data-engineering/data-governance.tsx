@@ -182,9 +182,9 @@ Column-level lineage tells you:
         <SubSubTitle>Implementing lineage with OpenLineage</SubSubTitle>
 
         <Para>
-          OpenLineage is an open standard (a CNCF project) for lineage event
-          emission. Any tool that implements it — Spark, dbt, Airflow, Flink —
-          emits lineage events that any catalog can consume.
+          OpenLineage is an open standard (an LF AI & Data Foundation project)
+          for lineage event emission. Any tool that implements it — Spark, dbt,
+          Airflow, Flink — emits lineage events that any catalog can consume.
         </Para>
 
         <CodeBox label="An OpenLineage event — job and inputs">{`{
@@ -575,9 +575,11 @@ WHERE eventName = 'GetTable'
           GDPR (EU) and CCPA (California&rsquo;s Consumer Privacy Act, expanded by
           the CPRA in 2023) require that organisations know where personal data
           is stored, protect it with appropriate controls, and honour erasure
-          requests within 30 days. For a data platform, this means classifying
-          which columns contain PII, masking or removing PII at the Silver
-          layer boundary, and implementing a right-to-erasure pipeline that can
+          requests within a statutory window — GDPR requires erasure requests be
+          honoured within 30 days; CCPA/CPRA gives organisations 45 days,
+          extendable to 90. For a data platform, this means classifying which
+          columns contain PII, masking or removing PII at the Silver layer
+          boundary, and implementing a right-to-erasure pipeline that can
           delete or anonymise a specific customer&rsquo;s data across all layers.
         </Para>
 
@@ -832,7 +834,7 @@ def process_erasure_request(customer_id: int, request_date: date, conn) -> dict:
             { tool: 'Amundsen (Lyft)', cat: 'Catalog', what: 'Open source. Search-focused. Graph database backend. Less active development than DataHub.', best: 'Historically popular — DataHub has largely superseded it' },
             { tool: 'Alation', cat: 'Catalog', what: 'Enterprise managed. AI-powered search, data stewardship workflows, governance policies.', best: 'Large enterprises with budget and compliance needs' },
             { tool: 'Atlan', cat: 'Catalog + Governance', what: 'Managed. Deep Slack integration, persona-based views, automated PII tagging, dbt native.', best: 'Modern data teams, strong dbt shops' },
-            { tool: 'OpenLineage', cat: 'Lineage standard', what: 'CNCF open standard for lineage event emission. Not a tool — a protocol.', best: 'The standard to adopt — all tools should emit OpenLineage events' },
+            { tool: 'OpenLineage', cat: 'Lineage standard', what: 'LF AI & Data Foundation open standard for lineage event emission. Not a tool — a protocol.', best: 'The standard to adopt — all tools should emit OpenLineage events' },
             { tool: 'Marquez', cat: 'Lineage backend', what: 'Open source OpenLineage event store with REST API and UI. From WeWork.', best: 'Simple open source lineage backend for OpenLineage events' },
             { tool: 'Unity Catalog', cat: 'Access + Governance', what: 'Databricks native. 3-level namespace, column masking, row security, auto lineage, audit logs.', best: 'Databricks lakehouse platforms' },
             { tool: 'AWS Lake Formation', cat: 'Access Control', what: 'AWS native. Fine-grained access on Glue catalog tables. Works with Athena, Redshift Spectrum, EMR.', best: 'AWS-native data lake platforms' },
@@ -1113,7 +1115,7 @@ For most organisations — anything below 100-200 engineers or fewer than 5-10 d
           {
             error: `An analyst accidentally dropped a Silver table — DROP TABLE silver.orders — and the pipeline cannot rebuild it because the role used by the pipeline also has DROP privilege`,
             cause: 'The pipeline service account role (PIPELINE_ROLE) was granted too many privileges. It has OWNERSHIP on the schema, which includes DROP TABLE permission. The analyst was also running under a role with elevated privileges. Granting CREATE TABLE on a schema to a role also grants DROP TABLE in most warehouse implementations.',
-            fix: 'Immediate recovery: restore from Delta Lake time travel — RESTORE TABLE silver.orders TO VERSION AS OF (last_good_version). Re-run dbt to verify the restore. Privilege remediation: PIPELINE_ROLE should have CREATE TABLE and INSERT privileges, but not OWNERSHIP or DROP TABLE. In Snowflake, create the schema under a privileged role, then grant only INSERT/SELECT/CREATE TABLE to PIPELINE_ROLE without transferring OWNERSHIP. For analysts: never grant any write or DDL privileges on production schemas. Separate pipelines and analysts into entirely different role hierarchies. Add a CI check that validates no analyst role has DROP TABLE capability on production.',
+            fix: 'Immediate recovery: UNDROP TABLE silver.orders; — Snowflake\'s Time Travel retention window keeps a dropped table recoverable, and UNDROP restores it in place with a single statement (no version number needed, unlike Delta Lake\'s RESTORE TABLE ... TO VERSION AS OF syntax, which does not exist in Snowflake). Re-run dbt to verify the restore. Privilege remediation: PIPELINE_ROLE should have CREATE TABLE and INSERT privileges, but not OWNERSHIP or DROP TABLE. In Snowflake, create the schema under a privileged role, then grant only INSERT/SELECT/CREATE TABLE to PIPELINE_ROLE without transferring OWNERSHIP. For analysts: never grant any write or DDL privileges on production schemas. Separate pipelines and analysts into entirely different role hierarchies. Add a CI check that validates no analyst role has DROP TABLE capability on production.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '20px 24px', marginBottom: 16 }}>

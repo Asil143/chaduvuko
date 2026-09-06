@@ -159,8 +159,8 @@ export default function DEUsaJobMarketModule() {
               { stat: '35,000+', label: 'DE job openings in the US', sub: 'Active listings, March 2026' },
               { stat: '2.6×', label: 'Demand vs supply ratio', sub: 'Skilled DEs vs open roles' },
               { stat: '14%', label: 'YoY salary growth', sub: 'Mid-level DE, national median' },
-              { stat: '$130K–$175K', label: 'Mid-level DE range', sub: 'Product company, national median' },
-              { stat: '4–8 months', label: 'Time to first job', sub: 'From non-CS with the right prep' },
+              { stat: '$130K–$175K', label: 'Mid-level DE range', sub: 'Total comp, product co., national median' },
+              { stat: '8–9 months', label: 'Time to first job', sub: 'From non-CS with the right prep' },
               { stat: '61%', label: 'Roles prefer cloud cert', sub: 'AWS, Azure, or GCP cert' },
             ].map((item) => (
               <div key={item.label} style={{
@@ -187,9 +187,10 @@ export default function DEUsaJobMarketModule() {
           <strong>Data source:</strong> Salary figures in this module are sourced from
           Levels.fyi, Glassdoor, LinkedIn Salary Insights, and BLS Occupational
           Employment data, cross-referenced with data engineering community surveys.
-          All figures reflect March 2026 data. Base salaries only — bonus and equity
-          (RSUs) add 15–45% at product companies and public tech companies, and can
-          add significantly more at pre-IPO startups if the exit is favorable.
+          All figures reflect March 2026 data. Figures are base salary unless
+          explicitly marked total comp — bonus and equity (RSUs) typically add
+          15–45% at product companies and public tech companies on top of base,
+          and can add significantly more at pre-IPO startups if the exit is favorable.
         </Callout>
       </section>
 
@@ -216,7 +217,7 @@ Junior DE          0–2 yrs   $75K–$100K           $80K–$110K
                              Entry into DE from
                              non-CS or CS new grad
 
-Data Engineer      2–4 yrs   $100K–$140K          $110K–$155K
+Data Engineer      2–4 yrs   $100K–$140K          $130K–$175K
                              Owns pipelines end-
                              to-end independently
 
@@ -294,7 +295,7 @@ Notes:
           same role, experience, and city.
         </Para>
 
-        <CodeBox label="Salary multiplier by company type — applied to national mid-level base">{`Company Type          Multiplier   Mid-level Example     Why
+        <CodeBox label="Salary multiplier by company type — applied to national mid-level base">{`Company Type          Multiplier   Mid-level Total Comp  Why
 ──────────────────────────────────────────────────────────────────────
 FAANG / AI Labs       1.75×        $175K–$260K           Stock + high base,
 (Amazon, Google,                                          competitive global
@@ -319,6 +320,10 @@ Enterprise Software    0.95×        $125K–$165K           IBM, Oracle, SAP,
 Consulting             0.70×        $95K–$130K            Accenture, Deloitte, KPMG,
 (IT services)                                              Cognizant — volume
                                                             hiring, lower pay
+
+Note: "Mid-level Total Comp" above is total compensation (base + bonus/
+equity), not base-only — see the experience-level table above for
+base-only figures by level.
 
 Note on consulting firms: While salary is lower, consulting firms provide
 structured training, large enterprise client exposure, and a recognizable
@@ -361,7 +366,7 @@ after 2–3 years.`}</CodeBox>
             desc: 'High absolute salaries at senior levels, with the most stable pay bands. Work on internal data platforms with access to enterprise-scale problems and often deep legacy systems to modernize.',
             companies: [
               { name: 'JPMorgan Chase', roles: 'DE, Data Platform, Quant Data Eng', stack: 'Spark, Python, internal platforms', note: 'Finance data at global scale, compliance-heavy' },
-              { name: 'Goldman Sachs', roles: 'DE, Data Engineer', stack: 'Slang (internal), Python, BigQuery', note: 'Proprietary tech stack, top-tier comp' },
+              { name: 'Goldman Sachs', roles: 'DE, Data Engineer', stack: 'Slang (internal), Python, AWS', note: 'Proprietary tech stack, top-tier comp' },
               { name: 'Walmart Global Tech', roles: 'DE, Data Platform Eng', stack: 'Spark, Kafka, Hive, Azure', note: 'Retail data at massive scale, legacy + modern mix' },
               { name: 'Amazon (AWS/Retail)', roles: 'DE, SDE-Data', stack: 'AWS native, Redshift, Glue, Kinesis', note: 'AWS-first stack, data engineering at Amazon scale' },
               { name: 'Microsoft', roles: 'DE, Data Eng (Azure)', stack: 'Azure-native, Databricks, Synapse', note: 'Azure stack depth, Azure certification valued' },
@@ -387,7 +392,7 @@ after 2–3 years.`}</CodeBox>
             companies: [
               { name: 'Palantir', roles: 'Forward Deployed Eng / Data Eng', stack: 'Python, SQL, custom platforms', note: 'Embedded consulting, proprietary training' },
               { name: 'ThoughtWorks', roles: 'Data Engineer', stack: 'Modern cloud, dbt, Airflow, Spark', note: 'Strong engineering culture, client delivery focus' },
-              { name: 'Slalom / Sigmoid', roles: 'Data Engineer', stack: 'AWS/Azure, Spark, dbt', note: 'Mid-size, specialised data engineering practices' },
+              { name: 'Slalom', roles: 'Data Engineer', stack: 'AWS/Azure, Spark, dbt', note: 'Mid-size, specialised data engineering practice' },
             ],
           },
         ].map((section) => (
@@ -620,13 +625,6 @@ Associate's Degree                                        genuine CS fundamental
             </div>
           ))}
         </div>
-
-        <KeyTakeaways items={[
-          'A CS degree is one signal among several — a strong portfolio and cloud certification can substitute at most product companies and startups.',
-          'Community college and bootcamp paths are well-worn and respected if the work produced is genuinely strong.',
-          'One deep, well-documented project beats five shallow tutorial clones in every interview.',
-          'Large enterprises and government-adjacent companies are more rigid about degree requirements than startups and mid-size product companies.',
-        ]} />
       </section>
 
       <Divider />
@@ -970,6 +968,19 @@ dbt Fundamentals                       Low-Medium  Free, fast to complete,
           </div>
         ))}
       </section>
+
+      {/* ── Key Takeaways ────────────────────────────────────────────── */}
+      <KeyTakeaways items={[
+        'A CS degree is one signal among several — a strong portfolio and cloud certification can substitute at most product companies and startups.',
+        'Community college and bootcamp paths are well-worn and respected if the work produced is genuinely strong.',
+        'One deep, well-documented project beats five shallow tutorial clones in every interview.',
+        'Large enterprises and government-adjacent companies are more rigid about degree requirements than startups and mid-size product companies.',
+        'Company type affects salary more than city — the FAANG-vs-consulting gap for the same role, experience, and city is often 2–3×, larger than any city multiplier.',
+        'Certifications are a fast, verifiable signal for non-CS candidates but never a substitute for a real, demonstrable project — pick the cloud platform your target companies actually use.',
+        'US salary negotiation is expected, not optional: never give the first number, get competing offers when possible, and negotiate total compensation — base, bonus, and equity — not just base.',
+        'The realistic non-CS timeline to a first offer is 8–9 months and roughly 100+ applications with single-digit interview conversion, not the viral "landed a job in 6 weeks" stories.',
+        'A resume tailored to mirror the exact terminology of the job description beats a generic one at getting past ATS filtering, and a verbal offer is never a reason to resign — wait for the signed offer letter.',
+      ]} />
 
       {/* ── Next Module CTA ──────────────────────────────────────────────── */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px', marginTop: 40 }}>

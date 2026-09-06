@@ -190,11 +190,15 @@ export default function DataFormatsModule() {
         <SectionTitle>The Format Decision That Changed Everything</SectionTitle>
 
         <Para>
-          In 2012, a team at Twitter needed to process billions of events per day.
-          They were using CSV files. Queries that should have taken minutes took hours.
-          Storage costs were enormous. They switched to a new columnar format called
-          Parquet. Query time dropped by 90%. Storage cost dropped by 75%. They
-          published the results. The industry never went back.
+          In 2013, engineers at Twitter and Cloudera were both wrestling with the
+          same problem: analytical queries against billions of events per day meant
+          reading entire rows from CSV and JSON files just to get the value of two
+          or three columns. Queries that should have taken seconds took minutes or
+          hours, and storage costs kept climbing. Twitter and Cloudera engineers
+          came together and created a new columnar format — Parquet — designed
+          specifically so a query could read only the columns it needed. The
+          industry took notice, and columnar formats became the default for
+          analytical storage.
         </Para>
 
         <Para>
@@ -352,8 +356,8 @@ What the file actually is on disk:
 
 Quoting rule (RFC 4180):
   If a value contains the delimiter, wrap it in double quotes:
-  9284755,4201938,"New York, Maharashtra",380.00,delivered
-                  ────────────────────
+  9284755,4201938,"Springfield, IL",380.00,delivered
+                  ────────────────
                   quoted because it contains a comma
 
   If a value contains double quotes, escape them by doubling:
@@ -639,8 +643,11 @@ Footer statistics for "city" column per row group:
 Combined with columnar storage (reading only the amount and city columns):
   Traditional CSV:   Read 10M rows × 5 columns = 50M values
   Parquet:           Read 4M rows × 2 columns  = 8M values
-  Effective speedup: ~6× from predicate pushdown × ~2.5× from columnar
-                   = ~15× total faster than CSV for this query`}</Output>
+  Effective speedup: ~6.25× total (10M rows × 5 columns = 50M values read
+                   → 4M rows × 2 columns = 8M values read). Row-group
+                   skipping and column selection aren't separate multipliers
+                   to stack — they're the two components of this one
+                   50M→8M reduction.`}</Output>
 
         <Para>
           <strong>Mechanism 2 — Encoding and compression per column.</strong> Because
@@ -1002,12 +1009,12 @@ ORC                 N/A             ~3.9 GB (zlib)      Similar to Parquet,
   Parquet (zstd):   2.8 GB × $0.023 = $0.064/month
 
 At 1 BILLION rows (10× scale) — annual cost difference:
-  CSV:     ~$25/month → $300/year
-  Parquet: ~$6.4/month → $77/year
+  CSV (gzip):     ~$2.10/month → ~$25/year
+  Parquet (zstd): ~$0.64/month → ~$8/year
 
-At 100 BILLION rows (100× scale) — annual cost difference:
-  CSV:     ~$2,520/year
-  Parquet: ~$770/year
+At 100 BILLION rows (1000× scale) — annual cost difference:
+  CSV (gzip):     ~$2,520/year
+  Parquet (zstd): ~$770/year
 
 Format choice is a cost decision as much as a performance decision.`}</CodeBox>
 

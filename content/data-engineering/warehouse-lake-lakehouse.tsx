@@ -828,7 +828,7 @@ Transaction log entry (JSON):
           ]}
           keys={['dim', 'warehouse', 'lake', 'lakehouse']}
           rows={[
-            { dim: 'Storage cost', warehouse: 'High — $100–500+/TB/month', lake: 'Very low — $23/TB/month (S3)', lakehouse: 'Very low — same object storage as lake' },
+            { dim: 'Storage cost', warehouse: 'Higher than lake — ~$40/TB/month (Snowflake, compressed)', lake: 'Very low — $23/TB/month (S3)', lakehouse: 'Very low — same object storage as lake' },
             { dim: 'Schema approach', warehouse: 'Schema-on-write — enforced before load', lake: 'Schema-on-read — applied at query time', lakehouse: 'Schema-on-write with evolution — enforced but changeable' },
             { dim: 'Data types accepted', warehouse: 'Structured only (tables)', lake: 'Any — structured, semi, unstructured', lakehouse: 'Structured + semi-structured (unstructured stored separately)' },
             { dim: 'ACID transactions', warehouse: '✓ Full ACID', lake: '✗ None — append only', lakehouse: '✓ Full ACID via transaction log' },
@@ -925,10 +925,14 @@ Unstructured Data   Pure Data Lake   Images, audio, PDFs in S3.
           Modern cloud warehouses (Snowflake, BigQuery, Redshift Spectrum) have
           been adding data lake features. Snowflake can query external S3 files
           directly. BigQuery supports external tables over GCS. Redshift Spectrum
-          queries S3 Parquet via Athena. Simultaneously, the lakehouse (Databricks
-          SQL) has been adding warehouse-quality SQL performance. The boundary
-          between warehouse and lakehouse is blurring — both are converging on the
-          same goal: cheap lake storage with warehouse-quality SQL.
+          queries S3 Parquet directly, using its own separate, AWS-managed
+          compute fleet — it does not route through Amazon Athena, which is a
+          distinct, unrelated query service. Spectrum and Athena are independent
+          services that happen to share the same AWS Glue Data Catalog for table
+          metadata. Simultaneously, the lakehouse (Databricks SQL) has been
+          adding warehouse-quality SQL performance. The boundary between
+          warehouse and lakehouse is blurring — both are converging on the same
+          goal: cheap lake storage with warehouse-quality SQL.
         </Para>
       </section>
 
@@ -1179,20 +1183,20 @@ In Delta Lake: SELECT * FROM orders VERSION AS OF 47 reads the table as it was a
 For data engineering, time travel is useful in four concrete situations. First, pipeline debugging: when a pipeline produces wrong results, time travel lets you compare the current table state to the state before the pipeline ran, identifying exactly what changed. Second, reprocessing: if a transformation bug corrupted data, you can restore the previous correct version and rerun the correct logic without re-ingesting from source. Third, slowly changing dimension tracking: SCD Type 2 can be implemented by reading historical snapshots rather than maintaining complex slowly-changing logic in the pipeline. Fourth, audit and compliance: regulated industries need to answer questions like "what was the account balance on this customer's account on this date" — time travel answers these without maintaining separate audit tables.`,
           },
           {
-            q: 'Q5. A company stores 5 TB of data in Snowflake and pays $2,400/month. The CTO asks if this can be reduced without losing analytical capability. What do you recommend?',
-            a: `This is a cost optimisation question that the lakehouse architecture answers directly. $2,400/month for 5 TB of storage in Snowflake translates to roughly $480/TB/month — substantially above object storage pricing of $23/TB/month.
+            q: 'Q5. A company stores 60 TB of data in Snowflake and pays $2,400/month. The CTO asks if this can be reduced without losing analytical capability. What do you recommend?',
+            a: `This is a cost optimisation question that the lakehouse architecture answers directly. $2,400/month for 60 TB of storage in Snowflake translates to roughly $40/TB/month — Snowflake's typical compressed storage rate — but that is still well above object storage pricing of $23/TB/month.
 
-The question is: how much of that 5 TB needs to be in Snowflake, and how much could move to cheaper object storage without losing analytical capability?
+The question is: how much of that 60 TB needs to be in Snowflake, and how much could move to cheaper object storage without losing analytical capability?
 
 My recommendation: implement a tiered storage architecture with three categories.
 
-First, identify which data is actively queried. In most data platforms, 20% of data accounts for 80% of queries — typically the Gold layer aggregations and the most recent 90 days of Silver data. This hot data stays in Snowflake where query performance is critical. Typically 500 GB to 1 TB.
+First, identify which data is actively queried. In most data platforms, 20% of data accounts for 80% of queries — typically the Gold layer aggregations and the most recent 90 days of Silver data. This hot data stays in Snowflake where query performance is critical. Typically 10–12 TB.
 
-Second, identify historical Silver and Bronze data that is queried rarely but must be kept for compliance or reprocessing. This cold data moves to Delta Lake on S3. It is still queryable via Snowflake external tables (Snowflake can query S3 Parquet files directly) or via Spark for ad-hoc analysis. Storage cost drops to $23/TB/month. Typically 3–4 TB.
+Second, identify historical Silver and Bronze data that is queried rarely but must be kept for compliance or reprocessing. This cold data moves to Delta Lake on S3. It is still queryable via Snowflake external tables (Snowflake can query S3 Parquet files directly) or via Spark for ad-hoc analysis. Storage cost drops to $23/TB/month. Typically 40–45 TB.
 
 Third, true archives (Bronze landing zone, raw unprocessed files) move to S3 Glacier Instant Retrieval at $4/TB/month. Rarely queried, only needed for disaster recovery or deep reprocessing.
 
-Expected outcome: keep 1 TB in Snowflake at $480/month, move 3.5 TB to S3 Delta at $80/month, archive 0.5 TB at $2/month. New monthly cost: approximately $562/month — a 77% reduction. Analytical capability for active data is unchanged. Historical data remains accessible, just slower to query.`,
+Expected outcome: keep 12 TB in Snowflake at $480/month, move 42 TB to S3 Delta at $966/month, archive 6 TB at $24/month. New monthly cost: approximately $1,470/month — a 39% reduction. Analytical capability for active data is unchanged. Historical data remains accessible, just slower to query.`,
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1235,7 +1239,7 @@ Expected outcome: keep 1 TB in Snowflake at $480/month, move 3.5 TB to S3 Delta 
           },
           {
             q: 'Treating "storage is cheap" as a reason to skip tiering — leaving cold, rarely-queried data in the warehouse indefinitely',
-            a: 'Interview Prep Q5\'s tiered-storage answer shows the real cost gap directly: warehouse storage at ~$480/TB/month versus object storage at $23/TB/month for identical rarely-queried data. Part 05\'s comparison table is the reference for deciding what stays hot (Snowflake) versus what moves cold (Delta on S3, then Glacier) — leaving everything in the warehouse by default forgoes that saving for no analytical benefit.',
+            a: 'Interview Prep Q5\'s tiered-storage answer shows the real cost gap directly: warehouse storage at ~$40/TB/month versus object storage at $23/TB/month for identical rarely-queried data. Part 05\'s comparison table is the reference for deciding what stays hot (Snowflake) versus what moves cold (Delta on S3, then Glacier) — leaving everything in the warehouse by default forgoes that saving for no analytical benefit.',
           },
         ].map((item, i) => (
           <div key={i} style={{

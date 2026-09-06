@@ -186,8 +186,10 @@ export default function GitForDataModule() {
           Every data engineer uses Git daily. Not just for committing pipeline code —
           for managing dbt model changes that affect production dashboards, for
           triggering CI/CD pipelines that deploy Airflow DAGs, for reviewing SQL
-          transformations before they hit the Gold layer, and for rolling back a
-          bad deployment that broke a morning report.
+          transformations before they hit the Gold layer (Bronze/Silver/Gold refers
+          to the medallion architecture pattern — you&rsquo;ll learn this fully in Module
+          30; for now, just know Gold is the final, most-refined layer), and for
+          rolling back a bad deployment that broke a morning report.
         </Para>
 
         <Para>
@@ -684,9 +686,10 @@ git lfs status             # LFS status of working directory
 ├── models/
 │   ├── staging/                  # stg_ models: raw → typed
 │   ├── intermediate/             # int_ models: business logic
-│   ├── marts/
-│   │   ├── core/dim_customers.sql
-│   │   └── finance/fct_orders.sql
+│   ├── marts/                     # fct_/dim_ prefixes follow dimensional modeling
+│   │                              # conventions (covered fully in Module 33)
+│   │   ├── core/dim_customers.sql       # dim_ = dimension/lookup table
+│   │   └── finance/fct_orders.sql       # fct_ = fact/transaction table
 │   └── _schema.yml               # model documentation + tests (committed)
 ├── seeds/                        # small reference CSVs (committed — these are code)
 │   └── store_mapping.csv         # 10-row mapping table, fine in git

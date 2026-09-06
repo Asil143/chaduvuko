@@ -157,7 +157,7 @@ ERROR BUDGET: SLO "99% of runs complete within 90 min", 6-hourly pipeline:
   When the budget is exhausted: stop new features, focus on reliability.
 
 Pipeline                SLI                 SLO             SLA
-silver_orders_daily     completion_time      < 60 min        —
+silver_orders_daily     completion_time      < 90 min        —
 gold_daily_revenue      data_freshness       < 2h            data by 08:00 ET
 ml_feature_store        completion_time      < 30 min        complete by 06:00 ET`}</CodeBox>
 
@@ -665,7 +665,7 @@ For data pipelines: monitoring answers "is this pipeline running on time?" Obser
             q: 'Q2. What is an SLO and how does it differ from an SLA? Why does the distinction matter?',
             a: `An SLI (Service Level Indicator) is the actual measured metric — what you measure. For a data pipeline, this might be pipeline completion time, data freshness age, or error rate.
 
-An SLO (Service Level Objective) is the target value for that metric — what the team aims to achieve internally. "The Silver orders pipeline completes within 60 minutes of its scheduled start time" is an SLO. SLOs are internal commitments that the engineering team sets based on their technical capabilities and the business's needs. They are typically measured as a percentage of successful periods — "99% of pipeline runs complete within 60 minutes over any 30-day rolling window." The remaining 1% is the error budget.
+An SLO (Service Level Objective) is the target value for that metric — what the team aims to achieve internally. "The Silver orders pipeline completes within 90 minutes of its scheduled start time" is an SLO. SLOs are internal commitments that the engineering team sets based on their technical capabilities and the business's needs. They are typically measured as a percentage of successful periods — "99% of pipeline runs complete within 90 minutes over any 30-day rolling window." The remaining 1% is the error budget.
 
 An SLA (Service Level Agreement) is the contractual commitment to an external consumer — what the business promises. "Finance dashboards will have yesterday's data available by 08:00 ET" is an SLA. SLAs are external commitments with business consequences if breached — an unhappy finance team, escalation to leadership, trust damage.
 
@@ -728,8 +728,8 @@ The practical implementation is a PipelineLogger class that wraps Python's loggi
 
         {[
           {
-            q: 'Configuring Airflow SLA at the DAG level instead of the task level',
-            a: 'DAG-level SLA is measured from the DAG\'s epoch start_date, not from each run\'s scheduled time — after 30 days of a daily pipeline, the elapsed time from start_date already exceeds any reasonable SLA, so it fires on every single run. This exact bug is in the Error Library below; the fix is setting sla on individual task operators.',
+            q: 'Setting one shared SLA on the DAG\'s default_args instead of sizing an SLA per task',
+            a: 'Airflow evaluates sla per task against that specific DAG run\'s own scheduled time (its data_interval), not against a cumulative counter since the DAG\'s start_date — the window resets every run rather than adding up across days. The real failure mode: a blanket sla=timedelta(...) in default_args gives every task in the DAG the same deadline measured from the run\'s scheduled start, so a task late in the pipeline can already have little or none of that window left by the time it even begins — and "misses" its SLA even though nothing is actually broken. This exact bug is in the Error Library below; the fix is setting a right-sized sla on individual task operators instead of one shared value for the whole DAG.',
           },
           {
             q: 'Pointing a freshness check at whichever timestamp column happens to exist',
@@ -764,9 +764,9 @@ The practical implementation is a PipelineLogger class that wraps Python's loggi
 
         {[
           {
-            error: `Airflow SLA miss alert fires every day even though the pipeline completes on time — false positive rate is 100%`,
-            cause: 'The SLA is configured as a timedelta from the DAG\'s start_date (the epoch of the first run), not from the scheduled execution time of each individual run. The SLA miss callback fires when the total time from start_date to the current run exceeds the timedelta. For a daily pipeline with a 2-hour SLA configured as sla=timedelta(hours=2) at the DAG level, after the pipeline has run for 30 days, the total elapsed time from start_date is 30 days — which exceeds 2 hours immediately, triggering the SLA miss on every run.',
-            fix: 'Configure SLA at the task level using the sla parameter on individual task operators, not at the DAG level. Task-level SLA is measured from when the task starts executing (or becomes eligible), not from the DAG\'s epoch start_date. Alternatively, implement custom SLA monitoring in a post-pipeline task that compares actual completion time to the scheduled deadline using context[\'data_interval_end\'] and the expected SLA time.',
+            error: `Airflow SLA miss alert fires for a downstream task every day even though the pipeline completes on time — false positive rate is 100%`,
+            cause: 'Airflow evaluates sla per task against that specific DAG run\'s own scheduled time (its data_interval/execution_date), not against a cumulative counter since the DAG\'s start_date — the window resets every run, it does not add up across days. The actual bug: sla=timedelta(hours=2) was set once in default_args, so every task in the DAG shares the same 2-hour deadline measured from the run\'s scheduled start. Upstream tasks alone take 90 minutes, so by the time this downstream task starts it has only 30 minutes left before its copy of that shared SLA "misses" — even though the task itself finishes in 5 minutes and the whole pipeline completes on time.',
+            fix: 'Set sla directly on individual task operators, sized to how long each task is actually expected to take counted from the DAG run\'s scheduled start — not one blanket sla shared by every task via default_args. A task 90 minutes into the pipeline needs a longer sla than a task that runs first. Alternatively, implement custom SLA monitoring in a post-pipeline task that compares actual completion time to the scheduled deadline using context[\'data_interval_end\'] and the expected SLA time, instead of relying on per-task sla misses at all.',
           },
           {
             error: `Monitoring dashboard shows all pipelines as "OK" but a Gold table has been stale for 6 hours — the freshness check is not working`,
@@ -806,7 +806,7 @@ The practical implementation is a PipelineLogger class that wraps Python's loggi
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
       <KeyTakeaways items={[
         'Monitoring catches fires you anticipated. Observability helps you understand fires you did not. The three signals: metrics (numeric time-series — row counts, durations, error rates), logs (structured JSON events with context — every run, every rejection with its reason), traces (end-to-end paths of specific events through the system). All three together make a pipeline diagnosable.',
-        'SLI is the measured metric (pipeline duration). SLO is the internal target (complete within 60 minutes). SLA is the external promise to the business (data available by 08:00 ET). Set SLOs stricter than SLAs to create a buffer. Alert on SLO breach risk, not SLA breach — this gives response time before the business is affected.',
+        'SLI is the measured metric (pipeline duration). SLO is the internal target (complete within 90 minutes). SLA is the external promise to the business (data available by 08:00 ET). Set SLOs stricter than SLAs to create a buffer. Alert on SLO breach risk, not SLA breach — this gives response time before the business is affected.',
         'Tiered alerting prevents alert fatigue. P1 (SLA breach imminent) → PagerDuty page, any hour. P2 (pipeline degraded, SLA at risk) → Slack #data-alerts, 1-hour response. P3 (slow but will complete, quality warning) → Slack #data-warnings. P4 (informational) → weekly digest. Target: 1-2 P1/P2 pages per on-call week.',
         'Good alert messages are actionable. Include: what failed, why (the actual error), what the impact is, how long until SLA breach, the run ID, and a link to the runbook. An alert that says "pipeline FAILED" is not actionable. An alert with specific error context and resolution steps reduces MTTR from hours to minutes.',
         'Structured logging means emitting JSON with consistent field names, not free-text strings. Every log entry includes: timestamp, level, event name, pipeline, run_id, stage, and relevant context. This makes logs queryable in CloudWatch Insights, Datadog, or Elasticsearch. Average extraction duration over 30 days becomes a single SQL-like query, not manual regex parsing.',

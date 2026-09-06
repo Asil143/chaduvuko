@@ -799,21 +799,21 @@ Friday
 
         <CodeBox label="DE career levels — US 2026 (Product Company)">{`Level              Experience     Salary Range          What Changes
 ───────────────────────────────────────────────────────────────────────
-Junior DE          0–2 years      $65K–$100K            Learning tools,
+Junior DE          0–2 years      $75K–$100K            Learning tools,
                                                          building under guidance
 
-Data Engineer      2–4 years      $100K–$155K           Owns pipelines end-to-end,
+Data Engineer      2–4 years      $100K–$140K           Owns pipelines end-to-end,
                                                          handles production incidents
 
-Senior DE          4–7 years      $135K–$210K           Designs systems,
+Senior DE          4–7 years      $140K–$185K           Designs systems,
                                                          mentors juniors,
                                                          cross-team influence
 
-Staff DE /         7–10 years     $185K–$260K           Technical strategy,
+Staff DE /         7–10 years     $185K–$240K           Technical strategy,
 Lead DE                                                   architectural decisions,
                                                          org-wide standards
 
-Principal /        10+ years      $260K–$400K+          Company-level data platform
+Principal /        10+ years      $240K–$320K+          Company-level data platform
 Staff+                                                    vision, external influence
 
 Notes:
@@ -1180,7 +1180,7 @@ Throughout this, I would communicate the timeline and trade-offs clearly to the 
         'The key difference between a data engineer and a software engineer is not the languages used but the systems built for: operational applications vs analytical data infrastructure.',
         'Reliable means four things: completes successfully, produces correct output, completes within SLA, and recovers from failures without human intervention.',
         'Non-IT backgrounds are an advantage in data engineering, not a disadvantage. Domain knowledge of what the data means is genuinely rare and valuable.',
-        'In the US in 2026, data engineering salaries range from $65K–$100K at entry level to $260K–$400K+ at principal level, with FAANG roles paying significantly above typical product company rates.',
+        'In the US in 2026, data engineering salaries range from $75K–$100K at entry level to $240K–$320K+ at principal level, with FAANG roles paying significantly above typical product company rates.',
         'The fastest path to a first DE job from a non-IT background: Python + SQL + 3 real projects on cloud free tiers + one cloud certification + GitHub portfolio. Achievable in 6–9 months of focused work.',
       ]} />
 

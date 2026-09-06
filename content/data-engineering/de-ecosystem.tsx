@@ -769,7 +769,7 @@ BigQuery       Serverless            Per-TB queried       Google Cloud stacks,
 Redshift       Cluster-based         Per-hour per node    AWS-native stacks,
 (AWS)          (you size it)         + Serverless option  steady high volume
 
-Azure Synapse  Hybrid (serverless    DTUs or serverless   Microsoft/Azure shops,
+Azure Synapse  Hybrid (serverless    DWUs or serverless   Microsoft/Azure shops,
                + dedicated pools)    + storage cost       hybrid on-prem/cloud
 
 ClickHouse     Single/clustered      Open source or       Real-time analytics,
@@ -836,7 +836,11 @@ Real-time streams    Apache Flink      Stateful stream processing
 
 Query engine over    Trino / Presto    Query data lakes directly with SQL
 data lake                              No need to load into a warehouse first
-(ad-hoc queries)                       AWS Athena and BigQuery use this model
+(ad-hoc queries)                       AWS Athena uses this model directly
+
+Note: BigQuery looks similar from the outside (serverless SQL over
+stored data) but is not Trino/Presto under the hood — it runs on
+Google's own proprietary Dremel-derived engine.
 
 The most important insight:
   dbt is the dominant transformation tool at most companies today
@@ -1037,7 +1041,7 @@ Tools:
             ],
           },
           {
-            type: 'Large Enterprise / GCC (Banking or Healthcare)',
+            type: 'Large Enterprise (Banking or Healthcare)',
             color: '#0078d4',
             stack: [
               { cat: 'Languages', tool: 'Python + SQL + Scala', why: 'Large Spark workloads' },
@@ -1314,7 +1318,7 @@ In practice: start with dbt. If a transformation is taking too long in the wareh
 
 Object storage (S3, ADLS) is extremely cheap — roughly $0.02–0.05 per GB per month — scales to unlimited size, and accepts any file format. It is the ideal place to store raw data that may need to be reprocessed in future, historical archives, large binary files, and data that is not yet clean enough for analysis. Its weakness is query performance — running SQL directly over S3 files is significantly slower than running the same query in a warehouse, and raw files require schema knowledge to interpret.
 
-Data warehouses are expensive at scale — $0.50–2.00 per GB per month for storage, plus compute costs — but they are 10–100× faster for analytical SQL queries, enforce schemas, have built-in access controls, and provide query optimisation that dramatically reduces compute cost for repeated query patterns.
+Data warehouse storage itself is actually cheap — roughly $0.02–0.04 per GB per month, in the same range as S3. What makes warehouses expensive at scale is compute, not storage: every query consumes compute credits or slot-time, and a team running heavy, frequent, or poorly optimised analytical queries can rack up a compute bill far larger than the storage bill ever gets. In exchange for that compute cost, warehouses are 10–100× faster for analytical SQL queries, enforce schemas, have built-in access controls, and provide query optimisation that dramatically reduces compute cost for repeated query patterns.
 
 The standard architecture uses both: raw and intermediate data live in S3/ADLS where storage is cheap, and only the clean, aggregated Gold layer data is loaded into the warehouse where query performance matters. This means you pay warehouse prices only for the data that analysts actually query, while retaining unlimited history in cheap object storage for future reprocessing.`,
           },

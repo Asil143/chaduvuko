@@ -732,7 +732,9 @@ results = process_store_category.expand_kwargs(combinations)   # 3 task instance
     result = run_extraction(run_date=context['ds'])
     context['ti'].xcom_push(key='rows_extracted', value=result.rows_extracted)
     context['ti'].xcom_push(key='rows_rejected',  value=result.rows_rejected)
-    # XCom value limit: ~48 KB default in PostgreSQL VARCHAR — keep it small
+    # Keep XCom values small — Airflow's own guidance is roughly tens of KB as a
+    # practical ceiling. The actual backend-enforced limit is much larger and varies
+    # (MySQL ~64 KB, PostgreSQL ~1 GB, SQLite ~2 GB) — don't rely on hitting it
 
 def quality_check_task(**context):
     ti = context['ti']
@@ -769,7 +771,7 @@ quality_check(result)   # result is passed as XCom automatically`}</CodeBox>
 @task
 def load_data_bad(**context):
     df = pd.read_csv('s3://bucket/orders.csv')
-    context['ti'].xcom_push(key='dataframe', value=df.to_dict())   # crashes Airflow
+    context['ti'].xcom_push(key='dataframe', value=df.to_dict())   # bloats/slows the metadata DB
 
 # GOOD — write the data, push only the path
 @task
@@ -779,9 +781,11 @@ def load_data_good(**context):
     df.to_parquet(output_path)
     context['ti'].xcom_push(key='output_path', value=output_path)`}</CodeBox>
 
-        <Output>{`ValueError: XCOM value exceeds maximum size (48 KB)
-# this is exactly what load_data_bad above triggers — the fix is load_data_good's
-# pattern: push the S3 path (a few dozen bytes), not the data itself`}</Output>
+        <Output>{`load_data_bad pushes a serialized DataFrame (hundreds of MB) into a single
+metadata-database row — depending on the backend this either fails outright
+or succeeds while bloating the metadata DB and slowing every task that reads
+XCom. load_data_good pushes a ~60-byte S3 path instead — that's the actual
+fix, regardless of which backend enforces which size limit.`}</Output>
       </section>
 
       <Divider />
@@ -848,7 +852,7 @@ def load_data_good(**context):
           },
           {
             wrong: '"XCom is fine for passing a DataFrame between tasks since Airflow handles serialization"',
-            right: 'XCom is a row in the metadata database, not a general message bus — Part 07\'s anti-pattern example is the exact ValueError: XCOM value exceeds maximum size (48 KB) that a serialized DataFrame triggers. Write the data to S3 and pass the path; that\'s the entire fix.',
+            right: 'XCom is a row in the metadata database, not a general message bus — Part 07\'s anti-pattern example shows why: a serialized DataFrame pushed through XCom bloats that row and slows every task that reads it, and depending on the backend can exceed it outright. Airflow\'s own guidance is to keep XCom values to roughly tens of KB, nowhere near a multi-hundred-MB DataFrame. Write the data to S3 and pass the path; that\'s the entire fix.',
           },
           {
             wrong: '"Dynamic task mapping and a for loop inside one PythonOperator are basically the same thing"',
@@ -1096,9 +1100,9 @@ Use Sensors when: you need to check an external condition that is not controlled
             fix: 'Set catchup=False on all production DAGs unless backfill behavior is explicitly needed: DAG(catchup=False, ...). If the 14 days of backlogged data genuinely needs to be processed, do it deliberately with a rate-limited backfill: airflow dags backfill --max-active-runs 3 --start-date ... --end-date ..., which processes 3 days at a time rather than all 1,344 simultaneously. Going forward: audit all DAGs for catchup settings during deployment review.',
           },
           {
-            error: `XCom value too large error — task fails with ValueError: XCOM value exceeds maximum size (48 KB)`,
-            cause: 'A task is pushing a large object to XCom — typically a list of dictionaries, a pandas DataFrame serialised as JSON, or a large query result set. XCom is stored in the Airflow metadata database and has a size limit (48 KB by default in PostgreSQL VARCHAR). Passing data larger than this limit causes the push to fail.',
-            fix: 'Never pass large data through XCom. Pass references instead. Write the large data to S3 or a database, then push the path or identifier to XCom: xcom_push(key="output_path", value="s3://bucket/tmp/run-abc123/result.parquet"). Downstream tasks read the path from XCom and load the data themselves. If you need to pass larger values for legitimate reasons, configure Airflow to use an XCom backend that stores values in S3 rather than the metadata database: configure AIRFLOW__CORE__XCOM_BACKEND to use an S3-backed implementation.',
+            error: `A task pushing a large object to XCom — a serialized pandas DataFrame, a big list of dicts, a large query result set — either fails outright or silently bloats the metadata database and slows every task that reads XCom`,
+            cause: 'XCom is stored as a row in the Airflow metadata database, not a general-purpose message bus. The size limit that actually gets enforced is backend-dependent — roughly 64 KB on MySQL, about 1 GB on PostgreSQL, about 2 GB on SQLite — so whether a large push fails outright or just succeeds while bloating the metadata DB depends on which backend is running underneath. Airflow\'s own guidance is to treat XCom as being for values in the tens of KB, well below any of those limits, precisely because a DataFrame-sized value causes real problems (DB bloat, slow reads, memory pressure on the scheduler/webserver) long before it hits a hard wall.',
+            fix: 'Never pass large data through XCom, regardless of what your specific backend would technically allow. Pass a reference instead: write the large data to S3 or a database, then push the path or identifier to XCom: xcom_push(key="output_path", value="s3://bucket/tmp/run-abc123/result.parquet"). Downstream tasks read the path from XCom and load the data themselves. If you have a legitimate need for larger XCom values, configure a custom XCom backend (AIRFLOW__CORE__XCOM_BACKEND) that stores the payload in S3 and keeps only a reference in the metadata database.',
           },
         ].map((item, i) => (
           <div key={i} style={{
@@ -1139,7 +1143,7 @@ Use Sensors when: you need to check an external condition that is not controlled
         'Sensors must use mode="reschedule" for any wait longer than a few seconds. mode="poke" holds a worker slot continuously — 100 poke sensors = 100 workers blocked sleeping. mode="reschedule" releases the slot between polls. This is one of the most common Airflow performance mistakes in production.',
         'Dataset scheduling (Airflow 2.4+) is the modern way to express cross-DAG dependencies declaratively. Producer tasks declare outlets=[Dataset("s3://bucket/table")]. Consumer DAGs declare schedule=[Dataset(...)]. Airflow triggers the consumer when producers update the dataset. Prefer this over ExternalTaskSensor for data-driven dependencies.',
         'Dynamic task mapping generates tasks at runtime from a list. @task.process_store.expand(store_id=stores) creates one task instance per store with independent logs, retries, and status. Use for processing N entities in parallel when N is data-driven. Avoid for N > 1,000 (scheduler performance impact).',
-        'XCom is for small values only (< 48 KB) — run IDs, row counts, file paths, status flags. Never push DataFrames, query results, or large JSON to XCom. Push an S3 path and have the downstream task load the data from that path. Monitor the xcom table size for high-frequency pipelines.',
+        'XCom is for small values only — Airflow\'s guidance is roughly tens of KB as a practical ceiling, well below the actual backend-enforced limit (which varies: ~64 KB on MySQL, ~1 GB on PostgreSQL, ~2 GB on SQLite). Use it for run IDs, row counts, file paths, status flags — never DataFrames, query results, or large JSON. Push an S3 path and have the downstream task load the data from that path. Monitor the xcom table size for high-frequency pipelines.',
         'Airflow is dominant and must be known deeply. Prefect is Pythonic and easier for local development. Dagster is asset-centric and has strong data lineage — aligns well with the dbt+ELT pattern. For interviews: know Airflow thoroughly, know Prefect/Dagster conceptually, have an opinion on trade-offs.',
       ]} />
 
