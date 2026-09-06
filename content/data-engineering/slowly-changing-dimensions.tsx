@@ -138,9 +138,9 @@ export default function SlowlyChangingDimensionsModule() {
               { type: 'Type 1', color: '#00e676', summary: 'Overwrite — update in place, no history kept.' },
               { type: 'Type 2', color: '#7b61ff', summary: 'Add row — full history preserved via multiple rows.' },
               { type: 'Type 3', color: '#f97316', summary: 'Add column — keep one level of history in a separate column.' },
-              { type: 'Type 4', color: '#4285f4', summary: 'History table — separate table for all historical versions.' },
+              { type: 'Type 4', color: '#4285f4', summary: 'Mini-dimension — rapidly-changing attributes split into their own small table.' },
               { type: 'Type 6', color: '#ffd700', summary: 'Hybrid (1+2+3) — current and historical in the same row.' },
-              { type: 'Type 7', color: '#ff4757', summary: 'Dual key — both current and historical access via two FKs.' },
+              { type: 'Type 7', color: '#ff4757', summary: 'Durable key — dual keys on the fact row, written once, never updated.' },
             ].map((item) => (
               <div key={item.type} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}30`, borderLeft: `3px solid ${item.color}`, borderRadius: 8, padding: '12px 14px' }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: item.color, fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 4 }}>{item.type}</div>
@@ -362,6 +362,18 @@ JOIN dim_customer c ON f.customer_id = c.customer_id AND c.is_current = TRUE
 
         <CodeBox label="Production Type 2 load — new entities">{`# PRODUCTION TYPE 2 LOAD PROCEDURE (Python):
 # Handles: new entities, Type 2 tracked changes, Type 1 changes
+import hashlib
+from datetime import timedelta
+
+def generate_surrogate_key(customer_id, updated_at) -> str:
+    """Deterministic surrogate key, unique per VERSION (not just per
+    customer) — hash the business key together with this version's
+    timestamp. Hashing customer_id alone would produce the same key for
+    every version of the same customer, which breaks the fact table's
+    ability to join to the exact version active at load time. Same
+    hashing pattern as the hub/link/satellite keys in data-vault.tsx."""
+    raw = f"{customer_id}||{updated_at.isoformat()}"
+    return hashlib.md5(raw.encode('utf-8')).hexdigest()
 
 def load_dim_customer_scd2(
     source_rows: list[dict],
@@ -656,36 +668,64 @@ Type 3: somewhere between — often superseded by Type 6 (hybrid).`}</CodeBox>
       {/* ── Part 06 — SCD Type 4 and 6 ───────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 06 — Type 4 and Type 6" />
-        <SectionTitle>Type 4 — History Table, and Type 6 — The Hybrid</SectionTitle>
+        <SectionTitle>Type 4 — The Mini-Dimension, and Type 6 — The Hybrid</SectionTitle>
 
-        <SubTitle>SCD Type 4 — separate history table</SubTitle>
+        <SubTitle>SCD Type 4 — the mini-dimension</SubTitle>
 
         <Para>
-          Type 4 keeps the current dimension table small and fast by separating
-          all historical versions into a separate history table. The main
-          dimension always contains only the current version. The history table
-          contains all previous versions. This pattern is useful when the main
-          dimension table is queried frequently for current values and must remain
-          as lean as possible.
+          Type 4 solves a different problem than Types 1&ndash;3: what to do when
+          one dimension mixes attributes that change at very different rates.
+          customer.city and customer.tier change rarely — maybe once or twice
+          a year. A behavioural attribute like a recalculated risk score or
+          engagement tier can change daily. Tracking the fast-changing
+          attributes as Type 2 on the main dimension would make dim_customer
+          grow a new version row every single day for every customer, even
+          though city and tier have not changed in years. Type 4 splits the
+          rapidly changing attributes into their own smaller dimension &mdash;
+          a <strong>mini-dimension</strong> &mdash; with its own surrogate key,
+          referenced directly by the fact table alongside the main dimension.
         </Para>
 
-        <CodeBox label="Type 4 — current table plus separate history table">{`dim_customer (current versions only — lean table):
-  customer_sk  customer_id  city    tier    updated_at
-  1            4201938      Austin  silver  2026-02-01
+        <CodeBox label="Type 4 — a mini-dimension for fast-changing attributes, referenced directly by the fact table">{`dim_customer (main dimension — Type 2, changes rarely):
+  customer_sk  customer_id  city     tier    valid_from   valid_to    is_current
+  1            4201938      Seattle  silver  2024-01-15   2026-01-31  FALSE
+  2            4201938      Austin   silver  2026-02-01   NULL        TRUE
 
-dim_customer_history (all historical versions):
-  customer_history_sk  customer_id  city     tier    valid_from   valid_to
-  100                  4201938      Seattle  silver  2024-01-15   2026-01-31
-  101                  4201938      Austin   silver  2026-02-01   NULL
+dim_customer_profile (MINI-DIMENSION — rapidly changing attributes only):
+  profile_sk  risk_score_band  engagement_tier
+  501         low              casual
+  502         low              engaged
+  503         medium           engaged
+  504         high             at_risk
+  ...         (every realistic band combination, pre-populated once)
+
+fct_orders (references BOTH the main dimension AND the mini-dimension):
+  order_sk  customer_sk  profile_sk  order_amount  order_date
+  100       1            502         380.00        2024-06-10
+  101       2            504         460.00        2026-03-01
+
+WHY BANDING MAKES THIS WORK:
+  risk_score and engagement_tier are BANDED into a small number of buckets
+  (low/medium/high, casual/engaged/at_risk) rather than stored as raw,
+  continuously changing values. Banding keeps dim_customer_profile small —
+  a few dozen rows covering every realistic combination — so it is built
+  once, not grown every time a score is recomputed. Each fact row simply
+  records whichever profile_sk was current when the order was placed; the
+  mini-dimension itself does not need valid_from/valid_to or a version
+  history, because the fact table's own grain is what captures the point
+  in time.
 
 WHEN TYPE 4 IS USEFUL:
-  ✓ Very large dimension tables where adding version rows slows down current queries
-  ✓ 95% of queries only need current values, history table rarely joined
-  ✓ Compliance / audit use cases requiring a separate history table by policy
+  ✓ A dimension mixes slow-changing attributes (city, tier) with rapidly
+    changing ones (behavioural scores, computed segments)
+  ✓ The rapidly changing attributes have low cardinality once banded
+  ✓ Tracking the fast attributes as Type 2 on the main dimension would
+    bloat it with version rows that have nothing to do with city or tier
 
-LIMITATION: more complex to query — must choose between dim_customer
-(current) and dim_customer_history (full history). Most teams prefer Type 2
-since one table with version rows is simpler.`}</CodeBox>
+LIMITATION: every query that needs both slow and fast attributes requires
+a second join (to the mini-dimension). Choosing the bands is itself a
+design decision — too coarse loses signal, too fine defeats the point of
+keeping the mini-dimension small.`}</CodeBox>
 
         <SubTitle>SCD Type 6 — the hybrid (Type 1 + Type 2 + Type 3)</SubTitle>
 
@@ -753,34 +793,40 @@ VALUES (2, 4201938, 'Austin', 'Austin', '2026-02-01', NULL, TRUE);
       {/* ── Part 07 — SCD Type 7 ─────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 07 — SCD Type 7" />
-        <SectionTitle>SCD Type 7 — Dual Foreign Keys in the Fact Table</SectionTitle>
+        <SectionTitle>SCD Type 7 — Dual Keys via a Durable Key, No Fact Updates</SectionTitle>
 
         <Para>
           Type 7 solves the same problem as Type 6 — enabling both historical
-          and current-state queries — but using two foreign keys in the fact table
-          rather than redundant columns in the dimension. The fact table stores
-          both a history_customer_sk (the surrogate key for the version active at
-          the time of the fact) and a current_customer_sk (always pointing to
-          the is_current=TRUE row). This keeps the dimension table pure Type 2
-          without any Type 1 overwrite columns.
+          and current-state queries from the same fact table — but without
+          touching the dimension&rsquo;s Type 2 columns or ever updating a fact
+          row after it is loaded. The dimension carries a <strong>durable
+          key</strong>: a value that identifies the customer and is copied
+          unchanged onto every version row, unlike the surrogate key, which
+          is unique per version. The fact table stores both the Type 2
+          surrogate key active at load time (for point-in-time accuracy) and
+          the durable key (for current-state lookups) — and both are written
+          once, at load time, and never revisited.
         </Para>
 
-        <SubSubTitle>Structure — a pure Type 2 dimension, dual keys in the fact</SubSubTitle>
+        <SubSubTitle>Structure — a pure Type 2 dimension with a durable key, dual keys in the fact</SubSubTitle>
 
-        <CodeBox label="dim_customer stays pure Type 2; fct_orders carries both surrogate keys">{`dim_customer (pure Type 2 — no current_city column needed):
-  customer_sk  customer_id  city     tier    valid_from   valid_to    is_current
-  1            4201938      Seattle  silver  2024-01-15   2026-01-31  FALSE
-  2            4201938      Austin   silver  2026-02-01   NULL        TRUE
+        <CodeBox label="dim_customer stays pure Type 2 plus one durable key column; fct_orders stores both keys once, at load time">{`dim_customer (pure Type 2 + a durable key copied onto every version):
+  customer_sk  customer_durable_key  customer_id  city     tier    valid_from   valid_to    is_current
+  1            DK-4201938            4201938      Seattle  silver  2024-01-15   2026-01-31  FALSE
+  2            DK-4201938            4201938      Austin   silver  2026-02-01   NULL        TRUE
 
-fct_orders (with DUAL surrogate keys):
-  order_sk  history_customer_sk  current_customer_sk  order_amount  order_date
-  100       1                    2                     380.00       2024-06-10
-  101       2                    2                     460.00       2026-03-01
+  customer_durable_key: IDENTICAL on every version row for this customer —
+  set once when the customer is first loaded, never changes, never reused.
 
-  history_customer_sk: the SK active at order time (stored at fact load time)
-  current_customer_sk: the SK of the current version (updated when customer changes)`}</CodeBox>
+fct_orders (with DUAL keys, BOTH set once at load time):
+  order_sk  history_customer_sk  customer_durable_key  order_amount  order_date
+  100       1                    DK-4201938             380.00       2024-06-10
+  101       2                    DK-4201938             460.00       2026-03-01
 
-        <CodeBox label="Two queries, two different joins, same fact table">{`-- Historical revenue by city (point-in-time accurate):
+  history_customer_sk:   the SK active at order time — set at load, never touched again
+  customer_durable_key:  the customer's durable key — also set at load, never touched again`}</CodeBox>
+
+        <CodeBox label="Two queries, two different joins — neither one requires a fact table update">{`-- Historical revenue by city (point-in-time accurate):
 SELECT c.city, SUM(f.order_amount) FROM fct_orders f
 JOIN dim_customer c ON f.history_customer_sk = c.customer_sk
 GROUP BY c.city;
@@ -788,16 +834,34 @@ GROUP BY c.city;
 
 -- Current revenue by city (where customers are TODAY):
 SELECT c.city, SUM(f.order_amount) FROM fct_orders f
-JOIN dim_customer c ON f.current_customer_sk = c.customer_sk
-WHERE c.is_current = TRUE
+JOIN dim_customer c
+  ON f.customer_durable_key = c.customer_durable_key
+ AND c.is_current = TRUE
 GROUP BY c.city;
--- Both orders join to SK=2 → 'Austin' — "revenue from customers now in Austin" ✓`}</CodeBox>
+-- Both orders' durable key resolves, via is_current, to the SAME current
+-- row (SK=2, Austin) — "revenue from customers now in Austin" ✓
+-- Nothing on fct_orders changed when the customer moved. The "current"
+-- answer comes from filtering the DIMENSION at query time, not from a
+-- column on the fact that had to be kept in sync.`}</CodeBox>
 
-        <Output>{`TYPE 7 COMPLEXITY: requires updating current_customer_sk in the fact table
-whenever a customer's current version changes — expensive for large fact
-tables. Most teams avoid this unless the use case specifically requires it.
-Type 6 is more common in practice (a current_city column in the dimension
-row is cheaper to maintain than updating millions of fact table rows).`}</Output>
+        <Output>{`TYPE 7'S ACTUAL ADVANTAGE OVER TYPE 6: the fact table is write-once. Both
+history_customer_sk and customer_durable_key are set at load time and never
+updated afterward, no matter how many times the customer's dimension row
+changes later. Type 6, by contrast, has to overwrite current_city on every
+existing version row for that customer — historical rows included — every
+time the tracked value changes.
+
+THE TRADE-OFF, STATED PRECISELY:
+  Type 6: one join, no is_current filter needed, but the DIMENSION requires
+    a write across all of a customer's rows on every change.
+  Type 7: two joins for the two query shapes (one filtered on is_current),
+    but the FACT TABLE — often the largest table in the warehouse — is
+    never written to again after the initial load.
+
+Most teams still default to Type 2 or Type 6 for day-to-day simplicity —
+one extra join is a small cost. Type 7 earns its complexity specifically
+when the fact table is too large to ever want a second pass over it, and
+an extra join at query time is the cheaper trade.`}</Output>
       </section>
 
       <Divider />
@@ -822,9 +886,9 @@ row is cheaper to maintain than updating millions of fact table rows).`}</Output
             { type: 'Type 1 (Overwrite)', history: '✗ No history', pit: '✗ No — joins always to current', current: '✓ Simple — one row', complexity: 'Low', best: 'Corrections, contact info, flags where history irrelevant' },
             { type: 'Type 2 (Add Row)', history: '✓ Full', pit: '✓ Yes — via surrogate key at load time', current: 'Need is_current=TRUE filter', complexity: 'Medium', best: 'Most tracked attributes — customer city/tier, product category' },
             { type: 'Type 3 (Add Column)', history: '✓ One level only', pit: '✗ No — one row, no version control', current: '✓ Current column', complexity: 'Low–Medium', best: 'Attributes that change once: territory reassignment, store type upgrade' },
-            { type: 'Type 4 (History Table)', history: '✓ Full (in history table)', pit: '✓ Via history table join', current: '✓ Fast via main table', complexity: 'Medium–High', best: 'Very large dimensions where current queries must be fast' },
+            { type: 'Type 4 (Mini-Dimension)', history: 'N/A — bands, not versions', pit: '✓ Via profile_sk stored on the fact row', current: '✓ Via mini-dimension join', complexity: 'Medium', best: 'Splitting rapidly-changing attributes (risk score, engagement tier) out of a slower main dimension' },
             { type: 'Type 6 (1+2+3)', history: '✓ Full', pit: '✓ Via city column', current: '✓ Via current_city column (no filter)', complexity: 'High', best: 'When BOTH historical and current queries are equally important and frequent' },
-            { type: 'Type 7 (Dual FK)', history: '✓ Full', pit: '✓ Via history_sk FK', current: '✓ Via current_sk FK', complexity: 'Highest', best: 'Rare — when Type 6 overhead in dimension table is unacceptable' },
+            { type: 'Type 7 (Durable Key)', history: '✓ Full', pit: '✓ Via history_sk FK (set once, at load)', current: '✓ Via durable key + is_current join', complexity: 'Highest', best: 'Very large fact tables where a Type 6-style dimension update, done at fact-table volume, is unacceptable' },
           ]}
         />
 
@@ -840,8 +904,11 @@ row is cheaper to maintain than updating millions of fact table rows).`}</Output
         Do you need both historical and current queries from the same join?
           No  → Type 2 (standard — use is_current filter when needed)
           Yes → Type 6 (add current_city column to dimension)
-        Is the dimension table very large (10M+ rows)?
-          Yes → Consider Type 4 (separate history table)`}</CodeBox>
+        Does the dimension mix rapidly-changing attributes (a behavioural
+        score, a computed segment) with slow-changing ones like city or
+        tier?
+          Yes → Consider Type 4 (split the fast-changing attributes into
+                a mini-dimension, referenced directly by the fact table)`}</CodeBox>
 
         <Output>{`PRACTICAL GUIDANCE (2026):
   80% of use cases: TYPE 2 (with dbt snapshot)
@@ -1145,7 +1212,7 @@ The fix is to run snapshots frequently — every 15-30 minutes for dimensions th
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
       <KeyTakeaways items={[
         'SCD patterns answer the question: when a dimension attribute changes, what should happen to the historical facts that referenced the old value? The answer depends entirely on whether historical accuracy matters for the business questions being answered.',
-        'Type 0 (fixed) — attribute never changes. Type 1 (overwrite) — update in place, no history kept. Type 2 (add row) — new row per version, full history. Type 3 (add column) — current + one previous value. Type 4 (history table) — separate table for history. Type 6 (hybrid) — full history + current value in every row. Type 7 (dual FK) — two surrogate keys in the fact table.',
+        'Type 0 (fixed) — attribute never changes. Type 1 (overwrite) — update in place, no history kept. Type 2 (add row) — new row per version, full history. Type 3 (add column) — current + one previous value. Type 4 (mini-dimension) — rapidly-changing attributes split into their own small dimension, referenced directly by the fact table. Type 6 (hybrid) — full history + current value in every row. Type 7 (durable key) — a stable durable key copied onto every dimension version and stored on the fact row alongside the Type 2 surrogate key, so the fact table is written once and never updated.',
         'Type 2 is the most important and most widely used SCD pattern. When a tracked attribute changes: expire the current row (set valid_to, is_current=FALSE) and insert a new version row (valid_from=today, valid_to=NULL, is_current=TRUE). Surrogate keys uniquely identify each version, enabling point-in-time fact joins.',
         'The key to correct Type 2 joins: the fact table must store the surrogate key at load time (the SK of the version active when the fact occurred). At query time, join on f.customer_sk = c.customer_sk — not on customer_id with is_current filter. The latter assigns all historical orders to the current version, destroying historical accuracy.',
         'dbt snapshots implement Type 2 automatically. Two strategies: timestamp (uses updated_at column to detect changes — efficient but depends on accurate source timestamps) and check (compares listed column values directly — more explicit, works without a reliable updated_at). Run snapshots more frequently than dbt runs for high-change dimensions.',

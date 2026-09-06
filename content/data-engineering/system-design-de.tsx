@@ -448,7 +448,8 @@ peak_kafka_throughput = peak_rate * event_size_bytes  # 580 × 200 = 116 KB/s
 # But for HA, use at least 3 brokers
 
 # Partition count for peak throughput:
-# One Kafka partition handles ~50–100 MB/s safely
+# One Kafka partition handles roughly 10–50 MB/s depending on message size
+# (~50 MB/s is often cited as a safe planning baseline)
 # Peak throughput = 116 KB/s → even 1 partition is fine for throughput
 # BUT: parallelism requirement → use 12 partitions (4 consumer threads × 3 for headroom)
 # AND: partition key = customer_id for ordering (10M+ customers → no hot partition)
@@ -1007,7 +1008,7 @@ firebase_daily_gb       = 50_000_000 * 200 / 1e9  # = 10 GB/day
 
 # Point-in-time correct join (time travel in Delta Lake):
 # SELECT c.customer_id, c.order_count_7d, c.preferred_cuisine, o.target_label
-# FROM customer_stats_history AS OF TIMESTAMP '2026-01-15 14:23:00' AS c
+# FROM customer_stats_history TIMESTAMP AS OF '2026-01-15 14:23:00' AS c
 # JOIN labeled_orders AS o
 #   ON c.customer_id = o.customer_id
 #   AND o.order_time BETWEEN '2026-01-15 14:00:00' AND '2026-01-15 15:00:00'
@@ -1350,7 +1351,7 @@ spark.sql("""
             },
             {
               '0': 'Single partition for ordering, no capacity check',
-              '1': 'One Kafka partition = one writer thread = ~100 MB/s max throughput. If your design requires global ordering AND has > 100 MB/s peak write throughput, you have an unsolvable conflict.',
+              '1': 'One Kafka partition = one writer thread = roughly 10–50 MB/s max throughput depending on message size (~50 MB/s is often cited as a safe planning baseline). If your design requires global ordering AND has peak write throughput at or above that, you have an unsolvable conflict.',
               '2': 'Challenge the ordering requirement first — does the business really need global ordering, or just per-entity ordering? Per-entity ordering scales horizontally.',
             },
             {
@@ -1524,7 +1525,7 @@ spark.sql("""
         {[
           {
             error: `Architecture review rejected: proposed design requires globally ordered events across all Kafka partitions at 50,000 events/second`,
-            cause: 'Global ordering in Kafka requires a single partition — no parallelism. A single Kafka partition handles roughly 10-50MB/s depending on message size. At 50,000 events/second with average 1KB messages, that is 50MB/s — well beyond a single partition. The design cannot work at the stated throughput. Kafka guarantees ordering within a partition, not across partitions.',
+            cause: 'Global ordering in Kafka requires a single partition — no parallelism. A single Kafka partition handles roughly 10–50 MB/s depending on message size, with ~50 MB/s often cited as a safe planning baseline. At 50,000 events/second with average 1KB messages, that is 50 MB/s — at the edge of, or beyond, what a single partition handles. The design cannot work at the stated throughput. Kafka guarantees ordering within a partition, not across partitions.',
             fix: 'Almost all "I need global ordering" requirements dissolve when examined carefully. You usually need ordering per entity (per customer, per order), not global ordering. Partition by the entity key — customer_id or order_id — and you get guaranteed ordering within each entity\'s partition. State explicitly in the design: "ordering is guaranteed per [entity] via consistent partition key." The interviewer is satisfied because this is the correct answer, not a workaround.',
           },
           {

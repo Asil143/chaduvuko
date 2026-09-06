@@ -171,12 +171,11 @@ export default function PythonForDEModule() {
 
         <Para>
           This module is built around one running example: <strong>FreshCart</strong>,
-          the same 40-store grocery chain from the Linux and Working with APIs
-          modules. Every night, each store&rsquo;s point-of-sale system drops an orders
-          export into blob storage — anywhere from 50 MB on a slow Tuesday to 6 GB on
-          the Saturday before Thanksgiving. Your job is to build the Python that reads
-          those files, cleans them, and loads them into the warehouse — reliably,
-          every single night, without anyone watching it run.
+          a 10-store grocery chain. Every night, each store&rsquo;s point-of-sale system
+          drops an orders export into blob storage — anywhere from 50 MB on a slow
+          Tuesday to 6 GB on the Saturday before Thanksgiving. Your job is to build
+          the Python that reads those files, cleans them, and loads them into the
+          warehouse — reliably, every single night, without anyone watching it run.
         </Para>
 
         <HighlightBox>
@@ -229,7 +228,7 @@ export default function PythonForDEModule() {
         <Para>
           The first thing most beginners do when they need to read a file in Python
           is load the entire thing into memory. For a 1 KB config file, that is fine.
-          For a 6 GB CSV of Saturday&rsquo;s orders across 40 stores, it crashes the
+          For a 6 GB CSV of Saturday&rsquo;s orders across 10 stores, it crashes the
           process — or worse, doesn&rsquo;t crash, and instead slows the whole machine to a
           crawl as the OS starts swapping memory to disk.
         </Para>
@@ -331,7 +330,7 @@ print(table.to_pandas().head())`}</CodeBox>
 4   9284755  205.30
 
 # Read 2.1 MB off disk instead of the full 5.8 GB file —
-# partition pruning skipped 39 stores, column projection skipped 18 columns.`}</Output>
+# partition pruning skipped 9 stores, column projection skipped 18 columns.`}</Output>
 
         <SubSubTitle>Reading straight from cloud storage</SubSubTitle>
 
@@ -552,7 +551,7 @@ INFO    refund 9284751 fetched successfully on attempt 3`}</Output>
 
         <Para>
           A record that still fails after every retry cannot be allowed to crash the
-          whole pipeline — 39 stores&rsquo; worth of good data shouldn&rsquo;t be lost because
+          whole pipeline — 9 stores&rsquo; worth of good data shouldn&rsquo;t be lost because
           one store&rsquo;s file has one bad row. Instead, write the failed record and the
           reason it failed to a dead letter queue, and keep going.
         </Para>
@@ -835,17 +834,16 @@ None
 
         <SubSubTitle>Pydantic settings — fail loudly, at startup, with a clear message</SubSubTitle>
 
-        <CodeBox label="config.py — validated configuration">{`from pydantic_settings import BaseSettings
+        <CodeBox label="config.py — validated configuration">{`from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Config(BaseSettings):
+    model_config = SettingsConfigDict(env_file='.env')
+
     db_url:            str
     payments_api_token: str
     batch_size:        int = 5_000
     max_retries:       int = 5
     dlq_path:          str = '/data/dlq/freshcart_orders.ndjson'
-
-    class Config:
-        env_file = '.env'
 
 config = Config()   # raises immediately if a required field is missing`}</CodeBox>
 
@@ -957,7 +955,9 @@ test_orders_clean.py::test_clean_orders_removes_invalid_status PASSED
 
         <SubSubTitle>Mocking — testing the I/O layer without a real API or database</SubSubTitle>
 
-        <CodeBox label="test_refunds_api.py — mocking requests.get">{`from unittest.mock import patch, MagicMock
+        <CodeBox label="test_refunds_api.py — mocking requests.get">{`import pytest
+import requests
+from unittest.mock import patch, MagicMock
 
 @patch('requests.get')
 def test_fetch_refund_success(mock_get):
@@ -1014,7 +1014,7 @@ def fetch_page(cursor: str | None, start_date: str) -> tuple[list[dict], str | N
         <CodeBox label="models.py — an Order model that coerces and validates real-world input">{`from decimal import Decimal
 from datetime import datetime
 from enum import Enum
-from pydantic import BaseModel, validator, Field
+from pydantic import BaseModel, field_validator, Field
 
 class OrderStatus(str, Enum):
     PLACED = 'placed'; CONFIRMED = 'confirmed'
@@ -1027,7 +1027,7 @@ class Order(BaseModel):
     status:     OrderStatus
     created_at: datetime
 
-    @validator('amount', pre=True)
+    @field_validator('amount', mode='before')
     def coerce_amount(cls, v):
         if isinstance(v, str):
             v = v.replace('$', '').replace(',', '').strip()
@@ -1110,7 +1110,7 @@ order_id
 
         <Para>
           Every part of this module built one piece. Here is what it looks like
-          assembled into the pipeline that actually runs at 2 AM against all 40
+          assembled into the pipeline that actually runs at 2 AM against all 10
           stores — config and logging from Parts 05 and 07, the chunked reader from
           Part 02, the generator chain from Part 06, validation from Part 09, and
           retry-protected DLQ handling from Part 04.
@@ -1130,16 +1130,17 @@ order_id
             Step 1 of 4 — config and logging
           </div>
 
-          <CodeBox label="freshcart_pipeline.py — setup">{`import os, uuid, logging
-from pydantic_settings import BaseSettings
+          <CodeBox label="freshcart_pipeline.py — setup">{`import os, time, glob, uuid, logging
+import psycopg2
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Config(BaseSettings):
+    model_config = SettingsConfigDict(env_file='.env')
+
     db_url:      str
     batch_size:  int = 5_000
     max_retries: int = 5
     dlq_path:    str = '/data/dlq/freshcart_orders.ndjson'
-    class Config:
-        env_file = '.env'
 
 config = Config()          # fails loudly here if anything required is missing
 RUN_ID = str(uuid.uuid4())
@@ -1210,7 +1211,7 @@ def batch_and_load(orders, conn) -> int:
             display: 'inline-block', margin: '28px 0 20px', letterSpacing: '.1em',
             textTransform: 'uppercase',
           }}>
-            Step 4 of 4 — main, run against all 40 stores
+            Step 4 of 4 — main, run against all 10 stores
           </div>
 
           <CodeBox label="freshcart_pipeline.py — entry point">{`def run(store_files: list[str]) -> None:
@@ -1232,7 +1233,7 @@ def batch_and_load(orders, conn) -> int:
 if __name__ == '__main__':
     run(store_files=glob.glob('/data/freshcart/store_*.csv'))`}</CodeBox>
 
-          <Output>{`{"level": "INFO", "msg": "Pipeline started for 40 stores", "run_id": "a1f9-..."}
+          <Output>{`{"level": "INFO", "msg": "Pipeline started for 10 stores", "run_id": "a1f9-..."}
 {"level": "INFO", "msg": "/data/freshcart/store_001.csv: 812,400 rows loaded"}
 {"level": "WARNING", "msg": "store_027: 12 rows sent to DLQ (invalid status)"}
 ...
@@ -1266,7 +1267,7 @@ The deeper principle is the generator pattern: rather than building a complete i
 
 The rationale is that if a request failed, the failure is likely due to the remote system being overloaded or temporarily unavailable. Retrying immediately often hits the same overloaded system and fails again. Waiting progressively longer gives the remote system time to recover before the next attempt.
 
-Jitter adds random variation to each retry delay. Without jitter, if 40 pipeline instances — one per FreshCart store — all fail at the same moment during a payments API deploy, they all enter exponential backoff simultaneously. When the deploy finishes, all 40 retry at exactly the same time, creating a thundering herd that immediately re-overloads the system. With jitter, each instance waits a slightly different amount, spreading the retry load over time.
+Jitter adds random variation to each retry delay. Without jitter, if 10 pipeline instances — one per FreshCart store — all fail at the same moment during a payments API deploy, they all enter exponential backoff simultaneously. When the deploy finishes, all 10 retry at exactly the same time, creating a thundering herd that immediately re-overloads the system. With jitter, each instance waits a slightly different amount, spreading the retry load over time.
 
 In data engineering, exponential backoff with jitter is important because pipeline failures are often correlated — many pipeline instances run on the same schedule, connect to the same source systems, and fail for the same reasons simultaneously. Jitter prevents the retry storm that would otherwise follow a shared failure.`,
           },
@@ -1286,7 +1287,7 @@ This pattern also makes it easy to swap out the I/O layer without changing the b
 
 DEBUG is the most detailed level — messages about the internal state of the program that are useful when diagnosing a specific problem but would be too verbose to log in production. Examples: "Fetching page 3 of refunds for store 014", "Row data: {order_id: 9284751, amount: 380.00}". Debug logs are typically disabled in production (set log level to INFO) and enabled temporarily when investigating an issue.
 
-INFO confirms that normal operations are proceeding as expected. These messages should be meaningful and not too frequent. Examples: "Pipeline started for 40 stores", "store_014: 812,400 rows loaded", "Pipeline complete: 31,840,220 total rows in 642.8 seconds". INFO logs are what you read to understand what a pipeline did during a run.
+INFO confirms that normal operations are proceeding as expected. These messages should be meaningful and not too frequent. Examples: "Pipeline started for 10 stores", "store_014: 812,400 rows loaded", "Pipeline complete: 31,840,220 total rows in 642.8 seconds". INFO logs are what you read to understand what a pipeline did during a run.
 
 WARNING signals something unexpected happened but the pipeline recovered and continued. Examples: "store_027: 12 rows sent to DLQ (invalid status)", "Rate limited by refunds API, waiting 15 seconds before retry", "Retry attempt 2 of 4 after connection timeout". Warnings should be investigated — they often indicate data quality issues or system instability that will eventually cause failures.
 

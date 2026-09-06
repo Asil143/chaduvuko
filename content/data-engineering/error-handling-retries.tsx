@@ -396,7 +396,7 @@ def retry_with_backoff(
 
         <CodeBox label="Applying the decorator to an API call and a database write">{`@retry_with_backoff(
     max_attempts=5, base_delay_s=2.0,
-    retryable_exceptions=(requests.Timeout, requests.ConnectionError),
+    retryable_exceptions=(requests.Timeout, requests.ConnectionError, RateLimitError),
     non_retryable_exceptions=(AuthenticationError, SchemaError),
 )
 def fetch_payments(from_ts: int, to_ts: int) -> dict:
@@ -415,6 +415,21 @@ def write_batch_to_db(rows: list[dict], conn) -> int:
     with conn:
         psycopg2.extras.execute_values(cur, UPSERT_SQL, rows)
     return len(rows)`}</CodeBox>
+
+        <Para>
+          <code>RateLimitError</code> has to be listed in <code>retryable_exceptions</code>{' '}
+          here — otherwise it matches neither tuple in the decorator&rsquo;s
+          try/except and propagates straight out on the very first 429, before
+          any retry logic runs at all. But once it&rsquo;s caught, the decorator
+          retries it the same generic way it retries a <code>Timeout</code>:
+          exponential backoff computed from the attempt number, with no
+          awareness of the exact Retry-After value the response sent. That&rsquo;s
+          fine when Retry-After is short, but it can retry too early against a
+          server that asked for a longer wait. The next section&rsquo;s pattern
+          reads Retry-After directly and sleeps that exact duration instead of
+          guessing with backoff — use it whenever precise rate-limit
+          compliance matters more than reusing this generic decorator.
+        </Para>
 
         <Output>{`WARNING fetch_payments failed (attempt 1/5): Timeout. Retrying in 2.14s
 WARNING fetch_payments failed (attempt 2/5): Timeout. Retrying in 3.87s
@@ -537,23 +552,28 @@ class CircuitBreaker:
         self._state = CircuitState.CLOSED
         self._failure_times: list[float] = []
         self._half_open_success = 0
+        self._half_open_probe_in_flight = False   # enforces ONE probe at a time in HALF_OPEN
         self._opened_at: float | None = None
         self._lock = threading.Lock()
 
     @property
     def state(self) -> CircuitState:
         with self._lock:
-            if self._state == CircuitState.OPEN:
-                if self._opened_at and time.monotonic() - self._opened_at >= self.cooldown_s:
-                    self._state, self._half_open_success = CircuitState.HALF_OPEN, 0
-                    log.info('Circuit %s: OPEN → HALF_OPEN (cooldown elapsed)', self.name)
-            return self._state`}</CodeBox>
+            self._maybe_transition_to_half_open()
+            return self._state
+
+    def _maybe_transition_to_half_open(self) -> None:
+        """Caller must already hold self._lock."""
+        if self._state == CircuitState.OPEN:
+            if self._opened_at and time.monotonic() - self._opened_at >= self.cooldown_s:
+                self._state, self._half_open_success = CircuitState.HALF_OPEN, 0
+                self._half_open_probe_in_flight = False
+                log.info('Circuit %s: OPEN → HALF_OPEN (cooldown elapsed)', self.name)`}</CodeBox>
 
         <SubSubTitle>Calling through the breaker, and recording the outcome</SubSubTitle>
 
-        <CodeBox label="circuit_breaker.py — call(), _on_success(), _on_failure()">{`    def call(self, func, *args, **kwargs):
-        if self.state == CircuitState.OPEN:
-            raise CircuitOpenError(f'Circuit breaker {self.name} is OPEN — service unavailable')
+        <CodeBox label="circuit_breaker.py — call(), _acquire(), _on_success(), _on_failure()">{`    def call(self, func, *args, **kwargs):
+        self._acquire()   # raises CircuitOpenError if OPEN, or if HALF_OPEN with a probe already in flight
         try:
             result = func(*args, **kwargs)
             self._on_success()
@@ -562,10 +582,24 @@ class CircuitBreaker:
             self._on_failure()
             raise
 
+    def _acquire(self) -> None:
+        """Gate every call: OPEN rejects everything, HALF_OPEN allows exactly one probe at a time."""
+        with self._lock:
+            self._maybe_transition_to_half_open()
+            if self._state == CircuitState.OPEN:
+                raise CircuitOpenError(f'Circuit breaker {self.name} is OPEN — service unavailable')
+            if self._state == CircuitState.HALF_OPEN:
+                if self._half_open_probe_in_flight:
+                    # a probe is already testing recovery — every concurrent caller is
+                    # rejected exactly like OPEN until that probe's result is known
+                    raise CircuitOpenError(f'Circuit breaker {self.name} is HALF_OPEN — probe already in flight')
+                self._half_open_probe_in_flight = True   # this call becomes THE probe
+
     def _on_success(self) -> None:
         with self._lock:
             if self._state == CircuitState.HALF_OPEN:
                 self._half_open_success += 1
+                self._half_open_probe_in_flight = False   # frees the next call to become a probe
                 if self._half_open_success >= self.success_threshold:
                     self._state, self._failure_times = CircuitState.CLOSED, []
                     log.info('Circuit %s: HALF_OPEN → CLOSED (service recovered)', self.name)
@@ -578,6 +612,7 @@ class CircuitBreaker:
             now = time.monotonic()
             if self._state == CircuitState.HALF_OPEN:
                 self._state, self._opened_at = CircuitState.OPEN, now
+                self._half_open_probe_in_flight = False
                 log.warning('Circuit %s: HALF_OPEN → OPEN (probe failed)', self.name)
                 return
             self._failure_times = [t for t in self._failure_times if now - t < self.window_s] + [now]
@@ -766,9 +801,17 @@ INFO DLQ reprocessing complete: attempted=5400 reprocessed=5400 failed=0`}</Outp
           choosing thresholds that surface real problems while suppressing noise.
         </Para>
 
-        <SubSubTitle>The four-tier alerting model</SubSubTitle>
+        <SubSubTitle>The five-tier alerting model</SubSubTitle>
 
         {[
+          {
+            tier: 'P0 — Abort the pipeline',
+            color: '#7f1d1d',
+            conditions: [
+              'DLQ count > 20% of processed rows in a single run — a systemic problem, not row-level noise the DLQ can safely absorb',
+              'Stop before writing any more silver/gold data from this run, then page on-call the same as a P1 — this is strictly more severe than paging alone',
+            ],
+          },
           {
             tier: 'P1 — Immediate (page someone)',
             color: '#ff4757',
@@ -968,7 +1011,7 @@ WARNING High DLQ rate in orders_pipeline_incremental: 8.0% of rows rejected.
           },
           {
             wrong: '"Once alerting exists, more alerts is strictly better than fewer"',
-            right: 'Part 06\'s four-tier model is built around the opposite idea: alerting on every transient error (Part 03\'s retries handle those automatically) trains engineers to ignore the alert channel, which is exactly the alert-fatigue failure documented in this module\'s Error Library. An alert that fires and nobody reads is worse than no alert at all.',
+            right: 'Part 06\'s five-tier model is built around the opposite idea: alerting on every transient error (Part 03\'s retries handle those automatically) trains engineers to ignore the alert channel, which is exactly the alert-fatigue failure documented in this module\'s Error Library. An alert that fires and nobody reads is worse than no alert at all.',
           },
           {
             wrong: '"A 500 error and a 400 error are both just \'the request failed\' — handle them the same way"',
@@ -1121,7 +1164,7 @@ First, wrap row-level processing in a try-except that catches all expected error
 
 Second, distinguish error types at the catch point. Data errors (ValueError, TypeError, KeyError, custom validation errors) should be caught at the row level and sent to the DLQ. Infrastructure errors (network timeouts, database connection failures) should propagate upward to be retried at the batch or pipeline level. Catching all exceptions at the row level and silently continuing would swallow infrastructure failures that indicate the entire pipeline needs to stop and retry.
 
-Third, monitor the DLQ rate and set an appropriate circuit-breaking threshold. If 50% of rows are being sent to the DLQ, continuing to process the remaining 50% is not useful — the batch has a systemic problem (schema change, source data corruption) that requires investigation before any more processing. Add a check after each batch: if rejection_rate > 0.5, abort the pipeline and send a P1 alert rather than loading half-corrupted data to the destination.
+Third, monitor the DLQ rate and set an appropriate circuit-breaking threshold. If 20% of rows are being sent to the DLQ, continuing to process the remaining 80% is not useful — the batch has a systemic problem (schema change, source data corruption) that requires investigation before any more processing. Add a check after each batch: if rejection_rate > 0.2, abort the pipeline and send a P0 alert rather than loading data from a systemically broken batch to the destination.
 
 The redesigned error flow: row-level data errors → DLQ (row processed, pipeline continues), infrastructure errors → retry with backoff (batch retried), high DLQ rate → abort and alert (pipeline stops, human investigates). This handles the three realistic failure scenarios correctly without either crashing on one bad row or silently continuing when the entire batch is corrupt.`,
           },
@@ -1248,11 +1291,11 @@ The redesigned error flow: row-level data errors → DLQ (row processed, pipelin
         'Rate limit (429) responses require special handling: read the Retry-After header for the exact wait time instead of using exponential backoff. The API is telling you exactly how long to wait. Using a shorter generic backoff will result in another 429 immediately.',
         'The circuit breaker has three states: closed (normal operation), open (all requests fail immediately — service gets time to recover), half-open (one probe request allowed to test recovery). Use circuit breakers for external third-party APIs where repeated timeouts would waste pipeline execution time and add load to a failing service.',
         'A Dead Letter Queue is a quarantine, not a trash can. Store the complete raw record, the error type, the error message, the run ID, and the source key. Monitor pending DLQ counts. Alert at 5% rejection rate. Build a reprocessing job that can retry quarantined records after fixing the root cause.',
-        'The DLQ rejection rate threshold determines alert urgency. Below 1%: normal DLQ activity, log only. 1–5%: P3 warning, investigate next business day. Above 5%: P1 alert, investigate immediately. Above 20%: abort the pipeline — the batch has a systemic problem.',
+        'The DLQ rejection rate threshold determines alert urgency. Below 1%: normal DLQ activity, log only. 1–5%: P3 warning, investigate next business day. Above 5%: P1 alert, investigate immediately. Above 20%: P0 — abort the pipeline — the batch has a systemic problem.',
         'Handle errors at the right level. Row-level data errors (ValueError, invalid field) go to DLQ — catch them per row, continue processing. Infrastructure errors (connection timeout, 5xx) propagate up to the batch level for retry. High DLQ rate triggers pipeline abort rather than loading corrupted data.',
         'Alert quality is as important as alert quantity. A good alert contains: pipeline name and run ID, error message, data impact (how stale is the data), rows processed before failure, DLQ count, checkpoint position, diagnostic links to Airflow logs and Snowflake query history, and automated recovery status.',
         'Alert fatigue is a reliability risk. If engineers ignore alerts because 90% resolve automatically, real P1 incidents get missed. Only alert on conditions that require human action: all retries exhausted, SLA missed, permanent errors, high DLQ rate. Transient errors that resolve within the retry budget should be logged, not alerted.',
-        'The four-tier alerting model: P1 (page immediately) — SLA breach, authentication failure, schema mismatch, 5% DLQ rate. P2 (investigate within 1 hour) — all retries exhausted, DLQ growing across consecutive runs. P3 (investigate within 24 hours) — single run failed but recovered, DLQ has new records. No alert — log only — transient errors that resolved, successful runs.',
+        'The five-tier alerting model: P0 (abort the pipeline) — DLQ count exceeds 20% of processed rows, a systemic problem too large for row-level quarantine to absorb. P1 (page immediately) — SLA breach, authentication failure, schema mismatch, 5% DLQ rate. P2 (investigate within 1 hour) — all retries exhausted, DLQ growing across consecutive runs. P3 (investigate within 24 hours) — single run failed but recovered, DLQ has new records. No alert — log only — transient errors that resolved, successful runs.',
       ]} />
 
 

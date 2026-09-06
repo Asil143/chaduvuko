@@ -863,7 +863,7 @@ return {'status': 'accepted'}`}</CodeBox>
     to_ts = int(time.time())
 
     new_count = 0
-    for payment in fetch_all_cursor(PAYMENTS_URL, auth_header(), {'from': from_ts, 'to': to_ts}):
+    for payment in fetch_all_cursor(f'{API_BASE}/payments', auth_header(), {'from': from_ts, 'to': to_ts}):
         if upsert_payment(payment):   # upsert returns True only for a genuinely new row
             new_count += 1
 
@@ -916,8 +916,10 @@ def parse_amount(raw):
         return None
     try:
         if isinstance(raw, int):
-            return Decimal(raw) / 100        # integer cents → dollars
-        return Decimal(str(raw).replace(',', '.'))  # float, string, or European comma
+            value = Decimal(raw) / 100        # integer cents → dollars
+        else:
+            value = Decimal(str(raw).replace(',', '.'))  # float, string, or European comma
+        return value.quantize(Decimal('0.01'))  # always 2 decimal places, whatever format came in
     except InvalidOperation:
         return None`}</CodeBox>
 
@@ -993,7 +995,9 @@ def parse_timestamp(raw):
         <SubSubTitle>Step 1 — configuration and structured logging</SubSubTitle>
 
         <CodeBox label="payment_ingestion.py — setup">{`import os, json, time, logging, uuid
+import psycopg2
 from pathlib import Path
+from datetime import datetime, timezone, timedelta
 
 API_BASE = 'https://api.payment-gateway.example.com/v1'
 DLQ_PATH = Path('/data/dlq/payments.ndjson')

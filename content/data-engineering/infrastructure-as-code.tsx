@@ -155,7 +155,7 @@ export default function InfrastructureAsCodeModule() {
   backend "s3" {
     bucket         = "freshcart-terraform-state"
     key            = "data-platform/terraform.tfstate"
-    region         = "ap-south-1"
+    region         = "us-east-1"
     encrypt        = true
     dynamodb_table = "freshcart-terraform-locks"   # prevents concurrent applies
   }
@@ -326,10 +326,17 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lake" {
     noncurrent_version_expiration { noncurrent_days = 30 }
   }
 
-  rule {   # silver/gold: standard IA after 180 days
-    id     = "silver-gold-tiering"
+  rule {   # silver: standard IA after 180 days
+    id     = "silver-tiering"
     status = "Enabled"
-    filter { or { prefix = "silver/" prefix = "gold/" } }
+    filter { prefix = "silver/" }
+    transition { days = 180 storage_class = "STANDARD_IA" }
+  }
+
+  rule {   # gold: standard IA after 180 days
+    id     = "gold-tiering"
+    status = "Enabled"
+    filter { prefix = "gold/" }
     transition { days = 180 storage_class = "STANDARD_IA" }
   }
 }`}</CodeBox>
@@ -636,7 +643,7 @@ module "snowflake_prod" {
   environment              = "prod"
   warehouse_size_pipeline = "MEDIUM"
   analyst_cluster_count   = 3
-  analysts = ["priya@freshcart.com", "rahul@freshcart.com"]
+  analysts = ["jason.miller@freshcart.com", "emily.chen@freshcart.com"]
 }
 
 # environments/dev/main.tf — SAME modules, cheaper settings
@@ -694,7 +701,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
         with: { terraform_version: "1.7.0" }
       - uses: aws-actions/configure-aws-credentials@v4
-        with: { role-to-assume: \${{ secrets.AWS_TERRAFORM_ROLE_ARN }}, aws-region: ap-south-1 }
+        with: { role-to-assume: \${{ secrets.AWS_TERRAFORM_ROLE_ARN }}, aws-region: us-east-1 }
 
       - run: terraform init
       - run: terraform fmt -check -recursive terraform/
@@ -731,7 +738,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
         with: { terraform_version: "1.7.0" }
       - uses: aws-actions/configure-aws-credentials@v4
-        with: { role-to-assume: \${{ secrets.AWS_TERRAFORM_ROLE_ARN }}, aws-region: ap-south-1 }
+        with: { role-to-assume: \${{ secrets.AWS_TERRAFORM_ROLE_ARN }}, aws-region: us-east-1 }
       - run: terraform init
       - run: terraform apply -var-file=../../environments/prod.tfvars -auto-approve -input=false`}</CodeBox>
 

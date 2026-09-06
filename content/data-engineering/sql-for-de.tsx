@@ -576,7 +576,13 @@ WITH deduped AS (
         ROW_NUMBER() OVER (PARTITION BY order_id, customer_id, amount, status) AS rn
     FROM silver.orders
 )
-SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;`}</CodeBox>
+SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;
+-- NOTE: SELECT * EXCLUDE (...) is Snowflake/DuckDB-specific syntax — it does
+-- NOT exist in PostgreSQL. PostgreSQL-portable alternative: list columns
+-- explicitly instead of *, e.g.
+-- SELECT order_id, customer_id, store_id, order_amount, status, order_date,
+--        created_at, updated_at
+-- FROM deduped WHERE rn = 1;`}</CodeBox>
 
         <SubSubTitle>Scenario 2 — same key, keep the most recent version</SubSubTitle>
 
@@ -589,7 +595,11 @@ SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;`}</CodeBox>
     FROM silver.orders
 )
 SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;
--- For each order_id, keeps exactly one row — the one with the latest updated_at`}</CodeBox>
+-- For each order_id, keeps exactly one row — the one with the latest updated_at
+-- NOTE: EXCLUDE (...) is Snowflake/DuckDB only — not valid PostgreSQL syntax.
+-- In PostgreSQL, list the columns you want explicitly instead of SELECT *, e.g.
+-- SELECT order_id, customer_id, store_id, order_amount, status, updated_at
+-- FROM deduped WHERE rn = 1;`}</CodeBox>
 
         <SubSubTitle>Scenario 3 — same key, keep the first seen version</SubSubTitle>
 
@@ -602,7 +612,11 @@ SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;
         ) AS rn
     FROM silver.orders
 )
-SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;`}</CodeBox>
+SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;
+-- NOTE: EXCLUDE (...) is Snowflake/DuckDB only, not valid PostgreSQL syntax.
+-- PostgreSQL alternative — list columns explicitly instead of *:
+-- SELECT order_id, customer_id, store_id, order_amount, status, created_at, ingested_at
+-- FROM deduped WHERE rn = 1;`}</CodeBox>
 
         <SubSubTitle>Snowflake&rsquo;s QUALIFY, and cleaning up an existing table</SubSubTitle>
 
@@ -620,6 +634,10 @@ FROM (
     FROM silver.orders
 ) t
 WHERE rn = 1;
+-- NOTE: SELECT * EXCLUDE (...) is Snowflake/DuckDB-specific — not valid PostgreSQL.
+-- PostgreSQL alternative: list columns explicitly in the outer SELECT instead of *, e.g.
+-- SELECT order_id, customer_id, store_id, order_amount, status, updated_at
+-- FROM (...) t WHERE rn = 1;
 
 -- Step 2: swap (truncate original, insert clean version)
 BEGIN;
@@ -1091,8 +1109,20 @@ SELECT order_id, customer_id, amount FROM orders;
 -- tables in Snowflake/BigQuery, hint with the smaller table on the right.
 
 -- 10. APPROXIMATE FUNCTIONS for exploration on very large datasets:
-SELECT APPROX_COUNT_DISTINCT(customer_id) FROM orders;             -- Snowflake
-SELECT HLL_COUNT.MERGE(HLL_COUNT.INIT(customer_id)) FROM orders;    -- BigQuery
+SELECT APPROX_COUNT_DISTINCT(customer_id) FROM orders;              -- Snowflake
+SELECT APPROX_COUNT_DISTINCT(customer_id) FROM orders;              -- BigQuery (simplest option)
+
+-- BigQuery's HLL_COUNT functions expose the underlying sketch — useful when you
+-- want to pre-compute one sketch per partition (e.g. per day) and merge them
+-- later without rescanning raw data. HLL_COUNT.INIT must run in an inner query,
+-- producing one sketch per group; HLL_COUNT.MERGE aggregates those sketches in
+-- an outer query — the two cannot be nested inside each other at the same level:
+SELECT HLL_COUNT.MERGE(daily_sketch) AS approx_distinct_customers
+FROM (
+    SELECT order_date, HLL_COUNT.INIT(customer_id) AS daily_sketch
+    FROM orders
+    GROUP BY order_date
+);
 -- Typically within 1–2% of the exact count, but runs much faster.`}</CodeBox>
       </section>
 
@@ -1353,6 +1383,8 @@ WITH deduped AS (
   FROM silver.orders
 )
 SELECT * EXCLUDE (rn) FROM deduped WHERE rn = 1;
+
+Note: SELECT * EXCLUDE (...) is Snowflake/DuckDB-specific syntax — it does not exist in PostgreSQL. In PostgreSQL, list the columns you want explicitly instead of using *: SELECT order_id, customer_id, store_id, order_amount, status, updated_at FROM deduped WHERE rn = 1.
 
 The choice of ORDER BY inside the window determines which copy is kept. DESC on updated_at keeps the most recently modified version. ASC keeps the earliest version. Adding a secondary sort on ingested_at as a tiebreaker handles cases where multiple versions have identical timestamps.
 

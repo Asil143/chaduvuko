@@ -157,7 +157,7 @@ export default function BatchPipelineFromScratchModule() {
               { label: 'Pattern', value: 'Incremental high-watermark — updated_at based', color: '#7b61ff' },
               { label: 'Schedule', value: 'Every 15 minutes via Airflow', color: '#f97316' },
               { label: 'Destination', value: 'Snowflake — silver.orders table', color: '#00add4' },
-              { label: 'Load mode', value: 'Upsert — ON CONFLICT (order_id) DO UPDATE', color: '#00e676' },
+              { label: 'Load mode', value: 'Upsert — MERGE (order_id) WHEN MATCHED THEN UPDATE', color: '#00e676' },
               { label: 'SLA', value: 'Data no older than 20 minutes at all times', color: '#facc15' },
             ].map((item) => (
               <div key={item.label} style={{
@@ -433,12 +433,19 @@ def get_source_now(conn) -> datetime:
 
 
 def get_source_connection():
-    """Read-only connection with a query timeout — never touches the primary."""
+    """Read-only connection with a query timeout — never touches the primary.
+
+    autocommit is deliberately OFF. extract_changed_rows() below opens a
+    NAMED (server-side) cursor, and psycopg2 named cursors are transaction-
+    scoped — the implicit DECLARE CURSOR needs an open transaction to stay
+    alive across repeated fetchmany() calls. Under autocommit=True that
+    transaction closes immediately, and the cursor is gone before the next
+    fetchmany() runs (surfaces as "cursor does not exist")."""
     conn = psycopg2.connect(
         config.source_db_url,
         options='-c statement_timeout=300000',   # 5-minute statement timeout
     )
-    conn.set_session(readonly=True, autocommit=True)
+    conn.set_session(readonly=True, autocommit=False)
     return conn`}</CodeBox>
 
         <SubSubTitle>Streaming changed rows with a server-side cursor</SubSubTitle>
@@ -517,7 +524,7 @@ VALID_STATUSES = frozenset({
     'picked_up', 'delivering', 'delivered', 'cancelled',
 })
 VALID_PAYMENT_METHODS = frozenset({
-    'debit_card', 'card', 'netbanking', 'wallet', 'cod', 'emi',
+    'credit_card', 'debit_card', 'paypal', 'apple_pay', 'gift_card',
 })
 
 
@@ -581,9 +588,14 @@ def validate_row(raw: dict) -> ValidationResult:
         'customer_id':         int(raw['customer_id']),
         'store_id':            str(raw.get('store_id') or ''),
         'restaurant_id':       raw.get('restaurant_id'),
-        'order_amount':        float(amount),
-        'delivery_fee':        float(Decimal(str(raw.get('delivery_fee') or 0))),
-        'discount_amount':     float(Decimal(str(raw.get('discount_amount') or 0))),
+        # Money stays Decimal all the way to storage — converting to float
+        # here would silently reintroduce the binary floating-point rounding
+        # error this function just parsed order_amount as Decimal to avoid.
+        # (See Part 07: the destination column is NUMBER(10,2), not FLOAT,
+        # specifically so this precision survives into Snowflake.)
+        'order_amount':        amount,
+        'delivery_fee':        Decimal(str(raw.get('delivery_fee') or 0)),
+        'discount_amount':     Decimal(str(raw.get('discount_amount') or 0)),
         'status':              status,
         'payment_method':      norm_method,
         'payment_status':      (raw.get('payment_status') or '').lower() or None,
@@ -673,6 +685,9 @@ def validate_batch(raw_rows: list[dict], dlq: DLQWriter) -> list[dict]:
     enriched = row.copy()
 
     # Total value: order + delivery - discount
+    # All three inputs are Decimal (validate_row keeps money as Decimal end
+    # to end, never float), so this arithmetic is exact — no binary
+    # floating-point rounding error to worry about.
     enriched['total_value'] = round(
         row['order_amount'] + row['delivery_fee'] - row['discount_amount'], 2)
 
@@ -718,7 +733,7 @@ def transform_batch(rows: list[dict]) -> list[dict]:
 
         <Output>{`>>> enrich_order({'order_amount': 380.0, 'delivery_fee': 40.0, 'discount_amount': 20.0,
 ...               'status': 'delivered', 'created_at': ..., 'delivered_at': ..., ...})
-{'total_value': 400.0, 'order_tier': 'standard', 'delivery_minutes': 55.0,
+{'total_value': 400.0, 'order_tier': 'economy', 'delivery_minutes': 55.0,
  'cancellation_type': None, 'has_promo': False, ...}`}</Output>
 
         <CodeBox label="pipeline/transform.py — schema projection for the destination">{`DEST_COLUMNS = [
@@ -785,7 +800,8 @@ def upsert_batch(rows: list[dict], conn) -> int:
 
     success, nchunks, nrows, output = write_pandas(
         conn=conn, df=df, table_name='orders_staging', schema=config.dest_schema,
-        overwrite=True, auto_create_table=True, use_logical_type=True,
+        overwrite=True, auto_create_table=True,
+        use_logical_type=True,   # required for the Decimal money columns to land as NUMBER, not FLOAT
     )
     if not success:
         raise RuntimeError(f'write_pandas failed: {output}')
@@ -819,8 +835,12 @@ def ensure_dest_table_exists(conn) -> None:
     CREATE TABLE IF NOT EXISTS {config.dest_schema}.{config.dest_table} (
         order_id BIGINT NOT NULL, customer_id BIGINT NOT NULL,
         store_id VARCHAR(50), restaurant_id BIGINT,
-        order_amount FLOAT NOT NULL, delivery_fee FLOAT NOT NULL DEFAULT 0,
-        discount_amount FLOAT NOT NULL DEFAULT 0, total_value FLOAT,
+        -- NUMBER(10,2), not FLOAT: money needs exact decimal precision, and
+        -- the pipeline carries order_amount/delivery_fee/discount_amount as
+        -- Python Decimal end to end (see validate.py) specifically so it can
+        -- land here without floating-point rounding error.
+        order_amount NUMBER(10,2) NOT NULL, delivery_fee NUMBER(10,2) NOT NULL DEFAULT 0,
+        discount_amount NUMBER(10,2) NOT NULL DEFAULT 0, total_value NUMBER(10,2),
         status VARCHAR(30) NOT NULL, payment_method VARCHAR(30), payment_status VARCHAR(30),
         order_tier VARCHAR(20), order_date DATE, order_hour INTEGER, order_month VARCHAR(7),
         delivery_minutes FLOAT, cancellation_type VARCHAR(20), cancellation_reason VARCHAR(500),
@@ -932,16 +952,27 @@ def setup_logging() -> None:
 ERROR Pipeline run FAILED after 301.2s: QueryCanceled: canceling statement due to statement timeout`}</Output>
 
         <CodeBox label="pipeline/observability.py — writing the run record">{`def write_run_record(run: 'PipelineRun', dest_conn) -> None:
-    record       = run.to_record()
-    columns      = ', '.join(record.keys())
-    placeholders = ', '.join(f'%({k})s' for k in record.keys())
+    """Upsert this run's row into the monitoring table.
+
+    dest_conn is a Snowflake connection (see load.py's get_dest_connection),
+    and Snowflake has no ON CONFLICT — that is Postgres-only syntax. MERGE is
+    the Snowflake equivalent, and it is the same construct load.py's
+    MERGE_SQL already uses to upsert the orders table itself."""
+    record = run.to_record()
+    cols   = list(record.keys())
+
+    select_exprs = ', '.join(f'%({c})s AS {c}' for c in cols)
+    update_set   = ', '.join(f'{c} = source.{c}' for c in cols if c != 'run_id')
+    insert_cols  = ', '.join(cols)
+    insert_vals  = ', '.join(f'source.{c}' for c in cols)
+
     sql = f"""
-        INSERT INTO {config.pipeline_run_table} ({columns}) VALUES ({placeholders})
-        ON CONFLICT (run_id) DO UPDATE SET
-            finished_at = EXCLUDED.finished_at, status = EXCLUDED.status,
-            rows_extracted = EXCLUDED.rows_extracted, rows_written = EXCLUDED.rows_written,
-            rows_rejected = EXCLUDED.rows_rejected, duration_seconds = EXCLUDED.duration_seconds,
-            error_message = EXCLUDED.error_message
+        MERGE INTO {config.pipeline_run_table} AS target
+        USING (SELECT {select_exprs}) AS source
+        ON target.run_id = source.run_id
+        WHEN MATCHED THEN UPDATE SET {update_set}
+        WHEN NOT MATCHED THEN
+            INSERT ({insert_cols}) VALUES ({insert_vals})
     """
     with dest_conn.cursor() as cur:
         cur.execute(sql, record)
@@ -1028,6 +1059,11 @@ def run_pipeline(run_date_str: str) -> PipelineRun:
             finally:
                 dest_conn.close()
         if source_conn:
+            # autocommit=False (see get_source_connection) means the named-
+            # cursor extraction left an open transaction on this connection.
+            # It is read-only — nothing to persist — so roll back explicitly
+            # rather than relying on close() to discard it implicitly.
+            source_conn.rollback()
             source_conn.close()
 
     return run`}</CodeBox>
@@ -1036,9 +1072,8 @@ def run_pipeline(run_date_str: str) -> PipelineRun:
 INFO Destination table verified: silver.orders
 INFO Extracting rows updated 2026-08-20T02:40:00+00:00 → 2026-08-20T03:00:12+00:00 (overlap: 5 min)
 INFO Extracted batch 1: 1,842 rows (total so far: 1,842)
-WARNING High rejection rate: 12.3% (34 of 277 rows rejected)
-INFO Staged 1,842 rows in 1 chunks
-INFO Merge complete: 1,690 inserted, 152 updated
+INFO Staged 1,808 rows in 1 chunks
+INFO Merge complete: 1,656 inserted, 152 updated
 INFO Checkpoint saved: 2026-08-20T03:00:12+00:00
 INFO Pipeline run complete: extracted=1842 written=1808 rejected=34 duration=12.4s`}</Output>
 
@@ -1284,7 +1319,7 @@ Total duration: 12.9s (SLA: 8 min — not breached)`}</Output>
           },
           {
             wrong: '"As long as I use ON CONFLICT / MERGE, the order operations run in doesn\'t matter"',
-            right: 'It matters enormously for the checkpoint. Part 09\'s ordering — extract, validate, transform, load, THEN save the watermark — is load-bearing. Save the watermark before the load and a failed write silently skips data forever, upsert or not. The upsert protects you from re-processing after a crash; it does nothing to protect you from advancing past data that was never written.',
+            right: 'One correction before the real point: ON CONFLICT and MERGE are not two names for one universal mechanism — ON CONFLICT is Postgres-specific syntax, while MERGE is the equivalent upsert construct on Snowflake (and most other warehouses). This pipeline uses MERGE exclusively because the destination is Snowflake, which does not support ON CONFLICT at all. Whichever construct your database gives you, operation order still matters enormously for the checkpoint. Part 09\'s ordering — extract, validate, transform, load, THEN save the watermark — is load-bearing. Save the watermark before the load and a failed write silently skips data forever, upsert or not. The upsert protects you from re-processing after a crash; it does nothing to protect you from advancing past data that was never written.',
           },
           {
             wrong: '"A pipeline that has never failed in production is a well-designed pipeline"',
@@ -1379,7 +1414,7 @@ FROM monitoring.pipeline_runs
 WHERE pipeline_name = 'orders_incremental' AND started_at::DATE = '2026-08-20'
 ORDER BY started_at;
 
--- 06:00 run: rows_extracted=182,000  duration_seconds=847  (14 minutes)
+-- 06:00 run: rows_extracted=48,000   duration_seconds=847  (14 minutes)
 -- typical run: rows_extracted=2,000   duration_seconds=45s
 -- → the 00:00–05:45 runs all failed silently (Snowflake maintenance window)
 --   06:00 processed 5.75 hours of backlog → expected to be slow
@@ -1451,7 +1486,7 @@ Finally I wrap this in an Airflow DAG with max_active_runs=1 to prevent concurre
 
 If the checkpoint is saved before the destination write, and the write then fails (network error, Snowflake timeout, schema mismatch), the next run starts from the advanced checkpoint — after the data that should have been written. The rows that were extracted but not successfully written are skipped forever. The destination has a permanent gap.
 
-If the checkpoint is saved after the destination write, and the checkpoint save fails or the process is killed between the write and the save, the next run starts from the previous checkpoint — before the data that was just written. It re-extracts and re-processes those rows. Because the destination uses upsert semantics (ON CONFLICT DO UPDATE), re-processing rows that already exist updates them to the same values — no duplicates, no corruption. This is exactly the idempotency principle: safe to rerun.
+If the checkpoint is saved after the destination write, and the checkpoint save fails or the process is killed between the write and the save, the next run starts from the previous checkpoint — before the data that was just written. It re-extracts and re-processes those rows. Because the destination uses upsert semantics (a MERGE — Snowflake's equivalent of Postgres's ON CONFLICT DO UPDATE), re-processing rows that already exist updates them to the same values — no duplicates, no corruption. This is exactly the idempotency principle: safe to rerun.
 
 The only safe invariant is: the checkpoint must only advance to a watermark when data up to that watermark has been durably written to the destination. Any other ordering risks permanent data loss.
 
@@ -1575,9 +1610,9 @@ The overall philosophy: write pure functions wherever possible (transformation, 
             fix: 'Check the success, nchunks, nrows, output tuple returned by write_pandas — raise an explicit RuntimeError if success is False (Part 07 already does this). Add a retry: if the staging table does not exist after write_pandas, retry once with a fresh connection. Also configure the Snowflake warehouse with AUTO_RESUME = TRUE and AUTO_SUSPEND = 60 (1 minute idle) to ensure it is available for the pipeline runs.',
           },
           {
-            error: `Pipeline runs complete successfully but Silver table row count grows unexpectedly — 500k new rows per run instead of expected 2k`,
-            cause: 'The overlap_minutes configuration is set to 60 minutes instead of 5 minutes. Every 15-minute run is re-extracting the last 60 minutes of data instead of just the last 5 minutes plus a small overlap. The upsert semantics prevent duplicates but the pipeline is doing 12× more work than necessary, re-processing 48k rows that were already correctly loaded.',
-            fix: 'Set overlap_minutes=5 (or at most 10 for tables with high clock skew risk). Re-check the monitoring table: if rows_extracted is consistently 12× higher than rows_written minus rows_rejected, the overlap window is larger than necessary. The correct size for overlap_minutes is the 99th percentile data lateness for the source table — typically 1–5 minutes for well-maintained application code.',
+            error: `Pipeline runs complete successfully but Silver table row count grows unexpectedly — ~24k new rows per run instead of expected 2k`,
+            cause: 'The overlap_minutes configuration is set to 60 minutes instead of 5 minutes — a 12× larger extraction window (60 ÷ 5 = 12). Every 15-minute run is re-extracting the last 60 minutes of data instead of just the last 5 minutes plus a small overlap. The upsert semantics prevent duplicates, but the pipeline is now extracting roughly 24k rows per run (12× the expected ~2k), re-processing about 22k rows that were already correctly loaded on a previous run.',
+            fix: 'Set overlap_minutes=5 (or at most 10 for tables with high clock skew risk). Re-check the monitoring table: if rows_extracted is consistently ~12× higher than the historical baseline for that run cadence, the overlap window is larger than necessary. The correct size for overlap_minutes is the 99th percentile data lateness for the source table — typically 1–5 minutes for well-maintained application code.',
           },
           {
             error: `Airflow DAG max_active_runs=1 is not preventing concurrent runs — two pipeline instances are running simultaneously`,

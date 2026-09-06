@@ -360,10 +360,20 @@ This is expected and correct — Bronze is the event log, Silver is the state.`}
 
         <SubSubTitle>Bronze implementation — the Spark ingestion function</SubSubTitle>
 
+        <Para>
+          The function below is the entire Bronze pipeline for one day of
+          Stripe payment events — it reads the landing JSON, adds four
+          metadata columns, and appends the result to Delta Lake. Notice what
+          it does <em>not</em> do: no filtering, no joins, no business rules.
+          Every transformation here exists only to make the raw data safely
+          queryable, not to make it correct.
+        </Para>
+
         <CodeBox label="Bronze layer pipeline — format conversion with schema preservation">{`"""
 Bronze pipeline: landing JSON → Bronze Parquet (Delta Lake)
 Preserves all source fields, adds ingestion metadata.
 """
+import uuid
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from datetime import date
@@ -377,6 +387,9 @@ LANDING_PATH = "s3://freshcart-data-lake-prod/landing/stripe"
 
 def load_to_bronze(run_date: date) -> dict:
     """Load raw Stripe JSON from landing to Bronze Delta Lake."""
+    # A fresh run_id per execution — written to every row so any batch of
+    # Bronze rows can be traced back to exactly which pipeline run wrote it.
+    run_id = str(uuid.uuid4())
     landing_file = f"{LANDING_PATH}/payments_{run_date.strftime('%Y%m%d')}.json"
 
     # Read raw JSON — schema inferred from source (schema-on-read at Bronze)
@@ -390,13 +403,26 @@ def load_to_bronze(run_date: date) -> dict:
         .withColumn("_bronze_date",    F.to_date(F.current_timestamp()))
     # Note: _ prefix on all metadata columns to distinguish from source columns
 
+    # Bronze is APPEND ONLY — mode("append") never overwrites or deletes
+    # existing rows, even when the same order_id shows up again.
+    # mergeSchema="true" lets a new source column flow through automatically
+    # instead of failing the write.
     bronze.write \\
-        .format("delta").mode("append") \\      # Bronze is APPEND ONLY
+        .format("delta").mode("append") \\
         .partitionBy("_bronze_date") \\
-        .option("mergeSchema", "true") \\        # allow new source columns to flow through
+        .option("mergeSchema", "true") \\
         .save(BRONZE_PATH)
 
-    return {"rows_written": bronze.count(), "path": BRONZE_PATH, "partition": str(run_date)}`}</CodeBox>
+    return {"rows_written": bronze.count(), "path": BRONZE_PATH, "partition": str(run_date), "run_id": run_id}`}</CodeBox>
+
+        <Para>
+          The one line worth pausing on is <code>mergeSchema=&quot;true&quot;</code>.
+          It is what lets this same pipeline keep running unmodified the day
+          Stripe adds a new field to its payment payload — instead of the
+          write failing with a schema mismatch, Delta Lake widens the Bronze
+          table to include it. That column then sits in Bronze until someone
+          deliberately decides Silver should have it too.
+        </Para>
 
         <SubSubTitle>Schema evolution — what happens when the source adds a column</SubSubTitle>
 
@@ -509,7 +535,7 @@ notes                          AS notes          -- leave NULL as NULL — NULL 
             detail: 'Fields containing personal information (phone numbers, email addresses, full names, IP addresses) are masked or hashed in Silver. Analysts who query Silver cannot access raw PII. The Bronze layer still has unmasked PII — access to Bronze is restricted to pipeline engineers only.',
             sql: `SHA2(customer_email, 256)     AS customer_email_hashed,
 REGEXP_REPLACE(phone, '[0-9]', 'X', 1, -1, 'i')
-                              AS phone_masked,   -- +91-XXXXXXXX-XX
+                              AS phone_masked,   -- +1-XXX-XXX-XXXX
 -- Raw fields NOT included in Silver SELECT — they stay in Bronze only`,
           },
           {
