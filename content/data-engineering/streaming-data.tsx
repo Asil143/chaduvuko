@@ -296,7 +296,7 @@ export default function StreamingDataModule() {
     "payment_method": "card",
     "delivery_address": {
       "city": "Austin",
-      "zip_code": "500032"
+      "zip_code": "78701"
     }
   },
 
@@ -1185,7 +1185,7 @@ event = {
         "customer_id":     "C98765",
         "customer_name":   "Emily Johnson",
         "customer_email":  "emily@example.com",   # included for notification service
-        "customer_phone":  "+91 9876543210",       # included for SMS service
+        "customer_phone":  "+1 512-555-0142",       # included for SMS service
         "store_id":        "ST007",
         "store_city":      "Austin",             # included for analytics
         "items":           [...],

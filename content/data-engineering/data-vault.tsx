@@ -145,7 +145,48 @@ export default function DataVaultModule() {
           rules breaks auditability and parallelism.
         </Para>
 
+        <Para>
+          The three-way split is not arbitrary — it follows directly from the
+          fact that a business entity has three parts that change at
+          completely different rates. The identifier itself (a customer ID,
+          an order ID) is essentially permanent: once a source system assigns
+          it, it doesn't change. Which other entities that identifier is
+          connected to changes occasionally, as business rules evolve — an
+          order gets reassigned to a different store, an employee moves
+          department. The descriptive detail attached to that identifier — a
+          customer's city, tier, or phone number — changes constantly, and
+          needs a full version history rather than a single current value.
+          Data Vault gives each of those three change rates its own table
+          type, so a change to one never forces a rewrite of the other two.
+        </Para>
+
+        <Para>
+          Hubs isolate the identifier: a hub row records only that a business
+          key exists, when it was first seen, and which source reported it —
+          nothing about the entity itself. Links record the relationships
+          between business keys, kept separate specifically because those
+          relationships are what shifts as the business changes, without the
+          underlying keys themselves ever changing. Satellites absorb
+          everything else — the descriptive, contextual attributes that
+          genuinely do change over time. The three tables below spell out the
+          exact rules for each, but every rule traces back to this one idea:
+          keep what's permanent, what's relational, and what's descriptive in
+          three separate places, so each can be loaded and changed
+          independently of the other two.
+        </Para>
+
         <SubSubTitle>Hub — records that a business key exists, nothing more</SubSubTitle>
+
+        <Para>
+          The hub below is deliberately sparse, and that sparseness is the
+          entire point. It shows two rows that might represent the very same
+          real customer, arriving under two different keys from two different
+          source systems — the hub doesn't try to resolve that here. Its only
+          job is recording that each key exists, when it was first seen, and
+          which source reported it; reconciling '4201938' with 'USR-42019'
+          happens two layers away, in the Business Vault (Part 05).
+        </Para>
+
         <CodeBox label="Table type 1: HUB — rules and structure">{`Purpose:  Records the existence of a business concept.
           Stores the unique business key from source systems.
 Rule:     ONLY contains the business key and metadata. No descriptive attributes.
@@ -161,7 +202,29 @@ HUB_CUSTOMER:
 Note: these two may be the same real customer — resolved in Business Vault via SAL.
 The hub just records that each key was seen from its source.`}</CodeBox>
 
+        <Para>
+          Notice what's missing: no name, no email, no city. That absence is
+          the rule, not an oversight — the moment a hub carries a descriptive
+          attribute, loading it independently of whatever process supplies
+          that attribute is no longer possible, and the whole reason for
+          isolating identity falls apart.
+        </Para>
+
         <SubSubTitle>Link — records a relationship between two or more hubs</SubSubTitle>
+
+        <Para>
+          A link exists because a relationship between two business keys is
+          not a permanent fact about either key — it's its own kind of
+          history. An order belongs to one customer today, but it's the
+          relationship itself, not the customer's identity, that a business
+          reorganisation or a same-as-link resolution might need to revise
+          later. If that relationship lived inside the hub or the satellite
+          instead, every change to it would mean rewriting rows that are
+          supposed to be immutable. The link below records the relationship
+          as its own fact, timestamped and sourced, independent of both hubs
+          it connects.
+        </Para>
+
         <CodeBox label="Table type 2: LINK — rules and structure">{`Purpose:  Records the relationship between two or more entities.
 Rule:     ONLY hub hash keys + metadata. No descriptive attributes.
 Columns:  lnk_[rel]_hk       CHAR(32) PK   ← hash of combined hub HKs
@@ -174,7 +237,29 @@ LNK_ORDER_CUSTOMER:
   lnk_hk            hub_order_hk      hub_customer_hk    load_dts
   MD5(hk1||hk2)     MD5('9284751')    MD5('4201938')     2026-03-17 ...`}</CodeBox>
 
+        <Para>
+          Structurally a link looks almost like a hub — the same INSERT-only
+          discipline, the same absence of descriptive attributes — but its
+          hash key is a composite, built from the hub keys it connects rather
+          than a single business key. That composite is computable the
+          instant both business keys are known, which is exactly what lets a
+          link load in parallel with the hubs it references instead of
+          waiting on either one.
+        </Para>
+
         <SubSubTitle>Satellite — descriptive attributes, one per source, full history</SubSubTitle>
+
+        <Para>
+          Everything left over — everything that actually describes an
+          entity rather than merely identifying it or connecting it to
+          something else — lives in a satellite, and it's deliberately the
+          only one of the three table types built to change. The example
+          below also shows the second satellite rule: one source, one
+          satellite, never merged, so that when two sources genuinely
+          disagree, both raw versions are still there to reconcile later
+          instead of one silently overwriting the other.
+        </Para>
+
         <CodeBox label="Table type 3: SATELLITE — rules and structure">{`Purpose:  Stores descriptive attributes + full history of changes.
 Rule:     ONLY attributes from ONE source. If two sources describe the same
           customer differently: TWO separate satellites, one per source.
@@ -194,6 +279,14 @@ SAT_CUSTOMER_LOYALTY_APP (from loyalty app — separate satellite):
   hub_customer_hk  load_dts          city       loyalty_points
   MD5('4201938')   2024-03-01 09:00  Seattle  4200`}</CodeBox>
         <Output>{`TWO satellites for the same customer: both raw versions preserved for audit.`}</Output>
+
+        <Para>
+          That last point is easy to underrate until it actually happens: two
+          sources reporting different values for the same customer is common,
+          and having preserved both independently — rather than merging them
+          at load time — is what makes an auditable reconciliation possible
+          at all in the Business Vault, instead of a guess.
+        </Para>
       </section>
 
       <Divider />

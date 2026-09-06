@@ -881,7 +881,7 @@ def convert_csv_to_parquet(input_path: str, output_root: str, source_date: date,
 
     full_table  = pa.concat_tables(all_tables)
     output_path = f"{s3_bucket}/bronze/orders" if s3_bucket else output_root + "/orders"
-    filesystem  = pafs.S3FileSystem(region='ap-south-1') if s3_bucket else pafs.LocalFileSystem()
+    filesystem  = pafs.S3FileSystem(region='us-east-1') if s3_bucket else pafs.LocalFileSystem()
     if not s3_bucket:
         Path(output_path).mkdir(parents=True, exist_ok=True)
 

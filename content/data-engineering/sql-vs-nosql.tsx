@@ -362,7 +362,7 @@ Table has 80+ columns, 75% NULL for any given row`}</Output>
         <SubSubTitle>The document database alternative — no forced-NULL columns</SubSubTitle>
         <CodeBox label="Document database solution — only the fields relevant to each product">{`Document database solution (MongoDB):
   Electronics product: {"id":1, "name":"iPhone 15", "ram":"6GB", "storage":"128GB"}
-  Clothing product:    {"id":2, "name":"Cotton Kurta", "size":"M", "fabric":"cotton"}
+  Clothing product:    {"id":2, "name":"Cotton T-Shirt", "size":"M", "fabric":"cotton"}
   Each document contains only the fields relevant to it.
   New categories need no schema migration — just add new documents.`}</CodeBox>
       </section>
@@ -539,7 +539,7 @@ Query to get one product with all details:
 {
   "_id": "SKU-00283741",
   "name": "Samsung Galaxy S24",
-  "price": 79999,
+  "price": 899,
   "category": "Electronics > Smartphones",
   "attributes": {
     "ram": "8GB", "storage": "256GB",
@@ -661,7 +661,7 @@ CASSANDRA TABLE DESIGN (designed around the query, not the entity):
 
 WRITE (very fast — append to partition):
   INSERT INTO delivery_events (delivery_id, event_time, event_type, lat, lng, agent_id)
-  VALUES (uuid(), toTimestamp(now()), 'in_transit', 12.9352, 77.6245, agent_uuid);
+  VALUES (uuid(), toTimestamp(now()), 'in_transit', 30.2672, -97.7431, agent_uuid);
 
 READ (fast — all data for this delivery is on one node):
   SELECT * FROM delivery_events
@@ -757,7 +757,7 @@ CASSANDRA RULE: design one table per query pattern.
 NODES (entities):
   (:User {id: 4201938, name: "Emily"})
   (:User {id: 1092847, name: "Marcus"})
-  (:Product {id: "SKU-001", name: "Kurta", category: "Clothing"})
+  (:Product {id: "SKU-001", name: "Cotton T-Shirt", category: "Clothing"})
   (:Product {id: "SKU-002", name: "Shoes",  category: "Footwear"})
 
 EDGES (relationships — stored directly, not derived):

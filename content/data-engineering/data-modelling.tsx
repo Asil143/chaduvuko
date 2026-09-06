@@ -328,11 +328,11 @@ DEGENERATE DIMENSIONS:
     fiscal_year    INT,
     is_weekday     BOOLEAN,
     is_holiday     BOOLEAN,
-    holiday_name   VARCHAR(100),   -- 'Diwali', 'Independence Day', ...
-    season         VARCHAR(20)     -- 'festive', 'regular', 'summer'
+    holiday_name   VARCHAR(100),   -- 'Thanksgiving', 'Independence Day', ...
+    season         VARCHAR(20)     -- 'holiday', 'regular', 'summer'
 );
 -- Generate 2000-01-01 through 2030-12-31 (11,000 rows — tiny table)
--- dbt: {{ dbt_utils.date_spine(datepart="day", start_date="'2020-01-01'",
+-- dbt: {{ dbt_utils.date_spine(datepart="day", start_date="'2000-01-01'",
 --         end_date="'2030-12-31'") }}`}</CodeBox>
 
         <SubSubTitle>dim_store — a denormalised hierarchy in one table</SubSubTitle>
@@ -343,7 +343,7 @@ DEGENERATE DIMENSIONS:
     store_name     VARCHAR(200),
     store_type     VARCHAR(50),            -- 'dark_store', 'franchise', 'owned'
     city           VARCHAR(100),
-    city_tier      VARCHAR(10),            -- 'tier1', 'tier2', 'tier3'
+    market_size    VARCHAR(20),            -- 'major_metro', 'mid_size', 'small_market'
     state          VARCHAR(50),
     region         VARCHAR(50),            -- hierarchy all in ONE table (not snowflaked)
     latitude       DECIMAL(9,6),
@@ -422,16 +422,16 @@ SURROGATE KEY GENERATION in dbt:
                             │ order_date_sk FK
                             │
 dim_customer ── customer_sk FK ── fct_orders ── store_sk FK ── dim_store
-(customer_sk PK)               ┌──────────────┐             (store_sk PK)
-                               │ order_sk  PK │
-               payment_sk FK──┤ customer_sk  │
-                    │          │ store_sk     │
-dim_payment_method │          │ date_sk      │
- (payment_sk PK) ──┘          │ payment_sk   │
-                               │ order_amount │ ← FACTS
-                               │ discount_amt │
-                               │ delivery_fee │
-                               └──────────────┘`}</CodeBox>
+(customer_sk PK)               ┌───────────────────┐        (store_sk PK)
+                               │ order_sk        PK │
+    payment_method_sk FK──────┤ customer_sk         │
+                    │          │ store_sk            │
+dim_payment_method │          │ date_sk             │
+ (payment_sk PK) ──┘          │ payment_method_sk   │
+                               │ order_amount        │ ← FACTS
+                               │ discount_amt        │
+                               │ delivery_fee        │
+                               └───────────────────┘`}</CodeBox>
 
         <SubSubTitle>The canonical query pattern, and why it's fast</SubSubTitle>
 
@@ -622,7 +622,9 @@ SELECT
     CASE
         WHEN state IN ('Texas','Georgia','Florida','Alabama','Tennessee') THEN 'South'
         WHEN state IN ('California','Oregon','Washington') THEN 'West'
-        ELSE 'Midwest'
+        WHEN state IN ('New York','Massachusetts','Pennsylvania','New Jersey','Connecticut') THEN 'Northeast'
+        WHEN state IN ('Illinois','Ohio','Michigan','Wisconsin','Minnesota') THEN 'Midwest'
+        ELSE 'Other'
     END AS region,
     tier, acquisition_channel, registration_date,
     dbt_valid_from AS valid_from,
@@ -678,7 +680,7 @@ LEFT JOIN {{ ref('dim_payment_method') }} p ON o.payment_method = p.payment_meth
         {[
           {
             wrong: '"The grain is a documentation detail — you can add columns first and formalize it later"',
-            right: 'Part 02 is explicit that grain has to come first precisely because every later column choice depends on it — adding product_id to an order-grain table silently multiplies rows per order, and this module\'s Error Library shows exactly what that does: SUM(order_amount) triples without any error being raised.',
+            right: 'Part 02 is explicit that grain has to come first precisely because every later column choice depends on it — adding product_id to an order-grain table silently multiplies rows per order, and this module\'s Error Library shows exactly what that does: SUM(order_amount) balloons to roughly 59× its correct value without any error being raised.',
           },
           {
             wrong: '"Snowflaking a dimension (normalizing dim_store into dim_store → dim_city → dim_region) is the more correct, professional design"',
@@ -686,7 +688,7 @@ LEFT JOIN {{ ref('dim_payment_method') }} p ON o.payment_method = p.payment_meth
           },
           {
             wrong: '"Joining a fact table to a dimension on the natural key (customer_id) is basically equivalent to joining on the surrogate key (customer_sk)"',
-            right: 'Part 04\'s Reason 1 and this module\'s Error Library both show this is where point-in-time accuracy dies — the natural-key join matches every historical SCD2 version simultaneously, causing exactly the "COUNT(order_id) triples" fan-out bug this module\'s Error Library opens with.',
+            right: 'Part 04\'s Reason 1 and this module\'s Error Library both show this is where point-in-time accuracy dies — the natural-key join matches every historical SCD2 version simultaneously, causing exactly the same COUNT(order_id) fan-out bug this module\'s Error Library opens with — a roughly 59× inflation there, not a mere tripling.',
           },
           {
             wrong: '"Storing a pre-computed ratio like cancellation_rate in the fact table is fine as long as it\'s accurate when written"',
@@ -770,9 +772,10 @@ JOIN dim_date d USING (order_date_sk)
 GROUP BY 1, 2, 3;
 
 -- Both Finance and Operations now query mrt_monthly_revenue.
--- Finance: SELECT delivered_revenue + in_progress_value AS gmv
+-- Finance: SELECT gross_order_value AS gmv   (all non-cancelled orders)
 -- Operations: SELECT delivered_revenue
--- The SAME number. The disagreement is eliminated structurally.`}</CodeBox>
+-- Each team gets a consistent, unambiguous number every run — the
+-- disagreement is eliminated structurally, not patched with a one-off query.`}</CodeBox>
 
           <Para>
             The root cause was not a data quality issue — it was a missing canonical
@@ -861,7 +864,7 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
         {[
           {
             q: 'Adding a column to a fact table without checking whether it\'s actually true at the declared grain',
-            a: 'Part 02\'s grain examples show exactly how this happens — product_id looks harmless to add to an order-grain table, but it silently forces multiple rows per order, and this module\'s Error Library documents the direct consequence: a revenue dashboard showing 3x the correct value with no error anywhere in the pipeline.',
+            a: 'Part 02\'s grain examples show exactly how this happens — product_id looks harmless to add to an order-grain table, but it silently forces multiple rows per order, and this module\'s Error Library documents the direct consequence: a revenue dashboard showing 59x the correct value with no error anywhere in the pipeline.',
           },
           {
             q: 'Joining a fact table to an SCD Type 2 dimension on the natural key instead of the surrogate key',
@@ -896,8 +899,8 @@ The pragmatic 2026 approach is a hybrid: build the canonical model as a star sch
 
         {[
           {
-            error: `Revenue dashboard shows 3× expected value — COUNT(order_id) returns 2,847,291 but COUNT(DISTINCT order_id) returns 48,234 on the same fact table`,
-            cause: 'The fct_orders dbt model joins to a dimension table that has multiple rows per natural key — most likely dim_customer or dim_payment_method with SCD Type 2 rows — and the join uses the natural key without filtering to is_current = TRUE. Each fact row now matches multiple dimension rows (one per historical version), creating fan-out. Three versions of a customer dimension row means three fact rows per order, tripling revenue.',
+            error: `Revenue dashboard shows 59× expected value — COUNT(order_id) returns 2,847,291 but COUNT(DISTINCT order_id) returns 48,234 on the same fact table`,
+            cause: 'The fct_orders dbt model joins to a dimension table that has multiple rows per natural key — most likely dim_customer or dim_payment_method with SCD Type 2 rows — and the join uses the natural key without filtering to is_current = TRUE. Each fact row now matches multiple dimension rows (one per historical version), creating fan-out. Roughly 59 historical dimension-row versions being matched per natural key means each order is counted about 59 times over, inflating total revenue by the same factor.',
             fix: 'Always join fact tables to SCD Type 2 dimensions using the surrogate key (customer_sk), not the natural key (customer_id). The surrogate key stored in the fact table at load time uniquely identifies exactly one dimension version — no fan-out possible. Fix the load process to look up the correct surrogate at fact load time using the date-range join: JOIN dim_customer c ON o.customer_id = c.customer_id AND o.order_date BETWEEN c.valid_from AND COALESCE(c.valid_to, \'9999-12-31\'). Add a dbt test: assert COUNT(DISTINCT order_id) = COUNT(*) on fct_orders to catch this immediately.',
           },
           {

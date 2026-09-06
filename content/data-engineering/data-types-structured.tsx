@@ -157,14 +157,14 @@ export default function DataTypesStructuredModule() {
                 type: 'Structured',
                 color: '#00e676',
                 oneline: 'Data with a rigid, predefined schema — rows and columns where every value has a known type and position.',
-                examples: 'PostgreSQL tables, CSV files, Excel sheets',
+                examples: 'PostgreSQL tables, CSV files, Excel sheets, Parquet, ORC',
                 pct: '~20% of all enterprise data',
               },
               {
                 type: 'Semi-Structured',
                 color: '#7b61ff',
                 oneline: 'Data with some organisation but no rigid schema — self-describing format where structure can vary between records.',
-                examples: 'JSON, XML, Avro, Parquet, log files',
+                examples: 'JSON, XML, Avro, log files',
                 pct: '~40% of all enterprise data',
               },
               {
@@ -799,8 +799,8 @@ Call recording pipeline:
                 },
                 {
                   dimension: 'Examples',
-                  structured: 'SQL tables, CSV with headers, Excel',
-                  semi: 'JSON, XML, Avro, Parquet, log files',
+                  structured: 'SQL tables, CSV with headers, Excel, Parquet, ORC',
+                  semi: 'JSON, XML, Avro, log files',
                   unstructured: 'Images, audio, video, free text, PDFs, emails',
                 },
                 {
@@ -1033,7 +1033,7 @@ Call recording pipeline:
             company: 'Providence Health — Healthcare',
             color: '#00e676',
             structured: [
-              'Patient table: patient_id, name, DOB, blood_group, allergies, primary_doctor_id',
+              'Patient table: patient_id, name, DOB, blood_type, allergies, primary_doctor_id',
               'Appointment table: appointment_id, patient_id, doctor_id, scheduled_at, status',
               'Billing table: bill_id, patient_id, total_amount, insurance_claimed, paid_amount',
               'Lab results table: result_id, patient_id, test_type, value, unit, reference_range, abnormal_flag',
@@ -1253,7 +1253,7 @@ Stage two is processing. I build a processing pipeline that reads unreviewed rec
 
 Stage three is storage in Silver and Gold. The structured model output joins with the original structured metadata in the Silver layer: one row per review with all fields. In the Gold layer, I aggregate: daily sentiment scores per product category, weekly trending topics, sentiment correlation with star rating to validate model quality, and alert thresholds for sudden sentiment drops on a product.
 
-The key engineering decisions are: how to handle the processing cost (run in batch nightly rather than in real-time unless live monitoring is needed), how to version the model so re-processing with a new model is possible, and how to handle multilingual reviews (Tamil, Hindi, Kannada alongside English) which may require different model versions.`,
+The key engineering decisions are: how to handle the processing cost (run in batch nightly rather than in real-time unless live monitoring is needed), how to version the model so re-processing with a new model is possible, and how to handle multilingual reviews (Spanish, Mandarin, Vietnamese alongside English) which may require different model versions.`,
           },
           {
             q: 'Q4. A new column is added to a source database table without notifying the data team. How does this break your pipeline and how do you prevent it?',

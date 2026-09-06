@@ -874,7 +874,7 @@ result = orders.join(
         </Para>
 
         <CodeBox label="salting — fixing data skew in distributed joins">
-{`# Problem: customer C00001 (Reliance Industries) has 10M orders out of 50M total
+{`# Problem: customer C00001 (Walmart) has 10M orders out of 50M total
 # After shuffle join, one executor gets 10M rows, others get ~800k
 # Result: 1 executor runs for 45 minutes, others finish in 4 minutes
 

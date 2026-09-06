@@ -318,7 +318,7 @@ DROP TABLE silver.store_master_old;
         {[
           {
             scenario: 'Small reference / dimension tables',
-            detail: 'Product categories, store master, currency exchange rates, postal code mappings — these tables are small (< 100,000 rows), change occasionally, and must always reflect the current state. Full load is simpler than tracking changes and is fast enough that performance is not a concern.',
+            detail: 'Product categories, store master, currency exchange rates, postal code mappings — these tables are small (< 1 million rows), change occasionally, and must always reflect the current state. Full load is simpler than tracking changes and is fast enough that performance is not a concern.',
           },
           {
             scenario: 'Tables with no reliable change tracking column',
@@ -1015,7 +1015,7 @@ The correct monitoring setup: query pg_replication_slots regularly and alert whe
         'CDC reads the database transaction log (WAL in PostgreSQL) to capture every INSERT, UPDATE, and DELETE as a structured event. It is the only pattern that captures hard deletes with the before-image of the deleted row. It requires wal_level=logical on PostgreSQL and a replication slot.',
         'Watermark columns: updated_at (best — works for updates), created_at (only for insert-only tables), auto-increment PK (only for insert-only tables with sequential inserts). When none is available: CDC or full load.',
         'The four incremental ingestion pitfalls: hard deletes are invisible, missing updated_at forces full load or CDC, clock skew between source and pipeline server can skip rows (fix: use source DB\'s NOW() as upper bound), and late-arriving updates miss the window (fix: overlap the lower bound by 30 minutes and upsert).',
-        'CDC infrastructure requires: wal_level=logical in postgresql.conf (requires DB restart), a dedicated replication user with REPLICATION privilege, a replication slot, and a Debezium connector publishing to Kafka. Always use Schema Registry with Debezium.',
+        'CDC infrastructure requires: wal_level=logical in postgresql.conf (requires DB restart), a dedicated replication user with REPLICATION privilege, a replication slot, and a Debezium connector publishing to Kafka. Always use Schema Registry with Debezium — it enforces schema compatibility as upstream tables evolve, so a source schema change fails loudly at the registry instead of silently breaking every downstream consumer.',
         'Replication slot monitoring is critical. An unmonitored slot on a high-write database can fill the server disk and crash the production database. Alert when lag exceeds 10 GB or 30 minutes. If a slot is stale and unrecoverable, drop it rather than risk disk full.',
         'CDC provides at-least-once delivery — the same event can be delivered more than once on consumer restart. The destination must handle this idempotently with upserts and UNIQUE constraints on the business key. Never use plain INSERT with CDC.',
         'Most production platforms use all three patterns simultaneously: full load for reference tables (nightly, fast), incremental for large transaction tables (every 15 minutes), and CDC for financial and customer tables where deletes matter (continuous). Match the pattern to the table\'s characteristics, not to a personal preference.',

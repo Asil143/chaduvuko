@@ -341,7 +341,7 @@ T=06:17  PIPELINE EXITS — run complete. Duration: 17 minutes.
 The pipeline does not exist as a running process — no compute resources
 are consumed. Data written between runs accumulates, waiting for next
 batch. A customer who placed an order at 08:00 PM won't see it in
-analytics until 06:17 AM the NEXT day (22+ hour latency).
+analytics until 06:17 AM the NEXT day (~10 hour latency).
 
 THIS IS FINE when the business question is "what was yesterday's revenue?"
 THIS IS NOT FINE when the question is "is there fraud happening RIGHT NOW?"`}</Output>
@@ -573,7 +573,7 @@ query = hourly_revenue.writeStream \\
           {
             usecase: 'Real-time inventory management',
             why: 'A flash sale that sells a product that has already gone out of stock needs to block new orders within seconds. If inventory updates arrive in batch every 15 minutes, the system oversells during the batch window.',
-            companies: 'Shopify, Amazon during Big Billion Days — prevent overselling during high-velocity sale events',
+            companies: 'Shopify, Amazon during Prime Day/Black Friday — prevent overselling during high-velocity sale events',
           },
           {
             usecase: 'Operational alerting',
@@ -631,8 +631,8 @@ query = hourly_revenue.writeStream \\
           This is how Spark Structured Streaming actually works internally: it is
           not true record-by-record streaming. It collects micro-batches of records
           from Kafka, processes each batch as a bounded Spark job, and outputs results
-          at the configured trigger interval. Apache Flink is the only mainstream
-          tool that does true record-by-record processing.
+          at the configured trigger interval. Apache Flink and Kafka Streams are the
+          main mainstream tools that do true record-by-record processing.
         </Para>
 
         <SubTitle>Micro-batch vs true streaming — the important distinction</SubTitle>

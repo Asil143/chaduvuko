@@ -642,7 +642,7 @@ WHERE payment_id = 'pay_xxx';
 INSERT INTO outbox_events (aggregate_type, aggregate_id, event_type, payload)
 VALUES (
     'payment', 'pay_xxx', 'PaymentCaptured',
-    '{"payment_id": "pay_xxx", "amount": 38000, "currency": "INR",
+    '{"payment_id": "pay_xxx", "amount": 38000, "currency": "USD",
       "merchant_id": "merch_001", "captured_at": "2026-03-17T20:14:32Z"}'
 );
 COMMIT;

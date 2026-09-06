@@ -149,6 +149,17 @@ ONE ACTION = ONE JOB:
   df.cache()                   ← does NOT trigger a job — lazy evaluation!
   df.cache().count()           ← triggers a job that materialises + counts`}</CodeBox>
 
+        <Para>
+          That hierarchy matters because stage boundaries are where the real
+          cost lives. A job with one stage is cheap almost regardless of data
+          volume, while a job with three stages pays for two shuffles, each of
+          which serialises, moves, and re-reads every row across the network.
+          The dividing line between operations that create a new stage and
+          operations that don't is worth knowing outright — it's the fastest
+          way to predict how expensive a chain of transformations will be
+          before you ever run it.
+        </Para>
+
         <CodeBox label="Which transformations cause a shuffle (new stage boundary)">{`SHUFFLE (= new stage boundary):
   groupBy() + agg()    ← rows with same key must go to same partition
   join()               ← rows with same join key must meet on same node
@@ -172,6 +183,14 @@ EXAMPLE EXECUTION PLAN:
   Spark creates 3 stages. Stage 2 and 3 each wait for the previous
   stage's shuffle to complete.`}</CodeBox>
 
+        <Para>
+          Once you can read where the stage boundaries fall, the next
+          question is how much work each stage actually does in parallel —
+          which comes down to how many partitions the data is split into, and
+          how much of that Spark can now decide on its own instead of you
+          hand-tuning it.
+        </Para>
+
         <SubSubTitle>Partitions and Adaptive Query Execution</SubSubTitle>
 
         <CodeBox label="Partition sizing and enabling AQE">{`PARTITIONS — the unit of parallelism:
@@ -191,6 +210,13 @@ ADAPTIVE QUERY EXECUTION (AQE — Spark 3.0+):
   AQE automatically adjusts partition count after each shuffle based on
   actual data sizes. Reduces need for manual tuning. ALWAYS enable in production.`}</CodeBox>
 
+        <Para>
+          Partition counts and AQE settings describe how Spark plans to run a
+          job. The Spark UI is where you check whether that plan actually
+          matched reality — it's the tool that turns "this job is slow" into
+          a specific stage, and a specific reason.
+        </Para>
+
         <SubSubTitle>Reading the Spark UI — finding the bottleneck</SubSubTitle>
 
         <CodeBox label="Stages tab — the red flags to look for">{`Each row = one stage. Key columns:
@@ -205,6 +231,14 @@ RED FLAGS:
   Stage has Spill = 50 GB → memory bound, increase executor memory
   Stage has Shuffle Read = 500 GB → network bound, consider broadcast`}</CodeBox>
 
+        <Para>
+          The Stages tab tells you which stage is the problem; it doesn't
+          tell you why one stage of otherwise-identical work takes ten times
+          longer on one machine than another. For that, drop down one level —
+          from the stage as a whole to the individual tasks running inside
+          it.
+        </Para>
+
         <CodeBox label="Tasks and Executors tabs">{`TASKS TAB (inside a stage):
   Duration histogram: should be relatively uniform across tasks.
   ONE TASK IS 10× SLOWER THAN OTHERS → data skew (key imbalance)
@@ -213,6 +247,14 @@ EXECUTORS TAB:
   Cores used: should be near max during active stages
   Memory used / total: if consistently > 80% → consider more memory
   Task time vs GC time: if GC > 10% of task time → memory pressure`}</CodeBox>
+
+        <Para>
+          Stage- and task-level metrics describe what actually happened when
+          the job ran. The physical plan describes what Spark intended to
+          happen before it started — and comparing the two, plan against
+          reality, is often exactly what surfaces the gap between a query
+          that looks fine on paper and one that isn't.
+        </Para>
 
         <SubSubTitle>Reading the physical plan</SubSubTitle>
 
@@ -456,6 +498,14 @@ WHERE created_at >= '2026-03-17'::TIMESTAMPTZ
 -- SLOW: WHERE DATE(created_at) = '2026-03-17'
 -- FAST: WHERE created_at >= '2026-03-17' AND created_at < '2026-03-18'`}</CodeBox>
 
+        <Para>
+          Pruning which micro-partitions get scanned is only half the I/O
+          story — the other half is how many columns get read within each
+          partition that does get scanned. The next pattern looks harmless
+          because it's syntactically trivial, but it's one of the most common
+          ways a query reads far more data than it needs.
+        </Para>
+
         <SubSubTitle>Pattern 2 — SELECT * reads every column</SubSubTitle>
 
         <CodeBox label="Columnar storage rewards selecting only what you need">{`-- SLOW: reads all 200 columns
@@ -469,6 +519,15 @@ FROM fct_orders_wide
 WHERE date = '2026-03-17';
 -- ~200× less I/O for a 200-column table.`}</CodeBox>
 
+        <Para>
+          Column and partition pruning both reduce how much data the
+          warehouse has to touch before it starts computing anything. The
+          next two patterns are a different kind of problem: the data being
+          scanned is already minimal, but the computation itself repeats work
+          it didn't need to — starting with one of the most expensive
+          operations in SQL, counting how many distinct values a column has.
+        </Para>
+
         <SubSubTitle>Pattern 3 — DISTINCT vs. approximate counting</SubSubTitle>
 
         <CodeBox label="APPROX_COUNT_DISTINCT trades 2% error for 100x speed">{`-- SLOW for large datasets — DISTINCT sorts/hashes all values:
@@ -480,6 +539,14 @@ SELECT COUNT(DISTINCT customer_id) FROM silver.orders WHERE date = '2026-03-17';
 -- FASTEST — HyperLogLog approximation (fine for most dashboards):
 SELECT APPROX_COUNT_DISTINCT(customer_id) FROM silver.orders WHERE date = '2026-03-17';
 -- ~2% error, 100× faster for large datasets.`}</CodeBox>
+
+        <Para>
+          DISTINCT is expensive because it has to sort or hash every value in
+          the column before it can tell you which ones are unique. A
+          different, and often worse, source of repeated work is a query that
+          reruns a whole subquery once for every row of its outer query,
+          instead of computing the answer once and reusing it.
+        </Para>
 
         <SubSubTitle>Pattern 4 — correlated subqueries vs. window functions</SubSubTitle>
 
@@ -497,6 +564,13 @@ SELECT order_id, order_amount,
 FROM silver.orders;
 -- Window function scans data once. 1000× faster.`}</CodeBox>
 
+        <Para>
+          A correlated subquery repeats work across rows within a single
+          query. The last pattern here is the same idea at the level of an
+          entire query: scanning the same table multiple times when one pass
+          would answer every branch of the question at once.
+        </Para>
+
         <SubSubTitle>Pattern 5 — UNION ALL vs. conditional aggregation</SubSubTitle>
 
         <CodeBox label="One conditional-aggregation scan replaces two full-table scans">{`-- SLOW: two full scans
@@ -509,6 +583,14 @@ SELECT
     COUNT(CASE WHEN status = 'delivered' THEN 1 END) AS delivered_count,
     COUNT(CASE WHEN status = 'cancelled' THEN 1 END) AS cancelled_count
 FROM silver.orders;`}</CodeBox>
+
+        <Para>
+          The conditional-aggregation trick above works on any SQL engine.
+          Snowflake also offers a shortcut specific to itself for a different
+          repeated pattern — filtering down to one row per group after a
+          window function, which on most engines forces an extra layer of
+          subquery just to apply the WHERE clause.
+        </Para>
 
         <CodeBox label="Snowflake-specific — QUALIFY eliminates a filtering subquery">{`-- SLOW: subquery to filter window function result
 SELECT order_id, order_amount, row_num FROM (

@@ -335,8 +335,14 @@ Filtering         WHERE status != 'test'
 Normalisation     LOWER(status), TRIM(name)
 Enrichment        JOIN to customers table
 Aggregation       SUM, COUNT, AVG, PERCENTILE
-Anonymisation     SHA256(email)
+Anonymisation     HMAC-SHA256(email, secret_key)
 Window calc       SUM OVER (PARTITION BY ... ORDER BY ...)
+
+CAUTION — a bare SHA256(email) is NOT anonymous: email addresses are
+low-entropy, so an attacker can hash every plausible email and match
+it against your output (a rainbow-table / dictionary attack) in
+seconds. Real anonymisation needs a salted hash or HMAC with a secret
+key (shown above), or tokenisation — never an unsalted hash alone.
 
 WHERE IT HAPPENS: Python/Pandas (general-purpose, easy to test) ·
 SQL/dbt (set-based, best for tabular data) · Spark (distributed, complex) ·
@@ -353,10 +359,28 @@ ALTER TABLE silver.store_master RENAME TO store_master_old;
 ALTER TABLE silver.store_master_staging RENAME TO store_master;
 DROP TABLE silver.store_master_old;`}</CodeBox>
 
+        <Para>
+          Full replace only works for tables you can afford to fully overwrite
+          on every run. For an append-only event stream, replacing anything
+          would destroy history — you only ever add new rows, and the risk
+          shifts from &ldquo;the table went empty&rdquo; to &ldquo;a rerun inserted the same
+          event twice.&rdquo;
+        </Para>
+
         <CodeBox label="Append-only — for immutable events, with a duplicate guard">{`INSERT INTO silver.events (event_id, user_id, event_type, ts)
 SELECT event_id, user_id, event_type, ts FROM staging.events
-WHERE ts > (SELECT MAX(ts) FROM silver.events);
--- add a UNIQUE constraint on event_id + ON CONFLICT DO NOTHING to survive reruns`}</CodeBox>
+WHERE ts > (SELECT MAX(ts) FROM silver.events)
+ON CONFLICT (event_id) DO NOTHING;
+-- requires a UNIQUE constraint on event_id — without it, ON CONFLICT
+-- has nothing to match against and a rerun inserts duplicates anyway`}</CodeBox>
+
+        <Para>
+          Most tables are neither purely overwritten nor purely appended —
+          rows get created and later updated (an order&rsquo;s status changes
+          repeatedly before it&rsquo;s final). That&rsquo;s what upsert is for: insert a
+          row if it&rsquo;s new, update it in place if it already exists, and never
+          let a late, stale record overwrite a newer one.
+        </Para>
 
         <CodeBox label="Upsert — the workhorse of incremental loading">{`INSERT INTO silver.orders (order_id, status, amount, updated_at)
 VALUES (%s, %s, %s, %s)
@@ -730,6 +754,15 @@ No row inserted for today by 8 AM    → pipeline did not run at all`}</Output>
 
         <SubSubTitle>Setup — imports, constants, and validated config</SubSubTitle>
 
+        <Para>
+          The docstring at the top states the schedule, the owner, and —
+          explicitly — whether the pipeline is idempotent and resumable, so
+          the next engineer who touches this file doesn&rsquo;t have to reverse
+          it from the code. Config reads required environment variables at
+          import time, so a missing variable fails immediately on startup
+          rather than partway through a run.
+        </Para>
+
         <CodeBox label="orders_ingestion_pipeline.py — header and configuration">{`"""
 Daily orders ingestion: PostgreSQL source → S3 Bronze Parquet
 Schedule: 00:30 UTC daily, previous day. Owner: data-team@freshcart.com
@@ -752,6 +785,15 @@ class Config:
     s3_path: str = os.environ['S3_OUTPUT_PATH']`}</CodeBox>
 
         <SubSubTitle>Extraction and validation — small, single-purpose functions</SubSubTitle>
+
+        <Para>
+          Each function does exactly one job and can be tested in isolation.{' '}
+          <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>extract_orders</code>{' '}
+          is the only place that touches a database connection; <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>validate_row</code>{' '}
+          is a pure function with no I/O at all, so its rejection logic can be
+          unit-tested with plain dictionaries — no database or mock connection
+          required.
+        </Para>
 
         <CodeBox label="Each function does one thing and has a clear name">{`def extract_orders(conn, run_date: date) -> Iterator[dict]:
     """Extract all orders for run_date. Fixed window — idempotent for the same date."""
@@ -777,6 +819,15 @@ def write_parquet_batch(rows: list[dict], path: str) -> None:
     pq.write_table(pa.Table.from_pylist(rows), path, compression='zstd')`}</CodeBox>
 
         <SubSubTitle>Orchestration — wiring extract, validate, and load together</SubSubTitle>
+
+        <Para>
+          <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>run()</code> is
+          the only function that calls the other three — it streams rows
+          through extraction and validation, batches the valid ones into
+          Parquet writes, and routes rejects to the DLQ instead of crashing
+          the run. The exit code at the bottom turns the rejection rate into
+          a pass/fail signal an orchestrator can act on directly.
+        </Para>
 
         <CodeBox label="run() — the main function, and its entry point">{`def run(run_date: date) -> dict:
     run_id, log = str(uuid.uuid4()), logging.getLogger('orders_ingestion')
@@ -1134,7 +1185,7 @@ The distinction matters practically: a pipeline can exist without a DAG (a cron 
       {/* ── Key Takeaways ────────────────────────────────────────────── */}
       <KeyTakeaways items={[
         'A data pipeline moves data from sources to sinks through transformations. Every pipeline has the same anatomy: Source → Extraction → Transformation → Loading → Sink, with Orchestration and Monitoring around it. The technology changes; the anatomy does not.',
-        'Extraction is either full (read everything, every run — simple, expensive) or incremental (read only changes since last run — efficient, requires a watermark column and checkpoint). Use incremental extraction for any table with more than a few million rows.',
+        'Extraction is either full (read everything, every run — simple, expensive) or incremental (read only changes since last run — efficient, requires a watermark column and checkpoint). Use incremental extraction for any table with more than 1 million rows.',
         'Loading patterns: full replace (truncate + reload — simple, destination empty during run), append-only (INSERT for immutable events), upsert (INSERT ... ON CONFLICT DO UPDATE — the correct default for mutable entities). Always use upserts with a UNIQUE constraint on the business key.',
         'ETL transforms before loading — good for PII masking, complex Python logic. ELT loads raw then transforms with SQL/dbt inside the warehouse — the modern standard. Most teams in 2026 use ELT with dbt for transformations and raw data preserved in the landing zone.',
         'The eight design principles: Idempotency, Resumability, Observability, Isolation, Data Quality Enforcement, Source Isolation, Atomicity at the right granularity, Minimal Footprint. Apply all eight and pipelines become reliable infrastructure. Ignore them and they become fragile scripts.',

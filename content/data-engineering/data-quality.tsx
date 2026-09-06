@@ -762,10 +762,15 @@ Slack: "Pipeline quality: 97.1% checks passed. 3 failures."`}</Output>
           <Para>
             The orders application team added a new status value — &ldquo;scheduled&rdquo;
             — for a new pre-order feature, deployed Friday evening without
-            notifying data engineering. By Monday, 12,847 orders with{' '}
-            <code>status=&apos;scheduled&apos;</code> were rejected from Silver by the{' '}
-            <code>accepted_values</code> test and sitting in the DLQ. The finance
-            dashboard showed no pre-order revenue. An analyst noticed Tuesday.
+            notifying data engineering. By Monday morning — the first day
+            alone — 12,847 orders with <code>status=&apos;scheduled&apos;</code> were
+            rejected from Silver by the <code>accepted_values</code> test and
+            sitting in the DLQ. Nobody caught it over the weekend, so the
+            pipeline kept running on its normal schedule and kept rejecting the
+            same status on every subsequent run. The finance dashboard showed
+            no pre-order revenue the entire time. An analyst finally noticed Tuesday
+            — by then, 47 failed runs had accumulated since Friday, and the DLQ
+            held nearly 600,000 rejected rows total.
           </Para>
 
           <CodeBox label="Diagnosis — from the monitoring table to the actual impact">{`-- STEP 1: check Silver dbt test failures since Friday

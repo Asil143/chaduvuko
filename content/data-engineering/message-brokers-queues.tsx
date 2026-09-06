@@ -1150,7 +1150,7 @@ consumer.subscribe(['freshcart.orders'])`}
 
         <HighlightBox>
           <Para>
-            <strong>At an e-commerce company (Sephora / Myntra):</strong>
+            <strong>At an e-commerce company (Sephora / Ulta):</strong>
             You are asked to design a new notification system. Orders topic
             already exists. Inventory, fraud, loyalty, and analytics services
             all need to react to new orders. The architecture decision is:

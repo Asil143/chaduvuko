@@ -408,7 +408,7 @@ Index: idx_orders_city ON orders(city)
 INDEX STRUCTURE (simplified):
   Root page:  [Chicago | Austin | New York]
                   ↓           ↓          ↓
-  Level 1: [Ahm..Che] [Hy..Mum] [Mum..Pun] [Pun..Vis]
+  Level 1: [Aus..Chi] [Chi..Den] [Den..NY] [NY..Sea]
                                      ↓
   Leaf pages: [New York row_ptr_1, New York row_ptr_2, ...]
               [New York row_ptr_3, New York row_ptr_4, ...]
@@ -872,14 +872,15 @@ Timeline:
   All three versions exist on disk simultaneously!`}</CodeBox>
 
         <SubSubTitle>Two concurrent readers, two different (both correct) answers — and cleanup via VACUUM</SubSubTitle>
-        <CodeBox label="Two concurrent queries see different snapshots, neither blocks">{`NOW: two concurrent queries run at T=250:
+        <CodeBox label="Two concurrent queries see different snapshots, neither blocks">{`NOW: two concurrent read queries, started at different times — T=250 and T=300:
 
-  QUERY A (analyst, started before txn 300):
+  QUERY A (analyst, started at T=250):
     Snapshot: sees all transactions committed before T=250
     Sees: status='confirmed' (txn 200 committed, txn 300 not yet)
     Returns: 'confirmed'
 
-  QUERY B (application write, started at T=300):
+  QUERY B (a second read, started at T=300 — after txn 300 committed):
+    Snapshot: sees all transactions committed before T=300
     Sees: status='delivered' (txn 300 committed)
     Returns: 'delivered'
 
