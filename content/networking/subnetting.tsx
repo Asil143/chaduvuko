@@ -134,11 +134,11 @@ function SubnetCalculator() {
     const mask = cidrToMask(prefix)
     const netNum = (ipToNum(octets) & ipToNum(mask)) >>> 0
     bitsAdded = subPrefix - prefix
-    subnetCount = 1 << bitsAdded
-    hostsPerSubnet = (1 << (32 - subPrefix)) - 2
+    subnetCount = 2 ** bitsAdded
+    hostsPerSubnet = (2 ** (32 - subPrefix)) - 2
     subnetMask = cidrToMask(subPrefix).join('.')
     const maxShow = Math.min(subnetCount, 8)
-    const subSize = 1 << (32 - subPrefix)
+    const subSize = 2 ** (32 - subPrefix)
     for (let i = 0; i < maxShow; i++) {
       const subNet = (netNum + i * subSize) >>> 0
       const broadcast = (subNet + subSize - 1) >>> 0
@@ -241,7 +241,7 @@ function VLSMPlanner() {
 
   const [selected, setSelected] = useState<string | null>(null)
   const sel = requirements.find(r => r.name === selected)
-  const totalUsed = requirements.reduce((s, r) => s + (1 << (32 - r.prefix)), 0)
+  const totalUsed = requirements.reduce((s, r) => s + (2 ** (32 - r.prefix)), 0)
   const totalAvail = 1024
 
   return (

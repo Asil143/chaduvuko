@@ -444,7 +444,7 @@ export default function Udp() {
       <Para>• <Accent>DHCP</Accent>: before a client has an IP, it must broadcast. DHCP DISCOVER goes to 255.255.255.255.</Para>
       <Para>• <Accent>mDNS (Multicast DNS)</Accent>: zero-configuration name resolution on local networks. Chromecasts, AirPrint printers, and Apple Bonjour use mDNS on 224.0.0.251:5353.</Para>
       <Para>• <Accent>SSDP (Simple Service Discovery Protocol)</Accent>: UPnP device discovery. Smart home devices, network printers. Multicast to 239.255.255.250:1900.</Para>
-      <Para>• <Accent>Routing protocols</Accent>: OSPF uses 224.0.0.5/224.0.0.6, RIP uses 224.0.0.9, EIGRP uses 224.0.0.10 — all via IP multicast over UDP.</Para>
+      <Para>• <Accent>Routing protocols</Accent>: RIP uses UDP multicast to 224.0.0.9. OSPF (IP protocol 89) and EIGRP (IP protocol 88) also use multicast addresses, but they run directly over IP rather than UDP.</Para>
       <Para>• <Accent>Video distribution</Accent>: IPTV systems multicast video streams to thousands of subscribers simultaneously. Each subscriber&apos;s set-top box joins the multicast group; the router sends one stream that fans out to all members.</Para>
 
       <Divider />
@@ -584,7 +584,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind(('0.0.0.0', 9999))
 
 while True:
-    data, addr = sock.recvfrom(65535)   # Receive up to 65535 bytes
+    data, addr = sock.recvfrom(65535)   # Buffer size; practical UDP payloads should stay near PMTU
     print(f"Received {len(data)} bytes from {addr}: {data.decode()}")
     sock.sendto(b"Echo: " + data, addr)  # Echo back to sender
 
@@ -640,7 +640,7 @@ sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 4194304)  # 4 MB`}</CodeBlo
       <H2>UDP Fragmentation and Jumbograms</H2>
 
       <StoryBox>
-        A developer builds a UDP application that sends 10,000-byte messages. It works perfectly on the local network. The moment it goes through the internet (MTU 1500 bytes), strange things happen. Sometimes messages arrive. Sometimes they don&apos;t. Occasionally they arrive partially corrupted. The developer assumes network problems. The actual issue: IP fragmentation.
+        A developer builds a UDP application that sends 10,000-byte messages. It works perfectly on the local network. The moment it goes through the internet (MTU 1500 bytes), strange things happen. Sometimes messages arrive. Often they disappear entirely. The developer assumes network problems. The actual issue: IP fragmentation.
         <br /><br />
         UDP has no MTU awareness. Send a 10,000-byte UDP datagram over a 1500-byte MTU path, and IP must fragment it into 7 packets. If any single fragment is lost, the entire datagram is dropped — the receiver has no way to reassemble a partial datagram. On a path with even 1% per-packet loss, a 7-fragment datagram has a 7% delivery failure rate. Fragmentation is reliable packet loss.
       </StoryBox>
@@ -775,7 +775,8 @@ iptables -A INPUT -p udp --dport 9999 -m hashlimit \
 import ssl, socket
 
 # DTLS server
-context = ssl.SSLContext(ssl.PROTOCOL_DTLS_SERVER)
+# Python's stdlib ssl module supports TLS over TCP, not DTLS.
+# Use a DTLS-capable library such as aioquic or a platform-specific DTLS binding.
 context.load_cert_chain('server.crt', 'server.key')
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock = context.wrap_socket(sock, server_side=True)

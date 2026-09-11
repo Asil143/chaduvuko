@@ -59,7 +59,7 @@ const HTTP_MESSAGES: HttpMsg[] = [
   {
     id: 'get', label: 'GET Request',
     lines: [
-      { part: 'Request Line', value: 'GET /api/users/42 HTTP/1.1', note: 'Method + path + version. GET is safe (no side effects) and idempotent. Never has a body.' },
+      { part: 'Request Line', value: 'GET /api/users/42 HTTP/1.1', note: 'Method + path + version. GET is safe (no side effects) and idempotent. It normally has no body; a body has no defined semantics and should be avoided.' },
       { part: 'Host', value: 'Host: api.example.com', note: 'Required in HTTP/1.1 — enables virtual hosting (many domains on one IP). Also the basis for SNI in TLS.' },
       { part: 'Accept', value: 'Accept: application/json, text/html;q=0.9', note: 'Content negotiation — client preference list with quality factors. Server picks the best supported format.' },
       { part: 'Authorization', value: 'Authorization: Bearer eyJhbGc...', note: 'Bearer token (JWT) for API auth. Base64-encoded, NOT encrypted — send only over HTTPS.' },
@@ -260,7 +260,7 @@ export default function HttpAndHttpsPage() {
       <Para>HTTP methods describe the intent of a request. They are case-sensitive and conventionally uppercase. Two critical properties define method semantics: <Accent>safe</Accent> (no observable side effects — reading only) and <Accent>idempotent</Accent> (repeating produces the same state as doing it once).</Para>
 
       <H3>The Core Methods</H3>
-      <Para>• <Accent>GET</Accent>: Retrieve a resource. Safe + idempotent. No request body. Responses are cacheable by default.</Para>
+      <Para>• <Accent>GET</Accent>: Retrieve a resource. Safe + idempotent. Normally no request body; a body is syntactically possible but has no defined semantics and is not portable. Responses are cacheable by default.</Para>
       <Para>• <Accent>POST</Accent>: Submit data to create a resource or trigger an action. Neither safe nor idempotent. Has a request body. Responses not cacheable by default.</Para>
       <Para>• <Accent>PUT</Accent>: Replace a resource entirely at the specified URL. Idempotent — two identical PUT requests produce the same final state. Body contains the complete replacement resource.</Para>
       <Para>• <Accent>PATCH</Accent>: Partially update a resource. Not necessarily idempotent (depends on patch semantics — "increment counter" is not idempotent; "set name to X" is). Body contains only the changes.</Para>
@@ -288,7 +288,7 @@ export default function HttpAndHttpsPage() {
       <Para>HTTP supports server-driven content negotiation. The client sends <Code>Accept</Code> (MIME types), <Code>Accept-Language</Code>, <Code>Accept-Encoding</Code> (gzip/br/deflate), listing supported formats with preference weights (q-values, 0.0–1.0). The server selects the best match and responds with the corresponding <Code>Content-Type</Code>, <Code>Content-Language</Code>, <Code>Content-Encoding</Code>. The <Code>Vary</Code> response header tells caches which request headers must match for a cached response to be reused — <Code>Vary: Accept-Encoding</Code> means separate cache entries for gzip and non-gzip.</Para>
 
       <H3>Chunked Transfer Encoding</H3>
-      <Para>When the server doesn't know the response size in advance (streaming responses, dynamic content), it uses <Code>Transfer-Encoding: chunked</Code>. Each chunk is prefixed with its hexadecimal size. A zero-size chunk (<Code>0\r\n\r\n</Code>) terminates the body. This enables streaming responses without buffering the entire body. HTTP/2 makes this obsolete — DATA frames carry length implicitly in the QUIC/H2 frame header.</Para>
+      <Para>When the server doesn't know the response size in advance (streaming responses, dynamic content), it uses <Code>Transfer-Encoding: chunked</Code>. Each chunk is prefixed with its hexadecimal size. A zero-size chunk (<Code>0\r\n\r\n</Code>) terminates the body. This enables streaming responses without buffering the entire body. HTTP/2 and HTTP/3 do not use chunked transfer coding — DATA frame lengths are carried in HTTP/2 frame headers or HTTP/3/QUIC framing.</Para>
 
       <Divider />
 
@@ -303,7 +303,7 @@ export default function HttpAndHttpsPage() {
       <Para>401 means "who are you? — authenticate first." It must include <Code>WWW-Authenticate</Code> describing how. 403 means "I know who you are, but you don't have permission." Confusing them breaks clients: browsers show an auth dialog on 401 but not 403. Security-conscious APIs sometimes return 404 for forbidden resources to avoid confirming their existence (resource enumeration prevention) — a deliberate information hiding trade-off.</Para>
 
       <H3>307 vs 308: Method-Preserving Redirects</H3>
-      <Para>Historical 302/301 redirects allowed browsers to silently change POST to GET on redirect — widespread but non-standard behavior. RFC 7238 added 307 (Temporary Redirect) and 308 (Permanent Redirect) which mandate method preservation. A POST to a 307-redirected URL must POST to the new URL, not GET. This matters for API clients submitting data: always use 307/308 when redirecting POST endpoints.</Para>
+      <Para>Historical 302/301 redirects allowed browsers to silently change POST to GET on redirect — widespread but non-standard behavior. 307 is the method-preserving temporary redirect; 308, originally introduced by RFC 7238, is the method-preserving permanent redirect. A POST to a 307/308-redirected URL must POST to the new URL, not GET. This matters for API clients submitting data: always use 307/308 when redirecting POST endpoints.</Para>
 
       <Divider />
 
@@ -477,7 +477,7 @@ curl -I https://example.com | grep -iE "strict-transport|x-frame|csp|x-content"`
       <H2>HTTP Security Attack Patterns</H2>
 
       <H3>HTTP Request Smuggling</H3>
-      <Para>Front-end proxies and back-end servers may disagree on where one HTTP request ends and the next begins — specifically when both <Code>Content-Length</Code> and <Code>Transfer-Encoding: chunked</Code> are present in the same request. An attacker crafts a request that the front-end sees as one request but the back-end processes as two, prepending a malicious prefix to the next user's request. PortSwigger's James Kettle documented this class extensively. Mitigations: reject requests with both CL and TE headers, upgrade to HTTP/2 (binary framing eliminates text ambiguity), normalize request parsing at the load balancer.</Para>
+      <Para>Front-end proxies and back-end servers may disagree on where one HTTP request ends and the next begins — specifically when both <Code>Content-Length</Code> and <Code>Transfer-Encoding: chunked</Code> are present in the same request. An attacker crafts a request that the front-end sees as one request but the back-end processes as two, prepending a malicious prefix to the next user's request. PortSwigger's James Kettle documented this class extensively. Mitigations: reject requests with both CL and TE headers, normalize request parsing at the load balancer, and handle HTTP/2-to-HTTP/1 downgrades carefully because translation boundaries can still be smuggled.</Para>
 
       <H3>HTTP/2 Rapid Reset (CVE-2023-44487)</H3>
       <Para>Discovered in 2023: an attacker sends a stream of HEADERS frames immediately followed by RST_STREAM frames, never completing any request. Each pair opens and immediately resets a stream. Since stream IDs increment and the server must track state per stream, this exhausts server concurrency limits and CPU without completing any request. The attack generated record-breaking DDoS floods exceeding 398 million requests per second. Mitigations: limit RST_STREAM rate per connection, implement server-side concurrency limits, and update HTTP/2 implementations.</Para>
@@ -543,7 +543,7 @@ curl -I https://example.com | grep -iE "strict-transport|x-frame|csp|x-content"`
         'CORS selectively relaxes the Same-Origin Policy via Access-Control-Allow-Origin headers; non-simple requests require a preflight OPTIONS round trip.',
         'Cookie security requires Secure (HTTPS only) + HttpOnly (no JS access) + SameSite=Lax (CSRF prevention) for authentication cookies.',
         'Content-Encoding (gzip/Brotli) compresses bodies 60–90%; Vary: Accept-Encoding ensures compressed and uncompressed variants are cached separately.',
-        'HTTP request smuggling exploits CL/TE header parsing desynchronization between proxy and server; HTTP/2 binary framing eliminates the ambiguity entirely.',
+        'HTTP request smuggling exploits CL/TE header parsing desynchronization between proxy and server; binary framing helps, but proxy downgrades and translation boundaries must still reject ambiguous requests.',
       ]} />
     </LearnLayout>
   )

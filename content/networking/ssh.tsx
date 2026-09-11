@@ -317,7 +317,7 @@ export default function SSHPage() {
   byte[m]  random padding     (m = padding_length)
   byte[k]  mac                (HMAC of seqno + plaintext, then packet encrypted)`}</CodeBlock>
       <Warn>
-        SSH packet sequence numbers are maintained per direction and reset to 0 after a rekey. If you write custom SSH tooling, failing to handle rekey sequence number resets is a common bug that breaks MAC verification.
+        SSH packet sequence numbers are maintained per direction, start at 0, and continue across rekeys in SSH-2. If you write custom SSH tooling, resetting sequence numbers during rekey is a common bug that breaks MAC or AEAD verification.
       </Warn>
 
       <Divider />
@@ -363,7 +363,7 @@ export default function SSHPage() {
         OpenSSH supports multiple host key algorithms:
       </Para>
       <Para>
-        <Accent>ed25519</Accent> — Preferred. EdDSA over Curve25519. Fast, small key (32 bytes), constant-time, no weak parameter risk. Generate: <Code>ssh-keygen -t ed25519</Code>
+        <Accent>ed25519</Accent> — Preferred. EdDSA over Edwards25519. Fast, small key (32 bytes), constant-time, no weak parameter risk. Generate: <Code>ssh-keygen -t ed25519</Code>
       </Para>
       <Para>
         <Accent>ecdsa</Accent> — ECDSA over NIST P-256/P-384/P-521. Faster than RSA, smaller than RSA, but NIST curves have theoretical parameter-selection concerns. Still widely used.
@@ -437,7 +437,7 @@ ssh-keygen -lf ~/.ssh/id_ed25519.pub
 # 256 SHA256:abc123... user@hostname (ED25519)
 
 # Convert old RSA to modern format
-ssh-keygen -p -f ~/.ssh/id_rsa -m RFC4716`}</CodeBlock>
+ssh-keygen -p -f ~/.ssh/id_rsa -o`}</CodeBlock>
       <Warn>
         Always protect your private key with a passphrase. An unprotected private key on a stolen laptop is an immediate full compromise of every server that key authorizes. Use the SSH agent to avoid typing the passphrase repeatedly while keeping the file encrypted.
       </Warn>
@@ -631,7 +631,7 @@ Host *.corp.internal
 # Disable password authentication - keys only
 PasswordAuthentication no
 ChallengeResponseAuthentication no
-UsePAM no           # or: keep UsePAM yes but disable ChallengeResponse
+UsePAM yes          # keep PAM account/session policy; disable password/keyboard auth separately
 
 # Disable root login
 PermitRootLogin no

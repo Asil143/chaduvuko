@@ -528,7 +528,7 @@ export default function TcpDeepDive() {
       <H3>SYN Cookies and SYN Flood Defense</H3>
       <Para>A SYN flood attack sends thousands of SYN packets per second with spoofed source IPs. The server responds to each with SYN-ACK and creates a half-open connection entry, consuming memory. If enough SYN-ACKs are sent with no ACK completing the handshake, the server&apos;s connection table fills and legitimate connections are rejected.</Para>
 
-      <Para><Accent>SYN cookies</Accent> (RFC 4987) eliminate the need to store state for half-open connections. Instead of storing connection state after receiving a SYN, the server encodes all necessary connection information (client IP, port, ISN, MSS, timestamp) in the initial sequence number of the SYN-ACK. When the legitimate ACK arrives, the server decodes the ISN to reconstruct the connection. No state stored, no memory exhaustion — SYN flood mitigation without resource consumption.</Para>
+      <Para><Accent>SYN cookies</Accent> (RFC 4987) eliminate the need to store state for half-open connections. Instead of storing connection state after receiving a SYN, the server encodes enough information in the SYN-ACK sequence number, usually using a cryptographic function of the 4-tuple, a timer, and a small MSS/options subset. When the legitimate ACK arrives, the server validates the cookie and reconstructs minimal connection state. No half-open state stored, no SYN backlog exhaustion — but not all TCP options can be preserved while cookies are active.</Para>
 
       <CodeBlock>{`# Check SYN cookie status (Linux)
 sysctl net.ipv4.tcp_syncookies          # Should be 1 (enabled)
@@ -562,7 +562,7 @@ sysctl -w net.ipv4.tcp_synack_retries=2         # Reduce SYN-ACK retries (flood 
       <Para>• <Accent>FIN</Accent>: no more data from sender. Initiates graceful close. Both sides must send FIN to fully close.</Para>
       <Para>• <Accent>RST</Accent>: reset — abort connection immediately. No graceful close. Used when a packet arrives for a closed port, when the connection is aborted due to error, or explicitly by applications using SO_LINGER with timeout=0.</Para>
       <Para>• <Accent>PSH</Accent>: push data to application immediately without buffering. Used for interactive applications (SSH, telnet) where each keystroke should be delivered immediately, not wait for a full buffer.</Para>
-      <Para>• <Accent>URG</Accent>: urgent pointer field is significant. Rarely used in modern protocols — superceded by application-layer priority mechanisms. Old telnet break signal used this.</Para>
+      <Para>• <Accent>URG</Accent>: urgent pointer field is significant. Rarely used in modern protocols — superseded by application-layer priority mechanisms. Old telnet break signal used this.</Para>
       <Para>• <Accent>ECE + CWR</Accent>: Explicit Congestion Notification (ECN). When a router experiences congestion, it sets the ECN codepoint in the IP header. The receiver echoes this to the sender via ECE. The sender confirms action taken via CWR. This avoids packet loss as the congestion signal, improving performance.</Para>
 
       <Divider />
@@ -574,10 +574,10 @@ sysctl -w net.ipv4.tcp_synack_retries=2         # Reduce SYN-ACK retries (flood 
         TCP&apos;s reliability mechanism is built on one key insight: every byte in the data stream has a unique number. By numbering bytes, not packets, TCP can handle packet fragmentation, reordering, and loss transparently. A sender can retransmit a lost segment. A receiver can reorder out-of-sequence segments. The application layer sees a clean byte stream — the network messiness is completely hidden.
       </StoryBox>
 
-      <Para>The <Accent>Initial Sequence Number (ISN)</Accent> is the starting point for each direction&apos;s byte numbering. Modern OSes choose ISNs using a time-based pseudo-random algorithm (RFC 6528: ISN = MD5(src_ip, src_port, dst_ip, dst_port, secret) + clock_offset). This prevents TCP sequence prediction attacks where an attacker could inject data into an existing connection by guessing the sequence number.</Para>
+      <Para>The <Accent>Initial Sequence Number (ISN)</Accent> is the starting point for each direction&apos;s byte numbering. Modern OSes choose ISNs using a secret-keyed pseudo-random function over the connection 4-tuple plus a time component, as described by RFC 6528. This prevents TCP sequence prediction attacks where an attacker could inject data into an existing connection by guessing the sequence number.</Para>
 
       <H3>Cumulative vs. Selective Acknowledgment</H3>
-      <Para>Basic TCP uses <Accent>cumulative acknowledgment</Accent>: ACK=N means &quot;I have received all bytes up to N-1 successfully.&quot; If segment 1001–2000 arrives but 2001–3000 is lost, ACK=1001 is sent. When 3001–4000 arrives (out of order), ACK=1001 is still sent (three duplicate ACKs). The sender must retransmit from 2001 onward — even though 3001–4000 was received.</Para>
+      <Para>Basic TCP uses <Accent>cumulative acknowledgment</Accent>: ACK=N means &quot;I have received all bytes up to N-1 successfully.&quot; If segment 1001–2000 arrives, ACK=2001 is sent. If 2001–3000 is lost and 3001–4000 arrives out of order, ACK=2001 repeats (duplicate ACKs). The sender must retransmit from 2001 onward — even though 3001–4000 was received.</Para>
 
       <Para><Accent>SACK (Selective Acknowledgment, RFC 2018)</Accent> allows the receiver to inform the sender exactly which segments are received and which are missing. The SACK option contains block pairs (left_edge, right_edge) for each out-of-order segment received. The sender can retransmit only the specific missing segments — not everything after the loss. This dramatically improves performance over lossy links (Wi-Fi, satellite, mobile).</Para>
 
@@ -597,7 +597,7 @@ sysctl net.ipv4.tcp_sack           # Should be 1
 tcpdump -i eth0 'tcp[tcpflags] & tcp-ack != 0' -vvv | grep SACK`}</CodeBlock>
 
       <Warn title="Disabling TCP timestamps also disables PAWS sequence number protection">
-        The <Accent>PAWS (Protection Against Wrapped Sequence Numbers)</Accent> mechanism uses TCP timestamps (RFC 7323) to prevent old duplicate segments from being accepted when sequence numbers wrap around. At 10 Gbps, a 32-bit sequence number wraps in ~3.4 seconds. Without PAWS, a delayed segment from a previous connection could arrive and corrupt the current stream. PAWS uses the timestamp option to detect and discard these wrapped duplicates. Disabling TCP timestamps (<Code>net.ipv4.tcp_timestamps=0</Code>) disables PAWS — safe only on networks with RTTs &gt; wrap-around period (nearly impossible at high bandwidth).
+        The <Accent>PAWS (Protection Against Wrapped Sequence Numbers)</Accent> mechanism uses TCP timestamps (RFC 7323) to prevent old duplicate segments from being accepted when sequence numbers wrap around. At 10 Gbps, a 32-bit sequence number wraps in ~3.4 seconds. Without PAWS, a delayed segment from a previous connection could arrive and corrupt the current stream. PAWS uses the timestamp option to detect and discard these wrapped duplicates. Disabling TCP timestamps (<Code>net.ipv4.tcp_timestamps=0</Code>) disables PAWS and is risky on high-speed paths where sequence numbers can wrap within the lifetime of old duplicate segments.
       </Warn>
 
       <Divider />
@@ -775,7 +775,7 @@ sysctl -w net.ipv4.tcp_window_scaling=1
       </StoryBox>
 
       <Para>Key TCP options and their operational importance:</Para>
-      <Para>• <Accent>MSS (Maximum Segment Size, Option 2)</Accent>: each side advertises the maximum segment it can receive in the SYN. Default TCP MSS = 536 bytes; Ethernet default = 1460 bytes (1500 MTU - 20 IP - 20 TCP). MSS is NOT negotiated — each side independently declares its limit; the sender uses the minimum.</Para>
+      <Para>• <Accent>MSS (Maximum Segment Size, Option 2)</Accent>: each side advertises the maximum segment it can receive in the SYN. The legacy IPv4 default is 536 bytes when no path/interface information is available; on Ethernet MTU 1500, common MSS values are 1460 for IPv4 and 1440 for IPv6. MSS is NOT negotiated — each side independently declares its limit; the sender uses the minimum.</Para>
       <Para>• <Accent>Window Scale (Option 3)</Accent>: scale factor for the window field. Negotiated in SYN/SYN-ACK only. If one side doesn&apos;t include it, window scaling is disabled for the connection. Always present on modern systems.</Para>
       <Para>• <Accent>SACK (Option 4 — SACK Permitted) + Option 5 (SACK Blocks)</Accent>: SACK Permitted advertised in SYN/SYN-ACK. SACK blocks (up to 4 ranges) carried in ACKs to report out-of-order receipt. Critical for performance over lossy links.</Para>
       <Para>• <Accent>Timestamps (Option 8)</Accent>: TSval (timestamp value) and TSecr (timestamp echo reply). Enables precise RTT measurement, PAWS protection, and improved retransmission decisions.</Para>
@@ -839,7 +839,7 @@ echo 1 > /sys/kernel/debug/tracing/events/tcp/enable`}</CodeBlock>
       <Para>HTTP/2 multiplexes multiple request/response streams over one TCP connection. If one stream&apos;s data is lost, TCP holds up ALL streams — including those with no data loss. A 1% packet loss that only affects one stream stalls all 30 streams in an HTTP/2 connection. HTTP/3 / QUIC solves this by implementing independent stream delivery in user space: a lost packet only blocks the one QUIC stream that contained it, not others.</Para>
 
       <H3>TCP Fast Open</H3>
-      <Para>Standard TCP requires 1 RTT for handshake + 1 RTT minimum for the first request. On a 100ms path, that is 200ms before the server processes the first byte of the request. TCP Fast Open (TFO, RFC 7413) allows data in the SYN packet on repeat connections, reducing first-request latency to 1 RTT. Chrome and iOS use TFO for performance-sensitive connections.</Para>
+      <Para>Standard TCP requires 1 RTT for handshake + 1 RTT minimum for the first request. On a 100ms path, that is 200ms before the server processes the first byte of the request. TCP Fast Open (TFO, RFC 7413) allows data in the SYN packet on repeat connections, reducing first-request latency to 1 RTT. Some operating systems and applications support TFO, but deployment varies and it may be disabled by default.</Para>
 
       <CodeBlock>{`# Enable TCP Fast Open (Linux)
 sysctl -w net.ipv4.tcp_fastopen=3      # 1=client, 2=server, 3=both
@@ -917,7 +917,7 @@ s.listen()`}</CodeBlock>
       <KeyTakeaways items={[
         'TCP provides reliability, ordering, flow control, and congestion control over an unreliable IP network by numbering every byte and acknowledging receipt.',
         'The three-way handshake (SYN → SYN-ACK → ACK) establishes bidirectional agreement on initial sequence numbers and TCP options (MSS, window scale, SACK, timestamps).',
-        'SYN cookies allow servers to handle SYN flood attacks without storing state for half-open connections — encoding connection info in the ISN and recovering it from the final ACK.',
+        'SYN cookies allow servers to handle SYN flood attacks without storing half-open state — encoding enough validated information in the ISN and recovering minimal state from the final ACK.',
         'Congestion control phases: Slow Start (exponential cwnd growth) → Congestion Avoidance (linear growth, AIMD) → Fast Recovery (triggered by 3 dup-ACKs, avoids Slow Start restart) → Timeout (Slow Start from cwnd=1).',
         'The receive window (rwnd) prevents buffer overflow at the receiver. Window scaling (RFC 7323) extends the 16-bit window to handle high-BDP paths (100ms RTT × 10 Gbps requires ~125 MB window).',
         'TIME_WAIT exists for correctness: delayed segment absorption and reliable final ACK delivery. Reducing it aggressively risks data corruption. Use connection pooling and tcp_tw_reuse instead.',

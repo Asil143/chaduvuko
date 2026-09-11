@@ -143,7 +143,7 @@ function IPv4AddressAnalyzer() {
     broadcastAddr = numToOctets(bcNum).join('.')
     firstHost = numToOctets(netNum + 1).join('.')
     lastHost = numToOctets(bcNum - 1).join('.')
-    totalHosts = prefix <= 30 ? Math.max(0, (1 << (32 - prefix)) - 2) : prefix === 31 ? 2 : 1
+    totalHosts = prefix <= 30 ? Math.max(0, (2 ** (32 - prefix)) - 2) : prefix === 31 ? 2 : 1
     for (let i = 0; i < 4; i++) for (let b = 7; b >= 0; b--) bits.push((octets[i] >> b) & 1)
   }
 
@@ -184,7 +184,7 @@ function IPv4AddressAnalyzer() {
             <div style={{ display: 'flex', gap: 16, fontSize: 11, marginTop: 6 }}>
               <span style={{ color: G }}>Network bits: {prefix}</span>
               <span style={{ color: 'var(--muted)' }}>Host bits: {32 - prefix}</span>
-              <span style={{ color: 'var(--muted)' }}>Total addresses: {prefix <= 30 ? (1 << (32 - prefix)).toLocaleString() : prefix === 31 ? 2 : 1}</span>
+              <span style={{ color: 'var(--muted)' }}>Total addresses: {prefix <= 30 ? (2 ** (32 - prefix)).toLocaleString() : prefix === 31 ? 2 : 1}</span>
             </div>
           </div>
 
@@ -414,7 +414,7 @@ Decimal:      192   .    168   .    10    .    50
       </Para>
 
       <Para>
-        CIDR also enables <Accent>supernetting (route aggregation)</Accent>: multiple smaller contiguous prefixes can be summarized as a single larger prefix in routing advertisements. An ISP owning 192.168.0.0/24 through 192.168.3.0/24 can advertise one 192.168.0.0/22, saving routing table entries on the internet. This aggregation is why BGP tables have ~900K entries, not tens of millions.
+        CIDR also enables <Accent>supernetting (route aggregation)</Accent>: multiple smaller contiguous prefixes can be summarized as a single larger prefix in routing advertisements. For public routing, an ISP with four contiguous public /24s can advertise one covering /22, saving routing table entries on the internet. Private ranges like 192.168.0.0/16 use the same math internally but are not advertised on the public internet. This aggregation is why BGP tables have far fewer entries than individual host routes.
       </Para>
 
       <CodeBlock title="CIDR prefix length reference">
@@ -527,7 +527,7 @@ Cisco ACL entry (permit host range 10.10.10.0–10.10.10.255):
       </Para>
 
       <Para>
-        The fundamental rule: private addresses are <Accent>never routed on the public internet</Accent>. All internet routers drop packets with private source or destination IPs. This means the same private address can simultaneously exist in millions of different private networks — your home 192.168.1.100 and a hospital's 192.168.1.100 are entirely separate devices. NAT translates private-to-public at the internet boundary.
+        The fundamental rule: private addresses are <Accent>not intended to be routed on the public internet</Accent>. Providers normally filter packets with private source or destination IPs at network boundaries. This means the same private address can simultaneously exist in millions of different private networks — your home 192.168.1.100 and a hospital's 192.168.1.100 are entirely separate devices. NAT translates private-to-public at the internet boundary.
       </Para>
 
       <WowBox emoji="🏠" title="The Entire World Shares Three Address Ranges">

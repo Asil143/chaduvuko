@@ -32,7 +32,7 @@ export default function NetworkingTrackPage() {
   return (
     <LearnLayout
       title="Networking Fundamentals — Zero to Advanced"
-      description="From what a packet is to subnetting, routing, DNS, TCP, firewalls, and Wireshark — 20 modules, no prerequisites"
+      description="From what a packet is to subnetting, routing, DNS, TCP, and firewalls — 35 live modules, no prerequisites"
       section="Networking"
       readTime="Self-paced"
       updatedAt="May 2026"
@@ -79,7 +79,7 @@ export default function NetworkingTrackPage() {
       }}>
         {[
           { value: `${allModules.length}`, label: 'Modules'        },
-          { value: '5',                    label: 'Sections'        },
+          { value: `${NETWORKING_CURRICULUM.length}`, label: 'Sections'        },
           { value: `${totalTopics}+`,      label: 'Topics covered'  },
           { value: `${totalHours}h`,       label: 'Total content'   },
           { value: '100%',                 label: 'Free forever'    },
@@ -110,7 +110,7 @@ export default function NetworkingTrackPage() {
         <strong style={{ color: N }}>This course builds the networking foundation every security professional needs.</strong>{' '}
         You will understand how packets move from your keyboard to a server on the other side of the planet —
         every hop, every protocol, every layer. Module 01 assumes zero prior knowledge.
-        Module 20 covers tools used by network engineers and penetration testers every day.
+        The live modules build from packets and layers through routing, transport protocols, application protocols, and network security.
       </div>
 
       {/* ── What Makes This Different ────────────────────────────────────── */}
@@ -156,7 +156,7 @@ export default function NetworkingTrackPage() {
             Recommended next course after this one
           </div>
           <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 10 }}>
-            Once you have finished all 20 modules here, you have the networking foundation needed for the Cybersecurity course.
+            Once you have finished the live modules here, you have the networking foundation needed for the Cybersecurity course.
           </div>
           <Link href="/learn/cybersecurity" style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -188,11 +188,11 @@ export default function NetworkingTrackPage() {
               letterSpacing: '-1px', color: 'var(--text)',
               fontFamily: 'var(--font-display)', marginBottom: 6,
             }}>
-              20 Modules. Packets to Penetration Testing.
+              35 Live Modules. Packets to Network Security.
             </h2>
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 520, margin: 0 }}>
               Follow in order. Each module builds on the last. Module 01 assumes you know nothing —
-              Module 20 ends with tools used by professional network engineers and security researchers.
+              the advanced modules end with protocols and defenses used by professional network engineers and security researchers.
             </p>
           </div>
 

@@ -138,7 +138,7 @@ const TOPOLOGY_A: STPSwitch[] = [
     id: 'SW-C', priority: 32768, mac: 'CC:CC:CC:CC:CC:01', isRoot: false,
     ports: [
       { name: 'Gi0/1', role: 'Root', state: 'Forwarding', cost: 4, toSwitch: 'SW-A' },
-      { name: 'Gi0/2', role: 'Alternate', state: 'Blocking', cost: 8, toSwitch: 'SW-B' },
+      { name: 'Gi0/2', role: 'Alternate', state: 'Blocking', cost: 4, toSwitch: 'SW-B' },
     ],
   },
 ]
@@ -215,7 +215,7 @@ function StpTopologyViewer() {
 }
 
 const STP_VERSIONS = [
-  { name: 'STP', std: '802.1D-1998', convergence: '30–50 s', perVlan: false, note: 'Original. One tree for all VLANs. Catastrophically slow convergence.' },
+  { name: 'STP', std: '802.1D-1998', convergence: '30–50 s', perVlan: false, note: 'Original common spanning tree behavior. Cisco PVST+ creates one tree per VLAN; MST maps VLANs to instances.' },
   { name: 'PVST+', std: 'Cisco (prop)', convergence: '30–50 s', perVlan: true, note: 'Cisco per-VLAN STP. Allows load balancing. Still slow convergence.' },
   { name: 'RSTP', std: '802.1w', convergence: '1–6 s', perVlan: false, note: 'Rapid STP. New port states (Discarding/Learning/Forwarding) and role-based negotiation for fast convergence.' },
   { name: 'RPVST+', std: 'Cisco (prop)', convergence: '1–6 s', perVlan: true, note: 'Cisco Rapid per-VLAN STP. Combines RSTP speed with per-VLAN trees.' },
@@ -563,7 +563,7 @@ Gi0/2               Desg FWD 4         128.2    P2p`}
       <H2>PortFast</H2>
 
       <Para>
-        End-host ports (connecting to PCs, phones, printers) will never receive BPDUs — only switches and bridges generate them. Making these ports wait 30–50 seconds to transition to Forwarding is wasteful and causes problems (DHCP requests time out before the port comes up, causing boot failures on diskless workstations).
+        End-host ports (connecting to PCs, phones, printers) are not expected to receive BPDUs — if they do, someone may have connected a switch, bridge, hypervisor bridge, or malicious device. Making normal host ports wait 30–50 seconds to transition to Forwarding is wasteful and causes problems (DHCP requests time out before the port comes up, causing boot failures on diskless workstations).
       </Para>
 
       <Para>

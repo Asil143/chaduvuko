@@ -472,7 +472,7 @@ SSH_FXP_STATUS (101)    ← Server status response (ok/error codes)`}</CodeBlock
         SFTP supports <Accent>request pipelining</Accent> — the client can send multiple requests without waiting for responses. Each request has a unique 32-bit request-id; responses may arrive in any order and are matched by id. Modern clients like OpenSSH's sftp and paramiko send 64 outstanding requests by default, dramatically improving throughput on high-latency links.
       </Para>
       <WowBox>
-        The reason SFTP transfers feel slow on some links is not the protocol — it is the default window size. SFTP transfers small chunks (32 KB by default) and waits for acknowledgement. Setting a larger transfer buffer (<Code>sftp -B 65536</Code>) on high-bandwidth links can multiply throughput significantly. On a 100ms latency link, 32KB window = max ~320 KB/s; 64MB window = potential gigabit speed.
+        The reason SFTP transfers feel slow on some links is usually the amount of data in flight, not the protocol itself. SFTP uses per-request buffers and pipelined outstanding requests; throughput depends on buffer size × outstanding requests ÷ RTT. Setting a larger transfer buffer (<Code>sftp -B 65536</Code>) and allowing enough pipelining on high-bandwidth links can multiply throughput significantly, but <Code>-B</Code> is not a 64 MB window by itself.
       </WowBox>
       <SftpCommandExplorer />
 
@@ -502,7 +502,7 @@ scp -l 100000 large_file.iso user@server:/iso/  # limit to 100 kbps
 # (Use sftp -B 65536 for larger buffer size control)`}</CodeBlock>
       <H2>rsync over SSH: Delta Transfers</H2>
       <Para>
-        rsync is not a protocol on its own — it is an algorithm for computing file differences and a tool that can use various transports. When used with SSH (<Code>rsync -e ssh</Code> or simply <Code>rsync user@host:/path</Code>), rsync runs the rsync daemon on the remote via the SSH channel. The rsync delta algorithm computes rolling checksums of file blocks; only changed blocks are transferred over the wire.
+        rsync is a tool and delta-transfer algorithm with its own protocol, and it can use various transports. When used with SSH (<Code>rsync -e ssh</Code> or simply <Code>rsync user@host:/path</Code>), rsync speaks its protocol over the SSH channel. The rsync delta algorithm computes rolling checksums of file blocks; only changed blocks are transferred over the wire.
       </Para>
       <CodeBlock>{`# rsync performance on changed files:
 # File: 1 GB, changed 1 MB
@@ -642,7 +642,7 @@ conn.on('ready', () => {
   hostVerifier: (key) => key.equals(EXPECTED_HOST_KEY_FINGERPRINT),
 });`}</CodeBlock>
       <Warn>
-        Never use <Code>RejectPolicy</Code> that silently accepts any host key in production automation (equivalent of StrictHostKeyChecking=no). Always pre-load known_hosts or verify the server fingerprint in code. An automated process that accepts any host key is vulnerable to MITM.
+        Never use <Code>AutoAddPolicy()</Code> that silently accepts any host key in production automation (equivalent of StrictHostKeyChecking=no). Use <Code>RejectPolicy()</Code> with preloaded known_hosts entries or verify the server fingerprint in code. An automated process that accepts any host key is vulnerable to MITM.
       </Warn>
 
       <Divider />
@@ -784,7 +784,7 @@ curl -X PUT --upload-file data.csv "https://my-bucket.s3.amazonaws.com/incoming/
       </IQ>
       <IQ level="PhD">
         <strong>Why does the OpenSSH chroot directory for SFTP need to be owned by root:root with mode 755, and what happens at the kernel level if this requirement is violated?</strong><br />
-        When sshd performs a <Code>chroot(2)</Code> syscall to jail an SFTP user, the kernel changes the process's notion of root. POSIX requires that a process doing chroot must be root (CAP_SYS_CHROOT). OpenSSH additionally enforces that the chroot directory and all ancestors are not writable by anyone other than root. The reason: if a user could write to any directory in the chroot path, they could create symlinks that escape the jail via hardlink/symlink race conditions. Specifically, a writable directory allows creating a symlink from a name inside the chroot to an absolute path outside; combined with directory traversal, this breaks the containment. The check is done in <Code>session.c</Code> (OpenSSH source) via <Code>safe_path()</Code>, which walks the directory tree verifying owner and mode. If any component fails, sshd logs "bad ownership or modes for chroot directory" and closes the connection — intentionally unhelpful to prevent information disclosure to attackers about the exact failure.
+        When sshd performs a <Code>chroot(2)</Code> syscall to jail an SFTP user, the kernel changes the process's notion of root. POSIX requires that a process doing chroot must be root (CAP_SYS_CHROOT). OpenSSH additionally enforces that the chroot directory and all ancestors are not writable by anyone other than root. The reason is defense in depth: writable path components allow replacement, race, bind-mount, and unsafe jail-root patterns before or during session setup. A plain absolute symlink inside an already-completed chroot does not escape by itself, but unsafe ownership on the jail path is still rejected. The check is done in <Code>session.c</Code> (OpenSSH source) via <Code>safe_path()</Code>, which walks the directory tree verifying owner and mode. If any component fails, sshd logs "bad ownership or modes for chroot directory" and closes the connection — intentionally unhelpful to prevent information disclosure to attackers about the exact failure.
       </IQ>
 
       <Divider />

@@ -102,7 +102,7 @@ const WELL_KNOWN_PORTS = [
   { port: 20, proto: 'TCP', service: 'FTP Data', cat: 'File Transfer', color: '#f97316', description: 'FTP active mode data channel. The server initiates a connection back to the client on port 20. Largely replaced by FTP passive mode (PASV) which uses a dynamic negotiated port above 1023.', sec: 'Unencrypted — credentials and data in plaintext. Replace with SFTP (port 22) or FTPS (port 990/implicit, 21/explicit).' },
   { port: 21, proto: 'TCP', service: 'FTP Control', cat: 'File Transfer', color: '#f97316', description: 'FTP control channel. Client connects here to issue FTP commands (USER, PASS, LIST, RETR, STOR, PASV). Session setup happens here; actual data uses port 20 (active) or negotiated port (passive).', sec: 'Credentials sent in plaintext. Block externally or replace entirely with SFTP.' },
   { port: 22, proto: 'TCP', service: 'SSH / SFTP / SCP', cat: 'Remote Access', color: G, description: 'Secure Shell — encrypted remote terminal, SFTP/SCP file transfer, port forwarding, and tunneling. Replaced Telnet (23), rsh, rlogin entirely. Key-based auth strongly preferred over password auth.', sec: 'Disable password auth; use key-based. Limit source IPs via firewall. Consider port knocking or fail2ban for brute-force protection.' },
-  { port: 25, proto: 'TCP', service: 'SMTP (server-to-server)', cat: 'Email', color: '#3b82f6', description: 'Server-to-server email delivery (MTA to MTA). NOT for client email submission (use 587 or 465). Most ISPs block outbound port 25 from residential IPs to prevent spam. Requires STARTTLS + authentication for submission.', sec: 'ISPs block outbound port 25 from residential connections. Use 587 (STARTTLS) or 465 (SMTPS) for client submission.' },
+  { port: 25, proto: 'TCP', service: 'SMTP (server-to-server)', cat: 'Email', color: '#3b82f6', description: 'Server-to-server email delivery (MTA to MTA). NOT for client email submission (use 587 or 465). STARTTLS is commonly used opportunistically or enforced by policy; authenticated client submission belongs on 587/465.', sec: 'ISPs block outbound port 25 from residential connections. Use 587 (STARTTLS) or 465 (SMTPS) for client submission.' },
   { port: 53, proto: 'UDP/TCP', service: 'DNS', cat: 'Infrastructure', color: '#8b5cf6', description: 'Domain Name System. UDP for queries under 512 bytes; TCP for large responses (DNSSEC, zone transfers) or when retrying after UDP truncation. Every network connection starts with at least one DNS query.', sec: 'DNS is unencrypted by default — queries visible to ISP, on-path attackers. Use DoH (port 443) or DoT (port 853) for privacy.' },
   { port: 67, proto: 'UDP', service: 'DHCP Server', cat: 'Infrastructure', color: '#8b5cf6', description: 'DHCP server receives client Discover and Request messages on port 67. Clients send from port 68. Broadcast-based — clients use 0.0.0.0:68 → 255.255.255.255:67 before they have an IP.', sec: 'Rogue DHCP servers can assign clients malicious gateway/DNS — a man-in-the-middle attack vector. Use DHCP snooping on managed switches.' },
   { port: 80, proto: 'TCP', service: 'HTTP', cat: 'Web', color: '#ef4444', description: 'Unencrypted HTTP. In modern deployments, port 80 only serves a redirect to HTTPS on port 443 — 301 Moved Permanently with HSTS header. Web servers (nginx, Apache, Caddy) listen here.', sec: 'All data transmitted in plaintext. Never transmit credentials, cookies, or sensitive data over HTTP. Redirect to HTTPS.' },
@@ -288,7 +288,7 @@ function FiveTupleTracker() {
           <p style={{ margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
             {conn.id === 1 && 'This is the first Chrome tab connection. The kernel tracks this as a unique 5-tuple. Replies from 142.250.80.46:443 with dst port 54321 are delivered to this specific tab.'}
             {conn.id === 2 && 'Same destination server and port as connection 1! But the source port is 54322 — making a different 5-tuple. The kernel perfectly delivers replies to the right tab, not the other one. This is transport-layer multiplexing.'}
-            {conn.id === 3 && 'UDP DNS query. No connection state — UDP is connectionless. The kernel still tracks the 5-tuple to match replies to the querying process. Short-lived; closed after response.'}
+            {conn.id === 3 && 'UDP DNS query. No connection state — UDP is connectionless. The local UDP socket/port receives the reply; connected UDP sockets may also filter by remote peer. Short-lived; closed after response.'}
             {conn.id === 4 && 'SSH connection to a private server. Different destination IP and port from the HTTPS connections — entirely separate kernel state. Runs indefinitely (keepalive packets prevent idle timeout).'}
             {conn.id === 5 && 'LISTEN socket — nginx waiting for incoming HTTPS connections. Not a connection but a listening endpoint. Source port = local port; all other fields wildcard. One accept() call returns a new ESTABLISHED socket per new client.'}
             {conn.id === 6 && 'HTTP/3 over QUIC — UDP to the same server as connections 1 and 2, but different protocol (UDP vs TCP). The protocol field of the 5-tuple makes this unique even though IP and ports are the same as the TCP connections.'}
@@ -344,7 +344,7 @@ The receiving server sees the reverse 5-tuple as its connection state:
       </Para>
 
       <WowBox emoji="🌐" title="One Port Handles Millions of Connections">
-        A Google frontend server handles millions of simultaneous HTTPS connections — all to destination port 443. The server's port stays constant at 443 across every connection. The diversity comes from client source IPs and source ports. Two clients from 192.168.1.10:54321 and 10.0.0.1:54321 have different source IPs, making them different 5-tuples. Within one client, different tabs use different source ports. One server IP, one server port, unlimited unique connections. Port 65K limit is a client-side constraint, not a server-side one.
+        A Google frontend server handles millions of simultaneous HTTPS connections — all to destination port 443. The server's port stays constant at 443 across every connection. The diversity comes from client source IPs and source ports. Two clients from 192.168.1.10:54321 and 10.0.0.1:54321 have different source IPs, making them different 5-tuples. Within one client, different tabs use different source ports. One server IP and one server port are not limited to 65K total connections; practical limits are memory, file descriptors, kernel tables, conntrack, and load-balancer capacity.
       </WowBox>
 
       <Divider />
@@ -357,7 +357,7 @@ The receiving server sees the reverse 5-tuple as its connection state:
       </StoryBox>
 
       <Para>
-        IANA divides the 65,535 port space into three ranges:
+        IANA divides the 65,536 possible port values (0–65,535) into three ranges:
       </Para>
 
       <CodeBlock title="Port range assignments">
@@ -632,7 +632,7 @@ ip addr add 10.0.0.2/24 dev eth0
       <Chapter n="07" title="Server-Side: Accept Queue and Backlog" subtitle="Why connections get refused under burst traffic and how to fix it" />
 
       <StoryBox>
-        A web server is handling steady 10,000 requests/second without issue. A news article mentions the site; traffic spikes to 100,000 requests/second for 30 seconds. Users see "Connection refused." CPU: 20%. Memory: fine. The problem: the accept queue — where completed TCP handshakes wait for accept() to be called — is full at its default size of 128. The kernel is dropping incoming SYNs. Linux sends RST to every new connection attempt. Raising somaxconn to 65,536 and restarting nginx with a higher backlog fixes it — the burst is absorbed, connections queue, nginx processes them in order.
+        A web server is handling steady 10,000 requests/second without issue. A news article mentions the site; traffic spikes to 100,000 requests/second for 30 seconds. Users see connection timeouts or resets. CPU: 20%. Memory: fine. The problem: the accept queue — where completed TCP handshakes wait for accept() to be called — is full at its default size of 128. Depending on kernel settings and state, new connection attempts may be ignored, retransmitted, or reset. Raising somaxconn to 65,536 and restarting nginx with a higher backlog fixes it — the burst is absorbed, connections queue, nginx processes them in order.
       </StoryBox>
 
       <Para>
@@ -996,7 +996,7 @@ strace -e trace=network -p PID      # All network syscalls for a process`}
       <Chapter n="14" title="Common Misconceptions" subtitle="Port and socket errors that waste hours in production debugging" />
 
       <Err title="A server can only handle 65,535 simultaneous connections">
-        Port numbers are 16-bit, giving 65,535 possible values — but this limit applies to the source port used by one client IP when connecting to one server IP:port. A server handling connections from thousands of different client IPs has thousands of different 5-tuples per port. There is no 65,535 limit on server-side connections. A server with 1 million clients connecting to port 443 has 1 million unique 5-tuples, all valid simultaneously. The per-server limit is memory (each connection uses ~4KB kernel memory) and file descriptor limits (ulimit -n, default 1024 — must be raised to 1M+ for high-performance servers).
+        Port numbers are 16-bit, giving 65,536 possible values numbered 0 through 65,535 — but this limit applies to the source port used by one client IP when connecting to one server IP:port. A server handling connections from thousands of different client IPs has thousands of different 5-tuples per port. There is no 65,535 limit on server-side connections. A server with 1 million clients connecting to port 443 has 1 million unique 5-tuples, all valid simultaneously. The per-server limit is memory (each connection uses ~4KB kernel memory) and file descriptor limits (ulimit -n, default 1024 — must be raised to 1M+ for high-performance servers).
       </Err>
 
       <Err title="Opening a connection 'uses up' a port on the server">
@@ -1051,7 +1051,7 @@ strace -e trace=network -p PID      # All network syscalls for a process`}
       <KeyTakeaways items={[
         'Ports (0–65,535) identify services on a machine. The 5-tuple (src_ip, src_port, dst_ip, dst_port, protocol) uniquely identifies every active connection — the kernel\'s demultiplexing key.',
         'Port ranges: 0–1023 well-known (root required to bind), 1024–49151 registered, 49152–65535 ephemeral (OS-assigned for client-side source ports, Linux default 32768–60999).',
-        'A server handles unlimited connections on one port — the server\'s port is constant; client diversity (src_ip:src_port) makes each 5-tuple unique. Port exhaustion is client-side only.',
+        'A server can handle many connections on one port — the server\'s port is constant; client diversity (src_ip:src_port) makes each 5-tuple unique. Practical limits are OS and resource limits, while port exhaustion is usually client-side.',
         'Socket API: socket()→bind()→listen()→accept() for servers; socket()→connect() for clients. File descriptors — treat them like files. Same API for TCP, UDP, and Unix domain sockets.',
         'Port exhaustion: client runs out of ephemeral ports to a specific dst_ip:port. Fix with connection pooling (best), expanded ephemeral range, tcp_tw_reuse, or multiple source IPs.',
         'TIME_WAIT lasts 60–120s after connection close — ensures safe 5-tuple reuse. tcp_tw_reuse safely allows client-side reuse; never use tcp_tw_recycle (removed in Linux 4.12).',

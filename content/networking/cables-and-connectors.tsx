@@ -175,7 +175,7 @@ const CABLES = [
     use: 'Datacenter top-of-rack switch to server',
     standard: 'TIA/EIA-568-C.2-1',
     connector: 'RJ-45 (Cat8.1) / TERA/ARJ45 (Cat8.2)',
-    notes: 'Always shielded. 30m limit makes it datacenter-only. 2 GHz bandwidth with PAM4 signaling. Replacing short fiber runs in dense datacenter environments.',
+    notes: 'Always shielded. 30m limit makes it datacenter-only. 2 GHz bandwidth with multilevel BASE-T signaling. Replacing short fiber runs in dense datacenter environments.',
   },
   {
     key: 'smf',
@@ -456,7 +456,7 @@ Cat6      250 MHz    1 Gbps      100 m     1000BASE-T
                      10 Gbps      55 m     10GBASE-T
 Cat6a     500 MHz    10 Gbps     100 m     10GBASE-T
 Cat7      600 MHz    10 Gbps     100 m     10GBASE-T (non-standard connector)
-Cat7a    1000 MHz    40 Gbps*    100 m     *not widely adopted
+Cat7a    1000 MHz    10 Gbps*    100 m     *non-TIA/common nonstandard for RJ45 Ethernet; 25/40GBASE-T uses Cat8 to 30 m
 Cat8     2000 MHz    25/40 Gbps   30 m     25GBASE-T / 40GBASE-T
 
 * The "100 m" rule: all categories limited to 100m for horizontal runs per TIA-568.
@@ -924,7 +924,7 @@ Step 6: Copper specific
       </Para>
 
       <Err title="Duplex mismatch — silent performance killer">
-        <Para>Duplex mismatch is one of the most common misconfigurations. Symptoms: ping works fine, but file transfer speeds are 2–10 Mbps on a gigabit link. The error output of the interface shows: increasing "late collision" counter (on the half-duplex side). Fix: set both sides to autonegotiation, or force both to 1000/full-duplex with matching configurations. The forced-side never sees FLPs, falls back to 10 Mbps by IEEE spec if the other side is auto — another reason to always use autonegotiation on both sides.</Para>
+        <Para>Duplex mismatch is one of the most common misconfigurations. Symptoms: ping works fine, but file transfer speeds are 2–10 Mbps on a gigabit link. The error output of the interface shows: increasing "late collision" counter (on the half-duplex side). Fix: set both sides to autonegotiation, or force both to the same speed/duplex with matching configurations. If one side is forced and the other remains auto, the auto side may detect speed through parallel detection but cannot reliably detect duplex, so it commonly falls back to half-duplex — another reason to use autonegotiation on both sides.</Para>
       </Err>
 
       <Divider />
@@ -1024,7 +1024,7 @@ Rules of thumb:
       </IQ>
 
       <IQ q="How does PoE 802.3bt Type 4 deliver 90W over Cat6a? Walk through the electrical path including detection, classification, and power delivery." level="Senior">
-        802.3bt Type 4 uses all four wire pairs. Detection: PSE applies 2.7–10 V probe; PD presents 25 kΩ signature resistance, confirming PoE capability. Classification: PSE applies 15.5–20.5 V; PD responds with a multi-event physical layer classification indicating Class 8 (90 W). The PSE allocates power budget. Power delivery: 52–57 V DC is applied across all four pairs simultaneously — both Mode A (pins 1,2,3,6) and Mode B (pins 4,5,7,8) carry power. Current: P = IV → at 57 V, 90 W requires ~1.57 A total (~0.78 A per pair). Power loss: 0.78 A through 26 AWG conductor (0.188 Ω/m × 2 × 100 m = 37.6 Ω per pair) → I²R = 0.78² × 37.6 ≈ 22.9 W per pair / 4 pairs = ~18.7 W total loss → PD receives 71.3 W. Temperature rise in bundled Cat6a must be managed — 802.3bt requires derating in cable bundles.
+        802.3bt Type 4 uses all four wire pairs. Detection: PSE applies 2.7–10 V probe; PD presents 25 kΩ signature resistance, confirming PoE capability. Classification: PSE applies 15.5–20.5 V; PD responds with a multi-event physical layer classification indicating Class 8. The PSE allocates power budget. Power delivery: 52–57 V DC is applied across all four pairs simultaneously — both Mode A (pins 1,2,3,6) and Mode B (pins 4,5,7,8) carry power. The standard allows up to 90 W at the PSE and about 71 W available at the powered device after cable loss; the exact loss depends on conductor gauge, length, temperature, and current sharing across pairs. Temperature rise in bundled Cat6a must be managed — 802.3bt requires derating in cable bundles.
       </IQ>
 
       <IQ q="Design the fiber cabling architecture for a 3-floor office building: 100 users per floor, 10G to every desk, a datacenter on floor 1, and future-proof for 25G. Justify every choice." level="PhD">

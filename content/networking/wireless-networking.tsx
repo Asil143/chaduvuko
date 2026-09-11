@@ -95,7 +95,7 @@ const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermedia
 
 const WIFI_STANDARDS = [
   { gen: 'Wi-Fi 4', std: '802.11n', year: 2009, band: '2.4 / 5 GHz', maxRate: '600 Mbps', mimo: '4×4 MIMO', modulation: '64-QAM', color: '#6b7280', notable: 'First MIMO standard. Changed Wi-Fi from niche to mainstream.' },
-  { gen: 'Wi-Fi 5', std: '802.11ac', year: 2013, band: '5 GHz only', maxRate: '3.5 Gbps', mimo: '8×8 MU-MIMO (DL)', modulation: '256-QAM', color: '#3b82f6', notable: 'Wave 2 added MU-MIMO (4 simultaneous clients). Gigabit Wi-Fi.' },
+  { gen: 'Wi-Fi 5', std: '802.11ac', year: 2013, band: '5 GHz only', maxRate: '6.9 Gbps theoretical (8 streams, 160 MHz)', mimo: '8×8 MU-MIMO (DL)', modulation: '256-QAM', color: '#3b82f6', notable: 'Wave 2 added MU-MIMO (4 simultaneous clients). Gigabit Wi-Fi.' },
   { gen: 'Wi-Fi 6', std: '802.11ax', year: 2019, band: '2.4 / 5 GHz', maxRate: '9.6 Gbps', mimo: '8×8 MU-MIMO (DL+UL)', modulation: '1024-QAM', color: '#8b5cf6', notable: 'OFDMA allows sub-channel allocation per client. 4× efficiency in dense environments.' },
   { gen: 'Wi-Fi 6E', std: '802.11ax', year: 2021, band: '2.4 / 5 / 6 GHz', maxRate: '9.6 Gbps', mimo: '8×8 MU-MIMO', modulation: '1024-QAM', color: '#f59e0b', notable: '6 GHz band adds 1.2 GHz of clean spectrum. 59 additional 20 MHz channels.' },
   { gen: 'Wi-Fi 7', std: '802.11be', year: 2024, band: '2.4 / 5 / 6 GHz', maxRate: '46 Gbps', mimo: '16×16 MU-MIMO', modulation: '4096-QAM', color: G, notable: 'Multi-Link Operation (MLO) bonds multiple bands simultaneously. 320 MHz channels.' },
@@ -208,8 +208,8 @@ function ChannelPlanningTool() {
               <p style={{ fontSize: 13, fontWeight: 700, color: G, margin: '0 0 4px' }}>Channel {selectedCh} — {CHANNELS_2G.channels.find(c => c.num === selectedCh)?.freq} MHz</p>
               <p style={{ fontSize: 13, color: 'var(--text)', margin: 0 }}>
                 {[1, 6, 11].includes(selectedCh)
-                  ? `Non-overlapping channel. Safe to use. Deploy APs on only channels 1, 6, and 11 to avoid co-channel interference with adjacent APs.`
-                  : `This channel overlaps with adjacent channels. Using it causes co-channel interference with APs on nearby channels. Avoid in new deployments — use channels 1, 6, or 11 only.`
+                  ? `Non-overlapping channel. Safe to use. Deploy APs on only channels 1, 6, and 11 to avoid adjacent-channel interference.`
+                  : `This channel overlaps with adjacent channels. Using it causes adjacent-channel interference with APs on nearby channels. Avoid in new deployments — use channels 1, 6, or 11 only.`
                 }
               </p>
             </div>
@@ -422,13 +422,13 @@ export default function WirelessNetworkingModule() {
       </Para>
 
       <Para>
-        <Accent>UNII-3 (149–165):</Accent> No DFS, no power limits beyond standard. Preferred for high-throughput outdoor links.
+        <Accent>UNII-3 (149–165):</Accent> No DFS and commonly used for outdoor/high-throughput links, subject to regional power and EIRP limits.
       </Para>
 
       <H2>The 6 GHz Band (Wi-Fi 6E/7)</H2>
 
       <Para>
-        The 6 GHz band (5.925–7.125 GHz) opened in the US in 2020 by FCC ruling provides 1.2 GHz of new spectrum — more than the 2.4 GHz and 5 GHz bands combined. It offers <Accent>59 non-overlapping 20 MHz channels</Accent> (7 at 160 MHz width, 14 at 80 MHz, 29 at 40 MHz). Crucially, the 6 GHz band has essentially no legacy devices — no 2.4 GHz or 5 GHz devices can use it, so there is no legacy interference. This creates a clean, high-capacity band perfect for Wi-Fi 6E and Wi-Fi 7 deployments.
+        The 6 GHz band (5.925–7.125 GHz) opened in the US in 2020 by FCC ruling provides 1.2 GHz of new spectrum — more than the 2.4 GHz and 5 GHz bands combined. In the US it offers up to <Accent>59 non-overlapping 20 MHz channels</Accent> (7 at 160 MHz width, 14 at 80 MHz, 29 at 40 MHz); availability varies by country. Crucially, the 6 GHz band has essentially no legacy devices — no 2.4 GHz or 5 GHz devices can use it, so there is no legacy interference. This creates a clean, high-capacity band perfect for Wi-Fi 6E and Wi-Fi 7 deployments.
       </Para>
 
       <ChannelPlanningTool />
@@ -842,7 +842,7 @@ ieee80211w=2      # MFP required (mandatory for WPA3)
       </IQ>
 
       <IQ q="What are the only non-overlapping channels in the 2.4 GHz band?" level="Beginner">
-        In the 2.4 GHz band, only channels 1, 6, and 11 are non-overlapping (in the US/Canada). Each 20 MHz channel is spaced 5 MHz apart, but a 20 MHz channel requires 25 MHz to avoid overlap (channel center ± 11 MHz). Channels 1 (2412 MHz) and 6 (2437 MHz) are 25 MHz apart — just barely non-overlapping. Channels 6 and 11 similarly. Any other channel selection results in partial overlap with adjacent channels, causing co-channel interference. This means a 2.4 GHz wireless deployment can only have a maximum of 3 non-interfering cells regardless of density — a fundamental scalability limitation.
+        In the 2.4 GHz band, only channels 1, 6, and 11 are non-overlapping (in the US/Canada). Each 20 MHz channel is spaced 5 MHz apart, but a 20 MHz channel requires 25 MHz to avoid overlap (channel center ± 11 MHz). Channels 1 (2412 MHz) and 6 (2437 MHz) are 25 MHz apart — just barely non-overlapping. Channels 6 and 11 similarly. Any other channel selection results in partial overlap with adjacent channels, causing adjacent-channel interference. This means a 2.4 GHz wireless deployment can only have a maximum of 3 non-interfering cells regardless of density — a fundamental scalability limitation.
       </IQ>
 
       <IQ q="Explain OFDMA in Wi-Fi 6 and why it improves dense network performance." level="Intermediate">
@@ -865,7 +865,7 @@ ieee80211w=2      # MFP required (mandatory for WPA3)
         'Wi-Fi is a shared half-duplex medium — CSMA/CA coordinates access by randomizing transmission timing to avoid (not detect) collisions.',
         'The 2.4 GHz band has only 3 non-overlapping channels (1, 6, 11) — fundamentally limiting high-density deployments. The 5 GHz band has 25 non-overlapping 20 MHz channels.',
         'Wi-Fi 6 (802.11ax) introduced OFDMA (sub-channel allocation per client) and TWT (battery-efficient IoT scheduling), dramatically improving dense network performance.',
-        'Wi-Fi 6E adds the 6 GHz band with 59 non-overlapping 20 MHz channels and no legacy interference — the biggest Wi-Fi spectrum expansion in history.',
+        'Wi-Fi 6E adds the 6 GHz band; in the US this means up to 59 non-overlapping 20 MHz channels and no legacy interference.',
         'Wi-Fi 7 Multi-Link Operation (MLO) bonds multiple bands simultaneously for both higher throughput and lower latency, routing traffic to the least-congested link dynamically.',
         'WPA3-SAE replaces WPA2-PSK\'s offline-crackable handshake with an interactive Dragonfly key exchange, providing resistance to dictionary attacks and forward secrecy.',
         '802.1X/EAP enterprise Wi-Fi gives each user/device unique credentials and per-session keys — EAP-TLS (mutual certificates) is the most secure; PEAP (server cert + AD password) is most common.',

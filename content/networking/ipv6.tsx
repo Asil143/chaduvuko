@@ -95,7 +95,7 @@ const IQ = ({ q, level, children }: { q: string; level: 'Beginner' | 'Intermedia
 
 const COMPRESS_EXAMPLES = [
   { full: '2001:0db8:0000:0000:0000:0000:0000:0001', compressed: '2001:db8::1', note: 'Leading zeros removed; four consecutive zero groups collapsed to ::' },
-  { full: 'fe80:0000:0000:0000:0200:5eff:fe00:5301', compressed: 'fe80::200:5e ff:fe00:5301', note: 'Link-local address. Leading zeros removed; longest run of zeros collapsed' },
+  { full: 'fe80:0000:0000:0000:0200:5eff:fe00:5301', compressed: 'fe80::200:5eff:fe00:5301', note: 'Link-local address. Leading zeros removed; longest run of zeros collapsed' },
   { full: '2001:0db8:00ab:00cd:0000:0000:00ef:0001', compressed: '2001:db8:ab:cd::ef:1', note: 'Multiple groups simplified. :: replaces the zero-filled middle groups.' },
   { full: '0000:0000:0000:0000:0000:0000:0000:0001', compressed: '::1', note: 'Loopback address. All 128 bits except the last are 0 — maximum compression.' },
   { full: '2001:0db8:0001:0002:0003:0004:0005:0006', compressed: '2001:db8:1:2:3:4:5:6', note: 'No consecutive zero groups — just remove leading zeros per group.' },
@@ -140,7 +140,7 @@ function IPv6CompressTool() {
 
 const ADDR_TYPES = [
   { type: 'Global Unicast', prefix: '2000::/3', example: '2001:db8::/32', color: G, desc: 'Globally routable addresses (public internet). Equivalent to public IPv4 addresses. Starts with 001 in the first 3 bits.' },
-  { type: 'Link-Local', prefix: 'fe80::/10', example: 'fe80::1', color: '#3b82f6', desc: 'Automatically generated on every IPv6 interface. Not routed beyond the local segment. Required for NDP (Neighbor Discovery Protocol). Never appears in routing tables.' },
+  { type: 'Link-Local', prefix: 'fe80::/10', example: 'fe80::1', color: '#3b82f6', desc: 'Automatically generated on every IPv6 interface. Not routed beyond the local segment. Required for NDP (Neighbor Discovery Protocol). Often appears as a next hop, not as a routed destination prefix.' },
   { type: 'Unique Local', prefix: 'fc00::/7', example: 'fd00::/8', color: '#8b5cf6', desc: 'Private addressing (IPv6 equivalent of RFC 1918). fd00::/8 requires random 40-bit global ID for uniqueness. Not routed on the public internet.' },
   { type: 'Loopback', prefix: '::1/128', example: '::1', color: '#f59e0b', desc: 'IPv6 loopback — equivalent to 127.0.0.1. A single address (not a range). Traffic to ::1 never leaves the host.' },
   { type: 'Unspecified', prefix: '::/128', example: '::', color: '#6b7280', desc: 'All zeros. Used as source address in DHCPv6 solicit (before address assigned). Never used as a destination.' },
@@ -193,7 +193,7 @@ type NdpStep = { step: string; msg: string; color: string; detail: string }
 
 const NDP_STEPS: NdpStep[] = [
   { step: '1. SLAAC',       msg: 'Router Advertisement received (prefix: 2001:db8::/64)', color: G,        detail: 'Router periodically sends RA (Router Advertisement) to ff02::1 (all nodes). RA contains: network prefix, prefix length, flags (M/O bits), default gateway, MTU. If M=0, O=0: SLAAC is used for address configuration.' },
-  { step: '2. Generate',    msg: 'EUI-64 address generated from MAC address',              color: '#3b82f6', detail: 'SLAAC generates a 64-bit Interface ID from the MAC address using EUI-64: insert FF:FE in the middle of the 48-bit MAC, flip the 7th bit (Universal/Local bit). MAC AA:BB:CC:DD:EE:FF → EUI-64: A8:BB:CC:FF:FE:DD:EE:FF. Full address: 2001:db8::a8bb:ccff:fedd:eeff/64.' },
+  { step: '2. Generate',    msg: 'Interface ID generated',              color: '#3b82f6', detail: 'Classic SLAAC could generate a 64-bit Interface ID from the MAC address using EUI-64: insert FF:FE in the middle of the 48-bit MAC, flip the 7th bit (Universal/Local bit). Modern operating systems usually use stable opaque or privacy-preserving IDs instead. Example EUI-64: MAC AA:BB:CC:DD:EE:FF → A8:BB:CC:FF:FE:DD:EE:FF → 2001:db8::a8bb:ccff:fedd:eeff/64.' },
   { step: '3. DAD',         msg: 'Duplicate Address Detection (NS to solicited-node)',    color: '#f59e0b', detail: 'Before using the address, the host performs DAD (Duplicate Address Detection): sends a Neighbor Solicitation to the solicited-node multicast address (ff02::1:ff+last 24 bits of address). If any host responds, there is a conflict and the address cannot be used.' },
   { step: '4. Tentative',   msg: 'Waiting 1 second for DAD conflict response',            color: '#f59e0b', detail: 'The address is in "tentative" state during DAD. The host cannot use it for communication yet, but listens for Neighbor Advertisements that would indicate a conflict. RFC 4862 requires waiting at least 1 second.' },
   { step: '5. Assigned',    msg: 'No conflict — address assigned and active',              color: G,        detail: 'DAD succeeded — no other host responded to the NS. The address is now in "preferred" state and fully usable. The host also has a link-local address (fe80::) generated the same way but from the fe80::/10 prefix, always assigned regardless of RA reception.' },
@@ -267,7 +267,7 @@ export default function IPv6Module() {
       </WowBox>
 
       <Para>
-        Beyond addressing, IPv6 redesigns several aspects of networking: eliminates broadcast (replaced by multicast), introduces SLAAC for stateless address configuration, simplifies the IP header for faster forwarding, mandates IPsec support, and improves mobility support. IPv6 is not merely a larger address space — it is a redesigned protocol.
+        Beyond addressing, IPv6 redesigns several aspects of networking: eliminates broadcast (replaced by multicast), introduces SLAAC for stateless address configuration, simplifies the IP header for faster forwarding, was designed with IPsec support in mind, and improves mobility support. IPv6 is not merely a larger address space — it is a redesigned protocol.
       </Para>
 
       <Divider />
@@ -761,7 +761,7 @@ sysctl net.ipv6.conf.all.forwarding`}
       <Chapter n={13} title="Common Misconceptions" />
 
       <Err title="IPv6 is just IPv4 with more addresses">
-        IPv6 is a redesigned protocol. Key differences: 128-bit addresses (not just bigger IPv4), no broadcast (multicast only), no header checksum (router performance improvement), no router fragmentation (source-only via extension header), NDP replaces ARP + Router Discovery + ICMP Redirect, SLAAC enables automatic address configuration without DHCP, mandatory IPsec support (though not mandatory to use), flow label for QoS, extension headers replace IPv4 options, solicited-node multicast replaces ARP broadcast. IPv6 is not a simple extension of IPv4.
+        IPv6 is a redesigned protocol. Key differences: 128-bit addresses (not just bigger IPv4), no broadcast (multicast only), no header checksum (router performance improvement), no router fragmentation (source-only via extension header), NDP replaces ARP + Router Discovery + ICMP Redirect, SLAAC enables automatic address configuration without DHCP, IPsec support is available but not mandatory for all IPv6 traffic, flow label for QoS, extension headers replace IPv4 options, solicited-node multicast replaces ARP broadcast. IPv6 is not a simple extension of IPv4.
       </Err>
 
       <Err title="IPv6 removes the need for firewalls because there is no NAT">

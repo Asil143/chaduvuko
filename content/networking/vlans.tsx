@@ -273,7 +273,7 @@ function Dot1QFrameInspector() {
 type AttackPhase = 'idle' | 'reconnaissance' | 'attack' | 'success' | 'defense'
 
 const ATTACK_PHASES: { phase: AttackPhase; label: string; color: string; detail: string }[] = [
-  { phase: 'reconnaissance', label: '1. Reconnaissance', color: '#f59e0b', detail: 'Attacker on VLAN 10 (Engineering) discovers that native VLAN is VLAN 1. Their port is an access port in VLAN 10, but trunk links use untagged native VLAN 1.' },
+  { phase: 'reconnaissance', label: '1. Reconnaissance', color: '#f59e0b', detail: 'Attacker is on an access port whose VLAN matches the trunk native VLAN. They discover that trunk links carry that native VLAN untagged.' },
   { phase: 'attack', label: '2. Double-Tag Attack', color: '#ef4444', detail: 'Attacker crafts a frame with TWO 802.1Q tags: outer tag = VLAN 1 (native), inner tag = VLAN 30 (Servers). The frame looks like a native-VLAN frame from the attacker\'s perspective.' },
   { phase: 'success', label: '3. Frame Hops VLANs', color: '#dc2626', detail: 'Switch A strips the outer (native) tag and forwards the frame to Switch B as a trunk frame with VID=30 (inner tag). Switch B sees VLAN 30 and delivers it to the Servers VLAN — a security violation.' },
   { phase: 'defense', label: '4. Mitigation', color: G, detail: 'Fix: change native VLAN from 1 to an unused VLAN (e.g., 999). Configure "vlan dot1q tag native" on trunk ports to tag all traffic including the native VLAN. Set all edge ports to "switchport mode access" to disable DTP.' },
@@ -375,7 +375,7 @@ export default function VLANsModule() {
       </Para>
 
       <WowBox emoji="🏗️" title="From 4,094 VLANs to 16 Million with VXLAN">
-        The 12-bit VLAN ID field in 802.1Q theoretically supports 4,096 unique VLANs per physical domain (IDs 0 and 4095 are reserved, leaving 4,094 usable). But modern hyperscale data centers using VXLAN (Virtual Extensible LAN) extend this to 16 million unique segments using 24-bit VNI (VXLAN Network Identifier) — a 4,000× expansion needed to support multi-tenant cloud environments.
+        The 12-bit VLAN ID field in 802.1Q theoretically supports 4,096 unique VLANs per physical domain (IDs 0 and 4095 are reserved, leaving 4,094 usable). But modern hyperscale data centers using VXLAN (Virtual Extensible LAN) extend this to 16 million unique segments using 24-bit VNI (VXLAN Network Identifier) — about a 4,096× expansion needed to support multi-tenant cloud environments.
       </WowBox>
 
       <Para>
@@ -441,7 +441,7 @@ interface GigabitEthernet0/1
 interface GigabitEthernet0/24
   description Trunk-to-SW-DIST-01
   switchport mode trunk
-  switchport trunk encapsulation dot1q
+  switchport trunk encapsulation dot1q  ! older platforms only; omit on dot1q-only switches
   switchport trunk native vlan 999
   switchport trunk allowed vlan 10,20,30,99`}
       </CodeBlock>
@@ -528,7 +528,7 @@ interface Vlan99
       <H2>CEF and the Hardware Fast Path</H2>
 
       <Para>
-        Cisco's <Accent>CEF (Cisco Express Forwarding)</Accent> pre-builds a hardware FIB from the software routing table. After the first packet of a new flow is processed in software (the "process switching" path), CEF installs a flow entry and subsequent packets are switched entirely in hardware without CPU involvement. This is called <Accent>fast-path</Accent> or <Accent>hardware switching</Accent>.
+        Cisco's <Accent>CEF (Cisco Express Forwarding)</Accent> pre-builds the FIB and adjacency tables from the software routing table. Packets can be forwarded through the fast path without per-flow process switching; modern platforms then use ASICs/TCAM to perform the lookup and rewrite entirely in hardware.
       </Para>
 
       <Para>
@@ -634,7 +634,7 @@ interface Vlan99
       <H2>MAC Flooding and CAM Table Overflow</H2>
 
       <Para>
-        A switch maintains a CAM (Content Addressable Memory) table mapping MAC addresses to ports. If an attacker floods the switch with frames containing thousands of fake source MAC addresses, the CAM table fills up and new legitimate MACs cannot be learned. The switch enters <Accent>fail-open</Accent> mode, broadcasting all frames to all ports — effectively turning the switch into a hub and allowing the attacker to capture all traffic.
+        A switch maintains a CAM (Content Addressable Memory) table mapping MAC addresses to ports. If an attacker floods the switch with frames containing thousands of fake source MAC addresses, the CAM table fills up and new legitimate MACs cannot be learned. The result is excessive unknown-unicast flooding and possible exposure of traffic whose destinations are not currently learned, rather than a guarantee that every known unicast becomes visible.
       </Para>
 
       <Para>
@@ -718,7 +718,7 @@ interface range GigabitEthernet0/1-10
 ! Trunk port
 interface GigabitEthernet0/24
  description Uplink-to-Distribution
- switchport trunk encapsulation dot1q
+ switchport trunk encapsulation dot1q  ! older platforms only; omit on dot1q-only switches
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,99
@@ -924,7 +924,7 @@ policy-map VOICE-POLICY
       </Para>
 
       <Para>
-        <Accent>4. SVI not up/up.</Accent> Symptom: hosts have correct IPs and VLAN is configured, but cannot reach their gateway IP. <Code>show interfaces vlan 10</Code> shows "down/down." An SVI comes up only when at least one access port in that VLAN is active. No active ports = SVI stays down.
+        <Accent>4. SVI not up/up.</Accent> Symptom: hosts have correct IPs and VLAN is configured, but cannot reach their gateway IP. <Code>show interfaces vlan 10</Code> shows "down/down." An SVI comes up only when the VLAN exists, is not suspended, and at least one up/up Layer 2 port carries that VLAN, either access or trunk. No active ports = SVI stays down.
       </Para>
 
       <Para>

@@ -79,7 +79,7 @@ const OID_TREE: OidNode[] = [
   { oid: '1.3.6.1.2.1', name: 'mib-2', description: 'MIB-II root. Standard objects for all TCP/IP managed nodes.', type: 'OID', example: 'N/A', children: ['1.3.6.1.2.1.1', '1.3.6.1.2.1.2', '1.3.6.1.2.1.4', '1.3.6.1.2.1.25'] },
   { oid: '1.3.6.1.2.1.1', name: 'system', description: 'System group: device identity, uptime, contact, location.', type: 'Group', example: 'N/A', children: ['1.3.6.1.2.1.1.1', '1.3.6.1.2.1.1.3', '1.3.6.1.2.1.1.5'] },
   { oid: '1.3.6.1.2.1.1.1', name: 'sysDescr', description: 'Full description of device hardware and OS version.', type: 'DisplayString', example: 'Cisco IOS Version 15.7 RELEASE SOFTWARE' },
-  { oid: '1.3.6.1.2.1.1.3', name: 'sysUpTime', description: 'Time since last network management re-initialization (in hundredths of seconds).', type: 'TimeTicks', example: '4328100 (= 500 days)' },
+  { oid: '1.3.6.1.2.1.1.3', name: 'sysUpTime', description: 'Time since last network management re-initialization (in hundredths of seconds).', type: 'TimeTicks', example: '4328100 (= 12 hours, 1 minute, 21 seconds)' },
   { oid: '1.3.6.1.2.1.1.5', name: 'sysName', description: 'Administratively assigned name — typically the FQDN.', type: 'DisplayString', example: 'router01.corp.example.com' },
   { oid: '1.3.6.1.2.1.2', name: 'interfaces', description: 'Interface group: list of all network interfaces, their state and counters.', type: 'Group', example: 'N/A', children: ['1.3.6.1.2.1.2.2.1'] },
   { oid: '1.3.6.1.2.1.2.2.1', name: 'ifTable', description: 'Table of network interface entries. Indexed by ifIndex (integer per interface).', type: 'Table', example: 'N/A', children: ['1.3.6.1.2.1.2.2.1.2', '1.3.6.1.2.1.2.2.1.8', '1.3.6.1.2.1.2.2.1.10', '1.3.6.1.2.1.2.2.1.16'] },
@@ -217,7 +217,7 @@ const MONITORING_TOOLS: MonitoringTool[] = [
   },
   {
     id: 'snmpv3', name: 'SNMPv3', model: 'Poll-based (GET/GetBulk) + Inform (acknowledged traps)',
-    transport: 'UDP (or TCP with TLS in RFC 6353)', port: '161, 162', security: 'USM: authentication (HMAC-SHA-256) + privacy (AES-256); VACM for access control',
+    transport: 'UDP (or TCP with TLS in RFC 6353)', port: '161, 162', security: 'USM: authentication + privacy, commonly SHA variants with AES-128; stronger options depend on vendor support; VACM for access control',
     dataType: 'Structured MIB objects, 64-bit counters (Counter64)', useCase: 'Production network device monitoring with security requirements',
     weaknesses: 'Complex configuration, UDP unreliability for Inform without TCP, MIB management overhead', modernAlt: 'SNMP + Prometheus node_exporter for hybrid', color: '#10b981',
   },
@@ -401,7 +401,7 @@ snmpbulkwalk -v2c -c public 192.168.1.1 ifTable`}</CodeBlock>
       </Para>
       <H2>The Counter Wrap Problem</H2>
       <Para>
-        SNMPv1 uses Counter32 (32-bit) for interface octets. A 32-bit counter wraps at 2^32 bytes = 4.29 GB. On a 1 Gbps interface running at full speed, that is 34 seconds to wrap. A monitoring system polling every 5 minutes cannot distinguish "counter wrapped once" from "zero traffic." SNMPv2c's Counter64 wraps at 2^64 bytes — a 10 Gbps interface running flat out would take 46 years to wrap.
+        SNMPv1 uses Counter32 (32-bit) for interface octets. A 32-bit counter wraps at 2^32 bytes = 4.29 GB. On a 1 Gbps interface running at full speed, that is 34 seconds to wrap. A monitoring system polling every 5 minutes cannot distinguish "counter wrapped once" from "zero traffic." SNMPv2c's Counter64 wraps at 2^64 bytes — a 10 Gbps interface running flat out would take roughly 468 years to wrap.
       </Para>
       <WowBox>
         The classic "interface utilization graph goes to zero and back up" in old monitoring systems is almost always a Counter32 wrap. The monitoring system subtracts current from previous sample, gets a large negative number, and treats it as zero. Always use Counter64 (SNMPv2c+) and poll frequently relative to the counter wrap time.
@@ -424,7 +424,7 @@ snmpbulkwalk -v2c -c public 192.168.1.1 ifTable`}</CodeBlock>
         <Accent>authNoPriv</Accent>: authenticated (HMAC), no encryption. Prevents tampering and replay attacks but SNMP data is visible on the wire.
       </Para>
       <Para>
-        <Accent>authPriv</Accent>: authenticated + encrypted. The correct setting for production. Uses HMAC-SHA-256 (or stronger) for auth and AES-256 for encryption.
+        <Accent>authPriv</Accent>: authenticated + encrypted. The correct setting for production. Common interoperable deployments use SHA-family authentication with AES-128 privacy; SHA-2 and AES-256 support depends on the device and client.
       </Para>
       <H2>SNMPv3 Configuration</H2>
       <CodeBlock>{`# Cisco IOS SNMPv3 configuration
@@ -514,7 +514,7 @@ snmpget -v3 -l authPriv -u monitor \
 <134>1 2026-05-24T10:01:00Z webserver apache 9801 - [request@12345 method="POST" uri="/api/login" status="401" bytes="230"] authentication failure`}</CodeBlock>
       <H2>Syslog Facility Codes</H2>
       <Para>
-        The facility identifies the source of the message. 24 defined facilities:
+        The facility identifies the source of the message. Common facilities include:
       </Para>
       <Para>
         <Code>0</Code> kern (kernel), <Code>1</Code> user, <Code>2</Code> mail, <Code>3</Code> daemon, <Code>4</Code> auth/security, <Code>5</Code> syslog, <Code>6</Code> lpr, <Code>7</Code> news, <Code>8</Code> uucp, <Code>9</Code> cron, <Code>10</Code> authpriv, <Code>16-23</Code> local0–local7 (for application use).
@@ -708,7 +708,7 @@ scrape_configs:
       {/* ── Chapter 13 ─────────────────────────────────────────── */}
       <Chapter n={13} title="Misconceptions About SNMP and Syslog" />
       <Err>
-        "SNMPv3 is automatically secure if I configure a username." — SNMPv3 has three security levels: noAuthNoPriv (useless), authNoPriv (auth only), and authPriv (auth + encryption). Many devices default to noAuthNoPriv or authNoPriv. Only authPriv with AES-256 and SHA-256 authentication provides meaningful security. Check your security level configuration explicitly.
+        "SNMPv3 is automatically secure if I configure a username." — SNMPv3 has three security levels: noAuthNoPriv (useless), authNoPriv (auth only), and authPriv (auth + encryption). Many devices default to noAuthNoPriv or authNoPriv. Use authPriv with interoperable SHA-family authentication and AES privacy; check the exact algorithms your platform supports. Check your security level configuration explicitly.
       </Err>
       <Err>
         "Syslog is a reliable log transport." — UDP/514 (the default) provides no delivery guarantees. Under load, on lossy networks, or if the log server is busy, messages are silently dropped. No counter, no error message. For security logging, use TCP/514 or TLS/6514, and implement buffering (rsyslog's queue action) to handle temporary collector outages.
@@ -746,7 +746,7 @@ scrape_configs:
       <Divider />
       <KeyTakeaways items={[
         'SNMP uses a tree of OIDs (Object Identifiers) to address manageable variables; MIBs define the OID tree and data types; MIB-II is the universal standard baseline.',
-        'SNMPv1/v2c use plaintext community strings — no real security; SNMPv3 with authPriv (HMAC-SHA-256 + AES-256) is required for production environments.',
+        'SNMPv1/v2c use plaintext community strings — no real security; SNMPv3 with authPriv is required for production environments, using algorithms supported by both manager and device.',
         'SNMP Trap = fire-and-forget UDP notification; Inform = acknowledged notification with retransmission — use Inform for critical alerts.',
         'Counter32 wraps at ~4GB; use SNMPv2c+ Counter64 (IF-MIB ifHCInOctets/ifHCOutOctets) for any interface above 100 Mbps.',
         'Syslog priority encodes facility (source category) and severity (urgency) as priority = (facility × 8) + severity; always check both when filtering.',

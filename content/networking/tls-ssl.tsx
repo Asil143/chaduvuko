@@ -634,7 +634,7 @@ grep ssl_protocols /etc/nginx/nginx.conf
       <H3>Key Derivation: The PRF and HKDF</H3>
       <Para>After the DH exchange, both sides have the same "pre-master secret." TLS mixes this with the client and server randoms through a <Accent>Pseudo-Random Function (PRF)</Accent> to derive distinct keys: client write key, server write key, client MAC key, server MAC key, and IVs. In TLS 1.3, this is replaced by HKDF (HMAC-based Key Derivation Function), which is cleaner and more formally analyzed.</Para>
 
-      <Para>The client and server randoms are crucial: they prevent replay attacks. Even if an attacker records a TLS session and the server's private key is later compromised, the randoms ensure that each session produces unique keys — this is Perfect Forward Secrecy.</Para>
+      <Para>The client and server randoms are crucial: they provide freshness and ensure each handshake derives unique keys. Perfect Forward Secrecy comes from ephemeral Diffie-Hellman key exchange and discarding the ephemeral private keys after the handshake.</Para>
 
       <CodeBlock>{`# Watch TLS 1.3 handshake with Wireshark
 # Filter: tls.handshake.type == 1  (ClientHello)
@@ -657,7 +657,7 @@ echo | openssl s_client -connect example.com:443 2>/dev/null | openssl x509 -tex
       <Para>TLS 1.3 is not an incremental improvement — it's a near-complete redesign guided by a decade of cryptographic analysis. The design philosophy: remove everything that isn't provably necessary, eliminate all algorithm agility that allows downgrade attacks, and make the common case (ECDHE + AEAD) as fast as possible.</Para>
 
       <H3>What Was Removed</H3>
-      <Para>TLS 1.3 eliminated: RSA key exchange (no PFS), DHE with finite-field groups (Logjam-vulnerable), CBC cipher modes (BEAST, POODLE, Lucky13, GOLDENDOODLE), RC4 (NOMORE), 3DES (SWEET32), MD5 and SHA-1 in signatures, compression (CRIME), renegotiation, non-AEAD cipher suites, and custom DH groups. The attack surface shrank dramatically.</Para>
+      <Para>TLS 1.3 eliminated: RSA key exchange (no PFS), custom and weak finite-field DH groups (Logjam-style risk), CBC cipher modes (BEAST, POODLE, Lucky13, GOLDENDOODLE), RC4 (NOMORE), 3DES (SWEET32), MD5 and SHA-1 in signatures, compression (CRIME), renegotiation, non-AEAD cipher suites, and custom DH groups. Named FFDHE groups are still supported, though ECDHE/X25519 is common. The attack surface shrank dramatically.</Para>
 
       <H3>1-RTT: The Latency Win</H3>
       <Para>TLS 1.2 required 2 round trips before the first application byte could be sent. TLS 1.3 requires only 1. The trick: the ClientHello includes the key_share extension with the client's DH public key (guessing that ECDHE with P-256 or X25519 will be chosen). The server responds with its DH public key in the same flight, and both sides derive traffic keys immediately. The server can start sending encrypted application data before the client's Finished arrives.</Para>
@@ -717,7 +717,7 @@ openssl s_client -connect example.com:443 -tls1_3 -sess_in /tmp/sess.pem -early_
       <Para>When a private key is compromised, the CA must revoke the certificate. Two mechanisms exist: <Accent>CRL</Accent> (Certificate Revocation List) — a periodically-published list of serial numbers, large and slow to download. <Accent>OCSP</Accent> (Online Certificate Status Protocol) — a real-time query to the CA asking "is this cert revoked?" OCSP stapling improves this: the server pre-fetches its own OCSP response and includes it in the TLS handshake, avoiding the extra round trip and privacy leak.</Para>
 
       <WowBox>
-        <Para>In 2020, Apple announced that Safari would cap certificate validity at 398 days (13 months). Any cert issued after September 1, 2020 with a longer validity would be rejected — regardless of CA. This was a unilateral policy change by Apple enforced through browser behavior, not IETF standards. The industry followed. Effective certificate maximal validity in 2024 is now 398 days across all major browsers.</Para>
+        <Para>In 2020, Apple announced that Safari would cap certificate validity at 398 days (13 months). Any cert issued after September 1, 2020 with a longer validity would be rejected — regardless of CA. The industry followed. Public TLS certificate lifetimes are now being shortened further: CA/B Forum SC-081 starts a staged reduction from 200 days in 2026 toward much shorter lifetimes later in the decade, making automated certificate renewal operationally mandatory.</Para>
       </WowBox>
 
       <Divider />
@@ -827,7 +827,7 @@ openssl x509 -in cert.pem -text -noout | grep -A 20 "CT Precertificate SCTs"
       <Para><Accent>Server Name Indication (SNI)</Accent>, defined in RFC 6066, solves this by adding a <Code>server_name</Code> extension to the ClientHello. The client announces which hostname it's trying to reach before encryption begins, allowing the server to select the correct certificate. This enabled CDNs, shared hosting, and modern cloud infrastructure — a single IP can now serve thousands of HTTPS sites.</Para>
 
       <H3>The SNI Privacy Problem</H3>
-      <Para>SNI is sent in plaintext. Any observer on the network path (your ISP, a coffee shop router, a government firewall) can see which hostname you're connecting to, even on HTTPS. China's Great Firewall uses SNI inspection to block specific HTTPS sites. This is why Encrypted Client Hello (ECH) is being developed — it encrypts the inner ClientHello (including SNI) using the server's public key, revealed only in DNS. ECH requires DNS-over-HTTPS (DoH) for the public key retrieval to be secure.</Para>
+      <Para>SNI is sent in plaintext. Any observer on the network path (your ISP, a coffee shop router, a government firewall) can see which hostname you're connecting to, even on HTTPS. China's Great Firewall uses SNI inspection to block specific HTTPS sites. This is why Encrypted Client Hello (ECH) is being developed — it encrypts the inner ClientHello (including SNI) using configuration published through DNS HTTPS/SVCB records. Encrypted or authenticated DNS such as DoH, DoT, or DNSSEC can protect ECH discovery depending on the threat model.</Para>
 
       <WowBox>
         <Para>Cloudflare serves over 25 million domains from roughly 1,500 IP addresses. Without SNI (or with only one cert per IP), they would need 25 million IP addresses — the entire IPv4 space is only ~4.3 billion addresses, with less than 100 million available. SNI is the technology that makes CDN-scale HTTPS economically feasible.</Para>

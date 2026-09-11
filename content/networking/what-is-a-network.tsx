@@ -895,7 +895,7 @@ export default function WhatIsANetworkModule() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, margin: '20px 0 32px' }}>
         {[
-          { icon: '🛡️', title: 'Fault Tolerant', desc: 'If one router fails, packets reroute around it automatically. The internet was originally designed to survive nuclear strikes by the US military (ARPANET, 1969).' },
+          { icon: '🛡️', title: 'Fault Tolerant', desc: 'If one router fails, packets can reroute around it. Early packet-switching networks emphasized resilient communication over unreliable links; the “nuclear-proof internet” story is an oversimplified myth.' },
           { icon: '⚡', title: 'Efficient', desc: "Multiple packets from different users share the same physical wire simultaneously. One slow download doesn't block someone else's video call." },
           { icon: '📈', title: 'Scalable', desc: 'Billions of devices can join the internet without reserving circuits in advance. Capacity is shared dynamically.' },
           { icon: '🔄', title: 'Resilient', desc: 'Packets can take different paths. One packet might go Ashburn → Singapore → Google, the next might go Ashburn → London → Google.' },
@@ -1283,8 +1283,8 @@ Server:           Decrypts pre-master secret using its private key
                   Both sides derive the same symmetric session key
 Server → Client:  ChangeCipherSpec + Finished
 
-→ From here, all communication is AES-256-GCM encrypted.
-→ TLS 1.3 optimized this from TLS 1.2's 3+ round trips down to 1-2.`}
+→ From here, communication uses the negotiated AEAD cipher, commonly AES-GCM or ChaCha20-Poly1305.
+→ TLS 1.3 optimized this from TLS 1.2's typical 2-RTT full handshake to 1 RTT, with optional 0-RTT for resumed sessions.`}
       </CodeBlock>
 
       <Para>
@@ -1307,11 +1307,11 @@ Server → Client:  ChangeCipherSpec + Finished
       <HttpRequestJourney />
 
       <Para>
-        Notice the single most surprising insight: <Accent>the actual HTTP request is trivial compared to the setup.</Accent> DNS + TCP + TLS take 3–5 round trips before a single byte of your actual content is transferred. This is why connection reuse matters so much — HTTP/1.1 introduced <Code>keep-alive</Code>, HTTP/2 introduced multiplexing (multiple requests on one connection), and HTTP/3 (QUIC) starts transferring data in the very first packet.
+        Notice the single most surprising insight: <Accent>the actual HTTP request is trivial compared to the setup.</Accent> DNS + TCP + TLS take multiple round trips before a single byte of your actual content is transferred. This is why connection reuse matters so much — HTTP/1.1 introduced <Code>keep-alive</Code>, HTTP/2 introduced multiplexing (multiple requests on one connection), and HTTP/3 (QUIC) combines transport setup with TLS so repeat connections can send replay-safe requests with 0-RTT.
       </Para>
 
       <WowBox emoji="🚀" title="HTTP/3 and QUIC — the next generation">
-        HTTP/3 runs on QUIC instead of TCP. QUIC is built on UDP but implements its own reliability, congestion control, and stream multiplexing. The key innovation: QUIC integrates TLS 1.3 into the transport handshake — so you go from connection establishment to encrypted data in just 1 round trip (or even 0 round trips for returning connections via session resumption). YouTube, Google Search, and Cloudflare-protected sites already use HTTP/3 for most connections.
+        HTTP/3 runs on QUIC instead of TCP. QUIC is built on UDP but implements its own reliability, congestion control, and stream multiplexing. The key innovation: QUIC integrates TLS 1.3 into the transport handshake — so a first connection can reach encrypted data in about 1 round trip, while returning connections may use 0-RTT for replay-safe requests. YouTube, Google Search, and Cloudflare-protected sites already use HTTP/3 for many connections.
       </WowBox>
 
       <Divider />
@@ -1585,7 +1585,7 @@ Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
       </Err>
 
       <Err title="Packets always take the same path from A to B">
-        Packet switching routes each packet independently. Two consecutive packets in the same TCP connection can travel entirely different paths — one via Singapore, one via London — and arrive at the destination out of order. TCP uses sequence numbers to reassemble them in the correct order regardless of arrival order. This is by design: if one path becomes congested or fails, individual packets reroute without the entire connection needing to restart. It also means that adding more hops (traceroute shows longer paths) doesn't necessarily mean higher latency — a longer path through faster routers can beat a shorter path through congested ones.
+        Packet switching can route each packet independently, although modern networks often keep packets from the same flow on one ECMP path to reduce reordering. When packets do arrive out of order, TCP uses sequence numbers to reassemble them in the correct order. This flexibility is by design: if one path becomes congested or fails, traffic can shift without the entire connection needing to restart. It also means that adding more hops (traceroute shows longer paths) doesn't necessarily mean higher latency — a longer path through faster routers can beat a shorter path through congested ones.
       </Err>
 
       <Err title="DNS is just a lookup — it doesn't affect performance or security">
@@ -1647,7 +1647,7 @@ Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
         "Every IP packet carries source and destination IPs end-to-end. MAC addresses handle local delivery and change at every router hop. NAT lets millions of private IPs share one public IP.",
         "DNS translates domain names to IP addresses through a hierarchy: root → TLD → authoritative. Responses are cached by TTL. DNS is critical infrastructure — broken DNS equals broken internet.",
         "Bandwidth = how much data per second (pipe width). Latency = how long data takes to travel (pipe length). For downloads, maximize bandwidth. For interactive apps, minimize latency.",
-        "HTTPS = HTTP + TLS. TLS authenticates the server via certificates, encrypts all data with AES-256, and ensures integrity via HMAC. TLS 1.3 mandates forward secrecy — past sessions cannot be decrypted even if keys are stolen later.",
+        "HTTPS = HTTP + TLS. TLS authenticates the server via certificates and negotiates an AEAD cipher such as AES-GCM or ChaCha20-Poly1305, providing encryption and integrity. TLS 1.3 mandates forward secrecy — past sessions cannot be decrypted even if keys are stolen later.",
         "Troubleshoot network issues bottom-up: Physical → Link → Network (ping router) → Internet (ping 8.8.8.8) → DNS (dig) → Application (curl). Confirm each layer works before checking the next.",
       ]} />
 

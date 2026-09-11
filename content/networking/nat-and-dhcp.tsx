@@ -575,7 +575,7 @@ show ip nat translations verbose           ! With timing info
 show ip nat statistics                     ! Hit counts, miss counts, translation table size`}</CodeBlock>
 
       <Warn>
-        The NAT translation table has a maximum size and per-entry timeouts. TCP entries default to 86400s (24 hours after connection established), but UDP entries expire in 300s. For high-traffic networks, this table can become the bottleneck. Monitor <Code>show ip nat statistics</Code> for &quot;expired translations&quot; and &quot;max_entries&quot; warnings. Aggressive UDP applications (DNS, video streaming) can exhaust the table if timeouts are too long.
+        The NAT translation table has a maximum size and per-entry timeouts. TCP entries may live for hours after establishment, while UDP entries use much shorter idle timers that vary by platform and traffic type (DNS examples are often around tens of seconds; some devices default to several minutes). For high-traffic networks, this table can become the bottleneck. Monitor <Code>show ip nat statistics</Code> for &quot;expired translations&quot; and &quot;max_entries&quot; warnings. Aggressive UDP applications (DNS, video streaming) can exhaust the table if timeouts are too long.
       </Warn>
 
       <Divider />
@@ -626,7 +626,7 @@ show ip nat statistics                     ! Hit counts, miss counts, translatio
       <Para>• IPv6 traffic (if IPv6 is deployed alongside NAT IPv4, it bypasses NAT entirely)</Para>
 
       <Warn>
-        If IPv6 is enabled alongside NAT IPv4 (dual-stack), every device has a globally routable IPv6 address. Those IPv6 addresses are NOT behind NAT and have no equivalent &quot;implicit inbound filtering&quot; — unless your firewall explicitly blocks inbound IPv6 traffic. Many corporate networks deploy NAT on IPv4 but forget to apply equivalent firewall rules to IPv6, creating a wide-open attack surface on the IPv6 side.
+        If IPv6 is enabled alongside NAT IPv4 (dual-stack), devices may have globally routable IPv6 addresses. Those IPv6 addresses are usually not behind NAT, so inbound exposure depends on firewall policy rather than address translation. Many home and enterprise firewalls default-deny unsolicited inbound IPv6, but teams that deploy IPv6 must still apply equivalent firewall rules instead of assuming NAT is providing a safety barrier.
       </Warn>
 
       <H3>CGNAT and Port Exhaustion</H3>
@@ -713,7 +713,7 @@ interface Vlan10
   ip helper-address 192.168.1.100     ! Forward DHCP broadcasts to this server
   ip helper-address 192.168.1.101     ! Second DHCP server for redundancy
 
-! ip helper-address forwards 8 UDP services by default:
+! ip helper-address forwards these UDP services by default on classic Cisco IOS:
 !   TFTP (69), DNS (53), DHCP/BOOTP (67/68), TACACS (49),
 !   NetBIOS Name Service (137/138), IEN-116 Name Service (42), Time (37)
 ! To restrict to DHCP only:
@@ -724,7 +724,7 @@ no ip forward-protocol udp 137       ! Disable NetBIOS forwarding
 debug ip dhcp server packet           ! See DISCOVER arriving from relay (giaddr set)`}</CodeBlock>
 
       <Warn>
-        If you configure <Code>ip helper-address</Code> but DHCP clients still get no IP, check: (1) the DHCP server has a pool matching the giaddr subnet, (2) the server can route replies back to the relay agent&apos;s IP (the gateway interface), and (3) no ACL on the router is blocking UDP 67/68. A common mistake is forgetting to add the DHCP subnet to the excluded-address list on the server, causing the server to offer the gateway&apos;s own IP to clients.
+        If you configure <Code>ip helper-address</Code> but DHCP clients still get no IP, check: (1) the DHCP server has a pool matching the giaddr subnet, (2) the server can route replies back to the relay agent&apos;s IP (the gateway interface), and (3) no ACL on the router is blocking UDP 67/68. A common mistake is forgetting to exclude infrastructure addresses, especially the gateway IP, causing the server to offer the gateway&apos;s own address to clients.
       </Warn>
 
       <Divider />
@@ -791,7 +791,7 @@ show ipv6 neighbors                   ! NDP neighbor table (IPv6 ARP equivalent)
 
       <Para>DHCP attacks are among the most accessible Layer 2 attacks. The defenses are built into modern switches:</Para>
 
-      <Para><Accent>DHCP Snooping</Accent> (IEEE 802.1Q): the switch differentiates between trusted ports (connecting to DHCP servers) and untrusted ports (connecting to clients). DHCP OFFER and DHCPACK messages on untrusted ports are dropped. The switch also builds a DHCP snooping binding table (IP-to-MAC-to-port mappings) that feeds Dynamic ARP Inspection and IP Source Guard.</Para>
+      <Para><Accent>DHCP Snooping</Accent>: a managed switch security feature, commonly configured per VLAN. The switch differentiates between trusted ports (connecting to DHCP servers) and untrusted ports (connecting to clients). DHCP OFFER and DHCPACK messages on untrusted ports are dropped. The switch also builds a DHCP snooping binding table (IP-to-MAC-to-port mappings) that feeds Dynamic ARP Inspection and IP Source Guard.</Para>
 
       <CodeBlock>{`! Enable DHCP snooping (Cisco IOS-based switch)
 ip dhcp snooping                           ! Enable globally

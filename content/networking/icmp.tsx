@@ -111,7 +111,7 @@ const ICMP_MESSAGES: IcmpMessage[] = [
     direction: 'Router → Sender',
     usage: 'Routers send this when no route to the destination exists. Contains the IP header + first 8 bytes of the original packet.',
     tool: 'traceroute (star hops = this is filtered)',
-    security: 'Important for path MTU discovery and connection failure detection. Filtering can cause TCP silent hangs.',
+    security: 'Important for reachability/error reporting. Filtering can hide real routing failures.',
     color: '#ef4444',
   },
   {
@@ -128,7 +128,7 @@ const ICMP_MESSAGES: IcmpMessage[] = [
     name: 'Destination Unreachable — Fragmentation Needed',
     direction: 'Router → Sender',
     usage: 'Critical for Path MTU Discovery (PMTUD). Router receives a packet with DF bit set that is too large for the next-hop link. Sends this message back with the MTU of the next link.',
-    tool: 'PMTUD — tcp MSS negotiation depends on this',
+    tool: 'PMTUD after MSS selection; MSS clamping is a workaround when this is blocked',
     security: 'MUST NOT be filtered. Filtering causes TCP Black Hole — connections establish but hang immediately after the 3-way handshake when data packets exceed MTU.',
     color: '#8b5cf6',
   },
@@ -332,7 +332,7 @@ const ECHO_REQUEST_FIELDS: IcmpField[] = [
   { name: 'Type', bits: '8 bits', value: '0x08 (8)', description: 'ICMP message type. 8 = Echo Request. The receiving host must respond with Type 0 (Echo Reply) using the same Identifier and Sequence Number.', color: '#f97316' },
   { name: 'Code', bits: '8 bits', value: '0x00 (0)', description: 'Sub-type within the message type. Echo Request only has one code: 0. Other types like Destination Unreachable use the code field to specify the reason.', color: '#3b82f6' },
   { name: 'Checksum', bits: '16 bits', value: '0xF7FF', description: 'One\'s complement checksum of the ICMP header + data. Computed over the entire ICMP message. Receiver recomputes and compares — mismatch means corruption.', color: '#8b5cf6' },
-  { name: 'Identifier', bits: '16 bits', value: '0x1A2B', description: 'Set by the sender to match replies with requests. ping uses the process ID as the identifier. On NAT-translated connections, this field is also translated (like port numbers in TCP/UDP).', color: G },
+  { name: 'Identifier', bits: '16 bits', value: '0x1A2B', description: 'Set by the sender to match replies with requests. ping often uses the process ID as the identifier. Many NATs may rewrite this field to demultiplex ICMP Echo flows, similar to how they use ports for TCP/UDP.', color: G },
   { name: 'Sequence Number', bits: '16 bits', value: '0x0001', description: 'Increments with each successive Echo Request. ping uses this to detect out-of-order replies and calculate packet loss percentage.', color: '#06b6d4' },
   { name: 'Data (Payload)', bits: 'Variable', value: '48 bytes of padding', description: 'Optional payload. ping typically sends a timestamp in the first 8 bytes so the receiver can compute one-way delay. The rest is padding. Minimum ICMP Echo size: 8 bytes header only.', color: '#6b7280' },
 ]
@@ -442,7 +442,7 @@ export default function Icmp() {
       <H3>ICMP in Error Messages — The Embedded Packet</H3>
       <Para>ICMP error messages (types 3, 4, 5, 11, 12) carry the IP header + first 8 bytes of the original packet that caused the error. This is enough to identify: the source and destination addresses, the protocol (TCP/UDP), and for TCP/UDP, the source and destination port numbers. This allows the receiving host to correlate the error with the specific connection that triggered it.</Para>
 
-      <Para>Eight bytes covers exactly a TCP/UDP/ICMP header — which is why 8 bytes was chosen. Applications can then deliver the error to the correct socket. This is how TCP knows to send RST when it receives ICMP Port Unreachable for a connection: the 8 bytes contain the original TCP port numbers, and the TCP stack matches them to the active socket.</Para>
+      <Para>Eight bytes covers the full UDP header and enough of the TCP header to include the source and destination ports plus sequence-number bytes. Applications can then deliver the error to the correct socket or flow. This is how the stack maps ICMP errors back to the packet that triggered them.</Para>
 
       <CodeBlock>{`# Analyze ICMP in Wireshark / tcpdump
 tcpdump -i eth0 icmp                        # Capture all ICMP
@@ -718,7 +718,7 @@ sysctl -w net.ipv4.tcp_mtu_probing=1      # Enable PMTUD probing on MTU failures
       <H2>ICMP in Security Tools</H2>
 
       <StoryBox>
-        A penetration tester is conducting a network reconnaissance engagement. The target network is behind a firewall that blocks all TCP/UDP probes. But ICMP Echo is allowed. Using ping sweeps, she maps out which IP addresses are live. Using ping with specific TTL values, she estimates network topology. Using ICMP timestamp requests, she discovers the target OS&apos;s uptime and may infer the OS type from the timestamp field format. ICMP has given her a map of the network without touching a single TCP port.
+        A penetration tester is conducting a network reconnaissance engagement. The target network is behind a firewall that blocks all TCP/UDP probes. But ICMP Echo is allowed. Using ping sweeps, she maps out which IP addresses are live. Using ping with specific TTL values, she estimates network topology. Using ICMP timestamp requests, she observes clock behavior and may infer OS traits from the timestamp field format. ICMP has given her a map of the network without touching a single TCP port.
       </StoryBox>
 
       <Para>ICMP is extensively used in network security tooling for both legitimate reconnaissance and attack purposes:</Para>
@@ -760,7 +760,7 @@ tcpdump -i eth0 'icmp[icmptype]=8 and len > 200'  # Large ICMP Echo Requests
       <Para>OS fingerprinting techniques using ICMP:</Para>
       <Para>• <Accent>Initial TTL</Accent>: Windows defaults to TTL=128, Linux/macOS to TTL=64, Cisco IOS to TTL=255. Receiving TTL=117 suggests ~11 hops from a Windows host (128-11=117).</Para>
       <Para>• <Accent>ICMP Error body</Accent>: some OSes return more than 8 bytes of the original packet in error messages. The amount returned varies by implementation.</Para>
-      <Para>• <Accent>ICMP Timestamp</Accent>: Type 13 (Timestamp Request) / Type 14 (Timestamp Reply) can reveal system uptime from the timestamp value, and the rate at which the counter increments reveals OS clock resolution.</Para>
+      <Para>• <Accent>ICMP Timestamp</Accent>: Type 13 (Timestamp Request) / Type 14 (Timestamp Reply) can reveal clock/time behavior and aid fingerprinting; the rate and format may expose OS clock resolution.</Para>
       <Para>• <Accent>Echo Request behavior</Accent>: Windows sets the DF bit on ICMP Echo; Linux does not by default. The data pattern in the payload also varies by OS.</Para>
 
       <Warn>
@@ -796,7 +796,7 @@ resource "aws_security_group_rule" "icmp_all" {
 resource "aws_security_group_rule" "icmp_unreachable" {
   type        = "ingress"
   from_port   = 3      # ICMP Type 3 (Destination Unreachable)
-  to_port     = -1
+  to_port     = 4
   protocol    = "icmp"
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = aws_security_group.main.id
@@ -921,7 +921,7 @@ traceroute6 2001:4860:4860::8888      # IPv6 path
         'ICMPv6 is essential for IPv6 operation — Types 133–136 (NDP) replace ARP and router discovery. Blocking ICMPv6 NDP completely breaks IPv6 neighbor resolution.',
         'Solicited-node multicast (FF02::1:FF + last 24 bits of address) makes IPv6 neighbor discovery far more efficient than ARP broadcast — only the targeted host receives the Neighbor Solicitation.',
         'ICMP tunneling encodes data in Echo Request/Reply payloads, bypassing firewalls that allow ICMP. Detect via payload size (> 200 bytes), rate (continuous vs. 1/second), and destination anomalies.',
-        'OS fingerprinting uses ICMP: initial TTL reveals OS family (Windows=128, Linux=64, Cisco=255), DF bit behavior, and Timestamp Request/Reply can expose system uptime.',
+        'OS fingerprinting uses ICMP: initial TTL reveals OS family (Windows=128, Linux=64, Cisco=255), DF bit behavior, and Timestamp Request/Reply can expose clock behavior.',
         'Path MTU Discovery requires ICMP Type 3 Code 4 to flow freely. When PMTUD is broken, MSS clamping at the bottleneck device (VPN gateway, tunnel endpoint) is the production workaround.',
         'ping RTT is not pure network latency — routers process ICMP in software (slow path), adding 1–5ms. Use transit measurements (traceroute RTT comparison) for accurate link latency assessment.',
       ]} />

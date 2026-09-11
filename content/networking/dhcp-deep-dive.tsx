@@ -606,7 +606,7 @@ ADVERTISE (2)       ← Like OFFER — server responds
 REQUEST (3)         → Client requests address from chosen server
 REPLY (7)           ← Server confirms
 RENEW (5)           → Client renews lease directly with server
-REBIND (6)          → Client broadcasts to any server (T2 expired)
+REBIND (6)          → Client multicasts to available DHCPv6 servers/relays (T2 expired)
 RELEASE (8)         → Client releases address
 INFORMATION-REQUEST (11) → Stateless: only wants options, not address`}</CodeBlock>
 
@@ -663,7 +663,7 @@ Add-DhcpServerv4Failover \
       </StoryBox>
       <H2>AWS VPC DHCP</H2>
       <Para>
-        Every VPC has a DHCP options set that specifies: domain-name, domain-name-servers, ntp-servers, netbios-name-servers. The default options push AmazonProvidedDNS (VPC resolver at base VPC CIDR +2, e.g., 10.0.0.2). Custom options sets can override to point to private DNS resolvers. The DHCP server itself is the AWS-managed router; you cannot change it.
+        Every VPC has a DHCP options set that specifies: domain-name, domain-name-servers, ntp-servers, netbios-name-servers. The default options push AmazonProvidedDNS (VPC resolver at base VPC CIDR +2, e.g., 10.0.0.2). Custom options sets can override to point to private DNS resolvers. AWS-managed VPC infrastructure provides DHCP responses; you configure DHCP options sets, not a router-hosted DHCP daemon.
       </Para>
       <H2>Kubernetes IPAM and CNI Plugins</H2>
       <Para>

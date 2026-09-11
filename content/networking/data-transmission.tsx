@@ -182,7 +182,7 @@ function SignalEncodingVisualizer() {
         }
       })
     } else if (key === '4b5b') {
-      // PAM2 (NRZ-I) on 4B/5B encoded bits: add parity bits: 1101 0010 → 11010 00101
+      // PAM2 (NRZ-I) on 4B/5B encoded bits: map nibbles to code groups: 1101 0010 → 11011 10100
       const encoded = [1,1,0,1,0, 0,0,1,0,1]
       let current = 75
       const segW2 = W / encoded.length
@@ -343,7 +343,7 @@ function LatencyBreakdown() {
 
 const APPS = [
   { name: 'Large File Download', emoji: '⬇', bwScore: 10, latScore: 1, why: 'Throughput is everything. Once TCP window is full, latency only matters for slow-start phase. A 10 Gbps link with 100ms RTT moves data faster than a 1 Gbps link with 1ms RTT.' },
-  { name: 'Web Page Load',       emoji: '🌐', bwScore: 5,  latScore: 7, why: 'Mixed. The first RTT (DNS + TCP handshake + HTTP GET + first byte) is pure latency. Then content download is bandwidth-limited. HTTP/2 multiplexing and TLS 1.3 0-RTT cut latency impact.' },
+  { name: 'Web Page Load',       emoji: '🌐', bwScore: 5,  latScore: 7, why: 'Mixed. DNS, connection setup, HTTP request, and first byte are latency-sensitive. Then content download is bandwidth-limited. HTTP/2 multiplexing and TLS 1.3 handshakes reduce latency; resumed sessions may use 0-RTT for replay-safe requests.' },
   { name: 'Video Call (1080p)',   emoji: '📹', bwScore: 4,  latScore: 9, why: 'Needs ~4 Mbps stable — easy on modern links. But jitter > 30ms causes visual artifacts; latency > 150ms makes conversation feel unnatural. Latency + jitter dominate.' },
   { name: 'Online Gaming',        emoji: '🎮', bwScore: 1,  latScore: 10, why: 'Games send tiny state packets (64-512 B), barely using bandwidth. RTT ("ping") must be < 50ms for responsive gameplay. Jitter causes rubber-banding. Pure latency app.' },
   { name: 'DNS Lookup',           emoji: '🔍', bwScore: 1,  latScore: 10, why: 'Query + response is ~64 bytes each. Completely latency-bound. A 1ms DNS lookup vs 100ms lookup adds 99ms to every new TCP connection — critical on mobile networks.' },
@@ -487,7 +487,7 @@ export default function DataTransmission() {
 
       <H2>Manchester Encoding</H2>
       <Para>
-        Every bit period contains a mandatory mid-bit transition: falling (high→low) encodes a 1; rising (low→high) encodes a 0. This is the IEEE 802.3 convention (10BASE-T Ethernet). Advantages: <Accent>self-clocking</Accent> — the receiver can recover the clock from transitions alone, and there are never more than 1 bit period without a transition. Disadvantage: the guaranteed mid-bit transition means Manchester encoding requires <Accent>twice the baud rate</Accent> of NRZ for the same bit rate. 10BASE-T at 10 Mbps runs at 20 Mbaud.
+        Every bit period contains a mandatory mid-bit transition: falling (high→low) encodes a 1; rising (low→high) encodes a 0. This is the IEEE 802.3 convention (10BASE-T Ethernet). Advantages: <Accent>self-clocking</Accent> — the receiver can recover the clock from transitions alone, and there are never more than 1 bit period without a transition. Disadvantage: the guaranteed mid-bit transition means Manchester encoding requires roughly <Accent>twice the signaling bandwidth</Accent> of NRZ for the same bit rate.
       </Para>
       <Para>
         Differential Manchester (used in Token Ring) always has a mid-bit transition, but encodes data in whether a transition occurs at the <em>start</em> of the bit period (0 = transition, 1 = no transition). This is more robust to polarity inversion.
@@ -642,7 +642,7 @@ Examples:
       </WowBox>
 
       <IQ q="What's the Shannon capacity of a 20 MHz WiFi channel at 25 dB SNR?" level="Intermediate">
-        S/N = 10^(25/10) = 316. C = 20×10⁶ × log₂(317) ≈ 20×10⁶ × 8.31 ≈ 166 Mbps. This is the absolute ceiling. Real WiFi 802.11n achieves ~150 Mbps on 20 MHz because it uses 64-QAM (6 bits/symbol) + LDPC, which approaches but doesn't reach the Shannon limit.
+        S/N = 10^(25/10) = 316. C = 20×10⁶ × log₂(317) ≈ 20×10⁶ × 8.31 ≈ 166 Mbps. This is the absolute ceiling before protocol overhead, coding rate, guard intervals, and spatial-stream assumptions. A single 20 MHz 802.11n stream is far below the headline multi-stream/channel-bonded rates; spec-sheet throughput only makes sense when channel width, guard interval, coding, and spatial streams are stated.
       </IQ>
 
       <Divider />
@@ -1085,7 +1085,7 @@ tc -s qdisc show dev eth0`}
 
       <H2>ECN — Explicit Congestion Notification</H2>
       <Para>
-        ECN allows routers to signal congestion without dropping packets. When a router detects congestion (via RED/CoDel), instead of dropping the packet it sets the CE (Congestion Experienced) bit in the ECN field of the IP header. The receiver echoes this back to the sender via the ECE flag in the TCP header. The sender reduces its window as if a packet had been lost — but the packet itself was delivered. Result: congestion control without the retransmission and throughput penalty of actual loss. Both endpoints must support ECN (negotiated during TCP handshake with CWR and ECE flags). Widely deployed; enabled by default in Linux and macOS.
+        ECN allows routers to signal congestion without dropping packets. When a router detects congestion (via RED/CoDel), instead of dropping the packet it sets the CE (Congestion Experienced) bit in the ECN field of the IP header. The receiver echoes this back to the sender via the ECE flag in the TCP header. The sender reduces its window as if a packet had been lost — but the packet itself was delivered. Result: congestion control without the retransmission and throughput penalty of actual loss. Both endpoints must support ECN (negotiated during TCP handshake with CWR and ECE flags). Major operating systems support ECN, but end-to-end effectiveness depends on hosts, networks, and middleboxes.
       </Para>
 
       <Divider />

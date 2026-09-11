@@ -412,10 +412,10 @@ export default function EthernetAndSwitching() {
         In 1973, Robert Metcalfe and David Boggs at Xerox PARC connected computers to a single thick coaxial cable and called the protocol <Accent>Ethernet</Accent> — named after the luminiferous ether that 19th century physicists believed carried light through space. The original speed was 2.94 Mbps. Today, 800 Gbps Ethernet links carry data inside the world's largest datacenters. The frame format defined in those first experiments is still recognizable in every packet on your network right now.
       </Para>
       <Para>
-        Ethernet's longevity is the result of a remarkable design philosophy: a minimal, extensible standard that separates the physical layer from the logical framing. When the physics improved (coax → twisted pair → fiber → 400G optical), the frame format stayed the same. When speeds increased by a factor of 270,000, the switching logic stayed the same. This is what a well-designed protocol looks like.
+        Ethernet's longevity is the result of a remarkable design philosophy: a minimal, extensible standard that separates the physical layer from the logical framing. When the physics improved (coax → twisted pair → fiber → 400G/800G optical), the frame format stayed the same. When speeds increased by a factor of roughly 80,000 from 10 Mbps to 800 Gbps, the switching logic stayed recognizable. This is what a well-designed protocol looks like.
       </Para>
       <StoryBox>
-        The original 10BASE-5 "Thicknet" cable was 10 mm diameter yellow coaxial cable nicknamed "the frozen yellow garden hose." Computers attached via a "vampire tap" — a connector that literally pierced the cable with a pin. The entire segment was one shared collision domain. If two computers transmitted simultaneously, their signals collided, both were destroyed, both had to retransmit. If a tap pierced the cable at the wrong position, the impedance mismatch caused reflections that corrupted all traffic on the entire segment. Installations required exactly 2.5 meter spacing between taps to prevent standing waves. This is the origin of the 100-meter cable limit still referenced in TIA-568 today — it was the maximum before signal degradation destroyed frame integrity.
+        The original 10BASE-5 "Thicknet" cable was 10 mm diameter yellow coaxial cable nicknamed "the frozen yellow garden hose." Computers attached via a "vampire tap" — a connector that literally pierced the cable with a pin. The entire segment was one shared collision domain. If two computers transmitted simultaneously, their signals collided, both were destroyed, both had to retransmit. If a tap pierced the cable at the wrong position, the impedance mismatch caused reflections that corrupted all traffic on the entire segment. Installations required exactly 2.5 meter spacing between taps to prevent standing waves. Modern 100-meter twisted-pair channel limits come from structured cabling budgets such as attenuation, delay, crosstalk, and patch cords — not from Thicknet tap spacing.
       </StoryBox>
 
       <H2>IEEE 802.3 — The Standard That Formalized Ethernet</H2>
@@ -535,12 +535,12 @@ export default function EthernetAndSwitching() {
         CAM table entries have a timer (default: 300 seconds on most switches). If no frame is received from a MAC address for 300 seconds, the entry is removed. This handles: devices that have been powered off, devices that have moved to a different port, and VMs that have migrated. When an entry ages out, the next frame to that MAC is flooded (unknown unicast) until the device transmits again and is re-learned.
       </Para>
       <Para>
-        <Accent>CAM table overflow attack (MAC flooding):</Accent> An attacker sends frames with thousands of random source MACs, filling the CAM table. When full, new entries cannot be added — all traffic (including known unicasts) is flooded to all ports. The attacker's port now receives all traffic on the VLAN — effectively performing a passive wiretap. Defense: port security (maximum MAC addresses per port), 802.1X port authentication.
+        <Accent>CAM table overflow attack (MAC flooding):</Accent> An attacker sends frames with thousands of random source MACs, filling the CAM table. When full, new entries cannot be added — unknown destinations are flooded, and existing learned entries may continue only until they age out or are evicted. The attacker's port may receive traffic that should have stayed unicast. Defense: port security (maximum MAC addresses per port), 802.1X port authentication.
       </Para>
 
       <H2>CAM Table Size Limits</H2>
       <Para>
-        CAM tables are implemented in TCAM (Ternary Content Addressable Memory) — extremely fast but very expensive silicon. Typical sizes: 8,000–16,000 entries on access layer switches, 64,000–256,000 on core/datacenter switches. Large campus networks can exhaust access switch CAM tables if too many devices are on the same VLAN — another reason to segment with VLANs.
+        MAC forwarding tables use exact-match CAM or ASIC hash resources, while TCAM is used for ternary/wildcard matches such as ACLs and route prefixes. Typical MAC table sizes: 8,000–16,000 entries on access layer switches, 64,000–256,000 on core/datacenter switches. Large campus networks can exhaust access switch MAC tables if too many devices are on the same VLAN — another reason to segment with VLANs.
       </Para>
       <CodeBlock title="Viewing CAM table on Cisco IOS">
 {`show mac address-table
@@ -676,10 +676,10 @@ show mac address-table aging-time   # default: 300 seconds`}
 
       <H2>TCAM — Ternary Content Addressable Memory</H2>
       <Para>
-        The CAM table uses <Accent>TCAM</Accent> hardware. Unlike standard RAM (look up a value by address), TCAM lets you supply a value and find the address in a single clock cycle — a hardware parallel search of all entries simultaneously. Each TCAM cell stores ternary values: 0, 1, or X (don't care). This enables: exact MAC address lookup (used for CAM/forwarding table), prefix matching (for IP routing tables with masks), ACL evaluation (match packets with specific source IP ranges and port ranges).
+        Switch ASICs use exact-match resources for MAC forwarding and <Accent>TCAM</Accent> for wildcard or prefix-style matches. Unlike standard RAM (look up a value by address), TCAM lets you supply a value and mask and find matching entries in hardware. Each TCAM cell stores ternary values: 0, 1, or X (don't care). This enables prefix matching (for IP routing tables with masks) and ACL evaluation (match packets with specific source IP ranges and port ranges).
       </Para>
       <Para>
-        TCAM is extremely expensive — each bit of TCAM requires 4 transistors vs 1 for SRAM and 1 for DRAM. This is why switch CAM tables have hard limits (8K–256K entries) and why expanding routing table capacity requires buying a higher-end switch. TCAM can't be upgraded after purchase.
+        TCAM is extremely expensive and much denser in circuitry than ordinary SRAM or DRAM cells. This is why ACL and routing-table capacity has hard platform limits and why expanding hardware forwarding scale usually requires buying a higher-end switch. TCAM can't be upgraded after purchase.
       </Para>
 
       <H2>Switching Fabric and Port ASICs</H2>
@@ -892,7 +892,7 @@ monitor session 1 type erspan-source
 
       <H2>400G and 800G Ethernet in Datacenters</H2>
       <Para>
-        A modern hyperscale datacenter switch (Broadcom Tomahawk 4: 25.6 Tbps, Broadcom Tomahawk 5: 51.2 Tbps) connects tens or hundreds of servers via high-density QSFP-DD 400G or 800G ports. These switches handle 10+ billion packets per second in hardware with single-digit microsecond latency. The switching ASIC processes every frame through a programmable pipeline: parse headers, look up forwarding table, apply ACL, decrement TTL, recompute CRC, output to correct port — all in hardware, at line rate, simultaneously on every port.
+        A modern hyperscale datacenter switch (Broadcom Tomahawk 4: 25.6 Tbps, Broadcom Tomahawk 5: 51.2 Tbps) connects tens or hundreds of servers via high-density QSFP-DD 400G or 800G ports. These switches handle 10+ billion packets per second in hardware with single-digit microsecond latency. The switching ASIC processes frames through a programmable pipeline: parse headers, look up forwarding table, apply ACL, and output to the correct port; for routed packets, it also decrements TTL and rewrites checksums/CRC as needed — all in hardware, at line rate, simultaneously on every port.
       </Para>
 
       <H2>RoCE — RDMA over Converged Ethernet</H2>
@@ -973,7 +973,7 @@ GigabitEthernet1/0/1 is up, line protocol is up
       </IQ>
 
       <IQ q="Why is the minimum Ethernet frame size 64 bytes? What happens to shorter frames?" level="Beginner">
-        64 bytes is the minimum required for CSMA/CD collision detection. At 10 Mbps, the worst-case round-trip propagation delay on a maximum-length segment is 51.2 µs = 512 bit times = 64 bytes. If a frame were shorter, the sender could finish transmitting before a collision signal from the far end arrived — the sender would never detect the collision. Frames shorter than 64 bytes (runts or collision fragments) are discarded by the receiving switch. NICs pad short payloads to 46 bytes (minimum payload) to ensure frames are never shorter than 64 bytes.
+        64 bytes is the minimum required for CSMA/CD collision detection. At 10 Mbps, the Ethernet slot time is 51.2 µs = 512 bit times = 64 bytes, sized to cover the worst-case collision-domain propagation and repeater-delay budget. If a frame were shorter, the sender could finish transmitting before a collision signal from the far end arrived — the sender would never detect the collision. Frames shorter than 64 bytes (runts or collision fragments) are discarded by the receiving switch. NICs pad short payloads to 46 bytes (minimum payload) to ensure frames are never shorter than 64 bytes.
       </IQ>
 
       <IQ q="What is the difference between a collision domain and a broadcast domain? How do switches and routers affect each?" level="Intermediate">
@@ -998,7 +998,7 @@ GigabitEthernet1/0/1 is up, line protocol is up
       <Divider />
 
       <KeyTakeaways items={[
-        'Ethernet was invented in 1973 at Xerox PARC. IEEE 802.3 (1983) standardized it. The same frame format has survived 50+ years while speeds increased 270,000-fold from 10 Mbps to 2.7 Tbps.',
+        'Ethernet was invented in 1973 at Xerox PARC. IEEE 802.3 (1983) standardized it. The same frame format has survived 50+ years while speeds increased roughly 80,000-fold from 10 Mbps to 800 Gbps.',
         'An Ethernet frame: Preamble(7B)+SFD(1B) | Dst MAC(6B) | Src MAC(6B) | [802.1Q tag(4B)] | EtherType(2B) | Payload(46–1500B) | FCS(4B). Minimum 64 bytes (CSMA/CD), maximum 1522 bytes (standard), 9022 bytes (jumbo).',
         'The FCS (CRC-32) detects bit errors — a corrupted frame is silently dropped at Layer 2 with no error notification to the sender. Upper layers (TCP retransmit, UDP application) must detect and recover.',
         'Hubs are shared collision domains — CSMA/CD required. Switches give each port its own collision domain. Full-duplex switch ports have zero collisions and disable CSMA/CD entirely.',

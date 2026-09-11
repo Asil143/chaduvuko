@@ -83,7 +83,7 @@ function ArpSimulator() {
       if (target) {
         newLog.push(`📨 ARP REPLY (unicast): ${target.name} (${target.ip}) replies "I have ${target.ip}, my MAC is ${target.mac}" — sent directly to ${sender.mac}.`)
         newTable.push({ ip: target.ip, mac: target.mac, age: 0, type: 'dynamic' })
-        newLog.push(`📖 LEARNED: ${target.ip} → ${target.mac} added to ARP cache (TTL: 300s on Linux, 600s on Windows)`)
+        newLog.push(`📖 LEARNED: ${target.ip} → ${target.mac} added to ARP cache (timeout is implementation-dependent)`)
       } else {
         newLog.push(`✗ NO REPLY: No host with IP ${targetIp} on this subnet. ARP request times out. Connection fails at Layer 2.`)
       }
@@ -167,10 +167,10 @@ function ArpPacketDissector() {
   const etherDst = isRequest ? 'FF:FF:FF:FF:FF:FF' : senderMac
 
   const fields = [
-    { name: 'Hardware Type', bytes: 2, value: '0x0001', desc: 'Ethernet (1). Specifies the network link layer protocol. 1=Ethernet, 6=IEEE 802.11 (Wi-Fi).' },
+    { name: 'Hardware Type', bytes: 2, value: '0x0001', desc: 'Ethernet (1). Specifies the link-layer hardware type. ARP hardware type 6 historically means IEEE 802 networks; Wi-Fi commonly carries ARP using Ethernet-style framing.' },
     { name: 'Protocol Type', bytes: 2, value: '0x0800', desc: 'IPv4 (0x0800). The EtherType of the protocol being mapped to hardware addresses.' },
     { name: 'Hardware Addr Length', bytes: 1, value: '6', desc: '6 bytes = 48-bit MAC address length. This tells the parser how many bytes to read for each hardware address.' },
-    { name: 'Protocol Addr Length', bytes: 1, value: '4', desc: '4 bytes = 32-bit IPv4 address length. For IPv6 NDP this would be 16.' },
+    { name: 'Protocol Addr Length', bytes: 1, value: '4', desc: '4 bytes = 32-bit IPv4 address length. IPv6 NDP is not ARP with longer addresses; it uses separate ICMPv6 message formats.' },
     { name: 'Operation', bytes: 2, value: opcode, desc: `${isRequest ? 'Request (1): "Who has this IP?" broadcast' : 'Reply (2): "I have that IP, here is my MAC" unicast response'}` },
     { name: 'Sender MAC', bytes: 6, value: senderMac, desc: `Hardware address of the sender (${isRequest ? 'the host performing the ARP request' : 'the target host that is replying'}). Always the real MAC, never spoofed in legitimate ARP.` },
     { name: 'Sender IP', bytes: 4, value: senderIp, desc: `IP address of the sender. In a request: the IP requesting the information. The target adds this to its own ARP cache.` },
@@ -388,7 +388,7 @@ export default function ArpPage() {
         ARP was defined in RFC 826 by David Plummer in November 1982 — three pages of specification.
         It has remained essentially unchanged for 40 years. In those 40 years, it has been the target
         of more local network attacks than probably any other protocol. The successor for IPv6 is NDP
-        (Neighbor Discovery Protocol), which uses ICMPv6 and adds cryptographic protection — lessons
+        (Neighbor Discovery Protocol), which uses ICMPv6 and is more capable, though base NDP is not cryptographically authenticated — lessons
         learned from 40 years of ARP attacks.
       </WowBox>
 
@@ -441,7 +441,7 @@ STEP 3 — ARP Reply (unicast):
 STEP 4 — Cache update:
   PC adds: 192.168.1.1 → 11:22:33:44:55:66 to ARP cache.
   PC can now send the ICMP ping packet inside an Ethernet frame addressed to Gateway's MAC.
-  ARP cache entry will expire after ~300s (Linux) or ~600s (Windows).`}</CodeBlock>
+  ARP cache entry will expire on an implementation-dependent timer.`}</CodeBlock>
 
       <ArpSimulator />
 
@@ -461,8 +461,8 @@ STEP 4 — Cache update:
       <H2>Gratuitous ARP</H2>
 
       <Para>
-        A <Accent>gratuitous ARP</Accent> is an ARP Request or Reply where the sender IP and target IP
-        are the same — the host is announcing its own IP-to-MAC mapping without being asked. Used for:
+        A <Accent>gratuitous ARP announcement</Accent> is an ARP Request or Reply where the sender IP and target IP
+        are the same — the host is announcing its own IP-to-MAC mapping without being asked. ARP probing for conflict detection is different: the sender IP is <Code>0.0.0.0</Code> and the target IP is the address being tested. Used for:
       </Para>
 
       <CodeBlock>{`1. IP conflict detection:
@@ -710,7 +710,7 @@ IP config              DHCP (separate)        SLAAC (Stateless Address Autoconfi
 Duplicate detection    Gratuitous ARP (basic) Duplicate Address Detection (DAD, robust)
 Prefix discovery       None (need static GW)  Router Advertisement carries prefix info
 Redirect               ICMP Redirect          NDP Redirect
-Security               None                   SEcure Neighbor Discovery (SEND, RFC 3971)
+Security               None                   Base NDP has no crypto; optional SEND exists
 
 NDP uses multicast instead of broadcast:
   NDP Solicitation sent to ff02::1:ff/104 (solicited-node multicast)

@@ -543,7 +543,7 @@ export default function DynamicRouting() {
 
       <Para>Dynamic routing protocols solve three fundamental problems: <Accent>topology discovery</Accent> (how does a router learn what the network looks like?), <Accent>path computation</Accent> (how does it decide which path is best?), and <Accent>convergence</Accent> (how does it react when the topology changes?).</Para>
 
-      <Para>Different protocols answer these questions with radically different architectural philosophies. OSPF builds a complete map of the network and runs Dijkstra. BGP is a policy machine that trades path vectors between autonomous systems. EIGRP keeps feasible backups cached for instant failover. IS-IS speaks in TLVs and runs inside the router&apos;s management plane. Understanding these differences is not academic — it determines how you design, troubleshoot, and scale every network you build.</Para>
+      <Para>Different protocols answer these questions with radically different architectural philosophies. OSPF builds a complete map of the network and runs Dijkstra. BGP is a policy machine that trades path vectors between autonomous systems. EIGRP keeps feasible backups cached for instant failover. IS-IS speaks in TLVs and runs directly over Layer 2 as a control-plane routing protocol. Understanding these differences is not academic — it determines how you design, troubleshoot, and scale every network you build.</Para>
 
       <WowBox emoji="🌐" title="BGP Event Storms at Internet Scale">
         The BGP table at a major IXP contains over 900,000 prefixes, each with multiple paths. Every time a BGP update arrives, the router must re-run best-path selection for the affected prefix and potentially propagate changes to hundreds of peers. During a major route leak, this can generate millions of updates per second — a condition called a <strong>BGP event storm</strong>.
@@ -615,7 +615,7 @@ LSA Type 7 — NSSA External LSA
       <Para>DR election uses OSPF <Accent>priority</Accent> (0–255, default 1; 0 means ineligible), then <Accent>Router-ID</Accent> as a tiebreaker. The DR uses multicast address <Code>224.0.0.6</Code> (AllDRRouters) while non-DR routers use <Code>224.0.0.5</Code> (AllSPFRouters).</Para>
 
       <WowBox emoji="🗳️" title="OSPF DR Election is Non-Preemptive">
-        Once a DR is elected, it does NOT re-elect when a higher-priority router joins the segment. OSPF is non-preemptive for DR/BDR. A router with priority 255 joining an existing broadcast segment will become BDR (if the current BDR has lower priority), but will only become DR when the current DR fails. This prevents unnecessary reconvergence.
+        Once a DR and BDR are elected, OSPF does NOT preempt them when a higher-priority router joins the segment. A router with priority 255 joining an existing broadcast segment will not automatically replace the current DR or BDR; it participates in the next election when the existing DR/BDR fails or adjacency is reset. This prevents unnecessary reconvergence.
       </WowBox>
 
       <H3>OSPF Area Design</H3>
@@ -668,7 +668,7 @@ debug ip ospf hello
 interface GigabitEthernet0/0
   ip ospf mtu-ignore          ! Workaround — better to fix MTU
 
-! Authentication mismatch (key mismatch shows as stuck at EXSTART)
+! Authentication mismatch (often no neighbor or stuck before full adjacency)
 interface GigabitEthernet0/0
   ip ospf authentication message-digest
   ip ospf message-digest-key 1 md5 SecretKey123`}</CodeBlock>
@@ -688,7 +688,7 @@ interface GigabitEthernet0/0
         This is why OSPF uses SPF delay and throttling. The first SPF after an event runs almost immediately. If more changes arrive, subsequent SPF runs are delayed exponentially to prevent CPU saturation during network instability.
       </StoryBox>
 
-      <Para>Modern OSPF implementations use <Accent>SPF throttle timers</Accent> with three values: initial delay, minimum hold, and maximum hold. RFC 3137 defines this as an exponential back-off. Cisco IOS defaults: <Code>timers throttle spf 50 200 5000</Code> — meaning 50ms initial delay, doubling hold times up to 5000ms maximum.</Para>
+      <Para>Modern OSPF implementations use <Accent>SPF throttle timers</Accent> with three values: initial delay, minimum hold, and maximum hold. These timers are implementation-specific tuning knobs rather than a behavior defined by RFC 3137. Cisco IOS defaults: <Code>timers throttle spf 50 200 5000</Code> — meaning 50ms initial delay, doubling hold times up to 5000ms maximum.</Para>
 
       <Para>Similarly, LSA generation is throttled with <Code>timers throttle lsa</Code> to prevent LSA storms from overwhelming OSPF flooding. The default in modern IOS: 50ms initial, 200ms minimum hold, 5000ms maximum.</Para>
 
@@ -733,7 +733,7 @@ interface GigabitEthernet0/1
 
       <H3>iBGP vs eBGP</H3>
       <Para>BGP runs in two modes: <Accent>eBGP</Accent> (between different ASes) and <Accent>iBGP</Accent> (within the same AS). The differences are significant:</Para>
-      <Para>• eBGP: TTL=1 by default (direct connection required unless multihop configured). Routes received via eBGP are redistributed to iBGP peers and IGP.</Para>
+      <Para>• eBGP: TTL=1 by default (direct connection required unless multihop configured). Routes received via eBGP may be advertised to iBGP peers under BGP rules; redistribution into an IGP is separate, explicit, and usually avoided for full internet routes.</Para>
       <Para>• iBGP: TTL=255. iBGP does NOT re-advertise routes learned from one iBGP peer to other iBGP peers (the iBGP split-horizon rule). This prevents loops but requires full mesh or route reflectors.</Para>
       <Para>• iBGP full mesh scales as O(n²) — 50 routers require 1225 sessions. <Accent>Route Reflectors (RRs)</Accent> break the full-mesh requirement by allowing a cluster of routers to share iBGP routes via a central reflector.</Para>
 
@@ -960,7 +960,7 @@ route-map EIGRP_TO_OSPF permit 20
         Route dampening is BGP&apos;s defense mechanism. Each time a prefix flaps, it accumulates a penalty. When the penalty exceeds a suppress-limit, the route is suppressed (hidden from the routing table). The penalty decays exponentially over time, and once it falls below the reuse threshold, the route is restored. Chronic flappers are suppressed for hours; occasional transients are tolerated.
       </StoryBox>
 
-      <Para>BGP convergence is intentionally slow compared to IGPs. The <Accent>MRAI (Minimum Route Advertisement Interval)</Accent> timer (default 30s for eBGP, 5s for iBGP) delays advertisement of new best paths. This prevents rapid topology changes from being propagated globally before they stabilize. The tradeoff: even a simple link failure can take 30–90 seconds to fully converge across the internet.</Para>
+      <Para>BGP convergence is intentionally slow compared to IGPs. The <Accent>MRAI (Minimum Route Advertisement Interval)</Accent> timer delays advertisement of new best paths. Many implementations use around 30s for eBGP; iBGP defaults vary and are often lower or disabled. This prevents rapid topology changes from being propagated globally before they stabilize. The tradeoff: even a simple link failure can take 30–90 seconds to fully converge across the internet.</Para>
 
       <H3>BGP Timer Tuning</H3>
       <Para>Production networks balance convergence speed against stability:</Para>
@@ -1044,7 +1044,7 @@ show nve peers`}</CodeBlock>
       <StoryBox>
         A network engineer gets paged at 2 AM. Customers cannot reach the company&apos;s web servers. Ping to the server IP fails from the outside. Ping from inside works fine. The firewall team says the rules are unchanged. The server team says the servers are up and responding locally.
         <br /><br />
-        The problem turns out to be a BGP route. The upstream ISP stopped advertising the company&apos;s prefix to the internet — the BGP session had gone down hours earlier due to a certificate expiry on MD5 authentication, and no one noticed. The route was simply absent from the global routing table.
+        The problem turns out to be a BGP route. The upstream ISP stopped advertising the company&apos;s prefix to the internet — the BGP session had gone down hours earlier due to an authentication key mismatch during rollover, and no one noticed. The route was simply absent from the global routing table.
         <br /><br />
         Routing troubleshooting requires a systematic top-down approach: verify the prefix is in the routing table, verify the BGP/OSPF session is up, verify the route is being advertised, verify the route is being received by peers. Every step has a specific show command.
       </StoryBox>

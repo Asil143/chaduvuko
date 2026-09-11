@@ -349,7 +349,7 @@ export default function RoutingFundamentalsModule() {
       </Para>
 
       <WowBox emoji="🌐" title="The BGP Default-Free Zone at Internet Scale">
-        The global internet routing system — the BGP Default-Free Zone — contains approximately 900,000 IPv4 prefixes and 180,000 IPv6 prefixes. Every core internet router (there are hundreds of thousands) must hold all ~1.08 million routes in memory and perform TCAM-based Longest Prefix Match lookups at line rate — for terabit-per-second links, that means billions of route lookups per second per interface. The engineering behind making this work at internet scale is remarkable.
+        The global internet routing system — the BGP Default-Free Zone — contains roughly a million-plus IPv4 prefixes and high-hundreds-of-thousands IPv6 prefixes, depending on vantage point and measurement date. Every core internet router must hold these routes in memory and perform hardware Longest Prefix Match lookups at line rate — for terabit-per-second links, that means billions of route lookups per second per interface. The engineering behind making this work at internet scale is remarkable.
       </WowBox>
 
       <Divider />
@@ -430,7 +430,7 @@ Unknown / untrustworthy 255  (never installed in routing table)`}
       <H2>Why LPM Enables Internet Scale</H2>
 
       <Para>
-        LPM enables hierarchical routing — the combination of specific routes and summary routes. An ISP can advertise a summary 10.0.0.0/8 to the internet while internally having specific routes for 10.10.10.0/24, 10.10.20.0/24, etc. Internet routers use the /8 summary; the ISP's own routers use the more specific /24 routes.
+        LPM enables hierarchical routing — the combination of specific routes and summary routes. An enterprise can advertise or carry a summary such as 10.0.0.0/8 internally while having specific routes for 10.10.10.0/24, 10.10.20.0/24, etc. Public ISPs do the same kind of aggregation with public address space; RFC 1918 private ranges are not advertised on the public internet.
       </Para>
 
       <Para>
@@ -551,7 +551,7 @@ show ip route 10.0.0.0`}
       </Para>
 
       <Para>
-        On broadcast networks (Ethernet), OSPF elects a <Accent>DR (Designated Router)</Accent> and BDR (Backup Designated Router) to reduce flooding overhead. All other routers (DROther) form adjacencies only with the DR and BDR, not with each other. The DR represents the network segment in the LSDB, reducing the n^2 adjacency problem to n adjacencies.
+        On broadcast networks (Ethernet), OSPF elects a <Accent>DR (Designated Router)</Accent> and BDR (Backup Designated Router) to reduce flooding overhead. All other routers (DROther) form adjacencies only with the DR and BDR, not with each other. The DR represents the network segment in the LSDB, reducing the full-mesh n(n-1)/2 adjacency problem to O(n), roughly two adjacencies per non-DR router plus the DR/BDR relationship.
       </Para>
 
       <H2>OSPF Areas</H2>
@@ -790,7 +790,7 @@ no ip route 10.99.99.0 255.255.255.0 null0  # cleanup`}
       </Err>
 
       <Err title="BGP is a fast routing protocol">
-        BGP is deliberately slow and conservative. It uses TCP for reliability, applies route filters and policies, and by default delays propagating route changes (MRAI — Minimum Route Advertisement Interval: 30 seconds for eBGP, 5 seconds for iBGP). BGP is designed for policy-based routing between organizations, not for fast convergence within a network. OSPF and EIGRP converge in seconds; BGP convergence after a major failure can take minutes. This is by design — BGP's policies and filtering must be processed carefully. Use IGPs (OSPF/EIGRP) inside networks; BGP is for inter-AS routing only.
+        BGP is deliberately slow and conservative. It uses TCP for reliability, applies route filters and policies, and commonly delays propagating route changes with an MRAI (Minimum Route Advertisement Interval). Many implementations use around 30 seconds for eBGP; iBGP defaults vary and are often lower or disabled. BGP is designed for policy-based routing between organizations, not for fast convergence within a network. OSPF and EIGRP converge in seconds; BGP convergence after a major failure can take minutes. This is by design — BGP's policies and filtering must be processed carefully. Use IGPs (OSPF/EIGRP) inside networks; BGP is for inter-AS routing only.
       </Err>
 
       <Err title="ECMP doubles your available bandwidth">

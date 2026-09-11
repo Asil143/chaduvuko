@@ -113,7 +113,7 @@ const networkTypes = [
     color: '#f97316',
     emoji: '📱',
     range: 'Up to 10 meters',
-    speed: 'Up to 3 Gbps (Bluetooth 5)',
+    speed: 'Up to 2 Mbps (Bluetooth 5 LE) or 3 Mbps (Bluetooth Classic EDR)',
     owned_by: 'Individual',
     tech: 'Bluetooth, USB, NFC, IrDA',
     examples: ['AirPods ↔ iPhone', 'Smartwatch ↔ Phone', 'Wireless keyboard ↔ Laptop', 'Phone hotspot → Laptop'],
@@ -659,7 +659,7 @@ export default function NetworkTypesTopologies() {
           { scenario: 'Connecting multiple office buildings in the same city', type: 'MAN or CAN', why: 'Lease dark fiber between buildings, or pay an ISP for a metro Ethernet service. Faster than WAN, cheaper than private fiber for longer distances.' },
           { scenario: 'Connecting offices in different cities or countries', type: 'WAN', why: 'Options: MPLS (private, expensive, low latency), internet + VPN (cheap, variable latency), SD-WAN (best of both worlds).' },
           { scenario: 'Connecting servers to shared storage in a data center', type: 'SAN', why: 'Block-level storage traffic needs dedicated bandwidth and ultra-low latency. General-purpose LAN is too slow and shared.' },
-          { scenario: 'Connecting employee phones, laptops, smartwatches', type: 'PAN (Bluetooth) + LAN (WiFi)', why: 'Bluetooth for personal device pairing, WiFi for internet access. Both coexist — Bluetooth at 2.4 GHz, WiFi at 5 GHz.' },
+          { scenario: 'Connecting employee phones, laptops, smartwatches', type: 'PAN (Bluetooth) + LAN (WiFi)', why: 'Bluetooth for personal device pairing, WiFi for internet access. Both coexist — Bluetooth uses 2.4 GHz, while WiFi may use 2.4, 5, or 6 GHz.' },
         ].map(row => (
           <div key={row.scenario} style={{ display: 'flex', gap: 16, marginBottom: 10, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 18px', alignItems: 'flex-start' }}>
             <code style={{ fontSize: 12, fontWeight: 800, color: G, background: `${G}15`, padding: '3px 8px', borderRadius: 5, fontFamily: FONT_MONO, flexShrink: 0, marginTop: 2 }}>{row.type}</code>
@@ -1151,7 +1151,7 @@ Storage (SAN):
       </Err>
 
       <Err title="LAN is always faster than WAN">
-        LAN technologies (Gigabit Ethernet, 10GbE WiFi 6) are typically faster than consumer WAN connections, but this is not universal. A direct 400 Gbps fiber WAN link between two data centers can vastly outperform a congested WiFi LAN sharing 300 Mbps among 50 devices. In cloud environments, your "LAN" might be a virtual network inside AWS with 10–25 Gbps between instances — while some enterprise WAN links (MPLS, leased fiber) deliver higher throughput than many office LANs. The defining characteristic of LAN vs WAN is geographic scope and ownership, not speed.
+        LAN technologies (Gigabit Ethernet, 10 GbE, and multi-gigabit WiFi 6 under ideal conditions) are typically faster than consumer WAN connections, but this is not universal. A direct 400 Gbps fiber WAN link between two data centers can vastly outperform a congested WiFi LAN sharing 300 Mbps among 50 devices. In cloud environments, your "LAN" might be a virtual network inside AWS with 10–25 Gbps between instances — while some enterprise WAN links (MPLS, leased fiber) deliver higher throughput than many office LANs. The defining characteristic of LAN vs WAN is geographic scope and ownership, not speed.
       </Err>
 
       <Err title="Ring topology is completely dead">
@@ -1184,7 +1184,7 @@ Storage (SAN):
       </IQ>
 
       <IQ q="What is Spanning Tree Protocol and why is it needed?" level="Intermediate">
-        STP (IEEE 802.1D) prevents Layer 2 switching loops. When you connect two switches together via two links for redundancy, you create a loop — a broadcast frame would circulate forever, consuming all bandwidth (a broadcast storm). STP prevents this by electing a root bridge, calculating the shortest path tree from every switch to the root, and putting redundant links into blocking state (they carry no traffic). If an active link fails, STP unblocks a blocked link, restoring connectivity — but classic STP takes 30-50 seconds to converge. RSTP (802.1w) reduced this to 1-2 seconds. Modern networks increasingly replace STP with port-channel/LAG bundling (which bonds multiple links without needing STP) or with routed access (running Layer 3 all the way to access switches, eliminating Layer 2 loops entirely).
+        STP (IEEE 802.1D) prevents Layer 2 switching loops. When you connect two switches together via two links for redundancy, you create a loop — a broadcast frame would circulate forever, consuming all bandwidth (a broadcast storm). STP prevents this by electing a root bridge, calculating the shortest path tree from every switch to the root, and putting redundant links into blocking state (they carry no traffic). If an active link fails, STP unblocks a blocked link, restoring connectivity — but classic STP can take 30-50 seconds to converge. RSTP (802.1w) can converge in a few seconds, often much faster depending on topology. Modern networks increasingly replace STP with port-channel/LAG bundling (which bonds multiple links without needing STP) or with routed access (running Layer 3 all the way to access switches, eliminating Layer 2 loops entirely).
       </IQ>
 
       <IQ q="When would you choose mesh topology over tree topology?" level="Intermediate">
