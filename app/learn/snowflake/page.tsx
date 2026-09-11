@@ -60,8 +60,8 @@ export default function SnowflakeTrackPage() {
       </div>
 
       <div style={{ background: 'rgba(41,181,232,0.07)', border: '1px solid rgba(41,181,232,0.24)', borderRadius: 10, padding: '16px 20px', marginBottom: 40, fontSize: 14, color: 'var(--text)', lineHeight: 1.75 }}>
-        <strong style={{ color: S }}>This is being built as a full track, not a single article.</strong>{' '}
-        The first deep modules are live now. Remaining modules are listed in the intended order and should be expanded to the same depth.
+        <strong style={{ color: S }}>This is a full Snowflake track, not a single article.</strong>{' '}
+        Every module has a live lesson: plain-English explanation, SQL examples, production mistakes, cost and security notes, and interview framing.
       </div>
 
       <div style={{ marginTop: 48, marginBottom: 14 }}>
@@ -72,7 +72,7 @@ export default function SnowflakeTrackPage() {
           20 Modules. Snowflake from First Query to Production Platform.
         </h2>
         <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 660, margin: 0 }}>
-          Follow in order. The live modules are deep, standalone tutorials; upcoming modules mark the remaining expansion plan.
+          Follow in order. Each module starts from the beginner mental model and ends with production and interview readiness.
         </p>
       </div>
 

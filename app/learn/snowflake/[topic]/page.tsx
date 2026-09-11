@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { SnowflakeLesson } from '@/content/snowflake/lesson'
 import { SNOWFLAKE_MODULE_BY_SLUG, SNOWFLAKE_MODULES } from '@/data/snowflake-curriculum'
 
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
@@ -10,7 +11,7 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
 }
 
 export async function generateStaticParams() {
-  return Object.keys(moduleMap).map(topic => ({ topic }))
+  return SNOWFLAKE_MODULES.map(module => ({ topic: module.slug }))
 }
 
 export async function generateMetadata({ params }: { params: { topic: string } }): Promise<Metadata> {
@@ -23,8 +24,11 @@ export async function generateMetadata({ params }: { params: { topic: string } }
 }
 
 export default async function SnowflakeTopicPage({ params }: { params: { topic: string } }) {
+  if (!SNOWFLAKE_MODULE_BY_SLUG[params.topic]) notFound()
   const loader = moduleMap[params.topic]
-  if (!loader) notFound()
-  const { default: Content } = await loader()
-  return <Content />
+  if (loader) {
+    const { default: Content } = await loader()
+    return <Content />
+  }
+  return <SnowflakeLesson slug={params.topic} />
 }
