@@ -533,7 +533,7 @@ With exactly_once_v2:
         <SectionTitle>Interactive Queries — Reading a State Store Without a Separate Database</SectionTitle>
         <Para>
           A Kafka Streams application's state stores hold genuinely useful, continuously up-to-date data —
-          the running transaction count per user from Part 08's worked example, or a materialized KTable of
+          the running transaction count per user from Part 10's worked example, or a materialized KTable of
           current customer tiers. The naive way to expose that to the rest of your organization is to also
           write it out to an external database and query that database instead. Interactive Queries offer a
           different option: querying a Kafka Streams application's own local state stores directly, over a
@@ -728,7 +728,7 @@ Scale to 10 application instances (beyond the partition count):
           terms of latency and Kafka throughput consumed.
         </Para>
         <CodeBox label="a groupBy that silently triggers a repartition, versus groupByKey which does not">
-{`KStream<String, Transaction> transactions = builder.stream("freshcart.transactions");
+{`KStream<String, Transaction> transactions = builder.stream("freshcart.raw-transactions");
 // Assume this topic is keyed by transaction_id, NOT user_id
 
 // groupByKey() -- uses the EXISTING key (transaction_id). No repartition,
@@ -754,7 +754,7 @@ transactions
           ]}
         />
         <Callout title="This is exactly why the fraud-detection example used groupByKey(), not groupBy()" color="#ff4757">
-          Part 08's (now Part 10's) worked example deliberately kept the <code>freshcart.transactions</code>
+          Part 10's worked example deliberately kept the <code>freshcart.transactions</code>
           topic keyed by <code>user_id</code> from the start, specifically so the fraud-count aggregation
           could use <code>groupByKey()</code> and avoid an unnecessary repartition topic and its added
           latency and Kafka throughput cost. Designing upstream topics to already be keyed by the field a
@@ -804,7 +804,7 @@ transactions
         <Para>
           The single habit worth building early: treat consumer-group-style lag and rebalance metrics, state
           store restoration progress, and record lateness as a package deal for any stateful, windowed
-          application, the same way Part 10 (Error Library) and Part 09b (scaling) both assume you already
+          application, the same way the Error Library section below and Part 09b (scaling) both assume you already
           have visibility into all three before diagnosing a live incident — reconstructing that visibility
           for the first time during an active fraud-detection outage is a much worse position to be in.
         </Para>
@@ -1043,7 +1043,7 @@ streams.start();`}
         <HighlightBox>
           <Para>
             <strong>In a systems design interview:</strong> "Design a real-time system that flags a user
-            attempting more than N logins in M minutes." The strong answer, straight from Part 08's worked
+            attempting more than N logins in M minutes." The strong answer, straight from Part 10's worked
             example, is a stateful, windowed count keyed by user ID over the login-attempts topic — using
             Kafka Streams' groupByKey().windowedBy().count() shape, with an explicit discussion of why
             event-time windowing and a grace period matter for correctness under network delay, not just
@@ -1092,7 +1092,7 @@ The remaining wrinkle is that because event time can legitimately lag arrival ev
           },
           {
             q: 'Q5. Walk me through how you would design a real-time fraud signal that flags a user making more than 8 transactions in any 5-minute window, and why you\'d choose exactly_once_v2 for it.',
-            a: `This is a stateful, windowed aggregation, per Part 08's worked example. I'd read the transactions topic as a KStream already keyed by user ID — using groupByKey() rather than groupBy() specifically to avoid an unnecessary repartition, since the data is already correctly keyed for this aggregation. I'd apply a 5-minute tumbling window with windowedBy(TimeWindows.ofSizeAndGrace(...)), including a modest grace period to correctly handle transactions that arrive slightly after their window's nominal end, then count() per user per window.
+            a: `This is a stateful, windowed aggregation, per Part 10's worked example. I'd read the transactions topic as a KStream already keyed by user ID — using groupByKey() rather than groupBy() specifically to avoid an unnecessary repartition, since the data is already correctly keyed for this aggregation. I'd apply a 5-minute tumbling window with windowedBy(TimeWindows.ofSizeAndGrace(...)), including a modest grace period to correctly handle transactions that arrive slightly after their window's nominal end, then count() per user per window.
 
 The result is a KTable of (windowed user key) -> count, which I'd convert back to a stream and filter for counts exceeding the threshold, then produce those as fraud-alert records to a dedicated output topic that a separate alerting service consumes.
 

@@ -223,13 +223,12 @@ export default function ProducerDesign() {
         </Para>
         <SubTitle>What blocking on every send actually does</SubTitle>
         <Para>
-          When you call <code>.get()</code> or <code>.result()</code> on a send's future immediately after
-          sending, you force the producer to wait for that specific record's full round trip — network out,
-          broker append, replication if <code>acks=all</code>, acknowledgement back — before your application
-          code is allowed to call <code>send()</code> again. The producer's internal batching mechanism can
-          never accumulate more than one record per batch, because you never give it the chance: you are
-          serializing what should be a pipelined, asynchronous operation into a synchronous one, one record at
-          a time.
+          When you call <code>producer.flush()</code> after every single <code>produce()</code> call, you force
+          the producer to wait for that specific record's full round trip — network out, broker append,
+          replication if <code>acks=all</code>, acknowledgement back — before your application code is allowed
+          to call <code>produce()</code> again. The producer's internal batching mechanism can never accumulate
+          more than one record per batch, because you never give it the chance: you are serializing what should
+          be a pipelined, asynchronous operation into a synchronous one, one record at a time.
         </Para>
         <CodeBox label="the throughput-killing pattern — do not do this">
 {`from confluent_kafka import Producer
@@ -242,7 +241,7 @@ producer = Producer({
 
 # ANTI-PATTERN: blocking on every single send
 for order_event in order_events:
-    future = producer.produce(
+    producer.produce(
         topic='orders.events',
         key=order_event['order_id'],
         value=serialize(order_event),

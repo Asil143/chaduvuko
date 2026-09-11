@@ -20,6 +20,14 @@ const deepModuleMap: Record<string, () => Promise<{ default: React.ComponentType
   'stream-processing-kafka-streams': () => import('@/content/apache-kafka/stream-processing-kafka-streams'),
   'security-acls-sasl-tls': () => import('@/content/apache-kafka/security-acls-sasl-tls'),
   'monitoring-observability': () => import('@/content/apache-kafka/monitoring-observability'),
+  'performance-tuning': () => import('@/content/apache-kafka/performance-tuning'),
+  'scaling-capacity-planning': () => import('@/content/apache-kafka/scaling-capacity-planning'),
+  'disaster-recovery-multi-region': () => import('@/content/apache-kafka/disaster-recovery-multi-region'),
+  'event-driven-architecture': () => import('@/content/apache-kafka/event-driven-architecture'),
+  'cdc-debezium': () => import('@/content/apache-kafka/cdc-debezium'),
+  'managed-kafka-cloud': () => import('@/content/apache-kafka/managed-kafka-cloud'),
+  'testing-debugging': () => import('@/content/apache-kafka/testing-debugging'),
+  'kafka-interview-system-design': () => import('@/content/apache-kafka/kafka-interview-system-design'),
 }
 
 export async function generateStaticParams() {

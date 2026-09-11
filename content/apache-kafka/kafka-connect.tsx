@@ -301,8 +301,7 @@ export default function KafkaConnect() {
   "name": "freshcart-orders-jdbc-source",
   "config": { ... },
   "tasks": [
-    { "connector": "freshcart-orders-jdbc-source", "task": 0 },
-    { "connector": "freshcart-orders-jdbc-source", "task": 1 }
+    { "connector": "freshcart-orders-jdbc-source", "task": 0 }
   ],
   "type": "source"
 }`}</Output>

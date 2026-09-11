@@ -267,7 +267,6 @@ finally:
         </Para>
         <CodeBox label="batch-level manual commit — the common production pattern">
 {`while True:
-    records = consumer.poll(timeout=1.0)
     batch = consumer.consume(num_messages=200, timeout=1.0)
     if not batch:
         continue
@@ -537,7 +536,7 @@ for attempt in range(1, MAX_RETRIES + 1):
         <SectionTag text="// Part 06 — The complete worked example" />
         <SectionTitle>A Production-Grade Order-Events Consumer, Start to Finish</SectionTitle>
         <Para>
-          This class combines manual batch commits, idempotent processing, bounded-retry DLQ routing, and a
+          This class combines a manual commit after each successfully processed record, idempotent processing, bounded-retry DLQ routing, and a
           rebalance listener into one consumer you could adapt directly for a real order-processing service.
         </Para>
         <CodeBox label="order_event_consumer.py — configuration and initialization">
@@ -555,7 +554,7 @@ MAX_RETRIES = 3
 class OrderEventConsumer:
     """
     Production consumer for order lifecycle events.
-    Reliability posture: manual commit after successful batch processing,
+    Reliability posture: manual commit after each successfully processed record,
     idempotent database writes, bounded retry with DLQ fallback for
     poison messages, and offset commits on partition revocation so a
     rebalance never silently reprocesses more than necessary.
@@ -960,6 +959,8 @@ consumer.subscribe(
 
     # process both records -- the poison one should exhaust retries and
     # route to DLQ, the good one right behind it should still process normally
+    # drain_available_records and test_db below are illustrative test-harness helpers —
+    # swap in your own test fixtures/consumer polling loop.
     processed = consumer.drain_available_records(timeout=10.0)
 
     dlq_messages = kafka_test_cluster.consume('test.orders.events.dlq', timeout=5.0)

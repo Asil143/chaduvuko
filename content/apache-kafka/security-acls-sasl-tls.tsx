@@ -253,8 +253,8 @@ ssl.truststore.password=\${TRUSTSTORE_PASSWORD}
   --entity-type users --entity-name checkout-service
 
 # The broker stores a salted hash derived from this password in
-# the internal __consumer_offsets-adjacent metadata store (ZooKeeper
-# in legacy clusters, the KRaft metadata log in current clusters) —
+# its internal metadata store — ZooKeeper (/config/users) in legacy
+# clusters, the KRaft __cluster_metadata log in current clusters —
 # never the plaintext password itself.`}
         </CodeBox>
         <Para>
