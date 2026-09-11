@@ -120,7 +120,7 @@ export default function CiaTriadSecurityModels() {
       </div>
 
       <H>The Privacy Extension</H>
-      <P>Privacy is confidentiality applied to personal data — with legal teeth. GDPR, CCPA, HIPAA, and similar regulations mandate specific confidentiality controls for personal data and impose fines for violations. A confidentiality failure involving personal data is simultaneously a security incident and a regulatory violation. In the US, HIPAA fines for healthcare data breaches range from $100 to $50,000 per record. A breach of 1 million records can result in $50 billion in potential maximum penalties.</P>
+      <P>Privacy is confidentiality applied to personal data — with legal teeth. GDPR, CCPA, HIPAA, and similar regulations mandate specific confidentiality controls for personal data and impose fines for violations. A confidentiality failure involving personal data is simultaneously a security incident and a regulatory violation. In the US, HIPAA civil penalties range from $100 to $50,000 per violation, but each identical-provision violation category is capped at roughly $1.5–2 million per calendar year — the per-record figure doesn't scale uncapped with breach size (a naive extrapolation to a 1-million-record breach implying $50 billion in penalties is illustrative only, not an actual possible fine).</P>
 
       <HR />
 

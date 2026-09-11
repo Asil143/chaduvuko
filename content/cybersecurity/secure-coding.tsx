@@ -700,9 +700,10 @@ def verify_token(provided: str, stored: str) -> bool:
 # Session fixation prevention — regenerate session ID on privilege change
 # Flask example:
 from flask import session
-session.clear()                    # clear old session
-session.regenerate()               # new session ID
-session['user_id'] = user.id       # set new session data after login
+session.clear()                    # discard old session data
+session['user_id'] = user.id       # set new session data — Flask signs a
+                                    # new cookie value on the response, so
+                                    # the old signed cookie is invalidated
 
 
 # Cookie security flags

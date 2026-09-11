@@ -62,14 +62,14 @@ export default function Module33() {
           An incident is any event that violates — or threatens to violate — the confidentiality, integrity, or availability of an organisation's information systems. Incident response (IR) is the structured process for managing that event: from the first alert to full recovery and documented lessons.
         </P>
         <P>
-          The cost of a breach that is contained within two hours is radically different from one that runs undetected for 197 days (the industry median dwell time). <Hl>Speed of detection and containment is the single biggest lever on breach impact.</Hl>
+          The cost of a breach that is contained within two hours is radically different from one that runs undetected for 18 days (the 2024 Verizon DBIR's median dwell time). <Hl>Speed of detection and containment is the single biggest lever on breach impact.</Hl>
         </P>
 
-        <H>NIST SP 800-61 — The IR Framework</H>
+        <H>SANS — The IR Framework</H>
         <P>
-          NIST Special Publication 800-61 (Computer Security Incident Handling Guide) is the definitive US government IR framework. All major IR certifications and corporate programmes align to its six phases:
+          The SANS Institute's PICERL model is the most widely taught IR framework. Most IR certifications and corporate programmes align to its six phases:
         </P>
-        <Block>{`NIST SP 800-61 Incident Response Lifecycle:
+        <Block>{`SANS PICERL Incident Response Lifecycle:
 
 Phase 1: PREPARATION
   Build and maintain IR capability before an incident occurs.
@@ -78,7 +78,7 @@ Phase 1: PREPARATION
   - Tabletop exercises run quarterly
   - Legal, PR, and executive contacts pre-established
 
-Phase 2: DETECTION AND ANALYSIS
+Phase 2: IDENTIFICATION
   Identify that an incident has occurred and understand its scope.
   - Alert triage (SIEM, EDR, user reports)
   - Initial scoping: what systems, what data, what timeline?
@@ -141,8 +141,8 @@ Phase 6: LESSONS LEARNED (Post-Incident Review)
         </div>
 
         <IQ
-          q="Walk me through the NIST incident response lifecycle."
-          a="NIST SP 800-61 defines six phases. Preparation: build IR capability before incidents occur — plan, playbooks, tools, and tabletop exercises. Detection and Analysis: identify that an incident has occurred, triage alerts, scope the impact, and classify severity. Containment: stop the spread — isolate affected systems short-term while preserving forensic evidence. Eradication: remove the attacker's foothold — malware, backdoors, persistence mechanisms — and address the root cause. Recovery: restore systems from clean backups or rebuilt images, validate they are clean, then reconnect with enhanced monitoring. Lessons Learned: within two weeks post-incident, conduct a blame-free retrospective to identify what the team detected well, where gaps exist, and how to update the plan and playbooks."
+          q="Walk me through the incident response lifecycle."
+          a="The SANS PICERL model defines six phases (NIST SP 800-61 covers the same ground in four, folding Containment/Eradication/Recovery into one combined phase). Preparation: build IR capability before incidents occur — plan, playbooks, tools, and tabletop exercises. Identification: identify that an incident has occurred, triage alerts, scope the impact, and classify severity. Containment: stop the spread — isolate affected systems short-term while preserving forensic evidence. Eradication: remove the attacker's foothold — malware, backdoors, persistence mechanisms — and address the root cause. Recovery: restore systems from clean backups or rebuilt images, validate they are clean, then reconnect with enhanced monitoring. Lessons Learned: within two weeks post-incident, conduct a blame-free retrospective to identify what the team detected well, where gaps exist, and how to update the plan and playbooks."
         />
       </Part>
 
@@ -859,7 +859,7 @@ DETECTION GAP: What signals were present but missed?`}
       <HR />
 
       <KeyTakeaways items={[
-        'The NIST SP 800-61 IR lifecycle has six phases: Preparation, Detection and Analysis, Containment, Eradication, Recovery, and Lessons Learned — in that order, every time.',
+        'The SANS PICERL IR lifecycle has six phases: Preparation, Identification, Containment, Eradication, Recovery, and Lessons Learned — in that order, every time.',
         'Most incident outcomes are determined before the incident occurs: teams with practised plans, deployed tools, and pre-established contacts contain breaches hours faster than those that improvise.',
         'Collect evidence in order of volatility: memory (RAM) first, then running process/network state, then disk — memory is lost forever on reboot and contains critical forensic artefacts.',
         'Containment and evidence preservation are in tension — if active exfiltration is occurring, isolate first; if time permits, collect RAM before network isolation.',

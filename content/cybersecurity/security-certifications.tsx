@@ -84,7 +84,7 @@ export default function Module37() {
                 ['Defensive / Blue team', 'Mid-Advanced', 'SC-200, AZ-500, BTL1, Splunk Core Certified', 'SOC analyst, threat hunter, IR analyst'],
                 ['GRC / Management', 'Mid-Advanced', 'CISM, CRISC, ISO 27001 Lead Auditor', 'GRC analyst, security manager, compliance'],
                 ['Senior / Leadership', 'Advanced', 'CISSP, CISA, CCSP', 'CISO, security architect, vCISO'],
-                ['Specialised offensive', 'Advanced', 'OSED, OSMR, GXPN, OSED', 'Exploit developer, malware analyst, red team lead'],
+                ['Specialised offensive', 'Advanced', 'OSED, OSEE, GXPN, OSCE3', 'Exploit developer, malware analyst, red team lead'],
               ].map(([cat, lvl, cert, role], i) => (
                 <tr key={i} style={{ background: i % 2 === 0 ? 'transparent' : `${C}08` }}>
                   {[cat, lvl, cert, role].map((c, j) => (

@@ -612,6 +612,8 @@ if __name__ == "__main__":
     ct_subs = ct_log_search(domain)
     print(f"  Found {len(ct_subs)} subdomains in CT logs")
     for sub in ct_subs[:20]:
+        if sub == domain:
+            continue
         result = check_subdomain(sub.replace(f".{domain}", ""), domain)
         if result:
             fqdn, ips = result

@@ -421,7 +421,7 @@ Part 1 — Management Requirements (mandatory, clauses 4-10):
   Clause 9:  Performance evaluation — monitoring, internal audit, management review
   Clause 10: Improvement — nonconformity, corrective action, continual improvement
 
-Part 2 — Annex A Controls (114 controls in 27001:2022, organised in 4 themes):
+Part 2 — Annex A Controls (93 controls in 27001:2022, organised in 4 themes):
   A5: Organisational controls (37 controls) — policies, roles, threat intel, IR, legal
   A6: People controls (8 controls)  — HR security, remote working, awareness
   A7: Physical controls (14 controls) — physical security, equipment, clear desk

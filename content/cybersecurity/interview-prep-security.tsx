@@ -348,7 +348,7 @@ Questions to AVOID:
         <Block>{`Salary negotiation framework:
 
 Step 1 — Research before interviewing:
-  Use: Levels.fyi, Glassdoor, LinkedIn Salary, Burroughs/comp data
+  Use: Levels.fyi, Glassdoor, LinkedIn Salary, Comparably
   For security roles: check H1B visa disclosure data (public, shows exact salaries)
   Target: know the 25th, 50th, and 75th percentile before negotiating
 

@@ -574,7 +574,7 @@ uncompyle6 challenge.pyc
             {[
               ['All categories', 'CyberChef, file, strings, binwalk, xxd', 'CyberChef (gchq.github.io/CyberChef)'],
               ['Web', 'Burp Suite, curl, Firefox DevTools, sqlmap, ffuf', 'GTFOBins, HackTricks'],
-              ['Cryptography', 'Python + pycryptodome, RsaCtfTool', 'CryptHack, factordb.com, dcode.fr'],
+              ['Cryptography', 'Python + pycryptodome, RsaCtfTool', 'CryptoHack, factordb.com, dcode.fr'],
               ['Forensics', 'Wireshark, tshark, Volatility 3, exiftool, binwalk', 'CyberChef, Wireshark filters'],
               ['Steganography', 'steghide, zsteg, stegsolve, exiftool', 'Aperisolve.fr (runs many tools at once)'],
               ['Binary exploitation', 'pwntools, GDB + pwndbg, ROPgadget, checksec', 'pwn.college, pwndbg docs'],

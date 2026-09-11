@@ -194,7 +194,7 @@ export default function SocialEngineeringPhishing() {
             color: '#facc15',
             scale: 'Single organisation',
             sophistication: 'Very high',
-            desc: 'The attacker compromises or impersonates a business email account to conduct fraud — instructing wire transfers, changing vendor payment information, or requesting sensitive data. BEC losses exceed all other cybercrime combined.',
+            desc: 'The attacker compromises or impersonates a business email account to conduct fraud — instructing wire transfers, changing vendor payment information, or requesting sensitive data. BEC is the single largest individual cybercrime loss category.',
             example: 'Attacker monitors a compromised email account for weeks, learning payment processes and vendor relationships. Then intercepts a legitimate invoice thread and redirects payment to attacker-controlled account.',
           },
         ].map((item) => (

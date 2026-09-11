@@ -119,7 +119,7 @@ Key privileged groups:
   Enterprise Admins:  Full control of entire forest (all domains)
   Schema Admins:      Can modify AD schema (rarely needed)
   Administrators:     Local admin on Domain Controllers
-  KRBTGT:             Fake service account — its hash enables Golden Tickets`}</Block>
+  KRBTGT:             Built-in domain account (disabled for logon) — its hash signs every Kerberos TGT, so compromising it enables Golden Tickets`}</Block>
         <Block>{`How credentials are stored in AD:
 
 NTDS.dit file:
@@ -469,8 +469,9 @@ AppLocker / WDAC (Windows Defender Application Control):
 # Enable Credential Guard (requires UEFI + Secure Boot):
 # GPO: Computer Configuration → Administrative Templates
 #      → System → Device Guard → Turn on Virtualization Based Security
-# Or via PowerShell (Windows 10 2004+):
-Set-VMSecurity -VMName "..." -VirtualizationBasedSecurityOptOut $false
+# Or directly via registry (Windows 10 2004+):
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard" -Name "EnableVirtualizationBasedSecurity" -Value 1
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\LSA" -Name "LsaCfgFlags" -Value 1
 
 # Enable ASR rules (requires Defender for Endpoint):
 Set-MpPreference -AttackSurfaceReductionRules_Ids @(

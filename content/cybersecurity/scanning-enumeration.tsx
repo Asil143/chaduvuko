@@ -433,7 +433,7 @@ Generated: 2026-05-01
   Test:       curl http://old.acmecorp.com/cgi-bin/.%2e/.%2e/.%2e/etc/passwd
   Notes:      Requires mod_cgi enabled for RCE; path traversal may work regardless
 
-[VH-002] Jenkins 2.289 Unauthenticated RCE — CVE-2021-21985
+[VH-002] Jenkins 2.289 CLI Arbitrary File Read/RCE — CVE-2024-23897
   Host:       jenkins.acmecorp.com (203.0.113.55)
   Port:       8080/tcp
   Evidence:   Jenkins 2.289 confirmed via /login page version footer

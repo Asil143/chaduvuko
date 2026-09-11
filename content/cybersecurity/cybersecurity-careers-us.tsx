@@ -69,7 +69,7 @@ export default function CybersecurityCareersUS() {
       {/* ── PART 01 ── */}
       <Part n="01" title="The State of the US Cybersecurity Job Market" />
 
-      <P>The US cybersecurity job market has a structural supply problem: there are consistently more open positions than qualified candidates to fill them. CyberSeek (the joint NIST/CompTIA/Lightcast workforce analytics platform) tracks this gap in real time. As of early 2026, the US has approximately 3.5 million open cybersecurity positions globally, with the US accounting for roughly 700,000 of those unfilled roles.</P>
+      <P>The US cybersecurity job market has a structural supply problem: there are consistently more open positions than qualified candidates to fill them. CyberSeek (the joint NIST/CompTIA/Lightcast workforce analytics platform) tracks this gap in real time. As of early 2026, the world has approximately 3.5 million open cybersecurity positions, with the US accounting for roughly 700,000 of those unfilled roles.</P>
 
       <P>This is not a soft market with a few niche openings. The Bureau of Labor Statistics projects <Hl>35% growth in information security analyst jobs from 2021 to 2031</Hl> — roughly five times the average for all occupations. Every major industry sector has security requirements: finance, healthcare, defense, technology, retail, energy, and government. The demand is not concentrated in one vertical.</P>
 

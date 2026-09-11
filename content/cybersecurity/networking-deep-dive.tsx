@@ -319,7 +319,7 @@ Two protocols:
 
 IKE (Internet Key Exchange) — the negotiation protocol:
   Phase 1 (IKE SA): Establish secure channel to negotiate Phase 2
-    Algorithms: AES-256-GCM, SHA-256, DH Group 14+ (2048-bit)
+    Algorithms: AES-256-GCM, SHA-256, DH Group 19+ (ECDH P-256)
     Result: Encrypted channel between peers
 
   Phase 2 (Child SA): Negotiate encryption for actual data
@@ -330,7 +330,7 @@ Weaknesses in legacy IPSec deployments:
   - DH Group 2 (1024-bit): breakable by nation-states (Logjam attack)
   - MD5 or SHA-1 for HMAC: deprecated
 
-Modern: IKEv2 + AES-256-GCM + SHA-256 + DH Group 20 (ECDH P-384) = secure`}</Block>
+Modern: IKEv2 + AES-256-GCM + SHA-256 + DH Group 19+ (ECDH P-256) = secure`}</Block>
         <Block>{`WireGuard — modern VPN protocol:
 
 Design philosophy: Simple, fast, auditable

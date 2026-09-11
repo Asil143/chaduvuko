@@ -580,7 +580,7 @@ The vulnerability pattern:
 
       <Err
         msg="Nonce reused in AES-CTR / AES-GCM — keystream exposed"
-        cause="CTR mode (and GCM which uses CTR internally) produces a keystream by encrypting a counter value with the key. The keystream is XORed with the plaintext to produce ciphertext. If the same nonce and key combination is ever used twice, both ciphertexts share the same keystream. XORing the two ciphertexts together cancels the keystream and produces the XOR of the two plaintexts — which is enough for an attacker to recover both messages in many cases. This completely breaks confidentiality. The PlayStation 3 was broken this way in 2010."
+        cause="CTR mode (and GCM which uses CTR internally) produces a keystream by encrypting a counter value with the key. The keystream is XORed with the plaintext to produce ciphertext. If the same nonce and key combination is ever used twice, both ciphertexts share the same keystream. XORing the two ciphertexts together cancels the keystream and produces the XOR of the two plaintexts — which is enough for an attacker to recover both messages in many cases. This completely breaks confidentiality."
         fix="Generate a fresh cryptographically random nonce for every encryption operation. With AES-GCM's 96-bit nonce, the risk of accidental collision with random nonces is negligible up to about 2^32 messages under the same key (the birthday bound). For extremely high-volume encryption, use an extended-nonce variant (XChaCha20-Poly1305) or key rotation. Never use a counter or timestamp as a nonce — these are predictable and reuse is possible under concurrent operation."
       />
 

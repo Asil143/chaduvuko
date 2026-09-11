@@ -292,7 +292,7 @@ spec:
           </thead>
           <tbody>
             {[
-              ['NIST Cybersecurity Framework (CSF 2.0)', 'Five functions: Govern, Identify, Protect, Detect, Respond, Recover. High-level risk management structure.', 'All organisations — especially US federal contractors'],
+              ['NIST Cybersecurity Framework (CSF 2.0)', 'Six functions: Govern, Identify, Protect, Detect, Respond, Recover. High-level risk management structure.', 'All organisations — especially US federal contractors'],
               ['CIS Controls v8', '18 prioritised control categories. Highly actionable — implementation groups allow small orgs to start with the highest-ROI controls first.', 'Practical for all org sizes. Implementation Group 1 = minimum baseline.'],
               ['ISO 27001/27002', 'Information Security Management System (ISMS) standard. Certification available. 93 controls in 4 themes.', 'Enterprise, international, and regulated industries requiring certification'],
               ['MITRE ATT&CK', 'Adversary tactics, techniques, and procedures (TTPs) mapped to real-world attack groups. Each technique has detection and mitigation guidance.', 'Threat detection, threat hunting, red team planning, security architecture review'],

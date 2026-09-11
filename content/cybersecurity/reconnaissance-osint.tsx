@@ -447,7 +447,7 @@ Active subdomains (47 found):
   INTERESTING (possibly forgotten/less hardened):
   - dev-api.acmecorp.com    → DEV environment, no WAF, different version headers
   - staging.acmecorp.com    → staging env, basic auth only (found via crt.sh)
-  - jenkins.acmecorp.com    → Jenkins 2.289 (CVE-2021-21985 — check)
+  - jenkins.acmecorp.com    → Jenkins 2.289 (CVE-2024-23897 — check)
   - old.acmecorp.com        → Apache/2.2.15 (end of life 2017)
 
 ━━ TECHNOLOGY STACK ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
