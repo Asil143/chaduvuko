@@ -683,7 +683,7 @@ int main() {
         A singly linked list only goes forward — you can never go back.
         A doubly linked list gives each node two pointers:
         <strong style={{ color: 'var(--green)' }}> next</strong> (forward) and
-        <strong style={{ color: '#7b61ff)' }}> prev</strong> (backward).
+        <strong style={{ color: '#7b61ff' }}> prev</strong> (backward).
         You can traverse in both directions. The tradeoff: each node uses more memory,
         and insert/delete need to update two pointers instead of one.
       </p>

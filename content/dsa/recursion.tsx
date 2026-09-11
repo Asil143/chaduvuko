@@ -393,7 +393,7 @@ int main() {
             <span style={{ fontSize: 13, color: 'var(--muted)' }}>Time:</span>
             <ComplexityBadge value="O(2ⁿ)" color="#ff4757" />
           </div>
-          <div style={{ fontSize: 13, color: 'var(--muted)' }}>fib(50) requires over 1 trillion calls!</div>
+          <div style={{ fontSize: 13, color: 'var(--muted)' }}>fib(50) requires over 40 billion calls!</div>
         </div>
       </div>
 
@@ -505,7 +505,7 @@ int main() {
       <Callout type="tip">
         <strong>Fast power is O(log n)</strong> because each call divides the exponent by 2.
         To compute 2^20, the simple version makes 20 calls.
-        The fast version makes only 5 — because 20 → 10 → 5 → 4 → 2 → 1.
+        The fast version makes only 6 — because 20 → 10 → 5 → 4 → 2 → 1 → 0.
         This same divide-in-half pattern appears in binary search, merge sort,
         and many other O(log n) algorithms.
       </Callout>

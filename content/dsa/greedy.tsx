@@ -749,7 +749,7 @@ int main() {
         {'E', 3, 15},
     };
     jobSequencing(jobs, 5);
-    /* Scheduled: A C E → profit 100+27+15 = 142 */
+    /* Scheduled: C A E → profit 100+27+15 = 142 */
     return 0;
 }`} />
 
@@ -779,15 +779,11 @@ int main() {
               Items: A(w=3,v=9), B(w=4,v=10), C(w=5,v=12). Capacity=7.
             </div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)', lineHeight: 1.9 }}>
-              Ratio: A=3.0, B=2.5, C=2.4<br />
-              Greedy picks A(3kg, $9), then B doesn't fit (3+4=7 ✓ wait it does)... B fits → A+B = 7kg, $19<br />
-              But C+B = 4+5=9 {'>'} 7 ✗. A+C = 3+5=8 {'>'} 7 ✗.<br />
-              Actually here greedy gets $19 and optimal is also $19. Better counter-example:<br />
-              Items: A(w=10,v=10), B(w=6,v=7), C(w=6,v=7). Cap=12.<br />
-              Greedy: ratio A=1.0, B=C=1.17 → pick B($7), C($7) = $14 but 6+6=12 fits ✓ greedy works here too.<br />
-              Real failure: Items X(w=1,v=1), Y(w=10,v=9). Cap=10.<br />
-              <span style={{ color: '#ff4757' }}>Greedy: ratio X=1.0{'>'} Y=0.9 → pick X(1kg,$1), then Y won't fit = $1</span><br />
-              <span style={{ color: 'var(--green)' }}>Optimal: pick Y alone = $9</span>
+              Items X(w=1,v=1), Y(w=10,v=9). Capacity=10.<br />
+              <span style={{ color: '#ff4757' }}>Greedy (by value/weight ratio): X=1.0 {'>'} Y=0.9 → pick X first (1kg, $1), leaving only 9kg — Y (10kg) no longer fits = $1 total</span><br />
+              <span style={{ color: 'var(--green)' }}>Optimal: skip X entirely and take Y alone = $9</span><br />
+              Greedy locks in the higher-ratio item without weighing what that choice forecloses —
+              taking the small, slightly-more-efficient item wastes capacity that the one big item needed.
             </div>
           </div>
         </div>

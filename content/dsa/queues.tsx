@@ -131,7 +131,7 @@ const QueueVisual = ({ items, frontLabel, rearLabel }: {
       {/* ENQUEUE arrow on right */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginLeft: 8 }}>
         <div style={{ fontSize: 11, color: 'var(--green)', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 4 }}>enqueue</div>
-        <div style={{ fontSize: 18, color: 'var(--green)' }}>←</div>
+        <div style={{ fontSize: 18, color: 'var(--green)' }}>→</div>
       </div>
     </div>
   </div>

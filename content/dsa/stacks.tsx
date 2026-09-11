@@ -683,7 +683,7 @@ int main() {
     char str[] = "Chaduvuko";
     printf("Before: %s\\n", str);   /* Chaduvuko */
     reverseString(str);
-    printf("After:  %s\\n", str);   /* okuvadhC  */
+    printf("After:  %s\\n", str);   /* okuvudahC */
     return 0;
 }`} />
 

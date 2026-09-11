@@ -153,7 +153,7 @@ export default function PointersPage() {
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '16px' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 10, fontFamily: 'var(--font-mono)' }}>Real world</div>
             <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
-              A house at <strong style={{ color: 'var(--green)' }}>12 MG Road</strong> contains a family.<br />
+              A house at <strong style={{ color: 'var(--green)' }}>12 Maple Street</strong> contains a family.<br />
               The <strong>address</strong> tells you where to find them.<br />
               The <strong>contents</strong> are who lives there.
             </div>

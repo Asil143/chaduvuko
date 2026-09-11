@@ -233,7 +233,7 @@ int main() {
     printf("hash(23)    = %d\\n", hashInt(23));       /* 3 */
     printf("hash(47)    = %d\\n", hashInt(47));       /* 7 */
     printf("hash(cat)   = %d\\n", hashString("cat")); /* 2 */
-    printf("hash(dog)   = %d\\n", hashString("dog")); /* 8 */
+    printf("hash(dog)   = %d\\n", hashString("dog")); /* 4 */
     return 0;
 }`} />
 
@@ -343,14 +343,17 @@ int main() {
           <Bucket index={2} empty />
           <Bucket index={3} items={['3']} />
           <Bucket index={4} empty />
-          <Bucket index={5} items={['5', '15', '25']} />
+          <Bucket index={5} items={['25', '15', '5']} />
           <Bucket index={6} empty />
-          <Bucket index={7} items={['7', '17']} />
+          <Bucket index={7} items={['17', '7']} />
           <Bucket index={8} empty />
           <Bucket index={9} empty />
         </div>
         <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, fontFamily: 'var(--font-mono)' }}>
           5%10=5, 15%10=5, 25%10=5 → all chain at bucket 5
+        </div>
+        <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6, fontFamily: 'var(--font-mono)' }}>
+          insert() adds each new node at the front of the chain, so buckets read newest-first (last inserted, first shown)
         </div>
       </div>
 

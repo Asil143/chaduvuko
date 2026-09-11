@@ -1005,7 +1005,9 @@ int main() {
         <strong>Topological sort only works on DAGs.</strong> If the graph has a cycle, there is no valid
         topological order — a cycle means A depends on B which depends on A which is impossible.
         If you try to topo-sort a graph with a cycle (like circular npm dependencies),
-        the algorithm detects the cycle instead of producing an order.
+        this basic version does NOT detect it — it silently skips already-visited nodes
+        and produces an incomplete or misleading order. Detecting the cycle requires the
+        recursion-stack approach described in the error card above.
       </Callout>
 
       <Divider />
@@ -1062,7 +1064,7 @@ int main() {
           {
             title: 'Running topological sort on a cyclic graph',
             symptom: 'Produces an incomplete or incorrect ordering — not all nodes appear',
-            fix: 'Check for cycles first (using DFS cycle detection). Topological sort is only valid on DAGs.',
+            fix: 'Check for cycles first — but note the undirected cycle-detection from Section 6 (visited + parent check) does not work here. Directed-graph cycle detection needs a recursion-stack array (an "in progress" / inStack[] set, separate from the overall visited set) to catch back-edges to a node still on the current DFS path. Topological sort is only valid on DAGs.',
           },
         ].map((item, i) => (
           <div key={i} style={{ background: 'var(--surface)', border: '1px solid rgba(255,71,87,0.2)', borderRadius: 12, overflow: 'hidden' }}>
@@ -1105,7 +1107,7 @@ int main() {
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Memoization, tabulation, knapsack, LCS, coin change, edit distance — in C.</div>
         </div>
         <Link href="/learn/dsa/dynamic-programming" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Coming Soon →
+          Continue →
         </Link>
       </div>
 

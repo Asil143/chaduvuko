@@ -282,9 +282,13 @@ export default function BacktrackingPage() {
           {'    '}Row 2: all columns blocked → <span style={{ color: '#f97316' }}>BACKTRACK</span><br />
           {'  '}Row 1: try col 3 → place queen at (1,3)<br />
           {'    '}Row 2: try col 1 → place queen at (2,1)<br />
-          {'      '}Row 3: try col 0,1,2 blocked → col 3 blocked → <span style={{ color: '#f97316' }}>BACKTRACK</span><br />
-          {'    '}Row 2: ... continue until (2,0) → (3,2) → <span style={{ color: 'var(--green)', fontWeight: 700 }}>SOLUTION! [0,3,1,2... wait checking]</span><br />
-          {'  '}Eventually finds: cols = [1, 3, 0, 2] ✓
+          {'      '}Row 3: cols 0-3 all blocked → <span style={{ color: '#f97316' }}>BACKTRACK</span><br />
+          {'    '}Row 2: cols 2, 3 also blocked → <span style={{ color: '#f97316' }}>BACKTRACK</span> row 1 entirely<br />
+          {'  '}Row 0: col 0 exhausted → <span style={{ color: '#f97316' }}>BACKTRACK</span>, try col 1 → place queen at (0,1)<br />
+          {'    '}Row 1: cols 0, 1, 2 blocked → try col 3 → place queen at (1,3)<br />
+          {'      '}Row 2: try col 0 → place queen at (2,0)<br />
+          {'        '}Row 3: try col 2 → place queen at (3,2) → <span style={{ color: 'var(--green)', fontWeight: 700 }}>SOLUTION!</span><br />
+          {'  '}Result: cols = [1, 3, 0, 2] ✓
         </div>
       </div>
 
@@ -376,7 +380,7 @@ int main() {
       ══════════════════════════════════════ */}
       <SectionTag text="Problem 2" />
 
-      <ProblemHeader num="Problem 02" title="Rat in a Maze — Find a Path Through a Grid" time="O(2^(N²))" space="O(N²)" />
+      <ProblemHeader num="Problem 02" title="Rat in a Maze — Find a Path Through a Grid" time="O(2^N)" space="O(N²)" />
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12, padding: '18px 20px', marginBottom: 20 }}>
         <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
@@ -463,8 +467,8 @@ void printSolution() {
 }
 
 int solveMaze(int row, int col) {
-    /* base case: reached destination */
-    if (row == N-1 && col == N-1) {
+    /* base case: reached destination — must also be an open cell, not a wall */
+    if (row == N-1 && col == N-1 && maze[row][col] == 1) {
         solution[row][col] = 1;
         return 1;  /* found a path */
     }
@@ -508,6 +512,9 @@ int main() {
         <code style={{ fontFamily: 'var(--font-mono)' }}> solveMaze(row-1, col)</code> and
         <code style={{ fontFamily: 'var(--font-mono)' }}> solveMaze(row, col-1)</code>.
         The visited check in <code style={{ fontFamily: 'var(--font-mono)' }}>isSafeCell</code> prevents infinite loops.
+        That variant explores up to 4 choices from every one of the N² cells, pushing the worst case to
+        roughly <code style={{ fontFamily: 'var(--font-mono)' }}>O(2^(N²))</code> — much larger than the
+        down/right-only version above, which only ever branches into 2 choices per cell.
       </Callout>
 
       <Divider />

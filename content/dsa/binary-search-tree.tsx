@@ -975,7 +975,7 @@ int main() {
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Min heap, max heap, heap as array, insert, delete, heap sort — in C.</div>
         </div>
         <Link href="/learn/dsa/heaps" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Coming Soon →
+          Continue →
         </Link>
       </div>
 

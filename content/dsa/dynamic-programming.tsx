@@ -447,9 +447,8 @@ int main() {
           </tbody>
         </table>
         <div style={{ marginTop: 12, fontSize: 12, color: 'var(--green)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-          Best choice: Item 2 (3kg, $4) + Item 3 (4kg... wait, 3+4=7 {'>'} 5).<br />
-          Actually: Item 1 (1kg) + Item 2 (3kg) = 4kg, $5. Or Item 2 + Item 1 is same.<br />
-          Or Item 4 alone = 5kg, $7. Best = $7 (just Item 4).
+          Best choice: Item 4 alone (5kg, $7) — it uses the full capacity and beats every combination of the<br />
+          other items (e.g. Item 1 + Item 2 = 4kg for only $5). Best = $7.
         </div>
       </div>
 
@@ -514,11 +513,11 @@ int main() {
           </thead>
           <tbody>
             {[
-              [0, 0, 0, 0, 0, 0, 0],
-              [0, 1, 1, 1, 1, 1, 1],
-              [0, 1, 1, 4, 5, 5, 5],
-              [0, 1, 1, 4, 5, 6, 6],
-              [0, 1, 1, 4, 5, 7, 8],
+              [0, 0, 0, 0, 0, 0],
+              [0, 1, 1, 1, 1, 1],
+              [0, 1, 1, 4, 5, 5],
+              [0, 1, 1, 4, 5, 6],
+              [0, 1, 1, 4, 5, 7],
             ].map((row, ri) => (
               <tr key={ri}>
                 <td style={{ padding: '6px 12px', color: 'var(--green)', fontWeight: 700 }}>
@@ -532,7 +531,7 @@ int main() {
           </tbody>
         </table>
         <div style={{ fontSize: 12, color: 'var(--green)', marginTop: 10, fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-          dp[4][5] = 8 — wait, that is with 4 items at capacity 5. Let me recheck: item4(w=5,v=7) fits exactly → 7. Or item1+item2 = 1+3=4kg, 1+4=$5. Or item2+item1 same. dp[4][5] = max(7, 8?) → 8 means item1+item2+... Actually dp tracks correctly via the recurrence ✓
+          dp[4][5] = 7 — with all 4 items available and capacity 5, item 4 (w=5, v=7) fits exactly and fills the bag, beating every other combination.
         </div>
       </div>
 
@@ -713,7 +712,7 @@ int main() {
         </div>
         <div style={{ display: 'flex', gap: 0 }}>
           {[0,1,2,3,4,5,6,7,8,9,10,11].map((amt, i) => (
-            <DPCell key={i} value={[0,1,2,3,4,1,1,2,2,1,2,2][i]} label={`a=${amt}`} highlight={i === 11} />
+            <DPCell key={i} value={[0,1,2,3,4,1,1,2,3,1,2,2][i]} label={`a=${amt}`} highlight={i === 11} />
           ))}
         </div>
         <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, fontFamily: 'var(--font-mono)' }}>

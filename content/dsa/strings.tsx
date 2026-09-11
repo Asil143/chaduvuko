@@ -215,12 +215,12 @@ int main() {
 
     /* Method 2: character by character — must add \\0 yourself */
     char city[7];
-    city[0] = 'M';
+    city[0] = 'A';
     city[1] = 'U';
-    city[2] = 'M';
-    city[3] = 'B';
-    city[4] = 'A';
-    city[5] = 'I';
+    city[2] = 'S';
+    city[3] = 'T';
+    city[4] = 'I';
+    city[5] = 'N';
     city[6] = '\\0';  /* MUST add this — or the string has no end */
 
     /* Method 3: let C count the size */
@@ -415,7 +415,7 @@ int main() {
 
     reverseString(str);
 
-    printf("After:  %s\\n", str);  /* okuvadhC */
+    printf("After:  %s\\n", str);  /* okuvudahC */
     return 0;
 }`} />
 
@@ -490,8 +490,8 @@ int main() {
         /* spaces, digits, symbols — ignored */
     }
 
-    printf("Vowels: %d\\n", vowels);        /* Vowels: 7 */
-    printf("Consonants: %d\\n", consonants);  /* Consonants: 10 */
+    printf("Vowels: %d\\n", vowels);        /* Vowels: 6 */
+    printf("Consonants: %d\\n", consonants);  /* Consonants: 11 */
     return 0;
 }`} />
 
@@ -675,7 +675,7 @@ int main() {
       {/* ══════════════════════════════════════
           SECTION 7 — STRINGS VS CHAR ARRAYS
       ══════════════════════════════════════ */}
-      <SectionTag text="Section 6" />
+      <SectionTag text="Section 7" />
       <SectionTitle>Quick Reference — Operations Summary</SectionTitle>
 
       <div style={{ overflowX: 'auto', marginBottom: 28 }}>

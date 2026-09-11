@@ -641,7 +641,7 @@ int main() {
         best="O(n log n)"
         avg="O(n log n)"
         worst="O(n²)"
-        space="O(log n)"
+        space="O(log n) avg, O(n) worst"
         stable={false}
       />
 
@@ -728,7 +728,10 @@ int main() {
         always the smallest or largest element (e.g. already sorted array with last element as pivot).
         The fix: use a random pivot or the median-of-three strategy.
         In practice with good pivot selection, quick sort is faster than merge sort
-        because it sorts in-place and has better cache locality.
+        because it sorts in-place and has better cache locality. That same worst case also
+        blows up space: recursion depth (and therefore stack space) matches the recursion
+        tree's height, so an already-sorted array with a poor pivot gives O(n) stack space
+        instead of the O(log n) you get from balanced partitioning.
       </Callout>
 
       <Divider />
@@ -821,6 +824,15 @@ int main() {
         integers in a small bounded range. Sorting 1 million exam scores from 0–100?
         Counting sort is perfect — k=100 is tiny. Sorting 1 million phone numbers?
         k would be 10 billion — terrible choice. Know your data before choosing.
+      </Callout>
+
+      <Callout type="info">
+        <strong>Note on the "Stable" claim above:</strong> this version sorts bare integers,
+        so there is nothing to preserve — duplicate values are indistinguishable and
+        stability isn't visible in the code shown. Counting sort CAN be implemented stably,
+        but doing so for records (sorting objects/rows by a key) requires computing cumulative
+        counts and placing elements in a right-to-left pass over the input, not the
+        simple "recount and refill" loop used here.
       </Callout>
 
       <Divider />
@@ -922,7 +934,7 @@ int main() {
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>Linear search, binary search, variations — with full C code and complexity.</div>
         </div>
         <Link href="/learn/dsa/searching" style={{ background: 'var(--green)', color: '#000', fontWeight: 700, fontSize: 13, borderRadius: 8, padding: '10px 22px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Coming Soon →
+          Continue →
         </Link>
       </div>
 
