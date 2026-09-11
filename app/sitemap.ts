@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { KAFKA_MODULES } from '@/data/kafka-curriculum'
+import { SNOWFLAKE_MODULES } from '@/data/snowflake-curriculum'
 
 const BASE_URL = 'https://chaduvuko.com'
 
@@ -35,7 +36,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
-    ...KAFKA_MODULES.map(module => ({
+    {
+      url: `${BASE_URL}/learn/snowflake`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    ...SNOWFLAKE_MODULES.filter(module => module.status === 'live').map(module => ({
+      url: `${BASE_URL}/learn/snowflake/${module.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.82,
+    })),
+    ...KAFKA_MODULES.filter(module => module.status === 'live').map(module => ({
       url: `${BASE_URL}/learn/apache-kafka/${module.slug}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,

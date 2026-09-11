@@ -76,7 +76,7 @@ const tracksAll = [
   { cat:'db',    icon:'🐘',  name:'PostgreSQL',             desc:'Advanced relational database mastery', pills:['JSONB','Full Text Search','Partitioning','Extensions'], jobs:'DBA · Backend Dev',            status:'soon', href:'#' },
   { cat:'db',    icon:'🍃',  name:'MongoDB',                desc:'NoSQL document database at scale', pills:['Aggregation Pipeline','Indexes','Atlas','Replication'], jobs:'Backend Dev · Full Stack Dev',   status:'soon', href:'#' },
   { cat:'db',    icon:'⚡',  name:'Redis',                  desc:'In-memory caching and queuing', pills:['Caching Patterns','Pub/Sub','Sessions','Lua Scripting'], jobs:'Backend Dev · Platform Eng',       status:'soon', href:'#' },
-  { cat:'db',    icon:'❄️',  name:'Snowflake',              desc:'Cloud data warehouse platform', pills:['Schemas','Time Travel','Streams','dbt Integration'], jobs:'Data Engineer · Analytics Engineer', status:'soon', href:'#' },
+  { cat:'db',    icon:'❄️',  name:'Snowflake',              desc:'Cloud data warehouse from scratch to advanced', pills:['Warehouses','COPY INTO','Time Travel','Streams','dbt'], jobs:'Data Engineer · Analytics Engineer', status:'live', href:'/learn/snowflake' },
   // CS Core
   { cat:'cs',    icon:'⚙️',  name:'System Design',          desc:'Design scalable systems like a senior', pills:['HLD','LLD','Scalability','CAP Theorem','Trade-offs'], jobs:'Senior Engineer · Tech Lead · Architect', status:'soon', href:'#' },
   { cat:'cs',    icon:'🖥️', name:'Operating Systems',      desc:'Processes, memory, scheduling, concurrency', pills:['Processes','Memory Mgmt','Scheduling','IPC'], jobs:'Technical Interviews · Systems Engineering', status:'soon', href:'#' },

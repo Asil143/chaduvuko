@@ -91,6 +91,9 @@ export const PAGE_ORDER: PageMeta[] = [
   { href: '/learn/apache-kafka/testing-debugging',           title: 'Testing and Debugging Kafka Systems',           section: 'Apache Kafka', difficulty: 'Advanced',     color: '#ef4444', readTime: '24 min', xp: 200 },
   { href: '/learn/apache-kafka/kafka-interview-system-design', title: 'Kafka Interview and System Design Guide',     section: 'Apache Kafka', difficulty: 'Advanced',     color: '#ef4444', readTime: '26 min', xp: 200 },
 
+  // Snowflake Track
+  { href: '/learn/snowflake', title: 'Snowflake Track Overview', section: 'Snowflake', difficulty: 'Intermediate', color: '#29b5e8', readTime: 'Self-paced', xp: 250 },
+
   // Azure Track
   { href: '/learn/azure/introduction',       title: 'Azure Introduction',            section: 'Azure Track', difficulty: 'Beginner',     color: '#0078d4', readTime: '12 min', xp: 100 },
   { href: '/learn/azure/adls-gen2',          title: 'ADLS Gen2',                     section: 'Azure Track', difficulty: 'Intermediate', color: '#0078d4', readTime: '15 min', xp: 150 },

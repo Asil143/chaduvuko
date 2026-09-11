@@ -18,6 +18,8 @@ export default function ApacheKafkaTrackPage() {
       color: section.color,
     }))
   )
+  const liveModules = allModules.filter(module => module.status === 'live')
+  const queuedModules = allModules.length - liveModules.length
 
   const filtered =
     activeSection === 'all'
@@ -79,7 +81,8 @@ export default function ApacheKafkaTrackPage() {
         marginBottom: 36,
       }}>
         {[
-          { value: `${allModules.length}`, label: 'Live modules' },
+          { value: `${liveModules.length}`, label: 'Live modules' },
+          { value: `${queuedModules}`, label: 'Queued modules' },
           { value: `${KAFKA_CURRICULUM.length}`, label: 'Sections' },
           { value: `${totalTopics}+`, label: 'Concepts covered' },
           { value: `${totalHours}h`, label: 'Total reading' },
@@ -156,7 +159,7 @@ export default function ApacheKafkaTrackPage() {
             fontFamily: 'var(--font-display)',
             marginBottom: 6,
           }}>
-            24 Live Modules. Kafka from Scratch to System Design.
+            {liveModules.length} Live Modules. {queuedModules} Advanced Modules Queued.
           </h2>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 620, margin: 0 }}>
             Follow in order. Each module begins with a simple explanation, then adds the production detail engineers need.
@@ -230,8 +233,8 @@ export default function ApacheKafkaTrackPage() {
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 800, color: module.color, background: `${module.color}18`, border: `1px solid ${module.color}33`, borderRadius: 6, padding: '3px 8px' }}>
                         MODULE {String(module.id).padStart(2, '0')}
                       </span>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: 'var(--green)', background: 'rgba(0,230,118,0.12)', border: '1px solid rgba(0,230,118,0.3)', borderRadius: 20, padding: '2px 10px', letterSpacing: '.08em' }}>
-                        LIVE
+                      <span style={{ fontSize: 10, fontWeight: 800, color: module.status === 'live' ? 'var(--green)' : 'var(--muted)', background: module.status === 'live' ? 'rgba(0,230,118,0.12)' : 'var(--bg2)', border: module.status === 'live' ? '1px solid rgba(0,230,118,0.3)' : '1px solid var(--border)', borderRadius: 20, padding: '2px 10px', letterSpacing: '.08em' }}>
+                        {module.status === 'live' ? 'LIVE' : 'QUEUED'}
                       </span>
                     </div>
 
@@ -262,9 +265,15 @@ export default function ApacheKafkaTrackPage() {
                       </div>
                     </div>
 
-                    <Link href={`/learn/apache-kafka/${module.slug}`} style={{ display: 'inline-block', background: module.color, color: '#000', fontSize: 12, fontWeight: 800, borderRadius: 8, padding: '8px 18px', textDecoration: 'none', letterSpacing: '.04em', whiteSpace: 'nowrap' }}>
-                      Start →
-                    </Link>
+                    {module.status === 'live' ? (
+                      <Link href={`/learn/apache-kafka/${module.slug}`} style={{ display: 'inline-block', background: module.color, color: '#000', fontSize: 12, fontWeight: 800, borderRadius: 8, padding: '8px 18px', textDecoration: 'none', letterSpacing: '.04em', whiteSpace: 'nowrap' }}>
+                        Start →
+                      </Link>
+                    ) : (
+                      <span style={{ display: 'inline-block', background: 'var(--bg2)', color: 'var(--muted)', border: '1px solid var(--border)', fontSize: 12, fontWeight: 800, borderRadius: 8, padding: '8px 18px', letterSpacing: '.04em', whiteSpace: 'nowrap' }}>
+                        Coming soon
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
