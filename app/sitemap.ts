@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { KAFKA_MODULES } from '@/data/kafka-curriculum'
 
 const BASE_URL = 'https://chaduvuko.com'
 
@@ -28,6 +29,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+    {
+      url: `${BASE_URL}/learn/apache-kafka`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    ...KAFKA_MODULES.map(module => ({
+      url: `${BASE_URL}/learn/apache-kafka/${module.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.82,
+    })),
 
     // Projects listing
     {

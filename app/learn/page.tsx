@@ -29,6 +29,17 @@ const TRACKS = [
   },
   {
     cat: 'data' as Cat,
+    icon: '◎', color: '#f97316',
+    name: 'Apache Kafka',
+    desc: 'Event streaming from scratch to advanced — topics, partitions, producers, consumers, schemas, Connect, Streams, security, and scale.',
+    pills: ['Events', 'Topics', 'Consumers', 'Connect', 'Streams', 'Security'],
+    jobs: 'Data Engineer · Backend Engineer · Platform Engineer',
+    status: 'live' as const,
+    href: '/learn/apache-kafka',
+    modules: 24,
+  },
+  {
+    cat: 'data' as Cat,
     icon: '☁️', color: '#0078d4',
     name: 'Microsoft Azure',
     desc: 'ADF, ADLS Gen2, Databricks, Synapse, Event Hubs, Key Vault, Fabric — the full cloud track.',
