@@ -7,7 +7,14 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'what-is-snowflake': () => import('@/content/snowflake/what-is-snowflake'),
   'architecture': () => import('@/content/snowflake/architecture'),
   'setup-and-sql-basics': () => import('@/content/snowflake/setup-and-sql-basics'),
+  'roles-security-basics': () => import('@/content/snowflake/roles-security-basics'),
   'loading-data': () => import('@/content/snowflake/loading-data'),
+  'semi-structured-data': () => import('@/content/snowflake/semi-structured-data'),
+  'elt-medallion': () => import('@/content/snowflake/elt-medallion'),
+  'merge-idempotency': () => import('@/content/snowflake/merge-idempotency'),
+  'time-travel-cloning': () => import('@/content/snowflake/time-travel-cloning'),
+  'snowpipe': () => import('@/content/snowflake/snowpipe'),
+  'streams-and-tasks': () => import('@/content/snowflake/streams-and-tasks'),
 }
 
 export async function generateStaticParams() {
