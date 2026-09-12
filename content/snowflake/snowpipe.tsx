@@ -595,7 +595,7 @@ FROM (
 
 SELECT
   payload:event_id::STRING AS event_id,
-  payload:order:order_id::STRING AS order_id,
+  payload:order.order_id::STRING AS order_id,
   source_file,
   loaded_at
 FROM SNOWPIPE_LAB.RAW.ORDER_EVENTS

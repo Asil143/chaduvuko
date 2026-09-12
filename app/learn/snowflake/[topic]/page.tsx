@@ -15,6 +15,15 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'time-travel-cloning': () => import('@/content/snowflake/time-travel-cloning'),
   'snowpipe': () => import('@/content/snowflake/snowpipe'),
   'streams-and-tasks': () => import('@/content/snowflake/streams-and-tasks'),
+  'dynamic-tables': () => import('@/content/snowflake/dynamic-tables'),
+  'performance-tuning': () => import('@/content/snowflake/performance-tuning'),
+  'cost-optimization': () => import('@/content/snowflake/cost-optimization'),
+  'advanced-security-governance': () => import('@/content/snowflake/advanced-security-governance'),
+  'data-sharing-marketplace': () => import('@/content/snowflake/data-sharing-marketplace'),
+  'snowflake-with-dbt': () => import('@/content/snowflake/snowflake-with-dbt'),
+  'production-operations': () => import('@/content/snowflake/production-operations'),
+  'snowflake-project': () => import('@/content/snowflake/snowflake-project'),
+  'interview-system-design': () => import('@/content/snowflake/interview-system-design'),
 }
 
 export async function generateStaticParams() {

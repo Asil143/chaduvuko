@@ -106,9 +106,9 @@ SELECT
         <CodeBox label="Extract fields with path notation">{`SELECT
   payload:event_id::STRING AS event_id,
   payload:event_type::STRING AS event_type,
-  payload:order:order_id::STRING AS order_id,
-  payload:order:customer_id::STRING AS customer_id,
-  payload:order:total_usd::NUMBER(12,2) AS total_usd,
+  payload:order.order_id::STRING AS order_id,
+  payload:order.customer_id::STRING AS customer_id,
+  payload:order.total_usd::NUMBER(12,2) AS total_usd,
   loaded_at
 FROM RAW.ORDER_EVENTS;`}
         </CodeBox>
@@ -116,7 +116,7 @@ FROM RAW.ORDER_EVENTS;`}
           headers={['Expression', 'Meaning', 'Result type before cast', 'Production note']}
           rows={[
             ['payload:event_id', 'Read top-level event_id.', 'VARIANT', 'Cast to STRING for stable use.'],
-            ['payload:order:total_usd', 'Read nested order total.', 'VARIANT', 'Cast to NUMBER for sums and comparisons.'],
+            ['payload:order.total_usd', 'Read nested order total.', 'VARIANT', 'Cast to NUMBER for sums and comparisons.'],
             ['payload:line_items[0]:sku', 'Read first item sku.', 'VARIANT', 'Good for inspection, not for modeling all items.'],
             ['payload:missing_key', 'Read absent key.', 'NULL-like value', 'Missing fields should be profiled and tested.'],
           ]}
@@ -145,9 +145,9 @@ FROM RAW.ORDER_EVENTS;`}
 SELECT
   payload:event_id::STRING AS event_id,
   payload:event_type::STRING AS event_type,
-  payload:order:order_id::STRING AS order_id,
-  payload:order:customer_id::STRING AS customer_id,
-  TRY_TO_NUMBER(payload:order:total_usd::STRING, 12, 2) AS total_usd,
+  payload:order.order_id::STRING AS order_id,
+  payload:order.customer_id::STRING AS customer_id,
+  TRY_TO_NUMBER(payload:order.total_usd::STRING, 12, 2) AS total_usd,
   TRY_TO_TIMESTAMP_NTZ(payload:occurred_at::STRING) AS occurred_at,
   payload AS raw_payload,
   source_file,
@@ -181,7 +181,7 @@ FROM RAW.ORDER_EVENTS;`}
           and objects.
         </Para>
         <CodeBox label="Flatten order line items">{`SELECT
-  payload:order:order_id::STRING AS order_id,
+  payload:order.order_id::STRING AS order_id,
   item.index AS line_item_index,
   item.value:sku::STRING AS sku,
   item.value:quantity::NUMBER AS quantity,
@@ -218,23 +218,23 @@ LATERAL FLATTEN(input => payload:line_items) item;`}
         </Para>
         <CodeBox label="Raw to Silver parent and child tables">{`CREATE OR REPLACE TABLE SILVER.ORDERS AS
 SELECT
-  payload:order:order_id::STRING AS order_id,
-  payload:order:customer_id::STRING AS customer_id,
+  payload:order.order_id::STRING AS order_id,
+  payload:order.customer_id::STRING AS customer_id,
   payload:event_id::STRING AS source_event_id,
-  TRY_TO_NUMBER(payload:order:total_usd::STRING, 12, 2) AS total_usd,
+  TRY_TO_NUMBER(payload:order.total_usd::STRING, 12, 2) AS total_usd,
   TRY_TO_TIMESTAMP_NTZ(payload:occurred_at::STRING) AS order_ts,
   source_file,
   loaded_at
 FROM RAW.ORDER_EVENTS
 WHERE payload:event_type::STRING = 'order_created'
 QUALIFY ROW_NUMBER() OVER (
-  PARTITION BY payload:order:order_id::STRING
+  PARTITION BY payload:order.order_id::STRING
   ORDER BY loaded_at DESC
 ) = 1;
 
 CREATE OR REPLACE TABLE SILVER.ORDER_ITEMS AS
 SELECT
-  payload:order:order_id::STRING AS order_id,
+  payload:order.order_id::STRING AS order_id,
   item.index AS line_number,
   item.value:sku::STRING AS sku,
   item.value:quantity::NUMBER AS quantity,
@@ -274,8 +274,8 @@ LATERAL FLATTEN(input => OBJECT_KEYS(payload)) keys;
 -- Are important extracted fields going null?
 SELECT
   COUNT(*) AS rows_checked,
-  COUNT_IF(payload:order:order_id IS NULL) AS missing_order_id,
-  COUNT_IF(TRY_TO_NUMBER(payload:order:total_usd::STRING, 12, 2) IS NULL) AS invalid_total,
+  COUNT_IF(payload:order.order_id IS NULL) AS missing_order_id,
+  COUNT_IF(TRY_TO_NUMBER(payload:order.total_usd::STRING, 12, 2) IS NULL) AS invalid_total,
   COUNT_IF(payload:line_items IS NULL) AS missing_line_items
 FROM RAW.ORDER_EVENTS
 WHERE loaded_at >= DATEADD(day, -1, CURRENT_TIMESTAMP());`}
@@ -318,8 +318,8 @@ WHERE loaded_at >= DATEADD(day, -1, CURRENT_TIMESTAMP());`}
         />
         <CodeBox label="Better dashboard input">{`-- Weaker dashboard pattern:
 SELECT
-  payload:order:customer_id::STRING,
-  payload:order:total_usd::NUMBER(12,2)
+  payload:order.customer_id::STRING,
+  payload:order.total_usd::NUMBER(12,2)
 FROM RAW.ORDER_EVENTS
 WHERE payload:event_type::STRING = 'order_created';
 
@@ -407,7 +407,7 @@ SELECT
   source_file,
   COUNT(*) AS rows_loaded,
   COUNT_IF(payload:event_id IS NULL) AS missing_event_id,
-  COUNT_IF(payload:order:order_id IS NULL) AS missing_order_id,
+  COUNT_IF(payload:order.order_id IS NULL) AS missing_order_id,
   COUNT_IF(payload:line_items IS NULL) AS missing_line_items
 FROM RAW.ORDER_EVENTS
 WHERE loaded_at >= DATEADD(hour, -1, CURRENT_TIMESTAMP())
@@ -511,12 +511,12 @@ ORDER BY occurrences DESC, f.path;`}
   payload:event_id::STRING AS event_id,
   payload:schema_version::NUMBER AS schema_version,
   CASE payload:schema_version::NUMBER
-    WHEN 1 THEN payload:order:total_before_discount::NUMBER(12,2)
-    WHEN 2 THEN payload:order:subtotal_usd::NUMBER(12,2)
+    WHEN 1 THEN payload:order.total_before_discount::NUMBER(12,2)
+    WHEN 2 THEN payload:order.subtotal_usd::NUMBER(12,2)
   END AS subtotal_usd,
   CASE payload:schema_version::NUMBER
-    WHEN 1 THEN payload:order:discount_usd::NUMBER(12,2)
-    WHEN 2 THEN payload:order:discount:amount_usd::NUMBER(12,2)
+    WHEN 1 THEN payload:order.discount_usd::NUMBER(12,2)
+    WHEN 2 THEN payload:order.discount.amount_usd::NUMBER(12,2)
   END AS discount_usd
 FROM RAW.ORDER_EVENTS;`}
         </CodeBox>
@@ -545,7 +545,7 @@ FROM RAW.ORDER_EVENTS;`}
 SELECT
   payload:event_id::STRING AS event_id,
   payload:event_type::STRING AS event_type,
-  payload:order:order_id::STRING AS order_id,
+  payload:order.order_id::STRING AS order_id,
   payload AS raw_payload,
   source_file,
   loaded_at
@@ -580,13 +580,13 @@ QUALIFY ROW_NUMBER() OVER (
 SELECT COUNT(*) AS bad_rows
 FROM RAW.ORDER_EVENTS
 WHERE payload:event_id IS NULL
-   OR payload:order:order_id IS NULL;
+   OR payload:order.order_id IS NULL;
 
 -- Invalid totals after casting
 SELECT COUNT(*) AS invalid_totals
 FROM RAW.ORDER_EVENTS
-WHERE payload:order:total_usd IS NOT NULL
-  AND TRY_TO_NUMBER(payload:order:total_usd::STRING, 12, 2) IS NULL;
+WHERE payload:order.total_usd IS NOT NULL
+  AND TRY_TO_NUMBER(payload:order.total_usd::STRING, 12, 2) IS NULL;
 
 -- Child rows without a parent order
 SELECT i.order_id, COUNT(*) AS orphan_items
@@ -667,7 +667,7 @@ Resolution:
         <Table
           headers={['Risk', 'Where it appears', 'Control']}
           rows={[
-            ['PII hidden in raw payload.', 'payload:customer:email or metadata fields.', 'Limit Raw access; create masked curated views.'],
+            ['PII hidden in raw payload.', 'payload:customer.email or metadata fields.', 'Limit Raw access; create masked curated views.'],
             ['Free-text sensitive data.', 'support_note, comment, custom_attributes.', 'Classify, tokenize, or exclude from broad marts.'],
             ['Unexpected partner fields.', 'New keys added without review.', 'Schema drift monitoring and access reviews.'],
             ['Over-broad analyst role.', 'SELECT on RAW event tables.', 'Prefer Gold/Silver views for most users.'],
