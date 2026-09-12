@@ -316,7 +316,7 @@ FROM {{ ref('stg_orders') }}
         </CodeBox>
         <Para>
           The `incremental_strategy='merge'` config is what pairs this pattern directly with Snowflake's native
-          MERGE, covered in depth in the streams-and-tasks module. Under the hood, dbt compiles the incremental
+          MERGE, covered in depth in the merge-idempotency module. Under the hood, dbt compiles the incremental
           run into roughly the same shape of `MERGE INTO target USING (new rows) ON unique_key ... WHEN
           MATCHED THEN UPDATE ... WHEN NOT MATCHED THEN INSERT` statement you'd hand-write yourself — dbt is
           just generating that MERGE for you from the `unique_key` and the compiled SELECT.
@@ -345,7 +345,7 @@ VALUES (src.order_id, src.customer_id, src.order_ts, src.status, src.total_usd, 
         />
         <Callout title="Why this pairs naturally with Snowflake">
           Snowflake's MERGE is a first-class, well-optimized statement — this is exactly the operation the
-          streams-and-tasks module used for stream-consuming pipelines. dbt's `merge` incremental strategy
+          merge-idempotency module covers for idempotent, dedupe-safe pipelines. dbt's `merge` incremental strategy
           isn't inventing new behavior on Snowflake; it's generating the same idiomatic MERGE pattern you'd
           write by hand, just parameterized from your model's `unique_key` and `is_incremental()` filter.
         </Callout>
