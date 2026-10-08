@@ -101,6 +101,7 @@ export function TracksMenuDesktop({ tracks, active }: { tracks: TrackSummaries; 
         ref={buttonRef}
         type="button"
         aria-expanded={open}
+        aria-current={active ? 'location' : undefined}
         aria-controls={panelId}
         onClick={() => setOpen(isOpen => !isOpen)}
         className="relative flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-colors"
@@ -142,6 +143,7 @@ export function TracksListMobile({ tracks, active, onNavigate }: { tracks: Track
       <button
         type="button"
         aria-expanded={expanded}
+        aria-current={active ? 'location' : undefined}
         aria-controls={listId}
         onClick={() => setExpanded(isExpanded => !isExpanded)}
         className="w-full flex items-center justify-between px-3 py-2.5 text-sm rounded-lg"
