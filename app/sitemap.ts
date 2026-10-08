@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { LIVE_LESSONS, NON_LESSON_ROUTES } from '@/lib/catalog'
+import { BLOG_ARTICLES } from '@/data/blog-articles'
+import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
 
 const BASE_URL = 'https://chaduvuko.com'
 
@@ -19,5 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...SITE_PAGES.map(href => ({ url: href === '/' ? BASE_URL : `${BASE_URL}${href}` })),
     ...nonLessonPages.map(href => ({ url: `${BASE_URL}${href}` })),
     ...lessonEntries,
+    ...Object.keys(ROLE_ROADMAPS).map(slug => ({ url: `${BASE_URL}/learn/roadmap/${slug}` })),
+    ...Object.keys(BLOG_ARTICLES).map(slug => ({ url: `${BASE_URL}/blog/${slug}` })),
   ]
 }
