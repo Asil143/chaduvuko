@@ -54,10 +54,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 import type { Metadata } from 'next'
 import './globals.css'
-import { ThemeProvider } from '@/components/layout/ThemeProvider'
 import { ServiceWorkerRegistration } from '@/components/ui/ServiceWorkerRegistration'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
+import { themeInitScript } from '@/lib/theme'
 import ChatBot from '@/components/ui/ChatBot'
 
 export const metadata: Metadata = {
@@ -166,38 +166,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body>
-        <ThemeProvider>
-          <ServiceWorkerRegistration />
-          <Navbar />
-          {/* Announce Bar */}
-          <div style={{
-            background: 'rgba(0, 230, 118, 0.06)',
-            borderBottom: '1px solid rgba(0, 230, 118, 0.12)',
-            padding: '7px 28px',
-            fontSize: '11px',
-            color: 'rgba(0, 230, 118, 0.9)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            fontWeight: 600,
-          }}>
-            <span style={{
-              width: '5px',
-              height: '5px',
-              borderRadius: '50%',
-              background: '#00e676',
-              display: 'inline-block',
-              flexShrink: 0,
-            }} />
-            New lessons, projects, and career tools are shipping regularly — your one platform for all of IT
-          </div>
-          <main>{children}</main>
-          <Footer />
-          <ChatBot />
-        </ThemeProvider>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body id="top">
+        <ServiceWorkerRegistration />
+        <Navbar />
+        <main id="main-content">{children}</main>
+        <Footer />
+        <ChatBot />
       </body>
     </html>
   )

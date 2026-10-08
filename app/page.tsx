@@ -36,8 +36,8 @@ const tracksAll = [
   { cat:'data',  icon:'🌩️', name:'Microsoft Azure',         desc:'Full Azure cloud service track', pills:['ADLS Gen2','ADF','Synapse','Fabric'],     jobs:'Cloud Engineer · Azure Developer',           status:'live', href:'/learn/azure/introduction' },
   { cat:'cs',    icon:'🧮',  name:'Data Structures & Algorithms', desc:'Crack every technical coding round', pills:['Arrays','Trees','Graphs','Dynamic Programming'], jobs:'Big Tech · FAANG · Product Companies', status:'live', href:'/learn/dsa' },
   { cat:'cs',    icon:'💾',  name:'DBMS',                   desc:'Database theory and design fundamentals', pills:['ER Diagrams','Normalization','ACID','Transactions'], jobs:'DBA · Backend Dev · Technical Interviews', status:'live', href:'/learn/dbms' },
-  { cat:'data',  icon:'🟠',  name:'Amazon Web Services',    desc:'S3, Glue, Redshift, Kinesis, Lambda', pills:['S3','Glue','Redshift','Lambda'],     jobs:'AWS Developer · Cloud Engineer',             status:'soon', href:'#' },
-  { cat:'data',  icon:'🔵',  name:'Google Cloud Platform',  desc:'BigQuery, Dataflow, Pub/Sub, Composer', pills:['BigQuery','Dataflow','Composer'],  jobs:'GCP Engineer · Data Engineer',               status:'soon', href:'#' },
+  { cat:'data',  icon:'🟠',  name:'Amazon Web Services',    desc:'S3, Glue, Redshift, Kinesis, Athena', pills:['S3','Glue','Redshift','Athena'],     jobs:'AWS Developer · Cloud Engineer',             status:'live', href:'/learn/aws/introduction' },
+  { cat:'data',  icon:'🔵',  name:'Google Cloud Platform',  desc:'BigQuery, Dataflow, Pub/Sub, Composer', pills:['BigQuery','Dataflow','Composer'],  jobs:'GCP Engineer · Data Engineer',               status:'live', href:'/learn/gcp/introduction' },
   { cat:'data',  icon:'📊',  name:'Power BI & Tableau',     desc:'Dashboards, DAX, data storytelling', pills:['Power BI','Tableau','DAX','Reports'],  jobs:'BI Developer · Data Analyst',               status:'soon', href:'#' },
   // AI & ML
 
@@ -243,12 +243,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ── ANNOUNCE BAR ── */}
-      <div style={{ background:'rgba(0,230,118,0.06)', borderBottom:'1px solid rgba(0,230,118,0.12)', padding:'7px 28px', fontSize:11, color:'rgba(0,230,118,0.9)', display:'flex', alignItems:'center', justifyContent:'center', gap:8, fontWeight:600 }}>
-        <span style={{ width:5, height:5, borderRadius:'50%', background:'var(--green)', display:'inline-block', animation:'pulse 2s infinite' }} />
-        Python · SQL · Web Dev · Java · AI/ML tracks launching soon — your one platform for all of IT
-      </div>
-
       {/* ── HERO ── */}
       <section style={{ maxWidth:1000, margin:'0 auto', padding:'72px 28px 56px', textAlign:'center' }}>
         <p style={{ fontSize:11, fontWeight:600, letterSpacing:'.14em', textTransform:'uppercase', color:'var(--muted)', marginBottom:20 }}>
