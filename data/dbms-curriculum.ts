@@ -1,0 +1,155 @@
+export const DBMS_SECTIONS = [
+  { id: 1, title: 'Foundations',             shortTitle: 'Foundations',  color: '#0078d4', difficulty: 'Beginner'     },
+  { id: 2, title: 'Design & SQL',            shortTitle: 'Design & SQL', color: '#00e676', difficulty: 'Intermediate' },
+  { id: 3, title: 'Internals',               shortTitle: 'Internals',    color: '#f97316', difficulty: 'Intermediate' },
+  { id: 4, title: 'Advanced Theory',         shortTitle: 'Adv. Theory',  color: '#8b5cf6', difficulty: 'Advanced'     },
+  { id: 5, title: 'Distributed & Interview', shortTitle: 'Distributed',  color: '#facc15', difficulty: 'Advanced'     },
+]
+
+export const DBMS_MODULES = [
+  // ── Section 1 — Foundations (01–04) ────────────────────────────────────────
+  {
+    number: '01', section: 1, slug: 'introduction',
+    title: 'Introduction to Databases & DBMS',
+    desc: 'What a database actually is, the 6 problems it solves, DBMS vs Database vs Database System, types of databases, and why this shows up in every interview.',
+    topics: ['What is a Database?', 'File System Problems', 'DBMS Software', 'Types of Databases', 'What DBAs Do'],
+    time: '25–30 min', difficulty: 'Beginner', status: 'live' as const,
+  },
+  {
+    number: '02', section: 1, slug: 'data-models',
+    title: 'Data Models',
+    desc: 'The blueprint that decides how data is stored and connected — hierarchical, network, relational, object, and document models explained with real analogies.',
+    topics: ['Hierarchical Model', 'Network Model', 'Relational Model', 'Document Model', 'Why Relational Won'],
+    time: '20–25 min', difficulty: 'Beginner', status: 'live' as const,
+  },
+  {
+    number: '03', section: 1, slug: 'er-model',
+    title: 'Entity-Relationship (ER) Model',
+    desc: 'Design a database visually before writing a single line of SQL. Entities, attributes, relationships, cardinality, weak entities — drawn step by step.',
+    topics: ['Entities & Attributes', 'Relationships & Cardinality', 'Strong vs Weak Entities', 'Drawing ER Diagrams', 'ER to Tables'],
+    time: '35–40 min', difficulty: 'Beginner', status: 'live' as const,
+  },
+  {
+    number: '04', section: 1, slug: 'relational-model',
+    title: 'Relational Model & Keys',
+    desc: 'Tables, tuples, domains, integrity constraints — and every type of key explained clearly: Super, Candidate, Primary, Foreign, Composite, Surrogate.',
+    topics: ['Relations & Tuples', 'Schema vs Instance', 'Super & Candidate Keys', 'Primary & Foreign Keys', 'Integrity Constraints'],
+    time: '30–35 min', difficulty: 'Beginner', status: 'live' as const,
+  },
+  // ── Section 2 — Design & SQL (05–08) ───────────────────────────────────────
+  {
+    number: '05', section: 2, slug: 'normalization',
+    title: 'Normalization — 1NF to 5NF',
+    desc: 'The most important theory topic in DBMS. Eliminate every database design mistake before it causes real problems — insert, update, and delete anomalies explained.',
+    topics: ['Insert/Update/Delete Anomalies', '1NF · 2NF · 3NF', 'BCNF · 4NF · 5NF', 'Step-by-Step Normalization', 'When to Denormalize'],
+    time: '45–55 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  {
+    number: '06', section: 2, slug: 'functional-dependencies',
+    title: 'Functional Dependencies',
+    desc: "The math behind normalization. X → Y means X determines Y. Armstrong's Axioms, attribute closure, canonical cover, and finding candidate keys using FDs.",
+    topics: ["Armstrong's Axioms", 'Trivial vs Non-Trivial FDs', 'Attribute Closure (F+)', 'Canonical Cover', 'Finding Candidate Keys'],
+    time: '30–35 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  {
+    number: '07', section: 2, slug: 'sql-complete',
+    title: 'SQL — Complete Guide',
+    desc: 'From your very first SELECT to window functions and recursive CTEs. DDL, DML, DCL, TCL, all joins, subqueries, aggregations, GROUP BY, HAVING — nothing skipped.',
+    topics: ['DDL · DML · DCL · TCL', 'SELECT & WHERE', 'All JOIN Types', 'Window Functions', 'CTEs & Subqueries'],
+    time: '90–120 min', difficulty: 'Beginner → Advanced', status: 'live' as const,
+  },
+  {
+    number: '08', section: 2, slug: 'indexes',
+    title: 'Indexes',
+    desc: 'Why queries slow down at scale, how indexes fix it, B+ tree vs hash index, clustered vs non-clustered, covering indexes, and when NOT to add an index.',
+    topics: ['How Indexes Work', 'B+ Tree Index', 'Clustered vs Non-Clustered', 'Composite & Covering Indexes', 'When NOT to Index'],
+    time: '35–40 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  // ── Section 3 — Internals (09–12) ──────────────────────────────────────────
+  {
+    number: '09', section: 3, slug: 'transactions',
+    title: 'Transactions & ACID Properties',
+    desc: 'All-or-nothing units of work. The bank transfer example that makes ACID click instantly — Atomicity, Consistency, Isolation, Durability — with real failure scenarios.',
+    topics: ['What is a Transaction?', 'Atomicity', 'Consistency', 'Isolation', 'Durability · COMMIT · ROLLBACK'],
+    time: '30–35 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  {
+    number: '10', section: 3, slug: 'concurrency-control',
+    title: 'Concurrency Control',
+    desc: 'How databases handle thousands of simultaneous users safely. Locks, deadlocks, isolation levels, Two-Phase Locking, and MVCC — the engine inside PostgreSQL.',
+    topics: ['Lost Update · Dirty Read · Phantom Read', 'Shared & Exclusive Locks', 'Two-Phase Locking (2PL)', 'Deadlock Detection', 'Isolation Levels · MVCC'],
+    time: '40–45 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  {
+    number: '11', section: 3, slug: 'query-processing',
+    title: 'Query Processing & Optimization',
+    desc: 'What actually happens the moment you press Enter on a query — parsing, planning, optimization, execution. Then how to make it 10x faster using EXPLAIN.',
+    topics: ['Parsing → Planning → Execution', 'Query Optimizer', 'EXPLAIN & EXPLAIN ANALYZE', 'Sequential vs Index Scan', 'Real Optimization Examples'],
+    time: '35–40 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  {
+    number: '12', section: 3, slug: 'storage-file-organization',
+    title: 'Storage & File Organization',
+    desc: 'How data physically lives on disk — blocks, pages, buffer pool, heap files, sequential files. Understanding this is what separates developers from engineers.',
+    topics: ['Blocks & Pages', 'Buffer Pool & Cache', 'Heap File Organization', 'Sequential & Hash Organization', 'Why This Affects Query Speed'],
+    time: '30–35 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  // ── Section 4 — Advanced Theory (13–16) ────────────────────────────────────
+  {
+    number: '13', section: 4, slug: 'hashing-btrees',
+    title: 'Hashing & B+ Trees',
+    desc: 'The two most important data structures inside every database. Static and dynamic hashing for fast lookups, B+ tree structure for range queries and indexes.',
+    topics: ['Static & Dynamic Hashing', 'Collision Handling', 'B+ Tree Structure', 'Search · Insert · Delete', 'Why B+ Tree is the Standard'],
+    time: '40–45 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  {
+    number: '14', section: 4, slug: 'relational-algebra',
+    title: 'Relational Algebra',
+    desc: 'The mathematics SQL is built on. Select, Project, Join, Union, Difference, Division — shown with plain English explanations and direct SQL equivalents.',
+    topics: ['Select (σ) & Project (π)', 'Union · Intersection · Difference', 'Cartesian Product & Join', 'Division (÷)', 'Mapping RA to SQL'],
+    time: '30–35 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  {
+    number: '15', section: 4, slug: 'views-procedures-triggers',
+    title: 'Views, Stored Procedures & Triggers',
+    desc: 'Database objects that encapsulate logic — virtual tables, pre-compiled SQL procedures, and triggers that run automatically on INSERT/UPDATE/DELETE.',
+    topics: ['Views & Materialized Views', 'Stored Procedures vs Functions', 'Triggers — BEFORE & AFTER', 'Cursors', 'Real Use Cases at Companies'],
+    time: '35–40 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  {
+    number: '16', section: 4, slug: 'crash-recovery',
+    title: 'Crash Recovery',
+    desc: 'How databases survive power failures, OS crashes, and hardware failures without losing a single committed transaction. WAL, checkpoints, and the ARIES algorithm.',
+    topics: ['Write-Ahead Logging (WAL)', 'Undo & Redo Logs', 'Checkpoints', 'ARIES Algorithm', 'What Happens at 3am When DB Crashes'],
+    time: '30–35 min', difficulty: 'Advanced', status: 'live' as const,
+  },
+  // ── Section 5 — Distributed & Interview (17–20) ────────────────────────────
+  {
+    number: '17', section: 5, slug: 'distributed-databases',
+    title: 'Distributed Databases & CAP Theorem',
+    desc: 'Data across multiple machines — fragmentation, replication, two-section commit, and the CAP theorem that every system design interview asks about.',
+    topics: ['Horizontal & Vertical Fragmentation', 'Replication Strategies', 'Two-Phase Commit (2PC)', 'CAP Theorem', 'CA · CP · AP Real Examples'],
+    time: '35–40 min', difficulty: 'Advanced', status: 'live' as const,
+  },
+  {
+    number: '18', section: 5, slug: 'nosql-databases',
+    title: 'NoSQL Databases',
+    desc: 'When and why to break away from relational — MongoDB, Redis, Cassandra, Neo4j explained clearly. The SQL vs NoSQL decision framework for real projects.',
+    topics: ['Document Stores — MongoDB', 'Key-Value — Redis', 'Column-Family — Cassandra', 'Graph — Neo4j', 'SQL vs NoSQL Decision Framework'],
+    time: '35–40 min', difficulty: 'Advanced', status: 'live' as const,
+  },
+  {
+    number: '19', section: 5, slug: 'database-security',
+    title: 'Database Security',
+    desc: 'Protecting data at every layer — authentication, authorization, roles, SQL injection attacks and exactly how to prevent them, encryption, and auditing.',
+    topics: ['Authentication vs Authorization', 'GRANT & REVOKE', 'SQL Injection — How & Prevention', 'Encryption at Rest & in Transit', 'Auditing & Row-Level Security'],
+    time: '25–30 min', difficulty: 'Intermediate', status: 'live' as const,
+  },
+  {
+    number: '20', section: 5, slug: 'interview-questions',
+    title: 'Interview Questions — All 60',
+    desc: '60 DBMS questions categorized by company type. Accenture/KPMG/Deloitte for campus placements, Amazon/DoorDash for product companies, and GATE-level for competitive exams.',
+    topics: ['Service Company Questions (Accenture, KPMG)', 'Product Company Questions (Amazon, DoorDash)', 'GATE CS Level Questions', 'System Design DB Questions', 'Answers with Explanations'],
+    time: '60–90 min', difficulty: 'All Levels', status: 'live' as const,
+  },
+]
