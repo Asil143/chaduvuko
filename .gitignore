@@ -9,3 +9,6 @@ Thumbs.db
 # WASM engine bundles (copied from node_modules at postinstall, not committed)
 public/duckdb/
 public/sqljs/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
