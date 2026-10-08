@@ -1,5 +1,12 @@
 export interface BlogArticle {
-  title: string; date: string; readTime: string; tags: string[]
+  title: string; date: string; readTime: string
+  /** The first two tags are the chips shown on the /blog card. */
+  tags: string[]
+  excerpt: string
+  /** Position on /blog; required so card order never depends on object key order. */
+  indexOrder: number
+  /** Set on featured posts only; 1 is shown first. */
+  featuredRank?: number
   intro: string; sections: { heading: string; body: string }[]
   cta: { label: string; href: string }
 }
@@ -9,6 +16,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Medallion Architecture Explained — Bronze, Silver, and Gold in Plain English',
     date: 'March 1, 2026', readTime: '8 min read',
     tags: ['Architecture', 'Data Lake', 'Azure', 'AWS', 'GCP'],
+    excerpt: 'The most widely used data lake design pattern in 2026. What each layer means, why it exists, and how to implement it on Azure, AWS, and GCP.',
+    indexOrder: 1, featuredRank: 1,
     intro: 'The Medallion Architecture is the most widely used data lake design pattern in 2026. If you are applying for data engineering roles, you will be asked about it in almost every interview. Here is exactly what each layer means, why it exists, and how to implement it on any cloud platform.',
     sections: [
       { heading: 'Why does the Medallion Architecture exist?', body: `Before the Medallion Architecture, data lakes were a mess. Raw data landed in a single location and everyone — analysts, data scientists, downstream pipelines — read directly from it. The result: inconsistent results, schema surprises, and nobody trusting the data.\n\nThe Medallion Architecture solves this by introducing three distinct layers, each with a clear contract about the quality and shape of the data inside it.` },
@@ -23,7 +32,9 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
   'delta-lake-vs-apache-iceberg': {
     title: 'Delta Lake vs. Apache Iceberg in 2026 — Which Should You Use?',
     date: 'February 22, 2026', readTime: '10 min read',
-    tags: ['Delta Lake', 'Apache Iceberg', 'Open Table Format'],
+    tags: ['Storage', 'Architecture', 'Delta Lake', 'Apache Iceberg', 'Open Table Format'],
+    excerpt: 'Two open table formats that bring ACID transactions to your data lake. Different strengths, different ecosystems, different ideal use cases.',
+    indexOrder: 5,
     intro: 'Both Delta Lake and Apache Iceberg are open table formats that bring ACID transactions to your data lake. Both are widely used in production. But they have different strengths, different ecosystems, and different ideal use cases.',
     sections: [
       { heading: 'What is an Open Table Format?', body: `An open table format sits on top of Parquet files in your data lake and adds a metadata layer enabling ACID transactions, schema evolution, time travel, and efficient upserts.\n\nWithout an open table format, a data lake is just a folder of Parquet files — no transactions, no versioning, no reliable reads during writes.` },
@@ -38,6 +49,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'How to Write a Data Engineer Resume When You Have No Work Experience',
     date: 'February 15, 2026', readTime: '12 min read',
     tags: ['Career', 'Resume', 'H1B'],
+    excerpt: 'The resume strategy that gets callbacks at consulting firms sponsoring H1B. What to include, what to cut, and how to quantify project work.',
+    indexOrder: 6,
     intro: 'Recruiters at consulting firms that sponsor H1B visas see hundreds of resumes every week. Most get rejected in under 10 seconds. Here is exactly what separates the resumes that get callbacks from the ones that do not.',
     sections: [
       { heading: 'The core problem with most beginner resumes', body: `Most beginners list technologies without demonstrating how they were used. "Proficient in Python, SQL, Azure, Spark" tells a recruiter nothing. Every resume says this.\n\nWhat recruiters want to see is evidence of applied skill — proof that you have actually used these tools to build something real.` },
@@ -52,7 +65,9 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
   'adf-vs-airflow-vs-step-functions': {
     title: 'ADF vs. Airflow vs. Step Functions — Which Orchestration Tool Should You Learn?',
     date: 'February 8, 2026', readTime: '9 min read',
-    tags: ['ADF', 'Airflow', 'Orchestration'],
+    tags: ['Orchestration', 'ADF', 'Airflow'],
+    excerpt: 'Three orchestration tools compared. When to use each, what they are good at, and which one has the most job market demand.',
+    indexOrder: 7,
     intro: 'Azure Data Factory, Apache Airflow, and AWS Step Functions all orchestrate data pipelines but take fundamentally different approaches. Knowing which to use — and more importantly, why — is one of the things that separates senior data engineers from junior ones.',
     sections: [
       { heading: 'What orchestration actually means', body: `Orchestration answers one question: in what order do things run, and what happens when something fails?\n\nA simple pipeline — extract data, transform it, load it — needs something to say "run transform only after extract succeeds, and alert me if it fails." That is orchestration. Without it, you have a collection of scripts with no coordination.\n\nAll three tools solve this problem differently.` },
@@ -67,7 +82,9 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
   'microsoft-fabric-explained': {
     title: 'Microsoft Fabric Explained — Should You Learn It Now or Wait?',
     date: 'February 1, 2026', readTime: '7 min read',
-    tags: ['Microsoft Fabric', 'Azure', 'Career'],
+    tags: ['Azure', 'Microsoft Fabric', 'Career'],
+    excerpt: 'The biggest change to the Azure data engineering landscape since Databricks. What it is, what it replaces, and the honest advice on timing.',
+    indexOrder: 8,
     intro: 'Microsoft Fabric is the biggest change to the Azure data engineering landscape since Databricks entered the picture. It unifies the entire Azure data stack into one product. Here is what it actually is, what it replaces, and the honest answer to whether you should prioritize it right now.',
     sections: [
       { heading: 'What is Microsoft Fabric?', body: `Microsoft Fabric is an all-in-one analytics platform launched in 2023. It unifies data integration (ADF), data engineering (Spark), data warehousing (Synapse), real-time analytics (Event Streams), business intelligence (Power BI), and data science — all inside one product with one license.\n\nThink of it as Microsoft deciding: instead of making customers stitch together ADF + Databricks + Synapse + Power BI, we will give them one platform that does everything.` },
@@ -83,6 +100,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Why Data Engineers Use Parquet Instead of CSV',
     date: 'March 10, 2026', readTime: '5 min read',
     tags: ['Foundations', 'Storage', 'Architecture'],
+    excerpt: 'CSV vs Parquet — what actually happens in production and why every serious pipeline uses columnar format for storage and query performance.',
+    indexOrder: 9,
     intro: 'If you open any data engineering job description, you will see Parquet listed under required skills. Yet most beginners start with CSV files. Understanding why the industry switched to Parquet — and the specific technical reasons behind it — is one of the most important foundational concepts in data engineering.',
     sections: [
       { heading: 'What is wrong with CSV?', body: `CSV files are human-readable, simple, and universal. So why does every production data pipeline avoid them?\n\nThe problem is how CSV stores data. CSV is row-oriented — each row is written together sequentially. To answer the query SELECT SUM(revenue) FROM sales, a CSV reader must scan every single column in every single row, even though you only need the revenue column.\n\nFor a file with 100 columns and 10 million rows, that means reading roughly 100x more data than necessary. At scale, this becomes the difference between a query running in 3 seconds or 5 minutes.` },
@@ -98,6 +117,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: '15 PySpark Interview Questions Asked at Real Data Engineering Roles',
     date: 'March 5, 2026', readTime: '10 min read',
     tags: ['Interview', 'Apache Spark'],
+    excerpt: 'Real PySpark questions from consulting firms, financial services, and tech companies. With the answers interviewers actually want to hear.',
+    indexOrder: 4, featuredRank: 4,
     intro: 'These are real PySpark questions asked at consulting firms, financial services companies, and technology companies that sponsor H1B visas. For each question, I have included the answer interviewers actually want to hear — not the textbook definition.',
     sections: [
       { heading: 'Fundamentals (expect all of these)', body: `Q1: What is the difference between a transformation and an action in Spark?\nA: Transformations (filter, select, groupBy, join) are lazy — they define a computation plan but do not execute. Actions (count, collect, show, write) trigger actual execution. This lazy evaluation allows Spark to optimize the full execution plan before running anything.\n\nQ2: What is a DataFrame vs an RDD?\nA: RDD is the low-level Spark API — distributed collection of objects with no schema. DataFrame is the higher-level API with a schema, similar to a SQL table. In 99% of production code you use DataFrames. RDDs are rarely written directly anymore.\n\nQ3: What is a partition in Spark?\nA: A partition is a chunk of the data distributed across worker nodes. Spark processes each partition in parallel. Too few partitions = underutilized cluster. Too many = excessive overhead. Rule of thumb: aim for 128-256MB per partition.\n\nQ4: Explain narrow vs wide transformations.\nA: Narrow transformations (filter, select, map) process each partition independently — no data movement between nodes. Wide transformations (groupBy, join, orderBy) require shuffling data across the network, which is expensive. Minimize wide transformations to optimize Spark jobs.` },
@@ -113,6 +134,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Azure vs AWS for Data Engineers in 2026 — A Real Comparison',
     date: 'February 28, 2026', readTime: '7 min read',
     tags: ['Azure', 'AWS', 'Career'],
+    excerpt: 'ADF vs Glue, Databricks vs EMR, Synapse vs Redshift. A direct comparison focused on what a data engineer actually uses every day.',
+    indexOrder: 3, featuredRank: 3,
     intro: 'Most data engineers are asked to work on Azure or AWS — and increasingly both. This is a direct comparison of the core services on each platform, focused specifically on what a data engineer actually spends their day using.',
     sections: [
       { heading: 'Storage: ADLS Gen2 vs Amazon S3', body: `Both are object storage services with virtually unlimited capacity. The core architecture is the same — files stored in containers or buckets, accessed via SDKs or pipelines.\n\nADLS Gen2 (Azure) adds hierarchical namespace — you can have real directory structure with file-level permissions using Azure RBAC and Active Directory integration. This matters a lot in enterprise environments that need fine-grained access control down to the folder level.\n\nAmazon S3 is simpler — flat namespace with bucket and prefix. S3 is the most widely used cloud storage service in the world and integrates with everything. S3's IAM permission model is extremely flexible but more complex to configure.\n\nVerdict: both do the same job. Learn S3 if AWS-focused, ADLS Gen2 if Azure-focused. The concepts transfer.` },
@@ -127,7 +150,9 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
   'how-to-get-h1b-data-engineering': {
     title: 'How to Get H1B Sponsorship as a Data Engineer in 2026',
     date: 'March 15, 2026', readTime: '8 min read',
-    tags: ['Career', 'H1B'],
+    tags: ['H1B', 'Career'],
+    excerpt: 'The companies that actually sponsor, what skills they look for, the resume strategy that works, and the exact timing of when to apply.',
+    indexOrder: 2, featuredRank: 2,
     intro: 'Getting an H1B-sponsored data engineering job in the US is achievable — but only if you target the right companies, with the right skills, at the right time. This guide is based on actual H1B disclosure data and hiring patterns at companies that consistently sponsor.',
     sections: [
       { heading: 'Which companies actually sponsor H1B for data engineers?', body: `The top H1B sponsors for data engineering and IT roles every year are consulting and IT services firms, not tech companies:\n\n1. Deloitte — consistently the largest H1B sponsor in the US\n2. Tata Consultancy Services (Accenture)\n3. Cognizant Technology Solutions\n4. KPMG Technologies\n5. PwC\n6. IBMnologies\n7. Accenture\n8. IBM\n9. Deloitte\n10. EY (Ernst and Young)\n\nThese companies place data engineers at Fortune 500 clients — banks, hospitals, retailers, government agencies. They sponsor aggressively because their entire business model depends on bringing in international talent.` },
@@ -144,6 +169,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Apache Spark Architecture Explained — How Spark Actually Works',
     date: 'March 18, 2026', readTime: '8 min read',
     tags: ['Apache Spark', 'Architecture'],
+    excerpt: 'Drivers, executors, DAGs, stages — the internals that separate engineers who can debug slow jobs from those who just restart the cluster.',
+    indexOrder: 10,
     intro: 'Every data engineer uses Spark but most cannot explain how it works under the hood. Understanding the architecture — drivers, executors, DAGs, stages — is what separates engineers who can debug slow jobs from those who just restart the cluster and hope.',
     sections: [
       { heading: 'Driver and Executors', body: `Spark runs on a master-worker architecture. The Driver is the brain — it runs your main program, builds the execution plan, and coordinates everything. Executors are the workers — JVM processes running on worker nodes that do the actual computation.\\n\\nWhen you call spark.read().csv("..."), nothing happens yet. The Driver records this as a transformation. When you call count() or write(), the Driver compiles all recorded transformations into a DAG and sends tasks to Executors.` },
@@ -159,6 +186,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Data Quality in Production Pipelines — What to Check and When',
     date: 'March 17, 2026', readTime: '7 min read',
     tags: ['Architecture', 'Foundations'],
+    excerpt: 'Bad data flowing silently is worse than a broken pipeline. The four categories of data quality issues and exactly where to apply checks.',
+    indexOrder: 11,
     intro: 'Bad data flowing silently through a pipeline is worse than a broken pipeline. A broken pipeline stops. Bad data corrupts reports, misleads analysts, and causes business decisions based on wrong numbers. Data quality checks are not optional — they are the difference between a pipeline and a reliable pipeline.',
     sections: [
       { heading: 'The four categories of data quality issues', body: `Completeness: required fields are null or missing. A sales record with no customer_id is unusable.\\n\\nAccuracy: values are present but wrong. A revenue field showing negative values or dates in the future.\\n\\nConsistency: the same entity has different representations. Customer ID 101 in one system, CUST-101 in another.\\n\\nTimeliness: data is correct but arrived too late to be useful. Last week's inventory data used for today's reorder decision.` },
@@ -173,6 +202,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'What Is a Data Lakehouse? The Architecture Replacing the Data Warehouse',
     date: 'March 16, 2026', readTime: '6 min read',
     tags: ['Architecture', 'Foundations'],
+    excerpt: 'Warehouse reliability at lake cost. How Delta Lake, Iceberg, and Microsoft Fabric are all built around this single architectural shift.',
+    indexOrder: 12,
     intro: 'The data lakehouse combines the low-cost storage of a data lake with the reliability and performance of a data warehouse. It is the dominant architecture pattern being adopted by enterprise companies in 2026, and it is what Databricks, Delta Lake, Apache Iceberg, and Microsoft Fabric are all built around.',
     sections: [
       { heading: 'The problem with data lakes and data warehouses separately', body: `Data warehouses (Snowflake, Redshift, Synapse) are fast, reliable, and support ACID transactions. But they are expensive and only work with structured data.\\n\\nData lakes (S3, ADLS Gen2, GCS) are cheap and handle any data type — CSV, JSON, images, logs. But they are unreliable for concurrent reads and writes, have no transaction support, and queries are slow on raw files.\\n\\nMost companies ended up with both: a data lake for raw storage and a data warehouse for analytics. This meant copying data twice, maintaining two systems, and paying twice.` },
@@ -187,6 +218,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'ADLS Gen2 Best Practices — How to Structure Your Azure Data Lake',
     date: 'March 14, 2026', readTime: '6 min read',
     tags: ['Azure', 'Storage'],
+    excerpt: 'Container structure, partitioning strategy, access controls, and the small files problem. The mistakes made early are expensive to fix at scale.',
+    indexOrder: 13,
     intro: 'Most Azure data engineers set up ADLS Gen2 incorrectly at the start. The mistakes made early — poor container structure, wrong partitioning strategy, incorrect access controls — are expensive to fix later when pipelines are running at scale.',
     sections: [
       { heading: 'Container structure', body: `Use one container per Medallion layer, not one container per project:\\n\\nbronze/\\nsilver/\\ngold/\\n\\nInside each container, organize by domain then by source system then by date:\\nbronze/sales/orders/2026/03/15/\\nbronze/hr/employees/2026/03/15/\\n\\nThis structure makes lifecycle management policies easy — you can expire bronze data older than 90 days at the container prefix level without affecting silver or gold.` },
@@ -201,6 +234,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Azure Key Vault for Data Engineers — Stop Putting Secrets in Your Code',
     date: 'March 13, 2026', readTime: '5 min read',
     tags: ['Azure', 'Security'],
+    excerpt: 'Secrets in code are the most common security mistake in data engineering. Key Vault with Databricks and ADF — set up properly in 15 minutes.',
+    indexOrder: 14,
     intro: 'Secrets in code are the most common security mistake in data engineering. Connection strings, API keys, and storage account keys hardcoded in notebooks, pipeline configs, or environment variables get committed to Git and end up exposed. Azure Key Vault is the solution — and it takes 15 minutes to set up properly.',
     sections: [
       { heading: 'What Key Vault does', body: `Azure Key Vault is a managed secrets store. You store secrets (passwords, connection strings, API keys, certificates) in Key Vault and retrieve them at runtime using managed identity — no credentials in your code at all.\\n\\nAudit logs track every secret access. You can rotate secrets without changing any code. You can revoke access to a specific secret immediately without touching other resources.` },
@@ -215,6 +250,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'What Is Apache Kafka? A Plain English Explanation for Data Engineers',
     date: 'March 12, 2026', readTime: '7 min read',
     tags: ['Streaming', 'Architecture'],
+    excerpt: 'Not just a message queue. Why Kafka changed how companies build data pipelines and what makes it different from every alternative.',
+    indexOrder: 15,
     intro: 'Apache Kafka appears in almost every senior data engineering job description. Most beginners understand it as a message queue but that undersells what it actually is and why it changed how companies build data pipelines.',
     sections: [
       { heading: 'Kafka in one sentence', body: `Kafka is a distributed, durable, high-throughput event streaming platform. Producers write events to Kafka topics. Consumers read from those topics at their own pace. Events are stored durably — not deleted after consumption — so multiple systems can read the same events independently.` },
@@ -229,6 +266,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Slowly Changing Dimensions Explained — SCD Type 1, 2, and 3',
     date: 'March 11, 2026', readTime: '6 min read',
     tags: ['Architecture', 'Foundations'],
+    excerpt: 'How to handle changes to dimension data over time. Getting this decision wrong can corrupt your entire historical analysis.',
+    indexOrder: 16,
     intro: 'Slowly Changing Dimensions (SCDs) appear in almost every data warehousing interview. They describe how to handle changes to dimension data over time — and getting this decision wrong can corrupt your entire historical analysis.',
     sections: [
       { heading: 'What is a dimension and why does it change slowly?', body: `In a data warehouse, facts are measurements (a sale happened, an event occurred) and dimensions are the context (who, what, where). Customer name, product category, store location — these change infrequently but they do change.\\n\\nWhen a customer moves cities, or a product changes category, you have a choice: overwrite the old value, keep both, or track the change date. That choice is your SCD type.` },
@@ -242,7 +281,9 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
   'etl-vs-elt-explained': {
     title: 'ETL vs ELT — Why the Industry Switched and What It Means for Your Work',
     date: 'March 9, 2026', readTime: '5 min read',
-    tags: ['Architecture', 'Foundations'],
+    tags: ['Foundations', 'Architecture'],
+    excerpt: 'Why the industry moved from ETL to ELT, what cloud storage costs have to do with it, and when ETL is still the right choice.',
+    indexOrder: 17,
     intro: 'ETL and ELT both move data from source to destination but in a different order. Understanding why the industry shifted from ETL to ELT — and when to use each — is a fundamental data engineering concept.',
     sections: [
       { heading: 'ETL — Extract, Transform, Load', body: `Traditional ETL extracts data from source, transforms it on a separate compute engine (SSIS, Informatica, custom scripts), then loads the clean, transformed data into the destination.\\n\\nThe transformation happens before loading. The destination only ever sees clean data.\\n\\nWhy it was used: 20 years ago, storage was expensive and databases were slow. Storing raw data was wasteful. Loading dirty data into an expensive Oracle database was unacceptable. So you cleaned it first, then stored only the clean version.` },
@@ -257,6 +298,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'AWS Glue vs Databricks on AWS — Which Should You Use?',
     date: 'March 8, 2026', readTime: '6 min read',
     tags: ['AWS', 'Apache Spark'],
+    excerpt: 'Both run Spark on AWS. When serverless Glue is the right call and when Databricks is worth the extra cost.',
+    indexOrder: 18,
     intro: 'Both AWS Glue and Databricks run Apache Spark on AWS. Both transform data. Both connect to S3. So why do some AWS shops use Glue and others use Databricks — and how do you know which one is right for a given situation?',
     sections: [
       { heading: 'What AWS Glue actually is', body: `AWS Glue is a fully managed serverless ETL service. You write Python or Scala scripts using the Glue DynamicFrame API (or standard PySpark), and Glue provisions the Spark cluster, runs your job, and tears it down — you only pay for the compute time used.\\n\\nGlue also includes a data catalog (schema registry), crawlers (automatic schema detection), and Studio (a visual ETL builder). It is tightly integrated with the AWS ecosystem — IAM, S3, Athena, Redshift, and Lake Formation all work natively with Glue.` },
@@ -271,6 +314,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Redshift vs BigQuery vs Synapse — Choosing a Cloud Data Warehouse',
     date: 'March 7, 2026', readTime: '7 min read',
     tags: ['AWS', 'GCP', 'Azure'],
+    excerpt: 'Architecture, cost patterns, and ecosystem integration for the three dominant cloud data warehouses. Which to learn for your target job market.',
+    indexOrder: 19,
     intro: 'Amazon Redshift, Google BigQuery, and Azure Synapse are the three dominant cloud data warehouses. Choosing between them is less about which is technically superior and more about which cloud your organization is on and what workload you are running.',
     sections: [
       { heading: 'Architecture differences', body: `Redshift: cluster-based MPP (Massively Parallel Processing). You provision a cluster of nodes, data is distributed across them, and queries execute in parallel. You pay for the cluster whether it is running queries or idle.\\n\\nBigQuery: serverless. No cluster to provision. Google manages all compute automatically. You pay per query (per terabyte scanned) or with flat-rate reservations. Scales to petabytes automatically.\\n\\nSynapse Analytics: hybrid. Dedicated SQL pools (cluster-based, like Redshift) and Serverless SQL pools (query-on-demand, like BigQuery). You choose based on workload pattern.` },
@@ -285,6 +330,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'BigQuery Cost Optimization — How to Stop Paying for Queries You Do Not Need',
     date: 'March 6, 2026', readTime: '6 min read',
     tags: ['GCP', 'BigQuery'],
+    excerpt: 'Partitioning, clustering, avoiding SELECT *, and materialized views. The practical changes that cut BigQuery bills dramatically.',
+    indexOrder: 20,
     intro: 'BigQuery charges per terabyte scanned. A single analyst running SELECT * on a 10TB table costs around $50. Multiplied across a team running queries all day, unoptimized BigQuery usage can generate surprising bills. These are the practical optimizations that make the biggest difference.',
     sections: [
       { heading: 'Partitioning — the most impactful change', body: `Partition your tables by date. A query with WHERE event_date = "2026-03-15" on a partitioned table reads only that day's partition — not the full table.\\n\\nCREATE TABLE myproject.dataset.events\\nPARTITION BY DATE(event_date)\\nAS SELECT * FROM source_table;\\n\\nFor a 2-year table queried daily: partitioning reduces bytes scanned by roughly 700x (730 days, querying 1 at a time). This is the single highest-impact optimization for most teams.` },
@@ -299,6 +346,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Cloud Composer vs Self-Managed Airflow — What GCP Data Engineers Should Know',
     date: 'March 4, 2026', readTime: '5 min read',
     tags: ['GCP', 'Orchestration'],
+    excerpt: 'What Composer manages for you, the real cost tradeoff, and when it makes sense vs running Airflow yourself.',
+    indexOrder: 21,
     intro: 'Cloud Composer is managed Apache Airflow on GCP. It removes infrastructure management but adds cost and some constraints. This is what you need to know before deciding between Composer and running Airflow yourself.',
     sections: [
       { heading: 'What Cloud Composer manages for you', body: `When you create a Composer environment, GCP provisions: a GKE cluster running Airflow scheduler and workers, a Cloud SQL database for Airflow metadata, Cloud Storage bucket for DAG storage, and networking and IAM configuration.\\n\\nYou get the Airflow UI, DAG versioning, and full Airflow functionality without managing any of this infrastructure. Updates to Airflow versions are handled by GCP.` },
@@ -310,9 +359,11 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
   },
 
   'dataflow-vs-spark-streaming': {
-    title: 'Google Dataflow vs Apache Spark Streaming — Streaming Processing Compared',
+    title: 'Google Dataflow vs Apache Spark Streaming — Stream Processing Compared',
     date: 'March 3, 2026', readTime: '6 min read',
     tags: ['GCP', 'Streaming'],
+    excerpt: 'Two streaming engines with different models. Latency, cost, ease of use, and which one GCP data engineering roles actually require.',
+    indexOrder: 22,
     intro: 'Both Google Dataflow and Apache Spark Structured Streaming process data in real time. They take fundamentally different approaches, and choosing between them depends on your cloud, your team, and your latency requirements.',
     sections: [
       { heading: 'How Dataflow works', body: `Dataflow is a fully managed stream and batch processing service based on Apache Beam. You write pipelines using the Beam SDK (Python or Java), defining a series of transforms on a PCollection (parallel collection of data).\\n\\nDataflow is serverless — no cluster management. Google auto-scales workers based on throughput. The same Beam pipeline code runs on both streaming and batch data without modification.` },
@@ -327,6 +378,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Pub/Sub vs Kafka vs Kinesis — Choosing a Streaming Ingestion Layer',
     date: 'March 2, 2026', readTime: '6 min read',
     tags: ['GCP', 'Streaming', 'AWS'],
+    excerpt: 'Every real-time pipeline needs a message broker. How the three major options compare on retention, throughput, and ecosystem fit.',
+    indexOrder: 23,
     intro: 'Every real-time data pipeline needs a message broker — a system that ingests high-velocity events and makes them available to downstream consumers. Google Pub/Sub, Apache Kafka, and Amazon Kinesis all do this job but with different tradeoffs.',
     sections: [
       { heading: 'Google Pub/Sub', body: `Pub/Sub is Google fully managed global message queue. Producers publish to topics. Subscribers receive messages via push (Pub/Sub calls your endpoint) or pull (your code polls).\\n\\nKey characteristic: at-least-once delivery. Messages may be delivered more than once — your consumer must handle duplicates. For exactly-once: use Dataflow with Pub/Sub source which handles deduplication.\\n\\nStrength: zero infrastructure management, global availability, integrates natively with all GCP services, automatic scaling to millions of messages per second.` },
@@ -341,6 +394,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'GCP IAM for Data Engineers — Access Control Without the Confusion',
     date: 'February 28, 2026', readTime: '5 min read',
     tags: ['GCP', 'Security'],
+    excerpt: 'Members, roles, bindings, and service accounts. The practical IAM setup for Dataflow pipelines, Composer DAGs, and BigQuery access.',
+    indexOrder: 24,
     intro: 'GCP IAM (Identity and Access Management) confuses most newcomers because it looks similar to AWS IAM and Azure RBAC but works differently. Understanding how to grant the right access to the right resources is essential for building secure data pipelines on GCP.',
     sections: [
       { heading: 'The three concepts you need', body: `Member: who is getting access. Can be a Google account, service account, Google group, or domain.\\n\\nRole: what access is being granted. A role is a collection of permissions. predefined roles (roles/bigquery.dataEditor) bundle common permissions. Custom roles let you create exactly the permission set you need.\\n\\nBinding: the connection between member and role on a specific resource. Grant service account X the role roles/bigquery.dataEditor on dataset Y.` },
@@ -355,6 +410,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Amazon Kinesis Firehose Explained — The Easiest Way to Stream Data into S3',
     date: 'February 26, 2026', readTime: '5 min read',
     tags: ['AWS', 'Streaming'],
+    excerpt: 'The easiest AWS streaming service. How Firehose auto-delivers to S3 with date partitioning and Lambda transformation built in.',
+    indexOrder: 25,
     intro: 'Kinesis Data Firehose is the simplest streaming ingestion service in AWS. While Kinesis Data Streams requires you to write consumer code, Firehose automatically delivers streaming data to S3, Redshift, OpenSearch, or Splunk — no consumer code needed.',
     sections: [
       { heading: 'What Firehose does', body: `You point an application at a Firehose delivery stream. Firehose buffers the incoming records (by size or time — whichever threshold is hit first), optionally transforms them using a Lambda function, and delivers batches to your destination.\\n\\nFor S3 delivery: Firehose automatically creates date-partitioned prefix paths (year/month/day/hour), converting your stream into organized S3 files suitable for Athena or Glue queries.` },
@@ -369,6 +426,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Amazon Redshift Best Practices — Distribution Keys, Sort Keys, and Vacuum',
     date: 'February 25, 2026', readTime: '7 min read',
     tags: ['AWS', 'Storage'],
+    excerpt: 'A poorly configured Redshift cluster can be 100x slower. The three decisions that define query performance at scale.',
+    indexOrder: 26,
     intro: 'A poorly configured Redshift cluster can be 100x slower than a well-configured one for the same query. The three most impactful configuration decisions — distribution keys, sort keys, and vacuum strategy — are what separate a performant Redshift cluster from an expensive slow one.',
     sections: [
       { heading: 'Distribution keys — how data splits across nodes', body: `Redshift distributes table rows across compute nodes. The distribution key determines which node each row goes to.\\n\\nKEY distribution: rows with the same distribution key value go to the same node. Use this on join columns — if orders and customers both distribute by customer_id, joins between them require no network transfer.\\n\\nEVEN distribution: rows distributed round-robin. Good for tables with no dominant join pattern.\\n\\nALL distribution: full copy on every node. Use for small dimension tables (under a few million rows) that join frequently with large fact tables.` },
@@ -383,6 +442,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Amazon S3 for Data Engineers — Beyond Just File Storage',
     date: 'February 24, 2026', readTime: '6 min read',
     tags: ['AWS', 'Storage'],
+    excerpt: 'Lifecycle policies, event notifications, S3 Select, and partitioning strategy. Features most engineers never learn but use every day.',
+    indexOrder: 27,
     intro: 'Most data engineers use S3 as a file system — upload files, download files. But S3 has a rich set of features specifically useful for data engineering that most engineers never learn: lifecycle policies, event notifications, S3 Select, Requester Pays, and Intelligent Tiering.',
     sections: [
       { heading: 'S3 storage classes and lifecycle policies', body: `S3 has multiple storage classes with different cost and retrieval speed tradeoffs:\\n\\nS3 Standard: hot data, frequent access, highest cost\\nS3 Standard-IA (Infrequent Access): data accessed monthly, 40% cheaper than Standard\\nS3 Glacier Instant Retrieval: archive data accessed quarterly, 68% cheaper\\nS3 Glacier Deep Archive: long-term archive, lowest cost, 12-hour retrieval\\n\\nLifecycle policies automatically transition objects between classes based on age. Bronze layer data older than 90 days → Standard-IA. Older than 365 days → Glacier. This runs automatically with no code required.` },
@@ -397,6 +458,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'The Data Engineering Career Path — Junior to Senior in 3 Years',
     date: 'February 23, 2026', readTime: '8 min read',
     tags: ['Career'],
+    excerpt: 'The skills and milestones that actually matter at each level, salary ranges at each stage, and the fastest path from zero to senior.',
+    indexOrder: 28,
     intro: 'Data engineering is one of the highest-paying entry points in the technology industry. But the path from zero experience to a senior role is not linear — and most guides miss the specific skills and milestones that actually matter to hiring managers at each level.',
     sections: [
       { heading: 'Year 0 to 1 — Getting the first job', body: `The first job is the hardest. Employers want experience, but you need a job to get experience. The way out: build a project that demonstrates you can do the actual work.\\n\\nThe minimum viable portfolio for a junior DE role:\\n1. One end-to-end pipeline project on a cloud platform (Azure or AWS)\\n2. SQL skills demonstrated through complex query samples\\n3. Python data transformation scripts on GitHub\\n4. Basic understanding of the Medallion Architecture\\n\\nYou do not need a degree in computer science or prior software engineering experience. The portfolio is the proof.` },
@@ -411,6 +474,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'What Is dbt? The Data Transformation Tool Everyone Is Talking About',
     date: 'February 20, 2026', readTime: '6 min read',
     tags: ['Foundations', 'Architecture'],
+    excerpt: 'What dbt actually does, why it became popular, dbt Core vs dbt Cloud, and whether you should add it to your learning list in 2026.',
+    indexOrder: 29,
     intro: 'dbt (data build tool) has become one of the most-mentioned tools in analytics engineering job descriptions in the past two years. If you are seeing it everywhere and not sure what it does or whether to learn it, this is the plain-English explanation.',
     sections: [
       { heading: 'What dbt actually does', body: `dbt transforms data that is already in your data warehouse or data lake. It does not extract data from sources or load it — that is handled by ADF, Glue, Fivetran, or your ingestion pipeline. dbt only does the T in ELT.\\n\\nYou write SQL SELECT statements in .sql files. dbt compiles them into the correct SQL dialect for your warehouse and runs them. Each .sql file becomes a table or view in your warehouse.\\n\\ndbt adds: dependency management between models, testing on data quality, documentation, and version control for SQL transformations.` },
@@ -425,6 +490,8 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
     title: 'Incremental Loading — How to Process Only New Data in Your Pipelines',
     date: 'February 18, 2026', readTime: '6 min read',
     tags: ['Architecture', 'Foundations'],
+    excerpt: 'Full load vs incremental, watermark patterns, handling late arrivals, and change data capture. The production pattern every DE needs.',
+    indexOrder: 30,
     intro: 'Loading all data from scratch every pipeline run is safe but slow and expensive. Incremental loading — processing only new or changed records since the last run — is what makes production pipelines fast enough to run every hour instead of once a day.',
     sections: [
       { heading: 'Full load vs incremental load', body: `Full load: truncate the target table, reload everything from source. Safe — always produces correct results. But for a table with 5 years of data, you reprocess everything every run. At scale this becomes impractical.\\n\\nIncremental load: identify records that are new or changed since the last run, process only those, and merge them into the target. Faster, cheaper, but requires careful implementation to avoid missing data or creating duplicates.` },
@@ -438,7 +505,9 @@ export const BLOG_ARTICLES: Record<string, BlogArticle> = {
   'batch-vs-streaming': {
     title: 'Batch vs. Streaming — The Decision Framework Every Data Engineer Needs',
     date: 'January 25, 2026', readTime: '6 min read',
-    tags: ['Architecture', 'Batch', 'Streaming'],
+    tags: ['Architecture', 'Streaming', 'Batch'],
+    excerpt: 'The 4-question framework for choosing between batch and streaming. When streaming is overkill and when you genuinely need it.',
+    indexOrder: 31,
     intro: 'Most data engineering architecture decisions come down to one question: batch or streaming? Get this wrong and you build an overly complex streaming system when a simple batch job would have worked fine — or you build a batch pipeline that cannot meet the business latency requirement.',
     sections: [
       { heading: 'The core difference', body: `Batch processing collects data over a period of time and processes it all at once on a schedule. Run at 2am, process all of yesterday's data, write results, done.\n\nStream processing processes data continuously as it arrives, event by event, with latency measured in milliseconds to seconds.\n\nThe key insight: streaming is not always better. It is more complex, more expensive, and harder to debug. You should only use streaming when the business genuinely requires low latency.` },
