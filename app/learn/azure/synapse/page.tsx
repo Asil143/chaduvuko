@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
@@ -5,6 +6,7 @@ export const metadata = { title: 'Azure Synapse Analytics — Asil' }
 
 export default function SynapsePage() {
   return (
+    <WithLessonNav href="/learn/azure/synapse">
     <LearnLayout
       title="Azure Synapse Analytics"
       description="Synapse is the SQL layer at the top of your Azure data stack. Analysts use it to query your Gold layer. It also has its own Spark pools, pipelines, and workspace — but its main job in a Medallion Architecture is giving analysts a familiar SQL interface to well-structured data."
@@ -114,5 +116,6 @@ WHERE order_date = '2025-03-01'
         This is the most common Synapse mistake in entry-level projects: provisioning a Dedicated SQL Pool, forgetting about it, and ending up with a $200 Azure bill for a portfolio project.
       </p>
     </LearnLayout>
+    </WithLessonNav>
   )
 }

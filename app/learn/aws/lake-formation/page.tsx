@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -116,6 +117,7 @@ const concepts = [
 
 export default function LakeFormationPage() {
   return (
+    <WithLessonNav href="/learn/aws/lake-formation">
     <LearnLayout
       title="AWS Lake Formation"
       description="Lake Formation is the AWS data governance and security layer for your data lake. It controls who can access which databases, tables, columns, and rows in your S3-based data lake — replacing complex IAM and S3 bucket policies with a centralized, fine-grained permission system."
@@ -202,5 +204,6 @@ export default function LakeFormationPage() {
         'Cross-account sharing lets you share specific tables with other AWS accounts without copying data',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

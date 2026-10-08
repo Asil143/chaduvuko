@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -38,6 +39,7 @@ const joinTypes = [
 
 export default function PostgreSQLPage() {
   return (
+    <WithLessonNav href="/learn/foundations/postgresql">
     <LearnLayout
       title="PostgreSQL for Data Engineers"
       description="The most important database skill you can learn. From absolute zero — install PostgreSQL, understand tables, write real queries, and build skills that every data engineering job requires."
@@ -686,5 +688,6 @@ GROUP BY st.store_id, st.city, s.category;`}</pre>
         'CREATE TABLE AS SELECT is how you materialise Gold-layer summary tables — the end result of a pipeline',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

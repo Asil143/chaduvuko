@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -147,6 +148,7 @@ const stateTypes = [
 
 export default function StepFunctionsPage() {
   return (
+    <WithLessonNav href="/learn/aws/step-functions">
     <LearnLayout
       title="AWS Step Functions"
       description="Step Functions is AWS serverless workflow orchestration. You define pipelines as state machines — visual, auditable, and automatically retried. Each step calls an AWS service: Lambda, Glue, Athena, EMR, or anything else in the AWS ecosystem."
@@ -217,5 +219,6 @@ export default function StepFunctionsPage() {
         'Use EventBridge to trigger Step Functions on a cron schedule — no always-running scheduler needed',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
@@ -5,6 +6,7 @@ export const metadata = { title: 'SQL for Data Engineers — Asil' }
 
 export default function SQLPage() {
   return (
+    <WithLessonNav href="/learn/foundations/sql">
     <LearnLayout
       title="SQL for Data Engineers"
       description="Not SQL for beginners — SQL for people who need to build pipelines, debug data quality issues, and answer hard questions from analysts. The parts that actually come up in interviews and on the job."
@@ -227,5 +229,6 @@ ORDER BY region, rn`} />
         When you can write a window function without looking it up and explain WHY you used it — you are ready.
       </p>
     </LearnLayout>
+    </WithLessonNav>
   )
 }

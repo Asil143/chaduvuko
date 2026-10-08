@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -127,6 +128,7 @@ const emrVsDatabricks = [
 
 export default function EMRPage() {
   return (
+    <WithLessonNav href="/learn/aws/emr">
     <LearnLayout
       title="Amazon EMR"
       description="Amazon EMR (Elastic MapReduce) is AWS managed big data platform. It runs Apache Spark, Hadoop, Hive, and Presto on EC2 clusters. EMR is the lower-cost alternative to Databricks for teams that want Spark without the premium."
@@ -208,5 +210,6 @@ export default function EMRPage() {
         'Choose EMR over Databricks when cost matters more than developer productivity',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

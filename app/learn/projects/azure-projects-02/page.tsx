@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -108,6 +109,7 @@ const newItems = [
 
 export default function Project02Page() {
   return (
+    <WithLessonNav href="/learn/projects/azure-projects-02">
     <LearnLayout
       title="Project 02 — Copy Multiple CSV Files Using ForEach Loop"
       description="Stop creating one Copy activity per file. Use the ForEach activity to loop through a list of files and copy all of them in a single pipeline run. Add a new store tomorrow — just update the array, no pipeline changes needed."
@@ -744,5 +746,6 @@ export default function Project02Page() {
         'Variables are different from parameters — you will use them properly in Project 03 where they are genuinely needed',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

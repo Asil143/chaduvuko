@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
@@ -5,6 +6,7 @@ export const metadata = { title: 'What is Data Engineering? — Asil' }
 
 export default function WhatIsDataEngineeringPage() {
   return (
+    <WithLessonNav href="/learn/what-is-data-engineering">
     <LearnLayout
       title="What is Data Engineering?"
       description="Before you touch a single Azure service or write a line of PySpark, you need to understand what you are actually building and why companies pay so much to hire people who can build it."
@@ -131,5 +133,6 @@ export default function WhatIsDataEngineeringPage() {
       </ol>
       <p>That is the full list. Everything on Asil is structured around those seven things.</p>
     </LearnLayout>
+    </WithLessonNav>
   )
 }

@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function StorageFileOrganization() {
   return (
+    <WithLessonNav href="/learn/dbms/storage-file-organization">
     <LearnLayout
       title="Storage & File Organization"
       description="The physical foundation everything else rests on — how databases talk to disks, how data is laid out in pages, how files are organised for fast access, and how the buffer pool keeps the most useful data in RAM."
@@ -1276,5 +1278,6 @@ GROUP BY c.relname ORDER BY pages_in_pool DESC LIMIT 20;`}
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

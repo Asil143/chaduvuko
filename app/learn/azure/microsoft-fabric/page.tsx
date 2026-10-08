@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -128,6 +129,7 @@ const vsTraditional = [
 
 export default function MicrosoftFabricPage() {
   return (
+    <WithLessonNav href="/learn/azure/microsoft-fabric">
     <LearnLayout
       title="Microsoft Fabric"
       description="Microsoft Fabric is an all-in-one analytics platform that unifies data engineering, data warehousing, real-time analytics, and business intelligence inside a single product. It replaces the need to stitch together ADF + Databricks + Synapse + Power BI separately."
@@ -242,5 +244,6 @@ export default function MicrosoftFabricPage() {
         'Learn the traditional Azure stack first — Fabric makes more sense once you understand what it is replacing',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

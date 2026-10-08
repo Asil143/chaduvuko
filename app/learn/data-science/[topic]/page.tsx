@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { DS_CURRICULUM } from '@/data/datascience-streampulse';
 import type { Metadata } from 'next';
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 
 // ─── Map: slug → dynamic import ──────────────────────────────────────────────
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
@@ -47,5 +48,5 @@ export default async function DataScienceModulePage({
   if (!loader) notFound();
 
   const { default: Content } = await loader();
-  return <Content />;
+  return <WithLessonNav href={`/learn/data-science/${params.topic}`}><Content /></WithLessonNav>;
 }

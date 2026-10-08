@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
@@ -5,6 +6,7 @@ export const metadata = { title: 'Python for Data Engineers — Asil' }
 
 export default function PythonPage() {
   return (
+    <WithLessonNav href="/learn/foundations/python">
     <LearnLayout
       title="Python for Data Engineers"
       description="You do not need to be a software engineer. You need to write clear, working Python that reads data, transforms it, handles errors, and connects to cloud services."
@@ -190,5 +192,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     main(args.run_date)`} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

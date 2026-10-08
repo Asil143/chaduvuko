@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function Indexes() {
   return (
+    <WithLessonNav href="/learn/dbms/indexes">
     <LearnLayout
       title="Indexes"
       description="Why queries slow down at scale, how indexes fix them, and the data structures powering every fast database lookup — explained from scratch."
@@ -1307,5 +1309,6 @@ CONCURRENTLY means no table lock — safe to run on live production. Takes about
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

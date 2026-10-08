@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -89,6 +90,7 @@ const newItems = [
 
 export default function Project06Page() {
   return (
+    <WithLessonNav href="/learn/projects/azure-project-06">
     <LearnLayout
       title="Project 06 — Pull Data From a REST API"
       description="Call a live weather API from ADF, receive JSON responses for three cities, save them to ADLS, and automate the pipeline to run every morning at 6 AM — no files, no uploads, pure API-driven ingestion."
@@ -884,5 +886,6 @@ trigger_weather_6am`}</CodeBlock>
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

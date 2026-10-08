@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -125,6 +126,7 @@ const resourceTable = [
 
 export default function Project04Page() {
   return (
+    <WithLessonNav href="/learn/projects/azure-project-04">
     <LearnLayout
       title="Project 04 — Download Files From a Public HTTPS URL"
       description="Stop uploading files manually. Build a pipeline that goes directly to a public internet URL, downloads the CSV, and saves it to ADLS — automatically, every morning. No analyst involvement required."
@@ -734,5 +736,6 @@ AFTER:
       </ul>
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

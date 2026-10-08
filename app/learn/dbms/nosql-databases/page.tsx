@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function NoSQLDatabases() {
   return (
+    <WithLessonNav href="/learn/dbms/nosql-databases">
     <LearnLayout
       title="NoSQL Databases"
       description="Why relational databases are not always the right tool, what NoSQL means in practice, and how each NoSQL family solves a specific class of problem that SQL databases handle poorly."
@@ -1306,5 +1308,6 @@ if count > 1000:
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

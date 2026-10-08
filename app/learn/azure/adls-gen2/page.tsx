@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
@@ -5,6 +6,7 @@ export const metadata = { title: 'ADLS Gen2 — Azure Data Lake Storage — Asil
 
 export default function ADLSPage() {
   return (
+    <WithLessonNav href="/learn/azure/adls-gen2">
     <LearnLayout
       title="Azure Data Lake Storage Gen2 (ADLS Gen2)"
       description="ADLS Gen2 is where all your data lives on Azure. Your Bronze, Silver, and Gold layers all sit here. Understanding how it is structured, how access works, and how to partition data well is foundational for everything else."
@@ -125,5 +127,6 @@ df.write \
         ADLS Gen1 is deprecated. It still exists but Microsoft is shutting it down. If you see Gen1 in a job description or on a project, that is a legacy system. Gen2 is what all new projects use. You do not need to learn Gen1.
       </p>
     </LearnLayout>
+    </WithLessonNav>
   )
 }

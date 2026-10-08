@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { DBT_MODULE_BY_SLUG, DBT_MODULES } from '@/data/dbt-curriculum'
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   'what-is-dbt': () => import('@/content/dbt/what-is-dbt'),
@@ -44,5 +45,5 @@ export default async function DbtTopicPage({ params }: { params: { topic: string
   const loader = moduleMap[params.topic]
   if (!loader) notFound()
   const { default: Content } = await loader()
-  return <Content />
+  return <WithLessonNav href={`/learn/dbt/${params.topic}`}><Content /></WithLessonNav>
 }

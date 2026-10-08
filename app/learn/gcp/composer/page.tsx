@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -93,6 +94,7 @@ with DAG(
 
 export default function ComposerPage() {
   return (
+    <WithLessonNav href="/learn/gcp/composer">
     <LearnLayout
       title="Cloud Composer (Managed Apache Airflow)"
       description="Cloud Composer is GCP's fully managed Apache Airflow service. You write Python DAGs to orchestrate your entire data pipeline — triggering Dataflow jobs, waiting for files, running BigQuery queries, and handling failures automatically."
@@ -145,5 +147,6 @@ export default function ComposerPage() {
         'Always configure retries and email alerts — production DAGs must handle failures automatically',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

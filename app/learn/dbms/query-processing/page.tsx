@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function QueryProcessing() {
   return (
+    <WithLessonNav href="/learn/dbms/query-processing">
     <LearnLayout
       title="Query Processing & Optimization"
       description="What actually happens between typing a SQL query and seeing results — parsing, algebra transformation, cost estimation, join algorithms, and how the database chooses the fastest execution plan."
@@ -1240,5 +1242,6 @@ ORDER BY gross_revenue DESC NULLS LAST;
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -65,6 +66,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function DBMSIntroduction() {
   return (
+    <WithLessonNav href="/learn/dbms/introduction">
     <LearnLayout
       title="Introduction to Databases & DBMS"
       description="From raw data to organized information systems — what databases are, why they exist, how they evolved, and why every application in the world depends on one."
@@ -1408,5 +1410,6 @@ SELECT * FROM user_preferences WHERE user_id = 42;
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

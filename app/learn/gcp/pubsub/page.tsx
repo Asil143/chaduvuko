@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -70,6 +71,7 @@ with subscriber:
 
 export default function PubSubPage() {
   return (
+    <WithLessonNav href="/learn/gcp/pubsub">
     <LearnLayout
       title="Cloud Pub/Sub"
       description="Cloud Pub/Sub is GCP's real-time messaging service. It decouples event producers from consumers and handles millions of messages per second — the streaming foundation of every GCP data pipeline."
@@ -122,5 +124,6 @@ export default function PubSubPage() {
         'Messages are retained for 7 days by default — useful for replaying events if a consumer goes down',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

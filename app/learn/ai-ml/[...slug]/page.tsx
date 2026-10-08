@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 
 // Key format:
 //   Section 1 (no prefix):  'what-is-ai'
@@ -214,5 +215,5 @@ export default async function AIMLModulePage({
   const loader = moduleMap[key];
   if (!loader) notFound();
   const { default: Content } = await loader();
-  return <Content />;
+  return <WithLessonNav href={`/learn/ai-ml/${key}`}><Content /></WithLessonNav>;
 }

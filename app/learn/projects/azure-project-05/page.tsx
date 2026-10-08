@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -127,6 +128,7 @@ const mistakesTable = [
 
 export default function Project05Page() {
   return (
+    <WithLessonNav href="/learn/projects/azure-project-05">
     <LearnLayout
       title="Project 05 — Organize Files Automatically With Date Stamps"
       description="Stop overwriting files silently. Build a pipeline that checks if a file exists before copying, date-stamps the output, cleans the landing zone automatically, and logs what was missing — a complete production file management workflow."
@@ -815,5 +817,6 @@ PROJECT 05:  File management with validation        → Get Metadata, If Conditi
       </ul>
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

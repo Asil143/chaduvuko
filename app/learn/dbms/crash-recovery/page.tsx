@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function CrashRecovery() {
   return (
+    <WithLessonNav href="/learn/dbms/crash-recovery">
     <LearnLayout
       title="Crash Recovery"
       description="How a database restores itself to a consistent state after a failure — the theory of what can go wrong, the write-ahead log that makes recovery possible, and the ARIES algorithm that every major database uses."
@@ -1039,5 +1041,6 @@ synchronous_standby_names = 'standby1'  -- wait for this standby to confirm`}
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

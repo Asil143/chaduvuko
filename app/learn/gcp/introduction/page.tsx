@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -35,6 +36,7 @@ const certs = [
 
 export default function GCPIntroPage() {
   return (
+    <WithLessonNav href="/learn/gcp/introduction">
     <LearnLayout
       title="Data Engineering on Google Cloud (GCP)"
       description="GCP is where Google engineering excellence shows. BigQuery alone is reason enough to learn GCP — query terabytes in seconds with zero infrastructure. This section maps everything from Azure and AWS to GCP equivalents."
@@ -138,5 +140,6 @@ export default function GCPIntroPage() {
         'GCP is especially strong for ML workloads — Vertex AI and TensorFlow originated from Google internal systems',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

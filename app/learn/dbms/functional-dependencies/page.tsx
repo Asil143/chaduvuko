@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -93,6 +94,7 @@ const FDBox = ({ lhs, rhs, label, color = 'var(--accent)', note }: {
 
 export default function FunctionalDependencies() {
   return (
+    <WithLessonNav href="/learn/dbms/functional-dependencies">
     <LearnLayout
       title="Functional Dependencies"
       description="The mathematical language of normalization — how attributes determine each other, how to derive all possible dependencies from a given set, and how to design schemas that enforce exactly the constraints the data requires."
@@ -1773,5 +1775,6 @@ Verify: {A}⁺ under F_c = {A}→B→C, A→D = {A,B,C,D} = same as under origin
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

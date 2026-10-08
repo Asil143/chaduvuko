@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function ConcurrencyControl() {
   return (
+    <WithLessonNav href="/learn/dbms/concurrency-control">
     <LearnLayout
       title="Concurrency Control"
       description="How databases let thousands of transactions run simultaneously without corrupting each other — locks, two-phase locking, deadlocks, timestamp ordering, and MVCC explained from the ground up."
@@ -1393,5 +1395,6 @@ RETURNING sold;  -- if sold increased: purchase succeeded; else: out of stock`}
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

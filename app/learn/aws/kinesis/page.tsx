@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
@@ -5,6 +6,7 @@ export const metadata = { title: 'Amazon Kinesis — Real-Time Streaming on AWS 
 
 export default function KinesisPage() {
   return (
+    <WithLessonNav href="/learn/aws/kinesis">
     <LearnLayout
       title="Amazon Kinesis — Real-Time Data Streaming on AWS"
       description="Kinesis is how you get data into AWS in real time. Instead of waiting for a file to land in S3, Kinesis captures events the moment they happen — clicks, transactions, sensor readings — and makes them available for processing within seconds."
@@ -132,5 +134,6 @@ print(f"Sent 50 records, {failed} failed")`} />
         For an AWS-native stack where simplicity matters more than portability — Kinesis. For anything else — Kafka.
       </p>
     </LearnLayout>
+    </WithLessonNav>
   )
 }

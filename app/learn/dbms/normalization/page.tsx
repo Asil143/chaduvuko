@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -119,6 +120,7 @@ const RelationTable = ({
 
 export default function Normalization() {
   return (
+    <WithLessonNav href="/learn/dbms/normalization">
     <LearnLayout
       title="Normalization — 1NF to 5NF"
       description="The complete science of designing databases that don't betray you — eliminating every class of anomaly, through every normal form, with complete worked examples and real-world context."
@@ -2044,5 +2046,6 @@ WHERE ask.skill = 'Python'
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

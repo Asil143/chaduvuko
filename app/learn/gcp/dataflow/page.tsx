@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -66,6 +67,7 @@ print("Dataflow job submitted successfully")`
 
 export default function DataflowPage() {
   return (
+    <WithLessonNav href="/learn/gcp/dataflow">
     <LearnLayout
       title="Cloud Dataflow"
       description="Cloud Dataflow is GCP's fully managed Apache Beam service. It handles both batch and streaming data processing, auto-scales workers up and down based on workload, and integrates natively with BigQuery, Pub/Sub, and GCS."
@@ -116,5 +118,6 @@ export default function DataflowPage() {
         'One Beam pipeline can run as batch (reading GCS files) or streaming (reading Pub/Sub) by changing the runner config',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

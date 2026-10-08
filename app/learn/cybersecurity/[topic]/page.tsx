@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   'what-is-cybersecurity':          () => import('@/content/cybersecurity/what-is-cybersecurity'),
@@ -112,5 +113,5 @@ export default async function CyberSecurityModulePage({
   const loader = moduleMap[params.topic];
   if (!loader) notFound();
   const { default: Content } = await loader();
-  return <Content />;
+  return <WithLessonNav href={`/learn/cybersecurity/${params.topic}`}><Content /></WithLessonNav>;
 }

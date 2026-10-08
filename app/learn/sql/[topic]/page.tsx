@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { SQL_CURRICULUM } from '@/data/sql-freshcart';
 import type { Metadata } from 'next';
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 
 // ─── Map: slug → dynamic import ──────────────────────────────────────────────
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
@@ -115,5 +116,5 @@ export default async function SQLModulePage({
   if (!loader) notFound();
 
   const { default: Content } = await loader();
-  return <Content />;
+  return <WithLessonNav href={`/learn/sql/${params.topic}`}><Content /></WithLessonNav>;
 }

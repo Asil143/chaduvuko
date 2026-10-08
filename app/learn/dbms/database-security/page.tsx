@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function DatabaseSecurity() {
   return (
+    <WithLessonNav href="/learn/dbms/database-security">
     <LearnLayout
       title="Database Security"
       description="The complete picture of how databases protect data — who gets in, what they can see, how attackers try to break in, how to stop them, and how to prove nothing went wrong."
@@ -1267,5 +1269,6 @@ SHOW log_rotation_size;
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

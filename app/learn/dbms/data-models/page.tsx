@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -64,6 +65,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function DataModels() {
   return (
+    <WithLessonNav href="/learn/dbms/data-models">
     <LearnLayout
       title="Data Models"
       description="The complete evolution of how humanity has organised data — from paper ledgers to distributed graph databases — and why every architectural decision in database engineering traces back to the choice of data model."
@@ -1844,5 +1846,6 @@ return product;
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

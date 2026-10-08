@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -76,6 +77,7 @@ print(f"Loaded {client.get_table('your_project.gold.daily_sales_summary').num_ro
 
 export default function BigQueryPage() {
   return (
+    <WithLessonNav href="/learn/gcp/bigquery">
     <LearnLayout
       title="Google BigQuery"
       description="BigQuery is the crown jewel of GCP — a serverless, massively parallel data warehouse that queries terabytes in seconds. Zero infrastructure to manage, zero tuning required. The most powerful SQL analytics engine in any cloud."
@@ -137,5 +139,6 @@ export default function BigQueryPage() {
         'The Python client library loads data from GCS into BigQuery — the standard pattern for Dataflow pipeline output',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

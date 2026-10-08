@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function ViewsProceduresTriggers() {
   return (
+    <WithLessonNav href="/learn/dbms/views-procedures-triggers">
     <LearnLayout
       title="Views, Stored Procedures & Triggers"
       description="The database's programmable layer — virtual tables that simplify complex queries, stored logic that runs inside the database engine, and event-driven code that fires automatically when data changes."
@@ -1398,5 +1400,6 @@ SELECT cron.schedule('nightly-refresh', '0 2 * * *', 'CALL refresh_reporting_lay
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

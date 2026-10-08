@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -107,6 +108,7 @@ const steps = [
 
 export default function KeyVaultPage() {
   return (
+    <WithLessonNav href="/learn/azure/key-vault">
     <LearnLayout
       title="Azure Key Vault"
       description="Azure Key Vault is a managed secrets store. Store passwords, connection strings, API keys, and certificates in one place — and let your pipelines retrieve them at runtime using Managed Identity, with zero credentials in your code."
@@ -205,5 +207,6 @@ export default function KeyVaultPage() {
         'Enable audit logging — every secret access is tracked for security review',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

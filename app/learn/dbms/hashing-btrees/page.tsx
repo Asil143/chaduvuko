@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function HashingBTrees() {
   return (
+    <WithLessonNav href="/learn/dbms/hashing-btrees">
     <LearnLayout
       title="Hashing & B+ Trees"
       description="The two data structures that power every fast database lookup — how hashing handles exact searches in O(1), and how B+ trees handle everything else in O(log n), with every insert, delete, split, and merge traced step by step."
@@ -1295,5 +1297,6 @@ CREATE INDEX CONCURRENTLY idx_payments_failed ON payments(created_at DESC) WHERE
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -86,6 +87,7 @@ const QA = ({ n, q, color, level, children }: QAProps) => {
 
 export default function InterviewQuestions() {
   return (
+    <WithLessonNav href="/learn/dbms/interview-questions">
     <LearnLayout
       title="DBMS Interview Questions"
       description="60 questions across every DBMS topic — with complete answers written the way senior engineers actually think about them. Organised by topic, labelled by difficulty."
@@ -599,5 +601,6 @@ WHERE product_id = :pid
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

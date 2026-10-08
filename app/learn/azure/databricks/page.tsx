@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -151,6 +152,7 @@ spark.sql("VACUUM delta.\`abfss://silver@yourlake.dfs.core.windows.net/sales/\` 
 
 export default function DatabricksPage() {
   return (
+    <WithLessonNav href="/learn/azure/databricks">
     <LearnLayout
       title="Azure Databricks"
       description="Azure Databricks is where the real transformation work happens. It brings Apache Spark as a fully managed service — write PySpark code in notebooks, run it across a cluster of machines, and process datasets too large to fit in memory on any single computer."
@@ -225,5 +227,6 @@ export default function DatabricksPage() {
         'dbutils.notebook.exit() returns a value to ADF so the pipeline can log the result of each notebook run',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { NETWORKING_CURRICULUM } from '@/data/networking-curriculum'
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   'what-is-a-network':        () => import('@/content/networking/what-is-a-network'),
@@ -103,5 +104,5 @@ export default async function NetworkingTopicPage({ params }: { params: { topic:
   const loader = moduleMap[params.topic]
   if (!LIVE_SLUGS.has(params.topic) || !loader) notFound()
   const { default: Content } = await loader()
-  return <Content />
+  return <WithLessonNav href={`/learn/networking/${params.topic}`}><Content /></WithLessonNav>
 }

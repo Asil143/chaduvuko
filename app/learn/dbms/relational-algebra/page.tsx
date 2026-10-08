@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -98,6 +99,7 @@ const OpCard = ({
 
 export default function RelationalAlgebra() {
   return (
+    <WithLessonNav href="/learn/dbms/relational-algebra">
     <LearnLayout
       title="Relational Algebra"
       description="The procedural query language that SQL compiles into — every operator defined precisely, composed into queries, and applied to every GATE and interview problem type you will encounter."
@@ -1521,5 +1523,6 @@ WHERE NOT EXISTS (
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

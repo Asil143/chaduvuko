@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -73,6 +74,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function ERModel() {
   return (
+    <WithLessonNav href="/learn/dbms/er-model">
     <LearnLayout
       title="Entity-Relationship (ER) Model"
       description="The architectural blueprint of database design — how to model any real-world system as entities, attributes, and relationships before writing a single line of SQL."
@@ -2231,5 +2233,6 @@ CREATE TABLE reviews (
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

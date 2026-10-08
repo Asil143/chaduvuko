@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function Transactions() {
   return (
+    <WithLessonNav href="/learn/dbms/transactions">
     <LearnLayout
       title="Transactions & ACID Properties"
       description="The mechanism that keeps your bank balance correct when the server crashes mid-transfer — what transactions are, why they exist, and how ACID properties guarantee correctness even when everything goes wrong."
@@ -1346,5 +1348,6 @@ def checkout():
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

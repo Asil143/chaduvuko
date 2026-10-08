@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { KafkaLesson } from '@/content/apache-kafka/lesson'
 import { KAFKA_MODULE_BY_SLUG, KAFKA_MODULES } from '@/data/kafka-curriculum'
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 
 const deepModuleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   'what-is-apache-kafka': () => import('@/content/apache-kafka/what-is-apache-kafka'),
@@ -49,7 +50,7 @@ export default async function ApacheKafkaTopicPage({ params }: { params: { topic
   const DeepContent = deepModuleMap[params.topic]
   if (DeepContent) {
     const { default: Content } = await DeepContent()
-    return <Content />
+    return <WithLessonNav href={`/learn/apache-kafka/${params.topic}`}><Content /></WithLessonNav>
   }
-  return <KafkaLesson slug={params.topic} />
+  return <WithLessonNav href={`/learn/apache-kafka/${params.topic}`}><KafkaLesson slug={params.topic} /></WithLessonNav>
 }

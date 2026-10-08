@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -118,6 +119,7 @@ const newItems = [
 
 export default function Project03Page() {
   return (
+    <WithLessonNav href="/learn/projects/azure-project-03">
     <LearnLayout
       title="Project 03 — Parameterized Pipeline with Run Date"
       description="Build a fully automated pipeline where you pass a date at runtime and ADF constructs the correct file names and folder paths automatically. Add a scheduled trigger and the pipeline runs every night at midnight with zero human involvement."
@@ -791,5 +793,6 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
         'After publishing the trigger, use "Trigger now" to test immediately without waiting for midnight',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

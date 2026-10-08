@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -69,6 +70,7 @@ const triggers = [
 
 export default function ADFPage() {
   return (
+    <WithLessonNav href="/learn/azure/adf">
     <LearnLayout
       title="Azure Data Factory (ADF)"
       description="ADF is the orchestration backbone of every Azure data pipeline. It moves data from 90+ sources, triggers Databricks notebooks, handles failures, and automates everything on a schedule — all without writing infrastructure code."
@@ -147,5 +149,6 @@ export default function ADFPage() {
         'ADF integrates natively with Databricks — triggering notebooks with parameters is the most common pipeline pattern',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

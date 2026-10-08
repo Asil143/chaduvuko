@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -36,6 +37,7 @@ const certPath = [
 
 export default function AzureIntroductionPage() {
   return (
+    <WithLessonNav href="/learn/azure/introduction">
     <LearnLayout
       title="Data Engineering on Microsoft Azure"
       description="Azure is the dominant cloud platform for enterprise data engineering. This section explains why Azure, what roles exist, how the architecture cycle works, and which services you'll actually use on the job."
@@ -204,5 +206,6 @@ export default function AzureIntroductionPage() {
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

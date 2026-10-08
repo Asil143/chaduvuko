@@ -13,7 +13,7 @@ import { QuizSection } from '@/components/ui/QuizSection'
 import { LinkedInGenerator } from '@/components/ui/LinkedInGenerator'
 import { SalaryWidget } from '@/components/ui/SalaryWidget'
 import { getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
-import { getLessonNavigation, type LessonNavTarget } from '@/lib/catalog'
+import { useLessonNav } from '@/components/content/LessonNavContext'
 import SQLSectionNav from '@/components/sql/SQLSectionNav'
 import DESectionNav from '@/components/data-engineering/DESectionNav'
 import PythonSectionNav from '@/components/python/PythonSectionNav'
@@ -170,30 +170,6 @@ interface Props {
   showSalary?: boolean
 }
 
-interface NavLink {
-  href: string
-  title: string
-  label: string
-  subtitle: string
-}
-
-function toNavLink(target: LessonNavTarget, direction: 'prev' | 'next'): NavLink {
-  if (target.kind === 'lesson') {
-    return {
-      href: target.lesson.href,
-      title: target.lesson.title,
-      label: direction === 'prev' ? 'Previous' : 'Next',
-      subtitle: target.lesson.section ?? '',
-    }
-  }
-  return {
-    href: target.track.indexHref,
-    title: `${target.track.title} overview`,
-    label: direction === 'prev' ? 'Back to' : 'Track complete',
-    subtitle: direction === 'prev' ? 'Start of track' : 'You finished every live lesson in this track',
-  }
-}
-
 export function LearnLayout({ children, title, description, section, readTime, updatedAt, breadcrumbs, showSalary }: Props) {
   const pathname = usePathname()
   const sqlMatch = pathname.match(/^\/learn\/sql\/([^/]+)$/)
@@ -209,9 +185,9 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const isAIML = pathname.startsWith('/learn/ai-ml/')
   const aimlModuleNum = isAIML ? getAIMLModuleNum(pathname) : null
   const displaySection = aimlModuleNum ? `AI/ML — Module ${aimlModuleNum}` : section
-  const lessonNav = getLessonNavigation(pathname)
-  const prev = lessonNav?.prev ? toNavLink(lessonNav.prev, 'prev') : null
-  const next = lessonNav?.next ? toNavLink(lessonNav.next, 'next') : null
+  const lessonNav = useLessonNav()
+  const prev = lessonNav?.prev ?? null
+  const next = lessonNav?.next ?? null
   const meta = getPageMeta(pathname)
   const suggestedNext = NEXT_PAGES[pathname] ?? getNextPages(pathname)
 

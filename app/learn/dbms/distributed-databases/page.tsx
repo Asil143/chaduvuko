@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -70,6 +71,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function DistributedDatabases() {
   return (
+    <WithLessonNav href="/learn/dbms/distributed-databases">
     <LearnLayout
       title="Distributed Databases & CAP Theorem"
       description="Why single-server databases stop being enough, what tradeoffs you face when data spans multiple machines, and the theorems that make those tradeoffs unavoidable."
@@ -1209,5 +1211,6 @@ N1,N2,N3 → C: "ACK"
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

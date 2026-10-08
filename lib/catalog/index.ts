@@ -2,6 +2,7 @@ import { TRACKS } from './tracks'
 import { staticLessons } from './static-lessons'
 import { curriculumLessons } from './curriculum-lessons'
 import type { Lesson, NonLessonKind, Track } from './types'
+import type { LessonNavLink, LessonNavLinks } from '@/lib/lesson-nav'
 
 export type { Lesson, LessonStatus, NonLessonKind, Track, TrackArea } from './types'
 export { TRACKS }
@@ -52,6 +53,32 @@ export function getLessonNavigation(href: string): LessonNavigation | null {
   const at = (i: number): LessonNavTarget | null => (lessons[i] ? { kind: 'lesson', lesson: lessons[i] } : overview)
 
   return { lesson, track, prev: at(index - 1), next: at(index + 1) }
+}
+
+function toNavLink(target: LessonNavTarget, direction: 'prev' | 'next'): LessonNavLink {
+  if (target.kind === 'lesson') {
+    return {
+      href: target.lesson.href,
+      title: target.lesson.title,
+      label: direction === 'prev' ? 'Previous' : 'Next',
+      subtitle: target.lesson.section ?? '',
+    }
+  }
+  return {
+    href: target.track.indexHref,
+    title: `${target.track.title} overview`,
+    label: direction === 'prev' ? 'Back to' : 'Track complete',
+    subtitle: direction === 'prev' ? 'Start of track' : 'You finished every live lesson in this track',
+  }
+}
+
+export function getLessonNavLinks(href: string): LessonNavLinks | null {
+  const nav = getLessonNavigation(href)
+  if (!nav) return null
+  return {
+    prev: nav.prev && toNavLink(nav.prev, 'prev'),
+    next: nav.next && toNavLink(nav.next, 'next'),
+  }
 }
 
 /** /learn routes that exist on purpose but are not lessons. */

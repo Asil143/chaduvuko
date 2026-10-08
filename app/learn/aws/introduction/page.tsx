@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -29,6 +30,7 @@ const azureToAws = [
 
 export default function AWSIntroductionPage() {
   return (
+    <WithLessonNav href="/learn/aws/introduction">
     <LearnLayout
       title="Data Engineering on AWS"
       description="AWS is the largest cloud platform by market share. If you already know Azure, the concepts transfer directly — you are learning new service names, not new ideas. This section maps everything you know to AWS equivalents."
@@ -122,5 +124,6 @@ export default function AWSIntroductionPage() {
         'IAM roles on AWS = Managed Identities on Azure — always use them instead of storing credentials',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

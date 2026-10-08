@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
@@ -5,6 +6,7 @@ export const metadata = { title: 'Amazon Redshift — Asil' }
 
 export default function RedshiftPage() {
   return (
+    <WithLessonNav href="/learn/aws/redshift">
     <LearnLayout
       title="Amazon Redshift — Cloud Data Warehouse on AWS"
       description="Redshift is AWS's cloud data warehouse. It is where large-scale analytical queries live — the kind that scan billions of rows, aggregate across years of data, and need to return results in seconds rather than hours."
@@ -116,5 +118,6 @@ WHERE r.order_date = '2025-03-01'`} />
         For most fact tables, customer ID or order ID are good distribution keys. For dimension tables smaller than a few hundred MB, use DISTSTYLE ALL — Redshift copies the whole table to every node, eliminating cross-node joins entirely.
       </p>
     </LearnLayout>
+    </WithLessonNav>
   )
 }

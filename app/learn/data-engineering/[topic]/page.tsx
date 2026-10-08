@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   'what-is-data':                 () => import('@/content/data-engineering/what-is-data'),
@@ -126,5 +127,5 @@ export default async function DEModulePage({
   const loader = moduleMap[params.topic];
   if (!loader) notFound();
   const { default: Content } = await loader();
-  return <Content />;
+  return <WithLessonNav href={`/learn/data-engineering/${params.topic}`}><Content /></WithLessonNav>;
 }

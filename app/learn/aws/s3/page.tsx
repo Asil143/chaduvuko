@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
@@ -5,6 +6,7 @@ export const metadata = { title: 'Amazon S3 — AWS Data Lake Storage — Asil' 
 
 export default function S3Page() {
   return (
+    <WithLessonNav href="/learn/aws/s3">
     <LearnLayout
       title="Amazon S3 — Your Data Lake on AWS"
       description="S3 is the foundation of every AWS data engineering stack. Every pipeline reads from it, writes to it, or both. Once you understand S3 well, everything else on AWS makes more sense."
@@ -136,5 +138,6 @@ df_clean.write \
         Set this up with S3 Lifecycle Rules — the same concept as ADLS lifecycle management. You define rules like "move objects in bronze/ to IA after 30 days, Glacier after 90 days" and AWS handles it automatically.
       </p>
     </LearnLayout>
+    </WithLessonNav>
   )
 }

@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
@@ -108,6 +109,7 @@ const phases = [
 
 export default function Project01Page() {
   return (
+    <WithLessonNav href="/learn/projects/azure-batch-pipeline">
     <LearnLayout
       title="Project 01 — Copy a CSV File to Azure Data Lake"
       description="Build your first Azure data pipeline from scratch. Copy a CSV file from a local landing zone into ADLS Gen2 using Azure Data Factory — the foundational pattern behind every data engineering pipeline in Azure."
@@ -701,5 +703,6 @@ export default function Project01Page() {
         'Resource Groups let you see all project costs together and delete everything with one click when done',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

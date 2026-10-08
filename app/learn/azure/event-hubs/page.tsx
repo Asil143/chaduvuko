@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -132,6 +133,7 @@ const tiers = [
 
 export default function EventHubsPage() {
   return (
+    <WithLessonNav href="/learn/azure/event-hubs">
     <LearnLayout
       title="Azure Event Hubs"
       description="Event Hubs is Azure's managed event streaming service — the Azure-native equivalent of Apache Kafka. It ingests millions of events per second from applications, IoT devices, and microservices, then makes them available for real-time processing or batch archiving."
@@ -240,5 +242,6 @@ export default function EventHubsPage() {
         'Standard tier handles most production DE workloads — start there',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

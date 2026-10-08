@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { Fragment } from 'react'
 import { LearnLayout } from '@/components/content/LearnLayout'
@@ -187,6 +188,7 @@ function SectionHeader({ letter, title, count, color }: {
 
 export default function MLInterviewPrepPage() {
   return (
+    <WithLessonNav href="/learn/ai-ml/ml-interview-prep">
     <LearnLayout
       title="ML Interview Prep — 50 Complete Answers"
       description="The 50 most-asked ML engineering questions across DoorDash, Stripe, Amazon, Brex, and Meta — with complete, ready-to-deliver answers for every level."
@@ -1747,5 +1749,6 @@ print(f"Practical:   {'Meaningful improvement' if lift_pct > 1.0 else 'Too small
         ]}
       />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

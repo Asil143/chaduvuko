@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -73,6 +74,7 @@ const CodeBox = ({ children, label }: { children: string; label?: string }) => (
 
 export default function RelationalModel() {
   return (
+    <WithLessonNav href="/learn/dbms/relational-model">
     <LearnLayout
       title="Relational Model & Keys"
       description="The mathematical bedrock of every relational database — from Codd's formal definitions to every key type, every integrity constraint, and every design decision that flows from them."
@@ -1963,5 +1965,6 @@ CREATE TABLE transactions (
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }

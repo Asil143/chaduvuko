@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
@@ -5,6 +6,7 @@ export const metadata = { title: 'AWS Glue — Asil' }
 
 export default function GluePage() {
   return (
+    <WithLessonNav href="/learn/aws/glue">
     <LearnLayout
       title="AWS Glue — Serverless Spark on AWS"
       description="AWS Glue is the closest thing AWS has to Azure Databricks — a managed environment for running Spark-based data transformations without managing servers. The key difference: Glue is fully serverless, Databricks gives you more control."
@@ -155,5 +157,6 @@ ORDER BY order_date
         Many companies run both: Glue for simple scheduled ETL, Databricks for complex transformation logic and data science work.
       </p>
     </LearnLayout>
+    </WithLessonNav>
   )
 }

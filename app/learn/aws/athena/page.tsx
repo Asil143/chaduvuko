@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { CodeBlock } from '@/components/content/CodeBlock'
@@ -150,6 +151,7 @@ const concepts = [
 
 export default function AthenaPage() {
   return (
+    <WithLessonNav href="/learn/aws/athena">
     <LearnLayout
       title="Amazon Athena"
       description="Athena is AWS serverless SQL query engine. It queries data directly in S3 using standard SQL — no database to set up, no cluster to manage, no data to load. You pay only for the data scanned per query."
@@ -230,5 +232,6 @@ export default function AthenaPage() {
         'Athena uses the Glue Data Catalog — tables defined in Glue are immediately queryable',
       ]} />
     </LearnLayout>
+    </WithLessonNav>
   )
 }

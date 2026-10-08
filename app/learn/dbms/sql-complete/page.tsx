@@ -1,3 +1,4 @@
+import { WithLessonNav } from '@/components/content/WithLessonNav'
 import type { Metadata } from 'next'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
@@ -127,6 +128,7 @@ const SampleTable = ({
 
 export default function SQLComplete() {
   return (
+    <WithLessonNav href="/learn/dbms/sql-complete">
     <LearnLayout
       title="SQL — Complete Guide"
       description="From your very first SELECT to recursive CTEs and window functions — every SQL concept explained from first principles with production-realistic examples from real US tech companies."
@@ -2469,5 +2471,6 @@ SELECT DISTINCT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1;
       ]} />
 
     </LearnLayout>
+    </WithLessonNav>
   )
 }
