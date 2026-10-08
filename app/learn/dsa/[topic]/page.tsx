@@ -1,29 +1,13 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { WithLessonNav } from '@/components/content/WithLessonNav'
+import { DsaLesson } from '@/components/dsa/DsaLesson'
+import { DSA_UNITS } from '@/data/dsa-curriculum'
 
-const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
-  'introduction':        () => import('@/content/dsa/introduction'),
-  'complexity':          () => import('@/content/dsa/complexity'),
-  'arrays':              () => import('@/content/dsa/arrays'),
-  'strings':             () => import('@/content/dsa/strings'),
-  'pointers':            () => import('@/content/dsa/pointers'),
-  'linked-lists':        () => import('@/content/dsa/linked-lists'),
-  'stacks':              () => import('@/content/dsa/stacks'),
-  'queues':              () => import('@/content/dsa/queues'),
-  'recursion':           () => import('@/content/dsa/recursion'),
-  'sorting':             () => import('@/content/dsa/sorting'),
-  'searching':           () => import('@/content/dsa/searching'),
-  'trees':               () => import('@/content/dsa/trees'),
-  'binary-search-tree':  () => import('@/content/dsa/binary-search-tree'),
-  'heaps':               () => import('@/content/dsa/heaps'),
-  'hashing':             () => import('@/content/dsa/hashing'),
-  'graphs':              () => import('@/content/dsa/graphs'),
-  'dynamic-programming': () => import('@/content/dsa/dynamic-programming'),
-  'greedy':              () => import('@/content/dsa/greedy'),
-  'backtracking':        () => import('@/content/dsa/backtracking'),
-  'advanced':            () => import('@/content/dsa/advanced'),
-};
+const LIVE_SLUGS = new Set(DSA_UNITS.filter(unit => unit.status === 'live').map(unit => unit.slug))
+
+export const dynamicParams = false
+
 
 const moduleMeta: Record<string, { title: string; description: string }> = {
   'introduction':        { title: 'Before We Write Code',         description: 'What DSA actually is, why every tech company tests it, and your first C program.' },
@@ -49,7 +33,7 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
 };
 
 export function generateStaticParams() {
-  return Object.keys(moduleMap).map(topic => ({ topic }));
+  return Array.from(LIVE_SLUGS).map(topic => ({ topic }));
 }
 
 export async function generateMetadata({
@@ -65,13 +49,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function DSAModulePage({
+export default function DSAModulePage({
   params,
 }: {
   params: { topic: string };
 }) {
-  const loader = moduleMap[params.topic];
-  if (!loader) notFound();
-  const { default: Content } = await loader();
-  return <WithLessonNav href={`/learn/dsa/${params.topic}`}><Content /></WithLessonNav>;
+  if (!LIVE_SLUGS.has(params.topic)) notFound();
+  return (
+    <WithLessonNav href={`/learn/dsa/${params.topic}`}>
+      <DsaLesson slug={params.topic} />
+    </WithLessonNav>
+  );
 }

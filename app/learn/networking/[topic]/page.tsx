@@ -2,44 +2,8 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { NETWORKING_CURRICULUM } from '@/data/networking-curriculum'
 import { WithLessonNav } from '@/components/content/WithLessonNav'
+import { NetworkingLesson } from '@/components/networking/NetworkingLesson'
 
-const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
-  'what-is-a-network':        () => import('@/content/networking/what-is-a-network'),
-  'network-types-topologies': () => import('@/content/networking/network-types-topologies'),
-  'osi-model':                () => import('@/content/networking/osi-model'),
-  'tcp-ip-model':             () => import('@/content/networking/tcp-ip-model'),
-  'data-transmission':        () => import('@/content/networking/data-transmission'),
-  'binary-and-hex':           () => import('@/content/networking/binary-and-hex'),
-  'cables-and-connectors':    () => import('@/content/networking/cables-and-connectors'),
-  'ethernet-and-switching':   () => import('@/content/networking/ethernet-and-switching'),
-  'arp':                      () => import('@/content/networking/arp'),
-  'vlans':                    () => import('@/content/networking/vlans'),
-  'spanning-tree':            () => import('@/content/networking/spanning-tree'),
-  'wireless-networking':      () => import('@/content/networking/wireless-networking'),
-  'ip-addressing':            () => import('@/content/networking/ip-addressing'),
-  'subnetting':               () => import('@/content/networking/subnetting'),
-  'ipv6':                     () => import('@/content/networking/ipv6'),
-  'routing-fundamentals':     () => import('@/content/networking/routing-fundamentals'),
-  'dynamic-routing':          () => import('@/content/networking/dynamic-routing'),
-  'nat-and-dhcp':             () => import('@/content/networking/nat-and-dhcp'),
-  'icmp':                     () => import('@/content/networking/icmp'),
-  'tcp-deep-dive':            () => import('@/content/networking/tcp-deep-dive'),
-  'udp':                      () => import('@/content/networking/udp'),
-  'ports-and-sockets':        () => import('@/content/networking/ports-and-sockets'),
-  'tls-ssl':                  () => import('@/content/networking/tls-ssl'),
-  'quic-http3':               () => import('@/content/networking/quic-http3'),
-  'dns':                      () => import('@/content/networking/dns'),
-  'http-and-https':           () => import('@/content/networking/http-and-https'),
-  'email-protocols':          () => import('@/content/networking/email-protocols'),
-  'ssh':                      () => import('@/content/networking/ssh'),
-  'ftp-and-sftp':             () => import('@/content/networking/ftp-and-sftp'),
-  'dhcp-deep-dive':           () => import('@/content/networking/dhcp-deep-dive'),
-  'snmp-and-syslog':          () => import('@/content/networking/snmp-and-syslog'),
-  'ntp':                      () => import('@/content/networking/ntp'),
-  'network-attacks':          () => import('@/content/networking/network-attacks'),
-  'firewalls-and-acls':       () => import('@/content/networking/firewalls-and-acls'),
-  'ids-and-ips':              () => import('@/content/networking/ids-and-ips'),
-}
 
 const moduleMeta: Record<string, { title: string; description: string }> = {
   'what-is-a-network':        { title: 'What is a Network?',                                   description: 'Packets, nodes, protocols — and what actually happens when you press Enter in a browser.' },
@@ -100,9 +64,11 @@ export async function generateMetadata({ params }: { params: { topic: string } }
   }
 }
 
-export default async function NetworkingTopicPage({ params }: { params: { topic: string } }) {
-  const loader = moduleMap[params.topic]
-  if (!LIVE_SLUGS.has(params.topic) || !loader) notFound()
-  const { default: Content } = await loader()
-  return <WithLessonNav href={`/learn/networking/${params.topic}`}><Content /></WithLessonNav>
+export default function NetworkingTopicPage({ params }: { params: { topic: string } }) {
+  if (!LIVE_SLUGS.has(params.topic)) notFound()
+  return (
+    <WithLessonNav href={`/learn/networking/${params.topic}`}>
+      <NetworkingLesson slug={params.topic} />
+    </WithLessonNav>
+  )
 }
