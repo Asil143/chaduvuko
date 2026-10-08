@@ -304,7 +304,6 @@ export default function WhatIsDbt() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'What is dbt?', href: '/learn/dbt/what-is-dbt' },
       ]}
-      next={{ title: 'How dbt Works: Compile, Run, and the DAG', href: '/learn/dbt/how-dbt-works' }}
     >
       {/* Part 01 */}
       <section style={{ marginBottom: 64 }}>

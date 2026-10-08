@@ -82,8 +82,6 @@ export default function DisasterRecoveryMultiRegion() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Disaster Recovery and Multi-Region Kafka', href: '/learn/apache-kafka/disaster-recovery-multi-region' },
       ]}
-      prev={{ title: 'Scaling and Capacity Planning', href: '/learn/apache-kafka/scaling-capacity-planning' }}
-      next={{ title: 'Event-Driven Architecture', href: '/learn/apache-kafka/event-driven-architecture' }}
     >
       {/* Part 01 */}
       <section style={{ marginBottom: 64 }}>

@@ -82,8 +82,6 @@ export default function ProducerDesign() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Producer Design', href: '/learn/apache-kafka/producer-design' },
       ]}
-      prev={{ title: 'Serialization and Schema Design', href: '/learn/apache-kafka/schemas-serialization' }}
-      next={{ title: 'Consumer Design', href: '/learn/apache-kafka/consumer-design' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — From concept to client" />

@@ -111,8 +111,6 @@ export default function EventsTopicsPartitions() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Events, Topics, and Partitions', href: '/learn/apache-kafka/events-topics-partitions' },
       ]}
-      prev={{ title: 'What is Apache Kafka?', href: '/learn/apache-kafka/what-is-apache-kafka' }}
-      next={{ title: 'Producers, Consumers, and Brokers', href: '/learn/apache-kafka/producers-consumers-brokers' }}
     >
       {/* ── Part 01 ─────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

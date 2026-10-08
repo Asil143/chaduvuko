@@ -82,8 +82,6 @@ export default function TestingBasics() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Testing: Generic and Singular Tests', href: '/learn/dbt/testing-basics' },
       ]}
-      prev={{ title: 'Incremental Models in Depth', href: '/learn/dbt/incremental-models' }}
-      next={{ title: 'Documentation: Descriptions, Doc Blocks, and dbt Docs', href: '/learn/dbt/documentation' }}
     >
       {/* ── Part 01 — Why Tests ── */}
       <section style={{ marginBottom: 64 }}>

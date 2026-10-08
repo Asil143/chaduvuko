@@ -13,8 +13,6 @@ export default function EltMedallion() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'ELT and Medallion Architecture', href: '/learn/snowflake/elt-medallion' },
       ]}
-      prev={{ title: 'Semi-Structured Data: VARIANT, JSON, FLATTEN', href: '/learn/snowflake/semi-structured-data' }}
-      next={{ title: 'MERGE, Upserts, and Idempotent Pipelines', href: '/learn/snowflake/merge-idempotency' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The big picture" />

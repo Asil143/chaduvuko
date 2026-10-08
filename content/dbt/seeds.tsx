@@ -82,8 +82,6 @@ export default function Seeds() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Seeds: Loading Static Reference Data', href: '/learn/dbt/seeds' },
       ]}
-      prev={{ title: 'Packages and dbt_utils', href: '/learn/dbt/packages' }}
-      next={{ title: 'Snapshots: Type 2 Slowly Changing Dimensions', href: '/learn/dbt/snapshots' }}
     >
       {/* ── Part 01 — What a seed is ── */}
       <section style={{ marginBottom: 64 }}>

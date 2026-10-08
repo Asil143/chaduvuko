@@ -82,8 +82,6 @@ export default function KeysOrderingPartitioning() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Keys, Ordering, and Partitioning Strategy', href: '/learn/apache-kafka/keys-ordering-partitioning' },
       ]}
-      prev={{ title: 'Replication, Leaders, and ISR', href: '/learn/apache-kafka/replication-leaders-isr' }}
-      next={{ title: 'Retention and Log Compaction', href: '/learn/apache-kafka/retention-compaction' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — What a key actually does" />

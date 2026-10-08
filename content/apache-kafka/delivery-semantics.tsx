@@ -82,8 +82,6 @@ export default function DeliverySemantics() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Delivery Semantics: At-Most, At-Least, Exactly-Once', href: '/learn/apache-kafka/delivery-semantics' },
       ]}
-      prev={{ title: 'Retention and Log Compaction', href: '/learn/apache-kafka/retention-compaction' }}
-      next={{ title: 'Serialization and Schema Design', href: '/learn/apache-kafka/schemas-serialization' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Three promises, precisely defined" />

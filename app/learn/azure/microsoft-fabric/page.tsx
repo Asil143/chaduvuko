@@ -138,8 +138,6 @@ export default function MicrosoftFabricPage() {
         { label: 'Azure Track', href: '/learn/azure/introduction' },
         { label: 'Microsoft Fabric', href: '/learn/azure/microsoft-fabric' },
       ]}
-      prev={{ title: 'Azure Key Vault', href: '/learn/azure/key-vault' }}
-      next={{ title: 'AWS Introduction', href: '/learn/aws/introduction' }}
     >
       <h2>What is Microsoft Fabric?</h2>
       <p>

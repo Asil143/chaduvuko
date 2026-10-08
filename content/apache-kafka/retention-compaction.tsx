@@ -82,8 +82,6 @@ export default function RetentionCompaction() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Retention and Log Compaction', href: '/learn/apache-kafka/retention-compaction' },
       ]}
-      prev={{ title: 'Keys, Ordering, and Partitioning Strategy', href: '/learn/apache-kafka/keys-ordering-partitioning' }}
-      next={{ title: 'Delivery Semantics: At-Most, At-Least, Exactly-Once', href: '/learn/apache-kafka/delivery-semantics' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Retention is not optional forever-storage" />

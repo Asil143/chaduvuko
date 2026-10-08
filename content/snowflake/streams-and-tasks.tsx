@@ -13,8 +13,6 @@ export default function StreamsAndTasks() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Streams and Tasks', href: '/learn/snowflake/streams-and-tasks' },
       ]}
-      prev={{ title: 'Snowpipe and Continuous Loading', href: '/learn/snowflake/snowpipe' }}
-      next={{ title: 'Dynamic Tables', href: '/learn/snowflake/dynamic-tables' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The plain-English idea" />

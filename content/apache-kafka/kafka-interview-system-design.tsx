@@ -83,7 +83,6 @@ export default function KafkaInterviewSystemDesign() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Kafka Interview and System Design Guide', href: '/learn/apache-kafka/kafka-interview-system-design' },
       ]}
-      prev={{ title: 'Testing and Debugging Kafka Systems', href: '/learn/apache-kafka/testing-debugging' }}
     >
       {/* ── Opening ─────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

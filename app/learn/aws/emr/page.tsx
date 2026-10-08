@@ -137,8 +137,6 @@ export default function EMRPage() {
         { label: 'AWS Track', href: '/learn/aws/introduction' },
         { label: 'Amazon EMR', href: '/learn/aws/emr' },
       ]}
-      prev={{ title: 'Amazon Athena', href: '/learn/aws/athena' }}
-      next={{ title: 'AWS Step Functions', href: '/learn/aws/step-functions' }}
     >
       <h2>What is Amazon EMR?</h2>
       <p>

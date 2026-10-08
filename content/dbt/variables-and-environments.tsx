@@ -82,8 +82,6 @@ export default function VariablesAndEnvironments() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Variables and Environments', href: '/learn/dbt/variables-and-environments' },
       ]}
-      prev={{ title: 'Snapshots: Type 2 Slowly Changing Dimensions', href: '/learn/dbt/snapshots' }}
-      next={{ title: 'Hooks and Operations', href: '/learn/dbt/hooks-and-operations' }}
     >
       {/* ── Part 01 — Why environments exist ── */}
       <section style={{ marginBottom: 64 }}>

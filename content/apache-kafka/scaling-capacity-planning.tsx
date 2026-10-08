@@ -82,8 +82,6 @@ export default function ScalingCapacityPlanning() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Scaling and Capacity Planning', href: '/learn/apache-kafka/scaling-capacity-planning' },
       ]}
-      prev={{ title: 'Performance Tuning', href: '/learn/apache-kafka/performance-tuning' }}
-      next={{ title: 'Disaster Recovery and Multi-Region Kafka', href: '/learn/apache-kafka/disaster-recovery-multi-region' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Capacity Planning Inputs" />

@@ -82,8 +82,6 @@ export default function ConsumerGroupsOffsets() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Consumer Groups and Offsets', href: '/learn/apache-kafka/consumer-groups-offsets' },
       ]}
-      prev={{ title: 'Local Setup and Kafka CLI', href: '/learn/apache-kafka/local-setup-cli' }}
-      next={{ title: 'Replication, Leaders, and ISR', href: '/learn/apache-kafka/replication-leaders-isr' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — What a consumer group actually is" />

@@ -14,7 +14,6 @@ export default function InterviewSystemDesign() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Snowflake Interview and System Design', href: '/learn/snowflake/interview-system-design' },
       ]}
-      prev={{ title: 'End-to-End Snowflake Project', href: '/learn/snowflake/snowflake-project' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// The Capstone Module" />

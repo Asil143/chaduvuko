@@ -44,8 +44,6 @@ export default function PostgreSQLPage() {
       section="Foundations"
       readTime="90–120 min"
       updatedAt="March 2026"
-      prev={{ title: 'SQL for Data Engineers', href: '/learn/foundations/sql' }}
-      next={{ title: 'Python for Data Engineers', href: '/learn/foundations/python' }}
     >
 
       {/* Meta badges */}

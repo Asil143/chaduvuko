@@ -126,8 +126,6 @@ export default function LakeFormationPage() {
         { label: 'AWS Track', href: '/learn/aws/introduction' },
         { label: 'AWS Lake Formation', href: '/learn/aws/lake-formation' },
       ]}
-      prev={{ title: 'AWS Step Functions', href: '/learn/aws/step-functions' }}
-      next={{ title: 'GCP Introduction', href: '/learn/gcp/introduction' }}
     >
       <h2>What is AWS Lake Formation?</h2>
       <p>

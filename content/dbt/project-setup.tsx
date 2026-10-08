@@ -82,8 +82,6 @@ export default function ProjectSetup() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Setting Up a dbt Project', href: '/learn/dbt/project-setup' },
       ]}
-      prev={{ title: 'How dbt Works: Compile, Run, and the DAG', href: '/learn/dbt/how-dbt-works' }}
-      next={{ title: 'Models: SELECT Statements as the Building Block', href: '/learn/dbt/models-basics' }}
     >
       {/* ── Part 01 — dbt Core vs dbt Cloud ─────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

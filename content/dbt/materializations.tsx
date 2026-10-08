@@ -82,8 +82,6 @@ export default function Materializations() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Materializations: View, Table, Incremental, Ephemeral', href: '/learn/dbt/materializations' },
       ]}
-      prev={{ title: 'Sources, ref(), and the Dependency Graph', href: '/learn/dbt/sources-and-ref' }}
-      next={{ title: 'Incremental Models in Depth', href: '/learn/dbt/incremental-models' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — What a materialization is" />

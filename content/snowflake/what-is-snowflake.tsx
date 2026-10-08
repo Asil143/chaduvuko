@@ -13,7 +13,6 @@ export default function WhatIsSnowflake() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'What is Snowflake?', href: '/learn/snowflake/what-is-snowflake' },
       ]}
-      next={{ title: 'Snowflake Architecture', href: '/learn/snowflake/architecture' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The real definition" />

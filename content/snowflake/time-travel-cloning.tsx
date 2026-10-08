@@ -13,8 +13,6 @@ export default function TimeTravelCloning() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Time Travel, Fail-safe, and Zero-Copy Cloning', href: '/learn/snowflake/time-travel-cloning' },
       ]}
-      prev={{ title: 'MERGE, Upserts, and Idempotent Pipelines', href: '/learn/snowflake/merge-idempotency' }}
-      next={{ title: 'Snowpipe and Continuous Loading', href: '/learn/snowflake/snowpipe' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The big idea" />

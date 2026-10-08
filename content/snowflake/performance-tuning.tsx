@@ -13,8 +13,6 @@ export default function PerformanceTuning() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Performance Tuning', href: '/learn/snowflake/performance-tuning' },
       ]}
-      prev={{ title: 'Dynamic Tables', href: '/learn/snowflake/dynamic-tables' }}
-      next={{ title: 'Cost Optimization', href: '/learn/snowflake/cost-optimization' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The plain-English idea" />

@@ -82,8 +82,6 @@ export default function ModelsBasics() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Models: SELECT Statements as the Building Block', href: '/learn/dbt/models-basics' },
       ]}
-      prev={{ title: 'Setting Up a dbt Project', href: '/learn/dbt/project-setup' }}
-      next={{ title: 'Sources, ref(), and the Dependency Graph', href: '/learn/dbt/sources-and-ref' }}
     >
       {/* ── Part 01 — What a model literally is ──────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

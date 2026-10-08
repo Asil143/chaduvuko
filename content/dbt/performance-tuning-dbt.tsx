@@ -82,8 +82,6 @@ export default function PerformanceTuningDbt() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Performance and Query Optimization in dbt', href: '/learn/dbt/performance-tuning-dbt' },
       ]}
-      prev={{ title: 'Project Structure and Layering', href: '/learn/dbt/project-structure' }}
-      next={{ title: 'CI/CD for dbt Projects', href: '/learn/dbt/cicd-for-dbt' }}
     >
       {/* ── Part 01 — Finding slow models ── */}
       <section style={{ marginBottom: 64 }}>

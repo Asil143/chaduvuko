@@ -82,8 +82,6 @@ export default function MonitoringObservability() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Monitoring and Observability', href: '/learn/apache-kafka/monitoring-observability' },
       ]}
-      prev={{ title: 'Kafka Security: TLS, SASL, and ACLs', href: '/learn/apache-kafka/security-acls-sasl-tls' }}
-      next={{ title: 'Performance Tuning', href: '/learn/apache-kafka/performance-tuning' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Why generic host metrics are not enough" />

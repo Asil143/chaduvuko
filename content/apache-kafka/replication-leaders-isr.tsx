@@ -82,8 +82,6 @@ export default function ReplicationLeadersISR() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Replication, Leaders, and ISR', href: '/learn/apache-kafka/replication-leaders-isr' },
       ]}
-      prev={{ title: 'Consumer Groups and Offsets', href: '/learn/apache-kafka/consumer-groups-offsets' }}
-      next={{ title: 'Keys, Ordering, and Partitioning Strategy', href: '/learn/apache-kafka/keys-ordering-partitioning' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Why replication exists" />

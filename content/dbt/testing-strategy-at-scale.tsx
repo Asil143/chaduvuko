@@ -82,8 +82,6 @@ export default function TestingStrategyAtScale() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Testing Strategy and Data Quality at Scale', href: '/learn/dbt/testing-strategy-at-scale' },
       ]}
-      prev={{ title: 'CI/CD for dbt Projects', href: '/learn/dbt/cicd-for-dbt' }}
-      next={{ title: 'dbt Interview and System Design Guide', href: '/learn/dbt/dbt-interview-system-design' }}
     >
       {/* ── Part 01 ── */}
       <section style={{ marginBottom: 64 }}>

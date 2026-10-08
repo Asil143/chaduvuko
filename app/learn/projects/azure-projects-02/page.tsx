@@ -118,8 +118,6 @@ export default function Project02Page() {
         { label: 'Projects', href: '/learn/projects' },
         { label: 'Project 02 — ForEach Loop', href: '/learn/projects/azure-projects-02' },
       ]}
-      prev={{ title: 'Project 01 — Copy CSV to ADLS', href: '/learn/projects/azure-batch-pipeline' }}
-      next={{ title: 'Project 03 — Parameterized Pipeline with Run Date', href: '/learn/projects/azure-project-03' }}
     >
 
       <LearningResourceJsonLd name="ADF ForEach Loop: Copy Multiple Files" description="Use ADF ForEach to copy 10 store CSV files with a single parameterized pipeline." url="https://chaduvuko.com/learn/projects/azure-projects-02" datePublished="2026-03-01" keywords={['azure data factory foreach', 'copy multiple files adf', 'adf pipeline parameters']} timeRequired="PT60M" />

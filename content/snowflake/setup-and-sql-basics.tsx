@@ -13,8 +13,6 @@ export default function SetupAndSqlBasics() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Setup and SQL Basics', href: '/learn/snowflake/setup-and-sql-basics' },
       ]}
-      prev={{ title: 'Snowflake Architecture', href: '/learn/snowflake/architecture' }}
-      next={{ title: 'Roles and Security Basics', href: '/learn/snowflake/roles-security-basics' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The object hierarchy" />

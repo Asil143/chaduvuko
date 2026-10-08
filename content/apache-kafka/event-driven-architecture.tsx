@@ -82,8 +82,6 @@ export default function EventDrivenArchitecture() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Event-Driven Architecture', href: '/learn/apache-kafka/event-driven-architecture' },
       ]}
-      prev={{ title: 'Disaster Recovery and Multi-Region Kafka', href: '/learn/apache-kafka/disaster-recovery-multi-region' }}
-      next={{ title: 'Change Data Capture with Debezium', href: '/learn/apache-kafka/cdc-debezium' }}
     >
       {/* Part 01 */}
       <section style={{ marginBottom: 64 }}>

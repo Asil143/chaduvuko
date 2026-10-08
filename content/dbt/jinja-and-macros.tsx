@@ -82,8 +82,6 @@ export default function JinjaAndMacros() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Jinja and Macros: Templating SQL', href: '/learn/dbt/jinja-and-macros' },
       ]}
-      prev={{ title: 'Documentation: Descriptions, Doc Blocks, and dbt Docs', href: '/learn/dbt/documentation' }}
-      next={{ title: 'Packages and dbt_utils', href: '/learn/dbt/packages' }}
     >
       {/* ── Part 01 — What Jinja is ── */}
       <section style={{ marginBottom: 64 }}>

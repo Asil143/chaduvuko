@@ -13,8 +13,6 @@ export default function CostOptimization() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Cost Optimization', href: '/learn/snowflake/cost-optimization' },
       ]}
-      prev={{ title: 'Performance Tuning', href: '/learn/snowflake/performance-tuning' }}
-      next={{ title: 'Advanced Security and Governance', href: '/learn/snowflake/advanced-security-governance' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The plain-English idea" />

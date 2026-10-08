@@ -82,8 +82,6 @@ export default function IncrementalModels() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Incremental Models in Depth', href: '/learn/dbt/incremental-models' },
       ]}
-      prev={{ title: 'Materializations: View, Table, Incremental, Ephemeral', href: '/learn/dbt/materializations' }}
-      next={{ title: 'Testing: Generic and Singular Tests', href: '/learn/dbt/testing-basics' }}
     >
       {/* ── Part 01 — The Problem ── */}
       <section style={{ marginBottom: 64 }}>

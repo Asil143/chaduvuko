@@ -82,8 +82,6 @@ export default function SourcesAndRef() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Sources, ref(), and the Dependency Graph', href: '/learn/dbt/sources-and-ref' },
       ]}
-      prev={{ title: 'Models: SELECT Statements as the Building Block', href: '/learn/dbt/models-basics' }}
-      next={{ title: 'Materializations: View, Table, Incremental, Ephemeral', href: '/learn/dbt/materializations' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — What a source actually is" />

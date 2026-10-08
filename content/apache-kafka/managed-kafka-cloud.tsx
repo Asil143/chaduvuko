@@ -82,8 +82,6 @@ export default function ManagedKafkaCloud() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Managed Kafka and Cloud Choices', href: '/learn/apache-kafka/managed-kafka-cloud' },
       ]}
-      prev={{ title: 'Change Data Capture with Debezium', href: '/learn/apache-kafka/cdc-debezium' }}
-      next={{ title: 'Testing and Debugging Kafka Systems', href: '/learn/apache-kafka/testing-debugging' }}
     >
       {/* ── Part 01 ───────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

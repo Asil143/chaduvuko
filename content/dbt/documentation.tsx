@@ -82,8 +82,6 @@ export default function Documentation() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Documentation: Descriptions, Doc Blocks, and dbt Docs', href: '/learn/dbt/documentation' },
       ]}
-      prev={{ title: 'Testing: Generic and Singular Tests', href: '/learn/dbt/testing-basics' }}
-      next={{ title: 'Jinja and Macros: Templating SQL', href: '/learn/dbt/jinja-and-macros' }}
     >
       {/* ── Part 01 — Why Documentation Is a First-Class dbt Feature ── */}
       <section style={{ marginBottom: 64 }}>

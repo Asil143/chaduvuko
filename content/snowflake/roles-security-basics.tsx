@@ -13,8 +13,6 @@ export default function RolesSecurityBasics() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Roles and Security Basics', href: '/learn/snowflake/roles-security-basics' },
       ]}
-      prev={{ title: 'Setup and SQL Basics', href: '/learn/snowflake/setup-and-sql-basics' }}
-      next={{ title: 'Loading Data with Stages and COPY INTO', href: '/learn/snowflake/loading-data' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The plain-English idea" />

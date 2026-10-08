@@ -282,15 +282,6 @@ export function getPageMeta(href: string): PageMeta | undefined {
   return PAGE_ORDER.find(p => p.href === href)
 }
 
-export function getPrevNext(href: string): { prev: PageMeta | null; next: PageMeta | null } {
-  const idx = PAGE_ORDER.findIndex(p => p.href === href)
-  if (idx === -1) return { prev: null, next: null }
-  return {
-    prev: idx > 0 ? PAGE_ORDER[idx - 1] : null,
-    next: idx < PAGE_ORDER.length - 1 ? PAGE_ORDER[idx + 1] : null,
-  }
-}
-
 export function getNextPages(href: string): PageMeta[] {
   const current = PAGE_ORDER.find(p => p.href === href)
   if (!current) return []

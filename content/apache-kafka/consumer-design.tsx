@@ -82,8 +82,6 @@ export default function ConsumerDesign() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Consumer Design', href: '/learn/apache-kafka/consumer-design' },
       ]}
-      prev={{ title: 'Producer Design', href: '/learn/apache-kafka/producer-design' }}
-      next={{ title: 'Kafka Connect', href: '/learn/apache-kafka/kafka-connect' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — From concept to client" />

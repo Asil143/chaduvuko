@@ -13,8 +13,6 @@ export default function SnowflakeProject() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'End-to-End Snowflake Project', href: '/learn/snowflake/snowflake-project' },
       ]}
-      prev={{ title: 'Production Operations and Monitoring', href: '/learn/snowflake/production-operations' }}
-      next={{ title: 'Snowflake Interview and System Design', href: '/learn/snowflake/interview-system-design' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Capstone framing" />

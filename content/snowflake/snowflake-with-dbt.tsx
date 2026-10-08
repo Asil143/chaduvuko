@@ -13,8 +13,6 @@ export default function SnowflakeWithDbt() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Snowflake with dbt', href: '/learn/snowflake/snowflake-with-dbt' },
       ]}
-      prev={{ title: 'Data Sharing and Marketplace', href: '/learn/snowflake/data-sharing-marketplace' }}
-      next={{ title: 'Production Operations and Monitoring', href: '/learn/snowflake/production-operations' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Where dbt fits" />

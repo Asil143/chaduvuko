@@ -82,8 +82,6 @@ export default function StreamProcessingKafkaStreams() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Stream Processing and Kafka Streams', href: '/learn/apache-kafka/stream-processing-kafka-streams' },
       ]}
-      prev={{ title: 'Kafka Connect', href: '/learn/apache-kafka/kafka-connect' }}
-      next={{ title: 'Kafka Security: TLS, SASL, and ACLs', href: '/learn/apache-kafka/security-acls-sasl-tls' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — What stream processing means" />

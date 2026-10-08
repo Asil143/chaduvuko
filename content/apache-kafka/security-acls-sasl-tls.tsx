@@ -82,8 +82,6 @@ export default function KafkaSecurityACLsSASLTLS() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Kafka Security: TLS, SASL, and ACLs', href: '/learn/apache-kafka/security-acls-sasl-tls' },
       ]}
-      prev={{ title: 'Stream Processing and Kafka Streams', href: '/learn/apache-kafka/stream-processing-kafka-streams' }}
-      next={{ title: 'Monitoring and Observability', href: '/learn/apache-kafka/monitoring-observability' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The default is wide open" />

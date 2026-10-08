@@ -82,8 +82,6 @@ export default function CicdForDbt() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'CI/CD for dbt Projects', href: '/learn/dbt/cicd-for-dbt' },
       ]}
-      prev={{ title: 'Performance and Query Optimization in dbt', href: '/learn/dbt/performance-tuning-dbt' }}
-      next={{ title: 'Testing Strategy and Data Quality at Scale', href: '/learn/dbt/testing-strategy-at-scale' }}
     >
       {/* ── Part 01 ─────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

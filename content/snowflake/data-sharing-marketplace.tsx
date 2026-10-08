@@ -13,8 +13,6 @@ export default function DataSharingMarketplace() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Data Sharing and Marketplace', href: '/learn/snowflake/data-sharing-marketplace' },
       ]}
-      prev={{ title: 'Advanced Security and Governance', href: '/learn/snowflake/advanced-security-governance' }}
-      next={{ title: 'Snowflake with dbt', href: '/learn/snowflake/snowflake-with-dbt' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The plain-English idea" />

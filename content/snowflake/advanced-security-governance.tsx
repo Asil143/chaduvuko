@@ -13,8 +13,6 @@ export default function AdvancedSecurityGovernance() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Advanced Security and Governance', href: '/learn/snowflake/advanced-security-governance' },
       ]}
-      prev={{ title: 'Cost Optimization', href: '/learn/snowflake/cost-optimization' }}
-      next={{ title: 'Data Sharing and Marketplace', href: '/learn/snowflake/data-sharing-marketplace' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The plain-English idea" />

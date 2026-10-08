@@ -13,8 +13,6 @@ export default function MergeIdempotency() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'MERGE, Upserts, and Idempotent Pipelines', href: '/learn/snowflake/merge-idempotency' },
       ]}
-      prev={{ title: 'ELT and Medallion Architecture in Snowflake', href: '/learn/snowflake/elt-medallion' }}
-      next={{ title: 'Time Travel, Fail-safe, and Zero-Copy Cloning', href: '/learn/snowflake/time-travel-cloning' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The real problem" />

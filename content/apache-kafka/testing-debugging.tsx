@@ -82,8 +82,6 @@ export default function TestingDebuggingKafka() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Testing and Debugging Kafka Systems', href: '/learn/apache-kafka/testing-debugging' },
       ]}
-      prev={{ title: 'Managed Kafka and Cloud Choices', href: '/learn/apache-kafka/managed-kafka-cloud' }}
-      next={{ title: 'Kafka Interview and System Design Guide', href: '/learn/apache-kafka/kafka-interview-system-design' }}
     >
       {/* ── Part 01 ─────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

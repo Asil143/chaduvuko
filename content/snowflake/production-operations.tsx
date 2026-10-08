@@ -13,8 +13,6 @@ export default function ProductionOperations() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Production Operations and Monitoring', href: '/learn/snowflake/production-operations' },
       ]}
-      prev={{ title: 'Snowflake with dbt', href: '/learn/snowflake/snowflake-with-dbt' }}
-      next={{ title: 'End-to-End Snowflake Project', href: '/learn/snowflake/snowflake-project' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The plain-English idea" />

@@ -13,8 +13,6 @@ export default function Snowpipe() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Snowpipe and Continuous Loading', href: '/learn/snowflake/snowpipe' },
       ]}
-      prev={{ title: 'Time Travel, Fail-safe, and Zero-Copy Cloning', href: '/learn/snowflake/time-travel-cloning' }}
-      next={{ title: 'Streams and Tasks', href: '/learn/snowflake/streams-and-tasks' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — What Snowpipe is" />

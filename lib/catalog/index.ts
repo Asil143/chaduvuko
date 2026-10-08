@@ -25,6 +25,35 @@ export function liveLessonsForTrack(slug: string): Lesson[] {
   return LIVE_LESSONS.filter(lesson => lesson.track === slug).sort((a, b) => a.order - b.order)
 }
 
+export type LessonNavTarget =
+  | { kind: 'lesson'; lesson: Lesson }
+  | { kind: 'track-overview'; track: Track }
+
+export interface LessonNavigation {
+  lesson: Lesson
+  track: Track
+  prev: LessonNavTarget | null
+  next: LessonNavTarget | null
+}
+
+/**
+ * Prev/next stay within the lesson's track and skip unpublished lessons.
+ * At either end of a track they point to the track overview, unless the
+ * overview is the current lesson itself.
+ */
+export function getLessonNavigation(href: string): LessonNavigation | null {
+  const lesson = getLiveLesson(href)
+  const track = lesson && getTrack(lesson.track)
+  if (!lesson || !track) return null
+
+  const lessons = liveLessonsForTrack(track.slug)
+  const index = lessons.findIndex(item => item.href === href)
+  const overview: LessonNavTarget | null = track.indexHref === href ? null : { kind: 'track-overview', track }
+  const at = (i: number): LessonNavTarget | null => (lessons[i] ? { kind: 'lesson', lesson: lessons[i] } : overview)
+
+  return { lesson, track, prev: at(index - 1), next: at(index + 1) }
+}
+
 /** /learn routes that exist on purpose but are not lessons. */
 export const NON_LESSON_ROUTES: Record<string, NonLessonKind> = {
   '/learn': 'catalog',

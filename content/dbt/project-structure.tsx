@@ -82,8 +82,6 @@ export default function ProjectStructure() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Project Structure and Layering', href: '/learn/dbt/project-structure' },
       ]}
-      prev={{ title: 'Hooks and Operations', href: '/learn/dbt/hooks-and-operations' }}
-      next={{ title: 'Performance and Query Optimization in dbt', href: '/learn/dbt/performance-tuning-dbt' }}
     >
       {/* ── Part 01 — Why layering is the real subject ── */}
       <section style={{ marginBottom: 64 }}>

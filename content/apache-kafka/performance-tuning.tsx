@@ -82,8 +82,6 @@ export default function PerformanceTuning() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Performance Tuning', href: '/learn/apache-kafka/performance-tuning' },
       ]}
-      prev={{ title: 'Monitoring and Observability', href: '/learn/apache-kafka/monitoring-observability' }}
-      next={{ title: 'Scaling and Capacity Planning', href: '/learn/apache-kafka/scaling-capacity-planning' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The Fundamental Trade-off" />

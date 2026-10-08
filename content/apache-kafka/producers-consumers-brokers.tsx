@@ -82,8 +82,6 @@ export default function ProducersConsumersBrokers() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Producers, Consumers, and Brokers', href: '/learn/apache-kafka/producers-consumers-brokers' },
       ]}
-      prev={{ title: 'Events, Topics, and Partitions', href: '/learn/apache-kafka/events-topics-partitions' }}
-      next={{ title: 'Local Setup and Kafka CLI', href: '/learn/apache-kafka/local-setup-cli' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The three roles" />

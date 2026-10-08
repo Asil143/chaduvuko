@@ -160,8 +160,6 @@ export default function AthenaPage() {
         { label: 'AWS Track', href: '/learn/aws/introduction' },
         { label: 'Amazon Athena', href: '/learn/aws/athena' },
       ]}
-      prev={{ title: 'Amazon Kinesis', href: '/learn/aws/kinesis' }}
-      next={{ title: 'Amazon EMR', href: '/learn/aws/emr' }}
     >
       <h2>What is Amazon Athena?</h2>
       <p>

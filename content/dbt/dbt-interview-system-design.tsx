@@ -83,7 +83,6 @@ export default function DbtInterviewSystemDesign() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'dbt Interview and System Design Guide', href: '/learn/dbt/dbt-interview-system-design' },
       ]}
-      prev={{ title: 'Testing Strategy and Data Quality at Scale', href: '/learn/dbt/testing-strategy-at-scale' }}
     >
       {/* ── Opening ─────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

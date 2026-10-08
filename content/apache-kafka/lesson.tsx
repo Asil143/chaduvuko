@@ -144,8 +144,6 @@ export function KafkaLesson({ slug }: { slug: string }) {
   const lesson = KAFKA_MODULE_BY_SLUG[slug]
   if (!lesson) return null
 
-  const prev = KAFKA_MODULE_BY_SLUG[Object.values(KAFKA_MODULE_BY_SLUG).find(m => m.id === lesson.id - 1)?.slug ?? '']
-  const next = KAFKA_MODULE_BY_SLUG[Object.values(KAFKA_MODULE_BY_SLUG).find(m => m.id === lesson.id + 1)?.slug ?? '']
 
   return (
     <LearnLayout
@@ -159,8 +157,6 @@ export function KafkaLesson({ slug }: { slug: string }) {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: lesson.title, href: `/learn/apache-kafka/${lesson.slug}` },
       ]}
-      prev={prev ? { title: prev.title, href: `/learn/apache-kafka/${prev.slug}` } : undefined}
-      next={next ? { title: next.title, href: `/learn/apache-kafka/${next.slug}` } : undefined}
     >
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 32 }}>
         {lesson.tags.map(tag => (

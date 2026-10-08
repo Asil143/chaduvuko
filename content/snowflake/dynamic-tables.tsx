@@ -13,8 +13,6 @@ export default function DynamicTables() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Dynamic Tables', href: '/learn/snowflake/dynamic-tables' },
       ]}
-      prev={{ title: 'Streams and Tasks', href: '/learn/snowflake/streams-and-tasks' }}
-      next={{ title: 'Performance Tuning', href: '/learn/snowflake/performance-tuning' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The plain-English idea" />

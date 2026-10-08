@@ -152,7 +152,6 @@ export default function WhatIsApacheKafka() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'What is Apache Kafka?', href: '/learn/apache-kafka/what-is-apache-kafka' },
       ]}
-      next={{ title: 'Events, Topics, and Partitions', href: '/learn/apache-kafka/events-topics-partitions' }}
     >
       {/* ── Part 01 ─────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

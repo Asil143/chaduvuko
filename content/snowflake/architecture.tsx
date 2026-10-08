@@ -13,8 +13,6 @@ export default function SnowflakeArchitecture() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Architecture', href: '/learn/snowflake/architecture' },
       ]}
-      prev={{ title: 'What is Snowflake?', href: '/learn/snowflake/what-is-snowflake' }}
-      next={{ title: 'Setup and SQL Basics', href: '/learn/snowflake/setup-and-sql-basics' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Three-layer architecture" />

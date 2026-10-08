@@ -157,8 +157,6 @@ export default function StepFunctionsPage() {
         { label: 'AWS Track', href: '/learn/aws/introduction' },
         { label: 'AWS Step Functions', href: '/learn/aws/step-functions' },
       ]}
-      prev={{ title: 'Amazon EMR', href: '/learn/aws/emr' }}
-      next={{ title: 'AWS Lake Formation', href: '/learn/aws/lake-formation' }}
     >
       <h2>What is AWS Step Functions?</h2>
       <p>

@@ -82,8 +82,6 @@ export default function PackagesModule() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Packages and dbt_utils', href: '/learn/dbt/packages' },
       ]}
-      prev={{ title: 'Jinja and Macros: Templating SQL', href: '/learn/dbt/jinja-and-macros' }}
-      next={{ title: 'Seeds: Loading Static Reference Data', href: '/learn/dbt/seeds' }}
     >
       {/* ── Part 01 ── */}
       <section style={{ marginBottom: 64 }}>

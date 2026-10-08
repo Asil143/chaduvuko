@@ -128,7 +128,6 @@ export default function Project03Page() {
         { label: 'Projects', href: '/learn/projects/azure-batch-pipeline' },
         { label: 'Project 03 — Run Date Pipeline', href: '/learn/projects/azure-project-03' },
       ]}
-      prev={{ title: 'Project 02 — ForEach Loop', href: '/learn/projects/azure-project-02' }}
     >
 
       <LearningResourceJsonLd name="ADF Parameterized Pipeline with Run Date and Trigger" description="Pass a run_date parameter at runtime and add a scheduled trigger for nightly ingestion." url="https://chaduvuko.com/learn/projects/azure-project-03" datePublished="2026-03-01" keywords={['azure data factory parameters', 'adf scheduled trigger', 'adf date partitioning']} timeRequired="PT75M" />

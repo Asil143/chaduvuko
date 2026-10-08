@@ -13,8 +13,6 @@ export default function LoadingData() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Loading Data', href: '/learn/snowflake/loading-data' },
       ]}
-      prev={{ title: 'Roles and Security Basics', href: '/learn/snowflake/roles-security-basics' }}
-      next={{ title: 'Semi-Structured Data: VARIANT, JSON, FLATTEN', href: '/learn/snowflake/semi-structured-data' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Loading model" />

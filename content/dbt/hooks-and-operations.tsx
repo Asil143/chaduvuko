@@ -82,8 +82,6 @@ export default function HooksAndOperations() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Hooks and Operations', href: '/learn/dbt/hooks-and-operations' },
       ]}
-      prev={{ title: 'Variables and Environments', href: '/learn/dbt/variables-and-environments' }}
-      next={{ title: 'Project Structure and Layering', href: '/learn/dbt/project-structure' }}
     >
       {/* ── Part 01 — What a hook is ── */}
       <section style={{ marginBottom: 64 }}>

@@ -82,8 +82,6 @@ export default function Snapshots() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'Snapshots: Type 2 Slowly Changing Dimensions', href: '/learn/dbt/snapshots' },
       ]}
-      prev={{ title: 'Seeds: Loading Static Reference Data', href: '/learn/dbt/seeds' }}
-      next={{ title: 'Variables and Environments', href: '/learn/dbt/variables-and-environments' }}
     >
       {/* ── Part 01 — The problem ── */}
       <section style={{ marginBottom: 64 }}>

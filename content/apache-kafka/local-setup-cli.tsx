@@ -82,8 +82,6 @@ export default function LocalSetupCli() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Local Setup and Kafka CLI', href: '/learn/apache-kafka/local-setup-cli' },
       ]}
-      prev={{ title: 'Producers, Consumers, and Brokers', href: '/learn/apache-kafka/producers-consumers-brokers' }}
-      next={{ title: 'Consumer Groups and Offsets', href: '/learn/apache-kafka/consumer-groups-offsets' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Why run Kafka locally" />

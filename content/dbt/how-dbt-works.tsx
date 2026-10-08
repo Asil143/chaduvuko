@@ -312,8 +312,6 @@ export default function HowDbtWorks() {
         { label: 'dbt', href: '/learn/dbt' },
         { label: 'How dbt Works: Compile, Run, and the DAG', href: '/learn/dbt/how-dbt-works' },
       ]}
-      prev={{ title: 'What is dbt?', href: '/learn/dbt/what-is-dbt' }}
-      next={{ title: 'Setting Up a dbt Project', href: '/learn/dbt/project-setup' }}
     >
       {/* Part 01 */}
       <section style={{ marginBottom: 64 }}>

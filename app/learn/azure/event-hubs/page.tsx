@@ -142,8 +142,6 @@ export default function EventHubsPage() {
         { label: 'Azure Track', href: '/learn/azure/introduction' },
         { label: 'Azure Event Hubs', href: '/learn/azure/event-hubs' },
       ]}
-      prev={{ title: 'Azure Synapse Analytics', href: '/learn/azure/synapse' }}
-      next={{ title: 'Azure Key Vault', href: '/learn/azure/key-vault' }}
     >
       <h2>What is Azure Event Hubs?</h2>
       <p>

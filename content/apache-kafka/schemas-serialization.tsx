@@ -82,8 +82,6 @@ export default function SchemasSerialization() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Serialization and Schema Design', href: '/learn/apache-kafka/schemas-serialization' },
       ]}
-      prev={{ title: 'Delivery Semantics: At-Most, At-Least, Exactly-Once', href: '/learn/apache-kafka/delivery-semantics' }}
-      next={{ title: 'Producer Design', href: '/learn/apache-kafka/producer-design' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Why raw JSON becomes a production risk" />

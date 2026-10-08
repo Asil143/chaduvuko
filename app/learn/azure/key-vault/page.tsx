@@ -117,8 +117,6 @@ export default function KeyVaultPage() {
         { label: 'Azure Track', href: '/learn/azure/introduction' },
         { label: 'Azure Key Vault', href: '/learn/azure/key-vault' },
       ]}
-      prev={{ title: 'Azure Event Hubs', href: '/learn/azure/event-hubs' }}
-      next={{ title: 'Microsoft Fabric', href: '/learn/azure/microsoft-fabric' }}
     >
       <h2>Why Key Vault Exists</h2>
       <p>

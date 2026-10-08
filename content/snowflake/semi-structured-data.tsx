@@ -13,8 +13,6 @@ export default function SemiStructuredData() {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: 'Semi-Structured Data', href: '/learn/snowflake/semi-structured-data' },
       ]}
-      prev={{ title: 'Loading Data with Stages and COPY INTO', href: '/learn/snowflake/loading-data' }}
-      next={{ title: 'ELT and Medallion Architecture in Snowflake', href: '/learn/snowflake/elt-medallion' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The plain-English idea" />

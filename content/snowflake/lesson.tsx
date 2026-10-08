@@ -1122,8 +1122,6 @@ export function SnowflakeLesson({ slug }: { slug: string }) {
   if (!module) return null
 
   const lesson = lessons[slug] ?? fallbackLesson(module.title)
-  const prev = SNOWFLAKE_MODULES.find(item => item.id === module.id - 1)
-  const next = SNOWFLAKE_MODULES.find(item => item.id === module.id + 1)
 
   return (
     <LearnLayout
@@ -1137,8 +1135,6 @@ export function SnowflakeLesson({ slug }: { slug: string }) {
         { label: 'Snowflake', href: '/learn/snowflake' },
         { label: module.title, href: `/learn/snowflake/${module.slug}` },
       ]}
-      prev={prev ? { title: prev.title, href: `/learn/snowflake/${prev.slug}` } : undefined}
-      next={next ? { title: next.title, href: `/learn/snowflake/${next.slug}` } : undefined}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — Plain-English foundation" />

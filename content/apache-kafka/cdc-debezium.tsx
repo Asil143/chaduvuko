@@ -82,8 +82,6 @@ export default function CdcDebezium() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Change Data Capture with Debezium', href: '/learn/apache-kafka/cdc-debezium' },
       ]}
-      prev={{ title: 'Event-Driven Architecture', href: '/learn/apache-kafka/event-driven-architecture' }}
-      next={{ title: 'Managed Kafka and Cloud Choices', href: '/learn/apache-kafka/managed-kafka-cloud' }}
     >
       {/* ── Part 01 ───────────────────────────────────────────────────── */}
       <section style={{ marginBottom: 64 }}>

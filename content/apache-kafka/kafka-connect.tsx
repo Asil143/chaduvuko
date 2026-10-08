@@ -82,8 +82,6 @@ export default function KafkaConnect() {
         { label: 'Apache Kafka', href: '/learn/apache-kafka' },
         { label: 'Kafka Connect', href: '/learn/apache-kafka/kafka-connect' },
       ]}
-      prev={{ title: 'Consumer Design', href: '/learn/apache-kafka/consumer-design' }}
-      next={{ title: 'Stream Processing and Kafka Streams', href: '/learn/apache-kafka/stream-processing-kafka-streams' }}
     >
       <section style={{ marginBottom: 64 }}>
         <SectionTag text="// Part 01 — The problem Connect solves" />

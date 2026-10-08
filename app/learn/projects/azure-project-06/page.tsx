@@ -99,7 +99,6 @@ export default function Project06Page() {
         { label: 'Projects', href: '/learn/projects/azure-batch-pipeline' },
         { label: 'Project 06 — Pull Data From a REST API', href: '/learn/projects/azure-project-06' },
       ]}
-      prev={{ title: 'Project 05 — Organize Files Automatically', href: '/learn/projects/azure-project-05' }}
     >
 
       {/* Series info */}
