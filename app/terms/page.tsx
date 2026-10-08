@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms | Chaduvuko',
+  title: 'Terms',
   description: 'Site terms for Chaduvuko.',
 }
 
 export default function TermsPage() {
   return (
-    <main style={{ maxWidth: '860px', margin: '0 auto', padding: '96px 24px 80px' }}>
+    <div style={{ maxWidth: '860px', margin: '0 auto', padding: '96px 24px 80px' }}>
       <h1 className="font-display" style={{ color: 'var(--text)', fontSize: '48px', margin: '0 0 18px' }}>
         Site Terms
       </h1>
@@ -23,6 +23,6 @@ export default function TermsPage() {
       <p style={{ color: 'var(--muted)', fontSize: '13px', lineHeight: 1.6 }}>
         Last updated: October 8, 2026
       </p>
-    </main>
+    </div>
   )
 }

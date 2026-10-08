@@ -10,11 +10,12 @@ const footerSections: Record<string, FooterLink[]> = {
   Learn: [
     { label: 'What Is Chaduvuko?', href: '/about' },
     { label: 'What Is Data Engineering?', href: '/learn/what-is-data-engineering' },
-    { label: 'What Is Cloud Computing?', href: '/learn/aws/introduction' },
+    { label: 'Data Engineering Track', href: '/learn/data-engineering' },
+    { label: 'SQL Track', href: '/learn/sql' },
+    { label: 'Python Track', href: '/learn/python' },
     { label: 'AI/ML Learning Hub', href: '/learn/ai-ml' },
     { label: 'Cybersecurity Learning Hub', href: '/learn/cybersecurity' },
     { label: 'What\'s New', href: '/blog' },
-    { label: 'Careers', href: '/careers' },
   ],
   Resources: [
     { label: 'Getting Started', href: '/learn' },
@@ -29,18 +30,23 @@ const footerSections: Record<string, FooterLink[]> = {
   Developers: [
     { label: 'Builder Playground', href: '/playground' },
     { label: 'SQL Playground', href: '/learn/sql/playground' },
-    { label: 'Python Track', href: '/learn/python' },
-    { label: 'Java Track', href: '/learn/roadmap/java-developer' },
     { label: 'HTML & CSS Track', href: '/learn/html-css' },
     { label: 'DSA Track', href: '/learn/dsa' },
     { label: 'DBMS Track', href: '/learn/dbms' },
+    { label: 'Apache Kafka Track', href: '/learn/apache-kafka' },
+    { label: 'dbt Track', href: '/learn/dbt' },
+    { label: 'Snowflake Track', href: '/learn/snowflake' },
+    { label: 'Networking Track', href: '/learn/networking' },
   ],
-  Help: [
-    { label: 'Contact', href: 'mailto:hello@chaduvuko.com', external: true },
-    { label: 'Find a Video', href: '/learn/find-video' },
+  Cloud: [
     { label: 'AWS Track', href: '/learn/aws/introduction' },
     { label: 'Azure Track', href: '/learn/azure/introduction' },
     { label: 'GCP Track', href: '/learn/gcp/introduction' },
+  ],
+  Help: [
+    { label: 'Contact', href: 'mailto:hello@chaduvuko.com', external: true },
+    { label: 'Careers', href: '/careers' },
+    { label: 'Find a Video', href: '/learn/find-video' },
     { label: 'Sitemap', href: '/sitemap.xml' },
   ],
 }
@@ -48,13 +54,12 @@ const footerSections: Record<string, FooterLink[]> = {
 const socialLinks: FooterLink[] = [
   { label: 'X', href: 'https://x.com/Asil143', external: true },
   { label: 'GitHub', href: 'https://github.com/Asil143', external: true },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com', external: true },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/asil-kamepalli-095157197/', external: true },
 ]
 
 const legalLinks: FooterLink[] = [
   { label: 'Privacy', href: '/privacy' },
   { label: 'Site terms', href: '/terms' },
-  { label: 'Cookie Preferences', href: '/privacy' },
 ]
 
 function FooterAnchor({ link }: { link: FooterLink }) {
@@ -66,14 +71,14 @@ function FooterAnchor({ link }: { link: FooterLink }) {
 
   if (link.external) {
     return (
-      <a href={link.href} target="_blank" rel="noreferrer" style={style}>
+      <a href={link.href} target="_blank" rel="noreferrer" className="footer-link" style={style}>
         {link.label}
       </a>
     )
   }
 
   return (
-    <Link href={link.href} style={style}>
+    <Link href={link.href} className="footer-link" style={style}>
       {link.label}
     </Link>
   )
@@ -150,11 +155,10 @@ export function Footer() {
             fontSize: '12px',
           }}
         >
-          <a href="#top" style={{ color: 'var(--text)', fontWeight: 700, textDecoration: 'none' }}>
+          <a href="#top" className="footer-link" style={{ color: 'var(--text)', fontWeight: 700, textDecoration: 'none' }}>
             Back to top
           </a>
           <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-            <span style={{ color: 'var(--text)', fontWeight: 700 }}>English</span>
             {socialLinks.map(link => (
               <FooterAnchor key={link.href} link={link} />
             ))}
@@ -191,7 +195,7 @@ export function Footer() {
               <FooterAnchor key={link.href} link={link} />
             ))}
           </div>
-          <span>© 2026 Chaduvuko. Built by Asil. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Chaduvuko. Built by Asil. All rights reserved.</span>
         </div>
       </div>
     </footer>

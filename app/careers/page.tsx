@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Careers | Chaduvuko',
+  title: 'Careers',
   description:
     'Join Chaduvuko as we build practical, free IT education for students, career switchers, and working professionals.',
 }
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function CareersPage() {
   return (
     <div style={{ background: 'var(--bg)', minHeight: '100vh' }}>
-      <main
+      <div
         style={{
           maxWidth: '920px',
           margin: '0 auto',
@@ -107,7 +107,7 @@ export default function CareersPage() {
             Explore the platform
           </Link>
         </div>
-      </main>
+      </div>
     </div>
   )
 }

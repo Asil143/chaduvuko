@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body id="top">
         <ThemeProvider>
           <ServiceWorkerRegistration />
           <Navbar />
@@ -192,7 +192,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               display: 'inline-block',
               flexShrink: 0,
             }} />
-            Python · SQL · Web Dev · Java · AI/ML tracks launching soon — your one platform for all of IT
+            New lessons, projects, and career tools are shipping regularly — your one platform for all of IT
           </div>
           <main>{children}</main>
           <Footer />
