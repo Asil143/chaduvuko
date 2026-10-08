@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { ThemePicker } from '@/components/ui/ThemePicker'
-import { SearchBar } from '@/components/ui/SearchBar'
+import { SiteSearch } from '@/components/ui/SiteSearch'
 
 type NavItem = { label: string; href: string }
 
@@ -101,7 +101,7 @@ export function Navbar() {
       </nav>
 
       <div className="flex items-center gap-2 flex-shrink-0">
-        <SearchBar variant="navbar" />
+        <SiteSearch />
         <ThemePicker />
         <div className="hidden sm:flex items-center gap-2 ml-2">
           <Link
