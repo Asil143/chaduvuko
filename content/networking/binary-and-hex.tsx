@@ -338,7 +338,7 @@ function BitwiseVisualizer() {
   function BitRow({ val, label, color }: { val: number; label: string; color: string }) {
     const bits = toBin8(val < 0 ? 0 : val > 255 ? 255 : val)
     return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, marginBottom: 8 }}>
         <span style={{ fontSize: 12, color, fontFamily: FONT_MONO, fontWeight: 700, minWidth: 80 }}>{label} = {val}</span>
         <div style={{ display: 'flex', gap: 3 }}>
           {bits.split('').map((bit, i) => (

@@ -227,7 +227,8 @@ function RoutingProtocolComparator() {
       <p style={{ fontSize: 13, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Interactive — Routing Protocol Comparator</p>
       <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 20px' }}>Click a protocol to compare Administrative Distance, type, and use case.</p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+      <div style={{ overflowX: 'auto' }}>
+      <div style={{ width: 'max-content', minWidth: '100%', display: 'flex', flexDirection: 'column', gap: 0 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '90px 40px 120px 120px 140px', padding: '8px 12px', background: `${G}15`, borderRadius: '8px 8px 0 0', fontSize: 11, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', gap: 0 }}>
           <span>Protocol</span><span>AD</span><span>Type</span><span>Algorithm</span><span>Scope</span>
         </div>
@@ -241,6 +242,7 @@ function RoutingProtocolComparator() {
             <span style={{ fontSize: 11, color: 'var(--muted)' }}>{p.scope}</span>
           </div>
         ))}
+      </div>
       </div>
 
       {proto && (

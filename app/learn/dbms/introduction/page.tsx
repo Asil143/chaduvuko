@@ -553,7 +553,7 @@ CREATE POLICY team_access ON employees
           explains why databases are engineered the way they are.
         </Para>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14, marginBottom: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 14, marginBottom: 28 }}>
           {[
             {
               function: 'Data Storage Management',
@@ -787,7 +787,7 @@ CREATE POLICY team_access ON employees
           There are two types, and both are critically important.
         </Para>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px,1fr))', gap: 16, marginBottom: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: 16, marginBottom: 28 }}>
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '24px' }}>
             <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)', marginBottom: 14, fontFamily: 'Syne, sans-serif' }}>Physical Data Independence</div>
             <Para>The ability to change the internal (physical) schema without affecting the conceptual schema or any external schemas. Applications continue to work without modification after physical storage changes.</Para>
@@ -891,7 +891,7 @@ CREATE POLICY team_access ON employees
                 <span style={{ fontSize: 24 }}>{user.icon}</span>
                 <span style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)', fontFamily: 'Syne, sans-serif' }}>{user.type}</span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px,1fr))', gap: 14 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: 14 }}>
                 {[
                   { label: 'How they interact', value: user.howTheyInteract, c: user.color },
                   { label: 'Real example', value: user.example, c: user.color },
@@ -930,7 +930,7 @@ CREATE POLICY team_access ON employees
           they exist to make the DBA's job tractable.
         </Para>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 14, marginBottom: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: 14, marginBottom: 28 }}>
           {[
             { responsibility: 'Schema Definition', desc: 'Creates and modifies the conceptual and physical schemas using DDL. Decides table structures, column types, constraints, and relationships. Balances normalization against query performance.' },
             { responsibility: 'Storage Structure Decisions', desc: 'Decides how data is physically organised — heap files, clustered indexes, tablespaces, storage quotas. Determines page sizes and buffer pool configuration for optimal performance.' },
@@ -1093,7 +1093,7 @@ CREATE POLICY team_access ON employees
                   <div style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textAlign: 'right', lineHeight: 1.7 }}>{db.examples}</div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: 12, marginBottom: 16 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: 12, marginBottom: 16 }}>
                   {[
                     { label: 'Structure', value: db.structure },
                     { label: 'Best For', value: db.bestFor },
@@ -1168,9 +1168,9 @@ CREATE POLICY team_access ON employees
                   background: `${msg.color}15`, border: `1px solid ${msg.color}30`,
                   borderRadius: 5, padding: '3px 8px', fontFamily: 'var(--font-mono)',
                   letterSpacing: '.06em', textTransform: 'uppercase',
-                  flexShrink: 0, marginTop: 3, whiteSpace: 'nowrap',
+                  flexShrink: 0, marginTop: 3, maxWidth: '40%',
                 }}>{msg.role}</span>
-                <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.85,  fontStyle: 'italic' }}>{msg.message}</div>
+                <div style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.85,  fontStyle: 'italic', minWidth: 0 }}>{msg.message}</div>
               </div>
             ))}
           </div>
@@ -1274,7 +1274,7 @@ SELECT * FROM user_preferences WHERE user_id = 42;
           Ignorance of DBMS at any seniority above junior level is a significant career limitation.
         </Para>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 14, marginBottom: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: 14, marginBottom: 28 }}>
           {[
             {
               role: 'Campus Placements — Accenture / KPMG / Deloitte / Cognizant',

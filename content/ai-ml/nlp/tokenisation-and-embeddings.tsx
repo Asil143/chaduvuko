@@ -396,7 +396,7 @@ except ImportError:
         <ConceptBox title="BPE algorithm — 5 iterations on a tiny corpus">
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 2.0 }}>
             <div style={{ color: '#888', marginBottom: 8 }}>Corpus: "low low lower new new newest"</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div className="lesson-wide-rows" style={{ display: 'flex', flexDirection: 'column', gap: 6, ...({ '--row-min': '600px' } as React.CSSProperties) }}>
               {[
                 { step: 'Start',   vocab: 'l o w e r n w s t </w>', merge: '—', result: 'l-o-w, l-o-w, l-o-w-e-r, n-e-w, n-e-w, n-e-w-e-s-t' },
                 { step: 'Merge 1', vocab: '+ lo',  merge: 'l+o → lo (freq 5)', result: 'lo-w, lo-w, lo-w-e-r, n-e-w, n-e-w, n-e-w-e-s-t' },

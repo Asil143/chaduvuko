@@ -172,7 +172,7 @@ export default function HeapsPage() {
       </div>
 
       {/* Max heap vs Min heap visual */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 16, marginBottom: 28 }}>
         {/* Max heap */}
         <div style={{ background: 'rgba(0,230,118,0.05)', border: '1px solid rgba(0,230,118,0.3)', borderRadius: 12, padding: '20px 24px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 16 }}>Max-Heap — largest at root</div>
@@ -304,7 +304,7 @@ export default function HeapsPage() {
         </div>
 
         {/* Index formulas */}
-        <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10 }}>
+        <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: 10 }}>
           {[
             { formula: 'parent(i) = (i-1)/2', example: 'parent(3) = (3-1)/2 = 1 → node 70 ✓' },
             { formula: 'left(i)   = 2*i + 1', example: 'left(1)   = 2*1+1 = 3 → node 40 ✓' },

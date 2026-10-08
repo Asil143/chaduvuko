@@ -490,7 +490,7 @@ for epoch in [1, 6, 11, 16, 20]:
           ResNet18 is better when training data is very scarce.
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+        <div className="lesson-wide-rows" style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24, ...({ '--row-min': '600px' } as React.CSSProperties) }}>
           {[
             {
               name: 'ResNet18',

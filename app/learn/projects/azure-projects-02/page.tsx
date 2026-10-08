@@ -288,7 +288,7 @@ export default function Project02Page() {
           ["@formatDateTime(utcNow(),'yyyy-MM-dd')", "Today's date formatted"],
         ].map(([expr, desc]) => (
           <div key={expr} className="flex gap-4 flex-wrap">
-            <span className="flex-shrink-0" style={{ color: '#00e676', minWidth: 280 }}>{expr}</span>
+            <span className="flex-shrink-0" style={{ color: '#00e676', minWidth: 'min(280px, 100%)' }}>{expr}</span>
             <span style={{ color: 'var(--muted)' }}>→ {desc}</span>
           </div>
         ))}

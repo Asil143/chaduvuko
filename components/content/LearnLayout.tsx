@@ -238,9 +238,9 @@ export function LearnLayout({ children, title, description, section, readTime, u
               )}
             </div>
             <h1 className="font-display font-extrabold leading-tight tracking-tight mt-1 mb-3"
-              style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: 'var(--text)' }}>{title}</h1>
+              style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: 'var(--text)', overflowWrap: 'break-word' }}>{title}</h1>
             <p className="text-base max-w-2xl leading-relaxed"
-              style={{ color: 'var(--muted)', fontFamily: 'Lora, serif', fontStyle: 'italic' }}>{description}</p>
+              style={{ color: 'var(--muted)', fontFamily: 'Lora, serif', fontStyle: 'italic', overflowWrap: 'break-word' }}>{description}</p>
             <div className="flex items-center gap-4 mt-4 text-xs font-mono" style={{ color: 'var(--muted)' }}>
               {readTime  && <span className="flex items-center gap-1"><Clock size={11} /> {readTime}</span>}
               {updatedAt && <span className="flex items-center gap-1"><Calendar size={11} /> {updatedAt}</span>}

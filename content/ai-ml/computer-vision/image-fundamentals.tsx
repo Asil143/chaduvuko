@@ -455,7 +455,7 @@ for space, use in guide:
         </p>
 
         <ConceptBox title="Resize strategies — what each one does to your image">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="lesson-wide-rows" style={{ display: 'flex', flexDirection: 'column', gap: 8, ...({ '--row-min': '560px' } as React.CSSProperties) }}>
             {[
               { name: 'Direct resize', code: 'T.Resize((224, 224))', color: '#D85A30', note: 'Stretches/squashes to target size. Distorts aspect ratio. Only use when aspect ratios are already consistent.' },
               { name: 'Resize shorter side + centre crop', code: 'T.Resize(256), T.CenterCrop(224)', color: '#1D9E75', note: 'Standard for validation/inference. No distortion. Loses image edges (typically background). Default for ImageNet eval.' },

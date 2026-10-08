@@ -397,8 +397,8 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
       <p>Click the <strong>"Connection"</strong> tab. Set the three path fields:</p>
       <div className="my-4 p-4 rounded-xl font-mono text-xs space-y-3" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>Container</span><span style={{ color: '#00e676' }}>landing</span><span style={{ color: 'var(--muted)', marginLeft: 8 }}>← type directly</span></div>
-        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>Directory</span><span style={{ color: '#7b61ff' }}>store_sales/@{'{dataset().run_date_folder}'}</span><span style={{ color: 'var(--muted)', marginLeft: 8 }}>← Add dynamic content</span></div>
-        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>File</span><span style={{ color: '#7b61ff' }}>@dataset().file_name</span><span style={{ color: 'var(--muted)', marginLeft: 8 }}>← Add dynamic content</span></div>
+        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>Directory</span><span style={{ color: '#7b61ff', minWidth: 0, overflowWrap: 'anywhere' }}>store_sales/@{'{dataset().run_date_folder}'}</span><span style={{ color: 'var(--muted)', marginLeft: 8 }}>← Add dynamic content</span></div>
+        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>File</span><span style={{ color: '#7b61ff', minWidth: 0, overflowWrap: 'anywhere' }}>@dataset().file_name</span><span style={{ color: 'var(--muted)', marginLeft: 8 }}>← Add dynamic content</span></div>
       </div>
       <p>For the <strong>Directory</strong> field: click <strong>"Add dynamic content"</strong> → in the editor, type the full expression: <code>{`store_sales/@{dataset().run_date_folder}`}</code> → click <strong>"OK"</strong>.</p>
       <p>For the <strong>File</strong> field: click <strong>"Add dynamic content"</strong> → under Parameters → click <strong>file_name</strong> → click <strong>"OK"</strong>.</p>
@@ -416,8 +416,8 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
       <p>Click <strong>Connection</strong> tab:</p>
       <div className="my-4 p-4 rounded-xl font-mono text-xs space-y-3" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>Container</span><span style={{ color: '#00e676' }}>raw</span></div>
-        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>Directory</span><span style={{ color: '#7b61ff' }}>sales/@{'{dataset().run_date_folder}'}</span></div>
-        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>File</span><span style={{ color: '#7b61ff' }}>@dataset().file_name</span></div>
+        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>Directory</span><span style={{ color: '#7b61ff', minWidth: 0, overflowWrap: 'anywhere' }}>sales/@{'{dataset().run_date_folder}'}</span></div>
+        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>File</span><span style={{ color: '#7b61ff', minWidth: 0, overflowWrap: 'anywhere' }}>@dataset().file_name</span></div>
       </div>
       <Screenshot caption="Sink dataset Connection tab — raw/sales/@{dataset().run_date_folder} for directory, @dataset().file_name for file" />
       <p>Click <strong>💾 Save</strong>.</p>
@@ -483,7 +483,7 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
       <p>Click the <strong>Variables</strong> tab in the <em>bottom properties panel</em> (this is the activity configuration, not the pipeline variables tab).</p>
       <div className="my-4 p-4 rounded-xl font-mono text-xs space-y-2" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 60, flexShrink: 0 }}>Name</span><span style={{ color: '#00e676' }}>run_date_folder</span><span style={{ color: 'var(--muted)', marginLeft: 8 }}>← select from dropdown</span></div>
-        <div className="flex gap-4 items-start"><span style={{ color: 'var(--muted)', width: 60, flexShrink: 0 }}>Value</span><span style={{ color: '#7b61ff' }}>date=@{'{pipeline().parameters.run_date}'}</span><span style={{ color: 'var(--muted)', marginLeft: 8 }}>← Add dynamic content</span></div>
+        <div className="flex gap-4 items-start"><span style={{ color: 'var(--muted)', width: 60, flexShrink: 0 }}>Value</span><span style={{ color: '#7b61ff', minWidth: 0, overflowWrap: 'anywhere' }}>date=@{'{pipeline().parameters.run_date}'}</span><span style={{ color: 'var(--muted)', marginLeft: 8 }}>← Add dynamic content</span></div>
       </div>
       <p>Click <strong>"Add dynamic content"</strong> for the Value field → type this expression in the editor:</p>
       <ExprBox
@@ -510,7 +510,7 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
       <div className="my-4 p-4 rounded-xl font-mono text-xs space-y-2" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 120, flexShrink: 0 }}>Sequential</span><span style={{ color: '#ff9900' }}>☐ Unchecked</span></div>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 120, flexShrink: 0 }}>Batch count</span><span style={{ color: '#00e676' }}>4</span></div>
-        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 120, flexShrink: 0 }}>Items</span><span style={{ color: '#7b61ff' }}>@pipeline().parameters.store_ids</span></div>
+        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 120, flexShrink: 0 }}>Items</span><span style={{ color: '#7b61ff', minWidth: 0, overflowWrap: 'anywhere' }}>@pipeline().parameters.store_ids</span></div>
       </div>
       <Screenshot caption="ForEach Settings tab — Sequential off, Batch count 4, Items showing @pipeline().parameters.store_ids" />
 
@@ -547,8 +547,8 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
           ["@{formatDateTime(pipeline().parameters.run_date,'yyyyMMdd')}", '"20240115" — date without dashes'],
           ['.csv',                                          '".csv"    — literal text'],
         ].map(([part, desc]) => (
-          <div key={part} className="flex gap-3">
-            <code className="flex-shrink-0 text-xs w-72" style={{ color: '#7b61ff' }}>{part}</code>
+          <div key={part} className="flex flex-wrap sm:flex-nowrap gap-x-3 gap-y-0.5">
+            <code className="flex-shrink-0 text-xs w-full sm:w-72" style={{ color: '#7b61ff' }}>{part}</code>
             <span style={{ color: 'var(--muted)' }}>→ {desc}</span>
           </div>
         ))}
@@ -558,8 +558,8 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
       <h2>Step 13 — Configure Sink</h2>
       <p>Click <strong>Sink</strong> tab → select <code>ds_sink_adls_dated_sales</code>. Two Dataset properties appear — fill them with the exact same expressions as the source:</p>
       <div className="my-4 p-4 rounded-xl font-mono text-xs space-y-2" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 160, flexShrink: 0 }}>run_date_folder</span><span style={{ color: '#7b61ff' }}>@variables('run_date_folder')</span></div>
-        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 160, flexShrink: 0 }}>file_name</span><span style={{ color: '#7b61ff' }}>store_@{'{item()}_sales_@{formatDateTime(pipeline().parameters.run_date,\'yyyyMMdd\')}.csv'}</span></div>
+        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 160, flexShrink: 0 }}>run_date_folder</span><span style={{ color: '#7b61ff', minWidth: 0, overflowWrap: 'anywhere' }}>@variables('run_date_folder')</span></div>
+        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 160, flexShrink: 0 }}>file_name</span><span style={{ color: '#7b61ff', minWidth: 0, overflowWrap: 'anywhere' }}>store_@{'{item()}_sales_@{formatDateTime(pipeline().parameters.run_date,\'yyyyMMdd\')}.csv'}</span></div>
       </div>
       <Screenshot caption="Sink tab fully configured — same expressions as source, writing to raw/sales/date=2024-01-15/" />
       <p>Click the <strong>back arrow</strong> to return to the main pipeline canvas.</p>
@@ -647,7 +647,7 @@ ORD2005,ST002,Levis Jeans,Apparel,8,2999.00,2024-01-15` },
       <p>In the Run Parameters dialog, enter a date you have files for:</p>
       <div className="my-4 p-4 rounded-xl font-mono text-xs space-y-2" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
         <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>run_date</span><span style={{ color: '#00e676' }}>2024-01-15</span></div>
-        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>store_ids</span><span style={{ color: '#7b61ff' }}>{"[\"ST001\",...,\"ST010\"]"}</span></div>
+        <div className="flex gap-4"><span style={{ color: 'var(--muted)', width: 100, flexShrink: 0 }}>store_ids</span><span style={{ color: '#7b61ff', minWidth: 0, overflowWrap: 'anywhere' }}>{"[\"ST001\",...,\"ST010\"]"}</span></div>
       </div>
       <Screenshot caption="Trigger now dialog — run_date and store_ids filled in" />
       <p>Click <strong>"OK"</strong> → go to <strong>Monitor → Pipeline runs</strong> to watch it execute.</p>

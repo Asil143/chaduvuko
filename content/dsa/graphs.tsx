@@ -160,7 +160,7 @@ export default function GraphsPage() {
       </p>
 
       {/* Real world examples */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginBottom: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: 12, marginBottom: 28 }}>
         {[
           { icon: '🗺️', title: 'Maps', desc: 'Cities are nodes. Roads are edges. Distance is the edge weight.' },
           { icon: '👥', title: 'Social networks', desc: 'People are nodes. Friendships are edges. LinkedIn, Instagram, Facebook.' },
@@ -185,7 +185,7 @@ export default function GraphsPage() {
       <SectionTag text="Section 2" />
       <SectionTitle>Types of Graphs — Know These Cold</SectionTitle>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14, marginBottom: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: 14, marginBottom: 28 }}>
         {[
           {
             name: 'Undirected Graph',
@@ -251,7 +251,7 @@ export default function GraphsPage() {
         <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16, fontFamily: 'var(--font-mono)' }}>
           // Example undirected graph — 5 nodes, 6 edges
         </div>
-        <svg width="280" height="160" viewBox="0 0 280 160" style={{ display: 'block', margin: '0 auto' }}>
+        <svg width="280" height="160" viewBox="0 0 280 160" style={{ display: 'block', margin: '0 auto', maxWidth: '100%', height: 'auto' }}>
           <defs>
             <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
               <path d="M0,0 L0,6 L8,3 z" fill="var(--border)" />
@@ -763,7 +763,7 @@ int main() {
         <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16, fontFamily: 'var(--font-mono)' }}>
           // Weighted graph — find shortest path from 0 to all nodes
         </div>
-        <svg width="300" height="160" viewBox="0 0 300 160" style={{ display: 'block', margin: '0 auto' }}>
+        <svg width="300" height="160" viewBox="0 0 300 160" style={{ display: 'block', margin: '0 auto', maxWidth: '100%', height: 'auto' }}>
           <GEdge x1={50} y1={80} x2={150} y2={30} weight={4} color="rgba(0,230,118,0.5)" />
           <GEdge x1={50} y1={80} x2={150} y2={130} weight={2} color="rgba(0,230,118,0.5)" />
           <GEdge x1={150} y1={30} x2={250} y2={80} weight={5} color="rgba(0,230,118,0.5)" />

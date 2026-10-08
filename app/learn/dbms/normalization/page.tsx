@@ -1160,7 +1160,7 @@ CREATE TABLE orders_good (
             We decompose by removing the violating FD (teacher_id → subject) into its own relation:
           </Para>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 14, marginBottom: 20 }}>
             <div>
               <RelationTable
                 title="TEACHER_SUBJECT (extracted)"

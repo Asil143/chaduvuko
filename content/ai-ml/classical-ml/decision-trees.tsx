@@ -774,7 +774,7 @@ print(f"From-scratch tree accuracy: {accuracy_score(y_test, y_pred_scratch):.4f}
           There are three main strategies, and sklearn exposes all of them.
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+        <div className="lesson-wide-rows" style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24, ...({ '--row-min': '600px' } as React.CSSProperties) }}>
           {[
             {
               param: 'max_depth',

@@ -52,7 +52,7 @@ const CodeBlock = ({ label, code }: { label: string; code: string }) => (
 );
 
 const GoodBad = ({ bad, good, badLabel, goodLabel }: { bad: string; good: string; badLabel?: string; goodLabel?: string }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12, margin: '16px 0 24px' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: 12, margin: '16px 0 24px' }}>
     <div style={{ background: 'rgba(255,71,87,0.05)', border: '1px solid rgba(255,71,87,0.25)', borderRadius: 10, overflow: 'hidden' }}>
       <div style={{ padding: '8px 14px', background: 'rgba(255,71,87,0.09)', borderBottom: '1px solid rgba(255,71,87,0.2)' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#ff4757', fontWeight: 700 }}>{badLabel ?? 'Avoid'}</span>

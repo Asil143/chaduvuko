@@ -713,7 +713,7 @@ print(f"Test MAE:    {best_test:.4f} min")`} />
         </p>
 
         <ConceptBox title="Loss function → gradient → what each tree learns to predict">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="lesson-wide-rows" style={{ display: 'flex', flexDirection: 'column', gap: 8, ...({ '--row-min': '660px' } as React.CSSProperties) }}>
             {[
               {
                 loss: 'MSE  (regression)',
@@ -843,6 +843,7 @@ for n_trees in [1, 5, 10, 25, 50, 100, 200, 500]:
         </p>
 
         <VisualBox label="Three implementations — what each one changed">
+          <div className="lesson-wide-rows" style={{ '--row-min': '640px' } as React.CSSProperties}>
           <div style={{ border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
             <div style={{
               display: 'grid', gridTemplateColumns: '160px 1fr 1fr 1fr',
@@ -883,6 +884,7 @@ for n_trees in [1, 5, 10, 25, 50, 100, 200, 500]:
                 <span style={{ fontSize: 11, color: '#BA7517', fontFamily: 'var(--font-mono)' }}>{row[3]}</span>
               </div>
             ))}
+          </div>
           </div>
         </VisualBox>
 

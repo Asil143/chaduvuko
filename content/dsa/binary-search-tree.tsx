@@ -161,7 +161,7 @@ export default function BSTPage() {
       </div>
 
       {/* Valid vs Invalid BST */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 16, marginBottom: 28 }}>
         {/* Valid BST */}
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.3)', borderRadius: 12, padding: '20px 24px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 16 }}>✅ Valid BST</div>
@@ -727,7 +727,7 @@ int main() {
         and every operation degrades to O(n). This is the BST's critical weakness.
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 20, marginBottom: 28 }}>
         {/* Balanced */}
         <div style={{ background: 'rgba(0,230,118,0.06)', border: '1px solid rgba(0,230,118,0.3)', borderRadius: 12, padding: '20px 24px' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', marginBottom: 12 }}>✅ Balanced BST</div>
@@ -762,7 +762,7 @@ int main() {
         </div>
 
         {/* Degenerate */}
-        <div style={{ background: 'rgba(255,71,87,0.06)', border: '1px solid rgba(255,71,87,0.3)', borderRadius: 12, padding: '20px 24px' }}>
+        <div style={{ background: 'rgba(255,71,87,0.06)', border: '1px solid rgba(255,71,87,0.3)', borderRadius: 12, padding: '20px 24px', overflowX: 'auto' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#ff4757', marginBottom: 12 }}>❌ Degenerate BST (skewed)</div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0, marginBottom: 14, paddingLeft: 20 }}>
             <BSTNode value={1} color="#ff4757" highlight />

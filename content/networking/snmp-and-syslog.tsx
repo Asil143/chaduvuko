@@ -167,7 +167,7 @@ function SyslogSeverityExplorer() {
     <div style={{ background: '#f8fafc', border: '2px solid #10b981', borderRadius: '14px', padding: '1.5rem', margin: '1.5rem 0' }}>
       <h3 style={{ fontWeight: 800, color: '#10b981', marginBottom: '0.25rem' }}>Syslog Severity Level Explorer</h3>
       <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.25rem' }}>Click a severity level to see its meaning, examples, and when to act.</p>
-      <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.25rem' }}>
         {SYSLOG_LEVELS.map(s => (
           <button key={s.severity} onClick={() => setActive(s.severity)}
             style={{ flex: 1, padding: '0.45rem 0.5rem', borderRadius: '7px', border: `2px solid ${s.color}`, background: active === s.severity ? s.color : '#fff', color: active === s.severity ? '#fff' : s.color, fontWeight: 700, cursor: 'pointer', fontSize: '0.78rem', textAlign: 'center' }}>

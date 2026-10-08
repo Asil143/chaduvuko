@@ -183,6 +183,10 @@
     /* `anywhere` (unlike `break-word`) also shrinks the min-content width of grid and
        flex items, so fixed `1fr` lesson layouts can narrow instead of overflowing. */
     .prose-chaduvuko { overflow-wrap: anywhere; }
+    /* Opt-in for comparison rows built from fixed-width grids: on phones the rows keep a
+       readable minimum width (--row-min) and the group scrolls sideways as one table. */
+    .lesson-wide-rows { overflow-x: auto; }
+    .lesson-wide-rows > * { min-width: var(--row-min, 560px); }
     /* Phones only: on wider screens display:block would stop width:100% tables from filling the column. */
     .prose-chaduvuko table {
       display: block;

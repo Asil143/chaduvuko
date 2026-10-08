@@ -540,7 +540,7 @@ print(f"\ntorchvision.ops.nms result: {kept_t.tolist()}  ← same as manual")`} 
           </div>
         </VisualBox>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+        <div className="lesson-wide-rows" style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24, ...({ '--row-min': '500px' } as React.CSSProperties) }}>
           <h3 style={S.h3}>YOLO version history — what each version improved</h3>
           {[
             {

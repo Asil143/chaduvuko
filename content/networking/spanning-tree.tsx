@@ -232,7 +232,8 @@ function StpVersionComparator() {
       <p style={{ fontSize: 13, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Interactive — STP Version Comparator</p>
       <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 20px' }}>Click a protocol to compare features.</p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+      <div style={{ overflowX: 'auto' }}>
+      <div style={{ width: 'max-content', minWidth: '100%', display: 'flex', flexDirection: 'column', gap: 0 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '100px 110px 90px 70px', gap: 0, padding: '8px 12px', borderRadius: '8px 8px 0 0', background: `${G}15`, fontSize: 11, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>
           <span>Protocol</span><span>Standard</span><span>Convergence</span><span>Per-VLAN</span>
         </div>
@@ -245,6 +246,7 @@ function StpVersionComparator() {
             <span style={{ fontSize: 12, color: s.perVlan ? G : 'var(--muted)' }}>{s.perVlan ? 'Yes' : 'No'}</span>
           </div>
         ))}
+      </div>
       </div>
 
       {stp && (

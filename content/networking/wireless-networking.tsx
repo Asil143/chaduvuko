@@ -110,7 +110,8 @@ function WifiStandardsExplorer() {
       <p style={{ fontSize: 13, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '.1em' }}>Interactive — Wi-Fi Standards Explorer</p>
       <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 20px' }}>Click a generation to compare specifications.</p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+      <div style={{ overflowX: 'auto' }}>
+      <div style={{ width: 'max-content', minWidth: '100%', display: 'flex', flexDirection: 'column', gap: 0 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '80px 80px 60px 100px 110px 100px', gap: 0, padding: '8px 12px', background: `${G}15`, borderRadius: '8px 8px 0 0', fontSize: 11, fontWeight: 700, color: G, fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>
           <span>Gen</span><span>Standard</span><span>Year</span><span>Max Rate</span><span>Band</span><span>MIMO</span>
         </div>
@@ -125,6 +126,7 @@ function WifiStandardsExplorer() {
             <span style={{ fontSize: 11, color: 'var(--muted)' }}>{w.mimo}</span>
           </div>
         ))}
+      </div>
       </div>
 
       {s && (

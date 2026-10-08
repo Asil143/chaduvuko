@@ -850,7 +850,7 @@ print(f"(Baseline — always predict mean: "
 
         <h3 style={S.h3}>Three variants of gradient descent</h3>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+        <div className="lesson-wide-rows" style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24, ...({ '--row-min': '640px' } as React.CSSProperties) }}>
           {[
             {
               name: 'Batch GD',

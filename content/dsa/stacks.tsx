@@ -175,7 +175,7 @@ export default function StacksPage() {
           {/* Push visual */}
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: 12, color: 'var(--green)', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 14 }}>PUSH — add to top</div>
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'clamp(8px, 3vw, 16px)' }}>
               <StackVisual items={[
                 { val: '10' },
                 { val: '20' },
@@ -197,7 +197,7 @@ export default function StacksPage() {
           {/* Pop visual */}
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: 12, color: '#ff4757', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: 14 }}>POP — remove from top</div>
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'clamp(8px, 3vw, 16px)' }}>
               <StackVisual items={[
                 { val: '10' },
                 { val: '20' },

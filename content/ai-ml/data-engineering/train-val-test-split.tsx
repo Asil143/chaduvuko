@@ -930,7 +930,7 @@ if abs(gap) > 1.0:
         </p>
 
         <ConceptBox title="Split size guidelines by dataset size">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="lesson-wide-rows" style={{ display: 'flex', flexDirection: 'column', gap: 8, ...({ '--row-min': '580px' } as React.CSSProperties) }}>
             {[
               {
                 size: '< 1,000 rows',

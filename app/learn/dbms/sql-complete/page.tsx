@@ -859,7 +859,7 @@ SELECT city, COUNT(*) FROM customers WHERE city = 'San Francisco' GROUP BY city;
 
         <SubTitle>The Reference Data for All JOIN Examples</SubTitle>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 14, marginBottom: 24 }}>
           <SampleTable
             title="customers (left table)"
             headers={['customer_id', 'name', 'city']}

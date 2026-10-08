@@ -601,7 +601,7 @@ void deleteTree(TreeNode *root) {
             { level: 'Level 1', nodes: [2, 3], color: '#4285f4' },
             { level: 'Level 2', nodes: [4, 5, 6, 7], color: '#facc15' },
           ].map((row) => (
-            <div key={row.level} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div key={row.level} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16, rowGap: 8 }}>
               <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', minWidth: 60 }}>{row.level}</div>
               <div style={{ display: 'flex', gap: 8 }}>
                 {row.nodes.map((v) => (

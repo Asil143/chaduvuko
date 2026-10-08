@@ -196,21 +196,24 @@ function OSIStackExplorer() {
             key={layer.n}
             onClick={() => setActive(active === i ? null : i)}
             style={{
-              display: 'flex', alignItems: 'center', gap: 14,
+              display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+              columnGap: 'clamp(6px, 2.5vw, 14px)', rowGap: 4,
               padding: '12px 18px',
               background: active === i ? `${layer.color}15` : 'var(--bg)',
               border: `1px solid ${active === i ? layer.color : 'var(--border)'}`,
               borderLeft: `4px solid ${layer.color}`,
               borderRadius: active === i ? '8px 8px 0 0' : 10,
               cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s',
-              marginLeft: `${(7 - layer.n) * 14}px`,
+              marginLeft: `calc(${7 - layer.n} * clamp(4px, 2vw, 14px))`,
             }}
           >
             <span style={{ fontSize: 18 }}>{layer.emoji}</span>
             <span style={{ fontSize: 10, fontWeight: 800, color: layer.color, fontFamily: FONT_MONO, textTransform: 'uppercase', letterSpacing: '.1em', background: `${layer.color}20`, padding: '3px 8px', borderRadius: 5, flexShrink: 0 }}>L{layer.n}</span>
-            <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', flex: 1 }}>{layer.name}</span>
-            <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO, flexShrink: 0 }}>{layer.pdu}</span>
-            <span style={{ fontSize: 11, color: layer.color, flexShrink: 0 }}>{active === i ? '▲' : '▼'}</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', flex: 1, overflowWrap: 'normal' }}>{layer.name}</span>
+            <span style={{ display: 'flex', alignItems: 'center', columnGap: 'clamp(6px, 2.5vw, 14px)', marginLeft: 'auto' }}>
+              <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO, overflowWrap: 'normal', textAlign: 'right' }}>{layer.pdu}</span>
+              <span style={{ fontSize: 11, color: layer.color, flexShrink: 0 }}>{active === i ? '▲' : '▼'}</span>
+            </span>
           </button>
         ))}
       </div>
