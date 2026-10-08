@@ -34,17 +34,21 @@ export function SiteSearch() {
     triggerRef.current?.focus()
   }, [])
 
+  const openRef = useRef(open)
+  openRef.current = open
+
   useEffect(() => {
     setShortcut(/Mac|iPhone|iPad/.test(navigator.platform) ? '⌘K' : 'Ctrl K')
     const onKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
-        setOpen(isOpen => !isOpen)
+        if (openRef.current) close()
+        else setOpen(true)
       }
     }
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [])
+  }, [close])
 
   useEffect(() => {
     if (!open) return
@@ -129,6 +133,7 @@ export function SiteSearch() {
                 ref={inputRef}
                 type="text"
                 role="combobox"
+                aria-label="Search lessons"
                 aria-expanded={results.length > 0}
                 aria-controls={listboxId}
                 aria-activedescendant={activeId}
