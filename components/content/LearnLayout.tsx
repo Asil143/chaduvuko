@@ -274,23 +274,23 @@ export function LearnLayout({ children, title, description, section, readTime, u
               <div className="flex items-center justify-between mb-8 gap-3">
                 {prev ? (
                   <Link href={prev.href}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-mono transition-all"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-mono transition-all min-w-0 max-w-[48%]"
                     style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text2)', textDecoration: 'none' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'; (e.currentTarget as HTMLElement).style.color = 'var(--accent)' }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text2)' }}>
-                    <ChevronLeft size={14} />
-                    {prev.title}
+                    <ChevronLeft size={14} className="flex-shrink-0" />
+                    <span className="truncate">{prev.title}</span>
                   </Link>
                 ) : <div />}
 
                 {next ? (
                   <Link href={next.href}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-mono transition-all"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-mono transition-all min-w-0 max-w-[48%]"
                     style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text2)', textDecoration: 'none' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'; (e.currentTarget as HTMLElement).style.color = 'var(--accent)' }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text2)' }}>
-                    {next.title}
-                    <ChevronRight size={14} />
+                    <span className="truncate">{next.title}</span>
+                    <ChevronRight size={14} className="flex-shrink-0" />
                   </Link>
                 ) : <div />}
               </div>
@@ -364,7 +364,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
               <div className="flex items-stretch gap-3 mt-10 pt-8" style={{ borderTop: '1px solid var(--border)' }}>
                 {prev ? (
                   <Link href={prev.href}
-                    className="flex-1 flex items-center gap-3 p-4 rounded-xl group transition-all"
+                    className="flex-1 min-w-0 flex items-center gap-3 p-4 rounded-xl group transition-all"
                     style={{ background: 'var(--surface)', border: '1px solid var(--border)', textDecoration: 'none' }}
                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'}
                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'}>
@@ -372,21 +372,21 @@ export function LearnLayout({ children, title, description, section, readTime, u
                     <div className="min-w-0">
                       <div className="text-xs font-mono mb-0.5" style={{ color: 'var(--muted)' }}>{prev.label}</div>
                       <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{prev.title}</div>
-                      <div className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{prev.subtitle}</div>
+                      <div className="text-xs font-mono truncate" style={{ color: 'var(--muted)' }}>{prev.subtitle}</div>
                     </div>
                   </Link>
                 ) : <div className="flex-1" />}
 
                 {next ? (
                   <Link href={next.href}
-                    className="flex-1 flex items-center gap-3 p-4 rounded-xl text-right justify-end group transition-all"
+                    className="flex-1 min-w-0 flex items-center gap-3 p-4 rounded-xl text-right justify-end group transition-all"
                     style={{ background: 'var(--surface)', border: '1px solid var(--border)', textDecoration: 'none' }}
                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'}
                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'}>
                     <div className="min-w-0">
                       <div className="text-xs font-mono mb-0.5" style={{ color: 'var(--muted)' }}>{next.label}</div>
                       <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{next.title}</div>
-                      <div className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{next.subtitle}</div>
+                      <div className="text-xs font-mono truncate" style={{ color: 'var(--muted)' }}>{next.subtitle}</div>
                     </div>
                     <ChevronRight size={18} style={{ color: 'var(--accent)', flexShrink: 0 }} />
                   </Link>
