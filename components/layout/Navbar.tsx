@@ -1,6 +1,5 @@
 'use client'
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
@@ -64,17 +63,14 @@ export function Navbar() {
         Skip to content
       </a>
 
-      <Link href="/" aria-label="Chaduvuko home" className="flex items-center flex-shrink-0">
-        <span className="flex items-center rounded-lg" style={{ background: '#ffffff', padding: '3px 12px' }}>
-          <Image
-            src="/logo.png"
-            alt="Chaduvuko"
-            width={1536}
-            height={1024}
-            priority
-            style={{ height: '54px', width: 'auto' }}
-          />
-        </span>
+      <Link
+        href="/"
+        aria-label="Chaduvuko home"
+        className="flex items-center flex-shrink-0"
+        style={{ fontSize: '21px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1, textDecoration: 'none' }}
+      >
+        <span style={{ color: 'var(--text)' }}>Chadu</span>
+        <span style={{ color: 'var(--brand-green)' }}>vuko</span>
       </Link>
 
       <nav aria-label="Main" className="hidden xl:block mx-4">
