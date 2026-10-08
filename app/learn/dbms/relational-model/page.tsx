@@ -1935,7 +1935,7 @@ CREATE TABLE transactions (
     
     payment_method_id  BIGINT         NOT NULL,        -- FK to surrogate PK (not card_number)
     amount             DECIMAL(12,2)  NOT NULL CHECK (amount > 0),
-    currency           CHAR(3)        NOT NULL DEFAULT 'INR',
+    currency           CHAR(3)        NOT NULL DEFAULT 'USD',
     txn_timestamp      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status             VARCHAR(20)    NOT NULL DEFAULT 'pending'
                        CHECK (status IN ('pending','authorised','captured','failed','refunded','voided')),

@@ -1206,7 +1206,7 @@ CREATE INDEX idx_orders_date ON orders(order_date) WITH (fillfactor = 70);
     merchant_id  VARCHAR(30)   NOT NULL,
     api_key      VARCHAR(64)   NOT NULL,
     amount       DECIMAL(15,2) NOT NULL,
-    currency     CHAR(3)       NOT NULL DEFAULT 'INR',
+    currency     CHAR(3)       NOT NULL DEFAULT 'USD',
     status       VARCHAR(20)   NOT NULL DEFAULT 'created',
     created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     completed_at TIMESTAMP
