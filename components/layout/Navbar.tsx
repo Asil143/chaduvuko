@@ -5,11 +5,12 @@ import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { ThemePicker } from '@/components/ui/ThemePicker'
 import { SiteSearch } from '@/components/ui/SiteSearch'
+import { TRACKS_HREF, TracksListMobile, TracksMenuDesktop } from '@/components/layout/TracksMenu'
+import type { TrackSummaries } from '@/lib/lesson-nav'
 
 type NavItem = { label: string; href: string }
 
 const navItems: NavItem[] = [
-  { label: 'Learn',          href: '/learn' },
   { label: 'Roadmap',        href: '/learn/roadmap' },
   { label: 'Projects',       href: '/learn/projects' },
   { label: 'Industry',       href: '/learn/industry' },
@@ -20,9 +21,9 @@ const navItems: NavItem[] = [
 const PLAYGROUND_HREF = '/playground'
 const START_HREF = '/learn/roadmap'
 
-// Longest matching prefix wins, so /learn/roadmap/x highlights Roadmap, not Learn.
+// Longest matching prefix wins, so /learn/roadmap/x highlights Roadmap, not Tracks.
 function getActiveHref(pathname: string): string | null {
-  const candidates = [...navItems.map(i => i.href), PLAYGROUND_HREF]
+  const candidates = [TRACKS_HREF, ...navItems.map(i => i.href), PLAYGROUND_HREF]
   let best: string | null = null
   for (const href of candidates) {
     const matches = pathname === href || pathname.startsWith(href + '/')
@@ -31,7 +32,7 @@ function getActiveHref(pathname: string): string | null {
   return best
 }
 
-export function Navbar() {
+export function Navbar({ tracks }: { tracks: TrackSummaries }) {
   const pathname = usePathname()
   const activeHref = getActiveHref(pathname)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -75,6 +76,9 @@ export function Navbar() {
 
       <nav aria-label="Main" className="hidden xl:block mx-4">
         <ul className="flex items-center gap-0.5">
+          <li>
+            <TracksMenuDesktop tracks={tracks} active={activeHref === TRACKS_HREF} />
+          </li>
           {navItems.map(item => {
             const active = item.href === activeHref
             return (
@@ -157,6 +161,7 @@ export function Navbar() {
           className="absolute top-16 left-0 right-0 p-4 xl:hidden z-40 max-h-[80vh] overflow-y-auto"
           style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}
         >
+          <TracksListMobile tracks={tracks} active={activeHref === TRACKS_HREF} onNavigate={() => setMobileOpen(false)} />
           <ul>
             {navItems.map(item => {
               const active = item.href === activeHref

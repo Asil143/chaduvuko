@@ -1,6 +1,15 @@
 // Client-safe shapes computed on the server from the catalog.
+import type { TrackArea } from '@/lib/catalog/types'
 
-export type TrackSummaries = Record<string, { href: string; lessons: number }>
+export interface TrackSummary {
+  href: string
+  title: string
+  area: TrackArea
+  lessons: number
+}
+
+/** Keyed by track slug, in catalog order. */
+export type TrackSummaries = Record<string, TrackSummary>
 
 export interface LessonNavLink {
   href: string

@@ -29,7 +29,12 @@ export function liveLessonsForTrack(slug: string): Lesson[] {
 /** Compact per-track data that is safe to pass to Client Components. */
 export function getTrackSummaries(): TrackSummaries {
   return Object.fromEntries(
-    TRACKS.map(track => [track.slug, { href: track.indexHref, lessons: liveLessonsForTrack(track.slug).length }]),
+    TRACKS.map(track => [track.slug, {
+      href: track.indexHref,
+      title: track.title,
+      area: track.area,
+      lessons: liveLessonsForTrack(track.slug).length,
+    }]),
   )
 }
 
