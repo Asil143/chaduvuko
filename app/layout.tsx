@@ -173,7 +173,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body id="top">
         <ServiceWorkerRegistration />
         <Navbar />
-        <main id="main-content">{children}</main>
+        {/* Page top paddings assume a 32px band below the fixed header (formerly the announcement bar). */}
+        <main id="main-content" style={{ paddingTop: '32px' }}>{children}</main>
         <Footer />
         <ChatBot />
       </body>
