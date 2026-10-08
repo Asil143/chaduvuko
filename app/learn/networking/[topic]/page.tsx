@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { NETWORKING_CURRICULUM } from '@/data/networking-curriculum'
 
 const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   'what-is-a-network':        () => import('@/content/networking/what-is-a-network'),
@@ -37,15 +38,6 @@ const moduleMap: Record<string, () => Promise<{ default: React.ComponentType }>>
   'network-attacks':          () => import('@/content/networking/network-attacks'),
   'firewalls-and-acls':       () => import('@/content/networking/firewalls-and-acls'),
   'ids-and-ips':              () => import('@/content/networking/ids-and-ips'),
-  'vpns-and-tunneling':       () => import('@/content/networking/vpns-and-tunneling'),
-  'wireless-security':        () => import('@/content/networking/wireless-security'),
-  'zero-trust-networking':    () => import('@/content/networking/zero-trust-networking'),
-  'ddos':                     () => import('@/content/networking/ddos'),
-  'network-troubleshooting':  () => import('@/content/networking/network-troubleshooting'),
-  'wireshark':                () => import('@/content/networking/wireshark'),
-  'tcpdump':                  () => import('@/content/networking/tcpdump'),
-  'nmap':                     () => import('@/content/networking/nmap'),
-  'network-monitoring':       () => import('@/content/networking/network-monitoring'),
 }
 
 const moduleMeta: Record<string, { title: string; description: string }> = {
@@ -84,19 +76,18 @@ const moduleMeta: Record<string, { title: string; description: string }> = {
   'network-attacks':          { title: 'Network Attacks — ARP Poisoning, MITM, Sniffing',        description: 'Every Layer 2/3 attack — how they work in Wireshark, how to defend.' },
   'firewalls-and-acls':       { title: 'Firewalls, ACLs, and Stateful Inspection',               description: 'Stateless vs stateful vs NGFW, ACL rule order, DMZ design, bypass techniques.' },
   'ids-and-ips':              { title: 'IDS and IPS — Detecting Attacks on the Wire',            description: 'Signature vs anomaly, Snort/Suricata rules, inline vs passive, evasion.' },
-  'vpns-and-tunneling':       { title: 'VPNs and Tunneling — IPSec, SSL, WireGuard',             description: 'How VPNs encrypt traffic — IKEv2, OpenVPN, WireGuard compared byte by byte.' },
-  'wireless-security':        { title: 'Wireless Security — WPA2/WPA3 Attacks',                  description: 'KRACK, PMKID, deauth, evil twin — complete wireless attack surface.' },
-  'zero-trust-networking':    { title: 'Zero Trust Networking — Never Trust, Always Verify',     description: 'BeyondCorp, microsegmentation, ZTNA vs VPN — the architecture replacing perimeters.' },
-  'ddos':                     { title: 'DDoS — How It Works and How to Defend Against It',       description: 'Volumetric, protocol, application layer — Cloudflare, AWS Shield, anycast.' },
-  'network-troubleshooting':  { title: 'Network Troubleshooting Methodology',                    description: 'OSI-layer-by-layer diagnosis with every command you run at each step.' },
-  'wireshark':                { title: 'Wireshark — Packet Analysis Complete Guide',             description: 'Capture filters, display filters, following streams, decrypting TLS.' },
-  'tcpdump':                  { title: 'tcpdump — Command-Line Packet Capture',                  description: 'BPF filter syntax, writing pcaps, piping to Wireshark.' },
-  'nmap':                     { title: 'Nmap — Network Scanning and Host Discovery',             description: 'SYN scan, OS fingerprinting, NSE scripts, timing, evading firewalls.' },
-  'network-monitoring':       { title: 'Network Monitoring — NetFlow, SNMP Polling, Dashboards', description: 'How enterprise networks are observed at scale — NetFlow, Grafana, alerting.' },
 }
 
+const LIVE_SLUGS = new Set(
+  NETWORKING_CURRICULUM.flatMap(section => section.modules)
+    .filter(module => module.status === 'live')
+    .map(module => module.slug),
+)
+
+export const dynamicParams = false
+
 export async function generateStaticParams() {
-  return Object.keys(moduleMap).map(topic => ({ topic }))
+  return Array.from(LIVE_SLUGS).map(topic => ({ topic }))
 }
 
 export async function generateMetadata({ params }: { params: { topic: string } }): Promise<Metadata> {
@@ -110,7 +101,7 @@ export async function generateMetadata({ params }: { params: { topic: string } }
 
 export default async function NetworkingTopicPage({ params }: { params: { topic: string } }) {
   const loader = moduleMap[params.topic]
-  if (!loader) notFound()
+  if (!LIVE_SLUGS.has(params.topic) || !loader) notFound()
   const { default: Content } = await loader()
   return <Content />
 }

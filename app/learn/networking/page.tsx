@@ -228,7 +228,7 @@ export default function NetworkingTrackPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 28 }}>
         {filtered.map((mod, idx) => {
           const isLive = mod.status === 'live'
-          const href   = isLive ? `/learn/networking/${mod.slug}` : '#'
+          const href   = `/learn/networking/${mod.slug}`
 
           return (
             <div key={mod.id}>
