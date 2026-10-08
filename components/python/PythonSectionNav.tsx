@@ -62,18 +62,14 @@ export default function PythonSectionNav({ slug }: { slug: string }) {
           {section.modules.map(m => {
             const isActive = m.slug === slug
             const isLive = m.status === 'live'
-            const href = isLive ? `/learn/python/${m.slug}` : '#'
-            return (
-              <Link
-                key={m.slug}
-                href={href}
-                title={m.title}
-                style={{
-                  flex: 1, height: 5, borderRadius: 3, display: 'block', textDecoration: 'none',
-                  background: isActive ? color : isLive ? `${color}40` : 'var(--border)',
-                }}
-              />
-            )
+            const style: React.CSSProperties = {
+              flex: 1, height: 5, borderRadius: 3, display: 'block', textDecoration: 'none',
+              background: isActive ? color : isLive ? `${color}40` : 'var(--border)',
+            }
+            if (!isLive) {
+              return <span key={m.slug} title={`${m.title} — Coming soon`} aria-hidden="true" style={style} />
+            }
+            return <Link key={m.slug} href={`/learn/python/${m.slug}`} title={m.title} style={style} />
           })}
         </div>
 
@@ -82,22 +78,25 @@ export default function PythonSectionNav({ slug }: { slug: string }) {
           {section.modules.map(m => {
             const isActive = m.slug === slug
             const isLive = m.status === 'live'
-            const href = isLive ? `/learn/python/${m.slug}` : '#'
+            const style: React.CSSProperties = {
+              flex: 1, fontSize: 9, textAlign: 'center', overflow: 'hidden',
+              textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              color: isActive ? color : isLive ? 'var(--muted)' : 'var(--border)',
+              fontWeight: isActive ? 700 : 400,
+              textDecoration: 'none',
+              fontFamily: 'var(--font-mono)',
+              opacity: isActive || isLive ? 1 : 0.5,
+            }
+            if (!isLive) {
+              return (
+                <span key={m.slug} title={`${m.title} — Coming soon`} style={{ ...style, cursor: 'default' }}>
+                  <span style={{ opacity: 0.7 }}>{m.id}.</span> {m.title}
+                  <span className="sr-only"> — Coming soon</span>
+                </span>
+              )
+            }
             return (
-              <Link
-                key={m.slug}
-                href={href}
-                title={m.title}
-                style={{
-                  flex: 1, fontSize: 9, textAlign: 'center', overflow: 'hidden',
-                  textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                  color: isActive ? color : isLive ? 'var(--muted)' : 'var(--border)',
-                  fontWeight: isActive ? 700 : 400,
-                  textDecoration: 'none',
-                  fontFamily: 'var(--font-mono)',
-                  opacity: isActive || isLive ? 1 : 0.5,
-                }}
-              >
+              <Link key={m.slug} href={`/learn/python/${m.slug}`} title={m.title} style={style}>
                 <span style={{ opacity: 0.7 }}>{m.id}.</span> {m.title}
               </Link>
             )
