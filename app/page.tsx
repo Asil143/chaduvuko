@@ -251,12 +251,12 @@ export default function HomePage() {
         <h1 style={{ fontSize:'clamp(40px,6vw,70px)', fontWeight:900, lineHeight:1.05, letterSpacing:'-3px', marginBottom:6 }}>
           One Platform.<br />Every IT Skill.<br /><span style={{ color:'var(--green)' }}>Every Career.</span>
         </h1>
-        <div style={{ fontSize:'clamp(16px,2.2vw,26px)', fontWeight:600, color:'var(--muted)', margin:'20px 0 24px', minHeight:44, display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+        <div style={{ fontSize:'clamp(16px,2.2vw,26px)', fontWeight:600, color:'var(--muted)', margin:'20px 0 24px', minHeight:44, display:'flex', flexWrap:'wrap', alignItems:'center', justifyContent:'center', gap:8 }}>
           Become a{' '}
           <Link href={roleLinks[jobRoles[roleIndex]] ?? '/learn/roadmap'} style={{
             background:'rgba(0,230,118,0.1)', border:'1px solid rgba(0,230,118,0.2)',
             color:'var(--green)', padding:'3px 14px', borderRadius:99, fontWeight:700,
-            minWidth:260, textAlign:'center', display:'inline-block',
+            minWidth:'min(260px, 100%)', textAlign:'center', display:'inline-block',
             opacity: roleVisible ? 1 : 0, transition:'opacity 0.25s',
             fontSize:'clamp(14px,1.8vw,22px)',
             textDecoration:'none', cursor:'pointer',
@@ -279,7 +279,7 @@ export default function HomePage() {
           </a>
         </div>
         {/* Stats */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:1, background:'var(--border)', border:'1px solid var(--border)', borderRadius:12, overflow:'hidden', maxWidth:560, margin:'0 auto' }}>
+        <div className="grid-cols-2 sm:grid-cols-4" style={{ display:'grid', gap:1, background:'var(--border)', border:'1px solid var(--border)', borderRadius:12, overflow:'hidden', maxWidth:560, margin:'0 auto' }}>
           {[
             { n:`${counters.t}+`, l:'Tutorials' },
             { n:`${counters.p}+`, l:'Projects & Growing' },
@@ -312,7 +312,7 @@ export default function HomePage() {
           <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// The honest truth</p>
           <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Every other platform has the<br /><span style={{ color:'var(--red)' }}>same blind spot.</span></h2>
           <p style={{ fontSize:14, color:'var(--muted)', marginBottom:32, maxWidth:520 }}>We studied 10 platforms and their real student complaints. Here&apos;s every failure — and how we built around each one.</p>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
+          <div className="grid-cols-1 md:grid-cols-2" style={{ display:'grid', gap:16 }}>
             {[
               { title:'❌ What every other platform does', border:'rgba(255,71,87,.2)', bg:'rgba(255,71,87,.03)', titleColor:'#ff6b7a', prefix:'✕', prefixColor:'#ff6b7a', items:[
                 'Teaches syntax. Never teaches what to do when it breaks.',
@@ -371,7 +371,7 @@ export default function HomePage() {
           ))}
         </div>
         {/* Tracks grid */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:6 }}>
+        <div className="grid-cols-2 md:grid-cols-3 lg:grid-cols-4" style={{ display:'grid', gap:6 }}>
           {visibleTracks.map(t => (
             <Link key={t.name} href={t.href} style={{ border:'1px solid var(--border)', borderRadius:10, padding:14, background:'var(--surface)', textDecoration:'none', display:'block', transition:'border-color .2s' }}
               onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--accent)')}
@@ -405,7 +405,7 @@ export default function HomePage() {
         <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// The Chaduvuko method</p>
         <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Three things no other<br />platform does.</h2>
         <p style={{ fontSize:14, color:'var(--muted)', marginBottom:32, maxWidth:520 }}>Direct fixes to the three biggest reasons students give up or fail interviews.</p>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12 }}>
+        <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ display:'grid', gap:12 }}>
           {[
             { icon:'🩺', title:'Error Library', desc:'Every project page has an "Errors You\'ll Hit" section — the actual error message, exactly why it happens, and the precise fix. 80% of real engineering is debugging. No other platform prepares you for it.', code: ['PipelineRunFailed: Copy_Store_Sales', 'Source file not found in landing zone', '', '→ Why: Date format in expression', '   uses "yyyy-MM-dd" but file has "yyyyMMdd"', '→ Fix: Change @formatDateTime format', '   to "yyyyMMdd" (remove hyphens)'] },
             { icon:'💼', title:'What This Looks Like at Work', desc:'Every concept ends with real job context — the actual Slack message your manager sends on day 1, the job posting that requires this skill, and what a senior engineer\'s code review would say.', code: ['Real task — DoorDash Data Engineering:', '"Build a daily ingestion pipeline', ' from S3 landing zone to Snowflake,', ' partitioned by market + order date."', '', '→ This exact tutorial covers it.'] },
@@ -436,7 +436,7 @@ export default function HomePage() {
           <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// Day 1 at work</p>
           <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>This is what you&apos;ll<br />actually be asked to do.</h2>
           <p style={{ fontSize:14, color:'var(--muted)', marginBottom:28, maxWidth:520 }}>Real tasks from real job descriptions at top US tech companies. Every tutorial connects to one of these.</p>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+          <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ display:'grid', gap:10 }}>
             {dayOneTasks.map(t => (
               <div key={t.role} style={{ borderRadius:12, padding:18, border:'1px solid var(--border)', background:'var(--surface)', borderLeft:`3px solid ${t.color}` }}>
                 <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'.1em', color:t.color, marginBottom:6 }}>{t.role}</div>
@@ -458,7 +458,7 @@ export default function HomePage() {
           <span style={{ color:'var(--green)', fontWeight:700 }}>🚀</span>
           Every project includes the Error Library, real job context, and a GitHub repo. More projects across every track are being added — check back often.
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8 }}>
+        <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ display:'grid', gap:8 }}>
           {[
             { num:'AZURE PROJECT 01', title:'Copy a CSV File to Azure Data Lake', desc:'Your first ADF pipeline from scratch. Includes the 3 errors every beginner hits and the exact fix for each one.', tags:['ADF','ADLS Gen2','Blob Storage'], href:'/learn/projects/azure-batch-pipeline' },
             { num:'AZURE PROJECT 02', title:'ForEach Loop — 10 Files, 1 Pipeline', desc:'Stop building 10 copy activities. One parameterized ForEach loop moves all store files efficiently.', tags:['ForEach','Parameters','ADF'], href:'/learn/projects/azure-projects-02' },
@@ -487,7 +487,7 @@ export default function HomePage() {
           <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Real 2026 US salary data.<br />Your filters. Your career.</h2>
           <p style={{ fontSize:14, color:'var(--muted)', marginBottom:28, maxWidth:560 }}>Filter by role, city, experience, and company type. Data sourced from LinkedIn, Glassdoor, Levels.fyi, and BLS OES — updated April 2026.</p>
           {/* Filters */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginBottom:20 }}>
+          <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ display:'grid', gap:10, marginBottom:20 }}>
             {[
               { label:'Job Role', id:'role', value:salaryRole, setter:setSalaryRole, opts:[
                 {v:'de',l:'Data Engineer'},{v:'ml',l:'ML / AI Engineer'},{v:'fs',l:'Full Stack Developer'},
@@ -523,7 +523,7 @@ export default function HomePage() {
             ))}
           </div>
           {/* Results */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
+          <div className="grid-cols-1 sm:grid-cols-2" style={{ display:'grid', gap:16 }}>
             <div style={{ border:'1px solid var(--border)', borderRadius:12, padding:20, background:'var(--surface)' }}>
               <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'.08em', color:'var(--muted)', marginBottom:14 }}>Estimated Salary Range</div>
               <div style={{ fontSize:38, fontWeight:900, color:'var(--green)', letterSpacing:'-2px', lineHeight:1 }}>${salMed}K</div>
@@ -587,7 +587,7 @@ export default function HomePage() {
         <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// Why Chaduvuko</p>
         <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Built by Asil.<br />For Engineers.</h2>
         <p style={{ fontSize:14, color:'var(--muted)', marginBottom:32, maxWidth:520 }}>Every decision is made with one question: does this actually help the student get the job?</p>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+        <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ display:'grid', gap:10 }}>
           {[
             { icon:'🩺', title:'Error Library', desc:'Every project includes the real errors you\'ll hit — exact error messages, root cause, and fix. No other platform prepares you for debugging.' },
             { icon:'🛠️', title:'Real Projects, Real Code', desc:'Not just theory. Working code on Azure, AWS, GCP, or real web infrastructure. Put it on your resume from day one.' },
