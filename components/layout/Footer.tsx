@@ -7,37 +7,55 @@ type FooterLink = {
 }
 
 const footerSections: Record<string, FooterLink[]> = {
-  'Products & Services': [
+  Learn: [
+    { label: 'What Is Chaduvuko?', href: '/about' },
+    { label: 'What Is Data Engineering?', href: '/learn/what-is-data-engineering' },
+    { label: 'What Is Cloud Computing?', href: '/learn/aws/introduction' },
+    { label: 'AI/ML Learning Hub', href: '/learn/ai-ml' },
+    { label: 'Cybersecurity Learning Hub', href: '/learn/cybersecurity' },
+    { label: 'What\'s New', href: '/blog' },
+    { label: 'Careers', href: '/careers' },
+  ],
+  Resources: [
+    { label: 'Getting Started', href: '/learn' },
     { label: 'Learning Dashboard', href: '/dashboard' },
-    { label: 'Courses', href: '/learn' },
-    { label: 'Playground', href: '/playground' },
     { label: 'Roadmaps', href: '/learn/roadmap' },
-    { label: 'Projects', href: '/learn/projects' },
+    { label: 'Projects Library', href: '/learn/projects' },
+    { label: 'SQL Cheatsheet', href: '/learn/sql/cheatsheet' },
+    { label: 'Interview Prep', href: '/learn/interview' },
+    { label: 'Industry Guide', href: '/learn/industry' },
     { label: 'Newsletter', href: '/newsletter' },
   ],
-  'About Chaduvuko': [
-    { label: 'About', href: '/about' },
-    { label: 'Blog', href: '/blog' },
-    { label: 'Industry Guide', href: '/learn/industry' },
-    { label: 'Interview Prep', href: '/learn/interview' },
-    { label: 'Find Videos', href: '/learn/find-video' },
+  Developers: [
+    { label: 'Builder Playground', href: '/playground' },
+    { label: 'SQL Playground', href: '/learn/sql/playground' },
+    { label: 'Python Track', href: '/learn/python' },
+    { label: 'Java Track', href: '/learn/roadmap/java-developer' },
+    { label: 'HTML & CSS Track', href: '/learn/html-css' },
+    { label: 'DSA Track', href: '/learn/dsa' },
+    { label: 'DBMS Track', href: '/learn/dbms' },
   ],
-  'Resources & Legal': [
-    { label: 'SQL Cheatsheet', href: '/learn/sql/cheatsheet' },
-    { label: 'Data Engineering', href: '/learn/data-engineering' },
-    { label: 'Python', href: '/learn/python' },
-    { label: 'AI/ML', href: '/learn/ai-ml' },
+  Help: [
+    { label: 'Contact', href: 'mailto:hello@chaduvuko.com', external: true },
+    { label: 'Find a Video', href: '/learn/find-video' },
+    { label: 'AWS Track', href: '/learn/aws/introduction' },
+    { label: 'Azure Track', href: '/learn/azure/introduction' },
+    { label: 'GCP Track', href: '/learn/gcp/introduction' },
     { label: 'Sitemap', href: '/sitemap.xml' },
   ],
-  'Quick Links': [
-    { label: 'SQL', href: '/learn/sql' },
-    { label: 'HTML & CSS', href: '/learn/html-css' },
-    { label: 'Cybersecurity', href: '/learn/cybersecurity' },
-    { label: 'Apache Kafka', href: '/learn/apache-kafka' },
-    { label: 'Snowflake', href: '/learn/snowflake' },
-    { label: 'DBMS', href: '/learn/dbms' },
-  ],
 }
+
+const socialLinks: FooterLink[] = [
+  { label: 'X', href: 'https://x.com/Asil143', external: true },
+  { label: 'GitHub', href: 'https://github.com/Asil143', external: true },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com', external: true },
+]
+
+const legalLinks: FooterLink[] = [
+  { label: 'Privacy', href: '/privacy' },
+  { label: 'Site terms', href: '/terms' },
+  { label: 'Cookie Preferences', href: '/privacy' },
+]
 
 function FooterAnchor({ link }: { link: FooterLink }) {
   const style = {
@@ -80,8 +98,8 @@ export function Footer() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '28px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
+            gap: '32px',
           }}
         >
           {Object.entries(footerSections).map(([title, sectionLinks]) => (
@@ -120,9 +138,45 @@ export function Footer() {
 
         <div
           style={{
-            marginTop: '32px',
-            paddingTop: '18px',
+            marginTop: '34px',
+            padding: '18px 0',
             borderTop: '1px solid var(--border)',
+            borderBottom: '1px solid var(--border)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '14px',
+            fontSize: '12px',
+          }}
+        >
+          <a href="#top" style={{ color: 'var(--text)', fontWeight: 700, textDecoration: 'none' }}>
+            Back to top
+          </a>
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <span style={{ color: 'var(--text)', fontWeight: 700 }}>English</span>
+            {socialLinks.map(link => (
+              <FooterAnchor key={link.href} link={link} />
+            ))}
+          </div>
+        </div>
+
+        <p
+          style={{
+            margin: '20px 0 0',
+            maxWidth: '820px',
+            fontSize: '11px',
+            lineHeight: 1.55,
+          }}
+        >
+          Chaduvuko is building free, practical IT education for learners and career switchers. As
+          we grow, we welcome builders, teachers, writers, and engineers who care about making high
+          quality learning accessible.
+        </p>
+
+        <div
+          style={{
+            marginTop: '18px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -132,10 +186,12 @@ export function Footer() {
             lineHeight: 1.5,
           }}
         >
-          <span>
-            Chaduvuko - built by Asil in California for students who deserve better learning tools.
-          </span>
-          <span>© 2026 Chaduvuko. No ads. No paywall.</span>
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
+            {legalLinks.map(link => (
+              <FooterAnchor key={link.href} link={link} />
+            ))}
+          </div>
+          <span>© 2026 Chaduvuko. Built by Asil. All rights reserved.</span>
         </div>
       </div>
     </footer>
