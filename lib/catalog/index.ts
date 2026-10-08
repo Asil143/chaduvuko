@@ -2,7 +2,7 @@ import { TRACKS } from './tracks'
 import { staticLessons } from './static-lessons'
 import { curriculumLessons } from './curriculum-lessons'
 import type { Lesson, NonLessonKind, Track } from './types'
-import type { LessonNavLink, LessonNavLinks } from '@/lib/lesson-nav'
+import type { LessonNavLink, LessonNavLinks, TrackSummaries } from '@/lib/lesson-nav'
 
 export type { Lesson, LessonStatus, NonLessonKind, Track, TrackArea } from './types'
 export { TRACKS }
@@ -24,6 +24,13 @@ export function getTrack(slug: string): Track | undefined {
 
 export function liveLessonsForTrack(slug: string): Lesson[] {
   return LIVE_LESSONS.filter(lesson => lesson.track === slug).sort((a, b) => a.order - b.order)
+}
+
+/** Compact per-track data that is safe to pass to Client Components. */
+export function getTrackSummaries(): TrackSummaries {
+  return Object.fromEntries(
+    TRACKS.map(track => [track.slug, { href: track.indexHref, lessons: liveLessonsForTrack(track.slug).length }]),
+  )
 }
 
 export type LessonNavTarget =
