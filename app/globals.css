@@ -171,6 +171,27 @@
   }
   .prose-chaduvuko strong { color: var(--text); font-weight: 600; }
 
+  /* Lesson bodies use many inline-styled tables, grids, and code-like blocks.
+     Keep them within the column on narrow screens: wide content scrolls in place,
+     long words and URLs break only when they cannot fit. */
+  .prose-chaduvuko pre,
+  .prose-chaduvuko [style*="white-space:pre"]:not([style*="white-space:pre-"]) {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  @media (max-width: 767px) {
+    /* `anywhere` (unlike `break-word`) also shrinks the min-content width of grid and
+       flex items, so fixed `1fr` lesson layouts can narrow instead of overflowing. */
+    .prose-chaduvuko { overflow-wrap: anywhere; }
+    /* Phones only: on wider screens display:block would stop width:100% tables from filling the column. */
+    .prose-chaduvuko table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-wrap: normal;
+    }
+  }
+
   .callout {
     background: var(--bg2);
     border: 1px solid var(--border);
