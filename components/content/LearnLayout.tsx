@@ -14,7 +14,7 @@ import { LinkedInGenerator } from '@/components/ui/LinkedInGenerator'
 import { SalaryWidget } from '@/components/ui/SalaryWidget'
 import { getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
 import { useLessonNav } from '@/components/content/LessonNavContext'
-import { recordLessonVisit, setLessonComplete, useProgress } from '@/lib/progress'
+import { recordLessonVisit, recordQuizPass, setLessonComplete, useProgress } from '@/lib/progress'
 import SQLSectionNav from '@/components/sql/SQLSectionNav'
 import DESectionNav from '@/components/data-engineering/DESectionNav'
 import PythonSectionNav from '@/components/python/PythonSectionNav'
@@ -317,7 +317,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
               )}
 
               <ResumeBullets href={pathname} />
-              <QuizSection pageHref={pathname} />
+              <QuizSection pageHref={pathname} onPass={isLesson ? () => recordQuizPass(pathname) : undefined} />
               <LinkedInGenerator pageHref={pathname} />
 
               {/* What to learn next */}
