@@ -54,12 +54,19 @@ export function getCatalogStats() {
 /** Compact per-track data that is safe to pass to Client Components. */
 export function getTrackSummaries(): TrackSummaries {
   return Object.fromEntries(
-    TRACKS.map(track => [track.slug, {
-      href: track.indexHref,
-      title: track.title,
-      area: track.area,
-      lessons: liveLessonsForTrack(track.slug).length,
-    }]),
+    TRACKS.map(track => {
+      const lessons = liveLessonsForTrack(track.slug).length
+      const unpublished = LESSONS.filter(lesson => lesson.track === track.slug && lesson.status === 'soon').length
+      return [track.slug, {
+        href: track.indexHref,
+        title: track.title,
+        area: track.area,
+        lessons,
+        // A handful of live lessons next to a large unpublished set (Data Science).
+        // Networking's few remaining drafts do not qualify.
+        early: unpublished > 0 && lessons < 15,
+      }]
+    }),
   )
 }
 

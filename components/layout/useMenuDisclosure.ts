@@ -13,6 +13,8 @@ export function useMenuDisclosure() {
 
   useEffect(() => {
     if (!open) return
+    const panel = containerRef.current?.querySelector<HTMLElement>('[data-menu-panel]')
+    panel?.querySelector<HTMLElement>('a, button')?.focus({ preventScroll: true })
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return
       setOpen(false)

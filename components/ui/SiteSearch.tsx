@@ -111,13 +111,13 @@ export function SiteSearch() {
         onClick={() => setOpen(true)}
         aria-label="Search lessons"
         aria-haspopup="dialog"
-        className="flex items-center justify-center md:justify-start gap-2 h-9 w-9 md:w-auto md:min-w-[180px] md:px-3 rounded-lg text-sm flex-shrink-0"
+        className="flex items-center justify-center lg:justify-start gap-2 h-9 w-9 lg:w-auto lg:min-w-[180px] lg:px-3 rounded-lg text-sm flex-shrink-0"
         style={{ background: 'var(--bg2)', border: '1px solid var(--border)', color: 'var(--muted)' }}
       >
         <Search size={14} />
-        <span className="hidden md:inline flex-1 text-left text-xs">Search lessons…</span>
+        <span className="hidden lg:inline flex-1 text-left text-xs">Search lessons…</span>
         {shortcut && (
-          <kbd className="hidden md:inline text-xs font-mono px-1 py-0.5 rounded"
+          <kbd className="hidden lg:inline text-xs font-mono px-1 py-0.5 rounded"
             style={{ background: 'var(--bg3)', border: '1px solid var(--border)', fontSize: '0.65rem' }}>
             {shortcut}
           </kbd>

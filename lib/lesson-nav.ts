@@ -6,6 +6,8 @@ export interface TrackSummary {
   title: string
   area: TrackArea
   lessons: number
+  /** True when most of the track is still unpublished. Short finished tracks stay unmarked. */
+  early: boolean
 }
 
 /** Live counts shown on the homepage and /learn, computed on the server. */

@@ -37,6 +37,7 @@ export function PracticeMenuDesktop({ activeHref }: { activeHref: string | null 
       {open && (
         <div
           id={panelId}
+          data-menu-panel
           className="absolute left-0 top-full mt-2 rounded-xl p-2"
           style={{ width: 300, background: 'var(--surface)', border: '1px solid var(--border2)', boxShadow: 'var(--shadow-lg)' }}
         >
