@@ -148,7 +148,7 @@ export default function SQLPlayground({
               : 'Failed to load — try refresh'}
           </span>
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
           {showSchema && (
             <button
               onClick={() => setSchemaOpen(p => !p)}
@@ -156,7 +156,7 @@ export default function SQLPlayground({
                 background: 'none', border: '1px solid var(--border)',
                 color: 'var(--muted)', borderRadius: 6,
                 padding: '4px 10px', fontSize: 11, cursor: 'pointer',
-                transition: 'all 0.15s',
+                transition: 'all 0.15s', whiteSpace: 'nowrap',
               }}
             >
               {schemaOpen ? 'Hide Schema' : 'Schema'}
@@ -172,7 +172,7 @@ export default function SQLPlayground({
               padding: '5px 14px', fontSize: 12, fontWeight: 700,
               cursor: status === 'ready' ? 'pointer' : 'not-allowed',
               transition: 'all 0.15s',
-              letterSpacing: '0.04em',
+              letterSpacing: '0.04em', whiteSpace: 'nowrap',
             }}
           >
             ▶ Run

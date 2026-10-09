@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { LearnLayout } from '@/components/content/LearnLayout';
 import SQLPlayground from '@/components/sql/SQLPlayground';
 
@@ -90,11 +90,16 @@ export default function SQLPlaygroundPage() {
   const [selected, setSelected]   = useState(0);
   const [mounted,  setMounted]    = useState(false);
   const [playKey,  setPlayKey]    = useState(0);
+  const playgroundRef = useRef<HTMLDivElement>(null);
 
   function loadChallenge(idx: number) {
     setSelected(idx);
     setPlayKey(k => k + 1); // remount playground with new query
     setMounted(true);
+    // Stacked layout: the editor is below the list, so bring it into view.
+    if (window.matchMedia('(max-width: 1199px)').matches) {
+      requestAnimationFrame(() => playgroundRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
   }
 
   const challenge = CHALLENGES[selected];
@@ -112,6 +117,10 @@ export default function SQLPlaygroundPage() {
         @keyframes statusPulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
         .challenge-card { transition: all 0.18s ease; }
         .challenge-card:hover { transform: translateY(-1px); }
+        .sqlpg-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; align-items: start; }
+        .sqlpg-schema { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+        @media (max-width: 1199px) { .sqlpg-layout { grid-template-columns: minmax(0, 1fr); } }
+        @media (max-width: 520px) { .sqlpg-schema { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
       ` }} />
 
       {/* ── Hero status bar ─────────────────────────────────────────────── */}
@@ -123,12 +132,11 @@ export default function SQLPlaygroundPage() {
         borderRadius: 14, padding: '16px 24px',
         boxShadow: '0 0 40px rgba(6,182,212,0.08)',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginRight: 6 }}>
             <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#00e676', boxShadow: '0 0 8px #00e67680', animation: 'statusPulse 2s ease infinite' }} />
             <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>DuckDB-WASM</span>
           </div>
-          <div style={{ width: 1, height: 16, background: 'var(--border)' }} />
           {[
             { label: '6 tables', color: SQL_COLOR },
             { label: 'FreshCart DB', color: SQL_COLOR },
@@ -137,7 +145,7 @@ export default function SQLPlaygroundPage() {
           ].map(b => (
             <span key={b.label} style={{
               fontSize: 11, fontFamily: 'var(--font-mono)', fontWeight: 700,
-              padding: '3px 10px', borderRadius: 20,
+              padding: '3px 10px', borderRadius: 20, whiteSpace: 'nowrap',
               background: `${b.color}18`, color: b.color,
               border: `1px solid ${b.color}30`,
             }}>{b.label}</span>
@@ -152,7 +160,7 @@ export default function SQLPlaygroundPage() {
       </div>
 
       {/* ── Main layout: challenges sidebar + playground ─────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 20, alignItems: 'start' }}>
+      <div className="sqlpg-layout">
 
         {/* ── Left: challenge cards ─── */}
         <div>
@@ -204,7 +212,7 @@ export default function SQLPlaygroundPage() {
         </div>
 
         {/* ── Right: playground ─── */}
-        <div>
+        <div ref={playgroundRef} style={{ scrollMarginTop: 80 }}>
           {/* Active challenge header */}
           {mounted && (
             <div style={{
@@ -246,7 +254,7 @@ export default function SQLPlaygroundPage() {
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--muted)', fontFamily: 'var(--font-mono)', marginBottom: 12 }}>
               // Schema reference
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+            <div className="sqlpg-schema">
               {[
                 { name: 'stores',      color: '#06b6d4', key: 'store_id',    cols: ['store_name','city','monthly_target'] },
                 { name: 'customers',   color: '#10b981', key: 'customer_id', cols: ['first_name','loyalty_tier','joined_date'] },
