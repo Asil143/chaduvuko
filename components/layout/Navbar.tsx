@@ -1,13 +1,14 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { ThemeChoice, ThemeMenu } from '@/components/ui/ThemePicker'
-import { SiteSearch } from '@/components/ui/SiteSearch'
+import { SiteSearch, type SearchResume } from '@/components/ui/SiteSearch'
 import { TRACKS_HREF, TracksListMobile, TracksMenuDesktop } from '@/components/layout/TracksMenu'
 import { PRACTICE_ITEMS, PracticeListMobile, PracticeMenuDesktop } from '@/components/layout/PracticeMenu'
 import { useLearnerProgress, type LearnerProgress } from '@/components/layout/useLearnerProgress'
+import { useMenuDisclosure } from '@/components/layout/useMenuDisclosure'
 import { useIsLessonPage } from '@/lib/lesson-page'
 import type { HeaderData } from '@/lib/lesson-nav'
 
@@ -35,26 +36,23 @@ export function Navbar({ header }: { header: HeaderData }) {
   const isLessonPage = useIsLessonPage()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [tracksOpened, setTracksOpened] = useState(false)
-  const menuButtonRef = useRef<HTMLButtonElement>(null)
   // The lesson index is needed for the Continue slot (hidden on lessons) and for
   // per-track completion counts once a track list is opened.
   const learner = useLearnerProgress(!isLessonPage || tracksOpened || mobileOpen)
   const projectCount = header.tracks.projects?.lessons ?? 0
-
-  useEffect(() => { setMobileOpen(false) }, [pathname])
-
-  useEffect(() => {
-    if (!mobileOpen) return
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return
-      setMobileOpen(false)
-      menuButtonRef.current?.focus()
-    }
-    document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
-  }, [mobileOpen])
-
-  const closeMenu = () => setMobileOpen(false)
+  const searchTracks = useMemo(
+    () => Object.values(header.tracks)
+      .filter(track => track.area !== 'practice' && track.lessons > 0)
+      .map(track => ({ href: track.href, title: track.title, context: `${track.lessons} lessons`, kind: 'track' as const })),
+    [header.tracks],
+  )
+  const resume = learner.status === 'ready' && learner.resume
+    ? {
+        href: learner.resume.href,
+        title: learner.resume.title,
+        detail: `${header.tracks[learner.resume.track]?.title ?? ''} · Lesson ${learner.resume.position} of ${learner.resume.trackSize}`,
+      }
+    : null
 
   return (
     <header
@@ -96,54 +94,121 @@ export function Navbar({ header }: { header: HeaderData }) {
       </nav>
 
       <div className="ml-auto flex items-center gap-1 sm:gap-2 flex-shrink-0">
-        <SiteSearch />
+        <SiteSearch resume={resume} tracks={searchTracks} />
         <div className="hidden lg:block">
           <ThemeMenu />
         </div>
         <ResumeSlot learner={learner} tracks={header.tracks} />
-        <button
-          ref={menuButtonRef}
-          type="button"
-          className="lg:hidden w-11 h-11 flex items-center justify-center rounded-[10px] flex-shrink-0"
-          aria-label={mobileOpen ? 'Close menu' : 'Menu'}
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-menu"
-          onClick={() => setMobileOpen(open => !open)}
-          style={{ background: mobileOpen ? 'var(--bg2)' : 'transparent' }}
-        >
-          {mobileOpen
-            ? <X size={20} aria-hidden="true" style={{ color: 'var(--text)' }} />
-            : <Menu size={20} aria-hidden="true" style={{ color: 'var(--text)' }} />}
-        </button>
+        <MobileMenu
+          header={header}
+          learner={learner}
+          resume={resume}
+          activeHref={activeHref}
+          projectCount={projectCount}
+          onOpenChange={setMobileOpen}
+        />
       </div>
-
-      {mobileOpen && (
-        <nav
-          id="mobile-menu"
-          aria-label="Menu"
-          className="absolute top-16 left-0 right-0 z-40 max-h-[calc(100vh-4rem)] overflow-y-auto p-3 lg:hidden"
-          style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}
-        >
-          <TracksListMobile
-            header={header}
-            completedByTrack={learner.completedByTrack}
-            resumeTrack={learner.resume?.track ?? null}
-            active={activeHref === TRACKS_HREF}
-            onNavigate={closeMenu}
-          />
-          <MobileLink item={ROADMAPS} active={activeHref === ROADMAPS.href} onNavigate={closeMenu} />
-          <PracticeListMobile activeHref={activeHref} projectCount={projectCount} onNavigate={closeMenu} />
-          <MobileLink item={INTERVIEW} active={activeHref === INTERVIEW.href} onNavigate={closeMenu} />
-          <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--border)' }}>
-            <ThemeChoice />
-            <p className="px-3 pt-1 pb-2 text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
-              Progress is saved in this browser, no account needed.{' '}
-              <Link href="/dashboard" onClick={closeMenu} style={{ color: 'var(--accent)' }}>Your progress</Link>
-            </p>
-          </div>
-        </nav>
-      )}
     </header>
+  )
+}
+
+/** Phones and tablets: a full-screen modal menu with the same destinations as the bar. */
+function MobileMenu({ header, learner, resume, activeHref, projectCount, onOpenChange }: {
+  header: HeaderData
+  learner: LearnerProgress
+  resume: SearchResume | null
+  activeHref: string | null
+  projectCount: number
+  onOpenChange: (open: boolean) => void
+}) {
+  const { open, setOpen, close, containerRef, buttonRef } = useMenuDisclosure()
+  const navigate = () => setOpen(false)
+
+  useEffect(() => {
+    onOpenChange(open)
+    if (!open) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = previous }
+  }, [open, onOpenChange])
+
+  return (
+    <div ref={containerRef} className="lg:hidden">
+      <button
+        ref={buttonRef}
+        type="button"
+        className="w-11 h-11 flex items-center justify-center rounded-[10px] flex-shrink-0"
+        aria-label="Menu"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-controls="mobile-menu"
+        onClick={() => setOpen(true)}
+      >
+        <Menu size={20} aria-hidden="true" style={{ color: 'var(--text)' }} />
+      </button>
+
+      {open && (
+        <div
+          id="mobile-menu"
+          data-menu-panel
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+          className="fixed inset-0 z-[60] flex flex-col"
+          style={{ background: 'var(--surface)' }}
+        >
+          <div className="h-16 flex-shrink-0 flex items-center justify-between pl-3.5 pr-2" style={{ borderBottom: '1px solid var(--border)' }}>
+            <span aria-hidden="true" style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.03em' }}>
+              <span style={{ color: 'var(--text)' }}>Chadu</span><span style={{ color: 'var(--brand-green)' }}>vuko</span>
+            </span>
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={close}
+              className="w-11 h-11 flex items-center justify-center rounded-[10px]"
+              style={{ background: 'var(--bg2)' }}
+            >
+              <X size={20} aria-hidden="true" style={{ color: 'var(--text)' }} />
+            </button>
+          </div>
+
+          <nav aria-label="Menu" className="flex-1 overflow-y-auto overscroll-contain px-3 py-3">
+            {resume && (
+              <Link
+                href={resume.href}
+                onClick={navigate}
+                aria-label={`Continue ${resume.detail}: ${resume.title}`}
+                className="block mb-2 px-3.5 py-3 rounded-xl"
+                style={{ background: 'rgba(0,230,118,0.08)', border: '1px solid rgba(0,230,118,0.3)' }}
+              >
+                <span className="block font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--green)' }}>
+                  Continue · {header.tracks[learner.resume!.track]?.title}
+                </span>
+                <span className="block mt-1 text-[15px] font-bold leading-snug" style={{ color: 'var(--text)' }}>{resume.title}</span>
+                <span className="block mt-1 text-xs" style={{ color: 'var(--muted)' }}>Lesson {learner.resume!.position} of {learner.resume!.trackSize}</span>
+              </Link>
+            )}
+            <TracksListMobile
+              header={header}
+              completedByTrack={learner.completedByTrack}
+              resumeTrack={learner.resume?.track ?? null}
+              active={activeHref === TRACKS_HREF}
+              onNavigate={navigate}
+            />
+            <MobileLink item={ROADMAPS} active={activeHref === ROADMAPS.href} onNavigate={navigate} />
+            <PracticeListMobile activeHref={activeHref} projectCount={projectCount} onNavigate={navigate} />
+            <MobileLink item={INTERVIEW} active={activeHref === INTERVIEW.href} onNavigate={navigate} />
+            <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--border)' }}>
+              <ThemeChoice />
+              <p className="px-3 pt-1 pb-2 text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
+                Progress is saved in this browser, no account needed.{' '}
+                <Link href="/dashboard" onClick={navigate} style={{ color: 'var(--accent)' }}>Your progress</Link>
+              </p>
+            </div>
+          </nav>
+        </div>
+      )}
+    </div>
   )
 }
 

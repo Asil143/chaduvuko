@@ -1,18 +1,19 @@
 import { NextResponse } from 'next/server'
-import { LIVE_LESSONS, TRACKS, getLiveLesson, getTrack } from '@/lib/catalog'
+import { LIVE_LESSONS, TRACKS, getCatalogStats, getLiveLesson, getTrack } from '@/lib/catalog'
 import type { SearchEntry, SearchIndex } from '@/lib/search'
 
 export const dynamic = 'force-static'
 
 const SITE_PAGES: SearchEntry[] = [
   { href: '/learn',                 title: 'All tracks',          context: 'Browse every learning track', kind: 'page' },
-  { href: '/learn/roadmap',         title: 'Career roadmaps',     context: 'Role-by-role learning paths', kind: 'page' },
-  { href: '/learn/interview',       title: 'Interview prep',      context: 'Questions and answers',       kind: 'page' },
+  { href: '/learn/roadmap',         title: 'Career roadmaps',     context: 'Role-by-role learning paths', kind: 'roadmap' },
+  { href: '/learn/interview',       title: 'Interview prep',      context: 'Questions and answers',       kind: 'interview' },
   { href: '/learn/industry',        title: 'Industry guide',      context: 'Companies and roles',         kind: 'page' },
-  { href: '/learn/sql/cheatsheet',  title: 'SQL cheatsheet',      context: 'Tools',                       kind: 'page' },
-  { href: '/learn/sql/playground',  title: 'SQL playground',      context: 'Tools',                       kind: 'page' },
-  { href: '/learn/sql/joins',       title: 'Visual JOIN diagrams', context: 'Tools',                      kind: 'page' },
-  { href: '/playground',            title: 'Builder playground',  context: 'Tools',                       kind: 'page' },
+  { href: '/learn/sql/cheatsheet',  title: 'SQL cheatsheet',      context: 'Practice',                    kind: 'practice' },
+  { href: '/learn/sql/playground',  title: 'SQL playground',      context: 'Practice',                    kind: 'practice' },
+  { href: '/learn/sql/joins',       title: 'Visual JOIN diagrams', context: 'Practice',                   kind: 'practice' },
+  { href: '/playground',            title: 'Code playground',     context: 'Practice',                    kind: 'practice' },
+  { href: '/learn/projects',        title: 'Projects',            context: 'Practice · End-to-end builds', kind: 'practice' },
   { href: '/learn/find-video',      title: 'Find a video',        context: 'Tools',                       kind: 'page' },
   { href: '/blog',                  title: 'Blog',                context: 'Articles',                    kind: 'page' },
   { href: '/newsletter',            title: 'Newsletter',          context: 'Updates',                     kind: 'page' },
@@ -20,7 +21,8 @@ const SITE_PAGES: SearchEntry[] = [
 
 export function GET() {
   // Tracks whose overview is itself a lesson are found through that lesson.
-  const tracks: SearchEntry[] = TRACKS.filter(track => !getLiveLesson(track.indexHref)).map(track => ({
+  // Projects is listed under Practice, not as a track.
+  const tracks: SearchEntry[] = TRACKS.filter(track => track.area !== 'practice' && !getLiveLesson(track.indexHref)).map(track => ({
     href: track.indexHref,
     title: track.title,
     context: 'Track overview',
@@ -37,9 +39,10 @@ export function GET() {
     }
   })
 
+  const stats = getCatalogStats()
   const index: SearchIndex = {
-    lessonCount: LIVE_LESSONS.length,
-    trackCount: TRACKS.length,
+    lessonCount: stats.lessons - stats.projects,
+    trackCount: stats.liveTracks,
     entries: [...tracks, ...lessons, ...SITE_PAGES],
   }
   return NextResponse.json(index)

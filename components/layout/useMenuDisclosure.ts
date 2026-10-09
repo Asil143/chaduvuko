@@ -5,6 +5,21 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
 
 /**
+ * Makes everything outside `container` inert: the siblings of the container and of each of its
+ * ancestors, so it also works for panels nested inside the page. Returns a function that undoes it.
+ */
+export function inertOutside(container: Element): () => void {
+  const inert: HTMLElement[] = []
+  for (let node: Element = container; node !== document.body && node.parentElement; node = node.parentElement) {
+    for (const sibling of Array.from(node.parentElement.children)) {
+      if (sibling !== node && sibling instanceof HTMLElement && !sibling.inert) inert.push(sibling)
+    }
+  }
+  inert.forEach(el => { el.inert = true })
+  return () => inert.forEach(el => { el.inert = false })
+}
+
+/**
  * Click-to-open header panel that behaves as a modal: focus moves into the panel
  * ([data-menu-panel]) and Tab stays inside it, the rest of the page is inert, and
  * Escape, outside click, or navigation closes it and returns focus to the trigger.
@@ -28,15 +43,7 @@ export function useMenuDisclosure() {
     const panel = container?.querySelector<HTMLElement>('[data-menu-panel]')
     panel?.querySelector<HTMLElement>(FOCUSABLE)?.focus({ preventScroll: true })
 
-    // Everything outside the panel's container becomes inert: the siblings of the container
-    // and of each of its ancestors, so this also works for panels nested inside the page.
-    const inert: HTMLElement[] = []
-    for (let node: Element | null = container ?? null; node && node !== document.body && node.parentElement; node = node.parentElement) {
-      for (const sibling of Array.from(node.parentElement.children)) {
-        if (sibling !== node && sibling instanceof HTMLElement && !sibling.inert) inert.push(sibling)
-      }
-    }
-    inert.forEach(el => { el.inert = true })
+    const restoreInert = container ? inertOutside(container) : () => {}
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -66,7 +73,7 @@ export function useMenuDisclosure() {
     document.addEventListener('keydown', onKeyDown)
     document.addEventListener('mousedown', onPointerDown)
     return () => {
-      inert.forEach(el => { el.inert = false })
+      restoreInert()
       document.removeEventListener('keydown', onKeyDown)
       document.removeEventListener('mousedown', onPointerDown)
     }
