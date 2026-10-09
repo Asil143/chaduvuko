@@ -2,20 +2,11 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, CornerDownLeft, Sparkles } from 'lucide-react'
-import { SEARCH_GROUPS, searchEntries, type SearchEntry, type SearchIndex } from '@/lib/search'
+import { groupResults, loadSearchIndex, searchEntries, type SearchEntry, type SearchIndex } from '@/lib/search'
 import { useProgress } from '@/lib/progress'
 import { askTutor } from '@/lib/tutor-bridge'
 import { inertOutside } from '@/components/layout/useMenuDisclosure'
 
-let indexPromise: Promise<SearchIndex> | null = null
-function loadIndex(): Promise<SearchIndex> {
-  indexPromise ??= fetch('/search-index.json').then(res => {
-    if (!res.ok) throw new Error(`search index ${res.status}`)
-    return res.json()
-  })
-  indexPromise.catch(() => { indexPromise = null })
-  return indexPromise
-}
 
 /** What the header's Continue slot points at, shown first when the field is empty. */
 export interface SearchResume {
@@ -31,6 +22,7 @@ interface Group {
 }
 
 const RECENT_LIMIT = 4
+const resultsHref = (query: string) => `/search?q=${encodeURIComponent(query)}`
 const FOCUSABLE = 'input, button:not([disabled]), a[href]'
 
 /**
@@ -57,10 +49,7 @@ export function SiteSearch({ resume, tracks }: { resume: SearchResume | null; tr
   const groups = useMemo((): Group[] => {
     if (!index) return []
     if (trimmed) {
-      const results = searchEntries(index.entries, trimmed)
-      return SEARCH_GROUPS
-        .map(group => ({ id: group.kind, label: group.label, entries: results.filter(entry => entry.kind === group.kind) }))
-        .filter(group => group.entries.length > 0)
+      return groupResults(searchEntries(index.entries, trimmed)).map(group => ({ id: group.kind, label: group.label, entries: group.entries }))
     }
     // Empty field: Continue, then recent lessons, then tracks.
     const byHref = new Map(index.entries.map(entry => [entry.href, entry]))
@@ -115,7 +104,7 @@ export function SiteSearch({ resume, tracks }: { resume: SearchResume | null; tr
     if (!open) return
     inputRef.current?.focus()
     setLoadFailed(false)
-    loadIndex().then(setIndex, () => setLoadFailed(true))
+    loadSearchIndex().then(setIndex, () => setLoadFailed(true))
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     const restoreInert = dialogRef.current ? inertOutside(dialogRef.current) : () => {}
@@ -147,8 +136,12 @@ export function SiteSearch({ resume, tracks }: { resume: SearchResume | null; tr
 
   function onInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (!options.length) {
-      // Never send the query to the AI tutor on Enter; that needs the button.
-      if (e.key === 'Enter') e.preventDefault()
+      // With nothing to open, Enter goes to the results page. It never sends the query to the
+      // AI tutor; that needs the button.
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        if (trimmed) go(resultsHref(trimmed))
+      }
       return
     }
     if (e.key === 'ArrowDown') { e.preventDefault(); setActive(i => (i + 1) % options.length) }
@@ -291,6 +284,16 @@ export function SiteSearch({ resume, tracks }: { resume: SearchResume | null; tr
                   </div>
                 ))}
               </div>
+              {trimmed && index && (
+                <a
+                  href={resultsHref(trimmed)}
+                  onClick={e => { e.preventDefault(); go(resultsHref(trimmed)) }}
+                  className="mt-2 flex items-center justify-center min-h-11 px-3 rounded-lg text-sm font-semibold"
+                  style={{ border: '1px solid var(--border2)', color: 'var(--text)' }}
+                >
+                  See all results for “{trimmed}”
+                </a>
+              )}
               {trimmed && index && (
                 <button
                   type="button"

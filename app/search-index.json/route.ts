@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { LIVE_LESSONS, TRACKS, getCatalogStats, getLiveLesson, getTrack } from '@/lib/catalog'
+import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
+import { BLOG_ARTICLES } from '@/data/blog-articles'
 import type { SearchEntry, SearchIndex } from '@/lib/search'
 
 export const dynamic = 'force-static'
@@ -39,11 +41,25 @@ export function GET() {
     }
   })
 
+  const roadmaps: SearchEntry[] = Object.entries(ROLE_ROADMAPS).map(([slug, roadmap]) => ({
+    href: `/learn/roadmap/${slug}`,
+    title: `${roadmap.title} roadmap`,
+    context: 'Career roadmap',
+    kind: 'roadmap',
+  }))
+
+  const articles: SearchEntry[] = Object.entries(BLOG_ARTICLES).map(([slug, article]) => ({
+    href: `/blog/${slug}`,
+    title: article.title,
+    context: `Article · ${article.tags.slice(0, 2).join(', ')}`,
+    kind: 'article',
+  }))
+
   const stats = getCatalogStats()
   const index: SearchIndex = {
     lessonCount: stats.lessons - stats.projects,
     trackCount: stats.liveTracks,
-    entries: [...tracks, ...lessons, ...SITE_PAGES],
+    entries: [...tracks, ...lessons, ...roadmaps, ...articles, ...SITE_PAGES],
   }
   return NextResponse.json(index)
 }

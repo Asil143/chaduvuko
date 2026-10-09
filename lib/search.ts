@@ -60,3 +60,22 @@ export function searchEntries(entries: SearchEntry[], query: string, limit = 12)
     .slice(0, limit)
     .map(item => item.entry)
 }
+
+let indexPromise: Promise<SearchIndex> | null = null
+
+/** Fetches /search-index.json once per page load (client only); a failed fetch can be retried. */
+export function loadSearchIndex(): Promise<SearchIndex> {
+  indexPromise ??= fetch('/search-index.json').then(res => {
+    if (!res.ok) throw new Error(`search index ${res.status}`)
+    return res.json()
+  })
+  indexPromise.catch(() => { indexPromise = null })
+  return indexPromise
+}
+
+/** Results grouped by kind, in SEARCH_GROUPS order; empty groups are dropped. */
+export function groupResults(results: SearchEntry[]) {
+  return SEARCH_GROUPS
+    .map(group => ({ ...group, entries: results.filter(entry => entry.kind === group.kind) }))
+    .filter(group => group.entries.length > 0)
+}
