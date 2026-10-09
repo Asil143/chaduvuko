@@ -60,7 +60,9 @@ function update(change: (record: ProgressRecord) => ProgressRecord) {
   try {
     window.localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(next))
   } catch {
-    return // storage unavailable (private mode, quota): nothing is saved and readers keep the old record
+    // Storage unavailable (private mode, quota): keep the change for this session only.
+    // readProgress returns this record until the stored string itself changes.
+    cachedRecord = next
   }
   window.dispatchEvent(new Event(CHANGE_EVENT))
 }
