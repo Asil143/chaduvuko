@@ -238,12 +238,6 @@ export function LearnLayout({ children, title, description, section, readTime, u
                   {diff}
                 </span>
               )}
-              {meta && (
-                <span className="text-xs font-mono px-2.5 py-1 rounded-full"
-                  style={{ background: 'rgba(0,230,118,0.1)', color: 'var(--green)', border: '1px solid rgba(0,230,118,0.2)' }}>
-                  +{meta.xp} XP
-                </span>
-              )}
             </div>
             <h1 className="font-display font-extrabold leading-tight tracking-tight mt-1 mb-3"
               style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: 'var(--text)', overflowWrap: 'break-word' }}>{title}</h1>
@@ -340,7 +334,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-display font-semibold truncate" style={{ color: 'var(--text)' }}>{page.title}</div>
                           <div className="text-xs font-mono mt-0.5" style={{ color: 'var(--muted)' }}>
-                            {page.section} · {page.readTime} · +{page.xp} XP
+                            {page.section} · {page.readTime}
                           </div>
                         </div>
                         <ChevronRight size={14} className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
