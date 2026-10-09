@@ -32,14 +32,17 @@ const VOTER_KEY    = 'asil_voter_id'
 const USER_KEY     = 'asil_user'
 const ADMIN_GITHUB = process.env.NEXT_PUBLIC_ADMIN_GITHUB || 'Asil143'
 
+let sessionVoterId: string | null = null
+
+// Persisted per browser when storage works; otherwise a per-session ID so voting still works.
 function getVoterId() {
-  if (typeof window === 'undefined') return ''
-  let id = localStorage.getItem(VOTER_KEY)
-  if (!id) {
-    id = Math.random().toString(36).slice(2) + Date.now().toString(36)
-    localStorage.setItem(VOTER_KEY, id)
-  }
-  return id
+  try {
+    const saved = localStorage.getItem(VOTER_KEY)
+    if (saved) return saved
+  } catch {}
+  sessionVoterId ??= Math.random().toString(36).slice(2) + Date.now().toString(36)
+  try { localStorage.setItem(VOTER_KEY, sessionVoterId) } catch {}
+  return sessionVoterId
 }
 
 function timeAgo(date: string) {
@@ -259,9 +262,10 @@ export function CommentSection() {
   const [loginMode,    setLoginMode]    = useState<'guest' | null>(null)
   const [guestName,    setGuestName]    = useState('')
   const [guestEmail,   setGuestEmail]   = useState('')
-  const voterId = typeof window !== 'undefined' ? getVoterId() : ''
+  const [voterId, setVoterId] = useState('')
 
   useEffect(() => {
+    setVoterId(getVoterId())
     try {
       const saved = localStorage.getItem(USER_KEY)
       if (saved) setUser(JSON.parse(saved))
@@ -290,7 +294,7 @@ export function CommentSection() {
     }
   }, [slug, voterId])
 
-  useEffect(() => { fetchComments() }, [fetchComments])
+  useEffect(() => { if (voterId) fetchComments() }, [voterId, fetchComments])
 
   async function submitComment(parentId?: string) {
     if (!user) return
@@ -340,7 +344,7 @@ export function CommentSection() {
     if (!guestName.trim()) return
     const u: User = { name: guestName.trim(), email: guestEmail.trim() || undefined, provider: 'guest' }
     setUser(u)
-    localStorage.setItem(USER_KEY, JSON.stringify(u))
+    try { localStorage.setItem(USER_KEY, JSON.stringify(u)) } catch {}
     setLoginMode(null)
   }
 
@@ -424,7 +428,7 @@ export function CommentSection() {
                 </span>
               )}
             </div>
-            <button onClick={() => { setUser(null); localStorage.removeItem(USER_KEY) }}
+            <button onClick={() => { setUser(null); try { localStorage.removeItem(USER_KEY) } catch {} }}
               className="text-xs font-mono" style={{ color: 'var(--muted)' }}>
               Sign out
             </button>
