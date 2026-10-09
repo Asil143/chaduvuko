@@ -11,10 +11,10 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)'],
-        display: ['var(--font-syne)'],
-        mono: ['var(--font-jetbrains)'],
-        serif: ['var(--font-lora)'],
+        sans: ['var(--font-sans)'],
+        display: ['var(--font-display)'],
+        mono: ['var(--font-mono)'],
+        serif: ['Lora', 'serif'],
       },
       colors: {
         brand: {

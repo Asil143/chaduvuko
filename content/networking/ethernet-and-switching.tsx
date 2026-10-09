@@ -256,9 +256,9 @@ function EthernetFrameBuilder() {
           <label style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>Dst MAC</label>
           <input value={dstMac} onChange={e => setDstMac(e.target.value)} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, color: 'var(--text)', padding: '5px 10px', fontSize: 12, fontFamily: FONT_MONO, width: 160 }} />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
           <label style={{ fontSize: 11, color: 'var(--muted)', fontFamily: FONT_MONO }}>EtherType</label>
-          <select value={etherType} onChange={e => setEtherType(e.target.value)} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, color: 'var(--text)', padding: '5px 10px', fontSize: 12, fontFamily: FONT_MONO }}>
+          <select value={etherType} onChange={e => setEtherType(e.target.value)} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, color: 'var(--text)', padding: '5px 10px', fontSize: 12, fontFamily: FONT_MONO, maxWidth: '100%' }}>
             {Object.entries(ETHERTYPES).map(([k, v]) => <option key={k} value={k}>{k} ({v})</option>)}
           </select>
         </div>
@@ -271,7 +271,7 @@ function EthernetFrameBuilder() {
         <div style={{ display: 'flex', height: 36, borderRadius: 8, overflow: 'hidden', marginBottom: 8 }}>
           {segments.map(seg => (
             <div key={seg.name} onMouseEnter={() => setHovered(seg.name)} onMouseLeave={() => setHovered(null)}
-              style={{ flex: seg.name === 'Payload' ? clampedPayload : seg.size, background: hovered === seg.name ? `${seg.color}50` : `${seg.color}25`, borderRight: '1px solid var(--bg)', cursor: 'pointer', transition: 'background .15s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              style={{ flex: seg.name === 'Payload' ? clampedPayload : seg.size, minWidth: 0, background: hovered === seg.name ? `${seg.color}50` : `${seg.color}25`, borderRight: '1px solid var(--bg)', cursor: 'pointer', transition: 'background .15s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {seg.size > 3 && (
                 <span style={{ fontSize: 9, color: seg.color, fontFamily: FONT_MONO, fontWeight: 800, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', padding: '0 4px' }}>
                   {seg.name === 'Payload' ? `PAYLOAD (${clampedPayload}B)` : seg.name}
