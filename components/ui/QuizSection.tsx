@@ -1,11 +1,11 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { CheckCircle, XCircle, Trophy, RefreshCw, ChevronRight, Zap } from 'lucide-react'
+import { CheckCircle, XCircle, Trophy, RefreshCw, ChevronRight } from 'lucide-react'
 import { QUIZZES, Question } from '@/data/quizzes'
 
 interface Props {
   pageHref: string
-  onPass?: (xp: number) => void
+  onPass?: () => void
 }
 
 const PASS_SCORE = 0.6  // 60% to pass
@@ -17,8 +17,7 @@ export function QuizSection({ pageHref, onPass }: Props) {
   const [answers, setAnswers] = useState<(number | boolean | null)[]>([])
   const [revealed, setRevealed] = useState(false)
   const [done, setDone] = useState(false)
-  const [xpAwarded, setXpAwarded] = useState(false)
-  const QUIZ_XP = 50
+  const [passRecorded, setPassRecorded] = useState(false)
 
   if (!questions || questions.length === 0) return null
 
@@ -29,9 +28,9 @@ export function QuizSection({ pageHref, onPass }: Props) {
   const passed = pct >= PASS_SCORE * 100
 
   useEffect(() => {
-    if (done && passed && !xpAwarded) {
-      setXpAwarded(true)
-      onPass?.(QUIZ_XP)
+    if (done && passed && !passRecorded) {
+      setPassRecorded(true)
+      onPass?.()
     }
   }, [done, passed])
 
@@ -62,7 +61,7 @@ export function QuizSection({ pageHref, onPass }: Props) {
     setAnswers([])
     setRevealed(false)
     setDone(false)
-    setXpAwarded(false)
+    setPassRecorded(false)
   }
 
   const isCorrect = revealed && answers[current] === q.answer
@@ -76,7 +75,7 @@ export function QuizSection({ pageHref, onPass }: Props) {
             Knowledge Check
           </h3>
           <p className="text-sm mb-5" style={{ color: 'var(--muted)', fontFamily: 'Lora, serif' }}>
-            {totalQ} questions · Earn {QUIZ_XP} XP for passing · Score 60% or more to pass
+            {totalQ} questions · Score 60% or more to pass
           </p>
           <button onClick={() => setStarted(true)} className="btn-primary">
             Start Quiz <ChevronRight size={14} />
@@ -102,7 +101,7 @@ export function QuizSection({ pageHref, onPass }: Props) {
           {passed && (
             <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-mono mb-5"
               style={{ background: 'rgba(0,230,118,0.1)', color: 'var(--green)', border: '1px solid rgba(0,230,118,0.2)' }}>
-              <Zap size={13} /> +{QUIZ_XP} XP earned
+              <CheckCircle size={13} /> Added to your dashboard
             </div>
           )}
           {!passed && (

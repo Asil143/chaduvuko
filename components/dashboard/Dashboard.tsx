@@ -135,9 +135,9 @@ export default function Dashboard({ lessons, tracks, quizLessons }: Props) {
           </p>
         </div>
 
-        <div className="flex gap-1 mb-6 p-1 rounded-xl w-fit" role="tablist" style={{ background: 'var(--bg2)', border: '1px solid var(--border)' }}>
+        <div className="flex gap-1 mb-6 p-1 rounded-xl w-fit" role="group" aria-label="Dashboard view" style={{ background: 'var(--bg2)', border: '1px solid var(--border)' }}>
           {(['overview', 'completed', 'badges'] as const).map(tab => (
-            <button key={tab} role="tab" aria-selected={activeTab === tab} onClick={() => setActiveTab(tab)}
+            <button key={tab} type="button" aria-pressed={activeTab === tab} onClick={() => setActiveTab(tab)}
               className="px-3 sm:px-4 py-2 rounded-lg text-sm font-mono capitalize transition-all"
               style={{
                 background: activeTab === tab ? 'var(--surface)' : 'transparent',
