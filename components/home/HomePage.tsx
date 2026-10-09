@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import type { SiteStats, TrackSummaries } from '@/lib/lesson-nav'
 
-// ─── SALARY DATA (US market 2026 — LinkedIn, Glassdoor, Levels.fyi, BLS OES) ───
+// ─── SALARY ESTIMATES (rough US ballparks for comparison; not sourced offer data) ───
 const salaryDB: Record<string, any> = {
   de:     { name:'Data Engineer',           fresher:{min:90,max:130,med:108},   mid:{min:130,max:175,med:150}, senior:{min:155,max:215,med:182}, lead:{min:190,max:260,med:220},  demand:'Very High', growth:'+22% YoY', skills:['Apache Spark','Databricks','dbt','SQL','Python','Kafka','Iceberg','Azure/AWS'],            companies:['Stripe','DoorDash','Airbnb','Databricks','Snowflake','Palantir','Lyft','Robinhood'], tracks:['Data Engineering','Python','SQL','Azure','AWS'] },
   ml:     { name:'ML / AI Engineer',        fresher:{min:110,max:155,med:130},  mid:{min:155,max:210,med:180}, senior:{min:200,max:280,med:235}, lead:{min:250,max:360,med:295},  demand:'Very High', growth:'+28% YoY', skills:['Python','PyTorch','TensorFlow','MLOps','SQL','LLMs','AWS SageMaker','Feature Stores'],     companies:['OpenAI','Anthropic','Google DeepMind','Meta AI','Amazon','Microsoft','Cohere','Scale AI'], tracks:['Machine Learning','Python','Data Science','AWS','Deep Learning'] },
@@ -128,9 +128,9 @@ const jobRoles = [
 const roleLinks: Record<string, string> = {
   'Data Engineer':            '/learn/roadmap/data-engineer',
   'ML Engineer':              '/learn/roadmap/ml-engineer',
-  'AI Engineer':              '/learn/roadmap/ml-engineer',
+  'AI Engineer':              '/learn/roadmap/ai-engineer',
   'Data Scientist':           '/learn/roadmap/data-scientist',
-  'GenAI Developer':          '/learn/roadmap/ml-engineer',
+  'GenAI Developer':          '/learn/roadmap/genai-developer',
   'Full Stack Developer':     '/learn/roadmap/fullstack',
   'Backend Developer':        '/learn/roadmap/backend-dev',
   'Frontend Developer':       '/learn/roadmap/frontend',
@@ -148,16 +148,6 @@ const roleLinks: Record<string, string> = {
   'Cloud Security Engineer':  '/learn/roadmap/cloud-security-engineer',
 }
 
-// ─── DAY 1 TASKS ─────────────────────────────────────────────────────────────
-const dayOneTasks = [
-  { role:'Data Engineer', company:'Stripe · San Francisco', salary:'$145K–$185K', task:'Build an automated daily pipeline ingesting 50M transaction events from S3 into Snowflake, partitioned by region and date, available for analysts by 7am ET.', track:'ADF + ADLS + Databricks track', color:'#0078d4' },
-  { role:'Backend Developer', company:'DoorDash · Seattle', salary:'$150K–$195K', task:'Design a REST API in Python FastAPI for our merchant analytics dashboard — handle 80k requests/min, write unit tests, deploy on AWS Lambda behind API Gateway.', track:'Python + AWS track', color:'#ff9900' },
-  { role:'ML Engineer', company:'Airbnb · San Francisco', salary:'$165K–$220K', task:'Train a listing recommendation model on 6 months of search history using two-tower embeddings, evaluate with NDCG@10, deploy via SageMaker real-time endpoint.', track:'Python + ML + AWS track', color:'#8b5cf6' },
-  { role:'Full Stack Developer', company:'Netflix · Los Gatos', salary:'$160K–$210K', task:'Build the A/B test results dashboard in React — fetch experiment data from our Node.js API, add real-time updates via Server-Sent Events, write Playwright E2E tests.', track:'React + Node.js + TypeScript track', color:'#06b6d4' },
-  { role:'DevOps Engineer', company:'Cloudflare · Austin', salary:'$140K–$180K', task:'Migrate 60 microservices to Kubernetes on EKS, write Terraform for all infra, set up ArgoCD for a full GitOps deployment pipeline with automated rollback.', track:'Docker + Kubernetes + DevOps track', color:'#f97316' },
-  { role:'GenAI Developer', company:'Cohere · Remote', salary:'$175K–$235K', task:'Build a RAG-based enterprise knowledge assistant using LangChain, Cohere embeddings, and Pinecone vector store — sub-2-second P95 latency requirement.', track:'Python + GenAI + Databases track', color:'#ec4899' },
-]
-
 export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; stats: SiteStats }) {
   // A card is live only when it points at a live catalog track or a known hub page.
   const hrefOf = (t: { track?: string; route?: string }) => (t.track ? tracks[t.track]?.href : t.route)
@@ -169,7 +159,6 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
   const [salaryCity, setSalaryCity] = useState('sf')
   const [salaryExp, setSalaryExp] = useState('mid')
   const [salaryComp, setSalaryComp] = useState('bigtech')
-  const [counters, setCounters] = useState({ t:0, p:0, tr:0, r:0 })
 
   // Role rotation
   useEffect(() => {
@@ -181,26 +170,6 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
       }, 250)
     }, 2400)
     return () => clearInterval(interval)
-  }, [])
-
-  // Counter animation
-  useEffect(() => {
-    const targets = { t:stats.lessons, p:stats.projects, tr:stats.liveTracks, r:stats.roadmaps }
-    const duration = 1200
-    const steps = 60
-    let step = 0
-    const timer = setInterval(() => {
-      step++
-      const pct = step / steps
-      setCounters({
-        t: Math.round(targets.t * pct),
-        p: Math.round(targets.p * pct),
-        tr: Math.round(targets.tr * pct),
-        r: Math.round(targets.r * pct),
-      })
-      if (step >= steps) clearInterval(timer)
-    }, duration / steps)
-    return () => clearInterval(timer)
   }, [])
 
   // Salary calculation
@@ -282,10 +251,10 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
         {/* Stats */}
         <div className="grid-cols-2 sm:grid-cols-4" style={{ display:'grid', gap:1, background:'var(--border)', border:'1px solid var(--border)', borderRadius:12, overflow:'hidden', maxWidth:560, margin:'0 auto' }}>
           {[
-            { n:`${counters.t}`, l:'Lessons' },
-            { n:`${counters.p}`, l:'Projects' },
-            { n:`${counters.tr}`, l:'Live Tracks' },
-            { n:`${counters.r}`, l:'Career Roadmaps' },
+            { n:`${stats.lessons}`, l:'Lessons' },
+            { n:`${stats.projects}`, l:'Projects' },
+            { n:`${stats.liveTracks}`, l:'Live Tracks' },
+            { n:`${stats.roadmaps}`, l:'Career Roadmaps' },
           ].map(s => (
             <div key={s.l} style={{ background:'var(--surface)', padding:'16px 10px', textAlign:'center' }}>
               <div style={{ fontSize:24, fontWeight:900, color:'var(--green)', lineHeight:1 }}>{s.n}</div>
@@ -305,55 +274,6 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
             </span>
           ))}
         </div>
-      </div>
-
-      {/* ── HONEST TRUTH ── */}
-      <div style={{ background:'var(--bg2)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)' }}>
-        <section style={{ maxWidth:1100, margin:'0 auto', padding:'56px 28px' }}>
-          <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// The honest truth</p>
-          <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Every other platform has the<br /><span style={{ color:'var(--red)' }}>same blind spot.</span></h2>
-          <p style={{ fontSize:14, color:'var(--muted)', marginBottom:32, maxWidth:520 }}>We studied 10 platforms and their real student complaints. Here&apos;s every failure — and how we built around each one.</p>
-          <div className="grid-cols-1 md:grid-cols-2" style={{ display:'grid', gap:16 }}>
-            {[
-              { title:'❌ What every other platform does', border:'rgba(255,71,87,.2)', bg:'rgba(255,71,87,.03)', titleColor:'#ff6b7a', prefix:'✕', prefixColor:'#ff6b7a', items:[
-                'Teaches syntax. Never teaches what to do when it breaks.',
-                'No connection between tutorials and real job requirements.',
-                '2019 content ranking #1 on Google — no version warning.',
-                'Aggressive login popups and modal walls mid-reading.',
-                '40-hour video courses with no structured job outcome.',
-                'Tutorial hell — finish 50 pages, still can\'t build anything.',
-                'No real job context — just theory with no connection to actual JDs.',
-                'Generic salary data — not filtered by role, country, or experience.',
-                'AI era completely ignored — no Copilot, GenAI, LLM workflows.',
-                'No visual path — students don\'t know what to learn next.',
-              ]},
-              { title:'✓ What Chaduvuko does differently', border:'rgba(0,230,118,.2)', bg:'rgba(0,230,118,.03)', titleColor:'var(--green)', prefix:'✓', prefixColor:'var(--green)', items:[
-                'Every project has an "Errors You\'ll Hit" section with real fixes.',
-                '"What This Looks Like at Work" — your real day-1 task at a job.',
-                '"Last Verified" badge — every tutorial shows tested version & date.',
-                'No popups. No login walls. Read any tutorial, anytime, always.',
-                '5-minute micro-lessons — learn on your phone in any gap.',
-                'End-to-end projects you put on your resume from day one.',
-                'US + global salary data — filtered by role, country, and experience.',
-                'Big Tech prep: Google, Amazon, Meta, Stripe, FAANG-level interviews.',
-                'AI-era track — Prompt Eng, RAG, LangChain, GitHub Copilot.',
-                'Visual skill roadmap — what to learn, in what order, why.',
-              ]},
-            ].map(col => (
-              <div key={col.title} style={{ border:`1px solid ${col.border}`, background:col.bg, borderRadius:12, padding:20 }}>
-                <div style={{ fontSize:12, fontWeight:700, color:col.titleColor, marginBottom:14 }}>{col.title}</div>
-                <ul style={{ listStyle:'none' }}>
-                  {col.items.map((item, i) => (
-                    <li key={i} style={{ fontSize:11.5, color:'var(--muted)', padding:'5px 0', borderBottom:'1px solid rgba(255,255,255,.04)', display:'flex', alignItems:'flex-start', gap:7, lineHeight:1.5 }}>
-                      <span style={{ color:col.prefixColor, flexShrink:0, fontSize:10, marginTop:2, fontWeight:700 }}>{col.prefix}</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
       </div>
 
       {/* ── TRACKS ── */}
@@ -417,22 +337,21 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
       {/* ── THE METHOD ── */}
       <section id="method" style={{ maxWidth:1100, margin:'0 auto', padding:'56px 28px' }}>
         <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// The Chaduvuko method</p>
-        <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Three things no other<br />platform does.</h2>
-        <p style={{ fontSize:14, color:'var(--muted)', marginBottom:32, maxWidth:520 }}>Direct fixes to the three biggest reasons students give up or fail interviews.</p>
+        <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Built around how<br />the work really goes.</h2>
+        <p style={{ fontSize:14, color:'var(--muted)', marginBottom:32, maxWidth:520 }}>Lessons cover what breaks, where the skill shows up at work, and give you somewhere to practise.</p>
         <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ display:'grid', gap:12 }}>
           {[
-            { icon:'🩺', title:'Error Library', desc:'Every project page has an "Errors You\'ll Hit" section — the actual error message, exactly why it happens, and the precise fix. 80% of real engineering is debugging. No other platform prepares you for it.', code: ['PipelineRunFailed: Copy_Store_Sales', 'Source file not found in landing zone', '', '→ Why: Date format in expression', '   uses "yyyy-MM-dd" but file has "yyyyMMdd"', '→ Fix: Change @formatDateTime format', '   to "yyyyMMdd" (remove hyphens)'] },
-            { icon:'💼', title:'What This Looks Like at Work', desc:'Every concept ends with real job context — the actual Slack message your manager sends on day 1, the job posting that requires this skill, and what a senior engineer\'s code review would say.', code: ['Real task — DoorDash Data Engineering:', '"Build a daily ingestion pipeline', ' from S3 landing zone to Snowflake,', ' partitioned by market + order date."', '', '→ This exact tutorial covers it.'] },
-            { icon:'📅', title:'Last Verified Badge', desc:'Every tutorial shows when it was last tested against the real tool version. GFG has Python 2 articles from 2019 ranking on Google with zero warning. That will never happen here.', code: ['✓ Last verified: March 2026', '✓ Tested on: ADF v2 · Python 3.12', '✓ Status: All steps confirmed working', '', '⚑ Flag something broken? →', '  Submit a correction in one click'] },
+            { icon:'🩺', title:'Errors You\'ll Hit', desc:'Lessons include the errors you are likely to run into — the actual message, why it happens, and the fix — because debugging is a large part of the job.', code: ['PipelineRunFailed: Copy_Store_Sales', 'Source file not found in landing zone', '', '→ Why: Date format in expression', '   uses "yyyy-MM-dd" but file has "yyyyMMdd"', '→ Fix: Change @formatDateTime format', '   to "yyyyMMdd" (remove hyphens)'] },
+            { icon:'💼', title:'What This Looks Like at Work', desc:'Lessons show where the skill shows up on the job: the kind of task you would be handed and how an experienced engineer would approach it.', code: ['Example task — data engineering team:', '"Build a daily ingestion pipeline', ' from an S3 landing zone to Snowflake,', ' partitioned by market + order date."', '', '→ The lesson walks through it.'] },
+            { icon:'🧪', title:'Practise in the Browser', desc:'Run real SQL against a sample database and write code in the playground without installing anything. Nothing to set up before you can try an idea.', code: ['SELECT city, COUNT(*) AS orders', 'FROM orders', 'GROUP BY city', 'ORDER BY orders DESC;', '', '→ Runs in the SQL Playground'] },
           ].map(m => (
             <div key={m.title} style={{ border:'1px solid var(--border)', borderRadius:14, padding:'22px 18px', background:'var(--surface)' }}>
-              <span style={{ fontSize:9, fontWeight:800, letterSpacing:'.1em', textTransform:'uppercase', color:'var(--green)', background:'rgba(0,230,118,.1)', padding:'2px 8px', borderRadius:99, display:'inline-block', marginBottom:10 }}>Unique — nowhere else</span>
               <div style={{ fontSize:24, marginBottom:8 }}>{m.icon}</div>
               <h3 style={{ fontSize:15, fontWeight:800, color:'var(--text)', marginBottom:8, letterSpacing:'-.5px' }}>{m.title}</h3>
               <p style={{ fontSize:12, color:'var(--muted)', lineHeight:1.65, marginBottom:12 }}>{m.desc}</p>
               <div style={{ background:'var(--bg2)', border:'1px solid var(--border)', borderRadius:8, padding:'10px 12px', fontFamily:'monospace', fontSize:10.5, lineHeight:1.7, color:'var(--muted)' }}>
                 {m.code.map((line, i) => (
-                  <div key={i} style={{ color: line.startsWith('→') || line.startsWith('✓') ? 'var(--green)' : line.startsWith('Real') ? 'var(--yellow)' : line.startsWith('Pipeline') ? 'var(--red)' : 'var(--muted)' }}>
+                  <div key={i} style={{ color: line.startsWith('→') || line.startsWith('✓') ? 'var(--green)' : line.startsWith('Example') ? 'var(--yellow)' : line.startsWith('Pipeline') ? 'var(--red)' : 'var(--muted)' }}>
                     {line || ' '}
                   </div>
                 ))}
@@ -444,34 +363,11 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
 
       <div style={{ height:1, background:'var(--border)', maxWidth:1100, margin:'0 auto' }} />
 
-      {/* ── DAY 1 AT WORK ── */}
-      <div style={{ background:'var(--bg2)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)' }}>
-        <section style={{ maxWidth:1100, margin:'0 auto', padding:'56px 28px' }}>
-          <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// Day 1 at work</p>
-          <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>This is what you&apos;ll<br />actually be asked to do.</h2>
-          <p style={{ fontSize:14, color:'var(--muted)', marginBottom:28, maxWidth:520 }}>Real tasks from real job descriptions at top US tech companies. Every tutorial connects to one of these.</p>
-          <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ display:'grid', gap:10 }}>
-            {dayOneTasks.map(t => (
-              <div key={t.role} style={{ borderRadius:12, padding:18, border:'1px solid var(--border)', background:'var(--surface)', borderLeft:`3px solid ${t.color}` }}>
-                <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'.1em', color:t.color, marginBottom:6 }}>{t.role}</div>
-                <div style={{ fontSize:10, color:'var(--muted)', marginBottom:10 }}>{t.company} · {t.salary}</div>
-                <p style={{ fontSize:12, color:'var(--text)', lineHeight:1.6, fontStyle:'italic', marginBottom:10 }}>&ldquo;{t.task}&rdquo;</p>
-                <span style={{ fontSize:9, fontWeight:600, padding:'2px 8px', borderRadius:99, background:'rgba(255,255,255,.06)', color:'var(--muted)' }}>→ {t.track}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-      </div>
-
       {/* ── PROJECTS ── */}
       <section style={{ maxWidth:1100, margin:'0 auto', padding:'56px 28px' }}>
         <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// Real world projects</p>
         <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Build. Don&apos;t just read.</h2>
-        <p style={{ fontSize:14, color:'var(--muted)', marginBottom:20, maxWidth:520 }}>End-to-end projects with full code, architecture diagrams, error walkthroughs, and &ldquo;What This Looks Like at Work&rdquo; context. More being added continuously across all tracks.</p>
-        <div style={{ fontSize:12, color:'var(--muted)', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:8, padding:'10px 16px', marginBottom:20, display:'flex', alignItems:'center', gap:8 }}>
-          <span style={{ color:'var(--green)', fontWeight:700 }}>🚀</span>
-          Every project includes the Error Library, real job context, and a GitHub repo. More projects across every track are being added — check back often.
-        </div>
+        <p style={{ fontSize:14, color:'var(--muted)', marginBottom:20, maxWidth:520 }}>Six end-to-end Azure Data Factory projects, built step by step, with the mistakes beginners commonly make. Projects for other tracks are planned.</p>
         <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ display:'grid', gap:8 }}>
           {[
             { num:'AZURE PROJECT 01', title:'Copy a CSV File to Azure Data Lake', desc:'Your first ADF pipeline from scratch. Includes the 3 errors every beginner hits and the exact fix for each one.', tags:['ADF','ADLS Gen2','Blob Storage'], href:'/learn/projects/azure-batch-pipeline' },
@@ -479,7 +375,7 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
             { num:'AZURE PROJECT 03', title:'Parameterized Pipeline with Run Date', desc:'Pass a date at runtime, ADF builds filenames automatically. Add a midnight trigger and it runs without you.', tags:['Triggers','Expressions','Date Partition'], href:'/learn/projects/azure-project-03' },
             { num:'AZURE PROJECT 04', title:'HTTP Ingestion from a Public URL', desc:'Pull data from a public HTTPS endpoint into ADLS. No manual uploads — ADF fetches from the internet directly.', tags:['HTTP','Web Activity','ADLS'], href:'/learn/projects/azure-project-04' },
             { num:'AZURE PROJECT 05', title:'Organise Files With Date Stamps', desc:'Check existence, add date stamps, auto-clean landing zone, log missing files — a full production workflow.', tags:['Get Metadata','If Condition','Delete'], href:'/learn/projects/azure-project-05' },
-            { num:'MORE COMING', title:'Across All Tracks', desc:'Python, SQL, Web Dev, ML, DevOps projects are being built. Every one will include the Error Library and real job context.', tags:['Python','SQL','React','ML','DevOps'], href:'/learn/projects' },
+            { num:'AZURE PROJECT 06', title:'Pull Data From a REST API', desc:'Call a live REST API from ADF, handle the JSON response, and land it in your data lake on a schedule.', tags:['REST API','JSON','Linked Service'], href:'/learn/projects/azure-project-06' },
           ].map(p => (
             <Link key={p.num} href={p.href} style={{ border:'1px solid var(--border)', borderRadius:10, padding:14, background:'var(--surface)', textDecoration:'none', display:'block' }}>
               <div style={{ fontSize:9, fontWeight:700, color:'var(--muted)', marginBottom:5, letterSpacing:'.06em' }}>{p.num}</div>
@@ -488,7 +384,7 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
               <div style={{ display:'flex', flexWrap:'wrap', gap:4, marginBottom:7 }}>
                 {p.tags.map(t => <span key={t} style={{ fontSize:9, padding:'2px 6px', borderRadius:3, background:'rgba(0,120,212,.12)', color:'#60a5fa' }}>{t}</span>)}
               </div>
-              {p.num !== 'MORE COMING' && <div style={{ fontSize:10, color:'var(--green)', fontWeight:600, display:'flex', alignItems:'center', gap:4 }}><span style={{ width:5, height:5, borderRadius:'50%', background:'var(--green)', display:'inline-block' }} /> Live · Includes Error Library</div>}
+              <div style={{ fontSize:10, color:'var(--green)', fontWeight:600, display:'flex', alignItems:'center', gap:4 }}><span style={{ width:5, height:5, borderRadius:'50%', background:'var(--green)', display:'inline-block' }} /> Live</div>
             </Link>
           ))}
         </div>
@@ -498,8 +394,8 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
       <div id="salary" style={{ background:'var(--bg2)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)' }}>
         <section style={{ maxWidth:1100, margin:'0 auto', padding:'56px 28px' }}>
           <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// Career salary explorer</p>
-          <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Real 2026 US salary data.<br />Your filters. Your career.</h2>
-          <p style={{ fontSize:14, color:'var(--muted)', marginBottom:28, maxWidth:560 }}>Filter by role, city, experience, and company type. Data sourced from LinkedIn, Glassdoor, Levels.fyi, and BLS OES — updated April 2026.</p>
+          <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Ballpark US salaries<br />by role.</h2>
+          <p style={{ fontSize:14, color:'var(--muted)', marginBottom:28, maxWidth:560 }}>Rough estimates for comparing roles, cities, experience, and company types — not offer data. Check Levels.fyi or Glassdoor for current numbers before you negotiate.</p>
           {/* Filters */}
           <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ display:'grid', gap:10, marginBottom:20 }}>
             {[
@@ -539,15 +435,9 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
           {/* Results */}
           <div className="grid-cols-1 sm:grid-cols-2" style={{ display:'grid', gap:16 }}>
             <div style={{ border:'1px solid var(--border)', borderRadius:12, padding:20, background:'var(--surface)' }}>
-              <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'.08em', color:'var(--muted)', marginBottom:14 }}>Estimated Salary Range</div>
+              <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'.08em', color:'var(--muted)', marginBottom:14 }}>Estimated salary range</div>
               <div style={{ fontSize:38, fontWeight:900, color:'var(--green)', letterSpacing:'-2px', lineHeight:1 }}>${salMed}K</div>
               <div style={{ fontSize:12, color:'var(--muted)', marginTop:4, marginBottom:10 }}>Range: ${salMin}K – ${salMax}K / year</div>
-              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:16 }}>
-                <span style={{ fontSize:10, fontWeight:600, padding:'3px 10px', borderRadius:99, background: sd.demand === 'Very High' ? 'rgba(139,92,246,.15)' : 'rgba(0,230,118,.12)', color: sd.demand === 'Very High' ? 'var(--purple)' : 'var(--green)' }}>
-                  {sd.demand} Demand
-                </span>
-                <span style={{ fontSize:11, color:'var(--green)', fontWeight:600 }}>{sd.growth}</span>
-              </div>
               <div style={{ height:6, background:'var(--surface2)', borderRadius:3, overflow:'hidden', marginBottom:16 }}>
                 <div style={{ height:'100%', borderRadius:3, background:'var(--green)', width:`${barPct}%`, transition:'width .6s ease' }} />
               </div>
@@ -558,11 +448,11 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
                 ))}
               </div>
               <div style={{ fontSize:10, color:'var(--muted2)', marginTop:14, paddingTop:12, borderTop:'1px solid var(--border)' }}>
-                Sources: LinkedIn, Glassdoor, Levels.fyi, BLS OES · April 2026 · {sd.name}
+                Estimate for planning only · {sd.name}
               </div>
             </div>
             <div style={{ border:'1px solid var(--border)', borderRadius:12, padding:20, background:'var(--surface)' }}>
-              <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'.08em', color:'var(--muted)', marginBottom:12 }}>Top Companies Hiring</div>
+              <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'.08em', color:'var(--muted)', marginBottom:12 }}>Example employers</div>
               <div style={{ display:'flex', flexWrap:'wrap', gap:5, marginBottom:16 }}>
                 {sd.companies.map((c: string, i: number) => (
                   <span key={c} style={{ fontSize:10, padding:'3px 8px', borderRadius:4, border:'1px solid var(--border)', background: i < 4 ? 'rgba(249,115,22,.1)' : 'rgba(255,255,255,.04)', color: i < 4 ? 'var(--orange)' : 'var(--muted)' }}>{c}</span>
@@ -585,12 +475,6 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
                   </div>
                 )
               })}
-              <div style={{ fontSize:10, fontWeight:600, textTransform:'uppercase', letterSpacing:'.06em', color:'var(--muted)', marginBottom:8, marginTop:14 }}>Tracks that prepare you for this role</div>
-              <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
-                {sd.tracks.map((t: string) => (
-                  <span key={t} style={{ fontSize:10, padding:'3px 8px', borderRadius:4, border:'1px solid rgba(0,230,118,.2)', background:'rgba(0,230,118,.08)', color:'var(--green)' }}>{t}</span>
-                ))}
-              </div>
             </div>
           </div>
         </section>
@@ -603,12 +487,12 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
         <p style={{ fontSize:14, color:'var(--muted)', marginBottom:32, maxWidth:520 }}>Every decision is made with one question: does this actually help the student get the job?</p>
         <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ display:'grid', gap:10 }}>
           {[
-            { icon:'🩺', title:'Error Library', desc:'Every project includes the real errors you\'ll hit — exact error messages, root cause, and fix. No other platform prepares you for debugging.' },
-            { icon:'🛠️', title:'Real Projects, Real Code', desc:'Not just theory. Working code on Azure, AWS, GCP, or real web infrastructure. Put it on your resume from day one.' },
-            { icon:'🎯', title:'Job-Market Focused', desc:'Content curated based on what companies are actively hiring for right now — mapped to real job descriptions, not five-year-old syllabi.' },
-            { icon:'📅', title:'Always Verified', desc:'Every page carries a "Last Verified" badge showing the tool version and test date. Stale content is flagged and fixed.' },
-            { icon:'🧭', title:'Structured Learning Path', desc:'Visual skill roadmaps per track — what to learn, in what order, and which job role it leads to. No more random rabbit holes.' },
-            { icon:'🌍', title:'Global Career Data', desc:'US + worldwide salary data by role and country. Big Tech prep, FAANG-level interview guides, and real job descriptions from top companies.' },
+            { icon:'🩺', title:'Errors Explained', desc:'Lessons include the errors you are likely to hit — the message, the root cause, and the fix.' },
+            { icon:'🛠️', title:'Real Projects', desc:'End-to-end Azure data pipelines you can rebuild yourself and show in your portfolio.' },
+            { icon:'🎯', title:'Job-Market Focused', desc:'Tracks and roadmaps are organised around the roles people are hiring for, from data engineering to AI and security.' },
+            { icon:'🧭', title:'Structured Learning Path', desc:'Career roadmaps show what to learn, in what order, and which role it leads to. No more random rabbit holes.' },
+            { icon:'🔓', title:'Free, No Login', desc:'Every lesson is free to read with no account and no popups. Your progress is saved in your browser.' },
+            { icon:'🧪', title:'Hands-On Practice', desc:'A SQL playground with a real sample database and a code playground, both in the browser.' },
           ].map(w => (
             <div key={w.title} style={{ border:'1px solid var(--border)', borderRadius:12, padding:18, background:'var(--surface)' }}>
               <div style={{ fontSize:22, marginBottom:10 }}>{w.icon}</div>
@@ -628,14 +512,14 @@ export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; st
           Pick a track. Follow the path. Build the project. Get the job. Built by Asil.
         </p>
         <div style={{ display:'flex', gap:20, justifyContent:'center', flexWrap:'wrap', marginBottom:28 }}>
-          {['No login required to read any tutorial','No popup interruptions','Error library on every project','Global salary data built in','Built by Asil'].map(item => (
+          {['No login required to read any lesson','No popup interruptions','Progress saved in your browser','SQL and code playgrounds'].map(item => (
             <div key={item} style={{ fontSize:11, color:'var(--muted)', display:'flex', alignItems:'center', gap:5 }}>
               <div style={{ width:4, height:4, borderRadius:'50%', background:'var(--green)' }} />
               {item}
             </div>
           ))}
         </div>
-        <Link href="/learn/roadmap" style={{ background:'var(--green)', color:'#000', fontSize:14, fontWeight:700, padding:'14px 36px', borderRadius:8, textDecoration:'none', display:'inline-block' }}>
+        <Link href="/learn" style={{ background:'var(--green)', color:'#000', fontSize:14, fontWeight:700, padding:'14px 36px', borderRadius:8, textDecoration:'none', display:'inline-block' }}>
           Explore All Tracks →
         </Link>
       </div>
