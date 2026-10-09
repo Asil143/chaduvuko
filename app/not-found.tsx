@@ -3,6 +3,8 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: '404 — Page Not Found',
+  robots: { index: false, follow: true },
+  alternates: { canonical: null },
 }
 
 export default function NotFound() {

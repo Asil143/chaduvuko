@@ -5,7 +5,7 @@ import { ROLE_ROADMAPS } from '@/data/roadmaps/role-registry'
 
 const BASE_URL = 'https://chaduvuko.com'
 
-const SITE_PAGES = ['/', '/blog', '/about', '/careers', '/privacy', '/terms']
+const SITE_PAGES = ['/', '/blog', '/about', '/careers', '/privacy', '/terms', '/newsletter', '/playground']
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const nonLessonPages = Object.entries(NON_LESSON_ROUTES)

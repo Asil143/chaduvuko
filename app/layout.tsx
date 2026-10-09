@@ -103,8 +103,10 @@ export const metadata: Metadata = {
   creator: 'Asil',
   publisher: 'Asil',
 
+  // './' resolves against each page's own route at build time, so every page
+  // is self-canonical. scripts/validate-seo.ts checks the built output.
   alternates: {
-    canonical: 'https://chaduvuko.com',
+    canonical: './',
   },
 
   robots: {
