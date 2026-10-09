@@ -1,8 +1,9 @@
 'use client'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, CornerDownLeft } from 'lucide-react'
+import { Search, CornerDownLeft, Sparkles } from 'lucide-react'
 import { searchEntries, type SearchIndex } from '@/lib/search'
+import { askTutor } from '@/lib/tutor-bridge'
 
 let indexPromise: Promise<SearchIndex> | null = null
 function loadIndex(): Promise<SearchIndex> {
@@ -71,7 +72,17 @@ export function SiteSearch() {
     router.push(href)
   }
 
+  // Offered under every query; Enter picks it only when no lesson matches.
+  const canAskTutor = Boolean(index && query.trim())
+
+  function askInstead() {
+    const question = query.trim()
+    close()
+    askTutor(question)
+  }
+
   function onInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (canAskTutor && !results.length && e.key === 'Enter') { e.preventDefault(); askInstead(); return }
     if (!results.length) return
     if (e.key === 'ArrowDown') { e.preventDefault(); setActive(i => (i + 1) % results.length) }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(i => (i - 1 + results.length) % results.length) }
@@ -186,6 +197,23 @@ export function SiteSearch() {
                       ? `${results.length} result${results.length === 1 ? '' : 's'}`
                       : `No lessons match “${query.trim()}”.`}
             </div>
+            {canAskTutor && (
+              <div className="px-3 pb-3">
+                <button
+                  type="button"
+                  onClick={askInstead}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left"
+                  style={{ background: 'var(--bg2)', border: '1px solid var(--border)' }}
+                >
+                  <Sparkles size={15} aria-hidden="true" style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                  <span className="flex-1 min-w-0">
+                    <span className="block text-sm font-medium" style={{ color: 'var(--text)' }}>Ask the AI tutor</span>
+                    <span className="block text-xs truncate mt-0.5" style={{ color: 'var(--muted)' }}>“{query.trim()}”</span>
+                  </span>
+                  <CornerDownLeft size={13} aria-hidden="true" style={{ color: 'var(--muted)', flexShrink: 0 }} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

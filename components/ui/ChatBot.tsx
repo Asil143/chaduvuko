@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { ASK_TUTOR_EVENT } from '@/lib/tutor-bridge'
 
 const SUGGESTIONS = [
   'I want to become a Data Engineer — where do I start?',
@@ -125,6 +126,20 @@ export default function ChatBot() {
     }
     setLoading(false)
   }
+
+  // Questions handed over from elsewhere (search with no matches) open the chat and send.
+  const sendRef = useRef(sendMessage)
+  sendRef.current = sendMessage
+  useEffect(() => {
+    const onAsk = (e: Event) => {
+      const question = (e as CustomEvent<string>).detail?.trim()
+      if (!question) return
+      setOpen(true)
+      sendRef.current(question)
+    }
+    window.addEventListener(ASK_TUTOR_EVENT, onAsk)
+    return () => window.removeEventListener(ASK_TUTOR_EVENT, onAsk)
+  }, [])
 
   function handleKey(e: React.KeyboardEvent) {
     if (e.key === 'Enter' && !e.shiftKey) {
