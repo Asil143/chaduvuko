@@ -7,6 +7,7 @@ import { ThemePicker } from '@/components/ui/ThemePicker'
 import { SiteSearch } from '@/components/ui/SiteSearch'
 import { TRACKS_HREF, TracksListMobile, TracksMenuDesktop } from '@/components/layout/TracksMenu'
 import type { TrackSummaries } from '@/lib/lesson-nav'
+import { useContinueLesson } from '@/components/layout/useContinueLesson'
 
 type NavItem = { label: string; href: string }
 
@@ -33,6 +34,10 @@ function getActiveHref(pathname: string): string | null {
 }
 
 export function Navbar({ tracks }: { tracks: TrackSummaries }) {
+  const continueLesson = useContinueLesson()
+  const cta = continueLesson
+    ? { href: continueLesson[0], label: 'Continue →', title: `Continue: ${continueLesson[1]}` }
+    : { href: START_HREF, label: 'Start Learning →', title: undefined }
   const pathname = usePathname()
   const activeHref = getActiveHref(pathname)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -124,7 +129,9 @@ export function Navbar({ tracks }: { tracks: TrackSummaries }) {
             Playground
           </Link>
           <Link
-            href={START_HREF}
+            href={cta.href}
+            title={cta.title}
+            aria-label={cta.title}
             style={{
               fontSize: '12px',
               fontWeight: 700,
@@ -136,7 +143,7 @@ export function Navbar({ tracks }: { tracks: TrackSummaries }) {
               whiteSpace: 'nowrap',
             }}
           >
-            Start Learning →
+            {cta.label}
           </Link>
         </div>
         <button
@@ -195,12 +202,12 @@ export function Navbar({ tracks }: { tracks: TrackSummaries }) {
               Playground
             </Link>
             <Link
-              href={START_HREF}
+              href={cta.href}
               className="block px-3 py-2.5 text-sm rounded-lg text-center font-bold"
               style={{ background: 'var(--green)', color: '#000' }}
               onClick={() => setMobileOpen(false)}
             >
-              Start Learning →
+              {continueLesson ? `Continue: ${continueLesson[1]} →` : 'Start Learning →'}
             </Link>
           </div>
         </nav>

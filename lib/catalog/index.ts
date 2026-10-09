@@ -3,6 +3,7 @@ import { staticLessons } from './static-lessons'
 import { curriculumLessons } from './curriculum-lessons'
 import type { Lesson, NonLessonKind, Track } from './types'
 import type { LessonNavLink, LessonNavLinks, TrackSummaries } from '@/lib/lesson-nav'
+import type { LessonEntry } from '@/lib/up-next'
 
 export type { Lesson, LessonStatus, NonLessonKind, Track, TrackArea } from './types'
 export { TRACKS }
@@ -24,6 +25,13 @@ export function getTrack(slug: string): Track | undefined {
 
 export function liveLessonsForTrack(slug: string): Lesson[] {
   return LIVE_LESSONS.filter(lesson => lesson.track === slug).sort((a, b) => a.order - b.order)
+}
+
+/** Live lessons grouped by track in curriculum order, as compact client-safe tuples. */
+export function getLessonOrder(): LessonEntry[] {
+  return TRACKS.flatMap(track =>
+    liveLessonsForTrack(track.slug).map((lesson): LessonEntry => [lesson.href, lesson.title, lesson.track]),
+  )
 }
 
 /** Compact per-track data that is safe to pass to Client Components. */

@@ -3,13 +3,11 @@ import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Trophy, Flame, BookOpen, Target, ChevronRight, CheckCircle2, Award } from 'lucide-react'
 import { useProgress, type ProgressRecord } from '@/lib/progress'
+import { upNext, type LessonEntry } from '@/lib/up-next'
 import type { TrackSummaries } from '@/lib/lesson-nav'
 
-/** [href, title, track slug], live lessons in catalog order. */
-export type DashboardLesson = [string, string, string]
-
 interface Props {
-  lessons: DashboardLesson[]
+  lessons: LessonEntry[]
   tracks: TrackSummaries
   quizLessons: string[]
 }
@@ -44,16 +42,6 @@ function learningStreak(progress: ProgressRecord): number {
     cursor.setDate(cursor.getDate() - 1)
   }
   return streak
-}
-
-/** Resume the last lesson if unfinished; otherwise the next unfinished live lesson in its track. */
-function upNext(progress: ProgressRecord, lessons: DashboardLesson[]): DashboardLesson | null {
-  const last = progress.lastVisited?.href
-  const index = last ? lessons.findIndex(([href]) => href === last) : -1
-  if (index === -1) return null
-  if (!progress.completed[last!]) return lessons[index]
-  const track = lessons[index][2]
-  return lessons.slice(index + 1).find(([href, , t]) => t === track && !progress.completed[href]) ?? null
 }
 
 const formatDate = (iso: string) => new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
