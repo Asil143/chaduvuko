@@ -1,14 +1,15 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useId, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import type { TrackArea } from '@/lib/catalog/types'
 import type { TrackSummaries } from '@/lib/lesson-nav'
+import { useMenuDisclosure } from '@/components/layout/useMenuDisclosure'
 
 export const TRACKS_HREF = '/learn'
 
-// Projects has its own header link, so 'practice' is not listed here.
+// Projects is listed under the header's Practice menu, so 'practice' is not listed here.
 const AREA_GROUPS: { area: TrackArea; label: string }[] = [
   { area: 'data',        label: 'Data' },
   { area: 'cloud',       label: 'Cloud' },
@@ -71,29 +72,7 @@ function AllTracksLink({ onNavigate }: { onNavigate: () => void }) {
 export function TracksMenuDesktop({ tracks, active }: { tracks: TrackSummaries; active: boolean }) {
   const pathname = usePathname()
   const panelId = useId()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const buttonRef = useRef<HTMLButtonElement>(null)
-  const [open, setOpen] = useState(false)
-
-  useEffect(() => { setOpen(false) }, [pathname])
-
-  useEffect(() => {
-    if (!open) return
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return
-      setOpen(false)
-      buttonRef.current?.focus()
-    }
-    const onPointerDown = (e: MouseEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) setOpen(false)
-    }
-    document.addEventListener('keydown', onKeyDown)
-    document.addEventListener('mousedown', onPointerDown)
-    return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      document.removeEventListener('mousedown', onPointerDown)
-    }
-  }, [open])
+  const { open, setOpen, containerRef, buttonRef } = useMenuDisclosure()
 
   return (
     <div ref={containerRef} className="relative">

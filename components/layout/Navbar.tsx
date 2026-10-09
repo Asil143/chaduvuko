@@ -6,25 +6,22 @@ import { Menu, X } from 'lucide-react'
 import { ThemePicker } from '@/components/ui/ThemePicker'
 import { SiteSearch } from '@/components/ui/SiteSearch'
 import { TRACKS_HREF, TracksListMobile, TracksMenuDesktop } from '@/components/layout/TracksMenu'
+import { PRACTICE_ITEMS, PracticeListMobile, PracticeMenuDesktop } from '@/components/layout/PracticeMenu'
 import type { TrackSummaries } from '@/lib/lesson-nav'
 import { useContinueLesson } from '@/components/layout/useContinueLesson'
 
 type NavItem = { label: string; href: string }
 
-const navItems: NavItem[] = [
-  { label: 'Roadmap',        href: '/learn/roadmap' },
-  { label: 'Projects',       href: '/learn/projects' },
-  { label: 'Industry',       href: '/learn/industry' },
-  { label: 'Blog',           href: '/blog' },
-  { label: 'Interview Prep', href: '/learn/interview' },
-]
+// Blog and the Industry guide live in the footer and search.
+const ROADMAPS: NavItem = { label: 'Roadmaps', href: '/learn/roadmap' }
+const INTERVIEW: NavItem = { label: 'Interview Prep', href: '/learn/interview' }
 
-const PLAYGROUND_HREF = '/playground'
-const START_HREF = '/learn/roadmap'
+const START_HREF = TRACKS_HREF
 
-// Longest matching prefix wins, so /learn/roadmap/x highlights Roadmap, not Tracks.
+// Longest matching prefix wins, so /learn/roadmap/x highlights Roadmaps and
+// /learn/sql/playground highlights Practice, not Tracks.
 function getActiveHref(pathname: string): string | null {
-  const candidates = [TRACKS_HREF, ...navItems.map(i => i.href), PLAYGROUND_HREF]
+  const candidates = [TRACKS_HREF, ROADMAPS.href, INTERVIEW.href, ...PRACTICE_ITEMS.map(i => i.href)]
   let best: string | null = null
   for (const href of candidates) {
     const matches = pathname === href || pathname.startsWith(href + '/')
@@ -79,55 +76,23 @@ export function Navbar({ tracks }: { tracks: TrackSummaries }) {
         <span style={{ color: 'var(--brand-green)' }}>vuko</span>
       </Link>
 
-      <nav aria-label="Main" className="hidden xl:block mx-4">
+      <nav aria-label="Main" className="hidden lg:block mx-2">
         <ul className="flex items-center gap-0.5">
           <li>
             <TracksMenuDesktop tracks={tracks} active={activeHref === TRACKS_HREF} />
           </li>
-          {navItems.map(item => {
-            const active = item.href === activeHref
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={active ? 'page' : undefined}
-                  className="relative flex items-center px-3 py-2 rounded-lg text-sm transition-colors"
-                  style={{ color: active ? 'var(--text)' : 'var(--muted)', fontWeight: active ? 600 : 400 }}
-                >
-                  {item.label}
-                  {active && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-3 right-3 -bottom-0.5 h-0.5 rounded-full"
-                      style={{ background: 'var(--accent)' }}
-                    />
-                  )}
-                </Link>
-              </li>
-            )
-          })}
+          <li><DesktopLink item={ROADMAPS} active={activeHref === ROADMAPS.href} /></li>
+          <li>
+            <PracticeMenuDesktop activeHref={activeHref} />
+          </li>
+          <li><DesktopLink item={INTERVIEW} active={activeHref === INTERVIEW.href} /></li>
         </ul>
       </nav>
 
       <div className="flex items-center gap-2 flex-shrink-0">
         <SiteSearch />
         <ThemePicker />
-        <div className="hidden sm:flex items-center gap-2 ml-2">
-          <Link
-            href={PLAYGROUND_HREF}
-            aria-current={activeHref === PLAYGROUND_HREF ? 'page' : undefined}
-            style={{
-              fontSize: '12px',
-              fontWeight: activeHref === PLAYGROUND_HREF ? 700 : 500,
-              padding: '5px 13px',
-              borderRadius: '6px',
-              border: '1px solid var(--border2)',
-              color: 'var(--text)',
-              textDecoration: 'none',
-            }}
-          >
-            Playground
-          </Link>
+        <div className="hidden sm:flex items-center ml-2">
           <Link
             href={cta.href}
             title={cta.title}
@@ -149,7 +114,7 @@ export function Navbar({ tracks }: { tracks: TrackSummaries }) {
         <button
           ref={menuButtonRef}
           type="button"
-          className="xl:hidden p-2 flex-shrink-0"
+          className="lg:hidden p-2 flex-shrink-0"
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
@@ -165,42 +130,16 @@ export function Navbar({ tracks }: { tracks: TrackSummaries }) {
         <nav
           id="mobile-menu"
           aria-label="Mobile"
-          className="absolute top-16 left-0 right-0 p-4 xl:hidden z-40 max-h-[80vh] overflow-y-auto"
+          className="absolute top-16 left-0 right-0 p-4 lg:hidden z-40 max-h-[80vh] overflow-y-auto"
           style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}
         >
           <TracksListMobile tracks={tracks} active={activeHref === TRACKS_HREF} onNavigate={() => setMobileOpen(false)} />
-          <ul>
-            {navItems.map(item => {
-              const active = item.href === activeHref
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={active ? 'page' : undefined}
-                    className="block px-3 py-2.5 text-sm rounded-lg"
-                    style={{
-                      color: active ? 'var(--text)' : 'var(--text2)',
-                      fontWeight: active ? 600 : 400,
-                      background: active ? 'var(--bg2)' : 'transparent',
-                    }}
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-          <div className="sm:hidden flex flex-col gap-2 mt-3 pt-3" style={{ borderTop: '1px solid var(--border)' }}>
-            <Link
-              href={PLAYGROUND_HREF}
-              aria-current={activeHref === PLAYGROUND_HREF ? 'page' : undefined}
-              className="block px-3 py-2.5 text-sm rounded-lg text-center"
-              style={{ border: '1px solid var(--border2)', color: 'var(--text)' }}
-              onClick={() => setMobileOpen(false)}
-            >
-              Playground
-            </Link>
+          <MobileLink item={ROADMAPS} active={activeHref === ROADMAPS.href} onNavigate={() => setMobileOpen(false)} />
+          <PracticeListMobile activeHref={activeHref} onNavigate={() => setMobileOpen(false)} />
+          <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--border)' }}>
+            <MobileLink item={INTERVIEW} active={activeHref === INTERVIEW.href} onNavigate={() => setMobileOpen(false)} />
+          </div>
+          <div className="sm:hidden mt-3 pt-3" style={{ borderTop: '1px solid var(--border)' }}>
             <Link
               href={cta.href}
               className="block px-3 py-2.5 text-sm rounded-lg text-center font-bold"
@@ -213,5 +152,35 @@ export function Navbar({ tracks }: { tracks: TrackSummaries }) {
         </nav>
       )}
     </header>
+  )
+}
+
+function DesktopLink({ item, active }: { item: NavItem; active: boolean }) {
+  return (
+    <Link
+      href={item.href}
+      aria-current={active ? 'page' : undefined}
+      className="relative flex items-center px-3 py-2 rounded-lg text-sm transition-colors whitespace-nowrap"
+      style={{ color: active ? 'var(--text)' : 'var(--muted)', fontWeight: active ? 600 : 400 }}
+    >
+      {item.label}
+      {active && (
+        <span aria-hidden="true" className="absolute left-3 right-3 -bottom-0.5 h-0.5 rounded-full" style={{ background: 'var(--accent)' }} />
+      )}
+    </Link>
+  )
+}
+
+function MobileLink({ item, active, onNavigate }: { item: NavItem; active: boolean; onNavigate: () => void }) {
+  return (
+    <Link
+      href={item.href}
+      aria-current={active ? 'page' : undefined}
+      className="block px-3 py-2.5 text-sm rounded-lg"
+      style={{ color: active ? 'var(--text)' : 'var(--text2)', fontWeight: active ? 600 : 400, background: active ? 'var(--bg2)' : 'transparent' }}
+      onClick={onNavigate}
+    >
+      {item.label}
+    </Link>
   )
 }
