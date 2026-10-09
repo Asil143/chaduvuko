@@ -12,6 +12,9 @@
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     --font-display: var(--font-sans);
 
+    /* Height of the fixed site header; 0 while lesson mode hides it. */
+    --header-offset: 64px;
+
     color-scheme: light;
     --bg: #f8f9fc;
     --bg2: #f1f3f8;
@@ -244,4 +247,17 @@
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.2; }
+}
+
+/* Lesson mode (components/layout/LessonHeaderMode.tsx) */
+html[data-header-hidden="true"] { --header-offset: 0px; }
+.site-header { transition: transform 0.2s ease; }
+html[data-header-hidden="true"] .site-header { transform: translateY(-100%); }
+.lesson-sidebar {
+  top: var(--header-offset);
+  max-height: calc(100vh - var(--header-offset));
+  transition: top 0.2s ease, max-height 0.2s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header, .lesson-sidebar { transition: none; }
 }

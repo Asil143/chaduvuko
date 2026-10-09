@@ -1,6 +1,7 @@
 'use client'
 import { CommentSection }  from '@/components/ui/CommentSection'
 import { ReadingProgress } from '@/components/ui/ReadingProgress'
+import { LessonHeaderMode } from '@/components/layout/LessonHeaderMode'
 import { ShareButtons }    from '@/components/ui/ShareButtons'
 import { PageViews }       from '@/components/ui/PageViews'
 import { RelatedArticles } from '@/components/ui/RelatedArticles'
@@ -213,6 +214,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
   return (
     <>
       <ReadingProgress />
+      {isLesson && <LessonHeaderMode />}
       <div className="pt-16 min-h-screen" style={{ background: 'var(--bg)' }}>
 
         {/* Page header */}
@@ -262,8 +264,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
               borderRight: '1px solid var(--border)',
               background: 'var(--bg2)',
             }}>
-            <div className="sticky top-16 overflow-y-auto py-6 px-4"
-              style={{ maxHeight: 'calc(100vh - 64px)' }}>
+            <div className="lesson-sidebar sticky overflow-y-auto py-6 px-4">
               <TableOfContents />
             </div>
           </aside>
