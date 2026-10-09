@@ -1,35 +1,71 @@
 'use client'
 import { usePathname } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-/** Click-to-open header menu: closes on Escape (returning focus), outside click, and navigation. */
+const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
+
+/**
+ * Click-to-open header panel that behaves as a modal: focus moves into the panel
+ * ([data-menu-panel]) and Tab stays inside it, the rest of the page is inert, and
+ * Escape, outside click, or navigation closes it and returns focus to the trigger.
+ */
 export function useMenuDisclosure() {
   const pathname = usePathname()
   const containerRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
 
+  const close = useCallback(() => {
+    setOpen(false)
+    buttonRef.current?.focus()
+  }, [])
+
   useEffect(() => { setOpen(false) }, [pathname])
 
   useEffect(() => {
     if (!open) return
-    const panel = containerRef.current?.querySelector<HTMLElement>('[data-menu-panel]')
-    panel?.querySelector<HTMLElement>('a, button')?.focus({ preventScroll: true })
+    const container = containerRef.current
+    const panel = container?.querySelector<HTMLElement>('[data-menu-panel]')
+    panel?.querySelector<HTMLElement>(FOCUSABLE)?.focus({ preventScroll: true })
+
+    const inert = Array.from(document.body.children).filter(
+      (el): el is HTMLElement => el instanceof HTMLElement && !el.contains(container ?? null) && !el.inert,
+    )
+    inert.forEach(el => { el.inert = true })
+
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return
-      setOpen(false)
-      buttonRef.current?.focus()
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        close()
+        return
+      }
+      if (e.key !== 'Tab' || !panel) return
+      const items = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE))
+      if (!items.length) return
+      const first = items[0]
+      const last = items[items.length - 1]
+      if (!panel.contains(document.activeElement)) {
+        e.preventDefault()
+        first.focus()
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     const onPointerDown = (e: MouseEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) setOpen(false)
+      if (!container?.contains(e.target as Node)) setOpen(false)
     }
     document.addEventListener('keydown', onKeyDown)
     document.addEventListener('mousedown', onPointerDown)
     return () => {
+      inert.forEach(el => { el.inert = false })
       document.removeEventListener('keydown', onKeyDown)
       document.removeEventListener('mousedown', onPointerDown)
     }
-  }, [open])
+  }, [open, close])
 
-  return { open, setOpen, containerRef, buttonRef }
+  return { open, setOpen, close, containerRef, buttonRef }
 }

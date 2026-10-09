@@ -261,3 +261,7 @@ html[data-header-hidden="true"] .site-header { transform: translateY(-100%); }
 @media (prefers-reduced-motion: reduce) {
   .site-header, .lesson-sidebar { transition: none; }
 }
+
+/* Lesson pages: Next is the action, so the header's Continue/Start slot is removed.
+   Pure CSS, so it holds before hydration (see components/layout/LessonPageMarker.tsx). */
+body:has([data-lesson-page]) .resume-slot { display: none; }

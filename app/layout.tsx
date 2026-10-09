@@ -56,7 +56,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { ServiceWorkerRegistration } from '@/components/ui/ServiceWorkerRegistration'
 import { Navbar } from '@/components/layout/Navbar'
-import { getLessonOrder, getTrackSummaries } from '@/lib/catalog'
+import { getHeaderData } from '@/lib/header-data'
 import { Footer } from '@/components/layout/Footer'
 import { themeInitScript } from '@/lib/theme'
 import ChatBot from '@/components/ui/ChatBot'
@@ -176,7 +176,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body id="top">
         <ServiceWorkerRegistration />
-        <Navbar tracks={getTrackSummaries()} lessons={getLessonOrder()} />
+        <Navbar header={getHeaderData()} />
         {/* Page top paddings assume a 32px band below the fixed header (formerly the announcement bar). */}
         <main id="main-content" style={{ paddingTop: '32px' }}>{children}</main>
         <Footer />

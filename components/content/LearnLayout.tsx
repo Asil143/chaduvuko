@@ -2,6 +2,7 @@
 import { CommentSection }  from '@/components/ui/CommentSection'
 import { ReadingProgress } from '@/components/ui/ReadingProgress'
 import { LessonHeaderMode } from '@/components/layout/LessonHeaderMode'
+import { LessonPageMarker } from '@/components/layout/LessonPageMarker'
 import { ShareButtons }    from '@/components/ui/ShareButtons'
 import { PageViews }       from '@/components/ui/PageViews'
 import { RelatedArticles } from '@/components/ui/RelatedArticles'
@@ -215,6 +216,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
     <>
       <ReadingProgress />
       {isLesson && <LessonHeaderMode />}
+      {isLesson && <LessonPageMarker />}
       <div className="pt-16 min-h-screen" style={{ background: 'var(--bg)' }}>
 
         {/* Page header */}

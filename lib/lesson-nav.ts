@@ -22,6 +22,23 @@ export interface SiteStats {
 /** Keyed by track slug, in catalog order. */
 export type TrackSummaries = Record<string, TrackSummary>
 
+export interface FeaturedRoadmap {
+  href: string
+  title: string
+  blurb: string
+}
+
+/** Everything the site header renders from the catalog, built on the server. */
+export interface HeaderData {
+  tracks: TrackSummaries
+  /** Live lessons in learning tracks (projects excluded). */
+  lessonCount: number
+  /** Learning tracks with at least one live lesson (projects excluded). */
+  trackCount: number
+  roadmapCount: number
+  featuredRoadmaps: FeaturedRoadmap[]
+}
+
 export interface LessonNavLink {
   href: string
   title: string

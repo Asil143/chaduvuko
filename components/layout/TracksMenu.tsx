@@ -2,128 +2,132 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useId, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import type { TrackArea } from '@/lib/catalog/types'
-import type { TrackSummaries } from '@/lib/lesson-nav'
-import type { LessonEntry } from '@/lib/up-next'
-import { trackForPath } from '@/lib/study-nav'
+import type { HeaderData, TrackSummary } from '@/lib/lesson-nav'
 import { useMenuDisclosure } from '@/components/layout/useMenuDisclosure'
 
 export const TRACKS_HREF = '/learn'
+const PROGRESS_HREF = '/dashboard'
+const START_HERE = 'foundations'
 
-// Projects is listed under the header's Practice menu, so 'practice' is not listed here.
-const AREA_GROUPS: { area: TrackArea; label: string }[] = [
-  { area: 'data',        label: 'Data' },
-  { area: 'cloud',       label: 'Cloud' },
-  { area: 'ai',          label: 'AI & ML' },
-  { area: 'programming', label: 'Programming' },
-  { area: 'cs',          label: 'CS Core' },
-  { area: 'security',    label: 'Security' },
-]
-
-function groupLiveTracks(tracks: TrackSummaries) {
-  const live = Object.entries(tracks).filter(([, track]) => track.lessons > 0)
-  return AREA_GROUPS
-    .map(group => ({ ...group, tracks: live.filter(([, track]) => track.area === group.area) }))
-    .filter(group => group.tracks.length > 0)
+const AREA_LABELS: Record<Exclude<TrackArea, 'practice'>, string> = {
+  data: 'Data',
+  programming: 'Programming',
+  cs: 'CS Core',
+  ai: 'AI & ML',
+  cloud: 'Cloud',
+  security: 'Security',
 }
 
-function TrackLinks({ tracks, pathname, onNavigate }: { tracks: TrackSummaries; pathname: string; onNavigate: () => void }) {
-  return (
-    <>
-      {groupLiveTracks(tracks).map(group => (
-        <div key={group.area}>
-          <div className="px-2 pb-1.5 text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>
-            {group.label}
-          </div>
-          <ul>
-            {group.tracks.map(([slug, track]) => {
-              const current = pathname === track.href
-              return (
-                <li key={slug}>
-                  <Link
-                    href={track.href}
-                    aria-current={current ? 'page' : undefined}
-                    onClick={onNavigate}
-                    className="flex items-baseline justify-between gap-3 px-2 py-1.5 rounded-md text-sm hover:bg-[var(--bg2)]"
-                    style={{ color: 'var(--text)', fontWeight: current ? 600 : 400 }}
-                  >
-                    <span>{track.title}</span>
-                    <span className="text-xs flex-shrink-0" style={{ color: 'var(--muted)' }}>
-                      {track.early ? 'Early · ' : ''}{track.lessons}
-                    </span>
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-      ))}
-    </>
-  )
+// Desktop columns. Projects ('practice') is listed under Practice, not here.
+const COLUMNS: (keyof typeof AREA_LABELS)[][] = [['data'], ['programming', 'cs'], ['ai', 'cloud', 'security']]
+
+type TrackEntry = [slug: string, track: TrackSummary]
+
+function liveTracksIn(tracks: HeaderData['tracks'], area: TrackArea): TrackEntry[] {
+  return Object.entries(tracks).filter(([, track]) => track.area === area && track.lessons > 0)
 }
 
-function PlaceRow({ tracks, lessons, continueLesson, onNavigate }: {
-  tracks: TrackSummaries
-  lessons: LessonEntry[]
-  continueLesson: LessonEntry | null
+function isInTrack(pathname: string, slug: string, track: TrackSummary) {
+  return pathname === track.href || pathname.startsWith(`/learn/${slug}/`)
+}
+
+function TrackRow({ slug, track, completed, pathname, onNavigate, tall = false }: {
+  slug: string
+  track: TrackSummary
+  completed: number
+  pathname: string
   onNavigate: () => void
+  tall?: boolean
 }) {
-  const pathname = usePathname()
-  const slug = trackForPath(pathname, lessons, tracks)
-  const track = slug ? tracks[slug] : undefined
-  const href = track?.href ?? continueLesson?.[0]
-  const eyebrow = track ? 'Current track' : 'Continue'
-  const title = track?.title ?? continueLesson?.[1]
-  if (!href || !title) return null
+  const current = isInTrack(pathname, slug, track)
   return (
-    <Link
-      href={href}
-      onClick={onNavigate}
-      className="block px-2 py-2 mb-4 rounded-md hover:bg-[var(--bg2)]"
-    >
-      <span className="block text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>{eyebrow}</span>
-      <span className="block text-sm font-semibold mt-0.5" style={{ color: 'var(--text)' }}>{title}</span>
-    </Link>
+    <li>
+      <Link
+        href={track.href}
+        aria-current={pathname === track.href ? 'page' : undefined}
+        onClick={onNavigate}
+        className={`flex items-center justify-between gap-3 px-2 -mx-2 rounded-md text-sm hover:bg-[var(--bg3)] ${tall ? 'min-h-11' : 'py-1.5'}`}
+        style={{ color: 'var(--text)', fontWeight: current ? 600 : 400 }}
+      >
+        <span className="min-w-0">
+          {track.title}
+          {slug === START_HERE && <span className="text-xs font-normal" style={{ color: 'var(--muted)' }}> · start here</span>}
+        </span>
+        <span className="flex items-center gap-1.5 flex-shrink-0 text-xs">
+          {completed > 0 ? (
+            <span className="font-medium" style={{ color: 'var(--green)' }}>{completed} completed</span>
+          ) : (
+            <>
+              {track.early && (
+                <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-semibold" style={{ background: 'rgba(245,158,11,0.14)', color: 'var(--gold)' }}>
+                  EARLY
+                </span>
+              )}
+              <span style={{ color: 'var(--muted)' }}>{track.lessons}</span>
+            </>
+          )}
+        </span>
+      </Link>
+    </li>
   )
 }
 
-function AllTracksLink({ onNavigate }: { onNavigate: () => void }) {
-  const pathname = usePathname()
+function AreaGroup({ idPrefix, area, header, completedByTrack, pathname, onNavigate, tall }: {
+  idPrefix: string
+  area: keyof typeof AREA_LABELS
+  header: HeaderData
+  completedByTrack: Record<string, number>
+  pathname: string
+  onNavigate: () => void
+  tall?: boolean
+}) {
+  const tracks = liveTracksIn(header.tracks, area)
+  if (!tracks.length) return null
+  const headingId = `${idPrefix}-${area}`
   return (
-    <Link href={TRACKS_HREF} onClick={onNavigate} aria-current={pathname === TRACKS_HREF ? 'page' : undefined}
-      className="text-sm font-semibold" style={{ color: 'var(--accent)' }}>
-      All tracks →
-    </Link>
+    <div>
+      <div id={headingId} className="pb-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>
+        {AREA_LABELS[area]}
+      </div>
+      <ul aria-labelledby={headingId}>
+        {tracks.map(([slug, track]) => (
+          <TrackRow key={slug} slug={slug} track={track} completed={completedByTrack[slug] ?? 0} pathname={pathname} onNavigate={onNavigate} tall={tall} />
+        ))}
+      </ul>
+    </div>
   )
 }
 
-export function TracksMenuDesktop({ tracks, lessons, continueLesson, active }: {
-  tracks: TrackSummaries
-  lessons: LessonEntry[]
-  continueLesson: LessonEntry | null
+export function TracksMenuDesktop({ header, completedByTrack, active, onOpenChange }: {
+  header: HeaderData
+  completedByTrack: Record<string, number>
   active: boolean
+  onOpenChange?: (open: boolean) => void
 }) {
   const pathname = usePathname()
   const panelId = useId()
-  const { open, setOpen, containerRef, buttonRef } = useMenuDisclosure()
+  const { open, setOpen, close, containerRef, buttonRef } = useMenuDisclosure()
+  const toggle = () => setOpen(isOpen => { onOpenChange?.(!isOpen); return !isOpen })
+  const navigate = () => setOpen(false)
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef}>
       <button
         ref={buttonRef}
         type="button"
         aria-expanded={open}
         aria-current={active ? 'location' : undefined}
         aria-controls={panelId}
-        onClick={() => setOpen(isOpen => !isOpen)}
-        className="relative flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-colors"
-        style={{ color: active || open ? 'var(--text)' : 'var(--muted)', fontWeight: active ? 600 : 400 }}
+        onClick={toggle}
+        className="relative flex items-center gap-1 h-10 px-3 rounded-lg text-sm transition-colors"
+        style={{ color: active || open ? 'var(--text)' : 'var(--text2)', fontWeight: active || open ? 600 : 400, background: open ? 'var(--bg2)' : 'transparent' }}
       >
         Tracks
         <ChevronDown size={13} aria-hidden="true" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', transformOrigin: 'center' }} />
         {active && (
-          <span aria-hidden="true" className="absolute left-3 right-3 -bottom-0.5 h-0.5 rounded-full" style={{ background: 'var(--accent)' }} />
+          <span aria-hidden="true" className="absolute left-3 right-3 bottom-0.5 h-0.5 rounded-full" style={{ background: 'var(--accent)' }} />
         )}
       </button>
 
@@ -131,15 +135,58 @@ export function TracksMenuDesktop({ tracks, lessons, continueLesson, active }: {
         <div
           id={panelId}
           data-menu-panel
-          className="absolute left-0 top-full mt-2 rounded-xl p-5"
-          style={{ width: 'min(720px, calc(100vw - 48px))', background: 'var(--surface)', border: '1px solid var(--border2)', boxShadow: 'var(--shadow-lg)' }}
+          role="dialog"
+          aria-label="Tracks"
+          className="fixed left-0 right-0 top-16 z-40 max-h-[calc(100vh-4rem)] overflow-y-auto"
+          style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border2)', boxShadow: 'var(--shadow-lg)' }}
         >
-          <PlaceRow tracks={tracks} lessons={lessons} continueLesson={continueLesson} onNavigate={() => setOpen(false)} />
-          <div className="grid grid-cols-3 gap-x-6 gap-y-5">
-            <TrackLinks tracks={tracks} pathname={pathname} onNavigate={() => setOpen(false)} />
+          <div className="relative max-w-[1400px] mx-auto px-8 pt-6 pb-5 flex gap-8">
+            <div className="flex-1 grid grid-cols-3 gap-10">
+              {COLUMNS.map((areas, i) => (
+                <div key={i} className="flex flex-col gap-6">
+                  {areas.map(area => (
+                    <AreaGroup key={area} idPrefix={panelId} area={area} header={header} completedByTrack={completedByTrack} pathname={pathname} onNavigate={navigate} />
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div className="hidden xl:flex flex-col w-[270px] pl-6 pr-10" style={{ borderLeft: '1px solid var(--border)' }}>
+              <div id={`${panelId}-roadmaps`} className="pb-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--accent)' }}>
+                Featured roadmaps
+              </div>
+              <ul aria-labelledby={`${panelId}-roadmaps`}>
+                {header.featuredRoadmaps.map(roadmap => (
+                  <li key={roadmap.href}>
+                    <Link href={roadmap.href} onClick={navigate} className="block py-1.5 rounded-md hover:underline">
+                      <span className="block text-sm font-semibold" style={{ color: 'var(--text)' }}>{roadmap.title}</span>
+                      <span className="block text-xs" style={{ color: 'var(--muted)' }}>{roadmap.blurb}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/learn/roadmap" onClick={navigate} className="pt-2.5 text-sm font-semibold" style={{ color: 'var(--accent)' }}>
+                All {header.roadmapCount} roadmaps →
+              </Link>
+            </div>
+            <button
+              type="button"
+              aria-label="Close tracks"
+              onClick={close}
+              className="absolute right-6 top-4 w-10 h-10 flex items-center justify-center rounded-lg"
+              style={{ background: 'var(--bg3)', color: 'var(--text2)' }}
+            >
+              <X size={16} aria-hidden="true" />
+            </button>
           </div>
-          <div className="mt-5 pt-4 flex justify-end" style={{ borderTop: '1px solid var(--border)' }}>
-            <AllTracksLink onNavigate={() => setOpen(false)} />
+          <div className="max-w-[1400px] mx-auto px-8 py-3 flex flex-wrap justify-between gap-2 text-[13px]" style={{ borderTop: '1px solid var(--border)', color: 'var(--muted)' }}>
+            <span>
+              {header.lessonCount} lessons in {header.trackCount} tracks ·{' '}
+              <Link href={TRACKS_HREF} onClick={navigate} style={{ color: 'var(--accent)' }}>Browse all tracks</Link>
+            </span>
+            <span>
+              Progress is saved in this browser, no account needed ·{' '}
+              <Link href={PROGRESS_HREF} onClick={navigate} style={{ color: 'var(--accent)' }}>Your progress</Link>
+            </span>
           </div>
         </div>
       )}
@@ -147,16 +194,21 @@ export function TracksMenuDesktop({ tracks, lessons, continueLesson, active }: {
   )
 }
 
-export function TracksListMobile({ tracks, lessons, continueLesson, active, onNavigate }: {
-  tracks: TrackSummaries
-  lessons: LessonEntry[]
-  continueLesson: LessonEntry | null
+export function TracksListMobile({ header, completedByTrack, resumeTrack, active, onNavigate, onExpand }: {
+  header: HeaderData
+  completedByTrack: Record<string, number>
+  /** The track Continue points into; listed first under Your tracks. */
+  resumeTrack: string | null
   active: boolean
   onNavigate: () => void
+  onExpand?: () => void
 }) {
   const pathname = usePathname()
   const listId = useId()
   const [expanded, setExpanded] = useState(false)
+  const yours = Object.entries(header.tracks)
+    .filter(([slug]) => slug === resumeTrack || (completedByTrack[slug] ?? 0) > 0)
+    .sort(([a], [b]) => Number(b === resumeTrack) - Number(a === resumeTrack))
 
   return (
     <div>
@@ -165,18 +217,34 @@ export function TracksListMobile({ tracks, lessons, continueLesson, active, onNa
         aria-expanded={expanded}
         aria-current={active ? 'location' : undefined}
         aria-controls={listId}
-        onClick={() => setExpanded(isExpanded => !isExpanded)}
-        className="w-full flex items-center justify-between px-3 py-2.5 text-sm rounded-lg"
-        style={{ color: active ? 'var(--text)' : 'var(--text2)', fontWeight: active ? 600 : 400, background: active ? 'var(--bg2)' : 'transparent' }}
+        onClick={() => setExpanded(isExpanded => { if (!isExpanded) onExpand?.(); return !isExpanded })}
+        className="w-full min-h-[50px] flex items-center justify-between px-3 text-base font-semibold rounded-lg"
+        style={{ color: 'var(--text)', background: active ? 'var(--bg2)' : 'transparent' }}
       >
         Tracks
-        <ChevronDown size={14} aria-hidden="true" style={{ transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', transformOrigin: 'center' }} />
+        <span className="flex items-center gap-2 text-[13px] font-normal" style={{ color: 'var(--muted)' }}>
+          {header.trackCount}
+          <ChevronDown size={14} aria-hidden="true" style={{ transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', transformOrigin: 'center' }} />
+        </span>
       </button>
       {expanded && (
-        <div id={listId} className="pl-2 pr-1 pt-2 pb-3 space-y-4">
-          <PlaceRow tracks={tracks} lessons={lessons} continueLesson={continueLesson} onNavigate={onNavigate} />
-          <TrackLinks tracks={tracks} pathname={pathname} onNavigate={onNavigate} />
-          <div className="px-2"><AllTracksLink onNavigate={onNavigate} /></div>
+        <div id={listId} className="px-3 pt-1 pb-3 space-y-4">
+          {yours.length > 0 && (
+            <div>
+              <div className="pb-1 font-mono text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Your tracks</div>
+              <ul>
+                {yours.map(([slug, track]) => (
+                  <TrackRow key={slug} slug={slug} track={track} completed={completedByTrack[slug] ?? 0} pathname={pathname} onNavigate={onNavigate} tall />
+                ))}
+              </ul>
+            </div>
+          )}
+          {COLUMNS.flat().map(area => (
+            <AreaGroup key={area} idPrefix={listId} area={area} header={header} completedByTrack={{}} pathname={pathname} onNavigate={onNavigate} tall />
+          ))}
+          <Link href={TRACKS_HREF} onClick={onNavigate} className="flex items-center min-h-11 text-sm font-semibold" style={{ color: 'var(--accent)' }}>
+            All {header.trackCount} tracks →
+          </Link>
         </div>
       )}
     </div>
