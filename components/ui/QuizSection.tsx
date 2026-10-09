@@ -19,20 +19,22 @@ export function QuizSection({ pageHref, onPass }: Props) {
   const [done, setDone] = useState(false)
   const [passRecorded, setPassRecorded] = useState(false)
 
-  if (!questions || questions.length === 0) return null
-
-  const q = questions[current]
-  const totalQ = questions.length
-  const score = done ? answers.filter((a, i) => a === questions[i].answer).length : 0
-  const pct = done ? Math.round((score / totalQ) * 100) : 0
+  const totalQ = questions?.length ?? 0
+  const score = done && questions ? answers.filter((a, i) => a === questions[i].answer).length : 0
+  const pct = done && totalQ > 0 ? Math.round((score / totalQ) * 100) : 0
   const passed = pct >= PASS_SCORE * 100
 
+  // Hooks run before the early return so they are called in the same order on every render.
   useEffect(() => {
     if (done && passed && !passRecorded) {
       setPassRecorded(true)
       onPass?.()
     }
-  }, [done, passed])
+  }, [done, passed, passRecorded, onPass])
+
+  if (!questions || questions.length === 0) return null
+
+  const q = questions[current]
 
   function selectAnswer(val: number | boolean) {
     if (revealed) return
