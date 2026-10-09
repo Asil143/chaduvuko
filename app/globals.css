@@ -249,19 +249,28 @@
   50% { opacity: 0.2; }
 }
 
-/* Lesson mode (components/layout/LessonHeaderMode.tsx) */
+/* Lesson pages (components/layout/LessonRow.tsx, LessonHeaderMode.tsx).
+   The lesson row sits under the site bar; while reading, the bar slides away and the row moves
+   up by the bar's height. Sticky offsets and anchor jumps use both heights. Next is the action
+   on a lesson, so the Continue/Start slot is removed (pure CSS, so it holds before hydration). */
+:root { --lesson-row-h: 0px; }
+html:has([data-lesson-page]) { --lesson-row-h: 54px; }
+html:has([data-lesson-page]) { scroll-padding-top: calc(var(--header-offset) + var(--lesson-row-h) + 16px); }
+body:has([data-lesson-page]) .resume-slot { display: none; }
 html[data-header-hidden="true"] { --header-offset: 0px; }
 .site-header { transition: transform 0.2s ease; }
 html[data-header-hidden="true"] .site-header { transform: translateY(-100%); }
+.lesson-row { top: var(--header-offset); transition: top 0.2s ease; }
 .lesson-sidebar {
-  top: var(--header-offset);
-  max-height: calc(100vh - var(--header-offset));
+  top: calc(var(--header-offset) + var(--lesson-row-h));
+  max-height: calc(100vh - var(--header-offset) - var(--lesson-row-h));
   transition: top 0.2s ease, max-height 0.2s ease;
 }
 @media (prefers-reduced-motion: reduce) {
-  .site-header, .lesson-sidebar { transition: none; }
+  .site-header, .lesson-row, .lesson-sidebar { transition: none; }
 }
 
-/* Lesson pages: Next is the action, so the header's Continue/Start slot is removed.
-   Pure CSS, so it holds before hydration (see components/layout/LessonPageMarker.tsx). */
-body:has([data-lesson-page]) .resume-slot { display: none; }
+/* A panel opened from the lesson row (the phone lesson sheet) must cover the site bar. */
+.lesson-row:has([data-menu-panel]) { z-index: 60; }
+/* Header and lesson-row panels are modal, so the chat bubble must not float over them. */
+body:has([data-menu-panel]) .chad-float { display: none; }

@@ -28,9 +28,14 @@ export function useMenuDisclosure() {
     const panel = container?.querySelector<HTMLElement>('[data-menu-panel]')
     panel?.querySelector<HTMLElement>(FOCUSABLE)?.focus({ preventScroll: true })
 
-    const inert = Array.from(document.body.children).filter(
-      (el): el is HTMLElement => el instanceof HTMLElement && !el.contains(container ?? null) && !el.inert,
-    )
+    // Everything outside the panel's container becomes inert: the siblings of the container
+    // and of each of its ancestors, so this also works for panels nested inside the page.
+    const inert: HTMLElement[] = []
+    for (let node: Element | null = container ?? null; node && node !== document.body && node.parentElement; node = node.parentElement) {
+      for (const sibling of Array.from(node.parentElement.children)) {
+        if (sibling !== node && sibling instanceof HTMLElement && !sibling.inert) inert.push(sibling)
+      }
+    }
     inert.forEach(el => { el.inert = true })
 
     const onKeyDown = (e: KeyboardEvent) => {

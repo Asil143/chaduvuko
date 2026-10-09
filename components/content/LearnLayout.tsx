@@ -3,6 +3,7 @@ import { CommentSection }  from '@/components/ui/CommentSection'
 import { ReadingProgress } from '@/components/ui/ReadingProgress'
 import { LessonHeaderMode } from '@/components/layout/LessonHeaderMode'
 import { LessonPageMarker } from '@/components/layout/LessonPageMarker'
+import { LessonRow } from '@/components/layout/LessonRow'
 import { ShareButtons }    from '@/components/ui/ShareButtons'
 import { PageViews }       from '@/components/ui/PageViews'
 import { RelatedArticles } from '@/components/ui/RelatedArticles'
@@ -214,16 +215,23 @@ export function LearnLayout({ children, title, description, section, readTime, u
 
   return (
     <>
-      <ReadingProgress />
-      {isLesson && <LessonHeaderMode />}
-      {isLesson && <LessonPageMarker />}
-      <div className="pt-16 min-h-screen" style={{ background: 'var(--bg)' }}>
+      {lessonNav ? (
+        <>
+          <LessonPageMarker />
+          <LessonRow nav={lessonNav} />
+          <LessonHeaderMode />
+        </>
+      ) : (
+        <ReadingProgress />
+      )}
+      <div className={`${isLesson ? 'pt-[118px]' : 'pt-16'} min-h-screen`} style={{ background: 'var(--bg)' }}>
 
         {/* Page header */}
         <div className="border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg2)' }}>
           <div className="w-[96%] max-w-[2200px] mx-auto px-4 md:px-6 py-8">
             {breadcrumbs && (
-              <nav className="flex items-center gap-1.5 text-xs font-mono mb-4" style={{ color: 'var(--muted)' }}>
+              // On lessons the lesson row carries the trail from lg up.
+              <nav className={`flex items-center gap-1.5 text-xs font-mono mb-4 ${isLesson ? 'lg:hidden' : ''}`} style={{ color: 'var(--muted)' }}>
                 <Link href="/" style={{ color: 'var(--accent)' }}>Home</Link>
                 {breadcrumbs.map(bc => (
                   <span key={bc.href} className="flex items-center gap-1.5">
@@ -275,8 +283,8 @@ export function LearnLayout({ children, title, description, section, readTime, u
           <div className="flex-1 min-w-0">
             <div className="px-8 md:px-12 py-10">
 
-              {/* Prev / Next at top — W3Schools style */}
-              <div className="flex items-center justify-between mb-8 gap-3">
+              {/* Prev / Next at top — W3Schools style. Lessons have these in the lesson row. */}
+              {!isLesson && <div className="flex items-center justify-between mb-8 gap-3">
                 {prev ? (
                   <Link href={prev.href}
                     className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-mono transition-all min-w-0 max-w-[48%]"
@@ -298,7 +306,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
                     <ChevronRight size={14} className="flex-shrink-0" />
                   </Link>
                 ) : <div />}
-              </div>
+              </div>}
 
               {/* Page content */}
               <div className="prose-chaduvuko">

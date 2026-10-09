@@ -46,7 +46,23 @@ export interface LessonNavLink {
   subtitle: string
 }
 
+/** A lesson in the track picker: [href, title, module]. */
+export type TrackLessonEntry = [href: string, title: string, module: string]
+
+/** Where the open lesson sits in its track; drives the lesson row under the site bar. */
+export interface LessonContext {
+  trackTitle: string
+  trackHref: string
+  /** Module (catalog section) of the open lesson, or null when the track has none. */
+  module: string | null
+  /** 1-based position among the track's live lessons. */
+  position: number
+  total: number
+  lessons: TrackLessonEntry[]
+}
+
 export interface LessonNavLinks {
   prev: LessonNavLink | null
   next: LessonNavLink | null
+  context: LessonContext
 }

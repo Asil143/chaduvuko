@@ -119,9 +119,18 @@ function toNavLink(target: LessonNavTarget, direction: 'prev' | 'next'): LessonN
 export function getLessonNavLinks(href: string): LessonNavLinks | null {
   const nav = getLessonNavigation(href)
   if (!nav) return null
+  const lessons = liveLessonsForTrack(nav.track.slug)
   return {
     prev: nav.prev && toNavLink(nav.prev, 'prev'),
     next: nav.next && toNavLink(nav.next, 'next'),
+    context: {
+      trackTitle: nav.track.title,
+      trackHref: nav.track.indexHref,
+      module: nav.lesson.section ?? null,
+      position: lessons.findIndex(lesson => lesson.href === href) + 1,
+      total: lessons.length,
+      lessons: lessons.map(lesson => [lesson.href, lesson.title, lesson.section ?? '']),
+    },
   }
 }
 
