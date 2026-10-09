@@ -8,6 +8,15 @@ export interface TrackSummary {
   lessons: number
 }
 
+/** Live counts shown on the homepage and /learn, computed on the server. */
+export interface SiteStats {
+  lessons: number
+  liveTracks: number
+  projects: number
+  roadmaps: number
+  articles: number
+}
+
 /** Keyed by track slug, in catalog order. */
 export type TrackSummaries = Record<string, TrackSummary>
 

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import type { TrackSummaries } from '@/lib/lesson-nav'
+import type { SiteStats, TrackSummaries } from '@/lib/lesson-nav'
 
 type Cat = 'all' | 'data' | 'ai' | 'prog' | 'web' | 'cs'
 
@@ -218,7 +218,6 @@ const SKILLS = [
   // CS Core
   { badge: 'CS Core', title: 'System Design', desc: 'Design scalable systems like a senior — HLD, LLD, Scalability, CAP Theorem, Trade-offs, real production systems.', pills: ['HLD', 'LLD', 'Scalability', 'CAP Theorem', 'Trade-offs'] },
   { badge: 'CS Core', title: 'Operating Systems', desc: 'Processes, memory management, CPU scheduling, concurrency, deadlock — for campus placements and interviews.', pills: ['Processes', 'Memory Mgmt', 'Scheduling', 'IPC', 'Deadlock'] },
-  { badge: 'CS Core', title: 'Computer Networks', track:'networking', desc: 'OSI and TCP/IP model, HTTP, DNS, routing, load balancers — for DevOps, backend, and campus prep.', pills: ['TCP/IP', 'HTTP/HTTPS', 'DNS', 'Load Balancers', 'Routing'] },
   // Mobile
   { badge: 'Mobile', title: 'Android Development', desc: 'Native Android with Kotlin — Jetpack Compose, MVVM, Room DB, Navigation, Coroutines.', pills: ['Kotlin', 'Jetpack Compose', 'MVVM', 'Room DB', 'Coroutines'] },
   { badge: 'Mobile', title: 'Flutter', desc: 'Cross-platform iOS and Android with Dart — Widgets, BLoC, Provider, Firebase, animations.', pills: ['Dart', 'Widgets', 'BLoC', 'Firebase', 'Animations'] },
@@ -228,7 +227,7 @@ const SKILLS = [
   { badge: 'Testing', title: 'Selenium', desc: 'Web browser test automation — WebDriver, TestNG, Page Object Model, automation frameworks.', pills: ['WebDriver', 'TestNG', 'Page Object Model', 'Frameworks', 'CI Integration'] },
   { badge: 'Testing', title: 'API Testing', desc: 'Postman, REST Assured, Newman, API automation — contract testing, performance, CI integration.', pills: ['Postman', 'REST Assured', 'Newman', 'Contract Testing', 'Performance'] },
   // Interview prep
-  { badge: 'Interview', title: 'Campus Placements', desc: 'Aptitude, Technical Round, HR Round, Group Discussion — the full entry-level interview loop.', pills: ['Aptitude', 'Technical Round', 'HR Round', 'Group Discussion', 'GD Tips'] },
+  { badge: 'Interview', title: 'New Grad Interview Prep', desc: 'Online assessments, phone screens, technical rounds, and behavioral interviews — the full new-grad hiring loop.', pills: ['Online Assessment', 'Phone Screen', 'Technical Rounds', 'Behavioral', 'Offers'] },
   { badge: 'Interview', title: 'FAANG Prep', desc: 'Google, Amazon, Microsoft, Meta, Apple — DSA patterns, System Design, Behavioural interviews.', pills: ['DSA Patterns', 'System Design', 'Behavioural', 'Coding Patterns', 'Mock Rounds'] },
   // Data & BI
   { badge: 'BI', title: 'Power BI & Tableau', desc: 'Dashboards, DAX, data storytelling, Tableau Desktop — the two tools every data analyst needs.', pills: ['Power BI', 'Tableau', 'DAX', 'Reports', 'Data Storytelling'] },
@@ -252,20 +251,19 @@ const skillBadgeColor: Record<string, string> = {
   'AI & ML': '#7b61ff',
 }
 
-const QUICK_LINKS = [
-  { icon: '🗺️', label: 'Career Roadmaps',    href: '/learn/roadmap',   desc: '20+ role-specific roadmaps' },
-  { icon: '🏗️', label: 'Real Projects',       href: '/learn/projects',  desc: '6 Azure end-to-end builds'   },
-  { icon: '🎯', label: 'Interview Prep',       href: '/learn/interview', desc: 'DE, ML, SQL, System Design'  },
-  { icon: '✍️', label: 'Blog',                 href: '/blog',            desc: '27 in-depth articles'        },
+const quickLinks = (stats: SiteStats) => [
+  { icon: '🗺️', label: 'Career Roadmaps',    href: '/learn/roadmap',   desc: `${stats.roadmaps} role-specific roadmaps` },
+  { icon: '🏗️', label: 'Real Projects',       href: '/learn/projects',  desc: `${stats.projects} Azure end-to-end builds` },
+  { icon: '🎯', label: 'Interview Prep',       href: '/learn/interview', desc: 'DE, ML, SQL, System Design' },
+  { icon: '✍️', label: 'Blog',                 href: '/blog',            desc: `${stats.articles} in-depth articles` },
 ]
 
-export default function LearnPage({ tracks }: { tracks: TrackSummaries }) {
+export default function LearnPage({ tracks, stats }: { tracks: TrackSummaries; stats: SiteStats }) {
   // A card is live only when it points at a live catalog track.
   const hrefOf = (t: { track?: string }) => (t.track ? tracks[t.track]?.href : undefined)
   const [cat, setCat] = useState<Cat>('all')
 
   const filtered = cat === 'all' ? TRACKS : TRACKS.filter(t => t.cat === cat)
-  const liveCount = TRACKS.filter(t => hrefOf(t)).length
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '48px 24px 80px' }}>
@@ -298,8 +296,8 @@ export default function LearnPage({ tracks }: { tracks: TrackSummaries }) {
         {/* Stats */}
         <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
           {[
-            { value: `${TRACKS.length}+`, label: 'Tracks'          },
-            { value: `${liveCount}`,       label: 'Live now'        },
+            { value: `${stats.liveTracks}`, label: 'Live tracks' },
+            { value: `${stats.lessons}`,    label: 'Lessons'     },
             { value: '100+',               label: 'Hours of content' },
             { value: '$0',                 label: 'Cost forever'    },
           ].map(s => (
@@ -320,7 +318,7 @@ export default function LearnPage({ tracks }: { tracks: TrackSummaries }) {
         gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
         gap: 10, marginBottom: 48,
       }}>
-        {QUICK_LINKS.map(q => (
+        {quickLinks(stats).map(q => (
           <a
             key={q.label}
             href={q.href}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import type { TrackSummaries } from '@/lib/lesson-nav'
+import type { SiteStats, TrackSummaries } from '@/lib/lesson-nav'
 
 // ─── SALARY DATA (US market 2026 — LinkedIn, Glassdoor, Levels.fyi, BLS OES) ───
 const salaryDB: Record<string, any> = {
@@ -33,7 +33,6 @@ const tracksAll = [
   { cat:'ai', icon:'🤖', name:'AI & Machine Learning', desc:'Math → Classical ML → Deep Learning → GenAI → MLOps. One complete path from zero.', pills:['Classical ML','Deep Learning','NLP','Generative AI','MLOps'], jobs:'ML Engineer · Data Scientist · AI Engineer', track:'ai-ml' },
   { cat:'data',  icon:'📁',  name:'Data Engineering',       desc:'From zero to production-grade DE — no cloud required', pills:['Pipelines','SQL','Python','Batch','Streaming'], jobs:'Data Engineer · Analytics Engineer',        track:'data-engineering' },
   { cat:'data',  icon:'◎',  name:'Apache Kafka',           desc:'Event streaming from scratch to advanced production systems', pills:['Events','Topics','Consumers','Connect','Streams'], jobs:'Data Engineer · Backend Engineer · Platform Engineer', track:'apache-kafka' },
-  { cat:'data',  icon:'☁️',  name:'Azure Track',      desc:'Full Azure cloud engineering track', pills:['ADF','Databricks','Spark','dbt','Kafka'],   jobs:'Data Engineer · Analytics Engineer',        track:'azure' },
   { cat:'data',  icon:'🌩️', name:'Microsoft Azure',         desc:'Full Azure cloud service track', pills:['ADLS Gen2','ADF','Synapse','Fabric'],     jobs:'Cloud Engineer · Azure Developer',           track:'azure' },
   { cat:'cs',    icon:'🧮',  name:'Data Structures & Algorithms', desc:'Crack every technical coding round', pills:['Arrays','Trees','Graphs','Dynamic Programming'], jobs:'Big Tech · FAANG · Product Companies', track:'dsa' },
   { cat:'cs',    icon:'💾',  name:'DBMS',                   desc:'Database theory and design fundamentals', pills:['ER Diagrams','Normalization','ACID','Transactions'], jobs:'DBA · Backend Dev · Technical Interviews', track:'dbms' },
@@ -72,7 +71,6 @@ const tracksAll = [
   { cat:'devops',icon:'🔄',  name:'CI/CD Pipelines',        desc:'GitHub Actions, Jenkins, ArgoCD', pills:['GitHub Actions','Jenkins','ArgoCD','GitOps'], jobs:'DevOps Eng · SRE' },
   { cat:'devops',icon:'🐧',  name:'Linux',                  desc:'Command line and system administration', pills:['Bash','File System','Networking','Permissions'], jobs:'SysAdmin · DevOps Eng' },
   { cat:'devops',icon:'🛡️', name:'Cybersecurity',          desc:'Ethical hacking and defence techniques', pills:['Pen Testing','OWASP','SIEM','Networks'], jobs:'Security Analyst · Pen Tester',          track:'cybersecurity' },
-  { cat:'devops',icon:'🌐', name:'Networking Fundamentals', desc:'LAN, WAN, TCP/IP, DNS, TLS — every protocol a network or security engineer must know', pills:['TCP/IP','Subnetting','DNS','Routing','Firewalls'], jobs:'Network Engineer · DevOps · Security Analyst', track:'networking' },
   // Databases
   { cat:'db',    icon:'🐘',  name:'PostgreSQL',             desc:'Advanced relational database mastery', pills:['JSONB','Full Text Search','Partitioning','Extensions'], jobs:'DBA · Backend Dev' },
   { cat:'db',    icon:'🍃',  name:'MongoDB',                desc:'NoSQL document database at scale', pills:['Aggregation Pipeline','Indexes','Atlas','Replication'], jobs:'Backend Dev · Full Stack Dev' },
@@ -160,7 +158,7 @@ const dayOneTasks = [
   { role:'GenAI Developer', company:'Cohere · Remote', salary:'$175K–$235K', task:'Build a RAG-based enterprise knowledge assistant using LangChain, Cohere embeddings, and Pinecone vector store — sub-2-second P95 latency requirement.', track:'Python + GenAI + Databases track', color:'#ec4899' },
 ]
 
-export default function HomePage({ tracks }: { tracks: TrackSummaries }) {
+export default function HomePage({ tracks, stats }: { tracks: TrackSummaries; stats: SiteStats }) {
   // A card is live only when it points at a live catalog track or a known hub page.
   const hrefOf = (t: { track?: string; route?: string }) => (t.track ? tracks[t.track]?.href : t.route)
   const [roleIndex, setRoleIndex] = useState(0)
@@ -187,7 +185,7 @@ export default function HomePage({ tracks }: { tracks: TrackSummaries }) {
 
   // Counter animation
   useEffect(() => {
-    const targets = { t:150, p:30, tr:40, r:20 }
+    const targets = { t:stats.lessons, p:stats.projects, tr:stats.liveTracks, r:stats.roadmaps }
     const duration = 1200
     const steps = 60
     let step = 0
@@ -284,10 +282,10 @@ export default function HomePage({ tracks }: { tracks: TrackSummaries }) {
         {/* Stats */}
         <div className="grid-cols-2 sm:grid-cols-4" style={{ display:'grid', gap:1, background:'var(--border)', border:'1px solid var(--border)', borderRadius:12, overflow:'hidden', maxWidth:560, margin:'0 auto' }}>
           {[
-            { n:`${counters.t}+`, l:'Tutorials' },
-            { n:`${counters.p}+`, l:'Projects & Growing' },
-            { n:`${counters.tr}+`, l:'IT Tracks' },
-            { n:`${counters.r}+`, l:'Job Roles Covered' },
+            { n:`${counters.t}`, l:'Lessons' },
+            { n:`${counters.p}`, l:'Projects' },
+            { n:`${counters.tr}`, l:'Live Tracks' },
+            { n:`${counters.r}`, l:'Career Roadmaps' },
           ].map(s => (
             <div key={s.l} style={{ background:'var(--surface)', padding:'16px 10px', textAlign:'center' }}>
               <div style={{ fontSize:24, fontWeight:900, color:'var(--green)', lineHeight:1 }}>{s.n}</div>
@@ -363,7 +361,7 @@ export default function HomePage({ tracks }: { tracks: TrackSummaries }) {
         <p style={{ fontSize:10, fontWeight:700, letterSpacing:'.12em', textTransform:'uppercase', color:'var(--muted)', marginBottom:8 }}>// Choose your track</p>
         <h2 style={{ fontSize:'clamp(22px,3vw,36px)', fontWeight:900, letterSpacing:'-1.5px', marginBottom:8 }}>Every IT discipline.<br />One structured platform.</h2>
         <p style={{ fontSize:14, color:'var(--muted)', marginBottom:24, maxWidth:520 }}>
-          {tracksAll.length}+ tracks across every branch of tech. Every track is sequenced from zero to job-ready with real projects and interview prep built in.
+          {stats.liveTracks} live tracks today, with {tracksAll.filter(t => !hrefOf(t)).length} more planned across every branch of tech. Every track is sequenced from zero to job-ready with real projects and interview prep built in.
         </p>
         {/* Category filters */}
         <div style={{ display:'flex', flexWrap:'wrap', gap:6, marginBottom:20 }}>

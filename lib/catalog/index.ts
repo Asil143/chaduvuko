@@ -34,6 +34,16 @@ export function getLessonOrder(): LessonEntry[] {
   )
 }
 
+/** Catalog-derived counts; roadmaps and articles come from their own registries. */
+export function getCatalogStats() {
+  const learningTracks = TRACKS.filter(track => track.area !== 'practice')
+  return {
+    lessons: LIVE_LESSONS.length,
+    liveTracks: learningTracks.filter(track => liveLessonsForTrack(track.slug).length > 0).length,
+    projects: liveLessonsForTrack('projects').length,
+  }
+}
+
 /** Compact per-track data that is safe to pass to Client Components. */
 export function getTrackSummaries(): TrackSummaries {
   return Object.fromEntries(
