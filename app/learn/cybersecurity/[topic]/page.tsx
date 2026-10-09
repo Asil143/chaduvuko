@@ -98,9 +98,9 @@ export async function generateMetadata({
   params: { topic: string };
 }): Promise<Metadata> {
   const meta = moduleMeta[params.topic];
-  if (!meta) return { title: 'Cybersecurity | Chaduvuko' };
+  if (!meta) return { title: 'Cybersecurity' };
   return {
-    title: `${meta.title} | Cybersecurity | Chaduvuko`,
+    title: `${meta.title} | Cybersecurity`,
     description: meta.description,
   };
 }

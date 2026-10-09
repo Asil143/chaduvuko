@@ -112,9 +112,9 @@ export async function generateMetadata({
   params: { topic: string };
 }): Promise<Metadata> {
   const meta = moduleMeta[params.topic];
-  if (!meta) return { title: 'Data Engineering | Chaduvuko' };
+  if (!meta) return { title: 'Data Engineering' };
   return {
-    title: `${meta.title} | Data Engineering | Chaduvuko`,
+    title: `${meta.title} | Data Engineering`,
     description: meta.description,
   };
 }

@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'SQL — Complete Guide | DBMS | Chaduvuko',
+  title: 'SQL — Complete Guide | DBMS',
   description:
     'SQL from absolute zero to production-level advanced — DDL, DML, DCL, TCL, every JOIN type, subqueries, correlated queries, window functions, CTEs, recursive CTEs, aggregations, indexes in queries, query execution order, and every interview trap explained with real examples.',
 }

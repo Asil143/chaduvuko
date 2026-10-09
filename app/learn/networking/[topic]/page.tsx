@@ -57,9 +57,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { topic: string } }): Promise<Metadata> {
   const meta = moduleMeta[params.topic]
-  if (!meta) return { title: 'Networking | Chaduvuko' }
+  if (!meta) return { title: 'Networking' }
   return {
-    title: `${meta.title} | Networking Fundamentals — Chaduvuko`,
+    title: `${meta.title} | Networking Fundamentals`,
     description: meta.description,
   }
 }

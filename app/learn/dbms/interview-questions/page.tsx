@@ -4,7 +4,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'DBMS Interview Questions — 60 Complete Answers | Chaduvuko',
+  title: 'DBMS Interview Questions — 60 Complete Answers',
   description:
     'The 60 most important DBMS interview questions with complete answers — covering normalization, transactions, indexing, SQL, query processing, concurrency, recovery, distributed databases, NoSQL, and security. For new grads and experienced engineers.',
 }

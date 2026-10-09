@@ -3,7 +3,7 @@ import { LearnLayout } from '@/components/content/LearnLayout'
 import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
-export const metadata = { title: 'PostgreSQL for Data Engineers — Asil' }
+export const metadata = { title: 'PostgreSQL for Data Engineers' }
 
 const conceptsTable = [
   { term: 'Database',   def: 'A container that holds all your tables and data',              example: 'freshmart_db' },

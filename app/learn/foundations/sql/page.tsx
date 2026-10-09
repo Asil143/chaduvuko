@@ -2,7 +2,7 @@ import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
-export const metadata = { title: 'SQL for Data Engineers — Asil' }
+export const metadata = { title: 'SQL for Data Engineers' }
 
 export default function SQLPage() {
   return (

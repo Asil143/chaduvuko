@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Concurrency Control — Complete Guide | DBMS | Chaduvuko',
+  title: 'Concurrency Control — Complete Guide | DBMS',
   description:
     'Complete concurrency control from first principles — lock-based protocols, two-phase locking, deadlocks, timestamp ordering, MVCC, serializability, conflict and view serializability, precedence graphs, and every exam and interview pattern explained.',
 }

@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Crash Recovery — Complete Guide | DBMS | Chaduvuko',
+  title: 'Crash Recovery — Complete Guide | DBMS',
   description:
     'How databases survive failures — failure classification, write-ahead logging, ARIES recovery algorithm, checkpoint mechanisms, UNDO and REDO phases, shadow paging, and every exam and interview pattern with complete worked examples.',
 }

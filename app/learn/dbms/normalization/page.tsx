@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Normalization — 1NF to 5NF Complete Guide | DBMS | Chaduvuko',
+  title: 'Normalization — 1NF to 5NF Complete Guide | DBMS',
   description:
     'Complete normalization from first principles — every anomaly type, 1NF through 5NF with full worked examples, BCNF vs 3NF trade-offs, lossless decomposition, dependency preservation, denormalization, and every interview trap explained.',
 }

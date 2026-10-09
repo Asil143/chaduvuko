@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Views, Stored Procedures & Triggers — Complete Guide | DBMS | Chaduvuko',
+  title: 'Views, Stored Procedures & Triggers — Complete Guide | DBMS',
   description:
     'Complete guide to views, materialised views, stored procedures, functions, and triggers — creation, updatability rules, INSTEAD OF triggers, PL/pgSQL, security, performance, and every interview pattern with production examples.',
 }

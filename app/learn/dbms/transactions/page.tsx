@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Transactions & ACID Properties — Complete Guide | DBMS | Chaduvuko',
+  title: 'Transactions & ACID Properties — Complete Guide | DBMS',
   description:
     'What transactions are, why they exist, ACID properties explained from first principles with real failure scenarios, transaction states, savepoints, isolation levels preview, and every interview trap with complete answers.',
 }

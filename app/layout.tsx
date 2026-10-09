@@ -60,13 +60,14 @@ import { getTrackSummaries } from '@/lib/catalog'
 import { Footer } from '@/components/layout/Footer'
 import { themeInitScript } from '@/lib/theme'
 import ChatBot from '@/components/ui/ChatBot'
+import { TITLE_TEMPLATE } from '@/lib/site-title'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chaduvuko.com'),
 
   title: {
     default: 'Chaduvuko — Free IT Learning Platform',
-    template: '%s | Asil — Data Engineering',
+    template: TITLE_TEMPLATE,
   },
 
   description:

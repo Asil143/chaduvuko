@@ -3,10 +3,17 @@ import { ChevronLeft, Clock, Calendar, ArrowRight } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { PageViews } from '@/components/ui/PageViews'
 import { BLOG_ARTICLES as ARTICLES } from '@/data/blog-articles'
+import type { Metadata } from 'next'
 
 
 export async function generateStaticParams() {
   return Object.keys(ARTICLES).map(slug => ({ slug }))
+}
+
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const article = ARTICLES[params.slug]
+  if (!article) return {}
+  return { title: article.title, description: article.excerpt }
 }
 
 const tagColors: Record<string, string> = {

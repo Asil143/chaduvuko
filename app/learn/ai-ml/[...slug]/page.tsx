@@ -199,9 +199,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const key = params.slug.join('/');
   const meta = moduleMeta[key];
-  if (!meta) return { title: 'AI & ML | Chaduvuko' };
+  if (!meta) return { title: 'AI & ML' };
   return {
-    title: `${meta.title} | AI & ML | Chaduvuko`,
+    title: `${meta.title} | AI & ML`,
     description: meta.description,
   };
 }

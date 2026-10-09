@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Database Security — Complete Guide | DBMS | Chaduvuko',
+  title: 'Database Security — Complete Guide | DBMS',
   description:
     'Complete database security from first principles — authentication, authorisation, SQL injection, privilege management, encryption at rest and in transit, auditing, row-level security, and every interview pattern with real production examples.',
 }

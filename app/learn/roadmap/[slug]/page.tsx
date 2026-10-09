@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const roadmap = ROADMAPS[params.slug]
   if (!roadmap) return {}
   return {
-    title: `${roadmap.title} Roadmap — Chaduvuko`,
+    title: `${roadmap.title} Roadmap`,
     description: roadmap.description,
   }
 }

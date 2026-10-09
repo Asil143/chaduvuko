@@ -2,7 +2,7 @@ import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
-export const metadata = { title: 'Amazon Kinesis — Real-Time Streaming on AWS — Asil' }
+export const metadata = { title: 'Amazon Kinesis — Real-Time Streaming on AWS' }
 
 export default function KinesisPage() {
   return (

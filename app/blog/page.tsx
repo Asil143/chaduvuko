@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, Clock, Calendar } from 'lucide-react'
 import { BLOG_ARTICLES } from '@/data/blog-articles'
 
-export const metadata = { title: 'Blog — Asil' }
+export const metadata = { title: 'Blog' }
 
 const posts = Object.entries(BLOG_ARTICLES)
   .map(([slug, article]) => ({ slug, ...article }))

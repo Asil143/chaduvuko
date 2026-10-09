@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Indexes in Databases — Complete Guide | DBMS | Chaduvuko',
+  title: 'Indexes in Databases — Complete Guide | DBMS',
   description:
     'How database indexes work from first principles — B+ trees, hash indexes, clustered vs non-clustered, covering indexes, composite indexes, when NOT to index, EXPLAIN plans, and real query optimization examples from production systems.',
 }

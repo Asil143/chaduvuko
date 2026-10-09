@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { DSA_UNITS as units } from '@/data/dsa-curriculum'
 
 export const metadata = {
-  title: 'Data Structures & Algorithms — Chaduvuko',
+  title: 'Data Structures & Algorithms',
   description:
     'Learn DSA from absolute zero to advanced. No CS degree needed. Every concept explained simply in plain English with C code. Built for freshers and non-IT learners.',
 }

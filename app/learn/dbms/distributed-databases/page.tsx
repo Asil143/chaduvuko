@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Distributed Databases & CAP Theorem — Complete Guide | DBMS | Chaduvuko',
+  title: 'Distributed Databases & CAP Theorem — Complete Guide | DBMS',
   description:
     'Distributed databases from first principles — CAP theorem proof and nuances, PACELC, consistency models, replication strategies, sharding, distributed transactions, two-phase commit, consensus protocols, and every interview pattern with real system examples.',
 }

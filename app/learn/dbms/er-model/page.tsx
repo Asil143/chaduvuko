@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Entity-Relationship Model — Complete Guide | DBMS | Chaduvuko',
+  title: 'Entity-Relationship Model — Complete Guide | DBMS',
   description:
     'The complete ER model from first principles — entities, attributes, relationships, cardinality, participation constraints, weak entities, generalisation, specialisation, aggregation, and complete ER-to-relational mapping with worked examples.',
 }

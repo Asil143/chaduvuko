@@ -2,7 +2,7 @@ import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
-export const metadata = { title: 'Amazon S3 — AWS Data Lake Storage — Asil' }
+export const metadata = { title: 'Amazon S3 — AWS Data Lake Storage' }
 
 export default function S3Page() {
   return (

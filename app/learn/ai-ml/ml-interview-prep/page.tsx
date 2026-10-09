@@ -7,7 +7,7 @@ import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 import MLPageHeader from '@/components/content/MLPageHeader'
 
 export const metadata: Metadata = {
-  title: 'ML Interview Prep — 50 Complete Answers — Chaduvuko',
+  title: 'ML Interview Prep — 50 Complete Answers',
   description:
     'The 50 most-asked ML engineering questions across DoorDash, Stripe, Amazon, Brex, and Meta — with complete, ready-to-deliver answers for every level.',
 }

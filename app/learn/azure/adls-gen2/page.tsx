@@ -2,7 +2,7 @@ import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
-export const metadata = { title: 'ADLS Gen2 — Azure Data Lake Storage — Asil' }
+export const metadata = { title: 'ADLS Gen2 — Azure Data Lake Storage' }
 
 export default function ADLSPage() {
   return (

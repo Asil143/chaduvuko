@@ -29,11 +29,11 @@ export async function generateMetadata({
   const module = allModules.find(m => m.slug === params.topic);
 
   if (!module) {
-    return { title: 'Data Science | Chaduvuko' };
+    return { title: 'Data Science' };
   }
 
   return {
-    title: `${module.title} | Data Science | Chaduvuko`,
+    title: `${module.title} | Data Science`,
     description: module.description,
   };
 }

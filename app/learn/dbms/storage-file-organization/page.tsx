@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Storage & File Organization — Complete Guide | DBMS | Chaduvuko',
+  title: 'Storage & File Organization — Complete Guide | DBMS',
   description:
     'How databases physically store data — storage hierarchy, disk mechanics, pages and blocks, heap files, sorted files, ISAM, slotted page format, buffer pool management, replacement policies, and row vs columnar storage explained from first principles.',
 }

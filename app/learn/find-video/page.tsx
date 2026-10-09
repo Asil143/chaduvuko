@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { VideoFinder } from '@/components/youtube/VideoFinder'
 
 export const metadata: Metadata = {
-  title: 'Find the Best YouTube Video — Chaduvuko',
+  title: 'Find the Best YouTube Video',
   description: 'Type any topic you\'re struggling with and we\'ll find the best-matching YouTube video, ranked by views and real engagement.',
 }
 

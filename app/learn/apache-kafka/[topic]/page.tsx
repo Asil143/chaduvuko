@@ -37,9 +37,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { topic: string } }): Promise<Metadata> {
   const module = KAFKA_MODULE_BY_SLUG[params.topic]
-  if (!module) return { title: 'Apache Kafka | Chaduvuko' }
+  if (!module) return { title: 'Apache Kafka' }
   return {
-    title: `${module.title} | Apache Kafka — Chaduvuko`,
+    title: `${module.title} | Apache Kafka`,
     description: module.description,
   }
 }

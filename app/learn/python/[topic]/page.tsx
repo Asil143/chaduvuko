@@ -112,9 +112,9 @@ export async function generateMetadata({
   params: { topic: string };
 }): Promise<Metadata> {
   const meta = moduleMeta[params.topic];
-  if (!meta) return { title: 'Python | Chaduvuko' };
+  if (!meta) return { title: 'Python' };
   return {
-    title: `${meta.title} | Python | Chaduvuko`,
+    title: `${meta.title} | Python`,
     description: meta.description,
   };
 }

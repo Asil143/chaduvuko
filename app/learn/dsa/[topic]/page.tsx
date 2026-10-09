@@ -42,9 +42,9 @@ export async function generateMetadata({
   params: { topic: string };
 }): Promise<Metadata> {
   const meta = moduleMeta[params.topic];
-  if (!meta) return { title: 'DSA | Chaduvuko' };
+  if (!meta) return { title: 'DSA' };
   return {
-    title: `${meta.title} | DSA | Chaduvuko`,
+    title: `${meta.title} | DSA`,
     description: meta.description,
   };
 }

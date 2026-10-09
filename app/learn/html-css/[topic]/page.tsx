@@ -104,9 +104,9 @@ export async function generateMetadata({
   params: { topic: string };
 }): Promise<Metadata> {
   const meta = moduleMeta[params.topic];
-  if (!meta) return { title: 'HTML & CSS | Chaduvuko' };
+  if (!meta) return { title: 'HTML & CSS' };
   return {
-    title: `${meta.title} | HTML & CSS | Chaduvuko`,
+    title: `${meta.title} | HTML & CSS`,
     description: meta.description,
   };
 }

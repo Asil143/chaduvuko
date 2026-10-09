@@ -97,11 +97,11 @@ export async function generateMetadata({
   const module = allModules.find(m => m.slug === params.topic);
 
   if (!module) {
-    return { title: 'SQL | Chaduvuko' };
+    return { title: 'SQL' };
   }
 
   return {
-    title: `${module.title} | SQL | Chaduvuko`,
+    title: `${module.title} | SQL`,
     description: module.description,
   };
 }

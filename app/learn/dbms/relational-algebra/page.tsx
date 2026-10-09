@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Relational Algebra — Complete Guide | DBMS | Chaduvuko',
+  title: 'Relational Algebra — Complete Guide | DBMS',
   description:
     'Complete relational algebra from first principles — all operators with formal definitions, composition, equivalences, query trees, division operator, extended operators, SQL-to-algebra translation, and every GATE exam pattern with full worked solutions.',
 }

@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Query Processing & Optimization — Complete Guide | DBMS | Chaduvuko',
+  title: 'Query Processing & Optimization — Complete Guide | DBMS',
   description:
     'How a database turns your SQL into a result — parsing, query trees, relational algebra transformations, cost estimation, join algorithms, the query optimiser, execution plans, and how to read and improve EXPLAIN output in production.',
 }

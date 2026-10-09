@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Data Models in DBMS — Hierarchical to NoSQL | Chaduvuko',
+  title: 'Data Models in DBMS — Hierarchical to NoSQL',
   description:
     'Every major data model explained at depth — hierarchical, network, relational, entity-relationship, object-oriented, object-relational, document, key-value, column-family, and graph. Why each was invented, how each works internally, and why the relational model has dominated for 50 years.',
 }

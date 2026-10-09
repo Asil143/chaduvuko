@@ -32,9 +32,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { topic: string } }): Promise<Metadata> {
   const module = DBT_MODULE_BY_SLUG[params.topic]
-  if (!module) return { title: 'dbt | Chaduvuko' }
+  if (!module) return { title: 'dbt' }
   return {
-    title: `${module.title} | dbt — Chaduvuko`,
+    title: `${module.title} | dbt`,
     description: module.description,
   }
 }

@@ -2,7 +2,7 @@ import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
-export const metadata = { title: 'Azure Synapse Analytics — Asil' }
+export const metadata = { title: 'Azure Synapse Analytics' }
 
 export default function SynapsePage() {
   return (

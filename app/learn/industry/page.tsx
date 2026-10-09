@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, TrendingUp, Users, DollarSign } from 'lucide-react'
 
-export const metadata = { title: 'Top Companies Hiring Data Engineers — Asil' }
+export const metadata = { title: 'Top Companies Hiring Data Engineers' }
 
 const companies = [
   {

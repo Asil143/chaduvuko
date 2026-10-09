@@ -23,6 +23,13 @@ export function getTrack(slug: string): Track | undefined {
   return TRACKS.find(track => track.slug === slug)
 }
 
+/** Title for a track's index page; an unknown slug fails the build. */
+export function trackIndexTitle(slug: string): string {
+  const track = getTrack(slug)
+  if (!track) throw new Error(`Unknown track: ${slug}`)
+  return `Learn ${track.title}`
+}
+
 export function liveLessonsForTrack(slug: string): Lesson[] {
   return LIVE_LESSONS.filter(lesson => lesson.track === slug).sort((a, b) => a.order - b.order)
 }

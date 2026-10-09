@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Introduction to Databases & DBMS | Chaduvuko',
+  title: 'Introduction to Databases & DBMS',
   description:
     'What data is, what a database is, why file systems fail, what a DBMS does, three-schema architecture, data independence, database users, and why every application depends on a database.',
 }

@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Functional Dependencies — Complete Guide | DBMS | Chaduvuko',
+  title: 'Functional Dependencies — Complete Guide | DBMS',
   description:
     "Complete functional dependencies from first principles — formal definition, trivial vs non-trivial, Armstrong's Axioms with proofs, derived rules, attribute closure algorithm, finding all candidate keys, canonical cover, dependency preservation, and every GATE exam pattern explained.",
 }

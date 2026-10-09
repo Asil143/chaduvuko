@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'NoSQL Databases — Complete Guide | DBMS | Chaduvuko',
+  title: 'NoSQL Databases — Complete Guide | DBMS',
   description:
     'Complete NoSQL guide from first principles — why NoSQL exists, key-value stores, document databases, column-family stores, graph databases, time-series databases, choosing the right NoSQL type, and every interview pattern with real production examples.',
 }

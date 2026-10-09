@@ -33,9 +33,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { topic: string } }): Promise<Metadata> {
   const module = SNOWFLAKE_MODULE_BY_SLUG[params.topic]
-  if (!module) return { title: 'Snowflake | Chaduvuko' }
+  if (!module) return { title: 'Snowflake' }
   return {
-    title: `${module.title} | Snowflake — Chaduvuko`,
+    title: `${module.title} | Snowflake`,
     description: module.description,
   }
 }

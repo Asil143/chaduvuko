@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'SQL Cheat Sheet — All Syntax on One Page | Chaduvuko',
+  title: 'SQL Cheat Sheet — All Syntax on One Page',
   description:
     'Complete SQL reference — SELECT, WHERE, JOINs, window functions, CTEs, and more. Bookmark this for interviews.',
 };

@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Relational Model & Keys — Complete Guide | DBMS | Chaduvuko',
+  title: 'Relational Model & Keys — Complete Guide | DBMS',
   description:
     'The complete relational model from mathematical foundations — relations, tuples, domains, schemas, integrity constraints, and every key type explained with full depth: super key, candidate key, primary key, foreign key, composite key, surrogate key, and alternate key.',
 }

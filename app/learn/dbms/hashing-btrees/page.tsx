@@ -5,7 +5,7 @@ import { Callout } from '@/components/content/Callout'
 import { KeyTakeaways } from '@/components/content/KeyTakeaways'
 
 export const metadata: Metadata = {
-  title: 'Hashing & B+ Trees — Complete Guide | DBMS | Chaduvuko',
+  title: 'Hashing & B+ Trees — Complete Guide | DBMS',
   description:
     'Static and dynamic hashing, extendible hashing, linear hashing, B+ tree structure, insertion and deletion with splits and merges, bulk loading, B-tree vs B+ tree, and every exam and interview pattern with full worked examples.',
 }

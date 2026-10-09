@@ -2,7 +2,7 @@ import { WithLessonNav } from '@/components/content/WithLessonNav'
 import { LearnLayout } from '@/components/content/LearnLayout'
 import { CodeBlock } from '@/components/content/CodeBlock'
 
-export const metadata = { title: 'What is Data Engineering? — Asil' }
+export const metadata = { title: 'What is Data Engineering?' }
 
 export default function WhatIsDataEngineeringPage() {
   return (

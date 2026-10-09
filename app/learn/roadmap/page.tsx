@@ -5,7 +5,7 @@ import Link from 'next/link'
 import CustomRoadmapGenerator from '@/components/roadmap/CustomRoadmapGenerator'
 
 export const metadata: Metadata = {
-  title: 'Learning Roadmaps — Chaduvuko',
+  title: 'Learning Roadmaps',
   description: 'Interactive skill-tree roadmaps for every tech role. Track your progress, earn XP, and unlock US salary data as you learn.',
 }
 
