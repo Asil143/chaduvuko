@@ -7,13 +7,14 @@ import { RelatedArticles } from '@/components/ui/RelatedArticles'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ChevronRight, ChevronLeft, Clock, Calendar, BookOpen, Copy, Check, CheckCircle2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { TableOfContents } from '@/components/ui/TableOfContents'
 import { QuizSection } from '@/components/ui/QuizSection'
 import { LinkedInGenerator } from '@/components/ui/LinkedInGenerator'
 import { SalaryWidget } from '@/components/ui/SalaryWidget'
 import { getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
 import { useLessonNav } from '@/components/content/LessonNavContext'
+import { recordLessonVisit, setLessonComplete, useProgress } from '@/lib/progress'
 import SQLSectionNav from '@/components/sql/SQLSectionNav'
 import DESectionNav from '@/components/data-engineering/DESectionNav'
 import PythonSectionNav from '@/components/python/PythonSectionNav'
@@ -200,7 +201,14 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const diff = meta?.difficulty ?? curriculumDiff
   const diffStyle = diff ? difficultyColors[diff] : null
 
-  const [completed, setCompleted] = useState(false)
+  // Lesson navigation is provided only for live catalog lessons, so it doubles as the lesson check.
+  const isLesson = lessonNav !== null
+  const progress = useProgress()
+  const completed = Boolean(progress?.completed[pathname])
+
+  useEffect(() => {
+    if (isLesson) recordLessonVisit(pathname)
+  }, [isLesson, pathname])
 
   return (
     <>
@@ -343,22 +351,27 @@ export function LearnLayout({ children, title, description, section, readTime, u
                 </div>
               )}
 
-              {/* Mark complete */}
-              <div className="mt-10 flex justify-center">
-                <button
-                  onClick={() => setCompleted(v => !v)}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-mono transition-all"
-                  style={{
-                    background: completed ? 'rgba(0,230,118,0.12)' : 'var(--surface)',
-                    border: completed ? '1px solid rgba(0,230,118,0.35)' : '1px solid var(--border)',
-                    color: completed ? 'var(--green)' : 'var(--muted)',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <CheckCircle2 size={15} />
-                  {completed ? 'Marked as complete ✓' : 'Mark as complete'}
-                </button>
-              </div>
+              {/* Mark complete — lessons only; disabled until saved progress has been read */}
+              {isLesson && (
+                <div className="mt-10 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setLessonComplete(pathname, !completed)}
+                    disabled={progress === null}
+                    aria-pressed={completed}
+                    className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-mono transition-all"
+                    style={{
+                      background: completed ? 'rgba(0,230,118,0.12)' : 'var(--surface)',
+                      border: completed ? '1px solid rgba(0,230,118,0.35)' : '1px solid var(--border)',
+                      color: completed ? 'var(--green)' : 'var(--muted)',
+                      cursor: progress === null ? 'default' : 'pointer',
+                    }}
+                  >
+                    <CheckCircle2 size={15} />
+                    {completed ? 'Marked as complete ✓' : 'Mark as complete'}
+                  </button>
+                </div>
+              )}
 
               {/* Prev / Next at bottom */}
               <div className="flex items-stretch gap-3 mt-10 pt-8" style={{ borderTop: '1px solid var(--border)' }}>
