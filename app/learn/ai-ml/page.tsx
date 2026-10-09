@@ -11,7 +11,6 @@ interface Module {
   title: string
   href?: string
   readTime: string
-  xp: number
   status: 'live' | 'soon'
   section: number
   description: string
@@ -52,7 +51,7 @@ const sectionInfo = [
 const modules: Module[] = [
   // ── Section 1 — Introduction ──────────────────────────────────────────────
   {
-    num: '01', section: 1, color: sectionColors[1], status: 'live', xp: 100,
+    num: '01', section: 1, color: sectionColors[1], status: 'live',
     readTime: '20–25 min',
     href: '/learn/ai-ml/what-is-ai',
     title: 'What is AI? ML, DL and GenAI Explained',
@@ -60,7 +59,7 @@ const modules: Module[] = [
     topics: ['AI', 'ML', 'DL', 'GenAI', 'Hierarchy'],
   },
   {
-    num: '02', section: 1, color: sectionColors[1], status: 'live', xp: 100,
+    num: '02', section: 1, color: sectionColors[1], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/ai-ml-landscape',
     title: 'The AI/ML Landscape — Tools, Roles, and Career Paths',
@@ -70,7 +69,7 @@ const modules: Module[] = [
 
   // ── Section 2 — Math Foundations ─────────────────────────────────────────
   {
-    num: '03', section: 2, color: sectionColors[2], status: 'live', xp: 100,
+    num: '03', section: 2, color: sectionColors[2], status: 'live',
     readTime: '30–38 min',
     href: '/learn/ai-ml/math-foundations/vectors-matrices-tensors',
     title: 'Vectors, Matrices and Tensors',
@@ -78,7 +77,7 @@ const modules: Module[] = [
     topics: ['Vectors', 'Matrices', 'Tensors', 'Dot product'],
   },
   {
-    num: '04', section: 2, color: sectionColors[2], status: 'live', xp: 100,
+    num: '04', section: 2, color: sectionColors[2], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/math-foundations/matrix-multiplication',
     title: 'Matrix Multiplication and Linear Transformations',
@@ -86,7 +85,7 @@ const modules: Module[] = [
     topics: ['Matrix mult', 'Transformations', 'SVD'],
   },
   {
-    num: '05', section: 2, color: sectionColors[2], status: 'live', xp: 100,
+    num: '05', section: 2, color: sectionColors[2], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/math-foundations/dot-product-similarity',
     title: 'Dot Product and Similarity',
@@ -94,7 +93,7 @@ const modules: Module[] = [
     topics: ['Dot product', 'Cosine similarity', 'Projections', 'Embeddings'],
   },
   {
-    num: '06', section: 2, color: sectionColors[2], status: 'live', xp: 100,
+    num: '06', section: 2, color: sectionColors[2], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/math-foundations/eigenvalues-eigenvectors',
     title: 'Eigenvalues and Eigenvectors',
@@ -102,7 +101,7 @@ const modules: Module[] = [
     topics: ['Eigenvalues', 'Eigenvectors', 'PCA preview', 'Decomposition'],
   },
   {
-    num: '07', section: 2, color: sectionColors[2], status: 'live', xp: 100,
+    num: '07', section: 2, color: sectionColors[2], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/math-foundations/derivatives-and-gradients',
     title: 'Derivatives, Gradients and the Chain Rule',
@@ -110,7 +109,7 @@ const modules: Module[] = [
     topics: ['Derivatives', 'Gradients', 'Chain rule', 'Backprop preview'],
   },
   {
-    num: '08', section: 2, color: sectionColors[2], status: 'live', xp: 100,
+    num: '08', section: 2, color: sectionColors[2], status: 'live',
     readTime: '36–45 min',
     href: '/learn/ai-ml/math-foundations/probability-distributions',
     title: 'Probability Distributions and Bayes Theorem',
@@ -118,7 +117,7 @@ const modules: Module[] = [
     topics: ['Distributions', 'Bayes', 'MLE', 'MAP'],
   },
   {
-    num: '09', section: 2, color: sectionColors[2], status: 'live', xp: 100,
+    num: '09', section: 2, color: sectionColors[2], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/math-foundations/information-theory',
     title: 'Information Theory — Entropy, Cross-Entropy and KL Divergence',
@@ -128,7 +127,7 @@ const modules: Module[] = [
 
   // ── Section 3 — Programming Ecosystem ────────────────────────────────────
   {
-    num: '10', section: 3, color: sectionColors[3], status: 'live', xp: 100,
+    num: '10', section: 3, color: sectionColors[3], status: 'live',
     readTime: '55–70 min',
     href: '/learn/ai-ml/programming/python-for-ml',
     title: 'Python for Machine Learning',
@@ -136,7 +135,7 @@ const modules: Module[] = [
     topics: ['NumPy', 'Pandas', 'Matplotlib', 'sklearn'],
   },
   {
-    num: '11', section: 3, color: sectionColors[3], status: 'live', xp: 100,
+    num: '11', section: 3, color: sectionColors[3], status: 'live',
     readTime: '40–52 min',
     href: '/learn/ai-ml/programming/numpy-arrays',
     title: 'NumPy Arrays and Broadcasting',
@@ -144,7 +143,7 @@ const modules: Module[] = [
     topics: ['Arrays', 'Broadcasting', 'Vectorisation', 'Indexing'],
   },
   {
-    num: '12', section: 3, color: sectionColors[3], status: 'live', xp: 100,
+    num: '12', section: 3, color: sectionColors[3], status: 'live',
     readTime: '45–58 min',
     href: '/learn/ai-ml/programming/pandas-dataframes',
     title: 'Pandas for Data Analysis',
@@ -152,7 +151,7 @@ const modules: Module[] = [
     topics: ['DataFrames', 'GroupBy', 'Merge', 'EDA'],
   },
   {
-    num: '13', section: 3, color: sectionColors[3], status: 'live', xp: 100,
+    num: '13', section: 3, color: sectionColors[3], status: 'live',
     readTime: '35–45 min',
     href: '/learn/ai-ml/programming/matplotlib-seaborn',
     title: 'Data Visualisation for ML',
@@ -160,7 +159,7 @@ const modules: Module[] = [
     topics: ['Matplotlib', 'Seaborn', 'Plotly', 'EDA charts'],
   },
   {
-    num: '14', section: 3, color: sectionColors[3], status: 'live', xp: 100,
+    num: '14', section: 3, color: sectionColors[3], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/programming/sklearn-interface',
     title: 'Scikit-learn Interface',
@@ -170,7 +169,7 @@ const modules: Module[] = [
 
   // ── Section 4 — Data Engineering for ML ──────────────────────────────────
   {
-    num: '15', section: 4, color: sectionColors[4], status: 'live', xp: 100,
+    num: '15', section: 4, color: sectionColors[4], status: 'live',
     readTime: '50–62 min',
     href: '/learn/ai-ml/data-engineering/data-collection',
     title: 'Data Collection — APIs, SQL, Files and Scraping',
@@ -178,7 +177,7 @@ const modules: Module[] = [
     topics: ['REST APIs', 'SQL', 'Parquet', 'Web scraping'],
   },
   {
-    num: '16', section: 4, color: sectionColors[4], status: 'live', xp: 100,
+    num: '16', section: 4, color: sectionColors[4], status: 'live',
     readTime: '45–58 min',
     href: '/learn/ai-ml/data-engineering/data-cleaning',
     title: 'Missing Values, Outliers and Data Cleaning',
@@ -186,7 +185,7 @@ const modules: Module[] = [
     topics: ['Missing values', 'Outliers', 'Imputation', 'Cleaning'],
   },
   {
-    num: '17', section: 4, color: sectionColors[4], status: 'live', xp: 100,
+    num: '17', section: 4, color: sectionColors[4], status: 'live',
     readTime: '30–38 min',
     href: '/learn/ai-ml/data-engineering/feature-scaling',
     title: 'Feature Scaling — Standardisation and Normalisation',
@@ -194,7 +193,7 @@ const modules: Module[] = [
     topics: ['StandardScaler', 'MinMaxScaler', 'RobustScaler'],
   },
   {
-    num: '18', section: 4, color: sectionColors[4], status: 'live', xp: 100,
+    num: '18', section: 4, color: sectionColors[4], status: 'live',
     readTime: '36–45 min',
     href: '/learn/ai-ml/data-engineering/encoding-categorical-features',
     title: 'Encoding Categorical Features',
@@ -202,7 +201,7 @@ const modules: Module[] = [
     topics: ['One-hot', 'Ordinal', 'Target encoding', 'OHE'],
   },
   {
-    num: '19', section: 4, color: sectionColors[4], status: 'live', xp: 100,
+    num: '19', section: 4, color: sectionColors[4], status: 'live',
     readTime: '45–55 min',
     href: '/learn/ai-ml/data-engineering/feature-engineering',
     title: 'Feature Engineering and the Sklearn Pipeline',
@@ -210,7 +209,7 @@ const modules: Module[] = [
     topics: ['Feature creation', 'Pipeline', 'ColumnTransformer'],
   },
   {
-    num: '20', section: 4, color: sectionColors[4], status: 'live', xp: 100,
+    num: '20', section: 4, color: sectionColors[4], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/data-engineering/train-val-test-split',
     title: 'Train / Validation / Test Split',
@@ -220,7 +219,7 @@ const modules: Module[] = [
 
   // ── Section 5 — Classical Machine Learning ────────────────────────────────
   {
-    num: '21', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '21', section: 5, color: sectionColors[5], status: 'live',
     readTime: '18–22 min',
     href: '/learn/ai-ml/classical-ml/what-is-ml',
     title: 'What is Machine Learning?',
@@ -228,7 +227,7 @@ const modules: Module[] = [
     topics: ['Supervised', 'Unsupervised', 'RL', 'Training', 'Workflow'],
   },
   {
-    num: '22', section: 5, color: sectionColors[5], status: 'live', xp: 150,
+    num: '22', section: 5, color: sectionColors[5], status: 'live',
     readTime: '30–35 min',
     href: '/learn/ai-ml/classical-ml/linear-regression',
     title: 'Linear Regression — DoorDash Delivery Time Prediction',
@@ -236,7 +235,7 @@ const modules: Module[] = [
     topics: ['Regression', 'OLS', 'Gradient descent', 'sklearn'],
   },
   {
-    num: '23', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '23', section: 5, color: sectionColors[5], status: 'live',
     readTime: '25–30 min',
     href: '/learn/ai-ml/classical-ml/logistic-regression',
     title: 'Logistic Regression — Stripe Fraud Detection',
@@ -244,7 +243,7 @@ const modules: Module[] = [
     topics: ['Classification', 'Sigmoid', 'Log-odds', 'Threshold'],
   },
   {
-    num: '24', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '24', section: 5, color: sectionColors[5], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/classical-ml/decision-trees',
     title: 'Decision Trees — Loan Approval at Capital One',
@@ -252,7 +251,7 @@ const modules: Module[] = [
     topics: ['Trees', 'Gini', 'Info gain', 'Pruning'],
   },
   {
-    num: '25', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '25', section: 5, color: sectionColors[5], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/classical-ml/svm',
     title: 'Support Vector Machines — Margin Maximisation',
@@ -260,7 +259,7 @@ const modules: Module[] = [
     topics: ['SVM', 'Margin', 'Kernels', 'Hyperplane'],
   },
   {
-    num: '26', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '26', section: 5, color: sectionColors[5], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/classical-ml/knn',
     title: 'K-Nearest Neighbours — Similarity-Based Prediction',
@@ -268,7 +267,7 @@ const modules: Module[] = [
     topics: ['KNN', 'Distance', 'Euclidean', 'Curse of dimensionality'],
   },
   {
-    num: '27', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '27', section: 5, color: sectionColors[5], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/classical-ml/naive-bayes',
     title: 'Naive Bayes — Probabilistic Text Classification',
@@ -276,7 +275,7 @@ const modules: Module[] = [
     topics: ['Naive Bayes', 'Bayes theorem', 'Probabilistic', 'Text classification'],
   },
   {
-    num: '28', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '28', section: 5, color: sectionColors[5], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/classical-ml/random-forest',
     title: 'Random Forest — Instacart Stock Prediction',
@@ -284,7 +283,7 @@ const modules: Module[] = [
     topics: ['Bagging', 'Ensemble', 'Feature importance', 'OOB'],
   },
   {
-    num: '29', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '29', section: 5, color: sectionColors[5], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/classical-ml/gradient-boosting',
     title: 'Gradient Boosting — How XGBoost and LightGBM Work',
@@ -292,7 +291,7 @@ const modules: Module[] = [
     topics: ['Boosting', 'Residuals', 'Weak learners', 'Shrinkage'],
   },
   {
-    num: '30', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '30', section: 5, color: sectionColors[5], status: 'live',
     readTime: '36–45 min',
     href: '/learn/ai-ml/classical-ml/xgboost',
     title: 'XGBoost in Practice — End to End',
@@ -300,7 +299,7 @@ const modules: Module[] = [
     topics: ['XGBoost', 'SHAP', 'Regularisation', 'Early stopping'],
   },
   {
-    num: '31', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '31', section: 5, color: sectionColors[5], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/classical-ml/lightgbm',
     title: 'LightGBM — Fast Gradient Boosting at Scale',
@@ -308,7 +307,7 @@ const modules: Module[] = [
     topics: ['LightGBM', 'Leaf-wise', 'Histogram', 'GBDT'],
   },
   {
-    num: '32', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '32', section: 5, color: sectionColors[5], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/classical-ml/kmeans-clustering',
     title: 'K-Means Clustering — Customer Segmentation',
@@ -316,7 +315,7 @@ const modules: Module[] = [
     topics: ['Clustering', 'K-Means', 'Silhouette', 'Elbow'],
   },
   {
-    num: '33', section: 5, color: sectionColors[5], status: 'live', xp: 100,
+    num: '33', section: 5, color: sectionColors[5], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/classical-ml/pca',
     title: 'PCA — Dimensionality Reduction',
@@ -326,7 +325,7 @@ const modules: Module[] = [
 
   // ── Section 6 — Evaluation & Optimisation ────────────────────────────────
   {
-    num: '34', section: 6, color: sectionColors[6], status: 'live', xp: 100,
+    num: '34', section: 6, color: sectionColors[6], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/evaluation/evaluation-metrics',
     title: 'Evaluation Metrics — Beyond Accuracy',
@@ -334,7 +333,7 @@ const modules: Module[] = [
     topics: ['Precision', 'Recall', 'F1', 'ROC', 'AUC'],
   },
   {
-    num: '35', section: 6, color: sectionColors[6], status: 'live', xp: 100,
+    num: '35', section: 6, color: sectionColors[6], status: 'live',
     readTime: '18–24 min',
     href: '/learn/ai-ml/evaluation/calibration',
     title: 'Calibration — Are Your Probabilities Trustworthy?',
@@ -342,7 +341,7 @@ const modules: Module[] = [
     topics: ['Calibration', 'Reliability', 'Brier score', 'Platt scaling'],
   },
   {
-    num: '36', section: 6, color: sectionColors[6], status: 'live', xp: 100,
+    num: '36', section: 6, color: sectionColors[6], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/evaluation/roc-and-auc',
     title: 'ROC Curve and AUC — Threshold-Independent Evaluation',
@@ -350,7 +349,7 @@ const modules: Module[] = [
     topics: ['ROC', 'AUC', 'PR curve', 'Threshold'],
   },
   {
-    num: '37', section: 6, color: sectionColors[6], status: 'live', xp: 100,
+    num: '37', section: 6, color: sectionColors[6], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/evaluation/cross-validation',
     title: 'Cross-Validation and the Bias-Variance Tradeoff',
@@ -358,7 +357,7 @@ const modules: Module[] = [
     topics: ['K-fold', 'Stratified', 'Bias-variance', 'Overfitting'],
   },
   {
-    num: '38', section: 6, color: sectionColors[6], status: 'live', xp: 100,
+    num: '38', section: 6, color: sectionColors[6], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/evaluation/hyperparameter-tuning',
     title: 'Hyperparameter Tuning with Optuna',
@@ -366,7 +365,7 @@ const modules: Module[] = [
     topics: ['Optuna', 'Bayesian', 'Grid search', 'Pruning'],
   },
   {
-    num: '39', section: 6, color: sectionColors[6], status: 'live', xp: 100,
+    num: '39', section: 6, color: sectionColors[6], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/evaluation/model-interpretability',
     title: 'Model Interpretability — SHAP and LIME',
@@ -374,7 +373,7 @@ const modules: Module[] = [
     topics: ['SHAP', 'LIME', 'Feature importance', 'XAI'],
   },
   {
-    num: '40', section: 6, color: sectionColors[6], status: 'live', xp: 100,
+    num: '40', section: 6, color: sectionColors[6], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/evaluation/regression-metrics',
     title: 'Regression Metrics — MAE, RMSE, R²',
@@ -384,7 +383,7 @@ const modules: Module[] = [
 
   // ── Section 7 — Deep Learning ─────────────────────────────────────────────
   {
-    num: '41', section: 7, color: sectionColors[7], status: 'live', xp: 100,
+    num: '41', section: 7, color: sectionColors[7], status: 'live',
     readTime: '40–52 min',
     href: '/learn/ai-ml/deep-learning/neural-networks-from-scratch',
     title: 'Neural Networks from Scratch',
@@ -392,7 +391,7 @@ const modules: Module[] = [
     topics: ['Neurons', 'Layers', 'Weights', 'Forward pass'],
   },
   {
-    num: '42', section: 7, color: sectionColors[7], status: 'live', xp: 100,
+    num: '42', section: 7, color: sectionColors[7], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/deep-learning/backpropagation',
     title: 'Backpropagation — How Neural Networks Learn',
@@ -400,7 +399,7 @@ const modules: Module[] = [
     topics: ['Backprop', 'Chain rule', 'Gradients', 'Weight updates'],
   },
   {
-    num: '43', section: 7, color: sectionColors[7], status: 'live', xp: 100,
+    num: '43', section: 7, color: sectionColors[7], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/deep-learning/activation-functions',
     title: 'Activation Functions and Loss Functions',
@@ -408,7 +407,7 @@ const modules: Module[] = [
     topics: ['ReLU', 'GELU', 'Softmax', 'Cross-entropy loss'],
   },
   {
-    num: '44', section: 7, color: sectionColors[7], status: 'live', xp: 100,
+    num: '44', section: 7, color: sectionColors[7], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/deep-learning/optimisers',
     title: 'Optimisers — SGD, Adam, AdamW',
@@ -416,7 +415,7 @@ const modules: Module[] = [
     topics: ['SGD', 'Adam', 'AdamW', 'Learning rate'],
   },
   {
-    num: '45', section: 7, color: sectionColors[7], status: 'live', xp: 100,
+    num: '45', section: 7, color: sectionColors[7], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/deep-learning/batch-norm-dropout',
     title: 'Batch Normalisation and Dropout',
@@ -424,7 +423,7 @@ const modules: Module[] = [
     topics: ['Batch norm', 'Dropout', 'Regularisation', 'Training stability'],
   },
   {
-    num: '46', section: 7, color: sectionColors[7], status: 'live', xp: 100,
+    num: '46', section: 7, color: sectionColors[7], status: 'live',
     readTime: '45–58 min',
     href: '/learn/ai-ml/deep-learning/cnns-image-classification',
     title: 'CNNs — Shopify Product Image Classification',
@@ -432,7 +431,7 @@ const modules: Module[] = [
     topics: ['CNN', 'Conv', 'Pooling', 'ResNet', 'Transfer learning'],
   },
   {
-    num: '47', section: 7, color: sectionColors[7], status: 'live', xp: 100,
+    num: '47', section: 7, color: sectionColors[7], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/deep-learning/rnns-and-lstms',
     title: 'RNNs and LSTMs — Sequence Modelling',
@@ -440,7 +439,7 @@ const modules: Module[] = [
     topics: ['RNN', 'LSTM', 'GRU', 'Sequences', 'Vanishing gradient'],
   },
   {
-    num: '48', section: 7, color: sectionColors[7], status: 'live', xp: 100,
+    num: '48', section: 7, color: sectionColors[7], status: 'live',
     readTime: '45–58 min',
     href: '/learn/ai-ml/deep-learning/transformers-and-attention',
     title: 'Transformers and Self-Attention',
@@ -450,7 +449,7 @@ const modules: Module[] = [
 
   // ── Section 8 — Natural Language Processing ───────────────────────────────
   {
-    num: '49', section: 8, color: sectionColors[8], status: 'live', xp: 100,
+    num: '49', section: 8, color: sectionColors[8], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/nlp/tokenisation-and-embeddings',
     title: 'Tokenisation and Word Embeddings',
@@ -458,7 +457,7 @@ const modules: Module[] = [
     topics: ['Tokenisation', 'BPE', 'Word2Vec', 'Embeddings'],
   },
   {
-    num: '50', section: 8, color: sectionColors[8], status: 'live', xp: 100,
+    num: '50', section: 8, color: sectionColors[8], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/nlp/bert-encoder-family',
     title: 'BERT and the Encoder-Only Family',
@@ -466,7 +465,7 @@ const modules: Module[] = [
     topics: ['BERT', 'MLM', 'Fine-tuning', 'RoBERTa'],
   },
   {
-    num: '51', section: 8, color: sectionColors[8], status: 'live', xp: 100,
+    num: '51', section: 8, color: sectionColors[8], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/nlp/peft-lora-adapters',
     title: 'Fine-Tuning with PEFT — LoRA and Adapters',
@@ -474,7 +473,7 @@ const modules: Module[] = [
     topics: ['LoRA', 'PEFT', 'Adapters', 'Fine-tuning'],
   },
   {
-    num: '52', section: 8, color: sectionColors[8], status: 'live', xp: 100,
+    num: '52', section: 8, color: sectionColors[8], status: 'live',
     readTime: '40–52 min',
     href: '/learn/ai-ml/nlp/rag-retrieval-augmented-generation',
     title: 'RAG — Retrieval-Augmented Generation',
@@ -482,7 +481,7 @@ const modules: Module[] = [
     topics: ['RAG', 'Vector DB', 'FAISS', 'Semantic search'],
   },
   {
-    num: '53', section: 8, color: sectionColors[8], status: 'live', xp: 100,
+    num: '53', section: 8, color: sectionColors[8], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/nlp/prompt-engineering',
     title: 'Prompt Engineering',
@@ -490,7 +489,7 @@ const modules: Module[] = [
     topics: ['Zero-shot', 'Few-shot', 'CoT', 'ReAct'],
   },
   {
-    num: '54', section: 8, color: sectionColors[8], status: 'live', xp: 100,
+    num: '54', section: 8, color: sectionColors[8], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/nlp/llm-agents-and-tool-use',
     title: 'LLM Agents and Tool Use',
@@ -500,7 +499,7 @@ const modules: Module[] = [
 
   // ── Section 9 — Computer Vision ──────────────────────────────────────────
   {
-    num: '55', section: 9, color: sectionColors[9], status: 'live', xp: 100,
+    num: '55', section: 9, color: sectionColors[9], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/computer-vision/image-fundamentals',
     title: 'Image Fundamentals — Pixels, Channels and Tensors',
@@ -508,7 +507,7 @@ const modules: Module[] = [
     topics: ['Pixels', 'RGB channels', 'Image tensors', 'Normalisation'],
   },
   {
-    num: '56', section: 9, color: sectionColors[9], status: 'live', xp: 100,
+    num: '56', section: 9, color: sectionColors[9], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/computer-vision/data-augmentation',
     title: 'Data Augmentation — Training on Limited Image Data',
@@ -516,7 +515,7 @@ const modules: Module[] = [
     topics: ['Augmentation', 'Flips', 'Mixup', 'Cutout'],
   },
   {
-    num: '57', section: 9, color: sectionColors[9], status: 'live', xp: 100,
+    num: '57', section: 9, color: sectionColors[9], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/computer-vision/object-detection',
     title: 'Object Detection — YOLO and Feature Pyramids',
@@ -524,7 +523,7 @@ const modules: Module[] = [
     topics: ['YOLO', 'Anchor boxes', 'IoU', 'NMS'],
   },
   {
-    num: '58', section: 9, color: sectionColors[9], status: 'live', xp: 100,
+    num: '58', section: 9, color: sectionColors[9], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/computer-vision/semantic-segmentation',
     title: 'Semantic Segmentation — Pixel-Level Classification',
@@ -532,7 +531,7 @@ const modules: Module[] = [
     topics: ['Segmentation', 'U-Net', 'Skip connections', 'Pixel labels'],
   },
   {
-    num: '59', section: 9, color: sectionColors[9], status: 'live', xp: 100,
+    num: '59', section: 9, color: sectionColors[9], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/computer-vision/transfer-learning',
     title: 'Transfer Learning — Fine-Tuning Pretrained Vision Models',
@@ -542,7 +541,7 @@ const modules: Module[] = [
 
   // ── Section 10 — Generative AI ────────────────────────────────────────────
   {
-    num: '60', section: 10, color: sectionColors[10], status: 'live', xp: 100,
+    num: '60', section: 10, color: sectionColors[10], status: 'live',
     readTime: '22–28 min',
     href: '/learn/ai-ml/generative-ai/what-is-generative-ai',
     title: 'What is Generative AI?',
@@ -550,7 +549,7 @@ const modules: Module[] = [
     topics: ['Generative', 'Discriminative', 'Architecture overview'],
   },
   {
-    num: '61', section: 10, color: sectionColors[10], status: 'live', xp: 100,
+    num: '61', section: 10, color: sectionColors[10], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/generative-ai/gans-generator-discriminator',
     title: 'GANs — Generator vs Discriminator',
@@ -558,7 +557,7 @@ const modules: Module[] = [
     topics: ['GAN', 'Generator', 'Discriminator', 'DCGAN'],
   },
   {
-    num: '62', section: 10, color: sectionColors[10], status: 'live', xp: 100,
+    num: '62', section: 10, color: sectionColors[10], status: 'live',
     readTime: '26–34 min',
     href: '/learn/ai-ml/generative-ai/variational-autoencoders',
     title: 'Variational Autoencoders — Learning Latent Representations',
@@ -566,7 +565,7 @@ const modules: Module[] = [
     topics: ['VAE', 'Latent space', 'Reparameterisation', 'ELBO'],
   },
   {
-    num: '63', section: 10, color: sectionColors[10], status: 'live', xp: 100,
+    num: '63', section: 10, color: sectionColors[10], status: 'live',
     readTime: '40–52 min',
     href: '/learn/ai-ml/generative-ai/diffusion-models',
     title: 'Diffusion Models and Stable Diffusion',
@@ -574,7 +573,7 @@ const modules: Module[] = [
     topics: ['Diffusion', 'DDPM', 'Latent diffusion', 'ControlNet'],
   },
   {
-    num: '64', section: 10, color: sectionColors[10], status: 'live', xp: 100,
+    num: '64', section: 10, color: sectionColors[10], status: 'live',
     readTime: '45–58 min',
     href: '/learn/ai-ml/generative-ai/llms-pretraining-rlhf',
     title: 'LLMs — Pretraining, RLHF, and Scaling Laws',
@@ -582,7 +581,7 @@ const modules: Module[] = [
     topics: ['LLMs', 'RLHF', 'DPO', 'Scaling laws', 'Pretraining'],
   },
   {
-    num: '65', section: 10, color: sectionColors[10], status: 'live', xp: 100,
+    num: '65', section: 10, color: sectionColors[10], status: 'live',
     readTime: '50–65 min',
     href: '/learn/ai-ml/generative-ai/llm-fine-tuning',
     title: 'LLM Fine-Tuning in Practice',
@@ -590,7 +589,7 @@ const modules: Module[] = [
     topics: ['Fine-tuning', 'LoRA', 'HuggingFace', 'PEFT'],
   },
   {
-    num: '66', section: 10, color: sectionColors[10], status: 'live', xp: 100,
+    num: '66', section: 10, color: sectionColors[10], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/generative-ai/multimodal-models',
     title: 'Multimodal Models — CLIP, LLaVA, and Vision-Language',
@@ -598,7 +597,7 @@ const modules: Module[] = [
     topics: ['Multimodal', 'CLIP', 'LLaVA', 'Vision-language'],
   },
   {
-    num: '67', section: 10, color: sectionColors[10], status: 'live', xp: 100,
+    num: '67', section: 10, color: sectionColors[10], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/generative-ai/advanced-rag',
     title: 'Advanced RAG — Reranking, Hybrid Search and Evaluation',
@@ -606,7 +605,7 @@ const modules: Module[] = [
     topics: ['Reranking', 'Hybrid search', 'RAG eval', 'Production RAG'],
   },
   {
-    num: '68', section: 10, color: sectionColors[10], status: 'live', xp: 100,
+    num: '68', section: 10, color: sectionColors[10], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/generative-ai/agents-tool-use',
     title: 'Agents and Tool Use — Building Autonomous AI Systems',
@@ -616,7 +615,7 @@ const modules: Module[] = [
 
   // ── Section 11 — MLOps & Production ──────────────────────────────────────
   {
-    num: '69', section: 11, color: sectionColors[11], status: 'live', xp: 100,
+    num: '69', section: 11, color: sectionColors[11], status: 'live',
     readTime: '40–52 min',
     href: '/learn/ai-ml/mlops/ml-pipelines-feature-stores',
     title: 'ML Pipelines and Feature Stores',
@@ -624,7 +623,7 @@ const modules: Module[] = [
     topics: ['Pipelines', 'Feature store', 'Airflow', 'Kubeflow'],
   },
   {
-    num: '70', section: 11, color: sectionColors[11], status: 'live', xp: 100,
+    num: '70', section: 11, color: sectionColors[11], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/mlops/experiment-tracking',
     title: 'Experiment Tracking with MLflow and Weights & Biases',
@@ -632,7 +631,7 @@ const modules: Module[] = [
     topics: ['MLflow', 'W&B', 'Experiment tracking', 'Model registry'],
   },
   {
-    num: '71', section: 11, color: sectionColors[11], status: 'live', xp: 100,
+    num: '71', section: 11, color: sectionColors[11], status: 'live',
     readTime: '50–65 min',
     href: '/learn/ai-ml/mlops/model-deployment',
     title: 'Model Deployment — FastAPI, Docker, Kubernetes',
@@ -640,7 +639,7 @@ const modules: Module[] = [
     topics: ['FastAPI', 'Docker', 'K8s', 'REST API', 'Serving'],
   },
   {
-    num: '72', section: 11, color: sectionColors[11], status: 'live', xp: 100,
+    num: '72', section: 11, color: sectionColors[11], status: 'live',
     readTime: '36–46 min',
     href: '/learn/ai-ml/mlops/model-monitoring',
     title: 'Model Monitoring — Drift Detection and Retraining',
@@ -648,7 +647,7 @@ const modules: Module[] = [
     topics: ['Drift', 'Monitoring', 'Evidently', 'Retraining'],
   },
   {
-    num: '73', section: 11, color: sectionColors[11], status: 'live', xp: 100,
+    num: '73', section: 11, color: sectionColors[11], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/mlops/retraining-pipelines',
     title: 'Retraining Pipelines — Keeping Models Fresh',
@@ -656,7 +655,7 @@ const modules: Module[] = [
     topics: ['Retraining', 'Scheduled', 'Champion-challenger', 'Model promotion'],
   },
   {
-    num: '74', section: 11, color: sectionColors[11], status: 'live', xp: 100,
+    num: '74', section: 11, color: sectionColors[11], status: 'live',
     readTime: '30–40 min',
     href: '/learn/ai-ml/mlops/dvc-data-version-control',
     title: 'DVC — Data Version Control',
@@ -664,7 +663,7 @@ const modules: Module[] = [
     topics: ['DVC', 'Data versioning', 'Pipelines', 'Git'],
   },
   {
-    num: '75', section: 11, color: sectionColors[11], status: 'live', xp: 100,
+    num: '75', section: 11, color: sectionColors[11], status: 'live',
     readTime: '55–70 min',
     href: '/learn/ai-ml/mlops/ml-system-design',
     title: 'ML System Design — End to End',
@@ -674,7 +673,7 @@ const modules: Module[] = [
 
   // ── Section 12 — Cloud ML Platforms ──────────────────────────────────────
   {
-    num: '76', section: 12, color: sectionColors[12], status: 'live', xp: 100,
+    num: '76', section: 12, color: sectionColors[12], status: 'live',
     readTime: '45–58 min',
     href: '/learn/ai-ml/cloud-ml/azure-ml',
     title: 'Azure ML — Studio, Pipelines and AutoML',
@@ -682,7 +681,7 @@ const modules: Module[] = [
     topics: ['Azure ML', 'AML Pipelines', 'AutoML', 'Endpoints'],
   },
   {
-    num: '77', section: 12, color: sectionColors[12], status: 'live', xp: 100,
+    num: '77', section: 12, color: sectionColors[12], status: 'live',
     readTime: '40–52 min',
     href: '/learn/ai-ml/cloud-ml/aws-sagemaker',
     title: 'AWS SageMaker — Training Jobs and Pipelines',
@@ -690,7 +689,7 @@ const modules: Module[] = [
     topics: ['SageMaker', 'Training jobs', 'Clarify', 'JumpStart'],
   },
   {
-    num: '78', section: 12, color: sectionColors[12], status: 'live', xp: 100,
+    num: '78', section: 12, color: sectionColors[12], status: 'live',
     readTime: '40–52 min',
     href: '/learn/ai-ml/cloud-ml/gcp-vertex-ai',
     title: 'GCP Vertex AI — Pipelines and AutoML',
@@ -698,7 +697,7 @@ const modules: Module[] = [
     topics: ['Vertex AI', 'Vertex Pipelines', 'BigQuery ML', 'AutoML'],
   },
   {
-    num: '79', section: 12, color: sectionColors[12], status: 'live', xp: 100,
+    num: '79', section: 12, color: sectionColors[12], status: 'live',
     readTime: '45–58 min',
     href: '/learn/ai-ml/cloud-ml/mlops-on-cloud',
     title: 'MLOps on Cloud — CI/CD for ML',
@@ -706,7 +705,7 @@ const modules: Module[] = [
     topics: ['CI/CD', 'GitHub Actions', 'MLOps', 'Automation'],
   },
   {
-    num: '80', section: 12, color: sectionColors[12], status: 'live', xp: 300,
+    num: '80', section: 12, color: sectionColors[12], status: 'live',
     readTime: '80–100 min',
     href: '/learn/ai-ml/ml-interview-prep',
     title: 'Interview Prep — 50 Complete ML Answers',

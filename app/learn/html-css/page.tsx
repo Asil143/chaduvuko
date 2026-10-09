@@ -12,7 +12,6 @@ interface Module {
   title: string
   slug: string
   readTime: string
-  xp: number
   status: 'live' | 'soon'
   phase: number
   description: string
@@ -33,7 +32,6 @@ const modules: Module[] = HTML_CSS_CURRICULUM.flatMap(s => s.modules.map(m => ({
   title: m.title,
   slug: m.slug,
   readTime: m.readTime,
-  xp: m.xp,
   status: m.status,
   phase: s.id,
   description: m.description,
