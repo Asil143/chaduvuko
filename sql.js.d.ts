@@ -14,6 +14,7 @@ declare module 'sql.js' {
     constructor(data?: ArrayLike<number> | ArrayBuffer | Uint8Array | null);
     run(sql: string, params?: SqlValue[]): Database;
     exec(sql: string, params?: SqlValue[]): QueryExecResult[];
+    export(): Uint8Array;
     close(): void;
   }
 

@@ -14,7 +14,9 @@ import { QuizSection } from '@/components/ui/QuizSection'
 import { LinkedInGenerator } from '@/components/ui/LinkedInGenerator'
 import { SalaryWidget } from '@/components/ui/SalaryWidget'
 import { getPageMeta, NEXT_PAGES, getNextPages } from '@/data/navigation'
-import { useLessonNav } from '@/components/content/LessonNavContext'
+import { useLessonNav, useLessonQuick } from '@/components/content/LessonNavContext'
+import { QuickAnswer } from '@/components/content/QuickAnswer'
+import { QuickCheck } from '@/components/content/QuickCheck'
 import { setLessonChrome } from '@/lib/lesson-chrome'
 import { SuggestFix } from '@/components/content/SuggestFix'
 import { recordLessonVisit, recordQuizPass, setLessonComplete, useProgress } from '@/lib/progress'
@@ -188,6 +190,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
   const aimlModuleNum = isAIML ? getAIMLModuleNum(pathname) : null
   const displaySection = aimlModuleNum ? `AI/ML — Lesson ${aimlModuleNum}` : section
   const lessonNav = useLessonNav()
+  const quick = useLessonQuick()
   const prev = lessonNav?.prev ?? null
   const next = lessonNav?.next ?? null
   const meta = getPageMeta(pathname)
@@ -298,7 +301,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
 
           {/* ── MAIN CONTENT — fills remaining width ── */}
           <div className="flex-1 min-w-0">
-            <div className="px-8 md:px-12 py-10">
+            <div className="px-4 sm:px-8 md:px-12 py-10">
 
               {/* Prev / Next at top — W3Schools style. Lessons have these in the lesson row. */}
               {!isLesson && <div className="flex items-center justify-between mb-8 gap-3">
@@ -325,6 +328,8 @@ export function LearnLayout({ children, title, description, section, readTime, u
                 ) : <div />}
               </div>}
 
+              {quick && <QuickAnswer quick={quick} />}
+
               {/* Page content */}
               <div className="prose-chaduvuko">
                 {children}
@@ -336,6 +341,7 @@ export function LearnLayout({ children, title, description, section, readTime, u
 
               <ResumeBullets href={pathname} />
               <QuizSection pageHref={pathname} onPass={isLesson ? () => recordQuizPass(pathname) : undefined} />
+              {quick?.check && <QuickCheck check={quick.check} onPass={() => recordQuizPass(pathname)} />}
               <LinkedInGenerator pageHref={pathname} />
 
               {/* What to learn next */}

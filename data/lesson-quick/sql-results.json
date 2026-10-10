@@ -1,0 +1,1626 @@
+{
+ "/learn/sql/acid-properties": {
+  "columns": [
+   "orders_with_unknown_customer"
+  ],
+  "rows": [
+   [
+    "0"
+   ]
+  ]
+ },
+ "/learn/sql/aggregate-functions": {
+  "columns": [
+   "orders",
+   "revenue",
+   "avg_order",
+   "largest"
+  ],
+  "rows": [
+   [
+    "23",
+    "1209.55",
+    "52.59",
+    "92.1"
+   ]
+  ]
+ },
+ "/learn/sql/aliases": {
+  "columns": [
+   "product",
+   "profit"
+  ],
+  "rows": [
+   [
+    "Ground Coffee",
+    "5"
+   ],
+   [
+    "Laundry Detergent",
+    "5"
+   ],
+   [
+    "Extra Virgin Olive Oil",
+    "4.5"
+   ],
+   [
+    "Anti-Dandruff Shampoo",
+    "3.5"
+   ],
+   [
+    "Jasmine Rice",
+    "3"
+   ]
+  ]
+ },
+ "/learn/sql/alter-table": {
+  "columns": [
+   "order_id",
+   "order_status",
+   "notes"
+  ],
+  "rows": [
+   [
+    "1001",
+    "Delivered",
+    "none"
+   ],
+   [
+    "1002",
+    "Delivered",
+    "none"
+   ],
+   [
+    "1003",
+    "Processing",
+    "none"
+   ]
+  ]
+ },
+ "/learn/sql/analytics-lag-lead": {
+  "columns": [
+   "customer_id",
+   "order_id",
+   "order_date",
+   "previous_order"
+  ],
+  "rows": [
+   [
+    "1",
+    "1001",
+    "2024-01-05",
+    "NULL"
+   ],
+   [
+    "1",
+    "1016",
+    "2024-02-14",
+    "2024-01-05"
+   ],
+   [
+    "2",
+    "1002",
+    "2024-01-08",
+    "NULL"
+   ],
+   [
+    "2",
+    "1026",
+    "2024-03-13",
+    "2024-01-08"
+   ]
+  ]
+ },
+ "/learn/sql/and-or-not": {
+  "columns": [
+   "first_name",
+   "last_name",
+   "city",
+   "loyalty_tier"
+  ],
+  "rows": [
+   [
+    "Emma",
+    "Johnson",
+    "Seattle",
+    "Gold"
+   ],
+   [
+    "Ava",
+    "Garcia",
+    "Seattle",
+    "Gold"
+   ]
+  ]
+ },
+ "/learn/sql/arithmetic-expressions": {
+  "columns": [
+   "product_name",
+   "margin",
+   "margin_pct"
+  ],
+  "rows": [
+   [
+    "All-Purpose Flour",
+    "2",
+    "33.4"
+   ],
+   [
+    "Jasmine Rice",
+    "3",
+    "33.4"
+   ],
+   [
+    "Red Lentils",
+    "1.3",
+    "37.2"
+   ],
+   [
+    "Sea Salt",
+    "1.2",
+    "40.1"
+   ],
+   [
+    "Whole Milk",
+    "1.8",
+    "32.8"
+   ]
+  ]
+ },
+ "/learn/sql/case-when": {
+  "columns": [
+   "order_id",
+   "total_amount",
+   "size"
+  ],
+  "rows": [
+   [
+    "1001",
+    "59.69",
+    "Medium"
+   ],
+   [
+    "1002",
+    "27.97",
+    "Small"
+   ],
+   [
+    "1003",
+    "17.95",
+    "Small"
+   ],
+   [
+    "1004",
+    "44.05",
+    "Medium"
+   ],
+   [
+    "1005",
+    "60.17",
+    "Large"
+   ]
+  ]
+ },
+ "/learn/sql/cast-convert": {
+  "columns": [
+   "from_text",
+   "truncated",
+   "stored_as"
+  ],
+  "rows": [
+   [
+    "43",
+    "3",
+    "text"
+   ]
+  ]
+ },
+ "/learn/sql/complex-where": {
+  "columns": [
+   "first_name",
+   "city",
+   "loyalty_tier"
+  ],
+  "rows": [
+   [
+    "Emma",
+    "Seattle",
+    "Gold"
+   ],
+   [
+    "Ava",
+    "Seattle",
+    "Gold"
+   ],
+   [
+    "Mason",
+    "Seattle",
+    "Platinum"
+   ]
+  ]
+ },
+ "/learn/sql/constraints": {
+  "columns": [
+   "name",
+   "type",
+   "pk"
+  ],
+  "rows": [
+   [
+    "customer_id",
+    "INTEGER",
+    "1"
+   ],
+   [
+    "first_name",
+    "VARCHAR",
+    "0"
+   ],
+   [
+    "last_name",
+    "VARCHAR",
+    "0"
+   ],
+   [
+    "email",
+    "VARCHAR",
+    "0"
+   ]
+  ]
+ },
+ "/learn/sql/correlated-subqueries": {
+  "columns": [
+   "product_name",
+   "category",
+   "unit_price"
+  ],
+  "rows": [
+   [
+    "Jasmine Rice",
+    "Staples",
+    "8.99"
+   ],
+   [
+    "Salted Butter",
+    "Dairy",
+    "6.49"
+   ],
+   [
+    "Large Eggs",
+    "Dairy",
+    "5.99"
+   ],
+   [
+    "Russet Potatoes",
+    "Vegetables",
+    "4.99"
+   ],
+   [
+    "Honeycrisp Apples",
+    "Fruits",
+    "6.99"
+   ]
+  ]
+ },
+ "/learn/sql/create-table": {
+  "columns": [
+   "code",
+   "discount",
+   "expires"
+  ],
+  "rows": [
+   [
+    "SPRING10",
+    "10",
+    "2024-04-30"
+   ]
+  ]
+ },
+ "/learn/sql/cross-join": {
+  "columns": [
+   "method",
+   "status"
+  ],
+  "rows": [
+   [
+    "Apple Pay",
+    "Cancelled"
+   ],
+   [
+    "Apple Pay",
+    "Delivered"
+   ],
+   [
+    "Apple Pay",
+    "Processing"
+   ],
+   [
+    "Apple Pay",
+    "Returned"
+   ],
+   [
+    "Cash",
+    "Cancelled"
+   ],
+   [
+    "Cash",
+    "Delivered"
+   ]
+  ]
+ },
+ "/learn/sql/cte-with-clause": {
+  "columns": [
+   "first_name",
+   "total"
+  ],
+  "rows": [
+   [
+    "Mason",
+    "166.22"
+   ],
+   [
+    "Ava",
+    "123.06"
+   ],
+   [
+    "Sophia",
+    "120.57"
+   ],
+   [
+    "Mia",
+    "115.67"
+   ],
+   [
+    "Emma",
+    "103.18"
+   ]
+  ]
+ },
+ "/learn/sql/data-types": {
+  "columns": [
+   "name",
+   "type"
+  ],
+  "rows": [
+   [
+    "order_id",
+    "INTEGER"
+   ],
+   [
+    "customer_id",
+    "INTEGER"
+   ],
+   [
+    "store_id",
+    "VARCHAR"
+   ],
+   [
+    "order_date",
+    "DATE"
+   ],
+   [
+    "delivery_date",
+    "DATE"
+   ],
+   [
+    "order_status",
+    "VARCHAR"
+   ],
+   [
+    "payment_method",
+    "VARCHAR"
+   ],
+   [
+    "total_amount",
+    "DECIMAL"
+   ]
+  ]
+ },
+ "/learn/sql/date-time-functions": {
+  "columns": [
+   "month",
+   "orders"
+  ],
+  "rows": [
+   [
+    "2024-01",
+    "10"
+   ],
+   [
+    "2024-02",
+    "11"
+   ],
+   [
+    "2024-03",
+    "9"
+   ]
+  ]
+ },
+ "/learn/sql/delete": {
+  "columns": [
+   "items_left"
+  ],
+  "rows": [
+   [
+    "0"
+   ]
+  ]
+ },
+ "/learn/sql/derived-tables": {
+  "columns": [
+   "store_name",
+   "orders",
+   "revenue"
+  ],
+  "rows": [
+   [
+    "FreshCart Manhattan",
+    "6",
+    "383.01"
+   ],
+   [
+    "FreshCart Capitol Hill",
+    "5",
+    "237.65"
+   ],
+   [
+    "FreshCart Pearl District",
+    "4",
+    "198.37"
+   ],
+   [
+    "FreshCart Scottsdale",
+    "2",
+    "100.09"
+   ],
+   [
+    "FreshCart South Austin",
+    "2",
+    "91.35"
+   ]
+  ]
+ },
+ "/learn/sql/distinct": {
+  "columns": [
+   "city"
+  ],
+  "rows": [
+   [
+    "Austin"
+   ],
+   [
+    "Chicago"
+   ],
+   [
+    "Los Angeles"
+   ],
+   [
+    "New York"
+   ],
+   [
+    "Phoenix"
+   ],
+   [
+    "Portland"
+   ],
+   [
+    "Seattle"
+   ]
+  ]
+ },
+ "/learn/sql/drop-truncate": {
+  "columns": [
+   "table_name",
+   "row_count"
+  ],
+  "rows": [
+   [
+    "orders",
+    "30"
+   ],
+   [
+    "order_items",
+    "118"
+   ]
+  ]
+ },
+ "/learn/sql/exists-not-exists": {
+  "columns": [
+   "product_id",
+   "product_name",
+   "category"
+  ],
+  "rows": [
+   [
+    "3",
+    "Red Lentils",
+    "Staples"
+   ],
+   [
+    "25",
+    "Apple Juice",
+    "Beverages"
+   ]
+  ]
+ },
+ "/learn/sql/explain-analyze": {
+  "columns": [
+   "id",
+   "parent",
+   "notused",
+   "detail"
+  ],
+  "rows": [
+   [
+    "3",
+    "0",
+    "216",
+    "SCAN o"
+   ],
+   [
+    "7",
+    "0",
+    "45",
+    "SEARCH c USING INTEGER PRIMARY KEY (rowid=?)"
+   ]
+  ]
+ },
+ "/learn/sql/full-outer-join": {
+  "columns": [
+   "january",
+   "march"
+  ],
+  "rows": [
+   [
+    "1",
+    "NULL"
+   ],
+   [
+    "3",
+    "NULL"
+   ],
+   [
+    "5",
+    "NULL"
+   ],
+   [
+    "8",
+    "NULL"
+   ],
+   [
+    "10",
+    "NULL"
+   ],
+   [
+    "NULL",
+    "11"
+   ]
+  ]
+ },
+ "/learn/sql/group-by": {
+  "columns": [
+   "payment_method",
+   "orders",
+   "revenue"
+  ],
+  "rows": [
+   [
+    "Credit Card",
+    "13",
+    "685.24"
+   ],
+   [
+    "Apple Pay",
+    "3",
+    "221.35"
+   ],
+   [
+    "Debit Card",
+    "5",
+    "202.87"
+   ],
+   [
+    "Cash",
+    "2",
+    "100.09"
+   ]
+  ]
+ },
+ "/learn/sql/having": {
+  "columns": [
+   "city",
+   "customers"
+  ],
+  "rows": [
+   [
+    "Seattle",
+    "5"
+   ],
+   [
+    "New York",
+    "4"
+   ],
+   [
+    "Portland",
+    "3"
+   ],
+   [
+    "Chicago",
+    "3"
+   ]
+  ]
+ },
+ "/learn/sql/how-databases-work": {
+  "columns": [
+   "product_name",
+   "unit_price",
+   "cost_price",
+   "margin"
+  ],
+  "rows": [
+   [
+    "Ground Coffee",
+    "13.99",
+    "8.99",
+    "5"
+   ],
+   [
+    "Laundry Detergent",
+    "13.99",
+    "8.99",
+    "5"
+   ],
+   [
+    "Extra Virgin Olive Oil",
+    "12.99",
+    "8.49",
+    "4.5"
+   ],
+   [
+    "Anti-Dandruff Shampoo",
+    "8.99",
+    "5.49",
+    "3.5"
+   ],
+   [
+    "Jasmine Rice",
+    "8.99",
+    "5.99",
+    "3"
+   ]
+  ]
+ },
+ "/learn/sql/in-between": {
+  "columns": [
+   "product_name",
+   "unit_price"
+  ],
+  "rows": [
+   [
+    "Whole Milk",
+    "5.49"
+   ],
+   [
+    "Old Fashioned Oats",
+    "5.49"
+   ],
+   [
+    "All-Purpose Flour",
+    "5.99"
+   ],
+   [
+    "Sourdough Bread",
+    "5.99"
+   ],
+   [
+    "Large Eggs",
+    "5.99"
+   ],
+   [
+    "Oreo Cookies",
+    "5.99"
+   ],
+   [
+    "Salted Butter",
+    "6.49"
+   ],
+   [
+    "Honeycrisp Apples",
+    "6.99"
+   ]
+  ]
+ },
+ "/learn/sql/index-strategies": {
+  "columns": [
+   "id",
+   "parent",
+   "notused",
+   "detail"
+  ],
+  "rows": [
+   [
+    "2",
+    "0",
+    "46",
+    "SEARCH orders USING COVERING INDEX idx_store_date (store_id=? AND order_date>?)"
+   ]
+  ]
+ },
+ "/learn/sql/indexes": {
+  "columns": [
+   "id",
+   "parent",
+   "notused",
+   "detail"
+  ],
+  "rows": [
+   [
+    "2",
+    "0",
+    "190",
+    "SEARCH orders USING COVERING INDEX idx_orders_date (order_date>?)"
+   ]
+  ]
+ },
+ "/learn/sql/inner-join": {
+  "columns": [
+   "order_id",
+   "product_name",
+   "quantity",
+   "line_total"
+  ],
+  "rows": [
+   [
+    "1002",
+    "Jasmine Rice",
+    "1",
+    "8.99"
+   ],
+   [
+    "1002",
+    "Extra Virgin Olive Oil",
+    "1",
+    "12.99"
+   ],
+   [
+    "1002",
+    "Large Eggs",
+    "1",
+    "5.99"
+   ]
+  ]
+ },
+ "/learn/sql/insert-into": {
+  "columns": [
+   "customer_id",
+   "first_name",
+   "city",
+   "loyalty_tier"
+  ],
+  "rows": [
+   [
+    "21",
+    "Ava",
+    "Denver",
+    "Bronze"
+   ]
+  ]
+ },
+ "/learn/sql/interview-questions": {
+  "columns": [
+   "second_highest"
+  ],
+  "rows": [
+   [
+    "75000"
+   ]
+  ]
+ },
+ "/learn/sql/joins-intro": {
+  "columns": [
+   "order_id",
+   "total_amount",
+   "customer"
+  ],
+  "rows": [
+   [
+    "1001",
+    "59.69",
+    "Emma Johnson"
+   ],
+   [
+    "1002",
+    "27.97",
+    "Liam Williams"
+   ],
+   [
+    "1003",
+    "17.95",
+    "Olivia Brown"
+   ],
+   [
+    "1004",
+    "44.05",
+    "Noah Jones"
+   ],
+   [
+    "1005",
+    "60.17",
+    "Ava Garcia"
+   ]
+  ]
+ },
+ "/learn/sql/left-right-join": {
+  "columns": [
+   "product_name",
+   "times_ordered"
+  ],
+  "rows": [
+   [
+    "Apple Juice",
+    "0"
+   ],
+   [
+    "Red Lentils",
+    "0"
+   ],
+   [
+    "Purified Water",
+    "1"
+   ],
+   [
+    "Moisturizing Bar Soap",
+    "2"
+   ]
+  ]
+ },
+ "/learn/sql/like-wildcards": {
+  "columns": [
+   "product_name",
+   "brand",
+   "unit_price"
+  ],
+  "rows": [
+   [
+    "Whole Milk",
+    "Horizon Organic",
+    "5.49"
+   ]
+  ]
+ },
+ "/learn/sql/limit-fetch": {
+  "columns": [
+   "order_id",
+   "total_amount"
+  ],
+  "rows": [
+   [
+    "1017",
+    "92.1"
+   ],
+   [
+    "1029",
+    "74.12"
+   ],
+   [
+    "1007",
+    "73.62"
+   ]
+  ]
+ },
+ "/learn/sql/math-functions": {
+  "columns": [
+   "unit_price",
+   "rounded",
+   "ceiling",
+   "floor"
+  ],
+  "rows": [
+   [
+    "5.99",
+    "6",
+    "6",
+    "5"
+   ],
+   [
+    "8.99",
+    "9",
+    "9",
+    "8"
+   ],
+   [
+    "3.49",
+    "3",
+    "4",
+    "3"
+   ],
+   [
+    "2.99",
+    "3",
+    "3",
+    "2"
+   ]
+  ]
+ },
+ "/learn/sql/normalization": {
+  "columns": [
+   "order_id",
+   "product_name",
+   "quantity",
+   "line_total"
+  ],
+  "rows": [
+   [
+    "1001",
+    "All-Purpose Flour",
+    "2",
+    "11.98"
+   ],
+   [
+    "1001",
+    "Whole Milk",
+    "4",
+    "21.96"
+   ],
+   [
+    "1001",
+    "Sea Salt",
+    "1",
+    "2.99"
+   ],
+   [
+    "1001",
+    "Oreo Cookies",
+    "4",
+    "22.76"
+   ]
+  ]
+ },
+ "/learn/sql/null-values": {
+  "columns": [
+   "order_id",
+   "order_status",
+   "delivery_date"
+  ],
+  "rows": [
+   [
+    "1003",
+    "Processing",
+    "NULL"
+   ],
+   [
+    "1006",
+    "Cancelled",
+    "NULL"
+   ],
+   [
+    "1014",
+    "Processing",
+    "NULL"
+   ],
+   [
+    "1019",
+    "Cancelled",
+    "NULL"
+   ],
+   [
+    "1030",
+    "Processing",
+    "NULL"
+   ]
+  ]
+ },
+ "/learn/sql/order-by": {
+  "columns": [
+   "product_name",
+   "unit_price"
+  ],
+  "rows": [
+   [
+    "Ground Coffee",
+    "13.99"
+   ],
+   [
+    "Laundry Detergent",
+    "13.99"
+   ],
+   [
+    "Extra Virgin Olive Oil",
+    "12.99"
+   ],
+   [
+    "Jasmine Rice",
+    "8.99"
+   ],
+   [
+    "Anti-Dandruff Shampoo",
+    "8.99"
+   ]
+  ]
+ },
+ "/learn/sql/query-best-practices": {
+  "columns": [
+   "order_id",
+   "order_date",
+   "total_amount"
+  ],
+  "rows": [
+   [
+    "1022",
+    "2024-03-01",
+    "48.05"
+   ],
+   [
+    "1023",
+    "2024-03-04",
+    "46.95"
+   ],
+   [
+    "1024",
+    "2024-03-07",
+    "15.27"
+   ],
+   [
+    "1025",
+    "2024-03-10",
+    "55.63"
+   ],
+   [
+    "1026",
+    "2024-03-13",
+    "49.87"
+   ]
+  ]
+ },
+ "/learn/sql/ranking-functions": {
+  "columns": [
+   "first_name",
+   "salary",
+   "row_num",
+   "rnk",
+   "dense"
+  ],
+  "rows": [
+   [
+    "Kevin",
+    "32000",
+    "1",
+    "1",
+    "1"
+   ],
+   [
+    "Amanda",
+    "33000",
+    "2",
+    "2",
+    "2"
+   ],
+   [
+    "Brandon",
+    "33000",
+    "3",
+    "2",
+    "2"
+   ],
+   [
+    "Carlos",
+    "38000",
+    "4",
+    "4",
+    "3"
+   ],
+   [
+    "Tyler",
+    "45000",
+    "5",
+    "5",
+    "4"
+   ],
+   [
+    "Rachel",
+    "46000",
+    "6",
+    "6",
+    "5"
+   ]
+  ]
+ },
+ "/learn/sql/recursive-cte": {
+  "columns": [
+   "employee_id",
+   "first_name",
+   "level"
+  ],
+  "rows": [
+   [
+    "1",
+    "Sarah",
+    "1"
+   ],
+   [
+    "2",
+    "Tyler",
+    "2"
+   ],
+   [
+    "3",
+    "Amanda",
+    "3"
+   ],
+   [
+    "4",
+    "Brandon",
+    "3"
+   ]
+  ]
+ },
+ "/learn/sql/select-from": {
+  "columns": [
+   "first_name",
+   "city"
+  ],
+  "rows": [
+   [
+    "Emma",
+    "Seattle"
+   ],
+   [
+    "Liam",
+    "Chicago"
+   ],
+   [
+    "Olivia",
+    "Los Angeles"
+   ],
+   [
+    "Noah",
+    "Phoenix"
+   ],
+   [
+    "Ava",
+    "Seattle"
+   ]
+  ]
+ },
+ "/learn/sql/self-join": {
+  "columns": [
+   "employee",
+   "role",
+   "manager"
+  ],
+  "rows": [
+   [
+    "Sarah",
+    "Store Manager",
+    "NULL"
+   ],
+   [
+    "Tyler",
+    "Assistant Manager",
+    "Sarah"
+   ],
+   [
+    "Amanda",
+    "Cashier",
+    "Tyler"
+   ],
+   [
+    "Brandon",
+    "Cashier",
+    "Tyler"
+   ],
+   [
+    "James",
+    "Store Manager",
+    "NULL"
+   ]
+  ]
+ },
+ "/learn/sql/setting-up": {
+  "columns": [
+   "customers_loaded"
+  ],
+  "rows": [
+   [
+    "20"
+   ]
+  ]
+ },
+ "/learn/sql/sql-for-data-analysis": {
+  "columns": [
+   "category",
+   "revenue",
+   "share_pct"
+  ],
+  "rows": [
+   [
+    "Staples",
+    "383.52",
+    "28.2"
+   ],
+   [
+    "Dairy",
+    "309.94",
+    "22.8"
+   ],
+   [
+    "Beverages",
+    "231.77",
+    "17.1"
+   ],
+   [
+    "Packaged Food",
+    "142.33",
+    "10.5"
+   ],
+   [
+    "Personal Care",
+    "123.13",
+    "9.1"
+   ]
+  ]
+ },
+ "/learn/sql/sql-projects": {
+  "columns": [
+   "delivered_orders",
+   "customers",
+   "revenue",
+   "revenue_per_customer"
+  ],
+  "rows": [
+   [
+    "23",
+    "15",
+    "1209.55",
+    "80.64"
+   ]
+  ]
+ },
+ "/learn/sql/stored-procedures": {
+  "columns": [
+   "first_name",
+   "loyalty_tier",
+   "spent"
+  ],
+  "rows": [
+   [
+    "Mason",
+    "Platinum",
+    "166.22"
+   ],
+   [
+    "Ava",
+    "Gold",
+    "123.06"
+   ],
+   [
+    "Sophia",
+    "Platinum",
+    "120.57"
+   ],
+   [
+    "Mia",
+    "Platinum",
+    "115.67"
+   ],
+   [
+    "Emma",
+    "Gold",
+    "103.18"
+   ]
+  ]
+ },
+ "/learn/sql/string-functions": {
+  "columns": [
+   "full_name",
+   "initial",
+   "email_length"
+  ],
+  "rows": [
+   [
+    "Emma Johnson",
+    "E.",
+    "22"
+   ],
+   [
+    "Liam Williams",
+    "L.",
+    "25"
+   ],
+   [
+    "Olivia Brown",
+    "O.",
+    "22"
+   ],
+   [
+    "Noah Jones",
+    "N.",
+    "20"
+   ]
+  ]
+ },
+ "/learn/sql/subqueries": {
+  "columns": [
+   "order_id",
+   "total_amount"
+  ],
+  "rows": [
+   [
+    "1017",
+    "92.1"
+   ],
+   [
+    "1029",
+    "74.12"
+   ],
+   [
+    "1007",
+    "73.62"
+   ],
+   [
+    "1018",
+    "62.89"
+   ],
+   [
+    "1005",
+    "60.17"
+   ]
+  ]
+ },
+ "/learn/sql/transactions": {
+  "columns": [
+   "items_still_there"
+  ],
+  "rows": [
+   [
+    "4"
+   ]
+  ]
+ },
+ "/learn/sql/triggers": {
+  "columns": [
+   "order_id",
+   "old_status",
+   "new_status"
+  ],
+  "rows": [
+   [
+    "1003",
+    "Processing",
+    "Delivered"
+   ]
+  ]
+ },
+ "/learn/sql/types-of-databases": {
+  "columns": [
+   "city",
+   "orders"
+  ],
+  "rows": [
+   [
+    "Seattle",
+    "8"
+   ],
+   [
+    "New York",
+    "6"
+   ],
+   [
+    "Chicago",
+    "5"
+   ],
+   [
+    "Portland",
+    "4"
+   ],
+   [
+    "Austin",
+    "3"
+   ]
+  ]
+ },
+ "/learn/sql/union-intersect-except": {
+  "columns": [
+   "city"
+  ],
+  "rows": [
+   [
+    "Austin"
+   ],
+   [
+    "Chicago"
+   ],
+   [
+    "Los Angeles"
+   ],
+   [
+    "New York"
+   ],
+   [
+    "Phoenix"
+   ],
+   [
+    "Portland"
+   ],
+   [
+    "Seattle"
+   ]
+  ]
+ },
+ "/learn/sql/update": {
+  "columns": [
+   "customer_id",
+   "first_name",
+   "loyalty_tier"
+  ],
+  "rows": [
+   [
+    "3",
+    "Olivia",
+    "Gold"
+   ]
+  ]
+ },
+ "/learn/sql/user-defined-functions": {
+  "columns": [
+   "product_name",
+   "margin_pct"
+  ],
+  "rows": [
+   [
+    "Instant Ramen",
+    "50.5"
+   ],
+   [
+    "Purified Water",
+    "50.3"
+   ],
+   [
+    "Yellow Onions",
+    "40.2"
+   ],
+   [
+    "Sea Salt",
+    "40.1"
+   ]
+  ]
+ },
+ "/learn/sql/views": {
+  "columns": [
+   "delivered",
+   "revenue"
+  ],
+  "rows": [
+   [
+    "23",
+    "1209.55"
+   ]
+  ]
+ },
+ "/learn/sql/what-is-a-database": {
+  "columns": [
+   "first_name",
+   "last_name",
+   "city",
+   "loyalty_tier"
+  ],
+  "rows": [
+   [
+    "Emma",
+    "Johnson",
+    "Seattle",
+    "Gold"
+   ],
+   [
+    "Liam",
+    "Williams",
+    "Chicago",
+    "Silver"
+   ],
+   [
+    "Olivia",
+    "Brown",
+    "Los Angeles",
+    "Bronze"
+   ],
+   [
+    "Noah",
+    "Jones",
+    "Phoenix",
+    "Platinum"
+   ],
+   [
+    "Ava",
+    "Garcia",
+    "Seattle",
+    "Gold"
+   ]
+  ]
+ },
+ "/learn/sql/where-clause": {
+  "columns": [
+   "first_name",
+   "last_name",
+   "loyalty_tier"
+  ],
+  "rows": [
+   [
+    "Emma",
+    "Johnson",
+    "Gold"
+   ],
+   [
+    "Ava",
+    "Garcia",
+    "Gold"
+   ],
+   [
+    "Lucas",
+    "Harris",
+    "Bronze"
+   ],
+   [
+    "Mason",
+    "Thompson",
+    "Platinum"
+   ],
+   [
+    "Evelyn",
+    "Robinson",
+    "Silver"
+   ]
+  ]
+ },
+ "/learn/sql/window-functions-intro": {
+  "columns": [
+   "order_id",
+   "store_id",
+   "total_amount",
+   "store_avg"
+  ],
+  "rows": [
+   [
+    "1001",
+    "ST001",
+    "59.69",
+    "56.99"
+   ],
+   [
+    "1005",
+    "ST001",
+    "60.17",
+    "56.99"
+   ],
+   [
+    "1014",
+    "ST001",
+    "15.93",
+    "56.99"
+   ],
+   [
+    "1016",
+    "ST001",
+    "43.49",
+    "56.99"
+   ],
+   [
+    "1017",
+    "ST001",
+    "92.1",
+    "56.99"
+   ],
+   [
+    "1020",
+    "ST001",
+    "53.44",
+    "56.99"
+   ],
+   [
+    "1029",
+    "ST001",
+    "74.12",
+    "56.99"
+   ]
+  ]
+ }
+}
